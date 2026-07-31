@@ -189,7 +189,7 @@ function ProjectDetailPage() {
                 {requests.length > 5 && (
                   <div className="px-6 py-3">
                     <Button asChild variant="outline" size="sm">
-                      <Link to="/requests">{t("requests.viewAll")}</Link>
+                      <Link to="/requests">{t("portal.viewAll")}</Link>
                     </Button>
                   </div>
                 )}
