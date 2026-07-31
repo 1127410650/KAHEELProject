@@ -29,7 +29,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { formatDate, formatDateTime, pickName, todayInRiyadh } from "@/lib/format";
+import { formatDate, pickName, todayInRiyadh } from "@/lib/format";
 import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
@@ -86,6 +86,7 @@ function RequestsPage() {
   const { t, locale } = useI18n();
   const { isAccountant, session } = useSession();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [projectFilter, setProjectFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
