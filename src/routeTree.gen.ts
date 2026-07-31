@@ -16,6 +16,8 @@ import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
+import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -63,6 +65,17 @@ const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
   path: '/invoices',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMyCustodyRoute = AuthenticatedMyCustodyRouteImport.update({
+  id: '/my-custody',
+  path: '/my-custody',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
@@ -135,6 +148,8 @@ export interface FileRoutesByFullPath {
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
+  '/my-custody': typeof AuthenticatedMyCustodyRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -155,6 +170,8 @@ export interface FileRoutesByTo {
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
+  '/my-custody': typeof AuthenticatedMyCustodyRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -177,6 +194,8 @@ export interface FileRoutesById {
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
+  '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -199,6 +218,8 @@ export interface FileRouteTypes {
     | '/custody'
     | '/dashboard'
     | '/invoices'
+    | '/my-custody'
+    | '/notifications'
     | '/portal'
     | '/reports'
     | '/settings'
@@ -219,6 +240,8 @@ export interface FileRouteTypes {
     | '/custody'
     | '/dashboard'
     | '/invoices'
+    | '/my-custody'
+    | '/notifications'
     | '/portal'
     | '/reports'
     | '/settings'
@@ -240,6 +263,8 @@ export interface FileRouteTypes {
     | '/_authenticated/custody'
     | '/_authenticated/dashboard'
     | '/_authenticated/invoices'
+    | '/_authenticated/my-custody'
+    | '/_authenticated/notifications'
     | '/_authenticated/portal'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
@@ -309,6 +334,20 @@ declare module '@tanstack/react-router' {
       path: '/invoices'
       fullPath: '/invoices'
       preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-custody': {
+      id: '/_authenticated/my-custody'
+      path: '/my-custody'
+      fullPath: '/my-custody'
+      preLoaderRoute: typeof AuthenticatedMyCustodyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/portal': {
@@ -403,6 +442,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCustodyRoute: typeof AuthenticatedCustodyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
+  AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -422,6 +463,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCustodyRoute: AuthenticatedCustodyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
+  AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
