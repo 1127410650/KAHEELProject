@@ -35,7 +35,7 @@ function VerifyInvoicePage() {
   // Small, self-dismissing note instead of a permanent full-width banner.
   useEffect(() => {
     const id = window.setTimeout(() => {
-      toast.info(t("verify.publicSaveHint"), { duration: 5000 });
+      toast.info(t("verify.publicSaveHint"), { duration: 5000, position: "bottom-center" });
     }, 900);
     return () => window.clearTimeout(id);
   }, [t]);
