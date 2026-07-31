@@ -422,7 +422,11 @@ function ProjectsPage() {
                               name_en: row.name_en ?? "",
                               supervisor_id: row.supervisor_id,
                               status: row.status,
+                              city: row.city ?? "",
+                              location: row.location ?? "",
+                              start_date: row.start_date ?? "",
                               description_ar: row.description_ar ?? "",
+
                               description_en: row.description_en ?? "",
                             });
                             setOpen(true);
