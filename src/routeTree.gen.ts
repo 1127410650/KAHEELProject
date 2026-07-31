@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
+import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
+import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
+import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCustodyRoute = AuthenticatedCustodyRouteImport.update({
+  id: '/custody',
+  path: '/custody',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProjectsRoute = AuthenticatedProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSupervisorsIndexRoute =
+  AuthenticatedSupervisorsIndexRouteImport.update({
+    id: '/supervisors/',
+    path: '/supervisors/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSupervisorsIdRoute =
+  AuthenticatedSupervisorsIdRouteImport.update({
+    id: '/supervisors/$id',
+    path: '/supervisors/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/custody': typeof AuthenticatedCustodyRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/projects': typeof AuthenticatedProjectsRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/trash': typeof AuthenticatedTrashRoute
+  '/users': typeof AuthenticatedUsersRoute
+  '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/custody': typeof AuthenticatedCustodyRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/projects': typeof AuthenticatedProjectsRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/trash': typeof AuthenticatedTrashRoute
+  '/users': typeof AuthenticatedUsersRoute
+  '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/supervisors': typeof AuthenticatedSupervisorsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/audit': typeof AuthenticatedAuditRoute
+  '/_authenticated/custody': typeof AuthenticatedCustodyRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/projects': typeof AuthenticatedProjectsRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/trash': typeof AuthenticatedTrashRoute
+  '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/_authenticated/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/audit'
+    | '/custody'
+    | '/dashboard'
+    | '/projects'
+    | '/reports'
+    | '/settings'
+    | '/trash'
+    | '/users'
+    | '/supervisors/$id'
+    | '/supervisors/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/audit'
+    | '/custody'
+    | '/dashboard'
+    | '/projects'
+    | '/reports'
+    | '/settings'
+    | '/trash'
+    | '/users'
+    | '/supervisors/$id'
+    | '/supervisors'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/audit'
+    | '/_authenticated/custody'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/projects'
+    | '/_authenticated/reports'
+    | '/_authenticated/settings'
+    | '/_authenticated/trash'
+    | '/_authenticated/users'
+    | '/_authenticated/supervisors/$id'
+    | '/_authenticated/supervisors/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +195,126 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/custody': {
+      id: '/_authenticated/custody'
+      path: '/custody'
+      fullPath: '/custody'
+      preLoaderRoute: typeof AuthenticatedCustodyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects': {
+      id: '/_authenticated/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof AuthenticatedProjectsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/trash': {
+      id: '/_authenticated/trash'
+      path: '/trash'
+      fullPath: '/trash'
+      preLoaderRoute: typeof AuthenticatedTrashRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/users': {
+      id: '/_authenticated/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthenticatedUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/supervisors/': {
+      id: '/_authenticated/supervisors/'
+      path: '/supervisors'
+      fullPath: '/supervisors/'
+      preLoaderRoute: typeof AuthenticatedSupervisorsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/supervisors/$id': {
+      id: '/_authenticated/supervisors/$id'
+      path: '/supervisors/$id'
+      fullPath: '/supervisors/$id'
+      preLoaderRoute: typeof AuthenticatedSupervisorsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
+  AuthenticatedCustodyRoute: typeof AuthenticatedCustodyRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
+  AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
+  AuthenticatedSupervisorsIdRoute: typeof AuthenticatedSupervisorsIdRoute
+  AuthenticatedSupervisorsIndexRoute: typeof AuthenticatedSupervisorsIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
+  AuthenticatedCustodyRoute: AuthenticatedCustodyRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTrashRoute: AuthenticatedTrashRoute,
+  AuthenticatedUsersRoute: AuthenticatedUsersRoute,
+  AuthenticatedSupervisorsIdRoute: AuthenticatedSupervisorsIdRoute,
+  AuthenticatedSupervisorsIndexRoute: AuthenticatedSupervisorsIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

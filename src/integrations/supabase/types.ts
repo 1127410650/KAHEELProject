@@ -14,16 +14,490 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      attachments: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          entity_id: string
+          entity_type: string
+          file_name: string
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          project_id: string | null
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          entity_id: string
+          entity_type: string
+          file_name: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          project_id?: string | null
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          project_id?: string | null
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attachments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          new_value: Json | null
+          old_value: Json | null
+          reason: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          reason?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      custody_transactions: {
+        Row: {
+          amount: number
+          approved_at: string | null
+          approved_by: string | null
+          client_token: string | null
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          id: string
+          notes_ar: string | null
+          notes_en: string | null
+          project_id: string | null
+          reason: string | null
+          reversal_of_id: string | null
+          serial_no: number
+          status: Database["public"]["Enums"]["record_status"]
+          supervisor_id: string
+          txn_date: string
+          txn_type: Database["public"]["Enums"]["custody_txn_type"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          approved_at?: string | null
+          approved_by?: string | null
+          client_token?: string | null
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes_ar?: string | null
+          notes_en?: string | null
+          project_id?: string | null
+          reason?: string | null
+          reversal_of_id?: string | null
+          serial_no?: number
+          status?: Database["public"]["Enums"]["record_status"]
+          supervisor_id: string
+          txn_date?: string
+          txn_type: Database["public"]["Enums"]["custody_txn_type"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          client_token?: string | null
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes_ar?: string | null
+          notes_en?: string | null
+          project_id?: string | null
+          reason?: string | null
+          reversal_of_id?: string | null
+          serial_no?: number
+          status?: Database["public"]["Enums"]["record_status"]
+          supervisor_id?: string
+          txn_date?: string
+          txn_type?: Database["public"]["Enums"]["custody_txn_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "custody_transactions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_reversal_of_id_fkey"
+            columns: ["reversal_of_id"]
+            isOneToOne: false
+            referencedRelation: "custody_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          is_active: boolean
+          locale: Database["public"]["Enums"]["app_locale"]
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          locale?: Database["public"]["Enums"]["app_locale"]
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          locale?: Database["public"]["Enums"]["app_locale"]
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      project_members: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_members_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_supervisors: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          supervisor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          supervisor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          supervisor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_supervisors_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_supervisors_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "project_supervisors_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          description_ar: string | null
+          description_en: string | null
+          id: string
+          name_ar: string
+          name_en: string | null
+          status: Database["public"]["Enums"]["project_status"]
+          supervisor_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          name_ar: string
+          name_en?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          supervisor_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          name_ar?: string
+          name_en?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          supervisor_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "projects_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supervisors: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string | null
+          national_id: string
+          notes_ar: string | null
+          notes_en: string | null
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en?: string | null
+          national_id: string
+          notes_ar?: string | null
+          notes_en?: string | null
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string | null
+          national_id?: string
+          notes_ar?: string | null
+          notes_en?: string | null
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      custody_balances: {
+        Row: {
+          balance: number | null
+          name_ar: string | null
+          name_en: string | null
+          supervisor_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      can_access_project: { Args: { _project_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_accountant: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_locale: "ar" | "en"
+      app_role: "accountant" | "employee"
+      custody_txn_type:
+        | "add"
+        | "settlement"
+        | "deduction"
+        | "refund"
+        | "reversal"
+      project_status: "active" | "on_hold" | "completed" | "cancelled"
+      record_status:
+        | "draft"
+        | "under_review"
+        | "returned"
+        | "approved"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +624,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_locale: ["ar", "en"],
+      app_role: ["accountant", "employee"],
+      custody_txn_type: [
+        "add",
+        "settlement",
+        "deduction",
+        "refund",
+        "reversal",
+      ],
+      project_status: ["active", "on_hold", "completed", "cancelled"],
+      record_status: [
+        "draft",
+        "under_review",
+        "returned",
+        "approved",
+        "cancelled",
+      ],
+    },
   },
 } as const

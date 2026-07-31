@@ -1,0 +1,291 @@
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useState, type ReactNode } from "react";
+import {
+  LayoutDashboard,
+  Users,
+  FolderKanban,
+  Wallet,
+  FileBarChart,
+  Trash2,
+  ScrollText,
+  Settings,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Menu,
+  ShieldCheck,
+  Languages,
+} from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n";
+import { useSession } from "@/lib/session";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+
+interface NavItem {
+  to: string;
+  labelKey: string;
+  icon: typeof LayoutDashboard;
+  accountantOnly?: boolean;
+}
+
+const groups: { titleKey: string; items: NavItem[] }[] = [
+  {
+    titleKey: "nav.sectionMain",
+    items: [{ to: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard }],
+  },
+  {
+    titleKey: "nav.sectionOperations",
+    items: [
+      { to: "/supervisors", labelKey: "nav.supervisors", icon: Users },
+      { to: "/projects", labelKey: "nav.projects", icon: FolderKanban },
+      { to: "/custody", labelKey: "nav.custody", icon: Wallet },
+      { to: "/reports", labelKey: "nav.reports", icon: FileBarChart },
+    ],
+  },
+  {
+    titleKey: "nav.sectionSystem",
+    items: [
+      { to: "/users", labelKey: "nav.users", icon: ShieldCheck, accountantOnly: true },
+      { to: "/trash", labelKey: "nav.trash", icon: Trash2, accountantOnly: true },
+      { to: "/audit", labelKey: "nav.audit", icon: ScrollText, accountantOnly: true },
+      { to: "/settings", labelKey: "nav.settings", icon: Settings },
+    ],
+  },
+];
+
+function LanguageToggle({ compact = false }: { compact?: boolean }) {
+  const { locale, setLocale } = useI18n();
+  const { profile } = useSession();
+
+  async function change(next: "ar" | "en") {
+    if (next === locale) return;
+    setLocale(next);
+    if (profile) {
+      await supabase.from("profiles").update({ locale: next }).eq("user_id", profile.user_id);
+    }
+  }
+
+  return (
+    <div
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border border-border bg-secondary p-1",
+        compact && "scale-95",
+      )}
+    >
+      <Languages className="mx-1 size-3.5 text-muted-foreground" aria-hidden />
+      <button
+        type="button"
+        onClick={() => change("ar")}
+        className={cn(
+          "rounded-full px-3 py-1 text-xs font-semibold transition-colors",
+          locale === "ar"
+            ? "bg-primary text-primary-foreground"
+            : "text-muted-foreground hover:text-foreground",
+        )}
+      >
+        العربية
+      </button>
+      <button
+        type="button"
+        onClick={() => change("en")}
+        className={cn(
+          "rounded-full px-3 py-1 text-xs font-semibold transition-colors",
+          locale === "en"
+            ? "bg-primary text-primary-foreground"
+            : "text-muted-foreground hover:text-foreground",
+        )}
+      >
+        English
+      </button>
+    </div>
+  );
+}
+
+function NavLinks({
+  collapsed,
+  onNavigate,
+}: {
+  collapsed: boolean;
+  onNavigate?: () => void;
+}) {
+  const { t } = useI18n();
+  const { isAccountant } = useSession();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  return (
+    <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
+      {groups.map((group) => {
+        const items = group.items.filter((i) => !i.accountantOnly || isAccountant);
+        if (items.length === 0) return null;
+        return (
+          <div key={group.titleKey}>
+            {!collapsed && (
+              <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/50">
+                {t(group.titleKey)}
+              </p>
+            )}
+            <ul className="space-y-1">
+              {items.map((item) => {
+                const Icon = item.icon;
+                const active = pathname === item.to || pathname.startsWith(`${item.to}/`);
+                return (
+                  <li key={item.to}>
+                    <Link
+                      to={item.to}
+                      onClick={onNavigate}
+                      title={collapsed ? t(item.labelKey) : undefined}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                        active
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-[inset_2px_0_0_0_var(--sidebar-primary)]"
+                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                        collapsed && "justify-center px-2",
+                      )}
+                    >
+                      <Icon className="size-4.5 shrink-0" aria-hidden />
+                      {!collapsed && <span className="truncate">{t(item.labelKey)}</span>}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
+    </nav>
+  );
+}
+
+function Brand({ collapsed }: { collapsed: boolean }) {
+  const { t } = useI18n();
+  return (
+    <div className="flex items-center gap-3 border-b border-sidebar-border px-4 py-4">
+      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+        <ShieldCheck className="size-5" aria-hidden />
+      </span>
+      {!collapsed && (
+        <span className="min-w-0">
+          <span className="block truncate text-base font-bold text-sidebar-foreground">
+            {t("app.name")}
+          </span>
+          <span className="block truncate text-[11px] text-sidebar-foreground/60">Tahqaq</span>
+        </span>
+      )}
+    </div>
+  );
+}
+
+export function AppLayout({ children }: { children: ReactNode }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { t, dir } = useI18n();
+  const { profile, role } = useSession();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    toast.success(t("auth.signedOut"));
+    navigate({ to: "/auth", replace: true });
+  }
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      {/* Desktop sidebar */}
+      <aside
+        className={cn(
+          "sticky top-0 hidden h-screen shrink-0 flex-col bg-sidebar transition-[width] duration-200 md:flex",
+          collapsed ? "w-[72px]" : "w-64",
+        )}
+      >
+        <Brand collapsed={collapsed} />
+        <NavLinks collapsed={collapsed} />
+        <div className="border-t border-sidebar-border p-3">
+          <button
+            type="button"
+            onClick={() => setCollapsed((v) => !v)}
+            className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          >
+            {collapsed ? (
+              <PanelLeftOpen className="size-4" aria-hidden />
+            ) : (
+              <>
+                <PanelLeftClose className="size-4" aria-hidden />
+                <span>{t("nav.collapse")}</span>
+              </>
+            )}
+          </button>
+        </div>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-border bg-card/95 px-4 py-3 backdrop-blur">
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label={t("nav.expand")}>
+                <Menu className="size-5" aria-hidden />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side={dir === "rtl" ? "right" : "left"} className="w-72 bg-sidebar p-0">
+              <SheetTitle className="sr-only">{t("app.name")}</SheetTitle>
+              <Brand collapsed={false} />
+              <NavLinks collapsed={false} onNavigate={() => setMobileOpen(false)} />
+            </SheetContent>
+          </Sheet>
+
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-foreground">{t("app.name")}</p>
+            <p className="hidden truncate text-xs text-muted-foreground sm:block">
+              {t("app.tagline")}
+            </p>
+          </div>
+
+          <LanguageToggle />
+
+          <div className="hidden text-end sm:block">
+            <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
+              {profile?.full_name || profile?.email || "—"}
+            </p>
+            <p className="text-[11px] text-muted-foreground">
+              {role ? t(`roles.${role}`) : "—"}
+            </p>
+          </div>
+
+          <Button variant="outline" size="sm" onClick={signOut} className="gap-2">
+            <LogOut className="size-4" aria-hidden />
+            <span className="hidden sm:inline">{t("nav.signOut")}</span>
+          </Button>
+        </header>
+
+        <main className="flex-1 p-4 md:p-6">{children}</main>
+      </div>
+    </div>
+  );
+}
+
+export function PageHeader({
+  title,
+  description,
+  actions,
+}: {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+}) {
+  return (
+    <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+      <div className="min-w-0">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
+        {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+      </div>
+      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+    </div>
+  );
+}
