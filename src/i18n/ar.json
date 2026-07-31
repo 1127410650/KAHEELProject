@@ -43,7 +43,8 @@
     "arabic": "العربية",
     "english": "English",
     "notAllowed": "لا تملك صلاحية لهذا الإجراء",
-    "select": "اختر…"
+    "select": "اختر…",
+    "reference": "المرجع"
   },
   "nav": {
     "dashboard": "لوحة التحكم",
@@ -220,7 +221,8 @@
     },
     "reversedBy": "معكوسة بالسند",
     "reversalOf": "عكس السند",
-    "netEffect": "الأثر الصافي"
+    "netEffect": "الأثر الصافي",
+    "noPermission": "ليس لديك صلاحية لعرض العهدة"
   },
   "users": {
     "title": "المستخدمون والصلاحيات",

@@ -81,7 +81,7 @@ const supervisorGroups: { titleKey: string; items: NavItem[] }[] = [
       { to: "/portal", labelKey: "nav.home", icon: Inbox },
       { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
       { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
-      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet },
+      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet, perm: "custody.view_own" },
       { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
     ],
   },
