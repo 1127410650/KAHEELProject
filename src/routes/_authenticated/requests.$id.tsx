@@ -331,6 +331,14 @@ function RequestDetailPage() {
     | null;
 
   const receipts = attachments.filter((a) => a.kind === "payment_receipt");
+  const statuses: RequestStatus[] = request
+    ? ([request.status, ...nextStatuses(request.status)] as RequestStatus[])
+    : [];
+  const isRequester =
+    !!request && (request.requester_id === session?.user.id || request.created_by === session?.user.id);
+  const progress = request ? requestProgress(request.status) : 0;
+
+
 
   return (
     <>
