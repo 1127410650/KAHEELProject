@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Plus, Search, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,7 @@ import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
+import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -79,6 +80,7 @@ function ProjectsPage() {
   const { t, locale } = useI18n();
   const { isAccountant, session } = useSession();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<ProjectForm>(emptyForm);
@@ -111,6 +113,34 @@ function ProjectsPage() {
       return data;
     },
   });
+
+  const { data: requestRows = [] } = useQuery({
+    queryKey: ["projects", "request-summary"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("requests")
+        .select("id, project_id, status, payment_no, created_at")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const requestStats = new Map<
+    string,
+    { open: number; awaiting: number; latestPaymentNo: string | null }
+  >();
+  for (const r of requestRows) {
+    const entry =
+      requestStats.get(r.project_id) ?? { open: 0, awaiting: 0, latestPaymentNo: null };
+    if (r.status !== "completed" && r.status !== "cancelled") entry.open += 1;
+    if (r.status === "awaiting_payment") {
+      entry.awaiting += 1;
+      if (!entry.latestPaymentNo && r.payment_no) entry.latestPaymentNo = r.payment_no;
+    }
+    requestStats.set(r.project_id, entry);
+  }
 
   const save = useMutation({
     mutationFn: async (values: ProjectForm) => {
@@ -384,19 +414,24 @@ function ProjectsPage() {
                 <th className="px-4 py-3 text-start font-semibold">{t("projects.nameAr")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("projects.supervisor")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.status")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("requests.title")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
                     {t("projects.empty")}
                   </td>
                 </tr>
               )}
               {filtered.map((row) => (
-                <tr key={row.id} className="hover:bg-secondary/40">
+                <tr
+                  key={row.id}
+                  className="cursor-pointer hover:bg-secondary/40"
+                  onClick={() => void navigate({ to: "/projects/$id", params: { id: row.id } })}
+                >
                   <td className="num px-4 py-3 font-medium">{row.code}</td>
                   <td className="px-4 py-3">{pickName(locale, row.name_ar, row.name_en)}</td>
                   <td className="px-4 py-3 text-muted-foreground">
@@ -410,13 +445,46 @@ function ProjectsPage() {
                     <StatusBadge status={row.status} />
                   </td>
                   <td className="px-4 py-3">
+                    <div className="flex flex-col items-start gap-1 text-xs text-muted-foreground">
+                      <span>
+                        {t("requests.openRequests")}:{" "}
+                        <span className="num font-semibold text-foreground">
+                          {requestStats.get(row.id)?.open ?? 0}
+                        </span>
+                      </span>
+                      <span>
+                        {t("requests.awaitingPayment")}:{" "}
+                        <span className="num font-semibold text-foreground">
+                          {requestStats.get(row.id)?.awaiting ?? 0}
+                        </span>
+                      </span>
+                      <PaymentNoBadge
+                        paymentNo={requestStats.get(row.id)?.latestPaymentNo ?? null}
+                      />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={t("projects.title")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void navigate({ to: "/projects/$id", params: { id: row.id } });
+                        }}
+                      >
+                        <ArrowUpRight className="size-4" aria-hidden />
+                      </Button>
+                    </div>
                     {isAccountant && (
                       <div className="flex gap-1">
                         <Button
                           variant="ghost"
                           size="icon"
                           aria-label={t("common.edit")}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setForm({
                               id: row.id,
                               code: row.code,
@@ -440,12 +508,13 @@ function ProjectsPage() {
                           variant="ghost"
                           size="icon"
                           aria-label={t("common.delete")}
-                          onClick={() =>
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setDeleteTarget({
                               id: row.id,
                               name: pickName(locale, row.name_ar, row.name_en),
-                            })
-                          }
+                            });
+                          }}
                         >
                           <Trash2 className="size-4 text-destructive" aria-hidden />
                         </Button>
