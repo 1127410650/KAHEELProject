@@ -317,13 +317,17 @@ function RequestDetailPage() {
   if (!requestQuery.isPending && !request) {
     return (
       <>
-        <PageHeader title={t("requests.details")} description={t("requests.notFound")} />
+        <PageHeader
+          title={t("requests.details")}
+          description={existsQuery.data ? t("requests.forbidden") : t("requests.notFound")}
+        />
         <Button asChild variant="outline">
           <Link to="/requests">{t("common.back")}</Link>
         </Button>
       </>
     );
   }
+
 
   const project = request?.projects as { code?: string; name_ar?: string; name_en?: string } | null;
   const supervisor = request?.supervisors as
@@ -415,9 +419,19 @@ function RequestDetailPage() {
                 />
                 <Row label={t("requests.requestType")} value={request?.request_type} />
                 <Row
+                  label={t("requests.scope")}
+                  value={
+                    request
+                      ? (locale === "ar" ? REQUEST_SCOPE_LABELS_AR : REQUEST_SCOPE_LABELS_EN)[
+                          (request.request_scope ?? "general") as RequestScope
+                        ]
+                      : "—"
+                  }
+                />
+                <Row
                   label={t("requests.project")}
                   value={
-                    request ? (
+                    request?.project_id ? (
                       <Link
                         to="/projects/$id"
                         params={{ id: request.project_id }}
@@ -431,6 +445,7 @@ function RequestDetailPage() {
                     )
                   }
                 />
+
                 <Row
                   label={t("requests.supervisor")}
                   value={
