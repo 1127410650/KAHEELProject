@@ -111,7 +111,7 @@ function PortalPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("requests")
-        .select("*, projects(code, name_ar, name_en)")
+        .select("*, projects!requests_project_id_fkey(code, name_ar, name_en)")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -124,10 +124,12 @@ function PortalPage() {
       const { error } = await supabase.rpc("submit_portal_request", {
         _kind: values.kind,
         _request_type: kindLabels[values.kind],
-        _project_id: values.kind === "project_create" ? null : values.project_id || null,
-        _amount: values.amount ? Number(values.amount) : null,
-        _notes_ar: values.notes_ar || null,
-        _authority: values.authority || null,
+        ...(values.kind === "project_create" || !values.project_id
+          ? {}
+          : { _project_id: values.project_id }),
+        ...(values.amount ? { _amount: Number(values.amount) } : {}),
+        ...(values.notes_ar ? { _notes_ar: values.notes_ar } : {}),
+        ...(values.authority ? { _authority: values.authority } : {}),
         _request_date: values.request_date,
       });
       if (error) throw error;
@@ -359,7 +361,7 @@ function PortalPage() {
                   <td className="num px-4 py-3">
                     <div className="flex flex-wrap items-center gap-2">
                       {formatDate(row.request_date)}
-                      {row.payment_no && <PaymentNoBadge value={row.payment_no} />}
+                      {row.payment_no && <PaymentNoBadge paymentNo={row.payment_no} />}
                     </div>
                   </td>
                   <td className="px-4 py-3">
