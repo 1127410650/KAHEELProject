@@ -43,6 +43,8 @@ interface SupervisorForm {
   name_en: string;
   national_id: string;
   phone: string;
+  email: string;
+  job_title: string;
   notes_ar: string;
   is_active: boolean;
 }
@@ -52,9 +54,12 @@ const emptyForm: SupervisorForm = {
   name_en: "",
   national_id: "",
   phone: "",
+  email: "",
+  job_title: "",
   notes_ar: "",
   is_active: true,
 };
+
 
 function SupervisorsPage() {
   const { t, locale } = useI18n();
