@@ -61,7 +61,8 @@ export function StageBar({ status }: { status: string }) {
             </span>
             {i < SIMPLE_STAGES.length - 1 && (
               <span aria-hidden className="text-muted-foreground">
-                ←
+                <span className="ltr:hidden">←</span>
+                <span className="hidden ltr:inline">→</span>
               </span>
             )}
           </li>
