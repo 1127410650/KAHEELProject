@@ -16,16 +16,19 @@ export type Database = {
     Tables: {
       app_settings: {
         Row: {
+          is_public: boolean
           key: string
           updated_at: string
           value: Json
         }
         Insert: {
+          is_public?: boolean
           key: string
           updated_at?: string
           value: Json
         }
         Update: {
+          is_public?: boolean
           key?: string
           updated_at?: string
           value?: Json
@@ -477,6 +480,10 @@ export type Database = {
         Returns: boolean
       }
       can_access_project: { Args: { _project_id: string }; Returns: boolean }
+      can_access_supervisor: {
+        Args: { _supervisor_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -485,6 +492,17 @@ export type Database = {
         Returns: boolean
       }
       is_accountant: { Args: never; Returns: boolean }
+      log_audit: {
+        Args: {
+          _action: string
+          _entity_id?: string
+          _entity_type: string
+          _new_value?: Json
+          _old_value?: Json
+          _reason?: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_locale: "ar" | "en"
