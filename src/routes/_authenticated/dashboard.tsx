@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Users, FolderKanban, Wallet, Clock } from "lucide-react";
 
@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate, formatMoney, formatNumber, pickName } from "@/lib/format";
+import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -47,6 +48,15 @@ function StatCard({
 }
 
 function DashboardPage() {
+  const { isSupervisor, isAccountant, loading } = useSession();
+
+  if (loading) return null;
+  if (isSupervisor && !isAccountant) return <Navigate to="/portal" replace />;
+
+  return <DashboardContent />;
+}
+
+function DashboardContent() {
   const { t, locale } = useI18n();
 
   const { data } = useQuery({
