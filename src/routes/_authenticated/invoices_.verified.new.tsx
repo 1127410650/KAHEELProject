@@ -192,6 +192,10 @@ function SaveVerifiedInvoicePage() {
       toast.error(t("tiv.supplierRequired"));
       return;
     }
+    if (!projectId) {
+      toast.error(t("tiv.projectRequired"));
+      return;
+    }
     setBusy(true);
     try {
       const outcome = await saveVerifiedInvoice({
@@ -400,7 +404,7 @@ function SaveVerifiedInvoicePage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>{t("tiv.project")}</Label>
+            <Label>{t("tiv.project")} *</Label>
             <Select value={projectId || "none"} onValueChange={(v) => setProjectId(v === "none" ? "" : v)}>
               <SelectTrigger>
                 <SelectValue placeholder={t("tiv.pickProject")} />

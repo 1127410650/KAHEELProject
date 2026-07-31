@@ -1013,6 +1013,7 @@
     "reason": "Reason",
     "nameAr": "Arabic name",
     "nameEn": "English name",
-    "category": "Category"
+    "category": "Category",
+    "projectRequired": "Project is required for an invoice"
   }
 }
