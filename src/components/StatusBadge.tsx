@@ -12,6 +12,11 @@ const tones: Record<string, string> = {
   completed: "bg-primary/10 text-primary border-primary/25",
   awaiting_payment: "bg-warning/20 text-warning-foreground border-warning/50",
   inactive: "bg-muted text-muted-foreground border-border",
+  new: "bg-info/10 text-info border-info/30",
+  processing: "bg-primary/10 text-primary border-primary/25",
+  needs_info: "bg-warning/15 text-warning-foreground border-warning/40",
+  paid: "bg-success/12 text-success border-success/30",
+
 };
 
 export function StatusBadge({ status }: { status: string }) {
