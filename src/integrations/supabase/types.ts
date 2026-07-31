@@ -135,6 +135,7 @@ export type Database = {
           delete_reason: string | null
           deleted_at: string | null
           id: string
+          invoice_id: string | null
           notes_ar: string | null
           notes_en: string | null
           project_id: string | null
@@ -157,6 +158,7 @@ export type Database = {
           delete_reason?: string | null
           deleted_at?: string | null
           id?: string
+          invoice_id?: string | null
           notes_ar?: string | null
           notes_en?: string | null
           project_id?: string | null
@@ -179,6 +181,7 @@ export type Database = {
           delete_reason?: string | null
           deleted_at?: string | null
           id?: string
+          invoice_id?: string | null
           notes_ar?: string | null
           notes_en?: string | null
           project_id?: string | null
@@ -192,6 +195,20 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "custody_transactions_project_id_fkey"
             columns: ["project_id"]
@@ -232,6 +249,152 @@ export type Database = {
             columns: ["supervisor_id"]
             isOneToOne: false
             referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_status_history: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["record_status"] | null
+          id: string
+          invoice_id: string
+          note: string | null
+          to_status: Database["public"]["Enums"]["record_status"]
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["record_status"] | null
+          id?: string
+          invoice_id: string
+          note?: string | null
+          to_status: Database["public"]["Enums"]["record_status"]
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["record_status"] | null
+          id?: string
+          invoice_id?: string
+          note?: string | null
+          to_status?: Database["public"]["Enums"]["record_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_status_history_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "invoice_status_history_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount_before_tax: number
+          client_token: string | null
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          description: string | null
+          duplicate_reason: string | null
+          id: string
+          internal_no: number
+          invoice_date: string
+          invoice_no: string
+          invoice_no_norm: string | null
+          project_id: string
+          status: Database["public"]["Enums"]["record_status"]
+          supervisor_id: string | null
+          supplier_id: string
+          tax_amount: number
+          total_amount: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount_before_tax?: number
+          client_token?: string | null
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          duplicate_reason?: string | null
+          id?: string
+          internal_no?: number
+          invoice_date: string
+          invoice_no: string
+          invoice_no_norm?: string | null
+          project_id: string
+          status?: Database["public"]["Enums"]["record_status"]
+          supervisor_id?: string | null
+          supplier_id: string
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount_before_tax?: number
+          client_token?: string | null
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          duplicate_reason?: string | null
+          id?: string
+          internal_no?: number
+          invoice_date?: string
+          invoice_no?: string
+          invoice_no_norm?: string | null
+          project_id?: string
+          status?: Database["public"]["Enums"]["record_status"]
+          supervisor_id?: string | null
+          supplier_id?: string
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "invoices_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
             referencedColumns: ["id"]
           },
         ]
@@ -584,6 +747,66 @@ export type Database = {
         }
         Relationships: []
       }
+      suppliers: {
+        Row: {
+          address: string | null
+          city: string | null
+          commercial_reg: string | null
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          email: string | null
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string | null
+          notes: string | null
+          phone: string | null
+          tax_number: string | null
+          unified_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          commercial_reg?: string | null
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en?: string | null
+          notes?: string | null
+          phone?: string | null
+          tax_number?: string | null
+          unified_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          commercial_reg?: string | null
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string | null
+          notes?: string | null
+          phone?: string | null
+          tax_number?: string | null
+          unified_number?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -621,10 +844,12 @@ export type Database = {
           amount: number | null
           deleted_at: string | null
           id: string | null
+          invoice_id: string | null
           notes_ar: string | null
           project_id: string | null
           reason: string | null
           reversal_of_id: string | null
+          reversal_of_invoice_id: string | null
           reversal_of_serial: number | null
           reversal_of_type:
             | Database["public"]["Enums"]["custody_txn_type"]
@@ -639,6 +864,34 @@ export type Database = {
           txn_type: Database["public"]["Enums"]["custody_txn_type"] | null
         }
         Relationships: [
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["reversal_of_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["reversal_of_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "custody_transactions_project_id_fkey"
             columns: ["project_id"]
@@ -683,6 +936,27 @@ export type Database = {
           },
         ]
       }
+      invoice_settlements: {
+        Row: {
+          invoice_id: string | null
+          remaining_amount: number | null
+          settled_amount: number | null
+          total_amount: number | null
+        }
+        Insert: {
+          invoice_id?: string | null
+          remaining_amount?: never
+          settled_amount?: never
+          total_amount?: number | null
+        }
+        Update: {
+          invoice_id?: string | null
+          remaining_amount?: never
+          settled_amount?: never
+          total_amount?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       can_access_attachment_object: {
@@ -708,6 +982,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      invoice_settled_amount: {
+        Args: { p_invoice_id: string }
+        Returns: number
+      }
       is_accountant: { Args: never; Returns: boolean }
       log_audit: {
         Args: {
@@ -720,6 +998,7 @@ export type Database = {
         }
         Returns: string
       }
+      normalize_doc_no: { Args: { p_value: string }; Returns: string }
     }
     Enums: {
       app_locale: "ar" | "en"
