@@ -263,7 +263,32 @@ function SupervisorsPage() {
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="s_email">
+                        {t("supervisors.email")}{" "}
+                        <span className="text-xs text-muted-foreground">({t("common.optional")})</span>
+                      </Label>
+                      <Input
+                        id="s_email"
+                        type="email"
+                        dir="ltr"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="s_job_title">
+                        {t("supervisors.jobTitle")}{" "}
+                        <span className="text-xs text-muted-foreground">({t("common.optional")})</span>
+                      </Label>
+                      <Input
+                        id="s_job_title"
+                        value={form.job_title}
+                        onChange={(e) => setForm({ ...form, job_title: e.target.value })}
+                      />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="notes">{t("common.notes")}</Label>
                     <Textarea
