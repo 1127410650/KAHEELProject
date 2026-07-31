@@ -379,6 +379,7 @@ function RequestDetailPage() {
                   projectName: pickName(locale, project?.name_ar, project?.name_en),
                 },
                 t("requests.untitled"),
+                locale,
               )
             : t("requests.details")
         }

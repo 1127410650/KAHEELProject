@@ -164,6 +164,7 @@ function ProjectDetailPage() {
                                   : null,
                               },
                               t("requests.untitled"),
+                              locale,
                             )}
                           </span>
                           <StageBadge status={r.status} />
