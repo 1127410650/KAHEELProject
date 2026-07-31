@@ -10,6 +10,8 @@ import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { ProjectMembersCard } from "@/components/ProjectMembersCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StageBadge } from "@/components/RequestStage";
+import { buildRequestTitle } from "@/lib/request-ui";
 import { formatDate, pickName } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/projects/$id")({
@@ -143,40 +145,59 @@ function ProjectDetailPage() {
             {requests.length === 0 ? (
               <p className="px-6 pb-6 text-sm text-muted-foreground">{t("requests.empty")}</p>
             ) : (
-              <ul className="divide-y divide-border">
-                {requests.map((r) => (
-                  <li key={r.id}>
-                    <button
-                      type="button"
-                      className="w-full px-6 py-3 text-start transition hover:bg-secondary/40"
-                      onClick={() => void navigate({ to: "/requests/$id", params: { id: r.id } })}
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-sm font-medium">
-                          <span className="num">{r.request_no}</span> · {r.request_type}
-                        </span>
-                        <StatusBadge status={r.status} />
-                      </div>
-                      <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                        <span>
-                          {pickName(
-                            locale,
-                            (r.supervisors as { name_ar?: string } | null)?.name_ar,
-                            (r.supervisors as { name_en?: string } | null)?.name_en,
-                          )}
-                        </span>
-                        <span className="num">
-                          {t("common.date")}: {formatDate(r.request_date)}
-                        </span>
-                        <PaymentNoBadge paymentNo={r.payment_no} />
-                      </div>
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="divide-y divide-border">
+                  {requests.slice(0, 5).map((r) => (
+                    <li key={r.id}>
+                      <button
+                        type="button"
+                        className="w-full px-6 py-3 text-start transition hover:bg-secondary/40"
+                        onClick={() => void navigate({ to: "/requests/$id", params: { id: r.id } })}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="text-sm font-medium">
+                            {buildRequestTitle(
+                              {
+                                ...r,
+                                projectName: project
+                                  ? pickName(locale, project.name_ar, project.name_en)
+                                  : null,
+                              },
+                              t("requests.untitled"),
+                            )}
+                          </span>
+                          <StageBadge status={r.status} />
+                        </div>
+                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                          <span className="num">{r.request_no}</span>
+                          <span>
+                            {pickName(
+                              locale,
+                              (r.supervisors as { name_ar?: string } | null)?.name_ar,
+                              (r.supervisors as { name_en?: string } | null)?.name_en,
+                            )}
+                          </span>
+                          <span className="num">
+                            {t("common.date")}: {formatDate(r.request_date)}
+                          </span>
+                          <PaymentNoBadge paymentNo={r.payment_no} />
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                {requests.length > 5 && (
+                  <div className="px-6 py-3">
+                    <Button asChild variant="outline" size="sm">
+                      <Link to="/requests">{t("portal.viewAll")}</Link>
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </CardContent>
         </Card>
+
 
         <div className="lg:col-span-3">
           <ProjectMembersCard projectId={id} />

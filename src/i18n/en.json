@@ -414,15 +414,17 @@
     "viewRequest": "View request",
     "untitled": "Untitled request",
     "viewAllProject": "View all project requests",
-    "showFullTimeline": "Show full stage log",
+    "showFullTimeline": "Show full stage timeline",
     "hideFullTimeline": "Hide stage log",
     "summary": "Request summary",
     "extraData": "Additional request data",
     "conversation": "Conversation and follow-up",
     "documents": "Documents and attachments",
-    "advancedTools": "Advanced tools (manager)",
+    "advancedTools": "Advanced tools",
     "assignedOfficer": "Responsible officer",
-    "search": "Search requests"
+    "search": "Search requests",
+    "workbox": "Workbox",
+    "workboxHint": "Requests grouped by the action required from you"
   },
   "suppliers": {
     "title": "Suppliers",

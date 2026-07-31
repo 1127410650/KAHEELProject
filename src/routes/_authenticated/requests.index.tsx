@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Pencil, History } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -9,8 +9,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
-import { StatusBadge } from "@/components/StatusBadge";
-import { PaymentNoBadge } from "@/components/PaymentNoBadge";
+import { RequestCard } from "@/components/RequestCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,30 +29,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { formatDate, formatDateTime, pickName, todayInRiyadh } from "@/lib/format";
+import { formatMoney, pickName, todayInRiyadh } from "@/lib/format";
+import { REQUEST_KIND_LABELS_AR, REQUEST_KIND_LABELS_EN, type RequestKind } from "@/lib/permissions";
 import {
-  ALL_REQUEST_STATUSES,
-  INBOX_VIEWS,
-  matchesInboxView,
-  requestProgress,
-  type InboxView,
-} from "@/lib/requests";
+  buildRequestTitle,
+  PORTAL_GROUPS,
+  portalGroupOf,
+  resolveNextAction,
+  STAFF_GROUPS,
+  staffGroupOf,
+} from "@/lib/request-ui";
 import { cn } from "@/lib/utils";
 
-import type { Database } from "@/integrations/supabase/types";
 
-type RequestStatus = Database["public"]["Enums"]["request_status"];
 
 export const Route = createFileRoute("/_authenticated/requests/")({
   head: () => ({
     meta: [
-      { title: "الطلبات — تحقّق | Requests — Tahqaq" },
+      { title: "صندوق العمل — الطلبات — تحقّق | Workbox — Tahqaq" },
       {
         name: "description",
-        content: "إدارة الطلبات ومراحلها وربطها بالمشروع والمشرف داخل تحقّق.",
+        content: "صندوق عمل الطلبات: ما هو مطلوب منك الآن وما ينتظر الرد أو الاعتماد أو التنفيذ.",
       },
-      { property: "og:title", content: "الطلبات — تحقّق" },
-      { property: "og:description", content: "Track requests and their stages per project." },
+      { property: "og:title", content: "صندوق العمل — الطلبات — تحقّق" },
+      { property: "og:description", content: "Request workbox grouped by the action required." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -61,18 +60,13 @@ export const Route = createFileRoute("/_authenticated/requests/")({
   component: RequestsPage,
 });
 
-const statuses: RequestStatus[] = ALL_REQUEST_STATUSES as unknown as RequestStatus[];
-
-
 interface RequestForm {
-  id?: string;
   request_no: string;
   request_type: string;
   project_id: string;
   request_date: string;
   reference_no: string;
   notes_ar: string;
-  status: RequestStatus;
 }
 
 const emptyForm: RequestForm = {
@@ -82,22 +76,20 @@ const emptyForm: RequestForm = {
   request_date: todayInRiyadh(),
   reference_no: "",
   notes_ar: "",
-  status: "new",
 };
 
 function RequestsPage() {
   const { t, locale } = useI18n();
-  const { isAccountant, session } = useSession();
+  const { session, role, can, isSupervisor } = useSession();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
+
   const [query, setQuery] = useState("");
   const [projectFilter, setProjectFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const groupList: readonly string[] = isSupervisor ? PORTAL_GROUPS : STAFF_GROUPS;
+  const [group, setGroup] = useState<string>(isSupervisor ? "action_mine" : "mine_now");
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<RequestForm>(emptyForm);
-  const [historyOf, setHistoryOf] = useState<string | null>(null);
-  const [inboxView, setInboxView] = useState<InboxView>("all");
-
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects", "list"],
@@ -113,32 +105,38 @@ function RequestsPage() {
   });
 
   const { data: rows = [] } = useQuery({
-    queryKey: ["requests", projectFilter, statusFilter],
+    queryKey: ["requests", "workbox", projectFilter],
     queryFn: async () => {
       let request = supabase
         .from("requests")
-        .select("*, projects!requests_project_id_fkey(code, name_ar, name_en), supervisors(name_ar, name_en)")
+        .select(
+          "*, projects!requests_project_id_fkey(code, name_ar, name_en), supervisors(name_ar, name_en)",
+        )
         .is("deleted_at", null)
-        .order("created_at", { ascending: false });
+        .order("updated_at", { ascending: false });
       if (projectFilter !== "all") request = request.eq("project_id", projectFilter);
-      if (statusFilter !== "all") request = request.eq("status", statusFilter as RequestStatus);
       const { data, error } = await request;
       if (error) throw error;
       return data;
     },
   });
 
-  const { data: history = [] } = useQuery({
-    queryKey: ["request-history", historyOf],
-    enabled: !!historyOf,
+  const { data: unreadByRequest = new Map<string, number>() } = useQuery({
+    queryKey: ["requests", "unread", session?.user.id],
+    enabled: !!session?.user.id,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("request_status_history")
-        .select("*")
-        .eq("request_id", historyOf!)
-        .order("created_at", { ascending: true });
+        .from("notifications")
+        .select("request_id")
+        .is("read_at", null)
+        .limit(500);
       if (error) throw error;
-      return data;
+      const map = new Map<string, number>();
+      for (const n of data ?? []) {
+        if (!n.request_id) continue;
+        map.set(n.request_id, (map.get(n.request_id) ?? 0) + 1);
+      }
+      return map;
     },
   });
 
@@ -154,26 +152,15 @@ function RequestsPage() {
       const payload = {
         request_no: values.request_no.trim(),
         request_type: values.request_type.trim(),
-        kind: "project_service",
-        request_scope: "project",
+        title: values.request_type.trim(),
+        kind: "project_service" as const,
+        request_scope: "project" as const,
         project_id: values.project_id,
         supervisor_id: project.supervisor_id,
         request_date: values.request_date,
         reference_no: values.reference_no.trim() || null,
         notes_ar: values.notes_ar.trim() || null,
       };
-      if (values.id) {
-        const { error } = await supabase.from("requests").update(payload).eq("id", values.id);
-        if (error) throw error;
-        await logAudit({
-          actorId: session?.user.id,
-          entityType: "request",
-          entityId: values.id,
-          action: "update",
-          newValue: payload,
-        });
-        return "updated" as const;
-      }
       const { data, error } = await supabase
         .from("requests")
         .insert({ ...payload, status: "new", created_by: session?.user.id ?? null })
@@ -187,10 +174,9 @@ function RequestsPage() {
         action: "create",
         newValue: payload,
       });
-      return "created" as const;
     },
-    onSuccess: (result) => {
-      toast.success(t(result === "created" ? "requests.created" : "requests.updated"));
+    onSuccess: () => {
+      toast.success(t("requests.created"));
       setOpen(false);
       setForm(emptyForm);
       void queryClient.invalidateQueries({ queryKey: ["requests"] });
@@ -202,203 +188,225 @@ function RequestsPage() {
     },
   });
 
-  const changeStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: RequestStatus }) => {
-      const { error } = await supabase.from("requests").update({ status }).eq("id", id);
-      if (error) throw error;
-      await logAudit({
-        actorId: session?.user.id,
-        entityType: "request",
-        entityId: id,
-        action: "update",
-        newValue: { status },
-      });
-    },
-    onSuccess: () => {
-      toast.success(t("requests.statusUpdated"));
-      void queryClient.invalidateQueries({ queryKey: ["requests"] });
-      void queryClient.invalidateQueries({ queryKey: ["request-history"] });
-    },
-    onError: () => toast.error(t("errors.saveFailed")),
-  });
-
-  const today = todayInRiyadh();
-  const filtered = rows.filter((row) => {
-    if (!matchesInboxView(row, inboxView, session?.user.id, today)) return false;
+  const cards = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return true;
-    return [row.request_no, row.request_type, row.reference_no, row.title]
-      .filter(Boolean)
-      .some((v) => String(v).toLowerCase().includes(q));
-  });
+    return rows
+      .filter((row) =>
+        !q
+          ? true
+          : [row.request_no, row.request_type, row.reference_no, row.title]
+              .filter(Boolean)
+              .some((v) => String(v).toLowerCase().includes(q)),
+      )
+      .map((row) => {
+        const projectName = row.projects
+          ? pickName(locale, row.projects.name_ar, row.projects.name_en)
+          : null;
+        const action = resolveNextAction(row, {
+          role,
+          isSupervisorView: isSupervisor,
+          isRequester: row.created_by === session?.user.id,
+          can: (perm) => can(perm as never),
+        });
+        return {
+          group: isSupervisor ? portalGroupOf(row.status) : staffGroupOf(row.status),
+          card: {
+            id: row.id,
+            request_no: row.request_no,
+            title: buildRequestTitle({ ...row, projectName }, t("requests.untitled")),
+            typeLabel: kindLabels[row.kind as RequestKind] ?? row.request_type,
+            projectName,
+            requesterName: row.supervisors
+              ? pickName(locale, row.supervisors.name_ar, row.supervisors.name_en)
+              : null,
+            status: row.status,
+            requestDate: row.request_date,
+            updatedAt: row.updated_at,
+            actionText: t(action.messageKey),
+            unread: unreadByRequest.get(row.id) ?? 0,
+            amountText: row.amount != null ? formatMoney(row.amount, locale) : null,
+            paymentNo: row.payment_no,
+          },
+        };
+      });
+  }, [rows, query, locale, role, can, isSupervisor, session?.user.id, t, kindLabels, unreadByRequest]);
 
+  const counts = useMemo(() => {
+    const base: Record<string, number> = {};
+    for (const g of groupList) base[g] = 0;
+    for (const c of cards) base[c.group] = (base[c.group] ?? 0) + 1;
+    return base;
+  }, [cards, groupList]);
+
+  const visible = cards.filter((c) => c.group === group);
 
   return (
     <>
       <PageHeader
-        title={t("requests.title")}
-        description={t("requests.description")}
+        title={t("requests.workbox")}
+        description={t("requests.workboxHint")}
         actions={
-          <Dialog
-            open={open}
-            onOpenChange={(next) => {
-              setOpen(next);
-              if (!next) setForm(emptyForm);
-            }}
-          >
-            <DialogTrigger asChild>
-              <Button className="w-full gap-2 sm:w-auto">
-                <Plus className="size-4" aria-hidden />
-                {t("requests.add")}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{form.id ? t("requests.edit") : t("requests.add")}</DialogTitle>
-              </DialogHeader>
-              <form
-                id="request-form"
-                className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!form.project_id) {
-                    toast.error(t("requests.projectRequired"));
-                    return;
-                  }
-                  save.mutate(form);
-                }}
-              >
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="r_no">{t("requests.requestNo")} *</Label>
-                    <Input
-                      id="r_no"
-                      required
-                      dir="ltr"
-                      value={form.request_no}
-                      onChange={(e) => setForm({ ...form, request_no: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="r_type">{t("requests.requestType")} *</Label>
-                    <Input
-                      id="r_type"
-                      required
-                      value={form.request_type}
-                      onChange={(e) => setForm({ ...form, request_type: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{t("requests.project")} *</Label>
-                    <Select
-                      value={form.project_id}
-                      onValueChange={(v) => setForm({ ...form, project_id: v })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("common.select")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {projects.map((p) => (
-                          <SelectItem key={p.id} value={p.id}>
-                            {p.code} — {pickName(locale, p.name_ar, p.name_en)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>
-                      {t("requests.supervisor")}{" "}
-                      <span className="text-xs text-muted-foreground">
-                        ({t("requests.supervisorFromProject")})
-                      </span>
-                    </Label>
-                    <Input
-                      readOnly
-                      value={
-                        selectedProject
-                          ? pickName(
-                              locale,
-                              (selectedProject.supervisors as { name_ar?: string } | null)?.name_ar,
-                              (selectedProject.supervisors as { name_en?: string } | null)?.name_en,
-                            )
-                          : ""
-                      }
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="r_date">{t("requests.requestDate")} *</Label>
-                    <Input
-                      id="r_date"
-                      required
-                      type="date"
-                      lang="en-GB"
-                      dir="ltr"
-                      value={form.request_date}
-                      onChange={(e) => setForm({ ...form, request_date: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="r_ref">
-                      {t("requests.referenceNo")}{" "}
-                      <span className="text-xs text-muted-foreground">
-                        ({t("common.optional")})
-                      </span>
-                    </Label>
-                    <Input
-                      id="r_ref"
-                      dir="ltr"
-                      value={form.reference_no}
-                      onChange={(e) => setForm({ ...form, reference_no: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="r_notes">{t("common.notes")}</Label>
-                  <Textarea
-                    id="r_notes"
-                    value={form.notes_ar}
-                    onChange={(e) => setForm({ ...form, notes_ar: e.target.value })}
-                  />
-                </div>
-              </form>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                  {t("common.cancel")}
+          can("requests.create") ? (
+            <Dialog
+              open={open}
+              onOpenChange={(next) => {
+                setOpen(next);
+                if (!next) setForm(emptyForm);
+              }}
+            >
+              <DialogTrigger asChild>
+                <Button className="w-full gap-2 sm:w-auto">
+                  <Plus className="size-4" aria-hidden />
+                  {t("requests.add")}
                 </Button>
-                <Button type="submit" form="request-form" disabled={save.isPending}>
-                  {t("common.save")}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent className="max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{t("requests.add")}</DialogTitle>
+                </DialogHeader>
+                <form
+                  id="request-form"
+                  className="space-y-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!form.project_id) {
+                      toast.error(t("requests.projectRequired"));
+                      return;
+                    }
+                    save.mutate(form);
+                  }}
+                >
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="r_no">{t("requests.requestNo")} *</Label>
+                      <Input
+                        id="r_no"
+                        required
+                        dir="ltr"
+                        value={form.request_no}
+                        onChange={(e) => setForm({ ...form, request_no: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="r_type">{t("requests.requestType")} *</Label>
+                      <Input
+                        id="r_type"
+                        required
+                        value={form.request_type}
+                        onChange={(e) => setForm({ ...form, request_type: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("requests.project")} *</Label>
+                      <Select
+                        value={form.project_id}
+                        onValueChange={(v) => setForm({ ...form, project_id: v })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("common.select")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {projects.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              <span className="num">{p.code}</span> —{" "}
+                              {pickName(locale, p.name_ar, p.name_en)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>
+                        {t("requests.supervisor")}{" "}
+                        <span className="text-xs text-muted-foreground">
+                          ({t("requests.supervisorFromProject")})
+                        </span>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={
+                          selectedProject
+                            ? pickName(
+                                locale,
+                                (selectedProject.supervisors as { name_ar?: string } | null)
+                                  ?.name_ar,
+                                (selectedProject.supervisors as { name_en?: string } | null)
+                                  ?.name_en,
+                              )
+                            : ""
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="r_date">{t("requests.requestDate")} *</Label>
+                      <Input
+                        id="r_date"
+                        required
+                        type="date"
+                        lang="en-GB"
+                        dir="ltr"
+                        value={form.request_date}
+                        onChange={(e) => setForm({ ...form, request_date: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="r_ref">
+                        {t("requests.referenceNo")}{" "}
+                        <span className="text-xs text-muted-foreground">
+                          ({t("common.optional")})
+                        </span>
+                      </Label>
+                      <Input
+                        id="r_ref"
+                        dir="ltr"
+                        value={form.reference_no}
+                        onChange={(e) => setForm({ ...form, reference_no: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="r_notes">{t("common.notes")}</Label>
+                    <Textarea
+                      id="r_notes"
+                      value={form.notes_ar}
+                      onChange={(e) => setForm({ ...form, notes_ar: e.target.value })}
+                    />
+                  </div>
+                </form>
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                    {t("common.cancel")}
+                  </Button>
+                  <Button type="submit" form="request-form" disabled={save.isPending}>
+                    {t("common.save")}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          ) : null
         }
       />
 
-      <nav aria-label={t("requests.inbox")} className="mb-4 flex flex-wrap gap-2">
-        {INBOX_VIEWS.map((view) => {
-          const count = rows.filter((r) => matchesInboxView(r, view, session?.user.id, todayInRiyadh())).length;
-          return (
-            <button
-              key={view}
-              type="button"
-              onClick={() => setInboxView(view)}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                inboxView === view
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:bg-secondary",
-              )}
-            >
-              {t(`inbox.${view}`)}
-              <span className="num opacity-70">{count}</span>
-            </button>
-          );
-        })}
+      <nav aria-label={t("requests.workbox")} className="mb-4 flex flex-wrap gap-2">
+        {groupList.map((g) => (
+          <button
+            key={g}
+            type="button"
+            onClick={() => setGroup(g)}
+            className={cn(
+              "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+              group === g
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border bg-card text-muted-foreground hover:bg-secondary",
+            )}
+          >
+            {t(`groups.${g}`)}
+            <span className="num opacity-70">{counts[g] ?? 0}</span>
+          </button>
+        ))}
       </nav>
 
       <div className="mb-4 flex flex-wrap items-end gap-3">
-
         <div className="relative w-full max-w-sm">
           <Search
             className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -421,23 +429,7 @@ function RequestsPage() {
               <SelectItem value="all">{t("common.all")}</SelectItem>
               {projects.map((p) => (
                 <SelectItem key={p.id} value={p.id}>
-                  {p.code} — {pickName(locale, p.name_ar, p.name_en)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="w-full max-w-48 space-y-2">
-          <Label>{t("common.status")}</Label>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              {statuses.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {t(`status.${s}`)}
+                  <span className="num">{p.code}</span> — {pickName(locale, p.name_ar, p.name_en)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -445,165 +437,18 @@ function RequestsPage() {
         </div>
       </div>
 
-      <div className="surface overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary/60">
-              <tr className="text-xs uppercase tracking-wide text-muted-foreground">
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.requestNo")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.requestType")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.project")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.supervisor")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.requestDate")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("common.status")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("common.actions")}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
-                    {t("requests.empty")}
-                  </td>
-                </tr>
-              )}
-              {filtered.map((row) => (
-                <tr
-                  key={row.id}
-                  className="cursor-pointer hover:bg-secondary/40"
-                  onClick={() => void navigate({ to: "/requests/$id", params: { id: row.id } })}
-                >
-                  <td className="num px-4 py-3 font-medium">{row.request_no}</td>
-                  <td className="px-4 py-3">{row.request_type}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    <span className="num">
-                      {(row.projects as { code?: string } | null)?.code ?? "—"}
-                    </span>{" "}
-                    {pickName(
-                      locale,
-                      (row.projects as { name_ar?: string } | null)?.name_ar,
-                      (row.projects as { name_en?: string } | null)?.name_en,
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {pickName(
-                      locale,
-                      (row.supervisors as { name_ar?: string } | null)?.name_ar,
-                      (row.supervisors as { name_en?: string } | null)?.name_en,
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-col items-start gap-1">
-                      <span className="num">{formatDate(row.request_date)}</span>
-                      <PaymentNoBadge paymentNo={row.payment_no} />
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-col items-start gap-1">
-                      <StatusBadge status={row.status} />
-                      <span className="flex items-center gap-1">
-                        <span className="h-1 w-16 overflow-hidden rounded-full bg-secondary">
-                          <span
-                            className="block h-full rounded-full bg-primary"
-                            style={{ width: `${requestProgress(row.status)}%` }}
-                          />
-                        </span>
-                        <span className="num text-[10px] text-muted-foreground">
-                          {requestProgress(row.status)}%
-                        </span>
-                      </span>
-                    </div>
-
-                  </td>
-                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex flex-wrap items-center gap-1">
-                      {isAccountant && (
-                        <Select
-                          value={row.status}
-                          onValueChange={(v) =>
-                            changeStatus.mutate({ id: row.id, status: v as RequestStatus })
-                          }
-                        >
-                          <SelectTrigger
-                            className="h-9 w-40"
-                            aria-label={t("requests.changeStatus")}
-                          >
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {statuses.map((s) => (
-                              <SelectItem key={s} value={s}>
-                                {t(`status.${s}`)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                      {(isAccountant ||
-                        (row.created_by === session?.user.id &&
-                          (row.status === "new" || row.status === "needs_info"))) && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          aria-label={t("common.edit")}
-                          onClick={() => {
-                            setForm({
-                              id: row.id,
-                              request_no: row.request_no,
-                              request_type: row.request_type,
-                              project_id: row.project_id ?? "",
-                              request_date: row.request_date,
-                              reference_no: row.reference_no ?? "",
-                              notes_ar: row.notes_ar ?? "",
-                              status: row.status,
-                            });
-                            setOpen(true);
-                          }}
-                        >
-                          <Pencil className="size-4" aria-hidden />
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label={t("requests.history")}
-                        onClick={() => setHistoryOf(row.id)}
-                      >
-                        <History className="size-4" aria-hidden />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {visible.length === 0 ? (
+        <div className="surface p-10 text-center text-sm text-muted-foreground">
+          {t("groups.emptyGroup")}
         </div>
-      </div>
-
-      <Dialog open={!!historyOf} onOpenChange={(v) => !v && setHistoryOf(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("requests.history")}</DialogTitle>
-          </DialogHeader>
-          {history.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("common.noData")}</p>
-          ) : (
-            <ul className="divide-y divide-border text-sm">
-              {history.map((h) => (
-                <li key={h.id} className="flex items-center justify-between gap-3 py-2.5">
-                  <span>
-                    {h.from_status ? `${t(`status.${h.from_status}`)} → ` : ""}
-                    {t(`status.${h.to_status}`)}
-                  </span>
-                  <span className="num text-xs text-muted-foreground">
-                    {formatDateTime(h.created_at)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </DialogContent>
-      </Dialog>
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+          {visible.map((c) => (
+            <RequestCard key={c.card.id} data={c.card} showRequester={!isSupervisor} />
+          ))}
+        </div>
+      )}
     </>
   );
 }
+

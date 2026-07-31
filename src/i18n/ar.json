@@ -420,9 +420,11 @@
     "extraData": "بيانات الطلب الإضافية",
     "conversation": "المحادثة والمتابعة",
     "documents": "المستندات والمرفقات",
-    "advancedTools": "أدوات متقدمة (للمسؤول)",
+    "advancedTools": "أدوات متقدمة",
     "assignedOfficer": "الموظف المختص",
-    "search": "بحث في الطلبات"
+    "search": "بحث في الطلبات",
+    "workbox": "صندوق العمل",
+    "workboxHint": "الطلبات مرتّبة حسب الإجراء المطلوب منك"
   },
   "suppliers": {
     "title": "الموردون",

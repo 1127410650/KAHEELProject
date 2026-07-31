@@ -116,8 +116,8 @@ export function buildRequestTitle(row: TitleSource, fallback: string): string {
   }
 
   const text = (row.notes_ar || row.reason || "").trim();
-  if (text) return text.length > 60 ? `${text.slice(0, 60)}…` : text;
-  if (row.request_type?.trim()) return row.request_type.trim();
+  if (text && !isPlaceholderTitle(text)) return text.length > 60 ? `${text.slice(0, 60)}…` : text;
+  if (!isPlaceholderTitle(row.request_type)) return row.request_type!.trim();
   return fallback;
 }
 
