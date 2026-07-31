@@ -36,6 +36,7 @@ import { RequestConversation } from "@/components/RequestConversation";
 import { RequestChangePanel } from "@/components/RequestChangePanel";
 import { nextStatuses } from "@/lib/requests";
 import { ActionNowCard } from "@/components/ActionNowCard";
+import { InfoTable } from "@/components/InfoTable";
 import { StageBadge, StageBar } from "@/components/RequestStage";
 import { buildRequestTitle } from "@/lib/request-ui";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
@@ -349,6 +350,16 @@ function RequestDetailPage() {
     | null;
 
   const receipts = attachments.filter((a) => a.kind === "payment_receipt");
+  const hasPaymentData = !!(
+    request?.payment_no ||
+    request?.payment_amount != null ||
+    request?.payment_beneficiary ||
+    request?.payment_expiry ||
+    request?.paid_at ||
+    request?.payment_method ||
+    request?.payment_reference ||
+    request?.payment_note
+  );
   const statuses: RequestStatus[] = request
     ? ([request.status, ...nextStatuses(request.status)] as RequestStatus[])
     : [];
