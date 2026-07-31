@@ -46,11 +46,30 @@ export interface VerificationResult {
   fileName?: string;
 }
 
-const VERDICT_STYLE: Record<VerdictLevel, { box: string; icon: typeof ShieldCheck }> = {
-  green: { box: "border-success/40 bg-success/10 text-success-foreground", icon: ShieldCheck },
-  yellow: { box: "border-warning/40 bg-warning/10 text-warning-foreground", icon: ShieldAlert },
-  red: { box: "border-destructive/40 bg-destructive/10 text-destructive", icon: XCircle },
-  gray: { box: "border-border bg-muted text-muted-foreground", icon: ShieldQuestion },
+const VERDICT_STYLE: Record<
+  VerdictLevel,
+  { box: string; tint: string; icon: typeof ShieldCheck }
+> = {
+  green: {
+    box: "border-success/40 bg-success/10 text-foreground",
+    tint: "text-success",
+    icon: ShieldCheck,
+  },
+  yellow: {
+    box: "border-warning/50 bg-warning/10 text-foreground",
+    tint: "text-warning",
+    icon: ShieldAlert,
+  },
+  red: {
+    box: "border-destructive/40 bg-destructive/10 text-foreground",
+    tint: "text-destructive",
+    icon: XCircle,
+  },
+  gray: {
+    box: "border-border bg-muted text-foreground",
+    tint: "text-muted-foreground",
+    icon: ShieldQuestion,
+  },
 };
 
 export function InvoiceVerifier({
@@ -329,7 +348,7 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
     <div className="space-y-3">
       <div className={`rounded-xl border p-4 ${style.box}`}>
         <div className="flex items-start gap-3">
-          <Icon className="mt-0.5 size-6 shrink-0" aria-hidden />
+          <Icon className={`mt-0.5 size-6 shrink-0 ${style.tint}`} aria-hidden />
           <div className="min-w-0">
             <p className="text-sm font-bold">{t(`verify.verdict.${result.verdict.level}`)}</p>
             <p className="mt-1 text-xs leading-relaxed">
