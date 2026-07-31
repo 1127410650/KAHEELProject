@@ -754,7 +754,7 @@ export type Database = {
           payment_no: string | null
           payment_note: string | null
           payment_reference: string | null
-          project_id: string
+          project_id: string | null
           reassign_reason: string | null
           reference_no: string | null
           request_date: string
@@ -793,7 +793,7 @@ export type Database = {
           payment_no?: string | null
           payment_note?: string | null
           payment_reference?: string | null
-          project_id: string
+          project_id?: string | null
           reassign_reason?: string | null
           reference_no?: string | null
           request_date?: string
@@ -832,7 +832,7 @@ export type Database = {
           payment_no?: string | null
           payment_note?: string | null
           payment_reference?: string | null
-          project_id?: string
+          project_id?: string | null
           reassign_reason?: string | null
           reference_no?: string | null
           request_date?: string
@@ -1236,6 +1236,18 @@ export type Database = {
       }
       send_request_reminder: {
         Args: { _message?: string; _request_id: string }
+        Returns: string
+      }
+      submit_portal_request: {
+        Args: {
+          _amount?: number
+          _authority?: string
+          _kind: string
+          _notes_ar?: string
+          _project_id?: string
+          _request_date?: string
+          _request_type: string
+        }
         Returns: string
       }
     }
