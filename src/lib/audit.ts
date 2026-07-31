@@ -8,7 +8,9 @@ export type AuditAction =
   | "soft_delete"
   | "restore"
   | "upload"
-  | "download";
+  | "download"
+  | "open";
+
 
 export async function logAudit(params: {
   /** Kept for call-site compatibility; the actor is derived server-side from the session. */
