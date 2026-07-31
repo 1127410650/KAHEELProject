@@ -17,7 +17,6 @@ import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { InfoTable } from "@/components/InfoTable";
 import {
   buildVerdict,
   checkCryptoLocally,
@@ -374,7 +373,25 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
       {qr && (
         <div className="surface space-y-2">
           <h3 className="text-sm font-semibold text-foreground">{t("verify.qrData")}</h3>
-          <InfoTable rows={rows} dense />
+          <div className="overflow-hidden rounded-lg border border-border">
+            <table className="w-full table-fixed text-sm">
+              <tbody>
+                {rows.map((row, index) => (
+                  <tr key={row.label} className={index % 2 === 1 ? "bg-muted/40" : undefined}>
+                    <th
+                      scope="row"
+                      className="w-[42%] border-b border-border/60 px-3 py-2 text-start align-top font-normal text-muted-foreground"
+                    >
+                      {row.label}
+                    </th>
+                    <td className="border-b border-border/60 px-3 py-2 align-top font-medium text-foreground">
+                      {row.value}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
