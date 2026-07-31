@@ -111,9 +111,7 @@ function RequestsPage() {
     queryFn: async () => {
       let request = supabase
         .from("requests")
-        .select(
-          "*, projects(code, name_ar, name_en), supervisors(name_ar, name_en)",
-        )
+        .select("*, projects(code, name_ar, name_en), supervisors(name_ar, name_en)")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
       if (projectFilter !== "all") request = request.eq("project_id", projectFilter);
@@ -323,6 +321,7 @@ function RequestsPage() {
                       id="r_date"
                       required
                       type="date"
+                      lang="en-GB"
                       dir="ltr"
                       value={form.request_date}
                       onChange={(e) => setForm({ ...form, request_date: e.target.value })}
@@ -331,7 +330,9 @@ function RequestsPage() {
                   <div className="space-y-2">
                     <Label htmlFor="r_ref">
                       {t("requests.referenceNo")}{" "}
-                      <span className="text-xs text-muted-foreground">({t("common.optional")})</span>
+                      <span className="text-xs text-muted-foreground">
+                        ({t("common.optional")})
+                      </span>
                     </Label>
                     <Input
                       id="r_ref"
@@ -466,7 +467,10 @@ function RequestsPage() {
                             changeStatus.mutate({ id: row.id, status: v as RequestStatus })
                           }
                         >
-                          <SelectTrigger className="h-9 w-40" aria-label={t("requests.changeStatus")}>
+                          <SelectTrigger
+                            className="h-9 w-40"
+                            aria-label={t("requests.changeStatus")}
+                          >
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>

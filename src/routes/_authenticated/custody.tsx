@@ -131,10 +131,7 @@ function CustodyPage() {
     },
   });
 
-  const effectById = useMemo(
-    () => new Map(effects.map((e) => [e.id, e])),
-    [effects],
-  );
+  const effectById = useMemo(() => new Map(effects.map((e) => [e.id, e])), [effects]);
 
   const { data: rows = [] } = useQuery({
     queryKey: ["custody", supervisorFilter, statusFilter],
@@ -148,7 +145,10 @@ function CustodyPage() {
         .order("serial_no", { ascending: false });
       if (supervisorFilter !== "all") request = request.eq("supervisor_id", supervisorFilter);
       if (statusFilter !== "all")
-        request = request.eq("status", statusFilter as Database["public"]["Enums"]["record_status"]);
+        request = request.eq(
+          "status",
+          statusFilter as Database["public"]["Enums"]["record_status"],
+        );
       const { data, error } = await request;
       if (error) throw error;
       return data;
@@ -405,7 +405,7 @@ function CustodyPage() {
                       id="txn_date"
                       required
                       type="date"
-              lang="en-GB"
+                      lang="en-GB"
                       dir="ltr"
                       value={form.txn_date}
                       onChange={(e) => setForm({ ...form, txn_date: e.target.value })}
@@ -585,43 +585,45 @@ function CustodyPage() {
                         >
                           <Printer className="size-4" aria-hidden />
                         </Button>
-                        {isAccountant && row.status !== "approved" && row.status !== "cancelled" && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              aria-label={t("common.approve")}
-                              onClick={() =>
-                                changeStatus.mutate({ id: row.id, status: "approved" })
-                              }
-                            >
-                              <Check className="size-4 text-success" aria-hidden />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              aria-label={t("common.cancel")}
-                              onClick={() =>
-                                changeStatus.mutate({ id: row.id, status: "cancelled" })
-                              }
-                            >
-                              <Ban className="size-4 text-destructive" aria-hidden />
-                            </Button>
-                          </>
-                        )}
+                        {isAccountant &&
+                          row.status !== "approved" &&
+                          row.status !== "cancelled" && (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={t("common.approve")}
+                                onClick={() =>
+                                  changeStatus.mutate({ id: row.id, status: "approved" })
+                                }
+                              >
+                                <Check className="size-4 text-success" aria-hidden />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={t("common.cancel")}
+                                onClick={() =>
+                                  changeStatus.mutate({ id: row.id, status: "cancelled" })
+                                }
+                              >
+                                <Ban className="size-4 text-destructive" aria-hidden />
+                              </Button>
+                            </>
+                          )}
                         {isAccountant &&
                           row.status === "approved" &&
                           row.txn_type !== "reversal" &&
                           effect?.reversed_by_serial == null && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label={t("custody.reversal")}
-                            onClick={() => setReversalTarget(row.id)}
-                          >
-                            <Undo2 className="size-4 text-warning-foreground" aria-hidden />
-                          </Button>
-                        )}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label={t("custody.reversal")}
+                              onClick={() => setReversalTarget(row.id)}
+                            >
+                              <Undo2 className="size-4 text-warning-foreground" aria-hidden />
+                            </Button>
+                          )}
                       </div>
                     </td>
                   </tr>
