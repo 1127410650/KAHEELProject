@@ -28,6 +28,14 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+/** Only allow same-origin internal paths, so a crafted link cannot redirect off-site. */
+function safeNext(): string | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("next");
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return null;
+  return raw;
+}
+
 function AuthPage() {
   const { t, locale, setLocale, dir } = useI18n();
   const navigate = useNavigate();
@@ -38,7 +46,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard", replace: true });
+      if (data.session) navigate({ to: safeNext() ?? "/dashboard", replace: true });
     });
   }, [navigate]);
 
@@ -59,7 +67,7 @@ function AuthPage() {
         toast.error(t("auth.invalid"));
         return;
       }
-      navigate({ to: "/dashboard", replace: true });
+      navigate({ to: safeNext() ?? "/dashboard", replace: true });
     } catch {
       toast.error(t("auth.invalid"));
     } finally {

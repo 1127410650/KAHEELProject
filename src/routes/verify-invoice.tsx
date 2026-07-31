@@ -103,6 +103,7 @@ function VerifyInvoicePage() {
                 </p>
               <Link
                 to="/auth"
+                search={{ next: "/invoices/verified/new" }}
                 className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
               >
                 <LogIn className="size-3.5" aria-hidden />
