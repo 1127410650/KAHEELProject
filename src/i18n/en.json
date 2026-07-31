@@ -63,7 +63,10 @@
     "expand": "Expand menu",
     "requests": "Requests",
     "suppliers": "Suppliers",
-    "invoices": "Invoices"
+    "invoices": "Invoices",
+    "portal": "Supervisor portal",
+    "myRequests": "My requests",
+    "myCustody": "My custody"
   },
   "auth": {
     "title": "Sign In",
@@ -75,12 +78,23 @@
     "signedOut": "Signed out",
     "invalid": "Invalid credentials",
     "genericError": "Could not sign in, please try again",
-    "welcome": "Welcome to Tahqaq"
+    "welcome": "Welcome to Tahqaq",
+    "identifier": "ID, email or mobile",
+    "identifierHint": "Sign in with your national ID, email or mobile number",
+    "locked": "Account temporarily locked after failed attempts. Try again later.",
+    "mustChangeTitle": "Password change required",
+    "mustChangeDesc": "For your account security, set a new password before continuing.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords do not match",
+    "passwordShort": "Password must be at least 8 characters",
+    "passwordChanged": "Password updated"
   },
   "roles": {
     "accountant": "Accountant / Admin",
     "employee": "Employee",
-    "label": "Role"
+    "label": "Role",
+    "supervisor": "Supervisor"
   },
   "status": {
     "draft": "Draft",
@@ -206,7 +220,25 @@
     "isActive": "Account Active",
     "roleUpdated": "Role updated",
     "empty": "No users",
-    "restricted": "This screen is available to accountants only"
+    "restricted": "This screen is available to accountants only",
+    "add": "Add user",
+    "edit": "Edit user",
+    "nationalId": "National ID",
+    "linkedSupervisor": "Linked supervisor",
+    "supervisorRequired": "Link the account to a supervisor",
+    "allowedProjects": "Allowed projects",
+    "permissions": "Permissions",
+    "allPermissions": "All permissions",
+    "tempPassword": "Temporary password",
+    "resetPassword": "Reset password",
+    "forcePasswordChange": "Force password change on first sign-in",
+    "accountActive": "Account active",
+    "created": "User created",
+    "updated": "User updated",
+    "emailTaken": "Email already in use",
+    "duplicate": "National ID or mobile already in use",
+    "activate": "Activate",
+    "deactivate": "Deactivate"
   },
   "reports": {
     "title": "Basic Reports",
@@ -403,5 +435,40 @@
     "settleNotApproved": "Settlement is only allowed for approved invoices",
     "settleNeedsSupervisor": "Link a supervisor to the invoice before settling",
     "approvedLocked": "An approved invoice cannot be edited"
+  },
+  "portal": {
+    "title": "Supervisor portal",
+    "description": "Submit and track your requests — nothing is executed before accountant approval",
+    "newRequest": "New request",
+    "kind": "Request kind",
+    "amount": "Requested amount",
+    "details": "Request details",
+    "myBalance": "My custody balance",
+    "pending": "Pending",
+    "submitted": "Request submitted",
+    "submitFailed": "Could not submit the request",
+    "noRequests": "No requests yet",
+    "awaitingApproval": "Awaiting accountant approval",
+    "notSupervisor": "This screen is for supervisor accounts"
+  },
+  "workflow": {
+    "approve": "Approve",
+    "reject": "Reject",
+    "execute": "Execute",
+    "reassign": "Assign",
+    "remind": "Remind",
+    "decisionNote": "Decision note",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "executed": "Executed",
+    "executeCustody": "Execute top-up",
+    "executeProject": "Create project",
+    "alreadyExecuted": "Already executed",
+    "reminderSent": "Reminder sent",
+    "reminderThrottled": "Only one reminder per 24 hours",
+    "reasonRequired": "Rejection reason is required",
+    "assignTo": "Assign to",
+    "assigned": "Assigned",
+    "failed": "Action failed"
   }
 }

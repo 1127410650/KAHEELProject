@@ -63,7 +63,10 @@
     "expand": "توسيع القائمة",
     "requests": "الطلبات",
     "suppliers": "الموردون",
-    "invoices": "الفواتير"
+    "invoices": "الفواتير",
+    "portal": "بوابة المشرف",
+    "myRequests": "طلباتي",
+    "myCustody": "عهدتي"
   },
   "auth": {
     "title": "تسجيل الدخول",
@@ -75,12 +78,23 @@
     "signedOut": "تم تسجيل الخروج",
     "invalid": "بيانات الدخول غير صحيحة",
     "genericError": "تعذر تسجيل الدخول، حاول مرة أخرى",
-    "welcome": "مرحبًا بك في تحقّق"
+    "welcome": "مرحبًا بك في تحقّق",
+    "identifier": "الهوية أو البريد أو الجوال",
+    "identifierHint": "يمكنك الدخول برقم الهوية أو البريد الإلكتروني أو رقم الجوال",
+    "locked": "الحساب موقوف مؤقتًا بسبب محاولات دخول خاطئة. حاول لاحقًا.",
+    "mustChangeTitle": "تغيير كلمة المرور مطلوب",
+    "mustChangeDesc": "لأمان حسابك، يجب تعيين كلمة مرور جديدة قبل المتابعة.",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين",
+    "passwordShort": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+    "passwordChanged": "تم تحديث كلمة المرور"
   },
   "roles": {
     "accountant": "محاسب / مسؤول",
     "employee": "موظف",
-    "label": "الدور"
+    "label": "الدور",
+    "supervisor": "مشرف"
   },
   "status": {
     "draft": "مسودة",
@@ -206,7 +220,25 @@
     "isActive": "الحساب مفعل",
     "roleUpdated": "تم تحديث الدور",
     "empty": "لا يوجد مستخدمون",
-    "restricted": "هذه الشاشة متاحة للمحاسب فقط"
+    "restricted": "هذه الشاشة متاحة للمحاسب فقط",
+    "add": "إضافة مستخدم",
+    "edit": "تعديل مستخدم",
+    "nationalId": "رقم الهوية",
+    "linkedSupervisor": "المشرف المرتبط",
+    "supervisorRequired": "يجب ربط الحساب بمشرف",
+    "allowedProjects": "المشاريع المسموح بها",
+    "permissions": "الصلاحيات",
+    "allPermissions": "كل الصلاحيات",
+    "tempPassword": "كلمة مرور مؤقتة",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "forcePasswordChange": "إلزام تغيير كلمة المرور أول دخول",
+    "accountActive": "الحساب مفعل",
+    "created": "تم إنشاء المستخدم",
+    "updated": "تم تحديث المستخدم",
+    "emailTaken": "البريد الإلكتروني مستخدم مسبقًا",
+    "duplicate": "رقم الهوية أو الجوال مستخدم مسبقًا",
+    "activate": "تفعيل",
+    "deactivate": "إيقاف"
   },
   "reports": {
     "title": "التقارير الأساسية",
@@ -403,5 +435,40 @@
     "settleNotApproved": "التسوية متاحة للفواتير المعتمدة فقط",
     "settleNeedsSupervisor": "يجب ربط الفاتورة بمشرف قبل التسوية",
     "approvedLocked": "لا يمكن تعديل بيانات فاتورة معتمدة"
+  },
+  "portal": {
+    "title": "بوابة المشرف",
+    "description": "أرسل طلباتك ومتابعتها — لا يتم التنفيذ إلا بعد موافقة المحاسب",
+    "newRequest": "طلب جديد",
+    "kind": "نوع الطلب",
+    "amount": "المبلغ المطلوب",
+    "details": "تفاصيل الطلب",
+    "myBalance": "رصيد عهدتي",
+    "pending": "قيد الانتظار",
+    "submitted": "تم إرسال الطلب",
+    "submitFailed": "تعذر إرسال الطلب",
+    "noRequests": "لا توجد طلبات",
+    "awaitingApproval": "بانتظار موافقة المحاسب",
+    "notSupervisor": "هذه الشاشة مخصصة لحسابات المشرفين"
+  },
+  "workflow": {
+    "approve": "موافقة",
+    "reject": "رفض",
+    "execute": "تنفيذ",
+    "reassign": "إسناد",
+    "remind": "تذكير",
+    "decisionNote": "ملاحظة القرار",
+    "approved": "تمت الموافقة",
+    "rejected": "تم الرفض",
+    "executed": "تم التنفيذ",
+    "executeCustody": "تنفيذ إضافة الرصيد",
+    "executeProject": "إنشاء المشروع",
+    "alreadyExecuted": "تم التنفيذ مسبقًا",
+    "reminderSent": "تم إرسال التذكير",
+    "reminderThrottled": "يمكن إرسال تذكير واحد كل 24 ساعة",
+    "reasonRequired": "سبب الرفض إلزامي",
+    "assignTo": "إسناد إلى",
+    "assigned": "تم الإسناد",
+    "failed": "تعذر تنفيذ الإجراء"
   }
 }
