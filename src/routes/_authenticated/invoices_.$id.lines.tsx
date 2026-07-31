@@ -169,7 +169,7 @@ function InvoiceLinesPage() {
         _id: payload.lineId,
         _decision: payload.decision,
         _patch: (payload.patch ?? {}) as never,
-        _reason: payload.reason ?? undefined,
+        ...(payload.reason ? { _reason: payload.reason } : {}),
       });
       if (error) throw error;
     },
@@ -186,7 +186,7 @@ function InvoiceLinesPage() {
       const { error } = await supabase.rpc("tiv_decide_invoice", {
         _invoice_id: id,
         _decision: payload.decision,
-        _note: payload.note || undefined,
+        ...(payload.note ? { _note: payload.note } : {}),
       });
       if (error) throw error;
     },

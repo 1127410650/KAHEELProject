@@ -151,8 +151,8 @@ function SaveVerifiedInvoicePage() {
     enabled: Boolean(stash && (stash.vatNumber || stash.sellerName)),
     queryFn: async () => {
       const { data, error } = await supabase.rpc("tiv_match_supplier", {
-        _vat: stash?.vatNumber ?? undefined,
-        _name: stash?.sellerName ?? undefined,
+        ...(stash?.vatNumber ? { _vat: stash.vatNumber } : {}),
+        ...(stash?.sellerName ? { _name: stash.sellerName } : {}),
       });
       if (error) throw error;
       return data as unknown as SupplierMatch;
@@ -270,10 +270,10 @@ function SaveVerifiedInvoicePage() {
       <section className={`rounded-lg border p-3 ${LEVEL_STYLE[stash.level] ?? LEVEL_STYLE['gray']}`}>
         <p className="flex items-center gap-2 text-sm font-bold">
           <ShieldCheck className="size-4" aria-hidden />
-          {t(`verify.level.${stash.level}`)}
+          {t(`tiv.level.${stash.level}`)}
           {stash.phase ? (
             <span className="text-[11px] font-medium opacity-80">
-              {t("verify.phase")} {stash.phase}
+              {t(`tiv.phase${stash.phase}`)}
             </span>
           ) : null}
         </p>
