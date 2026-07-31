@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Plus, Search, Pencil, History } from "lucide-react";
@@ -10,6 +10,7 @@ import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
+import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +30,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { formatDate, pickName, todayInRiyadh } from "@/lib/format";
+import { formatDate, formatDateTime, pickName, todayInRiyadh } from "@/lib/format";
 import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
@@ -435,7 +436,11 @@ function RequestsPage() {
                 </tr>
               )}
               {filtered.map((row) => (
-                <tr key={row.id} className="hover:bg-secondary/40">
+                <tr
+                  key={row.id}
+                  className="cursor-pointer hover:bg-secondary/40"
+                  onClick={() => void navigate({ to: "/requests/$id", params: { id: row.id } })}
+                >
                   <td className="num px-4 py-3 font-medium">{row.request_no}</td>
                   <td className="px-4 py-3">{row.request_type}</td>
                   <td className="px-4 py-3 text-muted-foreground">
@@ -455,11 +460,16 @@ function RequestsPage() {
                       (row.supervisors as { name_en?: string } | null)?.name_en,
                     )}
                   </td>
-                  <td className="num px-4 py-3">{formatDate(row.request_date)}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-col items-start gap-1">
+                      <span className="num">{formatDate(row.request_date)}</span>
+                      <PaymentNoBadge paymentNo={row.payment_no} />
+                    </div>
+                  </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={row.status} />
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                     <div className="flex flex-wrap items-center gap-1">
                       {isAccountant && (
                         <Select
