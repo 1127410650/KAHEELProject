@@ -117,7 +117,7 @@ function RequestsPage() {
     queryFn: async () => {
       let request = supabase
         .from("requests")
-        .select("*, projects(code, name_ar, name_en), supervisors(name_ar, name_en)")
+        .select("*, projects!requests_project_id_fkey(code, name_ar, name_en), supervisors(name_ar, name_en)")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
       if (projectFilter !== "all") request = request.eq("project_id", projectFilter);

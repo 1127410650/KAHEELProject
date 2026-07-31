@@ -119,7 +119,7 @@ function RequestDetailPage() {
       const { data, error } = await supabase
         .from("requests")
         .select(
-          "*, projects(id, code, name_ar, name_en), supervisors(id, name_ar, name_en, national_id, phone)",
+          "*, projects!requests_project_id_fkey(id, code, name_ar, name_en), supervisors(id, name_ar, name_en, national_id, phone)",
         )
         .eq("id", id)
         .maybeSingle();

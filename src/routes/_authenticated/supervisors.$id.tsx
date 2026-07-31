@@ -33,7 +33,7 @@ function SupervisorDetailPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("requests")
-        .select("*, projects(code, name_ar, name_en)")
+        .select("*, projects!requests_project_id_fkey(code, name_ar, name_en)")
         .eq("supervisor_id", id)
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
