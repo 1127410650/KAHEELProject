@@ -33,7 +33,8 @@ function StatCard({
   icon: typeof Users;
   label: string;
   value: string;
-}) {
+  long?: boolean;
+}).replace
   return (
     <div className="surface flex items-center gap-3 p-3.5 sm:gap-4 sm:p-5">
       <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary sm:size-11">
