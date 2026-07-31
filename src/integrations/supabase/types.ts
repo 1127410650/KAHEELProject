@@ -37,6 +37,8 @@ export type Database = {
       }
       attachments: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           created_at: string
           created_by: string | null
           delete_reason: string | null
@@ -54,6 +56,8 @@ export type Database = {
           storage_path: string
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           created_by?: string | null
           delete_reason?: string | null
@@ -71,6 +75,8 @@ export type Database = {
           storage_path: string
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           created_by?: string | null
           delete_reason?: string | null
@@ -156,6 +162,7 @@ export type Database = {
           notes_en: string | null
           project_id: string | null
           reason: string | null
+          request_id: string | null
           reversal_of_id: string | null
           serial_no: number
           status: Database["public"]["Enums"]["record_status"]
@@ -179,6 +186,7 @@ export type Database = {
           notes_en?: string | null
           project_id?: string | null
           reason?: string | null
+          request_id?: string | null
           reversal_of_id?: string | null
           serial_no?: number
           status?: Database["public"]["Enums"]["record_status"]
@@ -202,6 +210,7 @@ export type Database = {
           notes_en?: string | null
           project_id?: string | null
           reason?: string | null
+          request_id?: string | null
           reversal_of_id?: string | null
           serial_no?: number
           status?: Database["public"]["Enums"]["record_status"]
@@ -230,6 +239,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
             referencedColumns: ["id"]
           },
           {
@@ -415,6 +431,27 @@ export type Database = {
           },
         ]
       }
+      login_attempts: {
+        Row: {
+          fail_count: number
+          identifier: string
+          locked_until: string | null
+          updated_at: string
+        }
+        Insert: {
+          fail_count?: number
+          identifier: string
+          locked_until?: string | null
+          updated_at?: string
+        }
+        Update: {
+          fail_count?: number
+          identifier?: string
+          locked_until?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -423,7 +460,10 @@ export type Database = {
           id: string
           is_active: boolean
           locale: Database["public"]["Enums"]["app_locale"]
+          must_change_password: boolean
+          national_id: string | null
           phone: string | null
+          supervisor_id: string | null
           updated_at: string
           user_id: string
         }
@@ -434,7 +474,10 @@ export type Database = {
           id?: string
           is_active?: boolean
           locale?: Database["public"]["Enums"]["app_locale"]
+          must_change_password?: boolean
+          national_id?: string | null
           phone?: string | null
+          supervisor_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -445,11 +488,29 @@ export type Database = {
           id?: string
           is_active?: boolean
           locale?: Database["public"]["Enums"]["app_locale"]
+          must_change_password?: boolean
+          national_id?: string | null
           phone?: string | null
+          supervisor_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "profiles_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       project_members: {
         Row: {
@@ -595,6 +656,38 @@ export type Database = {
           },
         ]
       }
+      request_reminders: {
+        Row: {
+          actor_id: string
+          created_at: string
+          id: string
+          message: string | null
+          request_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          request_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_reminders_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       request_status_history: {
         Row: {
           actor_id: string | null
@@ -635,13 +728,22 @@ export type Database = {
       }
       requests: {
         Row: {
+          amount: number | null
+          approved_at: string | null
+          approved_by: string | null
+          assigned_to: string | null
           authority: string | null
           created_at: string
           created_by: string | null
+          created_project_id: string | null
           delete_reason: string | null
           deleted_at: string | null
+          due_date: string | null
+          executed_at: string | null
+          executed_by: string | null
           final_result: string | null
           id: string
+          kind: string
           notes_ar: string | null
           notes_en: string | null
           paid_at: string | null
@@ -652,24 +754,35 @@ export type Database = {
           payment_no: string | null
           payment_note: string | null
           payment_reference: string | null
-          project_id: string
+          project_id: string | null
+          reassign_reason: string | null
           reference_no: string | null
           request_date: string
           request_no: string
           request_type: string
+          requester_id: string | null
           status: Database["public"]["Enums"]["request_status"]
           status_note: string | null
           supervisor_id: string | null
           updated_at: string
         }
         Insert: {
+          amount?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assigned_to?: string | null
           authority?: string | null
           created_at?: string
           created_by?: string | null
+          created_project_id?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          due_date?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
           final_result?: string | null
           id?: string
+          kind?: string
           notes_ar?: string | null
           notes_en?: string | null
           paid_at?: string | null
@@ -680,24 +793,35 @@ export type Database = {
           payment_no?: string | null
           payment_note?: string | null
           payment_reference?: string | null
-          project_id: string
+          project_id?: string | null
+          reassign_reason?: string | null
           reference_no?: string | null
           request_date?: string
           request_no: string
           request_type: string
+          requester_id?: string | null
           status?: Database["public"]["Enums"]["request_status"]
           status_note?: string | null
           supervisor_id?: string | null
           updated_at?: string
         }
         Update: {
+          amount?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assigned_to?: string | null
           authority?: string | null
           created_at?: string
           created_by?: string | null
+          created_project_id?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          due_date?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
           final_result?: string | null
           id?: string
+          kind?: string
           notes_ar?: string | null
           notes_en?: string | null
           paid_at?: string | null
@@ -708,17 +832,26 @@ export type Database = {
           payment_no?: string | null
           payment_note?: string | null
           payment_reference?: string | null
-          project_id?: string
+          project_id?: string | null
+          reassign_reason?: string | null
           reference_no?: string | null
           request_date?: string
           request_no?: string
           request_type?: string
+          requester_id?: string | null
           status?: Database["public"]["Enums"]["request_status"]
           status_note?: string | null
           supervisor_id?: string | null
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "requests_created_project_id_fkey"
+            columns: ["created_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "requests_project_id_fkey"
             columns: ["project_id"]
@@ -853,6 +986,27 @@ export type Database = {
           tax_number?: string | null
           unified_number?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      user_permissions: {
+        Row: {
+          created_at: string
+          id: string
+          permission: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          permission: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          permission?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1008,6 +1162,10 @@ export type Database = {
       }
     }
     Functions: {
+      approve_attachment: {
+        Args: { _attachment_id: string }
+        Returns: undefined
+      }
       can_access_attachment_object: {
         Args: { _path: string }
         Returns: boolean
@@ -1017,6 +1175,7 @@ export type Database = {
         Args: { _supervisor_id: string }
         Returns: boolean
       }
+      current_supervisor_id: { Args: never; Returns: string }
       custody_base_effect: {
         Args: {
           p_amount: number
@@ -1024,6 +1183,7 @@ export type Database = {
         }
         Returns: number
       }
+      has_perm: { Args: { _perm: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1037,6 +1197,7 @@ export type Database = {
       }
       is_accountant: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
+      is_supervisor_user: { Args: never; Returns: boolean }
       log_audit: {
         Args: {
           _action: string
@@ -1049,17 +1210,57 @@ export type Database = {
         Returns: string
       }
       normalize_doc_no: { Args: { p_value: string }; Returns: string }
+      register_login_result: {
+        Args: { _identifier: string; _success: boolean }
+        Returns: boolean
+      }
+      request_decide: {
+        Args: { _decision: string; _note?: string; _request_id: string }
+        Returns: undefined
+      }
+      request_execute: {
+        Args: { _note?: string; _request_id: string }
+        Returns: Json
+      }
+      request_reassign: {
+        Args: { _assignee: string; _reason: string; _request_id: string }
+        Returns: undefined
+      }
+      resolve_login_identity: {
+        Args: { _identifier: string }
+        Returns: {
+          email: string
+          is_active: boolean
+          locked: boolean
+        }[]
+      }
+      send_request_reminder: {
+        Args: { _message?: string; _request_id: string }
+        Returns: string
+      }
+      submit_portal_request: {
+        Args: {
+          _amount?: number
+          _authority?: string
+          _kind: string
+          _notes_ar?: string
+          _project_id?: string
+          _request_date?: string
+          _request_type: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_locale: "ar" | "en"
-      app_role: "accountant" | "employee"
+      app_role: "accountant" | "employee" | "supervisor"
       custody_txn_type:
         | "add"
         | "settlement"
         | "deduction"
         | "refund"
         | "reversal"
-      project_status: "active" | "on_hold" | "completed" | "cancelled"
+      project_status: "active" | "on_hold" | "completed" | "cancelled" | "draft"
       record_status:
         | "draft"
         | "under_review"
@@ -1074,6 +1275,8 @@ export type Database = {
         | "paid"
         | "completed"
         | "cancelled"
+        | "approved"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1202,7 +1405,7 @@ export const Constants = {
   public: {
     Enums: {
       app_locale: ["ar", "en"],
-      app_role: ["accountant", "employee"],
+      app_role: ["accountant", "employee", "supervisor"],
       custody_txn_type: [
         "add",
         "settlement",
@@ -1210,7 +1413,7 @@ export const Constants = {
         "refund",
         "reversal",
       ],
-      project_status: ["active", "on_hold", "completed", "cancelled"],
+      project_status: ["active", "on_hold", "completed", "cancelled", "draft"],
       record_status: [
         "draft",
         "under_review",
@@ -1226,6 +1429,8 @@ export const Constants = {
         "paid",
         "completed",
         "cancelled",
+        "approved",
+        "rejected",
       ],
     },
   },

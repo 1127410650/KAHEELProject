@@ -132,6 +132,7 @@ function ProjectsPage() {
     { open: number; awaiting: number; latestPaymentNo: string | null }
   >();
   for (const r of requestRows) {
+    if (!r.project_id) continue;
     const entry =
       requestStats.get(r.project_id) ?? { open: 0, awaiting: 0, latestPaymentNo: null };
     if (r.status !== "completed" && r.status !== "cancelled") entry.open += 1;

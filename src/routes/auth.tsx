@@ -1,13 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { ShieldCheck, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { signInWithIdentifier } from "@/lib/auth.functions";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -28,7 +31,8 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t, locale, setLocale, dir } = useI18n();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const signIn = useServerFn(signInWithIdentifier);
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -41,18 +45,28 @@ function AuthPage() {
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setSubmitting(true);
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-    setSubmitting(false);
-    if (error) {
-      toast.error(
-        error.message.toLowerCase().includes("invalid")
-          ? t("auth.invalid")
-          : t("auth.genericError"),
-      );
-      return;
+    try {
+      const result = await signIn({ data: { identifier: identifier.trim(), password } });
+      if (!result.ok || !result.access_token || !result.refresh_token) {
+        toast.error(result.error === "LOCKED" ? t("auth.locked") : t("auth.invalid"));
+        return;
+      }
+      const { error } = await supabase.auth.setSession({
+        access_token: result.access_token,
+        refresh_token: result.refresh_token,
+      });
+      if (error) {
+        toast.error(t("auth.invalid"));
+        return;
+      }
+      navigate({ to: "/dashboard", replace: true });
+    } catch {
+      toast.error(t("auth.invalid"));
+    } finally {
+      setSubmitting(false);
     }
-    navigate({ to: "/dashboard", replace: true });
   }
+
 
   return (
     <div dir={dir} className="grid min-h-screen lg:grid-cols-2">
@@ -111,17 +125,19 @@ function AuthPage() {
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">{t("auth.email")}</Label>
+              <Label htmlFor="identifier">{t("auth.identifier")}</Label>
               <Input
-                id="email"
-                type="email"
+                id="identifier"
                 required
                 dir="ltr"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="username"
+                placeholder={t("auth.identifierHint")}
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
               />
+              <p className="text-xs text-muted-foreground">{t("auth.identifierHint")}</p>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">{t("auth.password")}</Label>
               <Input

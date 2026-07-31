@@ -9,6 +9,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
+import { RequestWorkflowPanel } from "@/components/RequestWorkflowPanel";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { Button } from "@/components/ui/button";
@@ -203,11 +204,13 @@ function RequestDetailPage() {
         if (!hasReceipt) throw new Error("PAYMENT_RECEIPT_REQUIRED");
       }
       if (files.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
+      if (files.length && !request.project_id) throw new Error("NO_PROJECT");
 
       // Upload first so mandatory receipts already exist when the status flips.
-      const uploadedIds = files.length
+      const projectId = request.project_id;
+      const uploadedIds = files.length && projectId
         ? await uploadAttachments(files, {
-            projectId: request.project_id,
+            projectId,
             entityType: "request",
             entityId: request.id,
             note: note,
@@ -288,9 +291,10 @@ function RequestDetailPage() {
     mutationFn: async () => {
       if (!request || stageFiles.length === 0) return;
       if (stageFiles.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
+      if (!request.project_id) throw new Error("NO_PROJECT");
       const currentStage = history.length ? history[history.length - 1]?.id : null;
       const ids = await uploadAttachments(stageFiles, {
-        projectId: request.project_id,
+        projectId: request.project_id!,
         entityType: "request",
         entityId: request.id,
         stageId: currentStage ?? null,
@@ -349,6 +353,21 @@ function RequestDetailPage() {
           </div>
         }
       />
+
+      {request && (
+        <RequestWorkflowPanel
+          request={{
+            id: request.id,
+            kind: request.kind,
+            status: request.status,
+            amount: request.amount,
+            approved_at: request.approved_at,
+            executed_at: request.executed_at,
+            assigned_to: request.assigned_to,
+          }}
+          onDone={invalidate}
+        />
+      )}
 
       {isAccountant && request && (
         <div className="surface mb-4 flex flex-wrap items-end gap-3 p-4">

@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Languages,
   ClipboardList,
+  Inbox,
   Truck,
   ReceiptText,
 
@@ -29,29 +30,36 @@ import { useSession } from "@/lib/session";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ForcePasswordChangeDialog } from "@/components/ForcePasswordChangeDialog";
+import type { Permission } from "@/lib/permissions";
 
 interface NavItem {
   to: string;
   labelKey: string;
   icon: typeof LayoutDashboard;
   accountantOnly?: boolean;
+  supervisorOnly?: boolean;
+  perm?: Permission;
 }
 
 const groups: { titleKey: string; items: NavItem[] }[] = [
   {
     titleKey: "nav.sectionMain",
-    items: [{ to: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard }],
+    items: [
+      { to: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
+      { to: "/portal", labelKey: "nav.portal", icon: Inbox, supervisorOnly: true },
+    ],
   },
   {
     titleKey: "nav.sectionOperations",
     items: [
-      { to: "/supervisors", labelKey: "nav.supervisors", icon: Users },
+      { to: "/supervisors", labelKey: "nav.supervisors", icon: Users, perm: "projects.view_all" },
       { to: "/projects", labelKey: "nav.projects", icon: FolderKanban },
-      { to: "/custody", labelKey: "nav.custody", icon: Wallet },
+      { to: "/custody", labelKey: "nav.custody", icon: Wallet, perm: "custody.execute_topup" },
       { to: "/requests", labelKey: "nav.requests", icon: ClipboardList },
-      { to: "/suppliers", labelKey: "nav.suppliers", icon: Truck },
-      { to: "/invoices", labelKey: "nav.invoices", icon: ReceiptText },
-      { to: "/reports", labelKey: "nav.reports", icon: FileBarChart },
+      { to: "/suppliers", labelKey: "nav.suppliers", icon: Truck, perm: "projects.view_all" },
+      { to: "/invoices", labelKey: "nav.invoices", icon: ReceiptText, perm: "projects.view_all" },
+      { to: "/reports", labelKey: "nav.reports", icon: FileBarChart, perm: "reports.view" },
 
 
     ],
@@ -123,13 +131,18 @@ function NavLinks({
   onNavigate?: () => void;
 }) {
   const { t } = useI18n();
-  const { isAccountant } = useSession();
+  const { isAccountant, isSupervisor, can } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
       {groups.map((group) => {
-        const items = group.items.filter((i) => !i.accountantOnly || isAccountant);
+        const items = group.items.filter(
+          (i) =>
+            (!i.accountantOnly || isAccountant) &&
+            (!i.supervisorOnly || isSupervisor) &&
+            (!i.perm || can(i.perm)),
+        );
         if (items.length === 0) return null;
         return (
           <div key={group.titleKey}>
@@ -274,6 +287,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </header>
 
         <main className="flex-1 p-4 md:p-6">{children}</main>
+        <ForcePasswordChangeDialog />
       </div>
     </div>
   );
