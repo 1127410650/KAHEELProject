@@ -35,13 +35,13 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="surface flex items-center gap-4 p-5">
-      <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
-        <Icon className="size-5" aria-hidden />
+    <div className="surface flex items-center gap-3 p-3.5 sm:gap-4 sm:p-5">
+      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary sm:size-11">
+        <Icon className="size-4.5 sm:size-5" aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="truncate text-xs font-medium text-muted-foreground">{label}</p>
-        <p className="num mt-1 text-xl font-bold text-foreground">{value}</p>
+        <p className="truncate text-sm font-medium text-muted-foreground sm:text-xs">{label}</p>
+        <p className="num mt-0.5 text-2xl font-bold text-foreground sm:mt-1 sm:text-xl">{value}</p>
       </div>
     </div>
   );
