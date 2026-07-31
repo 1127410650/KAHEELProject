@@ -154,6 +154,8 @@ function RequestsPage() {
       const payload = {
         request_no: values.request_no.trim(),
         request_type: values.request_type.trim(),
+        kind: "project_service",
+        request_scope: "project",
         project_id: values.project_id,
         supervisor_id: project.supervisor_id,
         request_date: values.request_date,
