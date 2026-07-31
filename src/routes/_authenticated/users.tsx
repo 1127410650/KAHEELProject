@@ -8,13 +8,15 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession, type AppRole } from "@/lib/session";
-import { createAppUser, updateAppUser } from "@/lib/users.functions";
+import { createAppUser, updateAppUser, listAuthLinks } from "@/lib/users.functions";
 import {
-  PERMISSIONS,
   PERMISSION_LABELS_AR,
   PERMISSION_LABELS_EN,
+  PERMISSION_GROUPS,
+  PERMISSION_GROUP_LABELS_AR,
+  PERMISSION_GROUP_LABELS_EN,
+  GROUPED_PERMISSIONS,
   ROLE_DEFAULT_PERMISSIONS,
-  type Permission,
 } from "@/lib/permissions";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -93,6 +95,8 @@ function UsersPage() {
   const create = useServerFn(createAppUser);
   const update = useServerFn(updateAppUser);
   const labels = locale === "ar" ? PERMISSION_LABELS_AR : PERMISSION_LABELS_EN;
+  const groupLabels = locale === "ar" ? PERMISSION_GROUP_LABELS_AR : PERMISSION_GROUP_LABELS_EN;
+  const fetchAuthLinks = useServerFn(listAuthLinks);
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<UserForm>({ ...emptyForm, password: randomPassword() });
@@ -120,6 +124,13 @@ function UsersPage() {
       }));
     },
   });
+
+  const { data: authLinks } = useQuery({
+    queryKey: ["users", "auth-links"],
+    enabled: isAccountant,
+    queryFn: async () => (await fetchAuthLinks()).auth_user_ids,
+  });
+  const linkedIds = new Set(authLinks ?? []);
 
   const { data: supervisors = [] } = useQuery({
     queryKey: ["supervisors", "list"],
