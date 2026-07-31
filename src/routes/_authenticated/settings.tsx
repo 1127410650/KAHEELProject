@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n, type Locale } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { formatDate, formatDateTime } from "@/lib/format";
 import { PageHeader } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,13 @@ function SettingsPage() {
   const { profile, refresh } = useSession();
   const [fullName, setFullName] = useState(profile?.full_name ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   const saveProfile = useMutation({
     mutationFn: async () => {
@@ -110,10 +118,19 @@ function SettingsPage() {
                 <dt className="text-muted-foreground">{t("settings.timezone")}</dt>
                 <dd className="num font-medium">Asia/Riyadh</dd>
               </div>
-              <div className="flex items-center justify-between py-3">
+              <div className="flex items-center justify-between gap-3 py-3">
                 <dt className="text-muted-foreground">{t("settings.dateFormat")}</dt>
-                <dd className="num font-medium">DD/MM/YYYY · 24h</dd>
+                <dd className="num text-end font-medium" dir="ltr">
+                  {formatDateTime(now)}
+                </dd>
               </div>
+              <div className="flex items-center justify-between gap-3 py-3">
+                <dt className="text-muted-foreground">{t("settings.datePreview")}</dt>
+                <dd className="num text-end font-medium" dir="ltr">
+                  {formatDate(now)}
+                </dd>
+              </div>
+
               <div className="flex items-center justify-between py-3">
                 <dt className="text-muted-foreground">{t("settings.defaultLocale")}</dt>
                 <dd className="font-medium">{t("common.arabic")}</dd>

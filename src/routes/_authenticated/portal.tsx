@@ -158,7 +158,7 @@ function PortalPage() {
           card: {
             id: row.id,
             request_no: row.request_no,
-            title: buildRequestTitle({ ...row, projectName }, t("requests.untitled")),
+            title: buildRequestTitle({ ...row, projectName }, t("requests.untitled"), locale),
             typeLabel: kindLabels[row.kind as RequestKind] ?? row.request_type,
             projectName,
             status: row.status,

@@ -253,7 +253,11 @@
     "emailTaken": "Email already in use",
     "duplicate": "National ID or mobile already in use",
     "activate": "Activate",
-    "deactivate": "Deactivate"
+    "deactivate": "Deactivate",
+    "authLink": "Login account",
+    "authLinked": "Linked",
+    "authMissing": "Not linked",
+    "uid": "User ID"
   },
   "reports": {
     "title": "Basic Reports",
@@ -312,7 +316,8 @@
     "defaultLocale": "Default language",
     "myPreferences": "My preferences",
     "languageSaved": "Language saved",
-    "profileSaved": "Profile saved"
+    "profileSaved": "Profile saved",
+    "datePreview": "Date preview"
   },
   "errors": {
     "generic": "An unexpected error occurred",

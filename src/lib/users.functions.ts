@@ -39,3 +39,10 @@ export const updateAppUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => updateSchema.parse(data))
   .handler(async ({ data, context }) => updateAppUserImpl(context.supabase, data));
+
+export const listAuthLinks = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { listAuthLinksImpl } = await import("./users.server");
+    return listAuthLinksImpl(context.supabase);
+  });
