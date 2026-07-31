@@ -151,8 +151,8 @@ function SaveVerifiedInvoicePage() {
     enabled: Boolean(stash && (stash.vatNumber || stash.sellerName)),
     queryFn: async () => {
       const { data, error } = await supabase.rpc("tiv_match_supplier", {
-        _vat: stash?.vatNumber ?? null,
-        _name: stash?.sellerName ?? null,
+        _vat: stash?.vatNumber ?? undefined,
+        _name: stash?.sellerName ?? undefined,
       });
       if (error) throw error;
       return data as unknown as SupplierMatch;
@@ -264,10 +264,10 @@ function SaveVerifiedInvoicePage() {
 
   return (
     <div className="space-y-3 md:space-y-4">
-      <PageHeader title={t("tiv.reviewTitle")} subtitle={t("tiv.reviewSubtitle")} />
+      <PageHeader title={t("tiv.reviewTitle")} description={t("tiv.reviewSubtitle")} />
 
       {/* 1 — verification result */}
-      <section className={`rounded-lg border p-3 ${LEVEL_STYLE[stash.level] ?? LEVEL_STYLE.gray}`}>
+      <section className={`rounded-lg border p-3 ${LEVEL_STYLE[stash.level] ?? LEVEL_STYLE['gray']}`}>
         <p className="flex items-center gap-2 text-sm font-bold">
           <ShieldCheck className="size-4" aria-hidden />
           {t(`verify.level.${stash.level}`)}
@@ -358,7 +358,7 @@ function SaveVerifiedInvoicePage() {
                 <SelectItem value="none">{t("tiv.noSupplier")}</SelectItem>
                 {suppliers.map((s) => (
                   <SelectItem key={s.id} value={s.id}>
-                    {pickName(s.name_ar, s.name_en, locale)}
+                    {pickName(locale, s.name_ar, s.name_en)}
                     {s.tax_number ? ` — ${s.tax_number}` : ""}
                   </SelectItem>
                 ))}
@@ -409,7 +409,7 @@ function SaveVerifiedInvoicePage() {
                 <SelectItem value="none">{t("tiv.noProject")}</SelectItem>
                 {projects.map((p) => (
                   <SelectItem key={p.id} value={p.id}>
-                    {p.code} — {pickName(p.name_ar, p.name_en, locale)}
+                    {p.code} — {pickName(locale, p.name_ar, p.name_en)}
                   </SelectItem>
                 ))}
               </SelectContent>
