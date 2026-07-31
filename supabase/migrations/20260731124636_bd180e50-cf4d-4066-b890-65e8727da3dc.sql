@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.custody_base_effect(public.custody_txn_type, numeric) TO PUBLIC;
