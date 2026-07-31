@@ -19,6 +19,7 @@ import {
   Inbox,
   Truck,
   ReceiptText,
+  PackageSearch,
   Bell,
 
 } from "lucide-react";
@@ -59,6 +60,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { to: "/requests", labelKey: "nav.requests", icon: ClipboardList },
       { to: "/suppliers", labelKey: "nav.suppliers", icon: Truck, perm: "projects.view_all" },
       { to: "/invoices", labelKey: "nav.invoices", icon: ReceiptText, perm: "projects.view_all" },
+      { to: "/products", labelKey: "nav.products", icon: PackageSearch, perm: "products.view" },
       { to: "/reports", labelKey: "nav.reports", icon: FileBarChart, perm: "reports.view" },
     ],
   },
