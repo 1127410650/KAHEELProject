@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Plus, ShieldCheck, KeyRound } from "lucide-react";
+import { Plus, ShieldCheck, KeyRound, Copy } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -101,6 +101,7 @@ function UsersPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<UserForm>({ ...emptyForm, password: randomPassword() });
   const [editing, setEditing] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   const { data: rows = [] } = useQuery({
     queryKey: ["users"],
@@ -500,25 +501,27 @@ function UsersPage() {
         }
       />
 
-      {/* Mobile: cards */}
-      <div className="space-y-3 md:hidden">
+      {/* Mobile: compact cards */}
+      <div className="space-y-2 md:hidden">
         {rows.length === 0 && (
-          <div className="surface p-8 text-center text-muted-foreground">{t("users.empty")}</div>
+          <div className="surface p-6 text-center text-sm text-muted-foreground">
+            {t("users.empty")}
+          </div>
         )}
         {rows.map((row) => (
-          <div key={row.id} className="surface space-y-3 p-4">
+          <div key={row.id} className="surface space-y-2 p-3.5">
             <div className="flex items-start justify-between gap-2">
-              <p className="font-semibold">{row.full_name}</p>
+              <p className="min-w-0 truncate text-base font-semibold">{row.full_name}</p>
               <StatusBadge status={row.is_active ? "active" : "inactive"} />
             </div>
-            <dl className="space-y-1 text-sm text-muted-foreground">
+            <dl className="space-y-1 text-[13px] text-muted-foreground">
               <div className="flex justify-between gap-2">
                 <dt>{t("users.role")}</dt>
                 <dd className="text-foreground">{row.role ? t(`roles.${row.role}`) : "—"}</dd>
               </div>
               <div className="flex justify-between gap-2">
-                <dt>{t("users.email")}</dt>
-                <dd className="num truncate text-foreground" dir="ltr">
+                <dt className="shrink-0">{t("users.email")}</dt>
+                <dd className="num min-w-0 truncate text-foreground" dir="ltr">
                   {row.email ?? "—"}
                 </dd>
               </div>
@@ -544,25 +547,54 @@ function UsersPage() {
                     : "…"}
                 </dd>
               </div>
-              <div className="flex justify-between gap-2">
-                <dt>{t("users.uid")}</dt>
-                <dd className="num truncate text-[11px] text-foreground" dir="ltr">
-                  {row.user_id}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2">
-                <dt>{t("common.createdAt")}</dt>
-                <dd className="num text-foreground">{formatDate(row.created_at)}</dd>
-              </div>
+              {expanded === row.id && (
+                <>
+                  <div className="flex items-center justify-between gap-2">
+                    <dt>{t("users.uid")}</dt>
+                    <dd className="flex items-center gap-1">
+                      <span className="num text-foreground" dir="ltr">
+                        {row.user_id.slice(0, 8)}…
+                      </span>
+                      <button
+                        type="button"
+                        aria-label={t("common.copy")}
+                        className="grid size-8 place-items-center rounded-md text-muted-foreground hover:text-foreground"
+                        onClick={() => {
+                          void navigator.clipboard.writeText(row.user_id);
+                          toast.success(t("common.copied"));
+                        }}
+                      >
+                        <Copy className="size-3.5" aria-hidden />
+                      </button>
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt>{t("common.createdAt")}</dt>
+                    <dd className="num text-foreground">{formatDate(row.created_at)}</dd>
+                  </div>
+                </>
+              )}
             </dl>
-            <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="outline" className="flex-1" onClick={() => openEdit(row)}>
+            <button
+              type="button"
+              className="text-xs font-medium text-primary"
+              onClick={() => setExpanded((v) => (v === row.id ? null : row.id))}
+            >
+              {expanded === row.id ? t("common.hideDetails") : t("common.showDetails")}
+            </button>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-10 flex-1 text-[13px]"
+                onClick={() => openEdit(row)}
+              >
                 <ShieldCheck className="size-4" aria-hidden />
                 {t("common.edit")}
               </Button>
               <Button
                 size="sm"
-                className="flex-1"
+                className="h-10 flex-1 text-[13px]"
                 variant={row.is_active ? "outline" : "default"}
                 disabled={toggleActive.isPending}
                 onClick={() => toggleActive.mutate({ userId: row.user_id, active: !row.is_active })}

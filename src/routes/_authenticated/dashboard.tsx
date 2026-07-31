@@ -29,19 +29,27 @@ function StatCard({
   icon: Icon,
   label,
   value,
+  long,
 }: {
   icon: typeof Users;
   label: string;
   value: string;
+  long?: boolean;
 }) {
   return (
-    <div className="surface flex items-center gap-4 p-5">
-      <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
-        <Icon className="size-5" aria-hidden />
+    <div className="surface flex items-center gap-3 p-3.5 sm:gap-4 sm:p-5">
+      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary sm:size-11">
+        <Icon className="size-4.5 sm:size-5" aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="truncate text-xs font-medium text-muted-foreground">{label}</p>
-        <p className="num mt-1 text-xl font-bold text-foreground">{value}</p>
+        <p className="truncate text-sm font-medium text-muted-foreground sm:text-xs">{label}</p>
+        <p
+          className={`num mt-0.5 font-bold text-foreground sm:mt-1 sm:text-xl ${
+            long ? "whitespace-nowrap text-sm sm:text-xl" : "truncate text-2xl"
+          }`}
+        >
+          {value}
+        </p>
       </div>
     </div>
   );
@@ -97,7 +105,7 @@ function DashboardContent() {
     <>
       <PageHeader title={t("dashboard.title")} description={t("dashboard.description")} />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 max-[340px]:grid-cols-1 sm:gap-4 xl:grid-cols-4">
         <StatCard
           icon={Users}
           label={t("dashboard.supervisorsCount")}
@@ -112,6 +120,7 @@ function DashboardContent() {
           icon={Wallet}
           label={t("dashboard.totalCustody")}
           value={formatMoney(totalCustody, locale)}
+          long
         />
         <StatCard
           icon={Clock}
@@ -120,18 +129,18 @@ function DashboardContent() {
         />
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+      <div className="mt-3 grid gap-3 sm:mt-6 sm:gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-base">{t("dashboard.recentCustody")}</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             {(data?.recent ?? []).length === 0 ? (
-              <p className="px-6 pb-6 text-sm text-muted-foreground">{t("custody.empty")}</p>
+              <p className="px-3.5 pb-3 text-sm sm:px-6 sm:pb-6 text-muted-foreground">{t("custody.empty")}</p>
             ) : (
               <ul className="divide-y divide-border">
                 {(data?.recent ?? []).map((row) => (
-                  <li key={row.id} className="flex flex-wrap items-center gap-3 px-6 py-3">
+                  <li key={row.id} className="flex flex-wrap items-center gap-2 px-3.5 py-2.5 sm:gap-3 sm:px-6 sm:py-3">
                     <span className="num text-xs text-muted-foreground">#{row.serial_no}</span>
                     <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
                       {pickName(
@@ -163,13 +172,13 @@ function DashboardContent() {
           </CardHeader>
           <CardContent className="p-0">
             {topBalances.length === 0 ? (
-              <p className="px-6 pb-6 text-sm text-muted-foreground">{t("supervisors.empty")}</p>
+              <p className="px-3.5 pb-3 text-sm sm:px-6 sm:pb-6 text-muted-foreground">{t("supervisors.empty")}</p>
             ) : (
               <ul className="divide-y divide-border">
                 {topBalances.map((row) => (
                   <li
                     key={row.supervisor_id}
-                    className="flex items-center justify-between gap-3 px-6 py-3"
+                    className="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-6 sm:py-3"
                   >
                     <span className="min-w-0 truncate text-sm text-foreground">
                       {pickName(locale, row.name_ar, row.name_en)}
