@@ -1422,13 +1422,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "custody_transactions_invoice_id_fkey"
-            columns: ["invoice_id"]
-            isOneToOne: false
-            referencedRelation: "invoice_settlements"
-            referencedColumns: ["invoice_id"]
-          },
-          {
-            foreignKeyName: "custody_transactions_invoice_id_fkey"
             columns: ["reversal_of_invoice_id"]
             isOneToOne: false
             referencedRelation: "invoice_settlements"
@@ -1437,13 +1430,20 @@ export type Database = {
           {
             foreignKeyName: "custody_transactions_invoice_id_fkey"
             columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["reversal_of_invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "custody_transactions_invoice_id_fkey"
-            columns: ["reversal_of_invoice_id"]
+            columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
             referencedColumns: ["id"]
