@@ -433,28 +433,48 @@ function UsersPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label>{t("users.permissions")}</Label>
-                  <div className="grid max-h-56 gap-1 overflow-y-auto rounded-lg border border-border p-3 sm:grid-cols-2">
-                    {PERMISSIONS.map((permission) => (
-                      <label key={permission} className="flex items-center gap-2 text-sm">
-                        <Checkbox
-                          checked={form.permissions.includes(permission)}
-                          onCheckedChange={(v) =>
-                            setForm({
-                              ...form,
-                              permissions:
-                                v === true
-                                  ? [...form.permissions, permission]
-                                  : form.permissions.filter((x) => x !== permission),
-                            })
-                          }
-                        />
-                        <span>{labels[permission as Permission]}</span>
-                      </label>
-                    ))}
+                  <div className="max-h-72 space-y-3 overflow-y-auto rounded-lg border border-border p-3">
+                    {PERMISSION_GROUPS.map((group) => {
+                      const items = GROUPED_PERMISSIONS[group];
+                      if (!items.length) return null;
+                      return (
+                        <div
+                          key={group}
+                          className="overflow-hidden rounded-lg border border-border/70"
+                        >
+                          <div className="bg-secondary/60 px-3 py-2 text-xs font-semibold">
+                            {groupLabels[group]}
+                          </div>
+                          <div className="grid gap-1 p-3 sm:grid-cols-2">
+                            {items.map((permission) => (
+                              <label
+                                key={permission}
+                                className="flex min-h-9 items-center gap-2 text-sm"
+                              >
+                                <Checkbox
+                                  checked={form.permissions.includes(permission)}
+                                  onCheckedChange={(v) =>
+                                    setForm({
+                                      ...form,
+                                      permissions:
+                                        v === true
+                                          ? [...form.permissions, permission]
+                                          : form.permissions.filter((x) => x !== permission),
+                                    })
+                                  }
+                                />
+                                <span>{labels[permission]}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
+
               </form>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>
