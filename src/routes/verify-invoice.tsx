@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { QrCode, ShieldCheck, LogIn } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -32,11 +31,7 @@ function VerifyInvoicePage() {
   const { t, locale, setLocale, dir } = useI18n();
 
   // Small, self-dismissing note instead of a permanent full-width banner.
-  const [showSaveNote, setShowSaveNote] = useState(true);
-  useEffect(() => {
-    const id = window.setTimeout(() => setShowSaveNote(false), 6000);
-    return () => window.clearTimeout(id);
-  }, []);
+
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
@@ -103,7 +98,7 @@ function VerifyInvoicePage() {
           onResult={stashVerification}
           footer={
             <div className="flex flex-col items-start gap-2 px-1">
-              {showSaveNote && (
+              {(
                 <p className="rounded-md bg-secondary px-2.5 py-1.5 text-[11px] leading-snug text-muted-foreground">
                   {t("verify.publicSaveHint")}
                 </p>
