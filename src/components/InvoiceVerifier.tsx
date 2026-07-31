@@ -327,14 +327,20 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
   const Icon = style.icon;
   const qr = result.qr;
 
+  const cell = (value?: string) => (
+    <span className="block break-all whitespace-normal" dir="auto">
+      {value ?? "—"}
+    </span>
+  );
+
   const rows: { label: string; value: React.ReactNode }[] = qr
     ? [
-        { label: t("verify.field.sellerName"), value: qr.sellerName ?? "—" },
-        { label: t("verify.field.vatNumber"), value: qr.vatNumber ?? "—" },
-        { label: t("verify.field.timestamp"), value: qr.timestamp ?? "—" },
-        { label: t("verify.field.netTotal"), value: qr.netTotal ?? "—" },
-        { label: t("verify.field.vatTotal"), value: qr.vatTotal ?? "—" },
-        { label: t("verify.field.total"), value: qr.total ?? "—" },
+        { label: t("verify.field.sellerName"), value: cell(qr.sellerName) },
+        { label: t("verify.field.vatNumber"), value: cell(qr.vatNumber) },
+        { label: t("verify.field.timestamp"), value: cell(qr.timestamp) },
+        { label: t("verify.field.netTotal"), value: cell(qr.netTotal) },
+        { label: t("verify.field.vatTotal"), value: cell(qr.vatTotal) },
+        { label: t("verify.field.total"), value: cell(qr.total) },
         {
           label: t("verify.field.phase"),
           value: qr.phase === 2 ? t("verify.phase2") : t("verify.phase1"),
