@@ -32,11 +32,16 @@ export function ForcePasswordChangeDialog() {
     }
     setSaving(true);
     const { error } = await supabase.auth.updateUser({ password });
-    if (error) {
+    // Reusing the current password is allowed: treat "same password" as success.
+    const isSamePassword =
+      error?.code === "same_password" ||
+      /different from the old password/i.test(error?.message ?? "");
+    if (error && !isSamePassword) {
       setSaving(false);
-      toast.error(t("errors.saveFailed"));
+      toast.error(error.message || t("errors.saveFailed"));
       return;
     }
+
     await supabase
       .from("profiles")
       .update({ must_change_password: false })
