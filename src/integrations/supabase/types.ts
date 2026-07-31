@@ -472,6 +472,10 @@ export type Database = {
       }
     }
     Functions: {
+      can_access_attachment_object: {
+        Args: { _path: string }
+        Returns: boolean
+      }
       can_access_project: { Args: { _project_id: string }; Returns: boolean }
       has_role: {
         Args: {
