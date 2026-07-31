@@ -253,7 +253,11 @@
     "emailTaken": "البريد الإلكتروني مستخدم مسبقًا",
     "duplicate": "رقم الهوية أو الجوال مستخدم مسبقًا",
     "activate": "تفعيل",
-    "deactivate": "إيقاف"
+    "deactivate": "إيقاف",
+    "authLink": "ربط حساب الدخول",
+    "authLinked": "مربوط",
+    "authMissing": "غير مربوط",
+    "uid": "معرّف المستخدم"
   },
   "reports": {
     "title": "التقارير الأساسية",
@@ -312,7 +316,8 @@
     "defaultLocale": "اللغة الافتراضية",
     "myPreferences": "تفضيلاتي",
     "languageSaved": "تم حفظ اللغة",
-    "profileSaved": "تم حفظ الملف الشخصي"
+    "profileSaved": "تم حفظ الملف الشخصي",
+    "datePreview": "معاينة التاريخ"
   },
   "errors": {
     "generic": "حدث خطأ غير متوقع",
