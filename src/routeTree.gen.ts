@@ -31,6 +31,7 @@ import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRequestsIdRouteImport } from './routes/_authenticated/requests.$id'
 import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
 import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
+import { Route as AuthenticatedInvoicesVerifiedNewRouteImport } from './routes/_authenticated/invoices_.verified.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -146,6 +147,12 @@ const AuthenticatedSupervisorsIdRoute =
     path: '/supervisors/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedInvoicesVerifiedNewRoute =
+  AuthenticatedInvoicesVerifiedNewRouteImport.update({
+    id: '/invoices_/verified/new',
+    path: '/invoices/verified/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/projects/': typeof AuthenticatedProjectsIndexRoute
   '/requests/': typeof AuthenticatedRequestsIndexRoute
   '/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
+  '/invoices/verified/new': typeof AuthenticatedInvoicesVerifiedNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -192,6 +200,7 @@ export interface FileRoutesByTo {
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/requests': typeof AuthenticatedRequestsIndexRoute
   '/supervisors': typeof AuthenticatedSupervisorsIndexRoute
+  '/invoices/verified/new': typeof AuthenticatedInvoicesVerifiedNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -217,6 +226,7 @@ export interface FileRoutesById {
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
   '/_authenticated/requests/': typeof AuthenticatedRequestsIndexRoute
   '/_authenticated/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
+  '/_authenticated/invoices_/verified/new': typeof AuthenticatedInvoicesVerifiedNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/requests/'
     | '/supervisors/'
+    | '/invoices/verified/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/requests'
     | '/supervisors'
+    | '/invoices/verified/new'
   id:
     | '__root__'
     | '/'
@@ -289,6 +301,7 @@ export interface FileRouteTypes {
     | '/_authenticated/projects/'
     | '/_authenticated/requests/'
     | '/_authenticated/supervisors/'
+    | '/_authenticated/invoices_/verified/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -454,6 +467,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSupervisorsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/invoices_/verified/new': {
+      id: '/_authenticated/invoices_/verified/new'
+      path: '/invoices/verified/new'
+      fullPath: '/invoices/verified/new'
+      preLoaderRoute: typeof AuthenticatedInvoicesVerifiedNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -476,6 +496,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
   AuthenticatedRequestsIndexRoute: typeof AuthenticatedRequestsIndexRoute
   AuthenticatedSupervisorsIndexRoute: typeof AuthenticatedSupervisorsIndexRoute
+  AuthenticatedInvoicesVerifiedNewRoute: typeof AuthenticatedInvoicesVerifiedNewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -497,6 +518,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
   AuthenticatedRequestsIndexRoute: AuthenticatedRequestsIndexRoute,
   AuthenticatedSupervisorsIndexRoute: AuthenticatedSupervisorsIndexRoute,
+  AuthenticatedInvoicesVerifiedNewRoute: AuthenticatedInvoicesVerifiedNewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -511,3 +533,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
