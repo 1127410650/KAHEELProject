@@ -1694,12 +1694,10 @@ export type Database = {
         Args: { _decision: string; _note?: string; _request_id: string }
         Returns: undefined
       }
-      request_execute:
-        | { Args: { _note?: string; _request_id: string }; Returns: Json }
-        | {
-            Args: { _note?: string; _reference?: string; _request_id: string }
-            Returns: Json
-          }
+      request_execute: {
+        Args: { _note?: string; _reference?: string; _request_id: string }
+        Returns: Json
+      }
       request_exists: { Args: { _request_id: string }; Returns: boolean }
       request_mark_read: { Args: { _request_id: string }; Returns: undefined }
       request_message_publish: {
@@ -1767,7 +1765,7 @@ export type Database = {
           _notes_ar?: string
           _project_id?: string
           _request_date?: string
-          _request_type: string
+          _request_type?: string
         }
         Returns: string
       }

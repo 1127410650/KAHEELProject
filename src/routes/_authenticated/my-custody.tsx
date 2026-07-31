@@ -8,7 +8,7 @@ import { useSession } from "@/lib/session";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, pickName } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/my-custody")({
   head: () => ({
@@ -29,11 +29,13 @@ export const Route = createFileRoute("/_authenticated/my-custody")({
 
 function MyCustodyPage() {
   const { t, locale } = useI18n();
-  const { supervisorId, isSupervisor } = useSession();
+  const { supervisorId, isSupervisor, can } = useSession();
+
+  const canView = can("custody.view_own");
 
   const { data: balance = 0 } = useQuery({
     queryKey: ["my-custody", "balance", supervisorId],
-    enabled: !!supervisorId,
+    enabled: !!supervisorId && canView,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("custody_balances")
@@ -47,11 +49,11 @@ function MyCustodyPage() {
 
   const { data: rows = [] } = useQuery({
     queryKey: ["my-custody", "txns", supervisorId],
-    enabled: !!supervisorId,
+    enabled: !!supervisorId && canView,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("custody_transactions")
-        .select("id, serial_no, txn_type, amount, txn_date, status, notes_ar, notes_en")
+        .select("id, serial_no, txn_type, amount, txn_date, status, notes_ar, notes_en, reason, projects(code, name_ar, name_en), requests(request_no)")
         .eq("supervisor_id", supervisorId!)
         .is("deleted_at", null)
         .order("serial_no", { ascending: false });
@@ -59,6 +61,17 @@ function MyCustodyPage() {
       return data ?? [];
     },
   });
+
+  if (!canView) {
+    return (
+      <>
+        <PageHeader title={t("portal.myCustody")} />
+        <div className="surface p-10 text-center text-muted-foreground">
+          {t("custody.noPermission")}
+        </div>
+      </>
+    );
+  }
 
   if (!isSupervisor || !supervisorId) {
     return (
@@ -102,13 +115,16 @@ function MyCustodyPage() {
                 <th className="px-4 py-3 text-start font-semibold">{t("custody.type")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.amount")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("custody.txnDate")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("nav.projects")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("common.reference")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.status")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("common.notes")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-4 py-10 text-center text-muted-foreground">
                     {t("custody.empty")}
                   </td>
                 </tr>
@@ -120,7 +136,16 @@ function MyCustodyPage() {
                   <td className="num px-4 py-3">{formatMoney(r.amount, locale)}</td>
                   <td className="num px-4 py-3">{formatDate(r.txn_date)}</td>
                   <td className="px-4 py-3">
+                    {r.projects
+                      ? `${r.projects.code} ${pickName(locale, r.projects.name_ar, r.projects.name_en)}`
+                      : "—"}
+                  </td>
+                  <td className="num px-4 py-3">{r.requests?.request_no ?? "—"}</td>
+                  <td className="px-4 py-3">
                     <StatusBadge status={r.status} />
+                  </td>
+                  <td className="max-w-56 truncate px-4 py-3 text-muted-foreground">
+                    {(locale === "ar" ? r.notes_ar : r.notes_en) ?? r.reason ?? "—"}
                   </td>
                 </tr>
               ))}

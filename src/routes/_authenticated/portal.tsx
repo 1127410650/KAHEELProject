@@ -99,7 +99,7 @@ const EMPTY: PortalForm = {
 
 function PortalPage() {
   const { t, locale } = useI18n();
-  const { supervisorId, isSupervisor, session, role } = useSession();
+  const { supervisorId, isSupervisor, session, role, can } = useSession();
   const queryClient = useQueryClient();
   const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
   const membershipLabels =
@@ -123,9 +123,15 @@ function PortalPage() {
     },
   });
 
+  const canViewCustody = can("custody.view_own");
+  const canRequestCustody = can("custody.request_movement") || can("custody.request_topup");
+  const visibleKinds = PORTAL_KINDS.filter(
+    (k) => canRequestCustody || (k !== "custody_topup" && k !== "payment"),
+  );
+
   const { data: balance } = useQuery({
     queryKey: ["portal", "balance", supervisorId],
-    enabled: !!supervisorId,
+    enabled: !!supervisorId && canViewCustody,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("custody_balances")
@@ -312,7 +318,7 @@ function PortalPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {PORTAL_KINDS.map((kind) => (
+                      {visibleKinds.map((kind) => (
                         <SelectItem key={kind} value={kind}>
                           {kindLabels[kind as RequestKind]}
                         </SelectItem>
@@ -510,15 +516,17 @@ function PortalPage() {
       />
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="surface flex items-center gap-4 p-5">
-          <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
-            <Wallet className="size-5" aria-hidden />
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs text-muted-foreground">{t("portal.myBalance")}</p>
-            <p className="num text-xl font-bold">{formatMoney(balance ?? 0, locale)}</p>
+        {canViewCustody && (
+          <div className="surface flex items-center gap-4 p-5">
+            <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
+              <Wallet className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs text-muted-foreground">{t("portal.myBalance")}</p>
+              <p className="num text-xl font-bold">{formatMoney(balance ?? 0, locale)}</p>
+            </div>
           </div>
-        </div>
+        )}
         <StatCard label={t("portal.openRequests")} value={openRequests.length} icon={ClipboardList} />
         <StatCard
           label={t("portal.needsCompletion")}

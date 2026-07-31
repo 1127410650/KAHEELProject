@@ -43,7 +43,8 @@
     "arabic": "العربية",
     "english": "English",
     "notAllowed": "You do not have permission for this action",
-    "select": "Select…"
+    "select": "Select…",
+    "reference": "Reference"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -220,7 +221,8 @@
     },
     "reversedBy": "Reversed by voucher",
     "reversalOf": "Reversal of voucher",
-    "netEffect": "Net effect"
+    "netEffect": "Net effect",
+    "noPermission": "You do not have permission to view custody"
   },
   "users": {
     "title": "Users & Permissions",
