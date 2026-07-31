@@ -384,7 +384,10 @@ function SupervisorsPage() {
                               name_en: row.name_en ?? "",
                               national_id: row.national_id,
                               phone: row.phone,
+                              email: row.email ?? "",
+                              job_title: row.job_title ?? "",
                               notes_ar: row.notes_ar ?? "",
+
                               is_active: row.is_active,
                             });
                             setOpen(true);
