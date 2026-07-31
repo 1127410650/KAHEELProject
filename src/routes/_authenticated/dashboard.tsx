@@ -120,6 +120,7 @@ function DashboardContent() {
           icon={Wallet}
           label={t("dashboard.totalCustody")}
           value={formatMoney(totalCustody, locale)}
+          long
         />
         <StatCard
           icon={Clock}
