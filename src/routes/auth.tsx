@@ -28,7 +28,8 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t, locale, setLocale, dir } = useI18n();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const signIn = useServerFn(signInWithIdentifier);
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -41,18 +42,28 @@ function AuthPage() {
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setSubmitting(true);
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-    setSubmitting(false);
-    if (error) {
-      toast.error(
-        error.message.toLowerCase().includes("invalid")
-          ? t("auth.invalid")
-          : t("auth.genericError"),
-      );
-      return;
+    try {
+      const result = await signIn({ data: { identifier: identifier.trim(), password } });
+      if (!result.ok || !result.access_token || !result.refresh_token) {
+        toast.error(result.error === "LOCKED" ? t("auth.locked") : t("auth.invalid"));
+        return;
+      }
+      const { error } = await supabase.auth.setSession({
+        access_token: result.access_token,
+        refresh_token: result.refresh_token,
+      });
+      if (error) {
+        toast.error(t("auth.invalid"));
+        return;
+      }
+      navigate({ to: "/dashboard", replace: true });
+    } catch {
+      toast.error(t("auth.invalid"));
+    } finally {
+      setSubmitting(false);
     }
-    navigate({ to: "/dashboard", replace: true });
   }
+
 
   return (
     <div dir={dir} className="grid min-h-screen lg:grid-cols-2">
