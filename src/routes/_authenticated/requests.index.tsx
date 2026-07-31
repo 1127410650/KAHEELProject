@@ -255,7 +255,7 @@ function RequestsPage() {
               }}
             >
               <DialogTrigger asChild>
-                <Button className="w-full gap-2 sm:w-auto">
+                <Button className="gap-1.5 sm:gap-2">
                   <Plus className="size-4" aria-hidden />
                   {t("requests.add")}
                 </Button>
@@ -387,14 +387,14 @@ function RequestsPage() {
         }
       />
 
-      <nav aria-label={t("requests.workbox")} className="mb-4 flex flex-wrap gap-2">
+      <nav aria-label={t("requests.workbox")} className="-mx-2.5 mb-2.5 flex snap-x gap-1.5 overflow-x-auto px-2.5 pb-1 [scrollbar-width:none] sm:mx-0 sm:mb-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:px-0">
         {groupList.map((g) => (
           <button
             key={g}
             type="button"
             onClick={() => setGroup(g)}
             className={cn(
-              "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+              "inline-flex shrink-0 snap-start items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs",
               group === g
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border bg-card text-muted-foreground hover:bg-secondary",

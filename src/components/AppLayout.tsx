@@ -107,7 +107,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full border border-border bg-secondary p-0.5 md:gap-1 md:p-1",
+        "inline-flex shrink-0 items-center gap-0.5 rounded-full border border-border bg-secondary p-0.5 md:gap-1 md:p-1",
         compact && "scale-95",
       )}
     >
@@ -116,7 +116,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => change("ar")}
         className={cn(
-          "rounded-full px-2 py-1 text-[11px] font-semibold transition-colors md:px-3 md:text-xs",
+          "rounded-full px-1.5 py-1 text-[11px] font-semibold leading-none transition-colors md:px-3 md:text-xs",
           locale === "ar"
             ? "bg-primary text-primary-foreground"
             : "text-muted-foreground hover:text-foreground",
@@ -129,7 +129,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => change("en")}
         className={cn(
-          "rounded-full px-2 py-1 text-[11px] font-semibold transition-colors md:px-3 md:text-xs",
+          "rounded-full px-1.5 py-1 text-[11px] font-semibold leading-none transition-colors md:px-3 md:text-xs",
           locale === "en"
             ? "bg-primary text-primary-foreground"
             : "text-muted-foreground hover:text-foreground",
@@ -141,6 +141,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
+
 
 function NavLinks({
   collapsed,
@@ -269,10 +270,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex items-center gap-1.5 border-b border-border bg-card/95 px-2.5 py-2 backdrop-blur md:gap-3 md:px-4 md:py-3">
+        <header className="sticky top-0 z-30 flex h-[54px] items-center gap-1 border-b border-border bg-card/95 px-2 backdrop-blur md:h-auto md:gap-3 md:px-4 md:py-3">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label={t("nav.expand")}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-9 shrink-0 md:hidden"
+                aria-label={t("nav.expand")}
+              >
                 <Menu className="size-5" aria-hidden />
               </Button>
             </SheetTrigger>
@@ -284,7 +290,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
           </Sheet>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-foreground">{t("app.name")}</p>
+            <p className="truncate text-[13px] font-semibold text-foreground md:text-sm">
+              {t("app.name")}
+            </p>
             <p className="hidden truncate text-xs text-muted-foreground sm:block">
               {t("app.tagline")}
             </p>
@@ -294,21 +302,24 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
           <LanguageToggle />
 
-
           <div className="hidden text-end sm:block">
             <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
               {profile?.full_name || profile?.email || "—"}
             </p>
-            <p className="text-[11px] text-muted-foreground">
-              {role ? t(`roles.${role}`) : "—"}
-            </p>
+            <p className="text-[11px] text-muted-foreground">{role ? t(`roles.${role}`) : "—"}</p>
           </div>
 
-          <Button variant="outline" size="sm" onClick={signOut} className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={signOut}
+            className="size-9 shrink-0 gap-2 p-0 sm:size-auto sm:px-3"
+          >
             <LogOut className="size-4" aria-hidden />
             <span className="hidden sm:inline">{t("nav.signOut")}</span>
           </Button>
         </header>
+
 
         <main className="flex-1 p-3 md:p-6">{children}</main>
         <ForcePasswordChangeDialog />
@@ -327,12 +338,21 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="mb-3 flex flex-wrap items-start justify-between gap-2 sm:mb-6 sm:gap-3">
+    <div className="mb-2.5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:mb-6 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
       <div className="min-w-0">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
-        {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+        {description && (
+          <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground sm:mt-1 sm:text-sm">
+            {description}
+          </p>
+        )}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 [&_[data-slot=button]]:w-auto">
+          {actions}
+        </div>
+      )}
     </div>
   );
+
 }

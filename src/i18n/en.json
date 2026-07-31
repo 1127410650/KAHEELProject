@@ -48,7 +48,8 @@
     "copy": "Copy",
     "copied": "Copied",
     "showDetails": "Show details",
-    "hideDetails": "Hide details"
+    "hideDetails": "Hide details",
+    "viewAll": "View all"
   },
   "nav": {
     "dashboard": "Dashboard",
