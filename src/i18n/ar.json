@@ -48,7 +48,8 @@
     "copy": "نسخ",
     "copied": "تم النسخ",
     "showDetails": "عرض التفاصيل",
-    "hideDetails": "إخفاء التفاصيل"
+    "hideDetails": "إخفاء التفاصيل",
+    "viewAll": "عرض الكل"
   },
   "nav": {
     "dashboard": "لوحة التحكم",
