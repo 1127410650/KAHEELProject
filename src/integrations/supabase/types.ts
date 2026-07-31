@@ -1635,6 +1635,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      project_exists: { Args: { _project_id: string }; Returns: boolean }
       project_membership_end: {
         Args: { _membership_id: string; _reason: string }
         Returns: undefined
@@ -1699,6 +1700,7 @@ export type Database = {
             Args: { _note?: string; _reference?: string; _request_id: string }
             Returns: Json
           }
+      request_exists: { Args: { _request_id: string }; Returns: boolean }
       request_mark_read: { Args: { _request_id: string }; Returns: undefined }
       request_message_publish: {
         Args: { _body?: string; _message_id: string }
