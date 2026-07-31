@@ -497,7 +497,21 @@ function RequestsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={row.status} />
+                    <div className="flex flex-col items-start gap-1">
+                      <StatusBadge status={row.status} />
+                      <span className="flex items-center gap-1">
+                        <span className="h-1 w-16 overflow-hidden rounded-full bg-secondary">
+                          <span
+                            className="block h-full rounded-full bg-primary"
+                            style={{ width: `${requestProgress(row.status)}%` }}
+                          />
+                        </span>
+                        <span className="num text-[10px] text-muted-foreground">
+                          {requestProgress(row.status)}%
+                        </span>
+                      </span>
+                    </div>
+
                   </td>
                   <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                     <div className="flex flex-wrap items-center gap-1">
