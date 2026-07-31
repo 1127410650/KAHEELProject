@@ -16,6 +16,8 @@ import {
   ShieldCheck,
   Languages,
   ClipboardList,
+  Truck,
+  ReceiptText,
 
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -47,7 +49,10 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { to: "/projects", labelKey: "nav.projects", icon: FolderKanban },
       { to: "/custody", labelKey: "nav.custody", icon: Wallet },
       { to: "/requests", labelKey: "nav.requests", icon: ClipboardList },
+      { to: "/suppliers", labelKey: "nav.suppliers", icon: Truck },
+      { to: "/invoices", labelKey: "nav.invoices", icon: ReceiptText },
       { to: "/reports", labelKey: "nav.reports", icon: FileBarChart },
+
 
     ],
   },
