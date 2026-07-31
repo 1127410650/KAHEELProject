@@ -338,12 +338,21 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="mb-3 flex flex-wrap items-start justify-between gap-2 sm:mb-6 sm:gap-3">
+    <div className="mb-2.5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:mb-6 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
       <div className="min-w-0">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
-        {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+        {description && (
+          <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground sm:mt-1 sm:text-sm">
+            {description}
+          </p>
+        )}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 [&_[data-slot=button]]:w-auto">
+          {actions}
+        </div>
+      )}
     </div>
   );
+
 }
