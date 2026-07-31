@@ -34,7 +34,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
 
-export const Route = createFileRoute("/_authenticated/requests")({
+export const Route = createFileRoute("/_authenticated/requests/")({
   head: () => ({
     meta: [
       { title: "الطلبات — تحقّق | Requests — Tahqaq" },

@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ClipboardList } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
@@ -8,7 +8,8 @@ import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { formatDate, formatMoney, pickName } from "@/lib/format";
+import { PaymentNoBadge } from "@/components/PaymentNoBadge";
+import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/supervisors/$id")({
   head: () => ({
@@ -25,6 +26,21 @@ export const Route = createFileRoute("/_authenticated/supervisors/$id")({
 function SupervisorDetailPage() {
   const { id } = Route.useParams();
   const { t, locale } = useI18n();
+  const navigate = useNavigate();
+
+  const { data: requests = [] } = useQuery({
+    queryKey: ["supervisor-requests", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("requests")
+        .select("*, projects(code, name_ar, name_en)")
+        .eq("supervisor_id", id)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const { data } = useQuery({
     queryKey: ["supervisor", id],
@@ -149,6 +165,57 @@ function SupervisorDetailPage() {
                       </span>
                       <StatusBadge status={txn.status} />
                     </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <ClipboardList className="size-4" aria-hidden />
+              {t("requests.supervisorRequests")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            {requests.length === 0 ? (
+              <p className="px-6 pb-6 text-sm text-muted-foreground">{t("requests.empty")}</p>
+            ) : (
+              <ul className="divide-y divide-border">
+                {requests.map((r) => (
+                  <li key={r.id}>
+                    <button
+                      type="button"
+                      className="w-full px-6 py-3 text-start transition hover:bg-secondary/40"
+                      onClick={() => void navigate({ to: "/requests/$id", params: { id: r.id } })}
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-sm font-medium">
+                          <span className="num">{r.request_no}</span> · {r.request_type}
+                        </span>
+                        <StatusBadge status={r.status} />
+                      </div>
+                      <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                        <span>
+                          <span className="num">
+                            {(r.projects as { code?: string } | null)?.code ?? "—"}
+                          </span>{" "}
+                          {pickName(
+                            locale,
+                            (r.projects as { name_ar?: string } | null)?.name_ar,
+                            (r.projects as { name_en?: string } | null)?.name_en,
+                          )}
+                        </span>
+                        <span className="num">
+                          {t("common.date")}: {formatDate(r.request_date)}
+                        </span>
+                        <PaymentNoBadge paymentNo={r.payment_no} />
+                        <span className="num">
+                          {t("requests.lastUpdate")}: {formatDateTime(r.updated_at)}
+                        </span>
+                      </div>
+                    </button>
                   </li>
                 ))}
               </ul>
