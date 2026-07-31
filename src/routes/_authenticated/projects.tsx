@@ -53,6 +53,9 @@ interface ProjectForm {
   name_en: string;
   supervisor_id: string;
   status: ProjectStatus;
+  city: string;
+  location: string;
+  start_date: string;
   description_ar: string;
   description_en: string;
 }
@@ -63,9 +66,13 @@ const emptyForm: ProjectForm = {
   name_en: "",
   supervisor_id: "",
   status: "active",
+  city: "",
+  location: "",
+  start_date: "",
   description_ar: "",
   description_en: "",
 };
+
 
 const statuses: ProjectStatus[] = ["active", "on_hold", "completed", "cancelled"];
 
@@ -114,9 +121,13 @@ function ProjectsPage() {
         name_en: values.name_en.trim() || null,
         supervisor_id: values.supervisor_id,
         status: values.status,
+        city: values.city.trim() || null,
+        location: values.location.trim() || null,
+        start_date: values.start_date || null,
         description_ar: values.description_ar.trim() || null,
         description_en: values.description_en.trim() || null,
       };
+
       if (values.id) {
         const { error } = await supabase.from("projects").update(payload).eq("id", values.id);
         if (error) throw error;
@@ -292,6 +303,33 @@ function ProjectsPage() {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_city">{t("projects.city")}</Label>
+                      <Input
+                        id="p_city"
+                        value={form.city}
+                        onChange={(e) => setForm({ ...form, city: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_location">{t("projects.location")}</Label>
+                      <Input
+                        id="p_location"
+                        value={form.location}
+                        onChange={(e) => setForm({ ...form, location: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_start_date">{t("projects.startDate")}</Label>
+                      <Input
+                        id="p_start_date"
+                        type="date"
+                        dir="ltr"
+                        value={form.start_date}
+                        onChange={(e) => setForm({ ...form, start_date: e.target.value })}
+                      />
+                    </div>
+
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="p_desc_ar">{t("projects.descriptionAr")}</Label>
@@ -384,7 +422,11 @@ function ProjectsPage() {
                               name_en: row.name_en ?? "",
                               supervisor_id: row.supervisor_id,
                               status: row.status,
+                              city: row.city ?? "",
+                              location: row.location ?? "",
+                              start_date: row.start_date ?? "",
                               description_ar: row.description_ar ?? "",
+
                               description_en: row.description_en ?? "",
                             });
                             setOpen(true);

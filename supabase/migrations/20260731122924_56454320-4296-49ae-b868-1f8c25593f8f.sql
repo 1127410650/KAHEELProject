@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.log_request_status() FROM authenticated;

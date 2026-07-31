@@ -332,6 +332,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          city: string | null
           code: string
           created_at: string
           created_by: string | null
@@ -340,13 +341,16 @@ export type Database = {
           description_ar: string | null
           description_en: string | null
           id: string
+          location: string | null
           name_ar: string
           name_en: string | null
+          start_date: string | null
           status: Database["public"]["Enums"]["project_status"]
           supervisor_id: string
           updated_at: string
         }
         Insert: {
+          city?: string | null
           code: string
           created_at?: string
           created_by?: string | null
@@ -355,13 +359,16 @@ export type Database = {
           description_ar?: string | null
           description_en?: string | null
           id?: string
+          location?: string | null
           name_ar: string
           name_en?: string | null
+          start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"]
           supervisor_id: string
           updated_at?: string
         }
         Update: {
+          city?: string | null
           code?: string
           created_at?: string
           created_by?: string | null
@@ -370,8 +377,10 @@ export type Database = {
           description_ar?: string | null
           description_en?: string | null
           id?: string
+          location?: string | null
           name_ar?: string
           name_en?: string | null
+          start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"]
           supervisor_id?: string
           updated_at?: string
@@ -393,14 +402,130 @@ export type Database = {
           },
         ]
       }
-      supervisors: {
+      request_status_history: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["request_status"] | null
+          id: string
+          note: string | null
+          request_id: string
+          to_status: Database["public"]["Enums"]["request_status"]
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["request_status"] | null
+          id?: string
+          note?: string | null
+          request_id: string
+          to_status: Database["public"]["Enums"]["request_status"]
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["request_status"] | null
+          id?: string
+          note?: string | null
+          request_id?: string
+          to_status?: Database["public"]["Enums"]["request_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_status_history_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      requests: {
         Row: {
           created_at: string
           created_by: string | null
           delete_reason: string | null
           deleted_at: string | null
           id: string
+          notes_ar: string | null
+          notes_en: string | null
+          project_id: string
+          reference_no: string | null
+          request_date: string
+          request_no: string
+          request_type: string
+          status: Database["public"]["Enums"]["request_status"]
+          supervisor_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes_ar?: string | null
+          notes_en?: string | null
+          project_id: string
+          reference_no?: string | null
+          request_date?: string
+          request_no: string
+          request_type: string
+          status?: Database["public"]["Enums"]["request_status"]
+          supervisor_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes_ar?: string | null
+          notes_en?: string | null
+          project_id?: string
+          reference_no?: string | null
+          request_date?: string
+          request_no?: string
+          request_type?: string
+          status?: Database["public"]["Enums"]["request_status"]
+          supervisor_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "requests_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "requests_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supervisors: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          email: string | null
+          id: string
           is_active: boolean
+          job_title: string | null
           name_ar: string
           name_en: string | null
           national_id: string
@@ -414,8 +539,10 @@ export type Database = {
           created_by?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          email?: string | null
           id?: string
           is_active?: boolean
+          job_title?: string | null
           name_ar: string
           name_en?: string | null
           national_id: string
@@ -429,8 +556,10 @@ export type Database = {
           created_by?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          email?: string | null
           id?: string
           is_active?: boolean
+          job_title?: string | null
           name_ar?: string
           name_en?: string | null
           national_id?: string
@@ -519,6 +648,14 @@ export type Database = {
         | "under_review"
         | "returned"
         | "approved"
+        | "cancelled"
+      request_status:
+        | "new"
+        | "processing"
+        | "needs_info"
+        | "awaiting_payment"
+        | "paid"
+        | "completed"
         | "cancelled"
     }
     CompositeTypes: {
@@ -662,6 +799,15 @@ export const Constants = {
         "under_review",
         "returned",
         "approved",
+        "cancelled",
+      ],
+      request_status: [
+        "new",
+        "processing",
+        "needs_info",
+        "awaiting_payment",
+        "paid",
+        "completed",
         "cancelled",
       ],
     },

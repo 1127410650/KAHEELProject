@@ -43,6 +43,8 @@ interface SupervisorForm {
   name_en: string;
   national_id: string;
   phone: string;
+  email: string;
+  job_title: string;
   notes_ar: string;
   is_active: boolean;
 }
@@ -52,9 +54,12 @@ const emptyForm: SupervisorForm = {
   name_en: "",
   national_id: "",
   phone: "",
+  email: "",
+  job_title: "",
   notes_ar: "",
   is_active: true,
 };
+
 
 function SupervisorsPage() {
   const { t, locale } = useI18n();
@@ -98,9 +103,12 @@ function SupervisorsPage() {
         name_en: values.name_en.trim() || null,
         national_id: values.national_id.trim(),
         phone: values.phone.trim(),
+        email: values.email.trim() || null,
+        job_title: values.job_title.trim() || null,
         notes_ar: values.notes_ar.trim() || null,
         is_active: values.is_active,
       };
+
       if (values.id) {
         const { error } = await supabase.from("supervisors").update(payload).eq("id", values.id);
         if (error) throw error;
@@ -255,7 +263,32 @@ function SupervisorsPage() {
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="s_email">
+                        {t("supervisors.email")}{" "}
+                        <span className="text-xs text-muted-foreground">({t("common.optional")})</span>
+                      </Label>
+                      <Input
+                        id="s_email"
+                        type="email"
+                        dir="ltr"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="s_job_title">
+                        {t("supervisors.jobTitle")}{" "}
+                        <span className="text-xs text-muted-foreground">({t("common.optional")})</span>
+                      </Label>
+                      <Input
+                        id="s_job_title"
+                        value={form.job_title}
+                        onChange={(e) => setForm({ ...form, job_title: e.target.value })}
+                      />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="notes">{t("common.notes")}</Label>
                     <Textarea
@@ -351,7 +384,10 @@ function SupervisorsPage() {
                               name_en: row.name_en ?? "",
                               national_id: row.national_id,
                               phone: row.phone,
+                              email: row.email ?? "",
+                              job_title: row.job_title ?? "",
                               notes_ar: row.notes_ar ?? "",
+
                               is_active: row.is_active,
                             });
                             setOpen(true);

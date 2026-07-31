@@ -15,6 +15,8 @@ import {
   Menu,
   ShieldCheck,
   Languages,
+  ClipboardList,
+
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -44,7 +46,9 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { to: "/supervisors", labelKey: "nav.supervisors", icon: Users },
       { to: "/projects", labelKey: "nav.projects", icon: FolderKanban },
       { to: "/custody", labelKey: "nav.custody", icon: Wallet },
+      { to: "/requests", labelKey: "nav.requests", icon: ClipboardList },
       { to: "/reports", labelKey: "nav.reports", icon: FileBarChart },
+
     ],
   },
   {

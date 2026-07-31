@@ -60,7 +60,8 @@
     "sectionOperations": "العمليات",
     "sectionSystem": "النظام",
     "collapse": "طي القائمة",
-    "expand": "توسيع القائمة"
+    "expand": "توسيع القائمة",
+    "requests": "الطلبات"
   },
   "auth": {
     "title": "تسجيل الدخول",
@@ -92,7 +93,10 @@
     "completed": "مكتمل",
     "active": "نشط",
     "on_hold": "متوقف مؤقتًا",
-    "inactive": "غير نشط"
+    "inactive": "غير نشط",
+    "new": "طلب جديد",
+    "processing": "قيد المعالجة",
+    "needs_info": "يحتاج استكمال"
   },
   "dashboard": {
     "title": "لوحة التحكم",
@@ -120,7 +124,10 @@
     "updated": "تم تحديث بيانات المشرف",
     "duplicateNationalId": "رقم الهوية مسجّل لمشرف آخر",
     "empty": "لا يوجد مشرفون بعد",
-    "profile": "ملف المشرف"
+    "profile": "ملف المشرف",
+    "email": "البريد الإلكتروني",
+    "jobTitle": "المسمى الوظيفي",
+    "restored": "تمت استعادة المشرف"
   },
   "projects": {
     "title": "المشاريع",
@@ -140,7 +147,11 @@
     "duplicateCode": "كود المشروع مستخدم مسبقًا",
     "empty": "لا توجد مشاريع بعد",
     "noAccess": "لا تملك صلاحية الوصول إلى هذا المشروع",
-    "profile": "ملف المشروع"
+    "profile": "ملف المشروع",
+    "city": "المدينة",
+    "location": "الموقع",
+    "startDate": "تاريخ البداية",
+    "supervisorRequired": "يجب اختيار مشرف للمشروع"
   },
   "custody": {
     "title": "عهد المشرفين",
@@ -250,5 +261,27 @@
     "notFound": "السجل غير موجود",
     "forbidden": "غير مصرح",
     "invalidAmount": "المبلغ غير صحيح"
+  },
+  "requests": {
+    "title": "الطلبات",
+    "description": "الطلبات ومراحلها مرتبطة بالمشروع والمشرف",
+    "add": "إضافة طلب",
+    "edit": "تعديل طلب",
+    "requestNo": "رقم الطلب",
+    "requestType": "نوع الطلب",
+    "project": "المشروع",
+    "supervisor": "المشرف",
+    "requestDate": "تاريخ الطلب",
+    "referenceNo": "رقم المرجع",
+    "created": "تم إنشاء الطلب",
+    "updated": "تم تحديث الطلب",
+    "statusUpdated": "تم تحديث حالة الطلب",
+    "duplicateNo": "رقم الطلب مستخدم مسبقًا",
+    "projectRequired": "المشروع إلزامي",
+    "empty": "لا توجد طلبات بعد",
+    "history": "مراحل الطلب",
+    "changeStatus": "تغيير الحالة",
+    "supervisorFromProject": "يُجلب من المشروع",
+    "list": "قائمة الطلبات"
   }
 }
