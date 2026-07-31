@@ -96,6 +96,8 @@ function RequestsPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<RequestForm>(emptyForm);
   const [historyOf, setHistoryOf] = useState<string | null>(null);
+  const [inboxView, setInboxView] = useState<InboxView>("all");
+
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects", "list"],
@@ -218,13 +220,16 @@ function RequestsPage() {
     onError: () => toast.error(t("errors.saveFailed")),
   });
 
+  const today = todayInRiyadh();
   const filtered = rows.filter((row) => {
+    if (!matchesInboxView(row, inboxView, session?.user.id, today)) return false;
     const q = query.trim().toLowerCase();
     if (!q) return true;
-    return [row.request_no, row.request_type, row.reference_no]
+    return [row.request_no, row.request_type, row.reference_no, row.title]
       .filter(Boolean)
       .some((v) => String(v).toLowerCase().includes(q));
   });
+
 
   return (
     <>
