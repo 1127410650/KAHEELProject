@@ -33,10 +33,11 @@ import { formatMoney, pickName, todayInRiyadh } from "@/lib/format";
 import { REQUEST_KIND_LABELS_AR, REQUEST_KIND_LABELS_EN, type RequestKind } from "@/lib/permissions";
 import {
   buildRequestTitle,
+  PORTAL_GROUPS,
+  portalGroupOf,
   resolveNextAction,
   STAFF_GROUPS,
   staffGroupOf,
-  type StaffGroup,
 } from "@/lib/request-ui";
 import { cn } from "@/lib/utils";
 
@@ -79,13 +80,14 @@ const emptyForm: RequestForm = {
 
 function RequestsPage() {
   const { t, locale } = useI18n();
-  const { session, role, can } = useSession();
+  const { session, role, can, isSupervisor } = useSession();
   const queryClient = useQueryClient();
   const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
 
   const [query, setQuery] = useState("");
   const [projectFilter, setProjectFilter] = useState("all");
-  const [group, setGroup] = useState<StaffGroup>("mine_now");
+  const groupList: readonly string[] = isSupervisor ? PORTAL_GROUPS : STAFF_GROUPS;
+  const [group, setGroup] = useState<string>(isSupervisor ? "action_mine" : "mine_now");
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<RequestForm>(emptyForm);
 
@@ -202,12 +204,12 @@ function RequestsPage() {
           : null;
         const action = resolveNextAction(row, {
           role,
-          isSupervisorView: false,
+          isSupervisorView: isSupervisor,
           isRequester: row.created_by === session?.user.id,
           can: (perm) => can(perm as never),
         });
         return {
-          group: staffGroupOf(row.status),
+          group: isSupervisor ? portalGroupOf(row.status) : staffGroupOf(row.status),
           card: {
             id: row.id,
             request_no: row.request_no,
@@ -227,14 +229,14 @@ function RequestsPage() {
           },
         };
       });
-  }, [rows, query, locale, role, can, session?.user.id, t, kindLabels, unreadByRequest]);
+  }, [rows, query, locale, role, can, isSupervisor, session?.user.id, t, kindLabels, unreadByRequest]);
 
   const counts = useMemo(() => {
     const base: Record<string, number> = {};
-    for (const g of STAFF_GROUPS) base[g] = 0;
+    for (const g of groupList) base[g] = 0;
     for (const c of cards) base[c.group] = (base[c.group] ?? 0) + 1;
     return base;
-  }, [cards]);
+  }, [cards, groupList]);
 
   const visible = cards.filter((c) => c.group === group);
 
@@ -386,7 +388,7 @@ function RequestsPage() {
       />
 
       <nav aria-label={t("requests.workbox")} className="mb-4 flex flex-wrap gap-2">
-        {STAFF_GROUPS.map((g) => (
+        {groupList.map((g) => (
           <button
             key={g}
             type="button"
@@ -442,7 +444,7 @@ function RequestsPage() {
       ) : (
         <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
           {visible.map((c) => (
-            <RequestCard key={c.card.id} data={c.card} showRequester />
+            <RequestCard key={c.card.id} data={c.card} showRequester={!isSupervisor} />
           ))}
         </div>
       )}
