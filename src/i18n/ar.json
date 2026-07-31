@@ -775,7 +775,7 @@
     "stopCamera": "إيقاف الكاميرا",
     "uploadFile": "رفع صورة أو PDF",
     "readingText": "جارٍ قراءة النص محليًا…",
-    "manualLabel": "نص رمز QR (Base64)",
+    "manualLabel": "إدخال رمز QR يدويًا",
     "verifyManual": "تحقق من النص",
     "cameraDenied": "تم رفض الوصول إلى الكاميرا",
     "noQrFound": "لم يتم العثور على رمز QR صالح",
@@ -877,6 +877,9 @@
       "minor_total": "الإجمالي مختلف"
     },
     "publicLink": "التحقق من فاتورة ضريبية",
-    "signInToSave": "تسجيل الدخول لحفظ الفاتورة"
+    "signInToSave": "تسجيل الدخول لحفظ الفاتورة",
+    "pasteQr": "لصق نص QR",
+    "cameraTitle": "تصوير رمز QR",
+    "flipCamera": "تبديل الكاميرا"
   }
 }

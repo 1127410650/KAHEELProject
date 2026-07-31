@@ -30,6 +30,9 @@ export const Route = createFileRoute("/verify-invoice")({
 function VerifyInvoicePage() {
   const { t, locale, setLocale, dir } = useI18n();
 
+  // Small, self-dismissing note instead of a permanent full-width banner.
+
+
   return (
     <div dir={dir} className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
@@ -76,14 +79,16 @@ function VerifyInvoicePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-6">
-        <div className="mb-5 flex items-start gap-3">
-          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-foreground">
-            <QrCode className="size-5" aria-hidden />
+      <main className="mx-auto max-w-2xl px-3 py-3 sm:px-4 sm:py-6">
+        <div className="mb-2.5 flex items-start gap-2 sm:mb-5 sm:gap-3">
+          <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-secondary text-foreground sm:size-10">
+            <QrCode className="size-4 sm:size-5" aria-hidden />
           </span>
           <div>
-            <h1 className="text-lg font-bold text-foreground sm:text-xl">{t("verify.title")}</h1>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+            <h1 className="text-[18px] leading-tight font-bold text-foreground sm:text-xl">
+              {t("verify.title")}
+            </h1>
+            <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground sm:text-xs">
               {t("verify.publicIntro")}
             </p>
           </div>
@@ -92,10 +97,10 @@ function VerifyInvoicePage() {
         <InvoiceVerifier
           onResult={stashVerification}
           footer={
-            <div className="space-y-2 px-1">
-              <p className="text-[11px] leading-relaxed text-muted-foreground">
-                {t("verify.publicSaveHint")}
-              </p>
+            <div className="flex flex-col items-start gap-2 px-1">
+                              <p className="rounded-md bg-secondary px-2.5 py-1.5 text-[11px] leading-snug text-muted-foreground">
+                  {t("verify.publicSaveHint")}
+                </p>
               <Link
                 to="/auth"
                 className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"

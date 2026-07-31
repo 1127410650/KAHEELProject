@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Camera,
   CheckCircle2,
+  ChevronDown,
   ClipboardPaste,
   FileUp,
   Loader2,
@@ -9,6 +10,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   ShieldQuestion,
+  X,
   XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -90,6 +92,8 @@ export function InvoiceVerifier({
   const [result, setResult] = useState<VerificationResult | null>(null);
   const [manual, setManual] = useState("");
   const [cameraOn, setCameraOn] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
+  const [facing, setFacing] = useState<"environment" | "user">("environment");
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -199,10 +203,10 @@ export function InvoiceVerifier({
     }
   }
 
-  async function startCamera() {
+  async function startCamera(mode: "environment" | "user" = facing) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: { facingMode: mode },
       });
       streamRef.current = stream;
       setCameraOn(true);
@@ -228,6 +232,14 @@ export function InvoiceVerifier({
     }
   }
 
+  /** Swap between front/back cameras; falls back silently when unavailable. */
+  async function flipCamera() {
+    const next = facing === "environment" ? "user" : "environment";
+    setFacing(next);
+    stopCamera();
+    await startCamera(next);
+  }
+
   async function verifyManual() {
     if (!manual.trim()) return;
     setBusy("manual");
@@ -241,52 +253,100 @@ export function InvoiceVerifier({
   function reset() {
     setResult(null);
     setManual("");
+    setManualOpen(false);
     stopCamera();
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {!result && (
-        <div className="surface space-y-4">
+        <div className="surface space-y-2 p-2.5 sm:space-y-4 sm:p-4">
           <div>
-            <h2 className="text-base font-semibold text-foreground">{t("verify.scanTitle")}</h2>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+            <h2 className="text-[18px] leading-tight font-semibold text-foreground sm:text-base">
+              {t("verify.scanTitle")}
+            </h2>
+            <p className="mt-1 text-[13px] leading-snug text-muted-foreground sm:text-xs">
               {t("verify.scanHint")}
             </p>
           </div>
 
-          {cameraOn ? (
-            <div className="space-y-2">
-              <div className="relative overflow-hidden rounded-lg border border-border bg-black">
+          {/* Three compact entry points — the camera never starts on its own. */}
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              className="h-10 min-h-11 flex-col gap-0.5 px-1 py-1 text-[11px] leading-tight sm:h-10 sm:flex-row sm:text-sm"
+              onClick={() => void startCamera()}
+              disabled={busy !== null || cameraOn}
+            >
+              <Camera className="size-4 shrink-0" aria-hidden />
+              <span className="truncate">{t("verify.useCamera")}</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-10 min-h-11 flex-col gap-0.5 px-1 py-1 text-[11px] leading-tight sm:h-10 sm:flex-row sm:text-sm"
+              onClick={() => fileRef.current?.click()}
+              disabled={busy !== null}
+            >
+              {busy ? (
+                <Loader2 className="size-4 shrink-0 animate-spin" aria-hidden />
+              ) : (
+                <FileUp className="size-4 shrink-0" aria-hidden />
+              )}
+              <span className="truncate">
+                {busy === "ocr" ? t("verify.readingText") : t("verify.uploadFile")}
+              </span>
+            </Button>
+            <Button
+              variant="secondary"
+              className="h-10 min-h-11 flex-col gap-0.5 px-1 py-1 text-[11px] leading-tight sm:h-10 sm:flex-row sm:text-sm"
+              onClick={() => setManualOpen((open) => !open)}
+              disabled={busy !== null}
+              aria-expanded={manualOpen}
+            >
+              <ClipboardPaste className="size-4 shrink-0" aria-hidden />
+              <span className="truncate">{t("verify.pasteQr")}</span>
+            </Button>
+          </div>
+
+          {cameraOn && (
+            <div className="space-y-2 rounded-lg border border-border bg-card p-2">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-foreground">
+                  {t("verify.cameraTitle")}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => void flipCamera()}
+                    aria-label={t("verify.flipCamera")}
+                    className="grid size-8 place-items-center rounded-md border border-input text-foreground hover:bg-accent"
+                  >
+                    <RefreshCw className="size-4" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={stopCamera}
+                    aria-label={t("verify.stopCamera")}
+                    className="grid size-8 place-items-center rounded-md border border-input text-foreground hover:bg-accent"
+                  >
+                    <X className="size-4" aria-hidden />
+                  </button>
+                </div>
+              </div>
+              <div
+                className="relative mx-auto overflow-hidden rounded-lg border border-border bg-black"
+                style={{ aspectRatio: "4 / 3", maxHeight: "42vh", minHeight: 220 }}
+              >
                 <video
                   ref={videoRef}
                   playsInline
                   muted
-                  className="aspect-[3/4] w-full object-cover sm:aspect-video"
+                  className="size-full object-cover"
+                  style={{ maxHeight: "42vh" }}
                 />
-                <div className="pointer-events-none absolute inset-8 rounded-lg border-2 border-primary/70" />
+                <div className="pointer-events-none absolute top-1/2 left-1/2 size-[48%] max-h-[170px] max-w-[170px] -translate-x-1/2 -translate-y-1/2 rounded-lg border-2 border-primary/70" />
               </div>
-              <Button variant="outline" className="w-full" onClick={stopCamera}>
+              <Button variant="outline" className="h-10 w-full" onClick={stopCamera}>
                 {t("verify.stopCamera")}
-              </Button>
-            </div>
-          ) : (
-            <div className="grid gap-2 sm:grid-cols-2">
-              <Button onClick={startCamera} disabled={busy !== null}>
-                <Camera className="size-4" aria-hidden />
-                {t("verify.useCamera")}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => fileRef.current?.click()}
-                disabled={busy !== null}
-              >
-                {busy ? (
-                  <Loader2 className="size-4 animate-spin" aria-hidden />
-                ) : (
-                  <FileUp className="size-4" aria-hidden />
-                )}
-                {busy === "ocr" ? t("verify.readingText") : t("verify.uploadFile")}
               </Button>
             </div>
           )}
@@ -303,26 +363,45 @@ export function InvoiceVerifier({
             }}
           />
 
-          <div className="space-y-2 border-t border-border pt-3">
-            <Label htmlFor="manual-qr" className="text-xs">
-              {t("verify.manualLabel")}
-            </Label>
-            <Input
-              id="manual-qr"
-              dir="ltr"
-              value={manual}
-              placeholder="AQ..."
-              onChange={(event) => setManual(event.target.value)}
-            />
-            <Button
-              variant="secondary"
-              className="w-full"
-              onClick={verifyManual}
-              disabled={!manual.trim() || busy !== null}
+          {/* Manual QR text — collapsed by default. */}
+          <div className="border-t border-border pt-2">
+            <button
+              type="button"
+              onClick={() => setManualOpen((open) => !open)}
+              aria-expanded={manualOpen}
+              className="flex min-h-11 w-full items-center justify-between gap-2 text-[13px] font-semibold text-primary"
             >
-              <ClipboardPaste className="size-4" aria-hidden />
-              {t("verify.verifyManual")}
-            </Button>
+              {t("verify.manualLabel")}
+              <ChevronDown
+                className={`size-4 transition-transform ${manualOpen ? "rotate-180" : ""}`}
+                aria-hidden
+              />
+            </button>
+            {manualOpen && (
+              <div className="mt-2 space-y-2">
+                <Label htmlFor="manual-qr" className="sr-only">
+                  {t("verify.manualLabel")}
+                </Label>
+                <Input
+                  id="manual-qr"
+                  dir="ltr"
+                  value={manual}
+                  placeholder="AQ..."
+                  onChange={(event) => setManual(event.target.value)}
+                />
+                {manual.trim().length > 0 && (
+                  <Button
+                    variant="secondary"
+                    className="h-10 min-h-11 w-full"
+                    onClick={verifyManual}
+                    disabled={busy !== null}
+                  >
+                    <ClipboardPaste className="size-4" aria-hidden />
+                    {t("verify.verifyManual")}
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
