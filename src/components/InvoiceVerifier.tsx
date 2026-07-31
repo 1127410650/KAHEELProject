@@ -125,10 +125,16 @@ export function InvoiceVerifier({
     [onResult, t],
   );
 
-  async function handleFile(file: File) {
+  async function handleFile(file: File): Promise<void> {
     const guard = validateScanFile(file);
-    if (guard === "TYPE") return toast.error(t("verify.badType"));
-    if (guard === "SIZE") return toast.error(t("verify.badSize"));
+    if (guard === "TYPE") {
+      toast.error(t("verify.badType"));
+      return;
+    }
+    if (guard === "SIZE") {
+      toast.error(t("verify.badSize"));
+      return;
+    }
 
     setBusy("file");
     try {
@@ -332,7 +338,7 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
             {result.verdict.reasons.length > 0 && (
               <ul className="mt-2 space-y-1 text-xs">
                 {result.verdict.reasons.slice(0, 6).map((reason) => (
-                  <li key={reason}>• {t(`verify.reason.${reason}`, reason)}</li>
+                  <li key={reason}>• {t(`verify.reason.${reason}`)}</li>
                 ))}
               </ul>
             )}
@@ -340,7 +346,12 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
         </div>
       </div>
 
-      {qr && <InfoTable title={t("verify.qrData")} rows={rows} />}
+      {qr && (
+        <div className="surface space-y-2">
+          <h3 className="text-sm font-semibold text-foreground">{t("verify.qrData")}</h3>
+          <InfoTable rows={rows} dense />
+        </div>
+      )}
 
       {result.comparison.length > 0 && (
         <div className="surface space-y-2">
@@ -443,7 +454,7 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
             </table>
             {result.cryptoNotes.length > 0 && (
               <p className="text-muted-foreground">
-                {result.cryptoNotes.map((note) => t(`verify.reason.${note}`, note)).join(" · ")}
+                {result.cryptoNotes.map((note) => t(`verify.reason.${note}`)).join(" · ")}
               </p>
             )}
             <p className="break-all text-muted-foreground" dir="ltr">
