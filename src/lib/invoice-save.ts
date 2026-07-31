@@ -44,7 +44,8 @@ export function toStash(result: VerificationResult): StashedVerification {
     total: result.qr?.total ?? printed?.total ?? null,
     vatTotal: result.qr?.vatTotal ?? printed?.vatTotal ?? null,
     invoiceNo: printed?.invoiceNo ?? null,
-    invoiceDate: printed?.invoiceDate ?? null,
+    /* eslint-disable-next-line */
+    invoiceDate: printed?.timestamp?.slice(0, 10) ?? null,
     decodedTags: (result.qr?.fields ?? []).map((f) => ({ tag: f.tag, value: f.value })),
     extractionMethod: printed?.method ?? (result.qr ? "qr" : "manual"),
     qrHash: result.qrHash ?? null,
@@ -111,8 +112,8 @@ export interface SaveInvoiceInput {
   invoiceDate: string;
   supplierId?: string | null;
   createSupplier?: boolean;
-  sellerName?: string | null;
-  sellerVat?: string | null;
+  sellerName?: string | null | undefined;
+  sellerVat?: string | null | undefined;
   projectId?: string | null;
   supervisorId?: string | null;
   amountBeforeTax: number | null;
@@ -212,12 +213,12 @@ export async function saveVerifiedInvoice(input: SaveInvoiceInput): Promise<Save
       unit: li.unit ?? null,
       unit_price_before_vat: li.unitPrice ?? null,
       discount: li.discount ?? null,
-      vat_rate: li.vatRate ?? null,
-      vat_amount: li.vatAmount ?? null,
-      subtotal_before_vat: li.subtotal ?? null,
-      total_with_vat: li.total ?? null,
+      vat_rate: li.taxRate ?? null,
+      vat_amount: li.taxAmount ?? null,
+      subtotal_before_vat: li.netAmount ?? null,
+      total_with_vat: li.grossAmount ?? null,
       extraction_method: s.extractionMethod,
-      confidence: li.confidence ?? null,
+      confidence: null,
     })),
   };
 
