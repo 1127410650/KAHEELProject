@@ -4,6 +4,7 @@ import { Clock, MessageSquare, Paperclip } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { StageBadge } from "@/components/RequestStage";
+import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { formatDate, formatDateTime } from "@/lib/format";
 
 export interface RequestCardData {
@@ -19,6 +20,7 @@ export interface RequestCardData {
   actionText: string;
   unread?: number;
   amountText?: string | null;
+  paymentNo?: string | null;
 }
 
 /** One request as a readable card — no technical field names, no status dropdown. */
