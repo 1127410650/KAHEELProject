@@ -112,12 +112,14 @@ export async function updateAppUserImpl(userClient: Client, input: UpdateUserInp
     await supabaseAdmin.from("user_roles").insert({ user_id: input.user_id, role: input.role });
   }
 
-  const profilePatch: Record<string, unknown> = {};
-  if (input.supervisor_id !== undefined) profilePatch["supervisor_id"] = input.supervisor_id;
-  if (input.is_active !== undefined) profilePatch["is_active"] = input.is_active;
+  const profilePatch: Database["public"]["Tables"]["profiles"]["Update"] = {
+    ...(input.supervisor_id !== undefined ? { supervisor_id: input.supervisor_id } : {}),
+    ...(input.is_active !== undefined ? { is_active: input.is_active } : {}),
+  };
   if (Object.keys(profilePatch).length) {
     await supabaseAdmin.from("profiles").update(profilePatch).eq("user_id", input.user_id);
   }
+
 
   // Disabling an account also terminates its sessions.
   if (input.is_active === false) {
