@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Camera,
   CheckCircle2,
+  ChevronDown,
   ClipboardPaste,
   FileUp,
   Loader2,
@@ -9,6 +10,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   ShieldQuestion,
+  X,
   XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -90,6 +92,8 @@ export function InvoiceVerifier({
   const [result, setResult] = useState<VerificationResult | null>(null);
   const [manual, setManual] = useState("");
   const [cameraOn, setCameraOn] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
+  const [facing, setFacing] = useState<"environment" | "user">("environment");
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -199,10 +203,10 @@ export function InvoiceVerifier({
     }
   }
 
-  async function startCamera() {
+  async function startCamera(mode: "environment" | "user" = facing) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: { facingMode: mode },
       });
       streamRef.current = stream;
       setCameraOn(true);
@@ -228,6 +232,14 @@ export function InvoiceVerifier({
     }
   }
 
+  /** Swap between front/back cameras; falls back silently when unavailable. */
+  async function flipCamera() {
+    const next = facing === "environment" ? "user" : "environment";
+    setFacing(next);
+    stopCamera();
+    await startCamera(next);
+  }
+
   async function verifyManual() {
     if (!manual.trim()) return;
     setBusy("manual");
@@ -241,6 +253,7 @@ export function InvoiceVerifier({
   function reset() {
     setResult(null);
     setManual("");
+    setManualOpen(false);
     stopCamera();
   }
 
@@ -261,7 +274,7 @@ export function InvoiceVerifier({
           <div className="grid grid-cols-3 gap-2">
             <Button
               className="h-10 min-h-11 flex-col gap-0.5 px-1 py-1 text-[11px] leading-tight sm:h-10 sm:flex-row sm:text-sm"
-              onClick={startCamera}
+              onClick={() => void startCamera()}
               disabled={busy !== null || cameraOn}
             >
               <Camera className="size-4 shrink-0" aria-hidden />
@@ -303,7 +316,7 @@ export function InvoiceVerifier({
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
-                    onClick={flipCamera}
+                    onClick={() => void flipCamera()}
                     aria-label={t("verify.flipCamera")}
                     className="grid size-8 place-items-center rounded-md border border-input text-foreground hover:bg-accent"
                   >

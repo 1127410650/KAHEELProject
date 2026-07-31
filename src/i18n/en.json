@@ -775,7 +775,7 @@
     "stopCamera": "Stop camera",
     "uploadFile": "Upload image or PDF",
     "readingText": "Reading text locally…",
-    "manualLabel": "QR text (Base64)",
+    "manualLabel": "Enter QR text manually",
     "verifyManual": "Verify text",
     "cameraDenied": "Camera access was denied",
     "noQrFound": "No readable QR code found",
@@ -877,6 +877,9 @@
       "minor_total": "Total differs"
     },
     "publicLink": "Verify a tax invoice",
-    "signInToSave": "Sign in to save this invoice"
+    "signInToSave": "Sign in to save this invoice",
+    "pasteQr": "Paste QR",
+    "cameraTitle": "Scan QR code",
+    "flipCamera": "Switch camera"
   }
 }
