@@ -8,8 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import {
-  MEMBERSHIP_TYPE_LABELS_AR,
-  MEMBERSHIP_TYPE_LABELS_EN,
+  MEMBERSHIP_LABELS_AR,
+  MEMBERSHIP_LABELS_EN,
   REQUEST_KIND_LABELS_AR,
   REQUEST_KIND_LABELS_EN,
   type MembershipType,
@@ -103,7 +103,7 @@ function PortalPage() {
   const queryClient = useQueryClient();
   const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
   const membershipLabels =
-    locale === "ar" ? MEMBERSHIP_TYPE_LABELS_AR : MEMBERSHIP_TYPE_LABELS_EN;
+    locale === "ar" ? MEMBERSHIP_LABELS_AR : MEMBERSHIP_LABELS_EN;
   const fileInput = useRef<HTMLInputElement>(null);
 
   const [open, setOpen] = useState(false);
