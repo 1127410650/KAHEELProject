@@ -239,3 +239,35 @@
     margin: 0;
   }
 }
+
+/* ------------------------------------------------------- mobile behaviour */
+html,
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 767px) {
+  /* comfortable touch targets and no accidental zoom on inputs */
+  button,
+  a[role="button"],
+  [role="tab"],
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+  button,
+  a[role="button"] {
+    min-height: 40px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  /* tables inside surfaces scroll instead of stretching the page */
+  .surface table {
+    min-width: 640px;
+  }
+}
