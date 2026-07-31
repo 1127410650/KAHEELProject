@@ -38,7 +38,7 @@ import { nextStatuses } from "@/lib/requests";
 import { ActionNowCard } from "@/components/ActionNowCard";
 import { InfoTable } from "@/components/InfoTable";
 import { StageBadge, StageBar } from "@/components/RequestStage";
-import { buildRequestTitle } from "@/lib/request-ui";
+import { buildRequestTitle, requestKindLabel } from "@/lib/request-ui";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
 
 import type { Database } from "@/integrations/supabase/types";
@@ -477,7 +477,10 @@ function RequestDetailPage() {
                   label: t("requests.requestNo"),
                   value: <span className="num">{request?.request_no}</span>,
                 },
-                { label: t("requests.requestType"), value: request?.request_type },
+                {
+                  label: t("requests.requestType"),
+                  value: requestKindLabel(request?.request_type, locale),
+                },
                 {
                   label: t("requests.project"),
                   value: request?.project_id ? (

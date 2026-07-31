@@ -120,6 +120,13 @@ const KIND_TITLES_EN: Record<string, string> = {
   general: "General request",
 };
 
+/** Localized request-type label — never shows the raw enum to the user. */
+export function requestKindLabel(kind: string | null | undefined, locale: string): string {
+  if (!kind) return "—";
+  const map = locale === "ar" ? KIND_TITLES_AR : KIND_TITLES_EN;
+  return map[kind] ?? kind.replace(/_/g, " ");
+}
+
 /**
  * Auto-title: never shows "0"/"00"/empty or internal test titles.
  * `fallback` is the localized "طلب بدون عنوان" string.
