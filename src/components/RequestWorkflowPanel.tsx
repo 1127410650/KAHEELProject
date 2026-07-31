@@ -137,9 +137,11 @@ export function RequestWorkflowPanel({
 
   const remind = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("send_request_reminder", {
+      const { error } = await supabase.rpc("request_add_reminder", {
         _request_id: request.id,
-        ...(note ? { _message: note } : {}),
+        _message: note.trim() || t("workflow.remind"),
+        ...(followUp ? { _follow_up_date: followUp } : {}),
+        ...(assignee ? { _target_user_id: assignee } : {}),
       });
       if (error) throw error;
     },
@@ -149,6 +151,7 @@ export function RequestWorkflowPanel({
     },
     onError: fail,
   });
+
 
   const setStatus = useMutation({
     mutationFn: async (status: string) => {
