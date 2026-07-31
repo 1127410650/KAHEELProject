@@ -103,9 +103,12 @@ function SupervisorsPage() {
         name_en: values.name_en.trim() || null,
         national_id: values.national_id.trim(),
         phone: values.phone.trim(),
+        email: values.email.trim() || null,
+        job_title: values.job_title.trim() || null,
         notes_ar: values.notes_ar.trim() || null,
         is_active: values.is_active,
       };
+
       if (values.id) {
         const { error } = await supabase.from("supervisors").update(payload).eq("id", values.id);
         if (error) throw error;
