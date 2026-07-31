@@ -23,9 +23,9 @@ export async function logAudit(params: {
   await supabase.rpc("log_audit", {
     _entity_type: params.entityType,
     _action: params.action,
-    _entity_id: params.entityId ?? undefined,
+    ...(params.entityId ? { _entity_id: params.entityId } : {}),
     _old_value: (params.oldValue ?? null) as never,
     _new_value: (params.newValue ?? null) as never,
-    _reason: params.reason ?? undefined,
+    ...(params.reason ? { _reason: params.reason } : {}),
   });
 }
