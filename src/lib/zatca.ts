@@ -281,10 +281,10 @@ export function buildVerdict(
     return { level: "red", reasons: errors.map((e) => e.code) };
   }
   if (major.length > 0) {
-    return { level: "red", reasons: major.map((r) => `mismatch.${r.field}`) };
+    return { level: "red", reasons: major.map((r) => `mismatch_${r.field}`) };
   }
 
-  const reasons: string[] = [...warnings.map((w) => w.code), ...minor.map((r) => `minor.${r.field}`)];
+  const reasons: string[] = [...warnings.map((w) => w.code), ...minor.map((r) => `minor_${r.field}`)];
   if (qr.phase === 1) reasons.push("phaseOneOnly");
   if (!options.cryptoChecked) reasons.push("cryptoNotVerified");
   if (options.lowOcrConfidence) reasons.push("lowOcrConfidence");

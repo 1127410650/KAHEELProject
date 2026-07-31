@@ -864,16 +864,16 @@
       "vatOverTotal": "قيمة الضريبة أكبر من الإجمالي",
       "hashShort": "بصمة الفاتورة قصيرة",
       "noQr": "لا يوجد رمز QR",
-      "mismatch.vatNumber": "الرقم الضريبي في الرمز يخالف الفاتورة",
-      "mismatch.total": "الإجمالي في الرمز يخالف الفاتورة",
-      "mismatch.sellerName": "اسم البائع مختلف",
-      "mismatch.timestamp": "التاريخ مختلف",
-      "mismatch.vatTotal": "قيمة الضريبة مختلفة",
-      "minor.sellerName": "اسم البائع مختلف عن المطبوع",
-      "minor.timestamp": "التاريخ مختلف عن المطبوع",
-      "minor.vatTotal": "قيمة الضريبة مختلفة عن المطبوع",
-      "minor.vatNumber": "الرقم الضريبي مختلف",
-      "minor.total": "الإجمالي مختلف"
+      "mismatch_vatNumber": "الرقم الضريبي في الرمز يخالف الفاتورة",
+      "mismatch_total": "الإجمالي في الرمز يخالف الفاتورة",
+      "mismatch_sellerName": "اسم البائع مختلف",
+      "mismatch_timestamp": "التاريخ مختلف",
+      "mismatch_vatTotal": "قيمة الضريبة مختلفة",
+      "minor_sellerName": "اسم البائع مختلف عن المطبوع",
+      "minor_timestamp": "التاريخ مختلف عن المطبوع",
+      "minor_vatTotal": "قيمة الضريبة مختلفة عن المطبوع",
+      "minor_vatNumber": "الرقم الضريبي مختلف",
+      "minor_total": "الإجمالي مختلف"
     },
     "publicLink": "التحقق من فاتورة ضريبية"
   }

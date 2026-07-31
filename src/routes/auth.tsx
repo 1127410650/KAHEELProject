@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { ShieldCheck, Loader2 } from "lucide-react";
+import { ShieldCheck, Loader2, QrCode } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -155,6 +155,19 @@ function AuthPage() {
               {submitting ? t("auth.signingIn") : t("auth.signIn")}
             </Button>
           </form>
+
+          <div className="mt-6 border-t border-border pt-4">
+            <Link
+              to="/verify-invoice"
+              className="flex items-center justify-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            >
+              <QrCode className="size-4" aria-hidden />
+              {t("verify.publicLink")}
+            </Link>
+            <p className="mt-2 text-center text-xs text-muted-foreground">
+              {t("verify.publicSaveHint")}
+            </p>
+          </div>
         </div>
       </div>
     </div>

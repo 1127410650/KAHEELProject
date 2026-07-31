@@ -864,16 +864,16 @@
       "vatOverTotal": "VAT amount is greater than the total",
       "hashShort": "Invoice hash is too short",
       "noQr": "No QR code",
-      "mismatch.vatNumber": "VAT number in the QR differs from the invoice",
-      "mismatch.total": "Total in the QR differs from the invoice",
-      "mismatch.sellerName": "Seller name differs",
-      "mismatch.timestamp": "Date differs",
-      "mismatch.vatTotal": "VAT amount differs",
-      "minor.sellerName": "Seller name differs from the printed one",
-      "minor.timestamp": "Date differs from the printed one",
-      "minor.vatTotal": "VAT amount differs from the printed one",
-      "minor.vatNumber": "VAT number differs",
-      "minor.total": "Total differs"
+      "mismatch_vatNumber": "VAT number in the QR differs from the invoice",
+      "mismatch_total": "Total in the QR differs from the invoice",
+      "mismatch_sellerName": "Seller name differs",
+      "mismatch_timestamp": "Date differs",
+      "mismatch_vatTotal": "VAT amount differs",
+      "minor_sellerName": "Seller name differs from the printed one",
+      "minor_timestamp": "Date differs from the printed one",
+      "minor_vatTotal": "VAT amount differs from the printed one",
+      "minor_vatNumber": "VAT number differs",
+      "minor_total": "Total differs"
     },
     "publicLink": "Verify a tax invoice"
   }
