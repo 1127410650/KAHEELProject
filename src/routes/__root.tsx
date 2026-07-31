@@ -81,16 +81,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "إدارة المشاريع والفواتير والطلبات وعهد المشرفين — Projects, invoices, requests and supervisor custody management.",
+          "إدارة المشاريع — Projects, invoices",
       },
       { property: "og:title", content: "تحقّق — Tahqaq" },
       {
         property: "og:description",
-        content: "Projects, invoices, requests and supervisor custody management.",
+        content: "إدارة المشاريع — Projects, invoices",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
+      { name: "twitter:title", content: "تحقّق — Tahqaq" },
+      { name: "twitter:description", content: "إدارة المشاريع — Projects, invoices" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
