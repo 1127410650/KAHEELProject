@@ -9,6 +9,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
+import { RequestWorkflowPanel } from "@/components/RequestWorkflowPanel";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { Button } from "@/components/ui/button";
@@ -352,6 +353,21 @@ function RequestDetailPage() {
           </div>
         }
       />
+
+      {request && (
+        <RequestWorkflowPanel
+          request={{
+            id: request.id,
+            kind: request.kind,
+            status: request.status,
+            amount: request.amount,
+            approved_at: request.approved_at,
+            executed_at: request.executed_at,
+            assigned_to: request.assigned_to,
+          }}
+          onDone={invalidate}
+        />
+      )}
 
       {isAccountant && request && (
         <div className="surface mb-4 flex flex-wrap items-end gap-3 p-4">
