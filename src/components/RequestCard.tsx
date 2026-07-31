@@ -39,8 +39,12 @@ export function RequestCard({
           <h3 className="truncate text-sm font-semibold">{data.title}</h3>
           <p className="num mt-0.5 text-xs text-muted-foreground">{data.request_no}</p>
         </div>
-        <StageBadge status={data.status} />
+        <div className="flex flex-wrap items-center gap-2">
+          {data.paymentNo && <PaymentNoBadge paymentNo={data.paymentNo} />}
+          <StageBadge status={data.status} />
+        </div>
       </div>
+
 
       <dl className="grid gap-1.5 text-xs text-muted-foreground sm:grid-cols-2">
         <div className="flex gap-1.5">
