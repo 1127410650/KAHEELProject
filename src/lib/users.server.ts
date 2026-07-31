@@ -12,7 +12,7 @@ export interface CreateUserInput {
   phone: string;
   email: string;
   role: "accountant" | "employee" | "supervisor";
-  supervisor_id?: string | null;
+  supervisor_id?: string | null | undefined;
   project_ids: string[];
   permissions: string[];
   is_active: boolean;
@@ -95,12 +95,12 @@ export async function createAppUserImpl(userClient: Client, input: CreateUserInp
 
 export interface UpdateUserInput {
   user_id: string;
-  role?: "accountant" | "employee" | "supervisor";
-  supervisor_id?: string | null;
-  project_ids?: string[];
-  permissions?: string[];
-  is_active?: boolean;
-  reset_password?: string | null;
+  role?: "accountant" | "employee" | "supervisor" | undefined;
+  supervisor_id?: string | null | undefined;
+  project_ids?: string[] | undefined;
+  permissions?: string[] | undefined;
+  is_active?: boolean | undefined;
+  reset_password?: string | null | undefined;
 }
 
 export async function updateAppUserImpl(userClient: Client, input: UpdateUserInput) {
