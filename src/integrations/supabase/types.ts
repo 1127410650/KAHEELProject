@@ -42,9 +42,12 @@ export type Database = {
           created_at: string
           created_by: string | null
           delete_reason: string | null
+          delete_requested_by: string | null
           deleted_at: string | null
+          deleted_by: string | null
           entity_id: string
           entity_type: string
+          file_hash: string | null
           file_name: string
           file_size: number | null
           id: string
@@ -52,8 +55,11 @@ export type Database = {
           mime_type: string | null
           note: string | null
           project_id: string | null
+          replaces_id: string | null
           stage_id: string | null
           storage_path: string
+          uploader_role: string | null
+          version: number
         }
         Insert: {
           approved_at?: string | null
@@ -61,9 +67,12 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           delete_reason?: string | null
+          delete_requested_by?: string | null
           deleted_at?: string | null
+          deleted_by?: string | null
           entity_id: string
           entity_type: string
+          file_hash?: string | null
           file_name: string
           file_size?: number | null
           id?: string
@@ -71,8 +80,11 @@ export type Database = {
           mime_type?: string | null
           note?: string | null
           project_id?: string | null
+          replaces_id?: string | null
           stage_id?: string | null
           storage_path: string
+          uploader_role?: string | null
+          version?: number
         }
         Update: {
           approved_at?: string | null
@@ -80,9 +92,12 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           delete_reason?: string | null
+          delete_requested_by?: string | null
           deleted_at?: string | null
+          deleted_by?: string | null
           entity_id?: string
           entity_type?: string
+          file_hash?: string | null
           file_name?: string
           file_size?: number | null
           id?: string
@@ -90,8 +105,11 @@ export type Database = {
           mime_type?: string | null
           note?: string | null
           project_id?: string | null
+          replaces_id?: string | null
           stage_id?: string | null
           storage_path?: string
+          uploader_role?: string | null
+          version?: number
         }
         Relationships: [
           {
@@ -99,6 +117,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attachments_replaces_id_fkey"
+            columns: ["replaces_id"]
+            isOneToOne: false
+            referencedRelation: "attachments"
             referencedColumns: ["id"]
           },
           {
@@ -452,6 +477,57 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          event: string
+          id: string
+          message_id: string | null
+          read_at: string | null
+          request_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          event: string
+          id?: string
+          message_id?: string | null
+          read_at?: string | null
+          request_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          event?: string
+          id?: string
+          message_id?: string | null
+          read_at?: string | null
+          request_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "request_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -656,27 +732,256 @@ export type Database = {
           },
         ]
       }
-      request_reminders: {
+      request_change_requests: {
         Row: {
-          actor_id: string
+          action: string
           created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          executed_at: string | null
+          executed_by: string | null
+          field_name: string | null
           id: string
-          message: string | null
+          new_value: string | null
+          old_value: string | null
+          reason: string
+          request_id: string
+          requested_by: string | null
+          requested_role: string | null
+          status: string
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
+          field_name?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          reason: string
+          request_id: string
+          requested_by?: string | null
+          requested_role?: string | null
+          status?: string
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
+          field_name?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          reason?: string
+          request_id?: string
+          requested_by?: string | null
+          requested_role?: string | null
+          status?: string
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_change_requests_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_field_versions: {
+        Row: {
+          change_request_id: string | null
+          changed_by: string | null
+          created_at: string
+          field_name: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          request_id: string
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          change_request_id?: string | null
+          changed_by?: string | null
+          created_at?: string
+          field_name: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          request_id: string
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          change_request_id?: string | null
+          changed_by?: string | null
+          created_at?: string
+          field_name?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          request_id?: string
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_field_versions_change_request_id_fkey"
+            columns: ["change_request_id"]
+            isOneToOne: false
+            referencedRelation: "request_change_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_field_versions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_message_reads: {
+        Row: {
+          message_id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          message_id: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          message_id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_message_reads_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "request_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_messages: {
+        Row: {
+          author_id: string | null
+          author_role: string | null
+          body: string
+          client_token: string | null
+          created_at: string
+          delete_reason: string | null
+          deleted_at: string | null
+          due_date: string | null
+          id: string
+          is_draft: boolean
+          items: Json | null
+          msg_kind: string
+          priority: string | null
+          reply_to_id: string | null
           request_id: string
         }
         Insert: {
-          actor_id: string
+          author_id?: string | null
+          author_role?: string | null
+          body: string
+          client_token?: string | null
           created_at?: string
+          delete_reason?: string | null
+          deleted_at?: string | null
+          due_date?: string | null
           id?: string
-          message?: string | null
+          is_draft?: boolean
+          items?: Json | null
+          msg_kind?: string
+          priority?: string | null
+          reply_to_id?: string | null
           request_id: string
         }
         Update: {
-          actor_id?: string
+          author_id?: string | null
+          author_role?: string | null
+          body?: string
+          client_token?: string | null
           created_at?: string
+          delete_reason?: string | null
+          deleted_at?: string | null
+          due_date?: string | null
+          id?: string
+          is_draft?: boolean
+          items?: Json | null
+          msg_kind?: string
+          priority?: string | null
+          reply_to_id?: string | null
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "request_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_reminders: {
+        Row: {
+          actor_id: string
+          client_token: string | null
+          created_at: string
+          follow_up_date: string | null
+          id: string
+          message: string | null
+          request_id: string
+          target_user_id: string | null
+        }
+        Insert: {
+          actor_id: string
+          client_token?: string | null
+          created_at?: string
+          follow_up_date?: string | null
+          id?: string
+          message?: string | null
+          request_id: string
+          target_user_id?: string | null
+        }
+        Update: {
+          actor_id?: string
+          client_token?: string | null
+          created_at?: string
+          follow_up_date?: string | null
           id?: string
           message?: string | null
           request_id?: string
+          target_user_id?: string | null
         }
         Relationships: [
           {
@@ -691,7 +996,10 @@ export type Database = {
       request_status_history: {
         Row: {
           actor_id: string | null
+          actor_role: string | null
+          assignee_id: string | null
           created_at: string
+          department: string | null
           from_status: Database["public"]["Enums"]["request_status"] | null
           id: string
           note: string | null
@@ -700,7 +1008,10 @@ export type Database = {
         }
         Insert: {
           actor_id?: string | null
+          actor_role?: string | null
+          assignee_id?: string | null
           created_at?: string
+          department?: string | null
           from_status?: Database["public"]["Enums"]["request_status"] | null
           id?: string
           note?: string | null
@@ -709,7 +1020,10 @@ export type Database = {
         }
         Update: {
           actor_id?: string | null
+          actor_role?: string | null
+          assignee_id?: string | null
           created_at?: string
+          department?: string | null
           from_status?: Database["public"]["Enums"]["request_status"] | null
           id?: string
           note?: string | null
@@ -728,22 +1042,29 @@ export type Database = {
       }
       requests: {
         Row: {
+          account_ref: string | null
           amount: number | null
           approved_at: string | null
           approved_by: string | null
           assigned_to: string | null
           authority: string | null
+          beneficiary: string | null
+          closed_at: string | null
           created_at: string
           created_by: string | null
           created_project_id: string | null
           delete_reason: string | null
           deleted_at: string | null
+          department: string | null
           due_date: string | null
           executed_at: string | null
           executed_by: string | null
+          execution_reference: string | null
           final_result: string | null
           id: string
+          info_state: string
           kind: string
+          need_date: string | null
           notes_ar: string | null
           notes_en: string | null
           paid_at: string | null
@@ -754,35 +1075,48 @@ export type Database = {
           payment_no: string | null
           payment_note: string | null
           payment_reference: string | null
+          priority: string
           project_id: string | null
+          reason: string | null
           reassign_reason: string | null
           reference_no: string | null
+          reject_reason: string | null
+          reopen_reason: string | null
           request_date: string
           request_no: string
           request_type: string
           requester_id: string | null
+          service_type: string | null
           status: Database["public"]["Enums"]["request_status"]
           status_note: string | null
           supervisor_id: string | null
+          title: string | null
           updated_at: string
         }
         Insert: {
+          account_ref?: string | null
           amount?: number | null
           approved_at?: string | null
           approved_by?: string | null
           assigned_to?: string | null
           authority?: string | null
+          beneficiary?: string | null
+          closed_at?: string | null
           created_at?: string
           created_by?: string | null
           created_project_id?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          department?: string | null
           due_date?: string | null
           executed_at?: string | null
           executed_by?: string | null
+          execution_reference?: string | null
           final_result?: string | null
           id?: string
+          info_state?: string
           kind?: string
+          need_date?: string | null
           notes_ar?: string | null
           notes_en?: string | null
           paid_at?: string | null
@@ -793,35 +1127,48 @@ export type Database = {
           payment_no?: string | null
           payment_note?: string | null
           payment_reference?: string | null
+          priority?: string
           project_id?: string | null
+          reason?: string | null
           reassign_reason?: string | null
           reference_no?: string | null
+          reject_reason?: string | null
+          reopen_reason?: string | null
           request_date?: string
           request_no: string
           request_type: string
           requester_id?: string | null
+          service_type?: string | null
           status?: Database["public"]["Enums"]["request_status"]
           status_note?: string | null
           supervisor_id?: string | null
+          title?: string | null
           updated_at?: string
         }
         Update: {
+          account_ref?: string | null
           amount?: number | null
           approved_at?: string | null
           approved_by?: string | null
           assigned_to?: string | null
           authority?: string | null
+          beneficiary?: string | null
+          closed_at?: string | null
           created_at?: string
           created_by?: string | null
           created_project_id?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          department?: string | null
           due_date?: string | null
           executed_at?: string | null
           executed_by?: string | null
+          execution_reference?: string | null
           final_result?: string | null
           id?: string
+          info_state?: string
           kind?: string
+          need_date?: string | null
           notes_ar?: string | null
           notes_en?: string | null
           paid_at?: string | null
@@ -832,16 +1179,22 @@ export type Database = {
           payment_no?: string | null
           payment_note?: string | null
           payment_reference?: string | null
+          priority?: string
           project_id?: string | null
+          reason?: string | null
           reassign_reason?: string | null
           reference_no?: string | null
+          reject_reason?: string | null
+          reopen_reason?: string | null
           request_date?: string
           request_no?: string
           request_type?: string
           requester_id?: string | null
+          service_type?: string | null
           status?: Database["public"]["Enums"]["request_status"]
           status_note?: string | null
           supervisor_id?: string | null
+          title?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1166,15 +1519,47 @@ export type Database = {
         Args: { _attachment_id: string }
         Returns: undefined
       }
+      attachment_restore: {
+        Args: { _attachment_id: string; _reason?: string }
+        Returns: undefined
+      }
       can_access_attachment_object: {
         Args: { _path: string }
         Returns: boolean
       }
       can_access_project: { Args: { _project_id: string }; Returns: boolean }
+      can_access_request: { Args: { _request_id: string }; Returns: boolean }
       can_access_supervisor: {
         Args: { _supervisor_id: string }
         Returns: boolean
       }
+      change_request_create: {
+        Args: {
+          _action: string
+          _field_name?: string
+          _new_value?: string
+          _old_value?: string
+          _reason: string
+          _request_id: string
+          _target_id?: string
+          _target_type: string
+        }
+        Returns: string
+      }
+      change_request_decide: {
+        Args: {
+          _change_id: string
+          _decision: string
+          _new_value?: string
+          _reason?: string
+        }
+        Returns: undefined
+      }
+      change_request_execute: {
+        Args: { _change_id: string }
+        Returns: undefined
+      }
+      current_role_label: { Args: never; Returns: string }
       current_supervisor_id: { Args: never; Returns: string }
       custody_base_effect: {
         Args: {
@@ -1210,21 +1595,106 @@ export type Database = {
         Returns: string
       }
       normalize_doc_no: { Args: { p_value: string }; Returns: string }
+      notify_request: {
+        Args: {
+          _body?: string
+          _event: string
+          _message_id?: string
+          _request_id: string
+          _title: string
+        }
+        Returns: undefined
+      }
       register_login_result: {
         Args: { _identifier: string; _success: boolean }
         Returns: boolean
+      }
+      request_add_reminder: {
+        Args: {
+          _client_token?: string
+          _follow_up_date?: string
+          _message: string
+          _request_id: string
+          _target_user_id?: string
+        }
+        Returns: string
+      }
+      request_ask_info: {
+        Args: {
+          _body: string
+          _due_date?: string
+          _items?: string
+          _priority?: string
+          _request_id: string
+        }
+        Returns: string
+      }
+      request_can_transition: {
+        Args: { _from: string; _to: string }
+        Returns: boolean
+      }
+      request_cancel: {
+        Args: { _reason: string; _request_id: string }
+        Returns: undefined
+      }
+      request_close: {
+        Args: { _note?: string; _request_id: string }
+        Returns: undefined
       }
       request_decide: {
         Args: { _decision: string; _note?: string; _request_id: string }
         Returns: undefined
       }
-      request_execute: {
-        Args: { _note?: string; _request_id: string }
-        Returns: Json
+      request_execute:
+        | { Args: { _note?: string; _request_id: string }; Returns: Json }
+        | {
+            Args: { _note?: string; _reference?: string; _request_id: string }
+            Returns: Json
+          }
+      request_mark_read: { Args: { _request_id: string }; Returns: undefined }
+      request_message_publish: {
+        Args: { _body?: string; _message_id: string }
+        Returns: undefined
       }
+      request_post_message: {
+        Args: {
+          _body: string
+          _client_token?: string
+          _is_draft?: boolean
+          _msg_kind?: string
+          _reply_to?: string
+          _request_id: string
+        }
+        Returns: string
+      }
+      request_progress: { Args: { _status: string }; Returns: number }
       request_reassign: {
         Args: { _assignee: string; _reason: string; _request_id: string }
         Returns: undefined
+      }
+      request_reopen: {
+        Args: { _reason: string; _request_id: string }
+        Returns: undefined
+      }
+      request_set_status: {
+        Args: {
+          _assignee?: string
+          _department?: string
+          _note?: string
+          _request_id: string
+          _status: string
+        }
+        Returns: undefined
+      }
+      request_stage_order: { Args: never; Returns: string[] }
+      request_supervisor_reply: {
+        Args: {
+          _body: string
+          _client_token?: string
+          _is_draft?: boolean
+          _request_id: string
+        }
+        Returns: string
       }
       resolve_login_identity: {
         Args: { _identifier: string }
@@ -1247,6 +1717,26 @@ export type Database = {
           _project_id?: string
           _request_date?: string
           _request_type: string
+        }
+        Returns: string
+      }
+      submit_request: {
+        Args: {
+          _account_ref?: string
+          _amount?: number
+          _authority?: string
+          _beneficiary?: string
+          _department?: string
+          _kind: string
+          _need_date?: string
+          _notes_ar?: string
+          _priority?: string
+          _project_id?: string
+          _reason?: string
+          _request_date?: string
+          _request_type?: string
+          _service_type?: string
+          _title?: string
         }
         Returns: string
       }
@@ -1277,6 +1767,15 @@ export type Database = {
         | "cancelled"
         | "approved"
         | "rejected"
+        | "awaiting_reply"
+        | "under_review"
+        | "assigned"
+        | "supervisor_replied"
+        | "review_after_info"
+        | "awaiting_approval"
+        | "awaiting_execution"
+        | "executing"
+        | "executed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1431,6 +1930,15 @@ export const Constants = {
         "cancelled",
         "approved",
         "rejected",
+        "awaiting_reply",
+        "under_review",
+        "assigned",
+        "supervisor_replied",
+        "review_after_info",
+        "awaiting_approval",
+        "awaiting_execution",
+        "executing",
+        "executed",
       ],
     },
   },

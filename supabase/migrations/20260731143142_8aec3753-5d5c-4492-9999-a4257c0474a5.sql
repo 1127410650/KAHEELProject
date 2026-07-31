@@ -1,0 +1,9 @@
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'awaiting_reply';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'under_review';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'assigned';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'supervisor_replied';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'review_after_info';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'awaiting_approval';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'awaiting_execution';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'executing';
+ALTER TYPE public.request_status ADD VALUE IF NOT EXISTS 'executed';
