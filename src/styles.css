@@ -221,9 +221,10 @@
   .voucher-sheet .grid {
     grid-template-columns: 1fr !important;
   }
-  .voucher-sheet dl.grid {
+  .voucher-sheet .grid-cols-2 {
     grid-template-columns: 1fr 1fr !important;
   }
+
   .voucher-sheet table {
     width: 100% !important;
     table-layout: fixed;
