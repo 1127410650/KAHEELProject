@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Plus, ShieldCheck, KeyRound } from "lucide-react";
+import { Plus, ShieldCheck, KeyRound, Copy } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -101,6 +101,7 @@ function UsersPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<UserForm>({ ...emptyForm, password: randomPassword() });
   const [editing, setEditing] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   const { data: rows = [] } = useQuery({
     queryKey: ["users"],

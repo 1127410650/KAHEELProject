@@ -44,7 +44,11 @@
     "english": "English",
     "notAllowed": "You do not have permission for this action",
     "select": "Select…",
-    "reference": "Reference"
+    "reference": "Reference",
+    "copy": "Copy",
+    "copied": "Copied",
+    "showDetails": "Show details",
+    "hideDetails": "Hide details"
   },
   "nav": {
     "dashboard": "Dashboard",
