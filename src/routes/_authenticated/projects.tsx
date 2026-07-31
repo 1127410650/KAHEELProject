@@ -53,6 +53,9 @@ interface ProjectForm {
   name_en: string;
   supervisor_id: string;
   status: ProjectStatus;
+  city: string;
+  location: string;
+  start_date: string;
   description_ar: string;
   description_en: string;
 }
@@ -63,9 +66,13 @@ const emptyForm: ProjectForm = {
   name_en: "",
   supervisor_id: "",
   status: "active",
+  city: "",
+  location: "",
+  start_date: "",
   description_ar: "",
   description_en: "",
 };
+
 
 const statuses: ProjectStatus[] = ["active", "on_hold", "completed", "cancelled"];
 
