@@ -19,6 +19,7 @@ import {
   Inbox,
   Truck,
   ReceiptText,
+  Bell,
 
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -147,12 +148,14 @@ function NavLinks({
   onNavigate?: () => void;
 }) {
   const { t } = useI18n();
-  const { isAccountant, isSupervisor, can } = useSession();
+  const { isAccountant, isSupervisor, role, can } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const supervisorOnly = isSupervisor && !isAccountant && role !== "employee";
+  const visibleGroups = supervisorOnly ? supervisorGroups : groups;
 
   return (
     <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
-      {groups.map((group) => {
+      {visibleGroups.map((group) => {
         const items = group.items.filter(
           (i) =>
             (!i.accountantOnly || isAccountant) &&
