@@ -29,31 +29,28 @@ function StatCard({
   icon: Icon,
   label,
   value,
-  long,
 }: {
   icon: typeof Users;
   label: string;
   value: string;
-  long?: boolean;
 }) {
   return (
-    <div className="surface flex items-center gap-3 p-3.5 sm:gap-4 sm:p-5">
-      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary sm:size-11">
-        <Icon className="size-4.5 sm:size-5" aria-hidden />
+    <div className="surface flex min-h-[78px] items-center gap-2.5 p-2.5 sm:min-h-0 sm:gap-4 sm:p-5">
+      <span className="grid size-[34px] shrink-0 place-items-center rounded-lg bg-primary/10 text-primary sm:size-11">
+        <Icon className="size-5" aria-hidden />
       </span>
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-muted-foreground sm:text-xs">{label}</p>
-        <p
-          className={`num mt-0.5 font-bold text-foreground sm:mt-1 sm:text-xl ${
-            long ? "whitespace-nowrap text-sm sm:text-xl" : "truncate text-2xl"
-          }`}
-        >
+      <div className="min-w-0 flex-1">
+        <p className="text-[12px] font-medium leading-tight text-muted-foreground sm:text-xs">
+          {label}
+        </p>
+        <p className="num mt-0.5 text-[22px] font-bold leading-tight text-foreground sm:mt-1 sm:text-xl">
           {value}
         </p>
       </div>
     </div>
   );
 }
+
 
 function DashboardPage() {
   const { isSupervisor, isAccountant, loading } = useSession();
