@@ -374,7 +374,7 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
         <div className="surface space-y-2">
           <h3 className="text-sm font-semibold text-foreground">{t("verify.qrData")}</h3>
           <div className="overflow-hidden rounded-lg border border-border">
-            <table className="w-full table-fixed text-sm">
+            <table className="w-full table-fixed text-sm" style={{ minWidth: 0 }}>
               <tbody>
                 {rows.map((row, index) => (
                   <tr key={row.label} className={index % 2 === 1 ? "bg-muted/40" : undefined}>
@@ -480,7 +480,7 @@ function ResultView({ result, onReset }: { result: VerificationResult; onReset: 
         </button>
         {showTech && qr && (
           <div className="mt-3 space-y-2 text-[11px]">
-            <table className="w-full">
+            <table className="w-full" style={{ minWidth: 0 }}>
               <tbody>
                 {qr.fields.map((field, index) => (
                   <tr key={`${field.tag}-${index}`} className="border-t border-border align-top">
