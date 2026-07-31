@@ -36,7 +36,7 @@ export async function scanPdf(file: File): Promise<PdfScanResult> {
   const buffer = await file.arrayBuffer();
   const bytes = new Uint8Array(buffer);
   const pdfjs = await getPdfjs();
-  const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise;
+  const doc = await pdfjs.getDocument({ data: bytes }).promise;
 
   const pageCount = Math.min(doc.numPages, MAX_PAGES);
   let text = "";
