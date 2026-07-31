@@ -31,6 +31,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { formatDate, formatDateTime, pickName, todayInRiyadh } from "@/lib/format";
+import {
+  ALL_REQUEST_STATUSES,
+  INBOX_VIEWS,
+  matchesInboxView,
+  requestProgress,
+  type InboxView,
+} from "@/lib/requests";
+import { cn } from "@/lib/utils";
+
 import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
@@ -52,15 +61,8 @@ export const Route = createFileRoute("/_authenticated/requests/")({
   component: RequestsPage,
 });
 
-const statuses: RequestStatus[] = [
-  "new",
-  "processing",
-  "needs_info",
-  "awaiting_payment",
-  "paid",
-  "completed",
-  "cancelled",
-];
+const statuses: RequestStatus[] = ALL_REQUEST_STATUSES as unknown as RequestStatus[];
+
 
 interface RequestForm {
   id?: string;
