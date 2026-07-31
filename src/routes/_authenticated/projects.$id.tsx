@@ -10,6 +10,8 @@ import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { ProjectMembersCard } from "@/components/ProjectMembersCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StageBadge } from "@/components/RequestStage";
+import { buildRequestTitle } from "@/lib/request-ui";
 import { formatDate, pickName } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/projects/$id")({
