@@ -500,16 +500,92 @@ function UsersPage() {
         }
       />
 
-      <div className="surface overflow-hidden">
+      {/* Mobile: cards */}
+      <div className="space-y-3 md:hidden">
+        {rows.length === 0 && (
+          <div className="surface p-8 text-center text-muted-foreground">{t("users.empty")}</div>
+        )}
+        {rows.map((row) => (
+          <div key={row.id} className="surface space-y-3 p-4">
+            <div className="flex items-start justify-between gap-2">
+              <p className="font-semibold">{row.full_name}</p>
+              <StatusBadge status={row.is_active ? "active" : "inactive"} />
+            </div>
+            <dl className="space-y-1 text-sm text-muted-foreground">
+              <div className="flex justify-between gap-2">
+                <dt>{t("users.role")}</dt>
+                <dd className="text-foreground">{row.role ? t(`roles.${row.role}`) : "—"}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt>{t("users.email")}</dt>
+                <dd className="num truncate text-foreground" dir="ltr">
+                  {row.email ?? "—"}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt>{t("users.nationalId")}</dt>
+                <dd className="num text-foreground" dir="ltr">
+                  {row.national_id ?? "—"}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt>{t("users.permissions")}</dt>
+                <dd className="num text-foreground">
+                  {row.role === "accountant" ? t("users.allPermissions") : row.permissions.length}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt>{t("users.authLink")}</dt>
+                <dd className="text-foreground">
+                  {authLinks
+                    ? linkedIds.has(row.user_id)
+                      ? t("users.authLinked")
+                      : t("users.authMissing")
+                    : "…"}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt>{t("users.uid")}</dt>
+                <dd className="num truncate text-[11px] text-foreground" dir="ltr">
+                  {row.user_id}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt>{t("common.createdAt")}</dt>
+                <dd className="num text-foreground">{formatDate(row.created_at)}</dd>
+              </div>
+            </dl>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="outline" className="flex-1" onClick={() => openEdit(row)}>
+                <ShieldCheck className="size-4" aria-hidden />
+                {t("common.edit")}
+              </Button>
+              <Button
+                size="sm"
+                className="flex-1"
+                variant={row.is_active ? "outline" : "default"}
+                disabled={toggleActive.isPending}
+                onClick={() => toggleActive.mutate({ userId: row.user_id, active: !row.is_active })}
+              >
+                {row.is_active ? t("users.deactivate") : t("users.activate")}
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: table */}
+      <div className="surface hidden overflow-hidden md:block">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
               <tr className="text-xs uppercase tracking-wide text-muted-foreground">
                 <th className="px-4 py-3 text-start font-semibold">{t("users.fullName")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("users.nationalId")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("users.email")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("users.role")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("users.permissions")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("users.authLink")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("users.uid")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.status")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.createdAt")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.actions")}</th>
@@ -518,7 +594,7 @@ function UsersPage() {
             <tbody className="divide-y divide-border">
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={9} className="px-4 py-10 text-center text-muted-foreground">
                     {t("users.empty")}
                   </td>
                 </tr>
@@ -527,14 +603,21 @@ function UsersPage() {
                 <tr key={row.id} className="hover:bg-secondary/40">
                   <td className="px-4 py-3 font-medium">{row.full_name}</td>
                   <td className="num px-4 py-3 text-muted-foreground" dir="ltr">
-                    {row.national_id ?? "—"}
-                  </td>
-                  <td className="num px-4 py-3 text-muted-foreground" dir="ltr">
                     {row.email ?? "—"}
                   </td>
                   <td className="px-4 py-3">{row.role ? t(`roles.${row.role}`) : "—"}</td>
                   <td className="num px-4 py-3 text-muted-foreground">
                     {row.role === "accountant" ? t("users.allPermissions") : row.permissions.length}
+                  </td>
+                  <td className="px-4 py-3">
+                    {authLinks ? (
+                      <StatusBadge status={linkedIds.has(row.user_id) ? "active" : "inactive"} />
+                    ) : (
+                      "…"
+                    )}
+                  </td>
+                  <td className="num px-4 py-3 text-[11px] text-muted-foreground" dir="ltr">
+                    {row.user_id}
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={row.is_active ? "active" : "inactive"} />
@@ -563,6 +646,7 @@ function UsersPage() {
             </tbody>
           </table>
         </div>
+
       </div>
     </>
   );
