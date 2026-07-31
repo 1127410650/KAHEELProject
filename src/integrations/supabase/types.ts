@@ -207,6 +207,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "custody_transactions_reversal_of_id_fkey"
+            columns: ["reversal_of_id"]
+            isOneToOne: false
+            referencedRelation: "custody_txn_effects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_reversal_of_id_fkey"
+            columns: ["reversal_of_id"]
+            isOneToOne: false
+            referencedRelation: "custody_txn_effects"
+            referencedColumns: ["reversed_by_id"]
+          },
+          {
             foreignKeyName: "custody_transactions_supervisor_id_fkey"
             columns: ["supervisor_id"]
             isOneToOne: false
@@ -602,6 +616,73 @@ export type Database = {
         }
         Relationships: []
       }
+      custody_txn_effects: {
+        Row: {
+          amount: number | null
+          deleted_at: string | null
+          id: string | null
+          notes_ar: string | null
+          project_id: string | null
+          reason: string | null
+          reversal_of_id: string | null
+          reversal_of_serial: number | null
+          reversal_of_type:
+            | Database["public"]["Enums"]["custody_txn_type"]
+            | null
+          reversed_by_id: string | null
+          reversed_by_serial: number | null
+          serial_no: number | null
+          signed_amount: number | null
+          status: Database["public"]["Enums"]["record_status"] | null
+          supervisor_id: string | null
+          txn_date: string | null
+          txn_type: Database["public"]["Enums"]["custody_txn_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "custody_transactions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_reversal_of_id_fkey"
+            columns: ["reversal_of_id"]
+            isOneToOne: false
+            referencedRelation: "custody_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_reversal_of_id_fkey"
+            columns: ["reversal_of_id"]
+            isOneToOne: false
+            referencedRelation: "custody_txn_effects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_reversal_of_id_fkey"
+            columns: ["reversal_of_id"]
+            isOneToOne: false
+            referencedRelation: "custody_txn_effects"
+            referencedColumns: ["reversed_by_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       can_access_attachment_object: {
@@ -612,6 +693,13 @@ export type Database = {
       can_access_supervisor: {
         Args: { _supervisor_id: string }
         Returns: boolean
+      }
+      custody_base_effect: {
+        Args: {
+          p_amount: number
+          p_type: Database["public"]["Enums"]["custody_txn_type"]
+        }
+        Returns: number
       }
       has_role: {
         Args: {
