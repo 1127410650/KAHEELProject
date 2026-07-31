@@ -203,11 +203,12 @@ function RequestDetailPage() {
         if (!hasReceipt) throw new Error("PAYMENT_RECEIPT_REQUIRED");
       }
       if (files.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
+      if (files.length && !request.project_id) throw new Error("NO_PROJECT");
 
       // Upload first so mandatory receipts already exist when the status flips.
       const uploadedIds = files.length
         ? await uploadAttachments(files, {
-            projectId: request.project_id ?? null,
+            projectId: request.project_id,
             entityType: "request",
             entityId: request.id,
             note: note,
@@ -288,9 +289,10 @@ function RequestDetailPage() {
     mutationFn: async () => {
       if (!request || stageFiles.length === 0) return;
       if (stageFiles.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
+      if (!request.project_id) throw new Error("NO_PROJECT");
       const currentStage = history.length ? history[history.length - 1]?.id : null;
       const ids = await uploadAttachments(stageFiles, {
-        projectId: request.project_id ?? null,
+        projectId: request.project_id,
         entityType: "request",
         entityId: request.id,
         stageId: currentStage ?? null,
