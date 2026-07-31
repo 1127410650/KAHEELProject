@@ -218,9 +218,20 @@
     color: #000 !important;
     background: transparent !important;
   }
+  .voucher-sheet .grid {
+    grid-template-columns: 1fr !important;
+  }
+  .voucher-sheet dl.grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .voucher-sheet table {
+    width: 100% !important;
+    table-layout: fixed;
+  }
   .print\:hidden {
     display: none !important;
   }
+
 
   @page {
     size: A4;
