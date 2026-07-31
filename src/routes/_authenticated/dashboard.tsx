@@ -29,12 +29,13 @@ function StatCard({
   icon: Icon,
   label,
   value,
+  long,
 }: {
   icon: typeof Users;
   label: string;
   value: string;
   long?: boolean;
-}).replace
+}) {
   return (
     <div className="surface flex items-center gap-3 p-3.5 sm:gap-4 sm:p-5">
       <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary sm:size-11">
@@ -42,7 +43,13 @@ function StatCard({
       </span>
       <div className="min-w-0">
         <p className="truncate text-sm font-medium text-muted-foreground sm:text-xs">{label}</p>
-        <p className="num mt-0.5 text-2xl font-bold text-foreground sm:mt-1 sm:text-xl">{value}</p>
+        <p
+          className={`num mt-0.5 truncate font-bold text-foreground sm:mt-1 sm:text-xl ${
+            long ? "text-base" : "text-2xl"
+          }`}
+        >
+          {value}
+        </p>
       </div>
     </div>
   );
