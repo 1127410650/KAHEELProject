@@ -373,7 +373,30 @@ function RequestsPage() {
         }
       />
 
+      <nav aria-label={t("requests.inbox")} className="mb-4 flex flex-wrap gap-2">
+        {INBOX_VIEWS.map((view) => {
+          const count = rows.filter((r) => matchesInboxView(r, view, session?.user.id, todayInRiyadh())).length;
+          return (
+            <button
+              key={view}
+              type="button"
+              onClick={() => setInboxView(view)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                inboxView === view
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary",
+              )}
+            >
+              {t(`inbox.${view}`)}
+              <span className="num opacity-70">{count}</span>
+            </button>
+          );
+        })}
+      </nav>
+
       <div className="mb-4 flex flex-wrap items-end gap-3">
+
         <div className="relative w-full max-w-sm">
           <Search
             className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
