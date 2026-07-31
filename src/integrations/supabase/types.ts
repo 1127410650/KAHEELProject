@@ -310,6 +310,112 @@ export type Database = {
           },
         ]
       }
+      invoice_line_items: {
+        Row: {
+          confidence: number
+          created_at: string
+          created_by: string | null
+          description: string | null
+          discount: number | null
+          extraction_method: string
+          id: string
+          invoice_id: string
+          line_number: number
+          normalized_name: string | null
+          original_name: string
+          quantity: number | null
+          review_status: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sku: string | null
+          subtotal_before_vat: number | null
+          total_with_vat: number | null
+          unified_product_id: string | null
+          unit: string | null
+          unit_price_before_vat: number | null
+          updated_at: string
+          vat_amount: number | null
+          vat_rate: number | null
+          verification_id: string | null
+        }
+        Insert: {
+          confidence?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discount?: number | null
+          extraction_method?: string
+          id?: string
+          invoice_id: string
+          line_number?: number
+          normalized_name?: string | null
+          original_name: string
+          quantity?: number | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sku?: string | null
+          subtotal_before_vat?: number | null
+          total_with_vat?: number | null
+          unified_product_id?: string | null
+          unit?: string | null
+          unit_price_before_vat?: number | null
+          updated_at?: string
+          vat_amount?: number | null
+          vat_rate?: number | null
+          verification_id?: string | null
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discount?: number | null
+          extraction_method?: string
+          id?: string
+          invoice_id?: string
+          line_number?: number
+          normalized_name?: string | null
+          original_name?: string
+          quantity?: number | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sku?: string | null
+          subtotal_before_vat?: number | null
+          total_with_vat?: number | null
+          unified_product_id?: string | null
+          unit?: string | null
+          unit_price_before_vat?: number | null
+          updated_at?: string
+          vat_amount?: number | null
+          vat_rate?: number | null
+          verification_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_line_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "invoice_line_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_line_items_verification_id_fkey"
+            columns: ["verification_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_verifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_status_history: {
         Row: {
           actor_id: string | null
@@ -355,22 +461,110 @@ export type Database = {
           },
         ]
       }
+      invoice_verifications: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          decoded_tags: Json
+          detected_phase: number | null
+          extraction_method: string | null
+          file_hash: string | null
+          id: string
+          invoice_id: string
+          invoice_timestamp: string | null
+          qr_hash: string | null
+          result_status: string
+          seller_name: string | null
+          seller_vat_number: string | null
+          storage_path: string | null
+          total_with_vat: number | null
+          vat_total: number | null
+          verification_reasons: Json
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          decoded_tags?: Json
+          detected_phase?: number | null
+          extraction_method?: string | null
+          file_hash?: string | null
+          id?: string
+          invoice_id: string
+          invoice_timestamp?: string | null
+          qr_hash?: string | null
+          result_status: string
+          seller_name?: string | null
+          seller_vat_number?: string | null
+          storage_path?: string | null
+          total_with_vat?: number | null
+          vat_total?: number | null
+          verification_reasons?: Json
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          decoded_tags?: Json
+          detected_phase?: number | null
+          extraction_method?: string | null
+          file_hash?: string | null
+          id?: string
+          invoice_id?: string
+          invoice_timestamp?: string | null
+          qr_hash?: string | null
+          result_status?: string
+          seller_name?: string | null
+          seller_vat_number?: string | null
+          storage_path?: string | null
+          total_with_vat?: number | null
+          vat_total?: number | null
+          verification_reasons?: Json
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_verifications_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "invoice_verifications_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoices: {
         Row: {
           amount_before_tax: number
+          approved_at: string | null
+          approved_by: string | null
           client_token: string | null
           created_at: string
           created_by: string | null
+          currency: string
           delete_reason: string | null
           deleted_at: string | null
           description: string | null
           duplicate_reason: string | null
+          extraction_method: string | null
+          file_hash: string | null
           id: string
           internal_no: number
           invoice_date: string
           invoice_no: string
           invoice_no_norm: string | null
+          lines_reviewed_at: string | null
           project_id: string
+          qr_hash: string | null
+          seller_name_raw: string | null
+          seller_vat_number: string | null
+          source: string
           status: Database["public"]["Enums"]["record_status"]
           supervisor_id: string | null
           supplier_id: string
@@ -378,22 +572,33 @@ export type Database = {
           total_amount: number
           updated_at: string
           updated_by: string | null
+          zatca_uuid: string | null
         }
         Insert: {
           amount_before_tax?: number
+          approved_at?: string | null
+          approved_by?: string | null
           client_token?: string | null
           created_at?: string
           created_by?: string | null
+          currency?: string
           delete_reason?: string | null
           deleted_at?: string | null
           description?: string | null
           duplicate_reason?: string | null
+          extraction_method?: string | null
+          file_hash?: string | null
           id?: string
           internal_no?: number
           invoice_date: string
           invoice_no: string
           invoice_no_norm?: string | null
+          lines_reviewed_at?: string | null
           project_id: string
+          qr_hash?: string | null
+          seller_name_raw?: string | null
+          seller_vat_number?: string | null
+          source?: string
           status?: Database["public"]["Enums"]["record_status"]
           supervisor_id?: string | null
           supplier_id: string
@@ -401,22 +606,33 @@ export type Database = {
           total_amount?: number
           updated_at?: string
           updated_by?: string | null
+          zatca_uuid?: string | null
         }
         Update: {
           amount_before_tax?: number
+          approved_at?: string | null
+          approved_by?: string | null
           client_token?: string | null
           created_at?: string
           created_by?: string | null
+          currency?: string
           delete_reason?: string | null
           deleted_at?: string | null
           description?: string | null
           duplicate_reason?: string | null
+          extraction_method?: string | null
+          file_hash?: string | null
           id?: string
           internal_no?: number
           invoice_date?: string
           invoice_no?: string
           invoice_no_norm?: string | null
+          lines_reviewed_at?: string | null
           project_id?: string
+          qr_hash?: string | null
+          seller_name_raw?: string | null
+          seller_vat_number?: string | null
+          source?: string
           status?: Database["public"]["Enums"]["record_status"]
           supervisor_id?: string | null
           supplier_id?: string
@@ -424,6 +640,7 @@ export type Database = {
           total_amount?: number
           updated_at?: string
           updated_by?: string | null
+          zatca_uuid?: string | null
         }
         Relationships: [
           {
@@ -524,6 +741,272 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_aliases: {
+        Row: {
+          alias_name: string
+          catalog_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          normalized_name: string | null
+          supplier_id: string | null
+          unified_product_id: string
+        }
+        Insert: {
+          alias_name: string
+          catalog_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          normalized_name?: string | null
+          supplier_id?: string | null
+          unified_product_id: string
+        }
+        Update: {
+          alias_name?: string
+          catalog_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          normalized_name?: string | null
+          supplier_id?: string | null
+          unified_product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_aliases_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "product_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_aliases_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_aliases_unified_product_id_fkey"
+            columns: ["unified_product_id"]
+            isOneToOne: false
+            referencedRelation: "unified_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_catalog: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          default_unit: string | null
+          description: string | null
+          id: string
+          normalized_name: string
+          original_name: string
+          sku: string | null
+          status: string
+          supplier_id: string | null
+          unified_product_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          default_unit?: string | null
+          description?: string | null
+          id?: string
+          normalized_name: string
+          original_name: string
+          sku?: string | null
+          status?: string
+          supplier_id?: string | null
+          unified_product_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          default_unit?: string | null
+          description?: string | null
+          id?: string
+          normalized_name?: string
+          original_name?: string
+          sku?: string | null
+          status?: string
+          supplier_id?: string | null
+          unified_product_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_catalog_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_catalog_unified_product_id_fkey"
+            columns: ["unified_product_id"]
+            isOneToOne: false
+            referencedRelation: "unified_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_price_history: {
+        Row: {
+          catalog_id: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          exclusion_reason: string | null
+          id: string
+          invoice_date: string | null
+          invoice_id: string | null
+          project_id: string | null
+          quantity: number | null
+          source_line_item_id: string
+          status: string
+          supplier_id: string | null
+          total_with_vat: number | null
+          unified_product_id: string | null
+          unit: string | null
+          unit_price: number
+          vat_rate: number | null
+        }
+        Insert: {
+          catalog_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          exclusion_reason?: string | null
+          id?: string
+          invoice_date?: string | null
+          invoice_id?: string | null
+          project_id?: string | null
+          quantity?: number | null
+          source_line_item_id: string
+          status?: string
+          supplier_id?: string | null
+          total_with_vat?: number | null
+          unified_product_id?: string | null
+          unit?: string | null
+          unit_price: number
+          vat_rate?: number | null
+        }
+        Update: {
+          catalog_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          exclusion_reason?: string | null
+          id?: string
+          invoice_date?: string | null
+          invoice_id?: string | null
+          project_id?: string | null
+          quantity?: number | null
+          source_line_item_id?: string
+          status?: string
+          supplier_id?: string | null
+          total_with_vat?: number | null
+          unified_product_id?: string | null
+          unit?: string | null
+          unit_price?: number
+          vat_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_price_history_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "product_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_price_history_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "product_price_history_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_price_history_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_price_history_source_line_item_id_fkey"
+            columns: ["source_line_item_id"]
+            isOneToOne: true
+            referencedRelation: "invoice_line_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_price_history_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_price_history_unified_product_id_fkey"
+            columns: ["unified_product_id"]
+            isOneToOne: false
+            referencedRelation: "unified_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_unit_conversions: {
+        Row: {
+          approved_by: string | null
+          created_at: string
+          factor: number
+          from_unit: string
+          id: string
+          note: string | null
+          to_unit: string
+          unified_product_id: string
+        }
+        Insert: {
+          approved_by?: string | null
+          created_at?: string
+          factor: number
+          from_unit: string
+          id?: string
+          note?: string | null
+          to_unit: string
+          unified_product_id: string
+        }
+        Update: {
+          approved_by?: string | null
+          created_at?: string
+          factor?: number
+          from_unit?: string
+          id?: string
+          note?: string | null
+          to_unit?: string
+          unified_product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_unit_conversions_unified_product_id_fkey"
+            columns: ["unified_product_id"]
+            isOneToOne: false
+            referencedRelation: "unified_products"
             referencedColumns: ["id"]
           },
         ]
@@ -1372,6 +1855,48 @@ export type Database = {
         }
         Relationships: []
       }
+      unified_products: {
+        Row: {
+          arabic_name: string
+          category: string | null
+          created_at: string
+          created_by: string | null
+          default_unit: string | null
+          description: string | null
+          english_name: string | null
+          id: string
+          normalized_name: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          arabic_name: string
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          default_unit?: string | null
+          description?: string | null
+          english_name?: string | null
+          id?: string
+          normalized_name?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          arabic_name?: string
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          default_unit?: string | null
+          description?: string | null
+          english_name?: string | null
+          id?: string
+          normalized_name?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_permissions: {
         Row: {
           created_at: string
@@ -1557,12 +2082,14 @@ export type Database = {
         Args: { _path: string }
         Returns: boolean
       }
+      can_access_invoice_object: { Args: { _name: string }; Returns: boolean }
       can_access_project: { Args: { _project_id: string }; Returns: boolean }
       can_access_request: { Args: { _request_id: string }; Returns: boolean }
       can_access_supervisor: {
         Args: { _supervisor_id: string }
         Returns: boolean
       }
+      can_view_invoice: { Args: { _invoice_id: string }; Returns: boolean }
       change_request_create: {
         Args: {
           _action: string
@@ -1625,6 +2152,7 @@ export type Database = {
         Returns: string
       }
       normalize_doc_no: { Args: { p_value: string }; Returns: string }
+      normalize_product_name: { Args: { _name: string }; Returns: string }
       notify_request: {
         Args: {
           _body?: string
@@ -1789,6 +2317,55 @@ export type Database = {
         }
         Returns: string
       }
+      tiv_add_verification: {
+        Args: { _invoice_id: string; _v: Json }
+        Returns: string
+      }
+      tiv_check_duplicate: {
+        Args: {
+          _file_hash?: string
+          _invoice_date?: string
+          _invoice_no?: string
+          _qr_hash?: string
+          _supplier_id?: string
+          _zatca_uuid?: string
+        }
+        Returns: Json
+      }
+      tiv_decide_invoice: {
+        Args: { _decision: string; _invoice_id: string; _note?: string }
+        Returns: Json
+      }
+      tiv_detach_catalog: {
+        Args: { _catalog_id: string; _reason: string }
+        Returns: undefined
+      }
+      tiv_exclude_price: {
+        Args: { _id: string; _reason: string }
+        Returns: undefined
+      }
+      tiv_link_catalog: {
+        Args: { _catalog_id: string; _reason?: string; _unified_id: string }
+        Returns: undefined
+      }
+      tiv_match_supplier: {
+        Args: { _name?: string; _vat?: string }
+        Returns: Json
+      }
+      tiv_merge_products: {
+        Args: { _from: string; _into: string; _reason: string }
+        Returns: Json
+      }
+      tiv_review_line_item: {
+        Args: {
+          _decision: string
+          _id: string
+          _patch?: Json
+          _reason?: string
+        }
+        Returns: Json
+      }
+      tiv_save_verified_invoice: { Args: { _payload: Json }; Returns: Json }
     }
     Enums: {
       app_locale: "ar" | "en"
@@ -1806,6 +2383,9 @@ export type Database = {
         | "returned"
         | "approved"
         | "cancelled"
+        | "tech_verified"
+        | "needs_review"
+        | "rejected"
       request_status:
         | "new"
         | "processing"
@@ -1968,6 +2548,9 @@ export const Constants = {
         "returned",
         "approved",
         "cancelled",
+        "tech_verified",
+        "needs_review",
+        "rejected",
       ],
       request_status: [
         "new",
