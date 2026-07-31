@@ -31,6 +31,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ForcePasswordChangeDialog } from "@/components/ForcePasswordChangeDialog";
+import { NotificationsBell } from "@/components/NotificationsBell";
+
 import type { Permission } from "@/lib/permissions";
 
 interface NavItem {
@@ -269,7 +271,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </p>
           </div>
 
+          <NotificationsBell />
+
           <LanguageToggle />
+
 
           <div className="hidden text-end sm:block">
             <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
