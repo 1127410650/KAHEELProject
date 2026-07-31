@@ -7,6 +7,7 @@ import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PaymentNoBadge } from "@/components/PaymentNoBadge";
+import { ProjectMembersCard } from "@/components/ProjectMembersCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate, pickName } from "@/lib/format";
@@ -176,6 +177,10 @@ function ProjectDetailPage() {
             )}
           </CardContent>
         </Card>
+
+        <div className="lg:col-span-3">
+          <ProjectMembersCard projectId={id} />
+        </div>
       </div>
     </>
   );
