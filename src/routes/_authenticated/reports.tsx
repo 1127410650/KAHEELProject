@@ -6,6 +6,7 @@ import { Printer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/AppLayout";
+import { PrintPortal } from "@/components/PrintPortal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,8 +25,113 @@ export const Route = createFileRoute("/_authenticated/reports")({
   component: ReportsPage,
 });
 
-function ReportsPage() {
+interface BalanceRow {
+  supervisor_id: string;
+  name_ar: string | null;
+  name_en: string | null;
+  balance: number | string | null;
+}
+
+interface ProjectRow {
+  label: string;
+  inTotal: number;
+  outTotal: number;
+}
+
+function ReportTables({
+  balances,
+  byProject,
+  total,
+}: {
+  balances: BalanceRow[];
+  byProject: ProjectRow[];
+  total: number;
+}) {
   const { t, locale } = useI18n();
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">{t("reports.custodyBySupervisor")}</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <table className="w-full text-sm">
+            <tbody className="divide-y divide-border">
+              {balances.length === 0 && (
+                <tr>
+                  <td className="px-6 py-8 text-center text-muted-foreground">
+                    {t("common.noData")}
+                  </td>
+                </tr>
+              )}
+              {balances.map((row) => (
+                <tr key={row.supervisor_id}>
+                  <td className="px-6 py-3">{pickName(locale, row.name_ar, row.name_en)}</td>
+                  <td className="num px-6 py-3 text-end font-semibold">
+                    {formatMoney(row.balance, locale)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot className="bg-secondary/60">
+              <tr>
+                <td className="px-6 py-3 font-semibold">{t("common.total")}</td>
+                <td className="num px-6 py-3 text-end font-bold text-primary">
+                  {formatMoney(total, locale)}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">{t("reports.custodyByProject")}</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <table className="w-full text-sm">
+            <thead className="bg-secondary/40 text-xs text-muted-foreground">
+              <tr>
+                <th className="px-6 py-2 text-start font-semibold">{t("custody.project")}</th>
+                <th className="px-6 py-2 text-end font-semibold">{t("custody.totalIn")}</th>
+                <th className="px-6 py-2 text-end font-semibold">{t("custody.totalOut")}</th>
+                <th className="px-6 py-2 text-end font-semibold">{t("reports.netTotal")}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {byProject.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
+                    {t("common.noData")}
+                  </td>
+                </tr>
+              )}
+              {byProject.map((row) => (
+                <tr key={row.label}>
+                  <td className="px-6 py-3">{row.label}</td>
+                  <td className="num px-6 py-3 text-end text-success">
+                    {formatMoney(row.inTotal, locale)}
+                  </td>
+                  <td className="num px-6 py-3 text-end text-destructive">
+                    {formatMoney(row.outTotal, locale)}
+                  </td>
+                  <td className="num px-6 py-3 text-end font-semibold">
+                    {formatMoney(row.inTotal - row.outTotal, locale)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function ReportsPage() {
+  const { t, locale, dir } = useI18n();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
 
@@ -34,16 +140,28 @@ function ReportsPage() {
     queryFn: async () => {
       const { data, error } = await supabase.from("custody_balances").select("*");
       if (error) throw error;
+      return data as BalanceRow[];
+    },
+  });
+
+  const { data: projects = [] } = useQuery({
+    queryKey: ["projects", "list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, code, name_ar, name_en")
+        .is("deleted_at", null);
+      if (error) throw error;
       return data;
     },
   });
 
   const { data: byProject = [] } = useQuery({
-    queryKey: ["report-by-project", from, to],
+    queryKey: ["report-by-project", from, to, projects.length],
     queryFn: async () => {
       let request = supabase
-        .from("custody_transactions")
-        .select("amount, txn_type, projects(code, name_ar, name_en)")
+        .from("custody_txn_effects")
+        .select("project_id, signed_amount")
         .eq("status", "approved")
         .is("deleted_at", null);
       if (from) request = request.gte("txn_date", from);
@@ -51,20 +169,16 @@ function ReportsPage() {
       const { data, error } = await request;
       if (error) throw error;
 
-      const map = new Map<string, { label: string; inTotal: number; outTotal: number }>();
+      const projectLabel = new Map(
+        projects.map((p) => [p.id, `${p.code} — ${pickName(locale, p.name_ar, p.name_en)}`]),
+      );
+      const map = new Map<string, ProjectRow>();
       for (const row of data ?? []) {
-        const project = row.projects as {
-          code?: string;
-          name_ar?: string;
-          name_en?: string;
-        } | null;
-        const label = project
-          ? `${project.code} — ${pickName(locale, project.name_ar, project.name_en)}`
-          : "—";
+        const label = (row.project_id && projectLabel.get(row.project_id)) || "—";
         const entry = map.get(label) ?? { label, inTotal: 0, outTotal: 0 };
-        const amount = Number(row.amount);
-        if (row.txn_type === "add" || row.txn_type === "refund") entry.inTotal += amount;
-        else entry.outTotal += amount;
+        const net = Number(row.signed_amount ?? 0);
+        if (net >= 0) entry.inTotal += net;
+        else entry.outTotal += -net;
         map.set(label, entry);
       }
       return [...map.values()].sort((a, b) => b.inTotal - a.inTotal);
@@ -86,13 +200,14 @@ function ReportsPage() {
         }
       />
 
-      <div className="voucher-sheet space-y-6">
-        <div className="flex flex-wrap items-end gap-3 print:hidden">
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-end gap-3">
           <div className="w-40 space-y-2">
             <Label htmlFor="from">{t("reports.from")}</Label>
             <Input
               id="from"
               type="date"
+              lang="en-GB"
               dir="ltr"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
@@ -103,6 +218,7 @@ function ReportsPage() {
             <Input
               id="to"
               type="date"
+              lang="en-GB"
               dir="ltr"
               value={to}
               onChange={(e) => setTo(e.target.value)}
@@ -110,80 +226,18 @@ function ReportsPage() {
           </div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{t("reports.custodyBySupervisor")}</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <table className="w-full text-sm">
-                <tbody className="divide-y divide-border">
-                  {balances.length === 0 && (
-                    <tr>
-                      <td className="px-6 py-8 text-center text-muted-foreground">
-                        {t("common.noData")}
-                      </td>
-                    </tr>
-                  )}
-                  {balances.map((row) => (
-                    <tr key={row.supervisor_id}>
-                      <td className="px-6 py-3">{pickName(locale, row.name_ar, row.name_en)}</td>
-                      <td className="num px-6 py-3 text-end font-semibold">
-                        {formatMoney(row.balance, locale)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot className="bg-secondary/60">
-                  <tr>
-                    <td className="px-6 py-3 font-semibold">{t("common.total")}</td>
-                    <td className="num px-6 py-3 text-end font-bold text-primary">
-                      {formatMoney(total, locale)}
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{t("reports.custodyByProject")}</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <table className="w-full text-sm">
-                <thead className="bg-secondary/40 text-xs text-muted-foreground">
-                  <tr>
-                    <th className="px-6 py-2 text-start font-semibold">{t("custody.project")}</th>
-                    <th className="px-6 py-2 text-end font-semibold">{t("custody.totalIn")}</th>
-                    <th className="px-6 py-2 text-end font-semibold">{t("custody.totalOut")}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {byProject.length === 0 && (
-                    <tr>
-                      <td colSpan={3} className="px-6 py-8 text-center text-muted-foreground">
-                        {t("common.noData")}
-                      </td>
-                    </tr>
-                  )}
-                  {byProject.map((row) => (
-                    <tr key={row.label}>
-                      <td className="px-6 py-3">{row.label}</td>
-                      <td className="num px-6 py-3 text-end text-success">
-                        {formatMoney(row.inTotal, locale)}
-                      </td>
-                      <td className="num px-6 py-3 text-end text-destructive">
-                        {formatMoney(row.outTotal, locale)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-        </div>
+        <ReportTables balances={balances} byProject={byProject} total={total} />
       </div>
+
+      <PrintPortal>
+        <div dir={dir} lang={locale} className="voucher-sheet space-y-6">
+          <header className="border-b border-border pb-4">
+            <h2 className="text-xl font-bold">{t("app.name")}</h2>
+            <p className="mt-1 text-sm">{t("reports.title")}</p>
+          </header>
+          <ReportTables balances={balances} byProject={byProject} total={total} />
+        </div>
+      </PrintPortal>
     </>
   );
 }
