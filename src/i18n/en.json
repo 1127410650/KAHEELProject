@@ -424,7 +424,8 @@
     "assignedOfficer": "Responsible officer",
     "search": "Search requests",
     "workbox": "Workbox",
-    "workboxHint": "Requests grouped by the action required from you"
+    "workboxHint": "Requests grouped by the action required from you",
+    "noPaymentYet": "No payment data yet"
   },
   "suppliers": {
     "title": "Suppliers",

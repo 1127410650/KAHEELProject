@@ -36,6 +36,7 @@ import { RequestConversation } from "@/components/RequestConversation";
 import { RequestChangePanel } from "@/components/RequestChangePanel";
 import { nextStatuses } from "@/lib/requests";
 import { ActionNowCard } from "@/components/ActionNowCard";
+import { InfoTable } from "@/components/InfoTable";
 import { StageBadge, StageBar } from "@/components/RequestStage";
 import { buildRequestTitle } from "@/lib/request-ui";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
@@ -349,6 +350,16 @@ function RequestDetailPage() {
     | null;
 
   const receipts = attachments.filter((a) => a.kind === "payment_receipt");
+  const hasPaymentData = !!(
+    request?.payment_no ||
+    request?.payment_amount != null ||
+    request?.payment_beneficiary ||
+    request?.payment_expiry ||
+    request?.paid_at ||
+    request?.payment_method ||
+    request?.payment_reference ||
+    request?.payment_note
+  );
   const statuses: RequestStatus[] = request
     ? ([request.status, ...nextStatuses(request.status)] as RequestStatus[])
     : [];
@@ -458,79 +469,76 @@ function RequestDetailPage() {
           <CardHeader>
             <CardTitle className="text-base">{t("common.details")}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <dl className="grid gap-x-8 text-sm sm:grid-cols-2">
-              <div className="divide-y divide-border">
-                <Row
-                  label={t("requests.requestNo")}
-                  value={<span className="num">{request?.request_no}</span>}
-                />
-                <Row label={t("requests.requestType")} value={request?.request_type} />
-                <Row
-                  label={t("requests.project")}
-                  value={
-                    request?.project_id ? (
-                      <Link
-                        to="/projects/$id"
-                        params={{ id: request.project_id }}
-                        className="text-primary hover:underline"
-                      >
-                        <span className="num">{project?.code}</span>{" "}
-                        {pickName(locale, project?.name_ar, project?.name_en)}
-                      </Link>
-                    ) : (
-                      "—"
-                    )
-                  }
-                />
-
-                <Row
-                  label={t("requests.supervisor")}
-                  value={
-                    request?.supervisor_id ? (
-                      <Link
-                        to="/supervisors/$id"
-                        params={{ id: request.supervisor_id }}
-                        className="text-primary hover:underline"
-                      >
-                        {pickName(locale, supervisor?.name_ar, supervisor?.name_en)}
-                      </Link>
-                    ) : (
-                      "—"
-                    )
-                  }
-                />
-                <Row
-                  label={t("supervisors.nationalId")}
-                  value={<span className="num">{supervisor?.national_id ?? "—"}</span>}
-                />
-                <Row
-                  label={t("supervisors.phone")}
-                  value={
+          <CardContent className="grid gap-4 sm:grid-cols-2">
+            <InfoTable
+              rows={[
+                {
+                  label: t("requests.requestNo"),
+                  value: <span className="num">{request?.request_no}</span>,
+                },
+                { label: t("requests.requestType"), value: request?.request_type },
+                {
+                  label: t("requests.project"),
+                  value: request?.project_id ? (
+                    <Link
+                      to="/projects/$id"
+                      params={{ id: request.project_id }}
+                      className="text-primary hover:underline"
+                    >
+                      <span className="num">{project?.code}</span>{" "}
+                      {pickName(locale, project?.name_ar, project?.name_en)}
+                    </Link>
+                  ) : null,
+                },
+                {
+                  label: t("requests.supervisor"),
+                  value: request?.supervisor_id ? (
+                    <Link
+                      to="/supervisors/$id"
+                      params={{ id: request.supervisor_id }}
+                      className="text-primary hover:underline"
+                    >
+                      {pickName(locale, supervisor?.name_ar, supervisor?.name_en)}
+                    </Link>
+                  ) : null,
+                },
+                {
+                  label: t("supervisors.nationalId"),
+                  value: supervisor?.national_id ? (
+                    <span className="num">{supervisor.national_id}</span>
+                  ) : null,
+                },
+                {
+                  label: t("supervisors.phone"),
+                  value: supervisor?.phone ? (
                     <span className="num" dir="ltr">
-                      {supervisor?.phone ?? "—"}
+                      {supervisor.phone}
                     </span>
-                  }
-                />
-              </div>
-              <div className="divide-y divide-border">
-                <Row
-                  label={t("requests.requestDate")}
-                  value={<span className="num">{formatDate(request?.request_date)}</span>}
-                />
-                <Row
-                  label={t("requests.referenceNo")}
-                  value={<span className="num">{request?.reference_no ?? "—"}</span>}
-                />
-                <Row label={t("requests.authority")} value={request?.authority ?? "—"} />
-                <Row label={t("common.notes")} value={request?.notes_ar ?? "—"} />
-                <Row label={t("requests.finalResult")} value={request?.final_result ?? "—"} />
-                <Row
-                  label={t("requests.lastUpdate")}
-                  value={<span className="num">{formatDateTime(request?.updated_at)}</span>}
-                />
-              </div>
-            </dl>
+                  ) : null,
+                },
+              ]}
+            />
+            <InfoTable
+              rows={[
+                {
+                  label: t("requests.requestDate"),
+                  value: <span className="num">{formatDate(request?.request_date)}</span>,
+                },
+                {
+                  label: t("requests.referenceNo"),
+                  value: request?.reference_no ? (
+                    <span className="num">{request.reference_no}</span>
+                  ) : null,
+                },
+                { label: t("requests.authority"), value: request?.authority },
+                { label: t("common.notes"), value: request?.notes_ar },
+                { label: t("requests.finalResult"), value: request?.final_result },
+                {
+                  label: t("requests.lastUpdate"),
+                  value: <span className="num">{formatDateTime(request?.updated_at)}</span>,
+                },
+              ]}
+            />
           </CardContent>
         </Card>
 
@@ -542,43 +550,66 @@ function RequestDetailPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="divide-y divide-border text-sm">
-              <Row
-                label={t("requests.paymentNo")}
-                value={
-                  request?.payment_no ? (
-                    <PaymentNoBadge paymentNo={request.payment_no} withLabel={false} />
-                  ) : (
-                    "—"
-                  )
-                }
+            {hasPaymentData ? (
+              <InfoTable
+                dense
+                rows={[
+                  {
+                    label: t("requests.paymentNo"),
+                    value: request?.payment_no ? (
+                      <PaymentNoBadge paymentNo={request.payment_no} withLabel={false} />
+                    ) : null,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.paymentAmount"),
+                    value:
+                      request?.payment_amount != null ? (
+                        <span className="num">{formatMoney(request.payment_amount, locale)}</span>
+                      ) : null,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.beneficiary"),
+                    value: request?.payment_beneficiary,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.paymentExpiry"),
+                    value: request?.payment_expiry ? (
+                      <span className="num">{formatDate(request.payment_expiry)}</span>
+                    ) : null,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.paidAt"),
+                    value: request?.paid_at ? (
+                      <span className="num">{formatDate(request.paid_at)}</span>
+                    ) : null,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.paymentMethod"),
+                    value: request?.payment_method,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.paymentReference"),
+                    value: request?.payment_reference ? (
+                      <span className="num">{request.payment_reference}</span>
+                    ) : null,
+                    hideIfEmpty: true,
+                  },
+                  {
+                    label: t("requests.paymentNote"),
+                    value: request?.payment_note,
+                    hideIfEmpty: true,
+                  },
+                ]}
               />
-              <Row
-                label={t("requests.paymentAmount")}
-                value={
-                  request?.payment_amount != null ? (
-                    <span className="num">{formatMoney(request.payment_amount, locale)}</span>
-                  ) : (
-                    "—"
-                  )
-                }
-              />
-              <Row label={t("requests.beneficiary")} value={request?.payment_beneficiary ?? "—"} />
-              <Row
-                label={t("requests.paymentExpiry")}
-                value={<span className="num">{formatDate(request?.payment_expiry)}</span>}
-              />
-              <Row
-                label={t("requests.paidAt")}
-                value={<span className="num">{formatDate(request?.paid_at)}</span>}
-              />
-              <Row label={t("requests.paymentMethod")} value={request?.payment_method ?? "—"} />
-              <Row
-                label={t("requests.paymentReference")}
-                value={<span className="num">{request?.payment_reference ?? "—"}</span>}
-              />
-              <Row label={t("requests.paymentNote")} value={request?.payment_note ?? "—"} />
-            </dl>
+            ) : (
+              <p className="text-sm text-muted-foreground">{t("requests.noPaymentYet")}</p>
+            )}
             {receipts.length > 0 && (
               <div className="mt-3 space-y-2">
                 {receipts.map((r) => (
@@ -600,6 +631,7 @@ function RequestDetailPage() {
             )}
           </CardContent>
         </Card>
+
 
         <Card className="lg:col-span-2">
           <CardContent className="pt-6">
