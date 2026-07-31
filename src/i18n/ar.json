@@ -66,7 +66,11 @@
     "invoices": "الفواتير",
     "portal": "بوابة المشرف",
     "myRequests": "طلباتي",
-    "myCustody": "عهدتي"
+    "myCustody": "عهدتي",
+    "home": "الرئيسية",
+    "notifications": "التنبيهات",
+    "myProjects": "مشاريعي",
+    "mySettings": "الإعدادات الشخصية"
   },
   "auth": {
     "title": "تسجيل الدخول",
@@ -396,7 +400,14 @@
     "reference_no": "الرقم المرجعي",
     "need_date": "تاريخ الحاجة",
     "account_ref": "رقم الحساب",
-    "service_type": "نوع الخدمة"
+    "service_type": "نوع الخدمة",
+    "scope": "نطاق الطلب",
+    "forbidden": "ليس لديك صلاحية لعرض هذا الطلب",
+    "convertToProject": "تحويل إلى طلب مشروع",
+    "converted": "تم تحويل الطلب إلى طلب مشروع",
+    "needsCompletion": "تحتاج استكمالًا",
+    "awaitingApprovalCount": "بانتظار الموافقة",
+    "completedCount": "مكتملة"
   },
   "suppliers": {
     "title": "الموردون",
@@ -459,8 +470,8 @@
     "approvedLocked": "لا يمكن تعديل بيانات فاتورة معتمدة"
   },
   "portal": {
-    "title": "بوابة المشرف",
-    "description": "أرسل طلباتك ومتابعتها — لا يتم التنفيذ إلا بعد موافقة المحاسب",
+    "title": "لوحة المشرف",
+    "description": "طلباتك ومشاريعك وعهدتك — سيتم الرد من قبل الموظف المختص",
     "newRequest": "طلب جديد",
     "kind": "نوع الطلب",
     "amount": "المبلغ المطلوب",
@@ -470,8 +481,28 @@
     "submitted": "تم إرسال الطلب",
     "submitFailed": "تعذر إرسال الطلب",
     "noRequests": "لا توجد طلبات",
-    "awaitingApproval": "بانتظار موافقة المحاسب",
-    "notSupervisor": "هذه الشاشة مخصصة لحسابات المشرفين"
+    "awaitingApproval": "سيتم الرد من قبل الموظف المختص بعد المراجعة",
+    "notSupervisor": "هذه الشاشة مخصصة لحسابات المشرفين",
+    "myProjects": "مشاريعي",
+    "openRequests": "الطلبات المفتوحة",
+    "needsCompletion": "تحتاج استكمالًا",
+    "awaitingReply": "بانتظار الرد",
+    "completedRequests": "الطلبات المكتملة",
+    "needsCompletionSection": "طلبات تحتاج استكمالًا",
+    "awaitingReplySection": "الطلبات بانتظار الرد",
+    "latestFollowUps": "آخر المتابعات",
+    "unreadAlerts": "التنبيهات غير المقروءة",
+    "myRequests": "طلباتي",
+    "viewAll": "عرض الكل",
+    "noProjects": "لا توجد مشاريع مرتبطة بك",
+    "noAlerts": "لا توجد تنبيهات غير مقروءة",
+    "noFollowUps": "لا توجد متابعات بعد",
+    "assignedTo": "الموظف المختص",
+    "awaitingStaff": "بانتظار رد الموظف المختص",
+    "awaitingStaffReview": "بانتظار مراجعة الموظف المختص",
+    "scope": "نطاق الطلب",
+    "myCustody": "عهدتي",
+    "custodyDescription": "رصيد عهدتك وحركاتها المعتمدة فقط"
   },
   "workflow": {
     "approve": "موافقة",
@@ -548,7 +579,10 @@
       "info_request": "طلب استكمال",
       "supervisor_reply": "رد المشرف",
       "reminder": "تذكير"
-    }
+    },
+    "visibility": "مدى الظهور",
+    "internalBadge": "داخلي",
+    "requesterOnlyBadge": "خاصة بمقدم الطلب"
   },
   "changes": {
     "title": "طلبات التعديل والحذف",
@@ -562,7 +596,7 @@
     "reason": "السبب",
     "reasonRequired": "السبب مطلوب",
     "decisionReason": "سبب القرار",
-    "submitted": "تم إرسال الطلب للمحاسب",
+    "submitted": "تم إرسال الطلب إلى الموظف المختص",
     "decided": "تم اتخاذ القرار",
     "executed": "تم تنفيذ التعديل",
     "execute": "تنفيذ",
@@ -571,8 +605,8 @@
     "notApproved": "الطلب غير معتمد",
     "empty": "لا توجد طلبات تعديل",
     "versions": "سجل الإصدارات",
-    "policy": "لا يتم أي تعديل أو حذف مباشرة؛ يُرسل الطلب للمحاسب ويُنفذ بعد الاعتماد مع حفظ الإصدارات.",
-    "awaitingAccountant": "سيُرسل الطلب للمحاسب للمراجعة والتنفيذ.",
+    "policy": "لا يتم أي تعديل أو حذف مباشرة؛ يُرسل الطلب للموظف المختص ويُنفذ بعد الاعتماد مع حفظ الإصدارات.",
+    "awaitingAccountant": "سيراجع الموظف المختص الطلب وينفّذه.",
     "status": {
       "pending": "بانتظار القرار",
       "approved": "معتمد",
@@ -585,5 +619,20 @@
     "duplicate": "الملف مرفق مسبقًا",
     "fileType": "نوع الملف غير مسموح",
     "fileSize": "حجم الملف كبير جدًا"
+  },
+  "members": {
+    "title": "مشرفو المشروع",
+    "add": "إضافة مشرف",
+    "type": "نوع العضوية",
+    "startDate": "تاريخ البداية",
+    "endDate": "تاريخ النهاية",
+    "endMembership": "إيقاف العضوية",
+    "endReason": "سبب الإيقاف",
+    "added": "تم تحديث عضوية المشرف",
+    "ended": "تم إيقاف العضوية",
+    "failed": "تعذر تنفيذ العملية",
+    "empty": "لا يوجد مشرفون مرتبطون",
+    "active": "نشطة",
+    "inactive": "موقوفة"
   }
 }

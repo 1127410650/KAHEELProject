@@ -19,6 +19,7 @@ import {
   Inbox,
   Truck,
   ReceiptText,
+  Bell,
 
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -47,10 +48,7 @@ interface NavItem {
 const groups: { titleKey: string; items: NavItem[] }[] = [
   {
     titleKey: "nav.sectionMain",
-    items: [
-      { to: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
-      { to: "/portal", labelKey: "nav.portal", icon: Inbox, supervisorOnly: true },
-    ],
+    items: [{ to: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard }],
   },
   {
     titleKey: "nav.sectionOperations",
@@ -62,8 +60,6 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { to: "/suppliers", labelKey: "nav.suppliers", icon: Truck, perm: "projects.view_all" },
       { to: "/invoices", labelKey: "nav.invoices", icon: ReceiptText, perm: "projects.view_all" },
       { to: "/reports", labelKey: "nav.reports", icon: FileBarChart, perm: "reports.view" },
-
-
     ],
   },
   {
@@ -76,6 +72,25 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
     ],
   },
 ];
+
+/** Supervisors get a private, simplified sidebar — no admin dashboard or cross-supervisor data. */
+const supervisorGroups: { titleKey: string; items: NavItem[] }[] = [
+  {
+    titleKey: "nav.sectionMain",
+    items: [
+      { to: "/portal", labelKey: "nav.home", icon: Inbox },
+      { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
+      { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
+      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet },
+      { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
+    ],
+  },
+  {
+    titleKey: "nav.sectionSystem",
+    items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
+  },
+];
+
 
 function LanguageToggle({ compact = false }: { compact?: boolean }) {
   const { locale, setLocale } = useI18n();
@@ -133,12 +148,14 @@ function NavLinks({
   onNavigate?: () => void;
 }) {
   const { t } = useI18n();
-  const { isAccountant, isSupervisor, can } = useSession();
+  const { isAccountant, isSupervisor, role, can } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const supervisorOnly = isSupervisor && !isAccountant && role !== "employee";
+  const visibleGroups = supervisorOnly ? supervisorGroups : groups;
 
   return (
     <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
-      {groups.map((group) => {
+      {visibleGroups.map((group) => {
         const items = group.items.filter(
           (i) =>
             (!i.accountantOnly || isAccountant) &&

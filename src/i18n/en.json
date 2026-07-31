@@ -66,7 +66,11 @@
     "invoices": "Invoices",
     "portal": "Supervisor portal",
     "myRequests": "My requests",
-    "myCustody": "My custody"
+    "myCustody": "My custody",
+    "home": "Home",
+    "notifications": "Notifications",
+    "myProjects": "My projects",
+    "mySettings": "Personal settings"
   },
   "auth": {
     "title": "Sign In",
@@ -396,7 +400,14 @@
     "reference_no": "Reference no.",
     "need_date": "Needed by",
     "account_ref": "Account",
-    "service_type": "Service type"
+    "service_type": "Service type",
+    "scope": "Request scope",
+    "forbidden": "You do not have permission to view this request",
+    "convertToProject": "Convert to project request",
+    "converted": "Request converted to a project request",
+    "needsCompletion": "Needs completion",
+    "awaitingApprovalCount": "Awaiting approval",
+    "completedCount": "Completed"
   },
   "suppliers": {
     "title": "Suppliers",
@@ -459,8 +470,8 @@
     "approvedLocked": "An approved invoice cannot be edited"
   },
   "portal": {
-    "title": "Supervisor portal",
-    "description": "Submit and track your requests — nothing is executed before accountant approval",
+    "title": "Supervisor dashboard",
+    "description": "Your requests, projects and custody — the responsible officer will reply",
     "newRequest": "New request",
     "kind": "Request kind",
     "amount": "Requested amount",
@@ -470,8 +481,28 @@
     "submitted": "Request submitted",
     "submitFailed": "Could not submit the request",
     "noRequests": "No requests yet",
-    "awaitingApproval": "Awaiting accountant approval",
-    "notSupervisor": "This screen is for supervisor accounts"
+    "awaitingApproval": "The responsible officer will reply after review",
+    "notSupervisor": "This screen is for supervisor accounts",
+    "myProjects": "My projects",
+    "openRequests": "Open requests",
+    "needsCompletion": "Needs completion",
+    "awaitingReply": "Awaiting reply",
+    "completedRequests": "Completed requests",
+    "needsCompletionSection": "Requests needing completion",
+    "awaitingReplySection": "Requests awaiting reply",
+    "latestFollowUps": "Latest follow-ups",
+    "unreadAlerts": "Unread notifications",
+    "myRequests": "My requests",
+    "viewAll": "View all",
+    "noProjects": "No projects linked to you",
+    "noAlerts": "No unread notifications",
+    "noFollowUps": "No follow-ups yet",
+    "assignedTo": "Responsible officer",
+    "awaitingStaff": "Awaiting the responsible officer's reply",
+    "awaitingStaffReview": "Awaiting the responsible officer's review",
+    "scope": "Request scope",
+    "myCustody": "My custody",
+    "custodyDescription": "Your custody balance and approved movements only"
   },
   "workflow": {
     "approve": "Approve",
@@ -548,7 +579,10 @@
       "info_request": "Info request",
       "supervisor_reply": "Supervisor reply",
       "reminder": "Reminder"
-    }
+    },
+    "visibility": "Visibility",
+    "internalBadge": "Internal",
+    "requesterOnlyBadge": "Requester only"
   },
   "changes": {
     "title": "Edit & delete requests",
@@ -562,7 +596,7 @@
     "reason": "Reason",
     "reasonRequired": "Reason is required",
     "decisionReason": "Decision reason",
-    "submitted": "Sent to the accountant",
+    "submitted": "Sent to the responsible officer",
     "decided": "Decision saved",
     "executed": "Change executed",
     "execute": "Execute",
@@ -571,8 +605,8 @@
     "notApproved": "Change is not approved",
     "empty": "No change requests",
     "versions": "Version history",
-    "policy": "Nothing is edited or deleted directly; the accountant reviews and executes, and every version is kept.",
-    "awaitingAccountant": "The accountant will review and execute this request.",
+    "policy": "Nothing is edited or deleted directly; the responsible officer reviews and executes, and every version is kept.",
+    "awaitingAccountant": "The responsible officer will review and execute this request.",
     "status": {
       "pending": "Pending decision",
       "approved": "Approved",
@@ -585,5 +619,20 @@
     "duplicate": "This file is already attached",
     "fileType": "File type not allowed",
     "fileSize": "File is too large"
+  },
+  "members": {
+    "title": "Project supervisors",
+    "add": "Add supervisor",
+    "type": "Membership type",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "endMembership": "Suspend membership",
+    "endReason": "Suspension reason",
+    "added": "Supervisor membership updated",
+    "ended": "Membership suspended",
+    "failed": "Operation failed",
+    "empty": "No supervisors linked",
+    "active": "Active",
+    "inactive": "Suspended"
   }
 }

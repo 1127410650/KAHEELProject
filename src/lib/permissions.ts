@@ -3,6 +3,7 @@ export const PERMISSIONS = [
   "users.manage",
   "projects.view_all",
   "projects.view_assigned",
+  "projects.manage_supervisors",
   "requests.create",
   "requests.view_own",
   "requests.view_assigned",
@@ -11,12 +12,20 @@ export const PERMISSIONS = [
   "requests.approve",
   "requests.reject",
   "requests.reopen",
+  "requests.execute",
   "requests.upload_files",
+  "project_requests.view",
+  "project_requests.create",
+  "general_requests.view_assigned",
+  "general_requests.manage",
+  "request_messages.view_shared",
+  "request_messages.view_internal",
   "custody.view_own",
   "custody.request_topup",
   "custody.execute_topup",
   "payment.request",
   "payment.execute",
+  "payment.view_sensitive",
   "project.request_create",
   "project.approve_create",
   "documents.request_upload",
@@ -36,6 +45,10 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<string, Permission[]> = {
     "requests.view_assigned",
     "requests.process",
     "requests.upload_files",
+    "project_requests.view",
+    "general_requests.view_assigned",
+    "request_messages.view_shared",
+    "request_messages.view_internal",
     "reminders.send",
     "reports.view",
   ],
@@ -44,6 +57,9 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<string, Permission[]> = {
     "requests.create",
     "requests.view_own",
     "requests.upload_files",
+    "project_requests.view",
+    "project_requests.create",
+    "request_messages.view_shared",
     "custody.view_own",
     "custody.request_topup",
     "payment.request",
@@ -52,6 +68,59 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<string, Permission[]> = {
     "reminders.send",
   ],
 };
+
+/** Request scope — the isolation boundary for every request (single requests table). */
+export const REQUEST_SCOPES = ["general", "project", "custody", "payment"] as const;
+export type RequestScope = (typeof REQUEST_SCOPES)[number];
+
+export const REQUEST_SCOPE_LABELS_AR: Record<RequestScope, string> = {
+  general: "طلب عام",
+  project: "طلب مرتبط بمشروع",
+  custody: "طلب عهدة",
+  payment: "طلب صرف دفعة",
+};
+
+export const REQUEST_SCOPE_LABELS_EN: Record<RequestScope, string> = {
+  general: "General request",
+  project: "Project request",
+  custody: "Custody request",
+  payment: "Payment request",
+};
+
+/** Project supervisor membership types. */
+export const MEMBERSHIP_TYPES = ["primary", "partner", "site", "followup"] as const;
+export type MembershipType = (typeof MEMBERSHIP_TYPES)[number];
+
+export const MEMBERSHIP_LABELS_AR: Record<MembershipType, string> = {
+  primary: "مشرف رئيسي",
+  partner: "مشرف مشارك",
+  site: "مشرف موقع",
+  followup: "مشرف متابعة",
+};
+
+export const MEMBERSHIP_LABELS_EN: Record<MembershipType, string> = {
+  primary: "Primary supervisor",
+  partner: "Partner supervisor",
+  site: "Site supervisor",
+  followup: "Follow-up supervisor",
+};
+
+/** Message visibility inside a request conversation. */
+export const MESSAGE_VISIBILITIES = ["shared", "internal", "requester_only"] as const;
+export type MessageVisibility = (typeof MESSAGE_VISIBILITIES)[number];
+
+export const VISIBILITY_LABELS_AR: Record<MessageVisibility, string> = {
+  shared: "رسالة مشتركة",
+  internal: "ملاحظة داخلية",
+  requester_only: "خاصة بمقدم الطلب",
+};
+
+export const VISIBILITY_LABELS_EN: Record<MessageVisibility, string> = {
+  shared: "Shared message",
+  internal: "Internal note",
+  requester_only: "Requester only",
+};
+
 
 export const PERMISSION_LABELS_AR: Record<Permission, string> = {
   "users.manage": "إدارة المستخدمين",
@@ -77,6 +146,15 @@ export const PERMISSION_LABELS_AR: Record<Permission, string> = {
   "documents.approve": "اعتماد المستندات",
   "reminders.send": "إرسال التذكيرات",
   "reports.view": "عرض التقارير",
+  "projects.manage_supervisors": "إدارة مشرفي المشروع",
+  "requests.execute": "تنفيذ الطلبات",
+  "project_requests.view": "عرض طلبات المشروع",
+  "project_requests.create": "إنشاء طلب مشروع",
+  "general_requests.view_assigned": "عرض الطلبات العامة المسندة",
+  "general_requests.manage": "إدارة الطلبات العامة",
+  "request_messages.view_shared": "عرض الرسائل المشتركة",
+  "request_messages.view_internal": "عرض الملاحظات الداخلية",
+  "payment.view_sensitive": "عرض البيانات المالية الحساسة",
 };
 
 export const PERMISSION_LABELS_EN: Record<Permission, string> = {
@@ -103,6 +181,15 @@ export const PERMISSION_LABELS_EN: Record<Permission, string> = {
   "documents.approve": "Approve documents",
   "reminders.send": "Send reminders",
   "reports.view": "View reports",
+  "projects.manage_supervisors": "Manage project supervisors",
+  "requests.execute": "Execute requests",
+  "project_requests.view": "View project requests",
+  "project_requests.create": "Create project request",
+  "general_requests.view_assigned": "View assigned general requests",
+  "general_requests.manage": "Manage general requests",
+  "request_messages.view_shared": "View shared messages",
+  "request_messages.view_internal": "View internal notes",
+  "payment.view_sensitive": "View sensitive financial data",
 };
 
 /** Request kinds available from the supervisor portal (all use the existing requests table). */

@@ -1,18 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { Paperclip, Plus, Wallet } from "lucide-react";
+import { AlertCircle, ClipboardList, FolderKanban, Paperclip, Plus, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import {
+  MEMBERSHIP_LABELS_AR,
+  MEMBERSHIP_LABELS_EN,
   REQUEST_KIND_LABELS_AR,
   REQUEST_KIND_LABELS_EN,
+  type MembershipType,
   type RequestKind,
 } from "@/lib/permissions";
 import {
+  isClosed,
   PORTAL_KINDS,
   PRIORITIES,
   kindNeedsAmount,
@@ -98,6 +102,8 @@ function PortalPage() {
   const { supervisorId, isSupervisor, session, role } = useSession();
   const queryClient = useQueryClient();
   const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
+  const membershipLabels =
+    locale === "ar" ? MEMBERSHIP_LABELS_AR : MEMBERSHIP_LABELS_EN;
   const fileInput = useRef<HTMLInputElement>(null);
 
   const [open, setOpen] = useState(false);
@@ -141,6 +147,50 @@ function PortalPage() {
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
+    },
+  });
+
+  const { data: myProjects = [] } = useQuery({
+    queryKey: ["portal", "my-projects", supervisorId],
+    enabled: !!supervisorId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("project_supervisors")
+        .select("membership_type, start_date, end_date, projects(id, code, name_ar, name_en, status)")
+        .eq("supervisor_id", supervisorId!)
+        .eq("is_active", true);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const { data: alerts = [] } = useQuery({
+    queryKey: ["portal", "alerts", session?.user.id],
+    enabled: !!session?.user.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id, title, body, request_id, read_at, created_at")
+        .is("read_at", null)
+        .order("created_at", { ascending: false })
+        .limit(6);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const { data: followUps = [] } = useQuery({
+    queryKey: ["portal", "follow-ups", session?.user.id],
+    enabled: !!session?.user.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("request_messages")
+        .select("id, body, created_at, request_id, requests(request_no)")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(6);
+      if (error) throw error;
+      return data ?? [];
     },
   });
 
@@ -215,6 +265,8 @@ function PortalPage() {
   }
 
   const needsProject = kindNeedsProject(form.kind);
+  const openRequests = requests.filter((r) => !isClosed(r.status));
+  const needsCompletion = requests.filter((r) => r.status === "needs_info");
   const amountRequired = kindNeedsAmount(form.kind);
 
   return (
@@ -457,17 +509,147 @@ function PortalPage() {
         }
       />
 
-      <div className="surface mb-6 flex items-center gap-4 p-5">
-        <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
-          <Wallet className="size-5" aria-hidden />
-        </span>
-        <div>
-          <p className="text-xs text-muted-foreground">{t("portal.myBalance")}</p>
-          <p className="num text-xl font-bold">{formatMoney(balance ?? 0, locale)}</p>
+      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="surface flex items-center gap-4 p-5">
+          <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
+            <Wallet className="size-5" aria-hidden />
+          </span>
+          <div className="min-w-0">
+            <p className="text-xs text-muted-foreground">{t("portal.myBalance")}</p>
+            <p className="num text-xl font-bold">{formatMoney(balance ?? 0, locale)}</p>
+          </div>
+        </div>
+        <StatCard label={t("portal.openRequests")} value={openRequests.length} icon={ClipboardList} />
+        <StatCard
+          label={t("portal.needsCompletion")}
+          value={needsCompletion.length}
+          icon={AlertCircle}
+        />
+        <StatCard label={t("portal.myProjects")} value={myProjects.length} icon={FolderKanban} />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="surface p-5 lg:col-span-2">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold">{t("portal.needsCompletionSection")}</h2>
+            <Link to="/requests" className="text-xs text-primary hover:underline">
+              {t("portal.viewAll")}
+            </Link>
+          </div>
+          {needsCompletion.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              {t("portal.noRequests")}
+            </p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {needsCompletion.map((row) => (
+                <li key={row.id} className="flex flex-wrap items-center gap-2 py-2.5 text-sm">
+                  <Link
+                    to="/requests/$id"
+                    params={{ id: row.id }}
+                    className="num font-medium text-primary hover:underline"
+                  >
+                    {row.request_no}
+                  </Link>
+                  <span className="min-w-0 flex-1 truncate">{row.title ?? row.request_type}</span>
+                  <StatusBadge status={row.status} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="surface p-5">
+          <h2 className="mb-3 text-sm font-semibold">{t("portal.unreadAlerts")}</h2>
+          {alerts.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("portal.noAlerts")}</p>
+          ) : (
+            <ul className="space-y-3">
+              {alerts.map((a) => (
+                <li key={a.id} className="text-sm">
+                  {a.request_id ? (
+                    <Link
+                      to="/requests/$id"
+                      params={{ id: a.request_id }}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {a.title}
+                    </Link>
+                  ) : (
+                    <span className="font-medium">{a.title}</span>
+                  )}
+                  <p className="num text-xs text-muted-foreground">{formatDate(a.created_at)}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="surface p-5">
+          <h2 className="mb-3 text-sm font-semibold">{t("portal.myProjects")}</h2>
+          {myProjects.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              {t("portal.noProjects")}
+            </p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {myProjects.map((m, i) => (
+                <li key={`${m.projects?.id ?? i}`} className="py-2.5 text-sm">
+                  {m.projects ? (
+                    <Link
+                      to="/projects/$id"
+                      params={{ id: m.projects.id }}
+                      className="text-primary hover:underline"
+                    >
+                      <span className="num">{m.projects.code}</span>{" "}
+                      {pickName(locale, m.projects.name_ar, m.projects.name_en)}
+                    </Link>
+                  ) : (
+                    "—"
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    {membershipLabels[(m.membership_type ?? "primary") as MembershipType]}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="surface p-5 lg:col-span-2">
+          <h2 className="mb-3 text-sm font-semibold">{t("portal.latestFollowUps")}</h2>
+          {followUps.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              {t("portal.noFollowUps")}
+            </p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {followUps.map((m) => (
+                <li key={m.id} className="py-2.5 text-sm">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Link
+                      to="/requests/$id"
+                      params={{ id: m.request_id }}
+                      className="num font-medium text-primary hover:underline"
+                    >
+                      {m.requests?.request_no ?? "—"}
+                    </Link>
+                    <span className="num text-xs text-muted-foreground">
+                      {formatDate(m.created_at)}
+                    </span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-muted-foreground">{m.body}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
 
-      <div className="surface overflow-hidden">
+      <div className="surface mt-4 overflow-hidden">
+        <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
+          <h2 className="text-sm font-semibold">{t("portal.myRequests")}</h2>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
@@ -536,5 +718,27 @@ function PortalPage() {
         </div>
       </div>
     </>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string;
+  value: number;
+  icon: typeof Wallet;
+}) {
+  return (
+    <div className="surface flex items-center gap-4 p-5">
+      <span className="grid size-11 place-items-center rounded-xl bg-secondary text-foreground">
+        <Icon className="size-5" aria-hidden />
+      </span>
+      <div className="min-w-0">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="num text-xl font-bold">{value}</p>
+      </div>
+    </div>
   );
 }

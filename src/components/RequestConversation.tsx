@@ -27,6 +27,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  MESSAGE_VISIBILITIES,
+  VISIBILITY_LABELS_AR,
+  VISIBILITY_LABELS_EN,
+  type MessageVisibility,
+} from "@/lib/permissions";
 import { formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -52,6 +58,7 @@ interface MessageRow {
   due_date: string | null;
   priority: string | null;
   items: unknown;
+  visibility: string | null;
   deleted_at: string | null;
 }
 
@@ -73,7 +80,10 @@ export function RequestConversation({
   infoState,
 }: Props) {
   const { t, locale } = useI18n();
-  const { session, role } = useSession();
+  const { session, role, isSupervisor, isAccountant } = useSession();
+  /** Only staff may mark a message internal or requester-only. */
+  const canChooseVisibility = isAccountant || !isSupervisor;
+  const visibilityLabels = locale === "ar" ? VISIBILITY_LABELS_AR : VISIBILITY_LABELS_EN;
   const queryClient = useQueryClient();
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -84,6 +94,7 @@ export function RequestConversation({
     canReply && infoState === "awaiting_supervisor" ? "supervisor_reply" : "message",
   );
   const [dueDate, setDueDate] = useState("");
+  const [visibility, setVisibility] = useState<MessageVisibility>("shared");
   const tokenRef = useRef(crypto.randomUUID());
 
   const messagesQuery = useQuery({
@@ -183,6 +194,7 @@ export function RequestConversation({
           _request_id: requestId,
           _body: text,
           _client_token: tokenRef.current,
+          ...(canChooseVisibility ? { _visibility: visibility } : {}),
           ...(replyTo ? { _reply_to: replyTo.id } : {}),
         });
         if (error) throw error;
@@ -207,6 +219,7 @@ export function RequestConversation({
       setFiles([]);
       setReplyTo(null);
       setDueDate("");
+      setVisibility("shared");
       tokenRef.current = crypto.randomUUID();
       if (fileInput.current) fileInput.current.value = "";
       invalidate();
@@ -292,6 +305,13 @@ export function RequestConversation({
                   {message.author_role && <span>· {t(`roles.${message.author_role}`)}</span>}
                   <span>· {t(`conversation.kind.${kind}`)}</span>
                   <span className="num">· {formatDateTime(message.created_at)}</span>
+                  {message.visibility && message.visibility !== "shared" && (
+                    <span className="rounded-full bg-warning/20 px-2 py-0.5 font-semibold text-warning-foreground">
+                      {message.visibility === "internal"
+                        ? t("conversation.internalBadge")
+                        : t("conversation.requesterOnlyBadge")}
+                    </span>
+                  )}
                   {message.due_date && (
                     <span className="num text-warning-foreground">
                       · {t("conversation.due")} {message.due_date}
@@ -383,6 +403,27 @@ export function RequestConversation({
             }
             aria-label={t("conversation.title")}
           />
+
+          {canChooseVisibility && mode === "message" && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs text-muted-foreground">{t("conversation.visibility")}:</span>
+              {MESSAGE_VISIBILITIES.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setVisibility(v)}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-xs font-medium",
+                    visibility === v
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border bg-secondary text-muted-foreground",
+                  )}
+                >
+                  {visibilityLabels[v]}
+                </button>
+              ))}
+            </div>
+          )}
 
           {mode === "info_request" && (
             <div className="max-w-52 space-y-2">
