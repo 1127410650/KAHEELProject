@@ -30,6 +30,7 @@ import {
   ocrImage,
   scanImageFileForQr,
   scanVideoFrameForQr,
+  sha256Hex,
   validateScanFile,
   type PrintedInvoice,
 } from "@/lib/invoice-scan";
