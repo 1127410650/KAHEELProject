@@ -175,3 +175,19 @@ export async function updateAppUserImpl(userClient: Client, input: UpdateUserInp
 
   return { ok: true };
 }
+
+/** Read-only reconciliation: which profiles have a matching auth user. Never deletes/merges. */
+export async function listAuthLinksImpl(userClient: Client) {
+  await assertAccountant(userClient);
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const ids: string[] = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
+    if (error) break;
+    const users = data?.users ?? [];
+    users.forEach((u) => ids.push(u.id));
+    if (users.length < 200) break;
+  }
+  return { auth_user_ids: ids };
+}
