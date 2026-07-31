@@ -112,7 +112,16 @@
     "inactive": "غير نشط",
     "new": "طلب جديد",
     "processing": "قيد المعالجة",
-    "needs_info": "يحتاج استكمال"
+    "needs_info": "يحتاج استكمال",
+    "awaiting_reply": "بانتظار الرد",
+    "assigned": "مسند",
+    "supervisor_replied": "رد المشرف",
+    "review_after_info": "مراجعة بعد الاستكمال",
+    "awaiting_approval": "بانتظار الاعتماد",
+    "awaiting_execution": "بانتظار التنفيذ",
+    "executing": "قيد التنفيذ",
+    "executed": "تم التنفيذ",
+    "rejected": "مرفوض"
   },
   "dashboard": {
     "title": "لوحة التحكم",
@@ -374,7 +383,20 @@
     "latestPaymentNo": "أحدث رقم سداد",
     "copyPaymentNo": "نسخ رقم السداد",
     "copied": "تم نسخ رقم السداد",
-    "notFound": "الطلب غير موجود"
+    "notFound": "الطلب غير موجود",
+    "priority": "الأولوية",
+    "needDate": "تاريخ الحاجة",
+    "accountRef": "رقم الحساب/الآيبان",
+    "serviceType": "نوع الخدمة",
+    "reason": "السبب",
+    "progress": "نسبة الإنجاز",
+    "inbox": "صناديق الطلبات",
+    "notes_ar": "الملاحظات",
+    "amount": "المبلغ",
+    "reference_no": "الرقم المرجعي",
+    "need_date": "تاريخ الحاجة",
+    "account_ref": "رقم الحساب",
+    "service_type": "نوع الخدمة"
   },
   "suppliers": {
     "title": "الموردون",
@@ -469,6 +491,99 @@
     "reasonRequired": "سبب الرفض إلزامي",
     "assignTo": "إسناد إلى",
     "assigned": "تم الإسناد",
-    "failed": "تعذر تنفيذ الإجراء"
+    "failed": "تعذر تنفيذ الإجراء",
+    "moveStage": "نقل إلى مرحلة",
+    "stageChanged": "تم تحديث المرحلة",
+    "close": "إغلاق الطلب",
+    "closed": "تم إغلاق الطلب",
+    "cancel": "إلغاء الطلب",
+    "cancelled": "تم إلغاء الطلب",
+    "reopen": "إعادة فتح",
+    "reopened": "تم إعادة فتح الطلب",
+    "followUpDate": "تاريخ المتابعة"
+  },
+  "priority": {
+    "low": "منخفضة",
+    "normal": "عادية",
+    "high": "عالية",
+    "urgent": "عاجلة"
+  },
+  "inbox": {
+    "all": "الكل",
+    "mine": "طلباتي",
+    "assigned_to_me": "المسندة لي",
+    "awaiting_my_review": "بانتظار المراجعة",
+    "awaiting_my_approval": "بانتظار الاعتماد",
+    "needs_info": "بانتظار استكمال",
+    "awaiting_execution": "بانتظار التنفيذ",
+    "overdue": "متأخرة",
+    "completed": "منجزة",
+    "rejected": "مرفوضة/ملغاة"
+  },
+  "notifications": {
+    "title": "التنبيهات",
+    "markAll": "تعليم الكل كمقروء",
+    "empty": "لا توجد تنبيهات"
+  },
+  "conversation": {
+    "title": "المحادثة الموحدة",
+    "send": "إرسال",
+    "sent": "تم الإرسال",
+    "sendFailed": "تعذر الإرسال",
+    "empty": "لا توجد رسائل بعد",
+    "reply": "رد",
+    "replyingTo": "رد على",
+    "markRead": "تعليم كمقروء",
+    "allRead": "تم تعليم المحادثة كمقروءة",
+    "placeholder": "اكتب رسالتك…",
+    "infoPlaceholder": "اكتب البيانات أو المستندات المطلوبة من المشرف…",
+    "bodyRequired": "نص الرسالة مطلوب",
+    "modeMessage": "رسالة",
+    "modeInfoRequest": "طلب استكمال بيانات",
+    "modeReply": "رد المشرف",
+    "due": "المهلة",
+    "system": "النظام",
+    "kind": {
+      "message": "رسالة",
+      "info_request": "طلب استكمال",
+      "supervisor_reply": "رد المشرف",
+      "reminder": "تذكير"
+    }
+  },
+  "changes": {
+    "title": "طلبات التعديل والحذف",
+    "request": "طلب تعديل/حذف",
+    "action": "الإجراء",
+    "actionEdit": "تعديل",
+    "actionDelete": "حذف",
+    "field": "الحقل",
+    "currentValue": "القيمة الحالية",
+    "newValue": "القيمة الجديدة",
+    "reason": "السبب",
+    "reasonRequired": "السبب مطلوب",
+    "decisionReason": "سبب القرار",
+    "submitted": "تم إرسال الطلب للمحاسب",
+    "decided": "تم اتخاذ القرار",
+    "executed": "تم تنفيذ التعديل",
+    "execute": "تنفيذ",
+    "reject": "رفض",
+    "failed": "تعذر تنفيذ العملية",
+    "notApproved": "الطلب غير معتمد",
+    "empty": "لا توجد طلبات تعديل",
+    "versions": "سجل الإصدارات",
+    "policy": "لا يتم أي تعديل أو حذف مباشرة؛ يُرسل الطلب للمحاسب ويُنفذ بعد الاعتماد مع حفظ الإصدارات.",
+    "awaitingAccountant": "سيُرسل الطلب للمحاسب للمراجعة والتنفيذ.",
+    "status": {
+      "pending": "بانتظار القرار",
+      "approved": "معتمد",
+      "rejected": "مرفوض",
+      "executed": "منفذ"
+    }
+  },
+  "attachments": {
+    "add": "إضافة مرفقات",
+    "duplicate": "الملف مرفق مسبقًا",
+    "fileType": "نوع الملف غير مسموح",
+    "fileSize": "حجم الملف كبير جدًا"
   }
 }

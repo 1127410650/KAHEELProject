@@ -112,7 +112,16 @@
     "inactive": "Inactive",
     "new": "New Request",
     "processing": "Processing",
-    "needs_info": "Needs Info"
+    "needs_info": "Needs Info",
+    "awaiting_reply": "Awaiting reply",
+    "assigned": "Assigned",
+    "supervisor_replied": "Supervisor replied",
+    "review_after_info": "Review after info",
+    "awaiting_approval": "Awaiting approval",
+    "awaiting_execution": "Awaiting execution",
+    "executing": "Executing",
+    "executed": "Executed",
+    "rejected": "Rejected"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -374,7 +383,20 @@
     "latestPaymentNo": "Latest payment no.",
     "copyPaymentNo": "Copy payment number",
     "copied": "Payment number copied",
-    "notFound": "Request not found"
+    "notFound": "Request not found",
+    "priority": "Priority",
+    "needDate": "Needed by",
+    "accountRef": "Account / IBAN",
+    "serviceType": "Service type",
+    "reason": "Reason",
+    "progress": "Progress",
+    "inbox": "Request inboxes",
+    "notes_ar": "Notes",
+    "amount": "Amount",
+    "reference_no": "Reference no.",
+    "need_date": "Needed by",
+    "account_ref": "Account",
+    "service_type": "Service type"
   },
   "suppliers": {
     "title": "Suppliers",
@@ -469,6 +491,99 @@
     "reasonRequired": "Rejection reason is required",
     "assignTo": "Assign to",
     "assigned": "Assigned",
-    "failed": "Action failed"
+    "failed": "Action failed",
+    "moveStage": "Move to stage",
+    "stageChanged": "Stage updated",
+    "close": "Close request",
+    "closed": "Request closed",
+    "cancel": "Cancel request",
+    "cancelled": "Request cancelled",
+    "reopen": "Reopen",
+    "reopened": "Request reopened",
+    "followUpDate": "Follow-up date"
+  },
+  "priority": {
+    "low": "Low",
+    "normal": "Normal",
+    "high": "High",
+    "urgent": "Urgent"
+  },
+  "inbox": {
+    "all": "All",
+    "mine": "My requests",
+    "assigned_to_me": "Assigned to me",
+    "awaiting_my_review": "Awaiting review",
+    "awaiting_my_approval": "Awaiting approval",
+    "needs_info": "Needs info",
+    "awaiting_execution": "Awaiting execution",
+    "overdue": "Overdue",
+    "completed": "Completed",
+    "rejected": "Rejected/cancelled"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAll": "Mark all read",
+    "empty": "No notifications"
+  },
+  "conversation": {
+    "title": "Unified conversation",
+    "send": "Send",
+    "sent": "Sent",
+    "sendFailed": "Could not send",
+    "empty": "No messages yet",
+    "reply": "Reply",
+    "replyingTo": "Replying to",
+    "markRead": "Mark as read",
+    "allRead": "Conversation marked as read",
+    "placeholder": "Write your message…",
+    "infoPlaceholder": "Describe the data or documents needed from the supervisor…",
+    "bodyRequired": "Message body is required",
+    "modeMessage": "Message",
+    "modeInfoRequest": "Request more info",
+    "modeReply": "Supervisor reply",
+    "due": "Due",
+    "system": "System",
+    "kind": {
+      "message": "Message",
+      "info_request": "Info request",
+      "supervisor_reply": "Supervisor reply",
+      "reminder": "Reminder"
+    }
+  },
+  "changes": {
+    "title": "Edit & delete requests",
+    "request": "Request edit/delete",
+    "action": "Action",
+    "actionEdit": "Edit",
+    "actionDelete": "Delete",
+    "field": "Field",
+    "currentValue": "Current value",
+    "newValue": "New value",
+    "reason": "Reason",
+    "reasonRequired": "Reason is required",
+    "decisionReason": "Decision reason",
+    "submitted": "Sent to the accountant",
+    "decided": "Decision saved",
+    "executed": "Change executed",
+    "execute": "Execute",
+    "reject": "Reject",
+    "failed": "Operation failed",
+    "notApproved": "Change is not approved",
+    "empty": "No change requests",
+    "versions": "Version history",
+    "policy": "Nothing is edited or deleted directly; the accountant reviews and executes, and every version is kept.",
+    "awaitingAccountant": "The accountant will review and execute this request.",
+    "status": {
+      "pending": "Pending decision",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "executed": "Executed"
+    }
+  },
+  "attachments": {
+    "add": "Add attachments",
+    "duplicate": "This file is already attached",
+    "fileType": "File type not allowed",
+    "fileSize": "File is too large"
   }
 }
