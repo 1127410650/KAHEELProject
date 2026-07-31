@@ -303,6 +303,33 @@ function ProjectsPage() {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_city">{t("projects.city")}</Label>
+                      <Input
+                        id="p_city"
+                        value={form.city}
+                        onChange={(e) => setForm({ ...form, city: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_location">{t("projects.location")}</Label>
+                      <Input
+                        id="p_location"
+                        value={form.location}
+                        onChange={(e) => setForm({ ...form, location: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_start_date">{t("projects.startDate")}</Label>
+                      <Input
+                        id="p_start_date"
+                        type="date"
+                        dir="ltr"
+                        value={form.start_date}
+                        onChange={(e) => setForm({ ...form, start_date: e.target.value })}
+                      />
+                    </div>
+
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="p_desc_ar">{t("projects.descriptionAr")}</Label>
