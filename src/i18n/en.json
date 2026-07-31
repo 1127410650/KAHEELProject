@@ -409,7 +409,20 @@
     "converted": "Request converted to a project request",
     "needsCompletion": "Needs completion",
     "awaitingApprovalCount": "Awaiting approval",
-    "completedCount": "Completed"
+    "completedCount": "Completed",
+    "requester": "Requester",
+    "viewRequest": "View request",
+    "untitled": "Untitled request",
+    "viewAllProject": "View all project requests",
+    "showFullTimeline": "Show full stage log",
+    "hideFullTimeline": "Hide stage log",
+    "summary": "Request summary",
+    "extraData": "Additional request data",
+    "conversation": "Conversation and follow-up",
+    "documents": "Documents and attachments",
+    "advancedTools": "Advanced tools (manager)",
+    "assignedOfficer": "Responsible officer",
+    "search": "Search requests"
   },
   "suppliers": {
     "title": "Suppliers",
@@ -504,7 +517,8 @@
     "awaitingStaffReview": "Awaiting the responsible officer's review",
     "scope": "Request scope",
     "myCustody": "My custody",
-    "custodyDescription": "Your custody balance and approved movements only"
+    "custodyDescription": "Your custody balance and approved movements only",
+    "myRequestsHint": "The responsible officer will reply"
   },
   "workflow": {
     "approve": "Approve",
@@ -636,5 +650,106 @@
     "empty": "No supervisors linked",
     "active": "Active",
     "inactive": "Suspended"
+  },
+  "stage": {
+    "received": "Request received",
+    "reviewing": "Under review",
+    "action_needed": "Action needed from you",
+    "approval_execution": "Approval or execution",
+    "done": "Completed",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled",
+    "railLabel": "Request stages",
+    "detail": "Exact stage"
+  },
+  "action": {
+    "title": "What to do now",
+    "short": "Needed",
+    "none": "Nothing is required from you right now",
+    "rejected": "This request was rejected",
+    "cancelled": "This request was cancelled",
+    "completed": "This request is completed",
+    "sup": {
+      "withStaff": "Nothing required from you — the responsible officer is handling it",
+      "needsInfo": "Please complete the requested data or upload the required document",
+      "approvedWaiting": "Approved and awaiting execution",
+      "executed": "Executed and awaiting closure"
+    },
+    "staff": {
+      "startReview": "Review the request and start reviewing",
+      "process": "Start processing or ask the supervisor for more information",
+      "reviewReply": "Review the supervisor's reply",
+      "sendForApproval": "Send the request for approval",
+      "awaitingSupervisor": "Awaiting the supervisor's reply",
+      "withManager": "No action now — the request is with the manager",
+      "confirmExecution": "Confirm execution",
+      "registerPayment": "Record the payment details and receipt"
+    },
+    "mgr": {
+      "awaitingApproval": "This request is awaiting your approval",
+      "approvedAwaitingExecution": "Approved and awaiting execution",
+      "closeRequest": "Close the request after confirming execution",
+      "reviewChange": "Review the change or delete request"
+    },
+    "btn": {
+      "addReply": "Add reply and attachments",
+      "startReview": "Start review",
+      "startProcessing": "Start processing",
+      "askInfo": "Ask for information",
+      "reviewReply": "Review reply",
+      "sendForApproval": "Send for approval",
+      "approve": "Approve",
+      "reject": "Reject",
+      "startExecution": "Start execution",
+      "confirmExecution": "Confirm execution",
+      "registerPayment": "Record payment",
+      "close": "Close request"
+    }
+  },
+  "notify": {
+    "created": "Your request was received",
+    "reviewStarted": "The responsible officer started reviewing your request",
+    "needsInfo": "We need you to complete some data",
+    "replyReceived": "Your reply was received",
+    "approved": "Your request was approved",
+    "executionStarted": "Execution of your request started",
+    "executed": "Your request was executed",
+    "completed": "The request is completed",
+    "rejected": "The request was rejected",
+    "cancelled": "The request was cancelled",
+    "message": "New message on your request",
+    "reminder": "Reminder on your request"
+  },
+  "groups": {
+    "action_mine": "Needs my action",
+    "in_progress": "In progress",
+    "completed": "Completed",
+    "closed_other": "Rejected or cancelled",
+    "mine_now": "Needed from me now",
+    "awaiting_supervisor": "Awaiting supervisor reply",
+    "awaiting_approval": "Awaiting approval",
+    "awaiting_execution": "Awaiting execution",
+    "emptyGroup": "No requests in this group"
+  },
+  "wizard": {
+    "step": "Step",
+    "step1": "Choose the request type",
+    "step2": "Enter the details",
+    "step3": "Review and send",
+    "next": "Next",
+    "back": "Back",
+    "submit": "Send request",
+    "submitted": "Your request was received and the responsible officer will reply",
+    "typeGeneral": "General request",
+    "typeGeneralHint": "Not linked to a project",
+    "typeProject": "Project request",
+    "typeProjectHint": "A service or action inside one of your projects",
+    "typeCustody": "Custody request",
+    "typeCustodyHint": "Top up or settle your custody balance",
+    "typePayment": "Payment request",
+    "typePaymentHint": "Pay a beneficiary inside a project",
+    "summary": "Request summary",
+    "movementType": "Movement type",
+    "titleOptional": "Request title (auto-generated when left empty)"
   }
 }

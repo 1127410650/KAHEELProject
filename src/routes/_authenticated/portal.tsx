@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
-import { AlertCircle, ClipboardList, FolderKanban, Paperclip, Plus, Wallet } from "lucide-react";
-import { toast } from "sonner";
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { AlertCircle, ClipboardList, FolderKanban, Wallet } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
@@ -15,38 +14,20 @@ import {
   type MembershipType,
   type RequestKind,
 } from "@/lib/permissions";
+import { isClosed } from "@/lib/requests";
 import {
-  isClosed,
-  PORTAL_KINDS,
-  PRIORITIES,
-  kindNeedsAmount,
-  kindNeedsProject,
-  requestProgress,
-} from "@/lib/requests";
-import { ACCEPT, isAllowedFile, isAllowedSize, uploadAttachments } from "@/lib/attachments";
+  buildRequestTitle,
+  PORTAL_GROUPS,
+  portalGroupOf,
+  resolveNextAction,
+  notificationTextKey,
+  type PortalGroup,
+} from "@/lib/request-ui";
 import { PageHeader } from "@/components/AppLayout";
-import { StatusBadge } from "@/components/StatusBadge";
-import { PaymentNoBadge } from "@/components/PaymentNoBadge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { formatDate, formatMoney, pickName, todayInRiyadh } from "@/lib/format";
+import { NewRequestWizard } from "@/components/NewRequestWizard";
+import { RequestCard } from "@/components/RequestCard";
+import { formatDate, formatMoney, pickName } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/portal")({
   head: () => ({
@@ -54,7 +35,7 @@ export const Route = createFileRoute("/_authenticated/portal")({
       { title: "بوابة المشرف — تحقّق | Supervisor portal — Tahqaq" },
       {
         name: "description",
-        content: "بوابة المشرف لإرسال طلبات إضافة الرصيد والصرف والمشاريع ومتابعة حالتها.",
+        content: "بوابة المشرف: تقديم الطلبات في ثلاث خطوات ومتابعة المرحلة والإجراء المطلوب.",
       },
       { property: "og:title", content: "بوابة المشرف — تحقّق" },
       { property: "og:description", content: "Submit and track supervisor requests in Tahqaq." },
@@ -65,50 +46,16 @@ export const Route = createFileRoute("/_authenticated/portal")({
   component: PortalPage,
 });
 
-interface PortalForm {
-  kind: RequestKind;
-  title: string;
-  project_id: string;
-  amount: string;
-  priority: string;
-  authority: string;
-  beneficiary: string;
-  account_ref: string;
-  service_type: string;
-  need_date: string;
-  reason: string;
-  notes_ar: string;
-  request_date: string;
-}
-
-const EMPTY: PortalForm = {
-  kind: "general",
-  title: "",
-  project_id: "",
-  amount: "",
-  priority: "normal",
-  authority: "",
-  beneficiary: "",
-  account_ref: "",
-  service_type: "",
-  need_date: "",
-  reason: "",
-  notes_ar: "",
-  request_date: todayInRiyadh(),
-};
-
 function PortalPage() {
   const { t, locale } = useI18n();
   const { supervisorId, isSupervisor, session, role, can } = useSession();
-  const queryClient = useQueryClient();
   const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
-  const membershipLabels =
-    locale === "ar" ? MEMBERSHIP_LABELS_AR : MEMBERSHIP_LABELS_EN;
-  const fileInput = useRef<HTMLInputElement>(null);
+  const membershipLabels = locale === "ar" ? MEMBERSHIP_LABELS_AR : MEMBERSHIP_LABELS_EN;
+  const [group, setGroup] = useState<PortalGroup>("action_mine");
 
-  const [open, setOpen] = useState(false);
-  const [files, setFiles] = useState<File[]>([]);
-  const [form, setForm] = useState<PortalForm>(EMPTY);
+  const canViewCustody = can("custody.view_own");
+  const canRequestCustody = can("custody.request_movement") || can("custody.request_topup");
+  const canRequestPayment = can("payment.request");
 
   const { data: projects = [] } = useQuery({
     queryKey: ["portal", "projects"],
@@ -122,12 +69,6 @@ function PortalPage() {
       return data;
     },
   });
-
-  const canViewCustody = can("custody.view_own");
-  const canRequestCustody = can("custody.request_movement") || can("custody.request_topup");
-  const visibleKinds = PORTAL_KINDS.filter(
-    (k) => canRequestCustody || (k !== "custody_topup" && k !== "payment"),
-  );
 
   const { data: balance } = useQuery({
     queryKey: ["portal", "balance", supervisorId],
@@ -150,7 +91,7 @@ function PortalPage() {
         .from("requests")
         .select("*, projects!requests_project_id_fkey(code, name_ar, name_en)")
         .is("deleted_at", null)
-        .order("created_at", { ascending: false });
+        .order("updated_at", { ascending: false });
       if (error) throw error;
       return data;
     },
@@ -162,7 +103,7 @@ function PortalPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("project_supervisors")
-        .select("membership_type, start_date, end_date, projects(id, code, name_ar, name_en, status)")
+        .select("membership_type, projects(id, code, name_ar, name_en, status)")
         .eq("supervisor_id", supervisorId!)
         .eq("is_active", true);
       if (error) throw error;
@@ -176,88 +117,68 @@ function PortalPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("notifications")
-        .select("id, title, body, request_id, read_at, created_at")
+        .select("id, event, title, request_id, read_at, created_at")
         .is("read_at", null)
         .order("created_at", { ascending: false })
-        .limit(6);
+        .limit(30);
       if (error) throw error;
       return data ?? [];
     },
   });
 
-  const { data: followUps = [] } = useQuery({
-    queryKey: ["portal", "follow-ups", session?.user.id],
-    enabled: !!session?.user.id,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("request_messages")
-        .select("id, body, created_at, request_id, requests(request_no)")
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false })
-        .limit(6);
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const unreadByRequest = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const a of alerts) {
+      if (!a.request_id) continue;
+      map.set(a.request_id, (map.get(a.request_id) ?? 0) + 1);
+    }
+    return map;
+  }, [alerts]);
 
-  const submit = useMutation({
-    mutationFn: async (values: PortalForm) => {
-      if (files.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
-      if (files.some((f) => !isAllowedSize(f))) throw new Error("FILE_SIZE");
+  const statusById = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const r of requests) map.set(r.id, r.status);
+    return map;
+  }, [requests]);
 
-      const { data, error } = await supabase.rpc("submit_request", {
-        _kind: values.kind,
-        _request_type: kindLabels[values.kind],
-        _title: values.title.trim() || kindLabels[values.kind],
-        _priority: values.priority,
-        _request_date: values.request_date,
-        ...(kindNeedsProject(values.kind) && values.project_id
-          ? { _project_id: values.project_id }
-          : {}),
-        ...(values.amount ? { _amount: Number(values.amount) } : {}),
-        ...(values.authority ? { _authority: values.authority.trim() } : {}),
-        ...(values.beneficiary ? { _beneficiary: values.beneficiary.trim() } : {}),
-        ...(values.account_ref ? { _account_ref: values.account_ref.trim() } : {}),
-        ...(values.service_type ? { _service_type: values.service_type.trim() } : {}),
-        ...(values.need_date ? { _need_date: values.need_date } : {}),
-        ...(values.reason ? { _reason: values.reason.trim() } : {}),
-        ...(values.notes_ar ? { _notes_ar: values.notes_ar.trim() } : {}),
-      });
-      if (error) throw error;
-
-      const requestId = data as string;
-      if (files.length && requestId) {
-        await uploadAttachments(files, {
-          projectId: kindNeedsProject(values.kind) ? values.project_id || null : null,
-          requestId,
-          entityType: "request",
-          entityId: requestId,
-          kind: "supervisor_doc",
-          uploaderRole: role,
-          userId: session?.user.id ?? null,
+  const cards = useMemo(
+    () =>
+      requests.map((row) => {
+        const projectName = row.projects
+          ? pickName(locale, row.projects.name_ar, row.projects.name_en)
+          : null;
+        const action = resolveNextAction(row, {
+          role,
+          isSupervisorView: true,
+          isRequester: true,
+          can: (perm) => can(perm as never),
         });
-      }
-    },
-    onSuccess: () => {
-      toast.success(t("portal.submitted"));
-      setOpen(false);
-      setForm(EMPTY);
-      setFiles([]);
-      if (fileInput.current) fileInput.current.value = "";
-      void queryClient.invalidateQueries({ queryKey: ["portal"] });
-      void queryClient.invalidateQueries({ queryKey: ["requests"] });
-    },
-    onError: (error: Error) => {
-      const message = error.message ?? "";
-      if (message.includes("PROJECT_REQUIRED")) toast.error(t("requests.projectRequired"));
-      else if (message.includes("AMOUNT_REQUIRED")) toast.error(t("common.required"));
-      else if (message.includes("DUPLICATE_FILE")) toast.error(t("attachments.duplicate"));
-      else if (message.includes("FILE_TYPE")) toast.error(t("attachments.fileType"));
-      else if (message.includes("FILE_SIZE")) toast.error(t("attachments.fileSize"));
-      else if (message.includes("FORBIDDEN")) toast.error(t("common.notAllowed"));
-      else toast.error(t("portal.submitFailed"));
-    },
-  });
+        return {
+          group: portalGroupOf(row.status),
+          card: {
+            id: row.id,
+            request_no: row.request_no,
+            title: buildRequestTitle({ ...row, projectName }, t("requests.untitled")),
+            typeLabel: kindLabels[row.kind as RequestKind] ?? row.request_type,
+            projectName,
+            status: row.status,
+            requestDate: row.request_date,
+            updatedAt: row.updated_at,
+            actionText: t(action.messageKey),
+            unread: unreadByRequest.get(row.id) ?? 0,
+            amountText: row.amount != null ? formatMoney(row.amount, locale) : null,
+          },
+        };
+      }),
+    [requests, locale, role, can, t, kindLabels, unreadByRequest],
+  );
+
+  const counts = useMemo(() => {
+    const base: Record<string, number> = {};
+    for (const g of PORTAL_GROUPS) base[g] = 0;
+    for (const c of cards) base[c.group] = (base[c.group] ?? 0) + 1;
+    return base;
+  }, [cards]);
 
   if (!isSupervisor) {
     return (
@@ -270,248 +191,20 @@ function PortalPage() {
     );
   }
 
-  const needsProject = kindNeedsProject(form.kind);
+  const visible = cards.filter((c) => c.group === group);
   const openRequests = requests.filter((r) => !isClosed(r.status));
-  const needsCompletion = requests.filter((r) => r.status === "needs_info");
-  const amountRequired = kindNeedsAmount(form.kind);
 
   return (
     <>
       <PageHeader
         title={t("portal.title")}
-        description={t("portal.description")}
+        description={t("portal.myRequestsHint")}
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Plus className="size-4" aria-hidden />
-                {t("portal.newRequest")}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{t("portal.newRequest")}</DialogTitle>
-              </DialogHeader>
-              <form
-                id="portal-form"
-                className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (needsProject && !form.project_id) {
-                    toast.error(t("requests.projectRequired"));
-                    return;
-                  }
-                  if (amountRequired && !(Number(form.amount) > 0)) {
-                    toast.error(t("common.required"));
-                    return;
-                  }
-                  if (!submit.isPending) submit.mutate(form);
-                }}
-              >
-                <div className="space-y-2">
-                  <Label>{t("portal.kind")} *</Label>
-                  <Select
-                    value={form.kind}
-                    onValueChange={(v) => setForm({ ...form, kind: v as RequestKind })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {visibleKinds.map((kind) => (
-                        <SelectItem key={kind} value={kind}>
-                          {kindLabels[kind as RequestKind]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="p_title">{t("requests.title")} *</Label>
-                  <Input
-                    id="p_title"
-                    required
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  />
-                </div>
-
-                {needsProject && (
-                  <div className="space-y-2">
-                    <Label>{t("requests.project")} *</Label>
-                    <Select
-                      value={form.project_id}
-                      onValueChange={(v) => setForm({ ...form, project_id: v })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("common.select")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {projects.map((p) => (
-                          <SelectItem key={p.id} value={p.id}>
-                            <span className="num">{p.code}</span>{" "}
-                            {pickName(locale, p.name_ar, p.name_en)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="p_amount">
-                      {t("portal.amount")} {amountRequired ? "*" : ""}
-                    </Label>
-                    <Input
-                      id="p_amount"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      dir="ltr"
-                      className="num"
-                      value={form.amount}
-                      onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{t("requests.priority")}</Label>
-                    <Select
-                      value={form.priority}
-                      onValueChange={(v) => setForm({ ...form, priority: v })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PRIORITIES.map((p) => (
-                          <SelectItem key={p} value={p}>
-                            {t(`priority.${p}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="p_date">{t("requests.requestDate")} *</Label>
-                    <Input
-                      id="p_date"
-                      type="date"
-                      required
-                      dir="ltr"
-                      className="num"
-                      value={form.request_date}
-                      onChange={(e) => setForm({ ...form, request_date: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="p_need">{t("requests.needDate")}</Label>
-                    <Input
-                      id="p_need"
-                      type="date"
-                      dir="ltr"
-                      className="num"
-                      value={form.need_date}
-                      onChange={(e) => setForm({ ...form, need_date: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                {form.kind === "payment" && (
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="p_ben">{t("requests.beneficiary")}</Label>
-                      <Input
-                        id="p_ben"
-                        value={form.beneficiary}
-                        onChange={(e) => setForm({ ...form, beneficiary: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="p_acc">{t("requests.accountRef")}</Label>
-                      <Input
-                        id="p_acc"
-                        dir="ltr"
-                        className="num"
-                        value={form.account_ref}
-                        onChange={(e) => setForm({ ...form, account_ref: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {(form.kind === "project_service" || form.kind === "utility_meter") && (
-                  <div className="space-y-2">
-                    <Label htmlFor="p_service">{t("requests.serviceType")}</Label>
-                    <Input
-                      id="p_service"
-                      value={form.service_type}
-                      onChange={(e) => setForm({ ...form, service_type: e.target.value })}
-                    />
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label htmlFor="p_authority">{t("requests.authority")}</Label>
-                  <Input
-                    id="p_authority"
-                    value={form.authority}
-                    onChange={(e) => setForm({ ...form, authority: e.target.value })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="p_reason">{t("requests.reason")}</Label>
-                  <Input
-                    id="p_reason"
-                    value={form.reason}
-                    onChange={(e) => setForm({ ...form, reason: e.target.value })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="p_notes">{t("portal.details")}</Label>
-                  <Textarea
-                    id="p_notes"
-                    rows={3}
-                    value={form.notes_ar}
-                    onChange={(e) => setForm({ ...form, notes_ar: e.target.value })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="p_files">{t("attachments.add")}</Label>
-                  <Input
-                    id="p_files"
-                    ref={fileInput}
-                    type="file"
-                    multiple
-                    accept={ACCEPT}
-                    onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
-                  />
-                  {files.length > 0 && (
-                    <p className="num flex items-center gap-1 text-xs text-muted-foreground">
-                      <Paperclip className="size-3" aria-hidden />
-                      {files.length}
-                    </p>
-                  )}
-                </div>
-
-                <p className="rounded-lg bg-secondary p-3 text-xs text-muted-foreground">
-                  {t("portal.awaitingApproval")}
-                </p>
-              </form>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                  {t("common.cancel")}
-                </Button>
-                <Button type="submit" form="portal-form" disabled={submit.isPending}>
-                  {t("common.submit")}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <NewRequestWizard
+            projects={projects}
+            canRequestCustody={canRequestCustody}
+            canRequestPayment={canRequestPayment}
+          />
         }
       />
 
@@ -529,62 +222,69 @@ function PortalPage() {
         )}
         <StatCard label={t("portal.openRequests")} value={openRequests.length} icon={ClipboardList} />
         <StatCard
-          label={t("portal.needsCompletion")}
-          value={needsCompletion.length}
+          label={t("groups.action_mine")}
+          value={counts["action_mine"] ?? 0}
           icon={AlertCircle}
         />
         <StatCard label={t("portal.myProjects")} value={myProjects.length} icon={FolderKanban} />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="surface p-5 lg:col-span-2">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold">{t("portal.needsCompletionSection")}</h2>
-            <Link to="/requests" className="text-xs text-primary hover:underline">
-              {t("portal.viewAll")}
-            </Link>
-          </div>
-          {needsCompletion.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              {t("portal.noRequests")}
-            </p>
-          ) : (
-            <ul className="divide-y divide-border">
-              {needsCompletion.map((row) => (
-                <li key={row.id} className="flex flex-wrap items-center gap-2 py-2.5 text-sm">
-                  <Link
-                    to="/requests/$id"
-                    params={{ id: row.id }}
-                    className="num font-medium text-primary hover:underline"
-                  >
-                    {row.request_no}
-                  </Link>
-                  <span className="min-w-0 flex-1 truncate">{row.title ?? row.request_type}</span>
-                  <StatusBadge status={row.status} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+      <section aria-labelledby="my-requests" className="mb-6">
+        <h2 id="my-requests" className="mb-3 text-sm font-semibold">
+          {t("portal.myRequests")}
+        </h2>
+        <nav className="mb-4 flex flex-wrap gap-2" aria-label={t("portal.myRequests")}>
+          {PORTAL_GROUPS.map((g) => (
+            <button
+              key={g}
+              type="button"
+              onClick={() => setGroup(g)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                group === g
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary",
+              )}
+            >
+              {t(`groups.${g}`)}
+              <span className="num opacity-70">{counts[g] ?? 0}</span>
+            </button>
+          ))}
+        </nav>
 
+        {visible.length === 0 ? (
+          <div className="surface p-10 text-center text-sm text-muted-foreground">
+            {t("groups.emptyGroup")}
+          </div>
+        ) : (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {visible.map((c) => (
+              <RequestCard key={c.card.id} data={c.card} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      <div className="grid gap-4 lg:grid-cols-2">
         <div className="surface p-5">
           <h2 className="mb-3 text-sm font-semibold">{t("portal.unreadAlerts")}</h2>
           {alerts.length === 0 ? (
             <p className="py-6 text-center text-sm text-muted-foreground">{t("portal.noAlerts")}</p>
           ) : (
             <ul className="space-y-3">
-              {alerts.map((a) => (
+              {alerts.slice(0, 6).map((a) => (
                 <li key={a.id} className="text-sm">
                   {a.request_id ? (
                     <Link
                       to="/requests/$id"
                       params={{ id: a.request_id }}
+                      search={{ focus: "action" }}
                       className="font-medium text-primary hover:underline"
                     >
-                      {a.title}
+                      {t(notificationTextKey(a.event, statusById.get(a.request_id)))}
                     </Link>
                   ) : (
-                    <span className="font-medium">{a.title}</span>
+                    <span className="font-medium">{t(notificationTextKey(a.event))}</span>
                   )}
                   <p className="num text-xs text-muted-foreground">{formatDate(a.created_at)}</p>
                 </li>
@@ -622,107 +322,6 @@ function PortalPage() {
               ))}
             </ul>
           )}
-        </div>
-
-        <div className="surface p-5 lg:col-span-2">
-          <h2 className="mb-3 text-sm font-semibold">{t("portal.latestFollowUps")}</h2>
-          {followUps.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              {t("portal.noFollowUps")}
-            </p>
-          ) : (
-            <ul className="divide-y divide-border">
-              {followUps.map((m) => (
-                <li key={m.id} className="py-2.5 text-sm">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Link
-                      to="/requests/$id"
-                      params={{ id: m.request_id }}
-                      className="num font-medium text-primary hover:underline"
-                    >
-                      {m.requests?.request_no ?? "—"}
-                    </Link>
-                    <span className="num text-xs text-muted-foreground">
-                      {formatDate(m.created_at)}
-                    </span>
-                  </div>
-                  <p className="mt-1 line-clamp-2 text-muted-foreground">{m.body}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-
-      <div className="surface mt-4 overflow-hidden">
-        <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
-          <h2 className="text-sm font-semibold">{t("portal.myRequests")}</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary/60">
-              <tr className="text-xs uppercase tracking-wide text-muted-foreground">
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.requestNo")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("portal.kind")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.project")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("common.amount")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.requestDate")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("common.status")}</th>
-                <th className="px-4 py-3 text-start font-semibold">{t("requests.progress")}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {requests.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
-                    {t("portal.noRequests")}
-                  </td>
-                </tr>
-              )}
-              {requests.map((row) => (
-                <tr key={row.id} className="hover:bg-secondary/40">
-                  <td className="num px-4 py-3 font-medium">
-                    <Link to="/requests/$id" params={{ id: row.id }} className="hover:underline">
-                      {row.request_no}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3">
-                    {kindLabels[row.kind as RequestKind] ?? row.request_type}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {row.projects
-                      ? pickName(locale, row.projects.name_ar, row.projects.name_en)
-                      : "—"}
-                  </td>
-                  <td className="num px-4 py-3">
-                    {row.amount === null ? "—" : formatMoney(row.amount, locale)}
-                  </td>
-                  <td className="num px-4 py-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      {formatDate(row.request_date)}
-                      {row.payment_no && <PaymentNoBadge paymentNo={row.payment_no} />}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={row.status} />
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-20 overflow-hidden rounded-full bg-secondary">
-                        <span
-                          className="block h-full rounded-full bg-primary"
-                          style={{ width: `${requestProgress(row.status)}%` }}
-                        />
-                      </span>
-                      <span className="num text-xs text-muted-foreground">
-                        {requestProgress(row.status)}%
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
     </>
