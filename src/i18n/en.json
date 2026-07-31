@@ -876,6 +876,7 @@
       "minor_vatNumber": "VAT number differs",
       "minor_total": "Total differs"
     },
-    "publicLink": "Verify a tax invoice"
+    "publicLink": "Verify a tax invoice",
+    "signInToSave": "Sign in to save this invoice"
   }
 }
