@@ -3,6 +3,7 @@ import { QrCode, ShieldCheck, LogIn } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { InvoiceVerifier } from "@/components/InvoiceVerifier";
+import { stashVerification } from "@/lib/invoice-save";
 
 export const Route = createFileRoute("/verify-invoice")({
   ssr: false,
@@ -89,10 +90,20 @@ function VerifyInvoicePage() {
         </div>
 
         <InvoiceVerifier
+          onResult={stashVerification}
           footer={
-            <p className="px-1 text-[11px] leading-relaxed text-muted-foreground">
-              {t("verify.publicSaveHint")}
-            </p>
+            <div className="space-y-2 px-1">
+              <p className="text-[11px] leading-relaxed text-muted-foreground">
+                {t("verify.publicSaveHint")}
+              </p>
+              <Link
+                to="/auth"
+                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
+              >
+                <LogIn className="size-3.5" aria-hidden />
+                {t("verify.signInToSave")}
+              </Link>
+            </div>
           }
         />
       </main>

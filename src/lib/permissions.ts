@@ -35,6 +35,15 @@ export const PERMISSIONS = [
   "documents.approve",
   "reminders.send",
   "reports.view",
+  "invoice_verification.use",
+  "invoices.save_verified",
+  "invoices.review_extracted",
+  "invoices.approve",
+  "products.view",
+  "products.manage",
+  "products.merge",
+  "prices.view",
+  "prices.export",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -54,6 +63,11 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<string, Permission[]> = {
     "request_messages.view_internal",
     "reminders.send",
     "reports.view",
+    "invoice_verification.use",
+    "invoices.save_verified",
+    "invoices.review_extracted",
+    "products.view",
+    "prices.view",
   ],
   supervisor: [
     "projects.view_assigned",
@@ -162,6 +176,15 @@ export const PERMISSION_LABELS_AR: Record<Permission, string> = {
   "request_messages.view_shared": "عرض الرسائل المشتركة",
   "request_messages.view_internal": "عرض الملاحظات الداخلية",
   "payment.view_sensitive": "عرض البيانات المالية الحساسة",
+  "invoice_verification.use": "استخدام التحقق من الفاتورة الضريبية",
+  "invoices.save_verified": "حفظ الفاتورة المتحقق منها في النظام",
+  "invoices.review_extracted": "مراجعة البيانات المستخرجة والبنود",
+  "invoices.approve": "اعتماد أو رفض الفاتورة المتحقق منها",
+  "products.view": "عرض المنتجات والأسعار",
+  "products.manage": "إدارة المنتجات والكتالوج",
+  "products.merge": "دمج المنتجات المتشابهة",
+  "prices.view": "عرض سجل الأسعار",
+  "prices.export": "تصدير تقارير الأسعار",
 };
 
 export const PERMISSION_LABELS_EN: Record<Permission, string> = {
@@ -200,6 +223,15 @@ export const PERMISSION_LABELS_EN: Record<Permission, string> = {
   "request_messages.view_shared": "View shared messages",
   "request_messages.view_internal": "View internal notes",
   "payment.view_sensitive": "View sensitive financial data",
+  "invoice_verification.use": "Use tax invoice verification",
+  "invoices.save_verified": "Save a verified invoice to the system",
+  "invoices.review_extracted": "Review extracted data and line items",
+  "invoices.approve": "Approve or reject a verified invoice",
+  "products.view": "View products and prices",
+  "products.manage": "Manage products and catalog",
+  "products.merge": "Merge similar products",
+  "prices.view": "View price history",
+  "prices.export": "Export price reports",
 };
 
 /** Request kinds available from the supervisor portal (all use the existing requests table). */
@@ -245,6 +277,7 @@ export const PERMISSION_GROUPS = [
   "requests",
   "documents",
   "invoices",
+  "products",
   "reports",
   "system",
 ] as const;
@@ -259,6 +292,7 @@ export const PERMISSION_GROUP_LABELS_AR: Record<PermissionGroup, string> = {
   requests: "الطلبات",
   documents: "المستندات",
   invoices: "الموردون والفواتير",
+  products: "المنتجات والأسعار",
   reports: "التقارير",
   system: "النظام",
 };
@@ -271,6 +305,7 @@ export const PERMISSION_GROUP_LABELS_EN: Record<PermissionGroup, string> = {
   requests: "Requests",
   documents: "Documents",
   invoices: "Suppliers & invoices",
+  products: "Products & prices",
   reports: "Reports",
   system: "System",
 };
@@ -311,7 +346,22 @@ export const GROUPED_PERMISSIONS: Record<PermissionGroup, Permission[]> = {
     "reminders.send",
   ],
   documents: ["documents.request_upload", "documents.approve", "requests.upload_files"],
-  invoices: ["payment.request", "payment.execute", "payment.view_sensitive"],
+  invoices: [
+    "payment.request",
+    "payment.execute",
+    "payment.view_sensitive",
+    "invoice_verification.use",
+    "invoices.save_verified",
+    "invoices.review_extracted",
+    "invoices.approve",
+  ],
+  products: [
+    "products.view",
+    "products.manage",
+    "products.merge",
+    "prices.view",
+    "prices.export",
+  ],
   reports: ["reports.view"],
   system: [],
 };

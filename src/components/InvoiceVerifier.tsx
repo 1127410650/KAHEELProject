@@ -30,6 +30,7 @@ import {
   ocrImage,
   scanImageFileForQr,
   scanVideoFrameForQr,
+  sha256Hex,
   validateScanFile,
   type PrintedInvoice,
 } from "@/lib/invoice-scan";
@@ -43,6 +44,12 @@ export interface VerificationResult {
   cryptoNotes: string[];
   source: "camera" | "file" | "manual";
   fileName?: string;
+  /** SHA-256 of the original file bytes (only when a file was used). */
+  fileHash?: string;
+  /** SHA-256 of the raw QR payload. */
+  qrHash?: string;
+  /** Kept in memory only — never uploaded from the public page. */
+  file?: File;
 }
 
 const VERDICT_STYLE: Record<
@@ -104,6 +111,7 @@ export function InvoiceVerifier({
       printed: PrintedInvoice | null,
       source: VerificationResult["source"],
       fileName?: string,
+      extras?: { file?: File; fileHash?: string },
     ) => {
       const qr = qrRaw ? decodeZatcaQr(qrRaw) : null;
       let cryptoNotes: string[] = [];
@@ -127,6 +135,7 @@ export function InvoiceVerifier({
         cryptoChecked,
         lowOcrConfidence: printed?.method === "ocr" && printed.confidence < 0.6,
       });
+      const qrHash = qrRaw ? await sha256Hex(qrRaw) : undefined;
       const next: VerificationResult = {
         qr,
         printed,
@@ -135,6 +144,9 @@ export function InvoiceVerifier({
         cryptoNotes,
         source,
         ...(fileName ? { fileName } : {}),
+        ...(qrHash ? { qrHash } : {}),
+        ...(extras?.fileHash ? { fileHash: extras.fileHash } : {}),
+        ...(extras?.file ? { file: extras.file } : {}),
       };
       setResult(next);
       onResult?.(next);
@@ -156,6 +168,8 @@ export function InvoiceVerifier({
 
     setBusy("file");
     try {
+      const fileHash = await sha256Hex(await file.arrayBuffer());
+      const extras = { file, fileHash };
       if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
         const { scanPdf, printedFromPdf } = await import("@/lib/pdf-extract");
         const scan = await scanPdf(file);
@@ -165,7 +179,7 @@ export function InvoiceVerifier({
           const ocr = await ocrImage(scan.pageBlobs[0], locale === "en" ? "en" : "ar");
           printed = { ...parseInvoiceText(ocr.text, "ocr"), confidence: ocr.confidence };
         }
-        await finalize(scan.qr, printed, "file", file.name);
+        await finalize(scan.qr, printed, "file", file.name, extras);
         return;
       }
 
@@ -176,7 +190,7 @@ export function InvoiceVerifier({
         ocr.text.replace(/\s/g, "").length > 20
           ? { ...parseInvoiceText(ocr.text, "ocr" as const), confidence: ocr.confidence }
           : null;
-      await finalize(qr, printed, "file", file.name);
+      await finalize(qr, printed, "file", file.name, extras);
     } catch (error) {
       console.error(error);
       toast.error(t("verify.scanFailed"));
