@@ -406,7 +406,49 @@ function ProjectsPage() {
         />
       </div>
 
-      <div className="surface overflow-hidden">
+      {/* Mobile: compact card list */}
+      <ul className="flex flex-col gap-1.5 sm:hidden">
+        {filtered.length === 0 && (
+          <li className="surface p-4 text-center text-sm text-muted-foreground">
+            {t("projects.empty")}
+          </li>
+        )}
+        {filtered.map((row) => (
+          <li key={row.id}>
+            <button
+              type="button"
+              className="surface flex w-full items-center gap-2 p-2.5 text-start"
+              onClick={() => void navigate({ to: "/projects/$id", params: { id: row.id } })}
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[13px] font-semibold">
+                  {pickName(locale, row.name_ar, row.name_en)}
+                </span>
+                <span className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+                  <span className="num">{row.code}</span>
+                  <span className="truncate">
+                    {pickName(
+                      locale,
+                      (row.supervisors as { name_ar?: string } | null)?.name_ar,
+                      (row.supervisors as { name_en?: string } | null)?.name_en,
+                    )}
+                  </span>
+                </span>
+              </span>
+              <span className="flex shrink-0 items-center gap-1.5">
+                <span className="num text-[11px] text-muted-foreground">
+                  {requestStats.get(row.id)?.open ?? 0}
+                </span>
+                <StatusBadge status={row.status} />
+                <ArrowUpRight className="size-4 text-muted-foreground" aria-hidden />
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <div className="surface hidden overflow-hidden sm:block">
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
