@@ -188,7 +188,10 @@
       "deduction": "Deduction",
       "refund": "Refund",
       "reversal": "Reversal"
-    }
+    },
+    "reversedBy": "Reversed by voucher",
+    "reversalOf": "Reversal of voucher",
+    "netEffect": "Net effect"
   },
   "users": {
     "title": "Users & Permissions",
@@ -210,7 +213,8 @@
     "custodyByProject": "Custody Transactions by Project",
     "printLanguage": "Print Language",
     "from": "From date",
-    "to": "To date"
+    "to": "To date",
+    "netTotal": "Net effect"
   },
   "trash": {
     "title": "Deleted Records",
