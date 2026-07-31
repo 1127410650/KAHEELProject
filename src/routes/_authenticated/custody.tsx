@@ -119,6 +119,20 @@ function CustodyPage() {
     },
   });
 
+  const { data: effects = [] } = useQuery({
+    queryKey: ["custody-effects"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("custody_txn_effects")
+        .select("id, signed_amount, reversal_of_serial, reversed_by_serial")
+        .is("deleted_at", null);
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const effectById = useMemo(() => new Map(effects.map((e) => [e.id, e])), [effects]);
+
   const { data: rows = [] } = useQuery({
     queryKey: ["custody", supervisorFilter, statusFilter],
     queryFn: async () => {
@@ -131,7 +145,10 @@ function CustodyPage() {
         .order("serial_no", { ascending: false });
       if (supervisorFilter !== "all") request = request.eq("supervisor_id", supervisorFilter);
       if (statusFilter !== "all")
-        request = request.eq("status", statusFilter as Database["public"]["Enums"]["record_status"]);
+        request = request.eq(
+          "status",
+          statusFilter as Database["public"]["Enums"]["record_status"],
+        );
       const { data, error } = await request;
       if (error) throw error;
       return data;
@@ -192,6 +209,7 @@ function CustodyPage() {
       });
       void queryClient.invalidateQueries({ queryKey: ["custody"] });
       void queryClient.invalidateQueries({ queryKey: ["custody-balances"] });
+      void queryClient.invalidateQueries({ queryKey: ["custody-effects"] });
     },
     onError: (error: Error & { code?: string }) => {
       if (error.code === "23505") toast.error(t("custody.duplicateBlocked"));
@@ -232,6 +250,7 @@ function CustodyPage() {
       toast.success(t(status === "approved" ? "custody.approved" : "custody.cancelled"));
       void queryClient.invalidateQueries({ queryKey: ["custody"] });
       void queryClient.invalidateQueries({ queryKey: ["custody-balances"] });
+      void queryClient.invalidateQueries({ queryKey: ["custody-effects"] });
     },
     onError: () => toast.error(t("errors.saveFailed")),
   });
@@ -242,6 +261,8 @@ function CustodyPage() {
       if (!reversalReason.trim()) throw new Error("reason");
       const source = rows.find((r) => r.id === reversalTarget);
       if (!source) throw new Error("missing");
+      if (source.txn_type === "reversal") throw new Error("reversal");
+      if (effectById.get(source.id)?.reversed_by_serial != null) throw new Error("exists");
       const payload = {
         supervisor_id: source.supervisor_id,
         project_id: source.project_id,
@@ -254,6 +275,7 @@ function CustodyPage() {
         approved_at: new Date().toISOString(),
         approved_by: session?.user.id ?? null,
         created_by: session?.user.id ?? null,
+        client_token: `reversal:${source.id}`,
       };
       const { data, error } = await supabase
         .from("custody_transactions")
@@ -276,9 +298,11 @@ function CustodyPage() {
       setReversalReason("");
       void queryClient.invalidateQueries({ queryKey: ["custody"] });
       void queryClient.invalidateQueries({ queryKey: ["custody-balances"] });
+      void queryClient.invalidateQueries({ queryKey: ["custody-effects"] });
     },
     onError: (error: Error & { code?: string }) => {
-      if (error.code === "23505") toast.error(t("custody.reversalExists"));
+      if (error.code === "23505" || error.message === "exists" || error.message === "reversal")
+        toast.error(t("custody.reversalExists"));
       else if (error.message === "reason") toast.error(t("trash.reasonRequired"));
       else toast.error(t("errors.saveFailed"));
     },
@@ -381,6 +405,7 @@ function CustodyPage() {
                       id="txn_date"
                       required
                       type="date"
+                      lang="en-GB"
                       dir="ltr"
                       value={form.txn_date}
                       onChange={(e) => setForm({ ...form, txn_date: e.target.value })}
@@ -494,6 +519,7 @@ function CustodyPage() {
                   name_ar?: string;
                   name_en?: string;
                 } | null;
+                const effect = effectById.get(row.id);
                 return (
                   <tr key={row.id} className="hover:bg-secondary/40">
                     <td className="num px-4 py-3 font-medium">#{row.serial_no}</td>
@@ -502,9 +528,26 @@ function CustodyPage() {
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {t(`custody.types.${row.txn_type}`)}
+                      {effect?.reversal_of_serial != null && (
+                        <span className="num mt-0.5 block text-xs">
+                          {t("custody.reversalOf")} #{effect.reversal_of_serial}
+                        </span>
+                      )}
+                      {effect?.reversed_by_serial != null && (
+                        <span className="num mt-0.5 block text-xs text-warning-foreground">
+                          {t("custody.reversedBy")} #{effect.reversed_by_serial}
+                        </span>
+                      )}
                     </td>
                     <td className="num px-4 py-3 font-semibold">
                       {formatMoney(row.amount, locale)}
+                      {row.status === "approved" && effect && (
+                        <span
+                          className={`num mt-0.5 block text-xs font-normal ${Number(effect.signed_amount) < 0 ? "text-destructive" : "text-success"}`}
+                        >
+                          {t("custody.netEffect")}: {formatMoney(effect.signed_amount, locale)}
+                        </span>
+                      )}
                     </td>
                     <td className="num px-4 py-3">{formatDate(row.txn_date)}</td>
                     <td className="px-4 py-3">
@@ -535,45 +578,52 @@ function CustodyPage() {
                                 : "—",
                               reason: row.reason,
                               notes: row.notes_ar,
+                              reversalOfSerial: effect?.reversal_of_serial ?? null,
+                              reversedBySerial: effect?.reversed_by_serial ?? null,
                             })
                           }
                         >
                           <Printer className="size-4" aria-hidden />
                         </Button>
-                        {isAccountant && row.status !== "approved" && row.status !== "cancelled" && (
-                          <>
+                        {isAccountant &&
+                          row.status !== "approved" &&
+                          row.status !== "cancelled" && (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={t("common.approve")}
+                                onClick={() =>
+                                  changeStatus.mutate({ id: row.id, status: "approved" })
+                                }
+                              >
+                                <Check className="size-4 text-success" aria-hidden />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={t("common.cancel")}
+                                onClick={() =>
+                                  changeStatus.mutate({ id: row.id, status: "cancelled" })
+                                }
+                              >
+                                <Ban className="size-4 text-destructive" aria-hidden />
+                              </Button>
+                            </>
+                          )}
+                        {isAccountant &&
+                          row.status === "approved" &&
+                          row.txn_type !== "reversal" &&
+                          effect?.reversed_by_serial == null && (
                             <Button
                               variant="ghost"
                               size="icon"
-                              aria-label={t("common.approve")}
-                              onClick={() =>
-                                changeStatus.mutate({ id: row.id, status: "approved" })
-                              }
+                              aria-label={t("custody.reversal")}
+                              onClick={() => setReversalTarget(row.id)}
                             >
-                              <Check className="size-4 text-success" aria-hidden />
+                              <Undo2 className="size-4 text-warning-foreground" aria-hidden />
                             </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              aria-label={t("common.cancel")}
-                              onClick={() =>
-                                changeStatus.mutate({ id: row.id, status: "cancelled" })
-                              }
-                            >
-                              <Ban className="size-4 text-destructive" aria-hidden />
-                            </Button>
-                          </>
-                        )}
-                        {isAccountant && row.status === "approved" && row.txn_type !== "reversal" && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label={t("custody.reversal")}
-                            onClick={() => setReversalTarget(row.id)}
-                          >
-                            <Undo2 className="size-4 text-warning-foreground" aria-hidden />
-                          </Button>
-                        )}
+                          )}
                       </div>
                     </td>
                   </tr>

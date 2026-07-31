@@ -73,7 +73,6 @@ const emptyForm: ProjectForm = {
   description_en: "",
 };
 
-
 const statuses: ProjectStatus[] = ["active", "on_hold", "completed", "cancelled"];
 
 function ProjectsPage() {
@@ -324,12 +323,12 @@ function ProjectsPage() {
                       <Input
                         id="p_start_date"
                         type="date"
+                        lang="en-GB"
                         dir="ltr"
                         value={form.start_date}
                         onChange={(e) => setForm({ ...form, start_date: e.target.value })}
                       />
                     </div>
-
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="p_desc_ar">{t("projects.descriptionAr")}</Label>
@@ -364,7 +363,10 @@ function ProjectsPage() {
       />
 
       <div className="relative mb-4 max-w-sm">
-        <Search className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+        <Search
+          className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden
+        />
         <Input
           placeholder={t("common.search")}
           value={query}
