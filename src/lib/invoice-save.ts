@@ -157,12 +157,12 @@ export async function checkDuplicate(args: {
   invoiceDate?: string | null;
 }) {
   const { data, error } = await supabase.rpc("tiv_check_duplicate", {
-    _file_hash: args.fileHash ?? undefined,
-    _qr_hash: args.qrHash ?? undefined,
-    _zatca_uuid: args.zatcaUuid ?? undefined,
-    _supplier_id: args.supplierId ?? undefined,
-    _invoice_no: args.invoiceNo ?? undefined,
-    _invoice_date: args.invoiceDate ?? undefined,
+    ...(args.fileHash ? { _file_hash: args.fileHash } : {}),
+    ...(args.qrHash ? { _qr_hash: args.qrHash } : {}),
+    ...(args.zatcaUuid ? { _zatca_uuid: args.zatcaUuid } : {}),
+    ...(args.supplierId ? { _supplier_id: args.supplierId } : {}),
+    ...(args.invoiceNo ? { _invoice_no: args.invoiceNo } : {}),
+    ...(args.invoiceDate ? { _invoice_date: args.invoiceDate } : {}),
   });
   if (error) throw error;
   return data as unknown as SaveInvoiceOutcome["duplicate"];
@@ -249,7 +249,7 @@ export async function saveVerifiedInvoice(input: SaveInvoiceInput): Promise<Save
       const { error: linkError } = await supabase.rpc("tiv_set_verification_file", {
         _verification_id: outcome.verification_id,
         _storage_path: path,
-        _file_hash: s.fileHash ?? undefined,
+        ...(s.fileHash ? { _file_hash: s.fileHash } : {}),
       });
       fileUploaded = !linkError;
     }
