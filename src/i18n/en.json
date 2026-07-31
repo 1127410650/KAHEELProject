@@ -60,7 +60,8 @@
     "sectionOperations": "Operations",
     "sectionSystem": "System",
     "collapse": "Collapse menu",
-    "expand": "Expand menu"
+    "expand": "Expand menu",
+    "requests": "Requests"
   },
   "auth": {
     "title": "Sign In",
@@ -92,7 +93,10 @@
     "completed": "Completed",
     "active": "Active",
     "on_hold": "On Hold",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "new": "New Request",
+    "processing": "Processing",
+    "needs_info": "Needs Info"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -120,7 +124,10 @@
     "updated": "Supervisor updated",
     "duplicateNationalId": "This national ID belongs to another supervisor",
     "empty": "No supervisors yet",
-    "profile": "Supervisor Profile"
+    "profile": "Supervisor Profile",
+    "email": "Email",
+    "jobTitle": "Job Title",
+    "restored": "Supervisor restored"
   },
   "projects": {
     "title": "Projects",
@@ -140,7 +147,11 @@
     "duplicateCode": "This project code is already used",
     "empty": "No projects yet",
     "noAccess": "You do not have access to this project",
-    "profile": "Project Profile"
+    "profile": "Project Profile",
+    "city": "City",
+    "location": "Location",
+    "startDate": "Start Date",
+    "supervisorRequired": "A supervisor is required"
   },
   "custody": {
     "title": "Supervisor Custody",
@@ -250,5 +261,27 @@
     "notFound": "Record not found",
     "forbidden": "Forbidden",
     "invalidAmount": "Invalid amount"
+  },
+  "requests": {
+    "title": "Requests",
+    "description": "Requests and their stages linked to project and supervisor",
+    "add": "Add Request",
+    "edit": "Edit Request",
+    "requestNo": "Request No.",
+    "requestType": "Request Type",
+    "project": "Project",
+    "supervisor": "Supervisor",
+    "requestDate": "Request Date",
+    "referenceNo": "Reference No.",
+    "created": "Request created",
+    "updated": "Request updated",
+    "statusUpdated": "Request status updated",
+    "duplicateNo": "This request number is already used",
+    "projectRequired": "Project is required",
+    "empty": "No requests yet",
+    "history": "Request Stages",
+    "changeStatus": "Change Status",
+    "supervisorFromProject": "From project",
+    "list": "Requests list"
   }
 }
