@@ -2366,6 +2366,14 @@ export type Database = {
         Returns: Json
       }
       tiv_save_verified_invoice: { Args: { _payload: Json }; Returns: Json }
+      tiv_set_verification_file: {
+        Args: {
+          _file_hash?: string
+          _storage_path: string
+          _verification_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_locale: "ar" | "en"
