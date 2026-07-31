@@ -43,6 +43,12 @@ export interface VerificationResult {
   cryptoNotes: string[];
   source: "camera" | "file" | "manual";
   fileName?: string;
+  /** SHA-256 of the original file bytes (only when a file was used). */
+  fileHash?: string;
+  /** SHA-256 of the raw QR payload. */
+  qrHash?: string;
+  /** Kept in memory only — never uploaded from the public page. */
+  file?: File;
 }
 
 const VERDICT_STYLE: Record<
