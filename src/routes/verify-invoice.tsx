@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import { QrCode, ShieldCheck, LogIn } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -33,12 +32,11 @@ function VerifyInvoicePage() {
   const { t, locale, setLocale, dir } = useI18n();
 
   // Small, self-dismissing note instead of a permanent full-width banner.
+  const [showSaveNote, setShowSaveNote] = useState(true);
   useEffect(() => {
-    const id = window.setTimeout(() => {
-      toast.info(t("verify.publicSaveHint"), { duration: 5000, position: "bottom-center" });
-    }, 900);
+    const id = window.setTimeout(() => setShowSaveNote(false), 6000);
     return () => window.clearTimeout(id);
-  }, [t]);
+  }, []);
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
@@ -104,7 +102,13 @@ function VerifyInvoicePage() {
         <InvoiceVerifier
           onResult={stashVerification}
           footer={
-            <div className="px-1">
+            <div className="space-y-2 px-1">
+              {showSaveNote && (
+                <p className="inline-block rounded-md bg-secondary px-2.5 py-1.5 text-[11px] leading-snug text-muted-foreground">
+                  {t("verify.publicSaveHint")}
+                </p>
+              )}
+              <br />
               <Link
                 to="/auth"
                 className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
