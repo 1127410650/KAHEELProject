@@ -148,9 +148,85 @@ export function RequestWorkflowPanel({
     onError: fail,
   });
 
+  const setStatus = useMutation({
+    mutationFn: async (status: string) => {
+      const { error } = await supabase.rpc("request_set_status", {
+        _request_id: request.id,
+        _status: status,
+        ...(note.trim() ? { _note: note.trim() } : {}),
+        ...(assignee ? { _assignee: assignee } : {}),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.stageChanged"));
+      setNote("");
+      onDone();
+    },
+    onError: fail,
+  });
+
+  const close = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.rpc("request_close", {
+        _request_id: request.id,
+        ...(note.trim() ? { _note: note.trim() } : {}),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.closed"));
+      setNote("");
+      onDone();
+    },
+    onError: fail,
+  });
+
+  const cancel = useMutation({
+    mutationFn: async () => {
+      if (!note.trim()) throw new Error("REASON_REQUIRED");
+      const { error } = await supabase.rpc("request_cancel", {
+        _request_id: request.id,
+        _reason: note.trim(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.cancelled"));
+      setNote("");
+      onDone();
+    },
+    onError: (error: Error) =>
+      error.message?.includes("REASON_REQUIRED")
+        ? toast.error(t("workflow.reasonRequired"))
+        : fail(error),
+  });
+
+  const reopen = useMutation({
+    mutationFn: async () => {
+      if (!note.trim()) throw new Error("REASON_REQUIRED");
+      const { error } = await supabase.rpc("request_reopen", {
+        _request_id: request.id,
+        _reason: note.trim(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.reopened"));
+      setNote("");
+      onDone();
+    },
+    onError: (error: Error) =>
+      error.message?.includes("REASON_REQUIRED")
+        ? toast.error(t("workflow.reasonRequired"))
+        : fail(error),
+  });
+
   if (!canApprove && !canReject && !canExecute && !canAssign && !canRemind) return null;
 
   const pending = request.status !== "approved" && request.status !== "rejected";
+  const closed = isClosed(request.status);
+  const transitions = nextStatuses(request.status);
 
   return (
     <div className="surface mb-4 space-y-3 p-4">
@@ -158,6 +234,7 @@ export function RequestWorkflowPanel({
         <Label htmlFor="wf-note">{t("workflow.decisionNote")}</Label>
         <Textarea
           id="wf-note"
+
           rows={2}
           value={note}
           onChange={(e) => setNote(e.target.value)}
