@@ -46,8 +46,11 @@ export type Database = {
           file_name: string
           file_size: number | null
           id: string
+          kind: string | null
           mime_type: string | null
+          note: string | null
           project_id: string | null
+          stage_id: string | null
           storage_path: string
         }
         Insert: {
@@ -60,8 +63,11 @@ export type Database = {
           file_name: string
           file_size?: number | null
           id?: string
+          kind?: string | null
           mime_type?: string | null
+          note?: string | null
           project_id?: string | null
+          stage_id?: string | null
           storage_path: string
         }
         Update: {
@@ -74,8 +80,11 @@ export type Database = {
           file_name?: string
           file_size?: number | null
           id?: string
+          kind?: string | null
           mime_type?: string | null
+          note?: string | null
           project_id?: string | null
+          stage_id?: string | null
           storage_path?: string
         }
         Relationships: [
@@ -84,6 +93,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attachments_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "request_status_history"
             referencedColumns: ["id"]
           },
         ]
@@ -619,53 +635,86 @@ export type Database = {
       }
       requests: {
         Row: {
+          authority: string | null
           created_at: string
           created_by: string | null
           delete_reason: string | null
           deleted_at: string | null
+          final_result: string | null
           id: string
           notes_ar: string | null
           notes_en: string | null
+          paid_at: string | null
+          payment_amount: number | null
+          payment_beneficiary: string | null
+          payment_expiry: string | null
+          payment_method: string | null
+          payment_no: string | null
+          payment_note: string | null
+          payment_reference: string | null
           project_id: string
           reference_no: string | null
           request_date: string
           request_no: string
           request_type: string
           status: Database["public"]["Enums"]["request_status"]
+          status_note: string | null
           supervisor_id: string | null
           updated_at: string
         }
         Insert: {
+          authority?: string | null
           created_at?: string
           created_by?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          final_result?: string | null
           id?: string
           notes_ar?: string | null
           notes_en?: string | null
+          paid_at?: string | null
+          payment_amount?: number | null
+          payment_beneficiary?: string | null
+          payment_expiry?: string | null
+          payment_method?: string | null
+          payment_no?: string | null
+          payment_note?: string | null
+          payment_reference?: string | null
           project_id: string
           reference_no?: string | null
           request_date?: string
           request_no: string
           request_type: string
           status?: Database["public"]["Enums"]["request_status"]
+          status_note?: string | null
           supervisor_id?: string | null
           updated_at?: string
         }
         Update: {
+          authority?: string | null
           created_at?: string
           created_by?: string | null
           delete_reason?: string | null
           deleted_at?: string | null
+          final_result?: string | null
           id?: string
           notes_ar?: string | null
           notes_en?: string | null
+          paid_at?: string | null
+          payment_amount?: number | null
+          payment_beneficiary?: string | null
+          payment_expiry?: string | null
+          payment_method?: string | null
+          payment_no?: string | null
+          payment_note?: string | null
+          payment_reference?: string | null
           project_id?: string
           reference_no?: string | null
           request_date?: string
           request_no?: string
           request_type?: string
           status?: Database["public"]["Enums"]["request_status"]
+          status_note?: string | null
           supervisor_id?: string | null
           updated_at?: string
         }

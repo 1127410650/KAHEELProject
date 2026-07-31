@@ -1,0 +1,1 @@
+revoke execute on function public.enforce_request_rules() from anon, authenticated;
