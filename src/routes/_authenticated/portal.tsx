@@ -176,7 +176,7 @@ function PortalPage() {
   const counts = useMemo(() => {
     const base: Record<string, number> = {};
     for (const g of PORTAL_GROUPS) base[g] = 0;
-    for (const c of cards) base[c.group] += 1;
+    for (const c of cards) base[c.group] = (base[c.group] ?? 0) + 1;
     return base;
   }, [cards]);
 
@@ -223,7 +223,7 @@ function PortalPage() {
         <StatCard label={t("portal.openRequests")} value={openRequests.length} icon={ClipboardList} />
         <StatCard
           label={t("groups.action_mine")}
-          value={counts.action_mine ?? 0}
+          value={counts["action_mine"] ?? 0}
           icon={AlertCircle}
         />
         <StatCard label={t("portal.myProjects")} value={myProjects.length} icon={FolderKanban} />
