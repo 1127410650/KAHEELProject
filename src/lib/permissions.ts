@@ -234,3 +234,84 @@ export const REQUEST_KIND_LABELS_EN: Record<RequestKind, string> = {
   document_upload: "Documents/photos request",
   general: "General request",
 };
+
+/* ------------------------------------------------- permission groups (UI) */
+
+export const PERMISSION_GROUPS = [
+  "users",
+  "projects",
+  "supervisors",
+  "custody",
+  "requests",
+  "documents",
+  "invoices",
+  "reports",
+  "system",
+] as const;
+
+export type PermissionGroup = (typeof PERMISSION_GROUPS)[number];
+
+export const PERMISSION_GROUP_LABELS_AR: Record<PermissionGroup, string> = {
+  users: "المستخدمون",
+  projects: "المشاريع",
+  supervisors: "المشرفون",
+  custody: "العهدة",
+  requests: "الطلبات",
+  documents: "المستندات",
+  invoices: "الموردون والفواتير",
+  reports: "التقارير",
+  system: "النظام",
+};
+
+export const PERMISSION_GROUP_LABELS_EN: Record<PermissionGroup, string> = {
+  users: "Users",
+  projects: "Projects",
+  supervisors: "Supervisors",
+  custody: "Custody",
+  requests: "Requests",
+  documents: "Documents",
+  invoices: "Suppliers & invoices",
+  reports: "Reports",
+  system: "System",
+};
+
+export const GROUPED_PERMISSIONS: Record<PermissionGroup, Permission[]> = {
+  users: ["users.manage"],
+  projects: [
+    "projects.view_all",
+    "projects.view_assigned",
+    "project.request_create",
+    "project.approve_create",
+  ],
+  supervisors: ["projects.manage_supervisors"],
+  custody: [
+    "custody.view_own",
+    "custody.request_topup",
+    "custody.request_movement",
+    "custody.approve_movement",
+    "custody.execute_movement",
+    "custody.execute_topup",
+  ],
+  requests: [
+    "requests.view_own",
+    "requests.view_assigned",
+    "project_requests.view",
+    "general_requests.view_assigned",
+    "request_messages.view_shared",
+    "request_messages.view_internal",
+    "requests.create",
+    "project_requests.create",
+    "requests.assign",
+    "requests.process",
+    "general_requests.manage",
+    "requests.reopen",
+    "requests.approve",
+    "requests.reject",
+    "requests.execute",
+    "reminders.send",
+  ],
+  documents: ["documents.request_upload", "documents.approve", "requests.upload_files"],
+  invoices: ["payment.request", "payment.execute", "payment.view_sensitive"],
+  reports: ["reports.view"],
+  system: [],
+};
