@@ -71,11 +71,21 @@ export function stageTone(stage: SimpleStage): string {
 
 const PLACEHOLDER_TITLES = new Set(["0", "00", "000", "-", "--", "."]);
 
+/** Internal/acceptance-test titles must never reach the end user. */
+const TEST_TITLE_PATTERNS = [
+  /^at\s|^at[_-]/i,
+  /\bat\s+final\b/i,
+  /\btest\b/i,
+  /\bqa\b/i,
+  /^smoke/i,
+];
+
 export function isPlaceholderTitle(title: string | null | undefined): boolean {
   const value = (title ?? "").trim();
   if (!value) return true;
   if (PLACEHOLDER_TITLES.has(value)) return true;
-  return /^0+$/.test(value);
+  if (/^0+$/.test(value)) return true;
+  return TEST_TITLE_PATTERNS.some((re) => re.test(value));
 }
 
 export interface TitleSource {
@@ -90,36 +100,65 @@ export interface TitleSource {
   projectName?: string | null;
 }
 
+const KIND_TITLES_AR: Record<string, string> = {
+  custody_topup: "طلب إضافة رصيد للعهدة",
+  payment: "طلب صرف دفعة",
+  project_create: "طلب إضافة مشروع",
+  project_service: "طلب خدمة للمشروع",
+  utility_meter: "طلب تركيب عداد",
+  document_upload: "طلب إضافة مستندات",
+  general: "طلب عام",
+};
+
+const KIND_TITLES_EN: Record<string, string> = {
+  custody_topup: "Custody top-up request",
+  payment: "Payment request",
+  project_create: "New project request",
+  project_service: "Project service request",
+  utility_meter: "Utility meter request",
+  document_upload: "Documents request",
+  general: "General request",
+};
+
 /**
- * Auto-title per section 9: never shows "0"/"00"/empty.
+ * Auto-title: never shows "0"/"00"/empty or internal test titles.
  * `fallback` is the localized "طلب بدون عنوان" string.
  */
-export function buildRequestTitle(row: TitleSource, fallback: string): string {
+export function buildRequestTitle(
+  row: TitleSource,
+  fallback: string,
+  locale: "ar" | "en" = "ar",
+): string {
   if (!isPlaceholderTitle(row.title)) return row.title!.trim();
 
   const kind = row.kind ?? "general";
   const project = row.projectName?.trim();
   const amount = row.amount != null ? String(row.amount) : "";
+  const kindLabel = (locale === "en" ? KIND_TITLES_EN : KIND_TITLES_AR)[kind];
 
   if (kind === "project_service" || kind === "utility_meter") {
     const service = row.service_type?.trim() || row.request_type?.trim();
-    const parts = [service, project].filter(Boolean);
+    const parts = [service || kindLabel, project].filter(Boolean);
     if (parts.length) return parts.join(" — ");
   }
   if (kind === "custody_topup") {
-    const parts = [row.request_type?.trim(), amount].filter(Boolean);
+    const parts = [kindLabel || row.request_type?.trim(), amount].filter(Boolean);
     if (parts.length) return parts.join(" — ");
   }
   if (kind === "payment") {
-    const parts = [row.request_type?.trim(), project || row.beneficiary?.trim()].filter(Boolean);
+    const parts = [kindLabel || row.request_type?.trim(), project || row.beneficiary?.trim()].filter(
+      Boolean,
+    );
     if (parts.length) return parts.join(" — ");
   }
 
   const text = (row.notes_ar || row.reason || "").trim();
   if (text && !isPlaceholderTitle(text)) return text.length > 60 ? `${text.slice(0, 60)}…` : text;
+  if (kindLabel) return project ? `${kindLabel} — ${project}` : kindLabel;
   if (!isPlaceholderTitle(row.request_type)) return row.request_type!.trim();
   return fallback;
 }
+
 
 /* ------------------------------------------------------------- work groups */
 
