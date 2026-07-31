@@ -20,6 +20,7 @@ import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticated/products'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
@@ -87,6 +88,11 @@ const AuthenticatedNotificationsRoute =
 const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProductsRoute = AuthenticatedProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/products': typeof AuthenticatedProductsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
@@ -197,6 +204,7 @@ export interface FileRoutesByTo {
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/products': typeof AuthenticatedProductsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
@@ -224,6 +232,7 @@ export interface FileRoutesById {
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/_authenticated/products': typeof AuthenticatedProductsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/my-custody'
     | '/notifications'
     | '/portal'
+    | '/products'
     | '/reports'
     | '/settings'
     | '/suppliers'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/my-custody'
     | '/notifications'
     | '/portal'
+    | '/products'
     | '/reports'
     | '/settings'
     | '/suppliers'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/_authenticated/my-custody'
     | '/_authenticated/notifications'
     | '/_authenticated/portal'
+    | '/_authenticated/products'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/suppliers'
@@ -401,6 +413,13 @@ declare module '@tanstack/react-router' {
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/products': {
+      id: '/_authenticated/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof AuthenticatedProductsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/reports': {
@@ -505,6 +524,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedProductsRoute: typeof AuthenticatedProductsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
@@ -528,6 +548,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedProductsRoute: AuthenticatedProductsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
