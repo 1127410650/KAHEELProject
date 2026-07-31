@@ -277,6 +277,7 @@ export const PERMISSION_GROUPS = [
   "requests",
   "documents",
   "invoices",
+  "products",
   "reports",
   "system",
 ] as const;
