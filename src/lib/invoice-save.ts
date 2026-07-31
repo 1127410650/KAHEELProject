@@ -44,7 +44,6 @@ export function toStash(result: VerificationResult): StashedVerification {
     total: result.qr?.total ?? printed?.total ?? null,
     vatTotal: result.qr?.vatTotal ?? printed?.vatTotal ?? null,
     invoiceNo: printed?.invoiceNo ?? null,
-    /* eslint-disable-next-line */
     invoiceDate: printed?.timestamp?.slice(0, 10) ?? null,
     decodedTags: (result.qr?.fields ?? []).map((f) => ({ tag: f.tag, value: f.value })),
     extractionMethod: printed?.method ?? (result.qr ? "qr" : "manual"),
@@ -158,12 +157,12 @@ export async function checkDuplicate(args: {
   invoiceDate?: string | null;
 }) {
   const { data, error } = await supabase.rpc("tiv_check_duplicate", {
-    _file_hash: args.fileHash ?? null,
-    _qr_hash: args.qrHash ?? null,
-    _zatca_uuid: args.zatcaUuid ?? null,
-    _supplier_id: args.supplierId ?? null,
-    _invoice_no: args.invoiceNo ?? null,
-    _invoice_date: args.invoiceDate ?? null,
+    _file_hash: args.fileHash ?? undefined,
+    _qr_hash: args.qrHash ?? undefined,
+    _zatca_uuid: args.zatcaUuid ?? undefined,
+    _supplier_id: args.supplierId ?? undefined,
+    _invoice_no: args.invoiceNo ?? undefined,
+    _invoice_date: args.invoiceDate ?? undefined,
   });
   if (error) throw error;
   return data as unknown as SaveInvoiceOutcome["duplicate"];
@@ -250,7 +249,7 @@ export async function saveVerifiedInvoice(input: SaveInvoiceInput): Promise<Save
       const { error: linkError } = await supabase.rpc("tiv_set_verification_file", {
         _verification_id: outcome.verification_id,
         _storage_path: path,
-        _file_hash: s.fileHash,
+        _file_hash: s.fileHash ?? undefined,
       });
       fileUploaded = !linkError;
     }
