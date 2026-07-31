@@ -207,7 +207,7 @@ function RequestDetailPage() {
       // Upload first so mandatory receipts already exist when the status flips.
       const uploadedIds = files.length
         ? await uploadAttachments(files, {
-            projectId: request.project_id,
+            projectId: request.project_id ?? null,
             entityType: "request",
             entityId: request.id,
             note: note,
@@ -290,7 +290,7 @@ function RequestDetailPage() {
       if (stageFiles.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
       const currentStage = history.length ? history[history.length - 1]?.id : null;
       const ids = await uploadAttachments(stageFiles, {
-        projectId: request.project_id,
+        projectId: request.project_id ?? null,
         entityType: "request",
         entityId: request.id,
         stageId: currentStage ?? null,

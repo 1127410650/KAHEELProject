@@ -505,7 +505,7 @@ function RequestsPage() {
                               id: row.id,
                               request_no: row.request_no,
                               request_type: row.request_type,
-                              project_id: row.project_id,
+                              project_id: row.project_id ?? "",
                               request_date: row.request_date,
                               reference_no: row.reference_no ?? "",
                               notes_ar: row.notes_ar ?? "",
