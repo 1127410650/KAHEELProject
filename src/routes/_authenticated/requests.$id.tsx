@@ -32,20 +32,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ACCEPT, isAllowedFile, openAttachment, uploadAttachments } from "@/lib/attachments";
+import { RequestConversation } from "@/components/RequestConversation";
+import { RequestChangePanel } from "@/components/RequestChangePanel";
+import { nextStatuses, requestProgress } from "@/lib/requests";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
+
 import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
 
-const statuses: RequestStatus[] = [
-  "new",
-  "processing",
-  "needs_info",
-  "awaiting_payment",
-  "paid",
-  "completed",
-  "cancelled",
-];
+
+
 
 export const Route = createFileRoute("/_authenticated/requests/$id")({
   head: () => ({
@@ -334,6 +331,14 @@ function RequestDetailPage() {
     | null;
 
   const receipts = attachments.filter((a) => a.kind === "payment_receipt");
+  const statuses: RequestStatus[] = request
+    ? ([request.status, ...nextStatuses(request.status)] as RequestStatus[])
+    : [];
+  const isRequester =
+    !!request && (request.requester_id === session?.user.id || request.created_by === session?.user.id);
+  const progress = request ? requestProgress(request.status) : 0;
+
+
 
   return (
     <>
@@ -808,7 +813,46 @@ function RequestDetailPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {request && (
+        <div className="mt-4 grid gap-4">
+          <div className="surface p-4">
+            <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
+              <span>{t("requests.progress")}</span>
+              <span className="num">{progress}%</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-secondary">
+              <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+
+          <RequestConversation
+            requestId={request.id}
+            projectId={request.project_id}
+            canAskInfo={isAccountant}
+            canReply={isRequester}
+            infoState={request.info_state}
+          />
+
+          <RequestChangePanel
+            requestId={request.id}
+            canRequest={isRequester || isAccountant}
+            currentValues={{
+              title: request.title ?? "",
+              notes_ar: request.notes_ar ?? "",
+              amount: request.amount === null ? "" : String(request.amount),
+              need_date: request.need_date ?? "",
+              authority: request.authority ?? "",
+              beneficiary: request.beneficiary ?? "",
+              account_ref: request.account_ref ?? "",
+              service_type: request.service_type ?? "",
+              reference_no: request.reference_no ?? "",
+            }}
+          />
+        </div>
+      )}
     </>
+
   );
 }
 

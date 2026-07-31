@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { BellRing, Check, Play, UserCog, X } from "lucide-react";
+import { BellRing, Check, Lock, Play, RotateCcw, UserCog, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import type { Permission } from "@/lib/permissions";
+import { isClosed, nextStatuses } from "@/lib/requests";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -17,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 
 export interface WorkflowRequest {
   id: string;
@@ -47,6 +50,8 @@ export function RequestWorkflowPanel({
   const { can } = useSession();
   const [note, setNote] = useState("");
   const [assignee, setAssignee] = useState("");
+  const [followUp, setFollowUp] = useState("");
+
 
   const executePerm = EXECUTE_PERM[request.kind];
   const canApprove = can("requests.approve");
@@ -132,9 +137,11 @@ export function RequestWorkflowPanel({
 
   const remind = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("send_request_reminder", {
+      const { error } = await supabase.rpc("request_add_reminder", {
         _request_id: request.id,
-        ...(note ? { _message: note } : {}),
+        _message: note.trim() || t("workflow.remind"),
+        ...(followUp ? { _follow_up_date: followUp } : {}),
+        ...(assignee ? { _target_user_id: assignee } : {}),
       });
       if (error) throw error;
     },
@@ -145,9 +152,86 @@ export function RequestWorkflowPanel({
     onError: fail,
   });
 
+
+  const setStatus = useMutation({
+    mutationFn: async (status: string) => {
+      const { error } = await supabase.rpc("request_set_status", {
+        _request_id: request.id,
+        _status: status,
+        ...(note.trim() ? { _note: note.trim() } : {}),
+        ...(assignee ? { _assignee: assignee } : {}),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.stageChanged"));
+      setNote("");
+      onDone();
+    },
+    onError: fail,
+  });
+
+  const close = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.rpc("request_close", {
+        _request_id: request.id,
+        ...(note.trim() ? { _note: note.trim() } : {}),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.closed"));
+      setNote("");
+      onDone();
+    },
+    onError: fail,
+  });
+
+  const cancel = useMutation({
+    mutationFn: async () => {
+      if (!note.trim()) throw new Error("REASON_REQUIRED");
+      const { error } = await supabase.rpc("request_cancel", {
+        _request_id: request.id,
+        _reason: note.trim(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.cancelled"));
+      setNote("");
+      onDone();
+    },
+    onError: (error: Error) =>
+      error.message?.includes("REASON_REQUIRED")
+        ? toast.error(t("workflow.reasonRequired"))
+        : fail(error),
+  });
+
+  const reopen = useMutation({
+    mutationFn: async () => {
+      if (!note.trim()) throw new Error("REASON_REQUIRED");
+      const { error } = await supabase.rpc("request_reopen", {
+        _request_id: request.id,
+        _reason: note.trim(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success(t("workflow.reopened"));
+      setNote("");
+      onDone();
+    },
+    onError: (error: Error) =>
+      error.message?.includes("REASON_REQUIRED")
+        ? toast.error(t("workflow.reasonRequired"))
+        : fail(error),
+  });
+
   if (!canApprove && !canReject && !canExecute && !canAssign && !canRemind) return null;
 
   const pending = request.status !== "approved" && request.status !== "rejected";
+  const closed = isClosed(request.status);
+  const transitions = nextStatuses(request.status);
 
   return (
     <div className="surface mb-4 space-y-3 p-4">
@@ -155,11 +239,87 @@ export function RequestWorkflowPanel({
         <Label htmlFor="wf-note">{t("workflow.decisionNote")}</Label>
         <Textarea
           id="wf-note"
+
           rows={2}
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />
       </div>
+
+      {canAssign && (
+        <div className="flex flex-wrap items-end gap-2 border-t border-border pt-3">
+          <div className="w-full max-w-64 space-y-2">
+            <Label>{t("workflow.moveStage")}</Label>
+            <Select
+              value=""
+              onValueChange={(v) => {
+                if (!setStatus.isPending) setStatus.mutate(v);
+              }}
+              disabled={transitions.length === 0}
+            >
+              <SelectTrigger aria-label={t("workflow.moveStage")}>
+                <SelectValue placeholder={t("common.select")} />
+              </SelectTrigger>
+              <SelectContent>
+                {transitions.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {t(`status.${s}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-40 space-y-2">
+            <Label htmlFor="wf-followup">{t("workflow.followUpDate")}</Label>
+            <Input
+              id="wf-followup"
+              type="date"
+              dir="ltr"
+              className="num"
+              value={followUp}
+              onChange={(e) => setFollowUp(e.target.value)}
+            />
+          </div>
+          {!closed && request.status === "executed" && (
+            <Button
+              type="button"
+              variant="secondary"
+              className="gap-2"
+              disabled={close.isPending}
+              onClick={() => close.mutate()}
+            >
+              <Lock className="size-4" aria-hidden />
+              {t("workflow.close")}
+            </Button>
+          )}
+          {!closed && (
+            <Button
+              type="button"
+              variant="outline"
+              className="gap-2"
+              disabled={cancel.isPending}
+              onClick={() => cancel.mutate()}
+            >
+              <X className="size-4" aria-hidden />
+              {t("workflow.cancel")}
+            </Button>
+          )}
+          {closed && can("requests.reopen") && (
+            <Button
+              type="button"
+              variant="outline"
+              className="gap-2"
+              disabled={reopen.isPending}
+              onClick={() => reopen.mutate()}
+            >
+              <RotateCcw className="size-4" aria-hidden />
+              {t("workflow.reopen")}
+            </Button>
+          )}
+        </div>
+      )}
+
+
 
       <div className="flex flex-wrap items-end gap-2">
         {canApprove && pending && (

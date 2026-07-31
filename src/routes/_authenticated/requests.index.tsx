@@ -31,6 +31,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { formatDate, formatDateTime, pickName, todayInRiyadh } from "@/lib/format";
+import {
+  ALL_REQUEST_STATUSES,
+  INBOX_VIEWS,
+  matchesInboxView,
+  requestProgress,
+  type InboxView,
+} from "@/lib/requests";
+import { cn } from "@/lib/utils";
+
 import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
@@ -52,15 +61,8 @@ export const Route = createFileRoute("/_authenticated/requests/")({
   component: RequestsPage,
 });
 
-const statuses: RequestStatus[] = [
-  "new",
-  "processing",
-  "needs_info",
-  "awaiting_payment",
-  "paid",
-  "completed",
-  "cancelled",
-];
+const statuses: RequestStatus[] = ALL_REQUEST_STATUSES as unknown as RequestStatus[];
+
 
 interface RequestForm {
   id?: string;
@@ -94,6 +96,8 @@ function RequestsPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<RequestForm>(emptyForm);
   const [historyOf, setHistoryOf] = useState<string | null>(null);
+  const [inboxView, setInboxView] = useState<InboxView>("all");
+
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects", "list"],
@@ -216,13 +220,16 @@ function RequestsPage() {
     onError: () => toast.error(t("errors.saveFailed")),
   });
 
+  const today = todayInRiyadh();
   const filtered = rows.filter((row) => {
+    if (!matchesInboxView(row, inboxView, session?.user.id, today)) return false;
     const q = query.trim().toLowerCase();
     if (!q) return true;
-    return [row.request_no, row.request_type, row.reference_no]
+    return [row.request_no, row.request_type, row.reference_no, row.title]
       .filter(Boolean)
       .some((v) => String(v).toLowerCase().includes(q));
   });
+
 
   return (
     <>
@@ -366,7 +373,30 @@ function RequestsPage() {
         }
       />
 
+      <nav aria-label={t("requests.inbox")} className="mb-4 flex flex-wrap gap-2">
+        {INBOX_VIEWS.map((view) => {
+          const count = rows.filter((r) => matchesInboxView(r, view, session?.user.id, todayInRiyadh())).length;
+          return (
+            <button
+              key={view}
+              type="button"
+              onClick={() => setInboxView(view)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                inboxView === view
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary",
+              )}
+            >
+              {t(`inbox.${view}`)}
+              <span className="num opacity-70">{count}</span>
+            </button>
+          );
+        })}
+      </nav>
+
       <div className="mb-4 flex flex-wrap items-end gap-3">
+
         <div className="relative w-full max-w-sm">
           <Search
             className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -467,7 +497,21 @@ function RequestsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={row.status} />
+                    <div className="flex flex-col items-start gap-1">
+                      <StatusBadge status={row.status} />
+                      <span className="flex items-center gap-1">
+                        <span className="h-1 w-16 overflow-hidden rounded-full bg-secondary">
+                          <span
+                            className="block h-full rounded-full bg-primary"
+                            style={{ width: `${requestProgress(row.status)}%` }}
+                          />
+                        </span>
+                        <span className="num text-[10px] text-muted-foreground">
+                          {requestProgress(row.status)}%
+                        </span>
+                      </span>
+                    </div>
+
                   </td>
                   <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                     <div className="flex flex-wrap items-center gap-1">
