@@ -620,21 +620,45 @@ export type Database = {
       project_supervisors: {
         Row: {
           created_at: string
+          created_by: string | null
+          end_date: string | null
+          end_reason: string | null
+          ended_by: string | null
           id: string
+          is_active: boolean
+          membership_type: string
           project_id: string
+          start_date: string
           supervisor_id: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          end_reason?: string | null
+          ended_by?: string | null
           id?: string
+          is_active?: boolean
+          membership_type?: string
           project_id: string
+          start_date?: string
           supervisor_id: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          end_reason?: string | null
+          ended_by?: string | null
           id?: string
+          is_active?: boolean
+          membership_type?: string
           project_id?: string
+          start_date?: string
           supervisor_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -900,6 +924,7 @@ export type Database = {
           priority: string | null
           reply_to_id: string | null
           request_id: string
+          visibility: string
         }
         Insert: {
           author_id?: string | null
@@ -917,6 +942,7 @@ export type Database = {
           priority?: string | null
           reply_to_id?: string | null
           request_id: string
+          visibility?: string
         }
         Update: {
           author_id?: string | null
@@ -934,6 +960,7 @@ export type Database = {
           priority?: string | null
           reply_to_id?: string | null
           request_id?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -1084,6 +1111,7 @@ export type Database = {
           reopen_reason: string | null
           request_date: string
           request_no: string
+          request_scope: string
           request_type: string
           requester_id: string | null
           service_type: string | null
@@ -1136,6 +1164,7 @@ export type Database = {
           reopen_reason?: string | null
           request_date?: string
           request_no: string
+          request_scope?: string
           request_type: string
           requester_id?: string | null
           service_type?: string | null
@@ -1188,6 +1217,7 @@ export type Database = {
           reopen_reason?: string | null
           request_date?: string
           request_no?: string
+          request_scope?: string
           request_type?: string
           requester_id?: string | null
           service_type?: string | null
@@ -1605,6 +1635,20 @@ export type Database = {
         }
         Returns: undefined
       }
+      project_membership_end: {
+        Args: { _membership_id: string; _reason: string }
+        Returns: undefined
+      }
+      project_membership_set: {
+        Args: {
+          _end_date?: string
+          _membership_type?: string
+          _project_id: string
+          _start_date?: string
+          _supervisor_id: string
+        }
+        Returns: string
+      }
       register_login_result: {
         Args: { _identifier: string; _success: boolean }
         Returns: boolean
@@ -1641,6 +1685,10 @@ export type Database = {
         Args: { _note?: string; _request_id: string }
         Returns: undefined
       }
+      request_convert_to_project: {
+        Args: { _project_id: string; _reason: string; _request_id: string }
+        Returns: undefined
+      }
       request_decide: {
         Args: { _decision: string; _note?: string; _request_id: string }
         Returns: undefined
@@ -1664,6 +1712,7 @@ export type Database = {
           _msg_kind?: string
           _reply_to?: string
           _request_id: string
+          _visibility?: string
         }
         Returns: string
       }
