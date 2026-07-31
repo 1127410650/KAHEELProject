@@ -1,18 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Plus, Wallet } from "lucide-react";
+import { useRef, useState } from "react";
+import { Paperclip, Plus, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import {
-  REQUEST_KINDS,
   REQUEST_KIND_LABELS_AR,
   REQUEST_KIND_LABELS_EN,
   type RequestKind,
 } from "@/lib/permissions";
+import {
+  PORTAL_KINDS,
+  PRIORITIES,
+  kindNeedsAmount,
+  kindNeedsProject,
+  requestProgress,
+} from "@/lib/requests";
+import { ACCEPT, isAllowedFile, isAllowedSize, uploadAttachments } from "@/lib/attachments";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PaymentNoBadge } from "@/components/PaymentNoBadge";
@@ -56,28 +63,46 @@ export const Route = createFileRoute("/_authenticated/portal")({
 
 interface PortalForm {
   kind: RequestKind;
+  title: string;
   project_id: string;
   amount: string;
+  priority: string;
   authority: string;
+  beneficiary: string;
+  account_ref: string;
+  service_type: string;
+  need_date: string;
+  reason: string;
   notes_ar: string;
   request_date: string;
 }
 
+const EMPTY: PortalForm = {
+  kind: "general",
+  title: "",
+  project_id: "",
+  amount: "",
+  priority: "normal",
+  authority: "",
+  beneficiary: "",
+  account_ref: "",
+  service_type: "",
+  need_date: "",
+  reason: "",
+  notes_ar: "",
+  request_date: todayInRiyadh(),
+};
+
 function PortalPage() {
   const { t, locale } = useI18n();
-  const { supervisorId, isSupervisor, session } = useSession();
+  const { supervisorId, isSupervisor, session, role } = useSession();
   const queryClient = useQueryClient();
   const kindLabels = locale === "ar" ? REQUEST_KIND_LABELS_AR : REQUEST_KIND_LABELS_EN;
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<PortalForm>({
-    kind: "custody_topup",
-    project_id: "",
-    amount: "",
-    authority: "",
-    notes_ar: "",
-    request_date: todayInRiyadh(),
-  });
+  const [files, setFiles] = useState<File[]>([]);
+  const [form, setForm] = useState<PortalForm>(EMPTY);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["portal", "projects"],
@@ -121,36 +146,58 @@ function PortalPage() {
 
   const submit = useMutation({
     mutationFn: async (values: PortalForm) => {
-      const { error } = await supabase.rpc("submit_portal_request", {
+      if (files.some((f) => !isAllowedFile(f))) throw new Error("FILE_TYPE");
+      if (files.some((f) => !isAllowedSize(f))) throw new Error("FILE_SIZE");
+
+      const { data, error } = await supabase.rpc("submit_request", {
         _kind: values.kind,
         _request_type: kindLabels[values.kind],
-        ...(values.kind === "project_create" || !values.project_id
-          ? {}
-          : { _project_id: values.project_id }),
-        ...(values.amount ? { _amount: Number(values.amount) } : {}),
-        ...(values.notes_ar ? { _notes_ar: values.notes_ar } : {}),
-        ...(values.authority ? { _authority: values.authority } : {}),
+        _title: values.title.trim() || kindLabels[values.kind],
+        _priority: values.priority,
         _request_date: values.request_date,
+        ...(kindNeedsProject(values.kind) && values.project_id
+          ? { _project_id: values.project_id }
+          : {}),
+        ...(values.amount ? { _amount: Number(values.amount) } : {}),
+        ...(values.authority ? { _authority: values.authority.trim() } : {}),
+        ...(values.beneficiary ? { _beneficiary: values.beneficiary.trim() } : {}),
+        ...(values.account_ref ? { _account_ref: values.account_ref.trim() } : {}),
+        ...(values.service_type ? { _service_type: values.service_type.trim() } : {}),
+        ...(values.need_date ? { _need_date: values.need_date } : {}),
+        ...(values.reason ? { _reason: values.reason.trim() } : {}),
+        ...(values.notes_ar ? { _notes_ar: values.notes_ar.trim() } : {}),
       });
       if (error) throw error;
+
+      const requestId = data as string;
+      if (files.length && requestId) {
+        await uploadAttachments(files, {
+          projectId: kindNeedsProject(values.kind) ? values.project_id || null : null,
+          requestId,
+          entityType: "request",
+          entityId: requestId,
+          kind: "supervisor_doc",
+          uploaderRole: role,
+          userId: session?.user.id ?? null,
+        });
+      }
     },
     onSuccess: () => {
       toast.success(t("portal.submitted"));
       setOpen(false);
-      setForm({
-        kind: "custody_topup",
-        project_id: "",
-        amount: "",
-        authority: "",
-        notes_ar: "",
-        request_date: todayInRiyadh(),
-      });
+      setForm(EMPTY);
+      setFiles([]);
+      if (fileInput.current) fileInput.current.value = "";
       void queryClient.invalidateQueries({ queryKey: ["portal"] });
+      void queryClient.invalidateQueries({ queryKey: ["requests"] });
     },
     onError: (error: Error) => {
       const message = error.message ?? "";
       if (message.includes("PROJECT_REQUIRED")) toast.error(t("requests.projectRequired"));
       else if (message.includes("AMOUNT_REQUIRED")) toast.error(t("common.required"));
+      else if (message.includes("DUPLICATE_FILE")) toast.error(t("attachments.duplicate"));
+      else if (message.includes("FILE_TYPE")) toast.error(t("attachments.fileType"));
+      else if (message.includes("FILE_SIZE")) toast.error(t("attachments.fileSize"));
       else if (message.includes("FORBIDDEN")) toast.error(t("common.notAllowed"));
       else toast.error(t("portal.submitFailed"));
     },
@@ -167,7 +214,8 @@ function PortalPage() {
     );
   }
 
-  const amountRequired = form.kind === "custody_topup" || form.kind === "payment";
+  const needsProject = kindNeedsProject(form.kind);
+  const amountRequired = kindNeedsAmount(form.kind);
 
   return (
     <>
@@ -182,7 +230,7 @@ function PortalPage() {
                 {t("portal.newRequest")}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-xl">
+            <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{t("portal.newRequest")}</DialogTitle>
               </DialogHeader>
@@ -191,7 +239,7 @@ function PortalPage() {
                 className="space-y-4"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (form.kind !== "project_create" && !form.project_id) {
+                  if (needsProject && !form.project_id) {
                     toast.error(t("requests.projectRequired"));
                     return;
                   }
@@ -212,16 +260,26 @@ function PortalPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {REQUEST_KINDS.map((kind) => (
+                      {PORTAL_KINDS.map((kind) => (
                         <SelectItem key={kind} value={kind}>
-                          {kindLabels[kind]}
+                          {kindLabels[kind as RequestKind]}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
 
-                {form.kind !== "project_create" && (
+                <div className="space-y-2">
+                  <Label htmlFor="p_title">{t("requests.title")} *</Label>
+                  <Input
+                    id="p_title"
+                    required
+                    value={form.title}
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  />
+                </div>
+
+                {needsProject && (
                   <div className="space-y-2">
                     <Label>{t("requests.project")} *</Label>
                     <Select
@@ -260,6 +318,24 @@ function PortalPage() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label>{t("requests.priority")}</Label>
+                    <Select
+                      value={form.priority}
+                      onValueChange={(v) => setForm({ ...form, priority: v })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PRIORITIES.map((p) => (
+                          <SelectItem key={p} value={p}>
+                            {t(`priority.${p}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="p_date">{t("requests.requestDate")} *</Label>
                     <Input
                       id="p_date"
@@ -271,7 +347,52 @@ function PortalPage() {
                       onChange={(e) => setForm({ ...form, request_date: e.target.value })}
                     />
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="p_need">{t("requests.needDate")}</Label>
+                    <Input
+                      id="p_need"
+                      type="date"
+                      dir="ltr"
+                      className="num"
+                      value={form.need_date}
+                      onChange={(e) => setForm({ ...form, need_date: e.target.value })}
+                    />
+                  </div>
                 </div>
+
+                {form.kind === "payment" && (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="p_ben">{t("requests.beneficiary")}</Label>
+                      <Input
+                        id="p_ben"
+                        value={form.beneficiary}
+                        onChange={(e) => setForm({ ...form, beneficiary: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="p_acc">{t("requests.accountRef")}</Label>
+                      <Input
+                        id="p_acc"
+                        dir="ltr"
+                        className="num"
+                        value={form.account_ref}
+                        onChange={(e) => setForm({ ...form, account_ref: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {(form.kind === "project_service" || form.kind === "utility_meter") && (
+                  <div className="space-y-2">
+                    <Label htmlFor="p_service">{t("requests.serviceType")}</Label>
+                    <Input
+                      id="p_service"
+                      value={form.service_type}
+                      onChange={(e) => setForm({ ...form, service_type: e.target.value })}
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="p_authority">{t("requests.authority")}</Label>
@@ -283,6 +404,15 @@ function PortalPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="p_reason">{t("requests.reason")}</Label>
+                  <Input
+                    id="p_reason"
+                    value={form.reason}
+                    onChange={(e) => setForm({ ...form, reason: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="p_notes">{t("portal.details")}</Label>
                   <Textarea
                     id="p_notes"
@@ -290,6 +420,24 @@ function PortalPage() {
                     value={form.notes_ar}
                     onChange={(e) => setForm({ ...form, notes_ar: e.target.value })}
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="p_files">{t("attachments.add")}</Label>
+                  <Input
+                    id="p_files"
+                    ref={fileInput}
+                    type="file"
+                    multiple
+                    accept={ACCEPT}
+                    onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+                  />
+                  {files.length > 0 && (
+                    <p className="num flex items-center gap-1 text-xs text-muted-foreground">
+                      <Paperclip className="size-3" aria-hidden />
+                      {files.length}
+                    </p>
+                  )}
                 </div>
 
                 <p className="rounded-lg bg-secondary p-3 text-xs text-muted-foreground">
@@ -330,12 +478,13 @@ function PortalPage() {
                 <th className="px-4 py-3 text-start font-semibold">{t("common.amount")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("requests.requestDate")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("common.status")}</th>
+                <th className="px-4 py-3 text-start font-semibold">{t("requests.progress")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {requests.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
                     {t("portal.noRequests")}
                   </td>
                 </tr>
@@ -366,6 +515,19 @@ function PortalPage() {
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={row.status} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <span className="h-1.5 w-20 overflow-hidden rounded-full bg-secondary">
+                        <span
+                          className="block h-full rounded-full bg-primary"
+                          style={{ width: `${requestProgress(row.status)}%` }}
+                        />
+                      </span>
+                      <span className="num text-xs text-muted-foreground">
+                        {requestProgress(row.status)}%
+                      </span>
+                    </div>
                   </td>
                 </tr>
               ))}
