@@ -125,17 +125,19 @@ function AuthPage() {
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">{t("auth.email")}</Label>
+              <Label htmlFor="identifier">{t("auth.identifier")}</Label>
               <Input
-                id="email"
-                type="email"
+                id="identifier"
                 required
                 dir="ltr"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="username"
+                placeholder={t("auth.identifierHint")}
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
               />
+              <p className="text-xs text-muted-foreground">{t("auth.identifierHint")}</p>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">{t("auth.password")}</Label>
               <Input
