@@ -409,7 +409,20 @@
     "converted": "تم تحويل الطلب إلى طلب مشروع",
     "needsCompletion": "تحتاج استكمالًا",
     "awaitingApprovalCount": "بانتظار الموافقة",
-    "completedCount": "مكتملة"
+    "completedCount": "مكتملة",
+    "requester": "مقدم الطلب",
+    "viewRequest": "عرض الطلب",
+    "untitled": "طلب بدون عنوان",
+    "viewAllProject": "عرض جميع طلبات المشروع",
+    "showFullTimeline": "عرض سجل المراحل الكامل",
+    "hideFullTimeline": "إخفاء سجل المراحل",
+    "summary": "ملخص الطلب",
+    "extraData": "بيانات الطلب الإضافية",
+    "conversation": "المحادثة والمتابعة",
+    "documents": "المستندات والمرفقات",
+    "advancedTools": "أدوات متقدمة (للمسؤول)",
+    "assignedOfficer": "الموظف المختص",
+    "search": "بحث في الطلبات"
   },
   "suppliers": {
     "title": "الموردون",
@@ -504,7 +517,8 @@
     "awaitingStaffReview": "بانتظار مراجعة الموظف المختص",
     "scope": "نطاق الطلب",
     "myCustody": "عهدتي",
-    "custodyDescription": "رصيد عهدتك وحركاتها المعتمدة فقط"
+    "custodyDescription": "رصيد عهدتك وحركاتها المعتمدة فقط",
+    "myRequestsHint": "سيتم الرد من قبل الموظف المختص"
   },
   "workflow": {
     "approve": "موافقة",
@@ -636,5 +650,106 @@
     "empty": "لا يوجد مشرفون مرتبطون",
     "active": "نشطة",
     "inactive": "موقوفة"
+  },
+  "stage": {
+    "received": "تم استلام الطلب",
+    "reviewing": "قيد المراجعة",
+    "action_needed": "يحتاج إجراء منك",
+    "approval_execution": "قيد الاعتماد أو التنفيذ",
+    "done": "مكتمل",
+    "rejected": "مرفوض",
+    "cancelled": "ملغي",
+    "railLabel": "مراحل الطلب",
+    "detail": "المرحلة الدقيقة"
+  },
+  "action": {
+    "title": "الإجراء المطلوب الآن",
+    "short": "المطلوب",
+    "none": "لا يوجد إجراء مطلوب منك حاليًا",
+    "rejected": "الطلب مرفوض",
+    "cancelled": "تم إلغاء الطلب",
+    "completed": "الطلب مكتمل",
+    "sup": {
+      "withStaff": "لا يوجد إجراء مطلوب منك، الطلب لدى الموظف المختص وسيتم الرد قريبًا",
+      "needsInfo": "يرجى استكمال البيانات أو رفع المستند المطلوب المذكور في المحادثة",
+      "approvedWaiting": "تم اعتماد الطلب وهو بانتظار التنفيذ",
+      "executed": "تم تنفيذ الطلب وبانتظار الإغلاق"
+    },
+    "staff": {
+      "startReview": "راجع الطلب وابدأ المراجعة",
+      "process": "ابدأ معالجة الطلب أو اطلب استكمالًا من المشرف",
+      "reviewReply": "راجع رد المشرف على طلب الاستكمال",
+      "sendForApproval": "ارفع الطلب للموافقة",
+      "awaitingSupervisor": "بانتظار رد المشرف على طلب الاستكمال",
+      "withManager": "لا يوجد إجراء حالي، الطلب لدى المسؤول",
+      "confirmExecution": "أكّد تنفيذ الطلب",
+      "registerPayment": "سجّل بيانات السداد وإيصاله"
+    },
+    "mgr": {
+      "awaitingApproval": "الطلب بانتظار موافقتك",
+      "approvedAwaitingExecution": "الطلب معتمد وبانتظار التنفيذ",
+      "closeRequest": "أغلق الطلب بعد التأكد من التنفيذ",
+      "reviewChange": "راجع طلب التعديل أو الحذف"
+    },
+    "btn": {
+      "addReply": "إضافة الرد والمرفقات",
+      "startReview": "بدء المراجعة",
+      "startProcessing": "بدء المعالجة",
+      "askInfo": "طلب استكمال",
+      "reviewReply": "مراجعة الاستكمال",
+      "sendForApproval": "إرسال للموافقة",
+      "approve": "اعتماد",
+      "reject": "رفض",
+      "startExecution": "بدء التنفيذ",
+      "confirmExecution": "تأكيد التنفيذ",
+      "registerPayment": "تسجيل السداد",
+      "close": "إغلاق الطلب"
+    }
+  },
+  "notify": {
+    "created": "تم استلام طلبك",
+    "reviewStarted": "بدأ الموظف المختص مراجعة طلبك",
+    "needsInfo": "نحتاج منك استكمال بعض البيانات",
+    "replyReceived": "تم استلام ردك",
+    "approved": "تم اعتماد طلبك",
+    "executionStarted": "بدأ تنفيذ طلبك",
+    "executed": "تم تنفيذ طلبك",
+    "completed": "اكتمل الطلب",
+    "rejected": "تم رفض الطلب",
+    "cancelled": "تم إلغاء الطلب",
+    "message": "رسالة جديدة على طلبك",
+    "reminder": "تذكير على طلبك"
+  },
+  "groups": {
+    "action_mine": "يحتاج إجراء مني",
+    "in_progress": "قيد المتابعة",
+    "completed": "مكتملة",
+    "closed_other": "مرفوضة أو ملغاة",
+    "mine_now": "مطلوب مني الآن",
+    "awaiting_supervisor": "بانتظار رد المشرف",
+    "awaiting_approval": "بانتظار الموافقة",
+    "awaiting_execution": "بانتظار التنفيذ",
+    "emptyGroup": "لا توجد طلبات في هذا القسم"
+  },
+  "wizard": {
+    "step": "الخطوة",
+    "step1": "اختر نوع الطلب",
+    "step2": "أدخل التفاصيل",
+    "step3": "مراجعة وإرسال",
+    "next": "التالي",
+    "back": "السابق",
+    "submit": "إرسال الطلب",
+    "submitted": "تم استلام طلبك وسيتم الرد من قبل الموظف المختص",
+    "typeGeneral": "طلب عام",
+    "typeGeneralHint": "طلب غير مرتبط بمشروع",
+    "typeProject": "طلب مرتبط بمشروع",
+    "typeProjectHint": "خدمة أو إجراء داخل أحد مشاريعك",
+    "typeCustody": "طلب عهدة",
+    "typeCustodyHint": "إضافة أو تسوية رصيد عهدتك",
+    "typePayment": "طلب صرف دفعة",
+    "typePaymentHint": "صرف دفعة لمستفيد داخل مشروع",
+    "summary": "ملخص الطلب",
+    "movementType": "نوع الحركة",
+    "titleOptional": "عنوان الطلب (يُنشأ تلقائيًا عند تركه فارغًا)"
   }
 }
