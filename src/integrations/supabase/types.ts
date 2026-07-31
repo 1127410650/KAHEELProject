@@ -987,6 +987,7 @@ export type Database = {
         Returns: number
       }
       is_accountant: { Args: never; Returns: boolean }
+      is_staff: { Args: never; Returns: boolean }
       log_audit: {
         Args: {
           _action: string
