@@ -206,9 +206,10 @@ function RequestDetailPage() {
       if (files.length && !request.project_id) throw new Error("NO_PROJECT");
 
       // Upload first so mandatory receipts already exist when the status flips.
-      const uploadedIds = files.length
+      const projectId = request.project_id;
+      const uploadedIds = files.length && projectId
         ? await uploadAttachments(files, {
-            projectId: request.project_id,
+            projectId,
             entityType: "request",
             entityId: request.id,
             note: note,
@@ -292,7 +293,7 @@ function RequestDetailPage() {
       if (!request.project_id) throw new Error("NO_PROJECT");
       const currentStage = history.length ? history[history.length - 1]?.id : null;
       const ids = await uploadAttachments(stageFiles, {
-        projectId: request.project_id,
+        projectId: request.project_id!,
         entityType: "request",
         entityId: request.id,
         stageId: currentStage ?? null,
