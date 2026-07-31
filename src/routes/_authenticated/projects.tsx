@@ -121,9 +121,13 @@ function ProjectsPage() {
         name_en: values.name_en.trim() || null,
         supervisor_id: values.supervisor_id,
         status: values.status,
+        city: values.city.trim() || null,
+        location: values.location.trim() || null,
+        start_date: values.start_date || null,
         description_ar: values.description_ar.trim() || null,
         description_en: values.description_en.trim() || null,
       };
+
       if (values.id) {
         const { error } = await supabase.from("projects").update(payload).eq("id", values.id);
         if (error) throw error;
