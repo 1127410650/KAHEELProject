@@ -107,7 +107,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full border border-border bg-secondary p-0.5 md:gap-1 md:p-1",
+        "inline-flex shrink-0 items-center gap-0.5 rounded-full border border-border bg-secondary p-0.5 md:gap-1 md:p-1",
         compact && "scale-95",
       )}
     >
@@ -116,7 +116,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => change("ar")}
         className={cn(
-          "rounded-full px-2 py-1 text-[11px] font-semibold transition-colors md:px-3 md:text-xs",
+          "rounded-full px-1.5 py-1 text-[11px] font-semibold leading-none transition-colors md:px-3 md:text-xs",
           locale === "ar"
             ? "bg-primary text-primary-foreground"
             : "text-muted-foreground hover:text-foreground",
@@ -129,7 +129,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => change("en")}
         className={cn(
-          "rounded-full px-2 py-1 text-[11px] font-semibold transition-colors md:px-3 md:text-xs",
+          "rounded-full px-1.5 py-1 text-[11px] font-semibold leading-none transition-colors md:px-3 md:text-xs",
           locale === "en"
             ? "bg-primary text-primary-foreground"
             : "text-muted-foreground hover:text-foreground",
@@ -141,6 +141,7 @@ function LanguageToggle({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
+
 
 function NavLinks({
   collapsed,
