@@ -422,7 +422,9 @@
     "documents": "Documents and attachments",
     "advancedTools": "Advanced tools (manager)",
     "assignedOfficer": "Responsible officer",
-    "search": "Search requests"
+    "search": "Search requests",
+    "workbox": "Workbox",
+    "workboxHint": "Requests grouped by the action required from you"
   },
   "suppliers": {
     "title": "Suppliers",

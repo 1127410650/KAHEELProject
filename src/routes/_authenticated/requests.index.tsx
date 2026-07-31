@@ -40,9 +40,7 @@ import {
 } from "@/lib/request-ui";
 import { cn } from "@/lib/utils";
 
-import type { Database } from "@/integrations/supabase/types";
 
-type RequestStatus = Database["public"]["Enums"]["request_status"];
 
 export const Route = createFileRoute("/_authenticated/requests/")({
   head: () => ({
@@ -452,4 +450,3 @@ function RequestsPage() {
   );
 }
 
-void (0 as unknown as RequestStatus);
