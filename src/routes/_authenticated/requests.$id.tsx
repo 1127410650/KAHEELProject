@@ -32,20 +32,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ACCEPT, isAllowedFile, openAttachment, uploadAttachments } from "@/lib/attachments";
+import { RequestConversation } from "@/components/RequestConversation";
+import { RequestChangePanel } from "@/components/RequestChangePanel";
+import { nextStatuses, requestProgress } from "@/lib/requests";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
+
 import type { Database } from "@/integrations/supabase/types";
 
 type RequestStatus = Database["public"]["Enums"]["request_status"];
 
-const statuses: RequestStatus[] = [
-  "new",
-  "processing",
-  "needs_info",
-  "awaiting_payment",
-  "paid",
-  "completed",
-  "cancelled",
-];
+
+
 
 export const Route = createFileRoute("/_authenticated/requests/$id")({
   head: () => ({
