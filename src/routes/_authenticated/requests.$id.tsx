@@ -38,11 +38,6 @@ import { nextStatuses } from "@/lib/requests";
 import { ActionNowCard } from "@/components/ActionNowCard";
 import { StageBadge, StageBar } from "@/components/RequestStage";
 import { buildRequestTitle } from "@/lib/request-ui";
-import {
-  REQUEST_SCOPE_LABELS_AR,
-  REQUEST_SCOPE_LABELS_EN,
-  type RequestScope,
-} from "@/lib/permissions";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
 
 import type { Database } from "@/integrations/supabase/types";
