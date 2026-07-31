@@ -44,8 +44,8 @@ function StatCard({
       <div className="min-w-0">
         <p className="truncate text-sm font-medium text-muted-foreground sm:text-xs">{label}</p>
         <p
-          className={`num mt-0.5 truncate font-bold text-foreground sm:mt-1 sm:text-xl ${
-            long ? "text-base" : "text-2xl"
+          className={`num mt-0.5 font-bold text-foreground sm:mt-1 sm:text-xl ${
+            long ? "whitespace-nowrap text-base" : "truncate text-2xl"
           }`}
         >
           {value}
