@@ -29,10 +29,12 @@ function StatCard({
   icon: Icon,
   label,
   value,
+  compactValue,
 }: {
   icon: typeof Users;
   label: string;
   value: string;
+  compactValue?: boolean;
 }) {
   return (
     <div className="surface flex min-h-[78px] items-center gap-2.5 p-2.5 sm:min-h-0 sm:gap-4 sm:p-5">
@@ -43,13 +45,18 @@ function StatCard({
         <p className="text-[12px] font-medium leading-tight text-muted-foreground sm:text-xs">
           {label}
         </p>
-        <p className="num mt-0.5 text-[22px] font-bold leading-tight text-foreground sm:mt-1 sm:text-xl">
+        <p
+          className={`num mt-0.5 font-bold leading-tight text-foreground sm:mt-1 sm:text-xl ${
+            compactValue ? "text-[15px]" : "text-[22px]"
+          }`}
+        >
           {value}
         </p>
       </div>
     </div>
   );
 }
+
 
 
 function DashboardPage() {
