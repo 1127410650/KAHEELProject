@@ -48,8 +48,15 @@ export function RequestCard({
       </div>
 
 
-      <dl className="grid gap-1 text-[11px] text-muted-foreground sm:grid-cols-2 sm:gap-1.5 sm:text-xs">
-        <div className="hidden gap-1.5 sm:flex">
+      {/* Mobile: one compact meta line. Desktop: full field grid. */}
+      <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground sm:hidden">
+        {data.projectName && <span className="max-w-[45%] truncate">{data.projectName}</span>}
+        {data.amountText && <span className="num font-medium text-foreground">{data.amountText}</span>}
+        <span className="num">{formatDateTime(data.updatedAt)}</span>
+      </p>
+
+      <dl className="hidden gap-1 text-[11px] text-muted-foreground sm:grid sm:grid-cols-2 sm:gap-1.5 sm:text-xs">
+        <div className="flex gap-1.5">
           <dt>{t("requests.requestType")}:</dt>
           <dd className="truncate font-medium text-foreground">{data.typeLabel}</dd>
         </div>
@@ -71,7 +78,7 @@ export function RequestCard({
             <dd className="num font-medium text-foreground">{data.amountText}</dd>
           </div>
         )}
-        <div className="hidden gap-1.5 sm:flex">
+        <div className="flex gap-1.5">
           <dt>{t("requests.requestDate")}:</dt>
           <dd className="num font-medium text-foreground">{formatDate(data.requestDate)}</dd>
         </div>
@@ -82,7 +89,7 @@ export function RequestCard({
         </div>
       </dl>
 
-      <p className="rounded-lg bg-secondary/70 px-2.5 py-1.5 text-[11px] leading-snug text-foreground/90 sm:px-3 sm:py-2 sm:text-xs">
+      <p className="rounded-lg bg-secondary/70 px-2 py-1 text-[11px] leading-snug text-foreground/90 sm:px-3 sm:py-2 sm:text-xs">
         <span className="font-semibold">{t("action.short")}: </span>
         {data.actionText}
       </p>
@@ -97,12 +104,13 @@ export function RequestCard({
           )}
           <Paperclip className="size-3.5 opacity-0" aria-hidden />
         </span>
-        <Button asChild size="sm" variant="outline">
+        <Button asChild size="sm" variant="outline" className="h-8 px-3 text-xs sm:h-9 sm:text-sm">
           <Link to="/requests/$id" params={{ id: data.id }}>
             {t("requests.viewRequest")}
           </Link>
         </Button>
       </div>
+
     </article>
   );
 }
