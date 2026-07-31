@@ -269,10 +269,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex items-center gap-1.5 border-b border-border bg-card/95 px-2.5 py-2 backdrop-blur md:gap-3 md:px-4 md:py-3">
+        <header className="sticky top-0 z-30 flex h-[54px] items-center gap-1 border-b border-border bg-card/95 px-2 backdrop-blur md:h-auto md:gap-3 md:px-4 md:py-3">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label={t("nav.expand")}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-9 shrink-0 md:hidden"
+                aria-label={t("nav.expand")}
+              >
                 <Menu className="size-5" aria-hidden />
               </Button>
             </SheetTrigger>
@@ -284,7 +289,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
           </Sheet>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-foreground">{t("app.name")}</p>
+            <p className="truncate text-[13px] font-semibold text-foreground md:text-sm">
+              {t("app.name")}
+            </p>
             <p className="hidden truncate text-xs text-muted-foreground sm:block">
               {t("app.tagline")}
             </p>
@@ -294,21 +301,24 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
           <LanguageToggle />
 
-
           <div className="hidden text-end sm:block">
             <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
               {profile?.full_name || profile?.email || "—"}
             </p>
-            <p className="text-[11px] text-muted-foreground">
-              {role ? t(`roles.${role}`) : "—"}
-            </p>
+            <p className="text-[11px] text-muted-foreground">{role ? t(`roles.${role}`) : "—"}</p>
           </div>
 
-          <Button variant="outline" size="sm" onClick={signOut} className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={signOut}
+            className="size-9 shrink-0 gap-2 p-0 sm:size-auto sm:px-3"
+          >
             <LogOut className="size-4" aria-hidden />
             <span className="hidden sm:inline">{t("nav.signOut")}</span>
           </Button>
         </header>
+
 
         <main className="flex-1 p-3 md:p-6">{children}</main>
         <ForcePasswordChangeDialog />
