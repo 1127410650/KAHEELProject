@@ -50,6 +50,8 @@ export function RequestWorkflowPanel({
   const { can } = useSession();
   const [note, setNote] = useState("");
   const [assignee, setAssignee] = useState("");
+  const [followUp, setFollowUp] = useState("");
+
 
   const executePerm = EXECUTE_PERM[request.kind];
   const canApprove = can("requests.approve");
@@ -240,6 +242,81 @@ export function RequestWorkflowPanel({
           onChange={(e) => setNote(e.target.value)}
         />
       </div>
+
+      {canAssign && (
+        <div className="flex flex-wrap items-end gap-2 border-t border-border pt-3">
+          <div className="w-full max-w-64 space-y-2">
+            <Label>{t("workflow.moveStage")}</Label>
+            <Select
+              value=""
+              onValueChange={(v) => {
+                if (!setStatus.isPending) setStatus.mutate(v);
+              }}
+              disabled={transitions.length === 0}
+            >
+              <SelectTrigger aria-label={t("workflow.moveStage")}>
+                <SelectValue placeholder={t("common.select")} />
+              </SelectTrigger>
+              <SelectContent>
+                {transitions.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {t(`status.${s}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-40 space-y-2">
+            <Label htmlFor="wf-followup">{t("workflow.followUpDate")}</Label>
+            <Input
+              id="wf-followup"
+              type="date"
+              dir="ltr"
+              className="num"
+              value={followUp}
+              onChange={(e) => setFollowUp(e.target.value)}
+            />
+          </div>
+          {!closed && request.status === "executed" && (
+            <Button
+              type="button"
+              variant="secondary"
+              className="gap-2"
+              disabled={close.isPending}
+              onClick={() => close.mutate()}
+            >
+              <Lock className="size-4" aria-hidden />
+              {t("workflow.close")}
+            </Button>
+          )}
+          {!closed && (
+            <Button
+              type="button"
+              variant="outline"
+              className="gap-2"
+              disabled={cancel.isPending}
+              onClick={() => cancel.mutate()}
+            >
+              <X className="size-4" aria-hidden />
+              {t("workflow.cancel")}
+            </Button>
+          )}
+          {closed && can("requests.reopen") && (
+            <Button
+              type="button"
+              variant="outline"
+              className="gap-2"
+              disabled={reopen.isPending}
+              onClick={() => reopen.mutate()}
+            >
+              <RotateCcw className="size-4" aria-hidden />
+              {t("workflow.reopen")}
+            </Button>
+          )}
+        </div>
+      )}
+
+
 
       <div className="flex flex-wrap items-end gap-2">
         {canApprove && pending && (
