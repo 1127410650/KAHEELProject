@@ -63,13 +63,13 @@ function SettingsPage() {
     <>
       <PageHeader title={t("settings.title")} description={t("settings.description")} />
 
-      <div className="grid gap-3 sm:gap-4 lg:grid-cols-2">
+      <div className="grid gap-2 sm:gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">{t("settings.myPreferences")}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 sm:space-y-4">
-            <div className="space-y-1.5 sm:space-y-2">
+          <CardContent className="space-y-2 sm:space-y-4">
+            <div className="space-y-1 sm:space-y-2">
               <Label htmlFor="full_name">{t("users.fullName")}</Label>
               <Input
                 id="full_name"
@@ -77,7 +77,7 @@ function SettingsPage() {
                 onChange={(e) => setFullName(e.target.value)}
               />
             </div>
-            <div className="space-y-1.5 sm:space-y-2">
+            <div className="space-y-1 sm:space-y-2">
               <Label htmlFor="s_phone">{t("users.phone")}</Label>
               <Input
                 id="s_phone"
@@ -86,7 +86,7 @@ function SettingsPage() {
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>
-            <div className="space-y-1.5 sm:space-y-2">
+            <div className="space-y-1 sm:space-y-2">
               <Label>{t("users.locale")}</Label>
               <Select value={locale} onValueChange={(v) => setLocale(v as Locale)}>
                 <SelectTrigger>
@@ -98,7 +98,7 @@ function SettingsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <Button className="w-full sm:w-auto" onClick={() => saveProfile.mutate()} disabled={saveProfile.isPending}>
+            <Button className="w-auto max-[359px]:w-full" onClick={() => saveProfile.mutate()} disabled={saveProfile.isPending}>
               {t("common.save")}
             </Button>
           </CardContent>
@@ -109,29 +109,29 @@ function SettingsPage() {
             <CardTitle className="text-base">{t("settings.general")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="divide-y divide-border text-sm">
-              <div className="flex items-center justify-between py-2 sm:py-3">
+            <dl className="divide-y divide-border text-[13px] sm:text-sm">
+              <div className="flex min-h-[42px] items-center justify-between gap-2 py-1.5 sm:min-h-0 sm:py-3">
                 <dt className="text-muted-foreground">{t("settings.currency")}</dt>
                 <dd className="num font-medium">SAR</dd>
               </div>
-              <div className="flex items-center justify-between py-2 sm:py-3">
+              <div className="flex min-h-[42px] items-center justify-between gap-2 py-1.5 sm:min-h-0 sm:py-3">
                 <dt className="text-muted-foreground">{t("settings.timezone")}</dt>
                 <dd className="num font-medium">Asia/Riyadh</dd>
               </div>
-              <div className="flex items-center justify-between gap-3 py-2 sm:py-3">
+              <div className="flex min-h-[42px] items-center justify-between gap-2 py-1.5 sm:min-h-0 sm:py-3">
                 <dt className="text-muted-foreground">{t("settings.dateFormat")}</dt>
                 <dd className="num text-end font-medium" dir="ltr">
                   {formatDateTime(now)}
                 </dd>
               </div>
-              <div className="flex items-center justify-between gap-3 py-2 sm:py-3">
+              <div className="flex min-h-[42px] items-center justify-between gap-2 py-1.5 sm:min-h-0 sm:py-3">
                 <dt className="text-muted-foreground">{t("settings.datePreview")}</dt>
                 <dd className="num text-end font-medium" dir="ltr">
                   {formatDate(now)}
                 </dd>
               </div>
 
-              <div className="flex items-center justify-between py-2 sm:py-3">
+              <div className="flex min-h-[42px] items-center justify-between gap-2 py-1.5 sm:min-h-0 sm:py-3">
                 <dt className="text-muted-foreground">{t("settings.defaultLocale")}</dt>
                 <dd className="font-medium">{t("common.arabic")}</dd>
               </div>
