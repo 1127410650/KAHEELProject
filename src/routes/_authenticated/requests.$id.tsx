@@ -35,6 +35,11 @@ import { ACCEPT, isAllowedFile, openAttachment, uploadAttachments } from "@/lib/
 import { RequestConversation } from "@/components/RequestConversation";
 import { RequestChangePanel } from "@/components/RequestChangePanel";
 import { nextStatuses, requestProgress } from "@/lib/requests";
+import {
+  REQUEST_SCOPE_LABELS_AR,
+  REQUEST_SCOPE_LABELS_EN,
+  type RequestScope,
+} from "@/lib/permissions";
 import { formatDate, formatDateTime, formatMoney, pickName } from "@/lib/format";
 
 import type { Database } from "@/integrations/supabase/types";
@@ -124,6 +129,17 @@ function RequestDetailPage() {
   });
 
   const request = requestQuery.data;
+
+  /** Distinguishes "no such request" from "exists but you are not allowed to see it". */
+  const existsQuery = useQuery({
+    queryKey: ["request-exists", id],
+    enabled: !requestQuery.isPending && !requestQuery.data,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("request_exists", { _request_id: id });
+      if (error) throw error;
+      return Boolean(data);
+    },
+  });
 
   const { data: history = [] } = useQuery({
     queryKey: ["request-history", id],
