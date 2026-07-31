@@ -21,6 +21,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
+import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -82,6 +83,12 @@ const AuthenticatedSupervisorsIndexRoute =
     path: '/supervisors/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSupervisorsIdRoute =
+  AuthenticatedSupervisorsIdRouteImport.update({
+    id: '/supervisors/$id',
+    path: '/supervisors/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
   '/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
   '/supervisors': typeof AuthenticatedSupervisorsIndexRoute
 }
 export interface FileRoutesById {
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
   '/_authenticated/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
 }
 export interface FileRouteTypes {
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/trash'
     | '/users'
+    | '/supervisors/$id'
     | '/supervisors/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/trash'
     | '/users'
+    | '/supervisors/$id'
     | '/supervisors'
   id:
     | '__root__'
@@ -164,6 +176,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/_authenticated/supervisors/$id'
     | '/_authenticated/supervisors/'
   fileRoutesById: FileRoutesById
 }
@@ -259,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSupervisorsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/supervisors/$id': {
+      id: '/_authenticated/supervisors/$id'
+      path: '/supervisors/$id'
+      fullPath: '/supervisors/$id'
+      preLoaderRoute: typeof AuthenticatedSupervisorsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -271,6 +291,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
+  AuthenticatedSupervisorsIdRoute: typeof AuthenticatedSupervisorsIdRoute
   AuthenticatedSupervisorsIndexRoute: typeof AuthenticatedSupervisorsIndexRoute
 }
 
@@ -283,6 +304,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
+  AuthenticatedSupervisorsIdRoute: AuthenticatedSupervisorsIdRoute,
   AuthenticatedSupervisorsIndexRoute: AuthenticatedSupervisorsIndexRoute,
 }
 
