@@ -34,7 +34,10 @@ import {
 import { ACCEPT, isAllowedFile, openAttachment, uploadAttachments } from "@/lib/attachments";
 import { RequestConversation } from "@/components/RequestConversation";
 import { RequestChangePanel } from "@/components/RequestChangePanel";
-import { nextStatuses, requestProgress } from "@/lib/requests";
+import { nextStatuses } from "@/lib/requests";
+import { ActionNowCard } from "@/components/ActionNowCard";
+import { StageBadge, StageBar } from "@/components/RequestStage";
+import { buildRequestTitle } from "@/lib/request-ui";
 import {
   REQUEST_SCOPE_LABELS_AR,
   REQUEST_SCOPE_LABELS_EN,
@@ -356,19 +359,28 @@ function RequestDetailPage() {
     : [];
   const isRequester =
     !!request && (request.requester_id === session?.user.id || request.created_by === session?.user.id);
-  const progress = request ? requestProgress(request.status) : 0;
 
 
 
   return (
     <>
       <PageHeader
-        title={`${t("requests.requestNo")} ${request?.request_no ?? ""}`}
-        description={request?.request_type ?? t("requests.details")}
+        title={
+          request
+            ? buildRequestTitle(
+                {
+                  ...request,
+                  projectName: pickName(locale, project?.name_ar, project?.name_en),
+                },
+                t("requests.untitled"),
+              )
+            : t("requests.details")
+        }
+        description={`${t("requests.requestNo")} ${request?.request_no ?? ""}`}
         actions={
           <div className="flex flex-wrap items-center gap-2">
             {request?.payment_no && <PaymentNoBadge paymentNo={request.payment_no} />}
-            {request && <StatusBadge status={request.status} />}
+            {request && <StageBadge status={request.status} />}
             <Button asChild variant="outline" className="gap-2">
               <Link to="/requests">
                 <ArrowRight className="size-4 ltr:rotate-180" aria-hidden />
@@ -380,45 +392,70 @@ function RequestDetailPage() {
       />
 
       {request && (
-        <RequestWorkflowPanel
-          request={{
-            id: request.id,
-            kind: request.kind,
-            status: request.status,
-            amount: request.amount,
-            approved_at: request.approved_at,
-            executed_at: request.executed_at,
-            assigned_to: request.assigned_to,
-          }}
-          onDone={invalidate}
-        />
-      )}
-
-      {isAccountant && request && (
-        <div className="surface mb-4 flex flex-wrap items-end gap-3 p-4">
-          <div className="w-full max-w-56 space-y-2">
-            <Label>{t("requests.changeStatusTo")}</Label>
-            <Select
-              value={request.status}
-              onValueChange={(v) => {
-                setNote("");
-                setFiles([]);
-                setTargetStatus(v as RequestStatus);
-              }}
-            >
-              <SelectTrigger aria-label={t("requests.changeStatus")}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {statuses.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {t(`status.${s}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        <>
+          <div className="surface mb-4 p-4">
+            <StageBar status={request.status} />
           </div>
-        </div>
+
+          <ActionNowCard
+            request={request}
+            onDone={invalidate}
+            onOpenPayment={(status) => {
+              setNote("");
+              setFiles([]);
+              setTargetStatus(status as RequestStatus);
+            }}
+            onReply={() => {
+              document
+                .getElementById("request-conversation")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+          />
+
+          {isAccountant && (
+            <details className="surface mb-4 p-4">
+              <summary className="cursor-pointer text-sm font-medium">
+                {t("requests.advancedTools")}
+              </summary>
+              <div className="mt-4 space-y-4">
+                <RequestWorkflowPanel
+                  request={{
+                    id: request.id,
+                    kind: request.kind,
+                    status: request.status,
+                    amount: request.amount,
+                    approved_at: request.approved_at,
+                    executed_at: request.executed_at,
+                    assigned_to: request.assigned_to,
+                  }}
+                  onDone={invalidate}
+                />
+                <div className="w-full max-w-56 space-y-2">
+                  <Label>{t("requests.changeStatusTo")}</Label>
+                  <Select
+                    value={request.status}
+                    onValueChange={(v) => {
+                      setNote("");
+                      setFiles([]);
+                      setTargetStatus(v as RequestStatus);
+                    }}
+                  >
+                    <SelectTrigger aria-label={t("requests.changeStatus")}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statuses.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {t(`status.${s}`)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </details>
+          )}
+        </>
       )}
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -434,16 +471,6 @@ function RequestDetailPage() {
                   value={<span className="num">{request?.request_no}</span>}
                 />
                 <Row label={t("requests.requestType")} value={request?.request_type} />
-                <Row
-                  label={t("requests.scope")}
-                  value={
-                    request
-                      ? (locale === "ar" ? REQUEST_SCOPE_LABELS_AR : REQUEST_SCOPE_LABELS_EN)[
-                          (request.request_scope ?? "general") as RequestScope
-                        ]
-                      : "—"
-                  }
-                />
                 <Row
                   label={t("requests.project")}
                   value={
@@ -580,13 +607,14 @@ function RequestDetailPage() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <History className="size-4" aria-hidden />
-              {t("requests.timeline")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
+            <details>
+              <summary className="flex cursor-pointer items-center gap-2 text-base font-semibold">
+                <History className="size-4" aria-hidden />
+                {t("requests.showFullTimeline")}
+              </summary>
+              <div className="mt-4">
+
             {history.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t("common.noData")}</p>
             ) : (
@@ -630,8 +658,11 @@ function RequestDetailPage() {
                 })}
               </ol>
             )}
+              </div>
+            </details>
           </CardContent>
         </Card>
+
 
         <Card>
           <CardHeader>
@@ -847,23 +878,16 @@ function RequestDetailPage() {
 
       {request && (
         <div className="mt-4 grid gap-4">
-          <div className="surface p-4">
-            <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
-              <span>{t("requests.progress")}</span>
-              <span className="num">{progress}%</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-secondary">
-              <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
-            </div>
+          <div id="request-conversation">
+            <RequestConversation
+              requestId={request.id}
+              projectId={request.project_id}
+              canAskInfo={isAccountant}
+              canReply={isRequester}
+              infoState={request.info_state}
+            />
           </div>
 
-          <RequestConversation
-            requestId={request.id}
-            projectId={request.project_id}
-            canAskInfo={isAccountant}
-            canReply={isRequester}
-            infoState={request.info_state}
-          />
 
           <RequestChangePanel
             requestId={request.id}
