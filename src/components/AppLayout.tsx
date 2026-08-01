@@ -293,7 +293,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               <NavLinks collapsed={false} onNavigate={() => setMobileOpen(false)} />
               <div className="mt-auto flex items-center justify-between gap-2 border-t border-sidebar-border px-4 py-3">
                 <span className="text-[11px] font-semibold text-sidebar-foreground/60">
-                  {t("settings.language")}
+                  {t("common.language")}
                 </span>
                 <LanguageToggle />
               </div>
