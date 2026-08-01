@@ -34,6 +34,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ForcePasswordChangeDialog } from "@/components/ForcePasswordChangeDialog";
 import { NotificationsBell } from "@/components/NotificationsBell";
+import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
+
 
 import type { Permission } from "@/lib/permissions";
 
@@ -309,9 +311,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </p>
           </div>
 
+          <WorkspaceSwitcher />
+
           <NotificationsBell />
 
           <LanguageToggle />
+
 
           <div className="hidden text-end sm:block">
             <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
