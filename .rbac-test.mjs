@@ -163,7 +163,7 @@ async function main() {
       tenant_id: tenant,
       supervisor_id: sup.id,
       project_id: pr.id,
-      txn_type: "addition",
+      txn_type: "add",
       amount: 1000,
       txn_date: new Date().toISOString().slice(0, 10),
       status: "approved",
@@ -251,7 +251,7 @@ async function main() {
   check("8b) refresh keeps the new workspace, not the previous one", reload.tenant === A && reload.acc === true, JSON.stringify(reload));
 
   // 6) ending membership cuts that tenant only
-  await admin.from("tenant_memberships").update({ status: "inactive" }).eq("tenant_id", B).eq("user_id", u2);
+  await admin.from("tenant_memberships").update({ status: "ended" }).eq("tenant_id", B).eq("user_id", u2);
   const c2b = await userClient(e2, PW);
   const endB = await c2b.rpc("set_active_tenant", { _tenant_id: B });
   const bGrants = await admin.from("user_roles").select("id").eq("tenant_id", B).eq("user_id", u2);
