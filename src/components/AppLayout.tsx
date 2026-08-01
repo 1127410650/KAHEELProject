@@ -108,7 +108,9 @@ const personalGroups: { titleKey: string; items: NavItem[] }[] = [
       { to: "/me", labelKey: "nav.home", icon: Inbox },
       { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
       { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
+      { to: "/my-documents", labelKey: "nav.myDocuments", icon: FileText },
       { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet, perm: "custody.view_own" },
+      { to: "/invitations", labelKey: "nav.invitations", icon: MailOpen },
       { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
     ],
   },
@@ -117,6 +119,7 @@ const personalGroups: { titleKey: string; items: NavItem[] }[] = [
     items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
   },
 ];
+
 
 
 
