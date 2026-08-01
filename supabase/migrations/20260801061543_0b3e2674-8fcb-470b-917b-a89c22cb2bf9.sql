@@ -1,0 +1,1 @@
+ALTER FUNCTION public.rate_limit_hit(text, text, integer, interval) SET search_path = public, extensions;

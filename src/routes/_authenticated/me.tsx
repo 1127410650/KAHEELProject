@@ -1,6 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, ClipboardList, FolderKanban, Info, Repeat2, Wallet } from "lucide-react";
+import {
+  Bell,
+  ClipboardList,
+  FileText,
+  FolderKanban,
+  Info,
+  MailOpen,
+  Repeat2,
+  Wallet,
+} from "lucide-react";
+import { useMyInvitations } from "./invitations";
+
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
@@ -8,7 +19,7 @@ import { useSession } from "@/lib/session";
 import { PageHeader } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { useAccounts, sortAccounts, type Account } from "@/hooks/use-accounts";
-import { formatMoney } from "@/lib/format";
+import { formatDate, formatMoney } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/me")({
   head: () => ({
@@ -29,6 +40,7 @@ export const Route = createFileRoute("/_authenticated/me")({
 });
 
 const CLOSED_STATUSES = ["executed", "completed", "rejected", "cancelled"];
+const ACTION_STATUSES = ["needs_info", "awaiting_reply"] as const;
 
 function PersonalDashboard() {
   const { t, locale } = useI18n();
@@ -52,6 +64,21 @@ function PersonalDashboard() {
     },
   });
 
+  const actionNeeded = useQuery({
+    queryKey: ["me", "action-needed", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("requests")
+        .select("id", { count: "exact", head: true })
+        .eq("created_by", userId!)
+        .is("deleted_at", null)
+        .in("status", ACTION_STATUSES);
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+
   const unread = useQuery({
     queryKey: ["me", "unread", userId],
     enabled: !!userId,
@@ -65,6 +92,23 @@ function PersonalDashboard() {
       return count ?? 0;
     },
   });
+
+  const latestNotifications = useQuery({
+    queryKey: ["me", "latest-notifications", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id, title, created_at")
+        .eq("user_id", userId!)
+        .order("created_at", { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const invitations = useMyInvitations();
 
   const custody = useQuery({
     queryKey: ["me", "custody", supervisorId],
@@ -91,6 +135,18 @@ function PersonalDashboard() {
       icon: ClipboardList,
       to: "/requests",
     },
+    {
+      key: "me.actionNeeded",
+      value: String(actionNeeded.data ?? 0),
+      icon: Info,
+      to: "/requests",
+    },
+    {
+      key: "me.invitations",
+      value: String(invitations.data?.length ?? 0),
+      icon: MailOpen,
+      to: "/invitations",
+    },
     { key: "me.unread", value: String(unread.data ?? 0), icon: Bell, to: "/notifications" },
   ];
   if (canCustody) {
@@ -101,6 +157,7 @@ function PersonalDashboard() {
       to: "/my-custody",
     });
   }
+
 
   return (
     <div className="space-y-3 md:space-y-5">
@@ -129,9 +186,12 @@ function PersonalDashboard() {
         {[
           { to: "/requests", key: "me.myRequests", icon: ClipboardList },
           { to: "/projects", key: "me.myProjects", icon: FolderKanban },
+          { to: "/my-documents", key: "me.myDocuments", icon: FileText },
+          { to: "/invitations", key: "me.invitations", icon: MailOpen },
           { to: "/notifications", key: "nav.notifications", icon: Bell },
           { to: "/settings", key: "nav.mySettings", icon: Info },
         ].map((l) => (
+
           <Link
             key={l.to}
             to={l.to}
@@ -142,6 +202,30 @@ function PersonalDashboard() {
           </Link>
         ))}
       </div>
+
+      <section className="surface p-2.5 sm:p-4">
+        <h2 className="mb-2 text-[13px] font-bold sm:text-sm">{t("me.recentNotifications")}</h2>
+        {(latestNotifications.data ?? []).length === 0 ? (
+          <p className="py-1 text-[11px] text-muted-foreground sm:text-xs">
+            {t("me.noNotifications")}
+          </p>
+        ) : (
+          <ul className="divide-y divide-border">
+            {(latestNotifications.data ?? []).map((n) => (
+              <li key={n.id} className="flex min-w-0 items-start gap-2 py-2">
+                <Bell className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
+                <p className="wrap-anywhere min-w-0 flex-1 text-[12px] leading-snug sm:text-sm">
+                  {n.title}
+                </p>
+                <span className="num shrink-0 text-[11px] text-muted-foreground">
+                  {formatDate(n.created_at)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
 
       <section className="surface p-2.5 sm:p-4">
         <div className="mb-2 flex items-start justify-between gap-2">

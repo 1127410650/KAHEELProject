@@ -78,7 +78,9 @@
     "myProjects": "My projects",
     "mySettings": "Personal settings",
     "products": "Products & prices",
-    "team": "Members & invitations"
+    "team": "Members & invitations",
+    "invitations": "Invitations",
+    "myDocuments": "My documents"
   },
   "auth": {
     "title": "Sign In",
@@ -1253,6 +1255,18 @@
     "goto": "Open",
     "noInvites": "No invitations",
     "personalScope": "This is a personal workspace: company data and other people's custody never appear here.",
-    "newRequest": "New request"
+    "newRequest": "New request",
+    "actionNeeded": "Requests needing action",
+    "recentNotifications": "Latest notifications",
+    "noNotifications": "No notifications",
+    "inbox": "Incoming invitations"
+  },
+  "invites": {
+    "subtitle": "Pending invitations addressed to your email only. Invitation codes are never shown."
+  },
+  "docs": {
+    "mySubtitle": "Documents you uploaded inside the current account.",
+    "myEmpty": "No documents",
+    "download": "Download"
   }
 }

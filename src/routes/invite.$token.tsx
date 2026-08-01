@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { CheckCircle2, Loader2, MailWarning, ShieldCheck } from "lucide-react";
@@ -40,7 +40,6 @@ interface Preview {
 function InvitePage() {
   const { token } = useParams({ from: "/invite/$token" });
   const { t, locale, dir } = useI18n();
-  const navigate = useNavigate();
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [accepted, setAccepted] = useState<{ multi: boolean } | null>(null);
 
@@ -113,7 +112,7 @@ function InvitePage() {
               <p className="mt-2 text-sm text-muted-foreground">
                 {accepted.multi ? t("invite.switchNote") : t("invite.acceptedBody")}
               </p>
-              <Button className="mt-4 w-full" onClick={() => navigate({ to: "/dashboard" })}>
+              <Button className="mt-4 w-full" onClick={() => window.location.replace("/select-account")}>
                 {t("invite.goWorkspace")}
               </Button>
             </>
