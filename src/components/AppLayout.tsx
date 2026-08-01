@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import {
   LayoutDashboard,
   Users,
+  UserPlus,
   FolderKanban,
   Wallet,
   FileBarChart,
