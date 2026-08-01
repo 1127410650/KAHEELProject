@@ -1035,5 +1035,11 @@
     "nameEn": "English name",
     "category": "Category",
     "projectRequired": "Project is required for an invoice"
+  },
+  "workspace": {
+    "title": "Workspace",
+    "switch": "Switch workspace",
+    "switched": "Switched to the new workspace",
+    "switchFailed": "Could not switch workspace"
   }
 }
