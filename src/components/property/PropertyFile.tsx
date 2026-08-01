@@ -44,23 +44,23 @@ export function PropertyFile({ projectId }: { projectId: string }) {
   const sensitive = isAccountant || can("payment.view_sensitive");
 
   return (
-    <div className="space-y-3">
-      <Tabs defaultValue="overview">
-        <div className="-mx-1 overflow-x-auto pb-1">
-          <TabsList className="h-auto w-max gap-1 p-1">
+    <div className="page-safe space-y-3">
+      <Tabs defaultValue="overview" className="min-w-0">
+        <div className="no-scrollbar w-full max-w-full overflow-x-auto overflow-y-hidden pb-1 lg:overflow-visible">
+          <TabsList className="h-auto w-max gap-1 whitespace-nowrap p-1 lg:w-full lg:flex-wrap lg:justify-start">
             {TABS.map(([key, label]) => (
-              <TabsTrigger key={key} value={key} className="h-8 px-2.5 text-xs">
+              <TabsTrigger key={key} value={key} className="h-8 w-auto shrink-0 whitespace-nowrap px-2.5 text-xs">
                 {pick(locale, label)}
               </TabsTrigger>
             ))}
           </TabsList>
         </div>
 
-        <TabsContent value="overview" className="mt-3">
+        <TabsContent value="overview" className="mt-3 min-w-0">
           <PropertyCard projectId={projectId} />
         </TabsContent>
 
-        <TabsContent value="land" className="mt-3">
+        <TabsContent value="land" className="mt-3 min-w-0">
           <PropertySection
             table="property_land"
             projectId={projectId}
@@ -108,7 +108,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="deed" className="mt-3">
+        <TabsContent value="deed" className="mt-3 min-w-0">
           <PropertySection
             table="property_deeds"
             projectId={projectId}
@@ -140,7 +140,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="owners" className="mt-3">
+        <TabsContent value="owners" className="mt-3 min-w-0">
           <PropertySection
             table="property_owners"
             projectId={projectId}
@@ -179,7 +179,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="license" className="mt-3">
+        <TabsContent value="license" className="mt-3 min-w-0">
           <PropertySection
             table="property_licenses"
             projectId={projectId}
@@ -219,7 +219,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="contracts" className="mt-3">
+        <TabsContent value="contracts" className="mt-3 min-w-0">
           <PropertySection
             table="property_contracts"
             projectId={projectId}
@@ -258,7 +258,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="plans" className="mt-3">
+        <TabsContent value="plans" className="mt-3 min-w-0">
           <PropertySection
             table="property_plans"
             projectId={projectId}
@@ -285,7 +285,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="units" className="mt-3">
+        <TabsContent value="units" className="mt-3 min-w-0">
           <PropertySection
             table="property_units"
             projectId={projectId}
@@ -317,7 +317,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="partition" className="mt-3">
+        <TabsContent value="partition" className="mt-3 min-w-0">
           <PropertySection
             table="property_partition_reports"
             projectId={projectId}
@@ -345,7 +345,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="services" className="mt-3">
+        <TabsContent value="services" className="mt-3 min-w-0">
           <PropertyServices
             projectId={projectId}
             canEdit={canEdit}
@@ -354,7 +354,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="documents" className="mt-3">
+        <TabsContent value="documents" className="mt-3 min-w-0">
           <PropertyDocuments
             projectId={projectId}
             canUpload={canUpload}
@@ -408,7 +408,7 @@ export function PropertyFile({ projectId }: { projectId: string }) {
           />
         </TabsContent>
 
-        <TabsContent value="completion" className="mt-3">
+        <TabsContent value="completion" className="mt-3 min-w-0">
           <PropertyCard projectId={projectId} />
         </TabsContent>
       </Tabs>

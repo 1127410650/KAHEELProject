@@ -133,8 +133,8 @@ export function ProjectMembersCard({ projectId }: { projectId: string }) {
   });
 
   return (
-    <Card>
-      <CardHeader className="flex-row items-center justify-between gap-2 space-y-0">
+    <Card className="h-auto min-w-0">
+      <CardHeader className="flex-row items-start justify-between gap-2 space-y-0 p-3 pb-2 sm:p-6 sm:pb-4">
         <CardTitle className="flex items-center gap-2 text-base">
           <Users className="size-4" aria-hidden />
           {t("members.title")}
@@ -147,7 +147,7 @@ export function ProjectMembersCard({ projectId }: { projectId: string }) {
                 {t("members.add")}
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-h-[88vh] w-[min(96vw,32rem)] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{t("members.add")}</DialogTitle>
               </DialogHeader>
@@ -225,40 +225,47 @@ export function ProjectMembersCard({ projectId }: { projectId: string }) {
       </CardHeader>
       <CardContent className="p-0">
         {members.length === 0 ? (
-          <p className="px-6 pb-6 text-sm text-muted-foreground">{t("members.empty")}</p>
+          <p className="px-3 pb-3 text-[13px] text-muted-foreground sm:px-6 sm:pb-6">{t("members.empty")}</p>
         ) : (
           <ul className="divide-y divide-border">
             {members.map((m) => (
-              <li key={m.id} className="flex flex-wrap items-center gap-3 px-6 py-3 text-sm">
-                <Link
-                  to="/supervisors/$id"
-                  params={{ id: m.supervisor_id }}
-                  className="font-medium text-primary hover:underline"
-                >
-                  {pickName(locale, m.supervisors?.name_ar, m.supervisors?.name_en)}
-                </Link>
-                <span className="rounded-full bg-secondary px-2 py-0.5 text-xs">
-                  {labels[(m.membership_type ?? "primary") as MembershipType]}
-                </span>
-                <span
-                  className={
-                    m.is_active
-                      ? "text-xs font-medium text-success"
-                      : "text-xs text-muted-foreground"
-                  }
-                >
-                  {m.is_active ? t("members.active") : t("members.inactive")}
-                </span>
-                <span className="num text-xs text-muted-foreground">
-                  {formatDate(m.start_date)}
-                  {m.end_date ? ` — ${formatDate(m.end_date)}` : ""}
-                </span>
+              <li
+                key={m.id}
+                className="flex min-w-0 flex-col gap-1.5 px-3 py-2.5 text-sm sm:flex-row sm:items-center sm:gap-3 sm:px-6 sm:py-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <Link
+                    to="/supervisors/$id"
+                    params={{ id: m.supervisor_id }}
+                    className="wrap-anywhere block font-medium text-primary hover:underline"
+                  >
+                    {pickName(locale, m.supervisors?.name_ar, m.supervisors?.name_en)}
+                  </Link>
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
+                    <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
+                      {labels[(m.membership_type ?? "primary") as MembershipType]}
+                    </span>
+                    <span
+                      className={
+                        m.is_active
+                          ? "whitespace-nowrap font-medium text-success"
+                          : "whitespace-nowrap text-muted-foreground"
+                      }
+                    >
+                      {m.is_active ? t("members.active") : t("members.inactive")}
+                    </span>
+                    <span className="num text-muted-foreground">
+                      {formatDate(m.start_date)}
+                      {m.end_date ? ` — ${formatDate(m.end_date)}` : ""}
+                    </span>
+                  </div>
+                </div>
                 {manage && m.is_active && (
                   <Button
                     type="button"
                     size="sm"
                     variant="ghost"
-                    className="ms-auto gap-1 text-destructive"
+                    className="h-8 w-full shrink-0 gap-1 px-2 text-xs text-destructive sm:w-auto"
                     disabled={end.isPending}
                     onClick={() => end.mutate(m.id)}
                   >

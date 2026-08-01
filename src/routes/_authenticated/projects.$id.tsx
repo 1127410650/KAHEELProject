@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, ClipboardList } from "lucide-react";
+import { ArrowLeft, ArrowRight, ClipboardList } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
@@ -44,7 +45,7 @@ function ProjectDetailPage() {
   const qc = useQueryClient();
   const { isAccountant } = useSession();
 
-  const { data: project } = useQuery({
+  const { data: project, isLoading: loadingProject } = useQuery({
     queryKey: ["project", id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -56,6 +57,7 @@ function ProjectDetailPage() {
       return data;
     },
   });
+
 
   const { data: requests = [] } = useQuery({
     queryKey: ["project-requests", id],
@@ -81,129 +83,135 @@ function ProjectDetailPage() {
     requests.find((r) => r.status === "awaiting_payment" && r.payment_no)?.payment_no ?? null;
 
   const supervisor = project?.supervisors as { name_ar?: string; name_en?: string } | null;
+  const na = locale === "ar" ? "غير مضاف" : "Not added";
+
+  /** compact label/value row: value wraps, never widens the page */
+  function Row({ label, children }: { label: string; children: ReactNode }) {
+    return (
+      <div className="flex min-w-0 items-start justify-between gap-3 py-1.5">
+        <dt className="shrink-0 text-muted-foreground">{label}</dt>
+        <dd className="wrap-anywhere flex-1 text-end font-medium">
+          {loadingProject ? <span className="inline-block h-3.5 w-20 animate-pulse rounded bg-muted align-middle" /> : children}
+        </dd>
+      </div>
+    );
+  }
+
+  const value = (v: unknown) => (v === null || v === undefined || v === "" ? <span className="font-normal text-muted-foreground">{na}</span> : (v as ReactNode));
 
   return (
-    <>
+    <div className="page-safe">
       <PageHeader
         title={project ? pickName(locale, project.name_ar, project.name_en) : t("projects.title")}
         description={project?.code ?? ""}
-        actions={
-          <Button asChild variant="outline" className="gap-2">
+        back={
+          <Button asChild variant="outline" size="sm" className="h-8 gap-1.5 px-2.5 text-xs">
             <Link to="/projects">
-              <ArrowRight className="size-4 ltr:rotate-180" aria-hidden />
+              {locale === "ar" ? (
+                <ArrowRight className="size-4" aria-hidden />
+              ) : (
+                <ArrowLeft className="size-4" aria-hidden />
+              )}
               {t("common.back")}
             </Link>
           </Button>
         }
       />
 
-      <div className="grid gap-2.5 sm:gap-4 lg:grid-cols-3">
-        <Card>
+      <div className="grid min-w-0 gap-2.5 sm:gap-4 lg:grid-cols-3">
+        <Card className="h-auto min-w-0">
           <CardHeader className="p-3 pb-2 sm:p-4 sm:pb-2">
             <CardTitle className="text-[17px] sm:text-lg">{t("common.details")}</CardTitle>
           </CardHeader>
           <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0">
-            <dl className="divide-y divide-border text-[13px] sm:text-sm">
-              <div className="flex items-center justify-between py-2">
-                <dt className="text-muted-foreground">{t("projects.code")}</dt>
-                <dd className="num font-medium">{project?.code ?? "—"}</dd>
-              </div>
-              <div className="flex items-center justify-between py-2">
-                <dt className="text-muted-foreground">{t("projects.supervisor")}</dt>
-                <dd className="font-medium">
-                  {project?.supervisor_id ? (
-                    <Link
-                      to="/supervisors/$id"
-                      params={{ id: project.supervisor_id }}
-                      className="text-primary hover:underline"
-                    >
-                      {pickName(locale, supervisor?.name_ar, supervisor?.name_en)}
-                    </Link>
-                  ) : (
-                    "—"
-                  )}
-                </dd>
-              </div>
-              <div className="flex items-center justify-between py-2">
-                <dt className="text-muted-foreground">{t("projects.city")}</dt>
-                <dd className="font-medium">{project?.city ?? "—"}</dd>
-              </div>
-              <div className="flex items-center justify-between py-2">
-                <dt className="text-muted-foreground">{t("projects.startDate")}</dt>
-                <dd className="num font-medium">{formatDate(project?.start_date)}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-2 py-2">
-                <dt className="text-muted-foreground">
-                  {locale === "ar" ? "نوع المشروع" : "Project type"}
-                </dt>
-                <dd className="font-medium">
-                  {isAccountant ? (
-                    <Select
-                      value={(project?.project_type as ProjectKind) ?? "general"}
-                      onValueChange={async (v) => {
-                        await supabase
-                          .from("projects")
-                          .update({ project_type: v as ProjectKind })
-                          .eq("id", id);
-                        await qc.invalidateQueries({ queryKey: ["project", id] });
-                      }}
-                    >
-                      <SelectTrigger className="h-8 w-40 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PROJECT_KINDS.map((k) => (
-                          <SelectItem key={k} value={k}>
-                            {pick(locale, PROJECT_KIND_LABELS[k])}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    pick(locale, PROJECT_KIND_LABELS[(project?.project_type as ProjectKind) ?? "general"])
-                  )}
-                </dd>
-              </div>
-              <div className="flex items-center justify-between py-2">
-                <dt className="text-muted-foreground">{t("common.status")}</dt>
-                <dd>{project && <StatusBadge status={project.status} />}</dd>
-              </div>
+            <dl className="min-w-0 divide-y divide-border text-[13px] sm:text-sm">
+              <Row label={t("projects.code")}>
+                <span className="num">{value(project?.code)}</span>
+              </Row>
+              <Row label={t("projects.supervisor")}>
+                {project?.supervisor_id ? (
+                  <Link
+                    to="/supervisors/$id"
+                    params={{ id: project.supervisor_id }}
+                    className="text-primary hover:underline"
+                  >
+                    {pickName(locale, supervisor?.name_ar, supervisor?.name_en)}
+                  </Link>
+                ) : (
+                  value(null)
+                )}
+              </Row>
+              <Row label={t("projects.city")}>{value(project?.city)}</Row>
+              <Row label={t("projects.startDate")}>
+                <span className="num">{value(project?.start_date ? formatDate(project.start_date) : null)}</span>
+              </Row>
+              <Row label={locale === "ar" ? "نوع المشروع" : "Project type"}>
+                {isAccountant ? (
+                  <Select
+                    value={(project?.project_type as ProjectKind) ?? "general"}
+                    onValueChange={async (v) => {
+                      await supabase
+                        .from("projects")
+                        .update({ project_type: v as ProjectKind })
+                        .eq("id", id);
+                      await qc.invalidateQueries({ queryKey: ["project", id] });
+                    }}
+                  >
+                    <SelectTrigger className="h-8 w-full max-w-[10rem] text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROJECT_KINDS.map((k) => (
+                        <SelectItem key={k} value={k}>
+                          {pick(locale, PROJECT_KIND_LABELS[k])}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  pick(locale, PROJECT_KIND_LABELS[(project?.project_type as ProjectKind) ?? "general"])
+                )}
+              </Row>
+              <Row label={t("common.status")}>
+                {project ? <StatusBadge status={project.status} /> : value(null)}
+              </Row>
             </dl>
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
+        <Card className="h-auto min-w-0 lg:col-span-2">
+
           <CardHeader className="p-3 pb-2 sm:p-4 sm:pb-2">
             <CardTitle className="flex items-center gap-2 text-[17px] sm:text-lg">
               <ClipboardList className="size-4" aria-hidden />
               {t("requests.projectRequests")}
             </CardTitle>
-            <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] font-medium">
-              <span className="rounded-full bg-secondary px-2 py-0.5">
+            <div className="no-scrollbar -mx-0.5 mt-2 flex max-w-full flex-wrap gap-1.5 overflow-x-auto px-0.5 text-[11px] font-medium">
+              <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.openRequests")}: <span className="num">{openCount}</span>
               </span>
-              <span className="rounded-full bg-warning/15 px-2 py-0.5 text-warning-foreground">
+              <span className="whitespace-nowrap rounded-full bg-warning/15 px-2 py-0.5 text-warning-foreground">
                 {t("requests.actionRequiredPlural")}: <span className="num">{actionCount}</span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5">
+              <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.awaitingPayment")}: <span className="num">{awaitingCount}</span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5">
+              <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.completedCount")}: <span className="num">{completedCount}</span>
               </span>
               {latestPaymentNo && <PaymentNoBadge paymentNo={latestPaymentNo} />}
             </div>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="min-w-0 p-0">
             {requests.length === 0 ? (
               <p className="px-3 pb-3 text-[13px] text-muted-foreground sm:px-4 sm:pb-4">
                 {t("requests.noneForProject")}
               </p>
             ) : (
               <>
-                <ul className="divide-y divide-border">
+                <ul className="min-w-0 divide-y divide-border">
                   {latestOpen.map((r) => (
-                    <li key={r.id}>
+                    <li key={r.id} className="min-w-0">
                       <RequestRow
                         id={r.id}
                         title={buildRequestTitle(
@@ -235,17 +243,17 @@ function ProjectDetailPage() {
           </CardContent>
         </Card>
 
-
-        <div className="lg:col-span-3">
+        <div className="min-w-0 lg:col-span-3">
           <ProjectMembersCard projectId={id} />
         </div>
 
         {project?.project_type === "real_estate" && (
-          <div className="lg:col-span-3">
+          <div className="min-w-0 lg:col-span-3">
             <PropertyFile projectId={id} />
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
+
