@@ -392,7 +392,8 @@ export function extractFields(
         let normalized: string | null = value;
         let penalty = 0;
         if (rule.kind === "date") {
-          normalized = normalizeDate(captured).value;
+          // Keep the surrounding match so هـ / م calendar markers stay visible.
+          normalized = normalizeDate(`${captured} ${m[0]}`).value;
           if (!normalized) penalty = 0.15;
         } else if (rule.kind === "number") {
           normalized = normalizeNumber(captured);
