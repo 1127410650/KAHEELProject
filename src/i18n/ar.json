@@ -105,7 +105,9 @@
     "accountant": "محاسب / مسؤول",
     "employee": "موظف",
     "label": "الدور",
-    "supervisor": "مشرف"
+    "supervisor": "مشرف",
+    "owner": "مالك الكيان",
+    "admin": "مدير الكيان"
   },
   "status": {
     "draft": "مسودة",

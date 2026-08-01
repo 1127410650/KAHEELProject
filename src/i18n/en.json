@@ -105,7 +105,9 @@
     "accountant": "Accountant / Admin",
     "employee": "Employee",
     "label": "Role",
-    "supervisor": "Supervisor"
+    "supervisor": "Supervisor",
+    "owner": "Workspace owner",
+    "admin": "Workspace admin"
   },
   "status": {
     "draft": "Draft",
