@@ -337,7 +337,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </header>
 
 
-        <main className="flex-1 p-3 md:p-6">{children}</main>
+        <main className="page-safe flex-1 overflow-x-hidden p-3 md:p-6">{children}</main>
         <ForcePasswordChangeDialog />
       </div>
     </div>
