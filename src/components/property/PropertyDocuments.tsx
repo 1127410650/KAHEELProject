@@ -521,7 +521,12 @@ export function PropertyDocuments({
                           </Button>
                         </div>
                       )}
+
+                      {!deleted && (
+                        <DocumentAnalysisPanel document={d} projectId={projectId} />
+                      )}
                     </AccordionContent>
+
                   </AccordionItem>
                 );
               })}
