@@ -376,7 +376,17 @@ export function extractFields(
       for (const pattern of rule.patterns) {
         const m = pattern.exec(text);
         if (!m) continue;
-        const captured = (m[m.length - 1] ?? m[1] ?? "").trim();
+        // Pick the most meaningful capture group: ignore calendar markers (هـ / م)
+        // and label alternations, then take the longest remaining group.
+        const groups = m
+          .slice(1)
+          .filter((g): g is string => typeof g === "string" && g.trim().length > 0)
+          .map((g) => g.trim())
+          .filter((g) => !/^(هـ|ه|م|ميلادي|هجري)$/.test(g));
+        const captured = (groups.length
+          ? groups.reduce((best, g) => (g.length > best.length ? g : best), groups[0]!)
+          : (m[0] ?? "")
+        ).trim();
         const value = cleanSpaces(toWesternDigits(captured));
         if (!value || value.length < 1) continue;
         let normalized: string | null = value;
