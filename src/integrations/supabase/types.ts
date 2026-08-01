@@ -310,6 +310,279 @@ export type Database = {
           },
         ]
       }
+      document_analyses: {
+        Row: {
+          analyzer_version: string
+          applied_at: string | null
+          applied_by: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          document_id: string
+          document_type_confirmed: string | null
+          document_type_detected: string | null
+          document_version: number | null
+          extraction_method: string | null
+          failure_code: string | null
+          failure_message: string | null
+          file_hash: string | null
+          id: string
+          language_detected: string | null
+          overall_confidence: number | null
+          page_count: number | null
+          project_id: string
+          qr_findings: Json
+          quick_mode: boolean
+          raw_text: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          analyzer_version?: string
+          applied_at?: string | null
+          applied_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id: string
+          document_type_confirmed?: string | null
+          document_type_detected?: string | null
+          document_version?: number | null
+          extraction_method?: string | null
+          failure_code?: string | null
+          failure_message?: string | null
+          file_hash?: string | null
+          id?: string
+          language_detected?: string | null
+          overall_confidence?: number | null
+          page_count?: number | null
+          project_id: string
+          qr_findings?: Json
+          quick_mode?: boolean
+          raw_text?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          analyzer_version?: string
+          applied_at?: string | null
+          applied_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id?: string
+          document_type_confirmed?: string | null
+          document_type_detected?: string | null
+          document_version?: number | null
+          extraction_method?: string | null
+          failure_code?: string | null
+          failure_message?: string | null
+          file_hash?: string | null
+          id?: string
+          language_detected?: string | null
+          overall_confidence?: number | null
+          page_count?: number | null
+          project_id?: string
+          qr_findings?: Json
+          quick_mode?: boolean
+          raw_text?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_analyses_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "property_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_analyses_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_analysis_conflicts: {
+        Row: {
+          analysis_id: string
+          conflict_type: string | null
+          created_at: string
+          document_value: string | null
+          field_key: string
+          id: string
+          project_value: string | null
+          resolution: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+        }
+        Insert: {
+          analysis_id: string
+          conflict_type?: string | null
+          created_at?: string
+          document_value?: string | null
+          field_key: string
+          id?: string
+          project_value?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+        }
+        Update: {
+          analysis_id?: string
+          conflict_type?: string | null
+          created_at?: string
+          document_value?: string | null
+          field_key?: string
+          id?: string
+          project_value?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_analysis_conflicts_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "document_analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_analysis_fields: {
+        Row: {
+          analysis_id: string
+          approved_value: string | null
+          bounding_box: Json | null
+          confidence: number | null
+          created_at: string
+          current_project_value: string | null
+          extracted_value: string | null
+          extraction_method: string | null
+          field_key: string
+          field_label: string | null
+          id: string
+          is_sensitive: boolean
+          match_state: string | null
+          normalized_value: string | null
+          original_text: string | null
+          page_number: number | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          analysis_id: string
+          approved_value?: string | null
+          bounding_box?: Json | null
+          confidence?: number | null
+          created_at?: string
+          current_project_value?: string | null
+          extracted_value?: string | null
+          extraction_method?: string | null
+          field_key: string
+          field_label?: string | null
+          id?: string
+          is_sensitive?: boolean
+          match_state?: string | null
+          normalized_value?: string | null
+          original_text?: string | null
+          page_number?: number | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          analysis_id?: string
+          approved_value?: string | null
+          bounding_box?: Json | null
+          confidence?: number | null
+          created_at?: string
+          current_project_value?: string | null
+          extracted_value?: string | null
+          extraction_method?: string | null
+          field_key?: string
+          field_label?: string | null
+          id?: string
+          is_sensitive?: boolean
+          match_state?: string | null
+          normalized_value?: string | null
+          original_text?: string | null
+          page_number?: number | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_analysis_fields_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "document_analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_analysis_runs: {
+        Row: {
+          analysis_id: string
+          analyzer_version: string
+          completed_at: string | null
+          device_info: Json | null
+          id: string
+          performance_metrics: Json | null
+          result: string | null
+          started_at: string
+        }
+        Insert: {
+          analysis_id: string
+          analyzer_version?: string
+          completed_at?: string | null
+          device_info?: Json | null
+          id?: string
+          performance_metrics?: Json | null
+          result?: string | null
+          started_at?: string
+        }
+        Update: {
+          analysis_id?: string
+          analyzer_version?: string
+          completed_at?: string | null
+          device_info?: Json | null
+          id?: string
+          performance_metrics?: Json | null
+          result?: string | null
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_analysis_runs_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "document_analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_line_items: {
         Row: {
           confidence: number
@@ -3355,6 +3628,10 @@ export type Database = {
       can_edit_property: { Args: { _project_id: string }; Returns: boolean }
       can_view_invoice: { Args: { _invoice_id: string }; Returns: boolean }
       can_view_property: { Args: { _project_id: string }; Returns: boolean }
+      can_view_property_document: {
+        Args: { _document_id: string }
+        Returns: boolean
+      }
       can_view_property_documents: {
         Args: { _project_id: string }
         Returns: boolean
@@ -3397,6 +3674,22 @@ export type Database = {
           p_type: Database["public"]["Enums"]["custody_txn_type"]
         }
         Returns: number
+      }
+      document_analysis_apply: {
+        Args: { _analysis_id: string; _only_field_keys?: string[] }
+        Returns: Json
+      }
+      document_analysis_raw_text: {
+        Args: { _analysis_id: string }
+        Returns: string
+      }
+      document_analysis_resolve_conflict: {
+        Args: { _conflict_id: string; _keep?: string; _resolution: string }
+        Returns: undefined
+      }
+      document_analysis_review_field: {
+        Args: { _action: string; _field_id: string; _value?: string }
+        Returns: undefined
       }
       has_perm: { Args: { _perm: string }; Returns: boolean }
       has_role: {

@@ -33,6 +33,7 @@ import {
   pdb,
   type PropertyRow,
 } from "@/lib/property";
+import { DocumentAnalysisPanel } from "@/components/property/DocumentAnalysisPanel";
 
 async function sha256(file: File): Promise<string | null> {
   try {
@@ -520,7 +521,12 @@ export function PropertyDocuments({
                           </Button>
                         </div>
                       )}
+
+                      {!deleted && (
+                        <DocumentAnalysisPanel document={d} projectId={projectId} />
+                      )}
                     </AccordionContent>
+
                   </AccordionItem>
                 );
               })}
