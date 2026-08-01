@@ -43,6 +43,11 @@ function AuthPage() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // The route is client-only; matching the empty server shell on the first paint
+  // avoids a hydration mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
