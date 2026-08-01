@@ -43,6 +43,11 @@ function AuthPage() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // The route is client-only; matching the empty server shell on the first paint
+  // avoids a hydration mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -76,8 +81,11 @@ function AuthPage() {
   }
 
 
+  if (!mounted) return null;
+
   return (
     <div dir={dir} className="grid min-h-screen lg:grid-cols-2">
+
       <div className="relative hidden flex-col justify-between bg-sidebar p-10 lg:flex">
         <div className="flex items-center gap-3">
           <span className="grid size-10 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
