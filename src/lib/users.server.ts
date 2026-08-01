@@ -74,19 +74,42 @@ export async function createAppUserImpl(userClient: Client, input: CreateUserInp
     throw new Error(profileError.message.includes("duplicate") ? "DUPLICATE" : "CREATE_FAILED");
   }
 
-  await supabaseAdmin.from("user_roles").delete().eq("user_id", userId);
-  await supabaseAdmin.from("user_roles").insert({ user_id: userId, role: input.role });
+  // Membership first: roles/permissions only exist for an active member of this workspace.
+  await supabaseAdmin
+    .from("tenant_memberships")
+    .upsert(
+      { tenant_id: tenantId, user_id: userId, role: input.role, status: "active" },
+      { onConflict: "tenant_id,user_id" },
+    );
+
+  await supabaseAdmin
+    .from("user_roles")
+    .delete()
+    .eq("user_id", userId)
+    .eq("tenant_id", tenantId);
+  await supabaseAdmin
+    .from("user_roles")
+    .insert({ user_id: userId, role: input.role, tenant_id: tenantId });
 
   if (permissions.length) {
     await supabaseAdmin
       .from("user_permissions")
-      .insert(permissions.map((permission) => ({ user_id: userId, permission })));
+      .insert(
+        permissions.map((permission) => ({ user_id: userId, permission, tenant_id: tenantId })),
+      );
   }
   if (input.project_ids.length) {
     await supabaseAdmin
       .from("project_members")
-      .insert(input.project_ids.map((project_id) => ({ user_id: userId, project_id })));
+      .insert(
+        input.project_ids.map((project_id) => ({
+          user_id: userId,
+          project_id,
+          tenant_id: tenantId,
+        })),
+      );
   }
+
 
   await userClient.rpc("log_audit", {
     _entity_type: "user",
