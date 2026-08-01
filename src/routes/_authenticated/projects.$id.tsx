@@ -73,9 +73,12 @@ function ProjectDetailPage() {
   });
 
   const openCount = requests.filter(
-    (r) => r.status !== "completed" && r.status !== "cancelled",
-  ).length;
+  const isOpen = (s: string) => s !== "completed" && s !== "cancelled" && s !== "rejected";
+  const openCount = requests.filter((r) => isOpen(r.status)).length;
+  const actionCount = requests.filter((r) => simpleStage(r.status) === "action_needed").length;
   const awaitingCount = requests.filter((r) => r.status === "awaiting_payment").length;
+  const completedCount = requests.filter((r) => r.status === "completed").length;
+  const latestOpen = requests.filter((r) => isOpen(r.status)).slice(0, 3);
   const latestPaymentNo =
     requests.find((r) => r.status === "awaiting_payment" && r.payment_no)?.payment_no ?? null;
 
