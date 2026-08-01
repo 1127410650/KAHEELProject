@@ -195,6 +195,7 @@
   "custody": {
     "title": "Supervisor Custody",
     "description": "Each supervisor has an independent statement; balance counts approved entries only",
+    "viewing": "Showing",
     "balance": "Custody Balance",
     "statement": "Custody Statement",
     "add": "Add Custody Voucher",
