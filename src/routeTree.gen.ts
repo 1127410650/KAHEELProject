@@ -21,6 +21,7 @@ import { Route as AuthenticatedInvitationsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
+import { Route as AuthenticatedMyDocumentsRouteImport } from './routes/_authenticated/my-documents'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
@@ -103,6 +104,12 @@ const AuthenticatedMyCustodyRoute = AuthenticatedMyCustodyRouteImport.update({
   path: '/my-custody',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMyDocumentsRoute =
+  AuthenticatedMyDocumentsRouteImport.update({
+    id: '/my-documents',
+    path: '/my-documents',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedNotificationsRoute =
   AuthenticatedNotificationsRouteImport.update({
     id: '/notifications',
@@ -230,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
+  '/my-documents': typeof AuthenticatedMyDocumentsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/portal': typeof AuthenticatedPortalRoute
@@ -264,6 +272,7 @@ export interface FileRoutesByTo {
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
+  '/my-documents': typeof AuthenticatedMyDocumentsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/portal': typeof AuthenticatedPortalRoute
@@ -300,6 +309,7 @@ export interface FileRoutesById {
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
+  '/_authenticated/my-documents': typeof AuthenticatedMyDocumentsRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/me'
     | '/my-custody'
+    | '/my-documents'
     | '/notifications'
     | '/onboarding'
     | '/portal'
@@ -370,6 +381,7 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/me'
     | '/my-custody'
+    | '/my-documents'
     | '/notifications'
     | '/onboarding'
     | '/portal'
@@ -405,6 +417,7 @@ export interface FileRouteTypes {
     | '/_authenticated/invoices'
     | '/_authenticated/me'
     | '/_authenticated/my-custody'
+    | '/_authenticated/my-documents'
     | '/_authenticated/notifications'
     | '/_authenticated/onboarding'
     | '/_authenticated/portal'
@@ -521,6 +534,13 @@ declare module '@tanstack/react-router' {
       path: '/my-custody'
       fullPath: '/my-custody'
       preLoaderRoute: typeof AuthenticatedMyCustodyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-documents': {
+      id: '/_authenticated/my-documents'
+      path: '/my-documents'
+      fullPath: '/my-documents'
+      preLoaderRoute: typeof AuthenticatedMyDocumentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/notifications': {
@@ -681,6 +701,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
+  AuthenticatedMyDocumentsRoute: typeof AuthenticatedMyDocumentsRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
@@ -711,6 +732,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
+  AuthenticatedMyDocumentsRoute: AuthenticatedMyDocumentsRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
