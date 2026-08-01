@@ -138,12 +138,35 @@ export interface UpdateUserInput {
 
 export async function updateAppUserImpl(userClient: Client, input: UpdateUserInput) {
   await assertAccountant(userClient);
+  const tenantId = await callerTenantId(userClient);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+  // An accountant may only administer members of their own workspace.
+  const { data: membership } = await supabaseAdmin
+    .from("tenant_memberships")
+    .select("id")
+    .eq("tenant_id", tenantId)
+    .eq("user_id", input.user_id)
+    .eq("status", "active")
+    .maybeSingle();
+  if (!membership) throw new Error("NOT_IN_TENANT");
+
   const [{ data: prevRoles }, { data: prevPerms }, { data: prevMembers }] = await Promise.all([
-    supabaseAdmin.from("user_roles").select("role").eq("user_id", input.user_id),
-    supabaseAdmin.from("user_permissions").select("permission").eq("user_id", input.user_id),
-    supabaseAdmin.from("project_members").select("project_id").eq("user_id", input.user_id),
+    supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", input.user_id)
+      .eq("tenant_id", tenantId),
+    supabaseAdmin
+      .from("user_permissions")
+      .select("permission")
+      .eq("user_id", input.user_id)
+      .eq("tenant_id", tenantId),
+    supabaseAdmin
+      .from("project_members")
+      .select("project_id")
+      .eq("user_id", input.user_id)
+      .eq("tenant_id", tenantId),
   ]);
   const before = {
     role: (prevRoles ?? [])[0]?.role ?? null,
@@ -153,8 +176,20 @@ export async function updateAppUserImpl(userClient: Client, input: UpdateUserInp
 
 
   if (input.role) {
-    await supabaseAdmin.from("user_roles").delete().eq("user_id", input.user_id);
-    await supabaseAdmin.from("user_roles").insert({ user_id: input.user_id, role: input.role });
+    await supabaseAdmin
+      .from("user_roles")
+      .delete()
+      .eq("user_id", input.user_id)
+      .eq("tenant_id", tenantId);
+    await supabaseAdmin
+      .from("user_roles")
+      .insert({ user_id: input.user_id, role: input.role, tenant_id: tenantId });
+    await supabaseAdmin
+      .from("tenant_memberships")
+      .update({ role: input.role })
+      .eq("tenant_id", tenantId)
+      .eq("user_id", input.user_id)
+      .neq("role", "owner");
   }
 
   const profilePatch: Database["public"]["Tables"]["profiles"]["Update"] = {
@@ -178,22 +213,39 @@ export async function updateAppUserImpl(userClient: Client, input: UpdateUserInp
     const permissions = input.permissions.filter((p) =>
       (PERMISSIONS as readonly string[]).includes(p),
     );
-    await supabaseAdmin.from("user_permissions").delete().eq("user_id", input.user_id);
+    await supabaseAdmin
+      .from("user_permissions")
+      .delete()
+      .eq("user_id", input.user_id)
+      .eq("tenant_id", tenantId);
     if (permissions.length) {
-      await supabaseAdmin
-        .from("user_permissions")
-        .insert(permissions.map((permission) => ({ user_id: input.user_id, permission })));
+      await supabaseAdmin.from("user_permissions").insert(
+        permissions.map((permission) => ({
+          user_id: input.user_id,
+          permission,
+          tenant_id: tenantId,
+        })),
+      );
     }
   }
 
   if (input.project_ids) {
-    await supabaseAdmin.from("project_members").delete().eq("user_id", input.user_id);
+    await supabaseAdmin
+      .from("project_members")
+      .delete()
+      .eq("user_id", input.user_id)
+      .eq("tenant_id", tenantId);
     if (input.project_ids.length) {
-      await supabaseAdmin
-        .from("project_members")
-        .insert(input.project_ids.map((project_id) => ({ user_id: input.user_id, project_id })));
+      await supabaseAdmin.from("project_members").insert(
+        input.project_ids.map((project_id) => ({
+          user_id: input.user_id,
+          project_id,
+          tenant_id: tenantId,
+        })),
+      );
     }
   }
+
 
   if (input.reset_password) {
     await supabaseAdmin.auth.admin.updateUserById(input.user_id, {
