@@ -444,8 +444,17 @@ function DashboardContent() {
           open={on("summary")}
           onToggle={toggle}
         >
-          {summary.isLoading ? (
+          {summary.isLoading || activeSupervisors.isLoading ? (
             <Loading />
+          ) : summary.isError || activeSupervisors.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => {
+                summary.refetch();
+                activeSupervisors.refetch();
+              }}
+            />
           ) : (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               <MiniStat
@@ -455,12 +464,12 @@ function DashboardContent() {
               />
               <MiniStat
                 label={t("dashboard.supervisorsCount")}
-                value={formatNumber(summary.data?.supervisors)}
+                value={formatNumber(activeCount ?? 0)}
                 icon={Users}
               />
               <MiniStat
                 label={t("dashboard.totalCustody")}
-                value={formatMoney(summary.data?.custody ?? 0, locale)}
+                value={formatMoney(custodyTotal, locale)}
                 icon={Wallet}
               />
               <MiniStat
@@ -492,6 +501,12 @@ function DashboardContent() {
         >
           {projects.isLoading ? (
             <Loading />
+          ) : projects.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => projects.refetch()}
+            />
           ) : (projects.data ?? []).length === 0 ? (
             <Empty text={t("projects.empty")} />
           ) : (
@@ -514,17 +529,23 @@ function DashboardContent() {
           id="supervisors"
           label={t("nav.supervisors")}
           icon={Users}
-          count={summary.data?.supervisors ?? null}
+          count={activeCount}
           open={on("supervisors")}
           onToggle={toggle}
         >
-          {supervisors.isLoading ? (
+          {activeSupervisors.isLoading ? (
             <Loading />
-          ) : (supervisors.data ?? []).length === 0 ? (
+          ) : activeSupervisors.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => activeSupervisors.refetch()}
+            />
+          ) : supervisorList.length === 0 ? (
             <Empty text={t("supervisors.empty")} />
           ) : (
             <ul className="divide-y divide-border">
-              {(supervisors.data ?? []).map((s) => (
+              {supervisorList.map((s) => (
                 <Row
                   key={s.id}
                   to={{ to: "/supervisors/$id", params: { id: s.id } }}
@@ -541,18 +562,28 @@ function DashboardContent() {
           id="custody"
           label={t("nav.custody")}
           icon={Wallet}
-          count={balances.data?.length ?? null}
+          count={activeCount}
           open={on("custody")}
           onToggle={toggle}
         >
-          {balances.isLoading ? (
+          {rawBalances.isLoading || activeSupervisors.isLoading ? (
             <Loading />
-          ) : (balances.data ?? []).length === 0 ? (
+          ) : rawBalances.isError || activeSupervisors.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => {
+                rawBalances.refetch();
+                activeSupervisors.refetch();
+              }}
+            />
+          ) : activeBalances.length === 0 ? (
             <Empty text={t("custody.empty")} />
           ) : (
             <>
               <div className="grid gap-2 sm:grid-cols-2">
-                {(balances.data ?? []).map((b) => (
+                {activeBalances.map((b) => (
+
                   <button
                     key={b.supervisor_id}
                     type="button"
