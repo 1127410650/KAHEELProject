@@ -17,6 +17,7 @@ import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedInvitationsRouteImport } from './routes/_authenticated/invitations'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
@@ -81,6 +82,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInvitationsRoute =
+  AuthenticatedInvitationsRouteImport.update({
+    id: '/invitations',
+    path: '/invitations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/invitations': typeof AuthenticatedInvitationsRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
@@ -252,6 +260,7 @@ export interface FileRoutesByTo {
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/invitations': typeof AuthenticatedInvitationsRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
@@ -287,6 +296,7 @@ export interface FileRoutesById {
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/invitations': typeof AuthenticatedInvitationsRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/custody'
     | '/dashboard'
+    | '/invitations'
     | '/invoices'
     | '/me'
     | '/my-custody'
@@ -355,6 +366,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/custody'
     | '/dashboard'
+    | '/invitations'
     | '/invoices'
     | '/me'
     | '/my-custody'
@@ -389,6 +401,7 @@ export interface FileRouteTypes {
     | '/_authenticated/audit'
     | '/_authenticated/custody'
     | '/_authenticated/dashboard'
+    | '/_authenticated/invitations'
     | '/_authenticated/invoices'
     | '/_authenticated/me'
     | '/_authenticated/my-custody'
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/invitations': {
+      id: '/_authenticated/invitations'
+      path: '/invitations'
+      fullPath: '/invitations'
+      preLoaderRoute: typeof AuthenticatedInvitationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/invoices': {
@@ -657,6 +677,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedCustodyRoute: typeof AuthenticatedCustodyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedInvitationsRoute: typeof AuthenticatedInvitationsRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
@@ -686,6 +707,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedCustodyRoute: AuthenticatedCustodyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedInvitationsRoute: AuthenticatedInvitationsRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
