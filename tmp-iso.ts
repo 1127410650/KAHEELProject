@@ -39,7 +39,7 @@ const mk = async (t: string, code: string) => {
   if (e1) throw e1;
   const { data: s, error: e2 } = await admin.from("suppliers").insert({ tenant_id: t, name_ar: "ISO vendor " + code }).select("id").single();
   if (e2) throw e2;
-  const { data: i, error: e3 } = await admin.from("invoices").insert({ tenant_id: t, project_id: p!.id, supplier_id: s!.id, internal_no: "ISOI-" + code + "-" + Math.floor(Math.random()*9999), invoice_no: "ISO-" + code + "-" + Math.floor(Math.random()*9999), invoice_date: "2026-01-01", total_amount: 100 }).select("id").single();
+  const { data: i, error: e3 } = await admin.from("invoices").insert({ tenant_id: t, project_id: p!.id, supplier_id: s!.id, internal_no: Math.floor(900000 + Math.random()*90000), invoice_no: "ISO-" + code + "-" + Math.floor(Math.random()*9999), invoice_date: "2026-01-01", total_amount: 100 }).select("id").single();
   if (e3) throw e3;
   const path = `projects/${p!.id}/${crypto.randomUUID()}/iso.txt`;
   await admin.storage.from("attachments").upload(path, new Blob(["iso"]), { contentType: "text/plain" });
