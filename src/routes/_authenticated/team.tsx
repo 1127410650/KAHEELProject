@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { formatDate } from "@/lib/format";
+import { formatDate, pickName } from "@/lib/format";
 import { PageHeader } from "@/components/AppLayout";
 import { RecordCard } from "@/components/RecordCard";
 import {
@@ -301,8 +301,8 @@ function MemberList({
             title={row.full_name || row.email || "—"}
             subtitle={t(`team.roles.${row.role}`)}
             fields={[
-              { label: t("team.emailInvite"), value: row.email ?? "—", numeric: true },
-              { label: t("team.joined"), value: formatDate(row.joined_at), numeric: true },
+              { label: t("team.emailInvite"), value: row.email ?? "—", num: true },
+              { label: t("team.joined"), value: formatDate(row.joined_at), num: true },
               {
                 label: t("team.projects"),
                 value: (row.project_names ?? []).join(" · ") || t("team.allProjects"),
@@ -407,8 +407,8 @@ function InviteList({
           title={row.email}
           subtitle={t(`team.roles.${row.invited_role}`)}
           fields={[
-            { label: t("invite.expiresAt"), value: formatDate(row.expires_at), numeric: true },
-            { label: t("team.mobile"), value: row.mobile ?? "—", numeric: true },
+            { label: t("invite.expiresAt"), value: formatDate(row.expires_at), num: true },
+            { label: t("team.mobile"), value: row.mobile ?? "—", num: true },
           ]}
           actions={
             onRevoke ? (
@@ -449,7 +449,7 @@ function InviteDialog({
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id,name,code")
+        .select("id,name_ar,name_en,code")
         .order("name");
       if (error) throw error;
       return data ?? [];
@@ -603,9 +603,9 @@ function InviteDialog({
                         v === true ? [...prev, project.id] : prev.filter((id) => id !== project.id),
                       )
                     }
-                    aria-label={project.name}
+                    aria-label={pickName(project, locale)}
                   />
-                  <span className="truncate">{project.name}</span>
+                  <span className="truncate">{pickName(project, locale)}</span>
                 </label>
               ))}
             </div>
