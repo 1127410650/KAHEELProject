@@ -104,11 +104,11 @@ function ProjectDetailPage() {
           </CardHeader>
           <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0">
             <dl className="divide-y divide-border text-[13px] sm:text-sm">
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.code")}</dt>
                 <dd className="num font-medium">{project?.code ?? "—"}</dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.supervisor")}</dt>
                 <dd className="font-medium">
                   {project?.supervisor_id ? (
@@ -124,15 +124,15 @@ function ProjectDetailPage() {
                   )}
                 </dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.city")}</dt>
                 <dd className="font-medium">{project?.city ?? "—"}</dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.startDate")}</dt>
                 <dd className="num font-medium">{formatDate(project?.start_date)}</dd>
               </div>
-              <div className="flex items-center justify-between gap-2 py-2.5">
+              <div className="flex items-center justify-between gap-2 py-2">
                 <dt className="text-muted-foreground">
                   {locale === "ar" ? "نوع المشروع" : "Project type"}
                 </dt>
@@ -164,7 +164,7 @@ function ProjectDetailPage() {
                   )}
                 </dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("common.status")}</dt>
                 <dd>{project && <StatusBadge status={project.status} />}</dd>
               </div>
