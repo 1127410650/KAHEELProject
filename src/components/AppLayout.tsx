@@ -382,14 +382,29 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
           <div className="min-w-0 flex-1">
             <p className="truncate text-[13px] font-semibold text-foreground md:text-sm">
-              {t("app.name")}
+              {current
+                ? (locale === "en" ? current.name_en || current.name_ar : current.name_ar)
+                : t("app.name")}
             </p>
-            <p className="hidden truncate text-xs text-muted-foreground sm:block">
-              {t("app.tagline")}
+            <p className="truncate text-[11px] text-muted-foreground sm:text-xs">
+              {current ? t(`account.types.${current.tenant_type}`) : t("app.tagline")}
             </p>
           </div>
 
-          <WorkspaceSwitcher />
+          {accounts.length > 1 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate({ to: "/select-account" })}
+              className="size-9 shrink-0 gap-2 p-0 sm:size-auto sm:px-3"
+              aria-label={t("account.switch")}
+              title={t("account.switch")}
+            >
+              <Repeat2 className="size-4" aria-hidden />
+              <span className="hidden text-xs sm:inline">{t("account.switch")}</span>
+            </Button>
+          )}
+
 
           <NotificationsBell />
 
