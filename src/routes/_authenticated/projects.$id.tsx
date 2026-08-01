@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, ClipboardList } from "lucide-react";
@@ -85,7 +86,7 @@ function ProjectDetailPage() {
   const na = locale === "ar" ? "غير مضاف" : "Not added";
 
   /** compact label/value row: value wraps, never widens the page */
-  function Row({ label, children }: { label: string; children: React.ReactNode }) {
+  function Row({ label, children }: { label: string; children: ReactNode }) {
     return (
       <div className="flex min-w-0 items-start justify-between gap-3 py-1.5">
         <dt className="shrink-0 text-muted-foreground">{label}</dt>
@@ -96,7 +97,7 @@ function ProjectDetailPage() {
     );
   }
 
-  const value = (v: unknown) => (v === null || v === undefined || v === "" ? <span className="font-normal text-muted-foreground">{na}</span> : (v as React.ReactNode));
+  const value = (v: unknown) => (v === null || v === undefined || v === "" ? <span className="font-normal text-muted-foreground">{na}</span> : (v as ReactNode));
 
   return (
     <div className="page-safe">
