@@ -4562,6 +4562,14 @@ export type Database = {
           tenant_id: string
         }[]
       }
+      invitation_accept_by_id: {
+        Args: { _id: string }
+        Returns: {
+          activated: boolean
+          memberships: number
+          tenant_id: string
+        }[]
+      }
       invitation_create: {
         Args: {
           _email: string
@@ -4650,6 +4658,19 @@ export type Database = {
           role: string
           tenant_id: string
           tenant_type: string
+        }[]
+      }
+      my_invitations: {
+        Args: never
+        Returns: {
+          created_at: string
+          expires_at: string
+          id: string
+          invitation_type: string
+          invited_role: string
+          tenant_id: string
+          tenant_name_ar: string
+          tenant_name_en: string
         }[]
       }
       my_tenants: {
