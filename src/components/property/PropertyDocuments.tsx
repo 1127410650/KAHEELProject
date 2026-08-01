@@ -33,6 +33,7 @@ import {
   pdb,
   type PropertyRow,
 } from "@/lib/property";
+import { DocumentAnalysisPanel } from "@/components/property/DocumentAnalysisPanel";
 
 async function sha256(file: File): Promise<string | null> {
   try {
