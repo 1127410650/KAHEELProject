@@ -26,7 +26,8 @@ async function client(email: string) {
 const ta = await tenant("TEST-TENANT-A"), tb = await tenant("TEST-TENANT-B");
 const ua = await user("isolation-a@tahqaq.test"), ub = await user("isolation-b@tahqaq.test");
 for (const [u, t, role] of [[ua, ta, "owner"], [ub, tb, "accountant"]] as const) {
-  await admin.from("tenant_memberships").upsert({ tenant_id: t, user_id: u, role, status: "active", created_by: u }, { onConflict: "tenant_id,user_id" });
+  await admin.from("tenant_memberships").delete().eq("tenant_id", t).eq("user_id", u);
+  { const r = await admin.from("tenant_memberships").insert({ tenant_id: t, user_id: u, role, status: "active", created_by: u }); if (r.error) throw r.error; }
   await admin.from("profiles").upsert({ user_id: u, full_name: "ISO " + role, active_tenant_id: t, locale: "ar", is_active: true }, { onConflict: "user_id" });
   await admin.from("user_roles").upsert({ user_id: u, role: "accountant" }, { onConflict: "user_id,role" });
 }
@@ -84,7 +85,7 @@ for (const [n, c, own, other] of [["A", ca, A, B], ["B", cb, B, A]] as const) {
   check(`set_active_tenant-blocked-${n}`, !!sw.error, sw.error?.message?.slice(0, 40) ?? "");
 }
 // dual membership + switch
-await admin.from("tenant_memberships").upsert({ tenant_id: tb, user_id: ua, role: "viewer", status: "active", created_by: ua }, { onConflict: "tenant_id,user_id" });
+{ await admin.from("tenant_memberships").delete().eq("tenant_id", tb).eq("user_id", ua); const r = await admin.from("tenant_memberships").insert({ tenant_id: tb, user_id: ua, role: "viewer", status: "active", created_by: ua }); if (r.error) throw r.error; }
 const cd = await client("isolation-a@tahqaq.test");
 const { data: mt2 } = await cd.rpc("my_tenants");
 check("dual-membership-2-tenants", (mt2 as any[])?.length === 2);
