@@ -241,7 +241,8 @@ export async function saveVerifiedInvoice(input: SaveInvoiceInput): Promise<Save
   let fileUploaded = false;
   if (input.file && outcome.verification_id) {
     const ext = (input.file.name.split(".").pop() ?? "bin").toLowerCase().slice(0, 8);
-    const path = `${outcome.invoice_id}/${outcome.verification_id}.${ext}`;
+    // Path shape is enforced by the storage policy: invoices/<invoice_id>/<verification_id>.<ext>
+    const path = `invoices/${outcome.invoice_id}/${outcome.verification_id}.${ext}`;
     const upload = await supabase.storage
       .from("invoice-files")
       .upload(path, input.file, { contentType: input.file.type || "application/octet-stream" });
