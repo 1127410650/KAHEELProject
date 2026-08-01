@@ -62,7 +62,7 @@ async function mkUser(email) {
     email_confirm: true,
     user_metadata: { full_name: email },
   });
-  if (error) throw new Error(`user ${email}: ${error.message}`);
+  if (error) throw new Error(`user ${email}: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`);
   const id = data.user.id;
   created.users.push(id);
   await admin
@@ -120,8 +120,8 @@ async function cleanup() {
 async function main() {
   const A = await mkTenant(`__test_A_${stamp}`);
   const B = await mkTenant(`__test_B_${stamp}`);
-  const e1 = `iso_u1_${stamp}@example.test`;
-  const e2 = `iso_u2_${stamp}@example.test`;
+  const e1 = `iso_u1_${stamp}@tahqaq-test.com`;
+  const e2 = `iso_u2_${stamp}@tahqaq-test.com`;
   const u1 = await mkUser(e1); // owner in A, viewer in B
   const u2 = await mkUser(e2); // accountant in A, supervisor in B
 
@@ -137,7 +137,7 @@ async function main() {
   check("roles: supervisor granted in B", (await grantRole(B, u2, "supervisor")) === null);
   check("roles: owner user has accountant role in A", (await grantRole(A, u1, "accountant")) === null);
   // grant without membership must be blocked
-  const u3 = await mkUser(`iso_u3_${stamp}@example.test`);
+  const u3 = await mkUser(`iso_u3_${stamp}@tahqaq-test.com`);
   const blocked = await grantRole(A, u3, "accountant");
   check("9a) role for non-member rejected by DB", !!blocked, blocked ?? "accepted!");
 
