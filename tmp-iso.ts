@@ -31,14 +31,19 @@ for (const [u, t, role] of [[ua, ta, "owner"], [ub, tb, "accountant"]] as const)
   await admin.from("user_roles").upsert({ user_id: u, role: "accountant" }, { onConflict: "user_id,role" });
 }
 const mk = async (t: string, code: string) => {
-  const { data: p, error } = await admin.from("projects").insert({ tenant_id: t, name: "ISO " + code, code, status: "active" }).select("id").single();
+  const { data: sv, error: e0 } = await admin.from("supervisors").insert({ tenant_id: t, name_ar: "ISO sup " + code, national_id: "10" + Math.floor(Math.random()*100000000), phone: "05" + Math.floor(10000000 + Math.random()*89999999) }).select("id").single();
+  if (e0) throw e0;
+  const { data: p, error } = await admin.from("projects").insert({ tenant_id: t, name_ar: "ISO " + code, code: "ISO-" + code + "-" + Math.floor(Math.random()*9999), supervisor_id: sv!.id, status: "active" }).select("id").single();
   if (error) throw error;
-  const { data: r } = await admin.from("requests").insert({ tenant_id: t, project_id: p!.id, title: "ISO req " + code, request_type: "purchase", status: "submitted" }).select("id").single();
-  const { data: s } = await admin.from("suppliers").insert({ tenant_id: t, name: "ISO sup " + code }).select("id").single();
-  const { data: i } = await admin.from("invoices").insert({ tenant_id: t, project_id: p!.id, supplier_id: s?.id, invoice_number: "ISO-" + code, invoice_date: "2026-01-01", total_amount: 100 }).select("id").single();
+  const { data: r, error: e1 } = await admin.from("requests").insert({ tenant_id: t, project_id: p!.id, supervisor_id: sv!.id, request_no: "ISOR-" + code + "-" + Math.floor(Math.random()*9999), title: "ISO req " + code, request_type: "purchase" }).select("id").single();
+  if (e1) throw e1;
+  const { data: s, error: e2 } = await admin.from("suppliers").insert({ tenant_id: t, name_ar: "ISO vendor " + code }).select("id").single();
+  if (e2) throw e2;
+  const { data: i, error: e3 } = await admin.from("invoices").insert({ tenant_id: t, project_id: p!.id, supplier_id: s!.id, internal_no: "ISOI-" + code + "-" + Math.floor(Math.random()*9999), invoice_no: "ISO-" + code + "-" + Math.floor(Math.random()*9999), invoice_date: "2026-01-01", total_amount: 100 }).select("id").single();
+  if (e3) throw e3;
   const path = `projects/${p!.id}/${crypto.randomUUID()}/iso.txt`;
   await admin.storage.from("attachments").upload(path, new Blob(["iso"]), { contentType: "text/plain" });
-  return { pid: p!.id, rid: r?.id, sid: s?.id, iid: i?.id, path };
+  return { sv: sv!.id, pid: p!.id, rid: r?.id, sid: s?.id, iid: i?.id, path };
 };
 const A = await mk(ta, "ISOA"), B = await mk(tb, "ISOB");
 const ca = await client("isolation-a@tahqaq.test"), cb = await client("isolation-b@tahqaq.test");
@@ -66,7 +71,7 @@ for (const [n, c, own, other] of [["A", ca, A, B], ["B", cb, B, A]] as const) {
   const mine = await c.storage.from("attachments").createSignedUrl(own.path, 60);
   check(`signed-url-own-ok-${n}`, !!mine.data?.signedUrl, mine.error?.message ?? "");
   // spoof tenant_id on insert
-  const spoof = await c.from("projects").insert({ tenant_id: other.pid ? (n === "A" ? tb : ta) : null, name: "spoof", code: "SPOOF" + n, status: "active" }).select("id");
+  const spoof = await c.from("projects").insert({ tenant_id: n === "A" ? tb : ta, name_ar: "spoof", code: "SPOOF" + n, supervisor_id: own.sv, status: "active" }).select("id");
   check(`insert-spoof-tenant-blocked-${n}`, !!spoof.error, spoof.error?.code ?? "");
   // update tenant_id of own project
   const imm = await c.from("projects").update({ tenant_id: n === "A" ? tb : ta }).eq("id", own.pid).select("id");
@@ -97,12 +102,12 @@ check("switch-back-only-A", !!back && back.some(x => x.id === A.pid) && !back.so
 // role isolation: viewer in B must not write in B
 await cd.rpc("set_active_tenant", { _tenant_id: tb });
 const c4 = await client("isolation-a@tahqaq.test");
-const wr = await c4.from("suppliers").insert({ name: "viewer-write" }).select("id");
+const wr = await c4.from("suppliers").insert({ name_ar: "viewer-write" }).select("id");
 check("role-not-carried-across-tenants", !!wr.error, wr.error?.code ?? "");
 
 // cleanup: archive test tenants and remove their rows
 for (const t of [ta, tb]) {
-  for (const tbl of ["invoice_line_items","invoices","requests","attachments","suppliers","project_supervisors","project_members","projects","notifications","audit_log","tenant_memberships"]) {
+  for (const tbl of ["invoice_line_items","invoices","request_status_history","requests","attachments","suppliers","project_supervisors","project_members","projects","supervisors","notifications","audit_log","tenant_memberships"]) {
     await admin.from(tbl).delete().eq("tenant_id", t);
   }
   await admin.from("tenants").update({ status: "archived", deleted_at: new Date().toISOString() }).eq("id", t);
