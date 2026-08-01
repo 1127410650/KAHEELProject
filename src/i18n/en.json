@@ -1042,6 +1042,7 @@
     "title": "Workspace",
     "switch": "Switch workspace",
     "switched": "Switched to the new workspace",
+    "scopeNote": "Roles and permissions apply inside the current workspace only",
     "switchFailed": "Could not switch workspace"
   }
 }
