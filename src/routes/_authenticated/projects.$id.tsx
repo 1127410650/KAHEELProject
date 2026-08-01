@@ -181,32 +181,32 @@ function ProjectDetailPage() {
               <ClipboardList className="size-4" aria-hidden />
               {t("requests.projectRequests")}
             </CardTitle>
-            <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] font-medium">
-              <span className="rounded-full bg-secondary px-2 py-0.5">
+            <div className="no-scrollbar -mx-0.5 mt-2 flex max-w-full flex-wrap gap-1.5 overflow-x-auto px-0.5 text-[11px] font-medium">
+              <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.openRequests")}: <span className="num">{openCount}</span>
               </span>
-              <span className="rounded-full bg-warning/15 px-2 py-0.5 text-warning-foreground">
+              <span className="whitespace-nowrap rounded-full bg-warning/15 px-2 py-0.5 text-warning-foreground">
                 {t("requests.actionRequiredPlural")}: <span className="num">{actionCount}</span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5">
+              <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.awaitingPayment")}: <span className="num">{awaitingCount}</span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5">
+              <span className="whitespace-nowrap rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.completedCount")}: <span className="num">{completedCount}</span>
               </span>
               {latestPaymentNo && <PaymentNoBadge paymentNo={latestPaymentNo} />}
             </div>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="min-w-0 p-0">
             {requests.length === 0 ? (
               <p className="px-3 pb-3 text-[13px] text-muted-foreground sm:px-4 sm:pb-4">
                 {t("requests.noneForProject")}
               </p>
             ) : (
               <>
-                <ul className="divide-y divide-border">
+                <ul className="min-w-0 divide-y divide-border">
                   {latestOpen.map((r) => (
-                    <li key={r.id}>
+                    <li key={r.id} className="min-w-0">
                       <RequestRow
                         id={r.id}
                         title={buildRequestTitle(
@@ -238,17 +238,17 @@ function ProjectDetailPage() {
           </CardContent>
         </Card>
 
-
-        <div className="lg:col-span-3">
+        <div className="min-w-0 lg:col-span-3">
           <ProjectMembersCard projectId={id} />
         </div>
 
         {project?.project_type === "real_estate" && (
-          <div className="lg:col-span-3">
+          <div className="min-w-0 lg:col-span-3">
             <PropertyFile projectId={id} />
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
+
