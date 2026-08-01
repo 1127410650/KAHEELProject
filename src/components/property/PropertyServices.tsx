@@ -50,7 +50,6 @@ export function PropertyServices({
   const { locale } = useI18n();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [requestId, setRequestId] = useState("");
 
   const { data: requests = [] } = useQuery({
     queryKey: ["property-service-requests", projectId],
@@ -80,6 +79,12 @@ export function PropertyServices({
     },
   });
 
+  const requestOptions: Record<string, [string, string]> = {};
+  for (const r of requests) {
+    const label = `${r.request_no} — ${r.title ?? ""}`.trim();
+    requestOptions[r.id] = [label, label];
+  }
+
   const invalidate = async () => {
     await qc.invalidateQueries({ queryKey: ["property-service-results", projectId] });
     await qc.invalidateQueries({ queryKey: ["property", "property_services", projectId] });
@@ -88,17 +93,14 @@ export function PropertyServices({
 
   const addResult = useMutation({
     mutationFn: async (values: Record<string, string | number | null>) => {
-      if (!requestId) throw new Error(locale === "ar" ? "اختر الطلب المصدر" : "Pick the source request");
       const { error } = await pdb.from("property_service_results").insert({
         ...values,
         project_id: projectId,
-        source_request_id: requestId,
       });
       if (error) throw error;
     },
     onSuccess: async () => {
       setOpen(false);
-      setRequestId("");
       await invalidate();
       toast.success(locale === "ar" ? "أُضيفت النتيجة للمراجعة" : "Result queued for review");
     },
@@ -263,6 +265,14 @@ export function PropertyServices({
         onOpenChange={setOpen}
         title={locale === "ar" ? "إدخال نتيجة تنفيذ" : "Add execution result"}
         fields={[
+          {
+            name: "source_request_id",
+            label: ["الطلب المصدر", "Source request"],
+            type: "select",
+            required: true,
+            wide: true,
+            options: requestOptions,
+          },
           { name: "service_type", label: ["نوع الخدمة", "Service type"], type: "select", required: true, options: SERVICE_TYPE_LABELS },
           { name: "service_status", label: ["الحالة", "Status"], type: "select", required: true, options: SERVICE_STATUS_LABELS },
           { name: "account_no", label: ["رقم الحساب", "Account no."] },
@@ -277,34 +287,6 @@ export function PropertyServices({
         onSubmit={(values) => addResult.mutate(values)}
       />
 
-      {open && (
-        <div className="fixed bottom-3 z-[60] w-full px-4 sm:hidden">
-          <p className="rounded-md bg-secondary px-3 py-2 text-[11px] text-muted-foreground">
-            {locale === "ar" ? "اختر الطلب المصدر من القائمة أدناه." : "Pick the source request below."}
-          </p>
-        </div>
-      )}
-
-      {open && (
-        <div className="fixed inset-x-0 bottom-0 z-[70] border-t border-border bg-card p-3 shadow-lg">
-          <label className="mb-1 block text-xs text-muted-foreground" htmlFor="src-req">
-            {locale === "ar" ? "الطلب المصدر" : "Source request"}
-          </label>
-          <select
-            id="src-req"
-            className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-            value={requestId}
-            onChange={(e) => setRequestId(e.target.value)}
-          >
-            <option value="">—</option>
-            {requests.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.request_no} — {r.title ?? ""}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
     </div>
   );
 }
