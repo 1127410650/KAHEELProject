@@ -44,12 +44,12 @@ export function PropertyFile({ projectId }: { projectId: string }) {
   const sensitive = isAccountant || can("payment.view_sensitive");
 
   return (
-    <div className="space-y-3">
-      <Tabs defaultValue="overview">
-        <div className="-mx-1 overflow-x-auto pb-1">
-          <TabsList className="h-auto w-max gap-1 p-1">
+    <div className="page-safe space-y-3">
+      <Tabs defaultValue="overview" className="min-w-0">
+        <div className="no-scrollbar w-full max-w-full overflow-x-auto overflow-y-hidden pb-1 lg:overflow-visible">
+          <TabsList className="h-auto w-max gap-1 whitespace-nowrap p-1 lg:w-full lg:flex-wrap lg:justify-start">
             {TABS.map(([key, label]) => (
-              <TabsTrigger key={key} value={key} className="h-8 px-2.5 text-xs">
+              <TabsTrigger key={key} value={key} className="h-8 w-auto shrink-0 whitespace-nowrap px-2.5 text-xs">
                 {pick(locale, label)}
               </TabsTrigger>
             ))}
