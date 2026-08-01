@@ -444,7 +444,7 @@ function RequestsPage() {
           {t("groups.emptyGroup")}
         </div>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+        <div className="grid gap-2 sm:gap-3 lg:grid-cols-2 2xl:grid-cols-3">
           {visible.map((c) => (
             <RequestCard key={c.card.id} data={c.card} showRequester={!isSupervisor} />
           ))}
