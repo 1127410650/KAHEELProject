@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/AppLayout";
 import { PrintPortal } from "@/components/PrintPortal";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
