@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { passwordPolicyError } from "@/lib/password-policy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,8 +23,9 @@ export function ForcePasswordChangeDialog() {
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (password.length < 8) {
-      toast.error(t("auth.passwordShort"));
+    // Strength policy is enforced here and again by Auth (leaked-password check).
+    if (passwordPolicyError(password)) {
+      toast.error(t("auth.passwordWeak"));
       return;
     }
     if (password !== confirm) {
@@ -32,11 +34,7 @@ export function ForcePasswordChangeDialog() {
     }
     setSaving(true);
     const { error } = await supabase.auth.updateUser({ password });
-    // Reusing the current password is allowed: treat "same password" as success.
-    const isSamePassword =
-      error?.code === "same_password" ||
-      /different from the old password/i.test(error?.message ?? "");
-    if (error && !isSamePassword) {
+    if (error) {
       setSaving(false);
       toast.error(error.message || t("errors.saveFailed"));
       return;

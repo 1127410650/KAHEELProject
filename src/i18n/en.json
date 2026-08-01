@@ -102,7 +102,8 @@
     "confirmPassword": "Confirm password",
     "passwordMismatch": "Passwords do not match",
     "passwordShort": "Password must be at least 8 characters",
-    "passwordChanged": "Password updated"
+    "passwordChanged": "Password updated",
+    "passwordWeak": "Password too weak — use at least 10 characters with mixed classes, no common or sequential patterns"
   },
   "roles": {
     "accountant": "Accountant / Admin",
@@ -1052,7 +1053,7 @@
   "signup": {
     "createAccount": "Create a new account",
     "title": "Create a new account",
-    "subtitle": "Register to create a workspace or accept an invitation.",
+    "subtitle": "Complete your details to accept the administrator invitation.",
     "fullName": "Full name",
     "email": "Email",
     "phone": "Mobile",
@@ -1063,15 +1064,19 @@
     "terms": "I agree to the Terms and Privacy Policy",
     "submit": "Create account",
     "submitting": "Creating…",
-    "checkEmail": "Check your email",
-    "checkEmailBody": "We sent a confirmation link to your email. After confirming you can sign in and continue creating a workspace or accepting your invitation.",
+    "checkEmail": "Your account is ready",
+    "checkEmailBody": "Sign in with the invited email and the password you chose, then finish accepting the invitation.",
     "haveAccount": "Already have an account?",
     "signIn": "Sign in",
     "rateLimited": "Too many attempts, please try again later",
-    "weakPassword": "Password too weak — use at least 8 characters",
+    "weakPassword": "Password too weak — use at least 10 characters with mixed classes, no common or sequential patterns",
     "invalid": "Please check the entered data",
-    "passwordHint": "At least 8 characters",
-    "inviteNote": "Have an invitation? It will continue automatically after email confirmation."
+    "passwordHint": "At least 10 characters with at least 3 different character types",
+    "inviteNote": "This invitation was sent to:",
+    "inviteRequiredTitle": "Accounts are invite-only",
+    "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Tahqaq. If you were invited, open the invitation link sent to your email.",
+    "inviteOnlySubtitle": "Complete your details to accept the invitation. The email is locked to the invited address.",
+    "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only."
   },
   "onboarding": {
     "title": "Create your workspace",

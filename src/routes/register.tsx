@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Loader2, MailCheck, ShieldCheck } from "lucide-react";
+import { Loader2, MailCheck, ShieldCheck, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -17,14 +18,14 @@ export const Route = createFileRoute("/register")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إنشاء حساب — تحقّق | Create account — Tahqaq" },
+      { title: "إنشاء حساب بدعوة — تحقّق | Invite-only account — Tahqaq" },
       {
         name: "description",
         content:
-          "أنشئ حسابًا في تحقّق لإنشاء مساحة عمل لإدارة المشاريع والمشرفين والعهد أو لقبول دعوة انضمام.",
+          "إنشاء الحسابات في تحقّق متاح عن طريق دعوة من المسؤول فقط؛ لا يوجد تسجيل عام.",
       },
-      { property: "og:title", content: "إنشاء حساب — تحقّق" },
-      { property: "og:description", content: "Create your Tahqaq account and workspace." },
+      { property: "og:title", content: "إنشاء حساب بدعوة — تحقّق" },
+      { property: "og:description", content: "Tahqaq accounts are created by invitation only." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -32,15 +33,35 @@ export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
-/** Only same-origin invite tokens are carried through registration. */
+/** Only same-origin invite tokens are accepted; anything else is treated as absent. */
 function inviteTokenFromUrl(): string | null {
   if (typeof window === "undefined") return null;
   const raw = new URLSearchParams(window.location.search).get("invite");
   return raw && /^[a-f0-9]{16,128}$/i.test(raw) ? raw : null;
 }
 
-function RegisterPage() {
+function Shell({ children }: { children: React.ReactNode }) {
   const { t, dir } = useI18n();
+  return (
+    <div dir={dir} className="flex min-h-screen items-center justify-center px-4 py-10">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 flex items-center gap-2.5">
+          <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+            <ShieldCheck className="size-5" aria-hidden />
+          </span>
+          <span className="text-base font-bold text-foreground">{t("app.name")}</span>
+          <span className="ms-auto">
+            <LanguageToggle compact />
+          </span>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function RegisterPage() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const submitRegister = useServerFn(registerAccount);
 
@@ -49,7 +70,6 @@ function RegisterPage() {
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({
     full_name: "",
-    email: "",
     phone: "",
     national_id: "",
     password: "",
@@ -65,11 +85,27 @@ function RegisterPage() {
     });
   }, [navigate]);
 
+  // The invitation decides whether any form is shown at all, and which email is used.
+  const preview = useQuery({
+    queryKey: ["invite-preview", inviteToken],
+    enabled: !!inviteToken,
+    retry: false,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("invitation_preview", { _token: inviteToken! });
+      if (error) throw error;
+      const row = (Array.isArray(data) ? data[0] : data) as
+        | { state: string; masked_email: string | null }
+        | undefined;
+      return row ?? { state: "invalid", masked_email: null };
+    },
+  });
+
   const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (!inviteToken) return;
     if (form.password !== form.confirm) {
       toast.error(t("signup.mismatch"));
       return;
@@ -79,12 +115,11 @@ function RegisterPage() {
       const result = await submitRegister({
         data: {
           full_name: form.full_name.trim(),
-          email: form.email.trim(),
           phone: form.phone.trim(),
           national_id: form.national_id.trim(),
           password: form.password,
           origin: window.location.origin,
-          ...(inviteToken ? { invite_token: inviteToken } : {}),
+          invite_token: inviteToken,
         },
       });
       if (!result.ok) {
@@ -93,7 +128,9 @@ function RegisterPage() {
             ? t("signup.rateLimited")
             : result.error === "WEAK_PASSWORD"
               ? t("signup.weakPassword")
-              : t("signup.invalid"),
+              : result.error === "INVITE_REQUIRED" || result.error === "INVITE_INVALID"
+                ? t("signup.inviteRequiredBody")
+                : t("signup.invalid"),
         );
         return;
       }
@@ -107,131 +144,141 @@ function RegisterPage() {
 
   if (!mounted) return null;
 
+  // No invitation, or an invitation that is not live: never render a sign-up form.
+  if (!inviteToken || (preview.isSuccess && preview.data.state !== "valid") || preview.isError) {
+    return (
+      <Shell>
+        <div className="surface p-5">
+          <ShieldAlert className="size-6 text-primary" aria-hidden />
+          <h1 className="mt-3 text-lg font-bold text-foreground">
+            {t("signup.inviteRequiredTitle")}
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {t("signup.inviteRequiredBody")}
+          </p>
+          <Button asChild className="mt-4 w-full">
+            <Link to="/auth">{t("signup.signIn")}</Link>
+          </Button>
+        </div>
+      </Shell>
+    );
+  }
+
+  if (preview.isLoading) {
+    return (
+      <Shell>
+        <div className="surface flex items-center gap-2 p-5 text-sm text-muted-foreground">
+          <Loader2 className="size-4 animate-spin" aria-hidden />
+          {t("common.loading")}
+        </div>
+      </Shell>
+    );
+  }
+
+  if (done) {
+    return (
+      <Shell>
+        <div className="surface p-5">
+          <MailCheck className="size-6 text-primary" aria-hidden />
+          <h1 className="mt-3 text-lg font-bold text-foreground">{t("signup.checkEmail")}</h1>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {t("signup.checkEmailBody")}
+          </p>
+          <Button asChild className="mt-4 w-full">
+            <Link to="/auth">{t("signup.signIn")}</Link>
+          </Button>
+        </div>
+      </Shell>
+    );
+  }
+
   return (
-    <div dir={dir} className="flex min-h-screen items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <div className="mb-6 flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-            <ShieldCheck className="size-5" aria-hidden />
-          </span>
-          <span className="text-base font-bold text-foreground">{t("app.name")}</span>
-          <span className="ms-auto">
-            <LanguageToggle compact />
-          </span>
+    <Shell>
+      <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.title")}</h1>
+      <p className="mt-1.5 text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
+      <p className="mt-3 rounded-lg bg-secondary p-2.5 text-xs text-muted-foreground">
+        {t("signup.inviteNote")}{" "}
+        <span dir="ltr" className="font-semibold text-foreground">
+          {preview.data?.masked_email ?? ""}
+        </span>
+      </p>
+
+      <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
+        <div className="space-y-1.5">
+          <Label htmlFor="full_name">{t("signup.fullName")}</Label>
+          <Input id="full_name" required value={form.full_name} onChange={set("full_name")} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="phone">{t("signup.phone")}</Label>
+          <Input
+            id="phone"
+            required
+            dir="ltr"
+            inputMode="tel"
+            placeholder="05XXXXXXXX"
+            value={form.phone}
+            onChange={set("phone")}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="national_id">{t("signup.nationalId")}</Label>
+          <Input
+            id="national_id"
+            dir="ltr"
+            inputMode="numeric"
+            value={form.national_id}
+            onChange={set("national_id")}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="password">{t("signup.password")}</Label>
+          <Input
+            id="password"
+            type="password"
+            required
+            minLength={10}
+            dir="ltr"
+            autoComplete="new-password"
+            value={form.password}
+            onChange={set("password")}
+          />
+          <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="confirm">{t("signup.confirm")}</Label>
+          <Input
+            id="confirm"
+            type="password"
+            required
+            minLength={10}
+            dir="ltr"
+            autoComplete="new-password"
+            value={form.confirm}
+            onChange={set("confirm")}
+          />
         </div>
 
-        {done ? (
-          <div className="surface p-5">
-            <MailCheck className="size-6 text-primary" aria-hidden />
-            <h1 className="mt-3 text-lg font-bold text-foreground">{t("signup.checkEmail")}</h1>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {t("signup.checkEmailBody")}
-            </p>
-            <Button asChild className="mt-4 w-full">
-              <Link to="/auth">{t("signup.signIn")}</Link>
-            </Button>
-          </div>
-        ) : (
-          <>
-            <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.title")}</h1>
-            <p className="mt-1.5 text-sm text-muted-foreground">{t("signup.subtitle")}</p>
-            {inviteToken && (
-              <p className="mt-3 rounded-lg bg-secondary p-2.5 text-xs text-muted-foreground">
-                {t("signup.inviteNote")}
-              </p>
-            )}
+        <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+          <Checkbox
+            checked={agreed}
+            onCheckedChange={(v) => setAgreed(v === true)}
+            aria-label={t("signup.terms")}
+          />
+          <span>{t("signup.terms")}</span>
+        </label>
 
-            <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
-              <div className="space-y-1.5">
-                <Label htmlFor="full_name">{t("signup.fullName")}</Label>
-                <Input id="full_name" required value={form.full_name} onChange={set("full_name")} />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="email">{t("signup.email")}</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  required
-                  dir="ltr"
-                  autoComplete="email"
-                  value={form.email}
-                  onChange={set("email")}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="phone">{t("signup.phone")}</Label>
-                <Input
-                  id="phone"
-                  required
-                  dir="ltr"
-                  inputMode="tel"
-                  placeholder="05XXXXXXXX"
-                  value={form.phone}
-                  onChange={set("phone")}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="national_id">{t("signup.nationalId")}</Label>
-                <Input
-                  id="national_id"
-                  dir="ltr"
-                  inputMode="numeric"
-                  value={form.national_id}
-                  onChange={set("national_id")}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="password">{t("signup.password")}</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  minLength={8}
-                  dir="ltr"
-                  autoComplete="new-password"
-                  value={form.password}
-                  onChange={set("password")}
-                />
-                <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="confirm">{t("signup.confirm")}</Label>
-                <Input
-                  id="confirm"
-                  type="password"
-                  required
-                  minLength={8}
-                  dir="ltr"
-                  autoComplete="new-password"
-                  value={form.confirm}
-                  onChange={set("confirm")}
-                />
-              </div>
+        <Button type="submit" className="w-full" disabled={busy || !agreed}>
+          {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
+          {busy ? t("signup.submitting") : t("signup.submit")}
+        </Button>
+      </form>
 
-              <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
-                <Checkbox
-                  checked={agreed}
-                  onCheckedChange={(v) => setAgreed(v === true)}
-                  aria-label={t("signup.terms")}
-                />
-                <span>{t("signup.terms")}</span>
-              </label>
-
-              <Button type="submit" className="w-full" disabled={busy || !agreed}>
-                {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
-                {busy ? t("signup.submitting") : t("signup.submit")}
-              </Button>
-            </form>
-
-            <p className="mt-5 text-center text-xs text-muted-foreground">
-              {t("signup.haveAccount")}{" "}
-              <Link to="/auth" className="font-semibold text-primary">
-                {t("signup.signIn")}
-              </Link>
-            </p>
-          </>
-        )}
-      </div>
-    </div>
+      <p className="mt-5 text-center text-xs text-muted-foreground">
+        {t("signup.haveAccount")}{" "}
+        <Link to="/auth" className="font-semibold text-primary">
+          {t("signup.signIn")}
+        </Link>
+      </p>
+    </Shell>
   );
 }

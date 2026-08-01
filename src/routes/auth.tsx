@@ -173,9 +173,7 @@ function AuthPage() {
           </form>
 
           <p className="mt-5 text-center text-xs text-muted-foreground">
-            <Link to="/register" className="font-semibold text-primary">
-              {t("signup.createAccount")}
-            </Link>
+            {t("signup.inviteOnlyNoteAuth")}
           </p>
 
           <div className="mt-6 border-t border-border pt-4">

@@ -127,7 +127,7 @@ function PersonalDashboard() {
 
   // The personal dashboard must always run inside the personal account, otherwise
   // RLS would scope these reads to whichever company is currently active.
-  const { data: accounts = [] } = useAccounts({ ensurePersonal: true });
+  const { data: accounts = [] } = useAccounts();
   const enterAccount = useEnterAccount();
   const current = accounts.find((a: Account) => a.is_current);
   const personal = accounts.find((a: Account) => a.is_personal);
