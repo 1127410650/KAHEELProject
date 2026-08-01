@@ -107,6 +107,18 @@ export async function updateAppUserImpl(userClient: Client, input: UpdateUserInp
   await assertAccountant(userClient);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+  const [{ data: prevRoles }, { data: prevPerms }, { data: prevMembers }] = await Promise.all([
+    supabaseAdmin.from("user_roles").select("role").eq("user_id", input.user_id),
+    supabaseAdmin.from("user_permissions").select("permission").eq("user_id", input.user_id),
+    supabaseAdmin.from("project_members").select("project_id").eq("user_id", input.user_id),
+  ]);
+  const before = {
+    role: (prevRoles ?? [])[0]?.role ?? null,
+    permissions: (prevPerms ?? []).map((r) => r.permission).sort(),
+    projects: (prevMembers ?? []).map((r) => r.project_id),
+  };
+
+
   if (input.role) {
     await supabaseAdmin.from("user_roles").delete().eq("user_id", input.user_id);
     await supabaseAdmin.from("user_roles").insert({ user_id: input.user_id, role: input.role });
