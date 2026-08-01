@@ -82,7 +82,8 @@ async function fetchDocumentBytes(storagePath: string): Promise<ArrayBuffer> {
 export async function findReusableAnalysis(documentId: string, fileHash: string | null) {
   const query = pdb
     .from("document_analyses")
-    .select("*")
+    // raw_text is excluded on purpose (permission-checked RPC only).
+    .select("id,status,file_hash,analyzer_version,document_type_detected,overall_confidence,created_at")
     .eq("document_id", documentId)
     .eq("analyzer_version", ANALYZER_VERSION)
     .not("status", "in", "(failed,cancelled)")
