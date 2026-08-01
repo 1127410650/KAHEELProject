@@ -86,7 +86,7 @@ export async function registerAccountImpl(
     email,
     password,
     options: {
-      emailRedirectTo: next || undefined,
+      ...(next ? { emailRedirectTo: next } : {}),
       data: {
         full_name: fullName,
         phone: normalizeMobile(input.phone ?? ""),
