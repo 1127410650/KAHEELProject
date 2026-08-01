@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/me")({
   component: PersonalDashboard,
 });
 
-const CLOSED_STATES = ["closed", "rejected", "cancelled", "done"];
+const CLOSED_STATUSES = ["executed", "completed", "rejected", "cancelled"];
 
 function PersonalDashboard() {
   const { t, locale } = useI18n();
@@ -46,7 +46,7 @@ function PersonalDashboard() {
         .select("id", { count: "exact", head: true })
         .eq("created_by", userId!)
         .is("deleted_at", null)
-        .not("state", "in", `(${CLOSED_STATES.join(",")})`);
+        .not("status", "in", `(${CLOSED_STATUSES.join(",")})`);
       if (error) throw error;
       return count ?? 0;
     },
