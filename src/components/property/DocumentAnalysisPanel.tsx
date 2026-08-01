@@ -85,7 +85,11 @@ export function DocumentAnalysisPanel({
     queryFn: async () => {
       const { data, error } = await pdb
         .from("document_analyses")
-        .select("*")
+        // raw_text is intentionally excluded: it is only reachable through the
+        // permission-checked document_analysis_raw_text RPC.
+        .select(
+          "id,project_id,document_id,document_version,file_hash,document_type_detected,document_type_confirmed,analyzer_version,extraction_method,language_detected,page_count,status,overall_confidence,quick_mode,qr_findings,started_at,completed_at,created_by,reviewed_by,reviewed_at,applied_by,applied_at,failure_code,failure_message,created_at,updated_at",
+        )
         .eq("document_id", documentId)
         .order("created_at", { ascending: false })
         .limit(1);

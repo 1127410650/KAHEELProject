@@ -376,13 +376,24 @@ export function extractFields(
       for (const pattern of rule.patterns) {
         const m = pattern.exec(text);
         if (!m) continue;
-        const captured = (m[m.length - 1] ?? m[1] ?? "").trim();
+        // Pick the most meaningful capture group: ignore calendar markers (هـ / م)
+        // and label alternations, then take the longest remaining group.
+        const groups = m
+          .slice(1)
+          .filter((g): g is string => typeof g === "string" && g.trim().length > 0)
+          .map((g) => g.trim())
+          .filter((g) => !/^(هـ|ه|م|ميلادي|هجري)$/.test(g));
+        const captured = (groups.length
+          ? groups.reduce((best, g) => (g.length > best.length ? g : best), groups[0]!)
+          : (m[0] ?? "")
+        ).trim();
         const value = cleanSpaces(toWesternDigits(captured));
         if (!value || value.length < 1) continue;
         let normalized: string | null = value;
         let penalty = 0;
         if (rule.kind === "date") {
-          normalized = normalizeDate(captured).value;
+          // Keep the surrounding match so هـ / م calendar markers stay visible.
+          normalized = normalizeDate(`${captured} ${m[0]}`).value;
           if (!normalized) penalty = 0.15;
         } else if (rule.kind === "number") {
           normalized = normalizeNumber(captured);
@@ -409,9 +420,19 @@ export function extractFields(
 
 /* --------------------------------------------------------- comparison */
 
+/**
+ * Measurement-like fields tolerate rounding differences. Identifiers (deed no,
+ * licence no, ID no, meter no, counts) must match exactly — a 1% tolerance would
+ * silently treat two different deed numbers as identical.
+ */
+export function allowsNumericTolerance(fieldKey: string): boolean {
+  return /(area|amount|tax|fees|ratio|width|share)$/.test(fieldKey);
+}
+
 export function compareValue(
   documentValue: string | null,
   projectValue: string | null,
+  numericTolerance = false,
 ): MatchState {
   const a = documentValue ? cleanSpaces(toWesternDigits(documentValue)).toLowerCase() : "";
   const b = projectValue ? cleanSpaces(toWesternDigits(projectValue)).toLowerCase() : "";
@@ -419,14 +440,17 @@ export function compareValue(
   if (!a) return "missing_in_document";
   if (!b) return "missing_in_project";
   if (a === b) return "match";
-  const na = Number(a.replace(/[^\d.]/g, ""));
-  const nb = Number(b.replace(/[^\d.]/g, ""));
-  if (Number.isFinite(na) && Number.isFinite(nb) && na > 0 && nb > 0) {
-    const diff = Math.abs(na - nb) / Math.max(na, nb);
-    if (diff <= 0.01) return "match";
-    if (diff <= 0.05) return "close";
-    return "different";
+  if (numericTolerance) {
+    const na = Number(a.replace(/[^\d.]/g, ""));
+    const nb = Number(b.replace(/[^\d.]/g, ""));
+    if (Number.isFinite(na) && Number.isFinite(nb) && na > 0 && nb > 0) {
+      const diff = Math.abs(na - nb) / Math.max(na, nb);
+      if (diff <= 0.01) return "match";
+      if (diff <= 0.05) return "close";
+      return "different";
+    }
   }
+  if (/^[\d.]+$/.test(a) && /^[\d.]+$/.test(b)) return "different";
   if (a.includes(b) || b.includes(a)) return "close";
   return "different";
 }

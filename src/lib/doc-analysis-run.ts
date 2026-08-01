@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BUCKET, signedUrl } from "@/lib/attachments";
 import { pdb } from "@/lib/property";
 import {
+  allowsNumericTolerance,
   ANALYZER_VERSION,
   compareValue,
   conflictSeverity,
@@ -81,7 +82,8 @@ async function fetchDocumentBytes(storagePath: string): Promise<ArrayBuffer> {
 export async function findReusableAnalysis(documentId: string, fileHash: string | null) {
   const query = pdb
     .from("document_analyses")
-    .select("*")
+    // raw_text is excluded on purpose (permission-checked RPC only).
+    .select("id,status,file_hash,analyzer_version,document_type_detected,overall_confidence,created_at")
     .eq("document_id", documentId)
     .eq("analyzer_version", ANALYZER_VERSION)
     .not("status", "in", "(failed,cancelled)")
@@ -281,7 +283,7 @@ async function persist(analysisId: string, projectId: string, result: AnalyzeRes
       confidence: Number(f.confidence.toFixed(2)),
       is_sensitive: f.is_sensitive,
       current_project_value: projectValue,
-      match_state: compareValue(documentValue, projectValue),
+      match_state: compareValue(documentValue, projectValue, allowsNumericTolerance(f.field_key)),
       status: "proposed",
     };
   });

@@ -202,9 +202,14 @@ async function analyzePdf(req: WorkerRequest): Promise<AnalyzeResult> {
     method = "embedded_xml";
   }
 
-  const textChars = pages.reduce((n, p) => n + p.text.replace(/\s/g, "").length, 0);
+  // Source order is strict: embedded XML -> PDF text -> QR -> OCR (last resort) -> manual.
+  // OCR never runs when precise values already came from embedded XML or a real PDF text layer.
+  const pdfTextChars = pages
+    .filter((p) => p.method === "pdf_text")
+    .reduce((n, p) => n + p.text.replace(/\s/g, "").length, 0);
+  const hasPreciseSource = !!xml || pdfTextChars >= MIN_TEXT_CHARS;
   let ocrConfidence = 0;
-  if (!req.quick && textChars < MIN_TEXT_CHARS && imageBlobs.length > 0) {
+  if (!req.quick && !hasPreciseSource && imageBlobs.length > 0) {
     progress("ocr", 50, `0/${imageBlobs.length}`);
     const results = await ocrBlobs(imageBlobs, req.locale, (_page, index) =>
       progress("ocr", 50 + Math.round((index / imageBlobs.length) * 30), `${index + 1}/${imageBlobs.length}`),
