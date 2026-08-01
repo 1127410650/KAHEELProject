@@ -118,10 +118,6 @@ function OnboardingPage() {
       if (error) throw error;
       return data as string;
     },
-
-      if (error) throw error;
-      return data as string;
-    },
     onSuccess: async (tenantId) => {
       if (typeof window !== "undefined") {
         window.localStorage.setItem("tahqaq.active_tenant", tenantId);
