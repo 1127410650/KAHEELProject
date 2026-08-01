@@ -284,10 +284,19 @@ export function AppLayout({ children }: { children: ReactNode }) {
                 <Menu className="size-5" aria-hidden />
               </Button>
             </SheetTrigger>
-            <SheetContent side={dir === "rtl" ? "right" : "left"} className="w-72 bg-sidebar p-0">
+            <SheetContent
+              side={dir === "rtl" ? "right" : "left"}
+              className="flex w-72 flex-col bg-sidebar p-0"
+            >
               <SheetTitle className="sr-only">{t("app.name")}</SheetTitle>
               <Brand collapsed={false} />
               <NavLinks collapsed={false} onNavigate={() => setMobileOpen(false)} />
+              <div className="mt-auto flex items-center justify-between gap-2 border-t border-sidebar-border px-4 py-3">
+                <span className="text-[11px] font-semibold text-sidebar-foreground/60">
+                  {t("common.language")}
+                </span>
+                <LanguageToggle />
+              </div>
             </SheetContent>
           </Sheet>
 

@@ -254,11 +254,20 @@ function ProductsPage() {
         <div className="space-y-2">
           {products.map((product) => {
             const rows = (byProduct.get(product.id) ?? []).filter((r) => r.status === "active");
-            const prices = rows.map((r) => Number(r.unit_price ?? 0)).filter((n) => n > 0);
+            const units = new Set(rows.map((r) => r.unit ?? "—"));
+            // Never blend different units: statistics use the product's dominant unit only.
+            const unitCounts = new Map<string, number>();
+            for (const r of rows) {
+              const k = r.unit ?? "—";
+              unitCounts.set(k, (unitCounts.get(k) ?? 0) + 1);
+            }
+            const statUnit =
+              Array.from(unitCounts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+            const statRows = statUnit ? rows.filter((r) => (r.unit ?? "—") === statUnit) : rows;
+            const prices = statRows.map((r) => Number(r.unit_price ?? 0)).filter((n) => n > 0);
             const min = prices.length ? Math.min(...prices) : null;
             const max = prices.length ? Math.max(...prices) : null;
             const avg = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
-            const units = new Set(rows.map((r) => r.unit ?? "—"));
             const open = openId === product.id;
 
             const bySupplier = new Map<string, PriceRow[]>();
