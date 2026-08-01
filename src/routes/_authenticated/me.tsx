@@ -104,7 +104,7 @@ function PersonalDashboard() {
 
   return (
     <div className="space-y-3 md:space-y-5">
-      <PageHeader title={t("me.title")} subtitle={t("me.subtitle")} />
+      <PageHeader title={t("me.title")} description={t("me.subtitle")} />
 
       <p className="surface flex items-start gap-2 p-2.5 text-[11px] leading-snug text-muted-foreground sm:text-xs">
         <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden />

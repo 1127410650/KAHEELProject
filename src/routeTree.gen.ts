@@ -18,6 +18,7 @@ import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
+import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
@@ -83,6 +84,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMeRoute = AuthenticatedMeRouteImport.update({
+  id: '/me',
+  path: '/me',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMyCustodyRoute = AuthenticatedMyCustodyRouteImport.update({
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
+  '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
+  '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
+  '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
@@ -314,6 +323,7 @@ export interface FileRouteTypes {
     | '/custody'
     | '/dashboard'
     | '/invoices'
+    | '/me'
     | '/my-custody'
     | '/notifications'
     | '/onboarding'
@@ -346,6 +356,7 @@ export interface FileRouteTypes {
     | '/custody'
     | '/dashboard'
     | '/invoices'
+    | '/me'
     | '/my-custody'
     | '/notifications'
     | '/onboarding'
@@ -379,6 +390,7 @@ export interface FileRouteTypes {
     | '/_authenticated/custody'
     | '/_authenticated/dashboard'
     | '/_authenticated/invoices'
+    | '/_authenticated/me'
     | '/_authenticated/my-custody'
     | '/_authenticated/notifications'
     | '/_authenticated/onboarding'
@@ -475,6 +487,13 @@ declare module '@tanstack/react-router' {
       path: '/invoices'
       fullPath: '/invoices'
       preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/me': {
+      id: '/_authenticated/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof AuthenticatedMeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/my-custody': {
@@ -639,6 +658,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCustodyRoute: typeof AuthenticatedCustodyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
+  AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
@@ -667,6 +687,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCustodyRoute: AuthenticatedCustodyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
+  AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
