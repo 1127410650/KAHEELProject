@@ -24,6 +24,9 @@ import {
   ReceiptText,
   PackageSearch,
   Bell,
+  FileText,
+  MailOpen,
+
 
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
