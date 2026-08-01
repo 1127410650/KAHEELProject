@@ -9,6 +9,8 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { formatDateTime, pickName } from "@/lib/format";
