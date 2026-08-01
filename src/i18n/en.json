@@ -263,7 +263,15 @@
     "authLink": "Login account",
     "authLinked": "Linked",
     "authMissing": "Not linked",
-    "uid": "User ID"
+    "uid": "User ID",
+    "searchPermissions": "Search permissions",
+    "selectGroup": "Select group",
+    "clearGroup": "Clear group",
+    "permName": "Permission",
+    "fromRole": "From role",
+    "direct": "Direct",
+    "effective": "Effective",
+    "sensitiveWarning": "Sensitive: grants approval or document management."
   },
   "reports": {
     "title": "Basic Reports",

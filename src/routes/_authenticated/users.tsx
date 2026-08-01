@@ -17,6 +17,7 @@ import {
   PERMISSION_GROUP_LABELS_EN,
   GROUPED_PERMISSIONS,
   ROLE_DEFAULT_PERMISSIONS,
+  SENSITIVE_PERMISSIONS,
 } from "@/lib/permissions";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -102,6 +103,7 @@ function UsersPage() {
   const [form, setForm] = useState<UserForm>({ ...emptyForm, password: randomPassword() });
   const [editing, setEditing] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [permQuery, setPermQuery] = useState("");
 
   const { data: rows = [] } = useQuery({
     queryKey: ["users"],
