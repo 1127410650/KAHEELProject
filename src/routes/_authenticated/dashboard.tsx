@@ -427,9 +427,10 @@ function DashboardContent() {
   const canReports = isAccountant || can("reports.view");
 
   const selectedBalance = useMemo(
-    () => (balances.data ?? []).find((b) => b.supervisor_id === supervisorFilter) ?? null,
-    [balances.data, supervisorFilter],
+    () => activeBalances.find((b) => b.supervisor_id === supervisorFilter) ?? null,
+    [activeBalances, supervisorFilter],
   );
+
 
   return (
     <div className="min-w-0 space-y-3 md:space-y-4">
