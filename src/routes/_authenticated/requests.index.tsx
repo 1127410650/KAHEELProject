@@ -387,21 +387,23 @@ function RequestsPage() {
         }
       />
 
-      <nav aria-label={t("requests.workbox")} className="-mx-2.5 mb-2.5 flex snap-x gap-1.5 overflow-x-auto px-2.5 pb-1 [scrollbar-width:none] sm:mx-0 sm:mb-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:px-0">
+      <nav aria-label={t("requests.workbox")} className="-mx-2.5 mb-2.5 flex snap-x gap-2 overflow-x-auto px-2.5 pb-1 [scrollbar-width:none] sm:mx-0 sm:mb-4 sm:flex-wrap sm:overflow-visible sm:px-0">
         {groupList.map((g) => (
           <button
             key={g}
             type="button"
             onClick={() => setGroup(g)}
             className={cn(
-              "inline-flex shrink-0 snap-start items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs",
+              "inline-flex h-9 shrink-0 snap-start items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium transition-colors sm:text-sm",
               group === g
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border bg-card text-muted-foreground hover:bg-secondary",
             )}
           >
             {t(`groups.${g}`)}
-            <span className="num opacity-70">{counts[g] ?? 0}</span>
+            <span className="num rounded-full bg-black/10 px-1.5 text-[11px] dark:bg-white/10">
+              {counts[g] ?? 0}
+            </span>
           </button>
         ))}
       </nav>
