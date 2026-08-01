@@ -172,72 +172,63 @@ function ProjectDetailPage() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex flex-wrap items-center gap-3 text-base">
+          <CardHeader className="p-3 pb-2 sm:p-4 sm:pb-2">
+            <CardTitle className="flex items-center gap-2 text-[17px] sm:text-lg">
               <ClipboardList className="size-4" aria-hidden />
               {t("requests.projectRequests")}
-              <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium">
+            </CardTitle>
+            <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] font-medium">
+              <span className="rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.openRequests")}: <span className="num">{openCount}</span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium">
+              <span className="rounded-full bg-warning/15 px-2 py-0.5 text-warning-foreground">
+                {t("requests.actionRequiredPlural")}: <span className="num">{actionCount}</span>
+              </span>
+              <span className="rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.awaitingPayment")}: <span className="num">{awaitingCount}</span>
               </span>
+              <span className="rounded-full bg-secondary px-2 py-0.5">
+                {t("requests.completedCount")}: <span className="num">{completedCount}</span>
+              </span>
               {latestPaymentNo && <PaymentNoBadge paymentNo={latestPaymentNo} />}
-            </CardTitle>
+            </div>
           </CardHeader>
           <CardContent className="p-0">
             {requests.length === 0 ? (
-              <p className="px-6 pb-6 text-sm text-muted-foreground">{t("requests.empty")}</p>
+              <p className="px-3 pb-3 text-[13px] text-muted-foreground sm:px-4 sm:pb-4">
+                {t("requests.noneForProject")}
+              </p>
             ) : (
               <>
                 <ul className="divide-y divide-border">
-                  {requests.slice(0, 5).map((r) => (
+                  {latestOpen.map((r) => (
                     <li key={r.id}>
-                      <button
-                        type="button"
-                        className="w-full px-6 py-3 text-start transition hover:bg-secondary/40"
-                        onClick={() => void navigate({ to: "/requests/$id", params: { id: r.id } })}
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span className="text-sm font-medium">
-                            {buildRequestTitle(
-                              {
-                                ...r,
-                                projectName: project
-                                  ? pickName(locale, project.name_ar, project.name_en)
-                                  : null,
-                              },
-                              t("requests.untitled"),
-                              locale,
-                            )}
-                          </span>
-                          <StageBadge status={r.status} />
-                        </div>
-                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                          <span className="num">{r.request_no}</span>
-                          <span>
-                            {pickName(
-                              locale,
-                              (r.supervisors as { name_ar?: string } | null)?.name_ar,
-                              (r.supervisors as { name_en?: string } | null)?.name_en,
-                            )}
-                          </span>
-                          <span className="num">
-                            {t("common.date")}: {formatDate(r.request_date)}
-                          </span>
-                          <PaymentNoBadge paymentNo={r.payment_no} />
-                        </div>
-                      </button>
+                      <RequestRow
+                        id={r.id}
+                        title={buildRequestTitle(
+                          {
+                            ...r,
+                            projectName: project
+                              ? pickName(locale, project.name_ar, project.name_en)
+                              : null,
+                          },
+                          t("requests.untitled"),
+                          locale,
+                        )}
+                        requestNo={r.request_no}
+                        status={r.status}
+                        date={r.request_date}
+                      />
                     </li>
                   ))}
                 </ul>
-                {requests.length > 5 && (
-                  <div className="px-6 py-3">
-                    <Button asChild variant="outline" size="sm">
-                      <Link to="/requests">{t("portal.viewAll")}</Link>
-                    </Button>
-                  </div>
-                )}
+                <div className="p-2.5 sm:p-3">
+                  <Button asChild variant="outline" size="sm" className="h-9 w-full text-[13px] sm:w-auto">
+                    <Link to="/projects/$id/requests" params={{ id }}>
+                      {t("requests.viewAllProjectRequests")}
+                    </Link>
+                  </Button>
+                </div>
               </>
             )}
           </CardContent>
