@@ -447,45 +447,136 @@ function UsersPage() {
 
                 <div className="space-y-3">
                   <Label>{t("users.permissions")}</Label>
+                  <Input
+                    dir="auto"
+                    placeholder={t("users.searchPermissions")}
+                    value={permQuery}
+                    onChange={(e) => setPermQuery(e.target.value)}
+                  />
                   <div className="max-h-72 space-y-3 overflow-y-auto rounded-lg border border-border p-3">
                     {PERMISSION_GROUPS.map((group) => {
-                      const items = GROUPED_PERMISSIONS[group];
+                      const q = permQuery.trim().toLowerCase();
+                      const items = GROUPED_PERMISSIONS[group].filter(
+                        (p) =>
+                          !q ||
+                          p.toLowerCase().includes(q) ||
+                          (labels[p] ?? "").toLowerCase().includes(q),
+                      );
                       if (!items.length) return null;
+                      const roleAll = form.role === "accountant";
                       return (
                         <div
                           key={group}
                           className="overflow-hidden rounded-lg border border-border/70"
                         >
-                          <div className="bg-secondary/60 px-3 py-2 text-xs font-semibold">
-                            {groupLabels[group]}
-                          </div>
-                          <div className="grid gap-1 p-3 sm:grid-cols-2">
-                            {items.map((permission) => (
-                              <label
-                                key={permission}
-                                className="flex min-h-9 items-center gap-2 text-sm"
+                          <div className="flex flex-wrap items-center justify-between gap-2 bg-secondary/60 px-3 py-2 text-xs font-semibold">
+                            <span>{groupLabels[group]}</span>
+                            <span className="flex gap-1">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 px-2 text-[11px]"
+                                onClick={() =>
+                                  setForm({
+                                    ...form,
+                                    permissions: Array.from(
+                                      new Set([...form.permissions, ...items]),
+                                    ),
+                                  })
+                                }
                               >
-                                <Checkbox
-                                  checked={form.permissions.includes(permission)}
-                                  onCheckedChange={(v) =>
-                                    setForm({
-                                      ...form,
-                                      permissions:
-                                        v === true
-                                          ? [...form.permissions, permission]
-                                          : form.permissions.filter((x) => x !== permission),
-                                    })
-                                  }
-                                />
-                                <span>{labels[permission]}</span>
-                              </label>
-                            ))}
+                                {t("users.selectGroup")}
+                              </Button>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 px-2 text-[11px]"
+                                onClick={() =>
+                                  setForm({
+                                    ...form,
+                                    permissions: form.permissions.filter(
+                                      (x) => !items.includes(x as never),
+                                    ),
+                                  })
+                                }
+                              >
+                                {t("users.clearGroup")}
+                              </Button>
+                            </span>
+                          </div>
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-xs">
+                              <thead className="text-muted-foreground">
+                                <tr>
+                                  <th className="px-3 py-2 text-start font-medium">
+                                    {t("users.permName")}
+                                  </th>
+                                  <th className="px-3 py-2 text-start font-medium">
+                                    {t("users.fromRole")}
+                                  </th>
+                                  <th className="px-3 py-2 text-start font-medium">
+                                    {t("users.direct")}
+                                  </th>
+                                  <th className="px-3 py-2 text-start font-medium">
+                                    {t("users.effective")}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-border/60">
+                                {items.map((permission) => {
+                                  const direct = form.permissions.includes(permission);
+                                  const sensitive = (
+                                    SENSITIVE_PERMISSIONS as string[]
+                                  ).includes(permission);
+                                  return (
+                                    <tr key={permission}>
+                                      <td className="px-3 py-2">
+                                        <div className="font-medium">{labels[permission]}</div>
+                                        <div className="num text-[10px] text-muted-foreground">
+                                          {permission}
+                                        </div>
+                                        {sensitive && direct && !roleAll && (
+                                          <div className="mt-1 text-[10px] text-destructive">
+                                            {t("users.sensitiveWarning")}
+                                          </div>
+                                        )}
+                                      </td>
+                                      <td className="px-3 py-2 text-muted-foreground">
+                                        {roleAll ? "✓" : "—"}
+                                      </td>
+                                      <td className="px-3 py-2">
+                                        <Checkbox
+                                          checked={direct}
+                                          onCheckedChange={(v) =>
+                                            setForm({
+                                              ...form,
+                                              permissions:
+                                                v === true
+                                                  ? [...form.permissions, permission]
+                                                  : form.permissions.filter(
+                                                      (x) => x !== permission,
+                                                    ),
+                                            })
+                                          }
+                                        />
+                                      </td>
+                                      <td className="px-3 py-2 font-medium">
+                                        {roleAll || direct ? t("common.yes") : t("common.no")}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       );
                     })}
                   </div>
                 </div>
+
 
               </form>
               <DialogFooter>
