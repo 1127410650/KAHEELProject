@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, ClipboardList, FolderKanban, FileText, Info, Repeat2, Wallet } from "lucide-react";
+import { Bell, ClipboardList, FolderKanban, Info, Repeat2, Wallet } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
@@ -129,7 +129,7 @@ function PersonalDashboard() {
         {[
           { to: "/requests", key: "me.myRequests", icon: ClipboardList },
           { to: "/projects", key: "me.myProjects", icon: FolderKanban },
-          { to: "/documents", key: "me.myDocuments", icon: FileText },
+          { to: "/notifications", key: "nav.notifications", icon: Bell },
           { to: "/settings", key: "nav.mySettings", icon: Info },
         ].map((l) => (
           <Link
