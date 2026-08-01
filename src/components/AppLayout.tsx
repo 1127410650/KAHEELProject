@@ -309,9 +309,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </p>
           </div>
 
+          <WorkspaceSwitcher />
+
           <NotificationsBell />
 
           <LanguageToggle />
+
 
           <div className="hidden text-end sm:block">
             <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
