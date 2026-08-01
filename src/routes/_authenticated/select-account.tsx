@@ -131,15 +131,14 @@ function SelectAccountPage() {
                     {label(a)}
                   </p>
                   <p className="wrap-anywhere text-[11px] leading-snug text-muted-foreground">
-                    {t(`account.types.${a.tenant_type}`)} — {t(`roles.${a.role}`)}
+                    {t(`account.types.${a.tenant_type}`)} — {t(`team.roles.${a.role}`)}
                     {a.masked_ref ? ` · ${a.masked_ref}` : ""}
                   </p>
                   <p className="text-[10.5px] leading-snug text-muted-foreground">
                     {t("account.membershipActive")}
-                    {a.last_seen_at
-                      ? ` · ${t("account.lastSeen")}: ${formatDate(a.last_seen_at, locale)}`
-                      : ""}
+                    {a.last_seen_at ? ` · ${t("account.lastSeen")}: ${formatDate(a.last_seen_at)}` : ""}
                   </p>
+
                 </div>
                 <Button
                   size="sm"
