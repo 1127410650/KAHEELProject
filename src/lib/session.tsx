@@ -87,12 +87,24 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       void load(nextSession?.user.id);
     });
 
+    // Permission/role changes made by an admin apply without signing out again.
+    const onFocus = () => {
+      if (document.visibilityState === "visible") {
+        void supabase.auth.getSession().then(({ data }) => load(data.session?.user.id));
+      }
+    };
+    window.addEventListener("visibilitychange", onFocus);
+    window.addEventListener("focus", onFocus);
+
     return () => {
       active = false;
+      window.removeEventListener("visibilitychange", onFocus);
+      window.removeEventListener("focus", onFocus);
       sub.subscription.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const value = useMemo<SessionContextValue>(() => {
     const isAccountant = role === "accountant";

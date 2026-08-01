@@ -44,9 +44,28 @@ export const PERMISSIONS = [
   "products.merge",
   "prices.view",
   "prices.export",
+  "property.view",
+  "property.edit",
+  "property.approve",
+  "property_documents.view",
+  "property_documents.upload",
+  "property_documents.manage",
+  "property_services.view",
+  "property_services.update",
+  "property_services.approve",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
+
+/** Permissions that need an explicit warning before granting (approval / sensitive documents). */
+export const SENSITIVE_PERMISSIONS: Permission[] = [
+  "property.approve",
+  "property_documents.manage",
+  "property_services.approve",
+  "invoices.approve",
+  "documents.approve",
+];
+
 
 /** Sensible defaults per role when the admin creates an account. */
 export const ROLE_DEFAULT_PERMISSIONS: Record<string, Permission[]> = {
@@ -185,6 +204,15 @@ export const PERMISSION_LABELS_AR: Record<Permission, string> = {
   "products.merge": "دمج المنتجات المتشابهة",
   "prices.view": "عرض سجل الأسعار",
   "prices.export": "تصدير تقارير الأسعار",
+  "property.view": "عرض الملف العقاري",
+  "property.edit": "تعديل بيانات الأرض والصك والرخص والملاك والعقود والوحدات",
+  "property.approve": "اعتماد تغييرات الملف العقاري الحساسة",
+  "property_documents.view": "عرض مستندات المشروع وفق مستوى الرؤية",
+  "property_documents.upload": "رفع مستندات وصور وإصدارات جديدة",
+  "property_documents.manage": "إدارة تصنيف المستندات ورؤيتها وحذفها واستعادتها",
+  "property_services.view": "عرض العدادات والخدمات ونتائجها",
+  "property_services.update": "إدخال نتيجة تنفيذ خدمة ومعلومات الحساب أو العداد",
+  "property_services.approve": "اعتماد نتيجة الخدمة وربطها بالمشروع أو الوحدة",
 };
 
 export const PERMISSION_LABELS_EN: Record<Permission, string> = {
@@ -232,6 +260,15 @@ export const PERMISSION_LABELS_EN: Record<Permission, string> = {
   "products.merge": "Merge similar products",
   "prices.view": "View price history",
   "prices.export": "Export price reports",
+  "property.view": "View property file",
+  "property.edit": "Edit land, deed, licence, owners, contracts and units data",
+  "property.approve": "Approve sensitive property file changes",
+  "property_documents.view": "View project documents by visibility level",
+  "property_documents.upload": "Upload documents, photos and new versions",
+  "property_documents.manage": "Classify, change visibility, delete and restore documents",
+  "property_services.view": "View meters, services and their results",
+  "property_services.update": "Enter service execution result and account/meter data",
+  "property_services.approve": "Approve a service result and link it to project or unit",
 };
 
 /** Request kinds available from the supervisor portal (all use the existing requests table). */
@@ -278,6 +315,7 @@ export const PERMISSION_GROUPS = [
   "documents",
   "invoices",
   "products",
+  "property",
   "reports",
   "system",
 ] as const;
@@ -293,6 +331,7 @@ export const PERMISSION_GROUP_LABELS_AR: Record<PermissionGroup, string> = {
   documents: "المستندات",
   invoices: "الموردون والفواتير",
   products: "المنتجات والأسعار",
+  property: "صلاحيات الملف العقاري",
   reports: "التقارير",
   system: "النظام",
 };
@@ -306,6 +345,7 @@ export const PERMISSION_GROUP_LABELS_EN: Record<PermissionGroup, string> = {
   documents: "Documents",
   invoices: "Suppliers & invoices",
   products: "Products & prices",
+  property: "Property file permissions",
   reports: "Reports",
   system: "System",
 };
@@ -361,6 +401,17 @@ export const GROUPED_PERMISSIONS: Record<PermissionGroup, Permission[]> = {
     "products.merge",
     "prices.view",
     "prices.export",
+  ],
+  property: [
+    "property.view",
+    "property.edit",
+    "property.approve",
+    "property_documents.view",
+    "property_documents.upload",
+    "property_documents.manage",
+    "property_services.view",
+    "property_services.update",
+    "property_services.approve",
   ],
   reports: ["reports.view"],
   system: [],

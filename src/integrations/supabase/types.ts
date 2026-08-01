@@ -3355,6 +3355,14 @@ export type Database = {
       can_edit_property: { Args: { _project_id: string }; Returns: boolean }
       can_view_invoice: { Args: { _invoice_id: string }; Returns: boolean }
       can_view_property: { Args: { _project_id: string }; Returns: boolean }
+      can_view_property_documents: {
+        Args: { _project_id: string }
+        Returns: boolean
+      }
+      can_view_property_services: {
+        Args: { _project_id: string }
+        Returns: boolean
+      }
       change_request_create: {
         Args: {
           _action: string

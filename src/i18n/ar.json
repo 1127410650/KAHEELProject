@@ -263,7 +263,15 @@
     "authLink": "ربط حساب الدخول",
     "authLinked": "مربوط",
     "authMissing": "غير مربوط",
-    "uid": "معرّف المستخدم"
+    "uid": "معرّف المستخدم",
+    "searchPermissions": "بحث في الصلاحيات",
+    "selectGroup": "تحديد المجموعة",
+    "clearGroup": "إلغاء تحديد المجموعة",
+    "permName": "الصلاحية",
+    "fromRole": "من الدور",
+    "direct": "مباشرة",
+    "effective": "الحالة الفعلية",
+    "sensitiveWarning": "صلاحية حساسة: تمنح الاعتماد أو إدارة المستندات."
   },
   "reports": {
     "title": "التقارير الأساسية",
