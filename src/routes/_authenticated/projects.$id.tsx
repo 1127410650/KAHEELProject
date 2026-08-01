@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, ClipboardList } from "lucide-react";
 
@@ -10,8 +10,8 @@ import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { ProjectMembersCard } from "@/components/ProjectMembersCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { StageBadge } from "@/components/RequestStage";
-import { buildRequestTitle } from "@/lib/request-ui";
+import { RequestRow } from "@/components/RequestRow";
+import { buildRequestTitle, simpleStage } from "@/lib/request-ui";
 import { formatDate, pickName } from "@/lib/format";
 import { PropertyFile } from "@/components/property/PropertyFile";
 import { PROJECT_KIND_LABELS, PROJECT_KINDS, pick, type ProjectKind } from "@/lib/property";
@@ -41,7 +41,6 @@ export const Route = createFileRoute("/_authenticated/projects/$id")({
 function ProjectDetailPage() {
   const { id } = Route.useParams();
   const { t, locale } = useI18n();
-  const navigate = useNavigate();
   const qc = useQueryClient();
   const { isAccountant } = useSession();
 
@@ -72,10 +71,12 @@ function ProjectDetailPage() {
     },
   });
 
-  const openCount = requests.filter(
-    (r) => r.status !== "completed" && r.status !== "cancelled",
-  ).length;
+  const isOpen = (s: string) => s !== "completed" && s !== "cancelled" && s !== "rejected";
+  const openCount = requests.filter((r) => isOpen(r.status)).length;
+  const actionCount = requests.filter((r) => simpleStage(r.status) === "action_needed").length;
   const awaitingCount = requests.filter((r) => r.status === "awaiting_payment").length;
+  const completedCount = requests.filter((r) => r.status === "completed").length;
+  const latestOpen = requests.filter((r) => isOpen(r.status)).slice(0, 3);
   const latestPaymentNo =
     requests.find((r) => r.status === "awaiting_payment" && r.payment_no)?.payment_no ?? null;
 
@@ -96,18 +97,18 @@ function ProjectDetailPage() {
         }
       />
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-2.5 sm:gap-4 lg:grid-cols-3">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("common.details")}</CardTitle>
+          <CardHeader className="p-3 pb-2 sm:p-4 sm:pb-2">
+            <CardTitle className="text-[17px] sm:text-lg">{t("common.details")}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <dl className="divide-y divide-border text-sm">
-              <div className="flex items-center justify-between py-2.5">
+          <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0">
+            <dl className="divide-y divide-border text-[13px] sm:text-sm">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.code")}</dt>
                 <dd className="num font-medium">{project?.code ?? "—"}</dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.supervisor")}</dt>
                 <dd className="font-medium">
                   {project?.supervisor_id ? (
@@ -123,15 +124,15 @@ function ProjectDetailPage() {
                   )}
                 </dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.city")}</dt>
                 <dd className="font-medium">{project?.city ?? "—"}</dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("projects.startDate")}</dt>
                 <dd className="num font-medium">{formatDate(project?.start_date)}</dd>
               </div>
-              <div className="flex items-center justify-between gap-2 py-2.5">
+              <div className="flex items-center justify-between gap-2 py-2">
                 <dt className="text-muted-foreground">
                   {locale === "ar" ? "نوع المشروع" : "Project type"}
                 </dt>
@@ -163,7 +164,7 @@ function ProjectDetailPage() {
                   )}
                 </dd>
               </div>
-              <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center justify-between py-2">
                 <dt className="text-muted-foreground">{t("common.status")}</dt>
                 <dd>{project && <StatusBadge status={project.status} />}</dd>
               </div>
@@ -172,72 +173,63 @@ function ProjectDetailPage() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex flex-wrap items-center gap-3 text-base">
+          <CardHeader className="p-3 pb-2 sm:p-4 sm:pb-2">
+            <CardTitle className="flex items-center gap-2 text-[17px] sm:text-lg">
               <ClipboardList className="size-4" aria-hidden />
               {t("requests.projectRequests")}
-              <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium">
+            </CardTitle>
+            <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] font-medium">
+              <span className="rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.openRequests")}: <span className="num">{openCount}</span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium">
+              <span className="rounded-full bg-warning/15 px-2 py-0.5 text-warning-foreground">
+                {t("requests.actionRequiredPlural")}: <span className="num">{actionCount}</span>
+              </span>
+              <span className="rounded-full bg-secondary px-2 py-0.5">
                 {t("requests.awaitingPayment")}: <span className="num">{awaitingCount}</span>
               </span>
+              <span className="rounded-full bg-secondary px-2 py-0.5">
+                {t("requests.completedCount")}: <span className="num">{completedCount}</span>
+              </span>
               {latestPaymentNo && <PaymentNoBadge paymentNo={latestPaymentNo} />}
-            </CardTitle>
+            </div>
           </CardHeader>
           <CardContent className="p-0">
             {requests.length === 0 ? (
-              <p className="px-6 pb-6 text-sm text-muted-foreground">{t("requests.empty")}</p>
+              <p className="px-3 pb-3 text-[13px] text-muted-foreground sm:px-4 sm:pb-4">
+                {t("requests.noneForProject")}
+              </p>
             ) : (
               <>
                 <ul className="divide-y divide-border">
-                  {requests.slice(0, 5).map((r) => (
+                  {latestOpen.map((r) => (
                     <li key={r.id}>
-                      <button
-                        type="button"
-                        className="w-full px-6 py-3 text-start transition hover:bg-secondary/40"
-                        onClick={() => void navigate({ to: "/requests/$id", params: { id: r.id } })}
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span className="text-sm font-medium">
-                            {buildRequestTitle(
-                              {
-                                ...r,
-                                projectName: project
-                                  ? pickName(locale, project.name_ar, project.name_en)
-                                  : null,
-                              },
-                              t("requests.untitled"),
-                              locale,
-                            )}
-                          </span>
-                          <StageBadge status={r.status} />
-                        </div>
-                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                          <span className="num">{r.request_no}</span>
-                          <span>
-                            {pickName(
-                              locale,
-                              (r.supervisors as { name_ar?: string } | null)?.name_ar,
-                              (r.supervisors as { name_en?: string } | null)?.name_en,
-                            )}
-                          </span>
-                          <span className="num">
-                            {t("common.date")}: {formatDate(r.request_date)}
-                          </span>
-                          <PaymentNoBadge paymentNo={r.payment_no} />
-                        </div>
-                      </button>
+                      <RequestRow
+                        id={r.id}
+                        title={buildRequestTitle(
+                          {
+                            ...r,
+                            projectName: project
+                              ? pickName(locale, project.name_ar, project.name_en)
+                              : null,
+                          },
+                          t("requests.untitled"),
+                          locale,
+                        )}
+                        requestNo={r.request_no}
+                        status={r.status}
+                        date={r.request_date}
+                      />
                     </li>
                   ))}
                 </ul>
-                {requests.length > 5 && (
-                  <div className="px-6 py-3">
-                    <Button asChild variant="outline" size="sm">
-                      <Link to="/requests">{t("portal.viewAll")}</Link>
-                    </Button>
-                  </div>
-                )}
+                <div className="p-2.5 sm:p-3">
+                  <Button asChild variant="outline" size="sm" className="h-9 w-full text-[13px] sm:w-auto">
+                    <Link to="/projects/$id/requests" params={{ id }}>
+                      {t("requests.viewAllProjectRequests")}
+                    </Link>
+                  </Button>
+                </div>
               </>
             )}
           </CardContent>

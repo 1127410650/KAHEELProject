@@ -443,8 +443,20 @@
     "assignedOfficer": "Responsible officer",
     "search": "Search requests",
     "workbox": "Workbox",
-    "workboxHint": "Requests grouped by the action required from you",
-    "noPaymentYet": "No payment data yet"
+    "workboxHint": "Requests grouped by the action required",
+    "noPaymentYet": "No payment data yet",
+    "actionRequiredBadge": "Action required",
+    "actionRequiredPlural": "Requests requiring action",
+    "actionRequiredMine": "This request requires action from you",
+    "viewAllProjectRequests": "View all project requests",
+    "noneForProject": "No requests linked to this project",
+    "allProjectRequests": "All project requests",
+    "period": "Period",
+    "from": "From",
+    "to": "To",
+    "sortLatest": "Latest updated",
+    "loadMore": "Load more",
+    "resultsCount": "Results"
   },
   "suppliers": {
     "title": "Suppliers",
@@ -676,7 +688,7 @@
   "stage": {
     "received": "Request received",
     "reviewing": "Under review",
-    "action_needed": "Action needed from you",
+    "action_needed": "Action required",
     "approval_execution": "Approval or execution",
     "done": "Completed",
     "rejected": "Rejected",
@@ -685,9 +697,9 @@
     "detail": "Exact stage"
   },
   "action": {
-    "title": "What to do now",
-    "short": "Needed",
-    "none": "Nothing is required from you right now",
+    "title": "Action required",
+    "short": "Action required",
+    "none": "No action required right now",
     "rejected": "This request was rejected",
     "cancelled": "This request was cancelled",
     "completed": "This request is completed",
@@ -731,7 +743,7 @@
   "notify": {
     "created": "Your request was received",
     "reviewStarted": "The responsible officer started reviewing your request",
-    "needsInfo": "We need you to complete some data",
+    "needsInfo": "Action required on your request",
     "replyReceived": "Your reply was received",
     "approved": "Your request was approved",
     "executionStarted": "Execution of your request started",
@@ -743,11 +755,11 @@
     "reminder": "Reminder on your request"
   },
   "groups": {
-    "action_mine": "Needs my action",
+    "action_mine": "Requests requiring action",
     "in_progress": "In progress",
     "completed": "Completed",
     "closed_other": "Rejected or cancelled",
-    "mine_now": "Needed from me now",
+    "mine_now": "Requests requiring action",
     "awaiting_supervisor": "Awaiting supervisor reply",
     "awaiting_approval": "Awaiting approval",
     "awaiting_execution": "Awaiting execution",
