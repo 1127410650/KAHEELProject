@@ -91,22 +91,34 @@ function OnboardingPage() {
 
   const create = useMutation({
     mutationFn: async () => {
+      const opt = (value: string, when = true) => {
+        const trimmed = value.trim();
+        return when && trimmed ? { value: trimmed } : null;
+      };
+      const put = (key: string, value: string, when = true) => {
+        const kept = opt(value, when);
+        return kept ? { [key]: kept.value } : {};
+      };
       const { data, error } = await supabase.rpc("create_workspace", {
         _tenant_type: type,
         _name_ar: form.name_ar.trim(),
-        _name_en: form.name_en.trim() || undefined,
-        _legal_name: isBusiness ? form.legal_name.trim() || undefined : undefined,
-        _cr_number: isBusiness ? form.cr_number.trim() || undefined : undefined,
-        _vat_number: form.vat_number.trim() || undefined,
-        _city: form.city.trim() || undefined,
-        _phone: form.phone.trim() || undefined,
-        _email: form.email.trim() || undefined,
-        _activity: form.activity.trim() || undefined,
-        _usage_type: isPersonal ? form.usage_type : undefined,
-        _provider_type: isProvider ? form.provider_type.trim() || undefined : undefined,
-        _specialty: isProvider ? form.specialty.trim() || undefined : undefined,
         _confirm_duplicate: confirmDuplicate,
+        ...put("_name_en", form.name_en),
+        ...put("_legal_name", form.legal_name, isBusiness),
+        ...put("_cr_number", form.cr_number, isBusiness),
+        ...put("_vat_number", form.vat_number),
+        ...put("_city", form.city),
+        ...put("_phone", form.phone),
+        ...put("_email", form.email),
+        ...put("_activity", form.activity),
+        ...put("_usage_type", form.usage_type, isPersonal),
+        ...put("_provider_type", form.provider_type, isProvider),
+        ...put("_specialty", form.specialty, isProvider),
       });
+      if (error) throw error;
+      return data as string;
+    },
+
       if (error) throw error;
       return data as string;
     },
