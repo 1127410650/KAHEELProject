@@ -97,13 +97,13 @@ function ProjectDetailPage() {
         }
       />
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-2.5 sm:gap-4 lg:grid-cols-3">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("common.details")}</CardTitle>
+          <CardHeader className="p-3 pb-2 sm:p-4 sm:pb-2">
+            <CardTitle className="text-[17px] sm:text-lg">{t("common.details")}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <dl className="divide-y divide-border text-sm">
+          <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0">
+            <dl className="divide-y divide-border text-[13px] sm:text-sm">
               <div className="flex items-center justify-between py-2.5">
                 <dt className="text-muted-foreground">{t("projects.code")}</dt>
                 <dd className="num font-medium">{project?.code ?? "—"}</dd>
