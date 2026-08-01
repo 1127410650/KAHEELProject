@@ -344,21 +344,55 @@ function PortalPage() {
 function StatCard({
   label,
   value,
+  valueText,
   icon: Icon,
+  tone = "muted",
+  onClick,
+  to,
 }: {
   label: string;
-  value: number;
+  value?: number;
+  valueText?: string;
   icon: typeof Wallet;
+  tone?: "muted" | "primary";
+  onClick?: () => void;
+  to?: string;
 }) {
-  return (
-    <div className="surface flex items-center gap-4 p-5">
-      <span className="grid size-11 place-items-center rounded-xl bg-secondary text-foreground">
-        <Icon className="size-5" aria-hidden />
+  const body = (
+    <>
+      <span
+        className={cn(
+          "grid size-8 shrink-0 place-items-center rounded-lg sm:size-9",
+          tone === "primary" ? "bg-primary/10 text-primary" : "bg-secondary text-foreground",
+        )}
+      >
+        <Icon className="size-4 sm:size-[18px]" aria-hidden />
       </span>
-      <div className="min-w-0">
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="num text-xl font-bold">{value}</p>
-      </div>
-    </div>
+      <span className="min-w-0">
+        <span className="block truncate text-[13px] leading-tight text-muted-foreground sm:text-sm">
+          {label}
+        </span>
+        <span className="num block truncate text-[22px] font-bold leading-tight sm:text-2xl">
+          {valueText ?? value ?? 0}
+        </span>
+      </span>
+    </>
   );
+
+  const cls =
+    "surface flex min-h-[72px] items-center gap-2.5 p-2.5 text-start sm:min-h-0 sm:gap-3 sm:p-3.5";
+
+  if (to)
+    return (
+      <Link to={to} className={cn(cls, "transition hover:bg-secondary/40")}>
+        {body}
+      </Link>
+    );
+  if (onClick)
+    return (
+      <button type="button" onClick={onClick} className={cn(cls, "transition hover:bg-secondary/40")}>
+        {body}
+      </button>
+    );
+  return <div className={cls}>{body}</div>;
 }
