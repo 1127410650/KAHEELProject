@@ -1275,6 +1275,8 @@
     },
     "actionNeeded": "Requests needing action",
     "unread": "Unread alerts",
-    "viewAllCustody": "View all custody"
+    "viewAllCustody": "View all custody",
+    "loadError": "Couldn't load data",
+    "retry": "Retry"
   }
 }
