@@ -238,6 +238,25 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { profile, role } = useSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  // A confirmed account with no workspace yet is sent through onboarding first.
+  const myTenants = useQuery({
+    queryKey: ["my-tenants"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("my_tenants");
+      if (error) throw error;
+      return (data ?? []) as unknown[];
+    },
+  });
+
+  useEffect(() => {
+    if (myTenants.data && myTenants.data.length === 0 && pathname !== "/onboarding") {
+      navigate({ to: "/onboarding", replace: true });
+    }
+  }, [myTenants.data, pathname, navigate]);
+
+
 
   async function signOut() {
     await queryClient.cancelQueries();
