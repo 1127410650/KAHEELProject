@@ -173,7 +173,6 @@ function AuthPage() {
           </form>
 
           <p className="mt-5 text-center text-xs text-muted-foreground">
-            {t("signup.haveAccount") /* prompt pairs with the create-account link */}{" "}
             <Link to="/register" className="font-semibold text-primary">
               {t("signup.createAccount")}
             </Link>
