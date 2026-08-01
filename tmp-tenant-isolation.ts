@@ -43,7 +43,7 @@ async function main() {
   const emailB = "isolation-b@tahqaq.test";
 
   // --- cleanup from earlier runs
-  await admin.from("tenants").delete().in("code", ["TEST-TENANT-A", "TEST-TENANT-B"]);
+  await admin.from("tenants").delete().eq("is_test", true);
 
   const uidA = await makeUser(emailA);
   const uidB = await makeUser(emailB);
@@ -51,13 +51,13 @@ async function main() {
   const { data: tenants, error: tErr } = await admin
     .from("tenants")
     .insert([
-      { code: "TEST-TENANT-A", name_ar: "كيان اختبار أ", name_en: "Test Tenant A" },
-      { code: "TEST-TENANT-B", name_ar: "كيان اختبار ب", name_en: "Test Tenant B" },
+      { name_ar: "كيان اختبار أ", name_en: "TEST-TENANT-A", is_test: true },
+      { name_ar: "كيان اختبار ب", name_en: "TEST-TENANT-B", is_test: true },
     ])
-    .select("id, code");
+    .select("id, name_en");
   if (tErr) throw tErr;
-  const tA = tenants!.find((x) => x.code === "TEST-TENANT-A")!.id;
-  const tB = tenants!.find((x) => x.code === "TEST-TENANT-B")!.id;
+  const tA = tenants!.find((x) => x.name_en === "TEST-TENANT-A")!.id;
+  const tB = tenants!.find((x) => x.name_en === "TEST-TENANT-B")!.id;
 
   // Profiles are created by the signup trigger; make sure both exist.
   for (const uid of [uidA, uidB]) {
@@ -81,11 +81,22 @@ async function main() {
     { onConflict: "user_id,role" },
   );
 
+  const { data: sups, error: sErr } = await admin
+    .from("supervisors")
+    .insert([
+      { name_ar: "مشرف كيان أ", national_id: "1000000001", phone: "0500000001", tenant_id: tA },
+      { name_ar: "مشرف كيان ب", national_id: "1000000002", phone: "0500000002", tenant_id: tB },
+    ])
+    .select("id, tenant_id");
+  if (sErr) throw sErr;
+  const sA = sups!.find((x) => x.tenant_id === tA)!.id;
+  const sB = sups!.find((x) => x.tenant_id === tB)!.id;
+
   const { data: projs, error: pErr } = await admin
     .from("projects")
     .insert([
-      { name: "مشروع كيان أ", code: "ISO-A", tenant_id: tA },
-      { name: "مشروع كيان ب", code: "ISO-B", tenant_id: tB },
+      { name_ar: "مشروع كيان أ", code: "ISO-A", supervisor_id: sA, tenant_id: tA },
+      { name_ar: "مشروع كيان ب", code: "ISO-B", supervisor_id: sB, tenant_id: tB },
     ])
     .select("id, code, tenant_id");
   if (pErr) throw pErr;
@@ -114,19 +125,19 @@ async function main() {
   check("A cannot read B project by id", (crossRead?.length ?? 0) === 0);
 
   // 3. Cross-tenant update / delete are no-ops.
-  const { data: upd } = await ca.from("projects").update({ name: "hacked" }).eq("id", pB).select("id");
+  const { data: upd } = await ca.from("projects").update({ name_ar: "hacked" }).eq("id", pB).select("id");
   check("A cannot update B project", (upd?.length ?? 0) === 0);
   const { data: del } = await ca.from("projects").delete().eq("id", pB).select("id");
   check("A cannot delete B project", (del?.length ?? 0) === 0);
-  const { data: stillThere } = await admin.from("projects").select("name").eq("id", pB).single();
-  check("B project untouched", stillThere?.name === "مشروع كيان ب", stillThere?.name);
+  const { data: stillThere } = await admin.from("projects").select("name_ar").eq("id", pB).single();
+  check("B project untouched", stillThere?.name_ar === "مشروع كيان ب", stillThere?.name_ar);
 
   // 4. Insert forged into the other tenant is rejected.
-  const forged = await ca.from("projects").insert({ name: "forged", code: "ISO-FORGE", tenant_id: tB });
+  const forged = await ca.from("projects").insert({ name_ar: "forged", code: "ISO-FORGE", supervisor_id: sB, tenant_id: tB });
   check("A cannot insert into tenant B", !!forged.error, forged.error?.message ?? "no error");
 
   // 5. Insert without tenant_id lands in the caller's own tenant.
-  const own = await ca.from("projects").insert({ name: "مشروع تلقائي", code: "ISO-AUTO" }).select("id, tenant_id").single();
+  const own = await ca.from("projects").insert({ name_ar: "مشروع تلقائي", code: "ISO-AUTO", supervisor_id: sA }).select("id, tenant_id").single();
   check("A insert auto-assigns tenant A", own.data?.tenant_id === tA, own.error?.message ?? "");
 
   // 6. Child rows cannot be attached to a foreign parent.
@@ -176,6 +187,7 @@ async function main() {
   // --- cleanup
   await admin.storage.from("attachments").remove([foreignPath]);
   await admin.from("projects").delete().like("code", "ISO-%");
+  await admin.from("supervisors").delete().in("id", [sA, sB]);
   await admin.from("tenants").delete().in("id", [tA, tB]);
   await admin.auth.admin.deleteUser(uidA);
   await admin.auth.admin.deleteUser(uidB);
