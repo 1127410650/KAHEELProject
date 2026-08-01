@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/AppLayout";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/audit")({
