@@ -14,6 +14,61 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_link_reviews: {
+        Row: {
+          candidate_count: number
+          created_at: string
+          id: string
+          reason: string
+          status: string
+          supervisor_id: string | null
+          tenant_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          candidate_count?: number
+          created_at?: string
+          id?: string
+          reason: string
+          status?: string
+          supervisor_id?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          candidate_count?: number
+          created_at?: string
+          id?: string
+          reason?: string
+          status?: string
+          supervisor_id?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_link_reviews_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "custody_balances"
+            referencedColumns: ["supervisor_id"]
+          },
+          {
+            foreignKeyName: "account_link_reviews_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_link_reviews_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_settings: {
         Row: {
           is_public: boolean
@@ -1459,6 +1514,7 @@ export type Database = {
       profiles: {
         Row: {
           active_tenant_id: string | null
+          always_select_account: boolean
           created_at: string
           email: string | null
           full_name: string
@@ -1475,6 +1531,7 @@ export type Database = {
         }
         Insert: {
           active_tenant_id?: string | null
+          always_select_account?: boolean
           created_at?: string
           email?: string | null
           full_name?: string
@@ -1491,6 +1548,7 @@ export type Database = {
         }
         Update: {
           active_tenant_id?: string | null
+          always_select_account?: boolean
           created_at?: string
           email?: string | null
           full_name?: string
@@ -3974,6 +4032,7 @@ export type Database = {
           created_by: string | null
           id: string
           joined_at: string | null
+          last_seen_at: string | null
           membership_end: string | null
           membership_start: string | null
           role: string
@@ -3987,6 +4046,7 @@ export type Database = {
           created_by?: string | null
           id?: string
           joined_at?: string | null
+          last_seen_at?: string | null
           membership_end?: string | null
           membership_start?: string | null
           role: string
@@ -4000,6 +4060,7 @@ export type Database = {
           created_by?: string | null
           id?: string
           joined_at?: string | null
+          last_seen_at?: string | null
           membership_end?: string | null
           membership_start?: string | null
           role?: string
@@ -4035,6 +4096,7 @@ export type Database = {
           name_ar: string
           name_en: string
           onboarding_completed_at: string | null
+          personal_user_id: string | null
           phone: string | null
           provider_type: string | null
           specialty: string | null
@@ -4060,6 +4122,7 @@ export type Database = {
           name_ar: string
           name_en: string
           onboarding_completed_at?: string | null
+          personal_user_id?: string | null
           phone?: string | null
           provider_type?: string | null
           specialty?: string | null
@@ -4085,6 +4148,7 @@ export type Database = {
           name_ar?: string
           name_en?: string
           onboarding_completed_at?: string | null
+          personal_user_id?: string | null
           phone?: string | null
           provider_type?: string | null
           specialty?: string | null
@@ -4344,6 +4408,15 @@ export type Database = {
       }
     }
     Functions: {
+      activate_account: {
+        Args: { _tenant_id: string }
+        Returns: {
+          is_personal: boolean
+          role: string
+          tenant_id: string
+          tenant_type: string
+        }[]
+      }
       approve_attachment: {
         Args: { _attachment_id: string }
         Returns: undefined
@@ -4452,6 +4525,7 @@ export type Database = {
         Args: { _action: string; _field_id: string; _value?: string }
         Returns: undefined
       }
+      ensure_personal_tenant: { Args: never; Returns: string }
       has_perm: { Args: { _perm: string }; Returns: boolean }
       has_permission_in_tenant: {
         Args: { _permission: string; _tenant_id: string; _user_id: string }
@@ -4561,6 +4635,22 @@ export type Database = {
       membership_set_status: {
         Args: { _membership_id: string; _reason?: string; _status: string }
         Returns: undefined
+      }
+      my_accounts: {
+        Args: never
+        Returns: {
+          is_current: boolean
+          is_owner: boolean
+          is_personal: boolean
+          last_seen_at: string
+          masked_ref: string
+          membership_status: string
+          name_ar: string
+          name_en: string
+          role: string
+          tenant_id: string
+          tenant_type: string
+        }[]
       }
       my_tenants: {
         Args: never
