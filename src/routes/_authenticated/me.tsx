@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
@@ -18,7 +19,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { PageHeader } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
-import { useAccounts, sortAccounts, type Account } from "@/hooks/use-accounts";
+import { useAccounts, useEnterAccount, sortAccounts, type Account } from "@/hooks/use-accounts";
 import { formatDate, formatMoney } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/me")({
