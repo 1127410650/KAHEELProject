@@ -661,8 +661,197 @@ function InvoicesPage() {
         </Select>
       </div>
 
-      <div className="surface overflow-hidden">
+      <MobileCards>
+        {filtered.length === 0 && <MobileEmpty>{t("invoices.empty")}</MobileEmpty>}
+        {filtered.map((row) => {
+          const supplier = row.suppliers as { name_ar?: string; name_en?: string } | null;
+          const project = row.projects as {
+            code?: string;
+            name_ar?: string;
+            name_en?: string;
+          } | null;
+          const supervisor = row.supervisors as { name_ar?: string; name_en?: string } | null;
+          const settled = settledByInvoice.get(row.id) ?? 0;
+          const canEdit = isAccountant || row.status === "draft" || row.status === "returned";
+          return (
+            <RecordCard
+              key={row.id}
+              lead={`#${row.internal_no}`}
+              title={pickName(locale, supplier?.name_ar, supplier?.name_en)}
+              subtitle={row.invoice_no}
+              badge={<StatusBadge status={row.status} />}
+              fields={[
+                {
+                  label: t("invoices.totalAmount"),
+                  value: formatMoney(row.total_amount, locale),
+                  num: true,
+                },
+                {
+                  label: t("invoices.settledAmount"),
+                  value: formatMoney(settled, locale),
+                  num: true,
+                },
+                {
+                  label: t("invoices.invoiceDate"),
+                  value: formatDate(row.invoice_date),
+                  num: true,
+                },
+                { label: t("invoices.project"), value: project?.code ?? "—" },
+                {
+                  label: t("invoices.supervisor"),
+                  value: pickName(locale, supervisor?.name_ar, supervisor?.name_en) || "—",
+                  wide: true,
+                },
+              ]}
+              footer={
+                row.duplicate_reason ? (
+                  <p className="mt-2 text-[11px] text-warning-foreground">
+                    {t("invoices.duplicateApproved")}
+                  </p>
+                ) : null
+              }
+              actions={
+                <>
+                  {(row.status === "draft" || row.status === "returned") && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 px-2 text-xs text-info"
+                      onClick={() => {
+                        setStatusTarget({ id: row.id, from: row.status, to: "under_review" });
+                        setStatusNote("");
+                      }}
+                    >
+                      <Send className="size-3.5" aria-hidden />
+                      {t("invoices.sendToReview")}
+                    </Button>
+                  )}
+                  {isAccountant && row.status === "under_review" && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1.5 px-2 text-xs text-success"
+                        onClick={() => {
+                          setStatusTarget({ id: row.id, from: row.status, to: "approved" });
+                          setStatusNote("");
+                        }}
+                      >
+                        <Check className="size-3.5" aria-hidden />
+                        {t("invoices.approve")}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1.5 px-2 text-xs text-warning-foreground"
+                        onClick={() => {
+                          setStatusTarget({ id: row.id, from: row.status, to: "returned" });
+                          setStatusNote("");
+                        }}
+                      >
+                        <Undo2 className="size-3.5" aria-hidden />
+                        {t("invoices.returnForFix")}
+                      </Button>
+                    </>
+                  )}
+                  {isAccountant && row.status === "approved" && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 px-2 text-xs text-primary"
+                      onClick={() => {
+                        setSettleTarget(row.id);
+                        setSettleAmount(
+                          String(Math.max(Number(row.total_amount ?? 0) - settled, 0).toFixed(2)),
+                        );
+                        setSettleDate(todayInRiyadh());
+                        setSettleNote("");
+                      }}
+                    >
+                      <Wallet className="size-3.5" aria-hidden />
+                      {t("invoices.settleFromCustody")}
+                    </Button>
+                  )}
+                  {canEdit && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 px-2 text-xs"
+                      onClick={() => {
+                        setForm({
+                          id: row.id,
+                          supplier_id: row.supplier_id,
+                          invoice_no: row.invoice_no,
+                          invoice_date: row.invoice_date,
+                          project_id: row.project_id,
+                          supervisor_id: row.supervisor_id ?? "",
+                          amount_before_tax: String(row.amount_before_tax ?? ""),
+                          tax_amount: String(row.tax_amount ?? ""),
+                          description: row.description ?? "",
+                        });
+                        setShowDuplicateOverride(!!row.duplicate_reason);
+                        setDuplicateReason(row.duplicate_reason ?? "");
+                        setOpen(true);
+                      }}
+                    >
+                      <Pencil className="size-3.5" aria-hidden />
+                      {t("common.edit")}
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 px-2 text-xs"
+                    onClick={() => setHistoryOf(row.id)}
+                  >
+                    {t("invoices.history")}
+                  </Button>
+                  {isAccountant && row.status !== "cancelled" && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 px-2 text-xs text-destructive"
+                      onClick={() => {
+                        setStatusTarget({ id: row.id, from: row.status, to: "cancelled" });
+                        setStatusNote("");
+                      }}
+                    >
+                      <Ban className="size-3.5" aria-hidden />
+                      {t("invoices.cancel")}
+                    </Button>
+                  )}
+                  {isAccountant && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 px-2 text-xs text-destructive"
+                      onClick={() =>
+                        setDeleteTarget({
+                          id: row.id,
+                          label: `#${row.internal_no} — ${row.invoice_no}`,
+                        })
+                      }
+                    >
+                      <Trash2 className="size-3.5" aria-hidden />
+                      {t("common.delete")}
+                    </Button>
+                  )}
+                </>
+              }
+            />
+          );
+        })}
+        {filtered.length > 0 && (
+          <li className="surface flex items-center justify-between p-3 text-[12px] font-semibold">
+            <span>{t("common.total")}</span>
+            <span className="num">{formatMoney(totals.total, locale)}</span>
+          </li>
+        )}
+      </MobileCards>
+
+      <div className="surface hidden overflow-hidden sm:block">
         <div className="overflow-x-auto">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
               <tr className="text-xs uppercase tracking-wide text-muted-foreground">
