@@ -1181,6 +1181,7 @@ export type Database = {
           location: string | null
           name_ar: string
           name_en: string | null
+          project_type: Database["public"]["Enums"]["project_kind"]
           start_date: string | null
           status: Database["public"]["Enums"]["project_status"]
           supervisor_id: string
@@ -1199,6 +1200,7 @@ export type Database = {
           location?: string | null
           name_ar: string
           name_en?: string | null
+          project_type?: Database["public"]["Enums"]["project_kind"]
           start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"]
           supervisor_id: string
@@ -1217,6 +1219,7 @@ export type Database = {
           location?: string | null
           name_ar?: string
           name_en?: string | null
+          project_type?: Database["public"]["Enums"]["project_kind"]
           start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"]
           supervisor_id?: string
@@ -1235,6 +1238,1265 @@ export type Database = {
             columns: ["supervisor_id"]
             isOneToOne: false
             referencedRelation: "supervisors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_boundaries: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          length_m: number | null
+          notes: string | null
+          project_id: string
+          projection_m: number | null
+          setback_m: number | null
+          side: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          length_m?: number | null
+          notes?: string | null
+          project_id: string
+          projection_m?: number | null
+          setback_m?: number | null
+          side: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          length_m?: number | null
+          notes?: string | null
+          project_id?: string
+          projection_m?: number | null
+          setback_m?: number | null
+          side?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_boundaries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_contracts: {
+        Row: {
+          amount: number | null
+          attachment_id: string | null
+          contract_date: string | null
+          contract_no: string | null
+          contract_type: string | null
+          contractor: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          end_date: string | null
+          engineering_office: string | null
+          id: string
+          inspection_body: string | null
+          insurance_company: string | null
+          is_current: boolean
+          notes: string | null
+          owner_name: string | null
+          previous_id: string | null
+          project_id: string
+          project_owner: string | null
+          start_date: string | null
+          status: string
+          supervision_office: string | null
+          title: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          amount?: number | null
+          attachment_id?: string | null
+          contract_date?: string | null
+          contract_no?: string | null
+          contract_type?: string | null
+          contractor?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          end_date?: string | null
+          engineering_office?: string | null
+          id?: string
+          inspection_body?: string | null
+          insurance_company?: string | null
+          is_current?: boolean
+          notes?: string | null
+          owner_name?: string | null
+          previous_id?: string | null
+          project_id: string
+          project_owner?: string | null
+          start_date?: string | null
+          status?: string
+          supervision_office?: string | null
+          title: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          amount?: number | null
+          attachment_id?: string | null
+          contract_date?: string | null
+          contract_no?: string | null
+          contract_type?: string | null
+          contractor?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          end_date?: string | null
+          engineering_office?: string | null
+          id?: string
+          inspection_body?: string | null
+          insurance_company?: string | null
+          is_current?: boolean
+          notes?: string | null
+          owner_name?: string | null
+          previous_id?: string | null
+          project_id?: string
+          project_owner?: string | null
+          start_date?: string | null
+          status?: string
+          supervision_office?: string | null
+          title?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_contracts_previous_id_fkey"
+            columns: ["previous_id"]
+            isOneToOne: false
+            referencedRelation: "property_contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_contracts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_coordinates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          label: string | null
+          latitude: number
+          longitude: number
+          notes: string | null
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label?: string | null
+          latitude: number
+          longitude: number
+          notes?: string | null
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label?: string | null
+          latitude?: number
+          longitude?: number
+          notes?: string | null
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_coordinates_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_deeds: {
+        Row: {
+          attachment_id: string | null
+          copy_no: string | null
+          created_at: string
+          created_by: string | null
+          deed_date: string | null
+          deed_no: string | null
+          doc_status: string
+          doc_type: string
+          id: string
+          is_current: boolean
+          issue_date: string | null
+          issuer: string | null
+          notes: string | null
+          owner_registry_no: string | null
+          previous_id: string | null
+          project_id: string
+          qr_payload: string | null
+          registry_property_no: string | null
+          updated_at: string
+          verify_url: string | null
+          version: number
+        }
+        Insert: {
+          attachment_id?: string | null
+          copy_no?: string | null
+          created_at?: string
+          created_by?: string | null
+          deed_date?: string | null
+          deed_no?: string | null
+          doc_status?: string
+          doc_type?: string
+          id?: string
+          is_current?: boolean
+          issue_date?: string | null
+          issuer?: string | null
+          notes?: string | null
+          owner_registry_no?: string | null
+          previous_id?: string | null
+          project_id: string
+          qr_payload?: string | null
+          registry_property_no?: string | null
+          updated_at?: string
+          verify_url?: string | null
+          version?: number
+        }
+        Update: {
+          attachment_id?: string | null
+          copy_no?: string | null
+          created_at?: string
+          created_by?: string | null
+          deed_date?: string | null
+          deed_no?: string | null
+          doc_status?: string
+          doc_type?: string
+          id?: string
+          is_current?: boolean
+          issue_date?: string | null
+          issuer?: string | null
+          notes?: string | null
+          owner_registry_no?: string | null
+          previous_id?: string | null
+          project_id?: string
+          qr_payload?: string | null
+          registry_property_no?: string | null
+          updated_at?: string
+          verify_url?: string | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_deeds_previous_id_fkey"
+            columns: ["previous_id"]
+            isOneToOne: false
+            referencedRelation: "property_deeds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_deeds_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_document_requests: {
+        Row: {
+          action: string
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          document_id: string
+          id: string
+          payload: Json | null
+          project_id: string
+          reason: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          document_id: string
+          id?: string
+          payload?: Json | null
+          project_id: string
+          reason: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          document_id?: string
+          id?: string
+          payload?: Json | null
+          project_id?: string
+          reason?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_document_requests_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "property_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_document_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_documents: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          delete_reason: string | null
+          deleted_at: string | null
+          deleted_by: string | null
+          description: string | null
+          doc_category: string
+          doc_status: string
+          file_hash: string | null
+          file_name: string
+          file_size: number | null
+          id: string
+          is_current: boolean
+          mime_type: string | null
+          previous_id: string | null
+          project_id: string
+          source_request_id: string | null
+          storage_path: string
+          title: string | null
+          unit_id: string | null
+          updated_at: string
+          version: number
+          visibility: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string | null
+          doc_category?: string
+          doc_status?: string
+          file_hash?: string | null
+          file_name: string
+          file_size?: number | null
+          id?: string
+          is_current?: boolean
+          mime_type?: string | null
+          previous_id?: string | null
+          project_id: string
+          source_request_id?: string | null
+          storage_path: string
+          title?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          version?: number
+          visibility?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          delete_reason?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string | null
+          doc_category?: string
+          doc_status?: string
+          file_hash?: string | null
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          is_current?: boolean
+          mime_type?: string | null
+          previous_id?: string | null
+          project_id?: string
+          source_request_id?: string | null
+          storage_path?: string
+          title?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          version?: number
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_documents_previous_id_fkey"
+            columns: ["previous_id"]
+            isOneToOne: false
+            referencedRelation: "property_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_documents_source_request_id_fkey"
+            columns: ["source_request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_documents_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_land: {
+        Row: {
+          additional_no: string | null
+          amanah: string | null
+          block_no: string | null
+          city: string | null
+          created_at: string
+          created_by: string | null
+          district: string | null
+          id: string
+          land_area: number | null
+          land_use: string | null
+          latitude: number | null
+          longitude: number | null
+          map_url: string | null
+          municipality: string | null
+          national_address: string | null
+          notes: string | null
+          parcel_no: string | null
+          plan_no: string | null
+          postal_code: string | null
+          project_id: string
+          property_no: string | null
+          region: string | null
+          street_name: string | null
+          street_width: number | null
+          updated_at: string
+        }
+        Insert: {
+          additional_no?: string | null
+          amanah?: string | null
+          block_no?: string | null
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          district?: string | null
+          id?: string
+          land_area?: number | null
+          land_use?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          map_url?: string | null
+          municipality?: string | null
+          national_address?: string | null
+          notes?: string | null
+          parcel_no?: string | null
+          plan_no?: string | null
+          postal_code?: string | null
+          project_id: string
+          property_no?: string | null
+          region?: string | null
+          street_name?: string | null
+          street_width?: number | null
+          updated_at?: string
+        }
+        Update: {
+          additional_no?: string | null
+          amanah?: string | null
+          block_no?: string | null
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          district?: string | null
+          id?: string
+          land_area?: number | null
+          land_use?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          map_url?: string | null
+          municipality?: string | null
+          national_address?: string | null
+          notes?: string | null
+          parcel_no?: string | null
+          plan_no?: string | null
+          postal_code?: string | null
+          project_id?: string
+          property_no?: string | null
+          region?: string | null
+          street_name?: string | null
+          street_width?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_land_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: true
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_license_components: {
+        Row: {
+          area: number | null
+          created_at: string
+          floors_count: number | null
+          id: string
+          license_id: string
+          name: string
+          notes: string | null
+          project_id: string
+          units_count: number | null
+          usage: string | null
+        }
+        Insert: {
+          area?: number | null
+          created_at?: string
+          floors_count?: number | null
+          id?: string
+          license_id: string
+          name: string
+          notes?: string | null
+          project_id: string
+          units_count?: number | null
+          usage?: string | null
+        }
+        Update: {
+          area?: number | null
+          created_at?: string
+          floors_count?: number | null
+          id?: string
+          license_id?: string
+          name?: string
+          notes?: string | null
+          project_id?: string
+          units_count?: number | null
+          usage?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_license_components_license_id_fkey"
+            columns: ["license_id"]
+            isOneToOne: false
+            referencedRelation: "property_licenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_license_components_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_licenses: {
+        Row: {
+          amanah: string | null
+          attachment_id: string | null
+          build_ratio: number | null
+          building_description: string | null
+          building_type: string | null
+          building_use: string | null
+          built_area: number | null
+          conditions: string | null
+          contractor: string | null
+          created_at: string
+          created_by: string | null
+          design_office: string | null
+          expiry_date: string | null
+          fees: number | null
+          floors_count: number | null
+          holder_id: string | null
+          holder_name: string | null
+          id: string
+          issue_date: string | null
+          land_area: number | null
+          license_no: string | null
+          license_status: string | null
+          license_type: string | null
+          municipality: string | null
+          notes: string | null
+          ownership_doc_no: string | null
+          ownership_doc_type: string | null
+          parcel_no: string | null
+          payment_date: string | null
+          payment_no: string | null
+          plan_no: string | null
+          project_id: string
+          request_type: string | null
+          supervision_office: string | null
+          units_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          amanah?: string | null
+          attachment_id?: string | null
+          build_ratio?: number | null
+          building_description?: string | null
+          building_type?: string | null
+          building_use?: string | null
+          built_area?: number | null
+          conditions?: string | null
+          contractor?: string | null
+          created_at?: string
+          created_by?: string | null
+          design_office?: string | null
+          expiry_date?: string | null
+          fees?: number | null
+          floors_count?: number | null
+          holder_id?: string | null
+          holder_name?: string | null
+          id?: string
+          issue_date?: string | null
+          land_area?: number | null
+          license_no?: string | null
+          license_status?: string | null
+          license_type?: string | null
+          municipality?: string | null
+          notes?: string | null
+          ownership_doc_no?: string | null
+          ownership_doc_type?: string | null
+          parcel_no?: string | null
+          payment_date?: string | null
+          payment_no?: string | null
+          plan_no?: string | null
+          project_id: string
+          request_type?: string | null
+          supervision_office?: string | null
+          units_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          amanah?: string | null
+          attachment_id?: string | null
+          build_ratio?: number | null
+          building_description?: string | null
+          building_type?: string | null
+          building_use?: string | null
+          built_area?: number | null
+          conditions?: string | null
+          contractor?: string | null
+          created_at?: string
+          created_by?: string | null
+          design_office?: string | null
+          expiry_date?: string | null
+          fees?: number | null
+          floors_count?: number | null
+          holder_id?: string | null
+          holder_name?: string | null
+          id?: string
+          issue_date?: string | null
+          land_area?: number | null
+          license_no?: string | null
+          license_status?: string | null
+          license_type?: string | null
+          municipality?: string | null
+          notes?: string | null
+          ownership_doc_no?: string | null
+          ownership_doc_type?: string | null
+          parcel_no?: string | null
+          payment_date?: string | null
+          payment_no?: string | null
+          plan_no?: string | null
+          project_id?: string
+          request_type?: string | null
+          supervision_office?: string | null
+          units_count?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_licenses_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_owners: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          full_name: string
+          id: string
+          id_number: string | null
+          id_type: string | null
+          nationality: string | null
+          notes: string | null
+          ownership_end: string | null
+          ownership_start: string | null
+          project_id: string
+          purchase_date: string | null
+          share_percent: number
+          transfer_value: number | null
+          unit_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          full_name: string
+          id?: string
+          id_number?: string | null
+          id_type?: string | null
+          nationality?: string | null
+          notes?: string | null
+          ownership_end?: string | null
+          ownership_start?: string | null
+          project_id: string
+          purchase_date?: string | null
+          share_percent?: number
+          transfer_value?: number | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          full_name?: string
+          id?: string
+          id_number?: string | null
+          id_type?: string | null
+          nationality?: string | null
+          notes?: string | null
+          ownership_end?: string | null
+          ownership_start?: string | null
+          project_id?: string
+          purchase_date?: string | null
+          share_percent?: number
+          transfer_value?: number | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_owners_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_partition_reports: {
+        Row: {
+          approved_at: string | null
+          attachment_id: string | null
+          created_at: string
+          created_by: string | null
+          deed_area: number | null
+          deed_no: string | null
+          engineering_office: string | null
+          id: string
+          license_no: string | null
+          notes: string | null
+          project_id: string
+          report_no: string | null
+          request_no: string | null
+          unit_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          attachment_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deed_area?: number | null
+          deed_no?: string | null
+          engineering_office?: string | null
+          id?: string
+          license_no?: string | null
+          notes?: string | null
+          project_id: string
+          report_no?: string | null
+          request_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          attachment_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deed_area?: number | null
+          deed_no?: string | null
+          engineering_office?: string | null
+          id?: string
+          license_no?: string | null
+          notes?: string | null
+          project_id?: string
+          report_no?: string | null
+          request_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_partition_reports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_partition_reports_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_plans: {
+        Row: {
+          attachment_id: string | null
+          created_at: string
+          created_by: string | null
+          design_office: string | null
+          id: string
+          is_current: boolean
+          issue_date: string | null
+          name: string
+          notes: string | null
+          plan_no: string | null
+          plan_type: string
+          preview_attachment_id: string | null
+          previous_id: string | null
+          project_id: string
+          review_status: string
+          revision_no: string | null
+          unit_id: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          attachment_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          design_office?: string | null
+          id?: string
+          is_current?: boolean
+          issue_date?: string | null
+          name: string
+          notes?: string | null
+          plan_no?: string | null
+          plan_type?: string
+          preview_attachment_id?: string | null
+          previous_id?: string | null
+          project_id: string
+          review_status?: string
+          revision_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          attachment_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          design_office?: string | null
+          id?: string
+          is_current?: boolean
+          issue_date?: string | null
+          name?: string
+          notes?: string | null
+          plan_no?: string | null
+          plan_type?: string
+          preview_attachment_id?: string | null
+          previous_id?: string | null
+          project_id?: string
+          review_status?: string
+          revision_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_plans_previous_id_fkey"
+            columns: ["previous_id"]
+            isOneToOne: false
+            referencedRelation: "property_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_plans_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_service_results: {
+        Row: {
+          account_no: string | null
+          applied_at: string | null
+          applied_service_id: string | null
+          capacity: string | null
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          executed_at: string | null
+          id: string
+          meter_no: string | null
+          notes: string | null
+          payment_no: string | null
+          previous_value: Json | null
+          project_id: string
+          request_no: string | null
+          service_status: string
+          service_type: string
+          source_request_id: string
+          status: string
+          subscription_no: string | null
+          unit_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_no?: string | null
+          applied_at?: string | null
+          applied_service_id?: string | null
+          capacity?: string | null
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          executed_at?: string | null
+          id?: string
+          meter_no?: string | null
+          notes?: string | null
+          payment_no?: string | null
+          previous_value?: Json | null
+          project_id: string
+          request_no?: string | null
+          service_status?: string
+          service_type: string
+          source_request_id: string
+          status?: string
+          subscription_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_no?: string | null
+          applied_at?: string | null
+          applied_service_id?: string | null
+          capacity?: string | null
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          executed_at?: string | null
+          id?: string
+          meter_no?: string | null
+          notes?: string | null
+          payment_no?: string | null
+          previous_value?: Json | null
+          project_id?: string
+          request_no?: string | null
+          service_status?: string
+          service_type?: string
+          source_request_id?: string
+          status?: string
+          subscription_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_service_results_applied_service_id_fkey"
+            columns: ["applied_service_id"]
+            isOneToOne: false
+            referencedRelation: "property_services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_service_results_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_service_results_source_request_id_fkey"
+            columns: ["source_request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_service_results_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_services: {
+        Row: {
+          account_no: string | null
+          activated_at: string | null
+          capacity: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          installed_at: string | null
+          meter_no: string | null
+          notes: string | null
+          payment_no: string | null
+          project_id: string
+          request_no: string | null
+          service_status: string
+          service_type: string
+          source_request_id: string | null
+          subscription_no: string | null
+          unit_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_no?: string | null
+          activated_at?: string | null
+          capacity?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          installed_at?: string | null
+          meter_no?: string | null
+          notes?: string | null
+          payment_no?: string | null
+          project_id: string
+          request_no?: string | null
+          service_status?: string
+          service_type: string
+          source_request_id?: string | null
+          subscription_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_no?: string | null
+          activated_at?: string | null
+          capacity?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          installed_at?: string | null
+          meter_no?: string | null
+          notes?: string | null
+          payment_no?: string | null
+          project_id?: string
+          request_no?: string | null
+          service_status?: string
+          service_type?: string
+          source_request_id?: string | null
+          subscription_no?: string | null
+          unit_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_services_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_services_source_request_id_fkey"
+            columns: ["source_request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_services_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_unit_components: {
+        Row: {
+          area: number | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          part_type: string
+          project_id: string
+          quantity: number | null
+          unit_id: string
+        }
+        Insert: {
+          area?: number | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          part_type?: string
+          project_id: string
+          quantity?: number | null
+          unit_id: string
+        }
+        Update: {
+          area?: number | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          part_type?: string
+          project_id?: string
+          quantity?: number | null
+          unit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_unit_components_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_unit_components_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_units: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_owner: string | null
+          floor: string | null
+          id: string
+          land_share_area: number | null
+          land_share_percent: number | null
+          notes: string | null
+          orientation: string | null
+          private_area: number | null
+          project_id: string
+          purchase_date: string | null
+          shared_area: number | null
+          status: string
+          total_area: number | null
+          transfer_value: number | null
+          unit_code: string | null
+          unit_no: string
+          unit_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_owner?: string | null
+          floor?: string | null
+          id?: string
+          land_share_area?: number | null
+          land_share_percent?: number | null
+          notes?: string | null
+          orientation?: string | null
+          private_area?: number | null
+          project_id: string
+          purchase_date?: string | null
+          shared_area?: number | null
+          status?: string
+          total_area?: number | null
+          transfer_value?: number | null
+          unit_code?: string | null
+          unit_no: string
+          unit_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_owner?: string | null
+          floor?: string | null
+          id?: string
+          land_share_area?: number | null
+          land_share_percent?: number | null
+          notes?: string | null
+          orientation?: string | null
+          private_area?: number | null
+          project_id?: string
+          purchase_date?: string | null
+          shared_area?: number | null
+          status?: string
+          total_area?: number | null
+          transfer_value?: number | null
+          unit_code?: string | null
+          unit_no?: string
+          unit_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_units_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -2089,7 +3351,10 @@ export type Database = {
         Args: { _supervisor_id: string }
         Returns: boolean
       }
+      can_approve_property: { Args: { _project_id: string }; Returns: boolean }
+      can_edit_property: { Args: { _project_id: string }; Returns: boolean }
       can_view_invoice: { Args: { _invoice_id: string }; Returns: boolean }
+      can_view_property: { Args: { _project_id: string }; Returns: boolean }
       change_request_create: {
         Args: {
           _action: string
@@ -2151,6 +3416,7 @@ export type Database = {
         }
         Returns: string
       }
+      mask_id_number: { Args: { _value: string }; Returns: string }
       normalize_doc_no: { Args: { p_value: string }; Returns: string }
       normalize_product_name: { Args: { _name: string }; Returns: string }
       notify_request: {
@@ -2178,6 +3444,33 @@ export type Database = {
         }
         Returns: string
       }
+      property_completion: { Args: { _project_id: string }; Returns: Json }
+      property_deed_add_version: {
+        Args: { _payload: Json; _previous_id: string }
+        Returns: string
+      }
+      property_document_add_version: {
+        Args: { _payload: Json; _previous_id: string }
+        Returns: string
+      }
+      property_document_request_decide: {
+        Args: { _approve: boolean; _id: string; _reason?: string }
+        Returns: undefined
+      }
+      property_document_restore: {
+        Args: { _document_id: string; _reason: string }
+        Returns: undefined
+      }
+      property_plan_add_version: {
+        Args: { _payload: Json; _previous_id: string }
+        Returns: string
+      }
+      property_service_result_apply: { Args: { _id: string }; Returns: string }
+      property_service_result_decide: {
+        Args: { _approve: boolean; _id: string; _reason?: string }
+        Returns: undefined
+      }
+      property_summary: { Args: { _project_id: string }; Returns: Json }
       register_login_result: {
         Args: { _identifier: string; _success: boolean }
         Returns: boolean
@@ -2384,6 +3677,12 @@ export type Database = {
         | "deduction"
         | "refund"
         | "reversal"
+      project_kind:
+        | "real_estate"
+        | "construction"
+        | "maintenance"
+        | "supply"
+        | "general"
       project_status: "active" | "on_hold" | "completed" | "cancelled" | "draft"
       record_status:
         | "draft"
@@ -2548,6 +3847,13 @@ export const Constants = {
         "deduction",
         "refund",
         "reversal",
+      ],
+      project_kind: [
+        "real_estate",
+        "construction",
+        "maintenance",
+        "supply",
+        "general",
       ],
       project_status: ["active", "on_hold", "completed", "cancelled", "draft"],
       record_status: [
