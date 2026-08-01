@@ -35,7 +35,9 @@ async function callerTenantId(userClient: Client): Promise<string> {
 
 export async function createAppUserImpl(userClient: Client, input: CreateUserInput) {
   await assertAccountant(userClient);
+  const tenantId = await callerTenantId(userClient);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
 
   const permissions = input.permissions.filter((p) =>
     (PERMISSIONS as readonly string[]).includes(p),
