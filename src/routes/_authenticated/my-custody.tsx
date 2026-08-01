@@ -7,6 +7,8 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { Button } from "@/components/ui/button";
 import { formatDate, formatMoney, pickName } from "@/lib/format";
 
