@@ -93,8 +93,49 @@ function TrashPage() {
         </TabsList>
 
         <TabsContent value={tab} className="mt-4">
-          <div className="surface overflow-hidden">
+          <MobileCards>
+            {rows.length === 0 && <MobileEmpty>{t("trash.empty")}</MobileEmpty>}
+            {rows.map((row) => (
+              <RecordCard
+                key={row.id}
+                title={
+                  row.serial_no != null
+                    ? `#${row.serial_no}`
+                    : pickName(locale, row.name_ar, row.name_en)
+                }
+                fields={[
+                  {
+                    label: t("trash.deletedAt"),
+                    value: formatDateTime(row.deleted_at),
+                    num: true,
+                    wide: true,
+                  },
+                  {
+                    label: t("trash.deleteReason"),
+                    value: row.delete_reason ?? "—",
+                    wide: true,
+                  },
+                ]}
+                actions={
+                  isAccountant ? (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 px-2 text-xs"
+                      onClick={() => restore.mutate(row.id)}
+                    >
+                      <RotateCcw className="size-3.5" aria-hidden />
+                      {t("common.restore")}
+                    </Button>
+                  ) : null
+                }
+              />
+            ))}
+          </MobileCards>
+
+          <div className="surface hidden overflow-hidden sm:block">
             <div className="overflow-x-auto">
+
               <table className="w-full text-sm">
                 <thead className="bg-secondary/60">
                   <tr className="text-xs uppercase tracking-wide text-muted-foreground">
