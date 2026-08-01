@@ -4023,42 +4023,64 @@ export type Database = {
           created_at: string
           id: string
           permission: string
+          tenant_id: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           permission: string
+          tenant_id: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
           permission?: string
+          tenant_id?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_permissions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
           created_at: string
           id: string
           role: Database["public"]["Enums"]["app_role"]
+          tenant_id: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           role: Database["public"]["Enums"]["app_role"]
+          tenant_id: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          tenant_id?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -4280,9 +4302,21 @@ export type Database = {
         Returns: undefined
       }
       has_perm: { Args: { _perm: string }; Returns: boolean }
+      has_permission_in_tenant: {
+        Args: { _permission: string; _tenant_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      has_role_in_tenant: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _tenant_id: string
           _user_id: string
         }
         Returns: boolean
@@ -4300,6 +4334,10 @@ export type Database = {
         Returns: number
       }
       is_accountant: { Args: never; Returns: boolean }
+      is_active_member: {
+        Args: { _tenant_id: string; _user_id?: string }
+        Returns: boolean
+      }
       is_staff: { Args: never; Returns: boolean }
       is_supervisor_user: { Args: never; Returns: boolean }
       is_tenant_member: { Args: { _tenant_id: string }; Returns: boolean }
