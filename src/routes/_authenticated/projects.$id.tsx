@@ -41,7 +41,6 @@ export const Route = createFileRoute("/_authenticated/projects/$id")({
 function ProjectDetailPage() {
   const { id } = Route.useParams();
   const { t, locale } = useI18n();
-  const navigate = useNavigate();
   const qc = useQueryClient();
   const { isAccountant } = useSession();
 
