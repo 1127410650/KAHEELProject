@@ -58,8 +58,8 @@ export function PropertyFormDialog({
   onOpenChange: (open: boolean) => void;
   title: string;
   fields: FieldDef[];
-  initial?: Record<string, unknown>;
-  submitting?: boolean;
+  initial?: Record<string, unknown> | undefined;
+  submitting?: boolean | undefined;
   onSubmit: (values: Record<string, string | number | null>) => void;
 }) {
   const { t, locale } = useI18n();
