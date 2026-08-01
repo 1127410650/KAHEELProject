@@ -44,9 +44,28 @@ export const PERMISSIONS = [
   "products.merge",
   "prices.view",
   "prices.export",
+  "property.view",
+  "property.edit",
+  "property.approve",
+  "property_documents.view",
+  "property_documents.upload",
+  "property_documents.manage",
+  "property_services.view",
+  "property_services.update",
+  "property_services.approve",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
+
+/** Permissions that need an explicit warning before granting (approval / sensitive documents). */
+export const SENSITIVE_PERMISSIONS: Permission[] = [
+  "property.approve",
+  "property_documents.manage",
+  "property_services.approve",
+  "invoices.approve",
+  "documents.approve",
+];
+
 
 /** Sensible defaults per role when the admin creates an account. */
 export const ROLE_DEFAULT_PERMISSIONS: Record<string, Permission[]> = {
