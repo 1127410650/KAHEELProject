@@ -186,9 +186,12 @@ function PersonalDashboard() {
         {[
           { to: "/requests", key: "me.myRequests", icon: ClipboardList },
           { to: "/projects", key: "me.myProjects", icon: FolderKanban },
+          { to: "/my-documents", key: "me.myDocuments", icon: FileText },
+          { to: "/invitations", key: "me.invitations", icon: MailOpen },
           { to: "/notifications", key: "nav.notifications", icon: Bell },
           { to: "/settings", key: "nav.mySettings", icon: Info },
         ].map((l) => (
+
           <Link
             key={l.to}
             to={l.to}
