@@ -156,8 +156,8 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
             : "text-muted-foreground hover:text-foreground",
         )}
       >
-        <span className="md:hidden">ع</span>
-        <span className="hidden md:inline">العربية</span>
+        <span className="lg:hidden">ع</span>
+        <span className="hidden lg:inline">العربية</span>
       </button>
       <button
         type="button"
@@ -169,8 +169,8 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
             : "text-muted-foreground hover:text-foreground",
         )}
       >
-        <span className="md:hidden">EN</span>
-        <span className="hidden md:inline">English</span>
+        <span className="lg:hidden">EN</span>
+        <span className="hidden lg:inline">English</span>
       </button>
     </div>
   );
@@ -404,12 +404,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
               variant="outline"
               size="sm"
               onClick={() => navigate({ to: "/select-account" })}
-              className="size-9 shrink-0 gap-2 p-0 sm:size-auto sm:px-3"
+              className="size-9 shrink-0 gap-2 p-0 lg:size-auto lg:px-3"
               aria-label={t("account.switch")}
               title={t("account.switch")}
             >
               <Repeat2 className="size-4" aria-hidden />
-              <span className="hidden text-xs sm:inline">{t("account.switch")}</span>
+              <span className="hidden text-xs lg:inline">{t("account.switch")}</span>
             </Button>
           )}
 
@@ -419,7 +419,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <LanguageToggle />
 
 
-          <div className="hidden text-end sm:block">
+          <div className="hidden text-end lg:block">
             <p className="max-w-[160px] truncate text-xs font-medium text-foreground">
               {profile?.full_name || profile?.email || "—"}
             </p>
@@ -430,10 +430,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
             variant="outline"
             size="sm"
             onClick={signOut}
-            className="size-9 shrink-0 gap-2 p-0 sm:size-auto sm:px-3"
+            className="size-9 shrink-0 gap-2 p-0 lg:size-auto lg:px-3"
+            aria-label={t("nav.signOut")}
           >
             <LogOut className="size-4" aria-hidden />
-            <span className="hidden sm:inline">{t("nav.signOut")}</span>
+            <span className="hidden lg:inline">{t("nav.signOut")}</span>
           </Button>
         </header>
 
