@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
@@ -19,13 +20,16 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticated/products'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
+import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
 import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authenticated/requests.index'
@@ -48,6 +52,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyInvoiceRoute = VerifyInvoiceRouteImport.update({
@@ -86,6 +95,11 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
@@ -111,6 +125,11 @@ const AuthenticatedSuppliersRoute = AuthenticatedSuppliersRouteImport.update({
   path: '/suppliers',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
   id: '/trash',
   path: '/trash',
@@ -120,6 +139,11 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   id: '/users',
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedProjectsIndexRoute =
   AuthenticatedProjectsIndexRouteImport.update({
@@ -177,6 +201,7 @@ const AuthenticatedProjectsIdRequestsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/register': typeof RegisterRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
@@ -184,13 +209,16 @@ export interface FileRoutesByFullPath {
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/products': typeof AuthenticatedProductsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
+  '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
@@ -204,6 +232,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/register': typeof RegisterRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
@@ -211,13 +240,16 @@ export interface FileRoutesByTo {
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/products': typeof AuthenticatedProductsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
+  '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
@@ -233,6 +265,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/register': typeof RegisterRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
@@ -240,13 +273,16 @@ export interface FileRoutesById {
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/products': typeof AuthenticatedProductsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
+  '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
@@ -262,6 +298,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/register'
     | '/verify-invoice'
     | '/audit'
     | '/custody'
@@ -269,13 +306,16 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/my-custody'
     | '/notifications'
+    | '/onboarding'
     | '/portal'
     | '/products'
     | '/reports'
     | '/settings'
     | '/suppliers'
+    | '/team'
     | '/trash'
     | '/users'
+    | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
@@ -289,6 +329,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/register'
     | '/verify-invoice'
     | '/audit'
     | '/custody'
@@ -296,13 +337,16 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/my-custody'
     | '/notifications'
+    | '/onboarding'
     | '/portal'
     | '/products'
     | '/reports'
     | '/settings'
     | '/suppliers'
+    | '/team'
     | '/trash'
     | '/users'
+    | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
@@ -317,6 +361,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/register'
     | '/verify-invoice'
     | '/_authenticated/audit'
     | '/_authenticated/custody'
@@ -324,13 +369,16 @@ export interface FileRouteTypes {
     | '/_authenticated/invoices'
     | '/_authenticated/my-custody'
     | '/_authenticated/notifications'
+    | '/_authenticated/onboarding'
     | '/_authenticated/portal'
     | '/_authenticated/products'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/suppliers'
+    | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/invite/$token'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
@@ -346,7 +394,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  RegisterRoute: typeof RegisterRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -370,6 +420,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-invoice': {
@@ -421,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/portal': {
       id: '/_authenticated/portal'
       path: '/portal'
@@ -456,6 +520,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSuppliersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/team': {
+      id: '/_authenticated/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof AuthenticatedTeamRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/trash': {
       id: '/_authenticated/trash'
       path: '/trash'
@@ -469,6 +540,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/users'
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/projects/': {
       id: '/_authenticated/projects/'
@@ -543,11 +621,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedProductsRoute: typeof AuthenticatedProductsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
+  AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedProjectsIdRoute: typeof AuthenticatedProjectsIdRoute
@@ -568,11 +648,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedProductsRoute: AuthenticatedProductsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
+  AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedProjectsIdRoute: AuthenticatedProjectsIdRoute,
@@ -593,7 +675,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  RegisterRoute: RegisterRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

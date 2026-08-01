@@ -1,8 +1,9 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard,
   Users,
+  UserPlus,
   FolderKanban,
   Wallet,
   FileBarChart,
@@ -23,7 +24,7 @@ import {
   Bell,
 
 } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
@@ -70,6 +71,8 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
     titleKey: "nav.sectionSystem",
     items: [
       { to: "/users", labelKey: "nav.users", icon: ShieldCheck, accountantOnly: true },
+      { to: "/team", labelKey: "nav.team", icon: UserPlus, accountantOnly: true },
+
       { to: "/trash", labelKey: "nav.trash", icon: Trash2, accountantOnly: true },
       { to: "/audit", labelKey: "nav.audit", icon: ScrollText, accountantOnly: true },
       { to: "/settings", labelKey: "nav.settings", icon: Settings },
@@ -235,6 +238,25 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { profile, role } = useSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  // A confirmed account with no workspace yet is sent through onboarding first.
+  const myTenants = useQuery({
+    queryKey: ["my-tenants"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("my_tenants");
+      if (error) throw error;
+      return (data ?? []) as unknown[];
+    },
+  });
+
+  useEffect(() => {
+    if (myTenants.data && myTenants.data.length === 0 && pathname !== "/onboarding") {
+      navigate({ to: "/onboarding", replace: true });
+    }
+  }, [myTenants.data, pathname, navigate]);
+
+
 
   async function signOut() {
     await queryClient.cancelQueries();
