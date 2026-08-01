@@ -257,32 +257,51 @@ function Brand({ collapsed }: { collapsed: boolean }) {
   );
 }
 
+/** Company-only areas that must never render inside a personal account. */
+const COMPANY_ONLY_PATHS = [
+  "/dashboard",
+  "/supervisors",
+  "/custody",
+  "/suppliers",
+  "/invoices",
+  "/users",
+  "/team",
+  "/audit",
+  "/trash",
+  "/reports",
+  "/products",
+  "/portal",
+];
+
 export function AppLayout({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { t, dir } = useI18n();
+  const { t, dir, locale } = useI18n();
   const { profile, role } = useSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
 
-  // A confirmed account with no workspace yet is sent through onboarding first.
-  const myTenants = useQuery({
-    queryKey: ["my-tenants"],
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc("my_tenants");
-      if (error) throw error;
-      return (data ?? []) as unknown[];
-    },
-  });
+  const { data: accounts = [], isSuccess: accountsLoaded } = useAccounts();
+  const current = accounts.find((a: Account) => a.is_current) ?? null;
+  const isPersonal = !!current?.is_personal;
+  const onSelectPage = pathname === "/select-account";
 
   useEffect(() => {
-    if (myTenants.data && myTenants.data.length === 0 && pathname !== "/onboarding") {
-      navigate({ to: "/onboarding", replace: true });
+    if (!accountsLoaded || onSelectPage) return;
+    // No workspace at all → onboarding. No account chosen yet → account picker.
+    if (accounts.length === 0) {
+      if (pathname !== "/onboarding") navigate({ to: "/onboarding", replace: true });
+      return;
     }
-  }, [myTenants.data, pathname, navigate]);
-
-
+    if (!current) {
+      navigate({ to: "/select-account", replace: true });
+      return;
+    }
+    if (isPersonal && COMPANY_ONLY_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+      navigate({ to: "/me", replace: true });
+    }
+  }, [accountsLoaded, accounts.length, current, isPersonal, pathname, onSelectPage, navigate]);
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -291,6 +310,17 @@ export function AppLayout({ children }: { children: ReactNode }) {
     toast.success(t("auth.signedOut"));
     navigate({ to: "/auth", replace: true });
   }
+
+  // The account picker is chrome-free: no sidebar and no tenant-scoped widgets.
+  if (onSelectPage) {
+    return (
+      <div className="min-h-screen bg-background">
+        <main className="page-safe">{children}</main>
+        <ForcePasswordChangeDialog />
+      </div>
+    );
+  }
+
 
   return (
     <div className="flex min-h-screen bg-background">
