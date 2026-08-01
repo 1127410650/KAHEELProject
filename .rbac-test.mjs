@@ -77,7 +77,7 @@ async function mkUser(email) {
 async function member(tenant, user, role) {
   const { error } = await admin
     .from("tenant_memberships")
-    .upsert({ tenant_id: tenant, user_id: user, role, status: "active" }, { onConflict: "tenant_id,user_id" });
+    .upsert({ tenant_id: tenant, user_id: user, role, status: "active" });
   if (error) throw new Error(`membership: ${error.message}`);
 }
 
