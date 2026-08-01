@@ -98,6 +98,25 @@ const supervisorGroups: { titleKey: string; items: NavItem[] }[] = [
   },
 ];
 
+/** Personal (individual) account: only the user's own data — never company records. */
+const personalGroups: { titleKey: string; items: NavItem[] }[] = [
+  {
+    titleKey: "nav.sectionMain",
+    items: [
+      { to: "/me", labelKey: "nav.home", icon: Inbox },
+      { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
+      { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
+      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet, perm: "custody.view_own" },
+      { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
+    ],
+  },
+  {
+    titleKey: "nav.sectionSystem",
+    items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
+  },
+];
+
+
 
 function LanguageToggle({ compact = false }: { compact?: boolean }) {
   const { locale, setLocale } = useI18n();
