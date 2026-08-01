@@ -3156,6 +3156,27 @@ export type Database = {
           },
         ]
       }
+      rate_events: {
+        Row: {
+          bucket: string
+          created_at: string
+          id: string
+          key_hash: string
+        }
+        Insert: {
+          bucket: string
+          created_at?: string
+          id?: string
+          key_hash: string
+        }
+        Update: {
+          bucket?: string
+          created_at?: string
+          id?: string
+          key_hash?: string
+        }
+        Relationships: []
+      }
       request_change_requests: {
         Row: {
           action: string
@@ -3864,6 +3885,89 @@ export type Database = {
           },
         ]
       }
+      tenant_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invitation_type: string
+          invited_by: string
+          invited_permissions: string[]
+          invited_role: string
+          membership_end: string | null
+          membership_start: string | null
+          membership_type: string | null
+          mobile: string | null
+          project_ids: string[]
+          revoked_at: string | null
+          revoked_by: string | null
+          service_type: string | null
+          status: string
+          tenant_id: string
+          token_hash: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invitation_type: string
+          invited_by: string
+          invited_permissions?: string[]
+          invited_role: string
+          membership_end?: string | null
+          membership_start?: string | null
+          membership_type?: string | null
+          mobile?: string | null
+          project_ids?: string[]
+          revoked_at?: string | null
+          revoked_by?: string | null
+          service_type?: string | null
+          status?: string
+          tenant_id: string
+          token_hash: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invitation_type?: string
+          invited_by?: string
+          invited_permissions?: string[]
+          invited_role?: string
+          membership_end?: string | null
+          membership_start?: string | null
+          membership_type?: string | null
+          mobile?: string | null
+          project_ids?: string[]
+          revoked_at?: string | null
+          revoked_by?: string | null
+          service_type?: string | null
+          status?: string
+          tenant_id?: string
+          token_hash?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_invitations_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenant_memberships: {
         Row: {
           created_at: string
@@ -3916,51 +4020,78 @@ export type Database = {
       }
       tenants: {
         Row: {
+          activity: string | null
+          city: string | null
           commercial_registration_number: string | null
+          contact_info: Json
           created_at: string
           created_by: string | null
           deleted_at: string | null
+          email: string | null
           id: string
           is_default: boolean
           is_test: boolean
           legal_name: string | null
           name_ar: string
           name_en: string
+          onboarding_completed_at: string | null
+          phone: string | null
+          provider_type: string | null
+          specialty: string | null
           status: string
           tenant_type: string
           updated_at: string
+          usage_type: string | null
           vat_number: string | null
         }
         Insert: {
+          activity?: string | null
+          city?: string | null
           commercial_registration_number?: string | null
+          contact_info?: Json
           created_at?: string
           created_by?: string | null
           deleted_at?: string | null
+          email?: string | null
           id?: string
           is_default?: boolean
           is_test?: boolean
           legal_name?: string | null
           name_ar: string
           name_en: string
+          onboarding_completed_at?: string | null
+          phone?: string | null
+          provider_type?: string | null
+          specialty?: string | null
           status?: string
           tenant_type?: string
           updated_at?: string
+          usage_type?: string | null
           vat_number?: string | null
         }
         Update: {
+          activity?: string | null
+          city?: string | null
           commercial_registration_number?: string | null
+          contact_info?: Json
           created_at?: string
           created_by?: string | null
           deleted_at?: string | null
+          email?: string | null
           id?: string
           is_default?: boolean
           is_test?: boolean
           legal_name?: string | null
           name_ar?: string
           name_en?: string
+          onboarding_completed_at?: string | null
+          phone?: string | null
+          provider_type?: string | null
+          specialty?: string | null
           status?: string
           tenant_type?: string
           updated_at?: string
+          usage_type?: string | null
           vat_number?: string | null
         }
         Relationships: []
@@ -4274,6 +4405,26 @@ export type Database = {
         Args: { _change_id: string }
         Returns: undefined
       }
+      create_workspace: {
+        Args: {
+          _activity?: string
+          _city?: string
+          _confirm_duplicate?: boolean
+          _contact_info?: Json
+          _cr_number?: string
+          _email?: string
+          _legal_name?: string
+          _name_ar: string
+          _name_en?: string
+          _phone?: string
+          _provider_type?: string
+          _specialty?: string
+          _tenant_type: string
+          _usage_type?: string
+          _vat_number?: string
+        }
+        Returns: string
+      }
       current_role_label: { Args: never; Returns: string }
       current_supervisor_id: { Args: never; Returns: string }
       current_tenant_id: { Args: never; Returns: string }
@@ -4329,6 +4480,49 @@ export type Database = {
         Args: { _role: string; _tenant_id: string }
         Returns: boolean
       }
+      invitation_accept: {
+        Args: { _token: string }
+        Returns: {
+          activated: boolean
+          memberships: number
+          tenant_id: string
+        }[]
+      }
+      invitation_create: {
+        Args: {
+          _email: string
+          _invitation_type: string
+          _invited_role: string
+          _membership_end?: string
+          _membership_start?: string
+          _membership_type?: string
+          _mobile?: string
+          _permissions?: string[]
+          _project_ids?: string[]
+          _service_type?: string
+        }
+        Returns: {
+          expires_at: string
+          id: string
+          token: string
+        }[]
+      }
+      invitation_preview: {
+        Args: { _token: string }
+        Returns: {
+          expires_at: string
+          invitation_type: string
+          invited_role: string
+          masked_email: string
+          state: string
+          tenant_name_ar: string
+          tenant_name_en: string
+        }[]
+      }
+      invitation_revoke: {
+        Args: { _id: string; _reason?: string }
+        Returns: undefined
+      }
       invoice_settled_amount: {
         Args: { p_invoice_id: string }
         Returns: number
@@ -4353,6 +4547,21 @@ export type Database = {
         Returns: string
       }
       mask_id_number: { Args: { _value: string }; Returns: string }
+      membership_set_access: {
+        Args: {
+          _membership_end?: string
+          _membership_id: string
+          _membership_start?: string
+          _permissions?: string[]
+          _project_ids?: string[]
+          _role: string
+        }
+        Returns: undefined
+      }
+      membership_set_status: {
+        Args: { _membership_id: string; _reason?: string; _status: string }
+        Returns: undefined
+      }
       my_tenants: {
         Args: never
         Returns: {
@@ -4361,6 +4570,14 @@ export type Database = {
           name_en: string
           role: string
           tenant_id: string
+        }[]
+      }
+      my_workspace_state: {
+        Args: never
+        Returns: {
+          memberships: number
+          own_workspaces: number
+          pending_invitations: number
         }[]
       }
       normalize_doc_no: { Args: { p_value: string }; Returns: string }
@@ -4417,6 +4634,10 @@ export type Database = {
         Returns: undefined
       }
       property_summary: { Args: { _project_id: string }; Returns: Json }
+      rate_limit_hit: {
+        Args: { _bucket: string; _key: string; _limit: number; _window: string }
+        Returns: boolean
+      }
       register_login_result: {
         Args: { _identifier: string; _success: boolean }
         Returns: boolean
@@ -4556,6 +4777,23 @@ export type Database = {
           _title?: string
         }
         Returns: string
+      }
+      tenant_members_list: {
+        Args: never
+        Returns: {
+          email: string
+          full_name: string
+          joined_at: string
+          membership_end: string
+          membership_id: string
+          membership_start: string
+          permissions: string[]
+          phone: string
+          project_names: string[]
+          role: string
+          status: string
+          user_id: string
+        }[]
       }
       tiv_add_verification: {
         Args: { _invoice_id: string; _v: Json }
