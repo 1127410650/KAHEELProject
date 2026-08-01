@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useAccounts, useEnterAccount, sortAccounts, type Account } from "@/hooks/use-accounts";
+import { LanguageToggle } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDate } from "@/lib/format";
@@ -88,6 +89,7 @@ function SelectAccountPage() {
             {t("account.subtitle")}
           </p>
         </div>
+        <LanguageToggle compact />
         <Button variant="outline" size="sm" onClick={signOut} className="shrink-0 gap-1.5">
           <LogOut className="size-4" aria-hidden />
           <span className="hidden sm:inline">{t("nav.signOut")}</span>
