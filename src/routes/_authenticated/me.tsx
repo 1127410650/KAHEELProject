@@ -204,6 +204,30 @@ function PersonalDashboard() {
       </div>
 
       <section className="surface p-2.5 sm:p-4">
+        <h2 className="mb-2 text-[13px] font-bold sm:text-sm">{t("me.recentNotifications")}</h2>
+        {(latestNotifications.data ?? []).length === 0 ? (
+          <p className="py-1 text-[11px] text-muted-foreground sm:text-xs">
+            {t("me.noNotifications")}
+          </p>
+        ) : (
+          <ul className="divide-y divide-border">
+            {(latestNotifications.data ?? []).map((n) => (
+              <li key={n.id} className="flex min-w-0 items-start gap-2 py-2">
+                <Bell className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
+                <p className="wrap-anywhere min-w-0 flex-1 text-[12px] leading-snug sm:text-sm">
+                  {n.title}
+                </p>
+                <span className="num shrink-0 text-[11px] text-muted-foreground">
+                  {formatDate(n.created_at)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+
+      <section className="surface p-2.5 sm:p-4">
         <div className="mb-2 flex items-start justify-between gap-2">
           <div className="min-w-0">
             <h2 className="text-[13px] font-bold sm:text-sm">{t("me.myAccounts")}</h2>
