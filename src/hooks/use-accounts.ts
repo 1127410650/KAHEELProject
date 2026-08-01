@@ -20,17 +20,14 @@ export interface Account {
  * Accounts the signed-in user may enter. The list comes from a security-definer
  * RPC that only returns tenants with an active, unexpired membership — the client
  * never decides which tenant it may open.
+ *
+ * Signing in never provisions a workspace: personal tenants are no longer created
+ * on demand, so new accounts only see the workspaces an admin or invitation gave them.
  */
-export function useAccounts(options?: { ensurePersonal?: boolean }) {
-  const ensurePersonal = options?.ensurePersonal ?? false;
+export function useAccounts() {
   return useQuery({
-    queryKey: ["my-accounts", ensurePersonal],
+    queryKey: ["my-accounts"],
     queryFn: async (): Promise<Account[]> => {
-      if (ensurePersonal) {
-        // Idempotent: one individual account per auth user, enforced in the DB.
-        const { error } = await supabase.rpc("ensure_personal_tenant");
-        if (error) throw error;
-      }
       const { data, error } = await supabase.rpc("my_accounts");
       if (error) throw error;
       return (data ?? []) as Account[];

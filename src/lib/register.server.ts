@@ -1,26 +1,8 @@
-// Server-only public sign-up helper. Rate limited, generic responses, no service key in the browser.
-import { createClient } from "@supabase/supabase-js";
+// Server-only account creation. INVITE ONLY: there is no public sign-up in Tahqaq.
+// The email always comes from the invitation row, never from the browser.
+import { createHash } from "crypto";
 
-import type { Database } from "@/integrations/supabase/types";
-
-function publishableClient() {
-  const url = process.env["SUPABASE_URL"]!;
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  return createClient<Database>(url, key, {
-    global: {
-      fetch: (input, init) => {
-        const headers = new Headers(
-          typeof Request !== "undefined" && input instanceof Request ? input.headers : undefined,
-        );
-        if (init?.headers) new Headers(init.headers).forEach((v, k) => headers.set(k, v));
-        if (headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
-        headers.set("apikey", key);
-        return fetch(input, { ...init, headers });
-      },
-    },
-    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-  });
-}
+import { passwordPolicyError } from "@/lib/password-policy";
 
 /** Saudi-friendly normalisation: keep digits, store as +9665XXXXXXXX when possible. */
 export function normalizeMobile(raw: string): string {
@@ -34,85 +16,109 @@ export function normalizeMobile(raw: string): string {
 
 export interface RegisterInput {
   full_name: string;
-  email: string;
   phone: string;
   national_id?: string;
   password: string;
   origin: string;
-  invite_token?: string;
+  /** Mandatory: account creation is only possible through a live invitation. */
+  invite_token: string;
 }
 
 export type RegisterResult =
   | { ok: true; needsConfirmation: boolean }
-  | { ok: false; error: "RATE_LIMITED" | "INVALID" | "WEAK_PASSWORD" };
+  | {
+      ok: false;
+      error: "RATE_LIMITED" | "INVALID" | "WEAK_PASSWORD" | "INVITE_REQUIRED" | "INVITE_INVALID";
+    };
 
 export async function registerAccountImpl(
   input: RegisterInput,
   clientKey: string,
 ): Promise<RegisterResult> {
-  const email = (input.email ?? "").trim().toLowerCase();
+  const token = (input.invite_token ?? "").trim();
+  if (!/^[a-f0-9]{16,128}$/i.test(token)) return { ok: false, error: "INVITE_REQUIRED" };
+
   const fullName = (input.full_name ?? "").trim();
   const password = input.password ?? "";
-
-  if (!email.includes("@") || fullName.length < 3) return { ok: false, error: "INVALID" };
-  if (password.length < 8) return { ok: false, error: "WEAK_PASSWORD" };
+  if (fullName.length < 3) return { ok: false, error: "INVALID" };
+  if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  // Two buckets: per-client (IP) and per-email, so neither can be abused alone.
-  const [{ data: ipOk }, { data: emailOk }] = await Promise.all([
-    supabaseAdmin.rpc("rate_limit_hit", {
-      _bucket: "signup_ip",
-      _key: clientKey,
-      _limit: 5,
-      _window: "01:00:00",
-    }),
-    supabaseAdmin.rpc("rate_limit_hit", {
-      _bucket: "signup_email",
-      _key: email,
-      _limit: 3,
-      _window: "01:00:00",
-    }),
-  ]);
-  if (ipOk === false || emailOk === false) return { ok: false, error: "RATE_LIMITED" };
+  // Rate limit before touching the invitation table.
+  const { data: ipOk } = await supabaseAdmin.rpc("rate_limit_hit", {
+    _bucket: "signup_ip",
+    _key: clientKey,
+    _limit: 5,
+    _window: "01:00:00",
+  });
+  if (ipOk === false) return { ok: false, error: "RATE_LIMITED" };
 
-  const origin = /^https?:\/\//.test(input.origin) ? input.origin : "";
-  const next = input.invite_token
-    ? `${origin}/invite/${encodeURIComponent(input.invite_token)}`
-    : `${origin}/auth`;
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+  const { data: invite } = await supabaseAdmin
+    .from("tenant_invitations")
+    .select("id, email, status, expires_at, tenant_id")
+    .eq("token_hash", tokenHash)
+    .maybeSingle();
 
-  const auth = publishableClient();
-  const { data, error } = await auth.auth.signUp({
+  if (
+    !invite ||
+    invite.status !== "pending" ||
+    !invite.expires_at ||
+    Date.parse(invite.expires_at) <= Date.now()
+  ) {
+    return { ok: false, error: "INVITE_INVALID" };
+  }
+
+  const { data: tenant } = await supabaseAdmin
+    .from("tenants")
+    .select("status, deleted_at")
+    .eq("id", invite.tenant_id)
+    .maybeSingle();
+  if (!tenant || tenant.status !== "active" || tenant.deleted_at) {
+    return { ok: false, error: "INVITE_INVALID" };
+  }
+
+  // The email is the invitation's email. A browser cannot substitute another one.
+  const email = invite.email.trim().toLowerCase();
+  const { data: emailOk } = await supabaseAdmin.rpc("rate_limit_hit", {
+    _bucket: "signup_email",
+    _key: email,
+    _limit: 3,
+    _window: "01:00:00",
+  });
+  if (emailOk === false) return { ok: false, error: "RATE_LIMITED" };
+
+  // Account creation goes through the Auth Admin API on the server, so public
+  // sign-up stays disabled in Auth entirely. The invitation was emailed to this
+  // address, which is what confirms ownership.
+  const created = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
-    options: {
-      ...(next ? { emailRedirectTo: next } : {}),
-      data: {
-        full_name: fullName,
-        phone: normalizeMobile(input.phone ?? ""),
-        national_id: (input.national_id ?? "").trim() || null,
-      },
+    email_confirm: true,
+    user_metadata: {
+      full_name: fullName,
+      phone: normalizeMobile(input.phone ?? ""),
+      national_id: (input.national_id ?? "").trim() || null,
     },
   });
 
-  // Never disclose whether the email already exists: the caller always sees the
-  // same "check your inbox" outcome.
-  if (error) {
-    const weak = /password/i.test(error.message);
-    return weak ? { ok: false, error: "WEAK_PASSWORD" } : { ok: true, needsConfirmation: true };
+  // Never disclose whether the email already exists.
+  if (created.error || !created.data.user) {
+    const weak = /password/i.test(created.error?.message ?? "");
+    return weak ? { ok: false, error: "WEAK_PASSWORD" } : { ok: true, needsConfirmation: false };
   }
 
   // Keep the phone/national id on the profile row created by the signup trigger.
-  if (data.user) {
-    await supabaseAdmin
-      .from("profiles")
-      .update({
-        full_name: fullName,
-        phone: normalizeMobile(input.phone ?? "") || null,
-        national_id: (input.national_id ?? "").trim() || null,
-      })
-      .eq("user_id", data.user.id);
-  }
+  // No workspace is created here: membership comes from invitation_accept only.
+  await supabaseAdmin
+    .from("profiles")
+    .update({
+      full_name: fullName,
+      phone: normalizeMobile(input.phone ?? "") || null,
+      national_id: (input.national_id ?? "").trim() || null,
+    })
+    .eq("user_id", created.data.user.id);
 
-  return { ok: true, needsConfirmation: !data.session };
+  return { ok: true, needsConfirmation: false };
 }

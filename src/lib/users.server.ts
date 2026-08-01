@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
 import { PERMISSIONS } from "@/lib/permissions";
+import { passwordPolicyError } from "@/lib/password-policy";
 
 type Client = SupabaseClient<Database>;
 
@@ -35,6 +36,8 @@ async function callerTenantId(userClient: Client): Promise<string> {
 
 export async function createAppUserImpl(userClient: Client, input: CreateUserInput) {
   await assertAccountant(userClient);
+  // Same strength policy as every other password path in the app.
+  if (passwordPolicyError(input.password)) throw new Error("WEAK_PASSWORD");
   const tenantId = await callerTenantId(userClient);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

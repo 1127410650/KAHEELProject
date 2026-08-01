@@ -3,7 +3,11 @@ import { getRequest } from "@tanstack/react-start/server";
 
 import { registerAccountImpl, type RegisterInput, type RegisterResult } from "@/lib/register.server";
 
-/** Public sign-up. Rate limited server-side; the browser never sees a service key. */
+/**
+ * Invite-only account creation. There is no public sign-up: the handler refuses
+ * any call without a live invitation token and takes the email from that
+ * invitation, never from the browser. Rate limited server-side.
+ */
 export const registerAccount = createServerFn({ method: "POST" })
   .inputValidator((data: RegisterInput) => data)
   .handler(async ({ data }): Promise<RegisterResult> => {

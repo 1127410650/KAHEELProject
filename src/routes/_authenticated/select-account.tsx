@@ -39,7 +39,7 @@ function SelectAccountPage() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [pending, setPending] = useState<string | null>(null);
-  const { data: accounts = [], isLoading } = useAccounts({ ensurePersonal: true });
+  const { data: accounts = [], isLoading } = useAccounts();
   const enterAccount = useEnterAccount();
 
   const sorted = useMemo(() => sortAccounts(accounts), [accounts]);
