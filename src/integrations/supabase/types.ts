@@ -1458,6 +1458,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          active_tenant_id: string | null
           created_at: string
           email: string | null
           full_name: string
@@ -1473,6 +1474,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          active_tenant_id?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
@@ -1488,6 +1490,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          active_tenant_id?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
@@ -1503,6 +1506,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_active_tenant_id_fkey"
+            columns: ["active_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_last_tenant_id_fkey"
             columns: ["last_tenant_id"]
@@ -4305,6 +4315,16 @@ export type Database = {
         Returns: string
       }
       mask_id_number: { Args: { _value: string }; Returns: string }
+      my_tenants: {
+        Args: never
+        Returns: {
+          is_current: boolean
+          name_ar: string
+          name_en: string
+          role: string
+          tenant_id: string
+        }[]
+      }
       normalize_doc_no: { Args: { p_value: string }; Returns: string }
       normalize_product_name: { Args: { _name: string }; Returns: string }
       notify_request: {
@@ -4466,6 +4486,7 @@ export type Database = {
         Args: { _message?: string; _request_id: string }
         Returns: string
       }
+      set_active_tenant: { Args: { _tenant_id: string }; Returns: string }
       submit_portal_request: {
         Args: {
           _amount?: number
