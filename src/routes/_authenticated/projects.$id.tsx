@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, ClipboardList } from "lucide-react";
+import { ArrowLeft, ArrowRight, ClipboardList } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
@@ -107,7 +107,11 @@ function ProjectDetailPage() {
         back={
           <Button asChild variant="outline" size="sm" className="h-8 gap-1.5 px-2.5 text-xs">
             <Link to="/projects">
-              <ArrowRight className="size-4 ltr:rotate-180" aria-hidden />
+              {locale === "ar" ? (
+                <ArrowRight className="size-4" aria-hidden />
+              ) : (
+                <ArrowLeft className="size-4" aria-hidden />
+              )}
               {t("common.back")}
             </Link>
           </Button>
