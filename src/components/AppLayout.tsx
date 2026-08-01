@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ForcePasswordChangeDialog } from "@/components/ForcePasswordChangeDialog";
 import { NotificationsBell } from "@/components/NotificationsBell";
-import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
+import { useAccounts, accountHome, type Account } from "@/hooks/use-accounts";
 
 
 import type { Permission } from "@/lib/permissions";
