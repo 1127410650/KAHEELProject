@@ -72,7 +72,6 @@ function ProjectDetailPage() {
     },
   });
 
-  const openCount = requests.filter(
   const isOpen = (s: string) => s !== "completed" && s !== "cancelled" && s !== "rejected";
   const openCount = requests.filter((r) => isOpen(r.status)).length;
   const actionCount = requests.filter((r) => simpleStage(r.status) === "action_needed").length;
