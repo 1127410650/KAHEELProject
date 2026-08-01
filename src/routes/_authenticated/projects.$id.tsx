@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, ClipboardList } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +13,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StageBadge } from "@/components/RequestStage";
 import { buildRequestTitle } from "@/lib/request-ui";
 import { formatDate, pickName } from "@/lib/format";
+import { PropertyFile } from "@/components/property/PropertyFile";
+import { PROJECT_KIND_LABELS, PROJECT_KINDS, pick, type ProjectKind } from "@/lib/property";
+import { useSession } from "@/lib/session";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/projects/$id")({
   head: () => ({
@@ -32,6 +42,8 @@ function ProjectDetailPage() {
   const { id } = Route.useParams();
   const { t, locale } = useI18n();
   const navigate = useNavigate();
+  const qc = useQueryClient();
+  const { isAccountant } = useSession();
 
   const { data: project } = useQuery({
     queryKey: ["project", id],
@@ -119,6 +131,38 @@ function ProjectDetailPage() {
                 <dt className="text-muted-foreground">{t("projects.startDate")}</dt>
                 <dd className="num font-medium">{formatDate(project?.start_date)}</dd>
               </div>
+              <div className="flex items-center justify-between gap-2 py-2.5">
+                <dt className="text-muted-foreground">
+                  {locale === "ar" ? "نوع المشروع" : "Project type"}
+                </dt>
+                <dd className="font-medium">
+                  {isAccountant ? (
+                    <Select
+                      value={(project?.project_type as ProjectKind) ?? "general"}
+                      onValueChange={async (v) => {
+                        await supabase
+                          .from("projects")
+                          .update({ project_type: v as ProjectKind })
+                          .eq("id", id);
+                        await qc.invalidateQueries({ queryKey: ["project", id] });
+                      }}
+                    >
+                      <SelectTrigger className="h-8 w-40 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PROJECT_KINDS.map((k) => (
+                          <SelectItem key={k} value={k}>
+                            {pick(locale, PROJECT_KIND_LABELS[k])}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    pick(locale, PROJECT_KIND_LABELS[(project?.project_type as ProjectKind) ?? "general"])
+                  )}
+                </dd>
+              </div>
               <div className="flex items-center justify-between py-2.5">
                 <dt className="text-muted-foreground">{t("common.status")}</dt>
                 <dd>{project && <StatusBadge status={project.status} />}</dd>
@@ -203,6 +247,12 @@ function ProjectDetailPage() {
         <div className="lg:col-span-3">
           <ProjectMembersCard projectId={id} />
         </div>
+
+        {project?.project_type === "real_estate" && (
+          <div className="lg:col-span-3">
+            <PropertyFile projectId={id} />
+          </div>
+        )}
       </div>
     </>
   );
