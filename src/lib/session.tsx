@@ -25,6 +25,8 @@ export interface Profile {
   must_change_password: boolean;
   locale: Locale;
   is_active: boolean;
+  always_select_account?: boolean;
+
 }
 
 interface SessionContextValue {

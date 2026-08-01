@@ -1217,5 +1217,42 @@
     "incomingInvites": "Incoming invitations",
     "assignedWork": "Assigned work",
     "requiredDocs": "Required documents"
+  },
+  "account": {
+    "title": "Select account",
+    "subtitle": "Choose the account you want to open. Only accounts with an active membership are listed.",
+    "enter": "Enter",
+    "enterFailed": "Could not open this account. Check your membership.",
+    "search": "Search by account name",
+    "empty": "No accounts available right now.",
+    "membershipActive": "Membership: active",
+    "lastSeen": "Last seen",
+    "personalName": "My personal account",
+    "switch": "Switch account",
+    "current": "Current account",
+    "types": {
+      "company": "Company",
+      "establishment": "Establishment",
+      "owner": "Owner",
+      "individual": "Personal account",
+      "service_provider": "Service provider"
+    }
+  },
+  "me": {
+    "title": "My personal account",
+    "subtitle": "Only your own data, personal requests, invitations and alerts.",
+    "myRequests": "My requests",
+    "myProjects": "My projects",
+    "myDocuments": "My documents",
+    "myCustody": "My custody",
+    "invitations": "Invitations",
+    "openRequests": "Open requests",
+    "unread": "Unread alerts",
+    "myAccounts": "My other accounts",
+    "myAccountsHint": "Opening another account shows its data inside that workspace only.",
+    "goto": "Open",
+    "noInvites": "No invitations",
+    "personalScope": "This is a personal workspace: company data and other people's custody never appear here.",
+    "newRequest": "New request"
   }
 }

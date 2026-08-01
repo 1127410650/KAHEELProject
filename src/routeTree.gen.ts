@@ -18,12 +18,14 @@ import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
+import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticated/products'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedSelectAccountRouteImport } from './routes/_authenticated/select-account'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
@@ -84,6 +86,11 @@ const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
   path: '/invoices',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMeRoute = AuthenticatedMeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedMyCustodyRoute = AuthenticatedMyCustodyRouteImport.update({
   id: '/my-custody',
   path: '/my-custody',
@@ -115,6 +122,12 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSelectAccountRoute =
+  AuthenticatedSelectAccountRouteImport.update({
+    id: '/select-account',
+    path: '/select-account',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -207,12 +220,14 @@ export interface FileRoutesByFullPath {
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
+  '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/products': typeof AuthenticatedProductsRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/select-account': typeof AuthenticatedSelectAccountRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/team': typeof AuthenticatedTeamRoute
@@ -238,12 +253,14 @@ export interface FileRoutesByTo {
   '/custody': typeof AuthenticatedCustodyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
+  '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/products': typeof AuthenticatedProductsRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/select-account': typeof AuthenticatedSelectAccountRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/team': typeof AuthenticatedTeamRoute
@@ -271,12 +288,14 @@ export interface FileRoutesById {
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
+  '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/products': typeof AuthenticatedProductsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/select-account': typeof AuthenticatedSelectAccountRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
@@ -304,12 +323,14 @@ export interface FileRouteTypes {
     | '/custody'
     | '/dashboard'
     | '/invoices'
+    | '/me'
     | '/my-custody'
     | '/notifications'
     | '/onboarding'
     | '/portal'
     | '/products'
     | '/reports'
+    | '/select-account'
     | '/settings'
     | '/suppliers'
     | '/team'
@@ -335,12 +356,14 @@ export interface FileRouteTypes {
     | '/custody'
     | '/dashboard'
     | '/invoices'
+    | '/me'
     | '/my-custody'
     | '/notifications'
     | '/onboarding'
     | '/portal'
     | '/products'
     | '/reports'
+    | '/select-account'
     | '/settings'
     | '/suppliers'
     | '/team'
@@ -367,12 +390,14 @@ export interface FileRouteTypes {
     | '/_authenticated/custody'
     | '/_authenticated/dashboard'
     | '/_authenticated/invoices'
+    | '/_authenticated/me'
     | '/_authenticated/my-custody'
     | '/_authenticated/notifications'
     | '/_authenticated/onboarding'
     | '/_authenticated/portal'
     | '/_authenticated/products'
     | '/_authenticated/reports'
+    | '/_authenticated/select-account'
     | '/_authenticated/settings'
     | '/_authenticated/suppliers'
     | '/_authenticated/team'
@@ -464,6 +489,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/me': {
+      id: '/_authenticated/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof AuthenticatedMeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/my-custody': {
       id: '/_authenticated/my-custody'
       path: '/my-custody'
@@ -504,6 +536,13 @@ declare module '@tanstack/react-router' {
       path: '/reports'
       fullPath: '/reports'
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/select-account': {
+      id: '/_authenticated/select-account'
+      path: '/select-account'
+      fullPath: '/select-account'
+      preLoaderRoute: typeof AuthenticatedSelectAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings': {
@@ -619,12 +658,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCustodyRoute: typeof AuthenticatedCustodyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
+  AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedProductsRoute: typeof AuthenticatedProductsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedSelectAccountRoute: typeof AuthenticatedSelectAccountRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
@@ -646,12 +687,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCustodyRoute: AuthenticatedCustodyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
+  AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedProductsRoute: AuthenticatedProductsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedSelectAccountRoute: AuthenticatedSelectAccountRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,

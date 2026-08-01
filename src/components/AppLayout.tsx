@@ -13,6 +13,8 @@ import {
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
+  Repeat2,
+
   Menu,
   ShieldCheck,
   Languages,
@@ -35,7 +37,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ForcePasswordChangeDialog } from "@/components/ForcePasswordChangeDialog";
 import { NotificationsBell } from "@/components/NotificationsBell";
-import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
+import { useAccounts, accountHome, type Account } from "@/hooks/use-accounts";
 
 
 import type { Permission } from "@/lib/permissions";
@@ -97,6 +99,25 @@ const supervisorGroups: { titleKey: string; items: NavItem[] }[] = [
     items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
   },
 ];
+
+/** Personal (individual) account: only the user's own data — never company records. */
+const personalGroups: { titleKey: string; items: NavItem[] }[] = [
+  {
+    titleKey: "nav.sectionMain",
+    items: [
+      { to: "/me", labelKey: "nav.home", icon: Inbox },
+      { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
+      { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
+      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet, perm: "custody.view_own" },
+      { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
+    ],
+  },
+  {
+    titleKey: "nav.sectionSystem",
+    items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
+  },
+];
+
 
 
 function LanguageToggle({ compact = false }: { compact?: boolean }) {
@@ -160,8 +181,15 @@ function NavLinks({
   const { t } = useI18n();
   const { isAccountant, isSupervisor, role, can } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { data: accounts = [] } = useAccounts();
+  const isPersonal = accounts.some((a) => a.is_current && a.is_personal);
   const supervisorOnly = isSupervisor && !isAccountant && role !== "employee";
-  const visibleGroups = supervisorOnly ? supervisorGroups : groups;
+  const visibleGroups = isPersonal
+    ? personalGroups
+    : supervisorOnly
+      ? supervisorGroups
+      : groups;
+
 
   return (
     <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
@@ -231,32 +259,51 @@ function Brand({ collapsed }: { collapsed: boolean }) {
   );
 }
 
+/** Company-only areas that must never render inside a personal account. */
+const COMPANY_ONLY_PATHS = [
+  "/dashboard",
+  "/supervisors",
+  "/custody",
+  "/suppliers",
+  "/invoices",
+  "/users",
+  "/team",
+  "/audit",
+  "/trash",
+  "/reports",
+  "/products",
+  "/portal",
+];
+
 export function AppLayout({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { t, dir } = useI18n();
+  const { t, dir, locale } = useI18n();
   const { profile, role } = useSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
 
-  // A confirmed account with no workspace yet is sent through onboarding first.
-  const myTenants = useQuery({
-    queryKey: ["my-tenants"],
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc("my_tenants");
-      if (error) throw error;
-      return (data ?? []) as unknown[];
-    },
-  });
+  const { data: accounts = [], isSuccess: accountsLoaded } = useAccounts();
+  const current = accounts.find((a: Account) => a.is_current) ?? null;
+  const isPersonal = !!current?.is_personal;
+  const onSelectPage = pathname === "/select-account";
 
   useEffect(() => {
-    if (myTenants.data && myTenants.data.length === 0 && pathname !== "/onboarding") {
-      navigate({ to: "/onboarding", replace: true });
+    if (!accountsLoaded || onSelectPage) return;
+    // No workspace at all → onboarding. No account chosen yet → account picker.
+    if (accounts.length === 0) {
+      if (pathname !== "/onboarding") navigate({ to: "/onboarding", replace: true });
+      return;
     }
-  }, [myTenants.data, pathname, navigate]);
-
-
+    if (!current) {
+      navigate({ to: "/select-account", replace: true });
+      return;
+    }
+    if (isPersonal && COMPANY_ONLY_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+      navigate({ to: "/me", replace: true });
+    }
+  }, [accountsLoaded, accounts.length, current, isPersonal, pathname, onSelectPage, navigate]);
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -265,6 +312,17 @@ export function AppLayout({ children }: { children: ReactNode }) {
     toast.success(t("auth.signedOut"));
     navigate({ to: "/auth", replace: true });
   }
+
+  // The account picker is chrome-free: no sidebar and no tenant-scoped widgets.
+  if (onSelectPage) {
+    return (
+      <div className="min-h-screen bg-background">
+        <main className="page-safe">{children}</main>
+        <ForcePasswordChangeDialog />
+      </div>
+    );
+  }
+
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -326,14 +384,29 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
           <div className="min-w-0 flex-1">
             <p className="truncate text-[13px] font-semibold text-foreground md:text-sm">
-              {t("app.name")}
+              {current
+                ? (locale === "en" ? current.name_en || current.name_ar : current.name_ar)
+                : t("app.name")}
             </p>
-            <p className="hidden truncate text-xs text-muted-foreground sm:block">
-              {t("app.tagline")}
+            <p className="truncate text-[11px] text-muted-foreground sm:text-xs">
+              {current ? t(`account.types.${current.tenant_type}`) : t("app.tagline")}
             </p>
           </div>
 
-          <WorkspaceSwitcher />
+          {accounts.length > 1 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate({ to: "/select-account" })}
+              className="size-9 shrink-0 gap-2 p-0 sm:size-auto sm:px-3"
+              aria-label={t("account.switch")}
+              title={t("account.switch")}
+            >
+              <Repeat2 className="size-4" aria-hidden />
+              <span className="hidden text-xs sm:inline">{t("account.switch")}</span>
+            </Button>
+          )}
+
 
           <NotificationsBell />
 

@@ -51,7 +51,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: safeNext() ?? "/dashboard", replace: true });
+      if (data.session) navigate({ to: safeNext() ?? "/select-account", replace: true });
     });
   }, [navigate]);
 
@@ -72,7 +72,7 @@ function AuthPage() {
         toast.error(t("auth.invalid"));
         return;
       }
-      navigate({ to: safeNext() ?? "/dashboard", replace: true });
+      navigate({ to: safeNext() ?? "/select-account", replace: true });
     } catch {
       toast.error(t("auth.invalid"));
     } finally {
