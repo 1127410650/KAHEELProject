@@ -37,8 +37,11 @@ export function useSwitchWorkspace() {
       return tenantId;
     },
     onSuccess: async () => {
-      // Every cached row belongs to the previous workspace — drop all of it.
+      // Every cached row — and the session's roles/permissions — belongs to the
+      // previous workspace, so reload instead of patching caches piecemeal.
       await queryClient.invalidateQueries();
+      if (typeof window !== "undefined") window.location.reload();
     },
+
   });
 }
