@@ -44,7 +44,7 @@ function ProjectDetailPage() {
   const qc = useQueryClient();
   const { isAccountant } = useSession();
 
-  const { data: project } = useQuery({
+  const { data: project, isLoading: loadingProject } = useQuery({
     queryKey: ["project", id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -56,6 +56,7 @@ function ProjectDetailPage() {
       return data;
     },
   });
+
 
   const { data: requests = [] } = useQuery({
     queryKey: ["project-requests", id],
