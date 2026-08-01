@@ -126,7 +126,7 @@ const personalGroups: { titleKey: string; items: NavItem[] }[] = [
 
 
 
-function LanguageToggle({ compact = false }: { compact?: boolean }) {
+export function LanguageToggle({ compact = false }: { compact?: boolean }) {
   const { locale, setLocale } = useI18n();
   const { profile } = useSession();
 
