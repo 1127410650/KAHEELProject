@@ -208,56 +208,69 @@ function PortalPage() {
         }
       />
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-3 grid grid-cols-2 gap-2 sm:mb-6 sm:gap-3 xl:grid-cols-4">
         {canViewCustody && (
-          <div className="surface flex items-center gap-4 p-5">
-            <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
-              <Wallet className="size-5" aria-hidden />
-            </span>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">{t("portal.myBalance")}</p>
-              <p className="num text-xl font-bold">{formatMoney(balance ?? 0, locale)}</p>
-            </div>
-          </div>
+          <StatCard
+            label={t("portal.myBalance")}
+            valueText={formatMoney(balance ?? 0, locale)}
+            icon={Wallet}
+            tone="primary"
+          />
         )}
-        <StatCard label={t("portal.openRequests")} value={openRequests.length} icon={ClipboardList} />
+        <StatCard
+          label={t("portal.openRequests")}
+          value={openRequests.length}
+          icon={ClipboardList}
+          onClick={() => setGroup("in_progress")}
+        />
         <StatCard
           label={t("groups.action_mine")}
           value={counts["action_mine"] ?? 0}
           icon={AlertCircle}
+          onClick={() => setGroup("action_mine")}
         />
-        <StatCard label={t("portal.myProjects")} value={myProjects.length} icon={FolderKanban} />
+        <StatCard
+          label={t("portal.myProjects")}
+          value={myProjects.length}
+          icon={FolderKanban}
+          to="/projects"
+        />
       </div>
 
-      <section aria-labelledby="my-requests" className="mb-6">
-        <h2 id="my-requests" className="mb-3 text-sm font-semibold">
+      <section aria-labelledby="my-requests" className="mb-4 sm:mb-6">
+        <h2 id="my-requests" className="mb-2 text-[15px] font-semibold sm:text-base">
           {t("portal.myRequests")}
         </h2>
-        <nav className="mb-4 flex flex-wrap gap-2" aria-label={t("portal.myRequests")}>
+        <nav
+          className="-mx-2.5 mb-2.5 flex snap-x gap-2 overflow-x-auto px-2.5 pb-1 [scrollbar-width:none] sm:mx-0 sm:mb-4 sm:flex-wrap sm:overflow-visible sm:px-0"
+          aria-label={t("portal.myRequests")}
+        >
           {PORTAL_GROUPS.map((g) => (
             <button
               key={g}
               type="button"
               onClick={() => setGroup(g)}
               className={cn(
-                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                "inline-flex h-9 shrink-0 snap-start items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium transition-colors sm:text-sm",
                 group === g
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card text-muted-foreground hover:bg-secondary",
               )}
             >
               {t(`groups.${g}`)}
-              <span className="num opacity-70">{counts[g] ?? 0}</span>
+              <span className="num rounded-full bg-black/10 px-1.5 text-[11px] dark:bg-white/10">
+                {counts[g] ?? 0}
+              </span>
             </button>
           ))}
         </nav>
 
         {visible.length === 0 ? (
-          <div className="surface p-10 text-center text-sm text-muted-foreground">
+          <div className="surface p-6 text-center text-sm text-muted-foreground sm:p-10">
             {t("groups.emptyGroup")}
           </div>
         ) : (
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-2 sm:gap-3 lg:grid-cols-2">
             {visible.map((c) => (
               <RequestCard key={c.card.id} data={c.card} />
             ))}
