@@ -149,7 +149,7 @@ async function main() {
   const mkProject = async (tenant, code) => {
     const { data: sup, error: se } = await admin
       .from("supervisors")
-      .insert({ tenant_id: tenant, name_ar: `مشرف ${code}`, id_number: `${stamp}`.slice(-9) + code, phone: "0500000000" })
+      .insert({ tenant_id: tenant, name_ar: `مشرف ${code}`, national_id: `${stamp}`.slice(-8) + code, phone: "0500000000" })
       .select("id")
       .single();
     if (se) throw new Error(`supervisor: ${se.message}`);
