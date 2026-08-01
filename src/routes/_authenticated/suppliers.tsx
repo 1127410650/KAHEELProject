@@ -350,8 +350,81 @@ function SuppliersPage() {
         />
       </div>
 
-      <div className="surface overflow-hidden">
+      <MobileCards>
+        {filtered.length === 0 && <MobileEmpty>{t("suppliers.empty")}</MobileEmpty>}
+        {filtered.map((row) => (
+          <RecordCard
+            key={row.id}
+            title={pickName(locale, row.name_ar, row.name_en)}
+            subtitle={row.city || undefined}
+            badge={<StatusBadge status={row.is_active ? "active" : "inactive"} />}
+            fields={[
+              {
+                label: t("suppliers.taxNumber"),
+                value: row.tax_number || "—",
+                num: true,
+                ltr: true,
+              },
+              {
+                label: t("suppliers.commercialReg"),
+                value: row.commercial_reg || "—",
+                num: true,
+                ltr: true,
+              },
+              { label: t("suppliers.phone"), value: row.phone || "—", num: true, ltr: true },
+            ]}
+            actions={
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 gap-1.5 px-2 text-xs"
+                  onClick={() => {
+                    setForm({
+                      id: row.id,
+                      name_ar: row.name_ar,
+                      name_en: row.name_en ?? "",
+                      tax_number: row.tax_number ?? "",
+                      commercial_reg: row.commercial_reg ?? "",
+                      unified_number: row.unified_number ?? "",
+                      phone: row.phone ?? "",
+                      email: row.email ?? "",
+                      city: row.city ?? "",
+                      address: row.address ?? "",
+                      notes: row.notes ?? "",
+                      is_active: row.is_active,
+                    });
+                    setOpen(true);
+                  }}
+                >
+                  <Pencil className="size-3.5" aria-hidden />
+                  {t("common.edit")}
+                </Button>
+                {isAccountant && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 gap-1.5 px-2 text-xs text-destructive"
+                    onClick={() =>
+                      setDeleteTarget({
+                        id: row.id,
+                        name: pickName(locale, row.name_ar, row.name_en),
+                      })
+                    }
+                  >
+                    <Trash2 className="size-3.5" aria-hidden />
+                    {t("common.delete")}
+                  </Button>
+                )}
+              </>
+            }
+          />
+        ))}
+      </MobileCards>
+
+      <div className="surface hidden overflow-hidden sm:block">
         <div className="overflow-x-auto">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
               <tr className="text-xs uppercase tracking-wide text-muted-foreground">
