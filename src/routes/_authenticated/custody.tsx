@@ -500,7 +500,11 @@ function CustodyPage() {
               type="button"
               onClick={() => setSupervisorFilter(active ? "all" : s.id)}
               aria-pressed={active}
-              className={`surface min-w-0 p-2.5 text-start transition-colors ${active ? "border-primary" : ""}`}
+              className={`surface relative min-w-0 p-2.5 text-start transition-all ${
+                active
+                  ? "border-primary bg-primary/10 ring-2 ring-primary/60 shadow-sm"
+                  : "hover:border-primary/40"
+              }`}
             >
               <span className="block truncate text-[11.5px] text-muted-foreground">
                 {pickName(locale, s.name_ar, s.name_en)}
@@ -508,7 +512,13 @@ function CustodyPage() {
               <span className="num block text-[14px] font-bold text-primary">
                 {formatMoney(balance, locale)}
               </span>
+              {active && (
+                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
+                  {t("custody.viewing")}
+                </span>
+              )}
             </button>
+
           );
         })}
       </div>
