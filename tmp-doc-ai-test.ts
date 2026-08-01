@@ -97,7 +97,7 @@ ok("ORDER ocr confidence lower than pdf_text", (get(extractFields([orderPages[2]
 ok("19 compare match/missing", compareValue("31010204567", "31010204567") === "match" && compareValue("123", null) === "missing_in_project");
 ok("20 deed no difference detected", compareValue("31010204567", "31010204999") === "different" && conflictSeverity("deed.deed_no") === "high");
 ok("21 land area difference detected", compareValue("1250.5", "980") === "different" && conflictSeverity("land.land_area") === "high");
-ok("21b close values flagged not silently matched", compareValue("1250", "1210") === "close");
+ok("21b close values flagged not silently matched", compareValue("1250", "1210", true) === "close");
 ok("22 licence/plan/parcel differences high severity", conflictSeverity("license.license_no") === "high" && conflictSeverity("land.plan_no") === "high" && conflictSeverity("land.parcel_no") === "high");
 
 /* ---- 36 masking helper */
