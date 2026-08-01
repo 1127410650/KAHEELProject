@@ -29,6 +29,7 @@ export const Route = createFileRoute("/_authenticated/me")({
 });
 
 const CLOSED_STATUSES = ["executed", "completed", "rejected", "cancelled"];
+const ACTION_STATUSES = ["needs_info", "awaiting_reply"];
 
 function PersonalDashboard() {
   const { t, locale } = useI18n();
@@ -52,6 +53,21 @@ function PersonalDashboard() {
     },
   });
 
+  const actionNeeded = useQuery({
+    queryKey: ["me", "action-needed", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("requests")
+        .select("id", { count: "exact", head: true })
+        .eq("created_by", userId!)
+        .is("deleted_at", null)
+        .in("status", ACTION_STATUSES);
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+
   const unread = useQuery({
     queryKey: ["me", "unread", userId],
     enabled: !!userId,
@@ -65,6 +81,23 @@ function PersonalDashboard() {
       return count ?? 0;
     },
   });
+
+  const latestNotifications = useQuery({
+    queryKey: ["me", "latest-notifications", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id, title, created_at")
+        .eq("user_id", userId!)
+        .order("created_at", { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const invitations = useMyInvitations();
 
   const custody = useQuery({
     queryKey: ["me", "custody", supervisorId],
@@ -91,6 +124,18 @@ function PersonalDashboard() {
       icon: ClipboardList,
       to: "/requests",
     },
+    {
+      key: "me.actionNeeded",
+      value: String(actionNeeded.data ?? 0),
+      icon: Info,
+      to: "/requests",
+    },
+    {
+      key: "me.invitations",
+      value: String(invitations.data?.length ?? 0),
+      icon: MailOpen,
+      to: "/invitations",
+    },
     { key: "me.unread", value: String(unread.data ?? 0), icon: Bell, to: "/notifications" },
   ];
   if (canCustody) {
@@ -101,6 +146,7 @@ function PersonalDashboard() {
       to: "/my-custody",
     });
   }
+
 
   return (
     <div className="space-y-3 md:space-y-5">
