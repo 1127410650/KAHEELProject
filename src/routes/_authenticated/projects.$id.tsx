@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, ClipboardList } from "lucide-react";
 
@@ -10,8 +10,8 @@ import { PaymentNoBadge } from "@/components/PaymentNoBadge";
 import { ProjectMembersCard } from "@/components/ProjectMembersCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { StageBadge } from "@/components/RequestStage";
-import { buildRequestTitle } from "@/lib/request-ui";
+import { RequestRow } from "@/components/RequestRow";
+import { buildRequestTitle, simpleStage } from "@/lib/request-ui";
 import { formatDate, pickName } from "@/lib/format";
 import { PropertyFile } from "@/components/property/PropertyFile";
 import { PROJECT_KIND_LABELS, PROJECT_KINDS, pick, type ProjectKind } from "@/lib/property";
