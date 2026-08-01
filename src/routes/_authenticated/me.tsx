@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/me")({
 });
 
 const CLOSED_STATUSES = ["executed", "completed", "rejected", "cancelled"];
-const ACTION_STATUSES = ["needs_info", "awaiting_reply"];
+const ACTION_STATUSES = ["needs_info", "awaiting_reply"] as const;
 
 function PersonalDashboard() {
   const { t, locale } = useI18n();
