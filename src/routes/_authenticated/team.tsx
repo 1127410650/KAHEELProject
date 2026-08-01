@@ -603,9 +603,9 @@ function InviteDialog({
                         v === true ? [...prev, project.id] : prev.filter((id) => id !== project.id),
                       )
                     }
-                    aria-label={pickName(project, locale)}
+                    aria-label={pickName(locale, project.name_ar, project.name_en)}
                   />
-                  <span className="truncate">{pickName(project, locale)}</span>
+                  <span className="truncate">{pickName(locale, project.name_ar, project.name_en)}</span>
                 </label>
               ))}
             </div>
