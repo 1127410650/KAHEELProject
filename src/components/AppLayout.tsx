@@ -13,6 +13,8 @@ import {
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
+  Repeat2,
+
   Menu,
   ShieldCheck,
   Languages,
