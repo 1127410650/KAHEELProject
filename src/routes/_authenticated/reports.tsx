@@ -259,7 +259,31 @@ function ReportTables({
           <CardTitle className="text-base">{t("reports.custodyByProject")}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <table className="w-full text-sm">
+          <MobileCards className="p-3">
+            {byProject.length === 0 && <MobileEmpty>{t("common.noData")}</MobileEmpty>}
+            {byProject.map((row) => (
+              <RecordCard
+                key={row.label}
+                title={row.label}
+                fields={[
+                  { label: t("custody.totalIn"), value: formatMoney(row.inTotal, locale), num: true },
+                  {
+                    label: t("custody.totalOut"),
+                    value: formatMoney(row.outTotal, locale),
+                    num: true,
+                  },
+                  {
+                    label: t("reports.netTotal"),
+                    value: formatMoney(row.inTotal - row.outTotal, locale),
+                    num: true,
+                    wide: true,
+                  },
+                ]}
+              />
+            ))}
+          </MobileCards>
+          <table className="hidden w-full text-sm sm:table">
+
             <thead className="bg-secondary/40 text-xs text-muted-foreground">
               <tr>
                 <th className="px-6 py-2 text-start font-semibold">{t("custody.project")}</th>
