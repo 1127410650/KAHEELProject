@@ -348,27 +348,35 @@ export function PageHeader({
   title,
   description,
   actions,
+  back,
 }: {
   title: string;
   description?: string;
   actions?: ReactNode;
+  /** rendered at the inline-start edge (right in RTL, left in LTR), own row on mobile */
+  back?: ReactNode;
 }) {
   return (
-    <div className="mb-2.5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:mb-6 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
-      <div className="min-w-0">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
-        {description && (
-          <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground sm:mt-1 sm:text-sm">
-            {description}
-          </p>
+    <div className="page-safe mb-2.5 sm:mb-6">
+      {back && <div className="mb-2 flex justify-start">{back}</div>}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
+        <div className="min-w-0">
+          <h1 className="wrap-anywhere text-xl font-bold leading-tight tracking-tight text-foreground sm:text-2xl">
+            {title}
+          </h1>
+          {description && (
+            <p className="wrap-anywhere mt-0.5 text-[11px] leading-snug text-muted-foreground sm:mt-1 sm:text-sm">
+              {description}
+            </p>
+          )}
+        </div>
+        {actions && (
+          <div className="flex shrink-0 flex-wrap items-center gap-2 [&_[data-slot=button]]:w-auto">
+            {actions}
+          </div>
         )}
       </div>
-      {actions && (
-        <div className="flex shrink-0 flex-wrap items-center gap-2 [&_[data-slot=button]]:w-auto">
-          {actions}
-        </div>
-      )}
     </div>
   );
-
 }
+
