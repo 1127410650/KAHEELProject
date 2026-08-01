@@ -20,20 +20,20 @@ export interface SectionProps {
   table: string;
   projectId: string;
   title: [string, string];
-  hint?: [string, string];
+  hint?: [string, string] | undefined;
   fields: FieldDef[];
   /** short heading shown on the collapsed row */
   primary: (row: PropertyRow) => string;
   /** small muted line under the heading */
-  secondary?: (row: PropertyRow) => string;
+  secondary?: ((row: PropertyRow) => string) | undefined;
   /** detail rows shown when expanded */
   details: (row: PropertyRow) => InfoRow[];
   canEdit: boolean;
-  canDelete?: boolean;
+  canDelete?: boolean | undefined;
   /** single-record sections (e.g. land) hide the add button once a row exists */
-  single?: boolean;
-  orderBy?: { column: string; ascending?: boolean };
-  defaults?: Record<string, string | number | null>;
+  single?: boolean | undefined;
+  orderBy?: { column: string; ascending?: boolean } | undefined;
+  defaults?: Record<string, string | number | null> | undefined;
 }
 
 /** Generic CRUD section: compact list on mobile, schema-driven dialog for edits. */
