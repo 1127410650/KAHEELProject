@@ -1,6 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, ClipboardList, FolderKanban, Info, Repeat2, Wallet } from "lucide-react";
+import {
+  Bell,
+  ClipboardList,
+  FileText,
+  FolderKanban,
+  Info,
+  MailOpen,
+  Repeat2,
+  Wallet,
+} from "lucide-react";
+import { useMyInvitations } from "./invitations";
+
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
