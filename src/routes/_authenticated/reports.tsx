@@ -66,7 +66,43 @@ function InvoiceGroupTable({ title, rows }: { title: string; rows: InvoiceGroupR
         <CardTitle className="text-base">{title}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
+        <MobileCards className="p-3">
+          {rows.length === 0 && <MobileEmpty>{t("common.noData")}</MobileEmpty>}
+          {rows.map((row) => (
+            <RecordCard
+              key={row.label}
+              title={row.label}
+              fields={[
+                { label: t("reports.invoicesCount"), value: row.count, num: true },
+                {
+                  label: t("invoices.totalAmount"),
+                  value: formatMoney(row.total, locale),
+                  num: true,
+                },
+                {
+                  label: t("reports.beforeTaxTotal"),
+                  value: formatMoney(row.beforeTax, locale),
+                  num: true,
+                },
+                { label: t("reports.taxTotal"), value: formatMoney(row.tax, locale), num: true },
+                {
+                  label: t("reports.settledTotal"),
+                  value: formatMoney(row.settled, locale),
+                  num: true,
+                  wide: true,
+                },
+              ]}
+            />
+          ))}
+          {rows.length > 0 && (
+            <li className="surface flex items-center justify-between p-3 text-[12px] font-semibold">
+              <span>{t("common.total")}</span>
+              <span className="num text-primary">{formatMoney(totals.total, locale)}</span>
+            </li>
+          )}
+        </MobileCards>
+        <div className="hidden overflow-x-auto sm:block">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/40 text-xs text-muted-foreground">
               <tr>
