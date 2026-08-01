@@ -149,6 +149,26 @@ function Empty({ text }: { text: string }) {
   return <p className="py-1 text-[11px] text-muted-foreground sm:text-xs">{text}</p>;
 }
 
+function ErrorState({
+  text,
+  label,
+  onRetry,
+}: {
+  text: string;
+  label: string;
+  onRetry: () => void;
+}) {
+  return (
+    <div className="min-w-0 space-y-2">
+      <p className="wrap-anywhere text-[11px] text-destructive sm:text-xs">{text}</p>
+      <Button size="sm" variant="outline" className="h-8 text-[12px]" onClick={onRetry}>
+        {label}
+      </Button>
+    </div>
+  );
+}
+
+
 function ViewAll({ to, label }: { to: string; label: string }) {
   return (
     <div className="mt-2">
@@ -221,15 +241,38 @@ function DashboardContent() {
   const toggle = (id: SectionKey) => setOpen((prev) => (prev === id ? null : id));
   const on = (id: SectionKey) => open === id;
 
+  // Single source of truth for "active supervisors" used by the summary card,
+  // the supervisors badge/list and the custody badge/cards.
+  const activeSupervisors = useQuery({
+    queryKey: ["entity", "active-supervisors", currentTenant],
+    enabled: on("summary") || on("supervisors") || on("custody"),
+    staleTime: STALE,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("supervisors")
+        .select("id, name_ar, name_en, phone, is_active")
+        .is("deleted_at", null)
+        .eq("is_active", true)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const activeIds = useMemo(
+    () => new Set((activeSupervisors.data ?? []).map((s) => s.id as string)),
+    [activeSupervisors.data],
+  );
+  const activeCount = activeSupervisors.data ? activeSupervisors.data.length : null;
+
   const summary = useQuery({
     queryKey: ["entity", "summary", currentTenant],
     enabled: on("summary"),
     staleTime: STALE,
     queryFn: async () => {
-      const [supervisors, projects, balances, pending, action, unread] = await Promise.all([
-        supabase.from("supervisors").select("id", { count: "exact", head: true }).is("deleted_at", null),
+      const [projects, balances, pending, action, unread] = await Promise.all([
         supabase.from("projects").select("id", { count: "exact", head: true }).is("deleted_at", null),
-        supabase.from("custody_balances").select("balance"),
+        supabase.from("custody_balances").select("supervisor_id, balance"),
         supabase
           .from("custody_transactions")
           .select("id", { count: "exact", head: true })
@@ -246,15 +289,22 @@ function DashboardContent() {
           .is("read_at", null),
       ]);
       return {
-        supervisors: supervisors.count ?? 0,
         projects: projects.count ?? 0,
-        custody: (balances.data ?? []).reduce((s, b) => s + Number(b.balance ?? 0), 0),
+        rawBalances: balances.data ?? [],
         pending: pending.count ?? 0,
         action: action.count ?? 0,
         unread: unread.count ?? 0,
       };
     },
   });
+
+  const custodyTotal = useMemo(
+    () =>
+      (summary.data?.rawBalances ?? [])
+        .filter((b) => activeIds.has(b.supervisor_id as string))
+        .reduce((s, b) => s + Number(b.balance ?? 0), 0),
+    [summary.data?.rawBalances, activeIds],
+  );
 
   const projects = useQuery({
     queryKey: ["entity", "projects", currentTenant],
@@ -272,23 +322,12 @@ function DashboardContent() {
     },
   });
 
-  const supervisors = useQuery({
-    queryKey: ["entity", "supervisors", currentTenant],
-    enabled: on("supervisors"),
-    staleTime: STALE,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("supervisors")
-        .select("id, name_ar, name_en, phone, is_active")
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false })
-        .limit(LIMIT);
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const supervisorList = useMemo(
+    () => (activeSupervisors.data ?? []).slice(0, LIMIT),
+    [activeSupervisors.data],
+  );
 
-  const balances = useQuery({
+  const rawBalances = useQuery({
     queryKey: ["entity", "custody-balances", currentTenant],
     enabled: on("custody"),
     staleTime: STALE,
@@ -298,6 +337,14 @@ function DashboardContent() {
       return data ?? [];
     },
   });
+
+  // Archived / inactive supervisors keep their historical movements in reports,
+  // but never appear as custody cards in the active entity dashboard.
+  const activeBalances = useMemo(
+    () => (rawBalances.data ?? []).filter((b) => activeIds.has(b.supervisor_id as string)),
+    [rawBalances.data, activeIds],
+  );
+
 
   // Each supervisor's movements are fetched on their own, so no rows can leak
   // into another supervisor's card.
@@ -400,9 +447,10 @@ function DashboardContent() {
   const canReports = isAccountant || can("reports.view");
 
   const selectedBalance = useMemo(
-    () => (balances.data ?? []).find((b) => b.supervisor_id === supervisorFilter) ?? null,
-    [balances.data, supervisorFilter],
+    () => activeBalances.find((b) => b.supervisor_id === supervisorFilter) ?? null,
+    [activeBalances, supervisorFilter],
   );
+
 
   return (
     <div className="min-w-0 space-y-3 md:space-y-4">
@@ -416,8 +464,17 @@ function DashboardContent() {
           open={on("summary")}
           onToggle={toggle}
         >
-          {summary.isLoading ? (
+          {summary.isLoading || activeSupervisors.isLoading ? (
             <Loading />
+          ) : summary.isError || activeSupervisors.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => {
+                summary.refetch();
+                activeSupervisors.refetch();
+              }}
+            />
           ) : (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               <MiniStat
@@ -427,12 +484,12 @@ function DashboardContent() {
               />
               <MiniStat
                 label={t("dashboard.supervisorsCount")}
-                value={formatNumber(summary.data?.supervisors)}
+                value={formatNumber(activeCount ?? 0)}
                 icon={Users}
               />
               <MiniStat
                 label={t("dashboard.totalCustody")}
-                value={formatMoney(summary.data?.custody ?? 0, locale)}
+                value={formatMoney(custodyTotal, locale)}
                 icon={Wallet}
               />
               <MiniStat
@@ -464,6 +521,12 @@ function DashboardContent() {
         >
           {projects.isLoading ? (
             <Loading />
+          ) : projects.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => projects.refetch()}
+            />
           ) : (projects.data ?? []).length === 0 ? (
             <Empty text={t("projects.empty")} />
           ) : (
@@ -486,17 +549,23 @@ function DashboardContent() {
           id="supervisors"
           label={t("nav.supervisors")}
           icon={Users}
-          count={summary.data?.supervisors ?? null}
+          count={activeCount}
           open={on("supervisors")}
           onToggle={toggle}
         >
-          {supervisors.isLoading ? (
+          {activeSupervisors.isLoading ? (
             <Loading />
-          ) : (supervisors.data ?? []).length === 0 ? (
+          ) : activeSupervisors.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => activeSupervisors.refetch()}
+            />
+          ) : supervisorList.length === 0 ? (
             <Empty text={t("supervisors.empty")} />
           ) : (
             <ul className="divide-y divide-border">
-              {(supervisors.data ?? []).map((s) => (
+              {supervisorList.map((s) => (
                 <Row
                   key={s.id}
                   to={{ to: "/supervisors/$id", params: { id: s.id } }}
@@ -513,18 +582,28 @@ function DashboardContent() {
           id="custody"
           label={t("nav.custody")}
           icon={Wallet}
-          count={balances.data?.length ?? null}
+          count={activeCount}
           open={on("custody")}
           onToggle={toggle}
         >
-          {balances.isLoading ? (
+          {rawBalances.isLoading || activeSupervisors.isLoading ? (
             <Loading />
-          ) : (balances.data ?? []).length === 0 ? (
+          ) : rawBalances.isError || activeSupervisors.isError ? (
+            <ErrorState
+              text={t("entity.loadError")}
+              label={t("entity.retry")}
+              onRetry={() => {
+                rawBalances.refetch();
+                activeSupervisors.refetch();
+              }}
+            />
+          ) : activeBalances.length === 0 ? (
             <Empty text={t("custody.empty")} />
           ) : (
             <>
               <div className="grid gap-2 sm:grid-cols-2">
-                {(balances.data ?? []).map((b) => (
+                {activeBalances.map((b) => (
+
                   <button
                     key={b.supervisor_id}
                     type="button"
