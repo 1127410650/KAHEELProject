@@ -149,6 +149,26 @@ function Empty({ text }: { text: string }) {
   return <p className="py-1 text-[11px] text-muted-foreground sm:text-xs">{text}</p>;
 }
 
+function ErrorState({
+  text,
+  label,
+  onRetry,
+}: {
+  text: string;
+  label: string;
+  onRetry: () => void;
+}) {
+  return (
+    <div className="min-w-0 space-y-2">
+      <p className="wrap-anywhere text-[11px] text-destructive sm:text-xs">{text}</p>
+      <Button size="sm" variant="outline" className="h-8 text-[12px]" onClick={onRetry}>
+        {label}
+      </Button>
+    </div>
+  );
+}
+
+
 function ViewAll({ to, label }: { to: string; label: string }) {
   return (
     <div className="mt-2">
