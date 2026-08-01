@@ -471,7 +471,11 @@ function InviteDialog({
       const { data, error } = await supabase.rpc("invitation_create", {
         _email: email.trim(),
         _invited_role: role,
-        _invitation_type: role === "service_provider" ? "service_provider" : "member",
+        _invitation_type:
+          role === "service_provider" || role === "supervisor" ||
+          role === "accountant" || role === "viewer"
+            ? role
+            : "employee",
         _permissions: permissions,
         _project_ids: scopeAll ? [] : projectIds,
         ...(mobile.trim() ? { _mobile: mobile.trim() } : {}),

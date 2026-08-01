@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { registerAccount } from "@/lib/register.functions";
 import { useI18n } from "@/i18n";
+import { LanguageToggle } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,6 +115,9 @@ function RegisterPage() {
             <ShieldCheck className="size-5" aria-hidden />
           </span>
           <span className="text-base font-bold text-foreground">{t("app.name")}</span>
+          <span className="ms-auto">
+            <LanguageToggle compact />
+          </span>
         </div>
 
         {done ? (
