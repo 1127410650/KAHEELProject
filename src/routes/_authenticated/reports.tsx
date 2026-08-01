@@ -201,7 +201,30 @@ function ReportTables({
           <CardTitle className="text-base">{t("reports.custodyBySupervisor")}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <table className="w-full text-sm">
+          <MobileCards className="p-3">
+            {balances.length === 0 && <MobileEmpty>{t("common.noData")}</MobileEmpty>}
+            {balances.map((row) => (
+              <li
+                key={row.supervisor_id}
+                className="surface flex min-w-0 items-center justify-between gap-2 p-3"
+              >
+                <span className="min-w-0 flex-1 wrap-anywhere text-[13px] font-medium">
+                  {pickName(locale, row.name_ar, row.name_en)}
+                </span>
+                <span className="num shrink-0 text-[13px] font-bold">
+                  {formatMoney(row.balance, locale)}
+                </span>
+              </li>
+            ))}
+            {balances.length > 0 && (
+              <li className="surface flex items-center justify-between p-3 text-[12px] font-semibold">
+                <span>{t("common.total")}</span>
+                <span className="num text-primary">{formatMoney(total, locale)}</span>
+              </li>
+            )}
+          </MobileCards>
+          <table className="hidden w-full text-sm sm:table">
+
             <tbody className="divide-y divide-border">
               {balances.length === 0 && (
                 <tr>
