@@ -19,7 +19,7 @@ import { useSession } from "@/lib/session";
 import { PageHeader } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { useAccounts, sortAccounts, type Account } from "@/hooks/use-accounts";
-import { formatMoney } from "@/lib/format";
+import { formatDate, formatMoney } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/me")({
   head: () => ({

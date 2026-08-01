@@ -113,7 +113,7 @@ function InvitePage() {
               <p className="mt-2 text-sm text-muted-foreground">
                 {accepted.multi ? t("invite.switchNote") : t("invite.acceptedBody")}
               </p>
-              <Button className="mt-4 w-full" onClick={() => navigate({ to: "/dashboard" })}>
+              <Button className="mt-4 w-full" onClick={() => window.location.replace("/select-account")}>
                 {t("invite.goWorkspace")}
               </Button>
             </>
