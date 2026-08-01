@@ -124,7 +124,19 @@ function PersonalDashboard() {
     },
   });
 
-  const { data: accounts = [] } = useAccounts();
+  // The personal dashboard must always run inside the personal account, otherwise
+  // RLS would scope these reads to whichever company is currently active.
+  const { data: accounts = [] } = useAccounts({ ensurePersonal: true });
+  const enterAccount = useEnterAccount();
+  const current = accounts.find((a: Account) => a.is_current);
+  const personal = accounts.find((a: Account) => a.is_personal);
+  const wrongAccount = !!current && !current.is_personal && !!personal;
+
+  useEffect(() => {
+    if (wrongAccount && !enterAccount.isPending) enterAccount.mutate(personal!.tenant_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wrongAccount]);
+
   const others = sortAccounts(accounts).filter((a: Account) => !a.is_current);
   const label = (a: Account) => (locale === "en" ? a.name_en || a.name_ar : a.name_ar);
 
