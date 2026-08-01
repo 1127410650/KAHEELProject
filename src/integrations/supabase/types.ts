@@ -3675,6 +3675,10 @@ export type Database = {
         }
         Returns: number
       }
+      document_analysis_apply: {
+        Args: { _analysis_id: string; _only_field_keys?: string[] }
+        Returns: Json
+      }
       document_analysis_raw_text: {
         Args: { _analysis_id: string }
         Returns: string
