@@ -1291,6 +1291,7 @@ export type Database = {
           full_name: string
           id: string
           is_active: boolean
+          last_tenant_id: string | null
           locale: Database["public"]["Enums"]["app_locale"]
           must_change_password: boolean
           national_id: string | null
@@ -1305,6 +1306,7 @@ export type Database = {
           full_name?: string
           id?: string
           is_active?: boolean
+          last_tenant_id?: string | null
           locale?: Database["public"]["Enums"]["app_locale"]
           must_change_password?: boolean
           national_id?: string | null
@@ -1319,6 +1321,7 @@ export type Database = {
           full_name?: string
           id?: string
           is_active?: boolean
+          last_tenant_id?: string | null
           locale?: Database["public"]["Enums"]["app_locale"]
           must_change_password?: boolean
           national_id?: string | null
@@ -1328,6 +1331,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_last_tenant_id_fkey"
+            columns: ["last_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_supervisor_id_fkey"
             columns: ["supervisor_id"]
@@ -3390,6 +3400,107 @@ export type Database = {
         }
         Relationships: []
       }
+      tenant_memberships: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          joined_at: string | null
+          membership_end: string | null
+          membership_start: string | null
+          role: string
+          status: string
+          tenant_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          joined_at?: string | null
+          membership_end?: string | null
+          membership_start?: string | null
+          role: string
+          status?: string
+          tenant_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          joined_at?: string | null
+          membership_end?: string | null
+          membership_start?: string | null
+          role?: string
+          status?: string
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_memberships_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenants: {
+        Row: {
+          commercial_registration_number: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          is_default: boolean
+          is_test: boolean
+          legal_name: string | null
+          name_ar: string
+          name_en: string
+          status: string
+          tenant_type: string
+          updated_at: string
+          vat_number: string | null
+        }
+        Insert: {
+          commercial_registration_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_default?: boolean
+          is_test?: boolean
+          legal_name?: string | null
+          name_ar: string
+          name_en: string
+          status?: string
+          tenant_type?: string
+          updated_at?: string
+          vat_number?: string | null
+        }
+        Update: {
+          commercial_registration_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_default?: boolean
+          is_test?: boolean
+          legal_name?: string | null
+          name_ar?: string
+          name_en?: string
+          status?: string
+          tenant_type?: string
+          updated_at?: string
+          vat_number?: string | null
+        }
+        Relationships: []
+      }
       unified_products: {
         Row: {
           arabic_name: string
@@ -3668,6 +3779,7 @@ export type Database = {
       }
       current_role_label: { Args: never; Returns: string }
       current_supervisor_id: { Args: never; Returns: string }
+      current_tenant_ids: { Args: never; Returns: string[] }
       custody_base_effect: {
         Args: {
           p_amount: number
@@ -3699,6 +3811,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_tenant_permission: {
+        Args: { _permission: string; _tenant_id: string }
+        Returns: boolean
+      }
+      has_tenant_role: {
+        Args: { _role: string; _tenant_id: string }
+        Returns: boolean
+      }
       invoice_settled_amount: {
         Args: { p_invoice_id: string }
         Returns: number
@@ -3706,6 +3826,7 @@ export type Database = {
       is_accountant: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       is_supervisor_user: { Args: never; Returns: boolean }
+      is_tenant_member: { Args: { _tenant_id: string }; Returns: boolean }
       log_audit: {
         Args: {
           _action: string
