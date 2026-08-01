@@ -25,6 +25,14 @@ async function assertAccountant(userClient: Client) {
   if (error || data !== true) throw new Error("FORBIDDEN");
 }
 
+/** Active workspace of the caller — every role/permission row is bound to it. */
+async function callerTenantId(userClient: Client): Promise<string> {
+  const { data, error } = await userClient.rpc("current_tenant_id");
+  if (error || !data) throw new Error("NO_ACTIVE_TENANT");
+  return data as string;
+}
+
+
 export async function createAppUserImpl(userClient: Client, input: CreateUserInput) {
   await assertAccountant(userClient);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
