@@ -176,13 +176,15 @@ export async function updateAppUserImpl(userClient: Client, input: UpdateUserInp
     _entity_type: "user",
     _action: "update",
     _entity_id: input.user_id,
+    _old_value: before as never,
     _new_value: {
-      role: input.role ?? null,
-      permissions: input.permissions ?? null,
-      projects: input.project_ids ?? null,
+      role: input.role ?? before.role,
+      permissions: (input.permissions ?? before.permissions).slice().sort(),
+      projects: input.project_ids ?? before.projects,
       is_active: input.is_active ?? null,
       password_reset: !!input.reset_password,
     } as never,
+
   });
 
   return { ok: true };
