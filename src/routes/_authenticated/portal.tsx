@@ -384,7 +384,7 @@ function StatCard({
 
   if (to)
     return (
-      <Link to={to} className={cn(cls, "transition hover:bg-secondary/40")}>
+      <Link to={to as "/projects"} className={cn(cls, "transition hover:bg-secondary/40")}>
         {body}
       </Link>
     );
