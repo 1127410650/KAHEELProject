@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/AppLayout";
 import { PrintPortal } from "@/components/PrintPortal";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,7 +68,43 @@ function InvoiceGroupTable({ title, rows }: { title: string; rows: InvoiceGroupR
         <CardTitle className="text-base">{title}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
+        <MobileCards className="p-3">
+          {rows.length === 0 && <MobileEmpty>{t("common.noData")}</MobileEmpty>}
+          {rows.map((row) => (
+            <RecordCard
+              key={row.label}
+              title={row.label}
+              fields={[
+                { label: t("reports.invoicesCount"), value: row.count, num: true },
+                {
+                  label: t("invoices.totalAmount"),
+                  value: formatMoney(row.total, locale),
+                  num: true,
+                },
+                {
+                  label: t("reports.beforeTaxTotal"),
+                  value: formatMoney(row.beforeTax, locale),
+                  num: true,
+                },
+                { label: t("reports.taxTotal"), value: formatMoney(row.tax, locale), num: true },
+                {
+                  label: t("reports.settledTotal"),
+                  value: formatMoney(row.settled, locale),
+                  num: true,
+                  wide: true,
+                },
+              ]}
+            />
+          ))}
+          {rows.length > 0 && (
+            <li className="surface flex items-center justify-between p-3 text-[12px] font-semibold">
+              <span>{t("common.total")}</span>
+              <span className="num text-primary">{formatMoney(totals.total, locale)}</span>
+            </li>
+          )}
+        </MobileCards>
+        <div className="hidden overflow-x-auto sm:block">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/40 text-xs text-muted-foreground">
               <tr>
@@ -163,7 +201,30 @@ function ReportTables({
           <CardTitle className="text-base">{t("reports.custodyBySupervisor")}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <table className="w-full text-sm">
+          <MobileCards className="p-3">
+            {balances.length === 0 && <MobileEmpty>{t("common.noData")}</MobileEmpty>}
+            {balances.map((row) => (
+              <li
+                key={row.supervisor_id}
+                className="surface flex min-w-0 items-center justify-between gap-2 p-3"
+              >
+                <span className="min-w-0 flex-1 wrap-anywhere text-[13px] font-medium">
+                  {pickName(locale, row.name_ar, row.name_en)}
+                </span>
+                <span className="num shrink-0 text-[13px] font-bold">
+                  {formatMoney(row.balance, locale)}
+                </span>
+              </li>
+            ))}
+            {balances.length > 0 && (
+              <li className="surface flex items-center justify-between p-3 text-[12px] font-semibold">
+                <span>{t("common.total")}</span>
+                <span className="num text-primary">{formatMoney(total, locale)}</span>
+              </li>
+            )}
+          </MobileCards>
+          <table className="hidden w-full text-sm sm:table">
+
             <tbody className="divide-y divide-border">
               {balances.length === 0 && (
                 <tr>
@@ -198,7 +259,31 @@ function ReportTables({
           <CardTitle className="text-base">{t("reports.custodyByProject")}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <table className="w-full text-sm">
+          <MobileCards className="p-3">
+            {byProject.length === 0 && <MobileEmpty>{t("common.noData")}</MobileEmpty>}
+            {byProject.map((row) => (
+              <RecordCard
+                key={row.label}
+                title={row.label}
+                fields={[
+                  { label: t("custody.totalIn"), value: formatMoney(row.inTotal, locale), num: true },
+                  {
+                    label: t("custody.totalOut"),
+                    value: formatMoney(row.outTotal, locale),
+                    num: true,
+                  },
+                  {
+                    label: t("reports.netTotal"),
+                    value: formatMoney(row.inTotal - row.outTotal, locale),
+                    num: true,
+                    wide: true,
+                  },
+                ]}
+              />
+            ))}
+          </MobileCards>
+          <table className="hidden w-full text-sm sm:table">
+
             <thead className="bg-secondary/40 text-xs text-muted-foreground">
               <tr>
                 <th className="px-6 py-2 text-start font-semibold">{t("custody.project")}</th>

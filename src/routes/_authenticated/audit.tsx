@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/AppLayout";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/audit")({
@@ -41,8 +43,25 @@ function AuditPage() {
     <>
       <PageHeader title={t("audit.title")} description={t("audit.description")} />
 
-      <div className="surface overflow-hidden">
+      <MobileCards>
+        {rows.length === 0 && <MobileEmpty>{t("audit.empty")}</MobileEmpty>}
+        {rows.map((row) => (
+          <RecordCard
+            key={row.id}
+            title={t(`audit.actions.${row.action}`)}
+            subtitle={row.entity_type}
+            fields={[
+              { label: t("common.date"), value: formatDateTime(row.created_at), num: true },
+              { label: t("audit.actor"), value: row.actorName },
+              { label: t("common.reason"), value: row.reason ?? "—", wide: true },
+            ]}
+          />
+        ))}
+      </MobileCards>
+
+      <div className="surface hidden overflow-hidden sm:block">
         <div className="overflow-x-auto">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
               <tr className="text-xs uppercase tracking-wide text-muted-foreground">

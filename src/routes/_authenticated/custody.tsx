@@ -10,6 +10,8 @@ import { useSession } from "@/lib/session";
 import { logAudit } from "@/lib/audit";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { CustodyVoucher, type VoucherData } from "@/components/CustodyVoucher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -485,8 +487,159 @@ function CustodyPage() {
         )}
       </div>
 
-      <div className="surface overflow-hidden">
+      {/* Per-supervisor balances: each custody is independent, never aggregated. */}
+      <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        {supervisors.map((s) => {
+          const balance = Number(
+            balances.find((b) => b.supervisor_id === s.id)?.balance ?? 0,
+          );
+          const active = supervisorFilter === s.id;
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setSupervisorFilter(active ? "all" : s.id)}
+              aria-pressed={active}
+              className={`surface min-w-0 p-2.5 text-start transition-colors ${active ? "border-primary" : ""}`}
+            >
+              <span className="block truncate text-[11.5px] text-muted-foreground">
+                {pickName(locale, s.name_ar, s.name_en)}
+              </span>
+              <span className="num block text-[14px] font-bold text-primary">
+                {formatMoney(balance, locale)}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <MobileCards>
+        {rows.length === 0 && <MobileEmpty>{t("custody.empty")}</MobileEmpty>}
+        {rows.map((row) => {
+          const supervisor = row.supervisors as {
+            name_ar?: string;
+            name_en?: string;
+            national_id?: string;
+            phone?: string;
+          } | null;
+          const project = row.projects as {
+            code?: string;
+            name_ar?: string;
+            name_en?: string;
+          } | null;
+          const effect = effectById.get(row.id);
+          return (
+            <RecordCard
+              key={row.id}
+              lead={`#${row.serial_no}`}
+              title={pickName(locale, supervisor?.name_ar, supervisor?.name_en)}
+              subtitle={t(`custody.types.${row.txn_type}`)}
+              badge={<StatusBadge status={row.status} />}
+              fields={[
+                { label: t("common.amount"), value: formatMoney(row.amount, locale), num: true },
+                { label: t("custody.txnDate"), value: formatDate(row.txn_date), num: true },
+                ...(row.status === "approved" && effect
+                  ? [
+                      {
+                        label: t("custody.netEffect"),
+                        value: formatMoney(effect.signed_amount, locale),
+                        num: true,
+                        wide: true,
+                      },
+                    ]
+                  : []),
+                ...(project
+                  ? [{ label: t("custody.project"), value: project.code ?? "—", wide: true }]
+                  : []),
+              ]}
+              footer={
+                effect?.reversal_of_serial != null || effect?.reversed_by_serial != null ? (
+                  <p className="num mt-2 text-[11px] text-warning-foreground">
+                    {effect?.reversal_of_serial != null
+                      ? `${t("custody.reversalOf")} #${effect.reversal_of_serial}`
+                      : `${t("custody.reversedBy")} #${effect?.reversed_by_serial}`}
+                  </p>
+                ) : null
+              }
+              actions={
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 gap-1.5 px-2 text-xs"
+                    onClick={() =>
+                      setVoucher({
+                        serial: row.serial_no,
+                        type: row.txn_type,
+                        amount: Number(row.amount),
+                        date: row.txn_date,
+                        status: row.status,
+                        supervisorName: pickName(
+                          locale,
+                          supervisor?.name_ar,
+                          supervisor?.name_en,
+                        ),
+                        nationalId: supervisor?.national_id ?? "—",
+                        phone: supervisor?.phone ?? "—",
+                        projectName: project
+                          ? `${project.code} — ${pickName(locale, project.name_ar, project.name_en)}`
+                          : "—",
+                        reason: row.reason,
+                        notes: row.notes_ar,
+                        reversalOfSerial: effect?.reversal_of_serial ?? null,
+                        reversedBySerial: effect?.reversed_by_serial ?? null,
+                      })
+                    }
+                  >
+                    <Printer className="size-3.5" aria-hidden />
+                    {t("custody.printVoucher")}
+                  </Button>
+                  {isAccountant && row.status !== "approved" && row.status !== "cancelled" && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1.5 px-2 text-xs text-success"
+                        onClick={() => changeStatus.mutate({ id: row.id, status: "approved" })}
+                      >
+                        <Check className="size-3.5" aria-hidden />
+                        {t("common.approve")}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1.5 px-2 text-xs text-destructive"
+                        onClick={() => changeStatus.mutate({ id: row.id, status: "cancelled" })}
+                      >
+                        <Ban className="size-3.5" aria-hidden />
+                        {t("common.cancel")}
+                      </Button>
+                    </>
+                  )}
+                  {isAccountant &&
+                    row.status === "approved" &&
+                    row.txn_type !== "reversal" &&
+                    effect?.reversed_by_serial == null && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1.5 px-2 text-xs text-warning-foreground"
+                        onClick={() => setReversalTarget(row.id)}
+                      >
+                        <Undo2 className="size-3.5" aria-hidden />
+                        {t("custody.reversal")}
+                      </Button>
+                    )}
+                </>
+              }
+            />
+          );
+        })}
+      </MobileCards>
+
+      <div className="surface hidden overflow-hidden sm:block">
         <div className="overflow-x-auto">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
               <tr className="text-xs uppercase tracking-wide text-muted-foreground">

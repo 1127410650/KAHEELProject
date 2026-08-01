@@ -7,6 +7,8 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { PageHeader } from "@/components/AppLayout";
 import { StatusBadge } from "@/components/StatusBadge";
+import { MobileCards, MobileEmpty, RecordCard } from "@/components/RecordCard";
+
 import { Button } from "@/components/ui/button";
 import { formatDate, formatMoney, pickName } from "@/lib/format";
 
@@ -106,8 +108,39 @@ function MyCustodyPage() {
         </div>
       </div>
 
-      <div className="surface overflow-hidden">
+      <MobileCards>
+        {rows.length === 0 && <MobileEmpty>{t("custody.empty")}</MobileEmpty>}
+        {rows.map((r) => (
+          <RecordCard
+            key={r.id}
+            lead={`#${r.serial_no}`}
+            title={t(`custody.types.${r.txn_type}`)}
+            subtitle={(locale === "ar" ? r.notes_ar : r.notes_en) ?? r.reason ?? undefined}
+            badge={<StatusBadge status={r.status} />}
+            fields={[
+              { label: t("common.amount"), value: formatMoney(r.amount, locale), num: true },
+              { label: t("custody.txnDate"), value: formatDate(r.txn_date), num: true },
+              {
+                label: t("nav.projects"),
+                value: r.projects
+                  ? `${r.projects.code} ${pickName(locale, r.projects.name_ar, r.projects.name_en)}`
+                  : "—",
+                wide: true,
+              },
+              {
+                label: t("common.reference"),
+                value: r.requests?.request_no ?? "—",
+                num: true,
+                wide: true,
+              },
+            ]}
+          />
+        ))}
+      </MobileCards>
+
+      <div className="surface hidden overflow-hidden sm:block">
         <div className="overflow-x-auto">
+
           <table className="w-full text-sm">
             <thead className="bg-secondary/60">
               <tr className="text-xs uppercase tracking-wide text-muted-foreground">
