@@ -47,7 +47,7 @@ const created = { tenants: [], users: [] };
 async function mkTenant(name) {
   const { data, error } = await admin
     .from("tenants")
-    .insert({ name_ar: name, status: "active" })
+    .insert({ name_ar: name, name_en: name, status: "active" })
     .select("id")
     .single();
   if (error) throw new Error(`tenant ${name}: ${error.message}`);
