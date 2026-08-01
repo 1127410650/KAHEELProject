@@ -1268,5 +1268,13 @@
     "mySubtitle": "Documents you uploaded inside the current account.",
     "myEmpty": "No documents",
     "download": "Download"
+  },
+  "entity": {
+    "sections": {
+      "summary": "Entity summary"
+    },
+    "actionNeeded": "Requests needing action",
+    "unread": "Unread alerts",
+    "viewAllCustody": "View all custody"
   }
 }
