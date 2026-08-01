@@ -16,3 +16,5 @@ export const Route = createFileRoute("/_authenticated")({
     </AppLayout>
   ),
 });
+
+
