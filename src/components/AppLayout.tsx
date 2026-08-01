@@ -70,6 +70,8 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
     titleKey: "nav.sectionSystem",
     items: [
       { to: "/users", labelKey: "nav.users", icon: ShieldCheck, accountantOnly: true },
+      { to: "/team", labelKey: "nav.team", icon: UserPlus, accountantOnly: true },
+
       { to: "/trash", labelKey: "nav.trash", icon: Trash2, accountantOnly: true },
       { to: "/audit", labelKey: "nav.audit", icon: ScrollText, accountantOnly: true },
       { to: "/settings", labelKey: "nav.settings", icon: Settings },
