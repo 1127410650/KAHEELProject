@@ -261,7 +261,8 @@ function UsersPage() {
     <>
       <PageHeader
         title={t("users.title")}
-        description={t("users.description")}
+        description={`${t("users.description")} — ${t("workspace.scopeNote")}`}
+
         actions={
           <Dialog
             open={open}
