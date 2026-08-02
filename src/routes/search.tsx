@@ -527,7 +527,7 @@ function SearchPage() {
       {!draftIsBusiness && (
         <label className="flex items-center gap-2 text-sm text-foreground">
           <Checkbox
-            className="size-4 shrink-0"
+            className="size-4 min-h-0 shrink-0"
             checked={draft.img === "1"}
             onCheckedChange={(checked) =>
               setDraft({ ...draft, img: checked === true ? "1" : undefined })
