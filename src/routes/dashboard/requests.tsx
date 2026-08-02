@@ -10,7 +10,10 @@ export const Route = createFileRoute("/dashboard/requests")({
   head: () => ({
     meta: [
       { title: "طلبات عروض السعر — سوق تحقّق" },
-      { name: "description", content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في سوق تحقّق." },
+      {
+        name: "description",
+        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في سوق تحقّق.",
+      },
       { property: "og:title", content: "طلبات عروض السعر — سوق تحقّق" },
       { property: "og:description", content: "إدارة طلبات عروض السعر." },
       { name: "robots", content: "noindex" },
@@ -26,7 +29,9 @@ function RequestsPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("mkt_quote_requests")
-        .select("id, title, description, city, quantity, unit, budget, status, created_at, listing_id")
+        .select(
+          "id, title, description, city, quantity, unit, budget, status, created_at, listing_id",
+        )
         .order("created_at", { ascending: false });
       return data ?? [];
     },
@@ -52,7 +57,9 @@ function RequestsPage() {
         ))}
       </ul>
       {!rows.isLoading && (rows.data ?? []).length === 0 && (
-        <p className="py-12 text-center text-sm text-muted-foreground">{t("market.dash.noRequests")}</p>
+        <p className="py-12 text-center text-sm text-muted-foreground">
+          {t("market.dash.noRequests")}
+        </p>
       )}
     </DashboardShell>
   );

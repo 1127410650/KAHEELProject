@@ -23,7 +23,13 @@ export interface ListingCardData extends MktListing {
   typeLabel?: string | undefined;
 }
 
-export function ListingCard({ listing, view = "grid" }: { listing: ListingCardData; view?: "grid" | "list" }) {
+export function ListingCard({
+  listing,
+  view = "grid",
+}: {
+  listing: ListingCardData;
+  view?: "grid" | "list";
+}) {
   const { t } = useI18n();
   const price = priceLabel(listing, t("market.priceOnRequest"));
 
@@ -67,7 +73,9 @@ export function ListingCard({ listing, view = "grid" }: { listing: ListingCardDa
           )}
           <VerifiedBadge status={listing.verificationStatus} />
         </div>
-        <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold text-foreground">{listing.title}</h3>
+        <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold text-foreground">
+          {listing.title}
+        </h3>
         {listing.summary && (
           <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{listing.summary}</p>
         )}

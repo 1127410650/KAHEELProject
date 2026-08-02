@@ -52,7 +52,12 @@ export function MarketHeader() {
       <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t("market.nav.menu")}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              aria-label={t("market.nav.menu")}
+            >
               <Menu className="size-5" aria-hidden />
             </Button>
           </SheetTrigger>
@@ -154,11 +159,16 @@ export function MarketFooter() {
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="text-base font-bold text-foreground">{t("market.brand")}</p>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("market.tagline")}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {t("market.tagline")}
+          </p>
         </div>
         <div className="space-y-2">
           <p className="text-sm font-semibold text-foreground">{t("market.footer.browse")}</p>
-          <Link to="/marketplace" className="block text-sm text-muted-foreground hover:text-primary">
+          <Link
+            to="/marketplace"
+            className="block text-sm text-muted-foreground hover:text-primary"
+          >
             {t("market.nav.marketplace")}
           </Link>
           <Link to="/search" className="block text-sm text-muted-foreground hover:text-primary">
@@ -167,10 +177,16 @@ export function MarketFooter() {
         </div>
         <div className="space-y-2">
           <p className="text-sm font-semibold text-foreground">{t("market.footer.business")}</p>
-          <Link to="/dashboard/ads/new" className="block text-sm text-muted-foreground hover:text-primary">
+          <Link
+            to="/dashboard/ads/new"
+            className="block text-sm text-muted-foreground hover:text-primary"
+          >
             {t("market.addListing")}
           </Link>
-          <Link to="/dashboard/my-ads" className="block text-sm text-muted-foreground hover:text-primary">
+          <Link
+            to="/dashboard/my-ads"
+            className="block text-sm text-muted-foreground hover:text-primary"
+          >
             {t("market.nav.myAds")}
           </Link>
         </div>

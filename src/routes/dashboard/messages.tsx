@@ -63,7 +63,9 @@ function MessagesPage() {
 
   async function send() {
     if (!selected || !body.trim()) return;
-    const { error } = await supabase.from("mkt_messages").insert({ conversation_id: selected, body: body.trim() });
+    const { error } = await supabase
+      .from("mkt_messages")
+      .insert({ conversation_id: selected, body: body.trim() });
     if (error) {
       toast.error(t("market.actions.failed"));
       return;
@@ -89,7 +91,9 @@ function MessagesPage() {
                       : "w-full rounded-lg border border-border bg-card p-3 text-start text-sm hover:bg-accent"
                   }
                 >
-                  <span className="line-clamp-2 font-medium text-foreground">{listing?.title ?? "—"}</span>
+                  <span className="line-clamp-2 font-medium text-foreground">
+                    {listing?.title ?? "—"}
+                  </span>
                 </button>
               </li>
             );

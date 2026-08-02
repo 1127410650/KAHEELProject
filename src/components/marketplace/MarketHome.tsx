@@ -42,7 +42,13 @@ function Section({
   );
 }
 
-function Grid({ items, loading }: { items: React.ComponentProps<typeof ListingCard>["listing"][]; loading: boolean }) {
+function Grid({
+  items,
+  loading,
+}: {
+  items: React.ComponentProps<typeof ListingCard>["listing"][];
+  loading: boolean;
+}) {
   const { t } = useI18n();
   if (loading) {
     return (
@@ -106,7 +112,10 @@ export function MarketHome() {
       return [...a, ...b].slice(0, 4);
     },
   });
-  const verified = useQuery({ queryKey: ["mkt", "home", "verified"], queryFn: () => loadVerifiedBusinesses(8) });
+  const verified = useQuery({
+    queryKey: ["mkt", "home", "verified"],
+    queryFn: () => loadVerifiedBusinesses(8),
+  });
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
 
@@ -197,7 +206,9 @@ export function MarketHome() {
       </Section>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-6">
-        <h2 className="mb-3 text-lg font-bold text-foreground">{t("market.sections.verifiedBusinesses")}</h2>
+        <h2 className="mb-3 text-lg font-bold text-foreground">
+          {t("market.sections.verifiedBusinesses")}
+        </h2>
         {verified.isLoading ? (
           <Skeleton className="h-24 w-full rounded-xl" />
         ) : (verified.data ?? []).length === 0 ? (
@@ -219,7 +230,9 @@ export function MarketHome() {
                   </p>
                   <VerifiedBadge status={b.verification_status} />
                 </div>
-                {b.headline && <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.headline}</p>}
+                {b.headline && (
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.headline}</p>
+                )}
                 {b.city && <p className="mt-2 text-[11px] text-muted-foreground">{b.city}</p>}
               </Link>
             ))}
@@ -227,10 +240,18 @@ export function MarketHome() {
         )}
       </section>
 
-      <Section title={t("market.sections.equipmentSale")} href="/search" search={{ type: "equipment_sale" }}>
+      <Section
+        title={t("market.sections.equipmentSale")}
+        href="/search"
+        search={{ type: "equipment_sale" }}
+      >
         <Grid items={equipment.data ?? []} loading={equipment.isLoading} />
       </Section>
-      <Section title={t("market.sections.equipmentRent")} href="/search" search={{ type: "equipment_rent" }}>
+      <Section
+        title={t("market.sections.equipmentRent")}
+        href="/search"
+        search={{ type: "equipment_rent" }}
+      >
         <Grid items={rentals.data ?? []} loading={rentals.isLoading} />
       </Section>
       <Section title={t("market.sections.products")} href="/search" search={{ type: "product" }}>

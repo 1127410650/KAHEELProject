@@ -1,0 +1,10 @@
+REVOKE ALL ON FUNCTION public.mkt_conversation_fill_seller() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_listing_before_write() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_listing_log_status() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_message_bump_conversation() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_quote_fill_seller() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_touch_updated_at() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_verification_request_submitted() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_guard_business_insert() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_guard_business_verification() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.mkt_guard_listing_status() FROM PUBLIC, anon, authenticated;

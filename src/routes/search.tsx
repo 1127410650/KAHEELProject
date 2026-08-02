@@ -27,7 +27,8 @@ export interface SearchParams {
 }
 
 const title = "نتائج البحث — سوق تحقّق";
-const description = "ابحث وفلتر إعلانات الخدمات والمقاولات ومواد البناء والمعدات حسب التصنيف والمدينة والسعر.";
+const description =
+  "ابحث وفلتر إعلانات الخدمات والمقاولات ومواد البناء والمعدات حسب التصنيف والمدينة والسعر.";
 
 export const Route = createFileRoute("/search")({
   ssr: false,
@@ -35,7 +36,19 @@ export const Route = createFileRoute("/search")({
     const pick = (key: keyof SearchParams) =>
       typeof search[key] === "string" && search[key] !== "" ? (search[key] as string) : undefined;
     const out: SearchParams = {};
-    for (const key of ["q", "category", "sub", "type", "city", "min", "max", "verified", "deal", "sort", "view"] as const) {
+    for (const key of [
+      "q",
+      "category",
+      "sub",
+      "type",
+      "city",
+      "min",
+      "max",
+      "verified",
+      "deal",
+      "sort",
+      "view",
+    ] as const) {
       const value = pick(key);
       if (value !== undefined) out[key] = value;
     }
@@ -234,7 +247,12 @@ function SearchPage() {
             {t("market.filters.verifiedOnly")}
           </label>
 
-          <Button variant="outline" size="sm" className="w-full" onClick={() => void navigate({ search: {} })}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => void navigate({ search: {} })}
+          >
             {t("common.reset")}
           </Button>
         </aside>
@@ -261,7 +279,11 @@ function SearchPage() {
                   type="button"
                   aria-label={t("market.view.grid")}
                   onClick={() => update({ view: "grid" })}
-                  className={view === "grid" ? "bg-primary p-2 text-primary-foreground" : "p-2 text-muted-foreground"}
+                  className={
+                    view === "grid"
+                      ? "bg-primary p-2 text-primary-foreground"
+                      : "p-2 text-muted-foreground"
+                  }
                 >
                   <LayoutGrid className="size-4" aria-hidden />
                 </button>
@@ -269,7 +291,11 @@ function SearchPage() {
                   type="button"
                   aria-label={t("market.view.list")}
                   onClick={() => update({ view: "list" })}
-                  className={view === "list" ? "bg-primary p-2 text-primary-foreground" : "p-2 text-muted-foreground"}
+                  className={
+                    view === "list"
+                      ? "bg-primary p-2 text-primary-foreground"
+                      : "p-2 text-muted-foreground"
+                  }
                 >
                   <List className="size-4" aria-hidden />
                 </button>
@@ -286,7 +312,10 @@ function SearchPage() {
           ) : (listings.data ?? []).length === 0 ? (
             <div className="rounded-xl border border-dashed border-border p-10 text-center">
               <p className="text-sm text-muted-foreground">{t("market.noResults")}</p>
-              <Link to="/dashboard/ads/new" className="mt-3 inline-block text-sm font-medium text-primary">
+              <Link
+                to="/dashboard/ads/new"
+                className="mt-3 inline-block text-sm font-medium text-primary"
+              >
                 {t("market.addListing")}
               </Link>
             </div>

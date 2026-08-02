@@ -14,9 +14,15 @@ export const Route = createFileRoute("/dashboard/my-ads")({
   head: () => ({
     meta: [
       { title: "إعلاناتي — سوق تحقّق" },
-      { name: "description", content: "إدارة إعلاناتك في سوق تحقّق: المسودات، قيد المراجعة، المنشورة والمرفوضة." },
+      {
+        name: "description",
+        content: "إدارة إعلاناتك في سوق تحقّق: المسودات، قيد المراجعة، المنشورة والمرفوضة.",
+      },
       { property: "og:title", content: "إعلاناتي — سوق تحقّق" },
-      { property: "og:description", content: "إدارة إعلانات الخدمات والمنتجات والمعدات الخاصة بك." },
+      {
+        property: "og:description",
+        content: "إدارة إعلانات الخدمات والمنتجات والمعدات الخاصة بك.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),

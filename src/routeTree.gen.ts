@@ -36,9 +36,13 @@ import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminListingsRouteImport } from './routes/admin/listings'
+import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
+import { Route as DashboardBusinessRouteImport } from './routes/dashboard/business'
 import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
@@ -194,6 +198,21 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminListingsRoute = AdminListingsRouteImport.update({
+  id: '/admin/listings',
+  path: '/admin/listings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminVerificationsRoute = AdminVerificationsRouteImport.update({
+  id: '/admin/verifications',
+  path: '/admin/verifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdsSlugRoute = AdsSlugRouteImport.update({
   id: '/ads/$slug',
   path: '/ads/$slug',
@@ -207,6 +226,11 @@ const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
   path: '/categories/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardBusinessRoute = DashboardBusinessRouteImport.update({
+  id: '/dashboard/business',
+  path: '/dashboard/business',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardFavoritesRoute = DashboardFavoritesRouteImport.update({
@@ -324,14 +348,18 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/business': typeof DashboardBusinessRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/admin/': typeof AdminIndexRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
@@ -371,14 +399,18 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/business': typeof DashboardBusinessRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/admin': typeof AdminIndexRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
@@ -420,14 +452,18 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/business': typeof DashboardBusinessRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/admin/': typeof AdminIndexRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
@@ -469,14 +505,18 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/listings'
+    | '/admin/verifications'
     | '/ads/$slug'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/business'
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/requests'
     | '/invite/$token'
+    | '/admin/'
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
@@ -516,14 +556,18 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/listings'
+    | '/admin/verifications'
     | '/ads/$slug'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/business'
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/requests'
     | '/invite/$token'
+    | '/admin'
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
@@ -564,14 +608,18 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/admin/listings'
+    | '/admin/verifications'
     | '/ads/$slug'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/business'
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/requests'
     | '/invite/$token'
+    | '/admin/'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
@@ -594,14 +642,18 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  AdminListingsRoute: typeof AdminListingsRoute
+  AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
+  DashboardBusinessRoute: typeof DashboardBusinessRoute
   DashboardFavoritesRoute: typeof DashboardFavoritesRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
 }
@@ -797,6 +849,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/listings': {
+      id: '/admin/listings'
+      path: '/admin/listings'
+      fullPath: '/admin/listings'
+      preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/verifications': {
+      id: '/admin/verifications'
+      path: '/admin/verifications'
+      fullPath: '/admin/verifications'
+      preLoaderRoute: typeof AdminVerificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ads/$slug': {
       id: '/ads/$slug'
       path: '/ads/$slug'
@@ -816,6 +889,13 @@ declare module '@tanstack/react-router' {
       path: '/categories/$slug'
       fullPath: '/categories/$slug'
       preLoaderRoute: typeof CategoriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/business': {
+      id: '/dashboard/business'
+      path: '/dashboard/business'
+      fullPath: '/dashboard/business'
+      preLoaderRoute: typeof DashboardBusinessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/favorites': {
@@ -1007,14 +1087,18 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  AdminListingsRoute: AdminListingsRoute,
+  AdminVerificationsRoute: AdminVerificationsRoute,
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
+  DashboardBusinessRoute: DashboardBusinessRoute,
   DashboardFavoritesRoute: DashboardFavoritesRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardMyAdsRoute: DashboardMyAdsRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
   InviteTokenRoute: InviteTokenRoute,
+  AdminIndexRoute: AdminIndexRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
 }
