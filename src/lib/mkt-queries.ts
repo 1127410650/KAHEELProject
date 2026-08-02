@@ -222,12 +222,13 @@ export async function loadUserProfileBySlug(username: string): Promise<MktUserPr
   return (data as MktUserProfile | null) ?? null;
 }
 
-export async function loadVerifiedBusinesses(limit = 8): Promise<MktBusiness[]> {
+/** Recently joined published businesses. Verification is never a criterion —
+ *  it only decides whether a check mark renders next to the name. */
+export async function loadBusinesses(limit = 8): Promise<MktBusiness[]> {
   const { data } = await supabase
     .from("mkt_business_profiles")
     .select(BUSINESS_COLUMNS)
     .eq("is_published", true)
-    .eq("verification_status", "verified")
     .order("joined_at", { ascending: false })
     .limit(limit);
   return (data ?? []) as MktBusiness[];
