@@ -19,6 +19,8 @@ export interface ListingFilters {
   subcategoryId?: string | undefined;
   type?: string | undefined;
   city?: string | undefined;
+  countryIso2?: string | undefined;
+  cityId?: string | undefined;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
   verifiedOnly?: boolean | undefined;
@@ -30,6 +32,7 @@ export interface ListingFilters {
   hasPrice?: boolean | undefined;
   page?: number | undefined;
 }
+
 
 export const PAGE_SIZE = 20;
 
