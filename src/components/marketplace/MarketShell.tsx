@@ -262,9 +262,10 @@ export function MarketShell({
   const variant = footer ?? footerVariantForPath(pathname);
 
   return (
-    <div dir={dir} className="flex min-h-screen flex-col overflow-x-hidden bg-background">
+    <div dir={dir} className="flex flex-col overflow-x-hidden bg-background">
       <MarketHeader />
-      <main className="flex-1">{children}</main>
+      <main>{children}</main>
+
       {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}
       {/* Space for the mobile bottom nav so content never hides behind it. */}
