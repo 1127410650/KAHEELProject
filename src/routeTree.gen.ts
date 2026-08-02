@@ -40,7 +40,9 @@ import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
+import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
+import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
@@ -212,9 +214,19 @@ const DashboardFavoritesRoute = DashboardFavoritesRouteImport.update({
   path: '/dashboard/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
+  id: '/dashboard/messages',
+  path: '/dashboard/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
   id: '/dashboard/my-ads',
   path: '/dashboard/my-ads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
+  id: '/dashboard/requests',
+  path: '/dashboard/requests',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
@@ -316,7 +328,9 @@ export interface FileRoutesByFullPath {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
+  '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -361,7 +375,9 @@ export interface FileRoutesByTo {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
+  '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -408,7 +424,9 @@ export interface FileRoutesById {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
+  '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -455,7 +473,9 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/favorites'
+    | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/requests'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
@@ -500,7 +520,9 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/favorites'
+    | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/requests'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
@@ -546,7 +568,9 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/favorites'
+    | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/requests'
     | '/invite/$token'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
@@ -574,7 +598,9 @@ export interface RootRouteChildren {
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DashboardFavoritesRoute: typeof DashboardFavoritesRoute
+  DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
+  DashboardRequestsRoute: typeof DashboardRequestsRoute
   InviteTokenRoute: typeof InviteTokenRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
@@ -799,11 +825,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardFavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/messages': {
+      id: '/dashboard/messages'
+      path: '/dashboard/messages'
+      fullPath: '/dashboard/messages'
+      preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/my-ads': {
       id: '/dashboard/my-ads'
       path: '/dashboard/my-ads'
       fullPath: '/dashboard/my-ads'
       preLoaderRoute: typeof DashboardMyAdsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/requests': {
+      id: '/dashboard/requests'
+      path: '/dashboard/requests'
+      fullPath: '/dashboard/requests'
+      preLoaderRoute: typeof DashboardRequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invite/$token': {
@@ -971,7 +1011,9 @@ const rootRouteChildren: RootRouteChildren = {
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DashboardFavoritesRoute: DashboardFavoritesRoute,
+  DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardMyAdsRoute: DashboardMyAdsRoute,
+  DashboardRequestsRoute: DashboardRequestsRoute,
   InviteTokenRoute: InviteTokenRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
@@ -979,3 +1021,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
