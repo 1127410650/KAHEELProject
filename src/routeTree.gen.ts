@@ -56,6 +56,7 @@ import { Route as AuthenticatedRequestsIdRouteImport } from './routes/_authentic
 import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
 import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
+import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
@@ -306,6 +307,11 @@ const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
   path: '/admin/reports/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminReportsIdRoute = AdminReportsIdRouteImport.update({
+  id: '/admin/reports/$id',
+  path: '/admin/reports/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
   id: '/dashboard/ads/new',
   path: '/dashboard/ads/new',
@@ -388,6 +394,7 @@ export interface FileRoutesByFullPath {
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/reports/$id': typeof AdminReportsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -443,6 +450,7 @@ export interface FileRoutesByTo {
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/reports/$id': typeof AdminReportsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
@@ -500,6 +508,7 @@ export interface FileRoutesById {
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/reports/$id': typeof AdminReportsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -557,6 +566,7 @@ export interface FileRouteTypes {
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/admin/reports/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects/'
@@ -612,6 +622,7 @@ export interface FileRouteTypes {
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/admin/reports/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects'
@@ -668,6 +679,7 @@ export interface FileRouteTypes {
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
+    | '/admin/reports/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/_authenticated/projects/'
@@ -703,6 +715,7 @@ export interface RootRouteChildren {
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminReportsIdRoute: typeof AdminReportsIdRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
@@ -1041,6 +1054,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/reports/$id': {
+      id: '/admin/reports/$id'
+      path: '/admin/reports/$id'
+      fullPath: '/admin/reports/$id'
+      preLoaderRoute: typeof AdminReportsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/ads/new': {
       id: '/dashboard/ads/new'
       path: '/dashboard/ads/new'
@@ -1180,6 +1200,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminReportsIdRoute: AdminReportsIdRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardReportsIdRoute: DashboardReportsIdRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
