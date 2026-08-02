@@ -9,8 +9,21 @@ import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { Skeleton } from "@/components/ui/skeleton";
 
-/** Shared gate + tabs for the marketplace back office. Only platform admins get in. */
-export function AdminShell({ title, children }: { title: string; children: ReactNode }) {
+/**
+ * Shared gate + tabs for the marketplace back office. Platform admins always get in;
+ * `staffAccess` lets a page open the gate for staff holding a specific permission.
+ */
+export function AdminShell({
+  title,
+  children,
+  staffAccess,
+  staffChecking = false,
+}: {
+  title: string;
+  children: ReactNode;
+  staffAccess?: boolean | undefined;
+  staffChecking?: boolean;
+}) {
   const { t } = useI18n();
   const { session, loading } = useSession();
   const admin = useQuery({
@@ -19,8 +32,8 @@ export function AdminShell({ title, children }: { title: string; children: React
     queryFn: isPlatformAdmin,
   });
 
-  const allowed = !!session && admin.data === true;
-  const checking = loading || (!!session && admin.isLoading);
+  const allowed = !!session && (admin.data === true || staffAccess === true);
+  const checking = loading || (!!session && (admin.isLoading || staffChecking));
 
   return (
     <MarketShell>
@@ -39,6 +52,12 @@ export function AdminShell({ title, children }: { title: string; children: React
               className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
             >
               {t("market.admin.verifications")}
+            </Link>
+            <Link
+              to="/admin/reports"
+              className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+            >
+              {t("market.admin.reports")}
             </Link>
           </nav>
         )}

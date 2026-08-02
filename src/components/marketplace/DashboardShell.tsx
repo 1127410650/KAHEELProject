@@ -1,6 +1,14 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { Heart, LayoutList, MessageSquare, ReceiptText, Store } from "lucide-react";
+import {
+  Flag,
+  Heart,
+  LayoutList,
+  MessageSquare,
+  ReceiptText,
+  ShieldAlert,
+  Store,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
@@ -14,6 +22,8 @@ const TABS = [
   { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
   { to: "/dashboard/favorites", key: "favorites", icon: Heart },
   { to: "/dashboard/business", key: "business", icon: Store },
+  { to: "/dashboard/reports", key: "reports", icon: Flag },
+  { to: "/dashboard/violations", key: "violations", icon: ShieldAlert },
 ] as const;
 
 export function DashboardShell({ title, children }: { title: string; children: ReactNode }) {
