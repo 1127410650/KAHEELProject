@@ -236,47 +236,6 @@ export function MarketHome() {
         loading={latest.isLoading}
       />
 
-      {(verified.isLoading || verifiedList.length > 0) && (
-        <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-base font-bold text-foreground sm:text-lg">
-              {t("market.sections.verifiedBusinesses")}
-            </h2>
-            <Link
-              to="/search"
-              search={{ verified: "1" }}
-              className="text-xs font-medium text-primary sm:text-sm"
-            >
-              {t("market.viewAll")}
-            </Link>
-          </div>
-          {verified.isLoading ? (
-            <Skeleton className="h-24 w-full rounded-xl" />
-          ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {verifiedList.map((b) => (
-                <Link
-                  key={b.tenant_id}
-                  to="/businesses/$slug"
-                  params={{ slug: b.slug }}
-                  className="rounded-xl border border-border bg-card p-3.5 transition-colors hover:border-primary/40"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="line-clamp-1 text-sm font-semibold text-foreground">
-                      {locale === "ar" ? b.display_name_ar : b.display_name_en || b.display_name_ar}
-                    </p>
-                    <VerifiedBadge status={b.verification_status} size="xs" />
-                  </div>
-                  {b.headline && (
-                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.headline}</p>
-                  )}
-                  {b.city && <p className="mt-2 text-[11px] text-muted-foreground">{b.city}</p>}
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
 
       <Section
         title={t("market.sections.equipmentSale")}
