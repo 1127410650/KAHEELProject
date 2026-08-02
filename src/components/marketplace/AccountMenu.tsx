@@ -1,13 +1,21 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  Bell,
   Building2,
   Check,
   ChevronDown,
+  Flag,
+  Heart,
+  LayoutList,
   LogOut,
+  MessageSquare,
+  ReceiptText,
   Settings,
+  ShieldAlert,
   User,
   X,
 } from "lucide-react";
+
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
@@ -111,7 +119,21 @@ export function AccountMenu() {
     </div>
   );
 
-  const manageLinks: { to: string; label: string; icon: typeof User }[] = [
+  type MenuLink = { to: string; label: string; icon: typeof User };
+
+  // Everything that used to sit in per-page tab bars now lives here, in two
+  // groups: what the user does in the market, and what they manage.
+  const activityLinks: MenuLink[] = [
+    { to: "/dashboard/my-ads", label: t("market.dash.myAds"), icon: LayoutList },
+    { to: "/dashboard/requests", label: t("market.dash.requests"), icon: ReceiptText },
+    { to: "/dashboard/messages", label: t("market.dash.messages"), icon: MessageSquare },
+    { to: "/dashboard/favorites", label: t("market.dash.favorites"), icon: Heart },
+    { to: "/dashboard/notifications", label: t("market.dash.notifications"), icon: Bell },
+    { to: "/dashboard/reports", label: t("market.dash.reports"), icon: Flag },
+    { to: "/dashboard/violations", label: t("market.dash.violations"), icon: ShieldAlert },
+  ];
+
+  const manageLinks: MenuLink[] = [
     { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
     ...(active.kind === "business"
       ? [
@@ -124,6 +146,7 @@ export function AccountMenu() {
       : []),
     { to: "/more", label: t("market.more.settings"), icon: Settings },
   ];
+
 
   if (isMobile) {
     return (
