@@ -408,8 +408,7 @@ export function ListingForm({ listing }: Props) {
       </div>
 
       <div className="space-y-3">
-        <CountryCitySelect
-          countryId={countryId || null}
+        <AccountCitySelect
           cityId={cityId || null}
           required
           onChange={(next) => {
@@ -418,6 +417,7 @@ export function ListingForm({ listing }: Props) {
             setCityId(next.cityId ?? "");
           }}
         />
+
         <div className="space-y-1.5">
           <Label htmlFor="region">{t("market.dash.region")}</Label>
           <Input id="region" name="region" defaultValue={listing?.region ?? ""} />
