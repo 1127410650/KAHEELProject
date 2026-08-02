@@ -68,7 +68,7 @@ export async function decorateListings(
     new Set(rows.filter((r) => !r.tenant_id).map((r) => r.owner_user_id)),
   );
 
-  const [{ data: businesses }, { data: people }, types, media] = await Promise.all([
+  const [{ data: businesses }, { data: people }, types, categories, media] = await Promise.all([
     tenantIds.length > 0
       ? supabase.from("mkt_business_profiles").select(BUSINESS_COLUMNS).in("tenant_id", tenantIds)
       : Promise.resolve({ data: [] as MktBusiness[] }),
@@ -76,6 +76,7 @@ export async function decorateListings(
       ? supabase.from("mkt_user_profiles").select(USER_PROFILE_COLUMNS).in("user_id", ownerIds)
       : Promise.resolve({ data: [] as MktUserProfile[] }),
     loadListingTypes(),
+    loadCategories(),
     resolveMedia(rows.map((r) => r.cover_image_url)),
   ]);
 
@@ -87,6 +88,8 @@ export async function decorateListings(
     ((businesses ?? []) as MktBusiness[]).map((b) => [b.tenant_id, b]),
   );
   const typeMap = new Map(types.map((tp) => [tp.code, tp]));
+  const catMap = new Map(categories.map((c) => [c.id, c]));
+
 
   return rows.map((row) => {
     const biz = row.tenant_id ? bizMap.get(row.tenant_id) : undefined;
