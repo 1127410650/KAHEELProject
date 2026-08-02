@@ -109,8 +109,6 @@ const QUICK_FILTERS = [
 
 export function MarketHome() {
   const { t, locale } = useI18n();
-  const navigate = useNavigate();
-  const [q, setQ] = useState("");
   const { preference } = useMarketPreference();
   // The home page always reflects the market the visitor picked.
   const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
@@ -134,25 +132,7 @@ export function MarketHome() {
   });
   const suggested = useSuggestedListings(locale, geo);
 
-  function submitSearch(event: React.FormEvent) {
-    event.preventDefault();
-    const term = q.trim();
-    if (term) {
-      trackMarketActivity({
-        event: "search",
-        searchQuery: term,
-        cityId: preference.cityId ?? null,
-      });
-    }
-    void navigate({
-      to: "/search",
-      search: {
-        ...(term ? { q: term } : {}),
-        country: preference.countryIso2,
-        ...(preference.cityId ? { cityId: preference.cityId } : {}),
-      },
-    });
-  }
+
 
 
   return (
