@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
+import { useMarketPreference } from "@/lib/mkt-geo";
 import { LISTING_COLUMNS, type MktCategory, type MktListing } from "@/lib/mkt";
 import { decorateListings, loadCategories } from "@/lib/mkt-queries";
 import { MarketShell } from "@/components/marketplace/MarketShell";
@@ -37,19 +38,34 @@ function CategoryPage() {
   const category = (categories.data ?? []).find((c) => c.slug === slug) ?? null;
   const children = (categories.data ?? []).filter((c) => c.parent_id === category?.id);
 
+  const { preference } = useMarketPreference();
   const listings = useQuery({
-    queryKey: ["mkt", "category-listings", category?.id, locale],
+    queryKey: [
+      "mkt",
+      "category-listings",
+      category?.id,
+      locale,
+      preference.countryIso2,
+      preference.cityId,
+    ],
     enabled: !!category,
     queryFn: async () => {
       const ids = [category!.id, ...children.map((c) => c.id)];
-      const { data } = await supabase
+      // Category pages follow the market the visitor is browsing.
+      const { data: country } = await supabase
+        .from("mkt_countries")
+        .select("id")
+        .eq("iso2", preference.countryIso2)
+        .maybeSingle();
+      let query = supabase
         .from("mkt_listings")
         .select(LISTING_COLUMNS)
         .eq("status", "published")
         .is("deleted_at", null)
-        .in("category_id", ids)
-        .order("published_at", { ascending: false })
-        .limit(48);
+        .in("category_id", ids);
+      if (country?.id) query = query.eq("country_id", country.id);
+      if (preference.cityId) query = query.eq("city_id", preference.cityId);
+      const { data } = await query.order("published_at", { ascending: false }).limit(48);
       return decorateListings((data ?? []) as unknown as MktListing[], locale);
     },
   });

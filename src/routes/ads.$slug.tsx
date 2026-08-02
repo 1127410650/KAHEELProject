@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { loadGeoLabel } from "@/lib/mkt-geo";
 import {
   BUSINESS_COLUMNS,
   LISTING_COLUMNS,
@@ -322,10 +323,10 @@ function AdPage() {
           </p>
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            {listing.city && (
+            {(geoLabel.data ?? listing.city) && (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" aria-hidden />
-                {listing.city}
+                {geoLabel.data ?? listing.city}
                 {listing.region ? ` — ${listing.region}` : ""}
               </span>
             )}
