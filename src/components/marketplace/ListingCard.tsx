@@ -16,11 +16,11 @@ export function VerifiedBadge({ status }: { status: string | null | undefined })
 }
 
 export interface ListingCardData extends MktListing {
-  businessName?: string | null;
-  businessSlug?: string | null;
-  verificationStatus?: string | null;
-  imageUrl?: string | null;
-  typeLabel?: string;
+  businessName?: string | null | undefined;
+  businessSlug?: string | null | undefined;
+  verificationStatus?: string | null | undefined;
+  imageUrl?: string | null | undefined;
+  typeLabel?: string | undefined;
 }
 
 export function ListingCard({ listing, view = "grid" }: { listing: ListingCardData; view?: "grid" | "list" }) {
