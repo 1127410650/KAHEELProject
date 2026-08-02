@@ -101,9 +101,13 @@ function MarketSetupPage() {
     setPhoneInvalid(false);
     setBusy(true);
     try {
-      const handle =
-        username.trim().toLowerCase().replace(/[^a-z0-9_]/g, "") ||
-        `u${session.user.id.slice(0, 8)}`;
+      // The stored handle must match the account rule: lowercase letters, digits
+      // and hyphens, 3-32 chars, starting with a letter or digit.
+      const cleaned = username.trim().toLowerCase().replace(/[_\s]+/g, "-").replace(/[^a-z0-9-]/g, "");
+      const handle = /^[a-z0-9][a-z0-9-]{2,31}$/.test(cleaned)
+        ? cleaned
+        : `u-${session.user.id.slice(0, 8)}`;
+
       const { error } = await supabase.from("mkt_user_profiles").upsert(
         {
           user_id: session.user.id,
