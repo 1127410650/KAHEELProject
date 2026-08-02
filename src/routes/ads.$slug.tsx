@@ -196,17 +196,31 @@ function DescriptionBlock({ text }: { text: string }) {
   );
 }
 
-/** Location: city and district always, an approximate area on the map by default. */
+/**
+ * Location: a short, honest line — city and district — plus one button that
+ * hands the place over to the phone's map app. No interactive map is loaded
+ * here: it made the page long, and an approximate ad has nothing to draw.
+ */
 function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
   const { t } = useI18n();
-  const { listing } = ad;
+  const { listing, country } = ad;
   const exact = listing.location_visibility === "exact";
-  const hasPoint = listing.latitude !== null && listing.longitude !== null;
   const place = [cityLabel ?? listing.city, listing.district ?? listing.region]
     .filter(Boolean)
     .join(" — ");
 
-  if (!place && !hasPoint) return null;
+  // An approximate ad only ever exports a blurred point, so the hidden pin
+  // stays hidden. With nothing to open at all the button is not rendered.
+  const link = locationLink({
+    latitude: listing.latitude,
+    longitude: listing.longitude,
+    visibility: listing.location_visibility,
+    city: cityLabel ?? listing.city,
+    district: listing.district,
+    country: country ? geoName(country, "en") : null,
+  });
+
+  if (!place && !link) return null;
 
   return (
     <section className="mt-4 rounded-xl border border-border bg-card p-4">
@@ -217,28 +231,31 @@ function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null
           {place}
         </p>
       )}
-      {hasPoint && (
-        <>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {exact ? t("market.ad.exact") : t("market.ad.approximate")}
-          </p>
-          <div className="mt-3">
-            <ClientOnly fallback={<Skeleton className="h-56 w-full rounded-xl sm:h-64" />}>
-              <Suspense fallback={<Skeleton className="h-56 w-full rounded-xl sm:h-64" />}>
-                <ListingApproxMap
-                  lat={listing.latitude!}
-                  lng={listing.longitude!}
-                  precision={exact ? "exact" : "approximate"}
-                  label={place || t("market.ad.location")}
-                />
-              </Suspense>
-            </ClientOnly>
-          </div>
-        </>
+      {listing.address_text && (
+        <p className="mt-1 break-words text-xs text-muted-foreground">{listing.address_text}</p>
+      )}
+      <p className="mt-1 text-xs text-muted-foreground">
+        {exact ? t("market.ad.exact") : t("market.ad.approximate")}
+      </p>
+      {link && (
+        <Button asChild size="sm" className="mt-3 min-h-11 w-full sm:w-auto">
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t("market.ad.openLocationHint")}
+            aria-label={t("market.ad.openLocationHint")}
+          >
+            <Navigation className="size-4" aria-hidden />
+            {t("market.ad.openLocation")}
+          </a>
+        </Button>
       )}
     </section>
   );
 }
+
+
 
 /** "About the advertiser": identity, and the only place the check mark appears. */
 function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
