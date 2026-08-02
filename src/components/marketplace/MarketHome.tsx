@@ -155,62 +155,74 @@ export function MarketHome() {
         </div>
       </section>
 
-
-      {/* One compact fields strip — five broad fields only. */}
+      {/* Fields strip — wraps into a compact grid on phones so nothing is clipped. */}
       <div className="border-b border-border bg-background">
-        <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
-          {QUICK_FILTERS.map((f) => (
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-2 px-4 py-3 sm:flex sm:flex-wrap sm:justify-center">
+          {QUICK_FILTERS.map((f, i) => (
             <Link
               key={f.key}
               to="/search"
               search={f.search}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary/60 hover:text-primary aria-[current=page]:border-primary aria-[current=page]:text-primary"
+              className={`inline-flex min-w-0 items-center justify-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary/60 hover:text-primary sm:w-auto sm:px-3.5 ${
+                i === QUICK_FILTERS.length - 1 ? "col-span-2 sm:col-span-1" : ""
+              }`}
             >
-              <f.icon className="size-3.5" aria-hidden />
-              {t(`market.quick.${f.key}`)}
+              <f.icon className="size-3.5 shrink-0" aria-hidden />
+              <span className="truncate">{t(`market.quick.${f.key}`)}</span>
             </Link>
           ))}
         </div>
-
       </div>
 
-      {/* Suggested for you — built from this visitor's own recent market activity. */}
-      <ListingSection
-        title={t("market.sections.suggested")}
-        href="/search"
-        items={suggested.data ?? []}
-        loading={suggested.isLoading}
-      />
-
-      <ListingSection
-        title={t("market.sections.latest")}
-        href="/search"
-        items={latest.data ?? []}
-        loading={latest.isLoading}
-      />
-
-
-      <ListingSection
-        title={t("market.sections.equipmentRent")}
-        href="/search"
-        search={{ type: "equipment_rent" }}
-        items={rentals.data ?? []}
-        loading={rentals.isLoading}
-      />
-      <ListingSection
-        title={t("market.sections.services")}
-        href="/search"
-        search={{ type: "service" }}
-        items={services.data ?? []}
-        loading={services.isLoading}
-      />
-      <ListingSection
-        title={t("market.sections.products")}
-        href="/search"
-        search={{ type: "product" }}
-        items={products.data ?? []}
-        loading={products.isLoading}
-      />
+      {isEmpty ? (
+        <section className="mx-auto w-full max-w-7xl px-4 py-8 text-center">
+          <p className="text-sm text-muted-foreground">{t("market.emptyHome")}</p>
+          <Button asChild size="sm" className="mt-3">
+            <Link to="/dashboard/ads/new">
+              <Plus className="size-4" aria-hidden />
+              {t("market.addListing")}
+            </Link>
+          </Button>
+        </section>
+      ) : (
+        <>
+          {/* Suggested for you — built from this visitor's own recent market activity. */}
+          <ListingSection
+            title={t("market.sections.suggested")}
+            href="/search"
+            items={suggested.data ?? []}
+            loading={suggested.isLoading}
+          />
+          <ListingSection
+            title={t("market.sections.latest")}
+            href="/search"
+            items={latest.data ?? []}
+            loading={latest.isLoading}
+          />
+          <ListingSection
+            title={t("market.sections.equipmentRent")}
+            href="/search"
+            search={{ type: "equipment_rent" }}
+            items={rentals.data ?? []}
+            loading={rentals.isLoading}
+          />
+          <ListingSection
+            title={t("market.sections.services")}
+            href="/search"
+            search={{ type: "service" }}
+            items={services.data ?? []}
+            loading={services.isLoading}
+          />
+          <ListingSection
+            title={t("market.sections.products")}
+            href="/search"
+            search={{ type: "product" }}
+            items={products.data ?? []}
+            loading={products.isLoading}
+          />
+        </>
+      )}
     </>
   );
+
 }
