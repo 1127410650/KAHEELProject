@@ -20,6 +20,8 @@ import {
   type MktUserProfile,
 } from "@/lib/mkt";
 import { decorateListings, loadListingTypes } from "@/lib/mkt-queries";
+import { trackMarketActivity } from "@/lib/mkt-activity";
+
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ListingGallery } from "@/components/marketplace/ListingGallery";
