@@ -176,9 +176,7 @@ export function MarketHome() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="sm">
-              <Link to="/search" search={{ verified: "1" }}>
-                {t("market.nav.verified")}
-              </Link>
+              <Link to="/search">{t("market.nav.search")}</Link>
             </Button>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">{t("market.hero.openToAll")}</p>
