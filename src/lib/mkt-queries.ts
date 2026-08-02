@@ -177,6 +177,9 @@ async function queryListings(
   }
 
   switch (filters.sort) {
+    case "oldest":
+      query = query.order("published_at", { ascending: true, nullsFirst: false });
+      break;
     case "views":
       query = query.order("views_count", { ascending: false });
       break;
