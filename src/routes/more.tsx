@@ -17,6 +17,7 @@ import {
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { canSeeLink } from "@/lib/routes-map";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 
@@ -119,7 +120,7 @@ function MorePage() {
         )}
 
 
-        {GROUPS.map((group) => (
+        {groups.map((group) => (
           <section key={group.key} className="mt-5">
             <h2 className="mb-2 text-sm font-bold text-foreground">
               {t(`market.more.${group.key}`)}
