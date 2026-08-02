@@ -1144,6 +1144,116 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_account_restrictions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          lifted_at: string | null
+          lifted_reason: string | null
+          reason: string
+          report_id: string | null
+          restriction: string
+          starts_at: string
+          subject_id: string
+          subject_type: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          lifted_at?: string | null
+          lifted_reason?: string | null
+          reason: string
+          report_id?: string | null
+          restriction: string
+          starts_at?: string
+          subject_id: string
+          subject_type: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          lifted_at?: string | null
+          lifted_reason?: string | null
+          reason?: string
+          report_id?: string | null
+          restriction?: string
+          starts_at?: string
+          subject_id?: string
+          subject_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_account_restrictions_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_appeals: {
+        Row: {
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          id: string
+          listing_id: string | null
+          reason: string
+          report_id: string
+          status: string
+          submitted_by: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          id?: string
+          listing_id?: string | null
+          reason: string
+          report_id: string
+          status?: string
+          submitted_by?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          id?: string
+          listing_id?: string | null
+          reason?: string
+          report_id?: string
+          status?: string
+          submitted_by?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_appeals_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_appeals_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_business_profiles: {
         Row: {
           about: string | null
@@ -1324,6 +1434,53 @@ export type Database = {
             columns: ["seller_tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_enforcement_actions: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          duration_days: number | null
+          expires_at: string | null
+          id: string
+          reason: string | null
+          report_id: string | null
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          duration_days?: number | null
+          expires_at?: string | null
+          id?: string
+          reason?: string | null
+          report_id?: string | null
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          duration_days?: number | null
+          expires_at?: string | null
+          id?: string
+          reason?: string | null
+          report_id?: string | null
+          target_id?: string
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_enforcement_actions_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
             referencedColumns: ["id"]
           },
         ]
@@ -1632,6 +1789,47 @@ export type Database = {
           },
         ]
       }
+      mkt_notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          event: string
+          id: string
+          read_at: string | null
+          report_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          event: string
+          id?: string
+          read_at?: string | null
+          report_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          event?: string
+          id?: string
+          read_at?: string | null
+          report_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_notifications_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_platform_admins: {
         Row: {
           created_at: string
@@ -1772,44 +1970,298 @@ export type Database = {
           },
         ]
       }
-      mkt_reports: {
+      mkt_report_files: {
         Row: {
+          appeal_id: string | null
+          created_at: string
+          file_name: string
+          id: string
+          mime_type: string | null
+          report_id: string
+          side: string
+          size_bytes: number | null
+          storage_path: string
+          uploaded_by: string
+        }
+        Insert: {
+          appeal_id?: string | null
+          created_at?: string
+          file_name: string
+          id?: string
+          mime_type?: string | null
+          report_id: string
+          side?: string
+          size_bytes?: number | null
+          storage_path: string
+          uploaded_by?: string
+        }
+        Update: {
+          appeal_id?: string | null
+          created_at?: string
+          file_name?: string
+          id?: string
+          mime_type?: string | null
+          report_id?: string
+          side?: string
+          size_bytes?: number | null
+          storage_path?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_report_files_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_report_messages: {
+        Row: {
+          attachment_path: string | null
+          body: string
+          channel: string
+          created_at: string
+          due_at: string | null
+          id: string
+          kind: string
+          report_id: string
+          sender_side: string
+          sender_user_id: string | null
+        }
+        Insert: {
+          attachment_path?: string | null
+          body: string
+          channel: string
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          kind?: string
+          report_id: string
+          sender_side: string
+          sender_user_id?: string | null
+        }
+        Update: {
+          attachment_path?: string | null
+          body?: string
+          channel?: string
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          kind?: string
+          report_id?: string
+          sender_side?: string
+          sender_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_report_messages_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_report_notes: {
+        Row: {
+          author_id: string
+          body: string
           created_at: string
           id: string
+          report_id: string
+        }
+        Insert: {
+          author_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          report_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_report_notes_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_report_reasons: {
+        Row: {
+          code: string
+          created_at: string
+          default_severity: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          requires_note: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          default_severity?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          requires_note?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          default_severity?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          requires_note?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_report_status_history: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          reason: string | null
+          report_id: string
+          to_status: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          reason?: string | null
+          report_id: string
+          to_status: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          reason?: string | null
+          report_id?: string
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_report_status_history_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_reports: {
+        Row: {
+          assigned_at: string | null
+          assigned_to: string | null
+          closed_at: string | null
+          created_at: string
+          decision: string | null
+          decision_reason: string | null
+          first_response_at: string | null
+          id: string
           listing_id: string
+          listing_snapshot: Json | null
+          merged_into: string | null
           note: string | null
+          owner_user_id: string | null
+          priority: string
+          public_outcome: string | null
           reason: string
+          reason_code: string | null
+          ref_no: string | null
+          reopened_at: string | null
+          reporter_confirmed: boolean
           reporter_user_id: string
           resolution_note: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          severity: string
+          sla_due_at: string | null
           status: string
+          tenant_id: string | null
           updated_at: string
         }
         Insert: {
+          assigned_at?: string | null
+          assigned_to?: string | null
+          closed_at?: string | null
           created_at?: string
+          decision?: string | null
+          decision_reason?: string | null
+          first_response_at?: string | null
           id?: string
           listing_id: string
+          listing_snapshot?: Json | null
+          merged_into?: string | null
           note?: string | null
+          owner_user_id?: string | null
+          priority?: string
+          public_outcome?: string | null
           reason: string
+          reason_code?: string | null
+          ref_no?: string | null
+          reopened_at?: string | null
+          reporter_confirmed?: boolean
           reporter_user_id?: string
           resolution_note?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          severity?: string
+          sla_due_at?: string | null
           status?: string
+          tenant_id?: string | null
           updated_at?: string
         }
         Update: {
+          assigned_at?: string | null
+          assigned_to?: string | null
+          closed_at?: string | null
           created_at?: string
+          decision?: string | null
+          decision_reason?: string | null
+          first_response_at?: string | null
           id?: string
           listing_id?: string
+          listing_snapshot?: Json | null
+          merged_into?: string | null
           note?: string | null
+          owner_user_id?: string | null
+          priority?: string
+          public_outcome?: string | null
           reason?: string
+          reason_code?: string | null
+          ref_no?: string | null
+          reopened_at?: string | null
+          reporter_confirmed?: boolean
           reporter_user_id?: string
           resolution_note?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          severity?: string
+          sla_due_at?: string | null
           status?: string
+          tenant_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1820,7 +2272,45 @@ export type Database = {
             referencedRelation: "mkt_listings"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "mkt_reports_merged_into_fkey"
+            columns: ["merged_into"]
+            isOneToOne: false
+            referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_reports_reason_code_fkey"
+            columns: ["reason_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_report_reasons"
+            referencedColumns: ["code"]
+          },
         ]
+      }
+      mkt_staff_permissions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          perm: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          perm: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          perm?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       mkt_verification_events: {
         Row: {
@@ -5478,13 +5968,145 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
+      mkt_enforce_listing: {
+        Args: {
+          _action: string
+          _days?: number
+          _reason?: string
+          _report_id: string
+        }
+        Returns: undefined
+      }
+      mkt_has_restriction: {
+        Args: {
+          _restrictions: string[]
+          _subject_id: string
+          _subject_type: string
+        }
+        Returns: boolean
+      }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
+      mkt_is_super_admin: { Args: never; Returns: boolean }
       mkt_is_verified_business: {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_lift_expired_restrictions: { Args: never; Returns: number }
+      mkt_lift_restriction: {
+        Args: { _reason: string; _restriction_id: string }
+        Returns: undefined
+      }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_my_moderation_cases: {
+        Args: never
+        Returns: {
+          can_appeal: boolean
+          closed_at: string
+          created_at: string
+          decision: string
+          decision_reason: string
+          listing_id: string
+          listing_title: string
+          reason_code: string
+          ref_no: string
+          report_id: string
+          severity: string
+          status: string
+        }[]
+      }
+      mkt_notify: {
+        Args: {
+          _body?: string
+          _event: string
+          _report_id: string
+          _title: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      mkt_report_apply_status: {
+        Args: { _reason: string; _report_id: string; _status: string }
+        Returns: undefined
+      }
+      mkt_report_assign: {
+        Args: { _assignee: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_close: {
+        Args: {
+          _decision: string
+          _public_outcome: string
+          _reason: string
+          _report_id: string
+        }
+        Returns: undefined
+      }
+      mkt_report_conflict: { Args: { _report_id: string }; Returns: boolean }
+      mkt_report_is_advertiser: {
+        Args: { _report_id: string }
+        Returns: boolean
+      }
+      mkt_report_is_reporter: { Args: { _report_id: string }; Returns: boolean }
+      mkt_report_merge: {
+        Args: { _into: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_message: {
+        Args: {
+          _attachment_path?: string
+          _body: string
+          _channel: string
+          _due_days?: number
+          _kind?: string
+          _report_id: string
+        }
+        Returns: undefined
+      }
+      mkt_report_note: {
+        Args: { _body: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_reopen: {
+        Args: { _reason: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_reply: {
+        Args: { _attachment_path?: string; _body: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_require: {
+        Args: { _perm: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_set_priority: {
+        Args: { _priority: string; _report_id: string; _severity?: string }
+        Returns: undefined
+      }
+      mkt_report_set_status: {
+        Args: { _reason?: string; _report_id: string; _status: string }
+        Returns: undefined
+      }
+      mkt_report_staff_can_view: {
+        Args: { _report_id: string }
+        Returns: boolean
+      }
+      mkt_report_stats: { Args: never; Returns: Json }
+      mkt_restrict_subject: {
+        Args: {
+          _days?: number
+          _reason: string
+          _report_id: string
+          _restriction: string
+          _subject_id: string
+          _subject_type: string
+        }
+        Returns: string
+      }
+      mkt_review_appeal: {
+        Args: { _appeal_id: string; _reason: string; _status: string }
+        Returns: undefined
+      }
       mkt_review_listing: {
         Args: { _action: string; _listing_id: string; _reason?: string }
         Returns: undefined
@@ -5494,6 +6116,24 @@ export type Database = {
         Returns: undefined
       }
       mkt_slugify: { Args: { _text: string }; Returns: string }
+      mkt_staff_has: { Args: { _perm: string }; Returns: boolean }
+      mkt_submit_appeal: {
+        Args: { _reason: string; _report_id: string }
+        Returns: string
+      }
+      mkt_submit_report: {
+        Args: {
+          _confirmed?: boolean
+          _listing_id: string
+          _note?: string
+          _reason_code: string
+        }
+        Returns: {
+          ref_no: string
+          report_id: string
+        }[]
+      }
+      mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       my_accounts: {
         Args: never
         Returns: {
