@@ -317,7 +317,7 @@ interface FooterGroup {
 }
 
 export function MarketFooter() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   const groups: FooterGroup[] = [
     {
@@ -385,7 +385,7 @@ export function MarketFooter() {
 
 /** Legal-only strip for long public content pages; never duplicates the bottom nav. */
 export function MarketCompactFooter() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
       <p className="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-muted-foreground">
