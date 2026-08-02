@@ -9,6 +9,7 @@ import {
   ReceiptText,
   ShieldAlert,
   Store,
+  User,
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -19,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const TABS = [
   { to: "/dashboard/my-ads", key: "myAds", icon: LayoutList },
+  { to: "/dashboard/profile", key: "profile", icon: User },
   { to: "/dashboard/requests", key: "requests", icon: ReceiptText },
   { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
   { to: "/dashboard/notifications", key: "notifications", icon: Bell },

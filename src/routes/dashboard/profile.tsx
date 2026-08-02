@@ -117,7 +117,7 @@ function ProfilePage() {
             {row?.username && (
               <Link
                 to="/u/$username"
-                params={{ slug: row.username, username: row.username }}
+                params={{ username: row.username }}
                 className="ms-auto inline-flex items-center gap-1 text-xs font-medium text-primary"
               >
                 {t("market.person.viewPublic")}
