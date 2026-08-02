@@ -95,6 +95,7 @@ export async function decorateListings(
     const biz = row.tenant_id ? bizMap.get(row.tenant_id) : undefined;
     const person = row.tenant_id ? undefined : personMap.get(row.owner_user_id);
     const type = typeMap.get(row.type_code);
+    const cat = catMap.get(row.category_id);
     const businessName = biz
       ? locale === "ar"
         ? biz.display_name_ar
@@ -111,8 +112,10 @@ export async function decorateListings(
       verificationStatus: (biz?.verification_status ?? person?.verification_status) ?? null,
       imageUrl: row.cover_image_url ? (media[row.cover_image_url] ?? null) : null,
       typeLabel: type ? (locale === "ar" ? type.name_ar : type.name_en) : undefined,
+      categoryLabel: cat ? (locale === "ar" ? cat.name_ar : cat.name_en) : undefined,
     };
   });
+
 }
 
 async function queryListings(
