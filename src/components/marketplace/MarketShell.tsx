@@ -16,6 +16,8 @@ import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
+import { useActiveAccount } from "@/lib/mkt-account";
+import { routeRuleFor } from "@/lib/routes-map";
 
 import { Button } from "@/components/ui/button";
 
