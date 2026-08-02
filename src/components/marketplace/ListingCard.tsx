@@ -250,7 +250,8 @@ export function ListingCard({
         }
       >
         <FavoriteButton listing={listing} />
-        {!horizontal && <CardMenu listing={listing} />}
+        <CardMenu listing={listing} />
+
       </div>
     </Link>
   );
