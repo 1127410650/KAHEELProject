@@ -45,6 +45,28 @@ export function geoName(row: { name_ar: string; name_en: string } | undefined, l
   return locale === "en" ? row.name_en || row.name_ar : row.name_ar;
 }
 
+/** Readable "Country — City" label for a stored country/city pair. */
+export async function loadGeoLabel(
+  countryId: string | null,
+  cityId: string | null,
+  locale: "ar" | "en",
+): Promise<string | null> {
+  if (!countryId && !cityId) return null;
+  const [country, city] = await Promise.all([
+    countryId
+      ? supabase.from("mkt_countries").select(COUNTRY_COLUMNS).eq("id", countryId).maybeSingle()
+      : Promise.resolve({ data: null }),
+    cityId
+      ? supabase.from("mkt_cities").select(CITY_COLUMNS).eq("id", cityId).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
+  const parts = [
+    geoName((country.data as MktCountry | null) ?? undefined, locale),
+    geoName((city.data as MktCity | null) ?? undefined, locale),
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" — ") : null;
+}
+
 /** A visitor's browsing market: which country, and optionally which city inside it. */
 export interface MarketPreference {
   countryIso2: string;
