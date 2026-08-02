@@ -1,8 +1,19 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Bell, Grid2x2, Home, Plus, Search, ShieldCheck, Store } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Bell,
+  Grid2x2,
+  Home,
+  MessageSquare,
+  Plus,
+  Search,
+  ShieldCheck,
+  Store,
+} from "lucide-react";
 import { useEffect } from "react";
 
 import { useI18n } from "@/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
