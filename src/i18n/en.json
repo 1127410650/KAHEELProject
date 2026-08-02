@@ -2039,6 +2039,7 @@
       "fallbackName": "Platform user",
       "activityTitle": "My activity",
       "manageTitle": "Account management"
-    }
+    },
+    "emptyHome": "No published listings yet"
   }
 }
