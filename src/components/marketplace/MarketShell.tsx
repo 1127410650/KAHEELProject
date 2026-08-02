@@ -1,11 +1,12 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Bell, Grid2x2, Home, Menu, Plus, Search, ShieldCheck, Store, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
 import { useMarketPreference } from "@/lib/mkt-geo";
+import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
