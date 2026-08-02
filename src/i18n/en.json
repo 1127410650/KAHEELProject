@@ -1339,6 +1339,7 @@
       "sort": "Sort",
       "reset": "Reset",
       "apply": "Apply",
+      "close": "Close filters",
       "title": "Filter results",
       "advertiser": "Advertiser type"
     },
