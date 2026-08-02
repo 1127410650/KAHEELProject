@@ -349,9 +349,13 @@ export function ListingForm({ listing }: Props) {
         location_accuracy: location.accuracy,
         location_source: location.source,
         location_visibility: location.visibility,
-        status: publish ? "pending" : "draft",
+        // A real estate ad is saved as a draft first, its licence row written,
+        // and only then sent to review — the database refuses to accept a real
+        // estate ad for review while its licence is missing.
+        status: publish && !isRealEstate ? "pending" : "draft",
       };
 
+      let listingId = listing?.id ?? null;
       if (listing) {
         const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listing.id);
         if (error) throw error;
@@ -370,10 +374,23 @@ export function ListingForm({ listing }: Props) {
           .select("id")
           .single();
         if (error || !data) throw error ?? new Error("insert failed");
+        listingId = data.id;
         const cover = await uploadImages(data.id);
         if (cover)
           await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
       }
+
+      if (isRealEstate && listingId) {
+        await saveListingLicense(listingId, license);
+        if (publish) {
+          const { error } = await supabase
+            .from("mkt_listings")
+            .update({ status: "pending" })
+            .eq("id", listingId);
+          if (error) throw error;
+        }
+      }
+
 
       clearDraft(scope);
       setDirty(false);
