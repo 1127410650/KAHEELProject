@@ -112,8 +112,16 @@ export function CountryCitySelect({
           className={selectClass}
           required={required}
           disabled={!countryId}
-          value={cityId ?? ""}
-          onChange={(e) => onChange({ countryId, cityId: e.target.value || null })}
+          value={suggesting ? OTHER : (cityId ?? "")}
+          onChange={(e) => {
+            if (e.target.value === OTHER) {
+              setSuggesting(true);
+              onChange({ countryId, cityId: null });
+              return;
+            }
+            setSuggesting(false);
+            onChange({ countryId, cityId: e.target.value || null });
+          }}
         >
           <option value="">{t("market.geo.pickCity")}</option>
           {filtered.map((c) => (
@@ -121,8 +129,34 @@ export function CountryCitySelect({
               {geoName(c, locale)}
             </option>
           ))}
+          {allowSuggest && !!session && !!countryId && (
+            <option value={OTHER}>{t("market.geo.otherCity")}</option>
+          )}
         </select>
+
+        {suggesting && (
+          <div className="space-y-1.5 rounded-lg border border-dashed border-border p-2">
+            <Input
+              value={suggestion}
+              onChange={(e) => setSuggestion(e.target.value)}
+              placeholder={t("market.geo.otherCity")}
+              aria-label={t("market.geo.otherCity")}
+              className="h-9"
+            />
+            <p className="text-[11px] text-muted-foreground">{t("market.geo.otherCityHint")}</p>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              disabled={busy || !suggestion.trim()}
+              onClick={() => void submitSuggestion()}
+            >
+              {t("market.geo.save")}
+            </Button>
+          </div>
+        )}
       </div>
+
     </div>
   );
 }
