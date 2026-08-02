@@ -23,7 +23,7 @@ export interface SearchParams {
   cityId?: string | undefined;
   min?: string | undefined;
   max?: string | undefined;
-  verified?: string | undefined;
+  
   deal?: string | undefined;
   sort?: string | undefined;
   view?: string | undefined;
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/search")({
       "cityId",
       "min",
       "max",
-      "verified",
+      
       "deal",
       "sort",
       "view",
@@ -107,7 +107,7 @@ function SearchPage() {
           cityId: params.cityId,
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
-          verifiedOnly: params.verified === "1",
+          
           advertiser:
             params.advertiser === "individual" || params.advertiser === "business"
               ? params.advertiser
@@ -381,15 +381,6 @@ function SearchPage() {
             </select>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-foreground">
-            <input
-              type="checkbox"
-              checked={params.verified === "1"}
-              onChange={(e) => update({ verified: e.target.checked ? "1" : undefined })}
-              className="size-4 rounded border-input"
-            />
-            {t("market.filters.verifiedOnly")}
-          </label>
 
           <Button
             variant="outline"

@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Building2, Plus, Search, ShieldCheck, Sparkles, Tag, User } from "lucide-react";
+import { ArrowLeft, Building2, Plus, Search, Sparkles, Tag, User } from "lucide-react";
 import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
-import { loadCategories, loadListings, loadVerifiedBusinesses } from "@/lib/mkt-queries";
-import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { loadCategories, loadListings } from "@/lib/mkt-queries";
+import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -75,7 +75,7 @@ const QUICK_FILTERS = [
   { key: "service", search: { type: "service" }, icon: Sparkles },
   { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Tag },
   { key: "product", search: { type: "product" }, icon: Tag },
-  { key: "verified", search: { verified: "1" }, icon: ShieldCheck },
+  
   { key: "business", search: { advertiser: "business" }, icon: Building2 },
   { key: "individual", search: { advertiser: "individual" }, icon: User },
 ] as const;
@@ -120,13 +120,8 @@ export function MarketHome() {
       return [...a, ...b].slice(0, 4);
     },
   });
-  const verified = useQuery({
-    queryKey: ["mkt", "home", "verified"],
-    queryFn: () => loadVerifiedBusinesses(8),
-  });
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
-  const verifiedList = verified.data ?? [];
 
   return (
     <>
@@ -181,9 +176,7 @@ export function MarketHome() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="sm">
-              <Link to="/search" search={{ verified: "1" }}>
-                {t("market.nav.verified")}
-              </Link>
+              <Link to="/search">{t("market.nav.search")}</Link>
             </Button>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">{t("market.hero.openToAll")}</p>
@@ -236,47 +229,6 @@ export function MarketHome() {
         loading={latest.isLoading}
       />
 
-      {(verified.isLoading || verifiedList.length > 0) && (
-        <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-base font-bold text-foreground sm:text-lg">
-              {t("market.sections.verifiedBusinesses")}
-            </h2>
-            <Link
-              to="/search"
-              search={{ verified: "1" }}
-              className="text-xs font-medium text-primary sm:text-sm"
-            >
-              {t("market.viewAll")}
-            </Link>
-          </div>
-          {verified.isLoading ? (
-            <Skeleton className="h-24 w-full rounded-xl" />
-          ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {verifiedList.map((b) => (
-                <Link
-                  key={b.tenant_id}
-                  to="/businesses/$slug"
-                  params={{ slug: b.slug }}
-                  className="rounded-xl border border-border bg-card p-3.5 transition-colors hover:border-primary/40"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="line-clamp-1 text-sm font-semibold text-foreground">
-                      {locale === "ar" ? b.display_name_ar : b.display_name_en || b.display_name_ar}
-                    </p>
-                    <VerifiedBadge status={b.verification_status} size="xs" />
-                  </div>
-                  {b.headline && (
-                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.headline}</p>
-                  )}
-                  {b.city && <p className="mt-2 text-[11px] text-muted-foreground">{b.city}</p>}
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
 
       <Section
         title={t("market.sections.equipmentSale")}

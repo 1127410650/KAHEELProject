@@ -23,7 +23,7 @@ export interface ListingFilters {
   cityId?: string | undefined;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
-  verifiedOnly?: boolean | undefined;
+  
   deal?: "sale" | "rent" | undefined;
   sort?: "newest" | "views" | "price_asc" | "price_desc" | undefined;
   limit?: number | undefined;
@@ -188,9 +188,8 @@ async function queryListings(
   const { data } = await query;
   const raw = (data ?? []) as unknown as MktListing[];
   const decorated = await decorateListings(raw, locale);
-  const rows = filters.verifiedOnly
-    ? decorated.filter((l) => l.verificationStatus === "verified")
-    : decorated;
+  // Verification is a visual badge only: it never filters or reorders results.
+  const rows = decorated;
   return { rows, fetched: raw.length };
 }
 
@@ -223,12 +222,13 @@ export async function loadUserProfileBySlug(username: string): Promise<MktUserPr
   return (data as MktUserProfile | null) ?? null;
 }
 
-export async function loadVerifiedBusinesses(limit = 8): Promise<MktBusiness[]> {
+/** Recently joined published businesses. Verification is never a criterion —
+ *  it only decides whether a check mark renders next to the name. */
+export async function loadBusinesses(limit = 8): Promise<MktBusiness[]> {
   const { data } = await supabase
     .from("mkt_business_profiles")
     .select(BUSINESS_COLUMNS)
     .eq("is_published", true)
-    .eq("verification_status", "verified")
     .order("joined_at", { ascending: false })
     .limit(limit);
   return (data ?? []) as MktBusiness[];
