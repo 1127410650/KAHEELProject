@@ -1,18 +1,24 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
-import { geoName, loadCities, loadCountries } from "@/lib/mkt-geo";
+import { geoName, loadCities, loadCountries, suggestCity } from "@/lib/mkt-geo";
+import { useSession } from "@/lib/session";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const selectClass =
   "h-10 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground disabled:opacity-50";
 
+const OTHER = "__other__";
+
 /**
  * The single place where a country and one of its cities are picked. Cities are
  * always scoped to the chosen country, and the list has its own search so long
- * country lists never fill a small screen.
+ * country lists never fill a small screen. A missing city can be proposed; it
+ * only becomes selectable for everyone after an admin approves it.
  */
 export function CountryCitySelect({
   countryId,
@@ -20,15 +26,22 @@ export function CountryCitySelect({
   onChange,
   required = false,
   cityLabel,
+  allowSuggest = true,
 }: {
   countryId: string | null;
   cityId: string | null;
   onChange: (next: { countryId: string | null; cityId: string | null }) => void;
   required?: boolean;
   cityLabel?: string;
+  allowSuggest?: boolean;
 }) {
   const { t, locale } = useI18n();
+  const { session } = useSession();
+  const queryClient = useQueryClient();
   const [term, setTerm] = useState("");
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestion, setSuggestion] = useState("");
+  const [busy, setBusy] = useState(false);
 
   const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
   const cities = useQuery({
@@ -45,6 +58,23 @@ export function CountryCitySelect({
       (c) => c.name_ar.toLowerCase().includes(q) || c.name_en.toLowerCase().includes(q),
     );
   }, [cities.data, term]);
+
+  async function submitSuggestion() {
+    if (!countryId || !session || !suggestion.trim()) return;
+    setBusy(true);
+    try {
+      await suggestCity({ countryId, name: suggestion, userId: session.user.id });
+      setSuggestion("");
+      setSuggesting(false);
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "admin-city-suggestions"] });
+      toast.success(t("market.geo.suggested"));
+    } catch {
+      toast.error(t("market.actions.failed"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
 
   return (
     <div className="grid min-w-0 gap-3 sm:grid-cols-2">
