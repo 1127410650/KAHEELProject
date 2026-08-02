@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -7,7 +7,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { MKT_BUCKET, SA_CITIES } from "@/lib/mkt";
+import { MKT_BUCKET } from "@/lib/mkt";
+import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { useMyUserProfile } from "@/lib/mkt-identity";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -75,7 +76,10 @@ function ProfilePage() {
         display_name: String(fd.get("display_name") ?? "").trim() || username,
         headline: (fd.get("headline") as string) || null,
         about: (fd.get("about") as string) || null,
-        city: (fd.get("city") as string) || null,
+        country_id: countryId || null,
+        city_id: (fd.get("city_id") as string) || null,
+        city:
+          (cities.data ?? []).find((c) => c.id === (fd.get("city_id") as string))?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         avatar_url: avatarPath,
         public_phone: (fd.get("public_phone") as string) || null,
@@ -161,12 +165,34 @@ function ProfilePage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="city">{t("market.filters.city")}</Label>
-              <select id="city" name="city" className={selectClass} defaultValue={row?.city ?? ""}>
-                <option value="">{t("market.filters.allCities")}</option>
-                {SA_CITIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+              <Label htmlFor="country_id">{t("market.geo.country")}</Label>
+              <select
+                id="country_id"
+                className={selectClass}
+                value={countryId}
+                onChange={(e) => setCountryId(e.target.value)}
+              >
+                <option value="">{t("market.geo.pick")}</option>
+                {(countries.data ?? []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {geoName(c, locale)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="city_id">{t("market.filters.city")}</Label>
+              <select
+                id="city_id"
+                name="city_id"
+                className={selectClass}
+                defaultValue={row?.city_id ?? ""}
+                disabled={!countryId}
+              >
+                <option value="">{t("market.geo.allCities")}</option>
+                {(cities.data ?? []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {geoName(c, locale)}
                   </option>
                 ))}
               </select>
