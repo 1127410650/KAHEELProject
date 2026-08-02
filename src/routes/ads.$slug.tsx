@@ -150,12 +150,8 @@ async function loadAd(slug: string) {
   const gallery = paths.map((p) => media[p]).filter((u): u is string => !!u);
 
   const categories = (catRows ?? []) as MktCategory[];
-  const rootSlug = (() => {
-    const category = categories.find((c) => c.id === listing.category_id);
-    if (!category) return null;
-    if (!category.parent_id) return category.slug;
-    return null;
-  })();
+  const rootSlug = categories.find((c) => !c.parent_id)?.slug ?? null;
+
   // Licence facts only exist for real estate ads; the row itself carries only
   // what the authority allows an ad to publish.
   const license = rootSlug === "real-estate" ? await loadPublicLicense(listing.id) : null;
