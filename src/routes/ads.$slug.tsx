@@ -236,6 +236,20 @@ function AdPage() {
 
   const ad = useQuery({ queryKey: ["mkt", "ad", slug], queryFn: () => loadAd(slug) });
 
+  const geoLabel = useQuery({
+    queryKey: [
+      "mkt",
+      "geo-label",
+      ad.data?.listing.country_id,
+      ad.data?.listing.city_id,
+      locale,
+    ],
+    enabled: !!ad.data,
+    queryFn: () =>
+      loadGeoLabel(ad.data!.listing.country_id, ad.data!.listing.city_id, locale),
+  });
+
+
   const similar = useQuery({
     queryKey: ["mkt", "similar", ad.data?.listing.id, locale],
     enabled: !!ad.data,
