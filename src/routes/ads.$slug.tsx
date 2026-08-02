@@ -185,20 +185,14 @@ function AdvertiserCard({
           ) : (
             <p className="truncate text-sm font-semibold text-foreground">{name}</p>
           )}
+          {/* Check mark directly under the identity name; nothing negative when absent. */}
+          <VerifiedBadge status={status} size="xs" />
           <p className="text-[11px] text-muted-foreground">
             {t(`market.advertiser.${isBusiness ? "business" : "individual"}`)}
           </p>
         </div>
       </div>
 
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <VerifiedBadge status={status} size="xs" />
-        {status !== "verified" && (
-          <span className="text-[11px] text-muted-foreground">
-            {t("market.advertiser.notVerified")}
-          </span>
-        )}
-      </div>
 
       {city && <p className="mt-2 text-xs text-muted-foreground">{city}</p>}
       {joined && (
