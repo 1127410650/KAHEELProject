@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { loadGeoLabel } from "@/lib/mkt-geo";
+import { loadGeoLabel, loadPublicPhone } from "@/lib/mkt-geo";
 import {
   BUSINESS_COLUMNS,
   LISTING_COLUMNS,

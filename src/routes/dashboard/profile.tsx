@@ -8,7 +8,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MKT_BUCKET } from "@/lib/mkt";
-import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import {
+  geoName,
+  loadCities,
+  loadCountries,
+  loadMyContact,
+  nationalPart,
+  saveMyContact,
+  toE164,
+  useMarketPreference,
+  type PhoneVisibility,
+} from "@/lib/mkt-geo";
+import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/PhoneFields";
 import { useMyUserProfile } from "@/lib/mkt-identity";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -55,6 +66,22 @@ function ProfilePage() {
     enabled: !!countryId,
     queryFn: () => loadCities(countryId),
   });
+  // Private contact record: the phone number and who may see it.
+  const contact = useQuery({
+    queryKey: ["mkt", "my-contact", session?.user.id],
+    enabled: !!session,
+    queryFn: () => loadMyContact(session!.user.id),
+  });
+  const [phone, setPhone] = useState("");
+  const [visibility, setVisibility] = useState<PhoneVisibility>("hidden");
+  const [phoneInvalid, setPhoneInvalid] = useState(false);
+  useEffect(() => {
+    const row = contact.data;
+    if (!row) return;
+    setPhone((prev) => prev || nationalPart(row.phone_e164));
+    if (row.phone_visibility) setVisibility(row.phone_visibility);
+  }, [contact.data]);
+
   // Adopt the saved country once the profile arrives, otherwise the browsing one.
   useEffect(() => {
     if (countryId) return;
@@ -113,6 +140,24 @@ function ProfilePage() {
         .from("mkt_user_profiles")
         .upsert(payload, { onConflict: "user_id" });
       if (error) throw error;
+
+      const iso2 = (countries.data ?? []).find((c) => c.id === countryId)?.iso2 ?? "";
+      if (phone.trim()) {
+        const e164 = toE164(iso2, phone);
+        if (!e164) {
+          setPhoneInvalid(true);
+          setBusy(false);
+          return;
+        }
+        setPhoneInvalid(false);
+        await saveMyContact({
+          userId: session.user.id,
+          countryId: countryId || null,
+          phoneE164: e164,
+          visibility,
+        });
+      }
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "my-contact"] });
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-user-profile"] });
       toast.success(t("market.person.saved"));
     } catch {

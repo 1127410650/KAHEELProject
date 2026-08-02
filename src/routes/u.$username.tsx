@@ -4,7 +4,7 @@ import { CalendarDays, MapPin, User } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { loadGeoLabel } from "@/lib/mkt-geo";
+import { loadGeoLabel, loadPublicPhone } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { LISTING_COLUMNS, resolveMedia, type MktListing } from "@/lib/mkt";
 import { decorateListings, loadUserProfileBySlug } from "@/lib/mkt-queries";
@@ -55,6 +55,12 @@ function UserProfilePage() {
     queryKey: ["mkt", "geo-label", profile.data?.country_id, profile.data?.city_id, locale],
     enabled: !!profile.data,
     queryFn: () => loadGeoLabel(profile.data!.country_id, profile.data!.city_id, locale),
+  });
+
+  const publicPhone = useQuery({
+    queryKey: ["mkt", "public-phone", me?.user_id],
+    enabled: !!me?.user_id,
+    queryFn: () => loadPublicPhone(me!.user_id),
   });
 
   const listings = useQuery({
