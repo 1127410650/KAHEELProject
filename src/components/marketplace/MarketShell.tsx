@@ -1,11 +1,12 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Bell, Grid2x2, Home, Menu, Plus, Search, ShieldCheck, Store, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
 import { useMarketPreference } from "@/lib/mkt-geo";
+import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -157,6 +158,23 @@ export function MarketHeader() {
   );
 }
 
+/**
+ * Signed-in visitors with an incomplete marketplace account are sent once to the
+ * short setup screen; guests keep browsing freely.
+ */
+function useMarketSetupGate() {
+  const { session } = useSession();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const status = useMarketSetupStatus();
+
+  useEffect(() => {
+    if (!session || !status.data?.needsSetup) return;
+    if (pathname.startsWith("/market-setup")) return;
+    void navigate({ to: "/market-setup", replace: true });
+  }, [session, status.data?.needsSetup, pathname, navigate]);
+}
+
 /** Compact mobile navigation: the five destinations that matter on a phone. */
 export function MarketBottomNav() {
   const { t } = useI18n();
@@ -277,6 +295,7 @@ export function MarketFooter() {
 
 export function MarketShell({ children }: { children: React.ReactNode }) {
   const { dir } = useI18n();
+  useMarketSetupGate();
   return (
     <div dir={dir} className="flex min-h-screen flex-col overflow-x-hidden bg-background">
       <MarketHeader />

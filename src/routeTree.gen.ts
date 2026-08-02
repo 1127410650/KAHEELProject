@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as RegisterRouteImport } from './routes/register'
@@ -38,6 +39,7 @@ import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
@@ -86,6 +88,11 @@ const AuthRoute = AuthRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketSetupRoute = MarketSetupRouteImport.update({
+  id: '/market-setup',
+  path: '/market-setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
@@ -215,6 +222,11 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminGeoRoute = AdminGeoRouteImport.update({
+  id: '/admin/geo',
+  path: '/admin/geo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminListingsRoute = AdminListingsRouteImport.update({
@@ -379,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/login': typeof LoginRoute
+  '/market-setup': typeof MarketSetupRoute
   '/marketplace': typeof MarketplaceRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
@@ -403,6 +416,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -439,6 +453,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/login': typeof LoginRoute
+  '/market-setup': typeof MarketSetupRoute
   '/marketplace': typeof MarketplaceRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
@@ -463,6 +478,7 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -501,6 +517,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/login': typeof LoginRoute
+  '/market-setup': typeof MarketSetupRoute
   '/marketplace': typeof MarketplaceRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
@@ -525,6 +542,7 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -563,6 +581,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/login'
+    | '/market-setup'
     | '/marketplace'
     | '/more'
     | '/register'
@@ -587,6 +606,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -623,6 +643,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/login'
+    | '/market-setup'
     | '/marketplace'
     | '/more'
     | '/register'
@@ -647,6 +668,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -684,6 +706,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/login'
+    | '/market-setup'
     | '/marketplace'
     | '/more'
     | '/register'
@@ -708,6 +731,7 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -746,11 +770,13 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   LoginRoute: typeof LoginRoute
+  MarketSetupRoute: typeof MarketSetupRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MoreRoute: typeof MoreRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  AdminGeoRoute: typeof AdminGeoRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdsSlugRoute: typeof AdsSlugRoute
@@ -803,6 +829,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/market-setup': {
+      id: '/market-setup'
+      path: '/market-setup'
+      fullPath: '/market-setup'
+      preLoaderRoute: typeof MarketSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace': {
@@ -978,6 +1011,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/geo': {
+      id: '/admin/geo'
+      path: '/admin/geo'
+      fullPath: '/admin/geo'
+      preLoaderRoute: typeof AdminGeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/listings': {
@@ -1263,11 +1303,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   LoginRoute: LoginRoute,
+  MarketSetupRoute: MarketSetupRoute,
   MarketplaceRoute: MarketplaceRoute,
   MoreRoute: MoreRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  AdminGeoRoute: AdminGeoRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdsSlugRoute: AdsSlugRoute,
@@ -1294,3 +1336,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

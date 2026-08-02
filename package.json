@@ -52,6 +52,7 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "jsqr": "^1.4.0",
+    "libphonenumber-js": "^1.13.10",
     "lucide-react": "^0.575.0",
     "pdfjs-dist": "^6.2.108",
     "react": "^19.2.0",

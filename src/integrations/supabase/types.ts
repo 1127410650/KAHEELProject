@@ -2494,24 +2494,62 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_user_contacts: {
+        Row: {
+          country_id: string | null
+          created_at: string
+          phone_e164: string | null
+          phone_status: string
+          phone_visibility: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          country_id?: string | null
+          created_at?: string
+          phone_e164?: string | null
+          phone_status?: string
+          phone_visibility?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          country_id?: string | null
+          created_at?: string
+          phone_e164?: string | null
+          phone_status?: string
+          phone_visibility?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_user_contacts_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_user_market_preferences: {
         Row: {
-          city_id: string | null
-          country_id: string | null
+          browsing_city_id: string | null
+          browsing_country_id: string | null
           created_at: string
           updated_at: string
           user_id: string
         }
         Insert: {
-          city_id?: string | null
-          country_id?: string | null
+          browsing_city_id?: string | null
+          browsing_country_id?: string | null
           created_at?: string
           updated_at?: string
           user_id: string
         }
         Update: {
-          city_id?: string | null
-          country_id?: string | null
+          browsing_city_id?: string | null
+          browsing_country_id?: string | null
           created_at?: string
           updated_at?: string
           user_id?: string
@@ -2519,14 +2557,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "mkt_user_market_preferences_city_id_fkey"
-            columns: ["city_id"]
+            columns: ["browsing_city_id"]
             isOneToOne: false
             referencedRelation: "mkt_cities"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "mkt_user_market_preferences_country_id_fkey"
-            columns: ["country_id"]
+            columns: ["browsing_country_id"]
             isOneToOne: false
             referencedRelation: "mkt_countries"
             referencedColumns: ["id"]
@@ -2545,14 +2583,10 @@ export type Database = {
           headline: string | null
           is_published: boolean
           joined_at: string
-          phone_e164: string | null
-          phone_visibility: string
           public_email: string | null
-          public_phone: string | null
           public_whatsapp: string | null
           region: string | null
           show_email: boolean
-          show_phone: boolean
           show_whatsapp: boolean
           updated_at: string
           user_id: string
@@ -2570,14 +2604,10 @@ export type Database = {
           headline?: string | null
           is_published?: boolean
           joined_at?: string
-          phone_e164?: string | null
-          phone_visibility?: string
           public_email?: string | null
-          public_phone?: string | null
           public_whatsapp?: string | null
           region?: string | null
           show_email?: boolean
-          show_phone?: boolean
           show_whatsapp?: boolean
           updated_at?: string
           user_id: string
@@ -2595,14 +2625,10 @@ export type Database = {
           headline?: string | null
           is_published?: boolean
           joined_at?: string
-          phone_e164?: string | null
-          phone_visibility?: string
           public_email?: string | null
-          public_phone?: string | null
           public_whatsapp?: string | null
           region?: string | null
           show_email?: boolean
-          show_phone?: boolean
           show_whatsapp?: boolean
           updated_at?: string
           user_id?: string
@@ -6343,6 +6369,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_public_phone: { Args: { _user_id: string }; Returns: string }
       mkt_report_apply_status: {
         Args: { _reason: string; _report_id: string; _status: string }
         Returns: undefined

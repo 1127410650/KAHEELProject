@@ -8,7 +8,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MKT_BUCKET } from "@/lib/mkt";
-import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import {
+  geoName,
+  loadCities,
+  loadCountries,
+  loadMyContact,
+  nationalPart,
+  saveMyContact,
+  toE164,
+  useMarketPreference,
+  type PhoneVisibility,
+} from "@/lib/mkt-geo";
+import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/PhoneFields";
 import { useMyUserProfile } from "@/lib/mkt-identity";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -55,6 +66,22 @@ function ProfilePage() {
     enabled: !!countryId,
     queryFn: () => loadCities(countryId),
   });
+  // Private contact record: the phone number and who may see it.
+  const contact = useQuery({
+    queryKey: ["mkt", "my-contact", session?.user.id],
+    enabled: !!session,
+    queryFn: () => loadMyContact(session!.user.id),
+  });
+  const [phone, setPhone] = useState("");
+  const [visibility, setVisibility] = useState<PhoneVisibility>("hidden");
+  const [phoneInvalid, setPhoneInvalid] = useState(false);
+  useEffect(() => {
+    const row = contact.data;
+    if (!row) return;
+    setPhone((prev) => prev || nationalPart(row.phone_e164));
+    if (row.phone_visibility) setVisibility(row.phone_visibility);
+  }, [contact.data]);
+
   // Adopt the saved country once the profile arrives, otherwise the browsing one.
   useEffect(() => {
     if (countryId) return;
@@ -102,10 +129,8 @@ function ProfilePage() {
           (cities.data ?? []).find((c) => c.id === (fd.get("city_id") as string))?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         avatar_url: avatarPath,
-        public_phone: (fd.get("public_phone") as string) || null,
         public_email: (fd.get("public_email") as string) || null,
         public_whatsapp: (fd.get("public_whatsapp") as string) || null,
-        show_phone: fd.get("show_phone") === "on",
         show_email: fd.get("show_email") === "on",
         show_whatsapp: fd.get("show_whatsapp") === "on",
         is_published: fd.get("is_published") === "on",
@@ -115,6 +140,24 @@ function ProfilePage() {
         .from("mkt_user_profiles")
         .upsert(payload, { onConflict: "user_id" });
       if (error) throw error;
+
+      const iso2 = (countries.data ?? []).find((c) => c.id === countryId)?.iso2 ?? "";
+      if (phone.trim()) {
+        const e164 = toE164(iso2, phone);
+        if (!e164) {
+          setPhoneInvalid(true);
+          setBusy(false);
+          return;
+        }
+        setPhoneInvalid(false);
+        await saveMyContact({
+          userId: session.user.id,
+          countryId: countryId || null,
+          phoneE164: e164,
+          visibility,
+        });
+      }
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "my-contact"] });
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-user-profile"] });
       toast.success(t("market.person.saved"));
     } catch {
@@ -239,18 +282,15 @@ function ProfilePage() {
             </legend>
             <p className="text-xs text-muted-foreground">{t("market.person.privacyHint")}</p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="public_phone">{t("market.form.phone")}</Label>
-                <Input
-                  id="public_phone"
-                  name="public_phone"
-                  dir="ltr"
-                  defaultValue={row?.public_phone ?? ""}
+              <div className="space-y-3 sm:col-span-2">
+                <PhoneField
+                  countryId={countryId || null}
+                  value={phone}
+                  onChange={setPhone}
+                  status={contact.data?.phone_status}
+                  invalid={phoneInvalid}
                 />
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" name="show_phone" defaultChecked={row?.show_phone} />
-                  {t("market.person.showField")}
-                </label>
+                <PhoneVisibilityField value={visibility} onChange={setVisibility} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="public_whatsapp">{t("market.form.whatsapp")}</Label>

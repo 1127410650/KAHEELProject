@@ -1523,7 +1523,17 @@
       "reasonRequired": "A reason is required",
       "confirm": "Confirm decision",
       "decisionSaved": "Decision recorded",
-      "reports": "Reports"
+      "reports": "Reports",
+      "geo": "Countries & cities",
+      "geoCities": "Cities",
+      "geoAddCity": "Add city",
+      "geoDisable": "Disable",
+      "geoEnable": "Enable",
+      "geoSuggestions": "Suggested cities",
+      "geoApprove": "Approve",
+      "geoReject": "Reject",
+      "geoInUse": "In use — disable only",
+      "geoIncomplete": "Records with incomplete location"
     },
     "biz": {
       "editTab": "Edit profile",
@@ -1939,7 +1949,8 @@
       "saved": "Profile saved",
       "viewPublic": "View public profile",
       "badgeState": "Verification:",
-      "notVerifiedHint": "Verification is optional and never blocks publishing."
+      "notVerifiedHint": "Verification is optional and never blocks publishing.",
+      "fallbackName": "Platform user"
     },
     "form": {
       "region": "Region",
@@ -1953,7 +1964,36 @@
       "country": "Country",
       "city": "City",
       "allCities": "All cities",
-      "allCountries": "All countries"
+      "allCountries": "All countries",
+      "searchCity": "Search a city",
+      "pickCity": "Select city",
+      "accountLocation": "Account location",
+      "browsingMarket": "Browsing market",
+      "save": "Save",
+      "otherCity": "Other city",
+      "otherCityHint": "A suggested city appears publicly only after admin review.",
+      "suggested": "City sent for review",
+      "incomplete": "Location incomplete",
+      "locationRequired": "Select a country and city before saving.",
+      "cityMismatch": "The selected city does not belong to the selected country."
+    },
+    "setup": {
+      "title": "Set up your marketplace account",
+      "subtitle": "Four details, then you continue to the marketplace.",
+      "displayName": "Display name",
+      "username": "Username",
+      "continue": "Continue to the marketplace"
+    },
+    "phone": {
+      "label": "Mobile number",
+      "invalid": "Not a valid number for this country.",
+      "unverified": "Unverified",
+      "verified": "Verified",
+      "visibility": "Phone visibility",
+      "hidden": "Hidden",
+      "onRequest": "Shown after a contact request is accepted",
+      "public": "Public",
+      "publicWarning": "Your number will be visible to every visitor. Make sure you want this."
     }
   }
 }

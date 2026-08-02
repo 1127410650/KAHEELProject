@@ -1,4 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberFromString,
+  type CountryCode,
+} from "libphonenumber-js";
 
 import { supabase } from "@/integrations/supabase/client";
 
@@ -107,10 +112,37 @@ export function useMarketPreference() {
     setPreference(readStored());
     const listener = (value: MarketPreference) => setPreference(value);
     listeners.add(listener);
+
+    // Signed in? The stored row is the source of truth; local storage is only a
+    // first paint optimisation, so it is corrected as soon as the row arrives.
+    void (async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) return;
+      const { data: row } = await supabase
+        .from("mkt_user_market_preferences")
+        .select("browsing_country_id, browsing_city_id")
+        .eq("user_id", data.session.user.id)
+        .maybeSingle();
+      if (!row?.browsing_country_id) return;
+      const { data: country } = await supabase
+        .from("mkt_countries")
+        .select("iso2")
+        .eq("id", row.browsing_country_id)
+        .maybeSingle();
+      if (!country?.iso2) return;
+      const next: MarketPreference = {
+        countryIso2: country.iso2,
+        cityId: row.browsing_city_id ?? null,
+      };
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      }
+      listeners.forEach((l) => l(next));
+    })();
+
     return () => {
       listeners.delete(listener);
     };
-
   }, []);
 
   const update = useCallback(async (next: MarketPreference) => {
@@ -129,8 +161,8 @@ export function useMarketPreference() {
     if (!country) return;
     await supabase.from("mkt_user_market_preferences").upsert({
       user_id: data.session.user.id,
-      country_id: country.id,
-      city_id: next.cityId,
+      browsing_country_id: country.id,
+      browsing_city_id: next.cityId,
       updated_at: new Date().toISOString(),
     });
   }, []);
@@ -138,10 +170,94 @@ export function useMarketPreference() {
   return { preference, setPreference: update };
 }
 
-/** Digits-only international phone, stored as +<code><national> with no spaces. */
-export function toE164(callingCode: string, national: string): string | null {
-  const digits = national.replace(/\D+/g, "").replace(/^0+/, "");
-  const code = callingCode.replace(/\D+/g, "");
-  if (digits.length < 6 || digits.length > 12) return null;
-  return `+${code}${digits}`;
+/**
+ * Normalise a national number typed by a user into E.164 for the chosen country.
+ * The country calling code is never duplicated: a pasted +966..., 00966... or a
+ * leading 0 all collapse to the same stored value.
+ */
+export function toE164(iso2: string, input: string): string | null {
+  const country = iso2.toUpperCase() as CountryCode;
+  const cleaned = input.replace(/[^\d+]/g, "").replace(/^00/, "+");
+  const candidate = cleaned.startsWith("+")
+    ? cleaned
+    : `+${callingDigits(iso2)}${cleaned.replace(/^0+/, "")}`;
+  const parsed = parsePhoneNumberFromString(candidate, country);
+  if (!parsed || !parsed.isValid()) return null;
+  // Guard against a number that is valid but belongs to another country.
+  if (parsed.country && parsed.country !== country) return null;
+  return parsed.number;
+}
+
+/** Digits of a supported country's calling code. */
+function callingDigits(iso2: string): string {
+  return CALLING_CODES[iso2.toUpperCase()] ?? "";
+}
+
+/** Calling codes for the eight supported markets (mirrors mkt_countries). */
+const CALLING_CODES: Record<string, string> = {
+  SA: "966",
+  KW: "965",
+  AE: "971",
+  JO: "962",
+  LB: "961",
+  EG: "20",
+  SY: "963",
+  IQ: "964",
+};
+
+export function isValidNationalPhone(iso2: string, input: string): boolean {
+  const e164 = toE164(iso2, input);
+  return !!e164 && isValidPhoneNumber(e164);
+}
+
+/** The part a user types, without the country calling code. */
+export function nationalPart(e164: string | null | undefined): string {
+  if (!e164) return "";
+  const parsed = parsePhoneNumberFromString(e164);
+  return parsed?.nationalNumber ? String(parsed.nationalNumber) : e164.replace(/^\+\d{1,3}/, "");
+}
+
+export type PhoneVisibility = "hidden" | "on_request" | "public";
+
+export interface MktUserContact {
+  user_id: string;
+  country_id: string | null;
+  phone_e164: string | null;
+  phone_status: "unverified" | "verified";
+  phone_visibility: PhoneVisibility;
+}
+
+const CONTACT_COLUMNS = "user_id, country_id, phone_e164, phone_status, phone_visibility";
+
+export async function loadMyContact(userId: string): Promise<MktUserContact | null> {
+  const { data } = await supabase
+    .from("mkt_user_contacts")
+    .select(CONTACT_COLUMNS)
+    .eq("user_id", userId)
+    .maybeSingle();
+  return (data as MktUserContact | null) ?? null;
+}
+
+export async function saveMyContact(input: {
+  userId: string;
+  countryId: string | null;
+  phoneE164: string | null;
+  visibility: PhoneVisibility;
+}): Promise<void> {
+  const { error } = await supabase.from("mkt_user_contacts").upsert({
+    user_id: input.userId,
+    country_id: input.countryId,
+    phone_e164: input.phoneE164,
+    // No SMS/OTP provider exists, so a number is never marked verified here.
+    phone_status: "unverified",
+    phone_visibility: input.visibility,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) throw error;
+}
+
+/** Public contact number of an advertiser, only when they made it public. */
+export async function loadPublicPhone(userId: string): Promise<string | null> {
+  const { data } = await supabase.rpc("mkt_public_phone", { _user_id: userId });
+  return (data as string | null) ?? null;
 }

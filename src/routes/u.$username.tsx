@@ -4,7 +4,7 @@ import { CalendarDays, MapPin, User } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { loadGeoLabel } from "@/lib/mkt-geo";
+import { loadGeoLabel, loadPublicPhone } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { LISTING_COLUMNS, resolveMedia, type MktListing } from "@/lib/mkt";
 import { decorateListings, loadUserProfileBySlug } from "@/lib/mkt-queries";
@@ -55,6 +55,12 @@ function UserProfilePage() {
     queryKey: ["mkt", "geo-label", profile.data?.country_id, profile.data?.city_id, locale],
     enabled: !!profile.data,
     queryFn: () => loadGeoLabel(profile.data!.country_id, profile.data!.city_id, locale),
+  });
+
+  const publicPhone = useQuery({
+    queryKey: ["mkt", "public-phone", profile.data?.user_id],
+    enabled: !!profile.data?.user_id,
+    queryFn: () => loadPublicPhone(profile.data!.user_id),
   });
 
   const listings = useQuery({
@@ -150,11 +156,11 @@ function UserProfilePage() {
           <h2 className="mt-4 text-sm font-bold text-foreground">{t("market.business.contact")}</h2>
           {session ? (
             <div className="mt-1 space-y-1 text-sm text-foreground" dir="ltr">
-              {me.show_phone && me.public_phone && <p>{me.public_phone}</p>}
+              {publicPhone.data && <p>{publicPhone.data}</p>}
               {me.show_whatsapp && me.public_whatsapp && <p>{me.public_whatsapp}</p>}
               {me.show_email && me.public_email && <p>{me.public_email}</p>}
               {!(
-                (me.show_phone && me.public_phone) ||
+                publicPhone.data ||
                 (me.show_whatsapp && me.public_whatsapp) ||
                 (me.show_email && me.public_email)
               ) && <p className="text-xs text-muted-foreground">{t("market.ad.contactPrivate")}</p>}
