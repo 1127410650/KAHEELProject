@@ -51,6 +51,12 @@ function UserProfilePage() {
     },
   });
 
+  const geoLabel = useQuery({
+    queryKey: ["mkt", "geo-label", profile.data?.country_id, profile.data?.city_id, locale],
+    enabled: !!profile.data,
+    queryFn: () => loadGeoLabel(profile.data!.country_id, profile.data!.city_id, locale),
+  });
+
   const listings = useQuery({
     queryKey: ["mkt", "user-listings", profile.data?.user_id, locale],
     enabled: !!profile.data,

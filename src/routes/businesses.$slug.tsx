@@ -48,6 +48,12 @@ function BusinessPage() {
     },
   });
 
+  const geoLabel = useQuery({
+    queryKey: ["mkt", "geo-label", business.data?.country_id, business.data?.city_id, locale],
+    enabled: !!business.data,
+    queryFn: () => loadGeoLabel(business.data!.country_id, business.data!.city_id, locale),
+  });
+
   const listings = useQuery({
     queryKey: ["mkt", "business-listings", business.data?.tenant_id, locale],
     enabled: !!business.data,
