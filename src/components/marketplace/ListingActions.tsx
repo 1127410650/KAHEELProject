@@ -151,6 +151,82 @@ export function ListingActions({ listing, pendingAction }: Props) {
 
 
 
+  async function share() {
+    const url = window.location.href;
+    const data = { title: listing.title, url };
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share(data);
+        return;
+      } catch {
+        /* cancelled or unsupported — fall back to copying */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("market.ad.linkCopied"));
+    } catch {
+      toast.error(t("market.actions.failed"));
+    }
+  }
+
+  const dialogs = (
+    <>
+      <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{t("market.actions.requestQuote")}</DialogTitle>
+            <DialogDescription>{listing.title}</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+  void dialogs;
+
+  // Compact icon row shown at the top of the ad: favourite, share, report.
+  if (variant === "quick") {
+    return (
+      <>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => void toggleFavorite()}
+            aria-label={saved ? t("market.actions.saved") : t("market.actions.save")}
+            aria-pressed={saved}
+            className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+          >
+            <Heart className={saved ? "size-5 fill-current text-primary" : "size-5"} aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => void share()}
+            aria-label={t("market.ad.share")}
+            className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+          >
+            <Share2 className="size-5" aria-hidden />
+          </button>
+          {!isOwner && (
+            <button
+              type="button"
+              onClick={() => gate("report") && setDialog("report")}
+              aria-label={t("market.actions.report")}
+              className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+            >
+              <Flag className="size-5" aria-hidden />
+            </button>
+          )}
+        </div>
+        <ReportDialog
+          listingId={listing.id}
+          listingTitle={listing.title}
+          open={dialog === "report"}
+          onOpenChange={(open) => !open && setDialog(null)}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="grid gap-2 sm:grid-cols-2">
@@ -162,23 +238,16 @@ export function ListingActions({ listing, pendingAction }: Props) {
           <ReceiptText className="size-4" aria-hidden />
           {t("market.actions.requestQuote")}
         </Button>
-        <Button variant="secondary" onClick={() => gate("contact") && setDialog("contact")}>
+        <Button
+          variant="secondary"
+          className="sm:col-span-2"
+          onClick={() => gate("contact") && setDialog("contact")}
+        >
           <MessageSquare className="size-4" aria-hidden />
           {t("market.actions.contact")}
         </Button>
-        <Button variant="outline" onClick={() => void toggleFavorite()}>
-          <Heart className={saved ? "size-4 fill-current text-primary" : "size-4"} aria-hidden />
-          {saved ? t("market.actions.saved") : t("market.actions.save")}
-        </Button>
-        <button
-          type="button"
-          onClick={() => gate("report") && setDialog("report")}
-          className="text-xs text-muted-foreground underline-offset-4 hover:underline sm:col-span-2"
-        >
-          <Flag className="me-1 inline size-3" aria-hidden />
-          {t("market.actions.report")}
-        </button>
       </div>
+
 
       <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
