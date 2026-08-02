@@ -118,8 +118,8 @@ export function isValidIdentityNumber(value: string): boolean {
 /** Yes/no duplicate check; it never reveals anything about the other business. */
 export async function isOfficialNumberTaken(cr: string, unified: string): Promise<boolean> {
   const { data } = await supabase.rpc("mkt_business_number_taken", {
-    _cr_number: cr.trim() || null,
-    _unified_number: unified.trim() || null,
+    _cr_number: cr.trim(),
+    _unified_number: unified.trim(),
   });
   return data === true;
 }
