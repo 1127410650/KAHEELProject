@@ -23,7 +23,7 @@ export interface ListingFilters {
   cityId?: string | undefined;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
-  verifiedOnly?: boolean | undefined;
+  
   deal?: "sale" | "rent" | undefined;
   sort?: "newest" | "views" | "price_asc" | "price_desc" | undefined;
   limit?: number | undefined;
