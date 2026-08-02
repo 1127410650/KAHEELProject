@@ -220,16 +220,8 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         tenant_id: string | null;
         owner_user_id: string;
       };
-      let businessId: string | null = null;
-      if (row.tenant_id) {
-        const { data: biz } = await supabase
-          .from("mkt_business_profiles")
-          .select("id")
-          .eq("tenant_id", row.tenant_id)
-          .maybeSingle();
-        businessId = (biz as { id: string } | null)?.id ?? null;
-      }
-      return { ...row, business_id: businessId };
+      // A business subject is identified by its tenant id (mkt_business_profiles PK).
+      return { ...row, business_id: row.tenant_id };
     },
   });
 
