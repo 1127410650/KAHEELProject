@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
@@ -33,6 +36,13 @@ import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
+import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
+import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
+import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
+import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
+import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
+import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
@@ -40,9 +50,11 @@ import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRequestsIdRouteImport } from './routes/_authenticated/requests.$id'
 import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
 import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
+import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as AuthenticatedInvoicesIdLinesRouteImport } from './routes/_authenticated/invoices_.$id.lines'
 import { Route as AuthenticatedInvoicesVerifiedNewRouteImport } from './routes/_authenticated/invoices_.verified.new'
 import { Route as AuthenticatedProjectsIdRequestsRouteImport } from './routes/_authenticated/projects_.$id.requests'
+import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,9 +70,24 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyInvoiceRoute = VerifyInvoiceRouteImport.update({
@@ -167,6 +194,41 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AdsSlugRoute = AdsSlugRouteImport.update({
+  id: '/ads/$slug',
+  path: '/ads/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
+  id: '/businesses/$slug',
+  path: '/businesses/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
+  id: '/categories/$slug',
+  path: '/categories/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardFavoritesRoute = DashboardFavoritesRouteImport.update({
+  id: '/dashboard/favorites',
+  path: '/dashboard/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
+  id: '/dashboard/messages',
+  path: '/dashboard/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
+  id: '/dashboard/my-ads',
+  path: '/dashboard/my-ads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
+  id: '/dashboard/requests',
+  path: '/dashboard/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -206,6 +268,11 @@ const AuthenticatedSupervisorsIdRoute =
     path: '/supervisors/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
+  id: '/dashboard/ads/new',
+  path: '/dashboard/ads/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedInvoicesIdLinesRoute =
   AuthenticatedInvoicesIdLinesRouteImport.update({
     id: '/invoices_/$id/lines',
@@ -224,11 +291,19 @@ const AuthenticatedProjectsIdRequestsRoute =
     path: '/projects/$id/requests',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
+  id: '/dashboard/ads/$id/edit',
+  path: '/dashboard/ads/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
+  '/marketplace': typeof MarketplaceRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
@@ -249,21 +324,33 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/ads/$slug': typeof AdsSlugRoute
+  '/businesses/$slug': typeof BusinessesSlugRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/favorites': typeof DashboardFavoritesRoute
+  '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
   '/requests/': typeof AuthenticatedRequestsIndexRoute
   '/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
   '/invoices/$id/lines': typeof AuthenticatedInvoicesIdLinesRoute
   '/invoices/verified/new': typeof AuthenticatedInvoicesVerifiedNewRoute
   '/projects/$id/requests': typeof AuthenticatedProjectsIdRequestsRoute
+  '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
+  '/marketplace': typeof MarketplaceRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
@@ -284,23 +371,35 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/ads/$slug': typeof AdsSlugRoute
+  '/businesses/$slug': typeof BusinessesSlugRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/favorites': typeof DashboardFavoritesRoute
+  '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/requests': typeof AuthenticatedRequestsIndexRoute
   '/supervisors': typeof AuthenticatedSupervisorsIndexRoute
   '/invoices/$id/lines': typeof AuthenticatedInvoicesIdLinesRoute
   '/invoices/verified/new': typeof AuthenticatedInvoicesVerifiedNewRoute
   '/projects/$id/requests': typeof AuthenticatedProjectsIdRequestsRoute
+  '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
+  '/marketplace': typeof MarketplaceRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
@@ -321,23 +420,35 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/ads/$slug': typeof AdsSlugRoute
+  '/businesses/$slug': typeof BusinessesSlugRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/favorites': typeof DashboardFavoritesRoute
+  '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/requests': typeof DashboardRequestsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
   '/_authenticated/requests/': typeof AuthenticatedRequestsIndexRoute
   '/_authenticated/supervisors/': typeof AuthenticatedSupervisorsIndexRoute
   '/_authenticated/invoices_/$id/lines': typeof AuthenticatedInvoicesIdLinesRoute
   '/_authenticated/invoices_/verified/new': typeof AuthenticatedInvoicesVerifiedNewRoute
   '/_authenticated/projects_/$id/requests': typeof AuthenticatedProjectsIdRequestsRoute
+  '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/login'
+    | '/marketplace'
     | '/register'
+    | '/search'
     | '/verify-invoice'
     | '/audit'
     | '/custody'
@@ -358,21 +469,33 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/ads/$slug'
+    | '/businesses/$slug'
+    | '/categories/$slug'
+    | '/dashboard/favorites'
+    | '/dashboard/messages'
+    | '/dashboard/my-ads'
+    | '/dashboard/requests'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/dashboard/ads/new'
     | '/projects/'
     | '/requests/'
     | '/supervisors/'
     | '/invoices/$id/lines'
     | '/invoices/verified/new'
     | '/projects/$id/requests'
+    | '/dashboard/ads/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/login'
+    | '/marketplace'
     | '/register'
+    | '/search'
     | '/verify-invoice'
     | '/audit'
     | '/custody'
@@ -393,22 +516,34 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/ads/$slug'
+    | '/businesses/$slug'
+    | '/categories/$slug'
+    | '/dashboard/favorites'
+    | '/dashboard/messages'
+    | '/dashboard/my-ads'
+    | '/dashboard/requests'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/dashboard/ads/new'
     | '/projects'
     | '/requests'
     | '/supervisors'
     | '/invoices/$id/lines'
     | '/invoices/verified/new'
     | '/projects/$id/requests'
+    | '/dashboard/ads/$id/edit'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/login'
+    | '/marketplace'
     | '/register'
+    | '/search'
     | '/verify-invoice'
     | '/_authenticated/audit'
     | '/_authenticated/custody'
@@ -429,25 +564,46 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/ads/$slug'
+    | '/businesses/$slug'
+    | '/categories/$slug'
+    | '/dashboard/favorites'
+    | '/dashboard/messages'
+    | '/dashboard/my-ads'
+    | '/dashboard/requests'
     | '/invite/$token'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
+    | '/dashboard/ads/new'
     | '/_authenticated/projects/'
     | '/_authenticated/requests/'
     | '/_authenticated/supervisors/'
     | '/_authenticated/invoices_/$id/lines'
     | '/_authenticated/invoices_/verified/new'
     | '/_authenticated/projects_/$id/requests'
+    | '/dashboard/ads/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  LoginRoute: typeof LoginRoute
+  MarketplaceRoute: typeof MarketplaceRoute
   RegisterRoute: typeof RegisterRoute
+  SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  AdsSlugRoute: typeof AdsSlugRoute
+  BusinessesSlugRoute: typeof BusinessesSlugRoute
+  CategoriesSlugRoute: typeof CategoriesSlugRoute
+  DashboardFavoritesRoute: typeof DashboardFavoritesRoute
+  DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardMyAdsRoute: typeof DashboardMyAdsRoute
+  DashboardRequestsRoute: typeof DashboardRequestsRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  DashboardAdsNewRoute: typeof DashboardAdsNewRoute
+  DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -473,11 +629,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-invoice': {
@@ -620,6 +797,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/ads/$slug': {
+      id: '/ads/$slug'
+      path: '/ads/$slug'
+      fullPath: '/ads/$slug'
+      preLoaderRoute: typeof AdsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/businesses/$slug': {
+      id: '/businesses/$slug'
+      path: '/businesses/$slug'
+      fullPath: '/businesses/$slug'
+      preLoaderRoute: typeof BusinessesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories/$slug': {
+      id: '/categories/$slug'
+      path: '/categories/$slug'
+      fullPath: '/categories/$slug'
+      preLoaderRoute: typeof CategoriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/favorites': {
+      id: '/dashboard/favorites'
+      path: '/dashboard/favorites'
+      fullPath: '/dashboard/favorites'
+      preLoaderRoute: typeof DashboardFavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/messages': {
+      id: '/dashboard/messages'
+      path: '/dashboard/messages'
+      fullPath: '/dashboard/messages'
+      preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/my-ads': {
+      id: '/dashboard/my-ads'
+      path: '/dashboard/my-ads'
+      fullPath: '/dashboard/my-ads'
+      preLoaderRoute: typeof DashboardMyAdsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/requests': {
+      id: '/dashboard/requests'
+      path: '/dashboard/requests'
+      fullPath: '/dashboard/requests'
+      preLoaderRoute: typeof DashboardRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -669,6 +895,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSupervisorsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/dashboard/ads/new': {
+      id: '/dashboard/ads/new'
+      path: '/dashboard/ads/new'
+      fullPath: '/dashboard/ads/new'
+      preLoaderRoute: typeof DashboardAdsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/invoices_/$id/lines': {
       id: '/_authenticated/invoices_/$id/lines'
       path: '/invoices/$id/lines'
@@ -689,6 +922,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/projects/$id/requests'
       preLoaderRoute: typeof AuthenticatedProjectsIdRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/dashboard/ads/$id/edit': {
+      id: '/dashboard/ads/$id/edit'
+      path: '/dashboard/ads/$id/edit'
+      fullPath: '/dashboard/ads/$id/edit'
+      preLoaderRoute: typeof DashboardAdsIdEditRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -762,20 +1002,22 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  LoginRoute: LoginRoute,
+  MarketplaceRoute: MarketplaceRoute,
   RegisterRoute: RegisterRoute,
+  SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  AdsSlugRoute: AdsSlugRoute,
+  BusinessesSlugRoute: BusinessesSlugRoute,
+  CategoriesSlugRoute: CategoriesSlugRoute,
+  DashboardFavoritesRoute: DashboardFavoritesRoute,
+  DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardMyAdsRoute: DashboardMyAdsRoute,
+  DashboardRequestsRoute: DashboardRequestsRoute,
   InviteTokenRoute: InviteTokenRoute,
+  DashboardAdsNewRoute: DashboardAdsNewRoute,
+  DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

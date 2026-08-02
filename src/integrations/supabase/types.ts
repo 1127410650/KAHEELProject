@@ -1144,6 +1144,684 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_business_profiles: {
+        Row: {
+          about: string | null
+          categories: string[]
+          city: string | null
+          created_at: string
+          display_name_ar: string
+          display_name_en: string | null
+          headline: string | null
+          is_published: boolean
+          joined_at: string
+          logo_url: string | null
+          public_email: string | null
+          public_phone: string | null
+          public_website: string | null
+          public_whatsapp: string | null
+          region: string | null
+          show_email: boolean
+          show_phone: boolean
+          show_whatsapp: boolean
+          slug: string
+          tenant_id: string
+          updated_at: string
+          verification_note: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          about?: string | null
+          categories?: string[]
+          city?: string | null
+          created_at?: string
+          display_name_ar: string
+          display_name_en?: string | null
+          headline?: string | null
+          is_published?: boolean
+          joined_at?: string
+          logo_url?: string | null
+          public_email?: string | null
+          public_phone?: string | null
+          public_website?: string | null
+          public_whatsapp?: string | null
+          region?: string | null
+          show_email?: boolean
+          show_phone?: boolean
+          show_whatsapp?: boolean
+          slug: string
+          tenant_id: string
+          updated_at?: string
+          verification_note?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          about?: string | null
+          categories?: string[]
+          city?: string | null
+          created_at?: string
+          display_name_ar?: string
+          display_name_en?: string | null
+          headline?: string | null
+          is_published?: boolean
+          joined_at?: string
+          logo_url?: string | null
+          public_email?: string | null
+          public_phone?: string | null
+          public_website?: string | null
+          public_whatsapp?: string | null
+          region?: string | null
+          show_email?: boolean
+          show_phone?: boolean
+          show_whatsapp?: boolean
+          slug?: string
+          tenant_id?: string
+          updated_at?: string
+          verification_note?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_business_profiles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: true
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_categories: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          parent_id: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          parent_id?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          parent_id?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_conversations: {
+        Row: {
+          buyer_user_id: string
+          created_at: string
+          id: string
+          last_message_at: string
+          listing_id: string
+          seller_tenant_id: string | null
+          seller_user_id: string | null
+        }
+        Insert: {
+          buyer_user_id?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          listing_id: string
+          seller_tenant_id?: string | null
+          seller_user_id?: string | null
+        }
+        Update: {
+          buyer_user_id?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          listing_id?: string
+          seller_tenant_id?: string | null
+          seller_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_conversations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_conversations_seller_tenant_id_fkey"
+            columns: ["seller_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_favorites: {
+        Row: {
+          created_at: string
+          listing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          listing_id: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          listing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_favorites_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_listing_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          id: string
+          is_cover: boolean
+          listing_id: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          is_cover?: boolean
+          listing_id: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          is_cover?: boolean
+          listing_id?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_listing_status_history: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          listing_id: string
+          reason: string | null
+          to_status: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          listing_id: string
+          reason?: string | null
+          to_status: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          listing_id?: string
+          reason?: string | null
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_status_history_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_listing_types: {
+        Row: {
+          code: string
+          created_at: string
+          is_active: boolean
+          is_request: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          is_active?: boolean
+          is_request?: boolean
+          name_ar: string
+          name_en: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          is_active?: boolean
+          is_request?: boolean
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_listings: {
+        Row: {
+          category_id: string
+          city: string | null
+          contact_requests_count: number
+          cover_image_url: string | null
+          created_at: string
+          currency: string
+          deal_kind: string | null
+          deleted_at: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          item_condition: string | null
+          owner_user_id: string
+          price: number | null
+          price_on_request: boolean
+          price_unit: string | null
+          published_at: string | null
+          quantity: number | null
+          region: string | null
+          rejection_reason: string | null
+          slug: string | null
+          specs: Json
+          status: string
+          subcategory_id: string | null
+          summary: string | null
+          tenant_id: string | null
+          title: string
+          type_code: string
+          unit: string | null
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          category_id: string
+          city?: string | null
+          contact_requests_count?: number
+          cover_image_url?: string | null
+          created_at?: string
+          currency?: string
+          deal_kind?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          item_condition?: string | null
+          owner_user_id?: string
+          price?: number | null
+          price_on_request?: boolean
+          price_unit?: string | null
+          published_at?: string | null
+          quantity?: number | null
+          region?: string | null
+          rejection_reason?: string | null
+          slug?: string | null
+          specs?: Json
+          status?: string
+          subcategory_id?: string | null
+          summary?: string | null
+          tenant_id?: string | null
+          title: string
+          type_code: string
+          unit?: string | null
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          category_id?: string
+          city?: string | null
+          contact_requests_count?: number
+          cover_image_url?: string | null
+          created_at?: string
+          currency?: string
+          deal_kind?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          item_condition?: string | null
+          owner_user_id?: string
+          price?: number | null
+          price_on_request?: boolean
+          price_unit?: string | null
+          published_at?: string | null
+          quantity?: number | null
+          region?: string | null
+          rejection_reason?: string | null
+          slug?: string | null
+          specs?: Json
+          status?: string
+          subcategory_id?: string | null
+          summary?: string | null
+          tenant_id?: string | null
+          title?: string
+          type_code?: string
+          unit?: string | null
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listings_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listings_subcategory_id_fkey"
+            columns: ["subcategory_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listings_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listings_type_code_fkey"
+            columns: ["type_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_listing_types"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      mkt_messages: {
+        Row: {
+          attachment_path: string | null
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender_user_id: string
+        }
+        Insert: {
+          attachment_path?: string | null
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_user_id?: string
+        }
+        Update: {
+          attachment_path?: string | null
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_platform_admins: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_quote_request_files: {
+        Row: {
+          created_at: string
+          file_name: string
+          id: string
+          mime_type: string | null
+          quote_request_id: string
+          size_bytes: number | null
+          storage_path: string
+          uploaded_by: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          id?: string
+          mime_type?: string | null
+          quote_request_id: string
+          size_bytes?: number | null
+          storage_path: string
+          uploaded_by?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          id?: string
+          mime_type?: string | null
+          quote_request_id?: string
+          size_bytes?: number | null
+          storage_path?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_quote_request_files_quote_request_id_fkey"
+            columns: ["quote_request_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_quote_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_quote_requests: {
+        Row: {
+          budget: number | null
+          buyer_user_id: string
+          city: string | null
+          contact_phone: string | null
+          contact_preference: string
+          created_at: string
+          description: string | null
+          id: string
+          listing_id: string | null
+          location_note: string | null
+          needed_date: string | null
+          quantity: number | null
+          seller_tenant_id: string | null
+          seller_user_id: string | null
+          status: string
+          status_note: string | null
+          title: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget?: number | null
+          buyer_user_id?: string
+          city?: string | null
+          contact_phone?: string | null
+          contact_preference?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          listing_id?: string | null
+          location_note?: string | null
+          needed_date?: string | null
+          quantity?: number | null
+          seller_tenant_id?: string | null
+          seller_user_id?: string | null
+          status?: string
+          status_note?: string | null
+          title: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget?: number | null
+          buyer_user_id?: string
+          city?: string | null
+          contact_phone?: string | null
+          contact_preference?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          listing_id?: string | null
+          location_note?: string | null
+          needed_date?: string | null
+          quantity?: number | null
+          seller_tenant_id?: string | null
+          seller_user_id?: string | null
+          status?: string
+          status_note?: string | null
+          title?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_quote_requests_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_quote_requests_seller_tenant_id_fkey"
+            columns: ["seller_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_reports: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          note: string | null
+          reason: string
+          reporter_user_id: string
+          resolution_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          note?: string | null
+          reason: string
+          reporter_user_id?: string
+          resolution_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          note?: string | null
+          reason?: string
+          reporter_user_id?: string
+          resolution_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_reports_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -4644,6 +5322,20 @@ export type Database = {
         Args: { _membership_id: string; _reason?: string; _status: string }
         Returns: undefined
       }
+      mkt_can_manage_listing: { Args: { _id: string }; Returns: boolean }
+      mkt_can_view_conversation: {
+        Args: { _conversation_id: string }
+        Returns: boolean
+      }
+      mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
+      mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
+      mkt_is_platform_admin: { Args: never; Returns: boolean }
+      mkt_is_verified_business: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
+      mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_slugify: { Args: { _text: string }; Returns: string }
       my_accounts: {
         Args: never
         Returns: {

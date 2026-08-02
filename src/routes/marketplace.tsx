@@ -7,7 +7,7 @@ const title = "سوق تحقّق — خدمات ومقاولات وموردين 
 const description =
   "سوق أعمال B2B للخدمات والمقاولات ومواد البناء والمعدات: تصفّح الإعلانات واطلب عرض سعر من منشآت موثقة في السعودية.";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/marketplace")({
   ssr: false,
   head: () => ({
     meta: [

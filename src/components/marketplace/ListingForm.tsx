@@ -1,0 +1,308 @@
+import { useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { ImagePlus, Loader2, X } from "lucide-react";
+import { toast } from "sonner";
+
+import { supabase } from "@/integrations/supabase/client";
+import { useI18n } from "@/i18n";
+import { useSession } from "@/lib/session";
+import { MKT_BUCKET, SA_CITIES, type MktListing } from "@/lib/mkt";
+import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+
+interface Props {
+  listing?: MktListing | undefined;
+}
+
+const selectClass = "h-9 w-full rounded-md border border-input bg-background px-2 text-sm";
+
+export function ListingForm({ listing }: Props) {
+  const { t, locale } = useI18n();
+  const { session } = useSession();
+  const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+  const [typeCode, setTypeCode] = useState(listing?.type_code ?? "service");
+  const [categoryId, setCategoryId] = useState(listing?.category_id ?? "");
+  const [priceOnRequest, setPriceOnRequest] = useState(listing?.price_on_request ?? false);
+  const [files, setFiles] = useState<File[]>([]);
+
+  const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
+  const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
+
+  const roots = (categories.data ?? []).filter((c) => !c.parent_id);
+  const subs = (categories.data ?? []).filter((c) => c.parent_id === categoryId);
+  const label = (o: { name_ar: string; name_en: string | null }) =>
+    locale === "ar" ? o.name_ar : o.name_en || o.name_ar;
+  const isEquipment = typeCode === "equipment_sale" || typeCode === "equipment_rent";
+
+  async function uploadImages(listingId: string): Promise<string | null> {
+    let cover: string | null = null;
+    for (const [index, file] of files.entries()) {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const path = `listings/${session!.user.id}/${listingId}/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from(MKT_BUCKET).upload(path, file, {
+        contentType: file.type || "image/jpeg",
+        upsert: false,
+      });
+      if (error) continue;
+      await supabase.from("mkt_listing_images").insert({
+        listing_id: listingId,
+        url: path,
+        sort_order: index,
+        is_cover: index === 0,
+      });
+      if (index === 0) cover = path;
+    }
+    return cover;
+  }
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>, publish: boolean) {
+    event.preventDefault();
+    const fd = new FormData(event.currentTarget);
+    if (!categoryId) {
+      toast.error(t("market.dash.pickCategory"));
+      return;
+    }
+    setBusy(true);
+    try {
+      const payload = {
+        type_code: typeCode,
+        category_id: categoryId,
+        subcategory_id: (fd.get("subcategory_id") as string) || null,
+        title: String(fd.get("title") ?? "").trim(),
+        summary: (fd.get("summary") as string) || null,
+        description: (fd.get("description") as string) || null,
+        price: priceOnRequest || !fd.get("price") ? null : Number(fd.get("price")),
+        price_on_request: priceOnRequest,
+        price_unit: (fd.get("price_unit") as string) || null,
+        quantity: fd.get("quantity") ? Number(fd.get("quantity")) : null,
+        unit: (fd.get("unit") as string) || null,
+        item_condition: isEquipment ? (fd.get("item_condition") as string) || null : null,
+        deal_kind: typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
+        city: (fd.get("city") as string) || null,
+        region: (fd.get("region") as string) || null,
+        status: publish ? "pending_review" : "draft",
+      };
+
+      if (listing) {
+        const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listing.id);
+        if (error) throw error;
+        if (files.length > 0) {
+          const cover = await uploadImages(listing.id);
+          if (cover) await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", listing.id);
+        }
+      } else {
+        const { data, error } = await supabase.from("mkt_listings").insert(payload).select("id").single();
+        if (error || !data) throw error ?? new Error("insert failed");
+        const cover = await uploadImages(data.id);
+        if (cover) await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
+      }
+
+      toast.success(publish ? t("market.dash.submitted") : t("market.dash.savedDraft"));
+      void navigate({ to: "/dashboard/my-ads" });
+    } catch {
+      toast.error(t("market.actions.failed"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form
+      className="max-w-2xl space-y-4"
+      onSubmit={(e) => void onSubmit(e, true)}
+    >
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="type_code">{t("market.filters.type")}</Label>
+          <select
+            id="type_code"
+            className={selectClass}
+            value={typeCode}
+            onChange={(e) => setTypeCode(e.target.value)}
+          >
+            {(types.data ?? []).map((tp) => (
+              <option key={tp.code} value={tp.code}>
+                {label(tp)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="category_id">{t("market.filters.category")}</Label>
+          <select
+            id="category_id"
+            className={selectClass}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            required
+          >
+            <option value="">{t("market.dash.pickCategory")}</option>
+            {roots.map((c) => (
+              <option key={c.id} value={c.id}>
+                {label(c)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {subs.length > 0 && (
+        <div className="space-y-1.5">
+          <Label htmlFor="subcategory_id">{t("market.filters.subcategory")}</Label>
+          <select
+            id="subcategory_id"
+            name="subcategory_id"
+            className={selectClass}
+            defaultValue={listing?.subcategory_id ?? ""}
+          >
+            <option value="">{t("market.filters.all")}</option>
+            {subs.map((c) => (
+              <option key={c.id} value={c.id}>
+                {label(c)}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      <div className="space-y-1.5">
+        <Label htmlFor="title">{t("market.dash.listingTitle")}</Label>
+        <Input id="title" name="title" required maxLength={160} defaultValue={listing?.title ?? ""} />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="summary">{t("market.dash.summary")}</Label>
+        <Input id="summary" name="summary" maxLength={240} defaultValue={listing?.summary ?? ""} />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="description">{t("market.dash.description")}</Label>
+        <Textarea id="description" name="description" rows={5} defaultValue={listing?.description ?? ""} />
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="price">{t("market.dash.price")}</Label>
+          <Input
+            id="price"
+            name="price"
+            dir="ltr"
+            inputMode="decimal"
+            disabled={priceOnRequest}
+            defaultValue={listing?.price ?? ""}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
+          <Input id="price_unit" name="price_unit" defaultValue={listing?.price_unit ?? ""} />
+        </div>
+        <label className="flex items-end gap-2 pb-2 text-sm text-foreground">
+          <input
+            type="checkbox"
+            className="size-4"
+            checked={priceOnRequest}
+            onChange={(e) => setPriceOnRequest(e.target.checked)}
+          />
+          {t("market.priceOnRequest")}
+        </label>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
+          <Input id="quantity" name="quantity" dir="ltr" inputMode="decimal" defaultValue={listing?.quantity ?? ""} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="unit">{t("market.quote.unit")}</Label>
+          <Input id="unit" name="unit" defaultValue={listing?.unit ?? ""} />
+        </div>
+        {isEquipment && (
+          <div className="space-y-1.5">
+            <Label htmlFor="item_condition">{t("market.dash.condition")}</Label>
+            <select
+              id="item_condition"
+              name="item_condition"
+              className={selectClass}
+              defaultValue={listing?.item_condition ?? "used"}
+            >
+              <option value="new">{t("market.condition.new")}</option>
+              <option value="used">{t("market.condition.used")}</option>
+              <option value="refurbished">{t("market.condition.refurbished")}</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="city">{t("market.filters.city")}</Label>
+          <select id="city" name="city" className={selectClass} defaultValue={listing?.city ?? ""}>
+            <option value="">{t("market.filters.allCities")}</option>
+            {SA_CITIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="region">{t("market.dash.region")}</Label>
+          <Input id="region" name="region" defaultValue={listing?.region ?? ""} />
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="images">{t("market.dash.images")}</Label>
+        <label className="flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-input px-3 py-3 text-sm text-muted-foreground">
+          <ImagePlus className="size-4" aria-hidden />
+          {t("market.dash.addImages")}
+          <input
+            id="images"
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => setFiles(Array.from(e.target.files ?? []).slice(0, 8))}
+          />
+        </label>
+        {files.length > 0 && (
+          <ul className="space-y-1">
+            {files.map((f) => (
+              <li key={f.name} className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                <span className="truncate">{f.name}</span>
+                <button type="button" onClick={() => setFiles(files.filter((x) => x !== f))}>
+                  <X className="size-3.5" aria-hidden />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <Button type="submit" disabled={busy}>
+          {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
+          {t("market.dash.submitForReview")}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={busy}
+          onClick={(e) => {
+            const form = (e.currentTarget as HTMLElement).closest("form") as HTMLFormElement;
+            if (form.reportValidity())
+              void onSubmit({ preventDefault() {}, currentTarget: form } as unknown as React.FormEvent<HTMLFormElement>, false);
+          }}
+        >
+          {t("market.dash.saveDraft")}
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground">{t("market.dash.reviewNote")}</p>
+    </form>
+  );
+}
