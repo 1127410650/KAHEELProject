@@ -221,8 +221,8 @@ function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null
   // An approximate ad only ever exports a blurred point, so the hidden pin
   // stays hidden. With nothing to open at all the button is not rendered.
   const link = locationLink({
-    latitude: listing.latitude,
-    longitude: listing.longitude,
+    latitude: listing.latitude_public,
+    longitude: listing.longitude_public,
     visibility: listing.location_visibility,
     city: cityLabel ?? listing.city,
     district: listing.district,
@@ -239,9 +239,6 @@ function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null
           <MapPin className="size-4 text-muted-foreground" aria-hidden />
           {place}
         </p>
-      )}
-      {listing.address_text && (
-        <p className="mt-1 break-words text-xs text-muted-foreground">{listing.address_text}</p>
       )}
       <p className="mt-1 text-xs text-muted-foreground">
         {exact ? t("market.ad.exact") : t("market.ad.approximate")}
