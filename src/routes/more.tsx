@@ -17,8 +17,8 @@ import {
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { useActiveIdentity } from "@/lib/mkt-identity";
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { IdentitySwitcher } from "@/components/marketplace/IdentitySwitcher";
 
 const title = "المزيد — سوق تحقّق";
 const description =
@@ -78,6 +78,7 @@ const GROUPS = [
 function MorePage() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
+  const { active } = useActiveIdentity();
 
   return (
     <MarketShell>
@@ -85,14 +86,15 @@ function MorePage() {
         <h1 className="text-xl font-bold text-foreground">{t("market.more.title")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{t("market.more.subtitle")}</p>
 
-        {session && (
-          <div className="mt-4 rounded-xl border border-border bg-card p-3">
-            <p className="mb-2 text-xs font-semibold text-muted-foreground">
-              {t("market.identity.actingAs")}
-            </p>
-            <IdentitySwitcher compact />
-          </div>
+        {session && active && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            {t("market.identity.actingAs")}:{" "}
+            <span className="font-semibold text-foreground">
+              {active.name || t("market.account.fallbackName")}
+            </span>
+          </p>
         )}
+
 
         {GROUPS.map((group) => (
           <section key={group.key} className="mt-5">
