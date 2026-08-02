@@ -1822,6 +1822,152 @@ export type Database = {
           },
         ]
       }
+      mkt_verification_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          reason: string | null
+          request_id: string | null
+          tenant_id: string
+          to_status: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          reason?: string | null
+          request_id?: string | null
+          tenant_id: string
+          to_status: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          reason?: string | null
+          request_id?: string | null
+          tenant_id?: string
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_verification_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_verification_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_verification_events_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_verification_files: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          id: string
+          mime_type: string | null
+          request_id: string
+          size_bytes: number | null
+          tenant_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          id?: string
+          mime_type?: string | null
+          request_id: string
+          size_bytes?: number | null
+          tenant_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          id?: string
+          mime_type?: string | null
+          request_id?: string
+          size_bytes?: number | null
+          tenant_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_verification_files_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_verification_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_verification_files_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_verification_requests: {
+        Row: {
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          id: string
+          note: string | null
+          status: string
+          submitted_by: string | null
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          id?: string
+          note?: string | null
+          status?: string
+          submitted_by?: string | null
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          id?: string
+          note?: string | null
+          status?: string
+          submitted_by?: string | null
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_verification_requests_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -5322,6 +5468,10 @@ export type Database = {
         Args: { _membership_id: string; _reason?: string; _status: string }
         Returns: undefined
       }
+      mkt_can_manage_business: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_can_manage_listing: { Args: { _id: string }; Returns: boolean }
       mkt_can_view_conversation: {
         Args: { _conversation_id: string }
@@ -5335,6 +5485,14 @@ export type Database = {
         Returns: boolean
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_review_listing: {
+        Args: { _action: string; _listing_id: string; _reason?: string }
+        Returns: undefined
+      }
+      mkt_review_verification: {
+        Args: { _action: string; _reason?: string; _request_id: string }
+        Returns: undefined
+      }
       mkt_slugify: { Args: { _text: string }; Returns: string }
       my_accounts: {
         Args: never

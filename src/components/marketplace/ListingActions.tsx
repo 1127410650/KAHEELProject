@@ -169,7 +169,11 @@ export function ListingActions({ listing, pendingAction }: Props) {
   return (
     <>
       <div className="grid gap-2 sm:grid-cols-2">
-        <Button size="lg" className="sm:col-span-2" onClick={() => gate("quote") && setDialog("quote")}>
+        <Button
+          size="lg"
+          className="sm:col-span-2"
+          onClick={() => gate("quote") && setDialog("quote")}
+        >
           <ReceiptText className="size-4" aria-hidden />
           {t("market.actions.requestQuote")}
         </Button>
@@ -293,7 +297,12 @@ export function ListingActions({ listing, pendingAction }: Props) {
               if (body) void startConversation(body);
             }}
           >
-            <Textarea name="body" rows={4} required placeholder={t("market.actions.messagePlaceholder")} />
+            <Textarea
+              name="body"
+              rows={4}
+              required
+              placeholder={t("market.actions.messagePlaceholder")}
+            />
             <Button type="submit" className="w-full" disabled={busy}>
               {t("market.actions.sendMessage")}
             </Button>

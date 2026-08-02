@@ -7,8 +7,15 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { MKT_BUCKET, SA_CITIES, type MktListing } from "@/lib/mkt";
+import {
+  BUSINESS_COLUMNS,
+  MKT_BUCKET,
+  SA_CITIES,
+  type MktBusiness,
+  type MktListing,
+} from "@/lib/mkt";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
+import { useWorkspaces } from "@/hooks/use-workspace";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,6 +39,23 @@ export function ListingForm({ listing }: Props) {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
+
+  const workspaces = useWorkspaces();
+  const activeTenant = (workspaces.data ?? []).find((w) => w.is_current)?.tenant_id ?? null;
+  const business = useQuery({
+    queryKey: ["mkt", "my-business", activeTenant],
+    enabled: !!activeTenant,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mkt_business_profiles")
+        .select(BUSINESS_COLUMNS)
+        .eq("tenant_id", activeTenant!)
+        .maybeSingle();
+      return (data as MktBusiness | null) ?? null;
+    },
+  });
+  // A business may prepare drafts while unverified, but only verified ones can go to review.
+  const blockedByVerification = !!business.data && business.data.verification_status !== "verified";
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
   const subs = (categories.data ?? []).filter((c) => c.parent_id === categoryId);
@@ -67,6 +91,10 @@ export function ListingForm({ listing }: Props) {
       toast.error(t("market.dash.pickCategory"));
       return;
     }
+    if (publish && blockedByVerification) {
+      toast.error(t("market.dash.needsVerification"));
+      return;
+    }
     setBusy(true);
     try {
       const payload = {
@@ -82,10 +110,11 @@ export function ListingForm({ listing }: Props) {
         quantity: fd.get("quantity") ? Number(fd.get("quantity")) : null,
         unit: (fd.get("unit") as string) || null,
         item_condition: isEquipment ? (fd.get("item_condition") as string) || null : null,
-        deal_kind: typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
+        deal_kind:
+          typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
         city: (fd.get("city") as string) || null,
         region: (fd.get("region") as string) || null,
-        status: publish ? "pending_review" : "draft",
+        status: publish ? "pending" : "draft",
       };
 
       if (listing) {
@@ -93,13 +122,22 @@ export function ListingForm({ listing }: Props) {
         if (error) throw error;
         if (files.length > 0) {
           const cover = await uploadImages(listing.id);
-          if (cover) await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", listing.id);
+          if (cover)
+            await supabase
+              .from("mkt_listings")
+              .update({ cover_image_url: cover })
+              .eq("id", listing.id);
         }
       } else {
-        const { data, error } = await supabase.from("mkt_listings").insert(payload).select("id").single();
+        const { data, error } = await supabase
+          .from("mkt_listings")
+          .insert(payload)
+          .select("id")
+          .single();
         if (error || !data) throw error ?? new Error("insert failed");
         const cover = await uploadImages(data.id);
-        if (cover) await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
+        if (cover)
+          await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
       }
 
       toast.success(publish ? t("market.dash.submitted") : t("market.dash.savedDraft"));
@@ -112,10 +150,7 @@ export function ListingForm({ listing }: Props) {
   }
 
   return (
-    <form
-      className="max-w-2xl space-y-4"
-      onSubmit={(e) => void onSubmit(e, true)}
-    >
+    <form className="max-w-2xl space-y-4" onSubmit={(e) => void onSubmit(e, true)}>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="type_code">{t("market.filters.type")}</Label>
@@ -172,7 +207,13 @@ export function ListingForm({ listing }: Props) {
 
       <div className="space-y-1.5">
         <Label htmlFor="title">{t("market.dash.listingTitle")}</Label>
-        <Input id="title" name="title" required maxLength={160} defaultValue={listing?.title ?? ""} />
+        <Input
+          id="title"
+          name="title"
+          required
+          maxLength={160}
+          defaultValue={listing?.title ?? ""}
+        />
       </div>
 
       <div className="space-y-1.5">
@@ -182,7 +223,12 @@ export function ListingForm({ listing }: Props) {
 
       <div className="space-y-1.5">
         <Label htmlFor="description">{t("market.dash.description")}</Label>
-        <Textarea id="description" name="description" rows={5} defaultValue={listing?.description ?? ""} />
+        <Textarea
+          id="description"
+          name="description"
+          rows={5}
+          defaultValue={listing?.description ?? ""}
+        />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
@@ -215,7 +261,13 @@ export function ListingForm({ listing }: Props) {
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="space-y-1.5">
           <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
-          <Input id="quantity" name="quantity" dir="ltr" inputMode="decimal" defaultValue={listing?.quantity ?? ""} />
+          <Input
+            id="quantity"
+            name="quantity"
+            dir="ltr"
+            inputMode="decimal"
+            defaultValue={listing?.quantity ?? ""}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="unit">{t("market.quote.unit")}</Label>
@@ -273,7 +325,10 @@ export function ListingForm({ listing }: Props) {
         {files.length > 0 && (
           <ul className="space-y-1">
             {files.map((f) => (
-              <li key={f.name} className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+              <li
+                key={f.name}
+                className="flex items-center justify-between gap-2 text-xs text-muted-foreground"
+              >
                 <span className="truncate">{f.name}</span>
                 <button type="button" onClick={() => setFiles(files.filter((x) => x !== f))}>
                   <X className="size-3.5" aria-hidden />
@@ -284,8 +339,14 @@ export function ListingForm({ listing }: Props) {
         )}
       </div>
 
+      {blockedByVerification && (
+        <p className="rounded-md border border-border bg-muted/50 p-3 text-xs text-muted-foreground">
+          {t("market.dash.needsVerification")}
+        </p>
+      )}
+
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={busy}>
+        <Button type="submit" disabled={busy || blockedByVerification}>
           {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
           {t("market.dash.submitForReview")}
         </Button>
@@ -296,7 +357,13 @@ export function ListingForm({ listing }: Props) {
           onClick={(e) => {
             const form = (e.currentTarget as HTMLElement).closest("form") as HTMLFormElement;
             if (form.reportValidity())
-              void onSubmit({ preventDefault() {}, currentTarget: form } as unknown as React.FormEvent<HTMLFormElement>, false);
+              void onSubmit(
+                {
+                  preventDefault() {},
+                  currentTarget: form,
+                } as unknown as React.FormEvent<HTMLFormElement>,
+                false,
+              );
           }}
         >
           {t("market.dash.saveDraft")}

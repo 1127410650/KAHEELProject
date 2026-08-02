@@ -50,7 +50,9 @@ export async function decorateListings(
 ): Promise<ListingCardData[]> {
   if (rows.length === 0) return [];
 
-  const tenantIds = Array.from(new Set(rows.map((r) => r.tenant_id).filter((v): v is string => !!v)));
+  const tenantIds = Array.from(
+    new Set(rows.map((r) => r.tenant_id).filter((v): v is string => !!v)),
+  );
   const [{ data: businesses }, types, media] = await Promise.all([
     tenantIds.length > 0
       ? supabase.from("mkt_business_profiles").select(BUSINESS_COLUMNS).in("tenant_id", tenantIds)
@@ -69,10 +71,14 @@ export async function decorateListings(
     const type = typeMap.get(row.type_code);
     return {
       ...row,
-      businessName: biz ? (locale === "ar" ? biz.display_name_ar : biz.display_name_en || biz.display_name_ar) : null,
+      businessName: biz
+        ? locale === "ar"
+          ? biz.display_name_ar
+          : biz.display_name_en || biz.display_name_ar
+        : null,
       businessSlug: biz?.slug ?? null,
       verificationStatus: biz?.verification_status ?? null,
-      imageUrl: row.cover_image_url ? media[row.cover_image_url] ?? null : null,
+      imageUrl: row.cover_image_url ? (media[row.cover_image_url] ?? null) : null,
       typeLabel: type ? (locale === "ar" ? type.name_ar : type.name_en) : undefined,
     };
   });

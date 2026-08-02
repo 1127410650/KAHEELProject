@@ -28,7 +28,11 @@ function EditAdPage() {
   const ad = useQuery({
     queryKey: ["mkt", "my-ad", id],
     queryFn: async () => {
-      const { data } = await supabase.from("mkt_listings").select(LISTING_COLUMNS).eq("id", id).maybeSingle();
+      const { data } = await supabase
+        .from("mkt_listings")
+        .select(LISTING_COLUMNS)
+        .eq("id", id)
+        .maybeSingle();
       return (data as unknown as MktListing | null) ?? null;
     },
   });

@@ -13,7 +13,8 @@ export const Route = createFileRoute("/categories/$slug")({
   ssr: false,
   head: ({ params }) => {
     const title = `تصنيف ${params.slug} — سوق تحقّق`;
-    const description = "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل سوق تحقّق للمقاولات والتوريد.";
+    const description =
+      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل سوق تحقّق للمقاولات والتوريد.";
     return {
       meta: [
         { title },
@@ -72,7 +73,9 @@ function CategoryPage() {
             <h1 className="text-xl font-bold text-foreground sm:text-2xl">{name(category)}</h1>
             {children.length > 0 && (
               <>
-                <h2 className="mt-5 text-sm font-bold text-foreground">{t("market.category.subcategories")}</h2>
+                <h2 className="mt-5 text-sm font-bold text-foreground">
+                  {t("market.category.subcategories")}
+                </h2>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {children.map((c) => (
                     <Link
@@ -90,11 +93,15 @@ function CategoryPage() {
 
             <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
               {listings.isLoading
-                ? Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-56 rounded-xl" />)
+                ? Array.from({ length: 8 }).map((_, i) => (
+                    <Skeleton key={i} className="h-56 rounded-xl" />
+                  ))
                 : (listings.data ?? []).map((l) => <ListingCard key={l.id} listing={l} />)}
             </div>
             {!listings.isLoading && (listings.data ?? []).length === 0 && (
-              <p className="py-16 text-center text-sm text-muted-foreground">{t("market.noResults")}</p>
+              <p className="py-16 text-center text-sm text-muted-foreground">
+                {t("market.noResults")}
+              </p>
             )}
           </>
         )}

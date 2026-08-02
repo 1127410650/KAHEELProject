@@ -3,14 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const MKT_BUCKET = "mkt-media";
 
 export type ListingStatus =
-  | "draft"
-  | "pending"
-  | "published"
-  | "rejected"
-  | "suspended"
-  | "expired"
-  | "archived"
-  | "deleted";
+  "draft" | "pending" | "published" | "rejected" | "suspended" | "expired" | "archived" | "deleted";
 
 export type QuoteStatus =
   | "new"
@@ -128,7 +121,10 @@ export interface MktBusiness {
   logo_url: string | null;
   city: string | null;
   region: string | null;
+  categories: string[];
   verification_status: string;
+  verification_note: string | null;
+
   is_published: boolean;
   joined_at: string;
   show_phone: boolean;
@@ -144,10 +140,12 @@ export const LISTING_COLUMNS =
   "id, slug, owner_user_id, tenant_id, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, quantity, unit, item_condition, deal_kind, city, region, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
 
 export const BUSINESS_COLUMNS =
-  "tenant_id, slug, display_name_ar, display_name_en, headline, about, logo_url, city, region, verification_status, is_published, joined_at, show_phone, show_email, show_whatsapp, public_phone, public_email, public_whatsapp, public_website";
+  "tenant_id, slug, display_name_ar, display_name_en, headline, about, logo_url, city, region, categories, verification_status, verification_note, is_published, joined_at, show_phone, show_email, show_whatsapp, public_phone, public_email, public_whatsapp, public_website";
 
 /** Resolve stored media references (storage paths or absolute URLs) to displayable URLs. */
-export async function resolveMedia(paths: (string | null | undefined)[]): Promise<Record<string, string>> {
+export async function resolveMedia(
+  paths: (string | null | undefined)[],
+): Promise<Record<string, string>> {
   const unique = Array.from(new Set(paths.filter((p): p is string => !!p)));
   const result: Record<string, string> = {};
   const storagePaths: string[] = [];
@@ -177,9 +175,7 @@ export function safeInternalPath(raw: string | null | undefined): string | null 
 /** Build a sign-in link that returns the visitor to the same listing and re-opens the action. */
 export function loginHref(returnPath: string, action?: MktAction): string {
   const safe = safeInternalPath(returnPath) ?? "/";
-  const withAction = action
-    ? `${safe}${safe.includes("?") ? "&" : "?"}action=${action}`
-    : safe;
+  const withAction = action ? `${safe}${safe.includes("?") ? "&" : "?"}action=${action}` : safe;
   return `/login?next=${encodeURIComponent(withAction)}`;
 }
 

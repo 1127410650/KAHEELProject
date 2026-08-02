@@ -14,7 +14,10 @@ export const Route = createFileRoute("/dashboard/favorites")({
   head: () => ({
     meta: [
       { title: "المفضلة — سوق تحقّق" },
-      { name: "description", content: "الإعلانات التي أضفتها إلى المفضلة في سوق تحقّق للخدمات والموردين." },
+      {
+        name: "description",
+        content: "الإعلانات التي أضفتها إلى المفضلة في سوق تحقّق للخدمات والموردين.",
+      },
       { property: "og:title", content: "المفضلة — سوق تحقّق" },
       { property: "og:description", content: "قائمة الإعلانات المحفوظة." },
       { name: "robots", content: "noindex" },
@@ -52,7 +55,9 @@ function FavoritesPage() {
         ))}
       </div>
       {!favorites.isLoading && (favorites.data ?? []).length === 0 && (
-        <p className="py-12 text-center text-sm text-muted-foreground">{t("market.dash.noFavorites")}</p>
+        <p className="py-12 text-center text-sm text-muted-foreground">
+          {t("market.dash.noFavorites")}
+        </p>
       )}
     </DashboardShell>
   );
