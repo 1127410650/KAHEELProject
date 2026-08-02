@@ -4,7 +4,7 @@ import { LayoutGrid, List, Loader2, SlidersHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useI18n } from "@/i18n";
-import { geoName, loadCities, loadCountries } from "@/lib/mkt-geo";
+import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { PAGE_SIZE, loadCategories, loadListingTypes, loadListingsPage } from "@/lib/mkt-queries";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
@@ -84,7 +84,11 @@ function SearchPage() {
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
   const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
-  const selectedCountry = (countries.data ?? []).find((c) => c.iso2 === params.country);
+  // The country comes from the signed-in account (Saudi Arabia by default) and is
+  // no longer a browsing filter; only the city can be narrowed down here.
+  const { preference } = useMarketPreference();
+  const accountCountryIso2 = preference.countryIso2;
+  const selectedCountry = (countries.data ?? []).find((c) => c.iso2 === accountCountryIso2);
   const cities = useQuery({
     queryKey: ["mkt", "cities", selectedCountry?.id],
     enabled: !!selectedCountry?.id,
@@ -103,7 +107,7 @@ function SearchPage() {
           subcategoryId: params.sub,
           type: params.type,
           city: params.city,
-          countryIso2: params.country,
+          countryIso2: accountCountryIso2,
           cityId: params.cityId,
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
@@ -294,22 +298,6 @@ function SearchPage() {
               {(types.data ?? []).map((tp) => (
                 <option key={tp.code} value={tp.code}>
                   {locale === "ar" ? tp.name_ar : tp.name_en}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label>{t("market.geo.country")}</Label>
-            <select
-              value={params.country ?? ""}
-              onChange={(e) => update({ country: e.target.value, cityId: undefined })}
-              className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-            >
-              <option value="">{t("market.geo.allCountries")}</option>
-              {(countries.data ?? []).map((c) => (
-                <option key={c.id} value={c.iso2}>
-                  {geoName(c, locale)}
                 </option>
               ))}
             </select>

@@ -113,32 +113,43 @@ export function useMarketPreference() {
     const listener = (value: MarketPreference) => setPreference(value);
     listeners.add(listener);
 
-    // Signed in? The stored row is the source of truth; local storage is only a
-    // first paint optimisation, so it is corrected as soon as the row arrives.
+    // Signed in? The country saved on the account is the single source of truth
+    // (defaulting to Saudi Arabia for older accounts without one); only the city
+    // stays a browsing preference.
     void (async () => {
       const { data } = await supabase.auth.getSession();
       if (!data.session) return;
-      const { data: row } = await supabase
-        .from("mkt_user_market_preferences")
-        .select("browsing_country_id, browsing_city_id")
-        .eq("user_id", data.session.user.id)
-        .maybeSingle();
-      if (!row?.browsing_country_id) return;
-      const { data: country } = await supabase
-        .from("mkt_countries")
-        .select("iso2")
-        .eq("id", row.browsing_country_id)
-        .maybeSingle();
-      if (!country?.iso2) return;
+      const [{ data: profile }, { data: row }] = await Promise.all([
+        supabase
+          .from("mkt_user_profiles")
+          .select("country_id")
+          .eq("user_id", data.session.user.id)
+          .maybeSingle(),
+        supabase
+          .from("mkt_user_market_preferences")
+          .select("browsing_city_id")
+          .eq("user_id", data.session.user.id)
+          .maybeSingle(),
+      ]);
+      let iso2 = DEFAULT_PREFERENCE.countryIso2;
+      if (profile?.country_id) {
+        const { data: country } = await supabase
+          .from("mkt_countries")
+          .select("iso2")
+          .eq("id", profile.country_id)
+          .maybeSingle();
+        if (country?.iso2) iso2 = country.iso2;
+      }
       const next: MarketPreference = {
-        countryIso2: country.iso2,
-        cityId: row.browsing_city_id ?? null,
+        countryIso2: iso2,
+        cityId: row?.browsing_city_id ?? readStored().cityId,
       };
       if (typeof window !== "undefined") {
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       }
       listeners.forEach((l) => l(next));
     })();
+
 
     return () => {
       listeners.delete(listener);

@@ -25,7 +25,6 @@ import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
-import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
 import { loadBusinesses, loadCategories, loadListings } from "@/lib/mkt-queries";
 import { resolveMedia } from "@/lib/mkt";
 import { ListingCard } from "@/components/marketplace/ListingCard";
@@ -223,13 +222,11 @@ export function MarketHome() {
               />
             </div>
             <div className="flex items-center gap-2 sm:shrink-0">
-              <div className="min-w-0 flex-1 sm:flex-none">
-                <MarketSwitcher />
-              </div>
-              <Button type="submit" className="h-11 shrink-0 px-6">
+              <Button type="submit" className="h-11 w-full shrink-0 px-6 sm:w-auto">
                 {t("common.search")}
               </Button>
             </div>
+
           </form>
 
           <Button asChild variant="ghost" size="sm" className="mt-3 text-primary">

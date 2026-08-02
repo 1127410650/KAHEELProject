@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
@@ -80,23 +79,11 @@ export function MarketHeader() {
                 className="h-9 ps-9"
               />
             </div>
-            <div className="hidden md:block">
-              <MarketSwitcher />
-            </div>
-            <div className="md:hidden">
-              <MarketSwitcher compact />
-            </div>
           </form>
         ) : (
-          <div className="flex min-w-0 flex-1 items-center justify-end gap-2 md:justify-start">
-            <div className="hidden md:block">
-              <MarketSwitcher />
-            </div>
-            <div className="md:hidden">
-              <MarketSwitcher compact />
-            </div>
-          </div>
+          <div className="min-w-0 flex-1" />
         )}
+
 
         {/* Only shipped destinations are linked from the header. */}
         <nav className="hidden items-center gap-5 lg:flex">

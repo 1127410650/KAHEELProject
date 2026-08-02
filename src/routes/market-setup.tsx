@@ -84,6 +84,13 @@ function MarketSetupPage() {
     if (row.contact?.phone_visibility) setVisibility(row.contact.phone_visibility);
   }, [existing.data]);
 
+  // Saudi Arabia is preselected: the country is asked once, here at signup.
+  useEffect(() => {
+    if (countryId) return;
+    const sa = (countries.data ?? []).find((c) => c.iso2 === "SA");
+    if (sa) setCountryId(sa.id);
+  }, [countryId, countries.data]);
+
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/auth", replace: true });
   }, [loading, session, navigate]);
