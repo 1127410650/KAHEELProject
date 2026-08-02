@@ -106,6 +106,13 @@ export interface MktListing {
   region: string | null;
   country_id: string | null;
   city_id: string | null;
+  district: string | null;
+  address_text: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  location_accuracy: number | null;
+  location_source: string | null;
+  location_visibility: string | null;
 
   cover_image_url: string | null;
   status: string;
