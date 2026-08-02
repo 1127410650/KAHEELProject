@@ -181,15 +181,21 @@ export function ListingActions({ listing, pendingAction, variant = "panel" }: Pr
     return (
       <>
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => void toggleFavorite()}
-            aria-label={saved ? t("market.actions.saved") : t("market.actions.save")}
-            aria-pressed={saved}
-            className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
-          >
-            <Heart className={saved ? "size-5 fill-current text-primary" : "size-5"} aria-hidden />
-          </button>
+          {!isOwner && (
+            <button
+              type="button"
+              onClick={() => void toggleFavorite()}
+              aria-label={saved ? t("market.actions.saved") : t("market.actions.save")}
+              aria-pressed={saved}
+              className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+            >
+              <Heart
+                className={saved ? "size-5 fill-current text-primary" : "size-5"}
+                aria-hidden
+              />
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => void share()}
