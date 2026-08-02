@@ -1781,6 +1781,7 @@ export type Database = {
       }
       mkt_listings: {
         Row: {
+          address_text: string | null
           advertiser_type: string | null
           category_id: string
           city: string | null
@@ -1793,9 +1794,15 @@ export type Database = {
           deal_kind: string | null
           deleted_at: string | null
           description: string | null
+          district: string | null
           expires_at: string | null
           id: string
           item_condition: string | null
+          latitude: number | null
+          location_accuracy: number | null
+          location_source: string | null
+          location_visibility: string
+          longitude: number | null
           owner_user_id: string
           price: number | null
           price_on_request: boolean
@@ -1817,6 +1824,7 @@ export type Database = {
           views_count: number
         }
         Insert: {
+          address_text?: string | null
           advertiser_type?: string | null
           category_id: string
           city?: string | null
@@ -1829,9 +1837,15 @@ export type Database = {
           deal_kind?: string | null
           deleted_at?: string | null
           description?: string | null
+          district?: string | null
           expires_at?: string | null
           id?: string
           item_condition?: string | null
+          latitude?: number | null
+          location_accuracy?: number | null
+          location_source?: string | null
+          location_visibility?: string
+          longitude?: number | null
           owner_user_id?: string
           price?: number | null
           price_on_request?: boolean
@@ -1853,6 +1867,7 @@ export type Database = {
           views_count?: number
         }
         Update: {
+          address_text?: string | null
           advertiser_type?: string | null
           category_id?: string
           city?: string | null
@@ -1865,9 +1880,15 @@ export type Database = {
           deal_kind?: string | null
           deleted_at?: string | null
           description?: string | null
+          district?: string | null
           expires_at?: string | null
           id?: string
           item_condition?: string | null
+          latitude?: number | null
+          location_accuracy?: number | null
+          location_source?: string | null
+          location_visibility?: string
+          longitude?: number | null
           owner_user_id?: string
           price?: number | null
           price_on_request?: boolean
