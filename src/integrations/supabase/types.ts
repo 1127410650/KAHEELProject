@@ -6534,6 +6534,10 @@ export type Database = {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_business_number_taken: {
+        Args: { _cr_number: string; _unified_number: string }
+        Returns: boolean
+      }
       mkt_can_manage_business: {
         Args: { _tenant_id: string }
         Returns: boolean
