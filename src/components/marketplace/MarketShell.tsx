@@ -103,9 +103,13 @@ export function MarketHeader() {
               className="ps-9"
             />
           </div>
+          <div className="md:hidden">
+            <MarketSwitcher compact />
+          </div>
           <div className="hidden md:block">
             <MarketSwitcher />
           </div>
+
 
           <Button type="submit" size="sm" className="hidden shrink-0 sm:inline-flex">
             {t("common.search")}
