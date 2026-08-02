@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
+import { useSession } from "@/lib/session";
+import { useActiveAccount } from "@/lib/mkt-account";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 
 export const Route = createFileRoute("/dashboard/requests")({
@@ -24,15 +26,25 @@ export const Route = createFileRoute("/dashboard/requests")({
 
 function RequestsPage() {
   const { t } = useI18n();
+  const { session } = useSession();
+  const { account } = useActiveAccount();
   const rows = useQuery({
-    queryKey: ["mkt", "quotes"],
+    queryKey: ["mkt", "quotes", account?.account_key],
+    enabled: !!session && !!account,
     queryFn: async () => {
-      const { data } = await supabase
+      // Quote requests follow the same isolation rule as conversations.
+      let query = supabase
         .from("mkt_quote_requests")
         .select(
           "id, title, description, city, quantity, unit, budget, status, created_at, listing_id",
-        )
-        .order("created_at", { ascending: false });
+        );
+      query =
+        account!.kind === "business"
+          ? query.eq("seller_tenant_id", account!.tenant_id!)
+          : query.or(
+              `buyer_user_id.eq.${session!.user.id},and(seller_user_id.eq.${session!.user.id},seller_tenant_id.is.null)`,
+            );
+      const { data } = await query.order("created_at", { ascending: false });
       return data ?? [];
     },
   });

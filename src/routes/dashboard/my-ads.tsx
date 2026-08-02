@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { useActiveAccount } from "@/lib/mkt-account";
 import { LISTING_COLUMNS, priceLabel, type MktListing } from "@/lib/mkt";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Button } from "@/components/ui/button";
@@ -32,15 +33,20 @@ export const Route = createFileRoute("/dashboard/my-ads")({
 function MyAdsPage() {
   const { t } = useI18n();
   const { session } = useSession();
+  const { account } = useActiveAccount();
 
   const ads = useQuery({
-    queryKey: ["mkt", "my-ads", session?.user.id],
-    enabled: !!session,
+    queryKey: ["mkt", "my-ads", account?.account_key],
+    enabled: !!session && !!account,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("mkt_listings")
-        .select(LISTING_COLUMNS)
-        .eq("owner_user_id", session!.user.id)
+      // Ads belong to the account the user entered under: a business sees its
+      // own ads only, the personal account sees the ones with no entity.
+      let query = supabase.from("mkt_listings").select(LISTING_COLUMNS);
+      query =
+        account!.kind === "business"
+          ? query.eq("tenant_id", account!.tenant_id!)
+          : query.is("tenant_id", null).eq("owner_user_id", session!.user.id);
+      const { data } = await query
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
       return (data ?? []) as unknown as MktListing[];
