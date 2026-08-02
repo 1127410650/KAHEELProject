@@ -94,12 +94,14 @@ export function ListingForm({ listing }: Props) {
     },
   });
 
+  const personGeo = myProfile.data;
   const identityGeo =
     active?.kind === "business"
       ? businessGeo.data
-      : myProfile
-        ? { country_id: myProfile.country_id, city_id: myProfile.city_id }
+      : personGeo
+        ? { country_id: personGeo.country_id, city_id: personGeo.city_id }
         : null;
+
 
   // A new ad defaults to the identity's own location, falling back to the market
   // the advertiser is browsing.
