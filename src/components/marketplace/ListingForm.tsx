@@ -687,8 +687,20 @@ export function ListingForm({ listing }: Props) {
               </ul>
             )}
           </div>
+
+          {isRealEstate && session?.user.id && (
+            <RealEstateLicenseFields
+              value={license}
+              userId={session.user.id}
+              onChange={(next) => {
+                setDirty(true);
+                setLicense(next);
+              }}
+            />
+          )}
         </div>
       )}
+
 
       {step === 2 && (
         <ListingLocationPicker
