@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
