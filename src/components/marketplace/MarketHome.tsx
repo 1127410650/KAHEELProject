@@ -157,45 +157,18 @@ export function MarketHome() {
 
   return (
     <>
-      {/* Hero — light gradient with soft geometric lines, no heavy imagery. */}
+      {/* Hero — title and one primary action; search lives in the header. */}
       <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 via-background to-background">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(to_right,var(--color-primary)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-primary)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]"
         />
-        <div className="relative mx-auto w-full max-w-4xl px-4 py-9 text-center sm:py-14">
+        <div className="relative mx-auto w-full max-w-4xl px-4 py-6 text-center sm:py-9">
           <h1 className="mx-auto max-w-3xl text-balance text-xl font-bold leading-snug tracking-tight text-foreground sm:text-3xl">
             {t("market.hero.title")}
           </h1>
 
-
-          {/* One single search surface for the whole page. */}
-          <form
-            onSubmit={submitSearch}
-            className="mx-auto mt-6 flex w-full flex-col gap-2 rounded-2xl border border-border bg-card p-2.5 shadow-[0_2px_10px_-6px_rgb(0_0_0/0.18)] sm:flex-row sm:items-center"
-          >
-            <div className="relative min-w-0 flex-1">
-              <Search
-                className="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-muted-foreground"
-                aria-hidden
-              />
-              <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder={t("market.searchPlaceholder")}
-                aria-label={t("market.searchPlaceholder")}
-                className="h-11 border-0 bg-transparent ps-9 shadow-none focus-visible:ring-0"
-              />
-            </div>
-            <div className="flex items-center gap-2 sm:shrink-0">
-              <Button type="submit" className="h-11 w-full shrink-0 px-6 sm:w-auto">
-                {t("common.search")}
-              </Button>
-            </div>
-
-          </form>
-
-          <Button asChild variant="ghost" size="sm" className="mt-3 text-primary">
+          <Button asChild size="sm" className="mt-4">
             <Link to="/dashboard/ads/new">
               <Plus className="size-4" aria-hidden />
               {t("market.addListing")}
@@ -203,6 +176,7 @@ export function MarketHome() {
           </Button>
         </div>
       </section>
+
 
       {/* One compact fields strip — five broad fields only. */}
       <div className="border-b border-border bg-background">
