@@ -274,3 +274,18 @@ export async function loadPublicPhone(userId: string): Promise<string | null> {
   const { data } = await supabase.rpc("mkt_public_phone", { _user_id: userId });
   return (data as string | null) ?? null;
 }
+
+/** A user-proposed city; it stays out of the public lists until an admin approves it. */
+export async function suggestCity(input: {
+  countryId: string;
+  name: string;
+  userId: string;
+}): Promise<void> {
+  const { error } = await supabase.from("mkt_city_suggestions").insert({
+    country_id: input.countryId,
+    suggested_name: input.name.trim(),
+    suggested_by: input.userId,
+    status: "pending",
+  });
+  if (error) throw error;
+}
