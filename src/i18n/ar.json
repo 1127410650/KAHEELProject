@@ -49,7 +49,10 @@
     "copied": "تم النسخ",
     "showDetails": "عرض التفاصيل",
     "hideDetails": "إخفاء التفاصيل",
-    "viewAll": "عرض الكل"
+    "viewAll": "عرض الكل",
+    "next": "التالي",
+    "previous": "السابق",
+    "saved": "تم الحفظ"
   },
   "nav": {
     "dashboard": "لوحة التحكم",
@@ -1380,7 +1383,8 @@
       "savedToFavorites": "أُضيف إلى المفضلة",
       "removedFromFavorites": "أُزيل من المفضلة",
       "ownListing": "هذا إعلانك",
-      "failed": "تعذّر إكمال العملية"
+      "failed": "تعذّر إكمال العملية",
+      "remove": "إزالة"
     },
     "quote": {
       "title": "عنوان الطلب",
@@ -1536,7 +1540,8 @@
       "geoApprove": "اعتماد",
       "geoReject": "رفض",
       "geoInUse": "مستخدمة — التعطيل فقط",
-      "geoIncomplete": "سجلات بموقع غير مكتمل"
+      "geoIncomplete": "سجلات بموقع غير مكتمل",
+      "noResults": "لا نتائج"
     },
     "biz": {
       "editTab": "تعديل الملف",
@@ -1577,7 +1582,94 @@
         "verified": "موثّقة",
         "rejected": "مرفوضة",
         "needs_more": "بحاجة لاستكمال"
-      }
+      },
+      "addBusiness": "إضافة منشأة",
+      "quickCreate": "إضافة منشأة جديدة",
+      "quickCreateHint": "املأ بيانات المنشأة وبيانات المسؤول عنها، وستُربط بحسابك مباشرة دون إنشاء دخول جديد.",
+      "createBusiness": "إنشاء المنشأة",
+      "created": "تم إنشاء المنشأة",
+      "limitReached": "وصلت إلى الحد الأقصى لعدد مساحات العمل",
+      "stage": {
+        "data": "بيانات المنشأة",
+        "officer": "المسؤول",
+        "verify": "التوثيق"
+      },
+      "legalName": "الاسم القانوني",
+      "tradeName": "الاسم التجاري",
+      "legalNameRequired": "الاسم القانوني مطلوب",
+      "entityType": "نوع الكيان",
+      "entity": {
+        "establishment": "مؤسسة",
+        "company": "شركة",
+        "office": "مكتب",
+        "factory": "مصنع",
+        "branch": "فرع",
+        "non_profit": "جهة غير ربحية",
+        "government": "جهة حكومية",
+        "other": "أخرى"
+      },
+      "crNumber": "رقم السجل التجاري",
+      "unifiedNumber": "الرقم الموحد",
+      "crIssueDate": "تاريخ إصدار السجل",
+      "crExpiryDate": "تاريخ انتهاء السجل",
+      "officialNumberRequired": "أدخل رقم السجل التجاري أو الرقم الموحد",
+      "crInvalid": "رقم السجل التجاري غير صحيح",
+      "unifiedInvalid": "الرقم الموحد غير صحيح",
+      "datesInvalid": "تاريخ الانتهاء يجب أن يكون بعد تاريخ الإصدار",
+      "duplicate": "يوجد منشأة مسجلة بنفس الرقم في هذه الدولة",
+      "mainActivity": "النشاط الرئيسي",
+      "subActivities": "الأنشطة الفرعية",
+      "activityRequired": "النشاط الرئيسي مطلوب",
+      "nationalAddress": "العنوان الوطني",
+      "contactPhone": "رقم التواصل",
+      "contactEmail": "البريد الإلكتروني",
+      "phoneInvalid": "رقم التواصل غير صحيح",
+      "emailInvalid": "البريد الإلكتروني غير صحيح",
+      "serviceCities": "مدن الخدمة",
+      "serviceRegions": "مناطق الخدمة",
+      "listHint": "افصل بين القيم بفاصلة.",
+      "multiHint": "يمكن اختيار أكثر من مدينة.",
+      "optional": "اختياري",
+      "officerName": "اسم المسؤول",
+      "officerNameRequired": "اسم المسؤول مطلوب",
+      "idType": "نوع الهوية",
+      "officerId": "رقم الهوية",
+      "officerIdInvalid": "رقم الهوية غير صحيح",
+      "idKind": {
+        "national_id": "هوية وطنية",
+        "iqama": "إقامة",
+        "gcc_id": "هوية خليجية",
+        "passport": "جواز سفر",
+        "other": "أخرى"
+      },
+      "capacity": "الصفة",
+      "cap": {
+        "owner": "مالك",
+        "manager": "مدير",
+        "authorized": "مفوّض",
+        "employee": "موظف"
+      },
+      "relation": "صفة العلاقة بالمنشأة",
+      "officerPhone": "جوال المسؤول",
+      "officerEmail": "بريد المسؤول",
+      "authExpiry": "تاريخ انتهاء التفويض",
+      "authExpired": "تاريخ انتهاء التفويض منتهٍ",
+      "idPrivate": "رقم الهوية بيانات خاصة: لا يظهر في الملف العام ولا في الإعلان، ويُعرض لك مُخفيًا بعد الحفظ.",
+      "officerPrivacy": "بيانات المسؤول تُستخدم للتحقق فقط. لا تُنشر ولا تُخزَّن في المتصفح، ولا تراها الإدارة إلا عبر صلاحية مراجعة التوثيق.",
+      "verificationRules": "أرفق السجل التجاري وخطاب التفويض والهوية. الملفات المسموحة PDF أو JPG أو PNG أو WebP وبحد أقصى 10 ميجابايت، وتُحفظ بروابط مؤقتة ولا تُنشر.",
+      "doc": {
+        "cr": "السجل التجاري",
+        "authorization": "خطاب التفويض",
+        "id": "هوية المسؤول",
+        "other": "مستند آخر"
+      },
+      "fileHint": "PDF أو JPG أو PNG أو WebP — حتى 10 ميجابايت.",
+      "fileRejected": "الملف غير مقبول: تحقق من النوع والحجم.",
+      "crDocRequired": "أرفق السجل التجاري",
+      "authDocRequired": "أرفق خطاب التفويض",
+      "sendVerification": "إرسال طلب التوثيق",
+      "later": "لاحقًا",
+      "incomplete": "أكمل بيانات المنشأة قبل إرسال طلب التوثيق"
     },
     "reports": {
       "report": "الإبلاغ عن الإعلان",
@@ -1912,7 +2004,8 @@
       "search": "البحث",
       "add": "أضف",
       "alerts": "التنبيهات",
-      "more": "المزيد"
+      "more": "المزيد",
+      "messages": "المحادثات"
     },
     "more": {
       "title": "المزيد",
@@ -1991,7 +2084,28 @@
       "phone": "رقم الجوال",
       "whatsapp": "واتساب",
       "email": "البريد الإلكتروني",
-      "quantity": "الكمية"
+      "quantity": "الكمية",
+      "back": "رجوع",
+      "next": "التالي",
+      "titleHint": "من {min} إلى {max} حرفًا، اكتب عنوانًا واضحًا للإعلان.",
+      "titleInvalid": "العنوان غير مقبول، الحد المطلوب من 5 إلى 120 حرفًا.",
+      "titleRequired": "العنوان مطلوب",
+      "categoryPath": "مسار التصنيف",
+      "choosePath": "اختر التصنيف",
+      "pathRequired": "أكمل اختيار التصنيف حتى آخر مرحلة",
+      "businessDenied": "لا تملك صلاحية النشر باسم هذه المنشأة",
+      "specs": "مواصفات إضافية",
+      "budget": "الميزانية التقديرية",
+      "stageRoot": "المجال",
+      "stageSection": "القسم",
+      "stageSubType": "النوع الفرعي",
+      "stagePurpose": "الغرض",
+      "step": {
+        "identity": "النشر باسم",
+        "details": "التفاصيل",
+        "location": "الموقع",
+        "review": "المعاينة"
+      }
     },
     "geo": {
       "pick": "اختر السوق",
@@ -2040,6 +2154,48 @@
       "activityTitle": "نشاطي",
       "manageTitle": "إدارة الحساب"
     },
-    "emptyHome": "لا توجد إعلانات منشورة حاليًا"
+    "emptyHome": "لا توجد إعلانات منشورة حاليًا",
+    "loc": {
+      "address": "العنوان التفصيلي",
+      "district": "الحي",
+      "dragHint": "اسحب المؤشر لتحديد موقع الإعلان على الخريطة.",
+      "geocodeFailed": "تعذّر تحديد الموقع من الاسم",
+      "noResults": "لا نتائج للبحث",
+      "permissionDenied": "تم رفض الوصول إلى موقع الجهاز",
+      "searchOnMap": "ابحث على الخريطة",
+      "searchPlaceholder": "اسم الحي أو المعلم القريب",
+      "useMyLocation": "استخدم موقعي الحالي",
+      "visibility": "ظهور الموقع",
+      "visibilityHint": "الموقع التقريبي يعرض دائرة عامة فقط، والموقع الدقيق يعرض الإحداثيات كما حددتها.",
+      "approximate": "تقريبي",
+      "exact": "دقيق",
+      "countryFromAccount": "الدولة مأخوذة من حسابك ولا تُعدّل من هنا."
+    },
+    "spec": {
+      "age": "عمر العقار",
+      "area": "المساحة",
+      "baths": "دورات المياه",
+      "brand": "الماركة",
+      "capacity": "السعة",
+      "coverage": "نطاق التغطية",
+      "delivery": "التوصيل",
+      "experience": "سنوات الخبرة",
+      "facade": "الواجهة",
+      "floor": "الدور",
+      "furnished": "مفروش",
+      "hours": "ساعات العمل",
+      "materialSpec": "مواصفة المادة",
+      "minOrder": "أقل كمية للطلب",
+      "model": "الطراز",
+      "negotiable": "السعر قابل للتفاوض",
+      "productionCapacity": "الطاقة الإنتاجية",
+      "rentPeriod": "مدة الإيجار",
+      "responseTime": "زمن الاستجابة",
+      "rooms": "الغرف",
+      "streetWidth": "عرض الشارع",
+      "warranty": "الضمان",
+      "withOperator": "مع مشغّل",
+      "year": "سنة الصنع"
+    }
   }
 }
