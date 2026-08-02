@@ -26,7 +26,9 @@ import { useState } from "react";
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadBusinesses, loadCategories, loadListings } from "@/lib/mkt-queries";
+import { trackMarketActivity, useSuggestedListings } from "@/lib/mkt-activity";
 import { resolveMedia } from "@/lib/mkt";
+
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
