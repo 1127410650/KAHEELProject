@@ -320,6 +320,8 @@ function ProfilePage() {
           show_email: draft.show_email,
           show_whatsapp: draft.show_whatsapp,
           is_published: draft.is_published,
+          personalize_suggestions: draft.personalize_suggestions,
+
         },
         { onConflict: "user_id" },
       );
