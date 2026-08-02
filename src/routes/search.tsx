@@ -50,7 +50,7 @@ export const Route = createFileRoute("/search")({
       "cityId",
       "min",
       "max",
-      "verified",
+      
       "deal",
       "sort",
       "view",
