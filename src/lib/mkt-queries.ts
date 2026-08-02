@@ -28,7 +28,7 @@ export interface ListingFilters {
   maxPrice?: number | undefined;
   
   deal?: "sale" | "rent" | undefined;
-  sort?: "newest" | "views" | "price_asc" | "price_desc" | undefined;
+  sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | undefined;
   limit?: number | undefined;
   advertiser?: "individual" | "business" | undefined;
   withImageOnly?: boolean | undefined;
