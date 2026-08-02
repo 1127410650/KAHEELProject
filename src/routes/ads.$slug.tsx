@@ -1,13 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { Building2, CalendarDays, Eye, MapPin, Share2, User } from "lucide-react";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { ClientOnly } from "@tanstack/react-router";
+import { Building2, CalendarDays, Eye, MapPin, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { loadGeoLabel, loadPublicPhone } from "@/lib/mkt-geo";
+import { geoName, loadPublicPhone, type MktCity, type MktCountry } from "@/lib/mkt-geo";
 import {
   BUSINESS_COLUMNS,
   LISTING_COLUMNS,
@@ -16,6 +17,7 @@ import {
   relativeTime,
   resolveMedia,
   type MktBusiness,
+  type MktCategory,
   type MktListing,
   type MktUserProfile,
 } from "@/lib/mkt";
@@ -26,8 +28,11 @@ import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ListingGallery } from "@/components/marketplace/ListingGallery";
 import { ListingActions } from "@/components/marketplace/ListingActions";
+import { ListingSpecs } from "@/components/marketplace/ListingSpecs";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const ListingApproxMap = lazy(() => import("@/components/marketplace/ListingApproxMap"));
 
 interface AdSearch {
   action?: string | undefined;
@@ -56,38 +61,80 @@ export const Route = createFileRoute("/ads/$slug")({
   component: AdPage,
 });
 
+/**
+ * One ad with everything the page needs. Visibility is decided by the database
+ * policies: a suspended, draft or soft-deleted ad simply returns no row for
+ * anyone but its owner (or a platform admin).
+ */
 async function loadAd(slug: string) {
   const { data } = await supabase
     .from("mkt_listings")
-    .select(LISTING_COLUMNS)
+    .select(`${LISTING_COLUMNS}, deleted_at`)
     .eq("slug", slug)
-    .eq("status", "published")
-    .is("deleted_at", null)
     .maybeSingle();
   if (!data) return null;
-  const listing = data as unknown as MktListing;
+  const listing = data as unknown as MktListing & { deleted_at: string | null };
 
-  const [{ data: imageRows }, { data: bizRow }, { data: personRow }, types] = await Promise.all([
-    supabase
-      .from("mkt_listing_images")
-      .select("id, url, alt_text, sort_order")
-      .eq("listing_id", listing.id)
-      .order("sort_order"),
-    listing.tenant_id
+  const [{ data: imageRows }, { data: bizRow }, { data: personRow }, types, { data: catRows }] =
+    await Promise.all([
+      supabase
+        .from("mkt_listing_images")
+        .select("id, url, alt_text, sort_order")
+        .eq("listing_id", listing.id)
+        .order("sort_order"),
+      listing.tenant_id
+        ? supabase
+            .from("mkt_business_profiles")
+            .select(BUSINESS_COLUMNS)
+            .eq("tenant_id", listing.tenant_id)
+            .maybeSingle()
+        : Promise.resolve({ data: null }),
+      listing.tenant_id
+        ? Promise.resolve({ data: null })
+        : supabase
+            .from("mkt_user_profiles")
+            .select(USER_PROFILE_COLUMNS)
+            .eq("user_id", listing.owner_user_id)
+            .maybeSingle(),
+      loadListingTypes(),
+      supabase
+        .from("mkt_categories")
+        .select("id, parent_id, slug, name_ar, name_en, icon, sort_order")
+        .in(
+          "id",
+          [listing.category_id, listing.subcategory_id].filter((v): v is string => !!v),
+        ),
+    ]);
+
+  const [{ data: countryRow }, { data: cityRow }, { count: activeAds }] = await Promise.all([
+    listing.country_id
       ? supabase
-          .from("mkt_business_profiles")
-          .select(BUSINESS_COLUMNS)
-          .eq("tenant_id", listing.tenant_id)
+          .from("mkt_countries")
+          .select("id, iso2, name_ar, name_en, calling_code, currency_code, sort_order")
+          .eq("id", listing.country_id)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
+    listing.city_id
+      ? supabase
+          .from("mkt_cities")
+          .select("id, country_id, name_ar, name_en, sort_order")
+          .eq("id", listing.city_id)
           .maybeSingle()
       : Promise.resolve({ data: null }),
     listing.tenant_id
-      ? Promise.resolve({ data: null })
+      ? supabase
+          .from("mkt_listings")
+          .select("id", { count: "exact", head: true })
+          .eq("tenant_id", listing.tenant_id)
+          .eq("status", "published")
+          .is("deleted_at", null)
       : supabase
-          .from("mkt_user_profiles")
-          .select(USER_PROFILE_COLUMNS)
-          .eq("user_id", listing.owner_user_id)
-          .maybeSingle(),
-    loadListingTypes(),
+          .from("mkt_listings")
+          .select("id", { count: "exact", head: true })
+          .eq("owner_user_id", listing.owner_user_id)
+          .is("tenant_id", null)
+          .eq("status", "published")
+          .is("deleted_at", null),
   ]);
 
   const paths = Array.from(
@@ -100,25 +147,104 @@ async function loadAd(slug: string) {
   const media = await resolveMedia(paths);
   const gallery = paths.map((p) => media[p]).filter((u): u is string => !!u);
 
+  const categories = (catRows ?? []) as MktCategory[];
+
   return {
     listing,
     gallery,
     business: (bizRow as MktBusiness | null) ?? null,
     person: (personRow as MktUserProfile | null) ?? null,
     type: types.find((tp) => tp.code === listing.type_code) ?? null,
+    category: categories.find((c) => c.id === listing.category_id) ?? null,
+    subcategory: categories.find((c) => c.id === listing.subcategory_id) ?? null,
+    country: (countryRow as MktCountry | null) ?? null,
+    city: (cityRow as MktCity | null) ?? null,
+    activeAds: activeAds ?? null,
   };
 }
 
-/** Advertiser card: works for both an individual and a business identity. */
-function AdvertiserCard({
-  business,
-  person,
-}: {
-  business: MktBusiness | null;
-  person: MktUserProfile | null;
-}) {
+type AdData = NonNullable<Awaited<ReturnType<typeof loadAd>>>;
+
+/** The description, folded when it is genuinely long. */
+function DescriptionBlock({ text }: { text: string }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const long = text.length > 420;
+
+  return (
+    <section className="mt-4 rounded-xl border border-border bg-card p-4">
+      <h2 className="text-sm font-bold text-foreground">{t("market.ad.description")}</h2>
+      <p
+        className={
+          long && !open
+            ? "mt-2 line-clamp-6 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground"
+            : "mt-2 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground"
+        }
+      >
+        {text}
+      </p>
+      {long && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="mt-2 text-xs font-medium text-primary"
+        >
+          {open ? t("market.ad.showLess") : t("market.ad.showMore")}
+        </button>
+      )}
+    </section>
+  );
+}
+
+/** Location: city and district always, an approximate area on the map by default. */
+function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
+  const { t } = useI18n();
+  const { listing } = ad;
+  const exact = listing.location_visibility === "exact";
+  const hasPoint = listing.latitude !== null && listing.longitude !== null;
+  const place = [cityLabel ?? listing.city, listing.district ?? listing.region]
+    .filter(Boolean)
+    .join(" — ");
+
+  if (!place && !hasPoint) return null;
+
+  return (
+    <section className="mt-4 rounded-xl border border-border bg-card p-4">
+      <h2 className="text-sm font-bold text-foreground">{t("market.ad.location")}</h2>
+      {place && (
+        <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-foreground">
+          <MapPin className="size-4 text-muted-foreground" aria-hidden />
+          {place}
+        </p>
+      )}
+      {hasPoint && (
+        <>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {exact ? t("market.ad.exact") : t("market.ad.approximate")}
+          </p>
+          <div className="mt-3">
+            <ClientOnly fallback={<Skeleton className="h-56 w-full rounded-xl sm:h-64" />}>
+              <Suspense fallback={<Skeleton className="h-56 w-full rounded-xl sm:h-64" />}>
+                <ListingApproxMap
+                  lat={listing.latitude!}
+                  lng={listing.longitude!}
+                  precision={exact ? "exact" : "approximate"}
+                  label={place || t("market.ad.location")}
+                />
+              </Suspense>
+            </ClientOnly>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+/** "About the advertiser": identity, and the only place the check mark appears. */
+function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
   const { t, locale } = useI18n();
   const { session } = useSession();
+  const { business, person, activeAds } = ad;
 
   const isBusiness = !!business;
   const name = business
@@ -127,13 +253,15 @@ function AdvertiserCard({
       : business.display_name_en || business.display_name_ar
     : (person?.display_name ?? t("market.advertiser.individual"));
   const status = business?.verification_status ?? person?.verification_status ?? null;
-  const city = business?.city ?? person?.city ?? null;
+  const city = business?.city ?? person?.city ?? cityLabel;
   const joined = business?.joined_at ?? person?.joined_at ?? null;
-  // An individual's number lives in their private contact record and is only
-  // returned by the database when they chose to make it public.
+  const logo = business?.logo_url ?? null;
+
+  // An individual's number lives in their private contact record and comes back
+  // from the database only when they chose to publish it.
   const personPhone = useQuery({
     queryKey: ["mkt", "public-phone", person?.user_id],
-    enabled: !business && !!person?.user_id,
+    enabled: !!session && !business && !!person?.user_id,
     queryFn: () => loadPublicPhone(person!.user_id),
   });
 
@@ -156,38 +284,22 @@ function AdvertiserCard({
   ].filter((v): v is string => !!v);
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.advertiser")}</h2>
+    <section className="rounded-xl border border-border bg-card p-4">
+      <h2 className="text-sm font-bold text-foreground">{t("market.ad.aboutAdvertiser")}</h2>
 
-      <div className="mt-2 flex items-center gap-2">
-        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground">
-          {isBusiness ? (
-            <Building2 className="size-4" aria-hidden />
+      <div className="mt-3 flex items-start gap-3">
+        <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-muted-foreground">
+          {logo ? (
+            <img src={logo} alt="" loading="lazy" className="size-full object-cover" />
+          ) : isBusiness ? (
+            <Building2 className="size-5" aria-hidden />
           ) : (
-            <User className="size-4" aria-hidden />
+            <User className="size-5" aria-hidden />
           )}
         </span>
         <div className="min-w-0">
-          {business ? (
-            <Link
-              to="/businesses/$slug"
-              params={{ slug: business.slug }}
-              className="block truncate text-sm font-semibold text-primary"
-            >
-              {name}
-            </Link>
-          ) : person?.username ? (
-            <Link
-              to="/u/$username"
-              params={{ username: person.username }}
-              className="block truncate text-sm font-semibold text-primary"
-            >
-              {name}
-            </Link>
-          ) : (
-            <p className="truncate text-sm font-semibold text-foreground">{name}</p>
-          )}
-          {/* Check mark directly under the identity name; nothing negative when absent. */}
+          <p className="truncate text-sm font-semibold text-foreground">{name}</p>
+          {/* Check mark sits under the identity name only; nothing when absent. */}
           <VerifiedBadge status={status} size="xs" />
           <p className="text-[11px] text-muted-foreground">
             {t(`market.advertiser.${isBusiness ? "business" : "individual"}`)}
@@ -195,34 +307,110 @@ function AdvertiserCard({
         </div>
       </div>
 
-
-      {city && <p className="mt-2 text-xs text-muted-foreground">{city}</p>}
-      {joined && (
-        <p className="mt-1 text-xs text-muted-foreground">
-          {t("market.business.joined")}:{" "}
-          {new Date(joined).toLocaleDateString("en-GB", { timeZone: "Asia/Riyadh" })}
-        </p>
-      )}
-
-      {session ? (
-        contacts.length > 0 ? (
-          <div className="mt-2 space-y-1 text-xs text-foreground" dir="ltr">
-            {contacts.map((c) => (
-              <p key={c}>{c}</p>
-            ))}
+      <dl className="mt-3 space-y-1 text-xs text-muted-foreground">
+        {city && (
+          <div className="flex gap-1.5">
+            <dt>{t("market.filters.city")}:</dt>
+            <dd className="min-w-0 break-words text-foreground">{city}</dd>
           </div>
-        ) : (
-          <p className="mt-2 text-xs text-muted-foreground">{t("market.ad.contactPrivate")}</p>
-        )
-      ) : (
-        <>
-          <p className="mt-2 text-xs text-muted-foreground">{t("market.ad.contactHidden")}</p>
-          <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-            <Link to="/auth">{t("market.signIn")}</Link>
-          </Button>
-        </>
+        )}
+        {joined && (
+          <div className="flex gap-1.5">
+            <dt>{t("market.business.joined")}:</dt>
+            <dd className="text-foreground" dir="ltr">
+              {new Date(joined).toLocaleDateString("en-GB", { timeZone: "Asia/Riyadh" })}
+            </dd>
+          </div>
+        )}
+        {typeof activeAds === "number" && activeAds > 0 && (
+          <div className="flex gap-1.5">
+            <dt>{t("market.ad.activeAds")}:</dt>
+            <dd className="text-foreground">{activeAds}</dd>
+          </div>
+        )}
+      </dl>
+
+      {(business?.slug || person?.username) && (
+        <Button asChild variant="outline" size="sm" className="mt-3 w-full">
+          {business ? (
+            <Link to="/businesses/$slug" params={{ slug: business.slug }}>
+              {t("market.ad.visitProfile")}
+            </Link>
+          ) : (
+            <Link to="/u/$username" params={{ username: person!.username }}>
+              {t("market.ad.visitProfile")}
+            </Link>
+          )}
+        </Button>
       )}
-    </div>
+
+      {session && contacts.length > 0 && (
+        <div className="mt-3 space-y-1 text-xs text-foreground" dir="ltr">
+          {contacts.map((c) => (
+            <p key={c}>{c}</p>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** Owner-only tools. Every action goes through the database policies. */
+function OwnerTools({ listing, onDone }: { listing: MktListing; onDone: () => void }) {
+  const { t } = useI18n();
+  const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+
+  async function update(patch: Record<string, unknown>, message: string) {
+    setBusy(true);
+    const { error } = await supabase.from("mkt_listings").update(patch).eq("id", listing.id);
+    setBusy(false);
+    if (error) {
+      toast.error(t("market.actions.failed"));
+      return;
+    }
+    toast.success(message);
+    onDone();
+  }
+
+  return (
+    <section className="rounded-xl border border-border bg-card p-4">
+      <h2 className="text-sm font-bold text-foreground">{t("market.ad.ownerTools")}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{t("market.ad.yourAd")}</p>
+      <div className="mt-3 grid gap-2">
+        <Button asChild size="sm" variant="secondary">
+          <Link to="/dashboard/ads/$id/edit" params={{ id: listing.id }}>
+            {t("market.ad.edit")}
+          </Link>
+        </Button>
+        {listing.status === "published" && (
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={busy}
+            onClick={() => void update({ status: "draft" }, t("market.ad.unpublished"))}
+          >
+            {t("market.ad.unpublish")}
+          </Button>
+        )}
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={busy}
+          onClick={() =>
+            void update(
+              { deleted_at: new Date().toISOString(), status: "archived" },
+              t("market.ad.deletedOk"),
+            ).then(() => navigate({ to: "/dashboard/my-ads" }))
+          }
+        >
+          {t("market.ad.softDelete")}
+        </Button>
+        <Button asChild size="sm" variant="ghost">
+          <Link to="/dashboard/my-ads">{t("market.ad.statusPreview")}</Link>
+        </Button>
+      </div>
+    </section>
   );
 }
 
@@ -234,41 +422,46 @@ function AdPage() {
 
   const ad = useQuery({ queryKey: ["mkt", "ad", slug], queryFn: () => loadAd(slug) });
 
-  const geoLabel = useQuery({
-    queryKey: [
-      "mkt",
-      "geo-label",
-      ad.data?.listing.country_id,
-      ad.data?.listing.city_id,
-      locale,
-    ],
-    enabled: !!ad.data,
-    queryFn: () =>
-      loadGeoLabel(ad.data!.listing.country_id, ad.data!.listing.city_id, locale),
-  });
-
-
   const similar = useQuery({
     queryKey: ["mkt", "similar", ad.data?.listing.id, locale],
-    enabled: !!ad.data,
+    enabled: !!ad.data && ad.data.listing.status === "published",
     queryFn: async () => {
       const listing = ad.data!.listing;
-      const { data } = await supabase
+      let query = supabase
         .from("mkt_listings")
         .select(LISTING_COLUMNS)
         .eq("status", "published")
         .is("deleted_at", null)
         .eq("category_id", listing.category_id)
-        .neq("id", listing.id)
-        .order("published_at", { ascending: false })
-        .limit(4);
-      return decorateListings((data ?? []) as unknown as MktListing[], locale);
+        .neq("id", listing.id);
+      if (listing.subcategory_id) query = query.eq("subcategory_id", listing.subcategory_id);
+      const { data } = await query.order("published_at", { ascending: false }).limit(4);
+      let rows = (data ?? []) as unknown as MktListing[];
+      if (rows.length === 0) {
+        const { data: wider } = await supabase
+          .from("mkt_listings")
+          .select(LISTING_COLUMNS)
+          .eq("status", "published")
+          .is("deleted_at", null)
+          .eq("category_id", listing.category_id)
+          .neq("id", listing.id)
+          .order("published_at", { ascending: false })
+          .limit(4);
+        rows = (wider ?? []) as unknown as MktListing[];
+      }
+      // Same city and same purpose first, then the most recent.
+      rows.sort(
+        (a, b) =>
+          Number(b.city_id === listing.city_id) - Number(a.city_id === listing.city_id) ||
+          Number(b.type_code === listing.type_code) - Number(a.type_code === listing.type_code),
+      );
+      return decorateListings(rows, locale);
     },
   });
 
   useEffect(() => {
     const row = ad.data?.listing;
-    if (!row?.id) return;
+    if (!row?.id || row.status !== "published") return;
     void supabase.rpc("mkt_increment_views", { _listing_id: row.id });
     // Feeds "Suggested for you" — ad + category + city only.
     trackMarketActivity({
@@ -279,12 +472,13 @@ function AdPage() {
     });
   }, [ad.data?.listing]);
 
-
   if (ad.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <Skeleton className="h-72 w-full rounded-xl" />
+        <div className="mx-auto max-w-7xl space-y-3 px-4 py-8">
+          <Skeleton className="h-6 w-3/4" />
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="aspect-[16/10] w-full rounded-xl" />
         </div>
       </MarketShell>
     );
@@ -303,26 +497,40 @@ function AdPage() {
     );
   }
 
-  const { listing, gallery, business, person, type } = ad.data;
-  const specs = (listing.specs && typeof listing.specs === "object" ? listing.specs : {}) as Record<
-    string,
-    unknown
-  >;
+  const { listing, gallery, type, category, subcategory, country, city } = ad.data;
+  const isOwner = session?.user.id === listing.owner_user_id;
+  const visible = listing.status === "published" && !listing.deleted_at;
+
+  const cityLabel = city ? geoName(city, locale) : listing.city;
+  const countryLabel = country ? geoName(country, locale) : null;
+  // The country is redundant for the home market; it only helps across borders.
+  const showCountry = !!countryLabel && country?.iso2 !== "SA";
+  const categoryPath = [category, subcategory]
+    .filter((c): c is MktCategory => !!c)
+    .map((c) => (locale === "ar" ? c.name_ar : c.name_en || c.name_ar))
+    .join(" › ");
 
   return (
     <MarketShell>
       <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 py-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px]">
         <article className="min-w-0">
-          {/* Title first, then price, then gallery: the reading order buyers expect. */}
+          {!visible && (
+            <div className="mb-3 rounded-xl border border-border bg-secondary p-3">
+              <p className="text-sm font-semibold text-secondary-foreground">
+                {t(`market.dash.status.${listing.deleted_at ? "deleted" : listing.status}`)}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{t("market.ad.statusNotice")}</p>
+              {listing.rejection_reason && (
+                <p className="mt-1 text-xs text-destructive">{listing.rejection_reason}</p>
+              )}
+            </div>
+          )}
+
+          {/* Key facts first, gallery after: the order buyers read in. */}
           <div className="flex flex-wrap items-center gap-1.5">
             {type && (
               <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
                 {locale === "ar" ? type.name_ar : type.name_en}
-              </span>
-            )}
-            {listing.item_condition && (
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground">
-                {t(`market.condition.${listing.item_condition}`)}
               </span>
             )}
             {listing.deal_kind && (
@@ -330,101 +538,84 @@ function AdPage() {
                 {t(`market.filters.${listing.deal_kind}`)}
               </span>
             )}
-            {/* No verification mark at the top of an ad: it belongs to the advertiser. */}
-
           </div>
 
-          <h1 className="mt-2 text-lg font-bold leading-snug text-foreground sm:text-2xl">
+          <h1 className="mt-2 break-words text-lg font-bold leading-snug text-foreground sm:text-2xl">
             {listing.title}
           </h1>
-          <p className="mt-1 text-lg font-bold text-primary sm:text-xl">
+          <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
             {priceLabel(listing, t("market.priceOnRequest"))}
           </p>
 
+          {categoryPath && (
+            <p className="mt-2 break-words text-xs text-muted-foreground">{categoryPath}</p>
+          )}
+
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            {(geoLabel.data ?? listing.city) && (
+            {(cityLabel || listing.district) && (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" aria-hidden />
-                {geoLabel.data ?? listing.city}
-                {listing.region ? ` — ${listing.region}` : ""}
+                {[showCountry ? countryLabel : null, cityLabel, listing.district]
+                  .filter(Boolean)
+                  .join(" — ")}
               </span>
             )}
             <span className="inline-flex items-center gap-1">
               <CalendarDays className="size-3.5" aria-hidden />
               {relativeTime(listing.published_at ?? listing.created_at, locale)}
             </span>
-            <span className="inline-flex items-center gap-1">
-              <Eye className="size-3.5" aria-hidden />
-              {listing.views_count}
+            {visible && (
+              <span className="inline-flex items-center gap-1">
+                <Eye className="size-3.5" aria-hidden />
+                {listing.views_count}
+              </span>
+            )}
+            <span dir="ltr">
+              {t("market.ad.refNo")}: {listing.id.slice(0, 8).toUpperCase()}
             </span>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 text-primary"
-              onClick={() => {
-                void navigator.clipboard.writeText(window.location.href);
-                toast.success(t("market.ad.linkCopied"));
-              }}
-            >
-              <Share2 className="size-3.5" aria-hidden />
-              {t("market.ad.share")}
-            </button>
+          </div>
+
+          <div className="mt-3">
+            <ListingActions listing={listing} pendingAction={action} variant="quick" />
           </div>
 
           <div className="mt-3">
             <ListingGallery images={gallery} title={listing.title} />
           </div>
 
-          {/* On phones the action panel sits right under the gallery. */}
-          <div className="mt-4 rounded-xl border border-border bg-card p-4 lg:hidden">
-            <ListingActions listing={listing} pendingAction={action} />
-            {!session && (
-              <p className="mt-3 text-xs text-muted-foreground">{t("market.ad.signInHint")}</p>
+          {/* On phones the contact panel sits right under the gallery. */}
+          <div className="mt-4 lg:hidden">
+            {isOwner ? (
+              <OwnerTools listing={listing} onDone={() => void ad.refetch()} />
+            ) : (
+              <div className="rounded-xl border border-border bg-card p-4">
+                <ListingActions listing={listing} pendingAction={action} />
+                {!session && (
+                  <Button asChild variant="outline" size="sm" className="mt-3 w-full">
+                    <Link to="/auth">{t("market.ad.signInToContact")}</Link>
+                  </Button>
+                )}
+              </div>
             )}
           </div>
 
-          {listing.summary && <p className="mt-4 text-sm text-foreground">{listing.summary}</p>}
-
-          {listing.description && (
-            <div className="mt-4 rounded-xl border border-border bg-card p-4">
-              <h2 className="text-sm font-bold text-foreground">{t("market.ad.details")}</h2>
-              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-                {listing.description}
-              </p>
-            </div>
+          {listing.summary && (
+            <p className="mt-4 break-words text-sm text-foreground">{listing.summary}</p>
           )}
 
-          {(Object.keys(specs).length > 0 || listing.quantity !== null) && (
-            <div className="mt-4 rounded-xl border border-border bg-card p-4">
-              <h2 className="text-sm font-bold text-foreground">{t("market.ad.specs")}</h2>
-              <dl className="mt-2 grid gap-2 sm:grid-cols-2">
-                {listing.quantity !== null && (
-                  <div className="flex justify-between gap-2 text-sm">
-                    <dt className="text-muted-foreground">{t("market.form.quantity")}</dt>
-                    <dd className="font-medium text-foreground">
-                      {listing.quantity}
-                      {listing.unit ? ` ${listing.unit}` : ""}
-                    </dd>
-                  </div>
-                )}
-                {Object.entries(specs).map(([key, value]) => (
-                  <div key={key} className="flex justify-between gap-2 text-sm">
-                    <dt className="text-muted-foreground">{key}</dt>
-                    <dd className="font-medium text-foreground">{String(value)}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          )}
+          {listing.description && <DescriptionBlock text={listing.description} />}
+
+          <ListingSpecs listing={listing} />
+
+          <LocationBlock ad={ad.data} cityLabel={cityLabel} />
 
           <div className="mt-4 lg:hidden">
-            <AdvertiserCard business={business} person={person} />
+            <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />
           </div>
 
           {(similar.data ?? []).length > 0 && (
             <section className="mt-8">
-              <h2 className="mb-3 text-base font-bold text-foreground">
-                {t("market.ad.similar")}
-              </h2>
+              <h2 className="mb-3 text-base font-bold text-foreground">{t("market.ad.similar")}</h2>
               <div className="flex flex-col gap-2.5 sm:hidden">
                 {(similar.data ?? []).map((l) => (
                   <ListingCard key={l.id} listing={l} view="row" />
@@ -440,13 +631,19 @@ function AdPage() {
         </article>
 
         <aside className="hidden space-y-4 lg:sticky lg:top-20 lg:block lg:self-start">
-          <div className="rounded-xl border border-border bg-card p-4">
-            <ListingActions listing={listing} pendingAction={action} />
-            {!session && (
-              <p className="mt-3 text-xs text-muted-foreground">{t("market.ad.signInHint")}</p>
-            )}
-          </div>
-          <AdvertiserCard business={business} person={person} />
+          {isOwner ? (
+            <OwnerTools listing={listing} onDone={() => void ad.refetch()} />
+          ) : (
+            <div className="rounded-xl border border-border bg-card p-4">
+              <ListingActions listing={listing} pendingAction={action} />
+              {!session && (
+                <Button asChild variant="outline" size="sm" className="mt-3 w-full">
+                  <Link to="/auth">{t("market.ad.signInToContact")}</Link>
+                </Button>
+              )}
+            </div>
+          )}
+          <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />
         </aside>
       </div>
     </MarketShell>
