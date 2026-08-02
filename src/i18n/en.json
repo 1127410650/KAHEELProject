@@ -2237,5 +2237,13 @@
       "unavailable": "This feature isn't available for this account.",
       "home": "Home"
     }
+  },
+  "routeError": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The link you opened doesn't exist or was moved.",
+    "errorTitle": "This page didn't load",
+    "retry": "Try again",
+    "home": "Home",
+    "code404": "404"
   }
 }
