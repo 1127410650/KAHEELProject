@@ -47,13 +47,6 @@ export function MarketHeader() {
       >
         {t("market.nav.requests")}
       </Link>
-      <Link
-        to="/search"
-        search={{ verified: "1" }}
-        className="text-sm font-medium text-foreground hover:text-primary"
-      >
-        {t("market.nav.verified")}
-      </Link>
       <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
         {t("market.nav.more")}
       </Link>
