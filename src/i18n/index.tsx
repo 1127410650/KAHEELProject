@@ -107,8 +107,24 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
+/**
+ * Fallback used when a component renders outside the provider (e.g. during an
+ * HMR boundary swap). Translations still resolve; only locale switching is a
+ * no-op, which is preferable to crashing the whole page.
+ */
+const fallbackI18n: I18nContextValue = {
+  locale: "ar",
+  dir: "rtl",
+  setLocale: (next) => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(STORAGE_KEY, next);
+      for (const listener of localeListeners) listener();
+    }
+  },
+  t: (key, vars) => translate(readStoredLocale(), key, vars),
+  tl: (key, forced, vars) => translate(forced, key, vars),
+};
+
 export function useI18n(): I18nContextValue {
-  const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error("useI18n must be used inside I18nProvider");
-  return ctx;
+  return useContext(I18nContext) ?? fallbackI18n;
 }
