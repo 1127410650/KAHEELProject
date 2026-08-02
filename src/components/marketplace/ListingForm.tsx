@@ -19,7 +19,9 @@ import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveIdentity } from "@/lib/mkt-identity";
+import { CountryCitySelect } from "@/components/marketplace/GeoFields";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
