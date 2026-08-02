@@ -319,10 +319,8 @@ function AdPage() {
                 {t(`market.filters.${listing.deal_kind}`)}
               </span>
             )}
-            <VerifiedBadge
-              status={business?.verification_status ?? person?.verification_status}
-              size="xs"
-            />
+            {/* No verification mark at the top of an ad: it belongs to the advertiser. */}
+
           </div>
 
           <h1 className="mt-2 text-lg font-bold leading-snug text-foreground sm:text-2xl">
