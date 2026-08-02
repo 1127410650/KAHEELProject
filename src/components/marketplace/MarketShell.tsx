@@ -22,15 +22,28 @@ import { Button } from "@/components/ui/button";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 import { AccountMenu } from "@/components/marketplace/AccountMenu";
 
+/**
+ * The single header for every marketplace surface (public pages, account pages
+ * via DashboardShell, and the back office via AdminShell). Element order is
+ * identical on desktop and mobile; only visibility differs by session state:
+ *
+ *   logo · search · language(desktop) · [notifications · account | sign-in] · add
+ *
+ * There is deliberately no second account switcher, no "marketplace"/"more"
+ * link (the logo and the mobile nav cover those) and no legacy `/login` href.
+ */
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
 
+  const addListingHref = session
+    ? undefined
+    : `/auth?next=${encodeURIComponent("/dashboard/ads/new")}`;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-4">
-        <Link to="/" className="flex shrink-0 items-center gap-2">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-1.5 px-3 py-2.5 sm:gap-3 sm:px-4">
+        <Link to="/" className="flex shrink-0 items-center gap-2" aria-label={t("market.brand")}>
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <Store className="size-4" aria-hidden />
           </span>
@@ -39,59 +52,62 @@ export function MarketHeader() {
           </span>
         </Link>
 
-        {/* «البحث» — the single search entry point in the header. */}
+        {/* The single search entry point in the app chrome. */}
         <Link
           to="/search"
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+          aria-label={t("market.nav.search")}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:px-3"
         >
           <Search className="size-4" aria-hidden />
-          {t("market.nav.search")}
+          <span className="hidden sm:inline">{t("market.nav.search")}</span>
         </Link>
 
         <div className="min-w-0 flex-1" />
 
-        {/* Only shipped destinations are linked from the header. */}
-        <nav className="hidden items-center gap-5 lg:flex">
-          <Link to="/" className="text-sm font-medium text-foreground hover:text-primary">
-            {t("market.nav.marketplace")}
-          </Link>
-          <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
-            {t("market.nav.more")}
-          </Link>
-        </nav>
-
-
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <MktNotificationsBell />
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <button
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
+            aria-label={t("nav.language")}
             className="hidden rounded-md border border-input px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-primary sm:block"
           >
             {locale === "ar" ? "EN" : "ع"}
           </button>
-          {/* The single account surface: identity, switching and management. */}
+
           {session ? (
-            <AccountMenu />
+            <>
+              <MktNotificationsBell />
+              {/* The single account surface: identity, switching and management. */}
+              <AccountMenu />
+            </>
           ) : (
-            <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
-              <Link to="/login">
+            <Button asChild size="sm" variant="outline">
+              <Link to="/auth">
                 <ShieldCheck className="size-4" aria-hidden />
-                <span className="hidden lg:inline">{t("market.signIn")}</span>
+                <span className="hidden sm:inline">{t("market.signIn")}</span>
               </Link>
             </Button>
           )}
+
           <Button asChild size="sm" className="shrink-0">
-            <Link to="/dashboard/ads/new" aria-label={t("market.addListing")}>
-              <Plus className="size-4" aria-hidden />
-              <span className="hidden sm:inline">{t("market.addListing")}</span>
-            </Link>
+            {addListingHref ? (
+              <a href={addListingHref} aria-label={t("market.addListing")}>
+                <Plus className="size-4" aria-hidden />
+                <span className="hidden sm:inline">{t("market.addListing")}</span>
+              </a>
+            ) : (
+              <Link to="/dashboard/ads/new" aria-label={t("market.addListing")}>
+                <Plus className="size-4" aria-hidden />
+                <span className="hidden sm:inline">{t("market.addListing")}</span>
+              </Link>
+            )}
           </Button>
         </div>
       </div>
     </header>
   );
 }
+
 
 /**
  * Signed-in visitors with an incomplete marketplace account are sent once to the
