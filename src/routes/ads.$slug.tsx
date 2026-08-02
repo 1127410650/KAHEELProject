@@ -361,7 +361,9 @@ function OwnerTools({ listing, onDone }: { listing: MktListing; onDone: () => vo
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
 
-  async function update(patch: Record<string, unknown>, message: string) {
+  type ListingPatch = { status?: string; deleted_at?: string };
+
+  async function update(patch: ListingPatch, message: string) {
     setBusy(true);
     const { error } = await supabase.from("mkt_listings").update(patch).eq("id", listing.id);
     setBusy(false);
