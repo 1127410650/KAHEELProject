@@ -1,21 +1,16 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ImagePlus, Loader2, X } from "lucide-react";
+import { Building2, ImagePlus, Loader2, User, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import {
-  BUSINESS_COLUMNS,
-  MKT_BUCKET,
-  SA_CITIES,
-  type MktBusiness,
-  type MktListing,
-} from "@/lib/mkt";
+import { MKT_BUCKET, SA_CITIES, type MktListing } from "@/lib/mkt";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
-import { useWorkspaces } from "@/hooks/use-workspace";
+import { useActiveIdentity } from "@/lib/mkt-identity";
+import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,22 +35,12 @@ export function ListingForm({ listing }: Props) {
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
 
-  const workspaces = useWorkspaces();
-  const activeTenant = (workspaces.data ?? []).find((w) => w.is_current)?.tenant_id ?? null;
-  const business = useQuery({
-    queryKey: ["mkt", "my-business", activeTenant],
-    enabled: !!activeTenant,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("mkt_business_profiles")
-        .select(BUSINESS_COLUMNS)
-        .eq("tenant_id", activeTenant!)
-        .maybeSingle();
-      return (data as MktBusiness | null) ?? null;
-    },
-  });
-  // A business may prepare drafts while unverified, but only verified ones can go to review.
-  const blockedByVerification = !!business.data && business.data.verification_status !== "verified";
+  // Every registered user can publish. The identity only decides the name the ad
+  // carries; verification is a trust badge, not a permission.
+  const { identities, active, select } = useActiveIdentity();
+  // The identity of an existing ad is fixed and cannot be switched afterwards.
+  const lockedIdentity = !!listing;
+  const tenantId = lockedIdentity ? (listing?.tenant_id ?? null) : (active?.tenantId ?? null);
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
   const subs = (categories.data ?? []).filter((c) => c.parent_id === categoryId);
@@ -89,10 +74,6 @@ export function ListingForm({ listing }: Props) {
     const fd = new FormData(event.currentTarget);
     if (!categoryId) {
       toast.error(t("market.dash.pickCategory"));
-      return;
-    }
-    if (publish && blockedByVerification) {
-      toast.error(t("market.dash.needsVerification"));
       return;
     }
     setBusy(true);
@@ -131,7 +112,7 @@ export function ListingForm({ listing }: Props) {
       } else {
         const { data, error } = await supabase
           .from("mkt_listings")
-          .insert(payload)
+          .insert({ ...payload, owner_user_id: session!.user.id, tenant_id: tenantId })
           .select("id")
           .single();
         if (error || !data) throw error ?? new Error("insert failed");
@@ -151,6 +132,49 @@ export function ListingForm({ listing }: Props) {
 
   return (
     <form className="max-w-2xl space-y-4" onSubmit={(e) => void onSubmit(e, true)}>
+      <fieldset className="space-y-2 rounded-xl border border-border bg-card p-3">
+        <legend className="px-1 text-sm font-semibold text-foreground">
+          {t("market.dash.publishAs")}
+        </legend>
+        {lockedIdentity ? (
+          <p className="text-xs text-muted-foreground">{t("market.dash.identityLocked")}</p>
+        ) : (
+          <>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {identities.map((identity) => (
+                <button
+                  key={identity.key}
+                  type="button"
+                  onClick={() => select(identity.key)}
+                  aria-pressed={identity.key === active?.key}
+                  className={
+                    identity.key === active?.key
+                      ? "flex items-center gap-2 rounded-lg border-2 border-primary bg-primary/5 p-2.5 text-start"
+                      : "flex items-center gap-2 rounded-lg border border-border p-2.5 text-start hover:border-primary/40"
+                  }
+                >
+                  {identity.kind === "business" ? (
+                    <Building2 className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  ) : (
+                    <User className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  )}
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium text-foreground">
+                      {identity.name}
+                    </span>
+                    <span className="block text-[11px] text-muted-foreground">
+                      {t(`market.identity.${identity.kind}`)}
+                    </span>
+                  </span>
+                  <VerifiedBadge status={identity.verificationStatus} size="xs" />
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{t("market.dash.identityHint")}</p>
+          </>
+        )}
+      </fieldset>
+
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="type_code">{t("market.filters.type")}</Label>
@@ -323,30 +347,38 @@ export function ListingForm({ listing }: Props) {
           />
         </label>
         {files.length > 0 && (
-          <ul className="space-y-1">
-            {files.map((f) => (
-              <li
-                key={f.name}
-                className="flex items-center justify-between gap-2 text-xs text-muted-foreground"
-              >
-                <span className="truncate">{f.name}</span>
-                <button type="button" onClick={() => setFiles(files.filter((x) => x !== f))}>
-                  <X className="size-3.5" aria-hidden />
-                </button>
-              </li>
-            ))}
-          </ul>
+          <>
+            <p className="text-[11px] text-muted-foreground">{t("market.dash.coverHint")}</p>
+            <ul className="flex flex-wrap gap-2">
+              {files.map((f, index) => (
+                <li key={`${f.name}-${index}`} className="relative">
+                  <img
+                    src={URL.createObjectURL(f)}
+                    alt={f.name}
+                    className="size-20 rounded-lg border border-border object-cover"
+                  />
+                  {index === 0 && (
+                    <span className="absolute bottom-1 start-1 rounded bg-primary px-1 text-[9px] font-semibold text-primary-foreground">
+                      {t("market.dash.cover")}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    aria-label={t("common.delete")}
+                    className="absolute -top-1.5 -end-1.5 rounded-full bg-background p-0.5 text-muted-foreground shadow"
+                    onClick={() => setFiles(files.filter((_, i) => i !== index))}
+                  >
+                    <X className="size-3.5" aria-hidden />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
 
-      {blockedByVerification && (
-        <p className="rounded-md border border-border bg-muted/50 p-3 text-xs text-muted-foreground">
-          {t("market.dash.needsVerification")}
-        </p>
-      )}
-
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={busy || blockedByVerification}>
+        <Button type="submit" disabled={busy}>
           {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
           {t("market.dash.submitForReview")}
         </Button>
