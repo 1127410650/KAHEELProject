@@ -78,7 +78,21 @@ const GROUPS = [
 function MorePage() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
-  const { account: active } = useActiveAccount();
+  const { account: active, can } = useActiveAccount();
+
+  // Links are filtered through the central route map so this page never offers a
+  // destination the current account would be blocked from opening.
+  const groups = GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) =>
+      canSeeLink(item.to, {
+        signedIn: !!session,
+        accountKind: active?.kind ?? null,
+        can,
+      }),
+    ),
+  })).filter((group) => group.items.length > 0);
+
 
   return (
     <MarketShell>
