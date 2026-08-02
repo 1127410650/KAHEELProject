@@ -2104,8 +2104,11 @@
         "identity": "Publish as",
         "details": "Details",
         "location": "Location",
-        "review": "Review"
-      }
+        "review": "Review",
+        "category": "Category"
+      },
+      "publishingAs": "Publishing as: {name}",
+      "noPublishPermission": "You do not have permission to publish ads in this account."
     },
     "geo": {
       "pick": "Choose market",
@@ -2210,6 +2213,20 @@
         "month": "Monthly",
         "project": "Per project"
       }
+    },
+    "entry": {
+      "title": "Choose account",
+      "subtitle": "The platform works under the account you choose only, fully isolated from the others.",
+      "change": "Change account",
+      "workingUnder": "Working as: {name}",
+      "revoked": "Your access to that account ended. Pick another account.",
+      "kind": {
+        "individual": "Personal account",
+        "business": "Business"
+      },
+      "otherAccount": "This ad belongs to “{name}”, not the active account.",
+      "switchTo": "Enter as {name}",
+      "notYours": "This ad does not belong to any of your accounts."
     }
   }
 }
