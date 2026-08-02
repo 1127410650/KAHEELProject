@@ -28,7 +28,7 @@ export interface ListingFilters {
   maxPrice?: number | undefined;
   
   deal?: "sale" | "rent" | undefined;
-  sort?: "newest" | "views" | "price_asc" | "price_desc" | undefined;
+  sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | undefined;
   limit?: number | undefined;
   advertiser?: "individual" | "business" | undefined;
   withImageOnly?: boolean | undefined;
@@ -177,6 +177,9 @@ async function queryListings(
   }
 
   switch (filters.sort) {
+    case "oldest":
+      query = query.order("published_at", { ascending: true, nullsFirst: false });
+      break;
     case "views":
       query = query.order("views_count", { ascending: false });
       break;
@@ -247,4 +250,54 @@ export async function loadBusinesses(limit = 8): Promise<MktBusiness[]> {
     .order("joined_at", { ascending: false })
     .limit(limit);
   return (data ?? []) as MktBusiness[];
+}
+
+export interface BusinessSearchFilters {
+  q?: string | undefined;
+  countryIso2?: string | undefined;
+  cityId?: string | undefined;
+  sort?: "newest" | "oldest" | undefined;
+}
+
+/**
+ * One page of published businesses for the "suppliers & businesses" field of the
+ * search page. Verification never filters or reorders: it only decides whether a
+ * check mark renders under the name inside the identity block.
+ */
+export async function loadBusinessesPage(
+  filters: BusinessSearchFilters,
+  page: number,
+): Promise<{ rows: MktBusiness[]; logos: Record<string, string>; fetched: number }> {
+  let countryId: string | undefined;
+  if (filters.countryIso2) {
+    const { data } = await supabase
+      .from("mkt_countries")
+      .select("id")
+      .eq("iso2", filters.countryIso2)
+      .maybeSingle();
+    countryId = data?.id;
+  }
+
+  let query = supabase
+    .from("mkt_business_profiles")
+    .select(BUSINESS_COLUMNS)
+    .eq("is_published", true);
+
+  if (countryId) query = query.eq("country_id", countryId);
+  if (filters.cityId) query = query.eq("city_id", filters.cityId);
+  if (filters.q) {
+    const term = `%${filters.q}%`;
+    query = query.or(
+      `display_name_ar.ilike.${term},display_name_en.ilike.${term},headline.ilike.${term}`,
+    );
+  }
+  query = query
+    .order("joined_at", { ascending: filters.sort === "oldest", nullsFirst: false })
+    .order("tenant_id", { ascending: false })
+    .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
+
+  const { data } = await query;
+  const rows = (data ?? []) as MktBusiness[];
+  const logos = await resolveMedia(rows.map((r) => r.logo_url));
+  return { rows, logos, fetched: rows.length };
 }

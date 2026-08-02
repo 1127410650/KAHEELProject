@@ -285,6 +285,10 @@ body {
   a[role="button"] {
     min-height: 40px;
   }
+  button[role="checkbox"],
+  button[role="switch"] {
+    min-height: 0;
+  }
   input,
   select,
   textarea {
