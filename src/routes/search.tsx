@@ -57,16 +57,24 @@ const PARAM_KEYS = [
   "sort",
 ] as const;
 
+type DomainKey = "realestate" | "service" | "product" | "equipment_rent" | "business";
+
+interface DomainDef {
+  key: DomainKey;
+  categorySlug?: string;
+  typeCode?: string;
+}
+
 /** The five broad fields. Each one maps onto real query constraints only. */
-const DOMAINS = [
+const DOMAINS: DomainDef[] = [
   { key: "realestate", categorySlug: "real-estate" },
   { key: "service", typeCode: "service" },
   { key: "product", typeCode: "product" },
   { key: "equipment_rent", typeCode: "equipment_rent" },
   { key: "business" },
-] as const;
+];
 
-type DomainKey = (typeof DOMAINS)[number]["key"];
+
 
 const SORTS = ["newest", "oldest", "price_asc", "price_desc"] as const;
 type SortKey = (typeof SORTS)[number];
