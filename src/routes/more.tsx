@@ -45,7 +45,7 @@ const GROUPS = [
     items: [
       { to: "/marketplace", key: "marketplace", icon: Store },
       { to: "/search", key: "search", icon: Search },
-      { to: "/search", key: "verified", icon: ShieldCheck, search: { verified: "1" } },
+      
     ],
   },
   {
