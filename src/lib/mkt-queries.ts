@@ -188,9 +188,8 @@ async function queryListings(
   const { data } = await query;
   const raw = (data ?? []) as unknown as MktListing[];
   const decorated = await decorateListings(raw, locale);
-  const rows = filters.verifiedOnly
-    ? decorated.filter((l) => l.verificationStatus === "verified")
-    : decorated;
+  // Verification is a visual badge only: it never filters or reorders results.
+  const rows = decorated;
   return { rows, fetched: raw.length };
 }
 
