@@ -2195,7 +2195,21 @@
       "streetWidth": "Street width",
       "warranty": "Warranty",
       "withOperator": "With operator",
-      "year": "Year"
+      "year": "Year",
+      "opt": {
+        "north": "North",
+        "south": "South",
+        "east": "East",
+        "west": "West",
+        "north_east": "North-east",
+        "north_west": "North-west",
+        "south_east": "South-east",
+        "south_west": "South-west",
+        "day": "Daily",
+        "week": "Weekly",
+        "month": "Monthly",
+        "project": "Per project"
+      }
     }
   }
 }
