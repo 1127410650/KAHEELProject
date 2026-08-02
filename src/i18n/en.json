@@ -2218,6 +2218,9 @@
       "title": "Choose account",
       "subtitle": "The platform works under the account you choose only, fully isolated from the others.",
       "change": "Change account",
+      "enter": "Enter with this account",
+      "browsePublic": "Browse the marketplace without an account",
+      "businessCreated": "Business created. You can now select it from the list.",
       "workingUnder": "Working as: {name}",
       "revoked": "Your access to that account ended. Pick another account.",
       "kind": {
