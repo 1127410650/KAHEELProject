@@ -46,6 +46,7 @@ import { Route as DashboardBusinessRouteImport } from './routes/dashboard/busine
 import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
+import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/notifications'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -253,6 +254,11 @@ const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
   path: '/dashboard/my-ads',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
+  id: '/dashboard/notifications',
+  path: '/dashboard/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
   id: '/dashboard/requests',
   path: '/dashboard/requests',
@@ -387,6 +393,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -443,6 +450,7 @@ export interface FileRoutesByTo {
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -501,6 +509,7 @@ export interface FileRoutesById {
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -559,6 +568,7 @@ export interface FileRouteTypes {
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/notifications'
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
@@ -615,6 +625,7 @@ export interface FileRouteTypes {
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/notifications'
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
@@ -672,6 +683,7 @@ export interface FileRouteTypes {
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/notifications'
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
@@ -711,6 +723,7 @@ export interface RootRouteChildren {
   DashboardFavoritesRoute: typeof DashboardFavoritesRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -984,6 +997,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardMyAdsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/notifications': {
+      id: '/dashboard/notifications'
+      path: '/dashboard/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/requests': {
       id: '/dashboard/requests'
       path: '/dashboard/requests'
@@ -1196,6 +1216,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardFavoritesRoute: DashboardFavoritesRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardMyAdsRoute: DashboardMyAdsRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
