@@ -57,20 +57,12 @@ export function BusinessQuickCreate({ open, onOpenChange, onCreated }: Props) {
     }
     setBusy(true);
     try {
+      const cityName = (cities.data ?? []).find((c) => c.id === cityId)?.name_ar;
       const { data: tenantId, error } = await supabase.rpc("create_workspace", {
         _tenant_type: "establishment",
         _name_ar: displayName,
-        _name_en: null,
-        _legal_name: null,
-        _cr_number: null,
-        _vat_number: null,
-        _city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
-        _phone: null,
-        _email: null,
-        _activity: activity.trim() || null,
-        _usage_type: null,
-        _provider_type: null,
-        _specialty: null,
+        ...(cityName ? { _city: cityName } : {}),
+        ...(activity.trim() ? { _activity: activity.trim() } : {}),
         _contact_info: {},
         _confirm_duplicate: false,
       });
