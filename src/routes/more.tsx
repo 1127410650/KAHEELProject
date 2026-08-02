@@ -43,7 +43,7 @@ const GROUPS = [
   {
     key: "browse",
     items: [
-      { to: "/marketplace", key: "marketplace", icon: Store },
+      { to: "/", key: "marketplace", icon: Store },
       { to: "/search", key: "search", icon: Search },
       
     ],
