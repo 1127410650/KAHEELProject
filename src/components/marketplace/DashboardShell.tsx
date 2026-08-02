@@ -1,7 +1,8 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Bell,
+  ChevronDown,
   Flag,
   Heart,
   LayoutList,
@@ -18,17 +19,22 @@ import { currentPath, loginHref } from "@/lib/mkt";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { Skeleton } from "@/components/ui/skeleton";
 
+/** The everyday destinations stay in the bar; everything else lives under "More". */
 const TABS = [
-  { to: "/dashboard/my-ads", key: "myAds", icon: LayoutList },
   { to: "/dashboard/profile", key: "profile", icon: User },
+  { to: "/dashboard/my-ads", key: "myAds", icon: LayoutList },
+  { to: "/dashboard/business", key: "business", icon: Store },
   { to: "/dashboard/requests", key: "requests", icon: ReceiptText },
   { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
+] as const;
+
+const SECONDARY_TABS = [
   { to: "/dashboard/notifications", key: "notifications", icon: Bell },
   { to: "/dashboard/favorites", key: "favorites", icon: Heart },
-  { to: "/dashboard/business", key: "business", icon: Store },
   { to: "/dashboard/reports", key: "reports", icon: Flag },
   { to: "/dashboard/violations", key: "violations", icon: ShieldAlert },
 ] as const;
+
 
 
 export function DashboardShell({ title, children }: { title: string; children: ReactNode }) {
