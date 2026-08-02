@@ -204,7 +204,7 @@ export function MarketHome() {
         </div>
       </section>
 
-      {/* Quick content types + the fields row: one compact strip, no big grid. */}
+      {/* One compact fields strip — five broad fields only. */}
       <div className="border-b border-border bg-background">
         <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
           {QUICK_FILTERS.map((f) => (
