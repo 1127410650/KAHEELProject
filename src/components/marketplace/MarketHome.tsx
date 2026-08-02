@@ -75,7 +75,7 @@ const QUICK_FILTERS = [
   { key: "service", search: { type: "service" }, icon: Sparkles },
   { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Tag },
   { key: "product", search: { type: "product" }, icon: Tag },
-  { key: "verified", search: { verified: "1" }, icon: ShieldCheck },
+  
   { key: "business", search: { advertiser: "business" }, icon: Building2 },
   { key: "individual", search: { advertiser: "individual" }, icon: User },
 ] as const;
