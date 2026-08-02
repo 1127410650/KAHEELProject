@@ -2247,7 +2247,10 @@
         "week": "Weekly",
         "month": "Monthly",
         "project": "Per project"
-      }
+      },
+      "sqm": "sqm",
+      "years": "years",
+      "meter": "m"
     },
     "entry": {
       "title": "Choose account",

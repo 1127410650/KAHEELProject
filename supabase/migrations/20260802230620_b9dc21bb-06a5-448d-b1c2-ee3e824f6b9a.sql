@@ -1,0 +1,1 @@
+UPDATE public.mkt_listings SET status = 'draft', published_at = NULL WHERE slug IN ('qa-temp-full-listing','qa-temp-empty-listing');

@@ -54,11 +54,11 @@ export function ListingSpecs({ listing }: { listing: MktListing }) {
       value: t(`market.condition.${listing.item_condition}`),
     });
   }
-  if (listing.price_on_request) {
-    rows.push({ label: t("market.ad.priceLabel"), value: t("market.priceOnRequest") });
-  } else if (listing.price_unit) {
+  // "Price on request" already sits next to the title, so it is not repeated here.
+  if (!listing.price_on_request && listing.price_unit) {
     rows.push({ label: t("market.ad.priceUnit"), value: listing.price_unit });
   }
+
 
   for (const [key, value] of Object.entries(specs)) {
     const row = specRow(key, value, t);
