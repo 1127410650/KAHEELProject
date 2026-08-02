@@ -189,6 +189,8 @@ function MarketSetupPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+            <p className="text-[11px] text-muted-foreground">{t("market.person.usernameRule")}</p>
+
           </div>
 
           <Button type="submit" className="w-full" disabled={busy || !countryId || !cityId}>
