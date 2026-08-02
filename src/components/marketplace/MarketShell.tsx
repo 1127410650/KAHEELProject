@@ -29,39 +29,27 @@ export function MarketHeader() {
           </span>
         </Link>
 
-        {searchVisible ? (
-          <form onSubmit={submit} className="flex min-w-0 flex-1 items-center gap-2">
-            <div className="relative min-w-0 flex-1 lg:max-w-md">
-              <Search
-                className="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-muted-foreground"
-                aria-hidden
-              />
-              <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder={t("market.searchPlaceholder")}
-                aria-label={t("market.searchPlaceholder")}
-                className="h-9 ps-9"
-              />
-            </div>
-          </form>
-        ) : (
-          <div className="min-w-0 flex-1" />
-        )}
+        {/* «البحث» — the single search entry point in the header. */}
+        <Link
+          to="/search"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+        >
+          <Search className="size-4" aria-hidden />
+          {t("market.nav.search")}
+        </Link>
 
+        <div className="min-w-0 flex-1" />
 
         {/* Only shipped destinations are linked from the header. */}
         <nav className="hidden items-center gap-5 lg:flex">
           <Link to="/marketplace" className="text-sm font-medium text-foreground hover:text-primary">
             {t("market.nav.marketplace")}
           </Link>
-          <Link to="/search" className="text-sm font-medium text-foreground hover:text-primary">
-            {t("market.nav.search")}
-          </Link>
           <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
             {t("market.nav.more")}
           </Link>
         </nav>
+
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <MktNotificationsBell />
