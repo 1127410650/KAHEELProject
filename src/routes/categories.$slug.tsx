@@ -80,7 +80,7 @@ function CategoryPage() {
         ) : !category ? (
           <div className="py-20 text-center">
             <h1 className="text-xl font-bold text-foreground">{t("market.category.notFound")}</h1>
-            <Link to="/marketplace" className="mt-4 inline-block text-sm font-medium text-primary">
+            <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
               {t("market.nav.marketplace")}
             </Link>
           </div>

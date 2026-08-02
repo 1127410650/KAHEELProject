@@ -30,7 +30,7 @@ export function MarketHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-4">
-        <Link to="/marketplace" className="flex shrink-0 items-center gap-2">
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <Store className="size-4" aria-hidden />
           </span>
@@ -52,7 +52,7 @@ export function MarketHeader() {
 
         {/* Only shipped destinations are linked from the header. */}
         <nav className="hidden items-center gap-5 lg:flex">
-          <Link to="/marketplace" className="text-sm font-medium text-foreground hover:text-primary">
+          <Link to="/" className="text-sm font-medium text-foreground hover:text-primary">
             {t("market.nav.marketplace")}
           </Link>
           <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
@@ -132,7 +132,7 @@ export function MarketBottomNav() {
   });
 
   const items = [
-    { to: "/marketplace", key: "home", icon: Home },
+    { to: "/", key: "home", icon: Home },
     { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
     { to: "/dashboard/ads/new", key: "add", icon: Plus },
     { to: "/dashboard/notifications", key: "alerts", icon: Bell },
@@ -198,7 +198,7 @@ export function MarketFooter() {
     {
       key: "browse",
       links: [
-        { to: "/marketplace", label: t("market.nav.marketplace") },
+        { to: "/", label: t("market.nav.marketplace") },
         { to: "/search", label: t("market.nav.search") },
         { to: "/more", label: t("market.nav.more") },
       ],

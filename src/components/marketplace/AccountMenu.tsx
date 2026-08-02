@@ -89,7 +89,7 @@ export function AccountMenu() {
 
   async function signOut() {
     await supabase.auth.signOut();
-    void navigate({ to: "/marketplace" });
+    void navigate({ to: "/" });
   }
 
   const trigger = (

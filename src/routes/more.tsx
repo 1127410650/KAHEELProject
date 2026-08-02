@@ -17,6 +17,7 @@ import {
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { canSeeLink } from "@/lib/routes-map";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 
@@ -43,7 +44,7 @@ const GROUPS = [
   {
     key: "browse",
     items: [
-      { to: "/marketplace", key: "marketplace", icon: Store },
+      { to: "/", key: "marketplace", icon: Store },
       { to: "/search", key: "search", icon: Search },
       
     ],
@@ -78,7 +79,21 @@ const GROUPS = [
 function MorePage() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
-  const { account: active } = useActiveAccount();
+  const { account: active, can } = useActiveAccount();
+
+  // Links are filtered through the central route map so this page never offers a
+  // destination the current account would be blocked from opening.
+  const groups = GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) =>
+      canSeeLink(item.to, {
+        signedIn: !!session,
+        accountKind: active?.kind ?? null,
+        can,
+      }),
+    ),
+  })).filter((group) => group.items.length > 0);
+
 
   return (
     <MarketShell>
@@ -105,7 +120,7 @@ function MorePage() {
         )}
 
 
-        {GROUPS.map((group) => (
+        {groups.map((group) => (
           <section key={group.key} className="mt-5">
             <h2 className="mb-2 text-sm font-bold text-foreground">
               {t(`market.more.${group.key}`)}

@@ -1,28 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { MarketShell } from "@/components/marketplace/MarketShell";
-import { MarketHome } from "@/components/marketplace/MarketHome";
+import { logLegacyRoute } from "@/lib/routes-map";
 
-const title = "سوق تحقّق — خدمات ومقاولات وموردين ومعدات";
-const description =
-  "سوق أعمال B2B للخدمات والمقاولات ومواد البناء والمعدات: تصفّح الإعلانات واطلب عرض سعر من منشآت موثقة في السعودية.";
-
+/**
+ * Legacy alias: `/marketplace` rendered the exact same home page as `/`.
+ * It now redirects to the canonical route, keeping any query string, and records
+ * the hit locally so the alias can be retired once it stops being used.
+ */
 export const Route = createFileRoute("/marketplace")({
   ssr: false,
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "robots", content: "index, follow" },
-    ],
-  }),
-  component: () => (
-    <MarketShell>
-      <MarketHome />
-    </MarketShell>
-  ),
+  beforeLoad: () => {
+    logLegacyRoute("/marketplace");
+    const search =
+      typeof window !== "undefined"
+        ? Object.fromEntries(new URLSearchParams(window.location.search).entries())
+        : {};
+    throw redirect({ to: "/", search, replace: true });
+  },
+  component: () => null,
 });

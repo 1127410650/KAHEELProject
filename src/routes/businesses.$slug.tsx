@@ -86,7 +86,7 @@ function BusinessPage() {
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
           <h1 className="text-xl font-bold text-foreground">{t("market.business.notFound")}</h1>
-          <Link to="/marketplace" className="mt-4 inline-block text-sm font-medium text-primary">
+          <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
         </div>

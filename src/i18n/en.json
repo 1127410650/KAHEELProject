@@ -2227,6 +2227,15 @@
       "otherAccount": "This ad belongs to “{name}”, not the active account.",
       "switchTo": "Enter as {name}",
       "notYours": "This ad does not belong to any of your accounts."
+    },
+    "access": {
+      "title": "This page can't be opened",
+      "forbidden": "You don't have permission to open this item with the current account.",
+      "session": "Your session has ended. Sign in to continue.",
+      "account": "Select a valid account to continue.",
+      "other-account": "This item belongs to another account.",
+      "unavailable": "This feature isn't available for this account.",
+      "home": "Home"
     }
   }
 }

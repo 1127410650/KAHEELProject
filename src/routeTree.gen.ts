@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as LoginRouteImport } from './routes/login'
@@ -79,6 +80,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -226,24 +232,24 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminGeoRoute = AdminGeoRouteImport.update({
-  id: '/admin/geo',
-  path: '/admin/geo',
-  getParentRoute: () => rootRouteImport,
+  id: '/geo',
+  path: '/geo',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingsRoute = AdminListingsRouteImport.update({
-  id: '/admin/listings',
-  path: '/admin/listings',
-  getParentRoute: () => rootRouteImport,
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminVerificationsRoute = AdminVerificationsRouteImport.update({
-  id: '/admin/verifications',
-  path: '/admin/verifications',
-  getParentRoute: () => rootRouteImport,
+  id: '/verifications',
+  path: '/verifications',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdsSlugRoute = AdsSlugRouteImport.update({
   id: '/ads/$slug',
@@ -345,14 +351,14 @@ const AuthenticatedSupervisorsIdRoute =
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
-  id: '/admin/reports/',
-  path: '/admin/reports/',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminReportsIdRoute = AdminReportsIdRouteImport.update({
-  id: '/admin/reports/$id',
-  path: '/admin/reports/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports/$id',
+  path: '/reports/$id',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
   id: '/dashboard/ads/new',
@@ -395,6 +401,7 @@ const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/login': typeof LoginRoute
@@ -523,6 +530,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/login': typeof LoginRoute
@@ -588,6 +596,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth'
     | '/choose-account'
     | '/login'
@@ -715,6 +724,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/admin'
     | '/auth'
     | '/choose-account'
     | '/login'
@@ -780,6 +790,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   LoginRoute: typeof LoginRoute
@@ -789,9 +800,6 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
-  AdminGeoRoute: typeof AdminGeoRoute
-  AdminListingsRoute: typeof AdminListingsRoute
-  AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -805,11 +813,8 @@ export interface RootRouteChildren {
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
   UUsernameRoute: typeof UUsernameRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminReportsIdRoute: typeof AdminReportsIdRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
-  AdminReportsIndexRoute: typeof AdminReportsIndexRoute
   DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
   DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
 }
@@ -828,6 +833,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1028,31 +1040,31 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/geo': {
       id: '/admin/geo'
-      path: '/admin/geo'
+      path: '/geo'
       fullPath: '/admin/geo'
       preLoaderRoute: typeof AdminGeoRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/listings': {
       id: '/admin/listings'
-      path: '/admin/listings'
+      path: '/listings'
       fullPath: '/admin/listings'
       preLoaderRoute: typeof AdminListingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/verifications': {
       id: '/admin/verifications'
-      path: '/admin/verifications'
+      path: '/verifications'
       fullPath: '/admin/verifications'
       preLoaderRoute: typeof AdminVerificationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/ads/$slug': {
       id: '/ads/$slug'
@@ -1189,17 +1201,17 @@ declare module '@tanstack/react-router' {
     }
     '/admin/reports/': {
       id: '/admin/reports/'
-      path: '/admin/reports'
+      path: '/reports'
       fullPath: '/admin/reports/'
       preLoaderRoute: typeof AdminReportsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/reports/$id': {
       id: '/admin/reports/$id'
-      path: '/admin/reports/$id'
+      path: '/reports/$id'
       fullPath: '/admin/reports/$id'
       preLoaderRoute: typeof AdminReportsIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/dashboard/ads/new': {
       id: '/dashboard/ads/new'
@@ -1318,9 +1330,32 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AdminRouteRouteChildren {
+  AdminGeoRoute: typeof AdminGeoRoute
+  AdminListingsRoute: typeof AdminListingsRoute
+  AdminVerificationsRoute: typeof AdminVerificationsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminReportsIdRoute: typeof AdminReportsIdRoute
+  AdminReportsIndexRoute: typeof AdminReportsIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminGeoRoute: AdminGeoRoute,
+  AdminListingsRoute: AdminListingsRoute,
+  AdminVerificationsRoute: AdminVerificationsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminReportsIdRoute: AdminReportsIdRoute,
+  AdminReportsIndexRoute: AdminReportsIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   LoginRoute: LoginRoute,
@@ -1330,9 +1365,6 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
-  AdminGeoRoute: AdminGeoRoute,
-  AdminListingsRoute: AdminListingsRoute,
-  AdminVerificationsRoute: AdminVerificationsRoute,
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
@@ -1346,24 +1378,11 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
   UUsernameRoute: UUsernameRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AdminReportsIdRoute: AdminReportsIdRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardReportsIdRoute: DashboardReportsIdRoute,
-  AdminReportsIndexRoute: AdminReportsIndexRoute,
   DashboardReportsIndexRoute: DashboardReportsIndexRoute,
   DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
