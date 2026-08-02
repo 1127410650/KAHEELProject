@@ -217,7 +217,7 @@ export function AccountMenu() {
     </div>
   );
 
-  const Badge = ({ value }: { value?: number }) =>
+  const Badge = ({ value }: { value?: number | undefined }) =>
     value && value > 0 ? (
       <span className="ms-auto min-w-5 rounded-full bg-primary px-1.5 text-center text-[10px] font-semibold leading-5 text-primary-foreground">
         {value > 99 ? "99+" : value}

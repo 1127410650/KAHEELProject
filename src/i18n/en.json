@@ -2155,7 +2155,10 @@
       "switchTitle": "Switch accounts",
       "fallbackName": "Platform user",
       "activityTitle": "My activity",
-      "manageTitle": "Account management"
+      "manageTitle": "Account management",
+      "members": "Business members",
+      "adminPanel": "Admin panel",
+      "unsavedWarning": "You have unsaved changes. Change account and lose them?"
     },
     "emptyHome": "No published listings yet",
     "loc": {

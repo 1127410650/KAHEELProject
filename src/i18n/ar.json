@@ -2155,7 +2155,10 @@
       "switchTitle": "التبديل بين الحسابات",
       "fallbackName": "مستخدم المنصة",
       "activityTitle": "نشاطي",
-      "manageTitle": "إدارة الحساب"
+      "manageTitle": "إدارة الحساب",
+      "members": "أعضاء المنشأة",
+      "adminPanel": "لوحة الإدارة",
+      "unsavedWarning": "لديك تغييرات غير محفوظة. هل تريد تغيير الحساب وفقدها؟"
     },
     "emptyHome": "لا توجد إعلانات منشورة حاليًا",
     "loc": {
