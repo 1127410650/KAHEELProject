@@ -37,6 +37,7 @@ import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
+import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
@@ -192,6 +193,11 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
   path: '/ads/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
+  id: '/businesses/$slug',
+  path: '/businesses/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
   path: '/categories/$slug',
@@ -283,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
@@ -323,6 +330,7 @@ export interface FileRoutesByTo {
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/trash'
     | '/users'
     | '/ads/$slug'
+    | '/businesses/$slug'
     | '/categories/$slug'
     | '/invite/$token'
     | '/projects/$id'
@@ -447,6 +457,7 @@ export interface FileRouteTypes {
     | '/trash'
     | '/users'
     | '/ads/$slug'
+    | '/businesses/$slug'
     | '/categories/$slug'
     | '/invite/$token'
     | '/projects/$id'
@@ -488,6 +499,7 @@ export interface FileRouteTypes {
     | '/_authenticated/trash'
     | '/_authenticated/users'
     | '/ads/$slug'
+    | '/businesses/$slug'
     | '/categories/$slug'
     | '/invite/$token'
     | '/_authenticated/projects/$id'
@@ -511,6 +523,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
   AdsSlugRoute: typeof AdsSlugRoute
+  BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   InviteTokenRoute: typeof InviteTokenRoute
 }
@@ -713,6 +726,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/businesses/$slug': {
+      id: '/businesses/$slug'
+      path: '/businesses/$slug'
+      fullPath: '/businesses/$slug'
+      preLoaderRoute: typeof BusinessesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/categories/$slug': {
       id: '/categories/$slug'
       path: '/categories/$slug'
@@ -868,6 +888,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
   AdsSlugRoute: AdsSlugRoute,
+  BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   InviteTokenRoute: InviteTokenRoute,
 }
