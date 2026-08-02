@@ -159,6 +159,8 @@ function ProfilePage() {
       }
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-contact"] });
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-user-profile"] });
+      // Every location form reads the account country from this key.
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "account-country"] });
       toast.success(t("market.person.saved"));
     } catch {
       toast.error(t("market.actions.failed"));
@@ -242,6 +244,9 @@ function ProfilePage() {
                   </option>
                 ))}
               </select>
+              <p className="text-[11px] text-muted-foreground">
+                {t("market.geo.countryAccountHint")}
+              </p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="city_id">{t("market.filters.city")}</Label>

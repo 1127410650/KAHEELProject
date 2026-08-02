@@ -1977,7 +1977,8 @@
       "suggested": "City sent for review",
       "incomplete": "Location incomplete",
       "locationRequired": "Select a country and city before saving.",
-      "cityMismatch": "The selected city does not belong to the selected country."
+      "cityMismatch": "The selected city does not belong to the selected country.",
+      "countryAccountHint": "The country comes from your account. Changing it updates the cities available later; it does not move existing ads."
     },
     "setup": {
       "title": "Set up your marketplace account",

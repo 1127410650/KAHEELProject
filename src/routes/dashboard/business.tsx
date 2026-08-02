@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { geoName, loadCities, loadCountries } from "@/lib/mkt-geo";
+import { geoName, loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { useWorkspaces } from "@/hooks/use-workspace";
 import { logAudit } from "@/lib/audit";
@@ -105,11 +105,13 @@ function BusinessDashboardPage() {
     [profile.data, draft],
   );
 
-  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  // The country belongs to the account (Settings → Account → Country); the
+  // business profile only picks a city inside it.
+  const accountCountry = useAccountCountry();
   const cities = useQuery({
-    queryKey: ["mkt", "cities", view.country_id],
-    enabled: !!view.country_id,
-    queryFn: () => loadCities(view.country_id),
+    queryKey: ["mkt", "cities", accountCountry.data?.id],
+    enabled: !!accountCountry.data?.id,
+    queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
 
 
@@ -144,7 +146,7 @@ function BusinessDashboardPage() {
         display_name_en: view.display_name_en ?? null,
         headline: view.headline ?? null,
         about: view.about ?? null,
-        country_id: view.country_id ?? null,
+        country_id: accountCountry.data?.id ?? view.country_id ?? null,
         city_id: view.city_id ?? null,
         city: (cities.data ?? []).find((c) => c.id === view.city_id)?.name_ar ?? null,
         region: view.region ?? null,
@@ -421,23 +423,12 @@ function BusinessDashboardPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="country_id">{t("market.geo.country")}</Label>
-              <select
-                id="country_id"
-                className={selectClass}
-                value={view.country_id ?? ""}
-                onChange={(e) => {
-                  set("country_id", e.target.value);
-                  set("city_id", null);
-                }}
-              >
-                <option value="">{t("market.geo.pick")}</option>
-                {(countries.data ?? []).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {geoName(c, locale)}
-                  </option>
-                ))}
-              </select>
+              <span className="block text-sm font-medium text-foreground">
+                {t("market.geo.country")}
+              </span>
+              <p className="flex h-9 items-center text-sm text-muted-foreground">
+                {accountCountry.data ? geoName(accountCountry.data, locale) : "—"}
+              </p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="city_id">{t("market.filters.city")}</Label>
@@ -446,7 +437,7 @@ function BusinessDashboardPage() {
                 className={selectClass}
                 value={view.city_id ?? ""}
                 onChange={(e) => set("city_id", e.target.value)}
-                disabled={!view.country_id}
+                disabled={!accountCountry.data}
               >
                 <option value="">{t("market.geo.allCities")}</option>
                 {(cities.data ?? []).map((c) => (
@@ -456,6 +447,7 @@ function BusinessDashboardPage() {
                 ))}
               </select>
             </div>
+
             <div className="space-y-1.5">
               <Label htmlFor="region">{t("market.dash.region")}</Label>
               <Input

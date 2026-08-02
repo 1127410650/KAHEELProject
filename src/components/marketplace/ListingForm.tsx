@@ -16,10 +16,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
-import { loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import { loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveIdentity } from "@/lib/mkt-identity";
-import { CountryCitySelect } from "@/components/marketplace/GeoFields";
+import { AccountCitySelect } from "@/components/marketplace/GeoFields";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 
 import { Button } from "@/components/ui/button";
@@ -65,8 +65,8 @@ export function ListingForm({ listing }: Props) {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
-  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
-  const { preference } = useMarketPreference();
+  // The country is never chosen here: it always comes from the account.
+  const accountCountry = useAccountCountry();
   const [countryId, setCountryId] = useState<string>(listing?.country_id ?? "");
   const [cityId, setCityId] = useState<string>(listing?.city_id ?? "");
   const cities = useQuery({
@@ -105,19 +105,16 @@ export function ListingForm({ listing }: Props) {
         : null;
 
 
-  // A new ad defaults to the identity's own location, falling back to the market
-  // the advertiser is browsing.
+  // The country always mirrors the account; only the city defaults to the
+  // publishing identity's own city on a new ad.
   const [geoTouched, setGeoTouched] = useState(!!listing);
   useEffect(() => {
-    if (geoTouched || countryId) return;
-    if (identityGeo?.country_id) {
-      setCountryId(identityGeo.country_id);
-      if (identityGeo.city_id) setCityId(identityGeo.city_id);
-      return;
-    }
-    const fallback = (countries.data ?? []).find((c) => c.iso2 === preference.countryIso2);
-    if (fallback) setCountryId(fallback.id);
-  }, [countries.data, countryId, geoTouched, identityGeo, preference.countryIso2]);
+    if (accountCountry.data) setCountryId(accountCountry.data.id);
+  }, [accountCountry.data]);
+  useEffect(() => {
+    if (geoTouched || cityId) return;
+    if (identityGeo?.city_id) setCityId(identityGeo.city_id);
+  }, [cityId, geoTouched, identityGeo]);
 
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
@@ -154,7 +151,7 @@ export function ListingForm({ listing }: Props) {
       toast.error(t("market.dash.pickCategory"));
       return;
     }
-    if (!countryId || !cityId) {
+    if (!cityId) {
       toast.error(t("market.geo.locationRequired"));
       return;
     }
@@ -181,10 +178,11 @@ export function ListingForm({ listing }: Props) {
         item_condition: isEquipment ? (fd.get("item_condition") as string) || null : null,
         deal_kind:
           typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
-        country_id: countryId || null,
+        // The country and its currency come from the account; the server forces
+        // them again so a hand-crafted request cannot pick another country.
+        country_id: countryId || accountCountry.data?.id || null,
         city_id: cityId || null,
-        currency:
-          (countries.data ?? []).find((c) => c.id === countryId)?.currency_code ?? "SAR",
+        currency: accountCountry.data?.currency_code ?? "SAR",
 
         city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
@@ -408,8 +406,7 @@ export function ListingForm({ listing }: Props) {
       </div>
 
       <div className="space-y-3">
-        <CountryCitySelect
-          countryId={countryId || null}
+        <AccountCitySelect
           cityId={cityId || null}
           required
           onChange={(next) => {
@@ -418,6 +415,7 @@ export function ListingForm({ listing }: Props) {
             setCityId(next.cityId ?? "");
           }}
         />
+
         <div className="space-y-1.5">
           <Label htmlFor="region">{t("market.dash.region")}</Label>
           <Input id="region" name="region" defaultValue={listing?.region ?? ""} />

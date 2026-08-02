@@ -6298,6 +6298,7 @@ export type Database = {
         Args: { _membership_id: string; _reason?: string; _status: string }
         Returns: undefined
       }
+      mkt_account_country_id: { Args: { _user_id: string }; Returns: string }
       mkt_can_manage_business: {
         Args: { _tenant_id: string }
         Returns: boolean

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   isValidPhoneNumber,
   parsePhoneNumberFromString,
@@ -180,6 +181,42 @@ export function useMarketPreference() {
 
   return { preference, setPreference: update };
 }
+
+/**
+ * The country stored on the signed-in account — the single source of truth for
+ * every location form. Older accounts without one fall back to Saudi Arabia.
+ * It is only changed from Settings → Account → Country.
+ */
+export async function loadAccountCountry(): Promise<MktCountry | null> {
+  const countries = await loadCountries();
+  const { data } = await supabase.auth.getSession();
+  const userId = data.session?.user.id;
+  let countryId: string | null = null;
+  if (userId) {
+    const { data: profile } = await supabase
+      .from("mkt_user_profiles")
+      .select("country_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+    countryId = profile?.country_id ?? null;
+  }
+  return (
+    countries.find((c) => c.id === countryId) ??
+    countries.find((c) => c.iso2 === "SA") ??
+    countries[0] ??
+    null
+  );
+}
+
+export function useAccountCountry() {
+  return useQuery({
+    queryKey: ["mkt", "account-country"],
+    queryFn: loadAccountCountry,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+
 
 /**
  * Normalise a national number typed by a user into E.164 for the chosen country.
