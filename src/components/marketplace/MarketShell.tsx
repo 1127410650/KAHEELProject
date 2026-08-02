@@ -96,19 +96,10 @@ export function MarketHeader() {
               className="ps-9"
             />
           </div>
-          <select
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            aria-label={t("market.filters.city")}
-            className="hidden h-9 rounded-md border border-input bg-background px-2 text-sm md:block"
-          >
-            <option value="">{t("market.filters.allCities")}</option>
-            {SA_CITIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          <div className="hidden md:block">
+            <MarketSwitcher />
+          </div>
+
           <Button type="submit" size="sm" className="hidden shrink-0 sm:inline-flex">
             {t("common.search")}
           </Button>
