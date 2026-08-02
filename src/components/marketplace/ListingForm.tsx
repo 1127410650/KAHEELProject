@@ -131,6 +131,32 @@ export function ListingForm({ listing }: Props) {
     [rootSlug, subSlug, typeCode],
   );
   const isEquipment = rootSlug === "equipment";
+  const isRealEstate = rootSlug === RE_ROOT_SLUG;
+
+  // Load the licence row of an ad being edited, once the ad is known.
+  useEffect(() => {
+    if (!listing?.id) return;
+    let alive = true;
+    void loadOwnerLicense(listing.id).then((row) => {
+      if (!alive || !row) return;
+      setLicense({
+        advertiserRole: row.advertiser_role,
+        adLicenseNumber: row.ad_license_number ?? "",
+        adLicenseExpiry: row.ad_license_expiry ?? "",
+        practiceLicenseNumber: row.practice_license_number ?? "",
+        licenseDocPath: row.license_doc_path ?? null,
+        exemptionRequested: row.exemption_requested,
+        exemptionReason: row.exemption_reason ?? "",
+        exemptionDocPath: row.exemption_doc_path ?? null,
+        exemptionApproved: row.exemption_approved,
+        verificationStatus: row.verification_status,
+      });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [listing?.id]);
+
 
   // ---------- draft: restore once, then autosave ----------
   useEffect(() => {
