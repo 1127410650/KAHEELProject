@@ -82,6 +82,10 @@ export function ListingForm({ listing }: Props) {
     (listing?.specs as Record<string, SpecValue> | null) ?? {},
   );
   const [files, setFiles] = useState<File[]>([]);
+  // Licence data of a real estate ad. It is never kept in a local draft: the
+  // numbers are legal identifiers, so they only live in the database row.
+  const [license, setLicense] = useState<LicenseFormValue>(EMPTY_LICENSE);
+
 
   const [location, setLocation] = useState<ListingLocationValue>({
     cityId: listing?.city_id ?? "",
