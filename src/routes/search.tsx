@@ -157,7 +157,6 @@ function SearchPage() {
   useEffect(() => {
     if (typeof window === "undefined" || restored.current || rows.length === 0) return;
     const saved = Number(window.sessionStorage.getItem(scrollKey) ?? "0");
-    (window as unknown as { __dbg?: string[] }).__dbg = [...(((window as unknown as { __dbg?: string[] }).__dbg) ?? []), `${saved}|${rows.length}|${document.documentElement.scrollHeight}`];
     if (!saved) {
       restored.current = true;
       return;
