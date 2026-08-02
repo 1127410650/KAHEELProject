@@ -12,45 +12,10 @@ import { Input } from "@/components/ui/input";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 import { AccountMenu } from "@/components/marketplace/AccountMenu";
 
-const HOME_PATHS = ["/", "/marketplace"];
-
-/** On the home page the hero owns the search box; the header one appears after
- *  the visitor scrolls past it so the same control never shows twice. */
-function useHeaderSearchVisible() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isHome = HOME_PATHS.includes(pathname);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    if (!isHome) return;
-    const onScroll = () => setScrolled(window.scrollY > 260);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome]);
-
-  return !isHome || scrolled;
-}
-
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
-  const navigate = useNavigate();
-  const [q, setQ] = useState("");
-  const { preference } = useMarketPreference();
-  const searchVisible = useHeaderSearchVisible();
 
-  function submit(event: React.FormEvent) {
-    event.preventDefault();
-    navigate({
-      to: "/search",
-      search: {
-        ...(q.trim() ? { q: q.trim() } : {}),
-        country: preference.countryIso2,
-        ...(preference.cityId ? { cityId: preference.cityId } : {}),
-      },
-    });
-  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
