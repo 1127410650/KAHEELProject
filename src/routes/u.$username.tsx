@@ -58,9 +58,9 @@ function UserProfilePage() {
   });
 
   const publicPhone = useQuery({
-    queryKey: ["mkt", "public-phone", me?.user_id],
-    enabled: !!me?.user_id,
-    queryFn: () => loadPublicPhone(me!.user_id),
+    queryKey: ["mkt", "public-phone", profile.data?.user_id],
+    enabled: !!profile.data?.user_id,
+    queryFn: () => loadPublicPhone(profile.data!.user_id),
   });
 
   const listings = useQuery({
