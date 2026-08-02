@@ -157,7 +157,7 @@ function ChooseAccountPage() {
       )}
 
       <p className="mt-4 text-center text-[11px] text-muted-foreground">
-        <Link to="/marketplace" className="underline">
+        <Link to="/" className="underline">
           {t("market.entry.browsePublic")}
         </Link>
       </p>

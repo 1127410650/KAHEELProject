@@ -133,7 +133,7 @@ function MarketSetupPage() {
         visibility,
       });
       await queryClient.invalidateQueries({ queryKey: ["mkt"] });
-      void navigate({ to: "/marketplace", replace: true });
+      void navigate({ to: "/", replace: true });
     } catch {
       toast.error(t("market.actions.failed"));
     } finally {
