@@ -22,11 +22,23 @@ import {
   type SpecField,
 } from "@/lib/mkt-taxonomy";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
+import {
+  licenseBlockers,
+  loadOwnerLicense,
+  RE_ROOT_SLUG,
+  saveListingLicense,
+} from "@/lib/mkt-license";
 import { CategoryPicker } from "@/components/marketplace/CategoryPicker";
 import {
   ListingLocationPicker,
   type ListingLocationValue,
 } from "@/components/marketplace/ListingLocationPicker";
+import {
+  EMPTY_LICENSE,
+  RealEstateLicenseFields,
+  type LicenseFormValue,
+} from "@/components/marketplace/RealEstateLicenseFields";
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
