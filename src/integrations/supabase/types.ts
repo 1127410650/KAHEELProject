@@ -1254,6 +1254,71 @@ export type Database = {
           },
         ]
       }
+      mkt_business_officers: {
+        Row: {
+          authorization_expires_on: string | null
+          capacity: string
+          created_at: string
+          created_by: string | null
+          email: string | null
+          full_name: string
+          id: string
+          id_last2: string | null
+          id_number: string
+          id_type: string
+          is_primary: boolean
+          phone: string
+          relation: string | null
+          tenant_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          authorization_expires_on?: string | null
+          capacity: string
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          id_last2?: string | null
+          id_number: string
+          id_type: string
+          is_primary?: boolean
+          phone: string
+          relation?: string | null
+          tenant_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          authorization_expires_on?: string | null
+          capacity?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          id_last2?: string | null
+          id_number?: string
+          id_type?: string
+          is_primary?: boolean
+          phone?: string
+          relation?: string | null
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_business_officers_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_business_profiles: {
         Row: {
           about: string | null
@@ -1268,15 +1333,19 @@ export type Database = {
           is_published: boolean
           joined_at: string
           logo_url: string | null
+          main_activity: string | null
           public_email: string | null
           public_phone: string | null
           public_website: string | null
           public_whatsapp: string | null
           region: string | null
+          service_area_city_ids: string[]
+          service_area_regions: string[]
           show_email: boolean
           show_phone: boolean
           show_whatsapp: boolean
           slug: string
+          sub_activities: string[]
           tenant_id: string
           updated_at: string
           verification_note: string | null
@@ -1297,15 +1366,19 @@ export type Database = {
           is_published?: boolean
           joined_at?: string
           logo_url?: string | null
+          main_activity?: string | null
           public_email?: string | null
           public_phone?: string | null
           public_website?: string | null
           public_whatsapp?: string | null
           region?: string | null
+          service_area_city_ids?: string[]
+          service_area_regions?: string[]
           show_email?: boolean
           show_phone?: boolean
           show_whatsapp?: boolean
           slug: string
+          sub_activities?: string[]
           tenant_id: string
           updated_at?: string
           verification_note?: string | null
@@ -1326,15 +1399,19 @@ export type Database = {
           is_published?: boolean
           joined_at?: string
           logo_url?: string | null
+          main_activity?: string | null
           public_email?: string | null
           public_phone?: string | null
           public_website?: string | null
           public_whatsapp?: string | null
           region?: string | null
+          service_area_city_ids?: string[]
+          service_area_regions?: string[]
           show_email?: boolean
           show_phone?: boolean
           show_whatsapp?: boolean
           slug?: string
+          sub_activities?: string[]
           tenant_id?: string
           updated_at?: string
           verification_note?: string | null
@@ -1359,6 +1436,78 @@ export type Database = {
           },
           {
             foreignKeyName: "mkt_business_profiles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: true
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_business_registry: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          country_id: string | null
+          cr_expiry_date: string | null
+          cr_issue_date: string | null
+          cr_number: string | null
+          created_at: string
+          created_by: string | null
+          entity_type: string
+          legal_name: string
+          main_activity: string | null
+          national_address: string | null
+          sub_activities: string[]
+          tenant_id: string
+          unified_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          country_id?: string | null
+          cr_expiry_date?: string | null
+          cr_issue_date?: string | null
+          cr_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          entity_type?: string
+          legal_name: string
+          main_activity?: string | null
+          national_address?: string | null
+          sub_activities?: string[]
+          tenant_id: string
+          unified_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          country_id?: string | null
+          cr_expiry_date?: string | null
+          cr_issue_date?: string | null
+          cr_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          entity_type?: string
+          legal_name?: string
+          main_activity?: string | null
+          national_address?: string | null
+          sub_activities?: string[]
+          tenant_id?: string
+          unified_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_business_registry_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_business_registry_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: true
             referencedRelation: "tenants"
@@ -2782,6 +2931,7 @@ export type Database = {
       mkt_verification_files: {
         Row: {
           created_at: string
+          doc_kind: string
           file_name: string
           file_path: string
           id: string
@@ -2793,6 +2943,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          doc_kind?: string
           file_name: string
           file_path: string
           id?: string
@@ -2804,6 +2955,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          doc_kind?: string
           file_name?: string
           file_path?: string
           id?: string
@@ -6378,6 +6530,10 @@ export type Database = {
         Returns: undefined
       }
       mkt_account_country_id: { Args: { _user_id: string }; Returns: string }
+      mkt_business_details_complete: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_can_manage_business: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -6387,6 +6543,7 @@ export type Database = {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_can_review_identity: { Args: never; Returns: boolean }
       mkt_can_view_conversation: {
         Args: { _conversation_id: string }
         Returns: boolean
