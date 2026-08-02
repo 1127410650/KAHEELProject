@@ -159,6 +159,8 @@ function ProfilePage() {
       }
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-contact"] });
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-user-profile"] });
+      // Every location form reads the account country from this key.
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "account-country"] });
       toast.success(t("market.person.saved"));
     } catch {
       toast.error(t("market.actions.failed"));
