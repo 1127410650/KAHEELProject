@@ -2,35 +2,22 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
-  Briefcase,
   Building2,
-  Factory,
-  Droplets,
-  HardHat,
-  LayoutGrid,
-  Package,
-  Paintbrush,
+  Home,
   Plus,
   Search,
-  ShieldCheck,
   Sparkles,
   Tag,
   Truck,
-  User,
-  Wind,
-  Wrench,
-  Zap,
 } from "lucide-react";
 import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
-import { loadBusinesses, loadCategories, loadListings } from "@/lib/mkt-queries";
+import { loadListings } from "@/lib/mkt-queries";
 import { trackMarketActivity, useSuggestedListings } from "@/lib/mkt-activity";
-import { resolveMedia } from "@/lib/mkt";
 
 import { ListingCard } from "@/components/marketplace/ListingCard";
-import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -110,30 +97,15 @@ function ListingSection({
   );
 }
 
+/** The only top strip: five broad fields. Sub-categories live in search,
+ *  filters and the listing form — never here. */
 const QUICK_FILTERS = [
+  { key: "realestate", search: { category: "real-estate" }, icon: Home },
   { key: "service", search: { type: "service" }, icon: Sparkles },
   { key: "product", search: { type: "product" }, icon: Tag },
   { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Truck },
   { key: "business", search: { advertiser: "business" }, icon: Building2 },
-  { key: "individual", search: { advertiser: "individual" }, icon: User },
 ] as const;
-
-/** Line icons for the active root categories, keyed by the stored icon name. */
-const CATEGORY_ICONS: Record<string, typeof HardHat> = {
-  "hard-hat": HardHat,
-  paintbrush: Paintbrush,
-  zap: Zap,
-  droplets: Droplets,
-  wind: Wind,
-  bricks: LayoutGrid,
-  truck: Truck,
-  package: Package,
-  wrench: Wrench,
-  "building-2": Building2,
-  briefcase: Briefcase,
-  "shield-check": ShieldCheck,
-  factory: Factory,
-};
 
 export function MarketHome() {
   const { t, locale } = useI18n();
@@ -144,11 +116,6 @@ export function MarketHome() {
   const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
   const geoKey = `${preference.countryIso2}:${preference.cityId ?? "all"}`;
 
-  const categories = useQuery({
-    queryKey: ["mkt", "categories"],
-    queryFn: loadCategories,
-    staleTime: 5 * 60_000,
-  });
   const latest = useQuery({
     queryKey: ["mkt", "home", "latest", locale, geoKey],
     queryFn: () => loadListings({ ...geo, limit: 4 }, locale),
@@ -165,19 +132,7 @@ export function MarketHome() {
     queryKey: ["mkt", "home", "products", locale, geoKey],
     queryFn: () => loadListings({ ...geo, type: "product", limit: 4 }, locale),
   });
-  const businesses = useQuery({
-    queryKey: ["mkt", "home", "businesses", locale],
-    staleTime: 5 * 60_000,
-    queryFn: async () => {
-      const rows = await loadBusinesses(4);
-      const logos = await resolveMedia(rows.map((b) => b.logo_url));
-      return rows.map((b) => ({ business: b, logoUrl: b.logo_url ? logos[b.logo_url] : null }));
-    },
-  });
-
   const suggested = useSuggestedListings(locale, geo);
-
-  const roots = (categories.data ?? []).filter((c) => !c.parent_id);
 
   function submitSearch(event: React.FormEvent) {
     event.preventDefault();
@@ -249,7 +204,7 @@ export function MarketHome() {
         </div>
       </section>
 
-      {/* Quick content types + the fields row: one compact strip, no big grid. */}
+      {/* One compact fields strip — five broad fields only. */}
       <div className="border-b border-border bg-background">
         <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
           {QUICK_FILTERS.map((f) => (
@@ -265,28 +220,6 @@ export function MarketHome() {
           ))}
         </div>
 
-        {/* Compact fields row — replaces the former category grid. */}
-        <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
-          {categories.isLoading
-            ? Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-8 w-24 shrink-0 rounded-full" />
-              ))
-            : roots.map((c) => {
-                const Icon = (c.icon && CATEGORY_ICONS[c.icon]) || LayoutGrid;
-                return (
-                  <Link
-                    key={c.id}
-                    to="/categories/$slug"
-                    params={{ slug: c.slug }}
-                    onClick={() => trackMarketActivity({ event: "open_category", categoryId: c.id })}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
-                  >
-                    <Icon className="size-3.5 shrink-0" aria-hidden />
-                    {locale === "ar" ? c.name_ar : c.name_en}
-                  </Link>
-                );
-              })}
-        </div>
       </div>
 
       {/* Suggested for you — built from this visitor's own recent market activity. */}
@@ -294,7 +227,7 @@ export function MarketHome() {
         title={t("market.sections.suggested")}
         href="/search"
         items={suggested.data ?? []}
-        loading={false}
+        loading={suggested.isLoading}
       />
 
       <ListingSection
@@ -304,30 +237,6 @@ export function MarketHome() {
         loading={latest.isLoading}
       />
 
-
-      {/* Suggested businesses — the check mark sits inside the identity block. */}
-      {(businesses.isLoading || (businesses.data ?? []).length > 0) && (
-        <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
-          <SectionHead
-            title={t("market.sections.businesses")}
-            href="/search"
-            search={{ advertiser: "business" }}
-          />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {businesses.isLoading
-              ? Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-32 w-full rounded-xl" />
-                ))
-              : (businesses.data ?? []).map((row) => (
-                  <BusinessCard
-                    key={row.business.tenant_id}
-                    business={row.business}
-                    logoUrl={row.logoUrl}
-                  />
-                ))}
-          </div>
-        </section>
-      )}
 
       <ListingSection
         title={t("market.sections.equipmentRent")}

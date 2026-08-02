@@ -1300,7 +1300,7 @@
     "resultsCount": "results",
     "viewAll": "View all",
     "hero": {
-      "title": "Type everything you need here — services, suppliers, equipment and materials",
+      "title": "Type everything you need here: real estate, services, suppliers, equipment and building materials",
       "openToAll": "Publishing is open to every registered user — as an individual or under a business. The verified badge belongs to the advertiser identity."
     },
     "nav": {
@@ -1903,8 +1903,9 @@
       "equipment_rent": "Equipment for rent",
       "product": "Products",
       "verified": "Verified only",
-      "business": "Businesses",
-      "individual": "Individuals"
+      "business": "Suppliers & businesses",
+      "individual": "Individuals",
+      "realestate": "Real estate"
     },
     "bottomNav": {
       "home": "Home",

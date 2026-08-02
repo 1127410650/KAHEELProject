@@ -71,9 +71,23 @@ export function useSuggestedListings(
 
   return useQuery({
     queryKey: ["mkt", "home", "suggested", userId, locale, geo.countryIso2, geo.cityId ?? "all"],
-    enabled: !!userId,
     staleTime: 60_000,
     queryFn: async (): Promise<ListingCardData[]> => {
+      /** Fallback chain: newest ads in the account city, then in the account
+       *  country. Never businesses, never demo content. */
+      const fallback = async () => {
+        if (geo.cityId) {
+          const inCity = await loadListings(
+            { countryIso2: geo.countryIso2, cityId: geo.cityId, limit: 8 },
+            locale,
+          );
+          if (inCity.length > 0) return inCity;
+        }
+        return loadListings({ countryIso2: geo.countryIso2, limit: 8 }, locale);
+      };
+
+      if (!userId) return fallback();
+
       const { data } = await supabase
         .from("mkt_user_activity")
         .select("event_type, category_id, ad_id, created_at")
@@ -81,7 +95,6 @@ export function useSuggestedListings(
         .limit(60);
 
       const rows = data ?? [];
-      if (rows.length === 0) return [];
 
       // Weight recent, higher-intent signals more strongly.
       const weight: Record<string, number> = {
@@ -102,7 +115,7 @@ export function useSuggestedListings(
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3)
         .map(([id]) => id);
-      if (topCategories.length === 0) return [];
+      if (topCategories.length === 0) return fallback();
 
       const seenAdIds = new Set(
         rows
@@ -111,12 +124,27 @@ export function useSuggestedListings(
           .filter((v): v is string => !!v),
       );
 
-      const listings = await loadListings(
-        { ...geo, categoryIds: topCategories, limit: 12 },
+      // City first (freshness order comes from the query), then the country.
+      const scoped = geo.cityId
+        ? await loadListings(
+            { countryIso2: geo.countryIso2, cityId: geo.cityId, categoryIds: topCategories, limit: 12 },
+            locale,
+          )
+        : [];
+      const wide = await loadListings(
+        { countryIso2: geo.countryIso2, categoryIds: topCategories, limit: 12 },
         locale,
       );
-      const fresh = listings.filter((l) => !seenAdIds.has(l.id));
-      return (fresh.length >= 4 ? fresh : listings).slice(0, 8);
+      const merged: ListingCardData[] = [];
+      const seen = new Set<string>();
+      for (const l of [...scoped, ...wide]) {
+        if (seen.has(l.id)) continue;
+        seen.add(l.id);
+        merged.push(l);
+      }
+      const fresh = merged.filter((l) => !seenAdIds.has(l.id));
+      const picked = (fresh.length >= 4 ? fresh : merged).slice(0, 8);
+      return picked.length > 0 ? picked : fallback();
     },
   });
 }
