@@ -265,9 +265,18 @@ function AdPage() {
   });
 
   useEffect(() => {
-    if (ad.data?.listing.id)
-      void supabase.rpc("mkt_increment_views", { _listing_id: ad.data.listing.id });
-  }, [ad.data?.listing.id]);
+    const row = ad.data?.listing;
+    if (!row?.id) return;
+    void supabase.rpc("mkt_increment_views", { _listing_id: row.id });
+    // Feeds "Suggested for you" — ad + category + city only.
+    trackMarketActivity({
+      event: "view_ad",
+      adId: row.id,
+      categoryId: row.category_id,
+      cityId: row.city_id,
+    });
+  }, [ad.data?.listing]);
+
 
   if (ad.isLoading) {
     return (
