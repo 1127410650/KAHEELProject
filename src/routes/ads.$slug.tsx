@@ -218,7 +218,7 @@ function AdvertiserCard({
         <>
           <p className="mt-2 text-xs text-muted-foreground">{t("market.ad.contactHidden")}</p>
           <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-            <Link to="/login">{t("market.signIn")}</Link>
+            <Link to="/auth">{t("market.signIn")}</Link>
           </Button>
         </>
       )}

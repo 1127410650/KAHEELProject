@@ -148,12 +148,32 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/reports/$id", "admin", "admin"),
 
   // ── هـ. Legacy / duplicated ────────────────────────────────────────────────
+  // These paths no longer have a route file of their own: the central splat
+  // handler (`src/routes/$.tsx`) resolves them, keeping query string and hash.
   // `/marketplace` rendered the exact same home page as `/`.
   rule("/marketplace", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/login", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
+  rule("/signin", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
+  rule("/sign-in", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
+  rule("/signup", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
+  rule("/sign-up", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
+  rule("/home", "legacy", "market", { legacy_redirect: "/", is_public: true }),
+  rule("/market", "legacy", "market", { legacy_redirect: "/", is_public: true }),
 ];
 
 const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
+
+/**
+ * Legacy path → canonical path, for the single central redirect handler.
+ * A redirected path never gains access: it lands on the canonical route and that
+ * route's own guard (login / active account / permission) still runs.
+ */
+export function resolveLegacyTarget(pathname: string): string | null {
+  const clean = pathname.split("?")[0]!.split("#")[0]!.replace(/\/+$/, "") || "/";
+  const found = BY_PATH.get(clean);
+  return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
+}
+
 
 /** Turns a concrete URL path into its registered pattern (`/ads/x` → `/ads/$slug`). */
 export function normalizePath(pathname: string): string {

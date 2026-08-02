@@ -83,7 +83,7 @@ function ChooseAccountPage() {
       toast.error(t("market.entry.revoked"));
       return;
     }
-    void navigate({ to: next ?? "/marketplace", replace: true });
+    void navigate({ to: next ?? "/", replace: true });
   }
 
   async function signOut() {
