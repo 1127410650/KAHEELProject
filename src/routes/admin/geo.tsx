@@ -63,7 +63,7 @@ function AdminGeoPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("mkt_city_suggestions")
-        .select("id, country_id, name, status, created_at")
+        .select("id, country_id, suggested_name, status, created_at")
         .eq("status", "pending")
         .order("created_at", { ascending: false })
         .limit(50);
@@ -103,22 +103,25 @@ function AdminGeoPage() {
   }
 
   async function reviewSuggestion(
-    row: { id: string; country_id: string; name: string },
+    row: { id: string; country_id: string; suggested_name: string },
     approve: boolean,
   ) {
     try {
       if (approve) {
         const { error } = await supabase.from("mkt_cities").insert({
           country_id: row.country_id,
-          name_ar: row.name,
-          name_en: row.name,
+          name_ar: row.suggested_name,
+          name_en: row.suggested_name,
           is_active: true,
         });
         if (error) throw error;
       }
       const { error } = await supabase
         .from("mkt_city_suggestions")
-        .update({ status: approve ? "approved" : "rejected" })
+        .update({
+          status: approve ? "approved" : "rejected",
+          reviewed_at: new Date().toISOString(),
+        })
         .eq("id", row.id);
       if (error) throw error;
       await queryClient.invalidateQueries({ queryKey: ["mkt"] });
@@ -210,7 +213,7 @@ function AdminGeoPage() {
             <ul className="mt-2 divide-y divide-border">
               {suggestions.data.map((row) => (
                 <li key={row.id} className="flex flex-wrap items-center gap-2 py-2">
-                  <span className="min-w-0 flex-1 truncate text-sm text-foreground">{row.name}</span>
+                  <span className="min-w-0 flex-1 truncate text-sm text-foreground">{row.suggested_name}</span>
                   <Button
                     type="button"
                     size="sm"

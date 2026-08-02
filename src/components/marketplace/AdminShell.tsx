@@ -54,6 +54,12 @@ export function AdminShell({
               {t("market.admin.verifications")}
             </Link>
             <Link
+              to="/admin/geo"
+              className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+            >
+              {t("market.admin.geo")}
+            </Link>
+            <Link
               to="/admin/reports"
               className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
             >
