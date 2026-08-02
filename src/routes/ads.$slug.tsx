@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { CalendarDays, Eye, MapPin, Share2 } from "lucide-react";
+import { useEffect } from "react";
+import { Building2, CalendarDays, Eye, MapPin, Share2, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -10,14 +10,18 @@ import { useSession } from "@/lib/session";
 import {
   BUSINESS_COLUMNS,
   LISTING_COLUMNS,
+  USER_PROFILE_COLUMNS,
   priceLabel,
+  relativeTime,
   resolveMedia,
   type MktBusiness,
   type MktListing,
+  type MktUserProfile,
 } from "@/lib/mkt";
 import { decorateListings, loadListingTypes } from "@/lib/mkt-queries";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { ListingGallery } from "@/components/marketplace/ListingGallery";
 import { ListingActions } from "@/components/marketplace/ListingActions";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,7 +37,7 @@ export const Route = createFileRoute("/ads/$slug")({
   head: ({ params }) => {
     const title = `إعلان ${params.slug} — سوق تحقّق`;
     const description =
-      "تفاصيل الإعلان والسعر والمواصفات وبيانات المنشأة المعلنة في سوق تحقّق للخدمات والمقاولات.";
+      "تفاصيل الإعلان والسعر والمواصفات وبيانات المعلن في سوق تحقّق للخدمات والمقاولات.";
     return {
       meta: [
         { title },
@@ -60,7 +64,7 @@ async function loadAd(slug: string) {
   if (!data) return null;
   const listing = data as unknown as MktListing;
 
-  const [{ data: imageRows }, { data: bizRow }, types] = await Promise.all([
+  const [{ data: imageRows }, { data: bizRow }, { data: personRow }, types] = await Promise.all([
     supabase
       .from("mkt_listing_images")
       .select("id, url, alt_text, sort_order")
@@ -73,27 +77,154 @@ async function loadAd(slug: string) {
           .eq("tenant_id", listing.tenant_id)
           .maybeSingle()
       : Promise.resolve({ data: null }),
+    listing.tenant_id
+      ? Promise.resolve({ data: null })
+      : supabase
+          .from("mkt_user_profiles")
+          .select(USER_PROFILE_COLUMNS)
+          .eq("user_id", listing.owner_user_id)
+          .maybeSingle(),
     loadListingTypes(),
   ]);
 
-  const paths = [listing.cover_image_url, ...(imageRows ?? []).map((r) => r.url)];
-  const media = await resolveMedia(paths);
-  const gallery = Array.from(
+  const paths = Array.from(
     new Set(
       [listing.cover_image_url, ...(imageRows ?? []).map((r) => r.url)].filter(
         (p): p is string => !!p,
       ),
     ),
-  )
-    .map((p) => media[p])
-    .filter((u): u is string => !!u);
+  );
+  const media = await resolveMedia(paths);
+  const gallery = paths.map((p) => media[p]).filter((u): u is string => !!u);
 
   return {
     listing,
     gallery,
     business: (bizRow as MktBusiness | null) ?? null,
+    person: (personRow as MktUserProfile | null) ?? null,
     type: types.find((tp) => tp.code === listing.type_code) ?? null,
   };
+}
+
+/** Advertiser card: works for both an individual and a business identity. */
+function AdvertiserCard({
+  business,
+  person,
+}: {
+  business: MktBusiness | null;
+  person: MktUserProfile | null;
+}) {
+  const { t, locale } = useI18n();
+  const { session } = useSession();
+
+  const isBusiness = !!business;
+  const name = business
+    ? locale === "ar"
+      ? business.display_name_ar
+      : business.display_name_en || business.display_name_ar
+    : (person?.display_name ?? t("market.advertiser.individual"));
+  const status = business?.verification_status ?? person?.verification_status ?? null;
+  const city = business?.city ?? person?.city ?? null;
+  const joined = business?.joined_at ?? person?.joined_at ?? null;
+  const contacts = [
+    business
+      ? business.show_phone
+        ? business.public_phone
+        : null
+      : person?.show_phone
+        ? person.public_phone
+        : null,
+    business
+      ? business.show_whatsapp
+        ? business.public_whatsapp
+        : null
+      : person?.show_whatsapp
+        ? person.public_whatsapp
+        : null,
+    business
+      ? business.show_email
+        ? business.public_email
+        : null
+      : person?.show_email
+        ? person.public_email
+        : null,
+  ].filter((v): v is string => !!v);
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-4">
+      <h2 className="text-sm font-bold text-foreground">{t("market.ad.advertiser")}</h2>
+
+      <div className="mt-2 flex items-center gap-2">
+        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground">
+          {isBusiness ? (
+            <Building2 className="size-4" aria-hidden />
+          ) : (
+            <User className="size-4" aria-hidden />
+          )}
+        </span>
+        <div className="min-w-0">
+          {business ? (
+            <Link
+              to="/businesses/$slug"
+              params={{ slug: business.slug }}
+              className="block truncate text-sm font-semibold text-primary"
+            >
+              {name}
+            </Link>
+          ) : person?.username ? (
+            <Link
+              to="/u/$username"
+              params={{ username: person.username }}
+              className="block truncate text-sm font-semibold text-primary"
+            >
+              {name}
+            </Link>
+          ) : (
+            <p className="truncate text-sm font-semibold text-foreground">{name}</p>
+          )}
+          <p className="text-[11px] text-muted-foreground">
+            {t(`market.advertiser.${isBusiness ? "business" : "individual"}`)}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <VerifiedBadge status={status} size="xs" />
+        {status !== "verified" && (
+          <span className="text-[11px] text-muted-foreground">
+            {t("market.advertiser.notVerified")}
+          </span>
+        )}
+      </div>
+
+      {city && <p className="mt-2 text-xs text-muted-foreground">{city}</p>}
+      {joined && (
+        <p className="mt-1 text-xs text-muted-foreground">
+          {t("market.business.joined")}:{" "}
+          {new Date(joined).toLocaleDateString("en-GB", { timeZone: "Asia/Riyadh" })}
+        </p>
+      )}
+
+      {session ? (
+        contacts.length > 0 ? (
+          <div className="mt-2 space-y-1 text-xs text-foreground" dir="ltr">
+            {contacts.map((c) => (
+              <p key={c}>{c}</p>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-2 text-xs text-muted-foreground">{t("market.ad.contactPrivate")}</p>
+        )
+      ) : (
+        <>
+          <p className="mt-2 text-xs text-muted-foreground">{t("market.ad.contactHidden")}</p>
+          <Button asChild variant="outline" size="sm" className="mt-3 w-full">
+            <Link to="/login">{t("market.signIn")}</Link>
+          </Button>
+        </>
+      )}
+    </div>
+  );
 }
 
 function AdPage() {
@@ -101,7 +232,6 @@ function AdPage() {
   const { action } = Route.useSearch();
   const { t, locale } = useI18n();
   const { session } = useSession();
-  const [active, setActive] = useState(0);
 
   const ad = useQuery({ queryKey: ["mkt", "ad", slug], queryFn: () => loadAd(slug) });
 
@@ -151,7 +281,7 @@ function AdPage() {
     );
   }
 
-  const { listing, gallery, business, type } = ad.data;
+  const { listing, gallery, business, person, type } = ad.data;
   const specs = (listing.specs && typeof listing.specs === "object" ? listing.specs : {}) as Record<
     string,
     unknown
@@ -159,41 +289,10 @@ function AdPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[1fr_360px]">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 py-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px]">
         <article className="min-w-0">
-          <div className="overflow-hidden rounded-xl border border-border bg-muted">
-            {gallery.length > 0 ? (
-              <img
-                src={gallery[active]}
-                alt={listing.title}
-                className="aspect-[16/10] w-full object-cover"
-              />
-            ) : (
-              <div className="grid aspect-[16/10] w-full place-items-center text-sm text-muted-foreground">
-                {t("market.noImage")}
-              </div>
-            )}
-          </div>
-          {gallery.length > 1 && (
-            <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
-              {gallery.map((url, i) => (
-                <button
-                  key={url}
-                  type="button"
-                  onClick={() => setActive(i)}
-                  className={
-                    i === active
-                      ? "size-16 shrink-0 overflow-hidden rounded-lg border-2 border-primary"
-                      : "size-16 shrink-0 overflow-hidden rounded-lg border border-border"
-                  }
-                >
-                  <img src={url} alt="" className="size-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          {/* Title first, then price, then gallery: the reading order buyers expect. */}
+          <div className="flex flex-wrap items-center gap-1.5">
             {type && (
               <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
                 {locale === "ar" ? type.name_ar : type.name_en}
@@ -209,17 +308,20 @@ function AdPage() {
                 {t(`market.filters.${listing.deal_kind}`)}
               </span>
             )}
-            <VerifiedBadge status={business?.verification_status} />
+            <VerifiedBadge
+              status={business?.verification_status ?? person?.verification_status}
+              size="xs"
+            />
           </div>
 
-          <h1 className="mt-2 text-xl font-bold leading-snug text-foreground sm:text-2xl">
+          <h1 className="mt-2 text-lg font-bold leading-snug text-foreground sm:text-2xl">
             {listing.title}
           </h1>
-          <p className="mt-2 text-lg font-bold text-primary">
+          <p className="mt-1 text-lg font-bold text-primary sm:text-xl">
             {priceLabel(listing, t("market.priceOnRequest"))}
           </p>
 
-          <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
             {listing.city && (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" aria-hidden />
@@ -229,11 +331,7 @@ function AdPage() {
             )}
             <span className="inline-flex items-center gap-1">
               <CalendarDays className="size-3.5" aria-hidden />
-              {listing.published_at
-                ? new Date(listing.published_at).toLocaleDateString("en-GB", {
-                    timeZone: "Asia/Riyadh",
-                  })
-                : "—"}
+              {relativeTime(listing.published_at ?? listing.created_at, locale)}
             </span>
             <span className="inline-flex items-center gap-1">
               <Eye className="size-3.5" aria-hidden />
@@ -252,7 +350,20 @@ function AdPage() {
             </button>
           </div>
 
+          <div className="mt-3">
+            <ListingGallery images={gallery} title={listing.title} />
+          </div>
+
+          {/* On phones the action panel sits right under the gallery. */}
+          <div className="mt-4 rounded-xl border border-border bg-card p-4 lg:hidden">
+            <ListingActions listing={listing} pendingAction={action} />
+            {!session && (
+              <p className="mt-3 text-xs text-muted-foreground">{t("market.ad.signInHint")}</p>
+            )}
+          </div>
+
           {listing.summary && <p className="mt-4 text-sm text-foreground">{listing.summary}</p>}
+
           {listing.description && (
             <div className="mt-4 rounded-xl border border-border bg-card p-4">
               <h2 className="text-sm font-bold text-foreground">{t("market.ad.details")}</h2>
@@ -262,15 +373,16 @@ function AdPage() {
             </div>
           )}
 
-          {(Object.keys(specs).length > 0 || listing.quantity) && (
+          {(Object.keys(specs).length > 0 || listing.quantity !== null) && (
             <div className="mt-4 rounded-xl border border-border bg-card p-4">
               <h2 className="text-sm font-bold text-foreground">{t("market.ad.specs")}</h2>
               <dl className="mt-2 grid gap-2 sm:grid-cols-2">
                 {listing.quantity !== null && (
                   <div className="flex justify-between gap-2 text-sm">
-                    <dt className="text-muted-foreground">{t("market.quote.quantity")}</dt>
-                    <dd className="font-medium text-foreground" dir="ltr">
-                      {listing.quantity} {listing.unit ?? ""}
+                    <dt className="text-muted-foreground">{t("market.form.quantity")}</dt>
+                    <dd className="font-medium text-foreground">
+                      {listing.quantity}
+                      {listing.unit ? ` ${listing.unit}` : ""}
                     </dd>
                   </div>
                 )}
@@ -284,77 +396,37 @@ function AdPage() {
             </div>
           )}
 
-          <section className="mt-8">
-            <h2 className="mb-3 text-base font-bold text-foreground">{t("market.ad.similar")}</h2>
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-              {(similar.data ?? []).map((l) => (
-                <ListingCard key={l.id} listing={l} />
-              ))}
-            </div>
-            {(similar.data ?? []).length === 0 && (
-              <p className="text-sm text-muted-foreground">{t("market.emptySection")}</p>
-            )}
-          </section>
+          <div className="mt-4 lg:hidden">
+            <AdvertiserCard business={business} person={person} />
+          </div>
+
+          {(similar.data ?? []).length > 0 && (
+            <section className="mt-8">
+              <h2 className="mb-3 text-base font-bold text-foreground">
+                {t("market.ad.similar")}
+              </h2>
+              <div className="flex flex-col gap-2.5 sm:hidden">
+                {(similar.data ?? []).map((l) => (
+                  <ListingCard key={l.id} listing={l} view="row" />
+                ))}
+              </div>
+              <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+                {(similar.data ?? []).map((l) => (
+                  <ListingCard key={l.id} listing={l} />
+                ))}
+              </div>
+            </section>
+          )}
         </article>
 
-        <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
+        <aside className="hidden space-y-4 lg:sticky lg:top-20 lg:block lg:self-start">
           <div className="rounded-xl border border-border bg-card p-4">
             <ListingActions listing={listing} pendingAction={action} />
             {!session && (
               <p className="mt-3 text-xs text-muted-foreground">{t("market.ad.signInHint")}</p>
             )}
           </div>
-
-          <div className="rounded-xl border border-border bg-card p-4">
-            <h2 className="text-sm font-bold text-foreground">{t("market.ad.advertiser")}</h2>
-            {business ? (
-              <>
-                <Link
-                  to="/businesses/$slug"
-                  params={{ slug: business.slug }}
-                  className="mt-2 block text-sm font-semibold text-primary"
-                >
-                  {locale === "ar"
-                    ? business.display_name_ar
-                    : business.display_name_en || business.display_name_ar}
-                </Link>
-                <div className="mt-1">
-                  <VerifiedBadge status={business.verification_status} />
-                </div>
-                {business.city && (
-                  <p className="mt-2 text-xs text-muted-foreground">{business.city}</p>
-                )}
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {t("market.business.joined")}:{" "}
-                  {new Date(business.joined_at).toLocaleDateString("en-GB", {
-                    timeZone: "Asia/Riyadh",
-                  })}
-                </p>
-                {session ? (
-                  <div className="mt-2 space-y-1 text-xs text-foreground" dir="ltr">
-                    {business.show_phone && business.public_phone && <p>{business.public_phone}</p>}
-                    {business.show_whatsapp && business.public_whatsapp && (
-                      <p>{business.public_whatsapp}</p>
-                    )}
-                    {business.show_email && business.public_email && <p>{business.public_email}</p>}
-                  </div>
-                ) : (
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {t("market.ad.contactHidden")}
-                  </p>
-                )}
-              </>
-            ) : (
-              <p className="mt-2 text-xs text-muted-foreground">
-                {t("market.ad.individualAdvertiser")}
-              </p>
-            )}
-            {!session && (
-              <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-                <Link to="/login">{t("market.signIn")}</Link>
-              </Button>
-            )}
-          </div>
+          <AdvertiserCard business={business} person={person} />
         </aside>
       </div>
     </MarketShell>

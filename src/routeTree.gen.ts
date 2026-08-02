@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MoreRouteImport } from './routes/more'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
@@ -47,9 +48,11 @@ import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favor
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/notifications'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
 import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authenticated/requests.index'
@@ -88,6 +91,11 @@ const LoginRoute = LoginRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoreRoute = MoreRouteImport.update({
+  id: '/more',
+  path: '/more',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -259,6 +267,11 @@ const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
   path: '/dashboard/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/dashboard/profile',
+  path: '/dashboard/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
   id: '/dashboard/requests',
   path: '/dashboard/requests',
@@ -272,6 +285,11 @@ const DashboardViolationsRoute = DashboardViolationsRouteImport.update({
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedProjectsIndexRoute =
@@ -362,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
+  '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
@@ -394,9 +413,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -419,6 +440,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
+  '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
@@ -451,9 +473,11 @@ export interface FileRoutesByTo {
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -478,6 +502,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
+  '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
@@ -510,9 +535,11 @@ export interface FileRoutesById {
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -537,6 +564,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/login'
     | '/marketplace'
+    | '/more'
     | '/register'
     | '/search'
     | '/verify-invoice'
@@ -569,9 +597,11 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/notifications'
+    | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/u/$username'
     | '/admin/'
     | '/projects/$id'
     | '/requests/$id'
@@ -594,6 +624,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/login'
     | '/marketplace'
+    | '/more'
     | '/register'
     | '/search'
     | '/verify-invoice'
@@ -626,9 +657,11 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/notifications'
+    | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/u/$username'
     | '/admin'
     | '/projects/$id'
     | '/requests/$id'
@@ -652,6 +685,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/login'
     | '/marketplace'
+    | '/more'
     | '/register'
     | '/search'
     | '/verify-invoice'
@@ -684,9 +718,11 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/notifications'
+    | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/u/$username'
     | '/admin/'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
@@ -711,6 +747,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   LoginRoute: typeof LoginRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MoreRoute: typeof MoreRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
@@ -724,9 +761,11 @@ export interface RootRouteChildren {
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
   DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  UUsernameRoute: typeof UUsernameRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
@@ -771,6 +810,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/more': {
+      id: '/more'
+      path: '/more'
+      fullPath: '/more'
+      preLoaderRoute: typeof MoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1004,6 +1050,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/dashboard/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/requests': {
       id: '/dashboard/requests'
       path: '/dashboard/requests'
@@ -1023,6 +1076,13 @@ declare module '@tanstack/react-router' {
       path: '/invite/$token'
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/projects/': {
@@ -1204,6 +1264,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   LoginRoute: LoginRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MoreRoute: MoreRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
@@ -1217,9 +1278,11 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardMyAdsRoute: DashboardMyAdsRoute,
   DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
+  UUsernameRoute: UUsernameRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,

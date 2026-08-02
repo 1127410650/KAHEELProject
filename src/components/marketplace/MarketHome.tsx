@@ -1,8 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Search } from "lucide-react";
+import { ArrowLeft, Building2, Plus, Search, ShieldCheck, Sparkles, Tag, User } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 
 import { useI18n } from "@/i18n";
 import { SA_CITIES } from "@/lib/mkt";
@@ -12,68 +11,73 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
+type Items = React.ComponentProps<typeof ListingCard>["listing"][];
+
+/** A section renders only when it has content, so the page never shows a wall
+ *  of empty placeholders. */
 function Section({
   title,
   href,
   search,
-  children,
+  items,
+  loading,
 }: {
   title: string;
   href: string;
   search?: Record<string, string>;
-  children: React.ReactNode;
+  items: Items;
+  loading: boolean;
 }) {
   const { t } = useI18n();
+  if (!loading && items.length === 0) return null;
+
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-6">
+    <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="text-lg font-bold text-foreground">{title}</h2>
+        <h2 className="text-base font-bold text-foreground sm:text-lg">{title}</h2>
         <Link
           to={href}
           search={search ?? {}}
-          className="inline-flex items-center gap-1 text-sm font-medium text-primary"
+          className="inline-flex items-center gap-1 text-xs font-medium text-primary sm:text-sm"
         >
           {t("market.viewAll")}
-          <ArrowLeft className="size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+          <ArrowLeft className="size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
         </Link>
       </div>
-      {children}
+
+      {loading ? (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-28 w-full rounded-xl sm:h-56" />
+          ))}
+        </div>
+      ) : (
+        <>
+          {/* Phones get compact horizontal rows; larger screens get a grid. */}
+          <div className="flex flex-col gap-2.5 sm:hidden">
+            {items.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} view="row" />
+            ))}
+          </div>
+          <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+            {items.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }
 
-function Grid({
-  items,
-  loading,
-}: {
-  items: React.ComponentProps<typeof ListingCard>["listing"][];
-  loading: boolean;
-}) {
-  const { t } = useI18n();
-  if (loading) {
-    return (
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-56 w-full rounded-xl" />
-        ))}
-      </div>
-    );
-  }
-  if (items.length === 0) {
-    return (
-      <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-        {t("market.emptySection")}
-      </p>
-    );
-  }
-  return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-      {items.map((listing) => (
-        <ListingCard key={listing.id} listing={listing} />
-      ))}
-    </div>
-  );
-}
+const QUICK_FILTERS = [
+  { key: "service", search: { type: "service" }, icon: Sparkles },
+  { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Tag },
+  { key: "product", search: { type: "product" }, icon: Tag },
+  { key: "verified", search: { verified: "1" }, icon: ShieldCheck },
+  { key: "business", search: { advertiser: "business" }, icon: Building2 },
+  { key: "individual", search: { advertiser: "individual" }, icon: User },
+] as const;
 
 export function MarketHome() {
   const { t, locale } = useI18n();
@@ -118,19 +122,20 @@ export function MarketHome() {
   });
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
+  const verifiedList = verified.data ?? [];
 
   return (
     <>
       <section className="border-b border-border bg-gradient-to-b from-secondary/60 to-background">
-        <div className="mx-auto w-full max-w-7xl px-4 py-10 text-center sm:py-14">
-          <h1 className="text-2xl font-bold leading-snug text-foreground sm:text-4xl">
+        <div className="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:py-14">
+          <h1 className="text-xl font-bold leading-snug text-foreground sm:text-4xl">
             {t("market.hero.title")}
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:mt-3 sm:text-base">
             {t("market.hero.subtitle")}
           </p>
           <form
-            className="mx-auto mt-6 flex max-w-3xl flex-col gap-2 sm:flex-row"
+            className="mx-auto mt-5 flex max-w-3xl flex-col gap-2 sm:flex-row"
             onSubmit={(e) => {
               e.preventDefault();
               navigate({
@@ -169,8 +174,9 @@ export function MarketHome() {
               {t("common.search")}
             </Button>
           </form>
+
           <div className="mt-4 flex flex-wrap justify-center gap-2">
-            <Button asChild variant="secondary" size="sm">
+            <Button asChild size="sm">
               <Link to="/dashboard/ads/new">
                 <Plus className="size-4" aria-hidden />
                 {t("market.addListing")}
@@ -182,87 +188,133 @@ export function MarketHome() {
               </Link>
             </Button>
           </div>
+          <p className="mt-3 text-xs text-muted-foreground">{t("market.hero.openToAll")}</p>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 py-6">
-        <h2 className="mb-3 text-lg font-bold text-foreground">{t("market.categories")}</h2>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-          {roots.map((c) => (
+      {/* Quick filters: one tap to the most requested slices of the market. */}
+      <div className="border-b border-border bg-background">
+        <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-3 py-3 sm:px-4">
+          {QUICK_FILTERS.map((f) => (
             <Link
-              key={c.id}
-              to="/categories/$slug"
-              params={{ slug: c.slug }}
-              className="rounded-xl border border-border bg-card px-3 py-3 text-center text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+              key={f.key}
+              to="/search"
+              search={f.search}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:border-primary/50 hover:text-primary"
             >
-              {locale === "ar" ? c.name_ar : c.name_en}
+              <f.icon className="size-3.5" aria-hidden />
+              {t(`market.quick.${f.key}`)}
             </Link>
           ))}
         </div>
-      </section>
+      </div>
 
-      <Section title={t("market.sections.latest")} href="/search">
-        <Grid items={latest.data ?? []} loading={latest.isLoading} />
-      </Section>
-
-      <section className="mx-auto w-full max-w-7xl px-4 py-6">
-        <h2 className="mb-3 text-lg font-bold text-foreground">
-          {t("market.sections.verifiedBusinesses")}
+      <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+        <h2 className="mb-3 text-base font-bold text-foreground sm:text-lg">
+          {t("market.categories")}
         </h2>
-        {verified.isLoading ? (
-          <Skeleton className="h-24 w-full rounded-xl" />
-        ) : (verified.data ?? []).length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-            {t("market.emptySection")}
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {(verified.data ?? []).map((b) => (
-              <Link
-                key={b.tenant_id}
-                to="/businesses/$slug"
-                params={{ slug: b.slug }}
-                className="rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/40"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <p className="line-clamp-1 text-sm font-semibold text-foreground">
-                    {locale === "ar" ? b.display_name_ar : b.display_name_en || b.display_name_ar}
-                  </p>
-                  <VerifiedBadge status={b.verification_status} />
-                </div>
-                {b.headline && (
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.headline}</p>
-                )}
-                {b.city && <p className="mt-2 text-[11px] text-muted-foreground">{b.city}</p>}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible lg:grid-cols-5">
+          {categories.isLoading
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-11 w-32 shrink-0 rounded-xl sm:w-full" />
+              ))
+            : roots.map((c) => (
+                <Link
+                  key={c.id}
+                  to="/categories/$slug"
+                  params={{ slug: c.slug }}
+                  className="shrink-0 rounded-xl border border-border bg-card px-3 py-2.5 text-center text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:text-sm"
+                >
+                  {locale === "ar" ? c.name_ar : c.name_en}
+                </Link>
+              ))}
+        </div>
       </section>
+
+      <Section
+        title={t("market.sections.latest")}
+        href="/search"
+        items={latest.data ?? []}
+        loading={latest.isLoading}
+      />
+
+      {(verified.isLoading || verifiedList.length > 0) && (
+        <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-base font-bold text-foreground sm:text-lg">
+              {t("market.sections.verifiedBusinesses")}
+            </h2>
+            <Link
+              to="/search"
+              search={{ verified: "1" }}
+              className="text-xs font-medium text-primary sm:text-sm"
+            >
+              {t("market.viewAll")}
+            </Link>
+          </div>
+          {verified.isLoading ? (
+            <Skeleton className="h-24 w-full rounded-xl" />
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {verifiedList.map((b) => (
+                <Link
+                  key={b.tenant_id}
+                  to="/businesses/$slug"
+                  params={{ slug: b.slug }}
+                  className="rounded-xl border border-border bg-card p-3.5 transition-colors hover:border-primary/40"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="line-clamp-1 text-sm font-semibold text-foreground">
+                      {locale === "ar" ? b.display_name_ar : b.display_name_en || b.display_name_ar}
+                    </p>
+                    <VerifiedBadge status={b.verification_status} size="xs" />
+                  </div>
+                  {b.headline && (
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.headline}</p>
+                  )}
+                  {b.city && <p className="mt-2 text-[11px] text-muted-foreground">{b.city}</p>}
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       <Section
         title={t("market.sections.equipmentSale")}
         href="/search"
         search={{ type: "equipment_sale" }}
-      >
-        <Grid items={equipment.data ?? []} loading={equipment.isLoading} />
-      </Section>
+        items={equipment.data ?? []}
+        loading={equipment.isLoading}
+      />
       <Section
         title={t("market.sections.equipmentRent")}
         href="/search"
         search={{ type: "equipment_rent" }}
-      >
-        <Grid items={rentals.data ?? []} loading={rentals.isLoading} />
-      </Section>
-      <Section title={t("market.sections.products")} href="/search" search={{ type: "product" }}>
-        <Grid items={products.data ?? []} loading={products.isLoading} />
-      </Section>
-      <Section title={t("market.sections.services")} href="/search" search={{ type: "service" }}>
-        <Grid items={services.data ?? []} loading={services.isLoading} />
-      </Section>
-      <Section title={t("market.sections.needs")} href="/search" search={{ type: "need_supplier" }}>
-        <Grid items={needs.data ?? []} loading={needs.isLoading} />
-      </Section>
+        items={rentals.data ?? []}
+        loading={rentals.isLoading}
+      />
+      <Section
+        title={t("market.sections.products")}
+        href="/search"
+        search={{ type: "product" }}
+        items={products.data ?? []}
+        loading={products.isLoading}
+      />
+      <Section
+        title={t("market.sections.services")}
+        href="/search"
+        search={{ type: "service" }}
+        items={services.data ?? []}
+        loading={services.isLoading}
+      />
+      <Section
+        title={t("market.sections.needs")}
+        href="/search"
+        search={{ type: "need_supplier" }}
+        items={needs.data ?? []}
+        loading={needs.isLoading}
+      />
     </>
   );
 }

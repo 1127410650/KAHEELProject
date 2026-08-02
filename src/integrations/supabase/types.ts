@@ -1511,6 +1511,30 @@ export type Database = {
           },
         ]
       }
+      mkt_follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          id: string
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          id?: string
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          id?: string
+          target_id?: string
+          target_type?: string
+        }
+        Relationships: []
+      }
       mkt_listing_images: {
         Row: {
           alt_text: string | null
@@ -1622,6 +1646,7 @@ export type Database = {
       }
       mkt_listings: {
         Row: {
+          advertiser_type: string | null
           category_id: string
           city: string | null
           contact_requests_count: number
@@ -1655,6 +1680,7 @@ export type Database = {
           views_count: number
         }
         Insert: {
+          advertiser_type?: string | null
           category_id: string
           city?: string | null
           contact_requests_count?: number
@@ -1688,6 +1714,7 @@ export type Database = {
           views_count?: number
         }
         Update: {
+          advertiser_type?: string | null
           category_id?: string
           city?: string | null
           contact_requests_count?: number
@@ -2309,6 +2336,72 @@ export type Database = {
           id?: string
           perm?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_user_profiles: {
+        Row: {
+          about: string | null
+          avatar_url: string | null
+          city: string | null
+          created_at: string
+          display_name: string
+          headline: string | null
+          is_published: boolean
+          joined_at: string
+          public_email: string | null
+          public_phone: string | null
+          public_whatsapp: string | null
+          region: string | null
+          show_email: boolean
+          show_phone: boolean
+          show_whatsapp: boolean
+          updated_at: string
+          user_id: string
+          username: string
+          verification_status: string
+        }
+        Insert: {
+          about?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          display_name: string
+          headline?: string | null
+          is_published?: boolean
+          joined_at?: string
+          public_email?: string | null
+          public_phone?: string | null
+          public_whatsapp?: string | null
+          region?: string | null
+          show_email?: boolean
+          show_phone?: boolean
+          show_whatsapp?: boolean
+          updated_at?: string
+          user_id: string
+          username: string
+          verification_status?: string
+        }
+        Update: {
+          about?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          display_name?: string
+          headline?: string | null
+          is_published?: boolean
+          joined_at?: string
+          public_email?: string | null
+          public_phone?: string | null
+          public_whatsapp?: string | null
+          region?: string | null
+          show_email?: boolean
+          show_phone?: boolean
+          show_whatsapp?: boolean
+          updated_at?: string
+          user_id?: string
+          username?: string
+          verification_status?: string
         }
         Relationships: []
       }
@@ -5963,6 +6056,10 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_manage_listing: { Args: { _id: string }; Returns: boolean }
+      mkt_can_publish_as_business: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_can_view_conversation: {
         Args: { _conversation_id: string }
         Returns: boolean
