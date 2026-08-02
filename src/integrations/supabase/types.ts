@@ -2494,6 +2494,61 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_user_activity: {
+        Row: {
+          ad_id: string | null
+          category_id: string | null
+          city_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          search_query: string | null
+          user_id: string
+        }
+        Insert: {
+          ad_id?: string | null
+          category_id?: string | null
+          city_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          search_query?: string | null
+          user_id?: string
+        }
+        Update: {
+          ad_id?: string | null
+          category_id?: string | null
+          city_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          search_query?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_user_activity_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_user_activity_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_user_activity_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_user_contacts: {
         Row: {
           country_id: string | null
@@ -2583,6 +2638,7 @@ export type Database = {
           headline: string | null
           is_published: boolean
           joined_at: string
+          personalize_suggestions: boolean
           public_email: string | null
           public_whatsapp: string | null
           region: string | null
@@ -2604,6 +2660,7 @@ export type Database = {
           headline?: string | null
           is_published?: boolean
           joined_at?: string
+          personalize_suggestions?: boolean
           public_email?: string | null
           public_whatsapp?: string | null
           region?: string | null
@@ -2625,6 +2682,7 @@ export type Database = {
           headline?: string | null
           is_published?: boolean
           joined_at?: string
+          personalize_suggestions?: boolean
           public_email?: string | null
           public_whatsapp?: string | null
           region?: string | null

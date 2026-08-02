@@ -79,6 +79,7 @@ interface Draft {
   show_email: boolean;
   show_whatsapp: boolean;
   is_published: boolean;
+  personalize_suggestions: boolean;
 }
 
 const EMPTY: Draft = {
@@ -94,7 +95,9 @@ const EMPTY: Draft = {
   show_email: false,
   show_whatsapp: false,
   is_published: true,
+  personalize_suggestions: true,
 };
+
 
 function Section({
   title,
@@ -182,7 +185,9 @@ function ProfilePage() {
       show_email: row?.show_email ?? false,
       show_whatsapp: row?.show_whatsapp ?? false,
       is_published: row?.is_published ?? true,
+      personalize_suggestions: row?.personalize_suggestions ?? true,
     });
+
     setLoaded(true);
   }, [loaded, me.isLoading, row, countries.data, preference.countryIso2]);
 
@@ -315,6 +320,8 @@ function ProfilePage() {
           show_email: draft.show_email,
           show_whatsapp: draft.show_whatsapp,
           is_published: draft.is_published,
+          personalize_suggestions: draft.personalize_suggestions,
+
         },
         { onConflict: "user_id" },
       );
@@ -612,6 +619,19 @@ function ProfilePage() {
               {t("market.person.publishProfile")}
             </label>
             <p className="text-[11px] text-muted-foreground">{t("market.person.publishHint")}</p>
+
+            <label className="mt-3 flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={draft.personalize_suggestions}
+                onChange={(e) => set("personalize_suggestions", e.target.checked)}
+              />
+              {t("market.person.personalize")}
+            </label>
+            <p className="text-[11px] text-muted-foreground">
+              {t("market.person.personalizeHint")}
+            </p>
+
 
             <div className="flex flex-wrap items-center gap-3 text-xs">
               <span className="text-muted-foreground">{t("market.person.badgeState")}</span>

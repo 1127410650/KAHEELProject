@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { trackMarketActivity } from "@/lib/mkt-activity";
 import { currentPath, loginHref, priceLabel, relativeTime, type MktListing } from "@/lib/mkt";
 import {
   DropdownMenu,
@@ -88,12 +89,21 @@ function FavoriteButton({ listing }: { listing: ListingCardData }) {
     },
     onSuccess: (added) => {
       void qc.invalidateQueries({ queryKey: ["mkt", "favorite-ids"] });
+      if (added) {
+        trackMarketActivity({
+          event: "favorite",
+          adId: listing.id,
+          categoryId: listing.category_id,
+          cityId: listing.city_id,
+        });
+      }
       toast.success(
         t(added ? "market.actions.savedToFavorites" : "market.actions.removedFromFavorites"),
       );
     },
     onError: () => toast.error(t("market.actions.failed")),
   });
+
 
   return (
     <button

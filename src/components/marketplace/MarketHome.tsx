@@ -26,7 +26,9 @@ import { useState } from "react";
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadBusinesses, loadCategories, loadListings } from "@/lib/mkt-queries";
+import { trackMarketActivity, useSuggestedListings } from "@/lib/mkt-activity";
 import { resolveMedia } from "@/lib/mkt";
+
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
@@ -173,19 +175,30 @@ export function MarketHome() {
     },
   });
 
+  const suggested = useSuggestedListings(locale, geo);
+
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
 
   function submitSearch(event: React.FormEvent) {
     event.preventDefault();
+    const term = q.trim();
+    if (term) {
+      trackMarketActivity({
+        event: "search",
+        searchQuery: term,
+        cityId: preference.cityId ?? null,
+      });
+    }
     void navigate({
       to: "/search",
       search: {
-        ...(q.trim() ? { q: q.trim() } : {}),
+        ...(term ? { q: term } : {}),
         country: preference.countryIso2,
         ...(preference.cityId ? { cityId: preference.cityId } : {}),
       },
     });
   }
+
 
   return (
     <>
@@ -199,9 +212,7 @@ export function MarketHome() {
           <h1 className="mx-auto max-w-3xl text-balance text-xl font-bold leading-snug tracking-tight text-foreground sm:text-3xl">
             {t("market.hero.title")}
           </h1>
-          <p className="mx-auto mt-2.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            {t("market.hero.subtitle")}
-          </p>
+
 
           {/* One single search surface for the whole page. */}
           <form
@@ -238,7 +249,7 @@ export function MarketHome() {
         </div>
       </section>
 
-      {/* Quick content types: one tap to the most requested slices of the market. */}
+      {/* Quick content types + the fields row: one compact strip, no big grid. */}
       <div className="border-b border-border bg-background">
         <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
           {QUICK_FILTERS.map((f) => (
@@ -253,17 +264,12 @@ export function MarketHome() {
             </Link>
           ))}
         </div>
-      </div>
 
-      {/* Categories: compact, evenly balanced grid — never a horizontal scroll. */}
-      <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
-        <h2 className="mb-3 text-base font-bold tracking-tight text-foreground sm:text-lg">
-          {t("market.categories")}
-        </h2>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {/* Compact fields row — replaces the former category grid. */}
+        <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
           {categories.isLoading
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <Skeleton key={i} className="h-16 w-full rounded-xl" />
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton key={i} className="h-8 w-24 shrink-0 rounded-full" />
               ))
             : roots.map((c) => {
                 const Icon = (c.icon && CATEGORY_ICONS[c.icon]) || LayoutGrid;
@@ -272,19 +278,24 @@ export function MarketHome() {
                     key={c.id}
                     to="/categories/$slug"
                     params={{ slug: c.slug }}
-                    className="flex min-h-16 items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-3 text-start transition-colors hover:border-primary/50 hover:bg-secondary/50"
+                    onClick={() => trackMarketActivity({ event: "open_category", categoryId: c.id })}
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
                   >
-                    <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-secondary text-primary">
-                      <Icon className="size-4" aria-hidden />
-                    </span>
-                    <span className="min-w-0 text-xs font-medium leading-snug text-foreground sm:text-sm">
-                      {locale === "ar" ? c.name_ar : c.name_en}
-                    </span>
+                    <Icon className="size-3.5 shrink-0" aria-hidden />
+                    {locale === "ar" ? c.name_ar : c.name_en}
                   </Link>
                 );
               })}
         </div>
-      </section>
+      </div>
+
+      {/* Suggested for you — built from this visitor's own recent market activity. */}
+      <ListingSection
+        title={t("market.sections.suggested")}
+        href="/search"
+        items={suggested.data ?? []}
+        loading={false}
+      />
 
       <ListingSection
         title={t("market.sections.latest")}
@@ -292,6 +303,7 @@ export function MarketHome() {
         items={latest.data ?? []}
         loading={latest.isLoading}
       />
+
 
       {/* Suggested businesses — the check mark sits inside the identity block. */}
       {(businesses.isLoading || (businesses.data ?? []).length > 0) && (

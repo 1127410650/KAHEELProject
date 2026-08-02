@@ -1,13 +1,21 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  Bell,
   Building2,
   Check,
   ChevronDown,
+  Flag,
+  Heart,
+  LayoutList,
   LogOut,
+  MessageSquare,
+  ReceiptText,
   Settings,
+  ShieldAlert,
   User,
   X,
 } from "lucide-react";
+
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
@@ -111,7 +119,21 @@ export function AccountMenu() {
     </div>
   );
 
-  const manageLinks: { to: string; label: string; icon: typeof User }[] = [
+  type MenuLink = { to: string; label: string; icon: typeof User };
+
+  // Everything that used to sit in per-page tab bars now lives here, in two
+  // groups: what the user does in the market, and what they manage.
+  const activityLinks: MenuLink[] = [
+    { to: "/dashboard/my-ads", label: t("market.dash.myAds"), icon: LayoutList },
+    { to: "/dashboard/requests", label: t("market.dash.requests"), icon: ReceiptText },
+    { to: "/dashboard/messages", label: t("market.dash.messages"), icon: MessageSquare },
+    { to: "/dashboard/favorites", label: t("market.dash.favorites"), icon: Heart },
+    { to: "/dashboard/notifications", label: t("market.dash.notifications"), icon: Bell },
+    { to: "/dashboard/reports", label: t("market.dash.reports"), icon: Flag },
+    { to: "/dashboard/violations", label: t("market.dash.violations"), icon: ShieldAlert },
+  ];
+
+  const manageLinks: MenuLink[] = [
     { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
     ...(active.kind === "business"
       ? [
@@ -124,6 +146,7 @@ export function AccountMenu() {
       : []),
     { to: "/more", label: t("market.more.settings"), icon: Settings },
   ];
+
 
   if (isMobile) {
     return (
@@ -172,7 +195,26 @@ export function AccountMenu() {
             </>
           )}
 
-          <div className="mt-4 overflow-hidden rounded-xl border border-border bg-card">
+          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
+            {t("market.account.activityTitle")}
+          </p>
+          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
+            {activityLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
+              >
+                <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
+            {t("market.account.manageTitle")}
+          </p>
+          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
             {manageLinks.map((link) => (
               <Link
                 key={link.to}
@@ -192,6 +234,7 @@ export function AccountMenu() {
               {t("nav.signOut")}
             </button>
           </div>
+
         </SheetContent>
       </Sheet>
     );
@@ -228,6 +271,21 @@ export function AccountMenu() {
             <DropdownMenuSeparator />
           </>
         )}
+        <DropdownMenuLabel className="text-xs text-muted-foreground">
+          {t("market.account.activityTitle")}
+        </DropdownMenuLabel>
+        {activityLinks.map((link) => (
+          <DropdownMenuItem key={link.to} asChild>
+            <Link to={link.to} className="gap-2 text-xs">
+              <link.icon className="size-4 text-muted-foreground" aria-hidden />
+              {link.label}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="text-xs text-muted-foreground">
+          {t("market.account.manageTitle")}
+        </DropdownMenuLabel>
         {manageLinks.map((link) => (
           <DropdownMenuItem key={link.to} asChild>
             <Link to={link.to} className="gap-2 text-xs">
@@ -236,6 +294,7 @@ export function AccountMenu() {
             </Link>
           </DropdownMenuItem>
         ))}
+
         <DropdownMenuItem onSelect={() => void signOut()} className="gap-2 text-xs">
           <LogOut className="size-4 text-muted-foreground" aria-hidden />
           {t("nav.signOut")}
