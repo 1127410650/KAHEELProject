@@ -105,6 +105,14 @@ function BusinessDashboardPage() {
     [profile.data, draft],
   );
 
+  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const cities = useQuery({
+    queryKey: ["mkt", "cities", view.country_id],
+    enabled: !!view.country_id,
+    queryFn: () => loadCities(view.country_id),
+  });
+
+
   function set<K extends keyof MktBusiness>(key: K, value: MktBusiness[K]) {
     setDraft((prev) => ({ ...(prev ?? {}), [key]: value }));
   }
