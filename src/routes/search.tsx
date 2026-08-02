@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import type { MktBusiness } from "@/lib/mkt";
 import { purposesFor } from "@/lib/mkt-taxonomy";
 import {
   PAGE_SIZE,
@@ -184,7 +185,7 @@ function SearchPage() {
     [categories.data],
   );
   const activeRoot = roots.find(
-    (r) => r.slug === (domainDef && "categorySlug" in domainDef ? domainDef.categorySlug : params.category),
+    (r) => r.slug === (domainDef?.categorySlug ?? params.category),
   );
   const subs = useMemo(
     () => (categories.data ?? []).filter((c) => c.parent_id && c.parent_id === activeRoot?.id),
@@ -220,12 +221,9 @@ function SearchPage() {
       loadListingsPage(
         {
           q: params.q,
-          categorySlug:
-            (domainDef && "categorySlug" in domainDef ? domainDef.categorySlug : undefined) ??
-            params.category,
+          categorySlug: domainDef?.categorySlug ?? params.category,
           subcategoryId: params.sub,
-          type:
-            (domainDef && "typeCode" in domainDef ? domainDef.typeCode : undefined) ?? params.type,
+          type: domainDef?.typeCode ?? params.type,
           countryIso2: accountCountryIso2,
           cityId: params.cityId,
           minPrice: params.min ? Number(params.min) : undefined,
@@ -275,8 +273,7 @@ function SearchPage() {
 
   const bizRows = useMemo(() => {
     const seen = new Set<string>();
-    const out: { business: (typeof businesses.data)["pages"][number]["rows"][number]; logo: string | null }[] =
-      [];
+    const out: { business: MktBusiness; logo: string | null }[] = [];
     for (const page of businesses.data?.pages ?? []) {
       for (const row of page.rows) {
         if (seen.has(row.tenant_id)) continue;
@@ -345,8 +342,7 @@ function SearchPage() {
   }, [sheetOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const draftRootSlug =
-    DOMAINS.find((d) => d.key === draft.domain && "categorySlug" in d)?.categorySlug ??
-    draft.category;
+    DOMAINS.find((d) => d.key === draft.domain)?.categorySlug ?? draft.category;
   const draftRoot = roots.find((r) => r.slug === draftRootSlug);
   const draftSubs = (categories.data ?? []).filter(
     (c) => c.parent_id && c.parent_id === draftRoot?.id,
@@ -362,9 +358,9 @@ function SearchPage() {
     const def = DOMAINS.find((d) => d.key === key);
     const next: SearchParams = { ...draft, domain: key || undefined };
     delete next.sub;
-    if (!def || !("categorySlug" in def)) delete next.category;
+    if (!def?.categorySlug) delete next.category;
     else next.category = def.categorySlug;
-    if (def && "typeCode" in def) next.type = def.typeCode;
+    if (def?.typeCode) next.type = def.typeCode;
     else delete next.type;
     if (!def || def.key === "business") {
       delete next.min;
@@ -414,7 +410,7 @@ function SearchPage() {
           <select
             id="f-cat"
             value={draft.category ?? ""}
-            disabled={!!DOMAINS.find((d) => d.key === draft.domain && "categorySlug" in d)}
+            disabled={!!DOMAINS.find((d) => d.key === draft.domain)?.categorySlug}
             onChange={(e) =>
               setDraft({ ...draft, category: e.target.value || undefined, sub: undefined })
             }
