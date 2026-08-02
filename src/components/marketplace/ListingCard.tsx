@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { trackMarketActivity } from "@/lib/mkt-activity";
 import { currentPath, loginHref, priceLabel, relativeTime, type MktListing } from "@/lib/mkt";
 import {
   DropdownMenu,
