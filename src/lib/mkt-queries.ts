@@ -3,11 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   BUSINESS_COLUMNS,
   LISTING_COLUMNS,
+  USER_PROFILE_COLUMNS,
   resolveMedia,
   type MktBusiness,
   type MktCategory,
   type MktListing,
   type MktListingType,
+  type MktUserProfile,
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
 
@@ -23,7 +25,13 @@ export interface ListingFilters {
   deal?: "sale" | "rent" | undefined;
   sort?: "newest" | "views" | "price_asc" | "price_desc" | undefined;
   limit?: number | undefined;
+  advertiser?: "individual" | "business" | undefined;
+  withImageOnly?: boolean | undefined;
+  hasPrice?: boolean | undefined;
+  page?: number | undefined;
 }
+
+export const PAGE_SIZE = 20;
 
 export async function loadCategories(): Promise<MktCategory[]> {
   const { data } = await supabase
@@ -53,13 +61,24 @@ export async function decorateListings(
   const tenantIds = Array.from(
     new Set(rows.map((r) => r.tenant_id).filter((v): v is string => !!v)),
   );
-  const [{ data: businesses }, types, media] = await Promise.all([
+  const ownerIds = Array.from(
+    new Set(rows.filter((r) => !r.tenant_id).map((r) => r.owner_user_id)),
+  );
+
+  const [{ data: businesses }, { data: people }, types, media] = await Promise.all([
     tenantIds.length > 0
       ? supabase.from("mkt_business_profiles").select(BUSINESS_COLUMNS).in("tenant_id", tenantIds)
       : Promise.resolve({ data: [] as MktBusiness[] }),
+    ownerIds.length > 0
+      ? supabase.from("mkt_user_profiles").select(USER_PROFILE_COLUMNS).in("user_id", ownerIds)
+      : Promise.resolve({ data: [] as MktUserProfile[] }),
     loadListingTypes(),
     resolveMedia(rows.map((r) => r.cover_image_url)),
   ]);
+
+  const personMap = new Map<string, MktUserProfile>(
+    ((people ?? []) as MktUserProfile[]).map((p) => [p.user_id, p]),
+  );
 
   const bizMap = new Map<string, MktBusiness>(
     ((businesses ?? []) as MktBusiness[]).map((b) => [b.tenant_id, b]),
@@ -68,16 +87,22 @@ export async function decorateListings(
 
   return rows.map((row) => {
     const biz = row.tenant_id ? bizMap.get(row.tenant_id) : undefined;
+    const person = row.tenant_id ? undefined : personMap.get(row.owner_user_id);
     const type = typeMap.get(row.type_code);
+    const businessName = biz
+      ? locale === "ar"
+        ? biz.display_name_ar
+        : biz.display_name_en || biz.display_name_ar
+      : null;
     return {
       ...row,
-      businessName: biz
-        ? locale === "ar"
-          ? biz.display_name_ar
-          : biz.display_name_en || biz.display_name_ar
-        : null,
+      // The trust badge always belongs to the identity that published the ad.
+      advertiserKind: (row.tenant_id ? "business" : "individual") as "business" | "individual",
+      advertiserName: businessName ?? person?.display_name ?? null,
+      advertiserUsername: person?.username ?? null,
+      businessName,
       businessSlug: biz?.slug ?? null,
-      verificationStatus: biz?.verification_status ?? null,
+      verificationStatus: (biz?.verification_status ?? person?.verification_status) ?? null,
       imageUrl: row.cover_image_url ? (media[row.cover_image_url] ?? null) : null,
       typeLabel: type ? (locale === "ar" ? type.name_ar : type.name_en) : undefined,
     };
@@ -108,6 +133,9 @@ export async function loadListings(
   if (categoryId) query = query.eq("category_id", categoryId);
   if (filters.subcategoryId) query = query.eq("subcategory_id", filters.subcategoryId);
   if (filters.type) query = query.eq("type_code", filters.type);
+  if (filters.advertiser) query = query.eq("advertiser_type", filters.advertiser);
+  if (filters.withImageOnly) query = query.not("cover_image_url", "is", null);
+  if (filters.hasPrice) query = query.eq("price_on_request", false).not("price", "is", null);
   if (filters.city) query = query.eq("city", filters.city);
   if (filters.deal) query = query.eq("deal_kind", filters.deal);
   if (filters.minPrice !== undefined) query = query.gte("price", filters.minPrice);
@@ -131,11 +159,37 @@ export async function loadListings(
       query = query.order("published_at", { ascending: false, nullsFirst: false });
   }
 
-  const { data } = await query.limit(filters.limit ?? 48);
+  const size = filters.limit ?? 48;
+  if (filters.page !== undefined) {
+    const from = filters.page * size;
+    query = query.range(from, from + size - 1);
+  } else {
+    query = query.limit(size);
+  }
+
+  const { data } = await query;
   const decorated = await decorateListings((data ?? []) as unknown as MktListing[], locale);
   return filters.verifiedOnly
     ? decorated.filter((l) => l.verificationStatus === "verified")
     : decorated;
+}
+
+/** One page of results for infinite scrolling. */
+export async function loadListingsPage(
+  filters: ListingFilters,
+  locale: "ar" | "en",
+  page: number,
+): Promise<ListingCardData[]> {
+  return loadListings({ ...filters, limit: filters.limit ?? PAGE_SIZE, page }, locale);
+}
+
+export async function loadUserProfileBySlug(username: string): Promise<MktUserProfile | null> {
+  const { data } = await supabase
+    .from("mkt_user_profiles")
+    .select(USER_PROFILE_COLUMNS)
+    .eq("username", username.toLowerCase())
+    .maybeSingle();
+  return (data as MktUserProfile | null) ?? null;
 }
 
 export async function loadVerifiedBusinesses(limit = 8): Promise<MktBusiness[]> {
