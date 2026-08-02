@@ -6,6 +6,7 @@ import {
   LogOut,
   Settings,
   User,
+  X,
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -23,7 +24,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 /** Round avatar / logo, falling back to the identity-kind icon. */
 function IdentityAvatar({
@@ -70,6 +77,7 @@ export function AccountMenu() {
   if (!session || !active) return null;
 
   const displayName = active.name || t("market.account.fallbackName");
+  const otherIdentities = identities.filter((i) => i.key !== active.key);
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -121,34 +129,48 @@ export function AccountMenu() {
     return (
       <Sheet>
         <SheetTrigger asChild>{trigger}</SheetTrigger>
-        <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-2xl">
-          <SheetTitle className="text-sm">{t("market.account.menu")}</SheetTitle>
-          <div className="mt-2 rounded-xl border border-border bg-card">{currentBlock}</div>
-
-          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
-            {t("market.account.switchTitle")}
-          </p>
-          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
-            {identities.map((identity) => (
-              <button
-                key={identity.key}
-                type="button"
-                onClick={() => select(identity.key)}
-                className="flex w-full items-center gap-2 border-b border-border px-3 py-2.5 text-start last:border-b-0 hover:bg-accent"
-              >
-                <IdentityAvatar identity={identity} size="sm" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm text-foreground">{identity.name || t("market.account.fallbackName")}</span>
-                  <span className="block text-[11px] text-muted-foreground">
-                    {t(`market.identity.${identity.kind}`)}
-                  </span>
-                </span>
-                {identity.key === active.key && (
-                  <Check className="size-4 shrink-0 text-primary" aria-hidden />
-                )}
-              </button>
-            ))}
+        <SheetContent
+          side="bottom"
+          hideClose
+          className="max-h-[85vh] overflow-y-auto rounded-t-2xl"
+        >
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <SheetTitle className="text-base">{t("market.account.menu")}</SheetTitle>
+            <SheetClose className="rounded-sm p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+              <X className="size-4" aria-hidden />
+              <span className="sr-only">{t("common.close")}</span>
+            </SheetClose>
           </div>
+
+          <div className="mt-4 rounded-xl border border-border bg-card">{currentBlock}</div>
+
+          {otherIdentities.length > 0 && (
+            <>
+              <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
+                {t("market.account.switchTitle")}
+              </p>
+              <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
+                {otherIdentities.map((identity) => (
+                  <button
+                    key={identity.key}
+                    type="button"
+                    onClick={() => select(identity.key)}
+                    className="flex w-full items-center gap-2 border-b border-border px-3 py-2.5 text-start last:border-b-0 hover:bg-accent"
+                  >
+                    <IdentityAvatar identity={identity} size="sm" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm text-foreground">
+                        {identity.name || t("market.account.fallbackName")}
+                      </span>
+                      <span className="block text-[11px] text-muted-foreground">
+                        {t(`market.identity.${identity.kind}`)}
+                      </span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
           <div className="mt-4 overflow-hidden rounded-xl border border-border bg-card">
             {manageLinks.map((link) => (
@@ -181,28 +203,31 @@ export function AccountMenu() {
       <DropdownMenuContent align="end" className="w-72">
         {currentBlock}
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          {t("market.account.switchTitle")}
-        </DropdownMenuLabel>
-        {identities.map((identity) => (
-          <DropdownMenuItem
-            key={identity.key}
-            onSelect={() => select(identity.key)}
-            className="gap-2"
-          >
-            <IdentityAvatar identity={identity} size="sm" />
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm">{identity.name || t("market.account.fallbackName")}</span>
-              <span className="block text-[11px] text-muted-foreground">
-                {t(`market.identity.${identity.kind}`)}
-              </span>
-            </span>
-            {identity.key === active.key && (
-              <Check className="size-4 shrink-0 text-primary" aria-hidden />
-            )}
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
+        {otherIdentities.length > 0 && (
+          <>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              {t("market.account.switchTitle")}
+            </DropdownMenuLabel>
+            {otherIdentities.map((identity) => (
+              <DropdownMenuItem
+                key={identity.key}
+                onSelect={() => select(identity.key)}
+                className="gap-2"
+              >
+                <IdentityAvatar identity={identity} size="sm" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm">
+                    {identity.name || t("market.account.fallbackName")}
+                  </span>
+                  <span className="block text-[11px] text-muted-foreground">
+                    {t(`market.identity.${identity.kind}`)}
+                  </span>
+                </span>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+          </>
+        )}
         {manageLinks.map((link) => (
           <DropdownMenuItem key={link.to} asChild>
             <Link to={link.to} className="gap-2 text-xs">
