@@ -16,10 +16,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
-import { loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import { loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveIdentity } from "@/lib/mkt-identity";
-import { CountryCitySelect } from "@/components/marketplace/GeoFields";
+import { AccountCitySelect } from "@/components/marketplace/GeoFields";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 
 import { Button } from "@/components/ui/button";
