@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import {
+  Bell,
   Flag,
   Heart,
   LayoutList,
@@ -20,11 +21,13 @@ const TABS = [
   { to: "/dashboard/my-ads", key: "myAds", icon: LayoutList },
   { to: "/dashboard/requests", key: "requests", icon: ReceiptText },
   { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
+  { to: "/dashboard/notifications", key: "notifications", icon: Bell },
   { to: "/dashboard/favorites", key: "favorites", icon: Heart },
   { to: "/dashboard/business", key: "business", icon: Store },
   { to: "/dashboard/reports", key: "reports", icon: Flag },
   { to: "/dashboard/violations", key: "violations", icon: ShieldAlert },
 ] as const;
+
 
 export function DashboardShell({ title, children }: { title: string; children: ReactNode }) {
   const { t } = useI18n();
