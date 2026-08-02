@@ -421,23 +421,12 @@ function BusinessDashboardPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="country_id">{t("market.geo.country")}</Label>
-              <select
-                id="country_id"
-                className={selectClass}
-                value={view.country_id ?? ""}
-                onChange={(e) => {
-                  set("country_id", e.target.value);
-                  set("city_id", null);
-                }}
-              >
-                <option value="">{t("market.geo.pick")}</option>
-                {(countries.data ?? []).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {geoName(c, locale)}
-                  </option>
-                ))}
-              </select>
+              <span className="block text-sm font-medium text-foreground">
+                {t("market.geo.country")}
+              </span>
+              <p className="flex h-9 items-center text-sm text-muted-foreground">
+                {accountCountry.data ? geoName(accountCountry.data, locale) : "—"}
+              </p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="city_id">{t("market.filters.city")}</Label>
@@ -446,7 +435,7 @@ function BusinessDashboardPage() {
                 className={selectClass}
                 value={view.city_id ?? ""}
                 onChange={(e) => set("city_id", e.target.value)}
-                disabled={!view.country_id}
+                disabled={!accountCountry.data}
               >
                 <option value="">{t("market.geo.allCities")}</option>
                 {(cities.data ?? []).map((c) => (
@@ -456,6 +445,7 @@ function BusinessDashboardPage() {
                 ))}
               </select>
             </div>
+
             <div className="space-y-1.5">
               <Label htmlFor="region">{t("market.dash.region")}</Label>
               <Input
