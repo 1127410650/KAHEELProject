@@ -4,7 +4,9 @@ import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { SA_CITIES } from "@/lib/mkt";
+import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
+import { useMarketPreference } from "@/lib/mkt-geo";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -16,16 +18,21 @@ export function MarketHeader() {
   const { session } = useSession();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [city, setCity] = useState("");
   const [open, setOpen] = useState(false);
+  const { preference } = useMarketPreference();
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     navigate({
       to: "/search",
-      search: { ...(q.trim() ? { q: q.trim() } : {}), ...(city ? { city } : {}) },
+      search: {
+        ...(q.trim() ? { q: q.trim() } : {}),
+        country: preference.countryIso2,
+        ...(preference.cityId ? { cityId: preference.cityId } : {}),
+      },
     });
   }
+
 
   const navLinks = (
     <>
@@ -96,19 +103,14 @@ export function MarketHeader() {
               className="ps-9"
             />
           </div>
-          <select
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            aria-label={t("market.filters.city")}
-            className="hidden h-9 rounded-md border border-input bg-background px-2 text-sm md:block"
-          >
-            <option value="">{t("market.filters.allCities")}</option>
-            {SA_CITIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          <div className="md:hidden">
+            <MarketSwitcher compact />
+          </div>
+          <div className="hidden md:block">
+            <MarketSwitcher />
+          </div>
+
+
           <Button type="submit" size="sm" className="hidden shrink-0 sm:inline-flex">
             {t("common.search")}
           </Button>

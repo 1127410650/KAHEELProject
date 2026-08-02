@@ -15,7 +15,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { MKT_BUCKET, SA_CITIES, type MktListing } from "@/lib/mkt";
+import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
+import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveIdentity } from "@/lib/mkt-identity";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -62,6 +63,20 @@ export function ListingForm({ listing }: Props) {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
+  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const { preference } = useMarketPreference();
+  const [countryId, setCountryId] = useState<string>(listing?.country_id ?? "");
+  const cities = useQuery({
+    queryKey: ["mkt", "cities", countryId],
+    enabled: !!countryId,
+    queryFn: () => loadCities(countryId),
+  });
+  // A new ad defaults to the market the advertiser is browsing.
+  useEffect(() => {
+    if (countryId || !countries.data) return;
+    const fallback = countries.data.find((c) => c.iso2 === preference.countryIso2);
+    if (fallback) setCountryId(fallback.id);
+  }, [countries.data, countryId, preference.countryIso2]);
 
   // Every registered user can publish. The identity only decides the name the ad
   // carries; verification is a trust badge, not a permission.
@@ -121,7 +136,10 @@ export function ListingForm({ listing }: Props) {
         item_condition: isEquipment ? (fd.get("item_condition") as string) || null : null,
         deal_kind:
           typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
-        city: (fd.get("city") as string) || null,
+        country_id: countryId || null,
+        city_id: (fd.get("city_id") as string) || null,
+        city:
+          (cities.data ?? []).find((c) => c.id === (fd.get("city_id") as string))?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         status: publish ? "pending" : "draft",
       };
@@ -344,12 +362,34 @@ export function ListingForm({ listing }: Props) {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="city">{t("market.filters.city")}</Label>
-          <select id="city" name="city" className={selectClass} defaultValue={listing?.city ?? ""}>
-            <option value="">{t("market.filters.allCities")}</option>
-            {SA_CITIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
+          <Label htmlFor="country_id">{t("market.geo.country")}</Label>
+          <select
+            id="country_id"
+            className={selectClass}
+            value={countryId}
+            onChange={(e) => setCountryId(e.target.value)}
+          >
+            <option value="">{t("market.geo.pick")}</option>
+            {(countries.data ?? []).map((c) => (
+              <option key={c.id} value={c.id}>
+                {geoName(c, locale)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="city_id">{t("market.filters.city")}</Label>
+          <select
+            id="city_id"
+            name="city_id"
+            className={selectClass}
+            defaultValue={listing?.city_id ?? ""}
+            disabled={!countryId}
+          >
+            <option value="">{t("market.geo.allCities")}</option>
+            {(cities.data ?? []).map((c) => (
+              <option key={c.id} value={c.id}>
+                {geoName(c, locale)}
               </option>
             ))}
           </select>

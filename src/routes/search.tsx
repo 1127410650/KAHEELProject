@@ -4,7 +4,7 @@ import { LayoutGrid, List, Loader2, SlidersHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useI18n } from "@/i18n";
-import { SA_CITIES } from "@/lib/mkt";
+import { geoName, loadCities, loadCountries } from "@/lib/mkt-geo";
 import { PAGE_SIZE, loadCategories, loadListingTypes, loadListingsPage } from "@/lib/mkt-queries";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
@@ -19,6 +19,8 @@ export interface SearchParams {
   sub?: string | undefined;
   type?: string | undefined;
   city?: string | undefined;
+  country?: string | undefined;
+  cityId?: string | undefined;
   min?: string | undefined;
   max?: string | undefined;
   verified?: string | undefined;
@@ -44,6 +46,8 @@ export const Route = createFileRoute("/search")({
       "sub",
       "type",
       "city",
+      "country",
+      "cityId",
       "min",
       "max",
       "verified",
@@ -79,6 +83,13 @@ function SearchPage() {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
+  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const selectedCountry = (countries.data ?? []).find((c) => c.iso2 === params.country);
+  const cities = useQuery({
+    queryKey: ["mkt", "cities", selectedCountry?.id],
+    enabled: !!selectedCountry?.id,
+    queryFn: () => loadCities(selectedCountry?.id),
+  });
 
   // Results load page by page as the visitor scrolls instead of one big batch.
   const listings = useInfiniteQuery({
@@ -92,6 +103,8 @@ function SearchPage() {
           subcategoryId: params.sub,
           type: params.type,
           city: params.city,
+          countryIso2: params.country,
+          cityId: params.cityId,
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
           verifiedOnly: params.verified === "1",
@@ -287,16 +300,33 @@ function SearchPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>{t("market.filters.city")}</Label>
+            <Label>{t("market.geo.country")}</Label>
             <select
-              value={params.city ?? ""}
-              onChange={(e) => update({ city: e.target.value })}
+              value={params.country ?? ""}
+              onChange={(e) => update({ country: e.target.value, cityId: undefined })}
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
             >
+              <option value="">{t("market.geo.allCountries")}</option>
+              {(countries.data ?? []).map((c) => (
+                <option key={c.id} value={c.iso2}>
+                  {geoName(c, locale)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label>{t("market.filters.city")}</Label>
+            <select
+              value={params.cityId ?? ""}
+              onChange={(e) => update({ cityId: e.target.value })}
+              disabled={!selectedCountry}
+              className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm disabled:opacity-50"
+            >
               <option value="">{t("market.filters.allCities")}</option>
-              {SA_CITIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
+              {(cities.data ?? []).map((c) => (
+                <option key={c.id} value={c.id}>
+                  {geoName(c, locale)}
                 </option>
               ))}
             </select>

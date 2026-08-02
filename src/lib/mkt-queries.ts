@@ -19,6 +19,8 @@ export interface ListingFilters {
   subcategoryId?: string | undefined;
   type?: string | undefined;
   city?: string | undefined;
+  countryIso2?: string | undefined;
+  cityId?: string | undefined;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
   verifiedOnly?: boolean | undefined;
@@ -30,6 +32,7 @@ export interface ListingFilters {
   hasPrice?: boolean | undefined;
   page?: number | undefined;
 }
+
 
 export const PAGE_SIZE = 20;
 
@@ -124,6 +127,16 @@ async function queryListings(
     if (!categoryId) return { rows: [], fetched: 0 };
   }
 
+  let countryId: string | undefined;
+  if (filters.countryIso2) {
+    const { data } = await supabase
+      .from("mkt_countries")
+      .select("id")
+      .eq("iso2", filters.countryIso2)
+      .maybeSingle();
+    countryId = data?.id;
+  }
+
   let query = supabase
     .from("mkt_listings")
     .select(LISTING_COLUMNS)
@@ -131,12 +144,15 @@ async function queryListings(
     .is("deleted_at", null);
 
   if (categoryId) query = query.eq("category_id", categoryId);
+  if (countryId) query = query.eq("country_id", countryId);
+  if (filters.cityId) query = query.eq("city_id", filters.cityId);
   if (filters.subcategoryId) query = query.eq("subcategory_id", filters.subcategoryId);
   if (filters.type) query = query.eq("type_code", filters.type);
   if (filters.advertiser) query = query.eq("advertiser_type", filters.advertiser);
   if (filters.withImageOnly) query = query.not("cover_image_url", "is", null);
   if (filters.hasPrice) query = query.eq("price_on_request", false).not("price", "is", null);
   if (filters.city) query = query.eq("city", filters.city);
+
   if (filters.deal) query = query.eq("deal_kind", filters.deal);
   if (filters.minPrice !== undefined) query = query.gte("price", filters.minPrice);
   if (filters.maxPrice !== undefined) query = query.lte("price", filters.maxPrice);
