@@ -130,6 +130,21 @@ export function MarketHome() {
   });
   const suggested = useSuggestedListings(locale, geo);
 
+  const anyLoading =
+    latest.isLoading ||
+    rentals.isLoading ||
+    services.isLoading ||
+    products.isLoading ||
+    suggested.isLoading;
+  const isEmpty =
+    !anyLoading &&
+    (latest.data?.length ?? 0) === 0 &&
+    (rentals.data?.length ?? 0) === 0 &&
+    (services.data?.length ?? 0) === 0 &&
+    (products.data?.length ?? 0) === 0 &&
+    (suggested.data?.length ?? 0) === 0;
+
+
 
 
 
