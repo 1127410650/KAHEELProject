@@ -107,7 +107,7 @@ function SearchPage() {
           cityId: params.cityId,
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
-          verifiedOnly: params.verified === "1",
+          
           advertiser:
             params.advertiser === "individual" || params.advertiser === "business"
               ? params.advertiser
