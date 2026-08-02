@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { currentPath, loginHref, SA_CITIES, type MktAction, type MktListing } from "@/lib/mkt";
+import { ReportDialog } from "@/components/marketplace/ReportDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -147,24 +148,8 @@ export function ListingActions({ listing, pendingAction }: Props) {
     }
   }
 
-  async function submitReport(form: HTMLFormElement) {
-    const fd = new FormData(form);
-    setBusy(true);
-    try {
-      const { error } = await supabase.from("mkt_reports").insert({
-        listing_id: listing.id,
-        reason: String(fd.get("reason") ?? "other"),
-        note: (fd.get("note") as string) || null,
-      });
-      if (error) throw error;
-      toast.success(t("market.actions.reportSent"));
-      setDialog(null);
-    } catch {
-      toast.error(t("market.actions.failed"));
-    } finally {
-      setBusy(false);
-    }
-  }
+
+
 
   return (
     <>
@@ -310,40 +295,13 @@ export function ListingActions({ listing, pendingAction }: Props) {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={dialog === "report"} onOpenChange={(o) => !o && setDialog(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t("market.actions.report")}</DialogTitle>
-            <DialogDescription>{listing.title}</DialogDescription>
-          </DialogHeader>
-          <form
-            className="space-y-3"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void submitReport(e.currentTarget);
-            }}
-          >
-            <div className="space-y-1.5">
-              <Label htmlFor="reason">{t("market.report.reason")}</Label>
-              <select
-                id="reason"
-                name="reason"
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-              >
-                <option value="spam">{t("market.report.spam")}</option>
-                <option value="fraud">{t("market.report.fraud")}</option>
-                <option value="wrong_category">{t("market.report.wrongCategory")}</option>
-                <option value="prohibited">{t("market.report.prohibited")}</option>
-                <option value="other">{t("market.report.other")}</option>
-              </select>
-            </div>
-            <Textarea name="note" rows={3} placeholder={t("market.report.note")} />
-            <Button type="submit" variant="destructive" className="w-full" disabled={busy}>
-              {t("market.report.submit")}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <ReportDialog
+        listingId={listing.id}
+        listingTitle={listing.title}
+        open={dialog === "report"}
+        onOpenChange={(open) => !open && setDialog(null)}
+      />
+
     </>
   );
 }
