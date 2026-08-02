@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Bell, Grid2x2, Home, Menu, Plus, Search, ShieldCheck, Store, User } from "lucide-react";
+import { Bell, Grid2x2, Home, Plus, Search, ShieldCheck, Store, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
@@ -10,17 +10,36 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 import { IdentitySwitcher } from "@/components/marketplace/IdentitySwitcher";
+
+const HOME_PATHS = ["/", "/marketplace"];
+
+/** On the home page the hero owns the search box; the header one appears after
+ *  the visitor scrolls past it so the same control never shows twice. */
+function useHeaderSearchVisible() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isHome = HOME_PATHS.includes(pathname);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!isHome) return;
+    const onScroll = () => setScrolled(window.scrollY > 260);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome]);
+
+  return !isHome || scrolled;
+}
 
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [open, setOpen] = useState(false);
   const { preference } = useMarketPreference();
+  const searchVisible = useHeaderSearchVisible();
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -34,85 +53,65 @@ export function MarketHeader() {
     });
   }
 
-
-  const navLinks = (
-    <>
-      <Link to="/marketplace" className="text-sm font-medium text-foreground hover:text-primary">
-        {t("market.nav.marketplace")}
-      </Link>
-      <Link
-        to="/search"
-        search={{ type: "need_supplier" }}
-        className="text-sm font-medium text-foreground hover:text-primary"
-      >
-        {t("market.nav.requests")}
-      </Link>
-      <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
-        {t("market.nav.more")}
-      </Link>
-    </>
-  );
-
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hidden lg:hidden"
-              aria-label={t("market.nav.menu")}
-            >
-              <Menu className="size-5" aria-hidden />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-72">
-            <div className="mt-8 flex flex-col gap-4" onClick={() => setOpen(false)}>
-              {navLinks}
-            </div>
-          </SheetContent>
-        </Sheet>
-
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-4">
         <Link to="/marketplace" className="flex shrink-0 items-center gap-2">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <Store className="size-4" aria-hidden />
           </span>
-          <span className="hidden text-base font-bold text-foreground sm:inline">
+          <span className="hidden text-base font-bold tracking-tight text-foreground sm:inline">
             {t("market.brand")}
           </span>
         </Link>
 
-        <form onSubmit={submit} className="flex min-w-0 flex-1 items-center gap-2">
-          <div className="relative min-w-0 flex-1">
-            <Search
-              className="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
-            />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder={t("market.searchPlaceholder")}
-              aria-label={t("market.searchPlaceholder")}
-              className="ps-9"
-            />
+        {searchVisible ? (
+          <form onSubmit={submit} className="flex min-w-0 flex-1 items-center gap-2">
+            <div className="relative min-w-0 flex-1 lg:max-w-md">
+              <Search
+                className="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden
+              />
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder={t("market.searchPlaceholder")}
+                aria-label={t("market.searchPlaceholder")}
+                className="h-9 ps-9"
+              />
+            </div>
+            <div className="hidden md:block">
+              <MarketSwitcher />
+            </div>
+            <div className="md:hidden">
+              <MarketSwitcher compact />
+            </div>
+          </form>
+        ) : (
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-2 md:justify-start">
+            <div className="hidden md:block">
+              <MarketSwitcher />
+            </div>
+            <div className="md:hidden">
+              <MarketSwitcher compact />
+            </div>
           </div>
-          <div className="md:hidden">
-            <MarketSwitcher compact />
-          </div>
-          <div className="hidden md:block">
-            <MarketSwitcher />
-          </div>
+        )}
 
+        {/* Only shipped destinations are linked from the header. */}
+        <nav className="hidden items-center gap-5 lg:flex">
+          <Link to="/marketplace" className="text-sm font-medium text-foreground hover:text-primary">
+            {t("market.nav.marketplace")}
+          </Link>
+          <Link to="/search" className="text-sm font-medium text-foreground hover:text-primary">
+            {t("market.nav.search")}
+          </Link>
+          <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
+            {t("market.nav.more")}
+          </Link>
+        </nav>
 
-          <Button type="submit" size="sm" className="hidden shrink-0 sm:inline-flex">
-            {t("common.search")}
-          </Button>
-        </form>
-
-        <nav className="hidden items-center gap-5 lg:flex">{navLinks}</nav>
-
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <div className="hidden lg:block">
             <IdentitySwitcher />
           </div>
@@ -120,31 +119,31 @@ export function MarketHeader() {
           <button
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-            className="hidden rounded-md border border-input px-2 py-1 text-xs font-semibold text-muted-foreground sm:block"
+            className="hidden rounded-md border border-input px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-primary sm:block"
           >
             {locale === "ar" ? "EN" : "ع"}
           </button>
-          <Button asChild size="sm" variant="secondary" className="hidden sm:inline-flex">
-            <Link to="/dashboard/ads/new">
-              <Plus className="size-4" aria-hidden />
-              {t("market.addListing")}
-            </Link>
-          </Button>
           {session ? (
             <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
               <Link to="/dashboard/my-ads">
                 <User className="size-4" aria-hidden />
-                <span className="hidden sm:inline">{t("market.nav.account")}</span>
+                <span className="hidden lg:inline">{t("market.nav.account")}</span>
               </Link>
             </Button>
           ) : (
-            <Button asChild size="sm">
+            <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
               <Link to="/login">
                 <ShieldCheck className="size-4" aria-hidden />
-                <span className="hidden sm:inline">{t("market.signIn")}</span>
+                <span className="hidden lg:inline">{t("market.signIn")}</span>
               </Link>
             </Button>
           )}
+          <Button asChild size="sm" className="shrink-0">
+            <Link to="/dashboard/ads/new" aria-label={t("market.addListing")}>
+              <Plus className="size-4" aria-hidden />
+              <span className="hidden sm:inline">{t("market.addListing")}</span>
+            </Link>
+          </Button>
         </div>
       </div>
     </header>
@@ -184,7 +183,7 @@ export function MarketBottomNav() {
   return (
     <nav
       aria-label={t("market.nav.menu")}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
@@ -219,64 +218,94 @@ export function MarketBottomNav() {
   );
 }
 
+interface FooterGroup {
+  key: string;
+  links: { to: string; label: string }[];
+}
+
 export function MarketFooter() {
   const { t } = useI18n();
+
+  const groups: FooterGroup[] = [
+    {
+      key: "browse",
+      links: [
+        { to: "/marketplace", label: t("market.nav.marketplace") },
+        { to: "/search", label: t("market.nav.search") },
+        { to: "/more", label: t("market.nav.more") },
+      ],
+    },
+    {
+      key: "account",
+      links: [
+        { to: "/login", label: t("market.signIn") },
+        { to: "/dashboard/profile", label: t("market.identity.managePersonal") },
+        { to: "/dashboard/favorites", label: t("market.more.links.favorites") },
+      ],
+    },
+    {
+      key: "business",
+      links: [
+        { to: "/dashboard/ads/new", label: t("market.addListing") },
+        { to: "/dashboard/my-ads", label: t("market.nav.myAds") },
+        { to: "/dashboard/business", label: t("market.dash.business") },
+      ],
+    },
+  ];
+
   return (
-    <footer className="mt-12 border-t border-border bg-secondary/40">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <p className="text-base font-bold text-foreground">{t("market.brand")}</p>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+    <footer className="mt-10 border-t border-border bg-secondary/30">
+      <div className="mx-auto w-full max-w-7xl px-4 py-7">
+        <div className="max-w-md">
+          <p className="text-base font-bold tracking-tight text-foreground">{t("market.brand")}</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
             {t("market.tagline")}
           </p>
         </div>
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-foreground">{t("market.footer.browse")}</p>
-          <Link
-            to="/marketplace"
-            className="block text-sm text-muted-foreground hover:text-primary"
-          >
-            {t("market.nav.marketplace")}
-          </Link>
-          <Link to="/search" className="block text-sm text-muted-foreground hover:text-primary">
-            {t("market.nav.search")}
-          </Link>
-          <Link to="/more" className="block text-sm text-muted-foreground hover:text-primary">
-            {t("market.nav.more")}
-          </Link>
+
+        {/* Desktop: three compact columns. */}
+        <div className="mt-6 hidden gap-8 sm:grid sm:grid-cols-3">
+          {groups.map((group) => (
+            <div key={group.key} className="space-y-2">
+              <p className="text-sm font-semibold text-foreground">
+                {t(`market.footer.${group.key}`)}
+              </p>
+              {group.links.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="block text-sm text-muted-foreground hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-foreground">{t("market.footer.business")}</p>
-          <Link
-            to="/dashboard/ads/new"
-            className="block text-sm text-muted-foreground hover:text-primary"
-          >
-            {t("market.addListing")}
-          </Link>
-          <Link
-            to="/dashboard/my-ads"
-            className="block text-sm text-muted-foreground hover:text-primary"
-          >
-            {t("market.nav.myAds")}
-          </Link>
-          <Link
-            to="/dashboard/business"
-            className="block text-sm text-muted-foreground hover:text-primary"
-          >
-            {t("market.dash.business")}
-          </Link>
-        </div>
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-foreground">{t("market.footer.account")}</p>
-          <Link to="/login" className="block text-sm text-muted-foreground hover:text-primary">
-            {t("market.signIn")}
-          </Link>
-          <Link
-            to="/dashboard/profile"
-            className="block text-sm text-muted-foreground hover:text-primary"
-          >
-            {t("market.identity.managePersonal")}
-          </Link>
+
+        {/* Phones: collapsed sections instead of a tall footer. */}
+        <div className="mt-5 divide-y divide-border border-y border-border sm:hidden">
+          {groups.map((group) => (
+            <details key={group.key} className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-semibold text-foreground">
+                {t(`market.footer.${group.key}`)}
+                <span className="text-muted-foreground transition-transform group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <div className="pb-3 ps-1">
+                {group.links.map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className="block py-1.5 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          ))}
         </div>
       </div>
       <p className="border-t border-border py-4 text-center text-xs text-muted-foreground">
@@ -292,7 +321,7 @@ export function MarketShell({ children }: { children: React.ReactNode }) {
   return (
     <div dir={dir} className="flex min-h-screen flex-col overflow-x-hidden bg-background">
       <MarketHeader />
-      <main className="flex-1 pb-16 lg:pb-0">{children}</main>
+      <main className="flex-1 pb-20 lg:pb-0">{children}</main>
       <MarketFooter />
       <MarketBottomNav />
     </div>

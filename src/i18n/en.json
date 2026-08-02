@@ -1317,7 +1317,7 @@
     },
     "footer": {
       "browse": "Browse",
-      "business": "For businesses",
+      "business": "Businesses",
       "account": "Account",
       "rights": "All rights reserved"
     },
@@ -1362,7 +1362,8 @@
       "products": "Products & building materials",
       "equipmentSale": "Equipment for sale",
       "equipmentRent": "Equipment for rent",
-      "needs": "Supplier & contractor wanted"
+      "needs": "Supplier & contractor wanted",
+      "businesses": "Suggested businesses"
     },
     "actions": {
       "requestQuote": "Request a quote",
@@ -1428,7 +1429,8 @@
       "notFound": "Business not found",
       "contact": "Contact details",
       "noListings": "No published listings",
-      "services": "Areas of work"
+      "services": "Areas of work",
+      "visit": "View profile"
     },
     "category": {
       "notFound": "Category not found",
@@ -1994,6 +1996,9 @@
       "onRequest": "Shown after a contact request is accepted",
       "public": "Public",
       "publicWarning": "Your number will be visible to every visitor. Make sure you want this."
+    },
+    "card": {
+      "options": "Listing options"
     }
   }
 }

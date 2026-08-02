@@ -1,22 +1,70 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Building2, Plus, Search, Sparkles, Tag, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Briefcase,
+  Building2,
+  Factory,
+  Droplets,
+  HardHat,
+  LayoutGrid,
+  Package,
+  Paintbrush,
+  Plus,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Tag,
+  Truck,
+  User,
+  Wind,
+  Wrench,
+  Zap,
+} from "lucide-react";
 import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
-import { loadCategories, loadListings } from "@/lib/mkt-queries";
+import { loadBusinesses, loadCategories, loadListings } from "@/lib/mkt-queries";
+import { resolveMedia } from "@/lib/mkt";
 import { ListingCard } from "@/components/marketplace/ListingCard";
+import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Items = React.ComponentProps<typeof ListingCard>["listing"][];
 
+/** Section header shared by listing and business rows. */
+function SectionHead({
+  title,
+  href,
+  search,
+}: {
+  title: string;
+  href: string;
+  search?: Record<string, string>;
+}) {
+  const { t } = useI18n();
+  return (
+    <div className="mb-3 flex items-center justify-between gap-3">
+      <h2 className="text-base font-bold tracking-tight text-foreground sm:text-lg">{title}</h2>
+      <Link
+        to={href}
+        search={search ?? {}}
+        className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-primary hover:underline sm:text-sm"
+      >
+        {t("market.viewAll")}
+        <ArrowLeft className="size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
+      </Link>
+    </div>
+  );
+}
+
 /** A section renders only when it has content, so the page never shows a wall
- *  of empty placeholders. */
-function Section({
+ *  of empty placeholders. Four items on desktop, two on phones. */
+function ListingSection({
   title,
   href,
   search,
@@ -29,39 +77,29 @@ function Section({
   items: Items;
   loading: boolean;
 }) {
-  const { t } = useI18n();
   if (!loading && items.length === 0) return null;
+  const shown = items.slice(0, 4);
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="text-base font-bold text-foreground sm:text-lg">{title}</h2>
-        <Link
-          to={href}
-          search={search ?? {}}
-          className="inline-flex items-center gap-1 text-xs font-medium text-primary sm:text-sm"
-        >
-          {t("market.viewAll")}
-          <ArrowLeft className="size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
-        </Link>
-      </div>
+    <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
+      <SectionHead title={title} href={href} {...(search ? { search } : {})} />
 
       {loading ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 w-full rounded-xl sm:h-56" />
+            <Skeleton key={i} className={i > 1 ? "hidden h-56 rounded-xl sm:block" : "h-28 w-full rounded-xl sm:h-56"} />
           ))}
         </div>
       ) : (
         <>
-          {/* Phones get compact horizontal rows; larger screens get a grid. */}
+          {/* Phones get two compact horizontal rows; larger screens get a grid. */}
           <div className="flex flex-col gap-2.5 sm:hidden">
-            {items.map((listing) => (
+            {shown.slice(0, 2).map((listing) => (
               <ListingCard key={listing.id} listing={listing} view="row" />
             ))}
           </div>
           <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
-            {items.map((listing) => (
+            {shown.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
@@ -73,12 +111,28 @@ function Section({
 
 const QUICK_FILTERS = [
   { key: "service", search: { type: "service" }, icon: Sparkles },
-  { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Tag },
   { key: "product", search: { type: "product" }, icon: Tag },
-  
+  { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Truck },
   { key: "business", search: { advertiser: "business" }, icon: Building2 },
   { key: "individual", search: { advertiser: "individual" }, icon: User },
 ] as const;
+
+/** Line icons for the active root categories, keyed by the stored icon name. */
+const CATEGORY_ICONS: Record<string, typeof HardHat> = {
+  "hard-hat": HardHat,
+  paintbrush: Paintbrush,
+  zap: Zap,
+  droplets: Droplets,
+  wind: Wind,
+  bricks: LayoutGrid,
+  truck: Truck,
+  package: Package,
+  wrench: Wrench,
+  "building-2": Building2,
+  briefcase: Briefcase,
+  "shield-check": ShieldCheck,
+  factory: Factory,
+};
 
 export function MarketHome() {
   const { t, locale } = useI18n();
@@ -89,65 +143,73 @@ export function MarketHome() {
   const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
   const geoKey = `${preference.countryIso2}:${preference.cityId ?? "all"}`;
 
-  const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
+  const categories = useQuery({
+    queryKey: ["mkt", "categories"],
+    queryFn: loadCategories,
+    staleTime: 5 * 60_000,
+  });
   const latest = useQuery({
     queryKey: ["mkt", "home", "latest", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, limit: 8 }, locale),
-  });
-  const equipment = useQuery({
-    queryKey: ["mkt", "home", "equipment", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, type: "equipment_sale", limit: 4 }, locale),
+    queryFn: () => loadListings({ ...geo, limit: 4 }, locale),
   });
   const rentals = useQuery({
     queryKey: ["mkt", "home", "rentals", locale, geoKey],
     queryFn: () => loadListings({ ...geo, type: "equipment_rent", limit: 4 }, locale),
   });
-  const products = useQuery({
-    queryKey: ["mkt", "home", "products", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, type: "product", limit: 4 }, locale),
-  });
   const services = useQuery({
     queryKey: ["mkt", "home", "services", locale, geoKey],
     queryFn: () => loadListings({ ...geo, type: "service", limit: 4 }, locale),
   });
-  const needs = useQuery({
-    queryKey: ["mkt", "home", "needs", locale, geoKey],
+  const products = useQuery({
+    queryKey: ["mkt", "home", "products", locale, geoKey],
+    queryFn: () => loadListings({ ...geo, type: "product", limit: 4 }, locale),
+  });
+  const businesses = useQuery({
+    queryKey: ["mkt", "home", "businesses", locale],
+    staleTime: 5 * 60_000,
     queryFn: async () => {
-      const [a, b] = await Promise.all([
-        loadListings({ ...geo, type: "need_supplier", limit: 4 }, locale),
-        loadListings({ ...geo, type: "need_contractor", limit: 4 }, locale),
-      ]);
-      return [...a, ...b].slice(0, 4);
+      const rows = await loadBusinesses(4);
+      const logos = await resolveMedia(rows.map((b) => b.logo_url));
+      return rows.map((b) => ({ business: b, logoUrl: b.logo_url ? logos[b.logo_url] : null }));
     },
   });
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
 
+  function submitSearch(event: React.FormEvent) {
+    event.preventDefault();
+    void navigate({
+      to: "/search",
+      search: {
+        ...(q.trim() ? { q: q.trim() } : {}),
+        country: preference.countryIso2,
+        ...(preference.cityId ? { cityId: preference.cityId } : {}),
+      },
+    });
+  }
+
   return (
     <>
-      <section className="border-b border-border bg-gradient-to-b from-secondary/60 to-background">
-        <div className="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:py-14">
-          <h1 className="text-xl font-bold leading-snug text-foreground sm:text-4xl">
+      {/* Hero — light gradient with soft geometric lines, no heavy imagery. */}
+      <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 via-background to-background">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(to_right,var(--color-primary)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-primary)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]"
+        />
+        <div className="relative mx-auto w-full max-w-4xl px-4 py-9 text-center sm:py-14">
+          <h1 className="mx-auto max-w-3xl text-balance text-xl font-bold leading-snug tracking-tight text-foreground sm:text-3xl">
             {t("market.hero.title")}
           </h1>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:mt-3 sm:text-base">
+          <p className="mx-auto mt-2.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             {t("market.hero.subtitle")}
           </p>
+
+          {/* One single search surface for the whole page. */}
           <form
-            className="mx-auto mt-5 flex max-w-3xl flex-col gap-2 sm:flex-row"
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate({
-                to: "/search",
-                search: {
-                  ...(q.trim() ? { q: q.trim() } : {}),
-                  country: preference.countryIso2,
-                  ...(preference.cityId ? { cityId: preference.cityId } : {}),
-                },
-              });
-            }}
+            onSubmit={submitSearch}
+            className="mx-auto mt-6 flex w-full flex-col gap-2 rounded-2xl border border-border bg-card p-2.5 shadow-[0_2px_10px_-6px_rgb(0_0_0/0.18)] sm:flex-row sm:items-center"
           >
-            <div className="relative flex-1">
+            <div className="relative min-w-0 flex-1">
               <Search
                 className="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-muted-foreground"
                 aria-hidden
@@ -157,41 +219,37 @@ export function MarketHome() {
                 onChange={(e) => setQ(e.target.value)}
                 placeholder={t("market.searchPlaceholder")}
                 aria-label={t("market.searchPlaceholder")}
-                className="h-11 ps-9"
+                className="h-11 border-0 bg-transparent ps-9 shadow-none focus-visible:ring-0"
               />
             </div>
-            <div className="flex items-center justify-center">
-              <MarketSwitcher />
+            <div className="flex items-center gap-2 sm:shrink-0">
+              <div className="min-w-0 flex-1 sm:flex-none">
+                <MarketSwitcher />
+              </div>
+              <Button type="submit" className="h-11 shrink-0 px-6">
+                {t("common.search")}
+              </Button>
             </div>
-            <Button type="submit" size="lg" className="h-11">
-              {t("common.search")}
-            </Button>
           </form>
 
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            <Button asChild size="sm">
-              <Link to="/dashboard/ads/new">
-                <Plus className="size-4" aria-hidden />
-                {t("market.addListing")}
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/search">{t("market.nav.search")}</Link>
-            </Button>
-          </div>
-          <p className="mt-3 text-xs text-muted-foreground">{t("market.hero.openToAll")}</p>
+          <Button asChild variant="ghost" size="sm" className="mt-3 text-primary">
+            <Link to="/dashboard/ads/new">
+              <Plus className="size-4" aria-hidden />
+              {t("market.addListing")}
+            </Link>
+          </Button>
         </div>
       </section>
 
-      {/* Quick filters: one tap to the most requested slices of the market. */}
+      {/* Quick content types: one tap to the most requested slices of the market. */}
       <div className="border-b border-border bg-background">
-        <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-3 py-3 sm:px-4">
+        <div className="mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:justify-center sm:overflow-visible">
           {QUICK_FILTERS.map((f) => (
             <Link
               key={f.key}
               to="/search"
               search={f.search}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:border-primary/50 hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary/60 hover:text-primary aria-[current=page]:border-primary aria-[current=page]:text-primary"
             >
               <f.icon className="size-3.5" aria-hidden />
               {t(`market.quick.${f.key}`)}
@@ -200,70 +258,88 @@ export function MarketHome() {
         </div>
       </div>
 
-      <section className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-        <h2 className="mb-3 text-base font-bold text-foreground sm:text-lg">
+      {/* Categories: compact, evenly balanced grid — never a horizontal scroll. */}
+      <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
+        <h2 className="mb-3 text-base font-bold tracking-tight text-foreground sm:text-lg">
           {t("market.categories")}
         </h2>
-        <div className="flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {categories.isLoading
-            ? Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-11 w-32 shrink-0 rounded-xl sm:w-full" />
+            ? Array.from({ length: 10 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 w-full rounded-xl" />
               ))
-            : roots.map((c) => (
-                <Link
-                  key={c.id}
-                  to="/categories/$slug"
-                  params={{ slug: c.slug }}
-                  className="shrink-0 rounded-xl border border-border bg-card px-3 py-2.5 text-center text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:text-sm"
-                >
-                  {locale === "ar" ? c.name_ar : c.name_en}
-                </Link>
-              ))}
+            : roots.map((c) => {
+                const Icon = (c.icon && CATEGORY_ICONS[c.icon]) || LayoutGrid;
+                return (
+                  <Link
+                    key={c.id}
+                    to="/categories/$slug"
+                    params={{ slug: c.slug }}
+                    className="flex min-h-16 items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-3 text-start transition-colors hover:border-primary/50 hover:bg-secondary/50"
+                  >
+                    <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-secondary text-primary">
+                      <Icon className="size-4" aria-hidden />
+                    </span>
+                    <span className="min-w-0 text-xs font-medium leading-snug text-foreground sm:text-sm">
+                      {locale === "ar" ? c.name_ar : c.name_en}
+                    </span>
+                  </Link>
+                );
+              })}
         </div>
       </section>
 
-      <Section
+      <ListingSection
         title={t("market.sections.latest")}
         href="/search"
         items={latest.data ?? []}
         loading={latest.isLoading}
       />
 
+      {/* Suggested businesses — the check mark sits inside the identity block. */}
+      {(businesses.isLoading || (businesses.data ?? []).length > 0) && (
+        <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
+          <SectionHead
+            title={t("market.sections.businesses")}
+            href="/search"
+            search={{ advertiser: "business" }}
+          />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {businesses.isLoading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <Skeleton key={i} className="h-32 w-full rounded-xl" />
+                ))
+              : (businesses.data ?? []).map((row) => (
+                  <BusinessCard
+                    key={row.business.tenant_id}
+                    business={row.business}
+                    logoUrl={row.logoUrl}
+                  />
+                ))}
+          </div>
+        </section>
+      )}
 
-      <Section
-        title={t("market.sections.equipmentSale")}
-        href="/search"
-        search={{ type: "equipment_sale" }}
-        items={equipment.data ?? []}
-        loading={equipment.isLoading}
-      />
-      <Section
+      <ListingSection
         title={t("market.sections.equipmentRent")}
         href="/search"
         search={{ type: "equipment_rent" }}
         items={rentals.data ?? []}
         loading={rentals.isLoading}
       />
-      <Section
-        title={t("market.sections.products")}
-        href="/search"
-        search={{ type: "product" }}
-        items={products.data ?? []}
-        loading={products.isLoading}
-      />
-      <Section
+      <ListingSection
         title={t("market.sections.services")}
         href="/search"
         search={{ type: "service" }}
         items={services.data ?? []}
         loading={services.isLoading}
       />
-      <Section
-        title={t("market.sections.needs")}
+      <ListingSection
+        title={t("market.sections.products")}
         href="/search"
-        search={{ type: "need_supplier" }}
-        items={needs.data ?? []}
-        loading={needs.isLoading}
+        search={{ type: "product" }}
+        items={products.data ?? []}
+        loading={products.isLoading}
       />
     </>
   );
