@@ -18,16 +18,21 @@ export function MarketHeader() {
   const { session } = useSession();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [city, setCity] = useState("");
   const [open, setOpen] = useState(false);
+  const { preference } = useMarketPreference();
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     navigate({
       to: "/search",
-      search: { ...(q.trim() ? { q: q.trim() } : {}), ...(city ? { city } : {}) },
+      search: {
+        ...(q.trim() ? { q: q.trim() } : {}),
+        country: preference.countryIso2,
+        ...(preference.cityId ? { cityId: preference.cityId } : {}),
+      },
     });
   }
+
 
   const navLinks = (
     <>
