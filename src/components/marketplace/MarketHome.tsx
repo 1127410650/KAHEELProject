@@ -112,37 +112,20 @@ export function MarketHome() {
   const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
   const geoKey = `${preference.countryIso2}:${preference.cityId ?? "all"}`;
 
+  // Two grouped queries only — one for the suggestion row, one for the latest row.
   const latest = useQuery({
     queryKey: ["mkt", "home", "latest", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, limit: 4 }, locale),
-  });
-  const rentals = useQuery({
-    queryKey: ["mkt", "home", "rentals", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, type: "equipment_rent", limit: 4 }, locale),
-  });
-  const services = useQuery({
-    queryKey: ["mkt", "home", "services", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, type: "service", limit: 4 }, locale),
-  });
-  const products = useQuery({
-    queryKey: ["mkt", "home", "products", locale, geoKey],
-    queryFn: () => loadListings({ ...geo, type: "product", limit: 4 }, locale),
+    queryFn: () => loadListings({ ...geo, limit: 8 }, locale),
   });
   const suggested = useSuggestedListings(locale, geo);
 
-  const anyLoading =
-    latest.isLoading ||
-    rentals.isLoading ||
-    services.isLoading ||
-    products.isLoading ||
-    suggested.isLoading;
-  const isEmpty =
-    !anyLoading &&
-    (latest.data?.length ?? 0) === 0 &&
-    (rentals.data?.length ?? 0) === 0 &&
-    (services.data?.length ?? 0) === 0 &&
-    (products.data?.length ?? 0) === 0 &&
-    (suggested.data?.length ?? 0) === 0;
+  const anyLoading = latest.isLoading || suggested.isLoading;
+  const suggestedItems = (suggested.data ?? []).slice(0, 4);
+  const suggestedIds = new Set(suggestedItems.map((l) => l.id));
+  // Avoid showing the same ad twice on one page.
+  const latestItems = (latest.data ?? []).filter((l) => !suggestedIds.has(l.id)).slice(0, 4);
+  const isEmpty = !anyLoading && suggestedItems.length === 0 && latestItems.length === 0;
+
 
 
 
