@@ -16,10 +16,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
-import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import { loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveIdentity } from "@/lib/mkt-identity";
+import { CountryCitySelect } from "@/components/marketplace/GeoFields";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,19 +74,51 @@ export function ListingForm({ listing }: Props) {
     enabled: !!countryId,
     queryFn: () => loadCities(countryId),
   });
-  // A new ad defaults to the market the advertiser is browsing.
-  useEffect(() => {
-    if (countryId || !countries.data) return;
-    const fallback = countries.data.find((c) => c.iso2 === preference.countryIso2);
-    if (fallback) setCountryId(fallback.id);
-  }, [countries.data, countryId, preference.countryIso2]);
-
   // Every registered user can publish. The identity only decides the name the ad
   // carries; verification is a trust badge, not a permission.
-  const { identities, active, select } = useActiveIdentity();
+  const { identities, active, select, myProfile } = useActiveIdentity();
   // The identity of an existing ad is fixed and cannot be switched afterwards.
   const lockedIdentity = !!listing;
   const tenantId = lockedIdentity ? (listing?.tenant_id ?? null) : (active?.tenantId ?? null);
+
+  // Location of the publishing identity: the business for a business ad, the
+  // person for an individual ad. Editing an ad's location never writes back.
+  const businessGeo = useQuery({
+    queryKey: ["mkt", "business-geo", active?.tenantId],
+    enabled: !listing && active?.kind === "business" && !!active.tenantId,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mkt_business_profiles")
+        .select("country_id, city_id")
+        .eq("tenant_id", active!.tenantId!)
+        .maybeSingle();
+      return data ?? null;
+    },
+  });
+
+  const personGeo = myProfile.data;
+  const identityGeo =
+    active?.kind === "business"
+      ? businessGeo.data
+      : personGeo
+        ? { country_id: personGeo.country_id, city_id: personGeo.city_id }
+        : null;
+
+
+  // A new ad defaults to the identity's own location, falling back to the market
+  // the advertiser is browsing.
+  const [geoTouched, setGeoTouched] = useState(!!listing);
+  useEffect(() => {
+    if (geoTouched || countryId) return;
+    if (identityGeo?.country_id) {
+      setCountryId(identityGeo.country_id);
+      if (identityGeo.city_id) setCityId(identityGeo.city_id);
+      return;
+    }
+    const fallback = (countries.data ?? []).find((c) => c.iso2 === preference.countryIso2);
+    if (fallback) setCountryId(fallback.id);
+  }, [countries.data, countryId, geoTouched, identityGeo, preference.countryIso2]);
+
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
   const subs = (categories.data ?? []).filter((c) => c.parent_id === categoryId);
@@ -120,6 +154,16 @@ export function ListingForm({ listing }: Props) {
       toast.error(t("market.dash.pickCategory"));
       return;
     }
+    if (!countryId || !cityId) {
+      toast.error(t("market.geo.locationRequired"));
+      return;
+    }
+    // The database enforces this too; catching it here keeps the message clear.
+    if (!(cities.data ?? []).some((c) => c.id === cityId)) {
+      toast.error(t("market.geo.cityMismatch"));
+      return;
+    }
+
     setBusy(true);
     try {
       const payload = {
@@ -139,6 +183,9 @@ export function ListingForm({ listing }: Props) {
           typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
         country_id: countryId || null,
         city_id: cityId || null,
+        currency:
+          (countries.data ?? []).find((c) => c.id === countryId)?.currency_code ?? "SAR",
+
         city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         status: publish ? "pending" : "draft",
@@ -360,51 +407,23 @@ export function ListingForm({ listing }: Props) {
         )}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="country_id">{t("market.geo.country")}</Label>
-          <select
-            id="country_id"
-            className={selectClass}
-            required
-            value={countryId}
-            onChange={(e) => {
-              setCountryId(e.target.value);
-              setCityId("");
-            }}
-          >
-            <option value="">{t("market.geo.pick")}</option>
-            {(countries.data ?? []).map((c) => (
-              <option key={c.id} value={c.id}>
-                {geoName(c, locale)}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="city_id">{t("market.filters.city")}</Label>
-          <select
-            id="city_id"
-            name="city_id"
-            className={selectClass}
-            required
-            value={cityId}
-            onChange={(e) => setCityId(e.target.value)}
-            disabled={!countryId}
-          >
-            <option value="">{t("market.geo.pickCity")}</option>
-            {(cities.data ?? []).map((c) => (
-              <option key={c.id} value={c.id}>
-                {geoName(c, locale)}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="space-y-3">
+        <CountryCitySelect
+          countryId={countryId || null}
+          cityId={cityId || null}
+          required
+          onChange={(next) => {
+            setGeoTouched(true);
+            setCountryId(next.countryId ?? "");
+            setCityId(next.cityId ?? "");
+          }}
+        />
         <div className="space-y-1.5">
           <Label htmlFor="region">{t("market.dash.region")}</Label>
           <Input id="region" name="region" defaultValue={listing?.region ?? ""} />
         </div>
       </div>
+
 
       <div className="space-y-1.5">
         <Label htmlFor="images">{t("market.dash.images")}</Label>

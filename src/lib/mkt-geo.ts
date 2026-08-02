@@ -177,16 +177,29 @@ export function useMarketPreference() {
  */
 export function toE164(iso2: string, input: string): string | null {
   const country = iso2.toUpperCase() as CountryCode;
+  const digits = callingDigits(iso2);
   const cleaned = input.replace(/[^\d+]/g, "").replace(/^00/, "+");
-  const candidate = cleaned.startsWith("+")
-    ? cleaned
-    : `+${callingDigits(iso2)}${cleaned.replace(/^0+/, "")}`;
-  const parsed = parsePhoneNumberFromString(candidate, country);
-  if (!parsed || !parsed.isValid()) return null;
-  // Guard against a number that is valid but belongs to another country.
-  if (parsed.country && parsed.country !== country) return null;
-  return parsed.number;
+
+  const attempt = (value: string): string | null => {
+    const parsed = parsePhoneNumberFromString(value, country);
+    if (!parsed || !parsed.isValid()) return null;
+    // Guard against a number that is valid but belongs to another country.
+    if (parsed.country && parsed.country !== country) return null;
+    return parsed.number;
+  };
+
+  if (cleaned.startsWith("+")) return attempt(cleaned);
+
+  const local = cleaned.replace(/^0+/, "");
+  const withCode = attempt(`+${digits}${local}`);
+  if (withCode) return withCode;
+  // The calling code typed without a leading "+" must not be duplicated.
+  if (digits && local.startsWith(digits)) {
+    return attempt(`+${local}`);
+  }
+  return null;
 }
+
 
 /** Digits of a supported country's calling code. */
 function callingDigits(iso2: string): string {
@@ -260,4 +273,19 @@ export async function saveMyContact(input: {
 export async function loadPublicPhone(userId: string): Promise<string | null> {
   const { data } = await supabase.rpc("mkt_public_phone", { _user_id: userId });
   return (data as string | null) ?? null;
+}
+
+/** A user-proposed city; it stays out of the public lists until an admin approves it. */
+export async function suggestCity(input: {
+  countryId: string;
+  name: string;
+  userId: string;
+}): Promise<void> {
+  const { error } = await supabase.from("mkt_city_suggestions").insert({
+    country_id: input.countryId,
+    suggested_name: input.name.trim(),
+    suggested_by: input.userId,
+    status: "pending",
+  });
+  if (error) throw error;
 }
