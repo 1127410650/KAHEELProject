@@ -330,7 +330,7 @@ export function MarketFooter() {
     {
       key: "account",
       links: [
-        { to: "/login", label: t("market.signIn") },
+        { to: "/auth", label: t("market.signIn") },
         { to: "/dashboard/profile", label: t("market.identity.managePersonal") },
         { to: "/dashboard/favorites", label: t("market.more.links.favorites") },
       ],
@@ -397,7 +397,7 @@ export function MarketCompactFooter() {
 export type FooterVariant = "full" | "compact" | "none";
 
 /** Public marketing surfaces keep the full footer. */
-const FULL_FOOTER_PATHS = ["/", "/marketplace", "/about", "/terms", "/privacy", "/help"];
+const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help"];
 /** Long public content pages get the legal strip only. */
 const COMPACT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/"];
 

@@ -15,9 +15,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
-import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
@@ -103,19 +101,9 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
   path: '/choose-account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MarketSetupRoute = MarketSetupRouteImport.update({
   id: '/market-setup',
   path: '/market-setup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketplaceRoute = MarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreRoute = MoreRouteImport.update({
@@ -411,9 +399,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
-  '/login': typeof LoginRoute
   '/market-setup': typeof MarketSetupRoute
-  '/marketplace': typeof MarketplaceRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
@@ -475,9 +461,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
-  '/login': typeof LoginRoute
   '/market-setup': typeof MarketSetupRoute
-  '/marketplace': typeof MarketplaceRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
@@ -542,9 +526,7 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
-  '/login': typeof LoginRoute
   '/market-setup': typeof MarketSetupRoute
-  '/marketplace': typeof MarketplaceRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
@@ -609,9 +591,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/auth'
     | '/choose-account'
-    | '/login'
     | '/market-setup'
-    | '/marketplace'
     | '/more'
     | '/register'
     | '/search'
@@ -673,9 +653,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/auth'
     | '/choose-account'
-    | '/login'
     | '/market-setup'
-    | '/marketplace'
     | '/more'
     | '/register'
     | '/search'
@@ -739,9 +717,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/auth'
     | '/choose-account'
-    | '/login'
     | '/market-setup'
-    | '/marketplace'
     | '/more'
     | '/register'
     | '/search'
@@ -806,9 +782,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
-  LoginRoute: typeof LoginRoute
   MarketSetupRoute: typeof MarketSetupRoute
-  MarketplaceRoute: typeof MarketplaceRoute
   MoreRoute: typeof MoreRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
@@ -876,25 +850,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChooseAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/market-setup': {
       id: '/market-setup'
       path: '/market-setup'
       fullPath: '/market-setup'
       preLoaderRoute: typeof MarketSetupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/marketplace': {
-      id: '/marketplace'
-      path: '/marketplace'
-      fullPath: '/marketplace'
-      preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more': {
@@ -1379,9 +1339,7 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
-  LoginRoute: LoginRoute,
   MarketSetupRoute: MarketSetupRoute,
-  MarketplaceRoute: MarketplaceRoute,
   MoreRoute: MoreRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
