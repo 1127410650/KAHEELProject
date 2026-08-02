@@ -164,3 +164,10 @@ export function isValidTitle(raw: string): boolean {
 
 export const TITLE_MIN = 5;
 export const TITLE_MAX = 120;
+
+/** Every known detail field, so a stored spec key can be labelled on the ad page. */
+export const SPEC_FIELDS: SpecField[] = Object.values(F);
+
+export function specFieldByKey(key: string): SpecField | null {
+  return SPEC_FIELDS.find((field) => field.key === key) ?? null;
+}
