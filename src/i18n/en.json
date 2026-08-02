@@ -1453,7 +1453,9 @@
       "deletedOk": "The ad was soft deleted",
       "yourAd": "This is your ad — contact options are not shown on your own ad",
       "statusNotice": "This status is visible to you only; visitors cannot see the ad until it is published.",
-      "category": "Category"
+      "category": "Category",
+      "openLocation": "Open location",
+      "openLocationHint": "Open the location in OpenStreetMap in a new tab"
     },
     "business": {
       "joined": "Member since",
@@ -2293,6 +2295,63 @@
       "addListingHint": "Nothing matched your search — you can post your own listing.",
       "businessesCount": "businesses",
       "loadingMore": "Loading more…"
+    },
+    "license": {
+      "sectionTitle": "Real estate licence data",
+      "formIntro": "The Real Estate General Authority requires a real estate ad to show its advertising licence number and expiry date.",
+      "advertiserRole": "Advertiser capacity",
+      "role": {
+        "owner": "Owner",
+        "broker": "Licensed broker",
+        "company": "Licensed real estate company",
+        "agent": "Owner's agent"
+      },
+      "number": "Advertising licence number",
+      "expiry": "Licence expiry date",
+      "practiceNumber": "Practice licence number",
+      "verify": "Verify licence",
+      "verifyHint": "Open the authority's advertising licence inquiry service",
+      "verifyBroker": "Verify practice licence",
+      "verifyBrokerHint": "Open the authority's real estate practice licence inquiry service",
+      "doc": "Licence document",
+      "uploadDoc": "Attach document",
+      "docAttached": "Attached",
+      "docHint": "The document stays private and is never shown publicly; only the platform team reviews it. PDF or image up to 8 MB.",
+      "docUploaded": "Document attached",
+      "docFailed": "Could not attach the document",
+      "docTypeError": "Unsupported file type",
+      "docSizeError": "File exceeds 8 MB",
+      "expiredWarning": "This licence has expired; an ad cannot be published with an expired licence.",
+      "expiringSoonWarning": "This licence expires in {days} days.",
+      "exemptionRequest": "Request a legal exemption from licensing",
+      "exemptionHint": "An exemption is never automatic; it is submitted as a request and reviewed by the administration before publishing.",
+      "exemptionReason": "Reason for the exemption request",
+      "exemptionDoc": "Supporting document",
+      "exemptionPendingNote": "The request is under review; the ad stays a draft until the exemption is approved.",
+      "statusNote": "The verification status is decided by the platform after review.",
+      "status": {
+        "not_entered": "No licence data entered",
+        "pending": "Under review",
+        "valid": "Verified",
+        "invalid": "Invalid data",
+        "expired": "Expired",
+        "exempt": "Legally exempt"
+      },
+      "block": {
+        "numberRequired": "Enter the advertising licence number before publishing.",
+        "expiryRequired": "Enter the licence expiry date before publishing.",
+        "expiredLicense": "The licence has expired; renew it before publishing.",
+        "practiceRequired": "Enter the practice licence number.",
+        "exemptionPending": "The exemption request is under review; publishing is not possible yet."
+      },
+      "badge": {
+        "active": "Valid licence",
+        "expiringSoon": "Expiring soon",
+        "expired": "Expired licence",
+        "pending": "Under review",
+        "exempt": "Legally exempt",
+        "invalid": "Invalid licence"
+      }
     }
   },
   "routeError": {
