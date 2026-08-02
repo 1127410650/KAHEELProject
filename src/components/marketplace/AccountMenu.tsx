@@ -10,6 +10,7 @@ import {
   LogOut,
   MessageSquare,
   ReceiptText,
+  Repeat,
   Settings,
   ShieldAlert,
   User,
@@ -19,7 +20,7 @@ import {
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { useActiveIdentity, type MktIdentity } from "@/lib/mkt-identity";
+import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -45,15 +46,15 @@ function IdentityAvatar({
   identity,
   size = "md",
 }: {
-  identity: MktIdentity;
+  identity: MktAccount;
   size?: "sm" | "md";
 }) {
   const box = size === "sm" ? "size-7" : "size-9";
   const Icon = identity.kind === "business" ? Building2 : User;
-  if (identity.avatarUrl) {
+  if (identity.avatar_url) {
     return (
       <img
-        src={identity.avatarUrl}
+        src={identity.avatar_url}
         alt=""
         className={`${box} shrink-0 rounded-full object-cover`}
         loading="lazy"
@@ -78,14 +79,13 @@ function IdentityAvatar({
 export function AccountMenu() {
   const { t } = useI18n();
   const { session } = useSession();
-  const { identities, active, select } = useActiveIdentity();
+  const { account: active } = useActiveAccount();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
   if (!session || !active) return null;
 
   const displayName = active.name || t("market.account.fallbackName");
-  const otherIdentities = identities.filter((i) => i.key !== active.key);
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -111,8 +111,8 @@ export function AccountMenu() {
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-semibold text-foreground">{displayName}</span>
         <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          {t(`market.identity.${active.kind}`)}
-          <VerifiedBadge status={active.verificationStatus} size="xs" />
+          {t(`market.entry.kind.${active.kind}`)}
+          <VerifiedBadge status={active.verification_status} size="xs" />
         </span>
       </span>
       <Check className="size-4 shrink-0 text-primary" aria-hidden />
@@ -144,6 +144,7 @@ export function AccountMenu() {
           },
         ]
       : []),
+    { to: "/choose-account", label: t("market.biz.addBusiness"), icon: Building2 },
     { to: "/more", label: t("market.more.settings"), icon: Settings },
   ];
 
@@ -167,33 +168,15 @@ export function AccountMenu() {
 
           <div className="mt-4 rounded-xl border border-border bg-card">{currentBlock}</div>
 
-          {otherIdentities.length > 0 && (
-            <>
-              <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
-                {t("market.account.switchTitle")}
-              </p>
-              <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
-                {otherIdentities.map((identity) => (
-                  <button
-                    key={identity.key}
-                    type="button"
-                    onClick={() => select(identity.key)}
-                    className="flex w-full items-center gap-2 border-b border-border px-3 py-2.5 text-start last:border-b-0 hover:bg-accent"
-                  >
-                    <IdentityAvatar identity={identity} size="sm" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm text-foreground">
-                        {identity.name || t("market.account.fallbackName")}
-                      </span>
-                      <span className="block text-[11px] text-muted-foreground">
-                        {t(`market.identity.${identity.kind}`)}
-                      </span>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+          <div className="mt-2 overflow-hidden rounded-xl border border-border bg-card">
+            <Link
+              to="/choose-account"
+              className="flex items-center gap-2.5 px-3 py-3 text-sm text-foreground hover:bg-accent"
+            >
+              <Repeat className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+              {t("market.entry.change")}
+            </Link>
+          </div>
 
           <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
             {t("market.account.activityTitle")}
@@ -246,31 +229,13 @@ export function AccountMenu() {
       <DropdownMenuContent align="end" className="w-72">
         {currentBlock}
         <DropdownMenuSeparator />
-        {otherIdentities.length > 0 && (
-          <>
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {t("market.account.switchTitle")}
-            </DropdownMenuLabel>
-            {otherIdentities.map((identity) => (
-              <DropdownMenuItem
-                key={identity.key}
-                onSelect={() => select(identity.key)}
-                className="gap-2"
-              >
-                <IdentityAvatar identity={identity} size="sm" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm">
-                    {identity.name || t("market.account.fallbackName")}
-                  </span>
-                  <span className="block text-[11px] text-muted-foreground">
-                    {t(`market.identity.${identity.kind}`)}
-                  </span>
-                </span>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-          </>
-        )}
+        <DropdownMenuItem asChild>
+          <Link to="/choose-account" className="gap-2 text-xs">
+            <Repeat className="size-4 text-muted-foreground" aria-hidden />
+            {t("market.entry.change")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuLabel className="text-xs text-muted-foreground">
           {t("market.account.activityTitle")}
         </DropdownMenuLabel>

@@ -6529,6 +6529,22 @@ export type Database = {
         Args: { _membership_id: string; _reason?: string; _status: string }
         Returns: undefined
       }
+      mkt_account_context: {
+        Args: { _account_key: string }
+        Returns: {
+          account_key: string
+          avatar_url: string
+          can_publish: boolean
+          kind: string
+          membership_id: string
+          name: string
+          permissions: string[]
+          role: string
+          slug: string
+          tenant_id: string
+          verification_status: string
+        }[]
+      }
       mkt_account_country_id: { Args: { _user_id: string }; Returns: string }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }
@@ -6583,6 +6599,22 @@ export type Database = {
         Returns: undefined
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_my_accounts: {
+        Args: never
+        Returns: {
+          account_key: string
+          avatar_url: string
+          can_publish: boolean
+          kind: string
+          membership_id: string
+          name: string
+          permissions: string[]
+          role: string
+          slug: string
+          tenant_id: string
+          verification_status: string
+        }[]
+      }
       mkt_my_moderation_cases: {
         Args: never
         Returns: {

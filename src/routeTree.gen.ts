@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
@@ -83,6 +84,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChooseAccountRoute = ChooseAccountRouteImport.update({
+  id: '/choose-account',
+  path: '/choose-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -390,6 +396,7 @@ const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/choose-account': typeof ChooseAccountRoute
   '/login': typeof LoginRoute
   '/market-setup': typeof MarketSetupRoute
   '/marketplace': typeof MarketplaceRoute
@@ -452,6 +459,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/choose-account': typeof ChooseAccountRoute
   '/login': typeof LoginRoute
   '/market-setup': typeof MarketSetupRoute
   '/marketplace': typeof MarketplaceRoute
@@ -516,6 +524,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/choose-account': typeof ChooseAccountRoute
   '/login': typeof LoginRoute
   '/market-setup': typeof MarketSetupRoute
   '/marketplace': typeof MarketplaceRoute
@@ -580,6 +589,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/choose-account'
     | '/login'
     | '/market-setup'
     | '/marketplace'
@@ -642,6 +652,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/choose-account'
     | '/login'
     | '/market-setup'
     | '/marketplace'
@@ -705,6 +716,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/choose-account'
     | '/login'
     | '/market-setup'
     | '/marketplace'
@@ -769,6 +781,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ChooseAccountRoute: typeof ChooseAccountRoute
   LoginRoute: typeof LoginRoute
   MarketSetupRoute: typeof MarketSetupRoute
   MarketplaceRoute: typeof MarketplaceRoute
@@ -822,6 +835,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/choose-account': {
+      id: '/choose-account'
+      path: '/choose-account'
+      fullPath: '/choose-account'
+      preLoaderRoute: typeof ChooseAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1302,6 +1322,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ChooseAccountRoute: ChooseAccountRoute,
   LoginRoute: LoginRoute,
   MarketSetupRoute: MarketSetupRoute,
   MarketplaceRoute: MarketplaceRoute,

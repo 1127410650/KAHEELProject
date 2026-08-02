@@ -1,7 +1,7 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Building2, ImagePlus, Loader2, Plus, User, X } from "lucide-react";
+import { ImagePlus, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,8 @@ import { useSession } from "@/lib/session";
 import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
 import { geoName, loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
-import { useActiveIdentity } from "@/lib/mkt-identity";
+import { useActiveAccount } from "@/lib/mkt-account";
+import { useMyUserProfile } from "@/lib/mkt-identity";
 import {
   dealKindFor,
   isValidTitle,
@@ -26,8 +27,6 @@ import {
   ListingLocationPicker,
   type ListingLocationValue,
 } from "@/components/marketplace/ListingLocationPicker";
-import { BusinessQuickCreate } from "@/components/marketplace/BusinessQuickCreate";
-import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,7 +38,7 @@ interface Props {
 }
 
 const selectClass = "h-9 w-full rounded-md border border-input bg-background px-2 text-sm";
-const STEPS = ["identity", "details", "location", "review"] as const;
+const STEPS = ["category", "details", "location", "review"] as const;
 type SpecValue = string | number | boolean;
 
 export function ListingForm({ listing }: Props) {
@@ -47,7 +46,9 @@ export function ListingForm({ listing }: Props) {
   const { session } = useSession();
   const navigate = useNavigate();
 
-  const scope = listing ? `edit:${listing.id}` : "new";
+  // The active account is part of the draft scope, so a draft never crosses
+  // from one entity to another: switching account starts a fresh copy and the
+  // original stays inside its own account.
   const [busy, setBusy] = useState(false);
   const [step, setStep] = useState(0);
   const [dirty, setDirty] = useState(false);
@@ -69,7 +70,6 @@ export function ListingForm({ listing }: Props) {
     (listing?.specs as Record<string, SpecValue> | null) ?? {},
   );
   const [files, setFiles] = useState<File[]>([]);
-  const [addBusinessOpen, setAddBusinessOpen] = useState(false);
 
   const [location, setLocation] = useState<ListingLocationValue>({
     cityId: listing?.city_id ?? "",
@@ -91,9 +91,13 @@ export function ListingForm({ listing }: Props) {
     queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
 
-  const { identities, active, select, myProfile } = useActiveIdentity();
-  const lockedIdentity = !!listing;
-  const tenantId = lockedIdentity ? (listing?.tenant_id ?? null) : (active?.tenantId ?? null);
+  const { account } = useActiveAccount();
+  const myProfile = useMyUserProfile();
+  // Identity is never chosen inside the form: an ad always belongs to the
+  // account the user entered, and the database re-derives ownership on write.
+  const tenantId = listing ? (listing.tenant_id ?? null) : (account?.tenant_id ?? null);
+  const scope = listing ? `edit:${listing.id}` : `new:${account?.account_key ?? "pending"}`;
+  const canPublish = !!listing || !account || account.can_publish;
 
   const label = (o: { name_ar: string; name_en: string | null }) =>
     locale === "ar" ? o.name_ar : o.name_en || o.name_ar;
@@ -139,7 +143,6 @@ export function ListingForm({ listing }: Props) {
       addressText: draft.addressText ?? prev.addressText,
       visibility: draft.locationVisibility ?? prev.visibility,
     }));
-    if (draft.identityKey && !listing) select(draft.identityKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scope]);
 
@@ -162,7 +165,7 @@ export function ListingForm({ listing }: Props) {
       district: location.district,
       addressText: location.addressText,
       locationVisibility: location.visibility,
-      identityKey: active?.key ?? "individual",
+      accountKey: account?.account_key ?? "individual",
       specs,
       step,
     };
@@ -180,7 +183,7 @@ export function ListingForm({ listing }: Props) {
     unit,
     itemCondition,
     location,
-    active?.key,
+    account?.account_key,
     specs,
     step,
   ]);
@@ -401,6 +404,26 @@ export function ListingForm({ listing }: Props) {
 
   return (
     <div className="max-w-2xl space-y-4">
+      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+        <span className="min-w-0">
+          {t("market.form.publishingAs", {
+            name:
+              (listing ? listing.tenant_id : account?.tenant_id)
+                ? account?.name || t("market.entry.kind.business")
+                : account?.name || t("market.entry.kind.individual"),
+          })}
+        </span>
+        {!listing && (
+          <Link
+            to="/choose-account"
+            search={{ next: "/dashboard/ads/new" }}
+            onClick={() => saveDraft(scope, snapshot())}
+            className="font-semibold text-primary underline"
+          >
+            {t("market.entry.change")}
+          </Link>
+        )}
+      </p>
       <ol className="flex flex-wrap items-center gap-1.5 text-[11px]">
         {STEPS.map((name, index) => (
           <li
@@ -421,63 +444,6 @@ export function ListingForm({ listing }: Props) {
 
       {step === 0 && (
         <div className="space-y-4">
-          <fieldset className="space-y-2 rounded-xl border border-border bg-card p-3">
-            <legend className="px-1 text-sm font-semibold text-foreground">
-              {t("market.dash.publishAs")}
-            </legend>
-            {lockedIdentity ? (
-              <p className="text-xs text-muted-foreground">{t("market.dash.identityLocked")}</p>
-            ) : (
-              <>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {identities.map((identity) => (
-                    <button
-                      key={identity.key}
-                      type="button"
-                      onClick={() => {
-                        setDirty(true);
-                        select(identity.key);
-                      }}
-                      aria-pressed={identity.key === active?.key}
-                      className={
-                        identity.key === active?.key
-                          ? "flex items-center gap-2 rounded-lg border-2 border-primary bg-primary/5 p-2.5 text-start"
-                          : "flex items-center gap-2 rounded-lg border border-border p-2.5 text-start hover:border-primary/40"
-                      }
-                    >
-                      {identity.kind === "business" ? (
-                        <Building2 className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                      ) : (
-                        <User className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                      )}
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium text-foreground">
-                          {identity.name || t(`market.identity.${identity.kind}`)}
-                        </span>
-                        <span className="block text-[11px] text-muted-foreground">
-                          {t(`market.identity.${identity.kind}`)}
-                        </span>
-                      </span>
-                      <VerifiedBadge status={identity.verificationStatus} size="xs" />
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      saveDraft(scope, snapshot());
-                      setAddBusinessOpen(true);
-                    }}
-                    className="flex items-center gap-2 rounded-lg border border-dashed border-input p-2.5 text-start text-sm text-muted-foreground hover:border-primary/40"
-                  >
-                    <Plus className="size-4 shrink-0" aria-hidden />
-                    {t("market.biz.addBusiness")}
-                  </button>
-                </div>
-                <p className="text-[11px] text-muted-foreground">{t("market.dash.identityHint")}</p>
-              </>
-            )}
-          </fieldset>
-
           <CategoryPicker
             categories={categories.data ?? []}
             types={types.data ?? []}
@@ -688,9 +654,7 @@ export function ListingForm({ listing }: Props) {
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.dash.publishAs")}</dt>
             <dd className="text-foreground">
-              {lockedIdentity
-                ? t("market.dash.identityLocked")
-                : active?.name || t(`market.identity.${active?.kind ?? "individual"}`)}
+              {account?.name || t(`market.entry.kind.${account?.kind ?? "individual"}`)}
             </dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">
@@ -711,6 +675,12 @@ export function ListingForm({ listing }: Props) {
         </dl>
       )}
 
+      {!canPublish && (
+        <p className="rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+          {t("market.form.noPublishPermission")}
+        </p>
+      )}
+
       <div className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
         {step > 0 && (
           <Button type="button" variant="ghost" onClick={() => setStep((prev) => prev - 1)}>
@@ -722,7 +692,12 @@ export function ListingForm({ listing }: Props) {
             {t("market.form.next")}
           </Button>
         ) : (
-          <Button type="button" className="min-w-32" disabled={busy} onClick={() => void submit(true)}>
+          <Button
+            type="button"
+            className="min-w-32"
+            disabled={busy || !canPublish}
+            onClick={() => void submit(true)}
+          >
             {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {t("market.dash.submitForReview")}
           </Button>
@@ -737,12 +712,6 @@ export function ListingForm({ listing }: Props) {
           {t("market.dash.saveDraft")}
         </Button>
       </div>
-
-      <BusinessQuickCreate
-        open={addBusinessOpen}
-        onOpenChange={setAddBusinessOpen}
-        onCreated={(newTenantId) => select(`business:${newTenantId}`)}
-      />
     </div>
   );
 }
