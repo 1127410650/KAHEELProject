@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { useActiveAccount } from "@/lib/mkt-account";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,12 +38,24 @@ function MessagesPage() {
   const [selected, setSelected] = useState<string | null>(c ?? null);
   const [body, setBody] = useState("");
 
+  const { account } = useActiveAccount();
+
   const conversations = useQuery({
-    queryKey: ["mkt", "conversations"],
+    queryKey: ["mkt", "conversations", account?.account_key],
+    enabled: !!session && !!account,
     queryFn: async () => {
-      const { data } = await supabase
+      // Conversations are scoped to the active account: a business sees the
+      // threads addressed to it, the personal account sees its own threads.
+      let query = supabase
         .from("mkt_conversations")
-        .select("id, listing_id, last_message_at, mkt_listings(title, slug)")
+        .select("id, listing_id, last_message_at, mkt_listings(title, slug)");
+      query =
+        account!.kind === "business"
+          ? query.eq("seller_tenant_id", account!.tenant_id!)
+          : query.or(
+              `buyer_user_id.eq.${session!.user.id},and(seller_user_id.eq.${session!.user.id},seller_tenant_id.is.null)`,
+            );
+      const { data } = await query
         .order("last_message_at", { ascending: false });
       return data ?? [];
     },

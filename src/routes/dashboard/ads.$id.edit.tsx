@@ -4,6 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { LISTING_COLUMNS, type MktListing } from "@/lib/mkt";
+import { useSession } from "@/lib/session";
+import { useActiveAccount } from "@/lib/mkt-account";
+import { Button } from "@/components/ui/button";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingForm } from "@/components/marketplace/ListingForm";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,6 +28,8 @@ export const Route = createFileRoute("/dashboard/ads/$id/edit")({
 function EditAdPage() {
   const { id } = Route.useParams();
   const { t } = useI18n();
+  const { session } = useSession();
+  const { account, accounts, select } = useActiveAccount();
   const ad = useQuery({
     queryKey: ["mkt", "my-ad", id],
     queryFn: async () => {
@@ -37,12 +42,48 @@ function EditAdPage() {
     },
   });
 
+  // A direct link may point at an ad that belongs to another account the user
+  // also works under. Rather than failing, offer to switch into that account.
+  const listing = ad.data;
+  const belongsToActive =
+    !!listing &&
+    !!account &&
+    (account.kind === "business"
+      ? listing.tenant_id === account.tenant_id
+      : !listing.tenant_id && listing.owner_user_id === session?.user.id);
+  const otherAccount =
+    listing && !belongsToActive
+      ? (accounts.find((a) =>
+          listing.tenant_id
+            ? a.kind === "business" && a.tenant_id === listing.tenant_id
+            : a.kind === "individual" && listing.owner_user_id === session?.user.id,
+        ) ?? null)
+      : null;
+
   return (
     <DashboardShell title={t("market.dash.edit")}>
       {ad.isLoading ? (
         <Skeleton className="h-64 w-full rounded-xl" />
-      ) : ad.data ? (
-        <ListingForm listing={ad.data} />
+      ) : listing && belongsToActive ? (
+        <ListingForm listing={listing} />
+      ) : listing && otherAccount ? (
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-sm text-foreground">
+            {t("market.entry.otherAccount", {
+              name: otherAccount.name || t("market.account.fallbackName"),
+            })}
+          </p>
+          <Button
+            className="mt-3"
+            onClick={() => void select(otherAccount.account_key)}
+          >
+            {t("market.entry.switchTo", {
+              name: otherAccount.name || t("market.account.fallbackName"),
+            })}
+          </Button>
+        </div>
+      ) : listing ? (
+        <p className="text-sm text-muted-foreground">{t("market.entry.notYours")}</p>
       ) : (
         <p className="text-sm text-muted-foreground">{t("market.ad.notFound")}</p>
       )}

@@ -17,7 +17,7 @@ import {
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { useActiveIdentity } from "@/lib/mkt-identity";
+import { useActiveAccount } from "@/lib/mkt-account";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 
 const title = "المزيد — سوق تحقّق";
@@ -78,7 +78,7 @@ const GROUPS = [
 function MorePage() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
-  const { active } = useActiveIdentity();
+  const { account: active } = useActiveAccount();
 
   return (
     <MarketShell>
@@ -87,12 +87,21 @@ function MorePage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("market.more.subtitle")}</p>
 
         {session && active && (
-          <p className="mt-3 text-sm text-muted-foreground">
-            {t("market.identity.actingAs")}:{" "}
-            <span className="font-semibold text-foreground">
-              {active.name || t("market.account.fallbackName")}
-            </span>
-          </p>
+          <div className="mt-3 rounded-xl border border-border bg-card p-3">
+            <p className="text-sm text-muted-foreground">
+              {t("market.entry.workingUnder", {
+                name: active.name || t("market.account.fallbackName"),
+              })}
+            </p>
+            <div className="mt-2 flex flex-wrap gap-3 text-xs font-semibold text-primary">
+              <Link to="/choose-account" className="underline">
+                {t("market.entry.change")}
+              </Link>
+              <Link to="/choose-account" className="underline">
+                {t("market.biz.addBusiness")}
+              </Link>
+            </div>
+          </div>
         )}
 
 

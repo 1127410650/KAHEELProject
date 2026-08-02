@@ -25,7 +25,7 @@ export interface ListingDraft {
   district: string;
   addressText: string;
   locationVisibility: "approximate" | "exact";
-  identityKey: string;
+  accountKey: string;
   specs: Record<string, string | number | boolean>;
   step: number;
 }
