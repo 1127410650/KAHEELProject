@@ -1,25 +1,32 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Building2,
-  ChevronDown,
-  ChevronUp,
-  ImagePlus,
-  Loader2,
-  User,
-  X,
-} from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Building2, ImagePlus, Loader2, Plus, User, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
-import { loadCities, useAccountCountry } from "@/lib/mkt-geo";
+import { geoName, loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveIdentity } from "@/lib/mkt-identity";
-import { AccountCitySelect } from "@/components/marketplace/GeoFields";
+import {
+  dealKindFor,
+  isValidTitle,
+  isWantedType,
+  specFieldsFor,
+  TITLE_MAX,
+  TITLE_MIN,
+  type SpecField,
+} from "@/lib/mkt-taxonomy";
+import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
+import { CategoryPicker } from "@/components/marketplace/CategoryPicker";
+import {
+  ListingLocationPicker,
+  type ListingLocationValue,
+} from "@/components/marketplace/ListingLocationPicker";
+import { BusinessQuickCreate } from "@/components/marketplace/BusinessQuickCreate";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 
 import { Button } from "@/components/ui/button";
@@ -32,96 +39,180 @@ interface Props {
 }
 
 const selectClass = "h-9 w-full rounded-md border border-input bg-background px-2 text-sm";
+const STEPS = ["identity", "details", "location", "review"] as const;
+type SpecValue = string | number | boolean;
 
 export function ListingForm({ listing }: Props) {
   const { t, locale } = useI18n();
   const { session } = useSession();
   const navigate = useNavigate();
+
+  const scope = listing ? `edit:${listing.id}` : "new";
   const [busy, setBusy] = useState(false);
-  const [typeCode, setTypeCode] = useState(listing?.type_code ?? "service");
+  const [step, setStep] = useState(0);
+  const [dirty, setDirty] = useState(false);
+  const restored = useRef(false);
+
+  const [typeCode, setTypeCode] = useState(listing?.type_code ?? "");
   const [categoryId, setCategoryId] = useState(listing?.category_id ?? "");
+  const [subcategoryId, setSubcategoryId] = useState(listing?.subcategory_id ?? "");
+  const [title, setTitle] = useState(listing?.title ?? "");
+  const [summary, setSummary] = useState(listing?.summary ?? "");
+  const [description, setDescription] = useState(listing?.description ?? "");
+  const [price, setPrice] = useState(listing?.price != null ? String(listing.price) : "");
+  const [priceUnit, setPriceUnit] = useState(listing?.price_unit ?? "");
   const [priceOnRequest, setPriceOnRequest] = useState(listing?.price_on_request ?? false);
-  const [files, setFiles] = useState<File[]>([]);
-
-  // Object URLs are created once per selected file and revoked on change so
-  // previews survive re-renders without leaking memory.
-  const previews = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files]);
-  const previewKeys = useMemo(
-    () => files.map((f, i) => `${f.name}-${f.size}-${f.lastModified}-${i}`),
-    [files],
+  const [quantity, setQuantity] = useState(listing?.quantity != null ? String(listing.quantity) : "");
+  const [unit, setUnit] = useState(listing?.unit ?? "");
+  const [itemCondition, setItemCondition] = useState(listing?.item_condition ?? "used");
+  const [specs, setSpecs] = useState<Record<string, SpecValue>>(
+    (listing?.specs as Record<string, SpecValue> | null) ?? {},
   );
-  useEffect(() => () => previews.forEach((url) => URL.revokeObjectURL(url)), [previews]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [addBusinessOpen, setAddBusinessOpen] = useState(false);
 
-  /** Reorder a selected image; index 0 is always the cover. */
-  function move(from: number, to: number) {
-    setFiles((prev) => {
-      if (to < 0 || to >= prev.length) return prev;
-      const next = [...prev];
-      const [item] = next.splice(from, 1);
-      if (item) next.splice(to, 0, item);
-      return next;
-    });
-  }
+  const [location, setLocation] = useState<ListingLocationValue>({
+    cityId: listing?.city_id ?? "",
+    district: listing?.district ?? "",
+    addressText: listing?.address_text ?? "",
+    latitude: listing?.latitude ?? null,
+    longitude: listing?.longitude ?? null,
+    accuracy: listing?.location_accuracy ?? null,
+    source: (listing?.location_source as ListingLocationValue["source"]) ?? null,
+    visibility: (listing?.location_visibility as "approximate" | "exact") ?? "approximate",
+  });
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
-  // The country is never chosen here: it always comes from the account.
   const accountCountry = useAccountCountry();
-  const [countryId, setCountryId] = useState<string>(listing?.country_id ?? "");
-  const [cityId, setCityId] = useState<string>(listing?.city_id ?? "");
   const cities = useQuery({
-    queryKey: ["mkt", "cities", countryId],
-    enabled: !!countryId,
-    queryFn: () => loadCities(countryId),
+    queryKey: ["mkt", "cities", accountCountry.data?.id],
+    enabled: !!accountCountry.data?.id,
+    queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
-  // Every registered user can publish. The identity only decides the name the ad
-  // carries; verification is a trust badge, not a permission.
+
   const { identities, active, select, myProfile } = useActiveIdentity();
-  // The identity of an existing ad is fixed and cannot be switched afterwards.
   const lockedIdentity = !!listing;
   const tenantId = lockedIdentity ? (listing?.tenant_id ?? null) : (active?.tenantId ?? null);
 
-  // Location of the publishing identity: the business for a business ad, the
-  // person for an individual ad. Editing an ad's location never writes back.
-  const businessGeo = useQuery({
-    queryKey: ["mkt", "business-geo", active?.tenantId],
-    enabled: !listing && active?.kind === "business" && !!active.tenantId,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("mkt_business_profiles")
-        .select("country_id, city_id")
-        .eq("tenant_id", active!.tenantId!)
-        .maybeSingle();
-      return data ?? null;
-    },
-  });
-
-  const personGeo = myProfile.data;
-  const identityGeo =
-    active?.kind === "business"
-      ? businessGeo.data
-      : personGeo
-        ? { country_id: personGeo.country_id, city_id: personGeo.city_id }
-        : null;
-
-
-  // The country always mirrors the account; only the city defaults to the
-  // publishing identity's own city on a new ad.
-  const [geoTouched, setGeoTouched] = useState(!!listing);
-  useEffect(() => {
-    if (accountCountry.data) setCountryId(accountCountry.data.id);
-  }, [accountCountry.data]);
-  useEffect(() => {
-    if (geoTouched || cityId) return;
-    if (identityGeo?.city_id) setCityId(identityGeo.city_id);
-  }, [cityId, geoTouched, identityGeo]);
-
-
-  const roots = (categories.data ?? []).filter((c) => !c.parent_id);
-  const subs = (categories.data ?? []).filter((c) => c.parent_id === categoryId);
   const label = (o: { name_ar: string; name_en: string | null }) =>
     locale === "ar" ? o.name_ar : o.name_en || o.name_ar;
-  const isEquipment = typeCode === "equipment_sale" || typeCode === "equipment_rent";
+
+  const rootSlug = useMemo(
+    () => (categories.data ?? []).find((c) => c.id === categoryId)?.slug ?? null,
+    [categories.data, categoryId],
+  );
+  const subSlug = useMemo(
+    () => (categories.data ?? []).find((c) => c.id === subcategoryId)?.slug ?? null,
+    [categories.data, subcategoryId],
+  );
+  const fields = useMemo(
+    () => specFieldsFor({ rootSlug, subSlug, typeCode }),
+    [rootSlug, subSlug, typeCode],
+  );
+  const isEquipment = rootSlug === "equipment";
+
+  // ---------- draft: restore once, then autosave ----------
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    const draft = loadDraft(scope);
+    if (!draft) return;
+    if (draft.typeCode) setTypeCode(draft.typeCode);
+    if (draft.categoryId) setCategoryId(draft.categoryId);
+    if (draft.subcategoryId !== undefined) setSubcategoryId(draft.subcategoryId ?? "");
+    if (draft.title !== undefined) setTitle(draft.title ?? "");
+    if (draft.summary !== undefined) setSummary(draft.summary ?? "");
+    if (draft.description !== undefined) setDescription(draft.description ?? "");
+    if (draft.price !== undefined) setPrice(draft.price ?? "");
+    if (draft.priceUnit !== undefined) setPriceUnit(draft.priceUnit ?? "");
+    if (draft.priceOnRequest !== undefined) setPriceOnRequest(!!draft.priceOnRequest);
+    if (draft.quantity !== undefined) setQuantity(draft.quantity ?? "");
+    if (draft.unit !== undefined) setUnit(draft.unit ?? "");
+    if (draft.itemCondition) setItemCondition(draft.itemCondition);
+    if (draft.specs) setSpecs(draft.specs as Record<string, SpecValue>);
+    if (typeof draft.step === "number") setStep(Math.min(draft.step, STEPS.length - 1));
+    setLocation((prev) => ({
+      ...prev,
+      cityId: draft.cityId || prev.cityId,
+      district: draft.district ?? prev.district,
+      addressText: draft.addressText ?? prev.addressText,
+      visibility: draft.locationVisibility ?? prev.visibility,
+    }));
+    if (draft.identityKey && !listing) select(draft.identityKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scope]);
+
+  const snapshot = useCallback((): Partial<ListingDraft> => {
+    // Coordinates and accuracy stay out of local storage on purpose.
+    return {
+      typeCode,
+      categoryId,
+      subcategoryId,
+      title,
+      summary,
+      description,
+      price,
+      priceUnit,
+      priceOnRequest,
+      quantity,
+      unit,
+      itemCondition,
+      cityId: location.cityId,
+      district: location.district,
+      addressText: location.addressText,
+      locationVisibility: location.visibility,
+      identityKey: active?.key ?? "individual",
+      specs,
+      step,
+    };
+  }, [
+    typeCode,
+    categoryId,
+    subcategoryId,
+    title,
+    summary,
+    description,
+    price,
+    priceUnit,
+    priceOnRequest,
+    quantity,
+    unit,
+    itemCondition,
+    location,
+    active?.key,
+    specs,
+    step,
+  ]);
+
+  useEffect(() => {
+    if (!restored.current) return;
+    saveDraft(scope, snapshot());
+  }, [scope, snapshot]);
+
+  useEffect(() => {
+    if (!dirty) return;
+    const handler = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [dirty]);
+
+  function touch<T>(setter: (value: T) => void) {
+    return (value: T) => {
+      setDirty(true);
+      setter(value);
+    };
+  }
+
+  // The account city seeds a new ad's location.
+  const accountCityId = listing ? null : (myProfile.data?.city_id ?? null);
+
+  // ---------- images ----------
+  const previews = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files]);
+  useEffect(() => () => previews.forEach((url) => URL.revokeObjectURL(url)), [previews]);
 
   async function uploadImages(listingId: string): Promise<string | null> {
     let cover: string | null = null;
@@ -144,48 +235,75 @@ export function ListingForm({ listing }: Props) {
     return cover;
   }
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>, publish: boolean) {
-    event.preventDefault();
-    const fd = new FormData(event.currentTarget);
-    if (!categoryId) {
-      toast.error(t("market.dash.pickCategory"));
+  // ---------- validation per step ----------
+  function stepError(index: number): string | null {
+    if (index === 0) {
+      if (!categoryId || !typeCode) return t("market.form.pathRequired");
+      return null;
+    }
+    if (index === 1) {
+      if (!title.trim()) return t("market.form.titleRequired");
+      if (!isValidTitle(title)) return t("market.form.titleInvalid");
+      return null;
+    }
+    if (index === 2) {
+      if (!location.cityId) return t("market.geo.locationRequired");
+      if (!(cities.data ?? []).some((c) => c.id === location.cityId))
+        return t("market.geo.cityMismatch");
+      return null;
+    }
+    return null;
+  }
+
+  function next() {
+    const error = stepError(step);
+    if (error) {
+      toast.error(error);
       return;
     }
-    if (!cityId) {
-      toast.error(t("market.geo.locationRequired"));
-      return;
-    }
-    // The database enforces this too; catching it here keeps the message clear.
-    if (!(cities.data ?? []).some((c) => c.id === cityId)) {
-      toast.error(t("market.geo.cityMismatch"));
-      return;
+    setStep((prev) => Math.min(prev + 1, STEPS.length - 1));
+  }
+
+  async function submit(publish: boolean) {
+    for (let i = 0; i < STEPS.length; i += 1) {
+      const error = stepError(i);
+      if (error) {
+        toast.error(error);
+        setStep(i);
+        return;
+      }
     }
 
     setBusy(true);
     try {
+      const cityName = (cities.data ?? []).find((c) => c.id === location.cityId)?.name_ar ?? null;
       const payload = {
         type_code: typeCode,
         category_id: categoryId,
-        subcategory_id: (fd.get("subcategory_id") as string) || null,
-        title: String(fd.get("title") ?? "").trim(),
-        summary: (fd.get("summary") as string) || null,
-        description: (fd.get("description") as string) || null,
-        price: priceOnRequest || !fd.get("price") ? null : Number(fd.get("price")),
+        subcategory_id: subcategoryId || null,
+        title: title.trim(),
+        summary: summary.trim() || null,
+        description: description.trim() || null,
+        specs,
+        price: priceOnRequest || !price ? null : Number(price),
         price_on_request: priceOnRequest,
-        price_unit: (fd.get("price_unit") as string) || null,
-        quantity: fd.get("quantity") ? Number(fd.get("quantity")) : null,
-        unit: (fd.get("unit") as string) || null,
-        item_condition: isEquipment ? (fd.get("item_condition") as string) || null : null,
-        deal_kind:
-          typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
-        // The country and its currency come from the account; the server forces
-        // them again so a hand-crafted request cannot pick another country.
-        country_id: countryId || accountCountry.data?.id || null,
-        city_id: cityId || null,
-        currency: accountCountry.data?.currency_code ?? "SAR",
-
-        city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
-        region: (fd.get("region") as string) || null,
+        price_unit: priceUnit || null,
+        quantity: quantity ? Number(quantity) : null,
+        unit: unit || null,
+        item_condition: isEquipment ? itemCondition || null : null,
+        deal_kind: dealKindFor(typeCode),
+        // The server forces the country from the account; sending it only keeps
+        // the insert-time NOT NULL check happy.
+        country_id: accountCountry.data?.id ?? null,
+        city_id: location.cityId,
+        city: cityName,
+        district: location.district.trim() || null,
+        address_text: location.addressText.trim() || null,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        location_accuracy: location.accuracy,
+        location_source: location.source,
+        location_visibility: location.visibility,
         status: publish ? "pending" : "draft",
       };
 
@@ -212,320 +330,419 @@ export function ListingForm({ listing }: Props) {
           await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
       }
 
+      clearDraft(scope);
+      setDirty(false);
       toast.success(publish ? t("market.dash.submitted") : t("market.dash.savedDraft"));
       void navigate({ to: "/dashboard/my-ads" });
-    } catch {
-      toast.error(t("market.actions.failed"));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      if (message.includes("TITLE_")) toast.error(t("market.form.titleInvalid"));
+      else if (message.includes("CITY_COUNTRY_MISMATCH")) toast.error(t("market.geo.cityMismatch"));
+      else if (message.includes("CATEGORY_")) toast.error(t("market.form.pathRequired"));
+      else if (message.includes("BUSINESS_NOT_ALLOWED")) toast.error(t("market.form.businessDenied"));
+      else toast.error(t("market.actions.failed"));
     } finally {
       setBusy(false);
     }
   }
 
-  return (
-    <form className="max-w-2xl space-y-4" onSubmit={(e) => void onSubmit(e, true)}>
-      <fieldset className="space-y-2 rounded-xl border border-border bg-card p-3">
-        <legend className="px-1 text-sm font-semibold text-foreground">
-          {t("market.dash.publishAs")}
-        </legend>
-        {lockedIdentity ? (
-          <p className="text-xs text-muted-foreground">{t("market.dash.identityLocked")}</p>
-        ) : (
-          <>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {identities.map((identity) => (
-                <button
-                  key={identity.key}
-                  type="button"
-                  onClick={() => select(identity.key)}
-                  aria-pressed={identity.key === active?.key}
-                  className={
-                    identity.key === active?.key
-                      ? "flex items-center gap-2 rounded-lg border-2 border-primary bg-primary/5 p-2.5 text-start"
-                      : "flex items-center gap-2 rounded-lg border border-border p-2.5 text-start hover:border-primary/40"
-                  }
-                >
-                  {identity.kind === "business" ? (
-                    <Building2 className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                  ) : (
-                    <User className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                  )}
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium text-foreground">
-                      {identity.name}
-                    </span>
-                    <span className="block text-[11px] text-muted-foreground">
-                      {t(`market.identity.${identity.kind}`)}
-                    </span>
-                  </span>
-                  <VerifiedBadge status={identity.verificationStatus} size="xs" />
-                </button>
-              ))}
-            </div>
-            <p className="text-[11px] text-muted-foreground">{t("market.dash.identityHint")}</p>
-          </>
-        )}
-      </fieldset>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="type_code">{t("market.filters.type")}</Label>
-          <select
-            id="type_code"
-            className={selectClass}
-            value={typeCode}
-            onChange={(e) => setTypeCode(e.target.value)}
-          >
-            {(types.data ?? []).map((tp) => (
-              <option key={tp.code} value={tp.code}>
-                {label(tp)}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="category_id">{t("market.filters.category")}</Label>
-          <select
-            id="category_id"
-            className={selectClass}
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-          >
-            <option value="">{t("market.dash.pickCategory")}</option>
-            {roots.map((c) => (
-              <option key={c.id} value={c.id}>
-                {label(c)}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {subs.length > 0 && (
-        <div className="space-y-1.5">
-          <Label htmlFor="subcategory_id">{t("market.filters.subcategory")}</Label>
-          <select
-            id="subcategory_id"
-            name="subcategory_id"
-            className={selectClass}
-            defaultValue={listing?.subcategory_id ?? ""}
-          >
-            <option value="">{t("market.filters.all")}</option>
-            {subs.map((c) => (
-              <option key={c.id} value={c.id}>
-                {label(c)}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      <div className="space-y-1.5">
-        <Label htmlFor="title">{t("market.dash.listingTitle")}</Label>
-        <Input
-          id="title"
-          name="title"
-          required
-          maxLength={160}
-          defaultValue={listing?.title ?? ""}
-        />
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="summary">{t("market.dash.summary")}</Label>
-        <Input id="summary" name="summary" maxLength={240} defaultValue={listing?.summary ?? ""} />
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="description">{t("market.dash.description")}</Label>
-        <Textarea
-          id="description"
-          name="description"
-          rows={5}
-          defaultValue={listing?.description ?? ""}
-        />
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="price">{t("market.dash.price")}</Label>
-          <Input
-            id="price"
-            name="price"
-            dir="ltr"
-            inputMode="decimal"
-            disabled={priceOnRequest}
-            defaultValue={listing?.price ?? ""}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
-          <Input id="price_unit" name="price_unit" defaultValue={listing?.price_unit ?? ""} />
-        </div>
-        <label className="flex items-end gap-2 pb-2 text-sm text-foreground">
+  function specInput(field: SpecField) {
+    const value = specs[field.key];
+    const set = (next: SpecValue) => {
+      setDirty(true);
+      setSpecs((prev) => ({ ...prev, [field.key]: next }));
+    };
+    if (field.kind === "bool") {
+      return (
+        <label key={field.key} className="flex items-center gap-2 text-sm text-foreground">
           <input
             type="checkbox"
             className="size-4"
-            checked={priceOnRequest}
-            onChange={(e) => setPriceOnRequest(e.target.checked)}
+            checked={value === true}
+            onChange={(e) => set(e.target.checked)}
           />
-          {t("market.priceOnRequest")}
+          {t(field.labelKey)}
         </label>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
+      );
+    }
+    return (
+      <div key={field.key} className="space-y-1.5">
+        <Label htmlFor={`spec_${field.key}`}>
+          {t(field.labelKey)}
+          {field.unitKey ? ` (${t(field.unitKey)})` : ""}
+        </Label>
+        {field.kind === "select" ? (
+          <select
+            id={`spec_${field.key}`}
+            className={selectClass}
+            value={typeof value === "string" ? value : ""}
+            onChange={(e) => set(e.target.value)}
+          >
+            <option value="">{t("market.filters.all")}</option>
+            {(field.options ?? []).map((option) => (
+              <option key={option} value={option}>
+                {t(`market.spec.opt.${option}`)}
+              </option>
+            ))}
+          </select>
+        ) : (
           <Input
-            id="quantity"
-            name="quantity"
-            dir="ltr"
-            inputMode="decimal"
-            defaultValue={listing?.quantity ?? ""}
+            id={`spec_${field.key}`}
+            {...(field.kind === "number" ? { inputMode: "decimal" as const, dir: "ltr" } : {})}
+            value={value == null || typeof value === "boolean" ? "" : String(value)}
+            onChange={(e) => set(e.target.value)}
           />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="unit">{t("market.quote.unit")}</Label>
-          <Input id="unit" name="unit" defaultValue={listing?.unit ?? ""} />
-        </div>
-        {isEquipment && (
-          <div className="space-y-1.5">
-            <Label htmlFor="item_condition">{t("market.dash.condition")}</Label>
-            <select
-              id="item_condition"
-              name="item_condition"
-              className={selectClass}
-              defaultValue={listing?.item_condition ?? "used"}
-            >
-              <option value="new">{t("market.condition.new")}</option>
-              <option value="used">{t("market.condition.used")}</option>
-              <option value="refurbished">{t("market.condition.refurbished")}</option>
-            </select>
-          </div>
         )}
       </div>
+    );
+  }
 
-      <div className="space-y-3">
-        <AccountCitySelect
-          cityId={cityId || null}
-          required
-          onChange={(next) => {
-            setGeoTouched(true);
-            setCountryId(next.countryId ?? "");
-            setCityId(next.cityId ?? "");
-          }}
-        />
+  const stepTitle = t(`market.form.step.${STEPS[step]}`);
 
-        <div className="space-y-1.5">
-          <Label htmlFor="region">{t("market.dash.region")}</Label>
-          <Input id="region" name="region" defaultValue={listing?.region ?? ""} />
-        </div>
-      </div>
+  return (
+    <div className="max-w-2xl space-y-4">
+      <ol className="flex flex-wrap items-center gap-1.5 text-[11px]">
+        {STEPS.map((name, index) => (
+          <li
+            key={name}
+            className={
+              index === step
+                ? "rounded-full bg-primary px-2 py-1 font-medium text-primary-foreground"
+                : index < step
+                  ? "rounded-full bg-secondary px-2 py-1 text-secondary-foreground"
+                  : "rounded-full border border-border px-2 py-1 text-muted-foreground"
+            }
+          >
+            {t(`market.form.step.${name}`)}
+          </li>
+        ))}
+      </ol>
+      <h2 className="text-base font-semibold text-foreground">{stepTitle}</h2>
 
-
-      <div className="space-y-1.5">
-        <Label htmlFor="images">{t("market.dash.images")}</Label>
-        <label className="flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-input px-3 py-3 text-sm text-muted-foreground">
-          <ImagePlus className="size-4" aria-hidden />
-          {t("market.dash.addImages")}
-          <input
-            id="images"
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={(e) => {
-              const picked = Array.from(e.target.files ?? []);
-              // Appending keeps earlier picks instead of replacing them.
-              setFiles((prev) => [...prev, ...picked].slice(0, 8));
-              e.target.value = "";
-            }}
-          />
-        </label>
-        {files.length > 0 && (
-          <>
-            <p className="text-[11px] text-muted-foreground">{t("market.dash.coverHint")}</p>
-            <ul className="flex flex-wrap gap-2">
-              {files.map((f, index) => (
-                <li key={previewKeys[index] ?? `${f.name}-${index}`} className="relative">
-                  <img
-                    src={previews[index]}
-                    alt={f.name}
-                    className="size-20 rounded-lg border border-border object-cover"
-                  />
-                  {index === 0 ? (
-                    <span className="absolute bottom-1 start-1 rounded bg-primary px-1 text-[9px] font-semibold text-primary-foreground">
-                      {t("market.dash.cover")}
-                    </span>
-                  ) : (
+      {step === 0 && (
+        <div className="space-y-4">
+          <fieldset className="space-y-2 rounded-xl border border-border bg-card p-3">
+            <legend className="px-1 text-sm font-semibold text-foreground">
+              {t("market.dash.publishAs")}
+            </legend>
+            {lockedIdentity ? (
+              <p className="text-xs text-muted-foreground">{t("market.dash.identityLocked")}</p>
+            ) : (
+              <>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {identities.map((identity) => (
                     <button
+                      key={identity.key}
                       type="button"
-                      className="absolute bottom-1 start-1 rounded bg-background/90 px-1 text-[9px] font-semibold text-foreground shadow"
-                      onClick={() => move(index, 0)}
+                      onClick={() => {
+                        setDirty(true);
+                        select(identity.key);
+                      }}
+                      aria-pressed={identity.key === active?.key}
+                      className={
+                        identity.key === active?.key
+                          ? "flex items-center gap-2 rounded-lg border-2 border-primary bg-primary/5 p-2.5 text-start"
+                          : "flex items-center gap-2 rounded-lg border border-border p-2.5 text-start hover:border-primary/40"
+                      }
                     >
-                      {t("market.dash.makeCover")}
+                      {identity.kind === "business" ? (
+                        <Building2 className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                      ) : (
+                        <User className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-foreground">
+                          {identity.name || t(`market.identity.${identity.kind}`)}
+                        </span>
+                        <span className="block text-[11px] text-muted-foreground">
+                          {t(`market.identity.${identity.kind}`)}
+                        </span>
+                      </span>
+                      <VerifiedBadge status={identity.verificationStatus} size="xs" />
                     </button>
-                  )}
-                  <span className="absolute bottom-1 end-1 flex gap-0.5">
-                    <button
-                      type="button"
-                      aria-label={t("market.dash.moveEarlier")}
-                      disabled={index === 0}
-                      className="rounded bg-background/90 p-0.5 text-foreground shadow disabled:opacity-40"
-                      onClick={() => move(index, index - 1)}
-                    >
-                      <ChevronUp className="size-3" aria-hidden />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label={t("market.dash.moveLater")}
-                      disabled={index === files.length - 1}
-                      className="rounded bg-background/90 p-0.5 text-foreground shadow disabled:opacity-40"
-                      onClick={() => move(index, index + 1)}
-                    >
-                      <ChevronDown className="size-3" aria-hidden />
-                    </button>
-                  </span>
+                  ))}
                   <button
                     type="button"
-                    aria-label={t("common.delete")}
-                    className="absolute -top-1.5 -end-1.5 rounded-full bg-background p-0.5 text-muted-foreground shadow"
-                    onClick={() => setFiles(files.filter((_, i) => i !== index))}
+                    onClick={() => {
+                      saveDraft(scope, snapshot());
+                      setAddBusinessOpen(true);
+                    }}
+                    className="flex items-center gap-2 rounded-lg border border-dashed border-input p-2.5 text-start text-sm text-muted-foreground hover:border-primary/40"
                   >
-                    <X className="size-3.5" aria-hidden />
+                    <Plus className="size-4 shrink-0" aria-hidden />
+                    {t("market.biz.addBusiness")}
                   </button>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
+                </div>
+                <p className="text-[11px] text-muted-foreground">{t("market.dash.identityHint")}</p>
+              </>
+            )}
+          </fieldset>
 
-      <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={busy}>
-          {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
-          {t("market.dash.submitForReview")}
-        </Button>
+          <CategoryPicker
+            categories={categories.data ?? []}
+            types={types.data ?? []}
+            value={{ categoryId, subcategoryId, typeCode }}
+            onChange={(next) => {
+              setDirty(true);
+              setCategoryId(next.categoryId);
+              setSubcategoryId(next.subcategoryId);
+              setTypeCode(next.typeCode);
+            }}
+          />
+        </div>
+      )}
+
+      {step === 1 && (
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="title">{t("market.dash.listingTitle")}</Label>
+            <Input
+              id="title"
+              value={title}
+              minLength={TITLE_MIN}
+              maxLength={TITLE_MAX}
+              onChange={(e) => touch(setTitle)(e.target.value)}
+            />
+            <p className="text-[11px] text-muted-foreground">
+              {t("market.form.titleHint", { min: TITLE_MIN, max: TITLE_MAX })}
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="summary">{t("market.dash.summary")}</Label>
+            <Input
+              id="summary"
+              value={summary}
+              maxLength={240}
+              onChange={(e) => touch(setSummary)(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="description">{t("market.dash.description")}</Label>
+            <Textarea
+              id="description"
+              rows={5}
+              value={description}
+              onChange={(e) => touch(setDescription)(e.target.value)}
+            />
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="price">
+                {isWantedType(typeCode) ? t("market.form.budget") : t("market.dash.price")}
+              </Label>
+              <Input
+                id="price"
+                dir="ltr"
+                inputMode="decimal"
+                disabled={priceOnRequest}
+                value={price}
+                onChange={(e) => touch(setPrice)(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
+              <Input
+                id="price_unit"
+                value={priceUnit}
+                onChange={(e) => touch(setPriceUnit)(e.target.value)}
+              />
+            </div>
+            <label className="flex items-end gap-2 pb-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4"
+                checked={priceOnRequest}
+                onChange={(e) => touch(setPriceOnRequest)(e.target.checked)}
+              />
+              {t("market.priceOnRequest")}
+            </label>
+          </div>
+
+          {(rootSlug === "building-materials" || rootSlug === "factories" || typeCode === "product") && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
+                <Input
+                  id="quantity"
+                  dir="ltr"
+                  inputMode="decimal"
+                  value={quantity}
+                  onChange={(e) => touch(setQuantity)(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="unit">{t("market.quote.unit")}</Label>
+                <Input id="unit" value={unit} onChange={(e) => touch(setUnit)(e.target.value)} />
+              </div>
+            </div>
+          )}
+
+          {isEquipment && (
+            <div className="space-y-1.5">
+              <Label htmlFor="item_condition">{t("market.dash.condition")}</Label>
+              <select
+                id="item_condition"
+                className={selectClass}
+                value={itemCondition}
+                onChange={(e) => touch(setItemCondition)(e.target.value)}
+              >
+                <option value="new">{t("market.condition.new")}</option>
+                <option value="used">{t("market.condition.used")}</option>
+              </select>
+            </div>
+          )}
+
+          {fields.length > 0 && (
+            <fieldset className="space-y-3 rounded-xl border border-border p-3">
+              <legend className="px-1 text-sm font-semibold text-foreground">
+                {t("market.form.specs")}
+              </legend>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {fields.filter((f) => f.kind !== "bool").map((f) => specInput(f))}
+              </div>
+              <div className="space-y-2">
+                {fields.filter((f) => f.kind === "bool").map((f) => specInput(f))}
+              </div>
+            </fieldset>
+          )}
+
+          <div className="space-y-1.5">
+            <Label htmlFor="images">{t("market.dash.images")}</Label>
+            <label className="flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-input px-3 py-3 text-sm text-muted-foreground">
+              <ImagePlus className="size-4" aria-hidden />
+              {t("market.dash.addImages")}
+              <input
+                id="images"
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  const picked = Array.from(e.target.files ?? []);
+                  setDirty(true);
+                  setFiles((prev) => [...prev, ...picked].slice(0, 8));
+                  e.target.value = "";
+                }}
+              />
+            </label>
+            {files.length > 0 && (
+              <ul className="flex flex-wrap gap-2">
+                {files.map((f, index) => (
+                  <li key={`${f.name}-${f.size}-${index}`} className="relative">
+                    <img
+                      src={previews[index]}
+                      alt={f.name}
+                      className="size-20 rounded-lg border border-border object-cover"
+                    />
+                    <button
+                      type="button"
+                      aria-label={t("market.actions.remove")}
+                      className="absolute top-1 end-1 rounded bg-background/90 p-0.5 text-foreground shadow"
+                      onClick={() => setFiles((prev) => prev.filter((_, i) => i !== index))}
+                    >
+                      <X className="size-3" aria-hidden />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+
+      {step === 2 && (
+        <ListingLocationPicker
+          value={location}
+          accountCityId={accountCityId}
+          onChange={(next) => {
+            setDirty(true);
+            setLocation(next);
+          }}
+        />
+      )}
+
+      {step === 3 && (
+        <dl className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm">
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted-foreground">{t("market.form.categoryPath")}</dt>
+            <dd className="min-w-0 break-words text-foreground">
+              {[
+                (categories.data ?? []).find((c) => c.id === categoryId),
+                (categories.data ?? []).find((c) => c.id === subcategoryId),
+              ]
+                .filter(Boolean)
+                .map((c) => label(c!))
+                .concat(
+                  (types.data ?? []).filter((tp) => tp.code === typeCode).map((tp) => label(tp)),
+                )
+                .join(" ← ")}
+            </dd>
+          </div>
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted-foreground">{t("market.dash.listingTitle")}</dt>
+            <dd className="min-w-0 break-words text-foreground">{title}</dd>
+          </div>
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted-foreground">{t("market.dash.publishAs")}</dt>
+            <dd className="text-foreground">
+              {lockedIdentity
+                ? t("market.dash.identityLocked")
+                : active?.name || t(`market.identity.${active?.kind ?? "individual"}`)}
+            </dd>
+          </div>
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted-foreground">{t("market.geo.city")}</dt>
+            <dd className="text-foreground">
+              {geoName(
+                (cities.data ?? []).find((c) => c.id === location.cityId) ?? undefined,
+                locale,
+              )}
+              {location.district ? ` — ${location.district}` : ""}
+            </dd>
+          </div>
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted-foreground">{t("market.loc.visibility")}</dt>
+            <dd className="text-foreground">{t(`market.loc.${location.visibility}`)}</dd>
+          </div>
+          <p className="pt-1 text-[11px] text-muted-foreground">{t("market.dash.reviewNote")}</p>
+        </dl>
+      )}
+
+      <div className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
+        {step > 0 && (
+          <Button type="button" variant="ghost" onClick={() => setStep((prev) => prev - 1)}>
+            {t("market.form.back")}
+          </Button>
+        )}
+        {step < STEPS.length - 1 ? (
+          <Button type="button" className="min-w-32" onClick={next}>
+            {t("market.form.next")}
+          </Button>
+        ) : (
+          <Button type="button" className="min-w-32" disabled={busy} onClick={() => void submit(true)}>
+            {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
+            {t("market.dash.submitForReview")}
+          </Button>
+        )}
         <Button
           type="button"
           variant="outline"
           disabled={busy}
-          onClick={(e) => {
-            const form = (e.currentTarget as HTMLElement).closest("form") as HTMLFormElement;
-            if (form.reportValidity())
-              void onSubmit(
-                {
-                  preventDefault() {},
-                  currentTarget: form,
-                } as unknown as React.FormEvent<HTMLFormElement>,
-                false,
-              );
-          }}
+          onClick={() => void submit(false)}
+          className="ms-auto"
         >
           {t("market.dash.saveDraft")}
         </Button>
       </div>
-      <p className="text-xs text-muted-foreground">{t("market.dash.reviewNote")}</p>
-    </form>
+
+      <BusinessQuickCreate
+        open={addBusinessOpen}
+        onOpenChange={setAddBusinessOpen}
+        onCreated={(newTenantId) => select(`business:${newTenantId}`)}
+      />
+    </div>
   );
 }
