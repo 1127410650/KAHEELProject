@@ -68,7 +68,7 @@ export function DashboardShell({
   const secondaryActive = SECONDARY_TABS.some((tab) => pathname.startsWith(tab.to));
 
   return (
-    <MarketShell>
+    <MarketShell footer="none">
       <div
         className={
           narrow

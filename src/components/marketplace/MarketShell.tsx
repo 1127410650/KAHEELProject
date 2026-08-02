@@ -262,31 +262,6 @@ export function MarketFooter() {
             </div>
           ))}
         </div>
-
-        {/* Phones: collapsed sections instead of a tall footer. */}
-        <div className="mt-5 divide-y divide-border border-y border-border sm:hidden">
-          {groups.map((group) => (
-            <details key={group.key} className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-semibold text-foreground">
-                {t(`market.footer.${group.key}`)}
-                <span className="text-muted-foreground transition-transform group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <div className="pb-3 ps-1">
-                {group.links.map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className="block py-1.5 text-sm text-muted-foreground hover:text-primary"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </details>
-          ))}
-        </div>
       </div>
       <p className="border-t border-border py-4 text-center text-xs text-muted-foreground">
         {t("market.footer.rights")} · Asia/Riyadh · SAR
@@ -295,15 +270,55 @@ export function MarketFooter() {
   );
 }
 
-export function MarketShell({ children }: { children: React.ReactNode }) {
+/** Legal-only strip for long public content pages; never duplicates the bottom nav. */
+export function MarketCompactFooter() {
+  const { t } = useI18n();
+  return (
+    <footer className="mt-8 border-t border-border">
+      <p className="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-muted-foreground">
+        {t("market.footer.rights")} · Asia/Riyadh · SAR
+      </p>
+    </footer>
+  );
+}
+
+export type FooterVariant = "full" | "compact" | "none";
+
+/** Public marketing surfaces keep the full footer. */
+const FULL_FOOTER_PATHS = ["/", "/marketplace", "/about", "/terms", "/privacy", "/help"];
+/** Long public content pages get the legal strip only. */
+const COMPACT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/"];
+
+/** Single source of truth: app/account/admin routes end right after their content. */
+export function footerVariantForPath(pathname: string): FooterVariant {
+  if (FULL_FOOTER_PATHS.includes(pathname)) return "full";
+  if (COMPACT_FOOTER_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return "compact";
+  return "none";
+}
+
+export function MarketShell({
+  children,
+  footer,
+}: {
+  children: React.ReactNode;
+  /** Override the route-derived decision (app shells pass "none"). */
+  footer?: FooterVariant;
+}) {
   const { dir } = useI18n();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   useMarketSetupGate();
+  const variant = footer ?? footerVariantForPath(pathname);
+
   return (
     <div dir={dir} className="flex min-h-screen flex-col overflow-x-hidden bg-background">
       <MarketHeader />
-      <main className="flex-1 pb-20 lg:pb-0">{children}</main>
-      <MarketFooter />
+      <main className="flex-1">{children}</main>
+      {variant === "full" && <MarketFooter />}
+      {variant === "compact" && <MarketCompactFooter />}
+      {/* Space for the mobile bottom nav so content never hides behind it. */}
+      <div className="h-16 lg:hidden" aria-hidden />
       <MarketBottomNav />
     </div>
   );
 }
+
