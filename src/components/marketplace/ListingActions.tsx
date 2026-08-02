@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Flag, Heart, MessageSquare, ReceiptText } from "lucide-react";
+import { Flag, Heart, MessageSquare, ReceiptText, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
