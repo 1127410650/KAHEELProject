@@ -104,6 +104,9 @@ export interface MktListing {
   deal_kind: string | null;
   city: string | null;
   region: string | null;
+  country_id: string | null;
+  city_id: string | null;
+
   cover_image_url: string | null;
   status: string;
   rejection_reason: string | null;
