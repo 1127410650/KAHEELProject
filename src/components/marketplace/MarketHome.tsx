@@ -188,37 +188,17 @@ export function MarketHome() {
           <ListingSection
             title={t("market.sections.suggested")}
             href="/search"
-            items={suggested.data ?? []}
+            items={suggestedItems}
             loading={suggested.isLoading}
           />
           <ListingSection
             title={t("market.sections.latest")}
             href="/search"
-            items={latest.data ?? []}
+            items={latestItems}
             loading={latest.isLoading}
           />
-          <ListingSection
-            title={t("market.sections.equipmentRent")}
-            href="/search"
-            search={{ type: "equipment_rent" }}
-            items={rentals.data ?? []}
-            loading={rentals.isLoading}
-          />
-          <ListingSection
-            title={t("market.sections.services")}
-            href="/search"
-            search={{ type: "service" }}
-            items={services.data ?? []}
-            loading={services.isLoading}
-          />
-          <ListingSection
-            title={t("market.sections.products")}
-            href="/search"
-            search={{ type: "product" }}
-            items={products.data ?? []}
-            loading={products.isLoading}
-          />
         </>
+
       )}
     </>
   );
