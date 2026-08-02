@@ -525,17 +525,27 @@ function SearchPage() {
       )}
 
       {!draftIsBusiness && (
-        <label className="flex items-center gap-2 text-sm text-foreground">
-          <Checkbox
-            className="size-4 min-h-0 shrink-0"
-            checked={draft.img === "1"}
-            onCheckedChange={(checked) =>
-              setDraft({ ...draft, img: checked === true ? "1" : undefined })
-            }
-          />
-          {t("market.search.withImages")}
-        </label>
+        <div className="flex items-center gap-1">
+          {/* 20px visual box inside a 44px touch target */}
+          <span className="grid size-11 shrink-0 place-items-center">
+            <Checkbox
+              id="f-img"
+              className="size-5 min-h-0 rounded-[4px] border-2"
+              checked={draft.img === "1"}
+              onCheckedChange={(checked) =>
+                setDraft({ ...draft, img: checked === true ? "1" : undefined })
+              }
+            />
+          </span>
+          <label
+            htmlFor="f-img"
+            className="flex min-h-11 flex-1 cursor-pointer select-none items-center text-sm text-foreground"
+          >
+            {t("market.search.withImages")}
+          </label>
+        </div>
       )}
+
 
       <div className="flex gap-2 pt-1">
         <Button className="flex-1" onClick={applyFilters}>
