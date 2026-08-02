@@ -36,6 +36,7 @@ import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
@@ -185,6 +186,11 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AdsSlugRoute = AdsSlugRouteImport.update({
+  id: '/ads/$slug',
+  path: '/ads/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -270,6 +276,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/ads/$slug': typeof AdsSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -308,6 +315,7 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/ads/$slug': typeof AdsSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/ads/$slug': typeof AdsSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -388,6 +397,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/ads/$slug'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/ads/$slug'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
@@ -465,6 +476,7 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/ads/$slug'
     | '/invite/$token'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
@@ -486,6 +498,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  AdsSlugRoute: typeof AdsSlugRoute
   InviteTokenRoute: typeof InviteTokenRoute
 }
 
@@ -680,6 +693,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/ads/$slug': {
+      id: '/ads/$slug'
+      path: '/ads/$slug'
+      fullPath: '/ads/$slug'
+      preLoaderRoute: typeof AdsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -827,6 +847,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  AdsSlugRoute: AdsSlugRoute,
   InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
