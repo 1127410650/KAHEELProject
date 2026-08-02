@@ -430,7 +430,10 @@ export function MarketShell({
       className="flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
     >
       <MarketHeader />
-      <main className="flex-1">{children}</main>
+      {/* Only the marketing surface stretches; content pages end right after
+       * their last section so a short ad leaves no blank strip. */}
+      <main className={variant === "full" ? "flex-1" : ""}>{children}</main>
+
 
       {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}
