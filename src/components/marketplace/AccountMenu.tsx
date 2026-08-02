@@ -1,26 +1,30 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
   Building2,
-  Check,
   ChevronDown,
   Flag,
   Heart,
   LayoutList,
   LogOut,
   MessageSquare,
-  ReceiptText,
   Repeat,
   Settings,
   ShieldAlert,
+  ShieldCheck,
   User,
+  Users,
   X,
 } from "lucide-react";
-
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
+import { useUnreadAlerts, useUnreadMessages } from "@/lib/mkt-unread";
+import { hasUnsavedChanges } from "@/lib/unsaved-changes";
+import { canSeeLink } from "@/lib/routes-map";
+import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -70,27 +74,118 @@ function IdentityAvatar({
   );
 }
 
+/** A stored value that is only a phone number is never shown as a name. */
+function looksLikePhone(value: string): boolean {
+  const compact = value.replace(/[\s\-()]/g, "");
+  return /^\+?\d{6,}$/.test(compact);
+}
+
+type MenuLink = {
+  to: string;
+  label: string;
+  icon: typeof User;
+  badge?: number;
+};
+
 /**
- * The only place in the marketplace where the account appears: it shows the
- * active identity, switches between the personal account and the businesses the
- * user may represent, and links to account management and sign-out. Switching is
- * a display choice only — every write is still authorised server-side.
+ * The one and only account menu: a dropdown on desktop and a bottom sheet on
+ * mobile, both rendered from the same data. It shows the active account, links
+ * to the approved account-selection screen, groups activity and management
+ * links, and signs out. Nothing here grants access — every path stays guarded.
  */
 export function AccountMenu() {
   const { t } = useI18n();
   const { session } = useSession();
-  const { account: active } = useActiveAccount();
+  const { account: active, accounts, clear, can } = useActiveAccount();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
+  const unreadMessages = useUnreadMessages(active);
+  const unreadAlerts = useUnreadAlerts();
+  const admin = useQuery({
+    queryKey: ["mkt", "is-platform-admin", session?.user.id ?? null],
+    enabled: !!session,
+    staleTime: 5 * 60_000,
+    queryFn: isPlatformAdmin,
+  });
+
   if (!session || !active) return null;
 
-  const displayName = active.name || t("market.account.fallbackName");
+  const rawName = (active.name ?? "").trim();
+  const displayName =
+    rawName && !looksLikePhone(rawName) ? rawName : t("market.account.fallbackName");
+
+  const viewer = {
+    signedIn: true,
+    accountKind: active.kind,
+    can,
+    isPlatformAdmin: admin.data === true,
+  };
+  const allowed = (links: MenuLink[]) => links.filter((l) => canSeeLink(l.to, viewer));
 
   async function signOut() {
+    clear();
     await supabase.auth.signOut();
     void navigate({ to: "/" });
   }
+
+  function changeAccount(event: { preventDefault: () => void }) {
+    if (
+      hasUnsavedChanges() &&
+      !window.confirm(t("market.account.unsavedWarning"))
+    ) {
+      event.preventDefault();
+      return;
+    }
+    event.preventDefault();
+    clear();
+    void navigate({ to: "/choose-account" });
+  }
+
+  const messagesBadge = unreadMessages.data ?? 0;
+  const alertsBadge = unreadAlerts.data ?? 0;
+
+  const activityLinks = allowed([
+    { to: "/dashboard/my-ads", label: t("market.dash.myAds"), icon: LayoutList },
+    {
+      to: "/dashboard/messages",
+      label: t("market.dash.messages"),
+      icon: MessageSquare,
+      badge: messagesBadge,
+    },
+    {
+      to: "/dashboard/notifications",
+      label: t("market.dash.notifications"),
+      icon: Bell,
+      badge: alertsBadge,
+    },
+    { to: "/dashboard/favorites", label: t("market.dash.favorites"), icon: Heart },
+    { to: "/dashboard/reports", label: t("market.dash.reports"), icon: Flag },
+    { to: "/dashboard/violations", label: t("market.dash.violations"), icon: ShieldAlert },
+  ]);
+
+  const manageLinks = allowed(
+    active.kind === "business"
+      ? [
+          {
+            to: "/dashboard/business",
+            label: t("market.identity.manageBusiness"),
+            icon: Building2,
+          },
+          { to: "/team", label: t("market.account.members"), icon: Users },
+          { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
+          { to: "/settings", label: t("market.more.settings"), icon: Settings },
+        ]
+      : [
+          { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
+          { to: "/settings", label: t("market.more.settings"), icon: Settings },
+          { to: "/choose-account", label: t("market.biz.addBusiness"), icon: Building2 },
+        ],
+  ).concat(
+    viewer.isPlatformAdmin
+      ? [{ to: "/admin", label: t("market.account.adminPanel"), icon: ShieldCheck }]
+      : [],
+  );
 
   const trigger = (
     <Button
@@ -109,45 +204,25 @@ export function AccountMenu() {
     <div className="flex items-center gap-2 px-2 py-2">
       <IdentityAvatar identity={active} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold text-foreground">{displayName}</span>
+        <span className="block truncate text-sm font-semibold text-foreground">
+          {displayName}
+        </span>
         <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           {t(`market.entry.kind.${active.kind}`)}
-          <VerifiedBadge status={active.verification_status} size="xs" />
+          {active.verification_status === "approved" ? (
+            <VerifiedBadge status={active.verification_status} size="xs" />
+          ) : null}
         </span>
       </span>
-      <Check className="size-4 shrink-0 text-primary" aria-hidden />
     </div>
   );
 
-  type MenuLink = { to: string; label: string; icon: typeof User };
-
-  // Everything that used to sit in per-page tab bars now lives here, in two
-  // groups: what the user does in the market, and what they manage.
-  const activityLinks: MenuLink[] = [
-    { to: "/dashboard/my-ads", label: t("market.dash.myAds"), icon: LayoutList },
-    { to: "/dashboard/requests", label: t("market.dash.requests"), icon: ReceiptText },
-    { to: "/dashboard/messages", label: t("market.dash.messages"), icon: MessageSquare },
-    { to: "/dashboard/favorites", label: t("market.dash.favorites"), icon: Heart },
-    { to: "/dashboard/notifications", label: t("market.dash.notifications"), icon: Bell },
-    { to: "/dashboard/reports", label: t("market.dash.reports"), icon: Flag },
-    { to: "/dashboard/violations", label: t("market.dash.violations"), icon: ShieldAlert },
-  ];
-
-  const manageLinks: MenuLink[] = [
-    { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
-    ...(active.kind === "business"
-      ? [
-          {
-            to: "/dashboard/business",
-            label: t("market.identity.manageBusiness"),
-            icon: Building2,
-          },
-        ]
-      : []),
-    { to: "/choose-account", label: t("market.biz.addBusiness"), icon: Building2 },
-    { to: "/more", label: t("market.more.settings"), icon: Settings },
-  ];
-
+  const Badge = ({ value }: { value?: number }) =>
+    value && value > 0 ? (
+      <span className="ms-auto min-w-5 rounded-full bg-primary px-1.5 text-center text-[10px] font-semibold leading-5 text-primary-foreground">
+        {value > 99 ? "99+" : value}
+      </span>
+    ) : null;
 
   if (isMobile) {
     return (
@@ -156,7 +231,7 @@ export function AccountMenu() {
         <SheetContent
           side="bottom"
           hideClose
-          className="max-h-[85vh] overflow-y-auto rounded-t-2xl"
+          className="max-h-[85vh] overflow-y-auto rounded-t-2xl pb-[max(1rem,env(safe-area-inset-bottom))]"
         >
           <div className="flex items-center justify-between border-b border-border pb-3">
             <SheetTitle className="text-base">{t("market.account.menu")}</SheetTitle>
@@ -169,13 +244,14 @@ export function AccountMenu() {
           <div className="mt-4 rounded-xl border border-border bg-card">{currentBlock}</div>
 
           <div className="mt-2 overflow-hidden rounded-xl border border-border bg-card">
-            <Link
-              to="/choose-account"
-              className="flex items-center gap-2.5 px-3 py-3 text-sm text-foreground hover:bg-accent"
+            <button
+              type="button"
+              onClick={changeAccount}
+              className="flex w-full items-center gap-2.5 px-3 py-3 text-start text-sm text-foreground hover:bg-accent"
             >
               <Repeat className="size-4 shrink-0 text-muted-foreground" aria-hidden />
               {t("market.entry.change")}
-            </Link>
+            </button>
           </div>
 
           <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
@@ -183,14 +259,16 @@ export function AccountMenu() {
           </p>
           <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
             {activityLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
-              >
-                <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                {link.label}
-              </Link>
+              <SheetClose asChild key={link.to}>
+                <Link
+                  to={link.to}
+                  className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
+                >
+                  <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="min-w-0 truncate">{link.label}</span>
+                  <Badge value={link.badge} />
+                </Link>
+              </SheetClose>
             ))}
           </div>
 
@@ -199,14 +277,15 @@ export function AccountMenu() {
           </p>
           <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
             {manageLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
-              >
-                <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                {link.label}
-              </Link>
+              <SheetClose asChild key={link.to}>
+                <Link
+                  to={link.to}
+                  className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
+                >
+                  <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="min-w-0 truncate">{link.label}</span>
+                </Link>
+              </SheetClose>
             ))}
             <button
               type="button"
@@ -217,7 +296,6 @@ export function AccountMenu() {
               {t("nav.signOut")}
             </button>
           </div>
-
         </SheetContent>
       </Sheet>
     );
@@ -229,11 +307,9 @@ export function AccountMenu() {
       <DropdownMenuContent align="end" className="w-72">
         {currentBlock}
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link to="/choose-account" className="gap-2 text-xs">
-            <Repeat className="size-4 text-muted-foreground" aria-hidden />
-            {t("market.entry.change")}
-          </Link>
+        <DropdownMenuItem onSelect={(e) => changeAccount(e)} className="gap-2 text-xs">
+          <Repeat className="size-4 text-muted-foreground" aria-hidden />
+          {t("market.entry.change")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel className="text-xs text-muted-foreground">
@@ -243,7 +319,8 @@ export function AccountMenu() {
           <DropdownMenuItem key={link.to} asChild>
             <Link to={link.to} className="gap-2 text-xs">
               <link.icon className="size-4 text-muted-foreground" aria-hidden />
-              {link.label}
+              <span className="min-w-0 truncate">{link.label}</span>
+              <Badge value={link.badge} />
             </Link>
           </DropdownMenuItem>
         ))}
@@ -255,11 +332,11 @@ export function AccountMenu() {
           <DropdownMenuItem key={link.to} asChild>
             <Link to={link.to} className="gap-2 text-xs">
               <link.icon className="size-4 text-muted-foreground" aria-hidden />
-              {link.label}
+              <span className="min-w-0 truncate">{link.label}</span>
             </Link>
           </DropdownMenuItem>
         ))}
-
+        <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => void signOut()} className="gap-2 text-xs">
           <LogOut className="size-4 text-muted-foreground" aria-hidden />
           {t("nav.signOut")}
