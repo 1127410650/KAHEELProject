@@ -11,25 +11,37 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { I18nProvider } from "@/i18n";
+import { I18nProvider, useI18n } from "@/i18n";
 import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
 
+/**
+ * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
+ * `RootComponent`, so they sit outside its provider tree. Each therefore has to
+ * mount its own `I18nProvider`, otherwise `useI18n` runs with no provider.
+ */
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <I18nProvider>
+      <NotFoundView />
+    </I18nProvider>
+  );
+}
+
+function NotFoundView() {
+  const { t, dir } = useI18n();
+  return (
+    <div dir={dir} className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          الصفحة غير موجودة — The page you're looking for doesn't exist.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("routeError.notFoundTitle")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("routeError.notFoundBody")}</p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            الرئيسية / Home
+            {t("routeError.home")}
           </Link>
         </div>
       </div>
@@ -38,17 +50,26 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+  return (
+    <I18nProvider>
+      <ErrorView error={error} reset={reset} />
+    </I18nProvider>
+  );
+}
+
+function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const { t, dir } = useI18n();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div dir={dir} className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          تعذر تحميل الصفحة — This page didn't load
+          {t("routeError.errorTitle")}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -58,19 +79,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            إعادة المحاولة / Try again
+            {t("routeError.retry")}
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            الرئيسية / Home
+            {t("routeError.home")}
           </a>
         </div>
       </div>
     </div>
   );
 }
+
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({

@@ -126,5 +126,9 @@ const fallbackI18n: I18nContextValue = {
 };
 
 export function useI18n(): I18nContextValue {
-  return useContext(I18nContext) ?? fallbackI18n;
+  const ctx = useContext(I18nContext);
+  if (!ctx && import.meta.env.DEV) {
+    console.warn("[i18n] useI18n rendered outside I18nProvider — using fallback dictionary.");
+  }
+  return ctx ?? fallbackI18n;
 }
