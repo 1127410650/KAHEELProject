@@ -1301,7 +1301,8 @@
     "viewAll": "View all",
     "hero": {
       "title": "Everything your project needs: services, suppliers, equipment and materials",
-      "subtitle": "Browse free without an account; sign in to request a quote or contact a seller."
+      "subtitle": "Browse free without an account; sign in to request a quote or contact a seller.",
+      "openToAll": "Publishing is open to every registered user — as an individual or under a business. The verified badge belongs to the advertiser identity."
     },
     "nav": {
       "marketplace": "Market",
@@ -1311,7 +1312,8 @@
       "myAds": "My listings",
       "myRequests": "My requests",
       "account": "Account",
-      "menu": "Menu"
+      "menu": "Menu",
+      "more": "More"
     },
     "footer": {
       "browse": "Browse",
@@ -1335,7 +1337,8 @@
       "sort": "Sort",
       "reset": "Reset",
       "apply": "Apply",
-      "title": "Filter results"
+      "title": "Filter results",
+      "advertiser": "Advertiser type"
     },
     "sort": {
       "newest": "Newest",
@@ -1414,7 +1417,9 @@
       "signInHint": "Sign in to request a quote or contact the advertiser.",
       "notFound": "This listing is unavailable or was removed",
       "share": "Share",
-      "linkCopied": "Link copied"
+      "linkCopied": "Link copied",
+      "contactPrivate": "The advertiser did not share direct contact details — use the quote request.",
+      "openImage": "View image"
     },
     "business": {
       "joined": "Member since",
@@ -1486,7 +1491,13 @@
       "needsVerification": "Listings can be submitted for review only after the business is verified. You can save a draft.",
       "reports": "My reports",
       "violations": "My violations",
-      "notifications": "Alerts"
+      "notifications": "Alerts",
+      "profile": "Personal profile",
+      "publishAs": "Publish as",
+      "identityHint": "You can publish as yourself or under a business where you hold an active membership with publishing rights.",
+      "identityLocked": "The advertiser identity cannot be changed after a listing is created.",
+      "cover": "Cover",
+      "coverHint": "The first image is used as the listing cover."
     },
     "admin": {
       "title": "Marketplace admin",
@@ -1857,6 +1868,82 @@
       "empty": "No notifications",
       "viewAll": "View all notifications",
       "unread": "Unread"
+    },
+    "endOfResults": "You reached the end of the results",
+    "advertiser": {
+      "individual": "Individual",
+      "business": "Business",
+      "notVerified": "Not verified"
+    },
+    "identity": {
+      "actingAs": "Publishing as",
+      "individual": "Personal account",
+      "business": "Business account",
+      "managePersonal": "Manage personal profile",
+      "manageBusiness": "Manage business profile"
+    },
+    "quick": {
+      "service": "Services",
+      "equipment_rent": "Equipment for rent",
+      "product": "Products",
+      "verified": "Verified only",
+      "business": "Businesses",
+      "individual": "Individuals"
+    },
+    "bottomNav": {
+      "home": "Home",
+      "search": "Search",
+      "add": "Post",
+      "alerts": "Alerts",
+      "more": "More"
+    },
+    "more": {
+      "title": "More",
+      "subtitle": "Every marketplace and account section in one place.",
+      "browse": "Browse",
+      "selling": "Selling",
+      "account": "My account",
+      "safety": "Safety and reports",
+      "settings": "Settings",
+      "links": {
+        "marketplace": "Marketplace",
+        "search": "Search and filters",
+        "verified": "Verified businesses",
+        "addListing": "Add a listing",
+        "myAds": "My listings",
+        "requests": "Quote requests",
+        "business": "Business profile",
+        "profile": "Personal profile",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "favorites": "Favourites",
+        "reports": "My reports",
+        "violations": "My violations",
+        "language": "Language"
+      }
+    },
+    "person": {
+      "notFound": "Advertiser not found",
+      "listings": "Listings by this advertiser",
+      "username": "Public handle",
+      "usernameRule": "Lowercase letters, numbers and dashes, 3 to 32 characters.",
+      "displayName": "Display name",
+      "headline": "Short headline",
+      "avatar": "Profile photo",
+      "publishProfile": "Show my profile in the marketplace",
+      "privacyHint": "Contact details are hidden by default and only shown to signed-in users when you choose to reveal them.",
+      "showField": "Show to signed-in users",
+      "saved": "Profile saved",
+      "viewPublic": "View public profile",
+      "badgeState": "Verification:",
+      "notVerifiedHint": "Verification is optional and never blocks publishing."
+    },
+    "form": {
+      "region": "Region",
+      "phone": "Mobile number",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "quantity": "Quantity"
     }
   }
 }
