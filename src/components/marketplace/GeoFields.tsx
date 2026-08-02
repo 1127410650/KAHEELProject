@@ -1,13 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
-import { geoName, loadCities, loadCountries, suggestCity } from "@/lib/mkt-geo";
+import {
+  geoName,
+  loadCities,
+  loadCountries,
+  suggestCity,
+  useAccountCountry,
+} from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 
 const selectClass =
   "h-10 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground disabled:opacity-50";
