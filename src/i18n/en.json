@@ -1283,5 +1283,152 @@
     "viewAllCustody": "View all custody",
     "loadError": "Couldn't load data",
     "retry": "Retry"
+  },
+  "market": {
+    "brand": "Tahqaq Market",
+    "tagline": "Marketplace for services, contracting and suppliers",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "verified": "Verified",
+    "categories": "Categories",
+    "addListing": "Post a listing",
+    "searchPlaceholder": "Search services, products or equipment…",
+    "noImage": "No image",
+    "noResults": "No matching results",
+    "emptySection": "No listings in this section yet",
+    "priceOnRequest": "Price on request",
+    "resultsCount": "results",
+    "viewAll": "View all",
+    "hero": {
+      "title": "Everything your project needs: services, suppliers, equipment and materials",
+      "subtitle": "Browse free without an account; sign in to request a quote or contact a seller."
+    },
+    "nav": {
+      "marketplace": "Market",
+      "search": "Search",
+      "verified": "Verified businesses",
+      "requests": "Quote requests",
+      "myAds": "My listings",
+      "myRequests": "My requests",
+      "account": "Account",
+      "menu": "Menu"
+    },
+    "footer": {
+      "browse": "Browse",
+      "business": "For businesses",
+      "account": "Account",
+      "rights": "All rights reserved"
+    },
+    "filters": {
+      "all": "All",
+      "category": "Category",
+      "subcategory": "Subcategory",
+      "type": "Listing type",
+      "city": "City",
+      "allCities": "All cities",
+      "minPrice": "Min price",
+      "maxPrice": "Max price",
+      "verifiedOnly": "Verified only",
+      "deal": "Deal type",
+      "sale": "Sale",
+      "rent": "Rent",
+      "sort": "Sort",
+      "reset": "Reset",
+      "apply": "Apply",
+      "title": "Filter results"
+    },
+    "sort": {
+      "newest": "Newest",
+      "priceAsc": "Price: low to high",
+      "priceDesc": "Price: high to low",
+      "views": "Most viewed"
+    },
+    "view": {
+      "grid": "Grid",
+      "list": "List"
+    },
+    "condition": {
+      "new": "New",
+      "used": "Used",
+      "refurbished": "Refurbished"
+    },
+    "sections": {
+      "latest": "Latest listings",
+      "verifiedBusinesses": "Verified businesses",
+      "services": "Services & contracting",
+      "products": "Products & building materials",
+      "equipmentSale": "Equipment for sale",
+      "equipmentRent": "Equipment for rent",
+      "needs": "Supplier & contractor wanted"
+    },
+    "actions": {
+      "requestQuote": "Request a quote",
+      "contact": "Contact",
+      "save": "Save",
+      "saved": "Saved",
+      "report": "Report listing",
+      "sendQuote": "Send request",
+      "sendMessage": "Send message",
+      "messagePlaceholder": "Write your message to the advertiser…",
+      "messageSent": "Message sent",
+      "quoteSent": "Quote request sent",
+      "reportSent": "Report submitted",
+      "savedToFavorites": "Added to favorites",
+      "removedFromFavorites": "Removed from favorites",
+      "ownListing": "This is your own listing",
+      "failed": "Could not complete the action"
+    },
+    "quote": {
+      "title": "Request title",
+      "description": "Describe what you need",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "city": "City",
+      "neededDate": "Needed by",
+      "locationNote": "Location note",
+      "budget": "Estimated budget",
+      "phone": "Contact phone",
+      "contactPreference": "Preferred contact",
+      "prefInApp": "In app",
+      "prefPhone": "Phone",
+      "prefWhatsapp": "WhatsApp",
+      "prefEmail": "Email"
+    },
+    "report": {
+      "reason": "Reason",
+      "spam": "Spam or duplicate",
+      "fraud": "Fraud or misleading",
+      "wrongCategory": "Wrong category",
+      "prohibited": "Prohibited content",
+      "other": "Other",
+      "note": "Extra details (optional)",
+      "submit": "Submit report"
+    },
+    "ad": {
+      "details": "Listing details",
+      "specs": "Specifications",
+      "similar": "Similar listings",
+      "advertiser": "Advertiser",
+      "contactHidden": "Contact details appear after signing in",
+      "individualAdvertiser": "Individual advertiser",
+      "signInHint": "Sign in to request a quote or contact the advertiser.",
+      "notFound": "This listing is unavailable or was removed",
+      "share": "Share",
+      "linkCopied": "Link copied"
+    },
+    "business": {
+      "joined": "Member since",
+      "about": "About",
+      "listings": "Business listings",
+      "notFound": "Business not found",
+      "contact": "Contact details",
+      "noListings": "No published listings",
+      "services": "Areas of work"
+    },
+    "category": {
+      "notFound": "Category not found",
+      "subcategories": "Subcategories",
+      "browse": "Browse category"
+    }
   }
 }

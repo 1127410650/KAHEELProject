@@ -1283,5 +1283,152 @@
     "viewAllCustody": "عرض جميع العهد",
     "loadError": "تعذّر تحميل البيانات",
     "retry": "إعادة المحاولة"
+  },
+  "market": {
+    "brand": "سوق تحقّق",
+    "tagline": "سوق الخدمات والمقاولات والموردين",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "verified": "موثّق",
+    "categories": "التصنيفات",
+    "addListing": "أضف إعلانًا",
+    "searchPlaceholder": "ابحث عن خدمة أو منتج أو معدة…",
+    "noImage": "لا توجد صورة",
+    "noResults": "لا توجد نتائج مطابقة",
+    "emptySection": "لا توجد إعلانات في هذا القسم بعد",
+    "priceOnRequest": "السعر على الطلب",
+    "resultsCount": "نتيجة",
+    "viewAll": "عرض الكل",
+    "hero": {
+      "title": "كل ما يحتاجه مشروعك: خدمات، موردون، معدات ومواد بناء",
+      "subtitle": "تصفّح مجانًا بدون تسجيل، وسجّل الدخول عند طلب عرض سعر أو التواصل."
+    },
+    "nav": {
+      "marketplace": "السوق",
+      "search": "البحث",
+      "verified": "منشآت موثّقة",
+      "requests": "طلبات عروض السعر",
+      "myAds": "إعلاناتي",
+      "myRequests": "طلباتي",
+      "account": "حسابي",
+      "menu": "القائمة"
+    },
+    "footer": {
+      "browse": "تصفّح",
+      "business": "للمنشآت",
+      "account": "الحساب",
+      "rights": "جميع الحقوق محفوظة"
+    },
+    "filters": {
+      "all": "الكل",
+      "category": "التصنيف",
+      "subcategory": "التصنيف الفرعي",
+      "type": "نوع الإعلان",
+      "city": "المدينة",
+      "allCities": "كل المدن",
+      "minPrice": "أدنى سعر",
+      "maxPrice": "أعلى سعر",
+      "verifiedOnly": "الموثّقة فقط",
+      "deal": "نوع العرض",
+      "sale": "بيع",
+      "rent": "تأجير",
+      "sort": "الترتيب",
+      "reset": "إعادة تعيين",
+      "apply": "تطبيق",
+      "title": "تصفية النتائج"
+    },
+    "sort": {
+      "newest": "الأحدث",
+      "priceAsc": "السعر: الأقل أولًا",
+      "priceDesc": "السعر: الأعلى أولًا",
+      "views": "الأكثر مشاهدة"
+    },
+    "view": {
+      "grid": "شبكة",
+      "list": "قائمة"
+    },
+    "condition": {
+      "new": "جديد",
+      "used": "مستعمل",
+      "refurbished": "مُجدَّد"
+    },
+    "sections": {
+      "latest": "أحدث الإعلانات",
+      "verifiedBusinesses": "منشآت موثّقة",
+      "services": "خدمات ومقاولات",
+      "products": "منتجات ومواد بناء",
+      "equipmentSale": "معدات للبيع",
+      "equipmentRent": "معدات للتأجير",
+      "needs": "مطلوب مورد أو مقاول"
+    },
+    "actions": {
+      "requestQuote": "طلب عرض سعر",
+      "contact": "تواصل",
+      "save": "إضافة للمفضلة",
+      "saved": "في المفضلة",
+      "report": "إبلاغ عن الإعلان",
+      "sendQuote": "إرسال الطلب",
+      "sendMessage": "إرسال الرسالة",
+      "messagePlaceholder": "اكتب رسالتك للمعلن…",
+      "messageSent": "تم إرسال رسالتك",
+      "quoteSent": "تم إرسال طلب عرض السعر",
+      "reportSent": "تم إرسال الإبلاغ",
+      "savedToFavorites": "أُضيف إلى المفضلة",
+      "removedFromFavorites": "أُزيل من المفضلة",
+      "ownListing": "هذا إعلانك",
+      "failed": "تعذّر إكمال العملية"
+    },
+    "quote": {
+      "title": "عنوان الطلب",
+      "description": "وصف الاحتياج",
+      "quantity": "الكمية",
+      "unit": "الوحدة",
+      "city": "المدينة",
+      "neededDate": "تاريخ الحاجة",
+      "locationNote": "ملاحظة الموقع",
+      "budget": "الميزانية التقديرية",
+      "phone": "رقم للتواصل",
+      "contactPreference": "طريقة التواصل المفضلة",
+      "prefInApp": "داخل التطبيق",
+      "prefPhone": "هاتف",
+      "prefWhatsapp": "واتساب",
+      "prefEmail": "بريد إلكتروني"
+    },
+    "report": {
+      "reason": "سبب الإبلاغ",
+      "spam": "إعلان مكرر أو مزعج",
+      "fraud": "احتيال أو تضليل",
+      "wrongCategory": "تصنيف غير صحيح",
+      "prohibited": "محتوى محظور",
+      "other": "أخرى",
+      "note": "تفاصيل إضافية (اختياري)",
+      "submit": "إرسال الإبلاغ"
+    },
+    "ad": {
+      "details": "تفاصيل الإعلان",
+      "specs": "المواصفات",
+      "similar": "إعلانات مشابهة",
+      "advertiser": "المعلن",
+      "contactHidden": "بيانات التواصل تظهر بعد تسجيل الدخول",
+      "individualAdvertiser": "معلن فرد",
+      "signInHint": "سجّل الدخول لطلب عرض سعر أو التواصل مع المعلن.",
+      "notFound": "الإعلان غير متوفر أو تم إزالته",
+      "share": "مشاركة",
+      "linkCopied": "تم نسخ الرابط"
+    },
+    "business": {
+      "joined": "عضو منذ",
+      "about": "نبذة",
+      "listings": "إعلانات المنشأة",
+      "notFound": "المنشأة غير متوفرة",
+      "contact": "بيانات التواصل",
+      "noListings": "لا توجد إعلانات منشورة",
+      "services": "مجالات العمل"
+    },
+    "category": {
+      "notFound": "التصنيف غير متوفر",
+      "subcategories": "التصنيفات الفرعية",
+      "browse": "تصفّح التصنيف"
+    }
   }
 }
