@@ -86,6 +86,7 @@ export interface MktListing {
   slug: string | null;
   owner_user_id: string;
   tenant_id: string | null;
+  advertiser_type?: "individual" | "business";
   type_code: string;
   category_id: string;
   subcategory_id: string | null;
@@ -216,4 +217,23 @@ export function priceLabel(
   if (listing.price_on_request || listing.price === null) return onRequestText;
   const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(listing.price);
   return `${amount} ${listing.currency}${listing.price_unit ? ` / ${listing.price_unit}` : ""}`;
+}
+
+/** Short "x days ago" style label used across marketplace cards. */
+export function relativeTime(iso: string | null, locale: "ar" | "en"): string {
+  if (!iso) return "—";
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.round(diff / 60000);
+  const fmt = new Intl.RelativeTimeFormat(locale === "ar" ? "ar-SA" : "en-GB", {
+    numeric: "auto",
+    style: "short",
+  });
+  if (mins < 60) return fmt.format(-Math.max(mins, 0), "minute");
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return fmt.format(-hours, "hour");
+  const days = Math.round(hours / 24);
+  if (days < 30) return fmt.format(-days, "day");
+  const months = Math.round(days / 30);
+  if (months < 12) return fmt.format(-months, "month");
+  return fmt.format(-Math.round(months / 12), "year");
 }
