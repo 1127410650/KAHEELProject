@@ -557,7 +557,7 @@ function AdPage() {
             {listing.title}
           </h1>
           <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
-            {priceLabel(listing, t("market.priceOnRequest"))}
+            {priceLabel(listing, t("market.priceOnRequest"), locale)}
           </p>
 
           {categoryPath && (
@@ -651,11 +651,6 @@ function AdPage() {
           ) : (
             <div className="rounded-xl border border-border bg-card p-4">
               <ListingActions listing={listing} pendingAction={action} />
-              {!session && (
-                <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-                  <Link to="/auth">{t("market.ad.signInToContact")}</Link>
-                </Button>
-              )}
             </div>
           )}
           <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />
