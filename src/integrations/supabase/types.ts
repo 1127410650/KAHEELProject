@@ -6718,6 +6718,7 @@ export type Database = {
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
       mkt_is_super_admin: { Args: never; Returns: boolean }
+      mkt_is_system_action: { Args: never; Returns: boolean }
       mkt_is_verified_business: {
         Args: { _tenant_id: string }
         Returns: boolean
