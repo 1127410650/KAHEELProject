@@ -53,6 +53,7 @@ export interface ListingCardData extends MktListing {
   imageUrl?: string | null | undefined;
   typeLabel?: string | undefined;
   categoryLabel?: string | undefined;
+  subcategoryLabel?: string | undefined;
 }
 
 /** Ids of the signed-in visitor's favourites — one shared query for all cards. */
@@ -203,7 +204,7 @@ export function ListingCard({
   const { t, locale } = useI18n();
   const price = priceLabel(listing, t("market.priceOnRequest"));
   const horizontal = view === "list" || view === "row";
-  const tag = listing.categoryLabel ?? listing.typeLabel;
+  const tag = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel;
 
   const meta = (
     <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-1.5 text-[11px] text-muted-foreground">
