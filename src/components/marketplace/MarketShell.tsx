@@ -126,74 +126,178 @@ function useMarketSetupGate() {
   }, [session, status.data?.needsSetup, pathname, navigate]);
 }
 
-/** Compact mobile navigation: the five destinations that matter on a phone. */
+/**
+ * Canonical destinations for the mobile bar, taken from the route map so no
+ * legacy path (`/notifications`, `/marketplace`, `/login`) can creep back in.
+ */
+const BOTTOM_NAV_PATHS = {
+  home: "/",
+  messages: "/dashboard/messages",
+  add: "/dashboard/ads/new",
+  alerts: "/dashboard/notifications",
+  more: "/more",
+} as const;
+
+if (import.meta.env.DEV) {
+  for (const path of Object.values(BOTTOM_NAV_PATHS)) {
+    if (!routeRuleFor(path)) console.warn("[bottom nav] unregistered path", path);
+  }
+}
+
+/** Exactly one item is active: the longest matching prefix wins. */
+function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
+  if (pathname.startsWith("/dashboard/ads")) return "add";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.messages)) return "messages";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.alerts)) return "alerts";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.more)) return "more";
+  return "home";
+}
+
+/**
+ * The single mobile navigation for the whole app. Signed-in users get the five
+ * destinations; guests get the three public ones (private surfaces are never
+ * advertised) and their "post" tap keeps the return path through sign-in.
+ */
 export function MarketBottomNav() {
   const { t } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { session } = useSession();
+  const { account } = useActiveAccount();
 
-  // Unread messages addressed to the signed-in user, shown as a small badge.
-  const unread = useQuery({
-    queryKey: ["mkt", "unread-messages", session?.user.id ?? null],
-    enabled: !!session,
+  // Unread messages inside the active account's conversations only.
+  const unreadMessages = useQuery({
+    queryKey: ["mkt", "unread-messages", account?.account_key ?? null],
+    enabled: !!session && !!account,
     refetchInterval: 60_000,
     queryFn: async () => {
+      let convQuery = supabase.from("mkt_conversations").select("id");
+      convQuery =
+        account!.kind === "business"
+          ? convQuery.eq("seller_tenant_id", account!.tenant_id!)
+          : convQuery.or(
+              `buyer_user_id.eq.${session!.user.id},and(seller_user_id.eq.${session!.user.id},seller_tenant_id.is.null)`,
+            );
+      const { data: convs } = await convQuery;
+      const ids = (convs ?? []).map((c) => c.id);
+      if (ids.length === 0) return 0;
       const { count } = await supabase
         .from("mkt_messages")
         .select("id", { count: "exact", head: true })
+        .in("conversation_id", ids)
         .is("read_at", null)
         .neq("sender_user_id", session!.user.id);
       return count ?? 0;
     },
   });
 
-  const items = [
-    { to: "/", key: "home", icon: Home },
-    { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
-    { to: "/dashboard/ads/new", key: "add", icon: Plus },
-    { to: "/dashboard/notifications", key: "alerts", icon: Bell },
-    { to: "/more", key: "more", icon: Grid2x2 },
-  ] as const;
+  // Marketplace notifications (mkt_notifications) — never the internal
+  // `/notifications` operational feed.
+  const unreadAlerts = useQuery({
+    queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
+    enabled: !!session,
+    refetchInterval: 60_000,
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("mkt_notifications")
+        .select("id", { count: "exact", head: true })
+        .is("read_at", null);
+      return count ?? 0;
+    },
+  });
+
+  const signInHref = (next: string) => `/auth?next=${encodeURIComponent(next)}`;
+
+  const items = session
+    ? ([
+        { key: "home", to: BOTTOM_NAV_PATHS.home, icon: Home, badge: 0 },
+        {
+          key: "messages",
+          to: BOTTOM_NAV_PATHS.messages,
+          icon: MessageSquare,
+          badge: unreadMessages.data ?? 0,
+        },
+        { key: "add", to: BOTTOM_NAV_PATHS.add, icon: Plus, badge: 0 },
+        {
+          key: "alerts",
+          to: BOTTOM_NAV_PATHS.alerts,
+          icon: Bell,
+          badge: unreadAlerts.data ?? 0,
+        },
+        { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
+      ] as const)
+    : ([
+        { key: "home", to: BOTTOM_NAV_PATHS.home, icon: Home, badge: 0 },
+        { key: "add", to: signInHref(BOTTOM_NAV_PATHS.add), icon: Plus, badge: 0 },
+        { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
+      ] as const);
+
+  const activeKey = activeBottomKey(pathname);
 
   return (
     <nav
       aria-label={t("market.nav.menu")}
+      data-testid="mkt-bottom-nav"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
-          const active = pathname === item.to;
           const center = item.key === "add";
-          const badge = item.key === "messages" ? (unread.data ?? 0) : 0;
+          const active = activeKey === item.key;
+          const label = t(`market.bottomNav.${item.key}`);
+          const inner = (
+            <>
+              <span
+                className={
+                  center
+                    ? "relative grid size-9 place-items-center rounded-full bg-primary text-primary-foreground shadow-sm"
+                    : active
+                      ? "relative grid size-8 place-items-center text-primary"
+                      : "relative grid size-8 place-items-center text-muted-foreground"
+                }
+              >
+                <item.icon className="size-4" aria-hidden />
+                {item.badge > 0 && (
+                  <span
+                    data-testid={`mkt-bottom-badge-${item.key}`}
+                    className="num absolute -top-0.5 end-0 min-w-4 rounded-full bg-destructive px-1 text-[9px] font-semibold leading-4 text-destructive-foreground"
+                    dir="ltr"
+                  >
+                    {item.badge > 99 ? "99+" : item.badge}
+                  </span>
+                )}
+              </span>
+              <span
+                className={
+                  active && !center ? "truncate text-primary" : "truncate text-muted-foreground"
+                }
+              >
+                {label}
+              </span>
+            </>
+          );
+          const className =
+            "flex flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium";
           return (
             <li key={item.key} className="flex-1">
-              <Link
-                to={item.to}
-                className="flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium"
-              >
-                <span
-                  className={
-                    center
-                      ? "relative grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"
-                      : active
-                        ? "relative grid size-8 place-items-center text-primary"
-                        : "relative grid size-8 place-items-center text-muted-foreground"
-                  }
+              {item.to.startsWith("/auth") ? (
+                <a
+                  href={item.to}
+                  aria-label={label}
+                  aria-current={active ? "page" : undefined}
+                  className={className}
                 >
-                  <item.icon className="size-4" aria-hidden />
-                  {badge > 0 && (
-                    <span
-                      className="absolute -top-0.5 end-0 min-w-4 rounded-full bg-destructive px-1 text-[9px] font-semibold leading-4 text-destructive-foreground"
-                      dir="ltr"
-                    >
-                      {badge > 99 ? "99+" : badge}
-                    </span>
-                  )}
-                </span>
-                <span className={active && !center ? "text-primary" : "text-muted-foreground"}>
-                  {t(`market.bottomNav.${item.key}`)}
-                </span>
-              </Link>
+                  {inner}
+                </a>
+              ) : (
+                <Link
+                  to={item.to}
+                  aria-label={label}
+                  aria-current={active ? "page" : undefined}
+                  className={className}
+                >
+                  {inner}
+                </Link>
+              )}
             </li>
           );
         })}
@@ -201,6 +305,7 @@ export function MarketBottomNav() {
     </nav>
   );
 }
+
 
 interface FooterGroup {
   key: string;
