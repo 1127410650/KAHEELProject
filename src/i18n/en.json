@@ -2030,7 +2030,11 @@
         "reports": "My reports",
         "violations": "My violations",
         "language": "Language"
-      }
+      },
+      "app": "App",
+      "accessTitle": "Access",
+      "usingAccount": "You are using: {name}",
+      "pagesSoon": "About, Help center, Contact, Terms and Privacy pages will be listed here once they exist."
     },
     "person": {
       "notFound": "Advertiser not found",
