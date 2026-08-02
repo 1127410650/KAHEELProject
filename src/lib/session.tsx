@@ -66,7 +66,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     ]);
     if (profileRow) {
       setProfile(profileRow as unknown as Profile);
-      setLocale((profileRow as unknown as Profile).locale ?? "ar");
+      // The profile locale is only a default: never override an explicit choice
+      // the user already made in this browser.
+      const chosen =
+        typeof window !== "undefined" ? window.localStorage.getItem("tahqaq.locale") : null;
+      if (chosen !== "ar" && chosen !== "en") {
+        setLocale((profileRow as unknown as Profile).locale ?? "ar");
+      }
     }
     const roles = (roleRows ?? []).map((r) => r.role as AppRole);
     setRole(roles.includes("accountant") ? "accountant" : (roles[0] ?? null));

@@ -4,7 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -59,17 +59,31 @@ function translate(locale: Locale, key: string, vars?: Vars): string {
   );
 }
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("ar");
+function readStoredLocale(): Locale {
+  if (typeof window === "undefined") return "ar";
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+  return stored === "en" ? "en" : "ar";
+}
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "ar" || stored === "en") setLocaleState(stored);
-  }, []);
+const localeListeners = new Set<() => void>();
+
+function subscribeLocale(onChange: () => void) {
+  localeListeners.add(onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    localeListeners.delete(onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  // Read from localStorage through an external store so the persisted choice is
+  // always reflected after hydration, independent of mount/remount timing.
+  const locale = useSyncExternalStore(subscribeLocale, readStoredLocale, () => "ar" as Locale);
 
   const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
     window.localStorage.setItem(STORAGE_KEY, next);
+    for (const listener of localeListeners) listener();
   }, []);
 
   const dir = locale === "ar" ? "rtl" : "ltr";
