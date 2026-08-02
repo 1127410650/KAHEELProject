@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { ClientOnly } from "@tanstack/react-router";
-import { Building2, CalendarDays, Eye, MapPin, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Building2, CalendarDays, Eye, MapPin, Navigation, User } from "lucide-react";
+
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
