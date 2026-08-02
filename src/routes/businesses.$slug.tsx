@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
+import { loadGeoLabel } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { BUSINESS_COLUMNS, LISTING_COLUMNS, type MktBusiness, type MktListing } from "@/lib/mkt";
 import { decorateListings } from "@/lib/mkt-queries";
@@ -45,6 +46,12 @@ function BusinessPage() {
         .maybeSingle();
       return (data as MktBusiness | null) ?? null;
     },
+  });
+
+  const geoLabel = useQuery({
+    queryKey: ["mkt", "geo-label", business.data?.country_id, business.data?.city_id, locale],
+    enabled: !!business.data,
+    queryFn: () => loadGeoLabel(business.data!.country_id, business.data!.city_id, locale),
   });
 
   const listings = useQuery({
@@ -99,10 +106,10 @@ function BusinessPage() {
               <h1 className="text-xl font-bold text-foreground sm:text-2xl">{name}</h1>
               <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                 <VerifiedBadge status={biz.verification_status} />
-                {biz.city && (
+                {(geoLabel.data ?? biz.city) && (
                   <span className="inline-flex items-center gap-1">
                     <MapPin className="size-3.5" aria-hidden />
-                    {biz.city}
+                    {geoLabel.data ?? biz.city}
                   </span>
                 )}
                 <span>

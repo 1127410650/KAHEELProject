@@ -6,10 +6,11 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
+import { geoName, loadCities, loadCountries } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { useWorkspaces } from "@/hooks/use-workspace";
 import { logAudit } from "@/lib/audit";
-import { BUSINESS_COLUMNS, MKT_BUCKET, SA_CITIES, resolveMedia, type MktBusiness } from "@/lib/mkt";
+import { BUSINESS_COLUMNS, MKT_BUCKET, resolveMedia, type MktBusiness } from "@/lib/mkt";
 import { loadCategories } from "@/lib/mkt-queries";
 import {
   loadVerificationEvents,
@@ -104,6 +105,14 @@ function BusinessDashboardPage() {
     [profile.data, draft],
   );
 
+  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const cities = useQuery({
+    queryKey: ["mkt", "cities", view.country_id],
+    enabled: !!view.country_id,
+    queryFn: () => loadCities(view.country_id),
+  });
+
+
   function set<K extends keyof MktBusiness>(key: K, value: MktBusiness[K]) {
     setDraft((prev) => ({ ...(prev ?? {}), [key]: value }));
   }
@@ -135,7 +144,9 @@ function BusinessDashboardPage() {
         display_name_en: view.display_name_en ?? null,
         headline: view.headline ?? null,
         about: view.about ?? null,
-        city: view.city ?? null,
+        country_id: view.country_id ?? null,
+        city_id: view.city_id ?? null,
+        city: (cities.data ?? []).find((c) => c.id === view.city_id)?.name_ar ?? null,
         region: view.region ?? null,
         categories: view.categories ?? [],
         public_phone: view.public_phone ?? null,
@@ -410,17 +421,37 @@ function BusinessDashboardPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="city">{t("market.filters.city")}</Label>
+              <Label htmlFor="country_id">{t("market.geo.country")}</Label>
               <select
-                id="city"
+                id="country_id"
                 className={selectClass}
-                value={view.city ?? ""}
-                onChange={(e) => set("city", e.target.value)}
+                value={view.country_id ?? ""}
+                onChange={(e) => {
+                  set("country_id", e.target.value);
+                  set("city_id", null);
+                }}
               >
-                <option value="">{t("market.filters.allCities")}</option>
-                {SA_CITIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+                <option value="">{t("market.geo.pick")}</option>
+                {(countries.data ?? []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {geoName(c, locale)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="city_id">{t("market.filters.city")}</Label>
+              <select
+                id="city_id"
+                className={selectClass}
+                value={view.city_id ?? ""}
+                onChange={(e) => set("city_id", e.target.value)}
+                disabled={!view.country_id}
+              >
+                <option value="">{t("market.geo.allCities")}</option>
+                {(cities.data ?? []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {geoName(c, locale)}
                   </option>
                 ))}
               </select>
