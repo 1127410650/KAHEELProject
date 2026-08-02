@@ -24,9 +24,12 @@ interface Props {
   listing: MktListing;
   /** Action requested through ?action= after signing in. */
   pendingAction?: string | undefined;
+  /** "quick" = the icon row above the gallery; "panel" = contact buttons. */
+  variant?: "panel" | "quick";
 }
 
-export function ListingActions({ listing, pendingAction }: Props) {
+export function ListingActions({ listing, pendingAction, variant = "panel" }: Props) {
+
   const { t } = useI18n();
   const { session } = useSession();
   const navigate = useNavigate();
