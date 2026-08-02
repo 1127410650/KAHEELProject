@@ -5968,6 +5968,23 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
+      mkt_enforce_listing: {
+        Args: {
+          _action: string
+          _days?: number
+          _reason?: string
+          _report_id: string
+        }
+        Returns: undefined
+      }
+      mkt_has_restriction: {
+        Args: {
+          _restrictions: string[]
+          _subject_id: string
+          _subject_type: string
+        }
+        Returns: boolean
+      }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
       mkt_is_super_admin: { Args: never; Returns: boolean }
@@ -5975,7 +5992,29 @@ export type Database = {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_lift_expired_restrictions: { Args: never; Returns: number }
+      mkt_lift_restriction: {
+        Args: { _reason: string; _restriction_id: string }
+        Returns: undefined
+      }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_my_moderation_cases: {
+        Args: never
+        Returns: {
+          can_appeal: boolean
+          closed_at: string
+          created_at: string
+          decision: string
+          decision_reason: string
+          listing_id: string
+          listing_title: string
+          reason_code: string
+          ref_no: string
+          report_id: string
+          severity: string
+          status: string
+        }[]
+      }
       mkt_notify: {
         Args: {
           _body?: string
@@ -5986,15 +6025,87 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_report_apply_status: {
+        Args: { _reason: string; _report_id: string; _status: string }
+        Returns: undefined
+      }
+      mkt_report_assign: {
+        Args: { _assignee: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_close: {
+        Args: {
+          _decision: string
+          _public_outcome: string
+          _reason: string
+          _report_id: string
+        }
+        Returns: undefined
+      }
       mkt_report_conflict: { Args: { _report_id: string }; Returns: boolean }
       mkt_report_is_advertiser: {
         Args: { _report_id: string }
         Returns: boolean
       }
       mkt_report_is_reporter: { Args: { _report_id: string }; Returns: boolean }
+      mkt_report_merge: {
+        Args: { _into: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_message: {
+        Args: {
+          _attachment_path?: string
+          _body: string
+          _channel: string
+          _due_days?: number
+          _kind?: string
+          _report_id: string
+        }
+        Returns: undefined
+      }
+      mkt_report_note: {
+        Args: { _body: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_reopen: {
+        Args: { _reason: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_reply: {
+        Args: { _attachment_path?: string; _body: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_require: {
+        Args: { _perm: string; _report_id: string }
+        Returns: undefined
+      }
+      mkt_report_set_priority: {
+        Args: { _priority: string; _report_id: string; _severity?: string }
+        Returns: undefined
+      }
+      mkt_report_set_status: {
+        Args: { _reason?: string; _report_id: string; _status: string }
+        Returns: undefined
+      }
       mkt_report_staff_can_view: {
         Args: { _report_id: string }
         Returns: boolean
+      }
+      mkt_report_stats: { Args: never; Returns: Json }
+      mkt_restrict_subject: {
+        Args: {
+          _days?: number
+          _reason: string
+          _report_id: string
+          _restriction: string
+          _subject_id: string
+          _subject_type: string
+        }
+        Returns: string
+      }
+      mkt_review_appeal: {
+        Args: { _appeal_id: string; _reason: string; _status: string }
+        Returns: undefined
       }
       mkt_review_listing: {
         Args: { _action: string; _listing_id: string; _reason?: string }
@@ -6006,6 +6117,23 @@ export type Database = {
       }
       mkt_slugify: { Args: { _text: string }; Returns: string }
       mkt_staff_has: { Args: { _perm: string }; Returns: boolean }
+      mkt_submit_appeal: {
+        Args: { _reason: string; _report_id: string }
+        Returns: string
+      }
+      mkt_submit_report: {
+        Args: {
+          _confirmed?: boolean
+          _listing_id: string
+          _note?: string
+          _reason_code: string
+        }
+        Returns: {
+          ref_no: string
+          report_id: string
+        }[]
+      }
+      mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       my_accounts: {
         Args: never
         Returns: {
