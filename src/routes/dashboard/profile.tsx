@@ -185,7 +185,9 @@ function ProfilePage() {
       show_email: row?.show_email ?? false,
       show_whatsapp: row?.show_whatsapp ?? false,
       is_published: row?.is_published ?? true,
+      personalize_suggestions: row?.personalize_suggestions ?? true,
     });
+
     setLoaded(true);
   }, [loaded, me.isLoading, row, countries.data, preference.countryIso2]);
 
