@@ -39,6 +39,7 @@ import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
+import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
@@ -203,6 +204,11 @@ const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   path: '/categories/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
+  id: '/dashboard/my-ads',
+  path: '/dashboard/my-ads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -291,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/ads/$slug': typeof AdsSlugRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -332,6 +339,7 @@ export interface FileRoutesByTo {
   '/ads/$slug': typeof AdsSlugRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -375,6 +383,7 @@ export interface FileRoutesById {
   '/ads/$slug': typeof AdsSlugRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -418,6 +427,7 @@ export interface FileRouteTypes {
     | '/ads/$slug'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/my-ads'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
@@ -459,6 +469,7 @@ export interface FileRouteTypes {
     | '/ads/$slug'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/my-ads'
     | '/invite/$token'
     | '/projects/$id'
     | '/requests/$id'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/ads/$slug'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/my-ads'
     | '/invite/$token'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
@@ -525,6 +537,7 @@ export interface RootRouteChildren {
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
+  DashboardMyAdsRoute: typeof DashboardMyAdsRoute
   InviteTokenRoute: typeof InviteTokenRoute
 }
 
@@ -740,6 +753,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/my-ads': {
+      id: '/dashboard/my-ads'
+      path: '/dashboard/my-ads'
+      fullPath: '/dashboard/my-ads'
+      preLoaderRoute: typeof DashboardMyAdsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -890,6 +910,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
+  DashboardMyAdsRoute: DashboardMyAdsRoute,
   InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
