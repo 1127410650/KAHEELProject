@@ -105,19 +105,16 @@ export function ListingForm({ listing }: Props) {
         : null;
 
 
-  // A new ad defaults to the identity's own location, falling back to the market
-  // the advertiser is browsing.
+  // The country always mirrors the account; only the city defaults to the
+  // publishing identity's own city on a new ad.
   const [geoTouched, setGeoTouched] = useState(!!listing);
   useEffect(() => {
-    if (geoTouched || countryId) return;
-    if (identityGeo?.country_id) {
-      setCountryId(identityGeo.country_id);
-      if (identityGeo.city_id) setCityId(identityGeo.city_id);
-      return;
-    }
-    const fallback = (countries.data ?? []).find((c) => c.iso2 === preference.countryIso2);
-    if (fallback) setCountryId(fallback.id);
-  }, [countries.data, countryId, geoTouched, identityGeo, preference.countryIso2]);
+    if (accountCountry.data) setCountryId(accountCountry.data.id);
+  }, [accountCountry.data]);
+  useEffect(() => {
+    if (geoTouched || cityId) return;
+    if (identityGeo?.city_id) setCityId(identityGeo.city_id);
+  }, [cityId, geoTouched, identityGeo]);
 
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
