@@ -188,10 +188,8 @@ export function toE164(iso2: string, input: string): string | null {
   return parsed.number;
 }
 
-/** Digits of a country's calling code, from the codes shipped with the library. */
+/** Digits of a supported country's calling code. */
 function callingDigits(iso2: string): string {
-  const parsed = parsePhoneNumberFromString("+0", iso2.toUpperCase() as CountryCode);
-  void parsed;
   return CALLING_CODES[iso2.toUpperCase()] ?? "";
 }
 
