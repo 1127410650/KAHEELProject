@@ -505,6 +505,17 @@ function AdPage() {
 
   const cityLabel = city ? geoName(city, locale) : listing.city;
   const countryLabel = country ? geoName(country, locale) : null;
+  // The short summary is only worth a block of its own when it is not already
+  // repeated in the title or the description.
+  const summaryText = listing.summary?.trim() ?? "";
+  const normalize = (s: string) => s.replace(/\s+/g, " ").trim().toLowerCase();
+  const leadSummary =
+    summaryText &&
+    normalize(summaryText) !== normalize(listing.title) &&
+    !normalize(listing.description ?? "").includes(normalize(summaryText))
+      ? summaryText
+      : null;
+
   // The country is redundant for the home market; it only helps across borders.
   const showCountry = !!countryLabel && country?.iso2 !== "SA";
   const categoryPath = [category, subcategory]
