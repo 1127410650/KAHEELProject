@@ -1,8 +1,19 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Bell, Grid2x2, Home, Plus, Search, ShieldCheck, Store } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Bell,
+  Grid2x2,
+  Home,
+  MessageSquare,
+  Plus,
+  Search,
+  ShieldCheck,
+  Store,
+} from "lucide-react";
 import { useEffect } from "react";
 
 import { useI18n } from "@/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
@@ -103,10 +114,26 @@ function useMarketSetupGate() {
 export function MarketBottomNav() {
   const { t } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { session } = useSession();
+
+  // Unread messages addressed to the signed-in user, shown as a small badge.
+  const unread = useQuery({
+    queryKey: ["mkt", "unread-messages", session?.user.id ?? null],
+    enabled: !!session,
+    refetchInterval: 60_000,
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("mkt_messages")
+        .select("id", { count: "exact", head: true })
+        .is("read_at", null)
+        .neq("sender_user_id", session!.user.id);
+      return count ?? 0;
+    },
+  });
 
   const items = [
     { to: "/marketplace", key: "home", icon: Home },
-    { to: "/search", key: "search", icon: Search },
+    { to: "/dashboard/messages", key: "messages", icon: MessageSquare },
     { to: "/dashboard/ads/new", key: "add", icon: Plus },
     { to: "/dashboard/notifications", key: "alerts", icon: Bell },
     { to: "/more", key: "more", icon: Grid2x2 },
@@ -121,6 +148,7 @@ export function MarketBottomNav() {
         {items.map((item) => {
           const active = pathname === item.to;
           const center = item.key === "add";
+          const badge = item.key === "messages" ? (unread.data ?? 0) : 0;
           return (
             <li key={item.key} className="flex-1">
               <Link
@@ -130,13 +158,21 @@ export function MarketBottomNav() {
                 <span
                   className={
                     center
-                      ? "grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"
+                      ? "relative grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"
                       : active
-                        ? "grid size-8 place-items-center text-primary"
-                        : "grid size-8 place-items-center text-muted-foreground"
+                        ? "relative grid size-8 place-items-center text-primary"
+                        : "relative grid size-8 place-items-center text-muted-foreground"
                   }
                 >
                   <item.icon className="size-4" aria-hidden />
+                  {badge > 0 && (
+                    <span
+                      className="absolute -top-0.5 end-0 min-w-4 rounded-full bg-destructive px-1 text-[9px] font-semibold leading-4 text-destructive-foreground"
+                      dir="ltr"
+                    >
+                      {badge > 99 ? "99+" : badge}
+                    </span>
+                  )}
                 </span>
                 <span className={active && !center ? "text-primary" : "text-muted-foreground"}>
                   {t(`market.bottomNav.${item.key}`)}

@@ -49,7 +49,10 @@
     "copied": "Copied",
     "showDetails": "Show details",
     "hideDetails": "Hide details",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "next": "Next",
+    "previous": "Previous",
+    "saved": "Saved"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -1380,7 +1383,8 @@
       "savedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
       "ownListing": "This is your own listing",
-      "failed": "Could not complete the action"
+      "failed": "Could not complete the action",
+      "remove": "Remove"
     },
     "quote": {
       "title": "Request title",
@@ -1536,7 +1540,8 @@
       "geoApprove": "Approve",
       "geoReject": "Reject",
       "geoInUse": "In use — disable only",
-      "geoIncomplete": "Records with incomplete location"
+      "geoIncomplete": "Records with incomplete location",
+      "noResults": "No results"
     },
     "biz": {
       "editTab": "Edit profile",
@@ -1577,7 +1582,94 @@
         "verified": "Verified",
         "rejected": "Rejected",
         "needs_more": "More info needed"
-      }
+      },
+      "addBusiness": "Add a business",
+      "quickCreate": "Add a new business",
+      "quickCreateHint": "Fill in the business details and its responsible officer. It is linked to your account — no new login is created.",
+      "createBusiness": "Create business",
+      "created": "Business created",
+      "limitReached": "You have reached the maximum number of workspaces",
+      "stage": {
+        "data": "Business data",
+        "officer": "Officer",
+        "verify": "Verification"
+      },
+      "legalName": "Legal name",
+      "tradeName": "Trade name",
+      "legalNameRequired": "Legal name is required",
+      "entityType": "Entity type",
+      "entity": {
+        "establishment": "Establishment",
+        "company": "Company",
+        "office": "Office",
+        "factory": "Factory",
+        "branch": "Branch",
+        "non_profit": "Non-profit",
+        "government": "Government entity",
+        "other": "Other"
+      },
+      "crNumber": "Commercial registration number",
+      "unifiedNumber": "Unified number",
+      "crIssueDate": "Registration issue date",
+      "crExpiryDate": "Registration expiry date",
+      "officialNumberRequired": "Enter the commercial registration or unified number",
+      "crInvalid": "Commercial registration number is invalid",
+      "unifiedInvalid": "Unified number is invalid",
+      "datesInvalid": "Expiry date must be after the issue date",
+      "duplicate": "A business with the same number is already registered in this country",
+      "mainActivity": "Main activity",
+      "subActivities": "Sub activities",
+      "activityRequired": "Main activity is required",
+      "nationalAddress": "National address",
+      "contactPhone": "Contact phone",
+      "contactEmail": "Email",
+      "phoneInvalid": "Contact phone is invalid",
+      "emailInvalid": "Email is invalid",
+      "serviceCities": "Service cities",
+      "serviceRegions": "Service regions",
+      "listHint": "Separate values with commas.",
+      "multiHint": "You can select more than one city.",
+      "optional": "Optional",
+      "officerName": "Officer name",
+      "officerNameRequired": "Officer name is required",
+      "idType": "ID type",
+      "officerId": "ID number",
+      "officerIdInvalid": "ID number is invalid",
+      "idKind": {
+        "national_id": "National ID",
+        "iqama": "Residency permit",
+        "gcc_id": "GCC ID",
+        "passport": "Passport",
+        "other": "Other"
+      },
+      "capacity": "Capacity",
+      "cap": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "authorized": "Authorized representative",
+        "employee": "Employee"
+      },
+      "relation": "Relation to the business",
+      "officerPhone": "Officer mobile",
+      "officerEmail": "Officer email",
+      "authExpiry": "Authorization expiry date",
+      "authExpired": "The authorization has already expired",
+      "idPrivate": "The ID number is private: it never appears on the public profile or an ad, and is shown back to you masked.",
+      "officerPrivacy": "Officer details are used for verification only. They are never published, never stored in the browser, and staff can only see them with the verification-review permission.",
+      "verificationRules": "Attach the commercial registration, authorization letter and ID. Allowed files are PDF, JPG, PNG or WebP up to 10 MB; they are stored privately and served through short-lived links.",
+      "doc": {
+        "cr": "Commercial registration",
+        "authorization": "Authorization letter",
+        "id": "Officer ID",
+        "other": "Other document"
+      },
+      "fileHint": "PDF, JPG, PNG or WebP — up to 10 MB.",
+      "fileRejected": "File rejected: check its type and size.",
+      "crDocRequired": "Attach the commercial registration",
+      "authDocRequired": "Attach the authorization letter",
+      "sendVerification": "Send verification request",
+      "later": "Later",
+      "incomplete": "Complete the business details before sending a verification request"
     },
     "reports": {
       "report": "Report this listing",
@@ -1912,7 +2004,8 @@
       "search": "Search",
       "add": "Post",
       "alerts": "Alerts",
-      "more": "More"
+      "more": "More",
+      "messages": "Messages"
     },
     "more": {
       "title": "More",
@@ -1991,7 +2084,28 @@
       "phone": "Mobile number",
       "whatsapp": "WhatsApp",
       "email": "Email",
-      "quantity": "Quantity"
+      "quantity": "Quantity",
+      "back": "Back",
+      "next": "Next",
+      "titleHint": "Between {min} and {max} characters — write a clear ad title.",
+      "titleInvalid": "Title must be between 5 and 120 characters.",
+      "titleRequired": "Title is required",
+      "categoryPath": "Category path",
+      "choosePath": "Choose a category",
+      "pathRequired": "Complete the category selection to the last stage",
+      "businessDenied": "You are not allowed to publish under this business",
+      "specs": "Additional specifications",
+      "budget": "Estimated budget",
+      "stageRoot": "Sector",
+      "stageSection": "Section",
+      "stageSubType": "Sub type",
+      "stagePurpose": "Purpose",
+      "step": {
+        "identity": "Publish as",
+        "details": "Details",
+        "location": "Location",
+        "review": "Review"
+      }
     },
     "geo": {
       "pick": "Choose market",
@@ -2040,6 +2154,62 @@
       "activityTitle": "My activity",
       "manageTitle": "Account management"
     },
-    "emptyHome": "No published listings yet"
+    "emptyHome": "No published listings yet",
+    "loc": {
+      "address": "Detailed address",
+      "district": "District",
+      "dragHint": "Drag the marker to set the ad location on the map.",
+      "geocodeFailed": "Could not resolve that place",
+      "noResults": "No search results",
+      "permissionDenied": "Device location access was denied",
+      "searchOnMap": "Search on map",
+      "searchPlaceholder": "District or nearby landmark",
+      "useMyLocation": "Use my current location",
+      "visibility": "Location visibility",
+      "visibilityHint": "Approximate shows a general circle only; exact shows the coordinates as you set them.",
+      "approximate": "Approximate",
+      "exact": "Exact",
+      "countryFromAccount": "Country comes from your account and cannot be changed here."
+    },
+    "spec": {
+      "age": "Property age",
+      "area": "Area",
+      "baths": "Bathrooms",
+      "brand": "Brand",
+      "capacity": "Capacity",
+      "coverage": "Coverage area",
+      "delivery": "Delivery",
+      "experience": "Years of experience",
+      "facade": "Facade",
+      "floor": "Floor",
+      "furnished": "Furnished",
+      "hours": "Working hours",
+      "materialSpec": "Material spec",
+      "minOrder": "Minimum order",
+      "model": "Model",
+      "negotiable": "Price negotiable",
+      "productionCapacity": "Production capacity",
+      "rentPeriod": "Rent period",
+      "responseTime": "Response time",
+      "rooms": "Rooms",
+      "streetWidth": "Street width",
+      "warranty": "Warranty",
+      "withOperator": "With operator",
+      "year": "Year",
+      "opt": {
+        "north": "North",
+        "south": "South",
+        "east": "East",
+        "west": "West",
+        "north_east": "North-east",
+        "north_west": "North-west",
+        "south_east": "South-east",
+        "south_west": "South-west",
+        "day": "Daily",
+        "week": "Weekly",
+        "month": "Monthly",
+        "project": "Per project"
+      }
+    }
   }
 }
