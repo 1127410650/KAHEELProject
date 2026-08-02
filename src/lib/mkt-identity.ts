@@ -88,9 +88,15 @@ export function useIdentities() {
         key: "individual",
         kind: "individual",
         tenantId: null,
-        name: me.data?.display_name || profile?.full_name || session.user.email || "",
+        // Never a phone number; an empty name is labelled by the UI instead.
+        name: isPhoneLike(me.data?.display_name)
+          ? ""
+          : me.data?.display_name ||
+            (isPhoneLike(profile?.full_name) ? "" : profile?.full_name) ||
+            "",
         slug: me.data?.username ?? null,
         verificationStatus: me.data?.verification_status ?? null,
+        avatarUrl: me.data?.avatar_url ?? null,
       },
     ];
     const bizMap = new Map((profiles.data ?? []).map((b) => [b.tenant_id, b]));
@@ -104,6 +110,7 @@ export function useIdentities() {
         name: biz?.display_name_ar || w.name_ar,
         slug: biz?.slug ?? null,
         verificationStatus: biz?.verification_status ?? null,
+        avatarUrl: biz?.logo_url ?? null,
         role: w.role,
       });
     }
