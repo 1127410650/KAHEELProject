@@ -150,10 +150,20 @@ async function loadAd(slug: string) {
   const gallery = paths.map((p) => media[p]).filter((u): u is string => !!u);
 
   const categories = (catRows ?? []) as MktCategory[];
+  const rootSlug = (() => {
+    const category = categories.find((c) => c.id === listing.category_id);
+    if (!category) return null;
+    if (!category.parent_id) return category.slug;
+    return null;
+  })();
+  // Licence facts only exist for real estate ads; the row itself carries only
+  // what the authority allows an ad to publish.
+  const license = rootSlug === "real-estate" ? await loadPublicLicense(listing.id) : null;
 
   return {
     listing,
     gallery,
+    license,
     business: (bizRow as MktBusiness | null) ?? null,
     person: (personRow as MktUserProfile | null) ?? null,
     type: types.find((tp) => tp.code === listing.type_code) ?? null,
@@ -163,6 +173,7 @@ async function loadAd(slug: string) {
     city: (cityRow as MktCity | null) ?? null,
     activeAds: activeAds ?? null,
   };
+
 }
 
 type AdData = NonNullable<Awaited<ReturnType<typeof loadAd>>>;
