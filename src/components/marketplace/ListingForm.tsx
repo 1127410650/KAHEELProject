@@ -319,6 +319,18 @@ export function ListingForm({ listing }: Props) {
       }
     }
 
+    // A real estate ad may be kept as a draft while incomplete, but it cannot
+    // go to review without a valid licence, or with an exemption still pending.
+    if (publish && isRealEstate) {
+      const blocks = licenseBlockers(license);
+      if (blocks.length > 0) {
+        toast.error(t(`market.license.block.${blocks[0]}`));
+        setStep(1);
+        return;
+      }
+    }
+
+
     setBusy(true);
     try {
       const cityName = (cities.data ?? []).find((c) => c.id === location.cityId)?.name_ar ?? null;
