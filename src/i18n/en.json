@@ -1497,7 +1497,10 @@
       "identityHint": "You can publish as yourself or under a business where you hold an active membership with publishing rights.",
       "identityLocked": "The advertiser identity cannot be changed after a listing is created.",
       "cover": "Cover",
-      "coverHint": "The first image is used as the listing cover."
+      "makeCover": "Make cover",
+      "moveEarlier": "Move image earlier",
+      "moveLater": "Move image later",
+      "coverHint": "The first image is the cover. Reorder images or pick another cover."
     },
     "admin": {
       "title": "Marketplace admin",

@@ -109,10 +109,10 @@ export async function decorateListings(
   });
 }
 
-export async function loadListings(
+async function queryListings(
   filters: ListingFilters,
   locale: "ar" | "en",
-): Promise<ListingCardData[]> {
+): Promise<{ rows: ListingCardData[]; fetched: number }> {
   let categoryId: string | undefined;
   if (filters.categorySlug) {
     const { data } = await supabase
@@ -121,7 +121,7 @@ export async function loadListings(
       .eq("slug", filters.categorySlug)
       .maybeSingle();
     categoryId = data?.id;
-    if (!categoryId) return [];
+    if (!categoryId) return { rows: [], fetched: 0 };
   }
 
   let query = supabase
@@ -158,6 +158,8 @@ export async function loadListings(
     default:
       query = query.order("published_at", { ascending: false, nullsFirst: false });
   }
+  // Tie-breaker so rows never shift between pages and appear twice.
+  query = query.order("id", { ascending: false });
 
   const size = filters.limit ?? 48;
   if (filters.page !== undefined) {
@@ -168,19 +170,32 @@ export async function loadListings(
   }
 
   const { data } = await query;
-  const decorated = await decorateListings((data ?? []) as unknown as MktListing[], locale);
-  return filters.verifiedOnly
+  const raw = (data ?? []) as unknown as MktListing[];
+  const decorated = await decorateListings(raw, locale);
+  const rows = filters.verifiedOnly
     ? decorated.filter((l) => l.verificationStatus === "verified")
     : decorated;
+  return { rows, fetched: raw.length };
 }
 
-/** One page of results for infinite scrolling. */
+export async function loadListings(
+  filters: ListingFilters,
+  locale: "ar" | "en",
+): Promise<ListingCardData[]> {
+  const { rows } = await queryListings(filters, locale);
+  return rows;
+}
+
+/**
+ * One page of results for infinite scrolling. `fetched` is the raw row count
+ * before the client-side "verified only" pass, so paging never stops early.
+ */
 export async function loadListingsPage(
   filters: ListingFilters,
   locale: "ar" | "en",
   page: number,
-): Promise<ListingCardData[]> {
-  return loadListings({ ...filters, limit: filters.limit ?? PAGE_SIZE, page }, locale);
+): Promise<{ rows: ListingCardData[]; fetched: number }> {
+  return queryListings({ ...filters, limit: filters.limit ?? PAGE_SIZE, page }, locale);
 }
 
 export async function loadUserProfileBySlug(username: string): Promise<MktUserProfile | null> {
