@@ -1346,7 +1346,8 @@
       "newest": "Newest",
       "priceAsc": "Price: low to high",
       "priceDesc": "Price: high to low",
-      "views": "Most viewed"
+      "views": "Most viewed",
+      "oldest": "Oldest"
     },
     "view": {
       "grid": "Grid",
@@ -2246,6 +2247,21 @@
       "other-account": "This item belongs to another account.",
       "unavailable": "This feature isn't available for this account.",
       "home": "Home"
+    },
+    "search": {
+      "title": "Search the marketplace",
+      "placeholder": "Search for a property, service, supplier, equipment or building material...",
+      "clear": "Clear search",
+      "filtersBtn": "Filter",
+      "domain": "Main field",
+      "offerType": "Offer type",
+      "withImages": "Listings with images",
+      "priceRange": "Price",
+      "apply": "Apply",
+      "clearFilters": "Clear filters",
+      "addListingHint": "Nothing matched your search — you can post your own listing.",
+      "businessesCount": "businesses",
+      "loadingMore": "Loading more…"
     }
   },
   "routeError": {
