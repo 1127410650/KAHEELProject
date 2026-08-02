@@ -1523,7 +1523,17 @@
       "reasonRequired": "السبب مطلوب",
       "confirm": "تأكيد القرار",
       "decisionSaved": "تم تسجيل القرار",
-      "reports": "البلاغات"
+      "reports": "البلاغات",
+      "geo": "الدول والمدن",
+      "geoCities": "المدن",
+      "geoAddCity": "إضافة مدينة",
+      "geoDisable": "تعطيل",
+      "geoEnable": "تفعيل",
+      "geoSuggestions": "مدن مقترحة",
+      "geoApprove": "اعتماد",
+      "geoReject": "رفض",
+      "geoInUse": "مستخدمة — التعطيل فقط",
+      "geoIncomplete": "سجلات بموقع غير مكتمل"
     },
     "biz": {
       "editTab": "تعديل الملف",
@@ -1939,7 +1949,8 @@
       "saved": "تم حفظ الملف الشخصي",
       "viewPublic": "عرض الملف العام",
       "badgeState": "حالة التوثيق:",
-      "notVerifiedHint": "التوثيق اختياري ولا يمنع النشر."
+      "notVerifiedHint": "التوثيق اختياري ولا يمنع النشر.",
+      "fallbackName": "مستخدم المنصة"
     },
     "form": {
       "region": "المنطقة",
@@ -1953,7 +1964,36 @@
       "country": "الدولة",
       "city": "المدينة",
       "allCities": "كل المدن",
-      "allCountries": "كل الدول"
+      "allCountries": "كل الدول",
+      "searchCity": "ابحث عن مدينة",
+      "pickCity": "اختر المدينة",
+      "accountLocation": "موقع الحساب",
+      "browsingMarket": "سوق التصفح",
+      "save": "حفظ",
+      "otherCity": "مدينة أخرى",
+      "otherCityHint": "سيتم عرض المدينة المقترحة بعد مراجعة الإدارة.",
+      "suggested": "تم إرسال المدينة للمراجعة",
+      "incomplete": "موقع غير مكتمل",
+      "locationRequired": "حدّد الدولة والمدينة قبل الحفظ.",
+      "cityMismatch": "المدينة المختارة لا تتبع الدولة المختارة."
+    },
+    "setup": {
+      "title": "إعداد حسابك في السوق",
+      "subtitle": "أربع معلومات فقط ثم تتابع إلى السوق.",
+      "displayName": "الاسم الظاهر",
+      "username": "اسم المستخدم",
+      "continue": "متابعة إلى السوق"
+    },
+    "phone": {
+      "label": "رقم الجوال",
+      "invalid": "رقم غير صالح لهذه الدولة.",
+      "unverified": "غير محقّق",
+      "verified": "محقّق",
+      "visibility": "ظهور رقم الجوال",
+      "hidden": "مخفي",
+      "onRequest": "يظهر بعد قبول طلب التواصل",
+      "public": "ظاهر للعامة",
+      "publicWarning": "سيظهر رقمك لأي زائر في السوق. تأكد من رغبتك في ذلك."
     }
   }
 }
