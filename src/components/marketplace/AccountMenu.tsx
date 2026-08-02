@@ -81,10 +81,10 @@ export function AccountMenu() {
       variant="outline"
       size="sm"
       aria-label={t("market.account.menu")}
-      className="h-9 max-w-[190px] justify-between gap-1.5 ps-1.5"
+      className="h-9 max-w-[120px] justify-between gap-1.5 ps-1.5 sm:max-w-[190px]"
     >
       <IdentityAvatar identity={active} size="sm" />
-      <span className="hidden truncate text-xs sm:inline">{displayName}</span>
+      <span className="truncate text-xs">{displayName}</span>
       <ChevronDown className="size-3.5 shrink-0 opacity-60" aria-hidden />
     </Button>
   );
