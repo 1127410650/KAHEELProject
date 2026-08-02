@@ -72,19 +72,49 @@ export function ListingForm({ listing }: Props) {
     enabled: !!countryId,
     queryFn: () => loadCities(countryId),
   });
-  // A new ad defaults to the market the advertiser is browsing.
-  useEffect(() => {
-    if (countryId || !countries.data) return;
-    const fallback = countries.data.find((c) => c.iso2 === preference.countryIso2);
-    if (fallback) setCountryId(fallback.id);
-  }, [countries.data, countryId, preference.countryIso2]);
-
   // Every registered user can publish. The identity only decides the name the ad
   // carries; verification is a trust badge, not a permission.
-  const { identities, active, select } = useActiveIdentity();
+  const { identities, active, select, myProfile } = useActiveIdentity();
   // The identity of an existing ad is fixed and cannot be switched afterwards.
   const lockedIdentity = !!listing;
   const tenantId = lockedIdentity ? (listing?.tenant_id ?? null) : (active?.tenantId ?? null);
+
+  // Location of the publishing identity: the business for a business ad, the
+  // person for an individual ad. Editing an ad's location never writes back.
+  const businessGeo = useQuery({
+    queryKey: ["mkt", "business-geo", active?.tenantId],
+    enabled: !listing && active?.kind === "business" && !!active.tenantId,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mkt_business_profiles")
+        .select("country_id, city_id")
+        .eq("tenant_id", active!.tenantId!)
+        .maybeSingle();
+      return data ?? null;
+    },
+  });
+
+  const identityGeo =
+    active?.kind === "business"
+      ? businessGeo.data
+      : myProfile
+        ? { country_id: myProfile.country_id, city_id: myProfile.city_id }
+        : null;
+
+  // A new ad defaults to the identity's own location, falling back to the market
+  // the advertiser is browsing.
+  const [geoTouched, setGeoTouched] = useState(!!listing);
+  useEffect(() => {
+    if (geoTouched || countryId) return;
+    if (identityGeo?.country_id) {
+      setCountryId(identityGeo.country_id);
+      if (identityGeo.city_id) setCityId(identityGeo.city_id);
+      return;
+    }
+    const fallback = (countries.data ?? []).find((c) => c.iso2 === preference.countryIso2);
+    if (fallback) setCountryId(fallback.id);
+  }, [countries.data, countryId, geoTouched, identityGeo, preference.countryIso2]);
+
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
   const subs = (categories.data ?? []).filter((c) => c.parent_id === categoryId);
