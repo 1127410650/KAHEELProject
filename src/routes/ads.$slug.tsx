@@ -23,16 +23,18 @@ import {
 } from "@/lib/mkt";
 import { decorateListings, loadListingTypes } from "@/lib/mkt-queries";
 import { trackMarketActivity } from "@/lib/mkt-activity";
+import { locationLink } from "@/lib/mkt-location-link";
+import { loadPublicLicense } from "@/lib/mkt-license";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ListingGallery } from "@/components/marketplace/ListingGallery";
 import { ListingActions } from "@/components/marketplace/ListingActions";
 import { ListingSpecs } from "@/components/marketplace/ListingSpecs";
+import { ListingLicenseSection } from "@/components/marketplace/ListingLicenseSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ListingApproxMap = lazy(() => import("@/components/marketplace/ListingApproxMap"));
 
 interface AdSearch {
   action?: string | undefined;
