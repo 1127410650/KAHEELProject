@@ -271,6 +271,21 @@ export function AccountMenu() {
             <DropdownMenuSeparator />
           </>
         )}
+        <DropdownMenuLabel className="text-xs text-muted-foreground">
+          {t("market.account.activityTitle")}
+        </DropdownMenuLabel>
+        {activityLinks.map((link) => (
+          <DropdownMenuItem key={link.to} asChild>
+            <Link to={link.to} className="gap-2 text-xs">
+              <link.icon className="size-4 text-muted-foreground" aria-hidden />
+              {link.label}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="text-xs text-muted-foreground">
+          {t("market.account.manageTitle")}
+        </DropdownMenuLabel>
         {manageLinks.map((link) => (
           <DropdownMenuItem key={link.to} asChild>
             <Link to={link.to} className="gap-2 text-xs">
@@ -279,6 +294,7 @@ export function AccountMenu() {
             </Link>
           </DropdownMenuItem>
         ))}
+
         <DropdownMenuItem onSelect={() => void signOut()} className="gap-2 text-xs">
           <LogOut className="size-4 text-muted-foreground" aria-hidden />
           {t("nav.signOut")}
