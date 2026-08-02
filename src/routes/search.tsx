@@ -23,7 +23,7 @@ export interface SearchParams {
   cityId?: string | undefined;
   min?: string | undefined;
   max?: string | undefined;
-  verified?: string | undefined;
+  
   deal?: string | undefined;
   sort?: string | undefined;
   view?: string | undefined;
