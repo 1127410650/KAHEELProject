@@ -2039,6 +2039,7 @@
       "fallbackName": "مستخدم المنصة",
       "activityTitle": "نشاطي",
       "manageTitle": "إدارة الحساب"
-    }
+    },
+    "emptyHome": "لا توجد إعلانات منشورة حاليًا"
   }
 }
