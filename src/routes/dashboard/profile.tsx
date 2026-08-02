@@ -38,7 +38,7 @@ export const Route = createFileRoute("/dashboard/profile")({
 const selectClass = "h-9 w-full rounded-md border border-input bg-background px-2 text-sm";
 
 function ProfilePage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { session, profile } = useSession();
   const me = useMyUserProfile();
   const queryClient = useQueryClient();
@@ -46,6 +46,26 @@ function ProfilePage() {
   const [avatar, setAvatar] = useState<File | null>(null);
 
   const row = me.data;
+
+  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const { preference } = useMarketPreference();
+  const [countryId, setCountryId] = useState<string>("");
+  const cities = useQuery({
+    queryKey: ["mkt", "cities", countryId],
+    enabled: !!countryId,
+    queryFn: () => loadCities(countryId),
+  });
+  // Adopt the saved country once the profile arrives, otherwise the browsing one.
+  useEffect(() => {
+    if (countryId) return;
+    if (row?.country_id) {
+      setCountryId(row.country_id);
+      return;
+    }
+    const fallback = (countries.data ?? []).find((c) => c.iso2 === preference.countryIso2);
+    if (fallback) setCountryId(fallback.id);
+  }, [countryId, row?.country_id, countries.data, preference.countryIso2]);
+
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
