@@ -105,11 +105,13 @@ function BusinessDashboardPage() {
     [profile.data, draft],
   );
 
-  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  // The country belongs to the account (Settings → Account → Country); the
+  // business profile only picks a city inside it.
+  const accountCountry = useAccountCountry();
   const cities = useQuery({
-    queryKey: ["mkt", "cities", view.country_id],
-    enabled: !!view.country_id,
-    queryFn: () => loadCities(view.country_id),
+    queryKey: ["mkt", "cities", accountCountry.data?.id],
+    enabled: !!accountCountry.data?.id,
+    queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
 
 
