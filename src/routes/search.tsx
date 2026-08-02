@@ -19,6 +19,8 @@ export interface SearchParams {
   sub?: string | undefined;
   type?: string | undefined;
   city?: string | undefined;
+  country?: string | undefined;
+  cityId?: string | undefined;
   min?: string | undefined;
   max?: string | undefined;
   verified?: string | undefined;
@@ -44,6 +46,8 @@ export const Route = createFileRoute("/search")({
       "sub",
       "type",
       "city",
+      "country",
+      "cityId",
       "min",
       "max",
       "verified",
@@ -92,6 +96,8 @@ function SearchPage() {
           subcategoryId: params.sub,
           type: params.type,
           city: params.city,
+          countryIso2: params.country,
+          cityId: params.cityId,
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
           verifiedOnly: params.verified === "1",
