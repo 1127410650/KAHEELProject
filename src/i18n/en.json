@@ -1300,8 +1300,7 @@
     "resultsCount": "results",
     "viewAll": "View all",
     "hero": {
-      "title": "Everything your project needs: services, suppliers, equipment and materials",
-      "subtitle": "Browse free without an account; sign in to request a quote or contact a seller.",
+      "title": "Type everything you need here — services, suppliers, equipment and materials",
       "openToAll": "Publishing is open to every registered user — as an individual or under a business. The verified badge belongs to the advertiser identity."
     },
     "nav": {
@@ -1363,7 +1362,8 @@
       "equipmentSale": "Equipment for sale",
       "equipmentRent": "Equipment for rent",
       "needs": "Supplier & contractor wanted",
-      "businesses": "Suggested businesses"
+      "businesses": "Suggested businesses",
+      "suggested": "Suggested for you"
     },
     "actions": {
       "requestQuote": "Request a quote",
@@ -1981,7 +1981,9 @@
       "optional": "Optional",
       "phoneStatusHint": "Verification status is shown in settings only — never on your public profile or ads.",
       "publishHint": "When on, only your name, headline, city and the contact details you chose to show are public.",
-      "cityRequired": "Pick a city within your account country."
+      "cityRequired": "Pick a city within your account country.",
+      "personalize": "Use my activity to improve suggestions",
+      "personalizeHint": "Only your searches and the categories you open are used to suggest ads. Messages and phone numbers are never used, and activity is deleted after 90 days."
     },
     "form": {
       "region": "Region",
