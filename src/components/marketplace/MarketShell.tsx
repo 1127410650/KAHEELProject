@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Bell, Grid2x2, Home, Plus, Search, ShieldCheck, Store, User } from "lucide-react";
+import { Bell, Grid2x2, Home, Plus, Search, ShieldCheck, Store } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
@@ -10,7 +10,7 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
-import { IdentitySwitcher } from "@/components/marketplace/IdentitySwitcher";
+import { AccountMenu } from "@/components/marketplace/AccountMenu";
 
 const HOME_PATHS = ["/", "/marketplace"];
 
@@ -99,9 +99,6 @@ export function MarketHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <div className="hidden lg:block">
-            <IdentitySwitcher />
-          </div>
           <MktNotificationsBell />
           <button
             type="button"
@@ -110,13 +107,9 @@ export function MarketHeader() {
           >
             {locale === "ar" ? "EN" : "ع"}
           </button>
+          {/* The single account surface: identity, switching and management. */}
           {session ? (
-            <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
-              <Link to="/dashboard/my-ads">
-                <User className="size-4" aria-hidden />
-                <span className="hidden lg:inline">{t("market.nav.account")}</span>
-              </Link>
-            </Button>
+            <AccountMenu />
           ) : (
             <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
               <Link to="/login">
