@@ -26,8 +26,16 @@ export interface MktIdentity {
   name: string;
   slug: string | null;
   verificationStatus: string | null;
+  /** Personal avatar or business logo; null when none is uploaded. */
+  avatarUrl: string | null;
   role?: string | undefined;
 }
+
+/** Phone numbers and raw emails are never used as a display name. */
+function isPhoneLike(value: string | null | undefined) {
+  return !!value && /^[+\d][\d\s()-]{5,}$/.test(value.trim());
+}
+
 
 export function useMyUserProfile() {
   const { session } = useSession();
