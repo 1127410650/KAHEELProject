@@ -1,56 +1,20 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Bell, Grid2x2, Home, Plus, Search, ShieldCheck, Store } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { useMarketPreference } from "@/lib/mkt-geo";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 import { AccountMenu } from "@/components/marketplace/AccountMenu";
-
-const HOME_PATHS = ["/", "/marketplace"];
-
-/** On the home page the hero owns the search box; the header one appears after
- *  the visitor scrolls past it so the same control never shows twice. */
-function useHeaderSearchVisible() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isHome = HOME_PATHS.includes(pathname);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    if (!isHome) return;
-    const onScroll = () => setScrolled(window.scrollY > 260);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome]);
-
-  return !isHome || scrolled;
-}
 
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
-  const navigate = useNavigate();
-  const [q, setQ] = useState("");
-  const { preference } = useMarketPreference();
-  const searchVisible = useHeaderSearchVisible();
 
-  function submit(event: React.FormEvent) {
-    event.preventDefault();
-    navigate({
-      to: "/search",
-      search: {
-        ...(q.trim() ? { q: q.trim() } : {}),
-        country: preference.countryIso2,
-        ...(preference.cityId ? { cityId: preference.cityId } : {}),
-      },
-    });
-  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
@@ -64,39 +28,27 @@ export function MarketHeader() {
           </span>
         </Link>
 
-        {searchVisible ? (
-          <form onSubmit={submit} className="flex min-w-0 flex-1 items-center gap-2">
-            <div className="relative min-w-0 flex-1 lg:max-w-md">
-              <Search
-                className="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-muted-foreground"
-                aria-hidden
-              />
-              <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder={t("market.searchPlaceholder")}
-                aria-label={t("market.searchPlaceholder")}
-                className="h-9 ps-9"
-              />
-            </div>
-          </form>
-        ) : (
-          <div className="min-w-0 flex-1" />
-        )}
+        {/* «البحث» — the single search entry point in the header. */}
+        <Link
+          to="/search"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+        >
+          <Search className="size-4" aria-hidden />
+          {t("market.nav.search")}
+        </Link>
 
+        <div className="min-w-0 flex-1" />
 
         {/* Only shipped destinations are linked from the header. */}
         <nav className="hidden items-center gap-5 lg:flex">
           <Link to="/marketplace" className="text-sm font-medium text-foreground hover:text-primary">
             {t("market.nav.marketplace")}
           </Link>
-          <Link to="/search" className="text-sm font-medium text-foreground hover:text-primary">
-            {t("market.nav.search")}
-          </Link>
           <Link to="/more" className="text-sm font-medium text-foreground hover:text-primary">
             {t("market.nav.more")}
           </Link>
         </nav>
+
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <MktNotificationsBell />
