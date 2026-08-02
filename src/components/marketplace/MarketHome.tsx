@@ -1,26 +1,24 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Building2,
   Home,
   Plus,
-  Search,
   Sparkles,
   Tag,
   Truck,
 } from "lucide-react";
-import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadListings } from "@/lib/mkt-queries";
-import { trackMarketActivity, useSuggestedListings } from "@/lib/mkt-activity";
+import { useSuggestedListings } from "@/lib/mkt-activity";
 
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+
 
 type Items = React.ComponentProps<typeof ListingCard>["listing"][];
 
