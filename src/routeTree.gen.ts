@@ -39,6 +39,7 @@ import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
@@ -221,6 +222,11 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminGeoRoute = AdminGeoRouteImport.update({
+  id: '/admin/geo',
+  path: '/admin/geo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminListingsRoute = AdminListingsRouteImport.update({
@@ -410,6 +416,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -471,6 +478,7 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -534,6 +542,7 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -597,6 +606,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -658,6 +668,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -720,6 +731,7 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -764,6 +776,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  AdminGeoRoute: typeof AdminGeoRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdsSlugRoute: typeof AdsSlugRoute
@@ -998,6 +1011,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/geo': {
+      id: '/admin/geo'
+      path: '/admin/geo'
+      fullPath: '/admin/geo'
+      preLoaderRoute: typeof AdminGeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/listings': {
@@ -1289,6 +1309,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  AdminGeoRoute: AdminGeoRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdsSlugRoute: AdsSlugRoute,
