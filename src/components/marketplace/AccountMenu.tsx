@@ -69,6 +69,8 @@ export function AccountMenu() {
 
   if (!session || !active) return null;
 
+  const displayName = active.name || t("market.account.fallbackName");
+
   async function signOut() {
     await supabase.auth.signOut();
     void navigate({ to: "/marketplace" });
@@ -82,7 +84,7 @@ export function AccountMenu() {
       className="h-9 max-w-[190px] justify-between gap-1.5 ps-1.5"
     >
       <IdentityAvatar identity={active} size="sm" />
-      <span className="hidden truncate text-xs sm:inline">{active.name}</span>
+      <span className="hidden truncate text-xs sm:inline">{displayName}</span>
       <ChevronDown className="size-3.5 shrink-0 opacity-60" aria-hidden />
     </Button>
   );
@@ -91,7 +93,7 @@ export function AccountMenu() {
     <div className="flex items-center gap-2 px-2 py-2">
       <IdentityAvatar identity={active} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold text-foreground">{active.name}</span>
+        <span className="block truncate text-sm font-semibold text-foreground">{displayName}</span>
         <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           {t(`market.identity.${active.kind}`)}
           <VerifiedBadge status={active.verificationStatus} size="xs" />
@@ -136,7 +138,7 @@ export function AccountMenu() {
               >
                 <IdentityAvatar identity={identity} size="sm" />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm text-foreground">{identity.name}</span>
+                  <span className="block truncate text-sm text-foreground">{identity.name || t("market.account.fallbackName")}</span>
                   <span className="block text-[11px] text-muted-foreground">
                     {t(`market.identity.${identity.kind}`)}
                   </span>
@@ -190,7 +192,7 @@ export function AccountMenu() {
           >
             <IdentityAvatar identity={identity} size="sm" />
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm">{identity.name}</span>
+              <span className="block truncate text-sm">{identity.name || t("market.account.fallbackName")}</span>
               <span className="block text-[11px] text-muted-foreground">
                 {t(`market.identity.${identity.kind}`)}
               </span>
