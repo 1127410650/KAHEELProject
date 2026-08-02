@@ -127,14 +127,16 @@ function AdvertiserCard({
   const status = business?.verification_status ?? person?.verification_status ?? null;
   const city = business?.city ?? person?.city ?? null;
   const joined = business?.joined_at ?? person?.joined_at ?? null;
+  // An individual's number lives in their private contact record and is only
+  // returned by the database when they chose to make it public.
+  const personPhone = useQuery({
+    queryKey: ["mkt", "public-phone", person?.user_id],
+    enabled: !business && !!person?.user_id,
+    queryFn: () => loadPublicPhone(person!.user_id),
+  });
+
   const contacts = [
-    business
-      ? business.show_phone
-        ? business.public_phone
-        : null
-      : person?.show_phone
-        ? person.public_phone
-        : null,
+    business ? (business.show_phone ? business.public_phone : null) : (personPhone.data ?? null),
     business
       ? business.show_whatsapp
         ? business.public_whatsapp

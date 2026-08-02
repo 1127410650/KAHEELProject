@@ -102,10 +102,8 @@ function ProfilePage() {
           (cities.data ?? []).find((c) => c.id === (fd.get("city_id") as string))?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         avatar_url: avatarPath,
-        public_phone: (fd.get("public_phone") as string) || null,
         public_email: (fd.get("public_email") as string) || null,
         public_whatsapp: (fd.get("public_whatsapp") as string) || null,
-        show_phone: fd.get("show_phone") === "on",
         show_email: fd.get("show_email") === "on",
         show_whatsapp: fd.get("show_whatsapp") === "on",
         is_published: fd.get("is_published") === "on",
@@ -239,18 +237,15 @@ function ProfilePage() {
             </legend>
             <p className="text-xs text-muted-foreground">{t("market.person.privacyHint")}</p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="public_phone">{t("market.form.phone")}</Label>
-                <Input
-                  id="public_phone"
-                  name="public_phone"
-                  dir="ltr"
-                  defaultValue={row?.public_phone ?? ""}
+              <div className="space-y-3 sm:col-span-2">
+                <PhoneField
+                  countryId={countryId || null}
+                  value={phone}
+                  onChange={setPhone}
+                  status={contact.data?.phone_status}
+                  invalid={phoneInvalid}
                 />
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" name="show_phone" defaultChecked={row?.show_phone} />
-                  {t("market.person.showField")}
-                </label>
+                <PhoneVisibilityField value={visibility} onChange={setVisibility} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="public_whatsapp">{t("market.form.whatsapp")}</Label>
