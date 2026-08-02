@@ -427,7 +427,7 @@ export function MarketShell({
       /* min-h-dvh + a growing <main> keep the footer at the natural end of the
        * content instead of leaving a blank strip above the fixed bottom nav.
        * The only reserved space is the nav height plus the safe area. */
-      className="flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0"
+      className="flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
     >
       <MarketHeader />
       <main className="flex-1">{children}</main>
