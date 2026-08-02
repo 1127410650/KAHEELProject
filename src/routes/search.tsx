@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { LayoutGrid, List, SlidersHorizontal } from "lucide-react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { LayoutGrid, List, Loader2, SlidersHorizontal } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { SA_CITIES } from "@/lib/mkt";
-import { loadCategories, loadListingTypes, loadListings } from "@/lib/mkt-queries";
+import { PAGE_SIZE, loadCategories, loadListingTypes, loadListingsPage } from "@/lib/mkt-queries";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ export interface SearchParams {
   deal?: string | undefined;
   sort?: string | undefined;
   view?: string | undefined;
+  advertiser?: string | undefined;
 }
 
 const title = "نتائج البحث — سوق تحقّق";
@@ -48,6 +50,7 @@ export const Route = createFileRoute("/search")({
       "deal",
       "sort",
       "view",
+      "advertiser",
     ] as const) {
       const value = pick(key);
       if (value !== undefined) out[key] = value;
@@ -72,14 +75,17 @@ function SearchPage() {
   const { t, locale } = useI18n();
   const params = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
 
-  const listings = useQuery({
+  // Results load page by page as the visitor scrolls instead of one big batch.
+  const listings = useInfiniteQuery({
     queryKey: ["mkt", "search", params, locale],
-    queryFn: () =>
-      loadListings(
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) =>
+      loadListingsPage(
         {
           q: params.q,
           categorySlug: params.category,
@@ -89,6 +95,10 @@ function SearchPage() {
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
           verifiedOnly: params.verified === "1",
+          advertiser:
+            params.advertiser === "individual" || params.advertiser === "business"
+              ? params.advertiser
+              : undefined,
           deal: params.deal === "sale" || params.deal === "rent" ? params.deal : undefined,
           sort:
             params.sort === "views" || params.sort === "price_asc" || params.sort === "price_desc"
@@ -96,8 +106,25 @@ function SearchPage() {
               : "newest",
         },
         locale,
+        pageParam,
       ),
+    getNextPageParam: (last, all) => (last.length < PAGE_SIZE ? undefined : all.length),
   });
+
+  const rows = (listings.data?.pages ?? []).flat();
+  const sentinel = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = sentinel.current;
+    if (!node) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting && listings.hasNextPage && !listings.isFetchingNextPage) {
+        void listings.fetchNextPage();
+      }
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [listings.hasNextPage, listings.isFetchingNextPage, listings.fetchNextPage, rows.length]);
 
   function update(patch: Partial<SearchParams>) {
     const next: SearchParams = { ...params, ...patch };
@@ -115,8 +142,24 @@ function SearchPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto grid w-full max-w-7xl gap-5 px-4 py-6 lg:grid-cols-[260px_1fr]">
-        <aside className="space-y-4 rounded-xl border border-border bg-card p-4">
+      <div className="mx-auto grid w-full max-w-7xl gap-4 px-3 py-5 sm:px-4 sm:py-6 lg:grid-cols-[260px_1fr]">
+        <Button
+          variant="outline"
+          size="sm"
+          className="lg:hidden"
+          onClick={() => setFiltersOpen((v) => !v)}
+        >
+          <SlidersHorizontal className="size-4" aria-hidden />
+          {filtersOpen ? t("common.close") : t("common.filter")}
+        </Button>
+
+        <aside
+          className={
+            filtersOpen
+              ? "space-y-4 rounded-xl border border-border bg-card p-4"
+              : "hidden space-y-4 rounded-xl border border-border bg-card p-4 lg:block"
+          }
+        >
           <p className="flex items-center gap-2 text-sm font-bold text-foreground">
             <SlidersHorizontal className="size-4" aria-hidden />
             {t("common.filter")}
@@ -237,6 +280,19 @@ function SearchPage() {
             </select>
           </div>
 
+          <div className="space-y-1.5">
+            <Label>{t("market.filters.advertiser")}</Label>
+            <select
+              value={params.advertiser ?? ""}
+              onChange={(e) => update({ advertiser: e.target.value })}
+              className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
+            >
+              <option value="">{t("market.filters.all")}</option>
+              <option value="individual">{t("market.advertiser.individual")}</option>
+              <option value="business">{t("market.advertiser.business")}</option>
+            </select>
+          </div>
+
           <label className="flex items-center gap-2 text-sm text-foreground">
             <input
               type="checkbox"
@@ -260,7 +316,7 @@ function SearchPage() {
         <section>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <p className="text-sm text-muted-foreground">
-              {t("market.resultsCount", { count: (listings.data ?? []).length })}
+              {t("market.resultsCount", { count: rows.length })}
             </p>
             <div className="flex items-center gap-2">
               <select
@@ -309,7 +365,7 @@ function SearchPage() {
                 <Skeleton key={i} className="h-56 w-full rounded-xl" />
               ))}
             </div>
-          ) : (listings.data ?? []).length === 0 ? (
+          ) : rows.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border p-10 text-center">
               <p className="text-sm text-muted-foreground">{t("market.noResults")}</p>
               <Link
@@ -320,17 +376,38 @@ function SearchPage() {
               </Link>
             </div>
           ) : view === "grid" ? (
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-              {(listings.data ?? []).map((l) => (
-                <ListingCard key={l.id} listing={l} />
-              ))}
-            </div>
+            <>
+              {/* Compact rows on phones, gallery grid from tablet up. */}
+              <div className="flex flex-col gap-2.5 sm:hidden">
+                {rows.map((l) => (
+                  <ListingCard key={l.id} listing={l} view="row" />
+                ))}
+              </div>
+              <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+                {rows.map((l) => (
+                  <ListingCard key={l.id} listing={l} />
+                ))}
+              </div>
+            </>
           ) : (
-            <div className="space-y-3">
-              {(listings.data ?? []).map((l) => (
+            <div className="space-y-2.5">
+              {rows.map((l) => (
                 <ListingCard key={l.id} listing={l} view="list" />
               ))}
             </div>
+          )}
+
+          <div ref={sentinel} className="h-10" aria-hidden />
+          {listings.isFetchingNextPage && (
+            <p className="flex items-center justify-center gap-2 py-4 text-xs text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              {t("common.loading")}
+            </p>
+          )}
+          {!listings.hasNextPage && rows.length > 0 && (
+            <p className="py-4 text-center text-xs text-muted-foreground">
+              {t("market.endOfResults")}
+            </p>
           )}
         </section>
       </div>
