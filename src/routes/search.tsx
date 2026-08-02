@@ -527,6 +527,7 @@ function SearchPage() {
       {!draftIsBusiness && (
         <label className="flex items-center gap-2 text-sm text-foreground">
           <Checkbox
+            className="size-4 shrink-0"
             checked={draft.img === "1"}
             onCheckedChange={(checked) =>
               setDraft({ ...draft, img: checked === true ? "1" : undefined })
@@ -604,7 +605,7 @@ function SearchPage() {
               side={isMobile ? "bottom" : "right"}
               className="max-h-[85dvh] overflow-y-auto sm:max-w-sm"
             >
-              <SheetHeader className="text-start">
+              <SheetHeader className="px-4 pe-12 text-start">
                 <SheetTitle>{t("market.filters.title")}</SheetTitle>
               </SheetHeader>
               <div className="px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">{filterBody}</div>
