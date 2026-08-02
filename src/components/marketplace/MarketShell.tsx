@@ -4,7 +4,9 @@ import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { SA_CITIES } from "@/lib/mkt";
+import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
+import { useMarketPreference } from "@/lib/mkt-geo";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
