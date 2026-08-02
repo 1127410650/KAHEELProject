@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticated/custody'
@@ -73,6 +74,11 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyInvoiceRoute = VerifyInvoiceRouteImport.update({
@@ -243,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
@@ -280,6 +287,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/custody': typeof AuthenticatedCustodyRoute
@@ -319,6 +327,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/custody': typeof AuthenticatedCustodyRoute
@@ -358,6 +367,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/marketplace'
     | '/register'
+    | '/search'
     | '/verify-invoice'
     | '/audit'
     | '/custody'
@@ -395,6 +405,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/marketplace'
     | '/register'
+    | '/search'
     | '/verify-invoice'
     | '/audit'
     | '/custody'
@@ -433,6 +444,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/marketplace'
     | '/register'
+    | '/search'
     | '/verify-invoice'
     | '/_authenticated/audit'
     | '/_authenticated/custody'
@@ -472,6 +484,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MarketplaceRoute: typeof MarketplaceRoute
   RegisterRoute: typeof RegisterRoute
+  SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
   InviteTokenRoute: typeof InviteTokenRoute
 }
@@ -518,6 +531,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-invoice': {
@@ -805,6 +825,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MarketplaceRoute: MarketplaceRoute,
   RegisterRoute: RegisterRoute,
+  SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
   InviteTokenRoute: InviteTokenRoute,
 }

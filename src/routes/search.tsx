@@ -13,17 +13,17 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export interface SearchParams {
-  q?: string;
-  category?: string;
-  sub?: string;
-  type?: string;
-  city?: string;
-  min?: string;
-  max?: string;
-  verified?: string;
-  deal?: string;
-  sort?: string;
-  view?: string;
+  q?: string | undefined;
+  category?: string | undefined;
+  sub?: string | undefined;
+  type?: string | undefined;
+  city?: string | undefined;
+  min?: string | undefined;
+  max?: string | undefined;
+  verified?: string | undefined;
+  deal?: string | undefined;
+  sort?: string | undefined;
+  view?: string | undefined;
 }
 
 const title = "نتائج البحث — سوق تحقّق";
