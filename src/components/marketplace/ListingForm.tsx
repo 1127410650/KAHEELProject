@@ -151,7 +151,7 @@ export function ListingForm({ listing }: Props) {
       toast.error(t("market.dash.pickCategory"));
       return;
     }
-    if (!countryId || !cityId) {
+    if (!cityId) {
       toast.error(t("market.geo.locationRequired"));
       return;
     }
@@ -178,10 +178,11 @@ export function ListingForm({ listing }: Props) {
         item_condition: isEquipment ? (fd.get("item_condition") as string) || null : null,
         deal_kind:
           typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
-        country_id: countryId || null,
+        // The country and its currency come from the account; the server forces
+        // them again so a hand-crafted request cannot pick another country.
+        country_id: countryId || accountCountry.data?.id || null,
         city_id: cityId || null,
-        currency:
-          (countries.data ?? []).find((c) => c.id === countryId)?.currency_code ?? "SAR",
+        currency: accountCountry.data?.currency_code ?? "SAR",
 
         city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
