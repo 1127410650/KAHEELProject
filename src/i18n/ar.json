@@ -2035,7 +2035,9 @@
     "account": {
       "menu": "قائمة الحساب",
       "switchTitle": "التبديل بين الحسابات",
-      "fallbackName": "مستخدم المنصة"
+      "fallbackName": "مستخدم المنصة",
+      "activityTitle": "نشاطي",
+      "manageTitle": "إدارة الحساب"
     }
   }
 }

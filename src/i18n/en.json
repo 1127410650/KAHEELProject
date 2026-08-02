@@ -2035,7 +2035,9 @@
     "account": {
       "menu": "Account menu",
       "switchTitle": "Switch accounts",
-      "fallbackName": "Platform user"
+      "fallbackName": "Platform user",
+      "activityTitle": "My activity",
+      "manageTitle": "Account management"
     }
   }
 }
