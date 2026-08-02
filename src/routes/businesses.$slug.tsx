@@ -88,7 +88,7 @@ function BusinessPage() {
   }
 
   const name = locale === "ar" ? biz.display_name_ar : biz.display_name_en || biz.display_name_ar;
-  const about = locale === "ar" ? biz.about_ar : biz.about_en || biz.about_ar;
+  const about = biz.about;
 
   return (
     <MarketShell>
@@ -126,9 +126,9 @@ function BusinessPage() {
               {biz.show_phone && biz.public_phone && <p>{biz.public_phone}</p>}
               {biz.show_whatsapp && biz.public_whatsapp && <p>{biz.public_whatsapp}</p>}
               {biz.show_email && biz.public_email && <p>{biz.public_email}</p>}
-              {biz.website && (
-                <a href={biz.website} target="_blank" rel="noreferrer noopener" className="text-primary">
-                  {biz.website}
+              {biz.public_website && (
+                <a href={biz.public_website} target="_blank" rel="noreferrer noopener" className="text-primary">
+                  {biz.public_website}
                 </a>
               )}
             </div>
