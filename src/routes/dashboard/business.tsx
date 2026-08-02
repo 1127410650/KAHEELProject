@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { geoName, loadCities, loadCountries } from "@/lib/mkt-geo";
+import { geoName, loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
 import { useWorkspaces } from "@/hooks/use-workspace";
 import { logAudit } from "@/lib/audit";
