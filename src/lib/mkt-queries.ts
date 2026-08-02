@@ -16,7 +16,10 @@ import type { ListingCardData } from "@/components/marketplace/ListingCard";
 export interface ListingFilters {
   q?: string | undefined;
   categorySlug?: string | undefined;
+  /** Suggestion feeds pass several category ids at once. */
+  categoryIds?: string[] | undefined;
   subcategoryId?: string | undefined;
+
   type?: string | undefined;
   city?: string | undefined;
   countryIso2?: string | undefined;
@@ -151,7 +154,11 @@ async function queryListings(
 
   if (categoryId) query = query.eq("category_id", categoryId);
   if (countryId) query = query.eq("country_id", countryId);
+  if (filters.categoryIds && filters.categoryIds.length > 0) {
+    query = query.in("category_id", filters.categoryIds);
+  }
   if (filters.cityId) query = query.eq("city_id", filters.cityId);
+
   if (filters.subcategoryId) query = query.eq("subcategory_id", filters.subcategoryId);
   if (filters.type) query = query.eq("type_code", filters.type);
   if (filters.advertiser) query = query.eq("advertiser_type", filters.advertiser);

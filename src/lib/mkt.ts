@@ -161,10 +161,12 @@ export interface MktUserProfile {
   show_whatsapp: boolean;
   public_email: string | null;
   public_whatsapp: string | null;
+  personalize_suggestions?: boolean;
 }
 
 export const USER_PROFILE_COLUMNS =
-  "user_id, username, display_name, headline, about, city, region, country_id, city_id, avatar_url, verification_status, is_published, joined_at, show_email, show_whatsapp, public_email, public_whatsapp";
+  "user_id, username, display_name, headline, about, city, region, country_id, city_id, avatar_url, verification_status, is_published, joined_at, show_email, show_whatsapp, public_email, public_whatsapp, personalize_suggestions";
+
 
 export const LISTING_COLUMNS =
   "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, quantity, unit, item_condition, deal_kind, city, region, country_id, city_id, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
