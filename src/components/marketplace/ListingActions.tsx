@@ -170,19 +170,8 @@ export function ListingActions({ listing, pendingAction }: Props) {
     }
   }
 
-  const dialogs = (
-    <>
-      <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{t("market.actions.requestQuote")}</DialogTitle>
-            <DialogDescription>{listing.title}</DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-  void dialogs;
+
+
 
   // Compact icon row shown at the top of the ad: favourite, share, report.
   if (variant === "quick") {
