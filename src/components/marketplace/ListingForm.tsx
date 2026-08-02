@@ -65,8 +65,8 @@ export function ListingForm({ listing }: Props) {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
-  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
-  const { preference } = useMarketPreference();
+  // The country is never chosen here: it always comes from the account.
+  const accountCountry = useAccountCountry();
   const [countryId, setCountryId] = useState<string>(listing?.country_id ?? "");
   const [cityId, setCityId] = useState<string>(listing?.city_id ?? "");
   const cities = useQuery({
