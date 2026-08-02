@@ -85,7 +85,10 @@ export function useMarketPreference() {
     setPreference(readStored());
     const listener = (value: MarketPreference) => setPreference(value);
     listeners.add(listener);
-    return () => listeners.delete(listener);
+    return () => {
+      listeners.delete(listener);
+    };
+
   }, []);
 
   const update = useCallback(async (next: MarketPreference) => {
