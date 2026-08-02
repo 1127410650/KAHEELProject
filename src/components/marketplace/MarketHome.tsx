@@ -4,7 +4,8 @@ import { ArrowLeft, Building2, Plus, Search, ShieldCheck, Sparkles, Tag, User } 
 import { useState } from "react";
 
 import { useI18n } from "@/i18n";
-import { SA_CITIES } from "@/lib/mkt";
+import { useMarketPreference } from "@/lib/mkt-geo";
+import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
 import { loadCategories, loadListings, loadVerifiedBusinesses } from "@/lib/mkt-queries";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
@@ -83,35 +84,38 @@ export function MarketHome() {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [city, setCity] = useState("");
+  const { preference } = useMarketPreference();
+  // The home page always reflects the market the visitor picked.
+  const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
+  const geoKey = `${preference.countryIso2}:${preference.cityId ?? "all"}`;
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const latest = useQuery({
-    queryKey: ["mkt", "home", "latest", locale],
-    queryFn: () => loadListings({ limit: 8 }, locale),
+    queryKey: ["mkt", "home", "latest", locale, geoKey],
+    queryFn: () => loadListings({ ...geo, limit: 8 }, locale),
   });
   const equipment = useQuery({
-    queryKey: ["mkt", "home", "equipment", locale],
-    queryFn: () => loadListings({ type: "equipment_sale", limit: 4 }, locale),
+    queryKey: ["mkt", "home", "equipment", locale, geoKey],
+    queryFn: () => loadListings({ ...geo, type: "equipment_sale", limit: 4 }, locale),
   });
   const rentals = useQuery({
-    queryKey: ["mkt", "home", "rentals", locale],
-    queryFn: () => loadListings({ type: "equipment_rent", limit: 4 }, locale),
+    queryKey: ["mkt", "home", "rentals", locale, geoKey],
+    queryFn: () => loadListings({ ...geo, type: "equipment_rent", limit: 4 }, locale),
   });
   const products = useQuery({
-    queryKey: ["mkt", "home", "products", locale],
-    queryFn: () => loadListings({ type: "product", limit: 4 }, locale),
+    queryKey: ["mkt", "home", "products", locale, geoKey],
+    queryFn: () => loadListings({ ...geo, type: "product", limit: 4 }, locale),
   });
   const services = useQuery({
-    queryKey: ["mkt", "home", "services", locale],
-    queryFn: () => loadListings({ type: "service", limit: 4 }, locale),
+    queryKey: ["mkt", "home", "services", locale, geoKey],
+    queryFn: () => loadListings({ ...geo, type: "service", limit: 4 }, locale),
   });
   const needs = useQuery({
-    queryKey: ["mkt", "home", "needs", locale],
+    queryKey: ["mkt", "home", "needs", locale, geoKey],
     queryFn: async () => {
       const [a, b] = await Promise.all([
-        loadListings({ type: "need_supplier", limit: 4 }, locale),
-        loadListings({ type: "need_contractor", limit: 4 }, locale),
+        loadListings({ ...geo, type: "need_supplier", limit: 4 }, locale),
+        loadListings({ ...geo, type: "need_contractor", limit: 4 }, locale),
       ]);
       return [...a, ...b].slice(0, 4);
     },
@@ -140,7 +144,11 @@ export function MarketHome() {
               e.preventDefault();
               navigate({
                 to: "/search",
-                search: { ...(q.trim() ? { q: q.trim() } : {}), ...(city ? { city } : {}) },
+                search: {
+                  ...(q.trim() ? { q: q.trim() } : {}),
+                  country: preference.countryIso2,
+                  ...(preference.cityId ? { cityId: preference.cityId } : {}),
+                },
               });
             }}
           >
@@ -157,19 +165,9 @@ export function MarketHome() {
                 className="h-11 ps-9"
               />
             </div>
-            <select
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              aria-label={t("market.filters.city")}
-              className="h-11 rounded-md border border-input bg-background px-3 text-sm"
-            >
-              <option value="">{t("market.filters.allCities")}</option>
-              {SA_CITIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center justify-center">
+              <MarketSwitcher />
+            </div>
             <Button type="submit" size="lg" className="h-11">
               {t("common.search")}
             </Button>
