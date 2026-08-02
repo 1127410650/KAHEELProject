@@ -43,7 +43,11 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
     const index = (next + images.length) % images.length;
     setActive(index);
     const track = trackRef.current;
-    if (track) track.scrollTo({ left: index * track.clientWidth, behavior: "smooth" });
+    if (!track) return;
+    // In an RTL page the track scrolls towards negative values, so the target
+    // offset has to follow the writing direction.
+    const rtl = getComputedStyle(track).direction === "rtl";
+    track.scrollTo({ left: (rtl ? -1 : 1) * index * track.clientWidth, behavior: "smooth" });
   }
 
   return (
@@ -53,10 +57,12 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
           ref={trackRef}
           onScroll={(e) => {
             const el = e.currentTarget;
-            if (el.clientWidth > 0) setActive(Math.round(el.scrollLeft / el.clientWidth));
+            // Math.abs keeps the index correct in both writing directions.
+            if (el.clientWidth > 0) setActive(Math.round(Math.abs(el.scrollLeft) / el.clientWidth));
           }}
           className="flex snap-x snap-mandatory overflow-x-auto"
         >
+
           {images.map((url, i) => (
             <button
               key={url}
