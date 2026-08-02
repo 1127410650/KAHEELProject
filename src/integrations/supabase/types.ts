@@ -2584,11 +2584,9 @@ export type Database = {
           is_published: boolean
           joined_at: string
           public_email: string | null
-          public_phone: string | null
           public_whatsapp: string | null
           region: string | null
           show_email: boolean
-          show_phone: boolean
           show_whatsapp: boolean
           updated_at: string
           user_id: string
@@ -2607,11 +2605,9 @@ export type Database = {
           is_published?: boolean
           joined_at?: string
           public_email?: string | null
-          public_phone?: string | null
           public_whatsapp?: string | null
           region?: string | null
           show_email?: boolean
-          show_phone?: boolean
           show_whatsapp?: boolean
           updated_at?: string
           user_id: string
@@ -2630,11 +2626,9 @@ export type Database = {
           is_published?: boolean
           joined_at?: string
           public_email?: string | null
-          public_phone?: string | null
           public_whatsapp?: string | null
           region?: string | null
           show_email?: boolean
-          show_phone?: boolean
           show_whatsapp?: boolean
           updated_at?: string
           user_id?: string
