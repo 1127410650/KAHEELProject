@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -525,17 +526,27 @@ function SearchPage() {
       )}
 
       {!draftIsBusiness && (
-        <label className="flex items-center gap-2 text-sm text-foreground">
-          <Checkbox
-            className="size-4 min-h-0 shrink-0"
-            checked={draft.img === "1"}
-            onCheckedChange={(checked) =>
-              setDraft({ ...draft, img: checked === true ? "1" : undefined })
-            }
-          />
-          {t("market.search.withImages")}
-        </label>
+        <div className="flex items-center gap-1">
+          {/* 20px visual box inside a 44px touch target */}
+          <span className="grid size-11 shrink-0 place-items-center">
+            <Checkbox
+              id="f-img"
+              className="size-5 min-h-0 rounded-[4px] border-2"
+              checked={draft.img === "1"}
+              onCheckedChange={(checked) =>
+                setDraft({ ...draft, img: checked === true ? "1" : undefined })
+              }
+            />
+          </span>
+          <label
+            htmlFor="f-img"
+            className="flex min-h-11 flex-1 cursor-pointer select-none items-center text-sm text-foreground"
+          >
+            {t("market.search.withImages")}
+          </label>
+        </div>
       )}
+
 
       <div className="flex gap-2 pt-1">
         <Button className="flex-1" onClick={applyFilters}>
@@ -603,13 +614,27 @@ function SearchPage() {
             </SheetTrigger>
             <SheetContent
               side={isMobile ? "bottom" : "right"}
-              className="max-h-[85dvh] overflow-y-auto sm:max-w-sm"
+              hideClose
+              className="flex max-h-[85dvh] flex-col gap-0 p-0 sm:max-w-sm"
             >
-              <SheetHeader className="px-4 pe-12 text-start">
-                <SheetTitle>{t("market.filters.title")}</SheetTitle>
+              {/* Header: title + close in one flex row, no absolute positioning */}
+              <SheetHeader className="flex shrink-0 flex-row items-center justify-between gap-3 space-y-0 border-b border-border px-4 py-2 text-start">
+                <SheetTitle className="min-w-0 flex-1 truncate text-base">
+                  {t("market.filters.title")}
+                </SheetTitle>
+                <SheetClose
+                  aria-label={t("market.filters.close")}
+                  title={t("market.filters.close")}
+                  className="grid size-11 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <X className="size-5" aria-hidden />
+                </SheetClose>
               </SheetHeader>
-              <div className="px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">{filterBody}</div>
+              <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+                {filterBody}
+              </div>
             </SheetContent>
+
           </Sheet>
 
           <select
