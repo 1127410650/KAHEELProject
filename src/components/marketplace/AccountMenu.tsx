@@ -195,7 +195,26 @@ export function AccountMenu() {
             </>
           )}
 
-          <div className="mt-4 overflow-hidden rounded-xl border border-border bg-card">
+          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
+            {t("market.account.activityTitle")}
+          </p>
+          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
+            {activityLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
+              >
+                <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
+            {t("market.account.manageTitle")}
+          </p>
+          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
             {manageLinks.map((link) => (
               <Link
                 key={link.to}
@@ -215,6 +234,7 @@ export function AccountMenu() {
               {t("nav.signOut")}
             </button>
           </div>
+
         </SheetContent>
       </Sheet>
     );
