@@ -1259,6 +1259,8 @@ export type Database = {
           about: string | null
           categories: string[]
           city: string | null
+          city_id: string | null
+          country_id: string | null
           created_at: string
           display_name_ar: string
           display_name_en: string | null
@@ -1286,6 +1288,8 @@ export type Database = {
           about?: string | null
           categories?: string[]
           city?: string | null
+          city_id?: string | null
+          country_id?: string | null
           created_at?: string
           display_name_ar: string
           display_name_en?: string | null
@@ -1313,6 +1317,8 @@ export type Database = {
           about?: string | null
           categories?: string[]
           city?: string | null
+          city_id?: string | null
+          country_id?: string | null
           created_at?: string
           display_name_ar?: string
           display_name_en?: string | null
@@ -1337,6 +1343,20 @@ export type Database = {
           verified_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "mkt_business_profiles_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_business_profiles_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "mkt_business_profiles_tenant_id_fkey"
             columns: ["tenant_id"]
@@ -1393,6 +1413,85 @@ export type Database = {
           },
         ]
       }
+      mkt_cities: {
+        Row: {
+          country_id: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+        }
+        Insert: {
+          country_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          sort_order?: number
+        }
+        Update: {
+          country_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cities_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_city_suggestions: {
+        Row: {
+          country_id: string
+          created_at: string
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          suggested_by: string
+          suggested_name: string
+        }
+        Insert: {
+          country_id: string
+          created_at?: string
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggested_by?: string
+          suggested_name: string
+        }
+        Update: {
+          country_id?: string
+          created_at?: string
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggested_by?: string
+          suggested_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_city_suggestions_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_conversations: {
         Row: {
           buyer_user_id: string
@@ -1437,6 +1536,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mkt_countries: {
+        Row: {
+          calling_code: string
+          created_at: string
+          currency_code: string
+          id: string
+          is_active: boolean
+          iso2: string
+          name_ar: string
+          name_en: string
+          sort_order: number
+        }
+        Insert: {
+          calling_code: string
+          created_at?: string
+          currency_code: string
+          id?: string
+          is_active?: boolean
+          iso2: string
+          name_ar: string
+          name_en: string
+          sort_order?: number
+        }
+        Update: {
+          calling_code?: string
+          created_at?: string
+          currency_code?: string
+          id?: string
+          is_active?: boolean
+          iso2?: string
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+        }
+        Relationships: []
       }
       mkt_enforcement_actions: {
         Row: {
@@ -1649,7 +1784,9 @@ export type Database = {
           advertiser_type: string | null
           category_id: string
           city: string | null
+          city_id: string | null
           contact_requests_count: number
+          country_id: string | null
           cover_image_url: string | null
           created_at: string
           currency: string
@@ -1683,7 +1820,9 @@ export type Database = {
           advertiser_type?: string | null
           category_id: string
           city?: string | null
+          city_id?: string | null
           contact_requests_count?: number
+          country_id?: string | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
@@ -1717,7 +1856,9 @@ export type Database = {
           advertiser_type?: string | null
           category_id?: string
           city?: string | null
+          city_id?: string | null
           contact_requests_count?: number
+          country_id?: string | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
@@ -1753,6 +1894,20 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listings_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listings_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
             referencedColumns: ["id"]
           },
           {
@@ -2339,16 +2494,59 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_user_market_preferences: {
+        Row: {
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_user_market_preferences_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_user_market_preferences_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_user_profiles: {
         Row: {
           about: string | null
           avatar_url: string | null
           city: string | null
+          city_id: string | null
+          country_id: string | null
           created_at: string
           display_name: string
           headline: string | null
           is_published: boolean
           joined_at: string
+          phone_e164: string | null
+          phone_visibility: string
           public_email: string | null
           public_phone: string | null
           public_whatsapp: string | null
@@ -2365,11 +2563,15 @@ export type Database = {
           about?: string | null
           avatar_url?: string | null
           city?: string | null
+          city_id?: string | null
+          country_id?: string | null
           created_at?: string
           display_name: string
           headline?: string | null
           is_published?: boolean
           joined_at?: string
+          phone_e164?: string | null
+          phone_visibility?: string
           public_email?: string | null
           public_phone?: string | null
           public_whatsapp?: string | null
@@ -2386,11 +2588,15 @@ export type Database = {
           about?: string | null
           avatar_url?: string | null
           city?: string | null
+          city_id?: string | null
+          country_id?: string | null
           created_at?: string
           display_name?: string
           headline?: string | null
           is_published?: boolean
           joined_at?: string
+          phone_e164?: string | null
+          phone_visibility?: string
           public_email?: string | null
           public_phone?: string | null
           public_whatsapp?: string | null
@@ -2403,7 +2609,22 @@ export type Database = {
           username?: string
           verification_status?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mkt_user_profiles_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_user_profiles_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_verification_events: {
         Row: {
