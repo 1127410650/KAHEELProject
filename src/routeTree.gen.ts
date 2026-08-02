@@ -51,6 +51,7 @@ import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/n
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects.index'
 import { Route as AuthenticatedProjectsIdRouteImport } from './routes/_authenticated/projects.$id'
 import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authenticated/requests.index'
@@ -280,6 +281,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedProjectsIndexRoute =
   AuthenticatedProjectsIndexRouteImport.update({
     id: '/projects/',
@@ -404,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -462,6 +469,7 @@ export interface FileRoutesByTo {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -522,6 +530,7 @@ export interface FileRoutesById {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
@@ -582,6 +591,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/u/$username'
     | '/admin/'
     | '/projects/$id'
     | '/requests/$id'
@@ -640,6 +650,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/u/$username'
     | '/admin'
     | '/projects/$id'
     | '/requests/$id'
@@ -699,6 +710,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/u/$username'
     | '/admin/'
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
@@ -740,6 +752,7 @@ export interface RootRouteChildren {
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  UUsernameRoute: typeof UUsernameRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
@@ -1045,6 +1058,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/projects/': {
       id: '/_authenticated/projects/'
       path: '/projects'
@@ -1241,6 +1261,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
+  UUsernameRoute: UUsernameRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
