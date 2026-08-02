@@ -84,11 +84,12 @@ export function MarketHeader() {
             </>
           ) : (
             <Button asChild size="sm" variant="outline">
-              <Link to="/auth">
+              <Link to="/auth" aria-label={t("market.signIn")} title={t("market.signIn")}>
                 <ShieldCheck className="size-4" aria-hidden />
                 <span className="hidden sm:inline">{t("market.signIn")}</span>
               </Link>
             </Button>
+
           )}
 
           <Button asChild size="sm" className="shrink-0">
