@@ -171,6 +171,9 @@ export function ListingForm({ listing }: Props) {
           typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
         country_id: countryId || null,
         city_id: cityId || null,
+        currency:
+          (countries.data ?? []).find((c) => c.id === countryId)?.currency_code ?? "SAR",
+
         city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         status: publish ? "pending" : "draft",
