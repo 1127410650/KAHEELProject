@@ -225,6 +225,22 @@ export function ListingActions({ listing, pendingAction, variant = "panel" }: Pr
     );
   }
 
+  // A visitor gets exactly one primary call to action; the real contact buttons
+  // only appear once there is a session, so nothing is duplicated.
+  if (!session) {
+    return (
+      <Button
+        size="lg"
+        className="w-full"
+        onClick={() =>
+          void navigate({ href: loginHref(currentPath().split("?")[0] ?? "/", "contact") })
+        }
+      >
+        {t("market.ad.signInToContact")}
+      </Button>
+    );
+  }
+
   return (
     <>
       <div className="grid gap-2 sm:grid-cols-2">
@@ -245,6 +261,7 @@ export function ListingActions({ listing, pendingAction, variant = "panel" }: Pr
           {t("market.actions.contact")}
         </Button>
       </div>
+
 
 
       <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
