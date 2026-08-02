@@ -585,27 +585,29 @@ function AdPage() {
             <ListingGallery images={gallery} title={listing.title} />
           </div>
 
-          {/* On phones the contact panel sits right under the gallery. */}
+          {/* On phones the contact panel sits right under the gallery.
+           * Owner tools and the contact panel are mutually exclusive. */}
           <div className="mt-4 lg:hidden">
             {isOwner ? (
               <OwnerTools listing={listing} onDone={() => void ad.refetch()} />
             ) : (
               <div className="rounded-xl border border-border bg-card p-4">
                 <ListingActions listing={listing} pendingAction={action} />
-                {!session && (
-                  <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-                    <Link to="/auth">{t("market.ad.signInToContact")}</Link>
-                  </Button>
-                )}
               </div>
             )}
           </div>
 
-          {listing.summary && (
-            <p className="mt-4 break-words text-sm text-foreground">{listing.summary}</p>
+          {leadSummary && (
+            <section className="mt-4 rounded-xl border border-border bg-card p-4">
+              <h2 className="text-sm font-bold text-foreground">{t("market.ad.summary")}</h2>
+              <p className="mt-2 break-words text-sm leading-relaxed text-muted-foreground">
+                {leadSummary}
+              </p>
+            </section>
           )}
 
           {listing.description && <DescriptionBlock text={listing.description} />}
+
 
           <ListingSpecs listing={listing} />
 
