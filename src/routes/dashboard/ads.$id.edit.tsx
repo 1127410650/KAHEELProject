@@ -38,7 +38,15 @@ function EditAdPage() {
         .select(LISTING_COLUMNS)
         .eq("id", id)
         .maybeSingle();
-      return (data as unknown as MktListing | null) ?? null;
+      const row = (data as unknown as MktListing | null) ?? null;
+      if (!row) return null;
+      // The exact pin and the street address are unreadable through the table;
+      // only the owner/admin path may fetch them back for editing.
+      const { data: loc } = await supabase.rpc("mkt_listing_exact_location", {
+        p_listing_id: id,
+      });
+      const exact = Array.isArray(loc) ? loc[0] : null;
+      return exact ? { ...row, ...exact } : row;
     },
   });
 
