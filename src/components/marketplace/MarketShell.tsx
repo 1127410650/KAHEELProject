@@ -68,7 +68,7 @@ export function MarketHeader() {
           <button
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-            aria-label={t("nav.language")}
+            aria-label={t("common.language")}
             className="hidden rounded-md border border-input px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-primary sm:block"
           >
             {locale === "ar" ? "EN" : "ع"}
