@@ -242,6 +242,9 @@ function ProfilePage() {
                   </option>
                 ))}
               </select>
+              <p className="text-[11px] text-muted-foreground">
+                {t("market.geo.countryAccountHint")}
+              </p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="city_id">{t("market.filters.city")}</Label>
