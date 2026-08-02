@@ -146,7 +146,7 @@ function BusinessDashboardPage() {
         display_name_en: view.display_name_en ?? null,
         headline: view.headline ?? null,
         about: view.about ?? null,
-        country_id: view.country_id ?? null,
+        country_id: accountCountry.data?.id ?? view.country_id ?? null,
         city_id: view.city_id ?? null,
         city: (cities.data ?? []).find((c) => c.id === view.city_id)?.name_ar ?? null,
         region: view.region ?? null,
