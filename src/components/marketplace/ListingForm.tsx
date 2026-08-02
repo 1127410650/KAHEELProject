@@ -152,6 +152,16 @@ export function ListingForm({ listing }: Props) {
       toast.error(t("market.dash.pickCategory"));
       return;
     }
+    if (!countryId || !cityId) {
+      toast.error(t("market.geo.locationRequired"));
+      return;
+    }
+    // The database enforces this too; catching it here keeps the message clear.
+    if (!(cities.data ?? []).some((c) => c.id === cityId)) {
+      toast.error(t("market.geo.cityMismatch"));
+      return;
+    }
+
     setBusy(true);
     try {
       const payload = {
