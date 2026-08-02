@@ -223,7 +223,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
       let businessId: string | null = null;
       if (row.tenant_id) {
         const { data: biz } = await supabase
-          .from("mkt_businesses")
+          .from("mkt_business_profiles")
           .select("id")
           .eq("tenant_id", row.tenant_id)
           .maybeSingle();
