@@ -84,11 +84,12 @@ export function MarketHeader() {
             </>
           ) : (
             <Button asChild size="sm" variant="outline">
-              <Link to="/auth">
+              <Link to="/auth" aria-label={t("market.signIn")} title={t("market.signIn")}>
                 <ShieldCheck className="size-4" aria-hidden />
                 <span className="hidden sm:inline">{t("market.signIn")}</span>
               </Link>
             </Button>
+
           )}
 
           <Button asChild size="sm" className="shrink-0">
@@ -421,16 +422,21 @@ export function MarketShell({
   const variant = footer ?? footerVariantForPath(pathname);
 
   return (
-    <div dir={dir} className="flex flex-col overflow-x-hidden bg-background">
+    <div
+      dir={dir}
+      /* min-h-dvh + a growing <main> keep the footer at the natural end of the
+       * content instead of leaving a blank strip above the fixed bottom nav.
+       * The only reserved space is the nav height plus the safe area. */
+      className="flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+    >
       <MarketHeader />
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
 
       {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}
-      {/* Space for the mobile bottom nav so content never hides behind it. */}
-      <div className="h-16 lg:hidden" aria-hidden />
       <MarketBottomNav />
     </div>
+
   );
 }
 
