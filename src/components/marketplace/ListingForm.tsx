@@ -1,7 +1,15 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Building2, ImagePlus, Loader2, User, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Building2,
+  ChevronDown,
+  ChevronUp,
+  ImagePlus,
+  Loader2,
+  User,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -31,6 +39,26 @@ export function ListingForm({ listing }: Props) {
   const [categoryId, setCategoryId] = useState(listing?.category_id ?? "");
   const [priceOnRequest, setPriceOnRequest] = useState(listing?.price_on_request ?? false);
   const [files, setFiles] = useState<File[]>([]);
+
+  // Object URLs are created once per selected file and revoked on change so
+  // previews survive re-renders without leaking memory.
+  const previews = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files]);
+  const previewKeys = useMemo(
+    () => files.map((f, i) => `${f.name}-${f.size}-${f.lastModified}-${i}`),
+    [files],
+  );
+  useEffect(() => () => previews.forEach((url) => URL.revokeObjectURL(url)), [previews]);
+
+  /** Reorder a selected image; index 0 is always the cover. */
+  function move(from: number, to: number) {
+    setFiles((prev) => {
+      if (to < 0 || to >= prev.length) return prev;
+      const next = [...prev];
+      const [item] = next.splice(from, 1);
+      if (item) next.splice(to, 0, item);
+      return next;
+    });
+  }
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
@@ -343,7 +371,12 @@ export function ListingForm({ listing }: Props) {
             accept="image/*"
             multiple
             className="hidden"
-            onChange={(e) => setFiles(Array.from(e.target.files ?? []).slice(0, 8))}
+            onChange={(e) => {
+              const picked = Array.from(e.target.files ?? []);
+              // Appending keeps earlier picks instead of replacing them.
+              setFiles((prev) => [...prev, ...picked].slice(0, 8));
+              e.target.value = "";
+            }}
           />
         </label>
         {files.length > 0 && (
@@ -351,17 +384,45 @@ export function ListingForm({ listing }: Props) {
             <p className="text-[11px] text-muted-foreground">{t("market.dash.coverHint")}</p>
             <ul className="flex flex-wrap gap-2">
               {files.map((f, index) => (
-                <li key={`${f.name}-${index}`} className="relative">
+                <li key={previewKeys[index] ?? `${f.name}-${index}`} className="relative">
                   <img
-                    src={URL.createObjectURL(f)}
+                    src={previews[index]}
                     alt={f.name}
                     className="size-20 rounded-lg border border-border object-cover"
                   />
-                  {index === 0 && (
+                  {index === 0 ? (
                     <span className="absolute bottom-1 start-1 rounded bg-primary px-1 text-[9px] font-semibold text-primary-foreground">
                       {t("market.dash.cover")}
                     </span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="absolute bottom-1 start-1 rounded bg-background/90 px-1 text-[9px] font-semibold text-foreground shadow"
+                      onClick={() => move(index, 0)}
+                    >
+                      {t("market.dash.makeCover")}
+                    </button>
                   )}
+                  <span className="absolute bottom-1 end-1 flex gap-0.5">
+                    <button
+                      type="button"
+                      aria-label={t("market.dash.moveEarlier")}
+                      disabled={index === 0}
+                      className="rounded bg-background/90 p-0.5 text-foreground shadow disabled:opacity-40"
+                      onClick={() => move(index, index - 1)}
+                    >
+                      <ChevronUp className="size-3" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={t("market.dash.moveLater")}
+                      disabled={index === files.length - 1}
+                      className="rounded bg-background/90 p-0.5 text-foreground shadow disabled:opacity-40"
+                      onClick={() => move(index, index + 1)}
+                    >
+                      <ChevronDown className="size-3" aria-hidden />
+                    </button>
+                  </span>
                   <button
                     type="button"
                     aria-label={t("common.delete")}

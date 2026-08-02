@@ -7,7 +7,7 @@ import { useI18n } from "@/i18n";
 import { SA_CITIES } from "@/lib/mkt";
 import { PAGE_SIZE, loadCategories, loadListingTypes, loadListingsPage } from "@/lib/mkt-queries";
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { ListingCard } from "@/components/marketplace/ListingCard";
+import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -108,10 +108,23 @@ function SearchPage() {
         locale,
         pageParam,
       ),
-    getNextPageParam: (last, all) => (last.length < PAGE_SIZE ? undefined : all.length),
+    getNextPageParam: (last, all) => (last.fetched < PAGE_SIZE ? undefined : all.length),
   });
 
-  const rows = (listings.data?.pages ?? []).flat();
+  // De-duplicate defensively: a listing published between two page fetches must
+  // never render twice.
+  const rows = (() => {
+    const seen = new Set<string>();
+    const out: ListingCardData[] = [];
+    for (const page of listings.data?.pages ?? []) {
+      for (const row of page.rows) {
+        if (seen.has(row.id)) continue;
+        seen.add(row.id);
+        out.push(row);
+      }
+    }
+    return out;
+  })();
   const sentinel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -125,6 +138,51 @@ function SearchPage() {
     observer.observe(node);
     return () => observer.disconnect();
   }, [listings.hasNextPage, listings.isFetchingNextPage, listings.fetchNextPage, rows.length]);
+
+  // Remember where the visitor was so opening an ad and coming back lands on the
+  // same card instead of jumping to the top of the results.
+  const scrollKey = `tahqaq.mkt.search.scroll:${JSON.stringify(params)}`;
+  const restored = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onScroll = () => {
+      // A navigation away resets scrollY to 0; keep the last real position.
+      if (window.scrollY > 0) window.sessionStorage.setItem(scrollKey, String(window.scrollY));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [scrollKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || restored.current || rows.length === 0) return;
+    const saved = Number(window.sessionStorage.getItem(scrollKey) ?? "0");
+    if (!saved) {
+      restored.current = true;
+      return;
+    }
+    // Keep pulling pages until the saved offset exists in the document again.
+    if (document.documentElement.scrollHeight < saved + window.innerHeight) {
+      if (listings.hasNextPage && !listings.isFetchingNextPage) void listings.fetchNextPage();
+      return;
+    }
+    restored.current = true;
+    // The router also restores scroll on back; re-apply a few frames later so the
+    // saved position wins once the results are laid out.
+    const timers = [0, 60, 200, 500].map((delay) =>
+      window.setTimeout(() => window.scrollTo({ top: saved }), delay),
+    );
+    return () => timers.forEach((id) => window.clearTimeout(id));
+
+  }, [
+    rows.length,
+    scrollKey,
+    listings.hasNextPage,
+    listings.isFetchingNextPage,
+    listings.fetchNextPage,
+  ]);
+
+
 
   function update(patch: Partial<SearchParams>) {
     const next: SearchParams = { ...params, ...patch };
