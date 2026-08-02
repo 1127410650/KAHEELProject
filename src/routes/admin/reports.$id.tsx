@@ -208,17 +208,28 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
     queryFn: async () => {
       const { data } = await supabase
         .from("mkt_listings")
-        .select("id, title, slug, status, business_id, owner_user_id")
+        .select("id, title, slug, status, tenant_id, owner_user_id")
         .eq("id", report.listing_id)
         .maybeSingle();
-      return data as {
+      if (!data) return null;
+      const row = data as {
         id: string;
         title: string;
         slug: string | null;
         status: string;
-        business_id: string | null;
+        tenant_id: string | null;
         owner_user_id: string;
-      } | null;
+      };
+      let businessId: string | null = null;
+      if (row.tenant_id) {
+        const { data: biz } = await supabase
+          .from("mkt_businesses")
+          .select("id")
+          .eq("tenant_id", row.tenant_id)
+          .maybeSingle();
+        businessId = (biz as { id: string } | null)?.id ?? null;
+      }
+      return { ...row, business_id: businessId };
     },
   });
 
