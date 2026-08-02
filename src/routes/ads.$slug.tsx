@@ -648,7 +648,12 @@ function AdPage() {
 
           <ListingSpecs listing={listing} />
 
+          {/* Real estate licence facts: never for other categories, and never a
+           * trust badge — account verification is a separate matter. */}
+          {ad.data.license && <ListingLicenseSection license={ad.data.license} />}
+
           <LocationBlock ad={ad.data} cityLabel={cityLabel} />
+
 
           <div className="mt-4 lg:hidden">
             <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />
