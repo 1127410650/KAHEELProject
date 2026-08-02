@@ -525,7 +525,7 @@ function AdPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 py-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px]">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 pb-6 pt-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px] lg:pb-6">
         <article className="min-w-0">
           {!visible && (
             <div className="mb-3 rounded-xl border border-border bg-secondary p-3">
