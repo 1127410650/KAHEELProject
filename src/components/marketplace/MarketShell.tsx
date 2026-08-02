@@ -8,6 +8,7 @@ import { SA_CITIES } from "@/lib/mkt";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
@@ -70,6 +71,15 @@ export function MarketHeader() {
               <Link to="/dashboard/requests" className="text-sm font-medium text-foreground">
                 {t("market.nav.myRequests")}
               </Link>
+              <Link to="/dashboard/notifications" className="text-sm font-medium text-foreground">
+                {t("market.notif.title")}
+              </Link>
+              <Link to="/dashboard/reports" className="text-sm font-medium text-foreground">
+                {t("market.dash.reports")}
+              </Link>
+              <Link to="/dashboard/violations" className="text-sm font-medium text-foreground">
+                {t("market.dash.violations")}
+              </Link>
             </div>
           </SheetContent>
         </Sheet>
@@ -118,6 +128,7 @@ export function MarketHeader() {
         <nav className="hidden items-center gap-5 lg:flex">{navLinks}</nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          <MktNotificationsBell />
           <button
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}

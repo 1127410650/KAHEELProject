@@ -1485,7 +1485,8 @@
       },
       "needsVerification": "Listings can be submitted for review only after the business is verified. You can save a draft.",
       "reports": "My reports",
-      "violations": "My violations"
+      "violations": "My violations",
+      "notifications": "Alerts"
     },
     "admin": {
       "title": "Marketplace admin",
@@ -1848,6 +1849,14 @@
         "tooManyFiles": "Too many files.",
         "generic": "The operation failed. Please try again."
       }
+    },
+    "notif": {
+      "title": "Marketplace alerts",
+      "markAll": "Mark all as read",
+      "markOne": "Mark as read",
+      "empty": "No notifications",
+      "viewAll": "View all notifications",
+      "unread": "Unread"
     }
   }
 }
