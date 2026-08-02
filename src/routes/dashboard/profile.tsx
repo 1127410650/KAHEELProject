@@ -114,7 +114,7 @@ function Section({
   );
 }
 
-function FieldError({ message }: { message?: string }) {
+function FieldError({ message }: { message?: string | undefined }) {
   if (!message) return null;
   return <p className="text-[11px] font-medium text-destructive">{message}</p>;
 }
@@ -272,7 +272,7 @@ function ProfilePage() {
     let e164: string | null = null;
     if (phone.trim()) {
       e164 = toE164(iso2, phone);
-      if (!e164) next.phone = t("market.geo.cityMismatch") && t("market.person.whatsappInvalid");
+      if (!e164) next.phone = t("market.person.whatsappInvalid");
     }
 
     if (Object.keys(next).length === 0 && !shape) {
