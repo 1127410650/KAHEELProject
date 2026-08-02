@@ -18,6 +18,7 @@ import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
+import { currencyLabel } from "@/lib/mkt";
 
 import { Button } from "@/components/ui/button";
 
@@ -376,7 +377,7 @@ export function MarketFooter() {
         </div>
       </div>
       <p className="border-t border-border py-4 text-center text-xs text-muted-foreground">
-        {t("market.footer.rights")} · Asia/Riyadh · SAR
+        {t("market.footer.rights")} · Asia/Riyadh · {currencyLabel("SAR", locale)}
       </p>
     </footer>
   );
@@ -388,7 +389,7 @@ export function MarketCompactFooter() {
   return (
     <footer className="mt-8 border-t border-border">
       <p className="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-muted-foreground">
-        {t("market.footer.rights")} · Asia/Riyadh · SAR
+        {t("market.footer.rights")} · Asia/Riyadh · {currencyLabel("SAR", locale)}
       </p>
     </footer>
   );
