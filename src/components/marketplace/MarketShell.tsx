@@ -18,6 +18,7 @@ import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
+import { currencyLabel } from "@/lib/mkt";
 
 import { Button } from "@/components/ui/button";
 
@@ -316,7 +317,7 @@ interface FooterGroup {
 }
 
 export function MarketFooter() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   const groups: FooterGroup[] = [
     {
@@ -376,7 +377,7 @@ export function MarketFooter() {
         </div>
       </div>
       <p className="border-t border-border py-4 text-center text-xs text-muted-foreground">
-        {t("market.footer.rights")} · Asia/Riyadh · SAR
+        {t("market.footer.rights")} · Asia/Riyadh · {currencyLabel("SAR", locale)}
       </p>
     </footer>
   );
@@ -384,11 +385,11 @@ export function MarketFooter() {
 
 /** Legal-only strip for long public content pages; never duplicates the bottom nav. */
 export function MarketCompactFooter() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
       <p className="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-muted-foreground">
-        {t("market.footer.rights")} · Asia/Riyadh · SAR
+        {t("market.footer.rights")} · Asia/Riyadh · {currencyLabel("SAR", locale)}
       </p>
     </footer>
   );
@@ -430,7 +431,10 @@ export function MarketShell({
       className="flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
     >
       <MarketHeader />
-      <main className="flex-1">{children}</main>
+      {/* Only the marketing surface stretches; content pages end right after
+       * their last section so a short ad leaves no blank strip. */}
+      <main className={variant === "full" ? "flex-1" : ""}>{children}</main>
+
 
       {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}

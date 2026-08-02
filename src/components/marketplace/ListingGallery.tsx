@@ -30,14 +30,15 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
   }, [zoom]);
 
   if (images.length === 0) {
-    // A clean placeholder keeps the layout intact instead of a broken gap.
+    // A balanced placeholder: no counter, no arrows, no thumbnail strip.
     return (
-      <div className="grid aspect-[16/10] w-full place-items-center gap-2 rounded-xl border border-border bg-muted text-sm text-muted-foreground">
-        <ImageOff className="size-7" aria-hidden />
+      <div className="grid h-36 w-full place-items-center gap-1.5 rounded-xl border border-border bg-muted text-sm text-muted-foreground sm:h-44">
+        <ImageOff className="size-6" aria-hidden />
         <span>{t("market.noImage")}</span>
       </div>
     );
   }
+
 
   function go(next: number) {
     const index = (next + images.length) % images.length;

@@ -505,6 +505,17 @@ function AdPage() {
 
   const cityLabel = city ? geoName(city, locale) : listing.city;
   const countryLabel = country ? geoName(country, locale) : null;
+  // The short summary is only worth a block of its own when it is not already
+  // repeated in the title or the description.
+  const summaryText = listing.summary?.trim() ?? "";
+  const normalize = (s: string) => s.replace(/\s+/g, " ").trim().toLowerCase();
+  const leadSummary =
+    summaryText &&
+    normalize(summaryText) !== normalize(listing.title) &&
+    !normalize(listing.description ?? "").includes(normalize(summaryText))
+      ? summaryText
+      : null;
+
   // The country is redundant for the home market; it only helps across borders.
   const showCountry = !!countryLabel && country?.iso2 !== "SA";
   const categoryPath = [category, subcategory]
@@ -514,7 +525,7 @@ function AdPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 py-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px]">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 pb-6 pt-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px] lg:pb-6">
         <article className="min-w-0">
           {!visible && (
             <div className="mb-3 rounded-xl border border-border bg-secondary p-3">
@@ -546,7 +557,7 @@ function AdPage() {
             {listing.title}
           </h1>
           <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
-            {priceLabel(listing, t("market.priceOnRequest"))}
+            {priceLabel(listing, t("market.priceOnRequest"), locale)}
           </p>
 
           {categoryPath && (
@@ -585,27 +596,29 @@ function AdPage() {
             <ListingGallery images={gallery} title={listing.title} />
           </div>
 
-          {/* On phones the contact panel sits right under the gallery. */}
+          {/* On phones the contact panel sits right under the gallery.
+           * Owner tools and the contact panel are mutually exclusive. */}
           <div className="mt-4 lg:hidden">
             {isOwner ? (
               <OwnerTools listing={listing} onDone={() => void ad.refetch()} />
             ) : (
               <div className="rounded-xl border border-border bg-card p-4">
                 <ListingActions listing={listing} pendingAction={action} />
-                {!session && (
-                  <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-                    <Link to="/auth">{t("market.ad.signInToContact")}</Link>
-                  </Button>
-                )}
               </div>
             )}
           </div>
 
-          {listing.summary && (
-            <p className="mt-4 break-words text-sm text-foreground">{listing.summary}</p>
+          {leadSummary && (
+            <section className="mt-4 rounded-xl border border-border bg-card p-4">
+              <h2 className="text-sm font-bold text-foreground">{t("market.ad.summary")}</h2>
+              <p className="mt-2 break-words text-sm leading-relaxed text-muted-foreground">
+                {leadSummary}
+              </p>
+            </section>
           )}
 
           {listing.description && <DescriptionBlock text={listing.description} />}
+
 
           <ListingSpecs listing={listing} />
 
@@ -638,11 +651,6 @@ function AdPage() {
           ) : (
             <div className="rounded-xl border border-border bg-card p-4">
               <ListingActions listing={listing} pendingAction={action} />
-              {!session && (
-                <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-                  <Link to="/auth">{t("market.ad.signInToContact")}</Link>
-                </Button>
-              )}
             </div>
           )}
           <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />

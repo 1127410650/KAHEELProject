@@ -225,14 +225,34 @@ export function currentPath(): string {
   return window.location.pathname + window.location.search;
 }
 
+/** Arabic short forms so the price never mixes scripts inside one label. */
+const CURRENCY_AR: Record<string, string> = {
+  SAR: "ر.س",
+  AED: "د.إ",
+  KWD: "د.ك",
+  QAR: "ر.ق",
+  BHD: "د.ب",
+  OMR: "ر.ع",
+  EGP: "ج.م",
+  JOD: "د.أ",
+  USD: "$",
+};
+
+export function currencyLabel(code: string, locale: "ar" | "en"): string {
+  return locale === "ar" ? (CURRENCY_AR[code] ?? code) : code;
+}
+
 export function priceLabel(
   listing: Pick<MktListing, "price" | "price_on_request" | "price_unit" | "currency">,
   onRequestText: string,
+  locale: "ar" | "en" = "en",
 ): string {
   if (listing.price_on_request || listing.price === null) return onRequestText;
   const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(listing.price);
-  return `${amount} ${listing.currency}${listing.price_unit ? ` / ${listing.price_unit}` : ""}`;
+  const currency = currencyLabel(listing.currency, locale);
+  return `${amount} ${currency}${listing.price_unit ? ` / ${listing.price_unit}` : ""}`;
 }
+
 
 /** Short "x days ago" style label used across marketplace cards. */
 export function relativeTime(iso: string | null, locale: "ar" | "en"): string {
