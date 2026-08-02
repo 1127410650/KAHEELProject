@@ -381,15 +381,6 @@ function SearchPage() {
             </select>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-foreground">
-            <input
-              type="checkbox"
-              checked={params.verified === "1"}
-              onChange={(e) => update({ verified: e.target.checked ? "1" : undefined })}
-              className="size-4 rounded border-input"
-            />
-            {t("market.filters.verifiedOnly")}
-          </label>
 
           <Button
             variant="outline"
