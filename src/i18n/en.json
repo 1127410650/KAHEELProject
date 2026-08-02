@@ -1429,6 +1429,57 @@
       "notFound": "Category not found",
       "subcategories": "Subcategories",
       "browse": "Browse category"
+    },
+    "dash": {
+      "myAds": "My listings",
+      "requests": "Quote requests",
+      "messages": "Messages",
+      "favorites": "Favorites",
+      "business": "Business profile",
+      "views": "views",
+      "view": "View",
+      "edit": "Edit",
+      "archive": "Archive",
+      "archived": "Listing archived",
+      "noAds": "No listings yet",
+      "noFavorites": "No saved listings",
+      "noRequests": "No requests yet",
+      "noMessages": "No conversations",
+      "pickConversation": "Select a conversation",
+      "pickCategory": "Select a category",
+      "listingTitle": "Listing title",
+      "summary": "Short summary",
+      "description": "Full description",
+      "price": "Price",
+      "priceUnit": "Price unit",
+      "condition": "Condition",
+      "region": "Region",
+      "images": "Images",
+      "addImages": "Add images (up to 8)",
+      "submitForReview": "Submit for review",
+      "saveDraft": "Save as draft",
+      "savedDraft": "Saved as draft",
+      "submitted": "Listing submitted for review",
+      "reviewNote": "Listings go live after marketplace review.",
+      "status": {
+        "draft": "Draft",
+        "pending_review": "Under review",
+        "published": "Published",
+        "rejected": "Rejected",
+        "paused": "Paused",
+        "archived": "Archived",
+        "expired": "Expired"
+      },
+      "quoteStatus": {
+        "new": "New",
+        "viewed": "Viewed",
+        "quoted": "Quoted",
+        "accepted": "Accepted",
+        "declined": "Declined",
+        "closed": "Closed",
+        "cancelled": "Cancelled",
+        "expired": "Expired"
+      }
     }
   }
 }

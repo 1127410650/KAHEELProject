@@ -1429,6 +1429,57 @@
       "notFound": "التصنيف غير متوفر",
       "subcategories": "التصنيفات الفرعية",
       "browse": "تصفّح التصنيف"
+    },
+    "dash": {
+      "myAds": "إعلاناتي",
+      "requests": "طلبات عروض السعر",
+      "messages": "المحادثات",
+      "favorites": "المفضلة",
+      "business": "ملف المنشأة",
+      "views": "مشاهدة",
+      "view": "عرض",
+      "edit": "تعديل",
+      "archive": "أرشفة",
+      "archived": "تم أرشفة الإعلان",
+      "noAds": "لا توجد إعلانات بعد",
+      "noFavorites": "لا توجد إعلانات في المفضلة",
+      "noRequests": "لا توجد طلبات بعد",
+      "noMessages": "لا توجد محادثات",
+      "pickConversation": "اختر محادثة لعرضها",
+      "pickCategory": "اختر التصنيف",
+      "listingTitle": "عنوان الإعلان",
+      "summary": "وصف مختصر",
+      "description": "الوصف التفصيلي",
+      "price": "السعر",
+      "priceUnit": "وحدة السعر",
+      "condition": "الحالة",
+      "region": "المنطقة",
+      "images": "الصور",
+      "addImages": "إضافة صور (حتى 8)",
+      "submitForReview": "إرسال للمراجعة",
+      "saveDraft": "حفظ كمسودة",
+      "savedDraft": "تم الحفظ كمسودة",
+      "submitted": "تم إرسال الإعلان للمراجعة",
+      "reviewNote": "يُنشر الإعلان بعد مراجعته من إدارة السوق.",
+      "status": {
+        "draft": "مسودة",
+        "pending_review": "قيد المراجعة",
+        "published": "منشور",
+        "rejected": "مرفوض",
+        "paused": "موقوف",
+        "archived": "مؤرشف",
+        "expired": "منتهي"
+      },
+      "quoteStatus": {
+        "new": "جديد",
+        "viewed": "تم الاطلاع",
+        "quoted": "تم إرسال عرض",
+        "accepted": "مقبول",
+        "declined": "مرفوض",
+        "closed": "مغلق",
+        "cancelled": "ملغى",
+        "expired": "منتهي"
+      }
     }
   }
 }
