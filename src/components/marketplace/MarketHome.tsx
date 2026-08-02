@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Building2, Plus, Search, ShieldCheck, Sparkles, Tag, User } from "lucide-react";
+import { ArrowLeft, Building2, Plus, Search, Sparkles, Tag, User } from "lucide-react";
 import { useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { MarketSwitcher } from "@/components/marketplace/MarketSwitcher";
-import { loadCategories, loadListings, loadVerifiedBusinesses } from "@/lib/mkt-queries";
-import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { loadCategories, loadListings } from "@/lib/mkt-queries";
+import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
