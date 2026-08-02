@@ -120,13 +120,8 @@ export function MarketHome() {
       return [...a, ...b].slice(0, 4);
     },
   });
-  const verified = useQuery({
-    queryKey: ["mkt", "home", "verified"],
-    queryFn: () => loadVerifiedBusinesses(8),
-  });
 
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
-  const verifiedList = verified.data ?? [];
 
   return (
     <>
