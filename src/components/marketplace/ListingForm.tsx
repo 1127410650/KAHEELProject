@@ -22,11 +22,23 @@ import {
   type SpecField,
 } from "@/lib/mkt-taxonomy";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
+import {
+  licenseBlockers,
+  loadOwnerLicense,
+  RE_ROOT_SLUG,
+  saveListingLicense,
+} from "@/lib/mkt-license";
 import { CategoryPicker } from "@/components/marketplace/CategoryPicker";
 import {
   ListingLocationPicker,
   type ListingLocationValue,
 } from "@/components/marketplace/ListingLocationPicker";
+import {
+  EMPTY_LICENSE,
+  RealEstateLicenseFields,
+  type LicenseFormValue,
+} from "@/components/marketplace/RealEstateLicenseFields";
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,6 +82,10 @@ export function ListingForm({ listing }: Props) {
     (listing?.specs as Record<string, SpecValue> | null) ?? {},
   );
   const [files, setFiles] = useState<File[]>([]);
+  // Licence data of a real estate ad. It is never kept in a local draft: the
+  // numbers are legal identifiers, so they only live in the database row.
+  const [license, setLicense] = useState<LicenseFormValue>(EMPTY_LICENSE);
+
 
   const [location, setLocation] = useState<ListingLocationValue>({
     cityId: listing?.city_id ?? "",
@@ -115,6 +131,32 @@ export function ListingForm({ listing }: Props) {
     [rootSlug, subSlug, typeCode],
   );
   const isEquipment = rootSlug === "equipment";
+  const isRealEstate = rootSlug === RE_ROOT_SLUG;
+
+  // Load the licence row of an ad being edited, once the ad is known.
+  useEffect(() => {
+    if (!listing?.id) return;
+    let alive = true;
+    void loadOwnerLicense(listing.id).then((row) => {
+      if (!alive || !row) return;
+      setLicense({
+        advertiserRole: row.advertiser_role,
+        adLicenseNumber: row.ad_license_number ?? "",
+        adLicenseExpiry: row.ad_license_expiry ?? "",
+        practiceLicenseNumber: row.practice_license_number ?? "",
+        licenseDocPath: row.license_doc_path ?? null,
+        exemptionRequested: row.exemption_requested,
+        exemptionReason: row.exemption_reason ?? "",
+        exemptionDocPath: row.exemption_doc_path ?? null,
+        exemptionApproved: row.exemption_approved,
+        verificationStatus: row.verification_status,
+      });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [listing?.id]);
+
 
   // ---------- draft: restore once, then autosave ----------
   useEffect(() => {
@@ -277,6 +319,18 @@ export function ListingForm({ listing }: Props) {
       }
     }
 
+    // A real estate ad may be kept as a draft while incomplete, but it cannot
+    // go to review without a valid licence, or with an exemption still pending.
+    if (publish && isRealEstate) {
+      const blocks = licenseBlockers(license);
+      if (blocks.length > 0) {
+        toast.error(t(`market.license.block.${blocks[0]}`));
+        setStep(1);
+        return;
+      }
+    }
+
+
     setBusy(true);
     try {
       const cityName = (cities.data ?? []).find((c) => c.id === location.cityId)?.name_ar ?? null;
@@ -307,9 +361,13 @@ export function ListingForm({ listing }: Props) {
         location_accuracy: location.accuracy,
         location_source: location.source,
         location_visibility: location.visibility,
-        status: publish ? "pending" : "draft",
+        // A real estate ad is saved as a draft first, its licence row written,
+        // and only then sent to review — the database refuses to accept a real
+        // estate ad for review while its licence is missing.
+        status: publish && !isRealEstate ? "pending" : "draft",
       };
 
+      let listingId = listing?.id ?? null;
       if (listing) {
         const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listing.id);
         if (error) throw error;
@@ -328,10 +386,23 @@ export function ListingForm({ listing }: Props) {
           .select("id")
           .single();
         if (error || !data) throw error ?? new Error("insert failed");
+        listingId = data.id;
         const cover = await uploadImages(data.id);
         if (cover)
           await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
       }
+
+      if (isRealEstate && listingId) {
+        await saveListingLicense(listingId, license);
+        if (publish) {
+          const { error } = await supabase
+            .from("mkt_listings")
+            .update({ status: "pending" })
+            .eq("id", listingId);
+          if (error) throw error;
+        }
+      }
+
 
       clearDraft(scope);
       setDirty(false);
@@ -616,8 +687,20 @@ export function ListingForm({ listing }: Props) {
               </ul>
             )}
           </div>
+
+          {isRealEstate && session?.user.id && (
+            <RealEstateLicenseFields
+              value={license}
+              userId={session.user.id}
+              onChange={(next) => {
+                setDirty(true);
+                setLicense(next);
+              }}
+            />
+          )}
         </div>
       )}
+
 
       {step === 2 && (
         <ListingLocationPicker

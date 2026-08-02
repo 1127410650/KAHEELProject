@@ -1857,6 +1857,109 @@ export type Database = {
           },
         ]
       }
+      mkt_listing_license_private: {
+        Row: {
+          brokerage_contract_number: string | null
+          created_at: string
+          deed_number: string | null
+          internal_note: string | null
+          listing_id: string
+          updated_at: string
+        }
+        Insert: {
+          brokerage_contract_number?: string | null
+          created_at?: string
+          deed_number?: string | null
+          internal_note?: string | null
+          listing_id: string
+          updated_at?: string
+        }
+        Update: {
+          brokerage_contract_number?: string | null
+          created_at?: string
+          deed_number?: string | null
+          internal_note?: string | null
+          listing_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_license_private_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_listing_licenses: {
+        Row: {
+          ad_license_expiry: string | null
+          ad_license_number: string | null
+          advertiser_role: string
+          created_at: string
+          exemption_approved: boolean
+          exemption_doc_path: string | null
+          exemption_reason: string | null
+          exemption_requested: boolean
+          license_doc_path: string | null
+          listing_id: string
+          practice_license_number: string | null
+          updated_at: string
+          verification_note: string | null
+          verification_source: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          ad_license_expiry?: string | null
+          ad_license_number?: string | null
+          advertiser_role?: string
+          created_at?: string
+          exemption_approved?: boolean
+          exemption_doc_path?: string | null
+          exemption_reason?: string | null
+          exemption_requested?: boolean
+          license_doc_path?: string | null
+          listing_id: string
+          practice_license_number?: string | null
+          updated_at?: string
+          verification_note?: string | null
+          verification_source?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          ad_license_expiry?: string | null
+          ad_license_number?: string | null
+          advertiser_role?: string
+          created_at?: string
+          exemption_approved?: boolean
+          exemption_doc_path?: string | null
+          exemption_reason?: string | null
+          exemption_requested?: boolean
+          license_doc_path?: string | null
+          listing_id?: string
+          practice_license_number?: string | null
+          updated_at?: string
+          verification_note?: string | null
+          verification_source?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_licenses_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_listing_status_history: {
         Row: {
           actor_id: string | null
@@ -6200,13 +6303,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "custody_transactions_invoice_id_fkey"
-            columns: ["reversal_of_invoice_id"]
-            isOneToOne: false
-            referencedRelation: "invoice_settlements"
-            referencedColumns: ["invoice_id"]
-          },
-          {
-            foreignKeyName: "custody_transactions_invoice_id_fkey"
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoice_settlements"
@@ -6215,13 +6311,20 @@ export type Database = {
           {
             foreignKeyName: "custody_transactions_invoice_id_fkey"
             columns: ["reversal_of_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_settlements"
+            referencedColumns: ["invoice_id"]
+          },
+          {
+            foreignKeyName: "custody_transactions_invoice_id_fkey"
+            columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "custody_transactions_invoice_id_fkey"
-            columns: ["invoice_id"]
+            columns: ["reversal_of_invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
             referencedColumns: ["id"]
@@ -6290,6 +6393,25 @@ export type Database = {
           total_amount?: number | null
         }
         Relationships: []
+      }
+      mkt_public_listing_licenses: {
+        Row: {
+          ad_license_expiry: string | null
+          ad_license_number: string | null
+          advertiser_role: string | null
+          listing_id: string | null
+          practice_license_number: string | null
+          verification_status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_licenses_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {
@@ -6751,6 +6873,7 @@ export type Database = {
           report_id: string
         }[]
       }
+      mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       my_accounts: {
         Args: never

@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { ClientOnly } from "@tanstack/react-router";
-import { Building2, CalendarDays, Eye, MapPin, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Building2, CalendarDays, Eye, MapPin, Navigation, User } from "lucide-react";
+
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -23,16 +23,18 @@ import {
 } from "@/lib/mkt";
 import { decorateListings, loadListingTypes } from "@/lib/mkt-queries";
 import { trackMarketActivity } from "@/lib/mkt-activity";
+import { locationLink } from "@/lib/mkt-location-link";
+import { loadPublicLicense } from "@/lib/mkt-license";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ListingGallery } from "@/components/marketplace/ListingGallery";
 import { ListingActions } from "@/components/marketplace/ListingActions";
 import { ListingSpecs } from "@/components/marketplace/ListingSpecs";
+import { ListingLicenseSection } from "@/components/marketplace/ListingLicenseSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ListingApproxMap = lazy(() => import("@/components/marketplace/ListingApproxMap"));
 
 interface AdSearch {
   action?: string | undefined;
@@ -148,10 +150,16 @@ async function loadAd(slug: string) {
   const gallery = paths.map((p) => media[p]).filter((u): u is string => !!u);
 
   const categories = (catRows ?? []) as MktCategory[];
+  const rootSlug = categories.find((c) => !c.parent_id)?.slug ?? null;
+
+  // Licence facts only exist for real estate ads; the row itself carries only
+  // what the authority allows an ad to publish.
+  const license = rootSlug === "real-estate" ? await loadPublicLicense(listing.id) : null;
 
   return {
     listing,
     gallery,
+    license,
     business: (bizRow as MktBusiness | null) ?? null,
     person: (personRow as MktUserProfile | null) ?? null,
     type: types.find((tp) => tp.code === listing.type_code) ?? null,
@@ -161,6 +169,7 @@ async function loadAd(slug: string) {
     city: (cityRow as MktCity | null) ?? null,
     activeAds: activeAds ?? null,
   };
+
 }
 
 type AdData = NonNullable<Awaited<ReturnType<typeof loadAd>>>;
@@ -196,17 +205,31 @@ function DescriptionBlock({ text }: { text: string }) {
   );
 }
 
-/** Location: city and district always, an approximate area on the map by default. */
+/**
+ * Location: a short, honest line — city and district — plus one button that
+ * hands the place over to the phone's map app. No interactive map is loaded
+ * here: it made the page long, and an approximate ad has nothing to draw.
+ */
 function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
   const { t } = useI18n();
-  const { listing } = ad;
+  const { listing, country } = ad;
   const exact = listing.location_visibility === "exact";
-  const hasPoint = listing.latitude !== null && listing.longitude !== null;
   const place = [cityLabel ?? listing.city, listing.district ?? listing.region]
     .filter(Boolean)
     .join(" — ");
 
-  if (!place && !hasPoint) return null;
+  // An approximate ad only ever exports a blurred point, so the hidden pin
+  // stays hidden. With nothing to open at all the button is not rendered.
+  const link = locationLink({
+    latitude: listing.latitude,
+    longitude: listing.longitude,
+    visibility: listing.location_visibility,
+    city: cityLabel ?? listing.city,
+    district: listing.district,
+    country: country ? geoName(country, "en") : null,
+  });
+
+  if (!place && !link) return null;
 
   return (
     <section className="mt-4 rounded-xl border border-border bg-card p-4">
@@ -217,28 +240,31 @@ function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null
           {place}
         </p>
       )}
-      {hasPoint && (
-        <>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {exact ? t("market.ad.exact") : t("market.ad.approximate")}
-          </p>
-          <div className="mt-3">
-            <ClientOnly fallback={<Skeleton className="h-56 w-full rounded-xl sm:h-64" />}>
-              <Suspense fallback={<Skeleton className="h-56 w-full rounded-xl sm:h-64" />}>
-                <ListingApproxMap
-                  lat={listing.latitude!}
-                  lng={listing.longitude!}
-                  precision={exact ? "exact" : "approximate"}
-                  label={place || t("market.ad.location")}
-                />
-              </Suspense>
-            </ClientOnly>
-          </div>
-        </>
+      {listing.address_text && (
+        <p className="mt-1 break-words text-xs text-muted-foreground">{listing.address_text}</p>
+      )}
+      <p className="mt-1 text-xs text-muted-foreground">
+        {exact ? t("market.ad.exact") : t("market.ad.approximate")}
+      </p>
+      {link && (
+        <Button asChild size="sm" className="mt-3 min-h-11 w-full sm:w-auto">
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t("market.ad.openLocationHint")}
+            aria-label={t("market.ad.openLocationHint")}
+          >
+            <Navigation className="size-4" aria-hidden />
+            {t("market.ad.openLocation")}
+          </a>
+        </Button>
       )}
     </section>
   );
 }
+
+
 
 /** "About the advertiser": identity, and the only place the check mark appears. */
 function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
@@ -622,7 +648,12 @@ function AdPage() {
 
           <ListingSpecs listing={listing} />
 
+          {/* Real estate licence facts: never for other categories, and never a
+           * trust badge — account verification is a separate matter. */}
+          {ad.data.license && <ListingLicenseSection license={ad.data.license} />}
+
           <LocationBlock ad={ad.data} cityLabel={cityLabel} />
+
 
           <div className="mt-4 lg:hidden">
             <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />
