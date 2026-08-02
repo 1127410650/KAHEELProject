@@ -165,7 +165,8 @@ export const USER_PROFILE_COLUMNS =
   "user_id, username, display_name, headline, about, city, region, avatar_url, verification_status, is_published, joined_at, show_phone, show_email, show_whatsapp, public_phone, public_email, public_whatsapp";
 
 export const LISTING_COLUMNS =
-  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, quantity, unit, item_condition, deal_kind, city, region, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
+  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, quantity, unit, item_condition, deal_kind, city, region, country_id, city_id, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
+
 
 
 export const BUSINESS_COLUMNS =
