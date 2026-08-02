@@ -66,6 +66,7 @@ export function ListingForm({ listing }: Props) {
   const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
   const { preference } = useMarketPreference();
   const [countryId, setCountryId] = useState<string>(listing?.country_id ?? "");
+  const [cityId, setCityId] = useState<string>(listing?.city_id ?? "");
   const cities = useQuery({
     queryKey: ["mkt", "cities", countryId],
     enabled: !!countryId,
@@ -137,9 +138,8 @@ export function ListingForm({ listing }: Props) {
         deal_kind:
           typeCode === "equipment_rent" ? "rent" : typeCode === "equipment_sale" ? "sale" : null,
         country_id: countryId || null,
-        city_id: (fd.get("city_id") as string) || null,
-        city:
-          (cities.data ?? []).find((c) => c.id === (fd.get("city_id") as string))?.name_ar ?? null,
+        city_id: cityId || null,
+        city: (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null,
         region: (fd.get("region") as string) || null,
         status: publish ? "pending" : "draft",
       };
@@ -366,8 +366,12 @@ export function ListingForm({ listing }: Props) {
           <select
             id="country_id"
             className={selectClass}
+            required
             value={countryId}
-            onChange={(e) => setCountryId(e.target.value)}
+            onChange={(e) => {
+              setCountryId(e.target.value);
+              setCityId("");
+            }}
           >
             <option value="">{t("market.geo.pick")}</option>
             {(countries.data ?? []).map((c) => (
@@ -383,10 +387,12 @@ export function ListingForm({ listing }: Props) {
             id="city_id"
             name="city_id"
             className={selectClass}
-            defaultValue={listing?.city_id ?? ""}
+            required
+            value={cityId}
+            onChange={(e) => setCityId(e.target.value)}
             disabled={!countryId}
           >
-            <option value="">{t("market.geo.allCities")}</option>
+            <option value="">{t("market.geo.pickCity")}</option>
             {(cities.data ?? []).map((c) => (
               <option key={c.id} value={c.id}>
                 {geoName(c, locale)}
