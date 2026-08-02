@@ -312,9 +312,11 @@ export function MarketShell({
   return (
     <div dir={dir} className="flex min-h-screen flex-col overflow-x-hidden bg-background">
       <MarketHeader />
-      <main className="flex-1 pb-20 lg:pb-6">{children}</main>
+      <main className="flex-1">{children}</main>
       {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}
+      {/* Space for the mobile bottom nav so content never hides behind it. */}
+      <div className="h-16 lg:hidden" aria-hidden />
       <MarketBottomNav />
     </div>
   );
