@@ -405,51 +405,23 @@ export function ListingForm({ listing }: Props) {
         )}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="country_id">{t("market.geo.country")}</Label>
-          <select
-            id="country_id"
-            className={selectClass}
-            required
-            value={countryId}
-            onChange={(e) => {
-              setCountryId(e.target.value);
-              setCityId("");
-            }}
-          >
-            <option value="">{t("market.geo.pick")}</option>
-            {(countries.data ?? []).map((c) => (
-              <option key={c.id} value={c.id}>
-                {geoName(c, locale)}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="city_id">{t("market.filters.city")}</Label>
-          <select
-            id="city_id"
-            name="city_id"
-            className={selectClass}
-            required
-            value={cityId}
-            onChange={(e) => setCityId(e.target.value)}
-            disabled={!countryId}
-          >
-            <option value="">{t("market.geo.pickCity")}</option>
-            {(cities.data ?? []).map((c) => (
-              <option key={c.id} value={c.id}>
-                {geoName(c, locale)}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="space-y-3">
+        <CountryCitySelect
+          countryId={countryId || null}
+          cityId={cityId || null}
+          required
+          onChange={(next) => {
+            setGeoTouched(true);
+            setCountryId(next.countryId ?? "");
+            setCityId(next.cityId ?? "");
+          }}
+        />
         <div className="space-y-1.5">
           <Label htmlFor="region">{t("market.dash.region")}</Label>
           <Input id="region" name="region" defaultValue={listing?.region ?? ""} />
         </div>
       </div>
+
 
       <div className="space-y-1.5">
         <Label htmlFor="images">{t("market.dash.images")}</Label>
