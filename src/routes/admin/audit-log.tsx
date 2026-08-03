@@ -7,6 +7,8 @@ import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { formatDateTime } from "@/lib/format";
 import { loadAuditLog, usePlatformIdentity } from "@/lib/mkt-platform";
+import { AdminUserLink } from "@/components/marketplace/AdminEntityLink";
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
