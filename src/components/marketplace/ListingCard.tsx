@@ -300,7 +300,13 @@ export function ListingCard({
         }
       >
         <FavoriteButton listing={listing} />
-        <CardMenu listing={listing} />
+        <CardMenu
+          listing={listing}
+          onInteract={(active) => {
+            navBlocked.current = active;
+          }}
+        />
+
       </div>
     </div>
   );
