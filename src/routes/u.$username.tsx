@@ -179,11 +179,14 @@ function UserProfilePage() {
                     timeZone: "Asia/Riyadh",
                   })}
                 </span>
-                {me.active_listings > 0 && (
-                  <span>
-                    {me.active_listings} {t("market.ad.activeAds")}
-                  </span>
-                )}
+                <span>
+                  {me.active_listings > 0 && (
+                    <span className="num" dir="ltr">
+                      {me.active_listings}{" "}
+                    </span>
+                  )}
+                  {t(activeListingsKey(me.active_listings))}
+                </span>
               </div>
             </div>
           </div>
