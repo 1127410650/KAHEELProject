@@ -2788,5 +2788,7 @@
     "retry": "إعادة المحاولة",
     "home": "الرئيسية",
     "code404": "404"
-  }
+  },
+  "market.media.imagesIncomplete": "هناك صور لم يكتمل رفعها — أعد المحاولة أو احذفها",
+  "market.media.imagesTooMany": "الحد الأقصى 20 صورة لكل إعلان"
 }
