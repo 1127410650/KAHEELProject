@@ -222,14 +222,13 @@ function AdminBusinessesPage() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.tenant_id} className="border-b border-border/60 last:border-0">
+                  <tr
+                    key={row.tenant_id}
+                    className="cursor-pointer border-b border-border/60 last:border-0 hover:bg-muted/40"
+                    onClick={(event) => openRow(event, row.tenant_id)}
+                  >
                     <td className="px-3 py-2">
-                      <Link
-                        to={`/admin/businesses/${row.tenant_id}`}
-                        className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
-                      >
-                        {row.name}
-                      </Link>
+                      <AdminBusinessLink id={row.tenant_id} name={row.name} truncate />
                       <span className="block truncate text-xs tabular-nums text-muted-foreground">
                         {formatDate(row.created_at)}
                       </span>
@@ -238,7 +237,14 @@ function AdminBusinessesPage() {
                       {[row.country, row.city].filter(Boolean).join(" · ") || "—"}
                     </td>
                     <td className="truncate px-3 py-2">{row.main_activity ?? "—"}</td>
-                    <td className="truncate px-3 py-2">{row.officer_name || "—"}</td>
+                    <td className="px-3 py-2">
+                      <AdminUserLink
+                        id={row.officer_user_id}
+                        name={row.officer_name}
+                        truncate
+                        className="text-sm"
+                      />
+                    </td>
                     <td className="px-3 py-2 tabular-nums">{row.listings_count}</td>
                     <td className="px-3 py-2">
                       <Verification value={row.verification_status} />
@@ -259,21 +265,36 @@ function AdminBusinessesPage() {
 
           <div className="mt-4 grid gap-2 lg:hidden">
             {rows.map((row) => (
-              <div key={row.tenant_id} className="rounded-xl border border-border bg-card p-3">
+              <div
+                key={row.tenant_id}
+                className="rounded-xl border border-border bg-card p-3"
+                onClick={(event) => openRow(event, row.tenant_id)}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <Link
-                      to={`/admin/businesses/${row.tenant_id}`}
-                      className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
-                    >
-                      {row.name}
-                    </Link>
+                    <AdminBusinessLink
+                      id={row.tenant_id}
+                      name={row.name}
+                      truncate
+                      className="min-h-11 py-2.5 text-sm font-semibold"
+                    />
                     <p className="truncate text-xs text-muted-foreground">
                       {[row.country, row.city].filter(Boolean).join(" · ")}
                     </p>
+                    {row.officer_name && (
+                      <p className="mt-1 truncate text-xs text-muted-foreground">
+                        {t("admin.business.officer")}:{" "}
+                        <AdminUserLink
+                          id={row.officer_user_id}
+                          name={row.officer_name}
+                          className="text-xs"
+                        />
+                      </p>
+                    )}
                   </div>
                   <ActionsMenu row={row} />
                 </div>
+
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
                   <Verification value={row.verification_status} />
                   <span className="text-muted-foreground">
