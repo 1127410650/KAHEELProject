@@ -6782,6 +6782,66 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
+      mkt_public_person: {
+        Args: { _username: string }
+        Returns: {
+          about: string
+          active_listings: number
+          avatar_url: string
+          city_ar: string
+          city_en: string
+          display_name: string
+          headline: string
+          is_owner: boolean
+          joined_at: string
+          public_email: string
+          public_phone: string
+          public_whatsapp: string
+          username: string
+          verification_status: string
+        }[]
+      }
+      mkt_public_person_categories: {
+        Args: { _username: string }
+        Returns: {
+          category_id: string
+          listings_count: number
+          name_ar: string
+          name_en: string
+          slug: string
+        }[]
+      }
+      mkt_public_person_listings: {
+        Args: {
+          _category_id?: string
+          _limit?: number
+          _offset?: number
+          _username: string
+        }
+        Returns: {
+          category_id: string
+          city: string
+          city_id: string
+          cover_image_url: string
+          created_at: string
+          currency: string
+          deal_kind: string
+          district: string
+          id: string
+          item_condition: string
+          price: number
+          price_on_request: boolean
+          price_unit: string
+          published_at: string
+          slug: string
+          subcategory_id: string
+          summary: string
+          title: string
+          type_code: string
+          views_count: number
+        }[]
+      }
       mkt_public_phone: { Args: { _user_id: string }; Returns: string }
       mkt_re_license_active: {
         Args: { p_listing_id: string }
