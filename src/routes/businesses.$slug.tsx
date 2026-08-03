@@ -107,7 +107,7 @@ function BusinessPage() {
       <MarketShell>
         <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4">
           <Skeleton className="h-28 w-full rounded-xl" />
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton key={i} className="h-40 rounded-xl" />
             ))}
