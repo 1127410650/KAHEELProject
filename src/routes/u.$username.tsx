@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { currentPath, loginHref, resolveMedia } from "@/lib/mkt";
 import {
+  activeListingsKey,
   loadPersonCategories,
   loadPersonListings,
   loadPublicPerson,
@@ -179,11 +180,14 @@ function UserProfilePage() {
                     timeZone: "Asia/Riyadh",
                   })}
                 </span>
-                {me.active_listings > 0 && (
-                  <span>
-                    {me.active_listings} {t("market.ad.activeAds")}
-                  </span>
-                )}
+                <span className="inline-flex items-center gap-1">
+                  {me.active_listings > 0 && (
+                    <span className="num" dir="ltr">
+                      {me.active_listings}
+                    </span>
+                  )}
+                  <span>{t(activeListingsKey(me.active_listings))}</span>
+                </span>
               </div>
             </div>
           </div>

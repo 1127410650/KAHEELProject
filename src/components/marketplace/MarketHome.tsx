@@ -102,7 +102,7 @@ const QUICK_FILTERS = [
   { key: "service", search: { type: "service" }, icon: Sparkles },
   { key: "product", search: { type: "product" }, icon: Tag },
   { key: "equipment_rent", search: { type: "equipment_rent" }, icon: Truck },
-  { key: "business", search: { advertiser: "business" }, icon: Building2 },
+  { key: "business", search: { domain: "business" }, icon: Building2 },
 ] as const;
 
 export function MarketHome() {
