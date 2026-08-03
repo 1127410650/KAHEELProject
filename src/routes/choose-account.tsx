@@ -147,7 +147,10 @@ function ChooseAccountPage() {
   const { next: rawNext, created } = Route.useSearch();
   // Re-sanitised here as well: never navigate to a value straight from the URL.
   const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
-  const target = safeInternalPath(next);
+  const safeNext = safeInternalPath(next);
+  // A `next` that points back at the picker would keep the user trapped here.
+  const target = safeNext.startsWith("/choose-account") ? "/" : safeNext;
+
   const navigate = useNavigate();
   const { accounts, account: activeAccount, loading, select } = useActiveAccount();
   const [pending, setPending] = useState<string | null>(null);
@@ -164,21 +167,37 @@ function ChooseAccountPage() {
   const personal = useMemo(() => accounts.filter((a) => a.kind === "individual"), [accounts]);
   const businesses = useMemo(() => accounts.filter((a) => a.kind === "business"), [accounts]);
 
+  /** Leaves the picker for good: never stay on /choose-account after success. */
+  function leave() {
+    void navigate({ href: target, replace: true }).catch(() => {
+      if (typeof window !== "undefined") window.location.replace(target);
+    });
+  }
+
   async function enter(account: MktAccount) {
     if (pending) return; // rapid double clicks pick one account only
+    // The current account needs no server round-trip and no new session.
     if (activeAccount?.account_key === account.account_key) {
-      void navigate({ href: target, replace: true });
+      leave();
       return;
     }
     setPending(account.account_key);
-    const ok = await select(account.account_key);
+    let ok = false;
+    try {
+      ok = await select(account.account_key);
+    } catch {
+      ok = false;
+    }
     setPending(null);
     if (!ok) {
-      toast.error(t("market.entry.revoked"));
+      // Stay here with the card re-enabled; the session and the current account
+      // are untouched, and language/theme are never cleared.
+      toast.error(t("market.entry.switchFailed"));
       return;
     }
-    void navigate({ href: target, replace: true });
+    leave();
   }
+
 
   async function signOut() {
     markManualSignOut();

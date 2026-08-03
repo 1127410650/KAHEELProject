@@ -11,7 +11,7 @@
  * the user is not asked again on every visit — it is re-validated every session,
  * and a key that no longer resolves is dropped.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -133,18 +133,26 @@ export function useActiveAccount(): ActiveAccountState {
         setKey(null);
         return false;
       }
-      remember(accountKey);
-      setKey(accountKey);
       // Keep the administrative workspace context aligned with the entity the
       // user just entered, so tenant-scoped RLS sees the same account.
       if (verified.tenant_id) {
-        await supabase.rpc("set_active_tenant", { _tenant_id: verified.tenant_id });
+        const { error } = await supabase.rpc("set_active_tenant", {
+          _tenant_id: verified.tenant_id,
+        });
+        if (error) return false;
       }
-      await queryClient.invalidateQueries();
+      remember(accountKey);
+      setKey(accountKey);
+      // Drop every cached row of the previous account, then let the next render
+      // refetch what it needs. Never awaited: a single slow/paused query must not
+      // block leaving the picker.
+      queryClient.removeQueries({ predicate: (q) => q.queryKey[0] !== "mkt-account-list" });
+      void queryClient.invalidateQueries();
       return true;
     },
     [queryClient],
   );
+
 
   const clear = useCallback(() => {
     remember(null);
@@ -200,12 +208,19 @@ export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
   const state = useActiveAccount();
   const { session, loading: sessionLoading } = useSession();
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const href = useRouterState({ select: (s) => s.location.href });
+  // One redirect per mount: `href` changes as soon as we navigate, so keeping it
+  // in the effect deps used to re-fire the redirect endlessly ("Maximum update
+  // depth exceeded") instead of settling on the picker.
+  const redirected = useRef(false);
 
   useEffect(() => {
     // Never redirect while the session is still being restored, and never because
     // a network/RPC failure hid the account list: that is retried, not a sign-out.
     if (sessionLoading || !session || state.loading || state.account || state.unavailable) return;
+    if (redirected.current || pathname === "/choose-account") return;
+    redirected.current = true;
     if (state.revoked && revokedMessage) toast.error(revokedMessage);
     void navigate({
       to: "/choose-account",
@@ -213,7 +228,8 @@ export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
       replace: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionLoading, session, state.loading, state.account, state.revoked, state.unavailable, href]);
+  }, [sessionLoading, session, state.loading, state.account, state.revoked, state.unavailable, pathname]);
+
 
   return state;
 }
