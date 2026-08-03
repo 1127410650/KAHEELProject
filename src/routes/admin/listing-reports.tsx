@@ -338,19 +338,28 @@ function AdminListingReportsPage() {
                       {r.ref_no ?? "—"}
                     </td>
                     <td className="max-w-[220px] p-2">
-                      <p className="truncate font-medium text-foreground">
-                        {r.listing_title ?? "—"}
-                      </p>
+                      <AdminListingLink
+                        id={r.listing_id}
+                        name={r.listing_title}
+                        truncate
+                        className="text-xs"
+                      />
                       <p dir="ltr" className="font-mono text-[11px] text-muted-foreground">
                         {r.listing_ref ?? "—"}
                       </p>
                     </td>
                     <td className="max-w-[160px] p-2">
-                      <p className="truncate text-foreground">{r.owner_label ?? "—"}</p>
+                      <AdminUserLink
+                        id={subjectMap[subjectKey("report_owner", r.id)] ?? null}
+                        name={r.owner_label}
+                        truncate
+                        className="text-xs"
+                      />
                       <p className="truncate text-[11px] text-muted-foreground">
                         {r.owner_business ?? "—"}
                       </p>
                     </td>
+
                     <td className="p-2 text-foreground">
                       {(locale === "ar" ? r.reason_name_ar : r.reason_name_en) ?? r.reason_code ?? "—"}
                     </td>
