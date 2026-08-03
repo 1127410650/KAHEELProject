@@ -308,9 +308,14 @@ function AdminListingReportsPage() {
           <ul className="mt-4 space-y-2 lg:hidden">
             {list.map((r) => (
               <li key={r.id}>
-                <ReportCard report={r} onOpen={() => setOpenId(r.id)} />
+                <ReportCard
+                  report={r}
+                  ownerUserId={subjectMap[subjectKey("report_owner", r.id)] ?? null}
+                  onOpen={() => setOpenId(r.id)}
+                />
               </li>
             ))}
+
           </ul>
 
           {/* desktop: table */}
