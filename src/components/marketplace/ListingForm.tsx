@@ -547,7 +547,11 @@ export function ListingForm({ listing }: Props) {
       else if (message.includes("CATEGORY_")) toast.error(t("market.form.pathRequired"));
       else if (message.includes("BUSINESS_NOT_ALLOWED"))
         toast.error(t("market.form.businessDenied"));
+      else if (message === "image_required") toast.error(t("market.media.required"));
+      else if (message === "images_incomplete") toast.error(t("market.media.imagesIncomplete"));
+      else if (message === "images_too_many") toast.error(t("market.media.imagesTooMany"));
       else toast.error(t("market.actions.failed"));
+
     } finally {
       setBusy(false);
     }
