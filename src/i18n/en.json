@@ -1716,7 +1716,8 @@
       "confirmData": "I confirm the data and the attached documents are correct.",
       "confirmRequired": "Confirm the data before creating the business",
       "privateByDefault": "Private by default; never shown publicly.",
-      "logoHint": "JPG, PNG or WebP; shown contained without distortion."
+      "logoHint": "JPG, PNG or WebP; shown contained without distortion.",
+      "leaveWarning": "Leaving this page before creating the business loses what you typed; documents and sensitive data are never stored in the browser."
     },
     "reports": {
       "report": "Report this listing",
