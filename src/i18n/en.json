@@ -2297,6 +2297,8 @@
       "businessCreated": "Business created. You can now select it from the list.",
       "workingUnder": "Working as: {name}",
       "revoked": "Your access to that account ended. Pick another account.",
+      "switchFailed": "Couldn't switch account, please try again",
+
       "kind": {
         "individual": "Personal account",
         "business": "Business"
