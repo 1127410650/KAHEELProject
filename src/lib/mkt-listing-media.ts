@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
 
 /** Actual policy limit shown in the UI — keep the texts in sync with this. */
-export const MAX_LISTING_IMAGES = 12;
+export const MAX_LISTING_IMAGES = 20;
 /** Largest accepted source file, before compression. */
 export const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 export const ACCEPTED_IMAGE_MIME = ["image/jpeg", "image/png", "image/webp"] as const;
@@ -40,6 +40,12 @@ export interface StagedImage {
   error?: MediaError | undefined;
   /** Blob kept only in memory so a failed upload can be retried. */
   blob?: Blob | undefined;
+  /** Real pixel size after compression, stored with the row. */
+  width?: number | undefined;
+  height?: number | undefined;
+  mime?: string | undefined;
+  /** SHA-256 of the source bytes, stored as `file_hash`. */
+  hash?: string | undefined;
   /** Object URL for instant preview; signed URL after a refresh. */
   preview?: string | undefined;
 }
@@ -88,7 +94,10 @@ export async function fingerprint(buffer: ArrayBuffer): Promise<string> {
 }
 
 /** Decode + downscale + re-encode. Throws when the bytes are not a real image. */
-export async function compressImage(buffer: ArrayBuffer, mime: ImageMime): Promise<Blob> {
+export async function compressImage(
+  buffer: ArrayBuffer,
+  mime: ImageMime,
+): Promise<{ blob: Blob; width: number; height: number }> {
   const source = new Blob([buffer], { type: mime });
   const bitmap = await createImageBitmap(source); // throws on corrupt data
   const scale = Math.min(1, MAX_DIMENSION / Math.max(bitmap.width, bitmap.height));
@@ -99,7 +108,7 @@ export async function compressImage(buffer: ArrayBuffer, mime: ImageMime): Promi
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return source;
+  if (!ctx) return { blob: source, width: bitmap.width, height: bitmap.height };
   ctx.drawImage(bitmap, 0, 0, width, height);
   bitmap.close?.();
 
@@ -107,14 +116,16 @@ export async function compressImage(buffer: ArrayBuffer, mime: ImageMime): Promi
     canvas.toBlob(resolve, "image/webp", WEBP_QUALITY),
   );
   // Never grow the file: keep the original when re-encoding does not help.
-  if (!encoded || encoded.size >= source.size) return source;
-  return encoded;
+  if (!encoded || encoded.size >= source.size) return { blob: source, width, height };
+  return { blob: encoded, width, height };
 }
 
 export interface PreparedFile {
   blob: Blob;
   fingerprint: string;
   mime: string;
+  width?: number | undefined;
+  height?: number | undefined;
   error?: MediaError | undefined;
 }
 
@@ -127,8 +138,8 @@ export async function prepareFile(file: File): Promise<PreparedFile> {
   if (!mime) return { blob: file, fingerprint: "", mime: file.type, error: "type" };
   const print = await fingerprint(buffer);
   try {
-    const blob = await compressImage(buffer, mime);
-    return { blob, fingerprint: print, mime: blob.type || mime };
+    const { blob, width, height } = await compressImage(buffer, mime);
+    return { blob, fingerprint: print, mime: blob.type || mime, width, height };
   } catch {
     return { blob: file, fingerprint: print, mime, error: "corrupt" };
   }
