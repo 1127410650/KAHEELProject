@@ -411,10 +411,13 @@ export function footerVariantForPath(pathname: string): FooterVariant {
 export function MarketShell({
   children,
   footer,
+  bottomNav = true,
 }: {
   children: React.ReactNode;
   /** Override the route-derived decision (app shells pass "none"). */
   footer?: FooterVariant;
+  /** Back-office shells hide the marketplace bottom navigation entirely. */
+  bottomNav?: boolean;
 }) {
   const { dir } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -427,7 +430,11 @@ export function MarketShell({
       /* min-h-dvh + a growing <main> keep the footer at the natural end of the
        * content instead of leaving a blank strip above the fixed bottom nav.
        * The only reserved space is the nav height plus the safe area. */
-      className="flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+      className={
+        bottomNav
+          ? "flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+          : "flex min-h-dvh flex-col overflow-x-hidden bg-background"
+      }
     >
       <MarketHeader />
       {/* `main` always grows, so a short page pushes the footer to the bottom of
@@ -437,8 +444,9 @@ export function MarketShell({
 
       {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}
-      <MarketBottomNav />
+      {bottomNav && <MarketBottomNav />}
     </div>
+
 
   );
 }

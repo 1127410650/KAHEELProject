@@ -1710,7 +1710,8 @@
           "admin_extended": "Admin extend"
         }
       },
-      "logTab": "Operations log"
+      "logTab": "Operations log",
+      "listingReports": "Listing reports"
     },
     "biz": {
       "editTab": "Edit profile",
@@ -2621,6 +2622,111 @@
       "endsInHours": "Ends in {n} hours",
       "endedAgo": "Ended {n} days ago",
       "endedAgoHours": "Ended {n} hours ago"
+    },
+    "lr": {
+      "title": "Listing reports",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Report no., listing no., title or owner",
+      "empty": "No matching reports",
+      "openCase": "Open report",
+      "openListing": "Open listing",
+      "unassigned": "Unassigned",
+      "prev": "Previous",
+      "next": "Next",
+      "reporter": "Reporter",
+      "reporterInvalid": "Invalid reports from this account",
+      "identityHidden": "The reporter's identity is hidden: only a pseudonym is shown, and no identifying data is returned without an explicit permission.",
+      "reasonLabel": "Reason (required for every decision)",
+      "lifecycle": "Report lifecycle",
+      "noTransitions": "No further status is available from here.",
+      "assignment": "Assignment and transfer",
+      "pickStaff": "Pick a reviewer",
+      "assign": "Assign",
+      "transfer": "Transfer to another reviewer",
+      "listingActions": "Listing actions",
+      "days": "Duration (days)",
+      "apply": "Apply",
+      "internalNotes": "Internal notes",
+      "notePlaceholder": "Internal note, never shown to users",
+      "addNote": "Add note",
+      "noteSaved": "Note saved",
+      "contactOwner": "Message the advertiser",
+      "replyReporter": "Reply to the reporter",
+      "replyReporterHint": "Sent through the system without revealing either side's details.",
+      "send": "Send",
+      "messageSent": "Message sent",
+      "history": "Status history",
+      "done": "Decision recorded",
+      "assigned": "Assignment updated",
+      "col": {
+        "ref": "Report no.",
+        "listing": "Listing",
+        "owner": "Advertiser",
+        "business": "Owning business",
+        "reason": "Reason",
+        "status": "Status",
+        "priority": "Priority",
+        "count": "Reports on listing",
+        "assignee": "Assignee",
+        "lastAction": "Last action",
+        "created": "Reported at",
+        "updated": "Last update"
+      },
+      "filters": {
+        "open": "Filters",
+        "apply": "Apply",
+        "all": "All",
+        "status": "Status",
+        "reason": "Reason",
+        "priority": "Priority",
+        "assignee": "Reviewer",
+        "from": "From",
+        "to": "To",
+        "suspendedOnly": "Suspended listings only",
+        "clear": "Clear filters"
+      },
+      "status": {
+        "new": "New",
+        "unassigned": "Unassigned",
+        "under_review": "Under review",
+        "awaiting_reporter": "Needs info",
+        "awaiting_advertiser": "Awaiting advertiser",
+        "action_taken": "Valid",
+        "invalid": "Not valid",
+        "closed": "Closed",
+        "reopened": "Reopened",
+        "duplicate": "Duplicate",
+        "out_of_scope": "Out of scope",
+        "escalated": "Escalated",
+        "referred": "Referred"
+      },
+      "to": {
+        "under_review": "Start review",
+        "awaiting_reporter": "Request more info",
+        "action_taken": "Mark valid",
+        "invalid": "Mark not valid",
+        "closed": "Close report",
+        "reopened": "Reopen report"
+      },
+      "action": {
+        "suspend": "Suspend listing",
+        "unsuspend": "Unsuspend",
+        "request_edit": "Request edit",
+        "reject": "Reject listing",
+        "archive": "Archive listing",
+        "extend": "Extend duration"
+      },
+      "err": {
+        "invalidTransition": "That status change is not allowed",
+        "reasonRequired": "A reason is required",
+        "invalidDuration": "Invalid duration",
+        "forbidden": "You do not have permission for this action",
+        "conflict": "Conflict of interest: you cannot review this report",
+        "notFound": "Report not found",
+        "assigneeNotStaff": "That user is not part of the review team",
+        "network": "Could not reach the service, please retry",
+        "failed": "The action could not be completed"
+      }
     }
   },
   "routeError": {

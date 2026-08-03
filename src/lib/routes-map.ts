@@ -147,6 +147,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin", "admin", "admin"),
   rule("/admin/listings", "admin", "admin"),
   rule("/admin/listing-events", "admin", "admin"),
+  rule("/admin/listing-reports", "admin", "admin"),
   rule("/admin/verifications", "admin", "admin"),
   rule("/admin/geo", "admin", "admin"),
   rule("/admin/reports", "admin", "admin"),

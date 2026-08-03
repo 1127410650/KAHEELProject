@@ -36,7 +36,7 @@ export function AdminShell({
   const checking = loading || (!!session && (admin.isLoading || staffChecking));
 
   return (
-    <MarketShell footer="none">
+    <MarketShell footer="none" bottomNav={false}>
       <div className="mx-auto w-full max-w-7xl px-4 py-6">
         <h1 className="text-xl font-bold text-foreground sm:text-2xl">{title}</h1>
         {allowed && (
@@ -52,6 +52,12 @@ export function AdminShell({
               className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
             >
               {t("market.admin.logTab")}
+            </Link>
+            <Link
+              to="/admin/listing-reports"
+              className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+            >
+              {t("market.admin.listingReports")}
             </Link>
             <Link
               to="/admin/verifications"
