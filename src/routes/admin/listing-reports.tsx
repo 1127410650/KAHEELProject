@@ -53,6 +53,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 
 export const Route = createFileRoute("/admin/listing-reports")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    status: typeof search["status"] === "string" ? (search["status"] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "بلاغات الإعلانات — إدارة سوق تحقّق" },
@@ -78,11 +81,14 @@ function AdminListingReportsPage() {
   const { t, locale } = useI18n();
   const { session } = useSession();
   const queryClient = useQueryClient();
+  const { status: statusParam } = Route.useSearch();
   const remembered = readAdminListState<LrFilters>("listing-reports", {
     page: 0,
     pageSize: PAGE_SIZE,
   });
-  const [filters, setFilters] = useState<LrFilters>(remembered);
+  const [filters, setFilters] = useState<LrFilters>(
+    statusParam ? { ...remembered, status: statusParam, page: 0 } : remembered,
+  );
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [openId, setOpenId] = useState<string | null>(null);
 

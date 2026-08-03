@@ -34,23 +34,50 @@ export const Route = createFileRoute("/admin/")({
   component: AdminHomePage,
 });
 
-/** Compact stat tile: a number and a label, nothing more. */
-function Stat({ label, value, icon: Icon }: { label: string; value: number; icon: typeof Users }) {
+/** Compact stat tile: a number and a label, clickable through to the matching list. */
+function Stat({
+  label,
+  value,
+  icon: Icon,
+  to,
+  search,
+}: {
+  label: string;
+  value: number;
+  icon: typeof Users;
+  to: string;
+  search?: Record<string, string | boolean>;
+}) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
+    <Link
+      to={to}
+      search={search ?? {}}
+      className="block rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-accent"
+    >
       <div className="flex items-center gap-2 text-muted-foreground">
         <Icon className="size-4 shrink-0" aria-hidden />
         <span className="truncate text-xs">{label}</span>
       </div>
       <p className="mt-2 text-2xl font-bold tabular-nums text-foreground">{value}</p>
-    </div>
+    </Link>
   );
 }
 
-function ActionRow({ to, label, count }: { to: string; label: string; count: number }) {
+function ActionRow({
+  to,
+  label,
+  count,
+  search,
+}: {
+  to: string;
+  label: string;
+  count: number;
+  search?: Record<string, string | boolean>;
+}) {
   return (
     <Link
       to={to}
+      search={search ?? {}}
       className="flex min-h-12 items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 hover:bg-accent"
     >
       <span className="min-w-0 truncate text-sm font-medium text-foreground">{label}</span>
@@ -82,26 +109,56 @@ function AdminHomePage() {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-            <Stat label={t("admin.stats.users")} value={data.users} icon={Users} />
-            <Stat label={t("admin.stats.businesses")} value={data.businesses} icon={Building2} />
-            <Stat label={t("admin.stats.published")} value={data.listings_published} icon={Megaphone} />
-            <Stat label={t("admin.stats.pending")} value={data.listings_pending} icon={Megaphone} />
-            <Stat label={t("admin.stats.reports")} value={data.reports_new} icon={Flag} />
+            <Stat label={t("admin.stats.users")} value={data.users} icon={Users} to="/admin/users" />
+            <Stat
+              label={t("admin.stats.businesses")}
+              value={data.businesses}
+              icon={Building2}
+              to="/admin/businesses"
+            />
+            <Stat
+              label={t("admin.stats.published")}
+              value={data.listings_published}
+              icon={Megaphone}
+              to="/admin/listings"
+              search={{ status: "published" }}
+            />
+            <Stat
+              label={t("admin.stats.pending")}
+              value={data.listings_pending}
+              icon={Megaphone}
+              to="/admin/listings"
+              search={{ status: "pending" }}
+            />
+            <Stat
+              label={t("admin.stats.reports")}
+              value={data.reports_new}
+              icon={Flag}
+              to="/admin/listing-reports"
+              search={{ status: "new" }}
+            />
             <Stat
               label={t("admin.stats.verifications")}
               value={data.verifications_pending}
               icon={BadgeCheck}
+              to="/admin/verifications"
+              search={{ status: "pending" }}
             />
             <Stat
               label={t("admin.stats.restricted")}
               value={data.restricted_accounts}
               icon={ShieldOff}
+              to="/admin/users"
+              search={{ restricted: true }}
             />
             <Stat
               label={t("admin.stats.suggestions")}
               value={data.activity_suggestions}
               icon={ListChecks}
+              to="/admin/activities"
+              search={{ tab: "suggestions" }}
             />
+
           </div>
 
           <section className="mt-6 rounded-xl border border-border bg-card p-4">
@@ -111,22 +168,27 @@ function AdminHomePage() {
                 to="/admin/listings"
                 label={t("admin.alerts.listingsPending")}
                 count={data.listings_pending}
+                search={{ status: "pending" }}
               />
               <ActionRow
                 to="/admin/listing-reports"
                 label={t("admin.alerts.reportsNew")}
                 count={data.reports_new}
+                search={{ status: "new" }}
               />
               <ActionRow
                 to="/admin/verifications"
                 label={t("admin.alerts.verifications")}
                 count={data.verifications_pending}
+                search={{ status: "pending" }}
               />
               <ActionRow
                 to="/admin/activities"
                 label={t("admin.alerts.activitySuggestions")}
                 count={data.activity_suggestions}
+                search={{ tab: "suggestions" }}
               />
+
             </div>
           </section>
         </>

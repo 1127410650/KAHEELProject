@@ -41,6 +41,9 @@ import {
 
 export const Route = createFileRoute("/admin/listings")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    status: typeof search["status"] === "string" ? (search["status"] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "مراجعة الإعلانات — إدارة سوق تحقّق" },
@@ -65,14 +68,15 @@ interface Decision {
 
 function AdminListingsPage() {
   const { t, locale } = useI18n();
+  const { status: statusParam } = Route.useSearch();
   const remembered = readAdminListState("listings", {
-    status: "pending",
+    status: "",
     city: "",
     categoryId: "",
     tenantId: "",
     q: "",
   });
-  const [status, setStatus] = useState(remembered.status);
+  const [status, setStatus] = useState(statusParam ?? remembered.status);
   const [city, setCity] = useState(remembered.city);
   const [categoryId, setCategoryId] = useState(remembered.categoryId);
   const [tenantId, setTenantId] = useState(remembered.tenantId);
@@ -249,6 +253,30 @@ function AdminListingsPage() {
           <Input id="f-q" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
       </div>
+
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground tabular-nums">
+          {listings.isLoading ? "…" : (listings.data ?? []).length}
+        </p>
+        {(status || city || categoryId || tenantId || q) && (
+          <Button
+            size="sm"
+            variant="ghost"
+            className="min-h-11"
+            onClick={() => {
+              setStatus("");
+              setCity("");
+              setCategoryId("");
+              setTenantId("");
+              setQ("");
+            }}
+          >
+            {t("market.filters.all")}
+          </Button>
+        )}
+      </div>
+
+
 
       <ul className="mt-5 space-y-3">
         {listings.isLoading

@@ -31,6 +31,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/admin/activities")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    tab: typeof search["tab"] === "string" ? (search["tab"] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "إدارة الأنشطة — سوق تحقّق" },
@@ -55,7 +58,10 @@ type Tab = "tree" | "suggestions" | "report";
 
 function AdminActivitiesPage() {
   const { t } = useI18n();
-  const [tab, setTab] = useState<Tab>("tree");
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState<Tab>(
+    tabParam === "suggestions" || tabParam === "report" ? tabParam : "tree",
+  );
 
   return (
     <AdminShell title={t("market.admin.activities")}>
