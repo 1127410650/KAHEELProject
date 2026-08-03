@@ -71,6 +71,7 @@ import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRequestsIdRouteImport } from './routes/_authenticated/requests.$id'
 import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
 import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
+import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users.$id'
@@ -399,6 +400,11 @@ const AuthenticatedSupervisorsIdRoute =
     path: '/supervisors/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminBusinessesRoute,
+} as any)
 const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
@@ -485,7 +491,7 @@ export interface FileRoutesByFullPath {
   '/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
-  '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/businesses': typeof AdminBusinessesRouteWithChildren
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -512,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
@@ -557,7 +564,7 @@ export interface FileRoutesByTo {
   '/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
-  '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/businesses': typeof AdminBusinessesRouteWithChildren
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -584,6 +591,7 @@ export interface FileRoutesByTo {
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
@@ -632,7 +640,7 @@ export interface FileRoutesById {
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
-  '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/businesses': typeof AdminBusinessesRouteWithChildren
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -659,6 +667,7 @@ export interface FileRoutesById {
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
@@ -734,6 +743,7 @@ export interface FileRouteTypes {
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/admin/businesses/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
     | '/dashboard/ads/new'
@@ -806,6 +816,7 @@ export interface FileRouteTypes {
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/admin/businesses/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
     | '/dashboard/ads/new'
@@ -880,6 +891,7 @@ export interface FileRouteTypes {
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
+    | '/admin/businesses/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
     | '/dashboard/ads/new'
@@ -1364,6 +1376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSupervisorsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/admin/businesses/$id': {
+      id: '/admin/businesses/$id'
+      path: '/$id'
+      fullPath: '/admin/businesses/$id'
+      preLoaderRoute: typeof AdminBusinessesIdRouteImport
+      parentRoute: typeof AdminBusinessesRoute
+    }
     '/admin/reports/': {
       id: '/admin/reports/'
       path: '/reports'
@@ -1500,6 +1519,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AdminBusinessesRouteChildren {
+  AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
+}
+
+const AdminBusinessesRouteChildren: AdminBusinessesRouteChildren = {
+  AdminBusinessesIdRoute: AdminBusinessesIdRoute,
+}
+
+const AdminBusinessesRouteWithChildren = AdminBusinessesRoute._addFileChildren(
+  AdminBusinessesRouteChildren,
+)
+
 interface AdminUsersRouteChildren {
   AdminUsersIdRoute: typeof AdminUsersIdRoute
 }
@@ -1515,7 +1546,7 @@ const AdminUsersRouteWithChildren = AdminUsersRoute._addFileChildren(
 interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
-  AdminBusinessesRoute: typeof AdminBusinessesRoute
+  AdminBusinessesRoute: typeof AdminBusinessesRouteWithChildren
   AdminGeoRoute: typeof AdminGeoRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -1532,7 +1563,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminActivitiesRoute: AdminActivitiesRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
-  AdminBusinessesRoute: AdminBusinessesRoute,
+  AdminBusinessesRoute: AdminBusinessesRouteWithChildren,
   AdminGeoRoute: AdminGeoRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
