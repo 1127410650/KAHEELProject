@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, ExternalLink, Filter, Loader2, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Filter, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
