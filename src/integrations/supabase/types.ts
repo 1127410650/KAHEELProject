@@ -8238,6 +8238,7 @@ export type Database = {
         Returns: string
       }
       set_active_tenant: { Args: { _tenant_id: string }; Returns: string }
+      shares_active_tenant: { Args: { _user_id: string }; Returns: boolean }
       submit_portal_request: {
         Args: {
           _amount?: number

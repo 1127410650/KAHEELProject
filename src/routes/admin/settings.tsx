@@ -111,13 +111,17 @@ function AdminSettingsPage() {
                           </p>
                         </div>
                         {bool !== null && (
-                          <Switch
-                            checked={bool}
-                            aria-label={row.description_ar || row.key}
-                            onCheckedChange={(next) =>
-                              setPending({ setting: row, next: { enabled: next } })
-                            }
-                          />
+                          /* The switch itself is 20px tall; the padded wrapper keeps
+                             the tap area at 44px on touch screens. */
+                          <span className="grid min-h-11 min-w-11 shrink-0 place-items-center">
+                            <Switch
+                              checked={bool}
+                              aria-label={row.description_ar || row.key}
+                              onCheckedChange={(next) =>
+                                setPending({ setting: row, next: { enabled: next } })
+                              }
+                            />
+                          </span>
                         )}
                         {num !== null && (
                           <div className="flex shrink-0 items-center gap-2">
