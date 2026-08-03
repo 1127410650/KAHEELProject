@@ -33,7 +33,8 @@ import {
 export const Route = createFileRoute("/admin/users")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>) => ({
-    restricted: search["restricted"] === "1" ? "1" : undefined,
+    restricted:
+      search["restricted"] === true || search["restricted"] === "true" ? true : undefined,
   }),
   head: () => ({
     meta: [
