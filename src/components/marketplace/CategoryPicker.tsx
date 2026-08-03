@@ -5,6 +5,8 @@ import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { MktCategory } from "@/lib/mkt";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 
@@ -29,6 +31,8 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
   const [stage, setStage] = useState<Stage>("root");
   const [root, setRoot] = useState("");
   const [sub, setSub] = useState("");
+  const [term, setTerm] = useState("");
+
 
   const label = (o: { name_ar: string; name_en: string | null }) =>
     locale === "ar" ? o.name_ar : o.name_en || o.name_ar;
@@ -56,6 +60,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
     if (!open) return;
     setRoot("");
     setSub("");
+    setTerm("");
     setStage("root");
   }, [open]);
 
@@ -67,6 +72,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
   function pickRoot(id: string) {
     setRoot(id);
     setSub("");
+    setTerm("");
     if (childrenOf(id).length === 0) {
       finish(id, "");
       return;
@@ -76,6 +82,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
 
   function pickSub(id: string) {
     setSub(id);
+    setTerm("");
     if (childrenOf(id).length === 0) {
       finish(root, id);
       return;
@@ -83,7 +90,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
     setStage("leaf");
   }
 
-  const items =
+  const all =
     stage === "root"
       ? roots.map((c) => ({ id: c.id, text: label(c), onSelect: () => pickRoot(c.id) }))
       : stage === "sub"
@@ -93,6 +100,10 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
             text: label(c),
             onSelect: () => finish(root, c.id),
           }));
+
+  // Search never leaves the current level: it only narrows what is on screen.
+  const needle = term.trim().toLowerCase();
+  const items = needle ? all.filter((item) => item.text.toLowerCase().includes(needle)) : all;
 
   const stageTitle = stage === "root" ? t("market.form.chooseField") : t("market.form.chooseSub");
 
@@ -105,7 +116,10 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
             variant="ghost"
             size="sm"
             className="h-11 px-2"
-            onClick={() => setStage(stage === "leaf" ? "sub" : "root")}
+            onClick={() => {
+              setTerm("");
+              setStage(stage === "leaf" ? "sub" : "root");
+            }}
           >
             {locale === "ar" ? (
               <ChevronRight className="size-4" aria-hidden />
@@ -124,6 +138,12 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
           </span>
         </div>
       )}
+      <Input
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+        placeholder={t("market.form.searchLevel")}
+        className="h-11"
+      />
       <ul
         className={
           stage === "root"
@@ -132,6 +152,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
         }
       >
         {items.map((item) => (
+
           <li key={item.id}>
             <button
               type="button"
@@ -152,7 +173,13 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
           </li>
         ))}
       </ul>
+      {items.length === 0 && (
+        <p className="py-4 text-center text-sm text-muted-foreground">
+          {t("market.form.noResults")}
+        </p>
+      )}
     </div>
+
   );
 
   return (

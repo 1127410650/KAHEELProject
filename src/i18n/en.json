@@ -2334,7 +2334,12 @@
       "locationHint": "No map needed: the city is enough and the location button is optional.",
       "editPath": "Edit",
       "reviewHint": "Check the summary, then submit for review or keep it as a draft.",
-      "specsPrimary": "Key details"
+      "specsPrimary": "Key details",
+      "loadFailed": "Could not load the ad form, please try again",
+      "retry": "Retry",
+      "searchLevel": "Search this list",
+      "noResults": "No matching results",
+      "typeRequired": "Choose the listing type"
     },
     "geo": {
       "pick": "Choose market",
@@ -2473,7 +2478,9 @@
       "unavailable": "Currently unavailable",
       "cancelToCurrent": "Cancel and return to the current account",
       "backToAccounts": "Back to account selection",
-      "justCreated": "Business created. Select it to make it the active account."
+      "justCreated": "Business created. Select it to make it the active account.",
+      "loadFailed": "Could not load your account data, please try again",
+      "retry": "Retry"
     },
     "access": {
       "title": "This page can't be opened",
