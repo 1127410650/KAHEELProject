@@ -24,8 +24,6 @@ import {
   ReceiptText,
   PackageSearch,
   Bell,
-  FileText,
-  MailOpen,
 
 
 } from "lucide-react";
