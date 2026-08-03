@@ -606,8 +606,9 @@ function AdPage() {
                 {listing.views_count}
               </span>
             )}
-            <span dir="ltr">
-              {t("market.ad.refNo")}: {listing.id.slice(0, 8).toUpperCase()}
+            <span className="inline-flex items-center gap-1">
+              {t("market.ad.refNo")}:
+              <bdi dir="ltr">{listing.id.slice(0, 8).toUpperCase()}</bdi>
             </span>
           </div>
 
