@@ -17,6 +17,8 @@ import QRCode from "qrcode";
 import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { canonicalCurrentUrl, shareTargets } from "@/lib/share-links";
+import { trackListingEvent, type ListingTrackKind } from "@/lib/mkt-listing-ops";
+
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
