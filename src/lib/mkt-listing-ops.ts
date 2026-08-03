@@ -7,6 +7,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { removeObjects } from "@/lib/mkt-listing-media";
 
 export const LISTING_DURATIONS = [1, 3, 7, 14, 30] as const;
 export type ListingDuration = (typeof LISTING_DURATIONS)[number];
@@ -59,7 +60,28 @@ export const archiveListing = (id: string) =>
 export const restoreListing = (id: string) =>
   call(supabase.rpc("mkt_listing_restore", { _id: id }));
 
-export const deleteListing = (id: string) => call(supabase.rpc("mkt_listing_delete", { _id: id }));
+/**
+ * Delete an ad. For a draft the photo objects have no reason to survive, so the
+ * owner's own storage objects are swept right after the row is gone; a failure
+ * there never turns a successful delete into an error.
+ */
+export const deleteListing = async (id: string) => {
+  const { data: images } = await supabase
+    .from("mkt_listing_images")
+    .select("url")
+    .eq("listing_id", id);
+  const { data: row } = await supabase
+    .from("mkt_listings")
+    .select("status")
+    .eq("id", id)
+    .maybeSingle();
+  const result = await call(supabase.rpc("mkt_listing_delete", { _id: id }));
+  if (row?.status === "draft") {
+    const paths = (images ?? []).map((i) => i.url).filter((u) => !/^https?:/i.test(u));
+    await removeObjects(paths);
+  }
+  return result;
+};
 
 export const duplicateListing = (id: string) =>
   call(supabase.rpc("mkt_listing_duplicate", { _id: id }));

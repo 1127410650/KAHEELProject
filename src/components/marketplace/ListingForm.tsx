@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { MKT_BUCKET, type MktListing } from "@/lib/mkt";
+import { type MktListing } from "@/lib/mkt";
 import { geoName, loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveAccount } from "@/lib/mkt-account";
@@ -38,6 +38,8 @@ import {
   RE_ROOT_SLUG,
   saveListingLicense,
 } from "@/lib/mkt-license";
+import { imagesRequired, MAX_LISTING_IMAGES } from "@/lib/mkt-listing-media";
+import { useListingImages } from "@/lib/use-listing-images";
 import { CategoryPicker } from "@/components/marketplace/CategoryPicker";
 import { ListingImages } from "@/components/marketplace/ListingImages";
 import {
@@ -60,7 +62,7 @@ const selectClass = "h-11 w-full rounded-md border border-input bg-background px
 const STEPS = ["basics", "media", "reviewPublish"] as const;
 type SpecValue = string | number | boolean;
 type PriceKind = "fixed" | "from" | "on_request";
-type FieldKey = "path" | "title" | "price" | "city";
+type FieldKey = "path" | "title" | "price" | "city" | "images";
 
 /** Short summary used on cards when the advertiser did not write one. */
 function autoSummary(description: string): string | null {
@@ -105,8 +107,9 @@ export function ListingForm({ listing }: Props) {
   const [itemCondition, setItemCondition] = useState(listing?.item_condition ?? "used");
   const [keywords, setKeywords] = useState((listing?.keywords ?? []).join("، "));
   const [specs, setSpecs] = useState<Record<string, SpecValue>>(storedSpecs);
-  const [files, setFiles] = useState<File[]>([]);
-  const [coverIndex, setCoverIndex] = useState(0);
+  // Photos live in a private staging folder identified by this id, so a refresh
+  // finds them again and a deleted draft can be swept clean.
+  const [draftId, setDraftId] = useState<string>(() => crypto.randomUUID());
   const [durationDays, setDurationDays] = useState<ListingDuration>(
     isListingDuration(listing?.duration_days)
       ? (listing!.duration_days as ListingDuration)
@@ -156,6 +159,11 @@ export function ListingForm({ listing }: Props) {
   const tenantId = listing ? (listing.tenant_id ?? null) : (account?.tenant_id ?? null);
   const scope = listing ? `edit:${listing.id}` : `new:${account?.account_key ?? "pending"}`;
   const canPublish = !!listing || !account || account.can_publish;
+  const media = useListingImages({
+    userId: session?.user.id ?? null,
+    draftId,
+    listingId: listing?.id,
+  });
 
   const label = (o: { name_ar: string; name_en: string | null }) =>
     locale === "ar" ? o.name_ar : o.name_en || o.name_ar;
@@ -249,6 +257,8 @@ export function ListingForm({ listing }: Props) {
     if (draft.cityId) setCityId(draft.cityId);
     if (draft.district) setDistrict(draft.district);
     if (draft.addressText) setAddressText(draft.addressText);
+    if (draft.draftId) setDraftId(draft.draftId);
+    if (draft.images?.length) media.restore(draft.images, draft.coverId ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scope, account]);
 
@@ -278,6 +288,9 @@ export function ListingForm({ listing }: Props) {
       accountKey: account?.account_key ?? "individual",
       specs,
       step,
+      draftId,
+      images: media.metas,
+      coverId: media.coverId,
     };
   }, [
     typeCode,
@@ -301,6 +314,9 @@ export function ListingForm({ listing }: Props) {
     account?.account_key,
     specs,
     step,
+    draftId,
+    media.metas,
+    media.coverId,
   ]);
 
   // Autosave is silent: only a small line under the form reports the result.
@@ -334,30 +350,6 @@ export function ListingForm({ listing }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountCityId]);
 
-  // ---------- images ----------
-  async function uploadImages(listingId: string): Promise<string | null> {
-    let cover: string | null = null;
-    const ordered = files;
-    for (const [index, file] of ordered.entries()) {
-      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-      const path = `listings/${session!.user.id}/${listingId}/${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage.from(MKT_BUCKET).upload(path, file, {
-        contentType: file.type || "image/jpeg",
-        upsert: false,
-      });
-      if (error) continue;
-      const isCover = index === coverIndex;
-      await supabase.from("mkt_listing_images").insert({
-        listing_id: listingId,
-        url: path,
-        sort_order: index,
-        is_cover: isCover,
-      });
-      if (isCover) cover = path;
-    }
-    return cover;
-  }
-
   // ---------- validation ----------
   function fieldError(key: FieldKey): string | null {
     if (key === "path") {
@@ -376,6 +368,11 @@ export function ListingForm({ listing }: Props) {
       if (priceKind !== "on_request" && !price.trim()) return t("market.form.priceRequired");
       return null;
     }
+    if (key === "images") {
+      if (imagesRequired(rootSlug, isWantedType(typeCode)) && media.readyCount === 0)
+        return t("market.media.required");
+      return null;
+    }
     if (key === "city") {
       if (!cityId) return t("market.form.cityRequired");
       if ((cities.data ?? []).length > 0 && !(cities.data ?? []).some((c) => c.id === cityId))
@@ -392,7 +389,7 @@ export function ListingForm({ listing }: Props) {
 
   const STEP_FIELDS: Record<number, FieldKey[]> = {
     0: ["path", "title", "price", "city"],
-    1: ["city"],
+    1: ["city", "images"],
     2: [],
   };
 
@@ -511,14 +508,12 @@ export function ListingForm({ listing }: Props) {
       if (listing) {
         const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listing.id);
         if (error) throw error;
-        if (files.length > 0) {
-          const cover = await uploadImages(listing.id);
-          if (cover && !listing.cover_image_url)
-            await supabase
-              .from("mkt_listings")
-              .update({ cover_image_url: cover })
-              .eq("id", listing.id);
-        }
+        const cover = await media.persist(listing.id);
+        if (cover)
+          await supabase
+            .from("mkt_listings")
+            .update({ cover_image_url: cover })
+            .eq("id", listing.id);
       } else {
         const { data, error } = await supabase
           .from("mkt_listings")
@@ -532,7 +527,7 @@ export function ListingForm({ listing }: Props) {
           .single();
         if (error || !data) throw error ?? new Error("insert failed");
         listingId = data.id;
-        const cover = await uploadImages(data.id);
+        const cover = await media.persist(data.id);
         if (cover)
           await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
       }
@@ -540,6 +535,7 @@ export function ListingForm({ listing }: Props) {
       if (isRealEstate && listingId) await saveListingLicense(listingId, license);
       if (publish && listingId) await submitListing(listingId);
 
+      await media.discardStaged();
       clearDraft(scope);
       setDirty(false);
       toast.success(publish ? t("market.dash.submitted") : t("market.dash.savedDraft"));
@@ -993,16 +989,10 @@ export function ListingForm({ listing }: Props) {
         <div className="space-y-4">
           <div className="space-y-1.5">
             <span className="text-sm font-medium text-foreground">{t("market.dash.images")}</span>
-            <ListingImages
-              listingId={listing?.id}
-              files={files}
-              onFilesChange={(nextFiles) => {
-                setDirty(true);
-                setFiles(nextFiles);
-              }}
-              coverIndex={coverIndex}
-              onCoverIndexChange={setCoverIndex}
-            />
+            <div id="images-block">
+              <ListingImages api={media} />
+            </div>
+            {errors.images && <p className="text-xs text-destructive">{errors.images}</p>}
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -1065,7 +1055,7 @@ export function ListingForm({ listing }: Props) {
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.dash.images")}</dt>
             <dd className="text-foreground" dir="ltr">
-              {files.length}
+              {media.readyCount}
             </dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">

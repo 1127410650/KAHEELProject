@@ -1521,7 +1521,7 @@
       "condition": "Condition",
       "region": "Region",
       "images": "Images",
-      "addImages": "Add images (up to 8)",
+      "addImages": "Add photos",
       "submitForReview": "Submit for review",
       "saveDraft": "Save as draft",
       "savedDraft": "Saved as draft",
@@ -2762,6 +2762,22 @@
         "assigneeNotStaff": "That user is not part of the review team",
         "network": "Could not reach the service, please retry",
         "failed": "The action could not be completed"
+      }
+    },
+    "media": {
+      "add": "Add photos",
+      "hint": "Up to {max} photos in JPG, PNG or WebP. The first photo is the cover; you can change it or drag to reorder.",
+      "drag": "Drag to reorder",
+      "retry": "Retry",
+      "replace": "Replace photo",
+      "required": "This category requires at least one photo.",
+      "err": {
+        "type": "The file is not a JPG, PNG or WebP image.",
+        "tooLarge": "The file exceeds the 15 MB limit.",
+        "corrupt": "The image could not be read; the file is damaged.",
+        "duplicate": "This photo is already added.",
+        "limit": "The photo limit has been reached.",
+        "upload": "Photo upload failed."
       }
     }
   },
