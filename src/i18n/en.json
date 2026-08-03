@@ -1526,6 +1526,10 @@
       "saveDraft": "Save as draft",
       "savedDraft": "Saved as draft",
       "submitted": "Listing submitted for review",
+      "submitOffline": "No internet connection. Your data is saved as a draft; retry when you are back online.",
+      "submitNotAllowed": "You are not allowed to submit this listing.",
+      "submitInvalidState": "The listing's current status does not allow submitting for review.",
+      "submitBusy": "The listing is being submitted, please wait…",
       "reviewNote": "Listings go live after marketplace review.",
       "status": {
         "draft": "Draft",
