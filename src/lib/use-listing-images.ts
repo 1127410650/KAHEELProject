@@ -47,6 +47,8 @@ export interface ListingImagesApi {
   /** Drop every staged object of this draft (used after a successful save). */
   discardStaged: () => Promise<void>;
   readyCount: number;
+  /** Photos that occupy a slot: uploaded or still uploading (rejects do not). */
+  activeCount: number;
   metas: StagedImageMeta[];
 }
 
@@ -151,8 +153,8 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
     (files: File[]) => {
       void (async () => {
         for (const file of files) {
-          const current = itemsRef.current;
-          if (current.length >= MAX_LISTING_IMAGES) {
+          const active = itemsRef.current.filter((i) => i.status !== "failed").length;
+          if (active >= MAX_LISTING_IMAGES) {
             setItems((prev) => [
               ...prev,
               failedItem(file, "limit"),
@@ -323,6 +325,7 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
     persist,
     discardStaged,
     readyCount: items.filter((i) => i.status === "ready").length,
+    activeCount: items.filter((i) => i.status !== "failed").length,
     metas,
   };
 }

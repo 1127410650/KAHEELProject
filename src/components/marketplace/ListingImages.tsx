@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   DndContext,
   KeyboardSensor,
@@ -37,7 +37,7 @@ interface Props {
  */
 export function ListingImages({ api }: Props) {
   const { t } = useI18n();
-  const remaining = Math.max(0, MAX_LISTING_IMAGES - api.items.length);
+  const remaining = Math.max(0, MAX_LISTING_IMAGES - api.activeCount);
   const inputRef = useRef<HTMLInputElement>(null);
   const [replacing, setReplacing] = useState<string | null>(null);
   const replaceRef = useRef<HTMLInputElement>(null);
@@ -150,14 +150,9 @@ function PhotoTile({ item, isCover, onCover, onRemove, onRetry, onReplace }: Til
     id: item.id,
   });
 
-  useEffect(
-    () => () => {
-      if (item.preview?.startsWith("blob:")) URL.revokeObjectURL(item.preview);
-    },
-    // Only on unmount: the URL belongs to this tile.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  // The preview URL is owned by the state hook: it is revoked when the photo is
+  // removed, never on unmount, so reordering cannot break an existing preview.
+
 
   return (
     <li
