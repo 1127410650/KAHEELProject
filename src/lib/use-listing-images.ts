@@ -305,7 +305,7 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
         }
         const target = attachedPath(userId, targetListing, item.blob?.type ?? "image/webp");
         const finalPath = await attachObject(item.path!, target);
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("mkt_listing_images")
           .insert({
             listing_id: targetListing,
@@ -323,13 +323,16 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
           })
           .select("id")
           .single();
-        if (data) {
-          patch(item.id, { kind: "stored", storedId: data.id, path: finalPath });
-          rowIds.push(data.id);
-          if (isCover) coverRow = data.id;
+        // A photo that cannot be attached must not be dropped silently: the
+        // caller keeps the draft and shows a clear message instead.
+        if (error || !data) throw new Error("attach_failed");
+        patch(item.id, { kind: "stored", storedId: data.id, path: finalPath });
+        rowIds.push(data.id);
+        if (isCover) {
+          coverRow = data.id;
+          coverPath = finalPath;
         }
-        if (isCover) coverPath = finalPath;
-      }
+
 
       // Order and cover are committed atomically server-side, never trusted
       // from the local grid alone.
