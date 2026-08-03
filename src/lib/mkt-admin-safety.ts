@@ -32,7 +32,7 @@ export async function loadAdvertiserSafety(
 ): Promise<AdvertiserSafety> {
   const { data, error } = await supabase.rpc("mkt_advertiser_safety", {
     _user_id: userId,
-    _tenant_id: tenantId ?? null,
+    ...(tenantId ? { _tenant_id: tenantId } : {}),
   });
   if (error) throw error;
   const row = (data ?? {}) as Record<string, unknown>;
