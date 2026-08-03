@@ -63,15 +63,35 @@ export function RealEstateLicenseFields({
   value,
   userId,
   onChange,
+  open,
+  onOpenChange,
+  focusField,
+  onFocusHandled,
 }: {
   value: LicenseFormValue;
   userId: string;
   onChange: (next: LicenseFormValue) => void;
+  /** Controlled accordion state; closed when the form opens. */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** Input id to focus after a failed submit. */
+  focusField?: string | null;
+  onFocusHandled?: () => void;
 }) {
   const { t } = useI18n();
   const [uploading, setUploading] = useState<"license" | "exemption" | null>(null);
   const licenseInput = useRef<HTMLInputElement>(null);
   const exemptionInput = useRef<HTMLInputElement>(null);
+  const summary = licenseSummary(value);
+
+  useEffect(() => {
+    if (!open || !focusField) return;
+    const el = document.getElementById(focusField) as HTMLElement | null;
+    el?.focus();
+    el?.scrollIntoView({ block: "center", behavior: "smooth" });
+    onFocusHandled?.();
+  }, [open, focusField, onFocusHandled]);
+
 
   const set = <K extends keyof LicenseFormValue>(key: K, next: LicenseFormValue[K]) =>
     onChange({ ...value, [key]: next });
