@@ -187,11 +187,45 @@ export function RealEstateLicenseFields({
   }
 
   return (
-    <fieldset className="space-y-4 rounded-xl border border-border p-3">
-      <legend className="px-1 text-sm font-semibold text-foreground">
-        {t("market.license.sectionTitle")}
-      </legend>
+    <div className="rounded-xl border border-border">
+      <button
+        type="button"
+        onClick={() => onOpenChange(!open)}
+        aria-expanded={open}
+        aria-controls="license-panel"
+        className="flex min-h-11 w-full items-center gap-2 p-3 text-start"
+      >
+        <ScrollText className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+        <span className="min-w-0 flex-1 text-sm font-semibold text-foreground">
+          {t("market.license.sectionTitle")}
+        </span>
+        <span
+          className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+            summary === "complete"
+              ? "bg-primary/10 text-primary"
+              : summary === "expired"
+                ? "bg-destructive/10 text-destructive"
+                : "bg-secondary text-secondary-foreground"
+          }`}
+        >
+          {summary === "complete" && <CheckCircle2 className="size-3.5" aria-hidden />}
+          {t(`market.license.summary.${summary}`)}
+        </span>
+        <ChevronDown
+          className={open ? "size-4 shrink-0 rotate-180 transition" : "size-4 shrink-0 transition"}
+          aria-hidden
+        />
+      </button>
+
+      {!open && (
+        <p className="px-3 pb-3 text-[11px] text-muted-foreground">
+          {t("market.license.completeNote")}
+        </p>
+      )}
+
+      <fieldset id="license-panel" hidden={!open} className="space-y-4 border-t border-border p-3">
       <p className="text-[11px] text-muted-foreground">{t("market.license.formIntro")}</p>
+
 
       <div className="space-y-1.5">
         <Label htmlFor="advertiser_role">{t("market.license.advertiserRole")}</Label>
