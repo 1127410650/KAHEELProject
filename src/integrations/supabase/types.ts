@@ -2202,30 +2202,63 @@ export type Database = {
       mkt_listing_images: {
         Row: {
           alt_text: string | null
+          byte_size: number | null
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          file_hash: string | null
+          height: number | null
           id: string
           is_cover: boolean
           listing_id: string
+          mime_type: string | null
+          original_filename: string | null
           sort_order: number
+          storage_key: string | null
+          thumbnail_key: string | null
+          upload_status: string
           url: string
+          width: number | null
         }
         Insert: {
           alt_text?: string | null
+          byte_size?: number | null
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          file_hash?: string | null
+          height?: number | null
           id?: string
           is_cover?: boolean
           listing_id: string
+          mime_type?: string | null
+          original_filename?: string | null
           sort_order?: number
+          storage_key?: string | null
+          thumbnail_key?: string | null
+          upload_status?: string
           url: string
+          width?: number | null
         }
         Update: {
           alt_text?: string | null
+          byte_size?: number | null
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          file_hash?: string | null
+          height?: number | null
           id?: string
           is_cover?: boolean
           listing_id?: string
+          mime_type?: string | null
+          original_filename?: string | null
           sort_order?: number
+          storage_key?: string | null
+          thumbnail_key?: string | null
+          upload_status?: string
           url?: string
+          width?: number | null
         }
         Relationships: [
           {
@@ -3213,6 +3246,36 @@ export type Database = {
           id?: string
           perm?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_storage_cleanup: {
+        Row: {
+          bucket: string
+          enqueued_at: string
+          error: string | null
+          id: string
+          object_key: string
+          processed_at: string | null
+          reason: string
+        }
+        Insert: {
+          bucket?: string
+          enqueued_at?: string
+          error?: string | null
+          id?: string
+          object_key: string
+          processed_at?: string | null
+          reason: string
+        }
+        Update: {
+          bucket?: string
+          enqueued_at?: string
+          error?: string | null
+          id?: string
+          object_key?: string
+          processed_at?: string | null
+          reason?: string
         }
         Relationships: []
       }
@@ -7387,6 +7450,22 @@ export type Database = {
           location_source: string
           longitude: number
         }[]
+      }
+      mkt_listing_image_delete: {
+        Args: { _image: string; _listing: string }
+        Returns: undefined
+      }
+      mkt_listing_image_set_cover: {
+        Args: { _image: string; _listing: string }
+        Returns: undefined
+      }
+      mkt_listing_images_reorder: {
+        Args: { _ids: string[]; _listing: string }
+        Returns: undefined
+      }
+      mkt_listing_images_required: {
+        Args: { _listing: string }
+        Returns: boolean
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
       mkt_listing_pause: { Args: { _id: string }; Returns: string }
