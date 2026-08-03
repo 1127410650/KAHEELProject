@@ -72,9 +72,11 @@ const ACTION_LABELS: Record<SubjectAction | "note", string> = {
 function AdminBusinessesPage() {
   const { t } = useI18n();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { identity } = usePlatformIdentity();
-  const [term, setTerm] = useState("");
-  const [search, setSearch] = useState("");
+  const remembered = readAdminListState("businesses", { term: "", search: "" });
+  const [term, setTerm] = useState(remembered.term);
+  const [search, setSearch] = useState(remembered.search);
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -85,6 +87,14 @@ function AdminBusinessesPage() {
     enabled: identity?.is_platform_admin === true || staffAccess,
     queryFn: () => loadAdminBusinesses(search),
   });
+
+  useAdminListMemory("businesses", { term, search }, !businesses.isLoading);
+
+  function openRow(event: React.MouseEvent, tenantId: string) {
+    if (isInteractive(event.target)) return;
+    void navigate({ to: "/admin/businesses/$id", params: { id: tenantId } });
+  }
+
 
   async function confirm(reason: string) {
     if (!pending) return;
