@@ -339,9 +339,11 @@ function AdminListingsPage() {
           {open && (
             <div className="space-y-3 text-sm">
               <p className="whitespace-pre-line text-muted-foreground">{open.description ?? "—"}</p>
-              <p className="text-xs text-muted-foreground" dir="ltr">
-                owner: {open.owner_user_id}
+              <p className="text-xs text-muted-foreground">
+                {t("market.admin.owner")}:{" "}
+                <AdminUserLink id={open.owner_user_id} name={t("admin.detail.userFile")} />
               </p>
+
               <div className="grid grid-cols-3 gap-2">
                 {(images.data ?? []).map((url) => (
                   <img
