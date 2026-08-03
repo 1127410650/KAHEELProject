@@ -2780,6 +2780,9 @@
         "upload": "Photo upload failed."
       },
       "imagesIncomplete": "Some photos have not finished uploading — retry or remove them.",
+      "stillUploading": "Wait until the photos finish uploading, then submit again.",
+      "someFailed": "Some photos failed to upload — retry or remove them, then submit.",
+      "attachFailed": "The photos could not be attached. Your data is saved as a draft; please retry.",
       "imagesTooMany": "Up to 20 photos per ad."
     }
   },
