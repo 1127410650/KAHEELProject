@@ -1455,7 +1455,7 @@
       "statusNotice": "This status is visible to you only; visitors cannot see the ad until it is published.",
       "category": "Category",
       "openLocation": "Open location",
-      "openLocationHint": "Open the location in OpenStreetMap in a new tab"
+      "openLocationHint": "Open the location in Google Maps in a new tab"
     },
     "business": {
       "joined": "Member since",
@@ -2352,7 +2352,15 @@
         "pending": "Under review",
         "exempt": "Legally exempt",
         "invalid": "Invalid licence"
-      }
+      },
+      "summary": {
+        "notStarted": "Incomplete",
+        "needsCompletion": "Needs completion",
+        "complete": "Required fields complete",
+        "expired": "Licence expired",
+        "exemptionPending": "Exemption under review"
+      },
+      "completeNote": "Complete fields do not mean the licence is verified; the platform reviews it."
     }
   },
   "routeError": {
