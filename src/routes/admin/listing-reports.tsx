@@ -71,7 +71,11 @@ function AdminListingReportsPage() {
   const { t, locale } = useI18n();
   const { session } = useSession();
   const queryClient = useQueryClient();
-  const [filters, setFilters] = useState<LrFilters>({ page: 0, pageSize: PAGE_SIZE });
+  const remembered = readAdminListState<LrFilters>("listing-reports", {
+    page: 0,
+    pageSize: PAGE_SIZE,
+  });
+  const [filters, setFilters] = useState<LrFilters>(remembered);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -100,9 +104,22 @@ function AdminListingReportsPage() {
   const total = list[0]?.total_count ?? 0;
   const current = list.find((r) => r.id === openId) ?? null;
 
+  useAdminListMemory("listing-reports", filters, !rows.isLoading);
+
+  // Identifiers only: the server withholds the reporter unless this admin may
+  // unmask reporters, so an unauthorised reviewer simply gets no link.
+  const reportIds = useMemo(() => list.map((r) => r.id), [list]);
+  const subjects = useQuery({
+    queryKey: ["mkt", "admin", "report-subjects", reportIds],
+    enabled: canView && reportIds.length > 0,
+    queryFn: () => loadAdminSubjectIds({ reportIds }),
+  });
+  const subjectMap = subjects.data ?? {};
+
   function set<K extends keyof LrFilters>(key: K, value: LrFilters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value, page: 0 }));
   }
+
 
   const filterFields = (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
