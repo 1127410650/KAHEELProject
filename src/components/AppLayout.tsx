@@ -24,8 +24,6 @@ import {
   ReceiptText,
   PackageSearch,
   Bell,
-  FileText,
-  MailOpen,
 
 
 } from "lucide-react";
@@ -104,25 +102,12 @@ const supervisorGroups: { titleKey: string; items: NavItem[] }[] = [
   },
 ];
 
-/** Personal (individual) account: only the user's own data — never company records. */
-const personalGroups: { titleKey: string; items: NavItem[] }[] = [
-  {
-    titleKey: "nav.sectionMain",
-    items: [
-      { to: "/me", labelKey: "nav.home", icon: Inbox },
-      { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
-      { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
-      { to: "/my-documents", labelKey: "nav.myDocuments", icon: FileText },
-      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet, perm: "custody.view_own" },
-      { to: "/invitations", labelKey: "nav.invitations", icon: MailOpen },
-      { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
-    ],
-  },
-  {
-    titleKey: "nav.sectionSystem",
-    items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
-  },
-];
+/**
+ * Personal (individual) accounts have no sidebar here any more: the old personal
+ * shell was retired in favour of the marketplace account dashboard, and this
+ * layout now only serves the internal operations of a business entity.
+ */
+
 
 
 
@@ -188,14 +173,9 @@ function NavLinks({
   const { t } = useI18n();
   const { isAccountant, isSupervisor, role, can } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: accounts = [] } = useAccounts();
-  const isPersonal = accounts.some((a) => a.is_current && a.is_personal);
   const supervisorOnly = isSupervisor && !isAccountant && role !== "employee";
-  const visibleGroups = isPersonal
-    ? personalGroups
-    : supervisorOnly
-      ? supervisorGroups
-      : groups;
+  const visibleGroups = supervisorOnly ? supervisorGroups : groups;
+
 
 
   return (
@@ -266,21 +246,13 @@ function Brand({ collapsed }: { collapsed: boolean }) {
   );
 }
 
-/** Company-only areas that must never render inside a personal account. */
-const COMPANY_ONLY_PATHS = [
-  "/dashboard",
-  "/supervisors",
-  "/custody",
-  "/suppliers",
-  "/invoices",
-  "/users",
-  "/team",
-  "/audit",
-  "/trash",
-  "/reports",
-  "/products",
-  "/portal",
-];
+/**
+ * This shell is for the internal operations of a business entity only. A personal
+ * (individual) account no longer has any page here — it is sent to the marketplace
+ * account dashboard, which is now the single home for personal data.
+ */
+const PERSONAL_HOME = "/dashboard/profile";
+
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -307,9 +279,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
       navigate({ to: "/select-account", replace: true });
       return;
     }
-    if (isPersonal && COMPANY_ONLY_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
-      navigate({ to: "/me", replace: true });
+    if (isPersonal) {
+      navigate({ to: PERSONAL_HOME, replace: true });
     }
+
   }, [accountsLoaded, accounts.length, current, isPersonal, pathname, onSelectPage, navigate]);
 
   async function signOut() {

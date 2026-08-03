@@ -16,6 +16,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
+import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
@@ -25,7 +26,6 @@ import { Route as AuthenticatedCustodyRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInvitationsRouteImport } from './routes/_authenticated/invitations'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
-import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
 import { Route as AuthenticatedMyCustodyRouteImport } from './routes/_authenticated/my-custody'
 import { Route as AuthenticatedMyDocumentsRouteImport } from './routes/_authenticated/my-documents'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
@@ -115,6 +115,11 @@ const MarketSetupRoute = MarketSetupRouteImport.update({
   path: '/market-setup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeRoute = MeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoreRoute = MoreRouteImport.update({
   id: '/more',
   path: '/more',
@@ -159,11 +164,6 @@ const AuthenticatedInvitationsRoute =
 const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedMeRoute = AuthenticatedMeRouteImport.update({
-  id: '/me',
-  path: '/me',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMyCustodyRoute = AuthenticatedMyCustodyRouteImport.update({
@@ -454,6 +454,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/market-setup': typeof MarketSetupRoute
+  '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
@@ -463,7 +464,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invitations': typeof AuthenticatedInvitationsRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
-  '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/my-documents': typeof AuthenticatedMyDocumentsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -525,6 +525,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/market-setup': typeof MarketSetupRoute
+  '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
@@ -534,7 +535,6 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/invitations': typeof AuthenticatedInvitationsRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
-  '/me': typeof AuthenticatedMeRoute
   '/my-custody': typeof AuthenticatedMyCustodyRoute
   '/my-documents': typeof AuthenticatedMyDocumentsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -599,6 +599,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/market-setup': typeof MarketSetupRoute
+  '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
@@ -608,7 +609,6 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/invitations': typeof AuthenticatedInvitationsRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
-  '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/my-custody': typeof AuthenticatedMyCustodyRoute
   '/_authenticated/my-documents': typeof AuthenticatedMyDocumentsRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
@@ -673,6 +673,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/market-setup'
+    | '/me'
     | '/more'
     | '/register'
     | '/search'
@@ -682,7 +683,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/invitations'
     | '/invoices'
-    | '/me'
     | '/my-custody'
     | '/my-documents'
     | '/notifications'
@@ -744,6 +744,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/market-setup'
+    | '/me'
     | '/more'
     | '/register'
     | '/search'
@@ -753,7 +754,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/invitations'
     | '/invoices'
-    | '/me'
     | '/my-custody'
     | '/my-documents'
     | '/notifications'
@@ -817,6 +817,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/market-setup'
+    | '/me'
     | '/more'
     | '/register'
     | '/search'
@@ -826,7 +827,6 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/invitations'
     | '/_authenticated/invoices'
-    | '/_authenticated/me'
     | '/_authenticated/my-custody'
     | '/_authenticated/my-documents'
     | '/_authenticated/notifications'
@@ -891,6 +891,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   MarketSetupRoute: typeof MarketSetupRoute
+  MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
@@ -966,6 +967,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/me': {
+      id: '/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof MeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/more': {
       id: '/more'
       path: '/more'
@@ -1027,13 +1035,6 @@ declare module '@tanstack/react-router' {
       path: '/invoices'
       fullPath: '/invoices'
       preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/me': {
-      id: '/_authenticated/me'
-      path: '/me'
-      fullPath: '/me'
-      preLoaderRoute: typeof AuthenticatedMeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/my-custody': {
@@ -1423,7 +1424,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedInvitationsRoute: typeof AuthenticatedInvitationsRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
-  AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedMyCustodyRoute: typeof AuthenticatedMyCustodyRoute
   AuthenticatedMyDocumentsRoute: typeof AuthenticatedMyDocumentsRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
@@ -1454,7 +1454,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedInvitationsRoute: AuthenticatedInvitationsRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
-  AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedMyCustodyRoute: AuthenticatedMyCustodyRoute,
   AuthenticatedMyDocumentsRoute: AuthenticatedMyDocumentsRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
@@ -1528,6 +1527,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   MarketSetupRoute: MarketSetupRoute,
+  MeRoute: MeRoute,
   MoreRoute: MoreRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
@@ -1554,3 +1554,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
