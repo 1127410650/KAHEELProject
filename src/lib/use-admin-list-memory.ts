@@ -95,19 +95,35 @@ export function useAdminListMemory<T extends object>(
     restoredForVisit.current = true;
     const target = read<T>(key)?.scrollY ?? 0;
     if (!target) return;
-    // Rows may still be painting, so the first scrollTo can be clamped. Retry
-    // over a few frames until the document is tall enough to honour it.
+    // Rows may still be painting, so the first scrollTo can be clamped, and the
+    // router's own scroll restoration can reset the offset a frame later. Keep
+    // re-asserting the offset briefly, and stop as soon as the reviewer scrolls.
     let attempts = 0;
+    let cancelled = false;
+    let timer = 0;
+    const cancel = () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+    window.addEventListener("wheel", cancel, { passive: true, once: true });
+    window.addEventListener("touchstart", cancel, { passive: true, once: true });
+    window.addEventListener("keydown", cancel, { once: true });
     const tick = () => {
+      if (cancelled) return;
       window.scrollTo({ top: target });
       lastScroll.current = window.scrollY;
       attempts += 1;
-      if (Math.abs(window.scrollY - target) > 2 && attempts < 12) {
-        window.setTimeout(tick, 60);
-      }
+      if (attempts < 14) timer = window.setTimeout(tick, 60);
     };
     requestAnimationFrame(tick);
+    return () => {
+      cancel();
+      window.removeEventListener("wheel", cancel);
+      window.removeEventListener("touchstart", cancel);
+      window.removeEventListener("keydown", cancel);
+    };
   }, [key, ready, onOwnPath]);
+
 }
 
 
