@@ -2293,6 +2293,8 @@
       "choosePath": "Choose a category",
       "pathRequired": "Complete the category selection to the last stage",
       "businessDenied": "You are not allowed to publish under this business",
+      "businessIncomplete": "Complete the business details (name, activity and contact) before submitting the listing for review.",
+      "geoRequired": "Select the city and service location before submitting.",
       "specs": "Additional specifications",
       "budget": "Estimated budget",
       "stageRoot": "Sector",
