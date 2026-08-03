@@ -248,21 +248,13 @@ function Brand({ collapsed }: { collapsed: boolean }) {
   );
 }
 
-/** Company-only areas that must never render inside a personal account. */
-const COMPANY_ONLY_PATHS = [
-  "/dashboard",
-  "/supervisors",
-  "/custody",
-  "/suppliers",
-  "/invoices",
-  "/users",
-  "/team",
-  "/audit",
-  "/trash",
-  "/reports",
-  "/products",
-  "/portal",
-];
+/**
+ * This shell is for the internal operations of a business entity only. A personal
+ * (individual) account no longer has any page here — it is sent to the marketplace
+ * account dashboard, which is now the single home for personal data.
+ */
+const PERSONAL_HOME = "/dashboard/profile";
+
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
