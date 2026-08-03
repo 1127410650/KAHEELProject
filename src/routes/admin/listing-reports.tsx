@@ -431,6 +431,8 @@ function AdminListingReportsPage() {
               report={current}
               can={can}
               staffOptions={staffOptions.data ?? []}
+              ownerUserId={subjectMap[subjectKey("report_owner", current.id)] ?? null}
+              reporterUserId={subjectMap[subjectKey("report_reporter", current.id)] ?? null}
               onDone={() => {
                 void queryClient.invalidateQueries({ queryKey: ["mkt", "listing-reports"] });
               }}
