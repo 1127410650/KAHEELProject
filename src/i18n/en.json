@@ -1715,7 +1715,8 @@
         }
       },
       "logTab": "Operations log",
-      "listingReports": "Listing reports"
+      "listingReports": "Listing reports",
+      "owner": "Advertiser"
     },
     "biz": {
       "editTab": "Edit profile",
