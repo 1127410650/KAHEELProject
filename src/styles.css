@@ -133,6 +133,22 @@
   --sidebar-accent-foreground: oklch(0.97 0.008 190);
   --sidebar-border: oklch(0.34 0.038 203);
   --sidebar-ring: oklch(0.74 0.108 78);
+
+  /* admin status tones (light) */
+  --admin-critical: oklch(0.42 0.17 25);
+  --admin-critical-soft: oklch(0.94 0.04 25);
+  --admin-urgent: oklch(0.55 0.16 45);
+  --admin-urgent-soft: oklch(0.95 0.045 45);
+  --admin-pending: oklch(0.5 0.11 85);
+  --admin-pending-soft: oklch(0.95 0.05 85);
+  --admin-progress: oklch(0.5 0.11 245);
+  --admin-progress-soft: oklch(0.945 0.035 245);
+  --admin-done: oklch(0.48 0.1 158);
+  --admin-done-soft: oklch(0.94 0.04 158);
+  --admin-idle: oklch(0.5 0.012 205);
+  --admin-idle-soft: oklch(0.94 0.008 205);
+  --admin-verify: oklch(0.47 0.14 300);
+  --admin-verify-soft: oklch(0.95 0.04 300);
 }
 
 .dark {
