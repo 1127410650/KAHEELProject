@@ -6,7 +6,7 @@
  *  - `MarketShell` / `MarketHome`  → which links to render
  *  - `DashboardShell`              → login + active account + permission
  *  - `AdminShell` / `/admin` gate  → platform-admin or staff permission
- *  - `AppLayout` / `_authenticated`→ operational pages (login + entity)
+ *  (the old internal operations shell `AppLayout` / `_authenticated` is gone)
  *
  * It never grants anything: the database (RLS + `mkt_my_accounts` /
  * `mkt_account_context` + `has_perm`) remains the only authority. This map only
@@ -186,8 +186,8 @@ const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
  * route's own guard (login / active account / permission) still runs.
  */
 export function resolveLegacyTarget(pathname: string): string | null {
-  const clean = pathname.split("?")[0]!.split("#")[0]!.replace(/\/+$/, "") || "/";
-  const found = BY_PATH.get(clean);
+  // Pattern-aware: `/projects/17` resolves through its `/projects/$id` rule.
+  const found = routeRuleFor(pathname);
   return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
 }
 
