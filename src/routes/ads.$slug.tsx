@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Building2, CalendarDays, Eye, MapPin, Navigation, User } from "lucide-react";
+import { Building2, CalendarDays, Eye, MapPin, User } from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -204,64 +204,6 @@ function DescriptionBlock({ text }: { text: string }) {
     </section>
   );
 }
-
-/**
- * Location: a short, honest line — city and district — plus one button that
- * hands the place over to the phone's map app. No interactive map is loaded
- * here: it made the page long, and an approximate ad has nothing to draw.
- */
-function LocationBlock({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
-  const { t } = useI18n();
-  const { listing, country } = ad;
-  const exact = listing.location_visibility === "exact";
-  const place = [cityLabel ?? listing.city, listing.district ?? listing.region]
-    .filter(Boolean)
-    .join(" — ");
-
-  // An approximate ad only ever exports a blurred point, so the hidden pin
-  // stays hidden. With nothing to open at all the button is not rendered.
-  const link = locationLink({
-    latitude: listing.latitude_public,
-    longitude: listing.longitude_public,
-    visibility: listing.location_visibility,
-    city: cityLabel ?? listing.city,
-    district: listing.district,
-    country: country ? geoName(country, "en") : null,
-  });
-
-  if (!place && !link) return null;
-
-  return (
-    <section className="mt-4 rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.location")}</h2>
-      {place && (
-        <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-foreground">
-          <MapPin className="size-4 text-muted-foreground" aria-hidden />
-          {place}
-        </p>
-      )}
-      <p className="mt-1 text-xs text-muted-foreground">
-        {exact ? t("market.ad.exact") : t("market.ad.approximate")}
-      </p>
-      {link && (
-        <Button asChild size="sm" className="mt-3 min-h-11 w-full sm:w-auto">
-          <a
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            title={t("market.ad.openLocationHint")}
-            aria-label={t("market.ad.openLocationHint")}
-          >
-            <Navigation className="size-4" aria-hidden />
-            {t("market.ad.openLocation")}
-          </a>
-        </Button>
-      )}
-    </section>
-  );
-}
-
-
 
 /** "About the advertiser": identity, and the only place the check mark appears. */
 function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | null }) {
@@ -541,6 +483,18 @@ function AdPage() {
 
   // The country is redundant for the home market; it only helps across borders.
   const showCountry = !!countryLabel && country?.iso2 !== "SA";
+  // One map link for the whole page: it lives in the icon row next to share.
+  // An approximate ad exports only a blurred point or a plain place search.
+  const mapHref =
+    locationLink({
+      latitude: listing.latitude_public,
+      longitude: listing.longitude_public,
+      visibility: listing.location_visibility,
+      city: cityLabel ?? listing.city,
+      district: listing.district ?? listing.region,
+      country: country ? geoName(country, "en") : null,
+    })?.href ?? null;
+
   const categoryPath = [category, subcategory]
     .filter((c): c is MktCategory => !!c)
     .map((c) => (locale === "ar" ? c.name_ar : c.name_en || c.name_ar))
@@ -613,7 +567,12 @@ function AdPage() {
           </div>
 
           <div className="mt-3">
-            <ListingActions listing={listing} pendingAction={action} variant="quick" />
+            <ListingActions
+              listing={listing}
+              pendingAction={action}
+              variant="quick"
+              locationHref={mapHref}
+            />
           </div>
 
           <div className="mt-3">
@@ -650,7 +609,6 @@ function AdPage() {
            * trust badge — account verification is a separate matter. */}
           {ad.data.license && <ListingLicenseSection license={ad.data.license} />}
 
-          <LocationBlock ad={ad.data} cityLabel={cityLabel} />
 
 
           <div className="mt-4 lg:hidden">
