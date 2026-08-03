@@ -656,19 +656,28 @@ function CaseDrawer({
         />
         <Row label={t("market.lr.col.created")} value={formatDateTime(report.created_at)} ltr />
         <Row label={t("market.lr.col.updated")} value={formatDateTime(report.updated_at)} ltr />
-        <Row
-          label={t("market.lr.reporter")}
-          value={
-            report.can_view_reporter && report.reporter_identity
-              ? report.reporter_identity
-              : report.reporter_alias
-          }
-        />
+        <div className="flex items-baseline justify-between gap-2 py-1">
+          <span className="text-[11px] text-muted-foreground">{t("market.lr.reporter")}</span>
+          {report.can_view_reporter && reporterUserId ? (
+            <AdminUserLink
+              id={reporterUserId}
+              name={report.reporter_identity ?? report.reporter_alias}
+              className="text-xs"
+            />
+          ) : (
+            <span className="text-xs text-foreground">
+              {report.can_view_reporter && report.reporter_identity
+                ? report.reporter_identity
+                : report.reporter_alias}
+            </span>
+          )}
+        </div>
         <Row
           label={t("market.lr.reporterInvalid")}
           value={String(report.reporter_invalid_count)}
           ltr
         />
+
       </div>
 
       {report.note && (
