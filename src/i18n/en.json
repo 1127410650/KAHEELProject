@@ -2068,6 +2068,7 @@
       "pagesSoon": "About, Help center, Contact, Terms and Privacy pages will be listed here once they exist."
     },
     "person": {
+      "count": {"zero": "No active listings", "one": "active listing", "two": "active listings", "many": "active listings"},
       "notFound": "Advertiser not found",
       "listings": "Listings by this advertiser",
       "username": "Public handle",

@@ -178,3 +178,14 @@ export function personInitials(name: string): string {
   const second = parts.length > 1 ? (parts[parts.length - 1]![0] ?? "") : "";
   return (first + second).toUpperCase();
 }
+
+/**
+ * Grammatical wording for the active-listing count. Arabic needs singular /
+ * dual / plural forms; English needs singular vs plural. Digits stay western.
+ */
+export function activeListingsKey(count: number): string {
+  if (count <= 0) return "market.person.count.zero";
+  if (count === 1) return "market.person.count.one";
+  if (count === 2) return "market.person.count.two";
+  return "market.person.count.many";
+}
