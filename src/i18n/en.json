@@ -2301,6 +2301,7 @@
       "noBusinesses": "No businesses are linked to your account yet.",
       "selectAria": "Enter with {name}",
       "unavailable": "Currently unavailable",
+      "cancelToCurrent": "Cancel and return to the current account",
       "backToAccounts": "Back to account selection"
     },
     "access": {

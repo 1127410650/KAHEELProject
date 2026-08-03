@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
@@ -48,10 +49,14 @@ function NewBusinessPage() {
   const { next: rawNext } = Route.useSearch();
   const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!loading && !session) void navigate({ to: "/auth", replace: true });
-  }, [loading, session, navigate]);
+    if (!loading && !session) {
+      const back = `/business/new${next ? `?next=${encodeURIComponent(next)}` : ""}`;
+      void navigate({ href: `/auth?next=${encodeURIComponent(back)}`, replace: true });
+    }
+  }, [loading, session, navigate, next]);
 
   function backToPicker() {
     void navigate({
@@ -60,6 +65,7 @@ function NewBusinessPage() {
       replace: true,
     });
   }
+
 
   return (
     <div className="mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-2xl">
@@ -81,7 +87,9 @@ function NewBusinessPage() {
           if (!open) backToPicker();
         }}
         onCreated={() => {
-          /* the active account intentionally stays unchanged */
+          // The new business appears in the picker, but the active account
+          // intentionally stays unchanged — the user selects it explicitly.
+          void queryClient.invalidateQueries({ queryKey: ["mkt", "my-accounts"] });
         }}
       />
     </div>
