@@ -32,6 +32,9 @@ import {
 
 export const Route = createFileRoute("/admin/users")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    restricted: search["restricted"] === "1" || search["restricted"] === true ? true : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "إدارة المستخدمين — إدارة المنصة" },
@@ -80,6 +83,7 @@ function AdminUsersPage() {
   const queryClient = useQueryClient();
   const { identity } = usePlatformIdentity();
   const navigate = useNavigate();
+  const { restricted: restrictedOnly } = Route.useSearch();
   const initial = readAdminListState("users", { search: "" });
   const [term, setTerm] = useState(initial.search);
   const [search, setSearch] = useState(initial.search);
@@ -119,7 +123,9 @@ function AdminUsersPage() {
     }
   }
 
-  const rows = users.data ?? [];
+  const all = users.data ?? [];
+  // A dashboard tile may deep-link to restricted accounts only.
+  const rows = restrictedOnly ? all.filter((r) => !!r.restriction) : all;
   // Back from a user file returns to the same search and scroll offset.
   useAdminListMemory("users", { search }, !users.isLoading);
 
@@ -190,6 +196,23 @@ function AdminUsersPage() {
           {t("common.search")}
         </Button>
       </form>
+
+      {restrictedOnly && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+          <span className="rounded-full bg-secondary px-3 py-1 font-medium text-secondary-foreground">
+            {t("admin.stats.restricted")}
+          </span>
+          <Link
+            to="/admin/users"
+            search={{}}
+            className="min-h-11 py-2.5 text-primary underline-offset-4 hover:underline"
+          >
+            {t("market.filters.all")}
+          </Link>
+        </div>
+      )}
+
+
 
       {users.isLoading ? (
         <Skeleton className="mt-4 h-48 w-full rounded-xl" />

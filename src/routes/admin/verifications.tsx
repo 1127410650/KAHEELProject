@@ -29,6 +29,9 @@ import {
 
 export const Route = createFileRoute("/admin/verifications")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    status: typeof search["status"] === "string" ? (search["status"] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "توثيق المنشآت — إدارة سوق تحقّق" },
@@ -49,7 +52,8 @@ const STATUSES = ["pending", "approved", "rejected", "needs_more"] as const;
 
 function AdminVerificationsPage() {
   const { t, locale } = useI18n();
-  const [status, setStatus] = useState<string>("pending");
+  const { status: statusParam } = Route.useSearch();
+  const [status, setStatus] = useState<string>(statusParam ?? "pending");
   const [decision, setDecision] = useState<{
     request: MktVerificationRequest;
     action: VerificationAction;
