@@ -704,17 +704,13 @@ function CaseDrawer({
         </p>
       )}
 
-      {report.listing_slug && (
-        <Link
-          to="/ads/$slug"
-          params={{ slug: report.listing_slug }}
-          target="_blank"
-          className="mt-3 inline-flex min-h-11 items-center gap-1 text-xs font-medium text-primary hover:underline"
-        >
-          {t("market.lr.openListing")}
-          <ExternalLink className="size-3" aria-hidden />
-        </Link>
-      )}
+      {/* stays inside the admin shell instead of opening the public page */}
+      <AdminListingLink
+        id={report.listing_id}
+        name={t("market.lr.openListing")}
+        className="mt-3 min-h-11 py-2.5 text-xs font-medium"
+      />
+
 
       {/* reason shared by every decision */}
       <div className="mt-4 space-y-1">
