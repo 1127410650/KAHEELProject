@@ -149,7 +149,6 @@ function CardMenu({
           if (!open) window.setTimeout(() => onInteract(false), 350);
         }}
       >
-
         <DropdownMenuTrigger asChild>
           <button
             type="button"
@@ -236,7 +235,6 @@ export function ListingCard({
   // Suppresses card navigation while (and just after) the ⋯ menu is open.
   const navBlocked = useRef(false);
 
-
   const meta = (
     <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-1.5 text-[11px] text-muted-foreground">
       {listing.city && (
@@ -306,7 +304,6 @@ export function ListingCard({
             navBlocked.current = active;
           }}
         />
-
       </div>
     </div>
   );
