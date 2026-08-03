@@ -152,6 +152,12 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/geo", "admin", "admin"),
   rule("/admin/reports", "admin", "admin"),
   rule("/admin/reports/$id", "admin", "admin"),
+  rule("/admin/activities", "admin", "admin"),
+  rule("/admin/users", "admin", "admin"),
+  rule("/admin/businesses", "admin", "admin"),
+  rule("/admin/roles", "admin", "admin"),
+  rule("/admin/audit-log", "admin", "admin"),
+  rule("/admin/settings", "admin", "admin"),
 
   // ── هـ. Legacy / duplicated ────────────────────────────────────────────────
   // These paths no longer have a route file of their own: the central splat
