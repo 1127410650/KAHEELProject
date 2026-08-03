@@ -212,6 +212,9 @@ export function ListingForm({ listing }: Props) {
   // ---------- draft: restore once, then autosave ----------
   useEffect(() => {
     if (restored.current) return;
+    // Wait for the active account: the draft scope contains its key, so
+    // restoring earlier would read (and later write) the wrong draft.
+    if (!listing && !account) return;
     restored.current = true;
     const draft = loadDraft(scope);
     if (!draft) return;
