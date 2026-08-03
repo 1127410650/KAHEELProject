@@ -30,6 +30,8 @@ export type ListingOpError =
   | "image_required"
   | "images_incomplete"
   | "images_too_many"
+  | "business_incomplete"
+  | "geo_required"
   | "failed";
 
 function opError(message: string): ListingOpError {
@@ -41,8 +43,12 @@ function opError(message: string): ListingOpError {
   if (message.includes("IMAGE_REQUIRED")) return "image_required";
   if (message.includes("IMAGES_INCOMPLETE")) return "images_incomplete";
   if (message.includes("IMAGES_TOO_MANY")) return "images_too_many";
+  // Publish-time gates raised by triggers, not by the submit function itself.
+  if (message.includes("BUSINESS_DETAILS_INCOMPLETE")) return "business_incomplete";
+  if (message.includes("GEO_LOCATION_REQUIRED")) return "geo_required";
   return "failed";
 }
+
 
 async function call<T>(promise: PromiseLike<{ data: T; error: { message: string } | null }>) {
   const { data, error } = await promise;

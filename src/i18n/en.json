@@ -1526,6 +1526,10 @@
       "saveDraft": "Save as draft",
       "savedDraft": "Saved as draft",
       "submitted": "Listing submitted for review",
+      "submitOffline": "No internet connection. Your data is saved as a draft; retry when you are back online.",
+      "submitNotAllowed": "You are not allowed to submit this listing.",
+      "submitInvalidState": "The listing's current status does not allow submitting for review.",
+      "submitBusy": "The listing is being submitted, please wait…",
       "reviewNote": "Listings go live after marketplace review.",
       "status": {
         "draft": "Draft",
@@ -2289,6 +2293,8 @@
       "choosePath": "Choose a category",
       "pathRequired": "Complete the category selection to the last stage",
       "businessDenied": "You are not allowed to publish under this business",
+      "businessIncomplete": "Complete the business details (name, activity and contact) before submitting the listing for review.",
+      "geoRequired": "Select the city and service location before submitting.",
       "specs": "Additional specifications",
       "budget": "Estimated budget",
       "stageRoot": "Sector",
@@ -2549,6 +2555,7 @@
         "exempt": "Legally exempt"
       },
       "block": {
+        "missing": "Complete the real-estate advertising licence details before submitting.",
         "numberRequired": "Enter the advertising licence number before publishing.",
         "expiryRequired": "Enter the licence expiry date before publishing.",
         "expiredLicense": "The licence has expired; renew it before publishing.",
@@ -2780,6 +2787,9 @@
         "upload": "Photo upload failed."
       },
       "imagesIncomplete": "Some photos have not finished uploading — retry or remove them.",
+      "stillUploading": "Wait until the photos finish uploading, then submit again.",
+      "someFailed": "Some photos failed to upload — retry or remove them, then submit.",
+      "attachFailed": "The photos could not be attached. Your data is saved as a draft; please retry.",
       "imagesTooMany": "Up to 20 photos per ad."
     }
   },

@@ -83,6 +83,10 @@ export function ListingForm({ listing }: Props) {
   const [errors, setErrors] = useState<{ [K in FieldKey]?: string | undefined }>({});
   const [draftNote, setDraftNote] = useState<"saved" | "failed" | null>(null);
   const restored = useRef(false);
+  /** Synchronous submit lock — protects against a double tap. */
+  const submitting = useRef(false);
+  /** Id of the row this form created, so a retry never inserts a second ad. */
+  const createdId = useRef<string | null>(null);
 
   const storedSpecs = (listing?.specs as Record<string, SpecValue> | null) ?? {};
   const [typeCode, setTypeCode] = useState(listing?.type_code ?? "");
@@ -448,6 +452,13 @@ export function ListingForm({ listing }: Props) {
   }
 
   async function submit(publish: boolean) {
+    // A second tap while the first request is in flight must never create a
+    // second ad: the ref flips synchronously, unlike React state.
+    if (submitting.current) {
+      toast.message(t("market.dash.submitBusy"));
+      return;
+    }
+
     for (let i = 0; i < STEPS.length; i += 1) {
       const bad = validateStep(i);
       if (bad) {
@@ -455,6 +466,24 @@ export function ListingForm({ listing }: Props) {
         window.setTimeout(() => focusField(bad), 50);
         return;
       }
+    }
+
+    // Photos still uploading or failed would be dropped by the server guard, so
+    // they are caught here with an actionable message.
+    if (media.items.some((i) => i.status === "uploading")) {
+      toast.error(t("market.media.stillUploading"));
+      setStep(1);
+      return;
+    }
+    if (media.items.some((i) => i.status === "failed")) {
+      toast.error(t("market.media.someFailed"));
+      setStep(1);
+      return;
+    }
+    if (media.readyCount > MAX_LISTING_IMAGES) {
+      toast.error(t("market.media.imagesTooMany"));
+      setStep(1);
+      return;
     }
 
     if (publish && isRealEstate) {
@@ -468,6 +497,13 @@ export function ListingForm({ listing }: Props) {
       }
     }
 
+    if (typeof navigator !== "undefined" && navigator.onLine === false) {
+      saveDraft(scope, snapshot());
+      toast.error(t("market.dash.submitOffline"));
+      return;
+    }
+
+    submitting.current = true;
     setBusy(true);
     try {
       const cityName = (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null;
@@ -504,16 +540,12 @@ export function ListingForm({ listing }: Props) {
         duration_days: durationDays,
       };
 
-      let listingId = listing?.id ?? null;
-      if (listing) {
-        const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listing.id);
+      // The row is created exactly once. A retry after a failed attach or a
+      // failed submit reuses the id kept here instead of inserting again.
+      let listingId = listing?.id ?? createdId.current;
+      if (listingId) {
+        const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listingId);
         if (error) throw error;
-        const cover = await media.persist(listing.id);
-        if (cover)
-          await supabase
-            .from("mkt_listings")
-            .update({ cover_image_url: cover })
-            .eq("id", listing.id);
       } else {
         const { data, error } = await supabase
           .from("mkt_listings")
@@ -527,13 +559,15 @@ export function ListingForm({ listing }: Props) {
           .single();
         if (error || !data) throw error ?? new Error("insert failed");
         listingId = data.id;
-        const cover = await media.persist(data.id);
-        if (cover)
-          await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", data.id);
+        createdId.current = data.id;
       }
 
-      if (isRealEstate && listingId) await saveListingLicense(listingId, license);
-      if (publish && listingId) await submitListing(listingId);
+      const cover = await media.persist(listingId);
+      if (cover)
+        await supabase.from("mkt_listings").update({ cover_image_url: cover }).eq("id", listingId);
+
+      if (isRealEstate) await saveListingLicense(listingId, license);
+      if (publish) await submitListing(listingId);
 
       await media.discardStaged();
       clearDraft(scope);
@@ -541,21 +575,36 @@ export function ListingForm({ listing }: Props) {
       toast.success(publish ? t("market.dash.submitted") : t("market.dash.savedDraft"));
       void navigate({ to: "/dashboard/my-ads" });
     } catch (error) {
+      // Nothing is thrown away on failure: the draft (and its photos) stay put
+      // so the advertiser can simply press the button again.
+      saveDraft(scope, snapshot());
       const message = error instanceof Error ? error.message : "";
-      if (message.includes("TITLE_")) toast.error(t("market.form.titleInvalid"));
+      const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+      if (offline || message.includes("Failed to fetch") || message.includes("NetworkError"))
+        toast.error(t("market.dash.submitOffline"));
+      else if (message.includes("TITLE_")) toast.error(t("market.form.titleInvalid"));
       else if (message.includes("CITY_COUNTRY_MISMATCH")) toast.error(t("market.geo.cityMismatch"));
       else if (message.includes("CATEGORY_")) toast.error(t("market.form.pathRequired"));
       else if (message.includes("BUSINESS_NOT_ALLOWED"))
         toast.error(t("market.form.businessDenied"));
+      else if (message === "attach_failed") toast.error(t("market.media.attachFailed"));
+      else if (message === "forbidden") toast.error(t("market.dash.submitNotAllowed"));
+      else if (message === "invalid_state") toast.error(t("market.dash.submitInvalidState"));
       else if (message === "image_required") toast.error(t("market.media.required"));
       else if (message === "images_incomplete") toast.error(t("market.media.imagesIncomplete"));
       else if (message === "images_too_many") toast.error(t("market.media.imagesTooMany"));
+      else if (message.includes("BUSINESS_DETAILS_INCOMPLETE") || message === "business_incomplete")
+        toast.error(t("market.form.businessIncomplete"));
+      else if (message.includes("GEO_LOCATION_REQUIRED") || message === "geo_required")
+        toast.error(t("market.form.geoRequired"));
+      else if (message === "license_required") toast.error(t("market.license.block.missing"));
       else toast.error(t("market.actions.failed"));
-
     } finally {
+      submitting.current = false;
       setBusy(false);
     }
   }
+
 
   function specInput(field: SpecField) {
     const value = specs[field.key];
