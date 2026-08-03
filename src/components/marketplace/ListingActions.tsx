@@ -186,7 +186,9 @@ export function ListingActions({
           <ShareSheet
             title={listing.title}
             url={canonicalUrl(`/ads/${listing.slug ?? listing.id}`)}
+            listingId={listing.id}
           >
+
             <button
               type="button"
               aria-label={t("market.ad.share")}
