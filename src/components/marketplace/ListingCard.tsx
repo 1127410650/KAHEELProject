@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { trackMarketActivity } from "@/lib/mkt-activity";
 import { currentPath, loginHref, priceLabel, relativeTime, type MktListing } from "@/lib/mkt";
+import { canonicalUrl } from "@/lib/share-links";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -148,7 +149,7 @@ function CardMenu({ listing }: { listing: ListingCardData }) {
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuItem
           onSelect={() => {
-            void navigator.clipboard.writeText(`${window.location.origin}/ads/${slug}`);
+            void navigator.clipboard.writeText(canonicalUrl(`/ads/${slug}`));
             toast.success(t("market.ad.linkCopied"));
           }}
         >

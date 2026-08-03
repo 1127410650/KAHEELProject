@@ -1415,6 +1415,20 @@
       "note": "Extra details (optional)",
       "submit": "Submit report"
     },
+    "share": {
+      "title": "Share",
+      "copyLink": "Copy link",
+      "system": "Share...",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram",
+      "x": "X",
+      "facebook": "Facebook",
+      "email": "Email",
+      "qr": "QR code",
+      "qrTitle": "QR code for the link",
+      "download": "Download code",
+      "close": "Close"
+    },
     "ad": {
       "details": "Listing details",
       "specs": "Specifications",
