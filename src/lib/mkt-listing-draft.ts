@@ -7,6 +7,8 @@
  * re-derives them from the saved city or the device when the form resumes.
  */
 
+import type { StagedImageMeta } from "@/lib/mkt-listing-media";
+
 export interface ListingDraft {
   typeCode: string;
   categoryId: string;
@@ -31,6 +33,11 @@ export interface ListingDraft {
   accountKey: string;
   specs: Record<string, string | number | boolean>;
   step: number;
+  /** Stable id of the private staging folder holding this draft's photos. */
+  draftId: string;
+  /** Uploaded photos in display order, plus the chosen cover. */
+  images: StagedImageMeta[];
+  coverId: string | null;
 }
 
 const PREFIX = "tahqaq.mkt.ad-draft:";
