@@ -180,13 +180,13 @@ function UserProfilePage() {
                     timeZone: "Asia/Riyadh",
                   })}
                 </span>
-                <span>
+                <span className="inline-flex items-center gap-1">
                   {me.active_listings > 0 && (
                     <span className="num" dir="ltr">
-                      {me.active_listings}{" "}
+                      {me.active_listings}
                     </span>
                   )}
-                  {t(activeListingsKey(me.active_listings))}
+                  <span>{t(activeListingsKey(me.active_listings))}</span>
                 </span>
               </div>
             </div>
