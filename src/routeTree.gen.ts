@@ -43,6 +43,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
+import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
@@ -248,6 +249,11 @@ const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
   path: '/listing-events',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminListingReportsRoute = AdminListingReportsRouteImport.update({
+  id: '/listing-reports',
+  path: '/listing-reports',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminListingsRoute = AdminListingsRouteImport.update({
   id: '/listings',
   path: '/listings',
@@ -444,6 +450,7 @@ export interface FileRoutesByFullPath {
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
+  '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -509,6 +516,7 @@ export interface FileRoutesByTo {
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
+  '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -577,6 +585,7 @@ export interface FileRoutesById {
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
+  '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -645,6 +654,7 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/geo'
     | '/admin/listing-events'
+    | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -710,6 +720,7 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/geo'
     | '/admin/listing-events'
+    | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -777,6 +788,7 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/geo'
     | '/admin/listing-events'
+    | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -1083,6 +1095,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminListingEventsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/listing-reports': {
+      id: '/admin/listing-reports'
+      path: '/listing-reports'
+      fullPath: '/admin/listing-reports'
+      preLoaderRoute: typeof AdminListingReportsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/listings': {
       id: '/admin/listings'
       path: '/listings'
@@ -1372,6 +1391,7 @@ interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminGeoRoute: typeof AdminGeoRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
+  AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1383,6 +1403,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminActivitiesRoute: AdminActivitiesRoute,
   AdminGeoRoute: AdminGeoRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
+  AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminIndexRoute: AdminIndexRoute,

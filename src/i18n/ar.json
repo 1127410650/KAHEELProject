@@ -1710,7 +1710,8 @@
           "admin_extended": "تمديد إداري"
         }
       },
-      "logTab": "سجل العمليات"
+      "logTab": "سجل العمليات",
+      "listingReports": "بلاغات الإعلانات"
     },
     "biz": {
       "editTab": "تعديل الملف",
@@ -2621,6 +2622,111 @@
       "endsInHours": "ينتهي بعد {n} ساعة",
       "endedAgo": "انتهى منذ {n} يومًا",
       "endedAgoHours": "انتهى منذ {n} ساعة"
+    },
+    "lr": {
+      "title": "بلاغات الإعلانات",
+      "searchLabel": "بحث",
+      "searchPlaceholder": "رقم البلاغ أو رقم الإعلان أو عنوانه أو صاحبه",
+      "empty": "لا توجد بلاغات مطابقة",
+      "openCase": "فتح البلاغ",
+      "openListing": "فتح الإعلان",
+      "unassigned": "غير معيّن",
+      "prev": "السابق",
+      "next": "التالي",
+      "reporter": "المبلّغ",
+      "reporterInvalid": "بلاغات غير صحيحة لهذا الحساب",
+      "identityHidden": "هوية المبلّغ محجوبة: تظهر باسم مستعار فقط، ولا تُعاد أي بيانات تعريفية دون صلاحية صريحة.",
+      "reasonLabel": "السبب (إلزامي لكل قرار)",
+      "lifecycle": "دورة البلاغ",
+      "noTransitions": "لا توجد حالة تالية متاحة من هذه الحالة.",
+      "assignment": "الإسناد والتحويل",
+      "pickStaff": "اختر مشرفًا",
+      "assign": "تعيين",
+      "transfer": "تحويل لمشرف آخر",
+      "listingActions": "إجراءات على الإعلان",
+      "days": "المدة (أيام)",
+      "apply": "تنفيذ",
+      "internalNotes": "ملاحظات داخلية",
+      "notePlaceholder": "ملاحظة داخلية لا تظهر للمستخدمين",
+      "addNote": "إضافة ملاحظة",
+      "noteSaved": "تم حفظ الملاحظة",
+      "contactOwner": "مراسلة صاحب الإعلان",
+      "replyReporter": "الرد على المبلّغ",
+      "replyReporterHint": "يُرسل الرد عبر النظام دون كشف أي بيانات للطرف الآخر.",
+      "send": "إرسال",
+      "messageSent": "تم إرسال الرسالة",
+      "history": "سجل الحالات",
+      "done": "تم تنفيذ القرار",
+      "assigned": "تم تحديث الإسناد",
+      "col": {
+        "ref": "رقم البلاغ",
+        "listing": "الإعلان",
+        "owner": "صاحب الإعلان",
+        "business": "المنشأة المالكة",
+        "reason": "سبب البلاغ",
+        "status": "الحالة",
+        "priority": "الأولوية",
+        "count": "بلاغات الإعلان",
+        "assignee": "المشرف المعيّن",
+        "lastAction": "آخر إجراء",
+        "created": "تاريخ البلاغ",
+        "updated": "آخر تحديث"
+      },
+      "filters": {
+        "open": "الفلاتر",
+        "apply": "تطبيق",
+        "all": "الكل",
+        "status": "الحالة",
+        "reason": "السبب",
+        "priority": "الأولوية",
+        "assignee": "المشرف",
+        "from": "من تاريخ",
+        "to": "إلى تاريخ",
+        "suspendedOnly": "الإعلانات الموقوفة فقط",
+        "clear": "مسح الفلاتر"
+      },
+      "status": {
+        "new": "جديد",
+        "unassigned": "غير معيّن",
+        "under_review": "قيد المراجعة",
+        "awaiting_reporter": "يحتاج معلومات",
+        "awaiting_advertiser": "بانتظار صاحب الإعلان",
+        "action_taken": "صحيح",
+        "invalid": "غير صحيح",
+        "closed": "مغلق",
+        "reopened": "أُعيد فتحه",
+        "duplicate": "مكرر",
+        "out_of_scope": "خارج النطاق",
+        "escalated": "مُصعّد",
+        "referred": "محوّل"
+      },
+      "to": {
+        "under_review": "بدء المراجعة",
+        "awaiting_reporter": "طلب معلومات إضافية",
+        "action_taken": "البلاغ صحيح",
+        "invalid": "البلاغ غير صحيح",
+        "closed": "إغلاق البلاغ",
+        "reopened": "إعادة فتح البلاغ"
+      },
+      "action": {
+        "suspend": "إيقاف الإعلان",
+        "unsuspend": "رفع الإيقاف",
+        "request_edit": "طلب تعديل",
+        "reject": "رفض الإعلان",
+        "archive": "أرشفة الإعلان",
+        "extend": "تمديد مدة الإعلان"
+      },
+      "err": {
+        "invalidTransition": "انتقال غير مسموح بين الحالات",
+        "reasonRequired": "السبب مطلوب",
+        "invalidDuration": "مدة غير صحيحة",
+        "forbidden": "لا تملك صلاحية هذا الإجراء",
+        "conflict": "تعارض مصالح: لا يمكنك مراجعة هذا البلاغ",
+        "notFound": "البلاغ غير موجود",
+        "assigneeNotStaff": "المستخدم المحدد ليس من فريق المراجعة",
+        "network": "تعذّر الاتصال بالخدمة، أعد المحاولة",
+        "failed": "تعذّر تنفيذ الإجراء"
+      }
     }
   },
   "routeError": {
