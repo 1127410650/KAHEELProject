@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Flag, Heart, MessageSquare, ReceiptText, Share2 } from "lucide-react";
+import { Flag, Heart, MapPin, MessageSquare, ReceiptText, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -26,9 +26,16 @@ interface Props {
   pendingAction?: string | undefined;
   /** "quick" = the icon row above the gallery; "panel" = contact buttons. */
   variant?: "panel" | "quick";
+  /** Ready-made map link for the icon row; omitted when there is no safe place. */
+  locationHref?: string | null | undefined;
 }
 
-export function ListingActions({ listing, pendingAction, variant = "panel" }: Props) {
+export function ListingActions({
+  listing,
+  pendingAction,
+  variant = "panel",
+  locationHref,
+}: Props) {
 
   const { t } = useI18n();
   const { session } = useSession();
@@ -204,6 +211,20 @@ export function ListingActions({ listing, pendingAction, variant = "panel" }: Pr
           >
             <Share2 className="size-5" aria-hidden />
           </button>
+          {/* Location lives here, next to share: no card, no full-width button.
+           * An approximate ad only ever links to a blurred point or a place. */}
+          {locationHref && (
+            <a
+              href={locationHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t("market.ad.openLocation")}
+              title={t("market.ad.openLocation")}
+              className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+            >
+              <MapPin className="size-5" aria-hidden />
+            </a>
+          )}
           {!isOwner && (
             <button
               type="button"
