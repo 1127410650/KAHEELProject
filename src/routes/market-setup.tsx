@@ -17,7 +17,7 @@ import {
 } from "@/lib/mkt-geo";
 import { CountryCitySelect } from "@/components/marketplace/GeoFields";
 import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/PhoneFields";
-import { LanguageToggle } from "@/components/AppLayout";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

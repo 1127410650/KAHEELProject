@@ -6,7 +6,7 @@
  *  - `MarketShell` / `MarketHome`  → which links to render
  *  - `DashboardShell`              → login + active account + permission
  *  - `AdminShell` / `/admin` gate  → platform-admin or staff permission
- *  - `AppLayout` / `_authenticated`→ operational pages (login + entity)
+ *  (the old internal operations shell `AppLayout` / `_authenticated` is gone)
  *
  * It never grants anything: the database (RLS + `mkt_my_accounts` /
  * `mkt_account_context` + `has_perm`) remains the only authority. This map only
@@ -107,40 +107,42 @@ export const ROUTE_MAP: RouteRule[] = [
     allowed_identity_types: ["business"],
   }),
 
-  // ── ج. Active entity (internal operations) ─────────────────────────────────
-  rule("/select-account", "authenticated", "app"),
-  rule("/settings", "authenticated", "app"),
-  rule("/onboarding", "authenticated", "app"),
-  rule("/notifications", "authenticated", "app"),
-  rule("/portal", "operational", "app"),
-  rule("/dashboard", "operational", "app"),
-  rule("/projects", "operational", "app", { required_permission: "projects.view" }),
-  rule("/projects/$id", "operational", "app", { required_permission: "projects.view" }),
-  rule("/projects_/$id/requests", "operational", "app", {
-    required_permission: "requests.view",
-  }),
-  rule("/requests", "operational", "app", { required_permission: "requests.view" }),
-  rule("/requests/$id", "operational", "app", { required_permission: "requests.view" }),
-  rule("/suppliers", "operational", "app", { required_permission: "suppliers.view" }),
-  rule("/products", "operational", "app", { required_permission: "suppliers.view" }),
-  rule("/invoices", "operational", "app", { required_permission: "invoices.view" }),
-  rule("/invoices_/$id/lines", "operational", "app", {
-    required_permission: "invoices.view",
-  }),
-  rule("/invoices_/verified/new", "operational", "app"),
-  rule("/custody", "operational", "app", { required_permission: "custody.view" }),
-  rule("/my-custody", "operational", "app", { required_permission: "custody.view_own" }),
-  rule("/my-documents", "operational", "app"),
-  rule("/supervisors", "operational", "app", { required_permission: "supervisors.view" }),
-  rule("/supervisors/$id", "operational", "app", {
-    required_permission: "supervisors.view",
-  }),
-  rule("/team", "operational", "app", { required_permission: "team.view" }),
-  rule("/users", "operational", "app", { required_permission: "users.manage" }),
-  rule("/invitations", "operational", "app", { required_permission: "users.manage" }),
-  rule("/reports", "operational", "app", { required_permission: "reports.view" }),
-  rule("/audit", "operational", "app", { required_permission: "audit.view" }),
-  rule("/trash", "operational", "app", { required_permission: "records.restore" }),
+  // ── ج. Retired internal operations console ─────────────────────────────────
+  // The old internal system (`AppLayout` + `_authenticated/*`: لوحة التحكم /
+  // المشرفون / المشاريع / العهد / الطلبات / الموردون / الفواتير / المنتجات /
+  // التقارير / المستخدمون / الأعضاء والدعوات / المحذوفات / سجل العمليات) no longer
+  // has any UI. Its database tables and history are untouched; the screens,
+  // sidebar and shell are deleted. Old bookmarks resolve here through the central
+  // splat handler, so nothing 404s and no old shell can be reopened.
+  rule("/select-account", "legacy", "bare", { legacy_redirect: "/choose-account" }),
+  rule("/settings", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
+  rule("/onboarding", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/notifications", "legacy", "bare", { legacy_redirect: "/dashboard/notifications" }),
+  rule("/portal", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/dashboard", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/projects", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/projects/$id", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/projects_/$id/requests", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/requests", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/requests/$id", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/suppliers", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/products", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/invoices", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/invoices_/$id/lines", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/invoices_/verified/new", "legacy", "bare", { legacy_redirect: "/verify-invoice" }),
+  rule("/custody", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/my-custody", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/my-documents", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/supervisors", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/supervisors/$id", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/team", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/users", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/invitations", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/reports", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/trash", "legacy", "bare", { legacy_redirect: "/me" }),
+  // `src/routes/audit.tsx` owns `/audit` so the destination can depend on the
+  // caller (admin → the operations log); this entry records the fallback.
+  rule("/audit", "legacy", "bare", { legacy_redirect: "/admin/audit-log" }),
 
   // ── د. Marketplace back office ─────────────────────────────────────────────
   rule("/admin", "admin", "admin"),
@@ -184,8 +186,8 @@ const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
  * route's own guard (login / active account / permission) still runs.
  */
 export function resolveLegacyTarget(pathname: string): string | null {
-  const clean = pathname.split("?")[0]!.split("#")[0]!.replace(/\/+$/, "") || "/";
-  const found = BY_PATH.get(clean);
+  // Pattern-aware: `/projects/17` resolves through its `/projects/$id` rule.
+  const found = routeRuleFor(pathname);
   return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
 }
 
