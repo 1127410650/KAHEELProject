@@ -117,6 +117,9 @@ export function useAdminListMemory<T extends object>(
     };
     requestAnimationFrame(tick);
     return () => {
+      // StrictMode double-invokes effects: reset the guard so the retained run
+      // still restores instead of being skipped as "already restored".
+      restoredForVisit.current = false;
       cancel();
       window.removeEventListener("wheel", cancel);
       window.removeEventListener("touchstart", cancel);
