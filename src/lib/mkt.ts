@@ -126,6 +126,15 @@ export interface MktListing {
   published_at: string | null;
   views_count: number;
   created_at: string;
+
+  // Lifecycle fields (my-ads dashboard). Optional so the public list queries,
+  // which do not select them, stay assignable to this type.
+  duration_days?: number | null;
+  expires_at?: string | null;
+  shares_count?: number | null;
+  contact_requests_count?: number | null;
+  paused_at?: string | null;
+  last_renewed_at?: string | null;
 }
 
 export interface MktBusiness {
