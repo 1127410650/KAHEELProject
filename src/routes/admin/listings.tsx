@@ -18,7 +18,15 @@ import {
 } from "@/lib/mkt";
 import { loadCategories } from "@/lib/mkt-queries";
 import { reviewListing, type ListingReviewAction } from "@/lib/mkt-admin";
+import { loadAdminSubjectIds, subjectKey } from "@/lib/mkt-admin-subjects";
+import {
+  AdminBusinessLink,
+  AdminListingLink,
+  AdminUserLink,
+} from "@/components/marketplace/AdminEntityLink";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
