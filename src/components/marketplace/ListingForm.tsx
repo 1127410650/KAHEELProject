@@ -23,7 +23,9 @@ import {
 } from "@/lib/mkt-taxonomy";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
 import {
+  LICENSE_BLOCK_FIELD,
   licenseBlockers,
+
   loadOwnerLicense,
   RE_ROOT_SLUG,
   saveListingLicense,
@@ -85,6 +87,11 @@ export function ListingForm({ listing }: Props) {
   // Licence data of a real estate ad. It is never kept in a local draft: the
   // numbers are legal identifiers, so they only live in the database row.
   const [license, setLicense] = useState<LicenseFormValue>(EMPTY_LICENSE);
+  // The licence section is collapsed until the advertiser opens it — or until a
+  // failed submit forces it open on the first missing field.
+  const [licenseOpen, setLicenseOpen] = useState(false);
+  const [licenseFocus, setLicenseFocus] = useState<string | null>(null);
+
 
 
   const [location, setLocation] = useState<ListingLocationValue>({
@@ -326,9 +333,12 @@ export function ListingForm({ listing }: Props) {
       if (blocks.length > 0) {
         toast.error(t(`market.license.block.${blocks[0]}`));
         setStep(1);
+        setLicenseOpen(true);
+        setLicenseFocus(LICENSE_BLOCK_FIELD[blocks[0]!]);
         return;
       }
     }
+
 
 
     setBusy(true);
@@ -692,12 +702,17 @@ export function ListingForm({ listing }: Props) {
             <RealEstateLicenseFields
               value={license}
               userId={session.user.id}
+              open={licenseOpen}
+              onOpenChange={setLicenseOpen}
+              focusField={licenseFocus}
+              onFocusHandled={() => setLicenseFocus(null)}
               onChange={(next) => {
                 setDirty(true);
                 setLicense(next);
               }}
             />
           )}
+
         </div>
       )}
 

@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { ExternalLink, FileUp, Loader2, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { CheckCircle2, ChevronDown, ExternalLink, FileUp, Loader2, ScrollText, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,7 @@ import {
   ADVERTISER_ROLES,
   daysUntil,
   licenseDate,
+  licenseSummary,
   needsPracticeLicense,
   REGA_AD_LICENSE_INQUIRY,
   REGA_BROKER_LICENSE_INQUIRY,
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
 
 export interface LicenseFormValue {
   advertiserRole: AdvertiserRole;
@@ -61,15 +63,35 @@ export function RealEstateLicenseFields({
   value,
   userId,
   onChange,
+  open,
+  onOpenChange,
+  focusField,
+  onFocusHandled,
 }: {
   value: LicenseFormValue;
   userId: string;
   onChange: (next: LicenseFormValue) => void;
+  /** Controlled accordion state; closed when the form opens. */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** Input id to focus after a failed submit. */
+  focusField?: string | null;
+  onFocusHandled?: () => void;
 }) {
   const { t } = useI18n();
   const [uploading, setUploading] = useState<"license" | "exemption" | null>(null);
   const licenseInput = useRef<HTMLInputElement>(null);
   const exemptionInput = useRef<HTMLInputElement>(null);
+  const summary = licenseSummary(value);
+
+  useEffect(() => {
+    if (!open || !focusField) return;
+    const el = document.getElementById(focusField) as HTMLElement | null;
+    el?.focus();
+    el?.scrollIntoView({ block: "center", behavior: "smooth" });
+    onFocusHandled?.();
+  }, [open, focusField, onFocusHandled]);
+
 
   const set = <K extends keyof LicenseFormValue>(key: K, next: LicenseFormValue[K]) =>
     onChange({ ...value, [key]: next });
@@ -165,11 +187,45 @@ export function RealEstateLicenseFields({
   }
 
   return (
-    <fieldset className="space-y-4 rounded-xl border border-border p-3">
-      <legend className="px-1 text-sm font-semibold text-foreground">
-        {t("market.license.sectionTitle")}
-      </legend>
+    <div className="rounded-xl border border-border">
+      <button
+        type="button"
+        onClick={() => onOpenChange(!open)}
+        aria-expanded={open}
+        aria-controls="license-panel"
+        className="flex min-h-11 w-full items-center gap-2 p-3 text-start"
+      >
+        <ScrollText className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+        <span className="min-w-0 flex-1 text-sm font-semibold text-foreground">
+          {t("market.license.sectionTitle")}
+        </span>
+        <span
+          className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+            summary === "complete"
+              ? "bg-primary/10 text-primary"
+              : summary === "expired"
+                ? "bg-destructive/10 text-destructive"
+                : "bg-secondary text-secondary-foreground"
+          }`}
+        >
+          {summary === "complete" && <CheckCircle2 className="size-3.5" aria-hidden />}
+          {t(`market.license.summary.${summary}`)}
+        </span>
+        <ChevronDown
+          className={open ? "size-4 shrink-0 rotate-180 transition" : "size-4 shrink-0 transition"}
+          aria-hidden
+        />
+      </button>
+
+      {!open && (
+        <p className="px-3 pb-3 text-[11px] text-muted-foreground">
+          {t("market.license.completeNote")}
+        </p>
+      )}
+
+      <fieldset id="license-panel" hidden={!open} className="space-y-4 border-t border-border p-3">
       <p className="text-[11px] text-muted-foreground">{t("market.license.formIntro")}</p>
+
 
       <div className="space-y-1.5">
         <Label htmlFor="advertiser_role">{t("market.license.advertiserRole")}</Label>
@@ -300,6 +356,8 @@ export function RealEstateLicenseFields({
       <p className="rounded-lg border border-border bg-secondary px-3 py-2 text-[11px] text-secondary-foreground">
         {t(`market.license.status.${value.verificationStatus}`)} — {t("market.license.statusNote")}
       </p>
-    </fieldset>
+      </fieldset>
+    </div>
+
   );
 }

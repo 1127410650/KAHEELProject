@@ -183,3 +183,37 @@ export async function saveListingLicense(
     .upsert(row, { onConflict: "listing_id" });
   if (error) throw error;
 }
+
+/** One-word state for the licence accordion header. */
+export type LicenseSummaryState =
+  | "notStarted"
+  | "needsCompletion"
+  | "complete"
+  | "expired"
+  | "exemptionPending";
+
+/**
+ * Whether the advertiser filled in what their role requires. A "complete" state
+ * only means the required fields are present — it never means the licence was
+ * verified or approved by the platform.
+ */
+export function licenseSummary(input: LicenseDraftInput): LicenseSummaryState {
+  if (input.exemptionRequested && !input.exemptionApproved) return "exemptionPending";
+  const number = input.adLicenseNumber.trim();
+  const practice = input.practiceLicenseNumber.trim();
+  const started = !!number || !!input.adLicenseExpiry || !!practice;
+  if (!started) return "notStarted";
+  if (input.adLicenseExpiry && daysUntil(input.adLicenseExpiry) < 0) return "expired";
+  if (!number || !input.adLicenseExpiry) return "needsCompletion";
+  if (needsPracticeLicense(input.advertiserRole) && !practice) return "needsCompletion";
+  return "complete";
+}
+
+/** The input a blocking reason points at, so the form can focus it. */
+export const LICENSE_BLOCK_FIELD: Record<LicenseBlock, string> = {
+  numberRequired: "ad_license_number",
+  expiryRequired: "ad_license_expiry",
+  expiredLicense: "ad_license_expiry",
+  practiceRequired: "practice_license_number",
+  exemptionPending: "exemption_reason",
+};

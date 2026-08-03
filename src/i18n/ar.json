@@ -1455,7 +1455,7 @@
       "statusNotice": "حالة الإعلان الحالية تظهر لك فقط، ولا يراه الزوار حتى يُنشر.",
       "category": "التصنيف",
       "openLocation": "الذهاب إلى الموقع",
-      "openLocationHint": "فتح الموقع في خرائط OpenStreetMap في نافذة جديدة"
+      "openLocationHint": "فتح الموقع في خرائط Google في نافذة جديدة"
     },
     "business": {
       "joined": "عضو منذ",
@@ -2352,7 +2352,15 @@
         "pending": "قيد المراجعة",
         "exempt": "مستثنى نظاميًا",
         "invalid": "ترخيص غير صحيح"
-      }
+      },
+      "summary": {
+        "notStarted": "غير مكتمل",
+        "needsCompletion": "يحتاج استكمالًا",
+        "complete": "البيانات مكتملة",
+        "expired": "الترخيص منتهي",
+        "exemptionPending": "طلب استثناء قيد المراجعة"
+      },
+      "completeNote": "اكتمال الحقول لا يعني توثيق الترخيص؛ تراجعه الإدارة."
     }
   },
   "routeError": {
