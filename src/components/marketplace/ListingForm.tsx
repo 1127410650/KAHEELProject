@@ -593,6 +593,11 @@ export function ListingForm({ listing }: Props) {
       else if (message === "image_required") toast.error(t("market.media.required"));
       else if (message === "images_incomplete") toast.error(t("market.media.imagesIncomplete"));
       else if (message === "images_too_many") toast.error(t("market.media.imagesTooMany"));
+      else if (message.includes("BUSINESS_DETAILS_INCOMPLETE") || message === "business_incomplete")
+        toast.error(t("market.form.businessIncomplete"));
+      else if (message.includes("GEO_LOCATION_REQUIRED") || message === "geo_required")
+        toast.error(t("market.form.geoRequired"));
+      else if (message === "license_required") toast.error(t("market.license.block.missing"));
       else toast.error(t("market.actions.failed"));
     } finally {
       submitting.current = false;
