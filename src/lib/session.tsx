@@ -96,10 +96,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, nextSession) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-      setSession(nextSession);
-      void load(nextSession?.user.id);
+      if (event === "SIGNED_OUT") {
+        // Only a real revocation (or a rejected refresh token) reaches here without
+        // the manual flag; say so once instead of failing silently.
+        if (!consumeManualSignOut()) toast.error(t("auth.expired"));
+        setSession(null);
+        void load(undefined);
+        return;
+      }
+      if (event !== "SIGNED_IN" && event !== "USER_UPDATED" && event !== "TOKEN_REFRESHED") return;
+      // A refreshed token keeps the same identity: never drop the session here.
+      if (nextSession) setSession(nextSession);
+      if (event !== "TOKEN_REFRESHED") void load(nextSession?.user.id);
     });
+
 
     // Permission/role changes made by an admin apply without signing out again.
     const onFocus = () => {
