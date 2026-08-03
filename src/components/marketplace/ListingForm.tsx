@@ -23,6 +23,13 @@ import {
 } from "@/lib/mkt-taxonomy";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
 import {
+  DEFAULT_LISTING_DURATION,
+  LISTING_DURATIONS,
+  isListingDuration,
+  submitListing,
+  type ListingDuration,
+} from "@/lib/mkt-listing-ops";
+import {
   LICENSE_BLOCK_FIELD,
   licenseBlockers,
 
@@ -84,6 +91,10 @@ export function ListingForm({ listing }: Props) {
     (listing?.specs as Record<string, SpecValue> | null) ?? {},
   );
   const [files, setFiles] = useState<File[]>([]);
+  // How long the ad stays live once approved. Chosen per ad, never forced to 30.
+  const [durationDays, setDurationDays] = useState<ListingDuration>(
+    isListingDuration(listing?.duration_days) ? (listing!.duration_days as ListingDuration) : DEFAULT_LISTING_DURATION,
+  );
   // Licence data of a real estate ad. It is never kept in a local draft: the
   // numbers are legal identifiers, so they only live in the database row.
   const [license, setLicense] = useState<LicenseFormValue>(EMPTY_LICENSE);
@@ -371,14 +382,13 @@ export function ListingForm({ listing }: Props) {
         location_accuracy: location.accuracy,
         location_source: location.source,
         location_visibility: location.visibility,
-        // A real estate ad is saved as a draft first, its licence row written,
-        // and only then sent to review — the database refuses to accept a real
-        // estate ad for review while its licence is missing.
-        status: publish && !isRealEstate ? "pending" : "draft",
+        duration_days: durationDays,
       };
 
       let listingId = listing?.id ?? null;
       if (listing) {
+        // `status` is not writable by the advertiser: review is requested
+        // through `mkt_listing_submit` once the row (and licence) is saved.
         const { error } = await supabase.from("mkt_listings").update(payload).eq("id", listing.id);
         if (error) throw error;
         if (files.length > 0) {
@@ -392,7 +402,12 @@ export function ListingForm({ listing }: Props) {
       } else {
         const { data, error } = await supabase
           .from("mkt_listings")
-          .insert({ ...payload, owner_user_id: session!.user.id, tenant_id: tenantId })
+          .insert({
+            ...payload,
+            status: "draft",
+            owner_user_id: session!.user.id,
+            tenant_id: tenantId,
+          })
           .select("id")
           .single();
         if (error || !data) throw error ?? new Error("insert failed");
@@ -404,14 +419,11 @@ export function ListingForm({ listing }: Props) {
 
       if (isRealEstate && listingId) {
         await saveListingLicense(listingId, license);
-        if (publish) {
-          const { error } = await supabase
-            .from("mkt_listings")
-            .update({ status: "pending" })
-            .eq("id", listingId);
-          if (error) throw error;
-        }
       }
+
+      // Review is always requested last, so a real estate ad reaches the queue
+      // only after its licence row exists.
+      if (publish && listingId) await submitListing(listingId);
 
 
       clearDraft(scope);
@@ -769,6 +781,30 @@ export function ListingForm({ listing }: Props) {
             <dt className="text-muted-foreground">{t("market.loc.visibility")}</dt>
             <dd className="text-foreground">{t(`market.loc.${location.visibility}`)}</dd>
           </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <dt className="text-muted-foreground">
+              <Label htmlFor="duration_days">{t("market.ops.duration")}</Label>
+            </dt>
+            <dd className="min-w-0">
+              <select
+                id="duration_days"
+                className={selectClass}
+                value={durationDays}
+                onChange={(e) => {
+                  setDirty(true);
+                  const next = Number(e.target.value);
+                  if (isListingDuration(next)) setDurationDays(next);
+                }}
+              >
+                {LISTING_DURATIONS.map((days) => (
+                  <option key={days} value={days}>
+                    {t("market.ops.durationDays").replace("{n}", String(days))}
+                  </option>
+                ))}
+              </select>
+            </dd>
+          </div>
+          <p className="text-[11px] text-muted-foreground">{t("market.ops.durationHint")}</p>
           <p className="pt-1 text-[11px] text-muted-foreground">{t("market.dash.reviewNote")}</p>
         </dl>
       )}

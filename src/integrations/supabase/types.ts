@@ -2158,6 +2158,41 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_listing_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          listing_id: string
+          meta: Json
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          listing_id: string
+          meta?: Json
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          listing_id?: string
+          meta?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_events_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_listing_images: {
         Row: {
           alt_text: string | null
@@ -2386,9 +2421,12 @@ export type Database = {
           deleted_at: string | null
           description: string | null
           district: string | null
+          duration_days: number
           expires_at: string | null
+          expiry_notice_stage: number
           id: string
           item_condition: string | null
+          last_renewed_at: string | null
           latitude: number | null
           latitude_public: number | null
           location_accuracy: number | null
@@ -2397,6 +2435,7 @@ export type Database = {
           longitude: number | null
           longitude_public: number | null
           owner_user_id: string
+          paused_at: string | null
           price: number | null
           price_on_request: boolean
           price_unit: string | null
@@ -2404,6 +2443,7 @@ export type Database = {
           quantity: number | null
           region: string | null
           rejection_reason: string | null
+          shares_count: number
           slug: string | null
           specs: Json
           status: string
@@ -2431,9 +2471,12 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           district?: string | null
+          duration_days?: number
           expires_at?: string | null
+          expiry_notice_stage?: number
           id?: string
           item_condition?: string | null
+          last_renewed_at?: string | null
           latitude?: number | null
           latitude_public?: number | null
           location_accuracy?: number | null
@@ -2442,6 +2485,7 @@ export type Database = {
           longitude?: number | null
           longitude_public?: number | null
           owner_user_id?: string
+          paused_at?: string | null
           price?: number | null
           price_on_request?: boolean
           price_unit?: string | null
@@ -2449,6 +2493,7 @@ export type Database = {
           quantity?: number | null
           region?: string | null
           rejection_reason?: string | null
+          shares_count?: number
           slug?: string | null
           specs?: Json
           status?: string
@@ -2476,9 +2521,12 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           district?: string | null
+          duration_days?: number
           expires_at?: string | null
+          expiry_notice_stage?: number
           id?: string
           item_condition?: string | null
+          last_renewed_at?: string | null
           latitude?: number | null
           latitude_public?: number | null
           location_accuracy?: number | null
@@ -2487,6 +2535,7 @@ export type Database = {
           longitude?: number | null
           longitude_public?: number | null
           owner_user_id?: string
+          paused_at?: string | null
           price?: number | null
           price_on_request?: boolean
           price_unit?: string | null
@@ -2494,6 +2543,7 @@ export type Database = {
           quantity?: number | null
           region?: string | null
           rejection_reason?: string | null
+          shares_count?: number
           slug?: string | null
           specs?: Json
           status?: string
@@ -7145,6 +7195,7 @@ export type Database = {
         Returns: boolean
       }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
+      mkt_is_listing_op: { Args: never; Returns: boolean }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
       mkt_is_super_admin: { Args: never; Returns: boolean }
       mkt_is_system_action: { Args: never; Returns: boolean }
@@ -7157,6 +7208,9 @@ export type Database = {
         Args: { _reason: string; _restriction_id: string }
         Returns: undefined
       }
+      mkt_listing_archive: { Args: { _id: string }; Returns: string }
+      mkt_listing_delete: { Args: { _id: string }; Returns: string }
+      mkt_listing_duplicate: { Args: { _id: string }; Returns: string }
       mkt_listing_exact_location: {
         Args: { p_listing_id: string }
         Returns: {
@@ -7168,6 +7222,19 @@ export type Database = {
         }[]
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_listing_pause: { Args: { _id: string }; Returns: string }
+      mkt_listing_renew: {
+        Args: { _days?: number; _id: string }
+        Returns: string
+      }
+      mkt_listing_restore: { Args: { _id: string }; Returns: string }
+      mkt_listing_resume: { Args: { _id: string }; Returns: string }
+      mkt_listing_submit: { Args: { _id: string }; Returns: string }
+      mkt_listing_track_share: { Args: { _id: string }; Returns: undefined }
+      mkt_log_listing_event: {
+        Args: { _event_type: string; _listing_id: string; _meta?: Json }
+        Returns: undefined
+      }
       mkt_merge_activities: {
         Args: { _note?: string; _source_id: string; _target_id: string }
         Returns: undefined
@@ -7478,6 +7545,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_set_listing_status: {
+        Args: { _listing_id: string; _reason?: string; _to: string }
+        Returns: undefined
+      }
       mkt_slugify: { Args: { _text: string }; Returns: string }
       mkt_staff_has: { Args: { _perm: string }; Returns: boolean }
       mkt_submit_appeal: {
@@ -7505,6 +7576,7 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_sweep_expired_listings: { Args: never; Returns: Json }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       my_accounts: {
