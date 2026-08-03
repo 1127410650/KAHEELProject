@@ -1537,7 +1537,10 @@
         "archived": "مؤرشف",
         "deleted": "محذوف",
         "paused": "موقوف مؤقتًا",
-        "pending_review": "قيد المراجعة"
+        "pending_review": "قيد المراجعة",
+        "needs_changes": "يحتاج تعديل",
+        "featured": "مميّز",
+        "hidden": "مخفي"
       },
       "quoteStatus": {
         "new": "جديد",
@@ -2531,7 +2534,24 @@
       "duration": "مدة النشر",
       "durationDays": "{n} يومًا",
       "durationHint": "يظل الإعلان منشورًا خلال المدة المختارة، ثم يصبح «منتهي» ويمكن تجديده.",
-      "licenseRequired": "لا يمكن إرسال إعلان عقاري للمراجعة قبل إكمال بيانات ترخيص الإعلان. افتح «تعديل» لإكمالها."
+      "licenseRequired": "لا يمكن إرسال إعلان عقاري للمراجعة قبل إكمال بيانات ترخيص الإعلان. افتح «تعديل» لإكمالها.",
+      "sort_recent": "الأحدث",
+      "sort_oldest": "الأقدم",
+      "sort_views": "الأكثر مشاهدة",
+      "sort_priceHigh": "الأعلى سعرًا",
+      "sort_priceLow": "الأقل سعرًا",
+      "sort_expiring": "الأقرب للانتهاء",
+      "sort_favorites": "الأكثر إضافة للمفضلة",
+      "totalFavorites": "المفضلة",
+      "totalQuotes": "طلبات عرض السعر",
+      "totalLinkCopies": "نسخ الرابط",
+      "totalQr": "رمز QR",
+      "totalRatings": "التقييمات",
+      "totalReports": "البلاغات",
+      "endsIn": "ينتهي بعد {n} يومًا",
+      "endsInHours": "ينتهي بعد {n} ساعة",
+      "endedAgo": "انتهى منذ {n} يومًا",
+      "endedAgoHours": "انتهى منذ {n} ساعة"
     }
   },
   "routeError": {
