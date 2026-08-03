@@ -7225,6 +7225,52 @@ export type Database = {
         Args: { _days: number; _listing_id: string }
         Returns: undefined
       }
+      mkt_admin_listing_reports: {
+        Args: {
+          _assignee?: string
+          _from?: string
+          _limit?: number
+          _offset?: number
+          _priority?: string
+          _reason?: string
+          _search?: string
+          _status?: string
+          _suspended_only?: boolean
+          _to?: string
+        }
+        Returns: {
+          assigned_to: string
+          assignee_label: string
+          can_view_reporter: boolean
+          created_at: string
+          id: string
+          last_action: string
+          last_action_at: string
+          listing_city: string
+          listing_id: string
+          listing_ref: string
+          listing_report_count: number
+          listing_slug: string
+          listing_status: string
+          listing_title: string
+          note: string
+          owner_business: string
+          owner_label: string
+          priority: string
+          reason_code: string
+          reason_name_ar: string
+          reason_name_en: string
+          ref_no: string
+          reporter_alias: string
+          reporter_identity: string
+          reporter_invalid_count: number
+          severity: string
+          sla_due_at: string
+          status: string
+          total_count: number
+          updated_at: string
+        }[]
+      }
       mkt_admin_update_activity: {
         Args: {
           _id: string
@@ -7410,6 +7456,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
       mkt_public_business: {
         Args: { _slug: string }
@@ -7564,6 +7611,15 @@ export type Database = {
         Returns: boolean
       }
       mkt_report_is_reporter: { Args: { _report_id: string }; Returns: boolean }
+      mkt_report_listing_action: {
+        Args: {
+          _action: string
+          _days?: number
+          _reason: string
+          _report_id: string
+        }
+        Returns: string
+      }
       mkt_report_merge: {
         Args: { _into: string; _report_id: string }
         Returns: undefined
@@ -7607,7 +7663,22 @@ export type Database = {
         Args: { _report_id: string }
         Returns: boolean
       }
+      mkt_report_staff_options: {
+        Args: never
+        Returns: {
+          label: string
+          user_id: string
+        }[]
+      }
       mkt_report_stats: { Args: never; Returns: Json }
+      mkt_report_transition: {
+        Args: { _reason?: string; _report_id: string; _to: string }
+        Returns: string
+      }
+      mkt_report_transition_ok: {
+        Args: { _from: string; _to: string }
+        Returns: boolean
+      }
       mkt_restrict_subject: {
         Args: {
           _days?: number
