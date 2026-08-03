@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MoreRouteImport } from './routes/more'
+import { Route as QaActivityPreviewRouteImport } from './routes/qa-activity-preview'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
@@ -111,6 +112,11 @@ const MarketSetupRoute = MarketSetupRouteImport.update({
 const MoreRoute = MoreRouteImport.update({
   id: '/more',
   path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QaActivityPreviewRoute = QaActivityPreviewRouteImport.update({
+  id: '/qa-activity-preview',
+  path: '/qa-activity-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -413,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/choose-account': typeof ChooseAccountRoute
   '/market-setup': typeof MarketSetupRoute
   '/more': typeof MoreRoute
+  '/qa-activity-preview': typeof QaActivityPreviewRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
@@ -477,6 +484,7 @@ export interface FileRoutesByTo {
   '/choose-account': typeof ChooseAccountRoute
   '/market-setup': typeof MarketSetupRoute
   '/more': typeof MoreRoute
+  '/qa-activity-preview': typeof QaActivityPreviewRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
@@ -544,6 +552,7 @@ export interface FileRoutesById {
   '/choose-account': typeof ChooseAccountRoute
   '/market-setup': typeof MarketSetupRoute
   '/more': typeof MoreRoute
+  '/qa-activity-preview': typeof QaActivityPreviewRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
@@ -611,6 +620,7 @@ export interface FileRouteTypes {
     | '/choose-account'
     | '/market-setup'
     | '/more'
+    | '/qa-activity-preview'
     | '/register'
     | '/search'
     | '/verify-invoice'
@@ -675,6 +685,7 @@ export interface FileRouteTypes {
     | '/choose-account'
     | '/market-setup'
     | '/more'
+    | '/qa-activity-preview'
     | '/register'
     | '/search'
     | '/verify-invoice'
@@ -741,6 +752,7 @@ export interface FileRouteTypes {
     | '/choose-account'
     | '/market-setup'
     | '/more'
+    | '/qa-activity-preview'
     | '/register'
     | '/search'
     | '/verify-invoice'
@@ -808,6 +820,7 @@ export interface RootRouteChildren {
   ChooseAccountRoute: typeof ChooseAccountRoute
   MarketSetupRoute: typeof MarketSetupRoute
   MoreRoute: typeof MoreRoute
+  QaActivityPreviewRoute: typeof QaActivityPreviewRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
@@ -887,6 +900,13 @@ declare module '@tanstack/react-router' {
       path: '/more'
       fullPath: '/more'
       preLoaderRoute: typeof MoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qa-activity-preview': {
+      id: '/qa-activity-preview'
+      path: '/qa-activity-preview'
+      fullPath: '/qa-activity-preview'
+      preLoaderRoute: typeof QaActivityPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1382,6 +1402,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChooseAccountRoute: ChooseAccountRoute,
   MarketSetupRoute: MarketSetupRoute,
   MoreRoute: MoreRoute,
+  QaActivityPreviewRoute: QaActivityPreviewRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
@@ -1407,3 +1428,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
