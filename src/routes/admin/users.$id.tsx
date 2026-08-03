@@ -192,7 +192,7 @@ function AdminUserDetailPage() {
                   to: `/admin/businesses/${row.tenant_id}`,
                   title: row.name || row.tenant_id.slice(0, 8),
                   meta: [
-                    t(`admin.detail.memberRole.${row.role}`, row.role),
+                    row.role,
                     row.verification_status ?? "",
                     formatDate(row.joined_at),
                   ],

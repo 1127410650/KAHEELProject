@@ -73,6 +73,7 @@ import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_aut
 import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
+import { Route as AdminUsersIdRouteImport } from './routes/admin/users.$id'
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
@@ -408,6 +409,11 @@ const AdminReportsIdRoute = AdminReportsIdRouteImport.update({
   path: '/reports/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminUsersRoute,
+} as any)
 const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
   id: '/dashboard/ads/new',
   path: '/dashboard/ads/new',
@@ -486,7 +492,7 @@ export interface FileRoutesByFullPath {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/users': typeof AdminUsersRoute
+  '/admin/users': typeof AdminUsersRouteWithChildren
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
@@ -507,6 +513,7 @@ export interface FileRoutesByFullPath {
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -557,7 +564,7 @@ export interface FileRoutesByTo {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/users': typeof AdminUsersRoute
+  '/admin/users': typeof AdminUsersRouteWithChildren
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
@@ -578,6 +585,7 @@ export interface FileRoutesByTo {
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
@@ -631,7 +639,7 @@ export interface FileRoutesById {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/users': typeof AdminUsersRoute
+  '/admin/users': typeof AdminUsersRouteWithChildren
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
@@ -652,6 +660,7 @@ export interface FileRoutesById {
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -726,6 +735,7 @@ export interface FileRouteTypes {
     | '/requests/$id'
     | '/supervisors/$id'
     | '/admin/reports/$id'
+    | '/admin/users/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects/'
@@ -797,6 +807,7 @@ export interface FileRouteTypes {
     | '/requests/$id'
     | '/supervisors/$id'
     | '/admin/reports/$id'
+    | '/admin/users/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects'
@@ -870,6 +881,7 @@ export interface FileRouteTypes {
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
     | '/admin/reports/$id'
+    | '/admin/users/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/_authenticated/projects/'
@@ -1366,6 +1378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportsIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/users/$id': {
+      id: '/admin/users/$id'
+      path: '/$id'
+      fullPath: '/admin/users/$id'
+      preLoaderRoute: typeof AdminUsersIdRouteImport
+      parentRoute: typeof AdminUsersRoute
+    }
     '/dashboard/ads/new': {
       id: '/dashboard/ads/new'
       path: '/dashboard/ads/new'
@@ -1481,6 +1500,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AdminUsersRouteChildren {
+  AdminUsersIdRoute: typeof AdminUsersIdRoute
+}
+
+const AdminUsersRouteChildren: AdminUsersRouteChildren = {
+  AdminUsersIdRoute: AdminUsersIdRoute,
+}
+
+const AdminUsersRouteWithChildren = AdminUsersRoute._addFileChildren(
+  AdminUsersRouteChildren,
+)
+
 interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
@@ -1491,7 +1522,7 @@ interface AdminRouteRouteChildren {
   AdminListingsRoute: typeof AdminListingsRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminUsersRoute: typeof AdminUsersRoute
+  AdminUsersRoute: typeof AdminUsersRouteWithChildren
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
@@ -1508,7 +1539,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminListingsRoute: AdminListingsRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
-  AdminUsersRoute: AdminUsersRoute,
+  AdminUsersRoute: AdminUsersRouteWithChildren,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
