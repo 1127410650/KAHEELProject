@@ -258,6 +258,13 @@ export function ListingCard({
       <Link
         to="/ads/$slug"
         params={{ slug: listing.slug ?? listing.id }}
+        onClick={(e) => {
+          if (navBlocked.current) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+
         className={
           horizontal
             ? "group relative flex gap-3 rounded-xl border border-border bg-card p-2.5 shadow-[0_1px_2px_rgb(0_0_0/0.03)] transition-colors hover:border-primary/40"
