@@ -37,7 +37,11 @@ function LinkBody({
   name,
   fallback,
   children,
-}: Pick<BaseProps, "name" | "fallback" | "children">) {
+}: {
+  name?: string | null | undefined;
+  fallback?: string | undefined;
+  children?: React.ReactNode;
+}) {
   if (children) return <>{children}</>;
   const label = (name ?? "").trim();
   return <>{label || fallback || "—"}</>;
@@ -76,7 +80,11 @@ export function AdminEntityLink({
   children,
 }: EntityLinkProps) {
   const allowed = useAllowed(ABILITY[kind]);
-  const body = <LinkBody name={name} fallback={fallback} children={children} />;
+  const body = (
+    <LinkBody name={name} fallback={fallback}>
+      {children}
+    </LinkBody>
+  );
   const shared = cn(truncate && "block truncate", className);
 
   if (!id || !allowed) {
