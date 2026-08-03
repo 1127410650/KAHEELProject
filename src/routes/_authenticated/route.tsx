@@ -1,14 +1,17 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import { supabase } from "@/integrations/supabase/client";
+import { guardSession } from "@/lib/auth-session";
 import { AppLayout } from "@/components/AppLayout";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
-  beforeLoad: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/auth" });
-    return { user: data.user };
+  beforeLoad: async ({ location }) => {
+    // A restored local session is enough; only a server-side revocation signs out.
+    const result = await guardSession();
+    if (result.status !== "authenticated") {
+      throw redirect({ to: "/auth", search: { next: location.href }, replace: true });
+    }
+    return { userId: result.userId };
   },
   component: () => (
     <AppLayout>
@@ -16,5 +19,3 @@ export const Route = createFileRoute("/_authenticated")({
     </AppLayout>
   ),
 });
-
-
