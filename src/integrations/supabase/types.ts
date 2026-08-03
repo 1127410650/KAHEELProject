@@ -7524,6 +7524,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_admin_subject_ids: {
+        Args: { _listing_ids?: string[]; _report_ids?: string[] }
+        Returns: {
+          kind: string
+          source_id: string
+          user_id: string
+        }[]
+      }
       mkt_admin_update_activity: {
         Args: {
           _id: string
