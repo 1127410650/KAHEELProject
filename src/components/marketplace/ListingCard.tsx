@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BadgeCheck, Clock, Flag, Heart, MapPin, MoreHorizontal, Share2 } from "lucide-react";
@@ -8,7 +9,9 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { trackMarketActivity } from "@/lib/mkt-activity";
 import { currentPath, loginHref, priceLabel, relativeTime, type MktListing } from "@/lib/mkt";
+import { ShareSheet } from "@/components/marketplace/ShareSheet";
 import { canonicalUrl } from "@/lib/share-links";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -106,7 +109,6 @@ function FavoriteButton({ listing }: { listing: ListingCardData }) {
     onError: () => toast.error(t("market.actions.failed")),
   });
 
-
   return (
     <button
       type="button"
@@ -128,42 +130,67 @@ function FavoriteButton({ listing }: { listing: ListingCardData }) {
   );
 }
 
-function CardMenu({ listing }: { listing: ListingCardData }) {
+/** Card ⋯ menu: share and report only — the share menu itself stays unified. */
+function CardMenu({
+  listing,
+  onInteract,
+}: {
+  listing: ListingCardData;
+  onInteract: (active: boolean) => void;
+}) {
   const { t } = useI18n();
+  const [shareOpen, setShareOpen] = useState(false);
   const slug = listing.slug ?? listing.id;
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label={t("market.card.options")}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="grid size-8 place-items-center rounded-full border border-border/60 bg-background/85 text-muted-foreground backdrop-blur transition-colors hover:text-primary"
-        >
-          <MoreHorizontal className="size-4" aria-hidden />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
-        <DropdownMenuItem
-          onSelect={() => {
-            void navigator.clipboard.writeText(canonicalUrl(`/ads/${slug}`));
-            toast.success(t("market.ad.linkCopied"));
-          }}
-        >
-          <Share2 className="size-4" aria-hidden />
-          {t("market.ad.share")}
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/ads/$slug" params={{ slug }} search={{ action: "report" }}>
-            <Flag className="size-4" aria-hidden />
-            {t("market.actions.report")}
-          </Link>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu
+        onOpenChange={(open) => {
+          onInteract(true);
+          if (!open) window.setTimeout(() => onInteract(false), 350);
+        }}
+      >
+
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label={t("market.card.options")}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="grid size-8 place-items-center rounded-full border border-border/60 bg-background/85 text-muted-foreground backdrop-blur transition-colors hover:text-primary"
+          >
+            <MoreHorizontal className="size-4" aria-hidden />
+          </button>
+        </DropdownMenuTrigger>
+        {/* React portals bubble events through the tree, so stop clicks from reaching the card link. */}
+        <DropdownMenuContent align="end" className="w-44" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenuItem
+            onSelect={() => {
+              setShareOpen(true);
+            }}
+          >
+            <Share2 className="size-4" aria-hidden />
+            {t("market.ad.share")}
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link to="/ads/$slug" params={{ slug }} search={{ action: "report" }}>
+              <Flag className="size-4" aria-hidden />
+              {t("market.actions.report")}
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <ShareSheet
+        title={listing.title}
+        url={canonicalUrl(`/ads/${slug}`)}
+        listingId={listing.id}
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+      />
+    </>
   );
 }
 
@@ -223,48 +250,48 @@ export function ListingCard({
   );
 
   return (
-    <Link
-      to="/ads/$slug"
-      params={{ slug: listing.slug ?? listing.id }}
-      className={
-        horizontal
-          ? "group relative flex gap-3 rounded-xl border border-border bg-card p-2.5 shadow-[0_1px_2px_rgb(0_0_0/0.03)] transition-colors hover:border-primary/40"
-          : "group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.03)] transition-colors hover:border-primary/40"
-      }
-    >
-      <Media listing={listing} horizontal={horizontal} />
-
-      <div
+    // Actions live outside the <Link> so their menus never trigger card navigation.
+    <div className="relative">
+      <Link
+        to="/ads/$slug"
+        params={{ slug: listing.slug ?? listing.id }}
         className={
-          horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-3"
+          horizontal
+            ? "group relative flex gap-3 rounded-xl border border-border bg-card p-2.5 shadow-[0_1px_2px_rgb(0_0_0/0.03)] transition-colors hover:border-primary/40"
+            : "group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.03)] transition-colors hover:border-primary/40"
         }
       >
-        {tag && (
-          <span className="w-fit max-w-full truncate rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground">
-            {tag}
-          </span>
-        )}
+        <Media listing={listing} horizontal={horizontal} />
 
-        <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold leading-snug text-foreground">
-          {listing.title}
-        </h3>
+        <div
+          className={horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-3"}
+        >
+          {tag && (
+            <span className="w-fit max-w-full truncate rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground">
+              {tag}
+            </span>
+          )}
 
-        <p className="mt-1 text-sm font-bold text-primary">{price}</p>
+          <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold leading-snug text-foreground">
+            {listing.title}
+          </h3>
 
-        {meta}
-      </div>
+          <p className="mt-1 text-sm font-bold text-primary">{price}</p>
+
+          {meta}
+        </div>
+      </Link>
 
       <div
         className={
           horizontal
-            ? "absolute top-2 flex flex-col gap-1 end-2"
-            : "absolute top-2 flex gap-1 end-2"
+            ? "absolute top-2 z-10 flex flex-col gap-1 end-2"
+            : "absolute top-2 z-10 flex gap-1 end-2"
         }
       >
         <FavoriteButton listing={listing} />
         <CardMenu listing={listing} />
-
       </div>
-    </Link>
+    </div>
   );
 }

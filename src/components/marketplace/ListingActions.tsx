@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Flag, Heart, MapPin, MessageSquare, ReceiptText, Share2 } from "lucide-react";
+import { Flag, Heart, MapPin, MessageSquare, QrCode, ReceiptText, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +8,9 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { currentPath, loginHref, SA_CITIES, type MktAction, type MktListing } from "@/lib/mkt";
 import { ReportDialog } from "@/components/marketplace/ReportDialog";
+import { QrCodeButton } from "@/components/marketplace/QrCodeButton";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
+
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,13 +34,7 @@ interface Props {
   locationHref?: string | null | undefined;
 }
 
-export function ListingActions({
-  listing,
-  pendingAction,
-  variant = "panel",
-  locationHref,
-}: Props) {
-
+export function ListingActions({ listing, pendingAction, variant = "panel", locationHref }: Props) {
   const { t } = useI18n();
   const { session } = useSession();
   const navigate = useNavigate();
@@ -160,9 +156,6 @@ export function ListingActions({
     }
   }
 
-
-
-
   // Compact icon row shown at the top of the ad: favourite, share, report.
   if (variant === "quick") {
     return (
@@ -188,7 +181,6 @@ export function ListingActions({
             url={canonicalUrl(`/ads/${listing.slug ?? listing.id}`)}
             listingId={listing.id}
           >
-
             <button
               type="button"
               aria-label={t("market.ad.share")}
@@ -197,6 +189,22 @@ export function ListingActions({
               <Share2 className="size-5" aria-hidden />
             </button>
           </ShareSheet>
+
+          {/* QR is its own action, never inside the share menu. */}
+          <QrCodeButton
+            url={canonicalUrl(`/ads/${listing.slug ?? listing.id}`)}
+            listingId={listing.id}
+          >
+            <button
+              type="button"
+              aria-label={t("market.share.qr")}
+              title={t("market.share.qr")}
+              className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+            >
+              <QrCode className="size-5" aria-hidden />
+            </button>
+          </QrCodeButton>
+
           {/* Location lives here, next to share: no card, no full-width button.
            * An approximate ad only ever links to a blurred point or a place. */}
           {locationHref && (
@@ -268,8 +276,6 @@ export function ListingActions({
           {t("market.actions.contact")}
         </Button>
       </div>
-
-
 
       <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
@@ -392,7 +398,6 @@ export function ListingActions({
         open={dialog === "report"}
         onOpenChange={(open) => !open && setDialog(null)}
       />
-
     </>
   );
 }
