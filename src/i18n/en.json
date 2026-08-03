@@ -2278,8 +2278,8 @@
       "meter": "m"
     },
     "entry": {
-      "title": "Choose account",
-      "subtitle": "The platform works under the account you choose only, fully isolated from the others.",
+      "title": "Choose the account you want to use",
+      "subtitle": "You can switch later from the account menu",
       "change": "Change account",
       "enter": "Enter with this account",
       "browsePublic": "Browse the marketplace without an account",
@@ -2292,7 +2292,16 @@
       },
       "otherAccount": "This ad belongs to “{name}”, not the active account.",
       "switchTo": "Enter as {name}",
-      "notYours": "This ad does not belong to any of your accounts."
+      "notYours": "This ad does not belong to any of your accounts.",
+      "current": "Current account",
+      "personalSection": "Personal account",
+      "businessSection": "Businesses you are authorised for",
+      "newBusiness": "Create a new business",
+      "newBusinessHint": "The business is added to the list; your active account does not change automatically.",
+      "noBusinesses": "No businesses are linked to your account yet.",
+      "selectAria": "Enter with {name}",
+      "unavailable": "Currently unavailable",
+      "backToAccounts": "Back to account selection"
     },
     "access": {
       "title": "This page can't be opened",

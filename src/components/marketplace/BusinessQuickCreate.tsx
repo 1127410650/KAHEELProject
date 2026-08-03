@@ -39,6 +39,12 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   /** Called with the new tenant id once the business exists. */
   onCreated: (tenantId: string) => void;
+  /**
+   * "dialog" keeps the historical modal used by the ad form; "page" renders the
+   * exact same wizard inline for the standalone /business/new screen, so account
+   * creation is never a modal inside the account picker.
+   */
+  variant?: "dialog" | "page";
 }
 
 const selectClass = "h-9 w-full rounded-md border border-input bg-background px-2 text-sm";
@@ -51,7 +57,7 @@ const DOC_ORDER: DocKind[] = ["cr", "authorization", "id", "other"];
  * as its owner. Official numbers and the officer's identity number are written
  * to the private tables only and are never kept in local storage.
  */
-export function BusinessQuickCreate({ open, onOpenChange, onCreated }: Props) {
+export function BusinessQuickCreate({ open, onOpenChange, onCreated, variant = "dialog" }: Props) {
   const { t, locale } = useI18n();
   const { session } = useSession();
   const queryClient = useQueryClient();
@@ -302,15 +308,16 @@ export function BusinessQuickCreate({ open, onOpenChange, onCreated }: Props) {
     setDocs((prev) => ({ ...prev, [kind]: file }));
   }
 
+  const asPage = variant === "page";
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[88vh] w-[calc(100vw-1.5rem)] max-w-lg overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("market.biz.quickCreate")}</DialogTitle>
-          <DialogDescription>
-            {stage === 2 ? t("market.biz.verificationHint") : t("market.biz.quickCreateHint")}
-          </DialogDescription>
-        </DialogHeader>
+    <Shell
+      asPage={asPage}
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t("market.biz.quickCreate")}
+      description={stage === 2 ? t("market.biz.verificationHint") : t("market.biz.quickCreateHint")}
+    >
 
         <ol className="flex flex-wrap gap-1.5 text-[11px]">
           {(["data", "officer", "verify"] as const).map((name, index) => (
@@ -505,7 +512,7 @@ export function BusinessQuickCreate({ open, onOpenChange, onCreated }: Props) {
           </div>
         )}
 
-        <DialogFooter className="flex-row flex-wrap items-center gap-2">
+        <Footer asPage={asPage}>
           {stage === 1 && (
             <Button type="button" variant="ghost" onClick={() => setStage(0)}>
               {t("market.form.back")}
@@ -544,10 +551,59 @@ export function BusinessQuickCreate({ open, onOpenChange, onCreated }: Props) {
               </Button>
             </>
           )}
-        </DialogFooter>
+        </Footer>
+    </Shell>
+  );
+}
+
+/**
+ * Layout wrapper. Declared at module scope on purpose: an inline component would
+ * get a new identity on every render and remount the whole form (losing focus).
+ */
+function Shell({
+  asPage,
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+}: {
+  asPage: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}) {
+  if (asPage) {
+    return (
+      <div className="flex min-w-0 flex-col gap-4">
+        <div className="min-w-0">
+          <h1 className="wrap-anywhere text-lg font-bold leading-tight sm:text-2xl">{title}</h1>
+          <p className="wrap-anywhere mt-1 text-xs leading-snug text-muted-foreground sm:text-sm">
+            {description}
+          </p>
+        </div>
+        {children}
+      </div>
+    );
+  }
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[88vh] w-[calc(100vw-1.5rem)] max-w-lg overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        {children}
       </DialogContent>
     </Dialog>
   );
+}
+
+function Footer({ asPage, children }: { asPage: boolean; children: React.ReactNode }) {
+  if (asPage) return <div className="flex flex-row flex-wrap items-center gap-2">{children}</div>;
+  return <DialogFooter className="flex-row flex-wrap items-center gap-2">{children}</DialogFooter>;
 }
 
 function splitList(value: string): string[] {
