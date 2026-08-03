@@ -304,7 +304,8 @@ export function AdminShell({
             </span>
           </Link>
 
-          <div className="min-w-0 flex-1" />
+          {allowed ? <AdminSearchBox /> : <div className="min-w-0 flex-1" />}
+          <div className="min-w-0 flex-1 sm:hidden" />
 
           {allowed && (
             <>
