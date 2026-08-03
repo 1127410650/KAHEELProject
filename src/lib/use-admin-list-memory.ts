@@ -43,42 +43,57 @@ function write<T>(key: string, snapshot: Snapshot<T>): void {
 }
 
 /**
- * Keeps the snapshot in sync with the live state and restores scroll on mount.
- * `ready` should be false while the list is still loading, so scroll is only
- * restored once rows exist to scroll to.
+ * Keeps the snapshot in sync with the live state and restores scroll whenever
+ * the list route is the active one again. `ready` should be false while the list
+ * is still loading, so scroll is only restored once rows exist to scroll to.
  *
- * Scroll is captured from a live `scroll` listener rather than read at unmount:
- * by the time the list unmounts, the router has already scrolled the new page
- * to the top, so reading `window.scrollY` there always recorded 0.
+ * Scroll is persisted from a live `scroll` listener, not read at unmount: by the
+ * time a detail page renders, the router has already scrolled to the top, and
+ * the list component may not unmount at all — so an unmount-time read of
+ * `window.scrollY` always recorded 0.
  */
 export function useAdminListMemory<T extends object>(
   key: string,
   state: T,
   ready = true,
 ): void {
-  const restored = useRef(false);
   const lastScroll = useRef(0);
+  const restoredForVisit = useRef(false);
+  const ownPath = useRef<string | null>(null);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (ownPath.current === null) ownPath.current = pathname;
+  const onOwnPath = pathname === ownPath.current;
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
+  // Persist the offset as the reviewer scrolls, but only while this list is the
+  // visible route — otherwise the router's scroll-to-top would overwrite it.
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const onScroll = () => {
+      if (!onOwnPath) return;
       lastScroll.current = window.scrollY;
+      write(key, { state: stateRef.current, scrollY: window.scrollY });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [key, onOwnPath]);
 
   // State changes never clobber the remembered scroll offset.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const kept = restored.current ? lastScroll.current : (read<T>(key)?.scrollY ?? 0);
-    write(key, { state, scrollY: kept });
+    write(key, { state, scrollY: read<T>(key)?.scrollY ?? lastScroll.current });
   }, [key, state]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || restored.current || !ready) return;
-    const snap = read<T>(key);
-    restored.current = true;
-    const target = snap?.scrollY ?? 0;
+    if (typeof window === "undefined") return;
+    if (!onOwnPath) {
+      restoredForVisit.current = false;
+      return;
+    }
+    if (restoredForVisit.current || !ready) return;
+    restoredForVisit.current = true;
+    const target = read<T>(key)?.scrollY ?? 0;
     if (!target) return;
     // Rows may still be painting, so the first scrollTo can be clamped. Retry
     // over a few frames until the document is tall enough to honour it.
@@ -92,22 +107,7 @@ export function useAdminListMemory<T extends object>(
       }
     };
     requestAnimationFrame(tick);
-  }, [key, ready]);
-
-  // Persist the last real offset when leaving the page (navigation or reload).
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const save = () => {
-      if (!restored.current) return;
-      const snap = read<T>(key);
-      write(key, { state: snap?.state ?? state, scrollY: lastScroll.current });
-    };
-    window.addEventListener("pagehide", save);
-    return () => {
-      save();
-      window.removeEventListener("pagehide", save);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [key, ready, onOwnPath]);
 }
+
 
