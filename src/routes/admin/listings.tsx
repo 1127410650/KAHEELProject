@@ -254,6 +254,30 @@ function AdminListingsPage() {
         </div>
       </div>
 
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground tabular-nums">
+          {listings.isLoading ? "…" : (listings.data ?? []).length}
+        </p>
+        {(status || city || categoryId || tenantId || q) && (
+          <Button
+            size="sm"
+            variant="ghost"
+            className="min-h-11"
+            onClick={() => {
+              setStatus("");
+              setCity("");
+              setCategoryId("");
+              setTenantId("");
+              setQ("");
+            }}
+          >
+            {t("market.filters.all")}
+          </Button>
+        )}
+      </div>
+
+
+
       <ul className="mt-5 space-y-3">
         {listings.isLoading
           ? Array.from({ length: 4 }).map((_, i) => (
