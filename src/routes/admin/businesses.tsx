@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -7,6 +7,8 @@ import { ExternalLink, FolderOpen, MoreHorizontal, Search } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
+import { AdminBusinessLink, AdminUserLink } from "@/components/marketplace/AdminEntityLink";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
 import { formatDate } from "@/lib/format";
 import {
   addAdminNote,
@@ -27,6 +29,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+/** A click on a link, button or menu must not also trigger the row itself. */
+function isInteractive(target: EventTarget | null): boolean {
+  return (
+    target instanceof Element &&
+    !!target.closest("a,button,input,select,textarea,[role='menuitem'],[data-no-row-open]")
+  );
+}
+
 
 export const Route = createFileRoute("/admin/businesses")({
   ssr: false,
