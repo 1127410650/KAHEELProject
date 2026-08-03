@@ -2778,7 +2778,9 @@
         "duplicate": "This photo is already added.",
         "limit": "The photo limit has been reached.",
         "upload": "Photo upload failed."
-      }
+      },
+      "imagesIncomplete": "Some photos have not finished uploading — retry or remove them.",
+      "imagesTooMany": "Up to 20 photos per ad."
     }
   },
   "routeError": {
@@ -2788,7 +2790,5 @@
     "retry": "Try again",
     "home": "Home",
     "code404": "404"
-  },
-  "market.media.imagesIncomplete": "Some photos have not finished uploading — retry or remove them",
-  "market.media.imagesTooMany": "Up to 20 photos per ad"
+  }
 }
