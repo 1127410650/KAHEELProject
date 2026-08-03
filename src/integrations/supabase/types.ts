@@ -7015,6 +7015,40 @@ export type Database = {
         }[]
       }
       mkt_account_country_id: { Args: { _user_id: string }; Returns: string }
+      mkt_activity_migration_report: {
+        Args: never
+        Returns: {
+          bucket: string
+          legacy_text: string
+          matched_activity_id: string
+          matched_name_ar: string
+          score: number
+          tenant_id: string
+        }[]
+      }
+      mkt_admin_activities: {
+        Args: {
+          _group_id?: string
+          _include_inactive?: boolean
+          _limit?: number
+          _q?: string
+        }
+        Returns: {
+          alias_count: number
+          child_count: number
+          created_at: string
+          entity_count: number
+          group_id: string
+          group_name_ar: string
+          id: string
+          is_active: boolean
+          merged_into_id: string
+          name_ar: string
+          name_en: string
+          parent_id: string
+          parent_name_ar: string
+        }[]
+      }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -7051,6 +7085,19 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_entity_activities_list: {
+        Args: { _tenant_id: string }
+        Returns: {
+          activity_id: string
+          group_id: string
+          group_name_ar: string
+          group_name_en: string
+          is_primary: boolean
+          name_ar: string
+          name_en: string
+          parent_id: string
+        }[]
+      }
       mkt_expire_re_licenses: { Args: never; Returns: number }
       mkt_has_restriction: {
         Args: {
@@ -7084,6 +7131,10 @@ export type Database = {
         }[]
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
+      mkt_merge_activities: {
+        Args: { _note?: string; _source_id: string; _target_id: string }
+        Returns: undefined
+      }
       mkt_my_accounts: {
         Args: never
         Returns: {
@@ -7339,6 +7390,15 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_review_activity_suggestion: {
+        Args: {
+          _activity_id?: string
+          _decision: string
+          _note?: string
+          _suggestion_id: string
+        }
+        Returns: undefined
+      }
       mkt_review_appeal: {
         Args: { _appeal_id: string; _reason: string; _status: string }
         Returns: undefined
@@ -7349,6 +7409,36 @@ export type Database = {
       }
       mkt_review_verification: {
         Args: { _action: string; _reason?: string; _request_id: string }
+        Returns: undefined
+      }
+      mkt_search_activities: {
+        Args: {
+          _group_id?: string
+          _limit?: number
+          _only_main?: boolean
+          _parent_id?: string
+          _q: string
+        }
+        Returns: {
+          group_id: string
+          group_name_ar: string
+          group_name_en: string
+          id: string
+          match_kind: string
+          matched_alias: string
+          name_ar: string
+          name_en: string
+          parent_id: string
+          parent_name_ar: string
+          score: number
+        }[]
+      }
+      mkt_set_entity_activities: {
+        Args: {
+          _main_activity_id: string
+          _sub_activity_ids?: string[]
+          _tenant_id: string
+        }
         Returns: undefined
       }
       mkt_slugify: { Args: { _text: string }; Returns: string }
@@ -7368,6 +7458,15 @@ export type Database = {
           ref_no: string
           report_id: string
         }[]
+      }
+      mkt_suggest_activity: {
+        Args: {
+          _group_id?: string
+          _parent_id?: string
+          _raw_text: string
+          _tenant_id?: string
+        }
+        Returns: string
       }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
