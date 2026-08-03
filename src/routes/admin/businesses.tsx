@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ExternalLink, MoreHorizontal, Search } from "lucide-react";
+import { ExternalLink, FolderOpen, MoreHorizontal, Search } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
