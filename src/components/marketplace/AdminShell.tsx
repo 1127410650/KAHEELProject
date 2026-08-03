@@ -48,6 +48,12 @@ export function AdminShell({
               {t("market.admin.listings")}
             </Link>
             <Link
+              to="/admin/listing-events"
+              className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+            >
+              {t("market.admin.logTab")}
+            </Link>
+            <Link
               to="/admin/verifications"
               className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
             >
