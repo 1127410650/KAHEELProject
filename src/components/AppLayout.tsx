@@ -104,25 +104,12 @@ const supervisorGroups: { titleKey: string; items: NavItem[] }[] = [
   },
 ];
 
-/** Personal (individual) account: only the user's own data — never company records. */
-const personalGroups: { titleKey: string; items: NavItem[] }[] = [
-  {
-    titleKey: "nav.sectionMain",
-    items: [
-      { to: "/me", labelKey: "nav.home", icon: Inbox },
-      { to: "/requests", labelKey: "nav.myRequests", icon: ClipboardList },
-      { to: "/projects", labelKey: "nav.myProjects", icon: FolderKanban },
-      { to: "/my-documents", labelKey: "nav.myDocuments", icon: FileText },
-      { to: "/my-custody", labelKey: "nav.myCustody", icon: Wallet, perm: "custody.view_own" },
-      { to: "/invitations", labelKey: "nav.invitations", icon: MailOpen },
-      { to: "/notifications", labelKey: "nav.notifications", icon: Bell },
-    ],
-  },
-  {
-    titleKey: "nav.sectionSystem",
-    items: [{ to: "/settings", labelKey: "nav.mySettings", icon: Settings }],
-  },
-];
+/**
+ * Personal (individual) accounts have no sidebar here any more: the old personal
+ * shell was retired in favour of the marketplace account dashboard, and this
+ * layout now only serves the internal operations of a business entity.
+ */
+
 
 
 
