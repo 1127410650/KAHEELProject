@@ -83,6 +83,10 @@ export function ListingForm({ listing }: Props) {
   const [errors, setErrors] = useState<{ [K in FieldKey]?: string | undefined }>({});
   const [draftNote, setDraftNote] = useState<"saved" | "failed" | null>(null);
   const restored = useRef(false);
+  /** Synchronous submit lock — protects against a double tap. */
+  const submitting = useRef(false);
+  /** Id of the row this form created, so a retry never inserts a second ad. */
+  const createdId = useRef<string | null>(null);
 
   const storedSpecs = (listing?.specs as Record<string, SpecValue> | null) ?? {};
   const [typeCode, setTypeCode] = useState(listing?.type_code ?? "");
