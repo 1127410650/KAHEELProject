@@ -2301,6 +2301,7 @@
       "noBusinesses": "لا توجد منشآت مرتبطة بحسابك بعد.",
       "selectAria": "الدخول بحساب {name}",
       "unavailable": "غير متاح حاليًا",
+      "cancelToCurrent": "إلغاء والعودة إلى الحساب الحالي",
       "backToAccounts": "العودة إلى اختيار الحساب"
     },
     "access": {

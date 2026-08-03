@@ -139,9 +139,12 @@ function ChooseAccountPage() {
 
   useEffect(() => {
     if (!sessionLoading && !session) {
-      void navigate({ to: "/auth", replace: true });
+      // Keep the intended destination so signing in lands back here.
+      const back = `/choose-account${next ? `?next=${encodeURIComponent(next)}` : ""}`;
+      void navigate({ href: `/auth?next=${encodeURIComponent(back)}`, replace: true });
     }
-  }, [sessionLoading, session, navigate]);
+  }, [sessionLoading, session, navigate, next]);
+
 
   const personal = useMemo(() => accounts.filter((a) => a.kind === "individual"), [accounts]);
   const businesses = useMemo(() => accounts.filter((a) => a.kind === "business"), [accounts]);
@@ -262,11 +265,25 @@ function ChooseAccountPage() {
         </div>
       )}
 
-      <p className="mt-5 text-center text-[11px] text-muted-foreground">
-        <Link to="/" className="underline">
-          {t("market.entry.browsePublic")}
-        </Link>
-      </p>
+      {/*
+        A signed-in user always works under one account, so there is no
+        "browse without an account" escape hatch here: with a valid active
+        account the only secondary action is cancelling back to it; with no
+        active account yet, a choice must be made (personal is always there).
+      */}
+      {!loading && activeAccount ? (
+        <p className="mt-5 text-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={!!pending}
+            onClick={() => void navigate({ href: target, replace: true })}
+          >
+            {t("market.entry.cancelToCurrent")}
+          </Button>
+        </p>
+      ) : null}
+
     </div>
   );
 }
