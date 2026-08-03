@@ -113,6 +113,14 @@ function AdminListingsPage() {
     },
   });
 
+  useAdminListMemory(
+    "listings",
+    { status, city, categoryId, tenantId, q },
+    !listings.isLoading,
+  );
+
+
+
   const images = useQuery({
     queryKey: ["mkt", "admin-listing-images", open?.id],
     enabled: !!open,
