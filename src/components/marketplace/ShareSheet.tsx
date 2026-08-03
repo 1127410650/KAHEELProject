@@ -1,25 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
-import {
-  Check,
-  Copy,
-  Download,
-  Facebook,
-  Mail,
-  MessageCircle,
-  QrCode,
-  Send,
-  Share2,
-  Twitter,
-} from "lucide-react";
+import { Check, Copy, Share2 } from "lucide-react";
 import { toast } from "sonner";
-import QRCode from "qrcode";
 
 import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { canonicalCurrentUrl, shareTargets } from "@/lib/share-links";
+import { canonicalCurrentUrl } from "@/lib/share-links";
 import { trackListingEvent, type ListingTrackKind } from "@/lib/mkt-listing-ops";
-
-import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Drawer,
@@ -28,12 +14,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ShareSheetProps {
   /** Text used as the share title (ad title, person or business name). */
@@ -43,20 +24,38 @@ interface ShareSheetProps {
   /** When sharing a listing, its id — aggregate share counters are bumped. */
   listingId?: string | undefined;
   /** Trigger element (a button); receives the click handler through asChild. */
-  children: ReactNode;
+  children?: ReactNode;
+  /** Controlled mode: lets a parent menu open the sheet without its own trigger. */
+  open?: boolean | undefined;
+  onOpenChange?: ((open: boolean) => void) | undefined;
 }
 
 type Row = { key: string; label: string; icon: ReactNode; onSelect: () => void };
 
-/** One shared share menu: bottom sheet on mobile, popover on desktop. */
-export function ShareSheet({ title, url, listingId, children }: ShareSheetProps) {
+/**
+ * One share menu across the platform, deliberately minimal: copy the link, or
+ * hand off to the device's own share sheet. App names (WhatsApp, Telegram, X…)
+ * are never listed here — the operating system already knows what is installed.
+ */
+export function ShareSheet({
+  title,
+  url,
+  listingId,
+  children,
+  open: openProp,
+  onOpenChange,
+}: ShareSheetProps) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
-  const [qrOpen, setQrOpen] = useState(false);
-  const [qrData, setQrData] = useState<string | null>(null);
+  const [openState, setOpenState] = useState(false);
   const [copied, setCopied] = useState(false);
   const [canSystemShare, setCanSystemShare] = useState(false);
+
+  const open = openProp ?? openState;
+  const setOpen = (next: boolean) => {
+    setOpenState(next);
+    onOpenChange?.(next);
+  };
 
   // navigator.share only exists in the browser — checked after hydration.
   useEffect(() => {
@@ -69,14 +68,6 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
   }
 
   const link = url ?? canonicalCurrentUrl();
-
-  const targets = shareTargets(title, link);
-
-  function openExternal(href: string) {
-    setOpen(false);
-    track("share");
-    window.open(href, "_blank", "noopener,noreferrer");
-  }
 
   async function copyLink() {
     try {
@@ -101,24 +92,15 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
     }
   }
 
-  async function showQr() {
-    try {
-      const data = await QRCode.toDataURL(link, { width: 512, margin: 1 });
-      setQrData(data);
-      setOpen(false);
-      setQrOpen(true);
-      track("qr_open");
-    } catch {
-      toast.error(t("market.actions.failed"));
-    }
-  }
-
-
   const rows: Row[] = [
     {
       key: "copy",
       label: t("market.share.copyLink"),
-      icon: copied ? <Check className="size-4" aria-hidden /> : <Copy className="size-4" aria-hidden />,
+      icon: copied ? (
+        <Check className="size-4" aria-hidden />
+      ) : (
+        <Copy className="size-4" aria-hidden />
+      ),
       onSelect: () => void copyLink(),
     },
     ...(canSystemShare
@@ -131,45 +113,6 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
           },
         ]
       : []),
-    {
-      key: "whatsapp",
-      label: t("market.share.whatsapp"),
-      icon: <MessageCircle className="size-4" aria-hidden />,
-      onSelect: () => openExternal(targets.whatsapp),
-    },
-    {
-      key: "telegram",
-      label: t("market.share.telegram"),
-      icon: <Send className="size-4" aria-hidden />,
-      onSelect: () => openExternal(targets.telegram),
-    },
-    {
-      key: "x",
-      label: t("market.share.x"),
-      icon: <Twitter className="size-4" aria-hidden />,
-      onSelect: () => openExternal(targets.x),
-    },
-    {
-      key: "facebook",
-      label: t("market.share.facebook"),
-      icon: <Facebook className="size-4" aria-hidden />,
-      onSelect: () => openExternal(targets.facebook),
-    },
-    {
-      key: "email",
-      label: t("market.share.email"),
-      icon: <Mail className="size-4" aria-hidden />,
-      onSelect: () => {
-        setOpen(false);
-        window.location.href = targets.email;
-      },
-    },
-    {
-      key: "qr",
-      label: t("market.share.qr"),
-      icon: <QrCode className="size-4" aria-hidden />,
-      onSelect: () => void showQr(),
-    },
   ];
 
   const list = (
@@ -189,60 +132,41 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
     </ul>
   );
 
-  const qrDialog = (
-    <Dialog open={qrOpen} onOpenChange={setQrOpen}>
-      <DialogContent className="max-w-[min(22rem,calc(100vw-2rem))]">
-        <DialogHeader>
-          <DialogTitle>{t("market.share.qrTitle")}</DialogTitle>
-        </DialogHeader>
-        {qrData && (
-          <div className="flex flex-col items-center gap-3">
-            <img
-              src={qrData}
-              alt={t("market.share.qrTitle")}
-              className="size-48 max-w-full rounded-lg border border-border bg-background"
-            />
-            <p className="w-full break-all text-center text-xs text-muted-foreground" dir="ltr">
-              {link}
-            </p>
-            <Button asChild variant="outline" size="sm" className="min-h-11 w-full">
-              <a href={qrData} download="tahqaq-qr.png">
-                <Download className="size-4" aria-hidden />
-                {t("market.share.download")}
-              </a>
-            </Button>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-
   if (isMobile) {
     return (
-      <>
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger asChild>{children}</DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader className="pb-1">
-              <DrawerTitle className="text-start text-base">{t("market.share.title")}</DrawerTitle>
-            </DrawerHeader>
-            <div className="max-h-[60vh] overflow-y-auto px-2 pb-6">{list}</div>
-          </DrawerContent>
-        </Drawer>
-        {qrDialog}
-      </>
+      <Drawer open={open} onOpenChange={setOpen}>
+        {children && <DrawerTrigger asChild>{children}</DrawerTrigger>}
+        <DrawerContent>
+          <DrawerHeader className="pb-1">
+            <DrawerTitle className="text-start text-base">{t("market.share.title")}</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-2 pb-6">{list}</div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  // Controlled mode without a trigger (opened from a card's ⋯ menu): a popover
+  // has nothing to anchor to, so show the same two rows in a small dialog.
+  if (!children) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-[min(20rem,calc(100vw-2rem))] p-3">
+          <DialogHeader>
+            <DialogTitle className="text-start text-base">{t("market.share.title")}</DialogTitle>
+          </DialogHeader>
+          {list}
+        </DialogContent>
+      </Dialog>
     );
   }
 
   return (
-    <>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>{children}</PopoverTrigger>
-        <PopoverContent align="end" className="w-56 p-1">
-          {list}
-        </PopoverContent>
-      </Popover>
-      {qrDialog}
-    </>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverContent align="end" className="w-52 p-1">
+        {list}
+      </PopoverContent>
+    </Popover>
   );
 }
