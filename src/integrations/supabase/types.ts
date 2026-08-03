@@ -7171,6 +7171,56 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_admin_listing_action: {
+        Args: {
+          _action: string
+          _days?: number
+          _listing_id: string
+          _reason?: string
+        }
+        Returns: string
+      }
+      mkt_admin_listing_brief: {
+        Args: { _listing_id: string }
+        Returns: {
+          city: string
+          expires_at: string
+          id: string
+          published_at: string
+          ref_no: string
+          rejection_reason: string
+          slug: string
+          status: string
+          title: string
+        }[]
+      }
+      mkt_admin_listing_events: {
+        Args: {
+          _actor?: string
+          _event_type?: string
+          _from?: string
+          _limit?: number
+          _offset?: number
+          _search?: string
+          _to?: string
+        }
+        Returns: {
+          actor_id: string
+          actor_label: string
+          can_view_ip: boolean
+          created_at: string
+          event_type: string
+          id: string
+          ip_address: string
+          listing_city: string
+          listing_id: string
+          listing_ref: string
+          listing_status: string
+          listing_title: string
+          meta: Json
+          user_agent: string
+        }[]
+      }
       mkt_admin_listing_extend: {
         Args: { _days: number; _listing_id: string }
         Returns: undefined
@@ -7254,6 +7304,7 @@ export type Database = {
       }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_listing_op: { Args: never; Returns: boolean }
+      mkt_is_moderation_op: { Args: never; Returns: boolean }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
       mkt_is_super_admin: { Args: never; Returns: boolean }
       mkt_is_system_action: { Args: never; Returns: boolean }

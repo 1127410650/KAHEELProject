@@ -42,6 +42,7 @@ import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
+import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
@@ -242,6 +243,11 @@ const AdminGeoRoute = AdminGeoRouteImport.update({
   path: '/geo',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
+  id: '/listing-events',
+  path: '/listing-events',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminListingsRoute = AdminListingsRouteImport.update({
   id: '/listings',
   path: '/listings',
@@ -437,6 +443,7 @@ export interface FileRoutesByFullPath {
   '/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
+  '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -501,6 +508,7 @@ export interface FileRoutesByTo {
   '/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
+  '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -568,6 +576,7 @@ export interface FileRoutesById {
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
+  '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
@@ -635,6 +644,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/admin/activities'
     | '/admin/geo'
+    | '/admin/listing-events'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -699,6 +709,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/admin/activities'
     | '/admin/geo'
+    | '/admin/listing-events'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -765,6 +776,7 @@ export interface FileRouteTypes {
     | '/_authenticated/users'
     | '/admin/activities'
     | '/admin/geo'
+    | '/admin/listing-events'
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
@@ -1064,6 +1076,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGeoRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/listing-events': {
+      id: '/admin/listing-events'
+      path: '/listing-events'
+      fullPath: '/admin/listing-events'
+      preLoaderRoute: typeof AdminListingEventsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/listings': {
       id: '/admin/listings'
       path: '/listings'
@@ -1352,6 +1371,7 @@ const AuthenticatedRouteRouteWithChildren =
 interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminGeoRoute: typeof AdminGeoRoute
+  AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1362,6 +1382,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminActivitiesRoute: AdminActivitiesRoute,
   AdminGeoRoute: AdminGeoRoute,
+  AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -1407,3 +1428,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
