@@ -46,7 +46,7 @@ function Stat({
   value: number;
   icon: typeof Users;
   to: string;
-  search?: Record<string, string>;
+  search?: Record<string, string | boolean>;
 }) {
   return (
     <Link
@@ -72,7 +72,7 @@ function ActionRow({
   to: string;
   label: string;
   count: number;
-  search?: Record<string, string>;
+  search?: Record<string, string | boolean>;
 }) {
   return (
     <Link
@@ -149,7 +149,7 @@ function AdminHomePage() {
               value={data.restricted_accounts}
               icon={ShieldOff}
               to="/admin/users"
-              search={{ restricted: "1" }}
+              search={{ restricted: true }}
             />
             <Stat
               label={t("admin.stats.suggestions")}
