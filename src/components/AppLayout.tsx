@@ -175,14 +175,9 @@ function NavLinks({
   const { t } = useI18n();
   const { isAccountant, isSupervisor, role, can } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: accounts = [] } = useAccounts();
-  const isPersonal = accounts.some((a) => a.is_current && a.is_personal);
   const supervisorOnly = isSupervisor && !isAccountant && role !== "employee";
-  const visibleGroups = isPersonal
-    ? personalGroups
-    : supervisorOnly
-      ? supervisorGroups
-      : groups;
+  const visibleGroups = supervisorOnly ? supervisorGroups : groups;
+
 
 
   return (
