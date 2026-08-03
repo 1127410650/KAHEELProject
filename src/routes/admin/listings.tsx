@@ -235,10 +235,27 @@ function AdminListingsPage() {
               <li key={ad.id} className="rounded-xl border border-border bg-card p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground">{ad.title}</p>
+                    <AdminListingLink
+                      id={ad.id}
+                      name={ad.title}
+                      truncate
+                      className="min-h-11 py-2.5 text-sm font-semibold"
+                    />
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {bizName(ad.tenant_id)} · {ad.city ?? "—"} ·{" "}
-                      {priceLabel(ad, t("market.priceOnRequest"))}
+                      {ad.tenant_id ? (
+                        <AdminBusinessLink
+                          id={ad.tenant_id}
+                          name={bizName(ad.tenant_id)}
+                          className="text-xs"
+                        />
+                      ) : (
+                        <AdminUserLink
+                          id={ownerIds[subjectKey("listing_owner", ad.id)] ?? null}
+                          name={t("market.ad.individualAdvertiser")}
+                          className="text-xs"
+                        />
+                      )}{" "}
+                      · {ad.city ?? "—"} · {priceLabel(ad, t("market.priceOnRequest"))}
                     </p>
                     {ad.rejection_reason && (
                       <p className="mt-1 text-xs text-destructive">{ad.rejection_reason}</p>
@@ -250,8 +267,11 @@ function AdminListingsPage() {
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button asChild size="sm" variant="outline">
-                    <Link to={`/admin/listings/${ad.id}`}>{t("market.admin.fullView")}</Link>
+                    <Link to="/admin/listings/$id" params={{ id: ad.id }}>
+                      {t("market.admin.fullView")}
+                    </Link>
                   </Button>
+
                   <Button size="sm" onClick={() => setDecision({ listing: ad, action: "approve" })}>
                     {t("market.admin.approve")}
                   </Button>
