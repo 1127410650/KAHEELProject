@@ -8,7 +8,10 @@ import {
 } from "react";
 import type { Session } from "@supabase/supabase-js";
 
+import { toast } from "sonner";
+
 import { supabase } from "@/integrations/supabase/client";
+import { consumeManualSignOut } from "@/lib/auth-session";
 import { useI18n, type Locale } from "@/i18n";
 import type { Permission } from "@/lib/permissions";
 
@@ -56,7 +59,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const [permissions, setPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const { setLocale } = useI18n();
+  const { setLocale, t } = useI18n();
 
   async function load(userId: string | undefined) {
     if (!userId) {
@@ -143,6 +146,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       // Mirrors the database has_perm(): accountants hold every permission.
       can: (permission: Permission) => isAccountant || permissions.includes(permission),
       loading,
+      status: loading ? "loading" : session ? "authenticated" : "unauthenticated",
       refresh: async () => {
         const { data } = await supabase.auth.getSession();
         setSession(data.session);
