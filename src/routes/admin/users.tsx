@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { AdminUserLink } from "@/components/marketplace/AdminEntityLink";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -77,8 +79,10 @@ function AdminUsersPage() {
   const { t } = useI18n();
   const queryClient = useQueryClient();
   const { identity } = usePlatformIdentity();
-  const [term, setTerm] = useState("");
-  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  const initial = readAdminListState("users", { search: "" });
+  const [term, setTerm] = useState(initial.search);
+  const [search, setSearch] = useState(initial.search);
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -116,6 +120,15 @@ function AdminUsersPage() {
   }
 
   const rows = users.data ?? [];
+  // Back from a user file returns to the same search and scroll offset.
+  useAdminListMemory("users", { search }, !users.isLoading);
+
+  /** Opens the administrative file; ignored when the click came from a control. */
+  function openRow(event: React.MouseEvent, userId: string) {
+    const target = event.target as HTMLElement;
+    if (target.closest("a,button,[role='menu'],[role='menuitem'],input")) return;
+    void navigate({ to: "/admin/users/$id", params: { id: userId } });
+  }
 
   function ActionsMenu({ row }: { row: AdminUserRow }) {
     const actions: (SubjectAction | "note")[] = row.restriction
@@ -124,13 +137,19 @@ function AdminUsersPage() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-11" aria-label={t("common.actions")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-11"
+            aria-label={t("common.actions")}
+            onClick={(event) => event.stopPropagation()}
+          >
             <MoreHorizontal className="size-4" aria-hidden />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link to={`/admin/users/${row.user_id}`}>
+            <Link to="/admin/users/$id" params={{ id: row.user_id }}>
               <FolderOpen className="size-4" aria-hidden />
               {t("admin.detail.userFile")}
             </Link>
@@ -195,17 +214,34 @@ function AdminUsersPage() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.user_id} className="border-b border-border/60 last:border-0">
+                  <tr
+                    key={row.user_id}
+                    className="cursor-pointer border-b border-border/60 transition-colors last:border-0 hover:bg-muted/50"
+                    onClick={(event) => openRow(event, row.user_id)}
+                  >
                     <td className="px-3 py-2">
-                      <Link
-                        to={`/admin/users/${row.user_id}`}
-                        className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
+                      <AdminUserLink
+                        id={row.user_id}
+                        name={row.display_name}
+                        fallback={t("admin.users.noName")}
+                        truncate
+                      />
+                      <AdminUserLink
+                        id={row.user_id}
+                        className="block truncate text-xs font-normal text-muted-foreground"
                       >
-                        {row.display_name || t("admin.users.noName")}
-                      </Link>
-                      <span className="block truncate text-xs text-muted-foreground">{row.email}</span>
+                        <span dir="ltr">{row.email}</span>
+                      </AdminUserLink>
                     </td>
-                    <td className="px-3 py-2 tabular-nums">{row.phone ?? "—"}</td>
+                    <td className="px-3 py-2 tabular-nums">
+                      {row.phone ? (
+                        <AdminUserLink id={row.user_id} className="font-normal">
+                          <span dir="ltr">{row.phone}</span>
+                        </AdminUserLink>
+                      ) : (
+                        "—"
+                      )}
+                    </td>
                     <td className="px-3 py-2 tabular-nums">{formatDate(row.created_at)}</td>
                     <td className="px-3 py-2 tabular-nums">
                       {row.last_seen_at ? formatDate(row.last_seen_at) : "—"}
@@ -229,14 +265,30 @@ function AdminUsersPage() {
             {rows.map((row) => (
               <div key={row.user_id} className="rounded-xl border border-border bg-card p-3">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <Link
-                      to={`/admin/users/${row.user_id}`}
-                      className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
+                  <div className="min-w-0 flex-1">
+                    <AdminUserLink
+                      id={row.user_id}
+                      name={row.display_name}
+                      fallback={t("admin.users.noName")}
+                      className="flex min-h-11 items-center text-sm font-semibold"
+                      truncate
+                    />
+                    <AdminUserLink
+                      id={row.user_id}
+                      className="flex min-h-11 items-center truncate text-xs font-normal text-muted-foreground"
                     >
-                      {row.display_name || t("admin.users.noName")}
-                    </Link>
-                    <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+                      <span dir="ltr" className="truncate">
+                        {row.email}
+                      </span>
+                    </AdminUserLink>
+                    {row.phone ? (
+                      <AdminUserLink
+                        id={row.user_id}
+                        className="flex min-h-11 items-center text-xs font-normal text-muted-foreground"
+                      >
+                        <span dir="ltr">{row.phone}</span>
+                      </AdminUserLink>
+                    ) : null}
                   </div>
                   <ActionsMenu row={row} />
                 </div>
