@@ -15,11 +15,14 @@ export interface ListingDraft {
   summary: string;
   description: string;
   price: string;
+  priceKind: "fixed" | "from" | "on_request";
   priceUnit: string;
   priceOnRequest: boolean;
   quantity: string;
   unit: string;
   itemCondition: string;
+  keywords: string;
+  durationDays: number;
   cityId: string;
   region: string;
   district: string;
@@ -49,12 +52,15 @@ export function loadDraft(scope: string): Partial<ListingDraft> | null {
   }
 }
 
-export function saveDraft(scope: string, draft: Partial<ListingDraft>): void {
-  if (typeof window === "undefined") return;
+/** Returns false when the browser refused to store the draft. */
+export function saveDraft(scope: string, draft: Partial<ListingDraft>): boolean {
+  if (typeof window === "undefined") return false;
   try {
     window.sessionStorage.setItem(draftKey(scope), JSON.stringify(draft));
+    return true;
   } catch {
     /* storage full or unavailable: the form still works without a draft */
+    return false;
   }
 }
 
