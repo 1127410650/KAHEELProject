@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 
 const searchSchema = z.object({ tab: z.string().optional() });
 
-export const Route = createFileRoute("/admin/businesses/$id")({
+export const Route = createFileRoute("/admin/businesses_/$id")({
   ssr: false,
   validateSearch: searchSchema,
   head: () => ({

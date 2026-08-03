@@ -26,7 +26,7 @@ import {
 
 const searchSchema = z.object({ tab: z.string().optional() });
 
-export const Route = createFileRoute("/admin/users/$id")({
+export const Route = createFileRoute("/admin/users_/$id")({
   ssr: false,
   validateSearch: searchSchema,
   head: () => ({
