@@ -642,7 +642,10 @@ function CaseDrawer({
 
       <div className="mt-3 grid gap-2 rounded-xl border border-border bg-card p-3 text-xs sm:grid-cols-2">
         <Row label={t("market.lr.col.listing")} value={report.listing_ref ?? "—"} ltr />
-        <Row label={t("market.lr.col.owner")} value={report.owner_label ?? "—"} />
+        <div className="flex items-baseline justify-between gap-2 py-1">
+          <span className="text-[11px] text-muted-foreground">{t("market.lr.col.owner")}</span>
+          <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-xs" />
+        </div>
         <Row label={t("market.lr.col.business")} value={report.owner_business ?? "—"} />
         <Row
           label={t("market.lr.col.reason")}
