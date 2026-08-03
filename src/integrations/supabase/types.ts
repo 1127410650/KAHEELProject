@@ -2051,10 +2051,12 @@ export type Database = {
           id: string
           item_condition: string | null
           latitude: number | null
+          latitude_public: number | null
           location_accuracy: number | null
           location_source: string | null
           location_visibility: string
           longitude: number | null
+          longitude_public: number | null
           owner_user_id: string
           price: number | null
           price_on_request: boolean
@@ -2094,10 +2096,12 @@ export type Database = {
           id?: string
           item_condition?: string | null
           latitude?: number | null
+          latitude_public?: number | null
           location_accuracy?: number | null
           location_source?: string | null
           location_visibility?: string
           longitude?: number | null
+          longitude_public?: number | null
           owner_user_id?: string
           price?: number | null
           price_on_request?: boolean
@@ -2137,10 +2141,12 @@ export type Database = {
           id?: string
           item_condition?: string | null
           latitude?: number | null
+          latitude_public?: number | null
           location_accuracy?: number | null
           location_source?: string | null
           location_visibility?: string
           longitude?: number | null
+          longitude_public?: number | null
           owner_user_id?: string
           price?: number | null
           price_on_request?: boolean
@@ -6700,6 +6706,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_expire_re_licenses: { Args: never; Returns: number }
       mkt_has_restriction: {
         Args: {
           _restrictions: string[]
@@ -6711,6 +6718,7 @@ export type Database = {
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
       mkt_is_super_admin: { Args: never; Returns: boolean }
+      mkt_is_system_action: { Args: never; Returns: boolean }
       mkt_is_verified_business: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -6719,6 +6727,16 @@ export type Database = {
       mkt_lift_restriction: {
         Args: { _reason: string; _restriction_id: string }
         Returns: undefined
+      }
+      mkt_listing_exact_location: {
+        Args: { p_listing_id: string }
+        Returns: {
+          address_text: string
+          latitude: number
+          location_accuracy: number
+          location_source: string
+          longitude: number
+        }[]
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
       mkt_my_accounts: {
@@ -6765,6 +6783,10 @@ export type Database = {
         Returns: undefined
       }
       mkt_public_phone: { Args: { _user_id: string }; Returns: string }
+      mkt_re_license_active: {
+        Args: { p_listing_id: string }
+        Returns: boolean
+      }
       mkt_report_apply_status: {
         Args: { _reason: string; _report_id: string; _status: string }
         Returns: undefined

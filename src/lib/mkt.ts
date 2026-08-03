@@ -107,12 +107,18 @@ export interface MktListing {
   country_id: string | null;
   city_id: string | null;
   district: string | null;
-  address_text: string | null;
-  latitude: number | null;
-  longitude: number | null;
-  location_accuracy: number | null;
-  location_source: string | null;
+  // Public point only: rounded to ~1 km unless the advertiser published an
+  // exact pin. The exact coordinates and the street address are not readable
+  // by the Data API roles at all — owners fetch them through
+  // `mkt_listing_exact_location`.
+  latitude_public: number | null;
+  longitude_public: number | null;
   location_visibility: string | null;
+  address_text?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  location_accuracy?: number | null;
+  location_source?: string | null;
 
   cover_image_url: string | null;
   status: string;
@@ -176,7 +182,7 @@ export const USER_PROFILE_COLUMNS =
 
 
 export const LISTING_COLUMNS =
-  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, quantity, unit, item_condition, deal_kind, city, region, country_id, city_id, district, address_text, latitude, longitude, location_accuracy, location_source, location_visibility, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
+  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, quantity, unit, item_condition, deal_kind, city, region, country_id, city_id, district, latitude_public, longitude_public, location_visibility, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
 
 
 

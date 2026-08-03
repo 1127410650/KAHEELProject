@@ -2302,9 +2302,9 @@
       "advertiserRole": "صفة المعلن",
       "role": {
         "owner": "المالك",
-        "broker": "وسيط عقاري",
-        "company": "منشأة عقارية مرخصة",
-        "agent": "وكيل عن المالك"
+        "broker_individual": "وسيط عقاري (فرد)",
+        "brokerage_business": "منشأة وساطة عقارية مرخصة",
+        "authorized_agent": "وكيل عن المالك"
       },
       "number": "رقم ترخيص الإعلان",
       "expiry": "تاريخ انتهاء الترخيص",
@@ -2331,10 +2331,11 @@
       "statusNote": "حالة التحقق تحدّدها المنصة بعد المراجعة.",
       "status": {
         "not_entered": "لم تُدخل بيانات الترخيص",
-        "pending": "قيد المراجعة",
+        "pending_verification": "قيد المراجعة",
         "valid": "تم التحقق",
         "invalid": "بيانات غير صحيحة",
         "expired": "منتهي",
+        "needs_completion": "بيانات ناقصة",
         "exempt": "مستثنى نظاميًا"
       },
       "block": {

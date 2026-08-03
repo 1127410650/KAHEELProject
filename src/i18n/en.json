@@ -2302,9 +2302,9 @@
       "advertiserRole": "Advertiser capacity",
       "role": {
         "owner": "Owner",
-        "broker": "Licensed broker",
-        "company": "Licensed real estate company",
-        "agent": "Owner's agent"
+        "broker_individual": "Licensed broker (individual)",
+        "brokerage_business": "Licensed brokerage business",
+        "authorized_agent": "Authorised agent for the owner"
       },
       "number": "Advertising licence number",
       "expiry": "Licence expiry date",
@@ -2330,11 +2330,12 @@
       "exemptionPendingNote": "The request is under review; the ad stays a draft until the exemption is approved.",
       "statusNote": "The verification status is decided by the platform after review.",
       "status": {
-        "not_entered": "No licence data entered",
-        "pending": "Under review",
+        "not_entered": "Licence details not entered",
+        "pending_verification": "Under review",
         "valid": "Verified",
-        "invalid": "Invalid data",
+        "invalid": "Invalid details",
         "expired": "Expired",
+        "needs_completion": "Incomplete details",
         "exempt": "Legally exempt"
       },
       "block": {
