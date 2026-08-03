@@ -32,6 +32,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ActivityPicker, type ActivityValue } from "@/components/marketplace/ActivityPicker";
+import { setEntityActivities } from "@/lib/mkt-activities";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -90,8 +92,10 @@ export function BusinessQuickCreate({
   const [tradeName, setTradeName] = useState("");
   const [tradeNameEn, setTradeNameEn] = useState("");
   const [entityType, setEntityType] = useState<string>("establishment");
-  const [mainActivity, setMainActivity] = useState("");
-  const [subActivities, setSubActivities] = useState("");
+  // The activity always comes from the reference taxonomy: the user picks it,
+  // nothing is matched or approved automatically, and an unlisted activity can
+  // only be sent as a suggestion for staff review.
+  const [activity, setActivity] = useState<ActivityValue>({ main: null, subs: [] });
   const [cityId, setCityId] = useState("");
   const [about, setAbout] = useState("");
   const [website, setWebsite] = useState("");
@@ -117,6 +121,8 @@ export function BusinessQuickCreate({
 
   const iso2 = country.data?.iso2 ?? "SA";
   const city = (cities.data ?? []).find((c) => c.id === cityId);
+  const mainActivityText = activity.main?.name_ar.trim() ?? "";
+  const subActivityNames = activity.subs.map((s) => s.name_ar.trim()).filter(Boolean);
 
   function touch() {
     onDirtyChange?.(true);
@@ -135,7 +141,7 @@ export function BusinessQuickCreate({
 
   function businessError(): string | null {
     if (tradeName.trim().length < 2) return t("market.biz.nameRequired");
-    if (mainActivity.trim().length < 2) return t("market.biz.activityRequired");
+    if (!activity.main) return t("market.biz.activityRequired");
     if (!cityId) return t("market.geo.pickCity");
     return null;
   }
@@ -206,7 +212,7 @@ export function BusinessQuickCreate({
         ...(city?.name_ar ? { _city: city.name_ar } : {}),
         _phone: businessPhone,
         _email: email.trim(),
-        _activity: mainActivity.trim(),
+        _activity: mainActivityText,
         _contact_info: {},
         _confirm_duplicate: false,
       });
@@ -229,8 +235,8 @@ export function BusinessQuickCreate({
         country_id: country.data?.id ?? null,
         city_id: cityId,
         city: city?.name_ar ?? null,
-        main_activity: mainActivity.trim(),
-        sub_activities: splitList(subActivities),
+        main_activity: mainActivityText,
+        sub_activities: subActivityNames,
         about: about.trim() || null,
         public_phone: businessPhone,
         public_email: email.trim(),
@@ -246,8 +252,8 @@ export function BusinessQuickCreate({
         cr_number: normalizeOfficialNumber(crNumber) || null,
         unified_number: normalizeOfficialNumber(unifiedNumber) || null,
         cr_expiry_date: crExpiry || null,
-        main_activity: mainActivity.trim(),
-        sub_activities: splitList(subActivities),
+        main_activity: mainActivityText,
+        sub_activities: subActivityNames,
         contact_phone: businessPhone,
         contact_email: email.trim(),
       });
@@ -319,6 +325,20 @@ export function BusinessQuickCreate({
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-businesses"] });
       onDirtyChange?.(false);
       toast.success(t("market.biz.created"));
+      // Reference activities are linked through the guarded RPC (ownership,
+      // one main activity, same sector). A failure here never blocks creation.
+      if (activity.main) {
+        try {
+          await setEntityActivities({
+            tenantId: tid,
+            mainActivityId: activity.main.id,
+            subActivityIds: activity.subs.map((s) => s.id),
+          });
+        } catch {
+          // The business exists; activities can be set again from its profile.
+        }
+      }
+
       onCreated(tid);
     } catch {
       toast.error(t("market.actions.failed"));
@@ -391,27 +411,17 @@ export function BusinessQuickCreate({
                 ))}
               </select>
             </Field>
-            <Field id="qc_activity" label={t("market.biz.mainActivity")}>
-              <Input
-                id="qc_activity"
-                value={mainActivity}
-                maxLength={120}
-                onChange={(e) => set(setMainActivity)(e.target.value)}
-              />
-            </Field>
-            <Field
-              id="qc_subact"
-              label={t("market.biz.subActivities")}
-              hint={t("market.biz.listHint")}
-            >
-              <Input
-                id="qc_subact"
-                value={subActivities}
-                maxLength={240}
-                onChange={(e) => set(setSubActivities)(e.target.value)}
-              />
-            </Field>
           </div>
+          <div className="min-w-0">
+            <ActivityPicker
+              value={activity}
+              onChange={(next) => {
+                touch();
+                setActivity(next);
+              }}
+            />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
           <Field id="qc_site" label={t("market.biz.website")} hint={t("market.biz.optional")}>
             <Input
               id="qc_site"
@@ -649,7 +659,8 @@ export function BusinessQuickCreate({
             <Row label={t("market.biz.nameAr")} value={tradeName.trim()} />
             {tradeNameEn.trim() ? <Row label={t("market.biz.nameEn")} value={tradeNameEn.trim()} /> : null}
             <Row label={t("market.biz.entityType")} value={t(`market.biz.entity.${entityType}`)} />
-            <Row label={t("market.biz.mainActivity")} value={mainActivity.trim()} />
+            <Row label={t("market.biz.mainActivity")} value={mainActivityText || "—"} />
+            <Row label={t("market.biz.subActivities")} value={subActivityNames.join(" · ") || "—"} />
             <Row label={t("market.geo.city")} value={city ? geoName(city, locale) : "—"} />
           </ReviewGroup>
 
