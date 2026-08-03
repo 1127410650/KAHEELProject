@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
+import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { routeRuleFor } from "@/lib/routes-map";
 
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ import { AccountMenu } from "@/components/marketplace/AccountMenu";
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
+  const { identity: adminIdentity } = usePlatformIdentity();
 
   const addListingHref = session
     ? undefined
