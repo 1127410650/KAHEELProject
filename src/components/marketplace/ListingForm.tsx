@@ -331,9 +331,12 @@ export function ListingForm({ listing }: Props) {
       if (blocks.length > 0) {
         toast.error(t(`market.license.block.${blocks[0]}`));
         setStep(1);
+        setLicenseOpen(true);
+        setLicenseFocus(LICENSE_BLOCK_FIELD[blocks[0]!]);
         return;
       }
     }
+
 
 
     setBusy(true);
