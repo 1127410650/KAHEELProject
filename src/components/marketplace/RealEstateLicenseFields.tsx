@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { ExternalLink, FileUp, Loader2, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { CheckCircle2, ChevronDown, ExternalLink, FileUp, Loader2, ScrollText, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,7 @@ import {
   ADVERTISER_ROLES,
   daysUntil,
   licenseDate,
+  licenseSummary,
   needsPracticeLicense,
   REGA_AD_LICENSE_INQUIRY,
   REGA_BROKER_LICENSE_INQUIRY,
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
 
 export interface LicenseFormValue {
   advertiserRole: AdvertiserRole;
