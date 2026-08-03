@@ -674,3 +674,30 @@ overflow = 0 في الأحجام الثلاثة (بما في ذلك أثناء �
 **المطلوب للإغلاق:** تسجيل دخول بحساب QA معزول من معاينة Lovable؛ تُحقن الجلسة في الجولة التالية ويُنفَّذ الاختبار المصادق عليه كاملًا قبل اعتماد الوحدة.
 
 **الملفات المتغيرة:** `src/components/marketplace/BusinessQuickCreate.tsx`, `src/routes/business.new.tsx`, `src/routes/choose-account.tsx`, `src/lib/mkt-business.ts`, `src/i18n/ar.json`, `src/i18n/en.json`. لا تغيير في قاعدة البيانات ولا في السياسات.
+
+### إصلاح خلل تبديل الحساب في `/choose-account` (2026-08-03 — مُغلق باختبار مصادق عليه)
+
+**السبب الجذري (مفحوص لا مفترض):**
+1. حلقة تحويل في `useRequireAccount`: كان `href` ضمن deps الخاصة بالـ effect الذي ينفّذ `navigate({ to: "/choose-account", search: { next: href }, replace: true })`. كل تحويل يغيّر `href` فيُعاد التحويل بلا نهاية → خطأ وقت التشغيل `Maximum update depth exceeded` (المكدّس يظهر `replace` داخل الراوتر)، فتبقى الصفحة عالقة ولا يكتمل التنقل.
+2. `select()` كانت تنفّذ `await queryClient.invalidateQueries()` على كل الاستعلامات قبل الرجوع، فأي استعلام بطيء/متوقف يُبقي `pending` عالقًا ويؤجّل الخروج من الصفحة.
+3. `next` قد يشير إلى `/choose-account` نفسه فيحتفظ بالمستخدم داخل الصفحة.
+
+**غير ذلك تم استبعاده بالفحص:** البطاقة `<button>` حقيقية مربوطة بـ `onClick` ومساحة اللمس 70px×366 على 390px (74px على 1366px)، ولا Overlay ولا `pointer-events: none`، وRPC ترجع 200.
+
+**ما نُفّذ:** `useRequireAccount` يحوّل مرة واحدة لكل mount (ref) ولا يحوّل إذا كان المسار `/choose-account` أصلًا؛ `select()` تتحقق خادميًا (`mkt_account_context`) ثم `set_active_tenant` وتفشل صراحةً عند خطأ الأخيرة، ثم تُسقط كاش الحساب السابق وتُعيد التحقق دون `await` مانع؛ عند الفشل تبقى الصفحة وتُعاد تفعيل البطاقة مع رسالة «تعذر تبديل الحساب، حاول مرة أخرى» (`market.entry.switchFailed` عربي/إنجليزي) دون تسجيل خروج ودون مساس اللغة/المظهر؛ الحساب الحالي يخرج فورًا بلا RPC جديد؛ `target` لا يعود إلى `/choose-account`؛ التنقل `replace` مع بديل `window.location.replace` عند فشل الراوتر. لم يُعَد تصميم الصفحة ولم تتغير الأحجام.
+
+**اختبار فعلي بجلسة محقونة (390×852 و1366×768):**
+- البطاقات الظاهرة: «شهم» (شخصي)، «الكيان الحالي — تحقّق»، «شهم فرع».
+- منشأة → شخصي: مغادرة `/choose-account` إلى `/`، الهيدر يعرض «شهم»، وبعد تحديث الصفحة يبقى `tahqaq.mkt.account = individual`.
+- شخصي → منشأة: مغادرة الصفحة إلى `/`، وبعد التحديث يبقى `business:f41c9729-…` نشطًا.
+- طلبات الشبكة: `mkt_account_context` = 200 ثم `set_active_tenant` = 200، طلب واحد لكل تبديل، ولا حلقة تحويل.
+- الضغط المتكرر السريع: النقرة الثانية محجوبة (البطاقة معطّلة أثناء التنفيذ) → لا تبديل مزدوج ولا سجل جديد.
+- الضغط على الحساب الحالي: خروج فوري إلى `/` بلا RPC إضافي وبلا Loading.
+- زر الرجوع بعد النجاح: يبقى على `/` ولا يعيد إلى صفحة الاختيار (`replace`).
+- الجلسة باقية في كل الحالات (لا تسجيل خروج).
+- overflow أفقي = 0 على `/choose-account` و`/` و`/search` و`/ads/$slug` عند 390 و1366، ولا Bottom Navigation داخل تدفق اختيار الحساب، ولا أخطاء Console (Error = 0، Critical = 0).
+- `bunx tsgo --noEmit` نجح، `bunx vite build` نجح.
+
+**اللقطات:** `/tmp/browser/choose/shots/` — `before_390.png`, `after_390.png`, `before_1366.png`, `after_1366.png`, `picker_390.png`, `picker_1366.png`, `1_picker_390.png`, `2_after_switch.png`, `3_after_reload.png`.
+
+**الملفات المتغيرة:** `src/lib/mkt-account.tsx`, `src/routes/choose-account.tsx`, `src/i18n/ar.json`, `src/i18n/en.json`. لا تغيير في قاعدة البيانات ولا في السياسات. لم يُنشر.
