@@ -17,6 +17,8 @@ import QRCode from "qrcode";
 import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { canonicalCurrentUrl, shareTargets } from "@/lib/share-links";
+import { trackListingEvent, type ListingTrackKind } from "@/lib/mkt-listing-ops";
+
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
@@ -38,6 +40,8 @@ interface ShareSheetProps {
   title: string;
   /** Canonical URL to share; defaults to the current page's canonical URL. */
   url?: string | undefined;
+  /** When sharing a listing, its id — aggregate share counters are bumped. */
+  listingId?: string | undefined;
   /** Trigger element (a button); receives the click handler through asChild. */
   children: ReactNode;
 }
@@ -45,7 +49,7 @@ interface ShareSheetProps {
 type Row = { key: string; label: string; icon: ReactNode; onSelect: () => void };
 
 /** One shared share menu: bottom sheet on mobile, popover on desktop. */
-export function ShareSheet({ title, url, children }: ShareSheetProps) {
+export function ShareSheet({ title, url, listingId, children }: ShareSheetProps) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -59,11 +63,18 @@ export function ShareSheet({ title, url, children }: ShareSheetProps) {
     setCanSystemShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
   }, []);
 
+  /** Aggregate counters only; no per-visitor data is stored. */
+  function track(kind: ListingTrackKind) {
+    if (listingId) trackListingEvent(listingId, kind);
+  }
+
   const link = url ?? canonicalCurrentUrl();
+
   const targets = shareTargets(title, link);
 
   function openExternal(href: string) {
     setOpen(false);
+    track("share");
     window.open(href, "_blank", "noopener,noreferrer");
   }
 
@@ -72,6 +83,7 @@ export function ShareSheet({ title, url, children }: ShareSheetProps) {
       await navigator.clipboard.writeText(link);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+      track("link_copy");
       toast.success(t("market.ad.linkCopied"));
       setOpen(false);
     } catch {
@@ -83,6 +95,7 @@ export function ShareSheet({ title, url, children }: ShareSheetProps) {
     setOpen(false);
     try {
       await navigator.share({ title, text: title, url: link });
+      track("share");
     } catch {
       /* dismissed by the user */
     }
@@ -94,10 +107,12 @@ export function ShareSheet({ title, url, children }: ShareSheetProps) {
       setQrData(data);
       setOpen(false);
       setQrOpen(true);
+      track("qr_open");
     } catch {
       toast.error(t("market.actions.failed"));
     }
   }
+
 
   const rows: Row[] = [
     {

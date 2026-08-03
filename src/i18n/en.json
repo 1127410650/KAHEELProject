@@ -1537,7 +1537,10 @@
         "archived": "Archived",
         "deleted": "Deleted",
         "paused": "Paused",
-        "pending_review": "Under review"
+        "pending_review": "Under review",
+        "needs_changes": "Needs changes",
+        "featured": "Featured",
+        "hidden": "Hidden"
       },
       "quoteStatus": {
         "new": "New",
@@ -2531,7 +2534,24 @@
       "duration": "Publish duration",
       "durationDays": "{n} days",
       "durationHint": "The ad stays live for the selected period, then becomes Expired and can be renewed.",
-      "licenseRequired": "A real estate ad needs its advertising licence details before review. Open Edit to complete them."
+      "licenseRequired": "A real estate ad needs its advertising licence details before review. Open Edit to complete them.",
+      "sort_recent": "Newest",
+      "sort_oldest": "Oldest",
+      "sort_views": "Most viewed",
+      "sort_priceHigh": "Highest price",
+      "sort_priceLow": "Lowest price",
+      "sort_expiring": "Expiring soon",
+      "sort_favorites": "Most favourited",
+      "totalFavorites": "Favourites",
+      "totalQuotes": "Quote requests",
+      "totalLinkCopies": "Link copies",
+      "totalQr": "QR opens",
+      "totalRatings": "Ratings",
+      "totalReports": "Reports",
+      "endsIn": "Ends in {n} days",
+      "endsInHours": "Ends in {n} hours",
+      "endedAgo": "Ended {n} days ago",
+      "endedAgoHours": "Ended {n} hours ago"
     }
   },
   "routeError": {

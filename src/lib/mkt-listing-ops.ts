@@ -18,7 +18,7 @@ export function isListingDuration(value: unknown): value is ListingDuration {
 
 /** Columns the owner dashboard needs on top of the public listing columns. */
 export const MY_LISTING_COLUMNS =
-  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, price, price_on_request, price_unit, currency, city, city_id, cover_image_url, status, rejection_reason, published_at, created_at, views_count, shares_count, contact_requests_count, duration_days, expires_at, paused_at, last_renewed_at";
+  "id, slug, ref_no, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, keywords, price, price_on_request, price_unit, currency, city, city_id, cover_image_url, status, rejection_reason, published_at, created_at, views_count, shares_count, contact_requests_count, favorites_count, quote_requests_count, reports_count, link_copies_count, qr_opens_count, ratings_count, ratings_avg, is_featured, featured_until, featured_package, display_priority, duration_days, expires_at, paused_at, last_renewed_at";
 
 export type ListingOpError =
   | "forbidden"
@@ -72,10 +72,34 @@ export function trackListingShare(id: string): void {
   );
 }
 
+/** Aggregate engagement events (link copies, QR opens, shares). */
+export type ListingTrackKind = "share" | "link_copy" | "qr_open";
+
+export function trackListingEvent(id: string, kind: ListingTrackKind): void {
+  void supabase.rpc("mkt_listing_track", { _id: id, _kind: kind }).then(
+    () => undefined,
+    () => undefined,
+  );
+}
+
+/** All lifecycle statuses an ad can be in, in dashboard display order. */
+export const MY_LISTING_STATUSES = [
+  "draft",
+  "pending",
+  "needs_changes",
+  "published",
+  "featured",
+  "paused",
+  "expired",
+  "rejected",
+  "suspended",
+  "archived",
+] as const;
+
 /** Which operations a status allows — mirrors the database guards. */
 export function allowedOps(status: string) {
   return {
-    submit: ["draft", "rejected", "expired", "archived"].includes(status),
+    submit: ["draft", "needs_changes", "rejected", "expired", "archived"].includes(status),
     pause: status === "published",
     resume: status === "paused",
     renew: ["published", "paused", "expired"].includes(status),
@@ -87,11 +111,28 @@ export function allowedOps(status: string) {
   };
 }
 
-/** Remaining time in whole days/hours, or null when the ad has no expiry. */
+
+/**
+ * Expiry label: "ends in X" while the ad is live, "ended X ago" afterwards, so
+ * the dashboard always states the duration explicitly.
+ */
 export function remainingLabel(
   expiresAt: string | null | undefined,
-  fmt: { days: (n: number) => string; hours: (n: number) => string; ended: string },
+  fmt: {
+    days: (n: number) => string;
+    hours: (n: number) => string;
+    ended: string;
+    endedDays?: ((n: number) => string) | undefined;
+    endedHours?: ((n: number) => string) | undefined;
+  },
 ): string | null {
+  if (!expiresAt) return null;
+  const past = new Date(expiresAt).getTime() - Date.now();
+  if (!Number.isNaN(past) && past <= 0 && (fmt.endedDays || fmt.endedHours)) {
+    const hours = Math.floor(-past / 3_600_000);
+    if (hours >= 24 && fmt.endedDays) return fmt.endedDays(Math.floor(hours / 24));
+    if (fmt.endedHours) return fmt.endedHours(Math.max(hours, 1));
+  }
   if (!expiresAt) return null;
   const ms = new Date(expiresAt).getTime() - Date.now();
   if (Number.isNaN(ms)) return null;

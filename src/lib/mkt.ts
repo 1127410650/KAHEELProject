@@ -3,7 +3,17 @@ import { supabase } from "@/integrations/supabase/client";
 export const MKT_BUCKET = "mkt-media";
 
 export type ListingStatus =
-  "draft" | "pending" | "published" | "rejected" | "suspended" | "expired" | "archived" | "deleted";
+  | "draft"
+  | "pending"
+  | "needs_changes"
+  | "published"
+  | "rejected"
+  | "suspended"
+  | "paused"
+  | "hidden"
+  | "expired"
+  | "archived"
+  | "deleted";
 
 export type QuoteStatus =
   | "new"
@@ -19,13 +29,17 @@ export type QuoteStatus =
 export const LISTING_STATUSES: ListingStatus[] = [
   "draft",
   "pending",
+  "needs_changes",
   "published",
   "rejected",
   "suspended",
+  "paused",
+  "hidden",
   "expired",
   "archived",
   "deleted",
 ];
+
 
 export const QUOTE_STATUSES: QuoteStatus[] = [
   "new",
@@ -129,13 +143,29 @@ export interface MktListing {
 
   // Lifecycle fields (my-ads dashboard). Optional so the public list queries,
   // which do not select them, stay assignable to this type.
+  ref_no?: number | null;
+  keywords?: string[] | null;
   duration_days?: number | null;
   expires_at?: string | null;
   shares_count?: number | null;
   contact_requests_count?: number | null;
+  favorites_count?: number | null;
+  quote_requests_count?: number | null;
+  reports_count?: number | null;
+  link_copies_count?: number | null;
+  qr_opens_count?: number | null;
+  ratings_count?: number | null;
+  ratings_avg?: number | null;
   paused_at?: string | null;
   last_renewed_at?: string | null;
+
+  // Paid-placement fields: stored and displayed, not yet sellable.
+  is_featured?: boolean | null;
+  featured_until?: string | null;
+  featured_package?: string | null;
+  display_priority?: number | null;
 }
+
 
 export interface MktBusiness {
   tenant_id: string;
