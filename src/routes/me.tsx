@@ -27,7 +27,9 @@ export const Route = createFileRoute("/me")({
 
     // The destination is decided first and thrown once, so a redirect can never be
     // swallowed by the error handling around the role lookup.
-    let target = "/choose-account";
+    // No account chosen yet → the picker, carrying the personal dashboard as the
+    // destination so the user never lands back on a retired screen.
+    let target = "/choose-account?next=%2Fdashboard%2Fprofile";
     let isAdmin = false;
     try {
       const identity = await loadPlatformIdentity();
