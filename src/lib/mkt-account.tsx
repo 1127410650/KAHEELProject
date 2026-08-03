@@ -75,6 +75,9 @@ export function useMyAccounts() {
     queryKey: ["mkt", "my-accounts", session?.user.id ?? null],
     enabled: !!session,
     staleTime: 30_000,
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
+    refetchOnReconnect: true,
     queryFn: async (): Promise<MktAccount[]> => {
       const { data, error } = await supabase.rpc("mkt_my_accounts");
       if (error) throw error;
@@ -98,6 +101,8 @@ export interface ActiveAccountState {
   loading: boolean;
   /** True when a remembered account is no longer reachable (membership lost). */
   revoked: boolean;
+  /** The account list could not be read (offline/server error) — NOT a sign-out. */
+  unavailable: boolean;
   select: (accountKey: string) => Promise<boolean>;
   clear: () => void;
   can: (permission: string) => boolean;
@@ -154,7 +159,9 @@ export function useActiveAccount(): ActiveAccountState {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, accounts.isLoading, key, list.length]);
 
-  const revoked = !!key && hydrated && !accounts.isLoading && list.length > 0 && !account;
+  const unavailable = accounts.isError;
+  const revoked =
+    !!key && hydrated && !accounts.isLoading && !unavailable && list.length > 0 && !account;
   useEffect(() => {
     if (revoked) remember(null);
   }, [revoked]);
@@ -169,6 +176,7 @@ export function useActiveAccount(): ActiveAccountState {
     account,
     loading: !hydrated || accounts.isLoading,
     revoked,
+    unavailable,
     select,
     clear,
     can,
@@ -195,7 +203,9 @@ export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
   const href = useRouterState({ select: (s) => s.location.href });
 
   useEffect(() => {
-    if (sessionLoading || !session || state.loading || state.account) return;
+    // Never redirect while the session is still being restored, and never because
+    // a network/RPC failure hid the account list: that is retried, not a sign-out.
+    if (sessionLoading || !session || state.loading || state.account || state.unavailable) return;
     if (state.revoked && revokedMessage) toast.error(revokedMessage);
     void navigate({
       to: "/choose-account",
@@ -203,7 +213,7 @@ export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
       replace: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionLoading, session, state.loading, state.account, state.revoked, href]);
+  }, [sessionLoading, session, state.loading, state.account, state.revoked, state.unavailable, href]);
 
   return state;
 }

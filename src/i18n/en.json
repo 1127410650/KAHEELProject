@@ -106,7 +106,8 @@
     "passwordMismatch": "Passwords do not match",
     "passwordShort": "Password must be at least 8 characters",
     "passwordChanged": "Password updated",
-    "passwordWeak": "Password too weak — use at least 10 characters with mixed classes, no common or sequential patterns"
+    "passwordWeak": "Password too weak — use at least 10 characters with mixed classes, no common or sequential patterns",
+    "expired": "Your session has expired. Please sign in again."
   },
   "roles": {
     "accountant": "Accountant / Admin",

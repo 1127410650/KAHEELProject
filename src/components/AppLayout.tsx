@@ -36,6 +36,7 @@ import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { supabase } from "@/integrations/supabase/client";
+import { markManualSignOut } from "@/lib/auth-session";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ForcePasswordChangeDialog } from "@/components/ForcePasswordChangeDialog";
@@ -312,6 +313,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   }, [accountsLoaded, accounts.length, current, isPersonal, pathname, onSelectPage, navigate]);
 
   async function signOut() {
+    markManualSignOut();
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();

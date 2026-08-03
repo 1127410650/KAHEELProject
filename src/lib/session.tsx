@@ -8,7 +8,10 @@ import {
 } from "react";
 import type { Session } from "@supabase/supabase-js";
 
+import { toast } from "sonner";
+
 import { supabase } from "@/integrations/supabase/client";
+import { consumeManualSignOut } from "@/lib/auth-session";
 import { useI18n, type Locale } from "@/i18n";
 import type { Permission } from "@/lib/permissions";
 
@@ -39,8 +42,14 @@ interface SessionContextValue {
   permissions: string[];
   can: (permission: Permission) => boolean;
   loading: boolean;
+  /**
+   * Explicit three-state auth status. `session === null` while `status` is
+   * "loading" is NOT a sign-out: it only means restoration is still running.
+   */
+  status: "loading" | "authenticated" | "unauthenticated";
   refresh: () => Promise<void>;
 }
+
 
 const SessionContext = createContext<SessionContextValue | null>(null);
 
@@ -50,7 +59,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const [permissions, setPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const { setLocale } = useI18n();
+  const { setLocale, t } = useI18n();
 
   async function load(userId: string | undefined) {
     if (!userId) {
@@ -90,10 +99,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, nextSession) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-      setSession(nextSession);
-      void load(nextSession?.user.id);
+      if (event === "SIGNED_OUT") {
+        // Only a real revocation (or a rejected refresh token) reaches here without
+        // the manual flag; say so once instead of failing silently.
+        if (!consumeManualSignOut()) toast.error(t("auth.expired"));
+        setSession(null);
+        void load(undefined);
+        return;
+      }
+      if (event !== "SIGNED_IN" && event !== "USER_UPDATED" && event !== "TOKEN_REFRESHED") return;
+      // A refreshed token keeps the same identity: never drop the session here.
+      if (nextSession) setSession(nextSession);
+      if (event !== "TOKEN_REFRESHED") void load(nextSession?.user.id);
     });
+
 
     // Permission/role changes made by an admin apply without signing out again.
     const onFocus = () => {
@@ -127,6 +146,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       // Mirrors the database has_perm(): accountants hold every permission.
       can: (permission: Permission) => isAccountant || permissions.includes(permission),
       loading,
+      status: loading ? "loading" : session ? "authenticated" : "unauthenticated",
       refresh: async () => {
         const { data } = await supabase.auth.getSession();
         setSession(data.session);
