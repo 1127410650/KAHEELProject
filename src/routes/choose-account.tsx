@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { isSafeInternalPath, safeInternalPath } from "@/lib/safe-next";
 import { Button } from "@/components/ui/button";
 
 interface ChooseSearch {
@@ -28,12 +29,7 @@ export const Route = createFileRoute("/choose-account")({
   validateSearch: (search: Record<string, unknown>): ChooseSearch => {
     const raw = search["next"];
     // Only internal, non protocol-relative paths survive: no open redirect.
-    return typeof raw === "string" &&
-      raw.startsWith("/") &&
-      !raw.startsWith("//") &&
-      !raw.startsWith("/\\")
-      ? { next: raw }
-      : {};
+    return typeof raw === "string" && isSafeInternalPath(raw) ? { next: raw } : {};
   },
   head: () => ({
     meta: [
@@ -133,7 +129,10 @@ function AccountCard({
 function ChooseAccountPage() {
   const { t } = useI18n();
   const { session, loading: sessionLoading } = useSession();
-  const { next } = Route.useSearch();
+  const { next: rawNext } = Route.useSearch();
+  // Re-sanitised here as well: never navigate to a value straight from the URL.
+  const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
+  const target = safeInternalPath(next);
   const navigate = useNavigate();
   const { accounts, account: activeAccount, loading, select } = useActiveAccount();
   const [pending, setPending] = useState<string | null>(null);
@@ -150,7 +149,7 @@ function ChooseAccountPage() {
   async function enter(account: MktAccount) {
     if (pending) return; // rapid double clicks pick one account only
     if (activeAccount?.account_key === account.account_key) {
-      void navigate({ to: next ?? "/", replace: true });
+      void navigate({ href: target, replace: true });
       return;
     }
     setPending(account.account_key);
@@ -160,7 +159,7 @@ function ChooseAccountPage() {
       toast.error(t("market.entry.revoked"));
       return;
     }
-    void navigate({ to: next ?? "/", replace: true });
+    void navigate({ href: target, replace: true });
   }
 
   async function signOut() {

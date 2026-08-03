@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { BusinessQuickCreate } from "@/components/marketplace/BusinessQuickCreate";
+import { isSafeInternalPath } from "@/lib/safe-next";
 
 interface NewBizSearch {
   next?: string | undefined;
@@ -21,12 +22,7 @@ export const Route = createFileRoute("/business/new")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): NewBizSearch => {
     const raw = search["next"];
-    return typeof raw === "string" &&
-      raw.startsWith("/") &&
-      !raw.startsWith("//") &&
-      !raw.startsWith("/\\")
-      ? { next: raw }
-      : {};
+    return typeof raw === "string" && isSafeInternalPath(raw) ? { next: raw } : {};
   },
   head: () => ({
     meta: [
@@ -49,7 +45,8 @@ export const Route = createFileRoute("/business/new")({
 function NewBusinessPage() {
   const { t } = useI18n();
   const { session, loading } = useSession();
-  const { next } = Route.useSearch();
+  const { next: rawNext } = Route.useSearch();
+  const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
   const navigate = useNavigate();
 
   useEffect(() => {
