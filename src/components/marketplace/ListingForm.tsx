@@ -58,7 +58,7 @@ interface Props {
   listing?: MktListing | undefined;
 }
 
-const selectClass = "h-[44px] w-full rounded-md border border-input bg-background px-2 text-sm sm:h-9";
+const selectClass = "h-11 w-full rounded-md border border-input bg-background px-2 text-sm sm:h-9";
 const STEPS = ["basics", "media", "reviewPublish"] as const;
 type SpecValue = string | number | boolean;
 type PriceKind = "fixed" | "from" | "on_request";
@@ -565,7 +565,7 @@ export function ListingForm({ listing }: Props) {
     };
     if (field.kind === "bool") {
       return (
-        <label key={field.key} className="flex min-h-[44px] items-center gap-2 text-sm text-foreground">
+        <label key={field.key} className="flex min-h-11 items-center gap-2 text-sm text-foreground">
           <input
             type="checkbox"
             className="size-4"
@@ -599,7 +599,7 @@ export function ListingForm({ listing }: Props) {
         ) : (
           <Input
             id={`spec_${field.key}`}
-            className="h-[44px] sm:h-9"
+            className="h-11 sm:h-9"
             {...(field.kind === "number" ? { inputMode: "decimal" as const, dir: "ltr" } : {})}
             value={value == null || typeof value === "boolean" ? "" : String(value)}
             onChange={(e) => set(e.target.value)}
@@ -653,7 +653,7 @@ export function ListingForm({ listing }: Props) {
         <p className="text-sm text-foreground">{t("market.form.loadFailed")}</p>
         <Button
           type="button"
-          className="min-h-[44px]"
+          className="min-h-11"
           onClick={() => {
             void categories.refetch();
             void types.refetch();
@@ -740,8 +740,8 @@ export function ListingForm({ listing }: Props) {
                       }}
                       className={
                         tp.code === typeCode
-                          ? "min-h-[44px] rounded-full bg-primary px-3 text-sm font-medium text-primary-foreground"
-                          : "min-h-[44px] rounded-full border border-border px-3 text-sm text-foreground"
+                          ? "min-h-11 rounded-full bg-primary px-3 text-sm font-medium text-primary-foreground"
+                          : "min-h-11 rounded-full border border-border px-3 text-sm text-foreground"
                       }
                     >
                       {label(tp)}
@@ -757,7 +757,7 @@ export function ListingForm({ listing }: Props) {
             <Label htmlFor="title">{t("market.dash.listingTitle")}</Label>
             <Input
               id="title"
-              className="h-[44px] sm:h-9"
+              className="h-11 sm:h-9"
               value={title}
               minLength={TITLE_MIN}
               maxLength={TITLE_MAX}
@@ -812,7 +812,7 @@ export function ListingForm({ listing }: Props) {
                 <div className="flex items-center gap-2">
                   <Input
                     id="price"
-                    className="h-[44px] sm:h-9"
+                    className="h-11 sm:h-9"
                     dir="ltr"
                     inputMode="decimal"
                     value={price}
@@ -865,7 +865,7 @@ export function ListingForm({ listing }: Props) {
                 <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
                 <Input
                   id="quantity"
-                  className="h-[44px] sm:h-9"
+                  className="h-11 sm:h-9"
                   dir="ltr"
                   inputMode="decimal"
                   value={quantity}
@@ -907,7 +907,7 @@ export function ListingForm({ listing }: Props) {
               type="button"
               onClick={() => setExtraOpen((prev) => !prev)}
               aria-expanded={extraOpen}
-              className="flex min-h-[44px] w-full items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium text-foreground"
+              className="flex min-h-11 w-full items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium text-foreground"
             >
               {t("market.form.moreDetails")}
               <ChevronDown
@@ -923,7 +923,7 @@ export function ListingForm({ listing }: Props) {
                     <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
                     <Input
                       id="price_unit"
-                      className="h-[44px] sm:h-9"
+                      className="h-11 sm:h-9"
                       value={priceUnit}
                       onChange={(e) => touch(setPriceUnit)(e.target.value)}
                     />
@@ -933,7 +933,7 @@ export function ListingForm({ listing }: Props) {
                       <Label htmlFor="unit">{t("market.quote.unit")}</Label>
                       <Input
                         id="unit"
-                        className="h-[44px] sm:h-9"
+                        className="h-11 sm:h-9"
                         value={unit}
                         onChange={(e) => touch(setUnit)(e.target.value)}
                       />
@@ -947,7 +947,7 @@ export function ListingForm({ listing }: Props) {
                   <Label htmlFor="summary">{t("market.form.summaryOverride")}</Label>
                   <Input
                     id="summary"
-                    className="h-[44px] sm:h-9"
+                    className="h-11 sm:h-9"
                     value={summary}
                     maxLength={240}
                     onChange={(e) => touch(setSummary)(e.target.value)}
@@ -960,7 +960,7 @@ export function ListingForm({ listing }: Props) {
                   <Label htmlFor="keywords">{t("market.form.keywords")}</Label>
                   <Input
                     id="keywords"
-                    className="h-[44px] sm:h-9"
+                    className="h-11 sm:h-9"
                     value={keywords}
                     onChange={(e) => touch(setKeywords)(e.target.value)}
                   />
@@ -1005,7 +1005,7 @@ export function ListingForm({ listing }: Props) {
               <Label htmlFor="district">{t("market.form.districtOptional")}</Label>
               <Input
                 id="district"
-                className="h-[44px] sm:h-9"
+                className="h-11 sm:h-9"
                 value={district}
                 maxLength={120}
                 onChange={(e) => touch(setDistrict)(e.target.value)}
@@ -1016,7 +1016,7 @@ export function ListingForm({ listing }: Props) {
           <Button
             type="button"
             variant="outline"
-            className="min-h-[44px]"
+            className="min-h-11"
             onClick={useMyLocation}
             disabled={locating}
           >
@@ -1099,13 +1099,13 @@ export function ListingForm({ listing }: Props) {
       {/* Mobile: one clear primary button per row, above the bottom nav. */}
       <div className="fixed inset-x-0 bottom-16 z-30 flex flex-col gap-2 border-t border-border bg-background px-3 py-2 sm:static sm:bottom-auto sm:z-auto sm:flex-row sm:items-center sm:bg-transparent sm:px-0 sm:pt-3">
         {step < STEPS.length - 1 ? (
-          <Button type="button" className="min-h-[44px] w-full sm:w-auto sm:min-w-32" onClick={next}>
+          <Button type="button" className="min-h-11 w-full sm:w-auto sm:min-w-32" onClick={next}>
             {t("market.form.next")}
           </Button>
         ) : (
           <Button
             type="button"
-            className="min-h-[44px] w-full sm:w-auto sm:min-w-32"
+            className="min-h-11 w-full sm:w-auto sm:min-w-32"
             disabled={busy || !canPublish}
             onClick={() => void submit(true)}
           >
@@ -1116,7 +1116,7 @@ export function ListingForm({ listing }: Props) {
         <Button
           type="button"
           variant="outline"
-          className="min-h-[44px] w-full sm:order-3 sm:ms-auto sm:w-auto"
+          className="min-h-11 w-full sm:order-3 sm:ms-auto sm:w-auto"
           disabled={busy}
           onClick={() => void submit(false)}
         >
@@ -1126,7 +1126,7 @@ export function ListingForm({ listing }: Props) {
           <Button
             type="button"
             variant="ghost"
-            className="min-h-[44px] w-full text-muted-foreground sm:order-1 sm:w-auto"
+            className="min-h-11 w-full text-muted-foreground sm:order-1 sm:w-auto"
             onClick={() => setStep((prev) => prev - 1)}
           >
             {t("market.form.back")}

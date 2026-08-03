@@ -89,7 +89,7 @@ export function ListingImages({ api }: Props) {
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={remaining === 0}
-        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input px-3 py-3 text-sm text-muted-foreground disabled:opacity-60"
+        className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input px-3 py-3 text-sm text-muted-foreground disabled:opacity-60"
       >
         <ImagePlus className="size-4" aria-hidden />
         {t("market.media.add")}
