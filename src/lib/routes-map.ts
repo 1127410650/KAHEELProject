@@ -86,6 +86,10 @@ export const ROUTE_MAP: RouteRule[] = [
 
   // ── ب. Signed in ────────────────────────────────────────────────────────────
   rule("/choose-account", "authenticated", "bare"),
+  // Standalone business creation: signed in, no active account required, and
+  // deliberately outside any shell so the picker never hosts it in a modal.
+  rule("/business/new", "authenticated", "bare"),
+
   rule("/market-setup", "authenticated", "market"),
   rule("/more", "public", "market"),
   rule("/dashboard/profile", "account", "dashboard"),

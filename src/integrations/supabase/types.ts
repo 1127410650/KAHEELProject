@@ -6661,8 +6661,10 @@ export type Database = {
         Args: { _account_key: string }
         Returns: {
           account_key: string
+          activity: string
           avatar_url: string
           can_publish: boolean
+          city: string
           kind: string
           membership_id: string
           name: string
@@ -6747,8 +6749,10 @@ export type Database = {
         Args: never
         Returns: {
           account_key: string
+          activity: string
           avatar_url: string
           can_publish: boolean
+          city: string
           kind: string
           membership_id: string
           name: string

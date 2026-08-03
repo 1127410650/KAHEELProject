@@ -32,6 +32,11 @@ export interface MktAccount {
   verification_status: string | null;
   can_publish: boolean;
   permissions: string[];
+  /** Display-only city label (no ids), used by the account picker. */
+  city?: string | null;
+  /** Short activity label for businesses; null for the personal account. */
+  activity?: string | null;
+
 }
 
 const REMEMBER_KEY = "tahqaq.mkt.account";

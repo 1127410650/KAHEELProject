@@ -44,6 +44,7 @@ import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
+import { Route as BusinessNewRouteImport } from './routes/business.new'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DashboardBusinessRouteImport } from './routes/dashboard/business'
@@ -250,6 +251,11 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
   path: '/ads/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BusinessNewRoute = BusinessNewRouteImport.update({
+  id: '/business/new',
+  path: '/business/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
   id: '/businesses/$slug',
   path: '/businesses/$slug',
@@ -427,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/business': typeof DashboardBusinessRoute
@@ -489,6 +496,7 @@ export interface FileRoutesByTo {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/business': typeof DashboardBusinessRoute
@@ -554,6 +562,7 @@ export interface FileRoutesById {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/business': typeof DashboardBusinessRoute
@@ -619,6 +628,7 @@ export interface FileRouteTypes {
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/business'
@@ -681,6 +691,7 @@ export interface FileRouteTypes {
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/business'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '/admin/listings'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/business'
@@ -788,6 +800,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
   AdsSlugRoute: typeof AdsSlugRoute
+  BusinessNewRoute: typeof BusinessNewRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DashboardBusinessRoute: typeof DashboardBusinessRoute
@@ -1051,6 +1064,13 @@ declare module '@tanstack/react-router' {
       path: '/ads/$slug'
       fullPath: '/ads/$slug'
       preLoaderRoute: typeof AdsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business/new': {
+      id: '/business/new'
+      path: '/business/new'
+      fullPath: '/business/new'
+      preLoaderRoute: typeof BusinessNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/businesses/$slug': {
@@ -1345,6 +1365,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
   AdsSlugRoute: AdsSlugRoute,
+  BusinessNewRoute: BusinessNewRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DashboardBusinessRoute: DashboardBusinessRoute,
