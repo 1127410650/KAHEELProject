@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 
 interface ChooseSearch {
   next?: string | undefined;
+  /** Tenant id of a business just created, highlighted once and never auto-selected. */
+  created?: string | undefined;
 }
 
 /**
@@ -28,8 +30,12 @@ export const Route = createFileRoute("/choose-account")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): ChooseSearch => {
     const raw = search["next"];
+    const created = search["created"];
     // Only internal, non protocol-relative paths survive: no open redirect.
-    return typeof raw === "string" && isSafeInternalPath(raw) ? { next: raw } : {};
+    return {
+      ...(typeof raw === "string" && isSafeInternalPath(raw) ? { next: raw } : {}),
+      ...(typeof created === "string" && /^[0-9a-f-]{36}$/i.test(created) ? { created } : {}),
+    };
   },
   head: () => ({
     meta: [
@@ -75,12 +81,14 @@ function AccountAvatar({ account }: { account: MktAccount }) {
 function AccountCard({
   account,
   current,
+  highlight,
   pending,
   disabled,
   onSelect,
 }: {
   account: MktAccount;
   current: boolean;
+  highlight?: boolean;
   pending: boolean;
   disabled: boolean;
   onSelect: () => void;
@@ -101,7 +109,7 @@ function AccountCard({
       aria-label={t("market.entry.selectAria").replace("{name}", name)}
       aria-current={current ? "true" : undefined}
       onClick={onSelect}
-      className="flex h-full w-full min-w-0 items-start gap-3 rounded-xl border border-border bg-card p-3 text-start transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 sm:p-3.5"
+      className={`flex h-full w-full min-w-0 items-start gap-3 rounded-xl border bg-card ${highlight ? "border-primary ring-2 ring-primary/30" : "border-border"} p-3 text-start transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 sm:p-3.5`}
     >
       <AccountAvatar account={account} />
       <span className="flex min-h-11 min-w-0 flex-1 flex-col justify-center">
@@ -112,6 +120,12 @@ function AccountCard({
         <span className="wrap-anywhere mt-0.5 block text-[11px] leading-snug text-muted-foreground sm:text-xs">
           {meta.join(" · ")}
         </span>
+        {highlight && !current && (
+          <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-primary">
+            <Check className="size-3.5" aria-hidden />
+            {t("market.entry.justCreated")}
+          </span>
+        )}
         {current && (
           <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-primary">
             <Check className="size-3.5" aria-hidden />
@@ -129,7 +143,7 @@ function AccountCard({
 function ChooseAccountPage() {
   const { t } = useI18n();
   const { session, loading: sessionLoading } = useSession();
-  const { next: rawNext } = Route.useSearch();
+  const { next: rawNext, created } = Route.useSearch();
   // Re-sanitised here as well: never navigate to a value straight from the URL.
   const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
   const target = safeInternalPath(next);
@@ -241,6 +255,7 @@ function ChooseAccountPage() {
                     <AccountCard
                       account={account}
                       current={activeAccount?.account_key === account.account_key}
+                      highlight={!!created && account.tenant_id === created}
                       pending={pending === account.account_key}
                       disabled={!!pending}
                       onSelect={() => void enter(account)}

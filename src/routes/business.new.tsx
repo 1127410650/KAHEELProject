@@ -1,16 +1,19 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { BusinessQuickCreate } from "@/components/marketplace/BusinessQuickCreate";
 import { isSafeInternalPath } from "@/lib/safe-next";
+import { clearUnsaved, markUnsaved } from "@/lib/unsaved-changes";
 
 interface NewBizSearch {
   next?: string | undefined;
 }
+
+const DIRTY_KEY = "business-new";
 
 /**
  * Standalone "create a business" screen.
@@ -50,6 +53,7 @@ function NewBusinessPage() {
   const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     if (!loading && !session) {
@@ -58,17 +62,32 @@ function NewBusinessPage() {
     }
   }, [loading, session, navigate, next]);
 
-  function backToPicker() {
+  // Nothing sensitive is persisted anywhere: the wizard lives in page state only,
+  // so leaving the page loses it — warn only while something is unsaved.
+  useEffect(() => {
+    if (!dirty) {
+      clearUnsaved(DIRTY_KEY);
+      return;
+    }
+    markUnsaved(DIRTY_KEY);
+    const onLeave = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener("beforeunload", onLeave);
+    return () => {
+      window.removeEventListener("beforeunload", onLeave);
+      clearUnsaved(DIRTY_KEY);
+    };
+  }, [dirty]);
+
+  function backToPicker(created?: string) {
     void navigate({
       to: "/choose-account",
-      search: { ...(next ? { next } : {}) },
+      search: { ...(next ? { next } : {}), ...(created ? { created } : {}) },
       replace: true,
     });
   }
 
-
   return (
-    <div className="mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-2xl">
+    <div className="mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-3xl">
       <p className="mb-3 text-[11px] text-muted-foreground">
         <Link
           to="/choose-account"
@@ -80,16 +99,25 @@ function NewBusinessPage() {
         </Link>
       </p>
 
+      {dirty && (
+        <p className="mb-3 rounded-lg bg-secondary/50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
+          {t("market.biz.leaveWarning")}
+        </p>
+      )}
+
       <BusinessQuickCreate
         variant="page"
         open
         onOpenChange={(open) => {
           if (!open) backToPicker();
         }}
-        onCreated={() => {
+        onDirtyChange={setDirty}
+        onCreated={(tenantId) => {
           // The new business appears in the picker, but the active account
           // intentionally stays unchanged — the user selects it explicitly.
+          setDirty(false);
           void queryClient.invalidateQueries({ queryKey: ["mkt", "my-accounts"] });
+          backToPicker(tenantId);
         }}
       />
     </div>

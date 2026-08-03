@@ -107,22 +107,47 @@ export function maskIdentity(last2: string | null | undefined): string {
   return `********${last2 ?? ""}`;
 }
 
+/** Review summary only ever shows the trailing four characters. */
+export function maskLast4(value: string | null | undefined): string {
+  const normalized = normalizeOfficialNumber(value ?? "");
+  if (!normalized) return "—";
+  return `••••${normalized.slice(-4)}`;
+}
+
+/**
+ * Canonical form of an official number before it is compared or stored:
+ * Arabic-Indic digits become ASCII, separators disappear, letters upper-case.
+ * Duplicate detection is meaningless without it (`1010-١٢٣` == `1010123`).
+ */
+export function normalizeOfficialNumber(value: string): string {
+  return value
+    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+    .replace(/[\u06f0-\u06f9]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+    .replace(/[^0-9A-Za-z]/g, "")
+    .toUpperCase();
+}
+
 export function isValidOfficialNumber(value: string): boolean {
-  return /^[0-9A-Za-z-]{5,30}$/.test(value.trim());
+  return /^[0-9A-Z]{5,30}$/.test(normalizeOfficialNumber(value));
 }
 
 export function isValidIdentityNumber(value: string): boolean {
-  return /^[0-9A-Za-z]{6,20}$/.test(value.replace(/[^0-9A-Za-z]/g, ""));
+  return /^[0-9A-Za-z]{6,20}$/.test(normalizeOfficialNumber(value));
 }
 
-/** Yes/no duplicate check; it never reveals anything about the other business. */
+/**
+ * Yes/no duplicate check, evaluated server-side on normalised numbers scoped to
+ * the account country and entity registry. It never reveals anything about the
+ * other business — not its name, not its owner.
+ */
 export async function isOfficialNumberTaken(cr: string, unified: string): Promise<boolean> {
   const { data } = await supabase.rpc("mkt_business_number_taken", {
-    _cr_number: cr.trim(),
-    _unified_number: unified.trim(),
+    _cr_number: normalizeOfficialNumber(cr),
+    _unified_number: normalizeOfficialNumber(unified),
   });
   return data === true;
 }
+
 
 export interface DocUpload {
   kind: DocKind;

@@ -1631,8 +1631,9 @@
       "limitReached": "You have reached the maximum number of workspaces",
       "stage": {
         "data": "Business data",
-        "officer": "Officer",
-        "verify": "Verification"
+        "officer": "Officer and documents",
+        "verify": "Verification",
+        "review": "Review and create"
       },
       "legalName": "Legal name",
       "tradeName": "Trade name",
@@ -1709,7 +1710,14 @@
       "authDocRequired": "Attach the authorization letter",
       "sendVerification": "Send verification request",
       "later": "Later",
-      "incomplete": "Complete the business details before sending a verification request"
+      "incomplete": "Complete the business details before sending a verification request",
+      "stepOf": "{n} of {total}",
+      "crExpired": "The registration expiry date has already passed",
+      "confirmData": "I confirm the data and the attached documents are correct.",
+      "confirmRequired": "Confirm the data before creating the business",
+      "privateByDefault": "Private by default; never shown publicly.",
+      "logoHint": "JPG, PNG or WebP; shown contained without distortion.",
+      "leaveWarning": "Leaving this page before creating the business loses what you typed; documents and sensitive data are never stored in the browser."
     },
     "reports": {
       "report": "Report this listing",
@@ -2165,7 +2173,9 @@
         "category": "Category"
       },
       "publishingAs": "Publishing as: {name}",
-      "noPublishPermission": "You do not have permission to publish ads in this account."
+      "noPublishPermission": "You do not have permission to publish ads in this account.",
+      "edit": "Edit",
+      "remove": "Remove"
     },
     "geo": {
       "pick": "Choose market",
@@ -2302,7 +2312,8 @@
       "selectAria": "Enter with {name}",
       "unavailable": "Currently unavailable",
       "cancelToCurrent": "Cancel and return to the current account",
-      "backToAccounts": "Back to account selection"
+      "backToAccounts": "Back to account selection",
+      "justCreated": "Business created. Select it to make it the active account."
     },
     "access": {
       "title": "This page can't be opened",
