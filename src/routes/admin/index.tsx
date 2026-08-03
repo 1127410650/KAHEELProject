@@ -168,22 +168,27 @@ function AdminHomePage() {
                 to="/admin/listings"
                 label={t("admin.alerts.listingsPending")}
                 count={data.listings_pending}
+                search={{ status: "pending" }}
               />
               <ActionRow
                 to="/admin/listing-reports"
                 label={t("admin.alerts.reportsNew")}
                 count={data.reports_new}
+                search={{ status: "new" }}
               />
               <ActionRow
                 to="/admin/verifications"
                 label={t("admin.alerts.verifications")}
                 count={data.verifications_pending}
+                search={{ status: "pending" }}
               />
               <ActionRow
                 to="/admin/activities"
                 label={t("admin.alerts.activitySuggestions")}
                 count={data.activity_suggestions}
+                search={{ tab: "suggestions" }}
               />
+
             </div>
           </section>
         </>
