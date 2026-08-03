@@ -1,39 +1,136 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import {
+  BadgeCheck,
+  Building2,
+  Flag,
+  ListChecks,
+  Megaphone,
+  ShieldOff,
+  Users,
+} from "lucide-react";
+
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { loadAdminOverview } from "@/lib/mkt-platform";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/admin/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إدارة السوق — سوق تحقّق" },
-      { name: "description", content: "لوحة إدارة السوق: مراجعة الإعلانات وطلبات توثيق المنشآت." },
-      { property: "og:title", content: "إدارة السوق — سوق تحقّق" },
-      { property: "og:description", content: "مراجعة الإعلانات وتوثيق المنشآت في سوق تحقّق." },
+      { title: "إدارة المنصة — تحقّق" },
+      {
+        name: "description",
+        content: "لوحة مدير النظام: نظرة سريعة على المستخدمين والمنشآت والإعلانات والبلاغات وطلبات التوثيق.",
+      },
+      { property: "og:title", content: "إدارة المنصة — تحقّق" },
+      { property: "og:description", content: "لوحة مدير النظام في منصة تحقّق." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: AdminIndexPage,
+  component: AdminHomePage,
 });
 
-function AdminIndexPage() {
-  const { t } = useI18n();
+/** Compact stat tile: a number and a label, nothing more. */
+function Stat({ label, value, icon: Icon }: { label: string; value: number; icon: typeof Users }) {
   return (
-    <AdminShell title={t("market.admin.title")}>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Link
-          to="/admin/listings"
-          className="rounded-xl border border-border bg-card p-5 text-sm font-semibold text-foreground hover:bg-accent"
-        >
-          {t("market.admin.listings")}
-        </Link>
-        <Link
-          to="/admin/verifications"
-          className="rounded-xl border border-border bg-card p-5 text-sm font-semibold text-foreground hover:bg-accent"
-        >
-          {t("market.admin.verifications")}
-        </Link>
+    <div className="rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <Icon className="size-4 shrink-0" aria-hidden />
+        <span className="truncate text-xs">{label}</span>
       </div>
+      <p className="mt-2 text-2xl font-bold tabular-nums text-foreground">{value}</p>
+    </div>
+  );
+}
+
+function ActionRow({ to, label, count }: { to: string; label: string; count: number }) {
+  return (
+    <Link
+      to={to}
+      className="flex min-h-12 items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 hover:bg-accent"
+    >
+      <span className="min-w-0 truncate text-sm font-medium text-foreground">{label}</span>
+      <span
+        className={
+          "shrink-0 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums " +
+          (count > 0 ? "bg-destructive/10 text-destructive" : "bg-secondary text-muted-foreground")
+        }
+      >
+        {count}
+      </span>
+    </Link>
+  );
+}
+
+function AdminHomePage() {
+  const { t } = useI18n();
+  const overview = useQuery({
+    queryKey: ["mkt", "admin", "overview"],
+    queryFn: loadAdminOverview,
+    staleTime: 30_000,
+  });
+  const data = overview.data;
+
+  return (
+    <AdminShell title={t("admin.console")}>
+      {overview.isLoading || !data ? (
+        <Skeleton className="h-56 w-full rounded-xl" />
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+            <Stat label={t("admin.stats.users")} value={data.users} icon={Users} />
+            <Stat label={t("admin.stats.businesses")} value={data.businesses} icon={Building2} />
+            <Stat label={t("admin.stats.published")} value={data.listings_published} icon={Megaphone} />
+            <Stat label={t("admin.stats.pending")} value={data.listings_pending} icon={Megaphone} />
+            <Stat label={t("admin.stats.reports")} value={data.reports_new} icon={Flag} />
+            <Stat
+              label={t("admin.stats.verifications")}
+              value={data.verifications_pending}
+              icon={BadgeCheck}
+            />
+            <Stat
+              label={t("admin.stats.restricted")}
+              value={data.restricted_accounts}
+              icon={ShieldOff}
+            />
+            <Stat
+              label={t("admin.stats.suggestions")}
+              value={data.activity_suggestions}
+              icon={ListChecks}
+            />
+          </div>
+
+          <section className="mt-6 rounded-xl border border-border bg-card p-4">
+            <h2 className="text-sm font-bold text-foreground">{t("admin.actionNeeded")}</h2>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <ActionRow
+                to="/admin/listings"
+                label={t("admin.alerts.listingsPending")}
+                count={data.listings_pending}
+              />
+              <ActionRow
+                to="/admin/listing-reports"
+                label={t("admin.alerts.reportsNew")}
+                count={data.reports_new}
+              />
+              <ActionRow
+                to="/admin/verifications"
+                label={t("admin.alerts.verifications")}
+                count={data.verifications_pending}
+              />
+              <ActionRow
+                to="/admin/activities"
+                label={t("admin.alerts.activitySuggestions")}
+                count={data.activity_suggestions}
+              />
+            </div>
+          </section>
+        </>
+      )}
     </AdminShell>
   );
 }

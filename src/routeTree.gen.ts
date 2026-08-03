@@ -41,10 +41,12 @@ import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
+import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessNewRouteImport } from './routes/business.new'
@@ -239,6 +241,11 @@ const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
   path: '/activities',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminBusinessesRoute = AdminBusinessesRouteImport.update({
+  id: '/businesses',
+  path: '/businesses',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminGeoRoute = AdminGeoRouteImport.update({
   id: '/geo',
   path: '/geo',
@@ -257,6 +264,11 @@ const AdminListingReportsRoute = AdminListingReportsRouteImport.update({
 const AdminListingsRoute = AdminListingsRouteImport.update({
   id: '/listings',
   path: '/listings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminVerificationsRoute = AdminVerificationsRouteImport.update({
@@ -448,10 +460,12 @@ export interface FileRoutesByFullPath {
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
+  '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
@@ -514,10 +528,12 @@ export interface FileRoutesByTo {
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
+  '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
@@ -583,10 +599,12 @@ export interface FileRoutesById {
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/admin/activities': typeof AdminActivitiesRoute
+  '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
@@ -652,10 +670,12 @@ export interface FileRouteTypes {
     | '/trash'
     | '/users'
     | '/admin/activities'
+    | '/admin/businesses'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
     | '/business/new'
@@ -718,10 +738,12 @@ export interface FileRouteTypes {
     | '/trash'
     | '/users'
     | '/admin/activities'
+    | '/admin/businesses'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
     | '/business/new'
@@ -786,10 +808,12 @@ export interface FileRouteTypes {
     | '/_authenticated/trash'
     | '/_authenticated/users'
     | '/admin/activities'
+    | '/admin/businesses'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
     | '/business/new'
@@ -1081,6 +1105,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminActivitiesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/businesses': {
+      id: '/admin/businesses'
+      path: '/businesses'
+      fullPath: '/admin/businesses'
+      preLoaderRoute: typeof AdminBusinessesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/geo': {
       id: '/admin/geo'
       path: '/geo'
@@ -1107,6 +1138,13 @@ declare module '@tanstack/react-router' {
       path: '/listings'
       fullPath: '/admin/listings'
       preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/verifications': {
@@ -1389,10 +1427,12 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
+  AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminGeoRoute: typeof AdminGeoRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
@@ -1401,10 +1441,12 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminActivitiesRoute: AdminActivitiesRoute,
+  AdminBusinessesRoute: AdminBusinessesRoute,
   AdminGeoRoute: AdminGeoRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
