@@ -692,12 +692,17 @@ export function ListingForm({ listing }: Props) {
             <RealEstateLicenseFields
               value={license}
               userId={session.user.id}
+              open={licenseOpen}
+              onOpenChange={setLicenseOpen}
+              focusField={licenseFocus}
+              onFocusHandled={() => setLicenseFocus(null)}
               onChange={(next) => {
                 setDirty(true);
                 setLicense(next);
               }}
             />
           )}
+
         </div>
       )}
 
