@@ -332,6 +332,8 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
           coverRow = data.id;
           coverPath = finalPath;
         }
+      }
+
 
 
       // Order and cover are committed atomically server-side, never trusted
