@@ -7307,25 +7307,46 @@ export type Database = {
         }[]
       }
       mkt_admin_business_detail: { Args: { _tenant_id: string }; Returns: Json }
-      mkt_admin_businesses: {
-        Args: { _limit?: number; _offset?: number; _search?: string }
-        Returns: {
-          city: string
-          country: string
-          created_at: string
-          listings_count: number
-          main_activity: string
-          name: string
-          officer_name: string
-          restriction: string
-          restriction_id: string
-          slug: string
-          status: string
-          sub_activities: string[]
-          tenant_id: string
-          verification_status: string
-        }[]
-      }
+      mkt_admin_businesses:
+        | {
+            Args: { _limit?: number; _search?: string }
+            Returns: {
+              city: string
+              country: string
+              created_at: string
+              listings_count: number
+              main_activity: string
+              name: string
+              officer_name: string
+              officer_user_id: string
+              restriction: string
+              restriction_id: string
+              slug: string
+              status: string
+              sub_activities: string[]
+              tenant_id: string
+              verification_status: string
+            }[]
+          }
+        | {
+            Args: { _limit?: number; _offset?: number; _search?: string }
+            Returns: {
+              city: string
+              country: string
+              created_at: string
+              listings_count: number
+              main_activity: string
+              name: string
+              officer_name: string
+              restriction: string
+              restriction_id: string
+              slug: string
+              status: string
+              sub_activities: string[]
+              tenant_id: string
+              verification_status: string
+            }[]
+          }
       mkt_admin_can: { Args: { _perm: string }; Returns: boolean }
       mkt_admin_create_activity: {
         Args: {
@@ -7502,6 +7523,14 @@ export type Database = {
           _subject_type: string
         }
         Returns: undefined
+      }
+      mkt_admin_subject_ids: {
+        Args: { _listing_ids?: string[]; _report_ids?: string[] }
+        Returns: {
+          kind: string
+          source_id: string
+          user_id: string
+        }[]
       }
       mkt_admin_update_activity: {
         Args: {

@@ -160,6 +160,9 @@ export interface AdminBusinessRow {
   status: string | null;
   created_at: string;
   officer_name: string | null;
+  /** Responsible officer's user id — used to open their administrative file. */
+  officer_user_id: string | null;
+
   restriction: string | null;
   restriction_id: string | null;
 }

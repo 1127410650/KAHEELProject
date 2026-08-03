@@ -7,6 +7,8 @@ import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { formatDateTime } from "@/lib/format";
 import { loadAuditLog, usePlatformIdentity } from "@/lib/mkt-platform";
+import { AdminUserLink } from "@/components/marketplace/AdminEntityLink";
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -115,8 +117,15 @@ function AdminAuditLogPage() {
                 {row.entity_id ? ` · ${row.entity_id}` : ""}
               </p>
               <p className="mt-1 truncate text-xs text-foreground">
-                {t("admin.audit.actor")}: {row.actor_name || t("admin.audit.system")}
+                {t("admin.audit.actor")}:{" "}
+                <AdminUserLink
+                  id={row.actor_id}
+                  name={row.actor_name}
+                  fallback={t("admin.audit.system")}
+                  className="text-xs"
+                />
               </p>
+
               {row.reason && (
                 <p className="mt-1.5 rounded-lg bg-background px-2 py-1.5 text-xs text-foreground">
                   {row.reason}

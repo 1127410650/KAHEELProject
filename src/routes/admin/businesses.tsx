@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -7,6 +7,8 @@ import { ExternalLink, FolderOpen, MoreHorizontal, Search } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
+import { AdminBusinessLink, AdminUserLink } from "@/components/marketplace/AdminEntityLink";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
 import { formatDate } from "@/lib/format";
 import {
   addAdminNote,
@@ -27,6 +29,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+/** A click on a link, button or menu must not also trigger the row itself. */
+function isInteractive(target: EventTarget | null): boolean {
+  return (
+    target instanceof Element &&
+    !!target.closest("a,button,input,select,textarea,[role='menuitem'],[data-no-row-open]")
+  );
+}
+
 
 export const Route = createFileRoute("/admin/businesses")({
   ssr: false,
@@ -61,9 +72,11 @@ const ACTION_LABELS: Record<SubjectAction | "note", string> = {
 function AdminBusinessesPage() {
   const { t } = useI18n();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { identity } = usePlatformIdentity();
-  const [term, setTerm] = useState("");
-  const [search, setSearch] = useState("");
+  const remembered = readAdminListState("businesses", { term: "", search: "" });
+  const [term, setTerm] = useState(remembered.term);
+  const [search, setSearch] = useState(remembered.search);
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -74,6 +87,14 @@ function AdminBusinessesPage() {
     enabled: identity?.is_platform_admin === true || staffAccess,
     queryFn: () => loadAdminBusinesses(search),
   });
+
+  useAdminListMemory("businesses", { term, search }, !businesses.isLoading);
+
+  function openRow(event: React.MouseEvent, tenantId: string) {
+    if (isInteractive(event.target)) return;
+    void navigate({ to: "/admin/businesses/$id", params: { id: tenantId } });
+  }
+
 
   async function confirm(reason: string) {
     if (!pending) return;
@@ -201,14 +222,13 @@ function AdminBusinessesPage() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.tenant_id} className="border-b border-border/60 last:border-0">
+                  <tr
+                    key={row.tenant_id}
+                    className="cursor-pointer border-b border-border/60 last:border-0 hover:bg-muted/40"
+                    onClick={(event) => openRow(event, row.tenant_id)}
+                  >
                     <td className="px-3 py-2">
-                      <Link
-                        to={`/admin/businesses/${row.tenant_id}`}
-                        className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
-                      >
-                        {row.name}
-                      </Link>
+                      <AdminBusinessLink id={row.tenant_id} name={row.name} truncate />
                       <span className="block truncate text-xs tabular-nums text-muted-foreground">
                         {formatDate(row.created_at)}
                       </span>
@@ -217,7 +237,14 @@ function AdminBusinessesPage() {
                       {[row.country, row.city].filter(Boolean).join(" · ") || "—"}
                     </td>
                     <td className="truncate px-3 py-2">{row.main_activity ?? "—"}</td>
-                    <td className="truncate px-3 py-2">{row.officer_name || "—"}</td>
+                    <td className="px-3 py-2">
+                      <AdminUserLink
+                        id={row.officer_user_id}
+                        name={row.officer_name}
+                        truncate
+                        className="text-sm"
+                      />
+                    </td>
                     <td className="px-3 py-2 tabular-nums">{row.listings_count}</td>
                     <td className="px-3 py-2">
                       <Verification value={row.verification_status} />
@@ -238,21 +265,36 @@ function AdminBusinessesPage() {
 
           <div className="mt-4 grid gap-2 lg:hidden">
             {rows.map((row) => (
-              <div key={row.tenant_id} className="rounded-xl border border-border bg-card p-3">
+              <div
+                key={row.tenant_id}
+                className="rounded-xl border border-border bg-card p-3"
+                onClick={(event) => openRow(event, row.tenant_id)}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <Link
-                      to={`/admin/businesses/${row.tenant_id}`}
-                      className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
-                    >
-                      {row.name}
-                    </Link>
+                    <AdminBusinessLink
+                      id={row.tenant_id}
+                      name={row.name}
+                      truncate
+                      className="min-h-11 py-2.5 text-sm font-semibold"
+                    />
                     <p className="truncate text-xs text-muted-foreground">
                       {[row.country, row.city].filter(Boolean).join(" · ")}
                     </p>
+                    {row.officer_name && (
+                      <p className="mt-1 truncate text-xs text-muted-foreground">
+                        {t("admin.business.officer")}:{" "}
+                        <AdminUserLink
+                          id={row.officer_user_id}
+                          name={row.officer_name}
+                          className="text-xs"
+                        />
+                      </p>
+                    )}
                   </div>
                   <ActionsMenu row={row} />
                 </div>
+
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
                   <Verification value={row.verification_status} />
                   <span className="text-muted-foreground">

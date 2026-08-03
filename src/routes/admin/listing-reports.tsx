@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, ExternalLink, Filter, Loader2, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Filter, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
@@ -36,6 +36,13 @@ import {
   type LrListingAction,
 } from "@/lib/mkt-listing-reports";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import {
+  AdminListingLink,
+  AdminUserLink,
+} from "@/components/marketplace/AdminEntityLink";
+import { loadAdminSubjectIds, subjectKey } from "@/lib/mkt-admin-subjects";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -71,7 +78,11 @@ function AdminListingReportsPage() {
   const { t, locale } = useI18n();
   const { session } = useSession();
   const queryClient = useQueryClient();
-  const [filters, setFilters] = useState<LrFilters>({ page: 0, pageSize: PAGE_SIZE });
+  const remembered = readAdminListState<LrFilters>("listing-reports", {
+    page: 0,
+    pageSize: PAGE_SIZE,
+  });
+  const [filters, setFilters] = useState<LrFilters>(remembered);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -100,9 +111,22 @@ function AdminListingReportsPage() {
   const total = list[0]?.total_count ?? 0;
   const current = list.find((r) => r.id === openId) ?? null;
 
+  useAdminListMemory("listing-reports", filters, !rows.isLoading);
+
+  // Identifiers only: the server withholds the reporter unless this admin may
+  // unmask reporters, so an unauthorised reviewer simply gets no link.
+  const reportIds = useMemo(() => list.map((r) => r.id), [list]);
+  const subjects = useQuery({
+    queryKey: ["mkt", "admin", "report-subjects", reportIds],
+    enabled: canView && reportIds.length > 0,
+    queryFn: () => loadAdminSubjectIds({ reportIds }),
+  });
+  const subjectMap = subjects.data ?? {};
+
   function set<K extends keyof LrFilters>(key: K, value: LrFilters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value, page: 0 }));
   }
+
 
   const filterFields = (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -284,9 +308,14 @@ function AdminListingReportsPage() {
           <ul className="mt-4 space-y-2 lg:hidden">
             {list.map((r) => (
               <li key={r.id}>
-                <ReportCard report={r} onOpen={() => setOpenId(r.id)} />
+                <ReportCard
+                  report={r}
+                  ownerUserId={subjectMap[subjectKey("report_owner", r.id)] ?? null}
+                  onOpen={() => setOpenId(r.id)}
+                />
               </li>
             ))}
+
           </ul>
 
           {/* desktop: table */}
@@ -314,19 +343,28 @@ function AdminListingReportsPage() {
                       {r.ref_no ?? "—"}
                     </td>
                     <td className="max-w-[220px] p-2">
-                      <p className="truncate font-medium text-foreground">
-                        {r.listing_title ?? "—"}
-                      </p>
+                      <AdminListingLink
+                        id={r.listing_id}
+                        name={r.listing_title}
+                        truncate
+                        className="text-xs"
+                      />
                       <p dir="ltr" className="font-mono text-[11px] text-muted-foreground">
                         {r.listing_ref ?? "—"}
                       </p>
                     </td>
                     <td className="max-w-[160px] p-2">
-                      <p className="truncate text-foreground">{r.owner_label ?? "—"}</p>
+                      <AdminUserLink
+                        id={subjectMap[subjectKey("report_owner", r.id)] ?? null}
+                        name={r.owner_label}
+                        truncate
+                        className="text-xs"
+                      />
                       <p className="truncate text-[11px] text-muted-foreground">
                         {r.owner_business ?? "—"}
                       </p>
                     </td>
+
                     <td className="p-2 text-foreground">
                       {(locale === "ar" ? r.reason_name_ar : r.reason_name_en) ?? r.reason_code ?? "—"}
                     </td>
@@ -393,6 +431,8 @@ function AdminListingReportsPage() {
               report={current}
               can={can}
               staffOptions={staffOptions.data ?? []}
+              ownerUserId={subjectMap[subjectKey("report_owner", current.id)] ?? null}
+              reporterUserId={subjectMap[subjectKey("report_reporter", current.id)] ?? null}
               onDone={() => {
                 void queryClient.invalidateQueries({ queryKey: ["mkt", "listing-reports"] });
               }}
@@ -404,7 +444,15 @@ function AdminListingReportsPage() {
   );
 }
 
-function ReportCard({ report, onOpen }: { report: AdminListingReport; onOpen: () => void }) {
+function ReportCard({
+  report,
+  ownerUserId,
+  onOpen,
+}: {
+  report: AdminListingReport;
+  ownerUserId: string | null;
+  onOpen: () => void;
+}) {
   const { t, locale } = useI18n();
   const overdue =
     !!report.sla_due_at &&
@@ -417,9 +465,12 @@ function ReportCard({ report, onOpen }: { report: AdminListingReport; onOpen: ()
           <p dir="ltr" className="font-mono text-xs font-bold text-foreground">
             {report.ref_no ?? "—"}
           </p>
-          <p className="mt-1 truncate text-sm font-medium text-foreground">
-            {report.listing_title ?? "—"}
-          </p>
+          <AdminListingLink
+            id={report.listing_id}
+            name={report.listing_title}
+            truncate
+            className="mt-1 min-h-11 py-2.5 text-sm font-medium"
+          />
           <p dir="ltr" className="font-mono text-[11px] text-muted-foreground">
             {report.listing_ref ?? "—"}
           </p>
@@ -434,9 +485,10 @@ function ReportCard({ report, onOpen }: { report: AdminListingReport; onOpen: ()
         {t("market.lr.col.count")}: <span dir="ltr">{report.listing_report_count}</span>
       </p>
       <p className="mt-1 text-[11px] text-muted-foreground">
-        {report.owner_label ?? "—"}
+        <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-[11px]" />
         {report.owner_business ? ` · ${report.owner_business}` : ""}
       </p>
+
       <p className="mt-1 text-[11px] text-muted-foreground">
         {report.assignee_label ?? t("market.lr.unassigned")} · {formatDateTime(report.updated_at)}
         {overdue && (
@@ -457,13 +509,19 @@ function CaseDrawer({
   report,
   can,
   staffOptions,
+  ownerUserId,
+  reporterUserId,
   onDone,
 }: {
   report: AdminListingReport;
   can: (perm: string) => boolean;
   staffOptions: { user_id: string; label: string }[];
+  /** Ids only; the server withheld them when this admin may not see them. */
+  ownerUserId: string | null;
+  reporterUserId: string | null;
   onDone: () => void;
 }) {
+
   const { t, locale } = useI18n();
   const [reason, setReason] = useState("");
   const [assignee, setAssignee] = useState(report.assigned_to ?? "");
@@ -584,7 +642,10 @@ function CaseDrawer({
 
       <div className="mt-3 grid gap-2 rounded-xl border border-border bg-card p-3 text-xs sm:grid-cols-2">
         <Row label={t("market.lr.col.listing")} value={report.listing_ref ?? "—"} ltr />
-        <Row label={t("market.lr.col.owner")} value={report.owner_label ?? "—"} />
+        <div className="flex items-baseline justify-between gap-2 py-1">
+          <span className="text-[11px] text-muted-foreground">{t("market.lr.col.owner")}</span>
+          <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-xs" />
+        </div>
         <Row label={t("market.lr.col.business")} value={report.owner_business ?? "—"} />
         <Row
           label={t("market.lr.col.reason")}
@@ -606,19 +667,28 @@ function CaseDrawer({
         />
         <Row label={t("market.lr.col.created")} value={formatDateTime(report.created_at)} ltr />
         <Row label={t("market.lr.col.updated")} value={formatDateTime(report.updated_at)} ltr />
-        <Row
-          label={t("market.lr.reporter")}
-          value={
-            report.can_view_reporter && report.reporter_identity
-              ? report.reporter_identity
-              : report.reporter_alias
-          }
-        />
+        <div className="flex items-baseline justify-between gap-2 py-1">
+          <span className="text-[11px] text-muted-foreground">{t("market.lr.reporter")}</span>
+          {report.can_view_reporter && reporterUserId ? (
+            <AdminUserLink
+              id={reporterUserId}
+              name={report.reporter_identity ?? report.reporter_alias}
+              className="text-xs"
+            />
+          ) : (
+            <span className="text-xs text-foreground">
+              {report.can_view_reporter && report.reporter_identity
+                ? report.reporter_identity
+                : report.reporter_alias}
+            </span>
+          )}
+        </div>
         <Row
           label={t("market.lr.reporterInvalid")}
           value={String(report.reporter_invalid_count)}
           ltr
         />
+
       </div>
 
       {report.note && (
@@ -634,17 +704,13 @@ function CaseDrawer({
         </p>
       )}
 
-      {report.listing_slug && (
-        <Link
-          to="/ads/$slug"
-          params={{ slug: report.listing_slug }}
-          target="_blank"
-          className="mt-3 inline-flex min-h-11 items-center gap-1 text-xs font-medium text-primary hover:underline"
-        >
-          {t("market.lr.openListing")}
-          <ExternalLink className="size-3" aria-hidden />
-        </Link>
-      )}
+      {/* stays inside the admin shell instead of opening the public page */}
+      <AdminListingLink
+        id={report.listing_id}
+        name={t("market.lr.openListing")}
+        className="mt-3 min-h-11 py-2.5 text-xs font-medium"
+      />
+
 
       {/* reason shared by every decision */}
       <div className="mt-4 space-y-1">

@@ -18,7 +18,14 @@ import {
 } from "@/lib/mkt";
 import { loadCategories } from "@/lib/mkt-queries";
 import { reviewListing, type ListingReviewAction } from "@/lib/mkt-admin";
+import {
+  AdminBusinessLink,
+  AdminListingLink,
+  AdminUserLink,
+} from "@/components/marketplace/AdminEntityLink";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,14 +65,23 @@ interface Decision {
 
 function AdminListingsPage() {
   const { t, locale } = useI18n();
-  const [status, setStatus] = useState("pending");
-  const [city, setCity] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [tenantId, setTenantId] = useState("");
-  const [q, setQ] = useState("");
+  const remembered = readAdminListState("listings", {
+    status: "pending",
+    city: "",
+    categoryId: "",
+    tenantId: "",
+    q: "",
+  });
+  const [status, setStatus] = useState(remembered.status);
+  const [city, setCity] = useState(remembered.city);
+  const [categoryId, setCategoryId] = useState(remembered.categoryId);
+  const [tenantId, setTenantId] = useState(remembered.tenantId);
+  const [q, setQ] = useState(remembered.q);
   const [open, setOpen] = useState<MktListing | null>(null);
   const [decision, setDecision] = useState<Decision | null>(null);
   const [busy, setBusy] = useState(false);
+
+
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const businesses = useQuery({
@@ -95,6 +111,14 @@ function AdminListingsPage() {
       return (data ?? []) as unknown as MktListing[];
     },
   });
+
+  useAdminListMemory(
+    "listings",
+    { status, city, categoryId, tenantId, q },
+    !listings.isLoading,
+  );
+
+
 
   const images = useQuery({
     queryKey: ["mkt", "admin-listing-images", open?.id],
@@ -235,10 +259,27 @@ function AdminListingsPage() {
               <li key={ad.id} className="rounded-xl border border-border bg-card p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground">{ad.title}</p>
+                    <AdminListingLink
+                      id={ad.id}
+                      name={ad.title}
+                      truncate
+                      className="min-h-11 py-2.5 text-sm font-semibold"
+                    />
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {bizName(ad.tenant_id)} · {ad.city ?? "—"} ·{" "}
-                      {priceLabel(ad, t("market.priceOnRequest"))}
+                      {ad.tenant_id ? (
+                        <AdminBusinessLink
+                          id={ad.tenant_id}
+                          name={bizName(ad.tenant_id)}
+                          className="text-xs"
+                        />
+                      ) : (
+                        <AdminUserLink
+                          id={ad.owner_user_id}
+                          name={t("market.ad.individualAdvertiser")}
+                          className="text-xs"
+                        />
+                      )}{" "}
+                      · {ad.city ?? "—"} · {priceLabel(ad, t("market.priceOnRequest"))}
                     </p>
                     {ad.rejection_reason && (
                       <p className="mt-1 text-xs text-destructive">{ad.rejection_reason}</p>
@@ -250,8 +291,11 @@ function AdminListingsPage() {
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button asChild size="sm" variant="outline">
-                    <Link to={`/admin/listings/${ad.id}`}>{t("market.admin.fullView")}</Link>
+                    <Link to="/admin/listings/$id" params={{ id: ad.id }}>
+                      {t("market.admin.fullView")}
+                    </Link>
                   </Button>
+
                   <Button size="sm" onClick={() => setDecision({ listing: ad, action: "approve" })}>
                     {t("market.admin.approve")}
                   </Button>
@@ -295,9 +339,11 @@ function AdminListingsPage() {
           {open && (
             <div className="space-y-3 text-sm">
               <p className="whitespace-pre-line text-muted-foreground">{open.description ?? "—"}</p>
-              <p className="text-xs text-muted-foreground" dir="ltr">
-                owner: {open.owner_user_id}
+              <p className="text-xs text-muted-foreground">
+                {t("market.admin.owner")}:{" "}
+                <AdminUserLink id={open.owner_user_id} name={t("admin.detail.userFile")} />
               </p>
+
               <div className="grid grid-cols-3 gap-2">
                 {(images.data ?? []).map((url) => (
                   <img
