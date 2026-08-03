@@ -17,6 +17,11 @@ import {
   loadVerificationFiles,
   loadVerificationRequests,
 } from "@/lib/mkt-admin";
+import {
+  loadEntityActivities,
+  setEntityActivities,
+} from "@/lib/mkt-activities";
+import { ActivityPicker, type ActivityValue } from "@/components/marketplace/ActivityPicker";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
@@ -75,6 +80,39 @@ function BusinessDashboardPage() {
   });
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
+
+  // Reference activities of this entity. Nothing is matched or changed
+  // automatically: the picker starts from what is already linked, and staff
+  // review is the only path for an activity that is not in the tree yet.
+  const entityActivities = useQuery({
+    queryKey: ["mkt", "entity-activities", tenantId],
+    enabled: !!tenantId,
+    queryFn: () => loadEntityActivities(tenantId!),
+  });
+  const [activityDraft, setActivityDraft] = useState<ActivityValue | null>(null);
+  const linkedActivity = useMemo<ActivityValue>(() => {
+    const rows = entityActivities.data ?? [];
+    const main = rows.find((r) => r.is_primary) ?? null;
+    return {
+      main: main
+        ? {
+            id: main.activity_id,
+            name_ar: main.name_ar,
+            name_en: main.name_en,
+            group_id: main.group_id,
+          }
+        : null,
+      subs: rows
+        .filter((r) => !r.is_primary)
+        .map((r) => ({
+          id: r.activity_id,
+          name_ar: r.name_ar,
+          name_en: r.name_en,
+          group_id: r.group_id,
+        })),
+    };
+  }, [entityActivities.data]);
+  const activityValue = activityDraft ?? linkedActivity;
   const roots = (categories.data ?? []).filter((c) => !c.parent_id);
 
   const requests = useQuery({
@@ -151,6 +189,10 @@ function BusinessDashboardPage() {
         city: (cities.data ?? []).find((c) => c.id === view.city_id)?.name_ar ?? null,
         region: view.region ?? null,
         categories: view.categories ?? [],
+        ...(activityValue.main ? { main_activity: activityValue.main.name_ar } : {}),
+        ...(activityValue.subs.length > 0
+          ? { sub_activities: activityValue.subs.map((a) => a.name_ar) }
+          : {}),
         public_phone: view.public_phone ?? null,
         public_whatsapp: view.public_whatsapp ?? null,
         public_email: view.public_email ?? null,
@@ -192,6 +234,17 @@ function BusinessDashboardPage() {
           newValue: payload,
         });
       }
+      // The activity link goes through the guarded RPC, not a direct update.
+      if (activityDraft?.main) {
+        await setEntityActivities({
+          tenantId,
+          mainActivityId: activityDraft.main.id,
+          subActivityIds: activityDraft.subs.map((a) => a.id),
+        });
+        setActivityDraft(null);
+        await entityActivities.refetch();
+      }
+
       setDraft(null);
       setLogoFile(null);
       toast.success(t("market.biz.saved"));
@@ -456,6 +509,15 @@ function BusinessDashboardPage() {
                 onChange={(e) => set("region", e.target.value)}
               />
             </div>
+          </div>
+
+          <div className="min-w-0 space-y-1.5">
+            <Label>{t("market.activity.current")}</Label>
+            <ActivityPicker
+              value={activityValue}
+              tenantId={tenantId}
+              onChange={setActivityDraft}
+            />
           </div>
 
           <div className="space-y-1.5">
