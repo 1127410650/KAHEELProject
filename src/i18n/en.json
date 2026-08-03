@@ -1465,7 +1465,16 @@
       "contact": "Contact details",
       "noListings": "No published listings",
       "services": "Areas of work",
-      "visit": "View profile"
+      "visit": "View profile",
+      "unavailable": "This profile is not available",
+      "fallbackName": "Business",
+      "manage": "Manage profile",
+      "shareProfile": "Share business profile",
+      "goToLocation": "Go to location",
+      "activities": "Activities & specialties",
+      "showAllActivities": "Show all",
+      "details": "Public activity details",
+      "entityType": "Entity type"
     },
     "category": {
       "notFound": "Category not found",
@@ -2068,7 +2077,12 @@
       "pagesSoon": "About, Help center, Contact, Terms and Privacy pages will be listed here once they exist."
     },
     "person": {
-      "count": {"zero": "No active listings", "one": "active listing", "two": "active listings", "many": "active listings"},
+      "count": {
+        "zero": "No active listings",
+        "one": "active listing",
+        "two": "active listings",
+        "many": "active listings"
+      },
       "notFound": "Advertiser not found",
       "listings": "Listings by this advertiser",
       "username": "Public handle",
@@ -2369,6 +2383,16 @@
         "exemptionPending": "Exemption under review"
       },
       "completeNote": "Complete fields do not mean the licence is verified; the platform reviews it."
+    },
+    "entity": {
+      "establishment": "Establishment",
+      "company": "Company",
+      "office": "Office",
+      "factory": "Factory",
+      "branch": "Branch",
+      "non_profit": "Non-profit",
+      "government": "Government",
+      "other": "Other"
     }
   },
   "routeError": {

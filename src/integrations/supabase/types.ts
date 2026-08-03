@@ -6678,6 +6678,10 @@ export type Database = {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_business_is_restricted: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_business_number_taken: {
         Args: { _cr_number: string; _unified_number: string }
         Returns: boolean
@@ -6783,6 +6787,72 @@ export type Database = {
         Returns: undefined
       }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
+      mkt_public_business: {
+        Args: { _slug: string }
+        Returns: {
+          about: string
+          active_listings: number
+          can_edit: boolean
+          city_ar: string
+          city_en: string
+          display_name_ar: string
+          display_name_en: string
+          entity_type: string
+          headline: string
+          is_member: boolean
+          joined_at: string
+          logo_url: string
+          main_activity: string
+          public_email: string
+          public_phone: string
+          public_website: string
+          public_whatsapp: string
+          region: string
+          slug: string
+          sub_activities: string[]
+          verification_status: string
+        }[]
+      }
+      mkt_public_business_categories: {
+        Args: { _slug: string }
+        Returns: {
+          category_id: string
+          listings_count: number
+          name_ar: string
+          name_en: string
+          slug: string
+        }[]
+      }
+      mkt_public_business_listings: {
+        Args: {
+          _category_id?: string
+          _limit?: number
+          _offset?: number
+          _slug: string
+        }
+        Returns: {
+          category_id: string
+          city: string
+          city_id: string
+          cover_image_url: string
+          created_at: string
+          currency: string
+          deal_kind: string
+          district: string
+          id: string
+          item_condition: string
+          price: number
+          price_on_request: boolean
+          price_unit: string
+          published_at: string
+          slug: string
+          subcategory_id: string
+          summary: string
+          title: string
+          type_code: string
+          views_count: number
+        }[]
+      }
       mkt_public_person: {
         Args: { _username: string }
         Returns: {
