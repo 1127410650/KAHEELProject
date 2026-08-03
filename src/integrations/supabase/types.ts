@@ -2164,24 +2164,30 @@ export type Database = {
           created_at: string
           event_type: string
           id: string
+          ip_address: string | null
           listing_id: string
           meta: Json
+          user_agent: string | null
         }
         Insert: {
           actor_id?: string | null
           created_at?: string
           event_type: string
           id?: string
+          ip_address?: string | null
           listing_id: string
           meta?: Json
+          user_agent?: string | null
         }
         Update: {
           actor_id?: string | null
           created_at?: string
           event_type?: string
           id?: string
+          ip_address?: string | null
           listing_id?: string
           meta?: Json
+          user_agent?: string | null
         }
         Relationships: [
           {
@@ -2420,15 +2426,24 @@ export type Database = {
           deal_kind: string | null
           deleted_at: string | null
           description: string | null
+          display_priority: number
           district: string | null
           duration_days: number
           expires_at: string | null
           expiry_notice_stage: number
+          favorites_count: number
+          featured_from: string | null
+          featured_package: string | null
+          featured_until: string | null
+          guaranteed_impressions: number | null
           id: string
+          is_featured: boolean
           item_condition: string | null
+          keywords: string[]
           last_renewed_at: string | null
           latitude: number | null
           latitude_public: number | null
+          link_copies_count: number
           location_accuracy: number | null
           location_source: string | null
           location_visibility: string
@@ -2440,9 +2455,16 @@ export type Database = {
           price_on_request: boolean
           price_unit: string | null
           published_at: string | null
+          qr_opens_count: number
           quantity: number | null
+          quote_requests_count: number
+          ratings_avg: number | null
+          ratings_count: number
+          ref_no: number
           region: string | null
           rejection_reason: string | null
+          reports_count: number
+          share_link_count: number
           shares_count: number
           slug: string | null
           specs: Json
@@ -2470,15 +2492,24 @@ export type Database = {
           deal_kind?: string | null
           deleted_at?: string | null
           description?: string | null
+          display_priority?: number
           district?: string | null
           duration_days?: number
           expires_at?: string | null
           expiry_notice_stage?: number
+          favorites_count?: number
+          featured_from?: string | null
+          featured_package?: string | null
+          featured_until?: string | null
+          guaranteed_impressions?: number | null
           id?: string
+          is_featured?: boolean
           item_condition?: string | null
+          keywords?: string[]
           last_renewed_at?: string | null
           latitude?: number | null
           latitude_public?: number | null
+          link_copies_count?: number
           location_accuracy?: number | null
           location_source?: string | null
           location_visibility?: string
@@ -2490,9 +2521,16 @@ export type Database = {
           price_on_request?: boolean
           price_unit?: string | null
           published_at?: string | null
+          qr_opens_count?: number
           quantity?: number | null
+          quote_requests_count?: number
+          ratings_avg?: number | null
+          ratings_count?: number
+          ref_no?: number
           region?: string | null
           rejection_reason?: string | null
+          reports_count?: number
+          share_link_count?: number
           shares_count?: number
           slug?: string | null
           specs?: Json
@@ -2520,15 +2558,24 @@ export type Database = {
           deal_kind?: string | null
           deleted_at?: string | null
           description?: string | null
+          display_priority?: number
           district?: string | null
           duration_days?: number
           expires_at?: string | null
           expiry_notice_stage?: number
+          favorites_count?: number
+          featured_from?: string | null
+          featured_package?: string | null
+          featured_until?: string | null
+          guaranteed_impressions?: number | null
           id?: string
+          is_featured?: boolean
           item_condition?: string | null
+          keywords?: string[]
           last_renewed_at?: string | null
           latitude?: number | null
           latitude_public?: number | null
+          link_copies_count?: number
           location_accuracy?: number | null
           location_source?: string | null
           location_visibility?: string
@@ -2540,9 +2587,16 @@ export type Database = {
           price_on_request?: boolean
           price_unit?: string | null
           published_at?: string | null
+          qr_opens_count?: number
           quantity?: number | null
+          quote_requests_count?: number
+          ratings_avg?: number | null
+          ratings_count?: number
+          ref_no?: number
           region?: string | null
           rejection_reason?: string | null
+          reports_count?: number
+          share_link_count?: number
           shares_count?: number
           slug?: string | null
           specs?: Json
@@ -7117,6 +7171,10 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_admin_listing_extend: {
+        Args: { _days: number; _listing_id: string }
+        Returns: undefined
+      }
       mkt_admin_update_activity: {
         Args: {
           _id: string
@@ -7211,6 +7269,18 @@ export type Database = {
       mkt_listing_archive: { Args: { _id: string }; Returns: string }
       mkt_listing_delete: { Args: { _id: string }; Returns: string }
       mkt_listing_duplicate: { Args: { _id: string }; Returns: string }
+      mkt_listing_event_log: {
+        Args: { _limit?: number; _listing_id: string }
+        Returns: {
+          actor_id: string
+          created_at: string
+          event_type: string
+          id: string
+          ip_address: string
+          meta: Json
+          user_agent: string
+        }[]
+      }
       mkt_listing_exact_location: {
         Args: { p_listing_id: string }
         Returns: {
@@ -7230,6 +7300,10 @@ export type Database = {
       mkt_listing_restore: { Args: { _id: string }; Returns: string }
       mkt_listing_resume: { Args: { _id: string }; Returns: string }
       mkt_listing_submit: { Args: { _id: string }; Returns: string }
+      mkt_listing_track: {
+        Args: { _id: string; _kind: string }
+        Returns: undefined
+      }
       mkt_listing_track_share: { Args: { _id: string }; Returns: undefined }
       mkt_log_listing_event: {
         Args: { _event_type: string; _listing_id: string; _meta?: Json }
