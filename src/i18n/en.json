@@ -2112,7 +2112,14 @@
       "publishHint": "When on, only your name, headline, city and the contact details you chose to show are public.",
       "cityRequired": "Pick a city within your account country.",
       "personalize": "Use my activity to improve suggestions",
-      "personalizeHint": "Only your searches and the categories you open are used to suggest ads. Messages and phone numbers are never used, and activity is deleted after 90 days."
+      "personalizeHint": "Only your searches and the categories you open are used to suggest ads. Messages and phone numbers are never used, and activity is deleted after 90 days.",
+      "unavailable": "This profile is not available",
+      "kindIndividual": "Individual",
+      "editProfile": "Edit profile",
+      "shareProfile": "Share profile",
+      "allCategories": "All",
+      "loadMore": "Load more listings",
+      "noListings": "No published listings right now"
     },
     "form": {
       "region": "Region",
