@@ -85,6 +85,11 @@ export function ListingForm({ listing }: Props) {
   // Licence data of a real estate ad. It is never kept in a local draft: the
   // numbers are legal identifiers, so they only live in the database row.
   const [license, setLicense] = useState<LicenseFormValue>(EMPTY_LICENSE);
+  // The licence section is collapsed until the advertiser opens it — or until a
+  // failed submit forces it open on the first missing field.
+  const [licenseOpen, setLicenseOpen] = useState(false);
+  const [licenseFocus, setLicenseFocus] = useState<string | null>(null);
+
 
 
   const [location, setLocation] = useState<ListingLocationValue>({
