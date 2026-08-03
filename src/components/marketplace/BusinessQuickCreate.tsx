@@ -818,14 +818,6 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-function splitList(value: string): string[] {
-  return value
-    .split(/[,،]/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .slice(0, 20);
-}
-
 function Field({
   id,
   label,
