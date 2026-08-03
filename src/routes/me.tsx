@@ -25,23 +25,29 @@ export const Route = createFileRoute("/me")({
     const { data } = await supabase.auth.getSession();
     if (!data.session) throw redirect({ to: "/auth", replace: true });
 
+    // The destination is decided first and thrown once, so a redirect can never be
+    // swallowed by the error handling around the role lookup.
+    let target = "/choose-account";
+    let isAdmin = false;
     try {
       const identity = await loadPlatformIdentity();
-      if (identity.is_platform_admin && !identity.restricted) {
-        throw redirect({ to: "/admin", replace: true });
-      }
-    } catch (error) {
-      if (error && typeof error === "object" && "to" in error) throw error;
+      isAdmin = identity.is_platform_admin && !identity.restricted;
+    } catch {
       /* role lookup failed → fall through to the normal account flow */
     }
 
-    const key = rememberedAccountKey();
-    const account = key ? await verifyAccount(key) : null;
-    if (!account) throw redirect({ to: "/choose-account", replace: true });
-    throw redirect({
-      to: account.kind === "business" ? "/dashboard/business" : "/dashboard/profile",
-      replace: true,
-    });
+    if (isAdmin) {
+      target = "/admin";
+    } else {
+      const key = rememberedAccountKey();
+      const account = key ? await verifyAccount(key) : null;
+      if (account) {
+        target = account.kind === "business" ? "/dashboard/business" : "/dashboard/profile";
+      }
+    }
+
+    throw redirect({ href: target, replace: true });
   },
+
   component: () => null,
 });
