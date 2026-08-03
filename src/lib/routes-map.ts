@@ -109,7 +109,6 @@ export const ROUTE_MAP: RouteRule[] = [
 
   // ── ج. Active entity (internal operations) ─────────────────────────────────
   rule("/select-account", "authenticated", "app"),
-  rule("/me", "authenticated", "app"),
   rule("/settings", "authenticated", "app"),
   rule("/onboarding", "authenticated", "app"),
   rule("/notifications", "authenticated", "app"),
@@ -171,6 +170,10 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/sign-up", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
   rule("/home", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/market", "legacy", "market", { legacy_redirect: "/", is_public: true }),
+  // The old personal dashboard. `src/routes/me.tsx` still owns the path so the
+  // destination can depend on who is asking (admin console / business dashboard /
+  // personal dashboard); this entry records the canonical fallback.
+  rule("/me", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
 ];
 
 const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));

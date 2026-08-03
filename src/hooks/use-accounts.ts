@@ -51,7 +51,9 @@ export function sortAccounts(accounts: Account[]): Account[] {
 }
 
 export function accountHome(account: { tenant_type: string; is_personal: boolean; role: string }) {
-  if (account.is_personal || account.tenant_type === "individual") return "/me";
+  // The old personal shell was retired: personal accounts live in the marketplace
+  // account dashboard now.
+  if (account.is_personal || account.tenant_type === "individual") return "/dashboard/profile";
   if (account.tenant_type === "service_provider") return "/requests";
   if (account.role === "supervisor") return "/portal";
   return "/dashboard";
