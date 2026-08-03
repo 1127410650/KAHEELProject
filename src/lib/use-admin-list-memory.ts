@@ -7,6 +7,8 @@
  * when the tab closes, and never contains anything but UI state.
  */
 import { useEffect, useRef } from "react";
+import { useRouterState } from "@tanstack/react-router";
+
 
 const PREFIX = "tahqaq.admin.list.";
 
