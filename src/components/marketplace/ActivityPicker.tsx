@@ -145,7 +145,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
           <>
             <div className="relative min-w-0">
               <Search
-                className="pointer-events-none absolute inset-inline-start-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground start-2"
+                className="pointer-events-none absolute start-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                 aria-hidden
               />
               <Input
@@ -160,7 +160,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
               />
               {mainResults.isFetching && (
                 <Loader2
-                  className="absolute inset-inline-end-2 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground end-2"
+                  className="absolute end-2 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground"
                   aria-hidden
                 />
               )}
