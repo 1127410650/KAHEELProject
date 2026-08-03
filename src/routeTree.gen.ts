@@ -40,6 +40,7 @@ import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
@@ -229,6 +230,11 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
+  id: '/activities',
+  path: '/activities',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminGeoRoute = AdminGeoRouteImport.update({
@@ -429,6 +435,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -492,6 +499,7 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -558,6 +566,7 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/admin/activities': typeof AdminActivitiesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -624,6 +633,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/activities'
     | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
@@ -687,6 +697,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/trash'
     | '/users'
+    | '/admin/activities'
     | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
@@ -752,6 +763,7 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/trash'
     | '/_authenticated/users'
+    | '/admin/activities'
     | '/admin/geo'
     | '/admin/listings'
     | '/admin/verifications'
@@ -1036,6 +1048,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/activities': {
+      id: '/admin/activities'
+      path: '/activities'
+      fullPath: '/admin/activities'
+      preLoaderRoute: typeof AdminActivitiesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/geo': {
@@ -1331,6 +1350,7 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface AdminRouteRouteChildren {
+  AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminGeoRoute: typeof AdminGeoRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
@@ -1340,6 +1360,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminActivitiesRoute: AdminActivitiesRoute,
   AdminGeoRoute: AdminGeoRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,

@@ -7049,6 +7049,43 @@ export type Database = {
           parent_name_ar: string
         }[]
       }
+      mkt_admin_create_activity: {
+        Args: {
+          _group_id: string
+          _name_ar: string
+          _name_en?: string
+          _parent_id?: string
+        }
+        Returns: string
+      }
+      mkt_admin_create_group: {
+        Args: {
+          _name_ar: string
+          _name_en?: string
+          _slug?: string
+          _sort_order?: number
+        }
+        Returns: string
+      }
+      mkt_admin_update_activity: {
+        Args: {
+          _id: string
+          _is_active?: boolean
+          _name_ar?: string
+          _name_en?: string
+        }
+        Returns: undefined
+      }
+      mkt_admin_update_group: {
+        Args: {
+          _id: string
+          _is_active?: boolean
+          _name_ar?: string
+          _name_en?: string
+          _sort_order?: number
+        }
+        Returns: undefined
+      }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }
         Returns: boolean

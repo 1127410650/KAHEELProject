@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useI18n } from "@/i18n";
 import {
   activityName,
+  loadActivityGroups,
   searchActivities,
   suggestActivity,
   type ActivitySearchHit,
@@ -35,6 +36,8 @@ interface Props {
 }
 
 const MIN_QUERY = 2;
+const selectClass =
+  "h-11 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm sm:h-10";
 
 function toChoice(hit: ActivitySearchHit): ActivityChoice {
   return { id: hit.id, name_ar: hit.name_ar, name_en: hit.name_en, group_id: hit.group_id };
@@ -55,21 +58,38 @@ function useDebounced(value: string, ms = 250): string {
  *
  * Nothing is ever selected automatically: results are listed by confidence and
  * the user picks. One main activity, many sub activities inside the same
- * sector. When the tree has no match, the user can only *suggest* a new
- * activity, which goes to the admin review queue.
+ * sector. The sector list is open — any sector staff adds shows up here — and
+ * when the tree still has no match, the user picks "my activity is not listed"
+ * and writes it; that text is stored as a *suggestion* for the admin queue and
+ * never becomes an approved activity by itself.
  */
 export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
   const { t, locale } = useI18n();
+  const [groupId, setGroupId] = useState("");
   const [mainQuery, setMainQuery] = useState("");
   const [subQuery, setSubQuery] = useState("");
   const [suggesting, setSuggesting] = useState(false);
+  const [suggestOpen, setSuggestOpen] = useState(false);
+  const [suggestText, setSuggestText] = useState("");
   const mainQ = useDebounced(mainQuery);
   const subQ = useDebounced(subQuery);
 
+  const groups = useQuery({
+    queryKey: ["mkt", "activity-groups"],
+    staleTime: 300_000,
+    queryFn: () => loadActivityGroups(),
+  });
+
   const mainResults = useQuery({
-    queryKey: ["mkt", "activities", "search-main", mainQ],
+    queryKey: ["mkt", "activities", "search-main", groupId, mainQ],
     enabled: mainQ.trim().length >= MIN_QUERY && !value.main,
-    queryFn: () => searchActivities({ q: mainQ.trim(), onlyMain: true, limit: 12 }),
+    queryFn: () =>
+      searchActivities({
+        q: mainQ.trim(),
+        groupId: groupId || null,
+        onlyMain: true,
+        limit: 12,
+      }),
   });
 
   const subResults = useQuery({
@@ -87,16 +107,19 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
   const subIds = useMemo(() => new Set(value.subs.map((s) => s.id)), [value.subs]);
 
   async function suggest(text: string) {
-    if (suggesting) return;
+    const clean = text.trim();
+    if (suggesting || clean.length < 2) return;
     setSuggesting(true);
     try {
       await suggestActivity({
-        text,
-        groupId: value.main?.group_id ?? null,
+        text: clean,
+        groupId: value.main?.group_id ?? groupId ?? null,
         parentId: value.main?.id ?? null,
         tenantId: tenantId ?? null,
       });
       toast.success(t("market.activity.suggestSent"));
+      setSuggestOpen(false);
+      setSuggestText("");
     } catch {
       toast.error(t("market.activity.suggestFailed"));
     } finally {
@@ -109,14 +132,28 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
     !value.main &&
     !mainResults.isFetching &&
     (mainResults.data ?? []).length === 0;
-  const noSubMatch =
-    !!value.main &&
-    subQ.trim().length >= MIN_QUERY &&
-    !subResults.isFetching &&
-    (subResults.data ?? []).length === 0;
 
   return (
     <div className="space-y-4">
+      {/* ---- sector filter: optional, and open to any new sector ---- */}
+      <div className="min-w-0 space-y-1.5">
+        <Label htmlFor="activity_sector">{t("market.activity.sector")}</Label>
+        <select
+          id="activity_sector"
+          className={selectClass}
+          value={groupId}
+          disabled={disabled || !!value.main}
+          onChange={(e) => setGroupId(e.target.value)}
+        >
+          <option value="">{t("market.activity.allSectors")}</option>
+          {(groups.data ?? []).map((g) => (
+            <option key={g.id} value={g.id}>
+              {activityName(g, locale)}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* ---- main activity: exactly one ---- */}
       <div className="min-w-0 space-y-1.5">
         <Label htmlFor="activity_main">{t("market.activity.main")}</Label>
@@ -199,24 +236,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
               </ul>
             )}
             {noMainMatch && (
-              <div className="rounded-lg border border-dashed border-border p-3">
-                <p className="text-xs text-muted-foreground">{t("market.activity.noResults")}</p>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  className="mt-2"
-                  disabled={disabled || suggesting}
-                  onClick={() => void suggest(mainQuery.trim())}
-                >
-                  {suggesting ? (
-                    <Loader2 className="size-3.5 animate-spin" aria-hidden />
-                  ) : (
-                    <Plus className="size-3.5" aria-hidden />
-                  )}
-                  {t("market.activity.suggest")}
-                </Button>
-              </div>
+              <p className="text-xs text-muted-foreground">{t("market.activity.noResults")}</p>
             )}
           </>
         )}
@@ -236,7 +256,10 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                     aria-label={t("market.form.remove")}
                     disabled={disabled}
                     onClick={() =>
-                      onChange({ main: value.main, subs: value.subs.filter((s) => s.id !== sub.id) })
+                      onChange({
+                        main: value.main,
+                        subs: value.subs.filter((s) => s.id !== sub.id),
+                      })
                     }
                   >
                     <X className="size-3.5" aria-hidden />
@@ -281,38 +304,74 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                     <span className="min-w-0 flex-1 break-words text-sm text-foreground">
                       {activityName(hit, locale)}
                     </span>
-                    {on ? (
-                      <Check className="size-4 shrink-0 text-primary" aria-hidden />
-                    ) : (
-                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground">
-                        {Math.round(hit.score * 100)}%
-                      </span>
-                    )}
+                    {on && <Check className="size-4 shrink-0 text-primary" aria-hidden />}
                   </button>
                 </li>
               );
             })}
           </ul>
         )}
-        {noSubMatch && (
-          <div className="rounded-lg border border-dashed border-border p-3">
-            <p className="text-xs text-muted-foreground">{t("market.activity.noResults")}</p>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              className="mt-2"
-              disabled={disabled || suggesting}
-              onClick={() => void suggest(subQuery.trim())}
-            >
-              {suggesting ? (
-                <Loader2 className="size-3.5 animate-spin" aria-hidden />
-              ) : (
-                <Plus className="size-3.5" aria-hidden />
-              )}
-              {t("market.activity.suggest")}
-            </Button>
+      </div>
+
+      {/* ---- "my activity is not listed": suggestion only, never approved here ---- */}
+      <div className="min-w-0 rounded-lg border border-dashed border-border p-3">
+        {suggestOpen ? (
+          <div className="min-w-0 space-y-2">
+            <Label htmlFor="activity_suggest">{t("market.activity.suggestLabel")}</Label>
+            <Input
+              id="activity_suggest"
+              autoComplete="off"
+              disabled={disabled}
+              value={suggestText}
+              maxLength={120}
+              className="h-11 w-full min-w-0 sm:h-10"
+              onChange={(e) => setSuggestText(e.target.value)}
+            />
+            <p className="text-[11px] leading-relaxed text-muted-foreground">
+              {t("market.activity.suggestHint")}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                size="sm"
+                disabled={disabled || suggesting || suggestText.trim().length < 2}
+                onClick={() => void suggest(suggestText)}
+              >
+                {suggesting ? (
+                  <Loader2 className="size-3.5 animate-spin" aria-hidden />
+                ) : (
+                  <Plus className="size-3.5" aria-hidden />
+                )}
+                {t("market.activity.suggest")}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                disabled={suggesting}
+                onClick={() => {
+                  setSuggestOpen(false);
+                  setSuggestText("");
+                }}
+              >
+                {t("market.activity.cancel")}
+              </Button>
+            </div>
           </div>
+        ) : (
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            disabled={disabled}
+            onClick={() => {
+              setSuggestText(mainQuery.trim() || subQuery.trim());
+              setSuggestOpen(true);
+            }}
+          >
+            <Plus className="size-3.5" aria-hidden />
+            {t("market.activity.notFound")}
+          </Button>
         )}
       </div>
     </div>
