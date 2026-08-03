@@ -40,6 +40,12 @@ export interface StagedImage {
   error?: MediaError | undefined;
   /** Blob kept only in memory so a failed upload can be retried. */
   blob?: Blob | undefined;
+  /** Real pixel size after compression, stored with the row. */
+  width?: number | undefined;
+  height?: number | undefined;
+  mime?: string | undefined;
+  /** SHA-256 of the source bytes, stored as `file_hash`. */
+  hash?: string | undefined;
   /** Object URL for instant preview; signed URL after a refresh. */
   preview?: string | undefined;
 }

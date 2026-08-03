@@ -188,7 +188,14 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
             patch(id, { status: "failed", error: "duplicate" });
             continue;
           }
-          patch(id, { fingerprint: prepared.fingerprint, blob: prepared.blob });
+          patch(id, {
+            fingerprint: prepared.fingerprint,
+            blob: prepared.blob,
+            hash: prepared.fingerprint,
+            mime: prepared.mime,
+            width: prepared.width,
+            height: prepared.height,
+          });
           await uploadOne({ ...placeholder, fingerprint: prepared.fingerprint }, prepared.blob);
         }
       })();
@@ -268,12 +275,19 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
         ordered.find((i) => i.id === coverId)?.id ?? ordered[0]?.id ?? null;
 
       for (const gone of removedStored.current) {
-        await supabase.from("mkt_listing_images").delete().eq("id", gone.rowId);
+        // Soft delete through the RPC: it re-checks ownership, re-picks the
+        // cover and queues the object for the storage sweep.
+        await supabase.rpc("mkt_listing_image_delete", {
+          _listing: targetListing,
+          _image: gone.rowId,
+        });
         await removeObjects([gone.path]);
       }
       removedStored.current = [];
 
       let coverPath: string | null = null;
+      const rowIds: string[] = [];
+      let coverRow: string | null = null;
       for (const [index, item] of ordered.entries()) {
         const isCover = item.id === coverTarget;
         if (item.kind === "stored" && item.storedId) {
@@ -281,7 +295,11 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
             .from("mkt_listing_images")
             .update({ sort_order: index, is_cover: isCover })
             .eq("id", item.storedId);
-          if (isCover) coverPath = item.path;
+          rowIds.push(item.storedId);
+          if (isCover) {
+            coverPath = item.path;
+            coverRow = item.storedId;
+          }
           continue;
         }
         const target = attachedPath(userId, targetListing, item.blob?.type ?? "image/webp");
@@ -291,14 +309,39 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
           .insert({
             listing_id: targetListing,
             url: finalPath,
+            storage_key: finalPath,
+            original_filename: item.name.slice(0, 120),
+            mime_type: item.mime ?? item.blob?.type ?? null,
+            byte_size: item.blob?.size ?? item.bytes,
+            width: item.width ?? null,
+            height: item.height ?? null,
+            file_hash: item.hash ?? null,
+            upload_status: "ready",
             sort_order: index,
             is_cover: isCover,
           })
           .select("id")
           .single();
-        if (data) patch(item.id, { kind: "stored", storedId: data.id, path: finalPath });
+        if (data) {
+          patch(item.id, { kind: "stored", storedId: data.id, path: finalPath });
+          rowIds.push(data.id);
+          if (isCover) coverRow = data.id;
+        }
         if (isCover) coverPath = finalPath;
       }
+
+      // Order and cover are committed atomically server-side, never trusted
+      // from the local grid alone.
+      if (rowIds.length > 0)
+        await supabase.rpc("mkt_listing_images_reorder", {
+          _listing: targetListing,
+          _ids: rowIds,
+        });
+      if (coverRow)
+        await supabase.rpc("mkt_listing_image_set_cover", {
+          _listing: targetListing,
+          _image: coverRow,
+        });
       return coverPath;
     },
     [coverId, patch, userId],
