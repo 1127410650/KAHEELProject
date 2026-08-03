@@ -2555,6 +2555,7 @@
         "exempt": "Legally exempt"
       },
       "block": {
+        "missing": "Complete the real-estate advertising licence details before submitting.",
         "numberRequired": "Enter the advertising licence number before publishing.",
         "expiryRequired": "Enter the licence expiry date before publishing.",
         "expiredLicense": "The licence has expired; renew it before publishing.",
