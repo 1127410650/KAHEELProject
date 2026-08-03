@@ -36,6 +36,13 @@ import {
   type LrListingAction,
 } from "@/lib/mkt-listing-reports";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import {
+  AdminListingLink,
+  AdminUserLink,
+} from "@/components/marketplace/AdminEntityLink";
+import { loadAdminSubjectIds, subjectKey } from "@/lib/mkt-admin-subjects";
+import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
