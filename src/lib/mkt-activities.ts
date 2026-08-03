@@ -290,3 +290,94 @@ export async function loadActivityEntities(
   );
   return rows.map((r) => ({ ...r, name: names.get(r.tenant_id) ?? null }));
 }
+
+// ------------------------------------------------- open sectors (admin only)
+
+/**
+ * The taxonomy is deliberately open-ended: staff can add a sector for any
+ * lawful activity at any time. Both helpers are admin-guarded server side.
+ */
+export async function createActivityGroup(input: {
+  nameAr: string;
+  nameEn?: string | undefined;
+  slug?: string | undefined;
+  sortOrder?: number | undefined;
+}): Promise<string> {
+  const { data, error } = await supabase.rpc("mkt_admin_create_group", {
+    _name_ar: input.nameAr,
+    ...(input.nameEn ? { _name_en: input.nameEn } : {}),
+    ...(input.slug ? { _slug: input.slug } : {}),
+    ...(input.sortOrder === undefined ? {} : { _sort_order: input.sortOrder }),
+  });
+  if (error) throw error;
+  return String(data ?? "");
+}
+
+export async function updateActivityGroup(input: {
+  id: string;
+  nameAr?: string | undefined;
+  nameEn?: string | undefined;
+  isActive?: boolean | undefined;
+  sortOrder?: number | undefined;
+}): Promise<void> {
+  const { error } = await supabase.rpc("mkt_admin_update_group", {
+    _id: input.id,
+    ...(input.nameAr ? { _name_ar: input.nameAr } : {}),
+    ...(input.nameEn ? { _name_en: input.nameEn } : {}),
+    ...(input.isActive === undefined ? {} : { _is_active: input.isActive }),
+    ...(input.sortOrder === undefined ? {} : { _sort_order: input.sortOrder }),
+  });
+  if (error) throw error;
+}
+
+export async function createActivity(input: {
+  groupId: string;
+  nameAr: string;
+  nameEn?: string | undefined;
+  parentId?: string | null | undefined;
+}): Promise<string> {
+  const { data, error } = await supabase.rpc("mkt_admin_create_activity", {
+    _group_id: input.groupId,
+    _name_ar: input.nameAr,
+    ...(input.nameEn ? { _name_en: input.nameEn } : {}),
+    ...(input.parentId ? { _parent_id: input.parentId } : {}),
+  });
+  if (error) throw error;
+  return String(data ?? "");
+}
+
+export async function updateActivity(input: {
+  id: string;
+  nameAr?: string | undefined;
+  nameEn?: string | undefined;
+  isActive?: boolean | undefined;
+}): Promise<void> {
+  const { error } = await supabase.rpc("mkt_admin_update_activity", {
+    _id: input.id,
+    ...(input.nameAr ? { _name_ar: input.nameAr } : {}),
+    ...(input.nameEn ? { _name_en: input.nameEn } : {}),
+    ...(input.isActive === undefined ? {} : { _is_active: input.isActive }),
+  });
+  if (error) throw error;
+}
+
+// ------------------------------------------------- migration report (read-only)
+
+export interface MigrationReportRow {
+  tenant_id: string;
+  legacy_text: string | null;
+  bucket: string;
+  matched_activity_id: string | null;
+  matched_name_ar: string | null;
+  score: number | null;
+}
+
+/**
+ * Pure analysis of the legacy free-text activity stored on business profiles.
+ * It reads and reports only — nothing is written or linked automatically.
+ */
+export async function loadMigrationReport(): Promise<MigrationReportRow[]> {
+  const { data, error } = await supabase.rpc("mkt_activity_migration_report");
+  if (error) throw error;
+  return (data ?? []) as MigrationReportRow[];
+}
