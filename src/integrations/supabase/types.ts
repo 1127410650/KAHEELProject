@@ -1197,6 +1197,297 @@ export type Database = {
           },
         ]
       }
+      mkt_activities: {
+        Row: {
+          country_id: string | null
+          created_at: string
+          created_by: string | null
+          group_id: string
+          id: string
+          is_active: boolean
+          merged_into_id: string | null
+          name_ar: string
+          name_en: string | null
+          needs_review: boolean
+          norm_ar: string | null
+          norm_en: string | null
+          official_code: string | null
+          official_source: string | null
+          parent_id: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          country_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          group_id: string
+          id?: string
+          is_active?: boolean
+          merged_into_id?: string | null
+          name_ar: string
+          name_en?: string | null
+          needs_review?: boolean
+          norm_ar?: string | null
+          norm_en?: string | null
+          official_code?: string | null
+          official_source?: string | null
+          parent_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          country_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          group_id?: string
+          id?: string
+          is_active?: boolean
+          merged_into_id?: string | null
+          name_ar?: string
+          name_en?: string | null
+          needs_review?: boolean
+          norm_ar?: string | null
+          norm_en?: string | null
+          official_code?: string | null
+          official_source?: string | null
+          parent_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_activities_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activity_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activities_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activities_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_activity_aliases: {
+        Row: {
+          activity_id: string
+          alias: string
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          norm_alias: string | null
+        }
+        Insert: {
+          activity_id: string
+          alias: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          norm_alias?: string | null
+        }
+        Update: {
+          activity_id?: string
+          alias?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          norm_alias?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_activity_aliases_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_activity_groups: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_activity_merges: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          moved_aliases: number
+          moved_children: number
+          moved_links: number
+          note: string | null
+          source_id: string
+          target_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          moved_aliases?: number
+          moved_children?: number
+          moved_links?: number
+          note?: string | null
+          source_id: string
+          target_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          moved_aliases?: number
+          moved_children?: number
+          moved_links?: number
+          note?: string | null
+          source_id?: string
+          target_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_activity_merges_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activity_merges_target_id_fkey"
+            columns: ["target_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_activity_suggestions: {
+        Row: {
+          created_at: string
+          group_id: string | null
+          id: string
+          linked_activity_id: string | null
+          norm_text: string | null
+          parent_id: string | null
+          raw_text: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          suggested_by: string | null
+          tenant_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          linked_activity_id?: string | null
+          norm_text?: string | null
+          parent_id?: string | null
+          raw_text: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggested_by?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          linked_activity_id?: string | null
+          norm_text?: string | null
+          parent_id?: string | null
+          raw_text?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggested_by?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_activity_suggestions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activity_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activity_suggestions_linked_activity_id_fkey"
+            columns: ["linked_activity_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activity_suggestions_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_activity_suggestions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_appeals: {
         Row: {
           created_at: string
@@ -1765,6 +2056,54 @@ export type Database = {
             columns: ["report_id"]
             isOneToOne: false
             referencedRelation: "mkt_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_entity_activities: {
+        Row: {
+          activity_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_primary: boolean
+          source: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_primary?: boolean
+          source?: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_primary?: boolean
+          source?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_entity_activities_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_entity_activities_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -6780,6 +7119,7 @@ export type Database = {
           status: string
         }[]
       }
+      mkt_norm_activity_text: { Args: { _t: string }; Returns: string }
       mkt_notify: {
         Args: {
           _body?: string
