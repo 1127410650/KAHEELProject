@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ExternalLink, MoreHorizontal, Search } from "lucide-react";
+import { ExternalLink, FolderOpen, MoreHorizontal, Search } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
@@ -114,6 +114,12 @@ function AdminBusinessesPage() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem asChild>
+            <Link to={`/admin/businesses/${row.tenant_id}`}>
+              <FolderOpen className="size-4" aria-hidden />
+              {t("admin.detail.businessFile")}
+            </Link>
+          </DropdownMenuItem>
           {row.slug && (
             <DropdownMenuItem asChild>
               <a href={`/businesses/${row.slug}`} target="_blank" rel="noreferrer">
@@ -197,7 +203,12 @@ function AdminBusinessesPage() {
                 {rows.map((row) => (
                   <tr key={row.tenant_id} className="border-b border-border/60 last:border-0">
                     <td className="px-3 py-2">
-                      <span className="block truncate font-medium text-foreground">{row.name}</span>
+                      <Link
+                        to={`/admin/businesses/${row.tenant_id}`}
+                        className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
+                      >
+                        {row.name}
+                      </Link>
                       <span className="block truncate text-xs tabular-nums text-muted-foreground">
                         {formatDate(row.created_at)}
                       </span>
@@ -230,7 +241,12 @@ function AdminBusinessesPage() {
               <div key={row.tenant_id} className="rounded-xl border border-border bg-card p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground">{row.name}</p>
+                    <Link
+                      to={`/admin/businesses/${row.tenant_id}`}
+                      className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
+                    >
+                      {row.name}
+                    </Link>
                     <p className="truncate text-xs text-muted-foreground">
                       {[row.country, row.city].filter(Boolean).join(" · ")}
                     </p>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -249,8 +249,8 @@ function AdminListingsPage() {
                   </span>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <Button size="sm" variant="outline" onClick={() => setOpen(ad)}>
-                    {t("market.admin.fullView")}
+                  <Button asChild size="sm" variant="outline">
+                    <Link to={`/admin/listings/${ad.id}`}>{t("market.admin.fullView")}</Link>
                   </Button>
                   <Button size="sm" onClick={() => setDecision({ listing: ad, action: "approve" })}>
                     {t("market.admin.approve")}

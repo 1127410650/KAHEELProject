@@ -1,0 +1,10 @@
+REVOKE EXECUTE ON FUNCTION public.mkt_admin_user_detail(uuid) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_admin_business_detail(uuid) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_admin_listing_detail(uuid) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_admin_subject_action(text, uuid, text, text, integer) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_admin_can(text) FROM anon;
+GRANT EXECUTE ON FUNCTION public.mkt_admin_user_detail(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_admin_business_detail(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_admin_listing_detail(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_admin_subject_action(text, uuid, text, text, integer) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_admin_can(text) TO authenticated;

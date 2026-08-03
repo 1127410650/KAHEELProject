@@ -7306,6 +7306,7 @@ export type Database = {
           reason: string
         }[]
       }
+      mkt_admin_business_detail: { Args: { _tenant_id: string }; Returns: Json }
       mkt_admin_businesses: {
         Args: { _limit?: number; _offset?: number; _search?: string }
         Returns: {
@@ -7325,6 +7326,7 @@ export type Database = {
           verification_status: string
         }[]
       }
+      mkt_admin_can: { Args: { _perm: string }; Returns: boolean }
       mkt_admin_create_activity: {
         Args: {
           _group_id: string
@@ -7366,6 +7368,7 @@ export type Database = {
           title: string
         }[]
       }
+      mkt_admin_listing_detail: { Args: { _listing_id: string }; Returns: Json }
       mkt_admin_listing_events: {
         Args: {
           _actor?: string
@@ -7443,6 +7446,20 @@ export type Database = {
           updated_at: string
         }[]
       }
+      mkt_admin_log_doc_access: {
+        Args: { _kind: string; _path: string; _subject_id: string }
+        Returns: undefined
+      }
+      mkt_admin_notes_list: {
+        Args: { _subject_id: string; _subject_type: string }
+        Returns: {
+          author_id: string
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+        }[]
+      }
       mkt_admin_notify_user: {
         Args: { _body: string; _title: string; _user_id: string }
         Returns: undefined
@@ -7505,6 +7522,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_admin_user_detail: { Args: { _user_id: string }; Returns: Json }
       mkt_admin_users: {
         Args: { _limit?: number; _offset?: number; _search?: string }
         Returns: {
@@ -7521,6 +7539,10 @@ export type Database = {
           username: string
           verification_status: string
         }[]
+      }
+      mkt_admin_verification_detail: {
+        Args: { _request_id: string }
+        Returns: Json
       }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }

@@ -71,8 +71,12 @@ import { Route as AuthenticatedRequestsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRequestsIdRouteImport } from './routes/_authenticated/requests.$id'
 import { Route as AuthenticatedSupervisorsIndexRouteImport } from './routes/_authenticated/supervisors.index'
 import { Route as AuthenticatedSupervisorsIdRouteImport } from './routes/_authenticated/supervisors.$id'
+import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
+import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
+import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
+import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
@@ -398,6 +402,16 @@ const AuthenticatedSupervisorsIdRoute =
     path: '/supervisors/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
+  id: '/businesses_/$id',
+  path: '/businesses/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminListingsIdRoute = AdminListingsIdRouteImport.update({
+  id: '/listings_/$id',
+  path: '/listings/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
@@ -406,6 +420,16 @@ const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
 const AdminReportsIdRoute = AdminReportsIdRouteImport.update({
   id: '/reports/$id',
   path: '/reports/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
+  id: '/users_/$id',
+  path: '/users/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminVerificationsIdRoute = AdminVerificationsIdRouteImport.update({
+  id: '/verifications_/$id',
+  path: '/verifications/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
@@ -506,7 +530,11 @@ export interface FileRoutesByFullPath {
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -577,7 +605,11 @@ export interface FileRoutesByTo {
   '/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
@@ -651,7 +683,11 @@ export interface FileRoutesById {
   '/_authenticated/projects/$id': typeof AuthenticatedProjectsIdRoute
   '/_authenticated/requests/$id': typeof AuthenticatedRequestsIdRoute
   '/_authenticated/supervisors/$id': typeof AuthenticatedSupervisorsIdRoute
+  '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
+  '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/users_/$id': typeof AdminUsersIdRoute
+  '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -725,7 +761,11 @@ export interface FileRouteTypes {
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/admin/businesses/$id'
+    | '/admin/listings/$id'
     | '/admin/reports/$id'
+    | '/admin/users/$id'
+    | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects/'
@@ -796,7 +836,11 @@ export interface FileRouteTypes {
     | '/projects/$id'
     | '/requests/$id'
     | '/supervisors/$id'
+    | '/admin/businesses/$id'
+    | '/admin/listings/$id'
     | '/admin/reports/$id'
+    | '/admin/users/$id'
+    | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects'
@@ -869,7 +913,11 @@ export interface FileRouteTypes {
     | '/_authenticated/projects/$id'
     | '/_authenticated/requests/$id'
     | '/_authenticated/supervisors/$id'
+    | '/admin/businesses_/$id'
+    | '/admin/listings_/$id'
     | '/admin/reports/$id'
+    | '/admin/users_/$id'
+    | '/admin/verifications_/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/_authenticated/projects/'
@@ -1352,6 +1400,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSupervisorsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/admin/businesses_/$id': {
+      id: '/admin/businesses_/$id'
+      path: '/businesses/$id'
+      fullPath: '/admin/businesses/$id'
+      preLoaderRoute: typeof AdminBusinessesIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/listings_/$id': {
+      id: '/admin/listings_/$id'
+      path: '/listings/$id'
+      fullPath: '/admin/listings/$id'
+      preLoaderRoute: typeof AdminListingsIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/reports/': {
       id: '/admin/reports/'
       path: '/reports'
@@ -1364,6 +1426,20 @@ declare module '@tanstack/react-router' {
       path: '/reports/$id'
       fullPath: '/admin/reports/$id'
       preLoaderRoute: typeof AdminReportsIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/users_/$id': {
+      id: '/admin/users_/$id'
+      path: '/users/$id'
+      fullPath: '/admin/users/$id'
+      preLoaderRoute: typeof AdminUsersIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/verifications_/$id': {
+      id: '/admin/verifications_/$id'
+      path: '/verifications/$id'
+      fullPath: '/admin/verifications/$id'
+      preLoaderRoute: typeof AdminVerificationsIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/dashboard/ads/new': {
@@ -1494,7 +1570,11 @@ interface AdminRouteRouteChildren {
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
+  AdminListingsIdRoute: typeof AdminListingsIdRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
+  AdminUsersIdRoute: typeof AdminUsersIdRoute
+  AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
 }
 
@@ -1511,7 +1591,11 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminBusinessesIdRoute: AdminBusinessesIdRoute,
+  AdminListingsIdRoute: AdminListingsIdRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
+  AdminUsersIdRoute: AdminUsersIdRoute,
+  AdminVerificationsIdRoute: AdminVerificationsIdRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
 }
 
@@ -1554,13 +1638,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

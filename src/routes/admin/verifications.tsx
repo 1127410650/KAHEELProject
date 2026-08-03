@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -137,7 +137,12 @@ function AdminVerificationsPage() {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-foreground">
-                        {bizName(req.tenant_id)}
+                        <Link
+                          to={`/admin/verifications/${req.id}`}
+                          className="underline-offset-2 hover:underline"
+                        >
+                          {bizName(req.tenant_id)}
+                        </Link>
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground" dir="ltr">
                         {new Date(req.created_at).toLocaleString("en-GB", {
