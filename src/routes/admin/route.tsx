@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import { supabase } from "@/integrations/supabase/client";
+import { guardSession } from "@/lib/auth-session";
 
 /**
  * Single gate for the whole marketplace back office. Direct links to any
@@ -11,10 +11,11 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/admin")({
   ssr: false,
   beforeLoad: async ({ location }) => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) {
+    const result = await guardSession();
+    if (result.status !== "authenticated") {
       throw redirect({ to: "/auth", search: { next: location.href }, replace: true });
     }
   },
+
   component: () => <Outlet />,
 });
