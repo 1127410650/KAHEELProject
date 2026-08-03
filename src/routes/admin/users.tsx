@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { MoreHorizontal, Search } from "lucide-react";
+import { FolderOpen, MoreHorizontal, Search } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
@@ -129,6 +129,12 @@ function AdminUsersPage() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem asChild>
+            <Link to={`/admin/users/${row.user_id}`}>
+              <FolderOpen className="size-4" aria-hidden />
+              {t("admin.detail.userFile")}
+            </Link>
+          </DropdownMenuItem>
           {actions.map((action) => (
             <DropdownMenuItem key={action} onSelect={() => setPending({ row, action })}>
               {t(ACTION_LABELS[action])}
@@ -191,9 +197,12 @@ function AdminUsersPage() {
                 {rows.map((row) => (
                   <tr key={row.user_id} className="border-b border-border/60 last:border-0">
                     <td className="px-3 py-2">
-                      <span className="block truncate font-medium text-foreground">
+                      <Link
+                        to={`/admin/users/${row.user_id}`}
+                        className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
+                      >
                         {row.display_name || t("admin.users.noName")}
-                      </span>
+                      </Link>
                       <span className="block truncate text-xs text-muted-foreground">{row.email}</span>
                     </td>
                     <td className="px-3 py-2 tabular-nums">{row.phone ?? "—"}</td>
@@ -221,9 +230,12 @@ function AdminUsersPage() {
               <div key={row.user_id} className="rounded-xl border border-border bg-card p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground">
+                    <Link
+                      to={`/admin/users/${row.user_id}`}
+                      className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
+                    >
                       {row.display_name || t("admin.users.noName")}
-                    </p>
+                    </Link>
                     <p className="truncate text-xs text-muted-foreground">{row.email}</p>
                   </div>
                   <ActionsMenu row={row} />
