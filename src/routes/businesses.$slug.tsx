@@ -30,6 +30,8 @@ import {
 } from "@/lib/mkt-business-public";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -160,24 +162,6 @@ function BusinessPage() {
   });
   const hasDetails = !!entityLabel;
 
-  async function share() {
-    const url = `${window.location.origin}/businesses/${biz!.slug}`;
-    const payload = { title: name, text: activitySummary ?? name, url };
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share(payload);
-        return;
-      } catch {
-        /* dismissed by the user */
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success(t("market.ad.linkCopied"));
-    } catch {
-      toast.error(t("market.actions.failed"));
-    }
-  }
 
   return (
     <MarketShell>
@@ -244,18 +228,19 @@ function BusinessPage() {
                   </a>
                 </Button>
               )}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="min-h-11 flex-1 sm:flex-none"
-                onClick={() => void share()}
-                aria-label={t("market.business.shareProfile")}
-                title={t("market.business.shareProfile")}
-              >
-                <Share2 className="size-4" aria-hidden />
-                {t("market.ad.share")}
-              </Button>
+              <ShareSheet title={name} url={canonicalUrl(`/businesses/${biz.slug}`)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="min-h-11 flex-1 sm:flex-none"
+                  aria-label={t("market.business.shareProfile")}
+                  title={t("market.business.shareProfile")}
+                >
+                  <Share2 className="size-4" aria-hidden />
+                  {t("market.ad.share")}
+                </Button>
+              </ShareSheet>
               {place && (
                 <Button
                   asChild

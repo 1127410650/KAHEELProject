@@ -8,6 +8,8 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { currentPath, loginHref, SA_CITIES, type MktAction, type MktListing } from "@/lib/mkt";
 import { ReportDialog } from "@/components/marketplace/ReportDialog";
+import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -161,28 +163,6 @@ export function ListingActions({
 
 
 
-  async function share() {
-    const url = window.location.href;
-    const data = { title: listing.title, url };
-    if (typeof navigator.share === "function") {
-      try {
-        await navigator.share(data);
-        return;
-      } catch {
-        /* cancelled or unsupported — fall back to copying */
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success(t("market.ad.linkCopied"));
-    } catch {
-      toast.error(t("market.actions.failed"));
-    }
-  }
-
-
-
-
   // Compact icon row shown at the top of the ad: favourite, share, report.
   if (variant === "quick") {
     return (
@@ -203,14 +183,18 @@ export function ListingActions({
             </button>
           )}
 
-          <button
-            type="button"
-            onClick={() => void share()}
-            aria-label={t("market.ad.share")}
-            className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+          <ShareSheet
+            title={listing.title}
+            url={canonicalUrl(`/ads/${listing.slug ?? listing.id}`)}
           >
-            <Share2 className="size-5" aria-hidden />
-          </button>
+            <button
+              type="button"
+              aria-label={t("market.ad.share")}
+              className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
+            >
+              <Share2 className="size-5" aria-hidden />
+            </button>
+          </ShareSheet>
           {/* Location lives here, next to share: no card, no full-width button.
            * An approximate ad only ever links to a blurred point or a place. */}
           {locationHref && (

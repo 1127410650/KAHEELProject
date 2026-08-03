@@ -18,6 +18,8 @@ import {
 } from "@/lib/mkt-person";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -123,24 +125,6 @@ function UserProfilePage() {
   );
   const cats = categories.data ?? [];
 
-  async function share() {
-    const url = `${window.location.origin}/u/${me!.username}`;
-    const payload = { title: name, text: name, url };
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share(payload);
-        return;
-      } catch {
-        /* dismissed by the user */
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success(t("market.ad.linkCopied"));
-    } catch {
-      toast.error(t("market.actions.failed"));
-    }
-  }
 
   return (
     <MarketShell>
@@ -207,18 +191,19 @@ function UserProfilePage() {
                 </a>
               </Button>
             )}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="min-h-11 flex-1 sm:flex-none"
-              onClick={() => void share()}
-              aria-label={t("market.person.shareProfile")}
-              title={t("market.person.shareProfile")}
-            >
-              <Share2 className="size-4" aria-hidden />
-              {t("market.ad.share")}
-            </Button>
+            <ShareSheet title={name} url={canonicalUrl(`/u/${me.username}`)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="min-h-11 flex-1 sm:flex-none"
+                aria-label={t("market.person.shareProfile")}
+                title={t("market.person.shareProfile")}
+              >
+                <Share2 className="size-4" aria-hidden />
+                {t("market.ad.share")}
+              </Button>
+            </ShareSheet>
           </div>
 
           {!me.is_owner && session && contacts.length > 0 && (
