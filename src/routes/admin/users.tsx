@@ -130,7 +130,7 @@ function AdminUsersPage() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link to={`/admin/users_/${row.user_id}`}>
+            <Link to={`/admin/users/${row.user_id}`}>
               <FolderOpen className="size-4" aria-hidden />
               {t("admin.detail.userFile")}
             </Link>
@@ -198,7 +198,7 @@ function AdminUsersPage() {
                   <tr key={row.user_id} className="border-b border-border/60 last:border-0">
                     <td className="px-3 py-2">
                       <Link
-                        to={`/admin/users_/${row.user_id}`}
+                        to={`/admin/users/${row.user_id}`}
                         className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
                       >
                         {row.display_name || t("admin.users.noName")}
@@ -231,7 +231,7 @@ function AdminUsersPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <Link
-                      to={`/admin/users_/${row.user_id}`}
+                      to={`/admin/users/${row.user_id}`}
                       className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
                     >
                       {row.display_name || t("admin.users.noName")}

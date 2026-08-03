@@ -115,7 +115,7 @@ function AdminBusinessesPage() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link to={`/admin/businesses_/${row.tenant_id}`}>
+            <Link to={`/admin/businesses/${row.tenant_id}`}>
               <FolderOpen className="size-4" aria-hidden />
               {t("admin.detail.businessFile")}
             </Link>
@@ -204,7 +204,7 @@ function AdminBusinessesPage() {
                   <tr key={row.tenant_id} className="border-b border-border/60 last:border-0">
                     <td className="px-3 py-2">
                       <Link
-                        to={`/admin/businesses_/${row.tenant_id}`}
+                        to={`/admin/businesses/${row.tenant_id}`}
                         className="block truncate font-medium text-foreground underline-offset-2 hover:underline"
                       >
                         {row.name}
@@ -242,7 +242,7 @@ function AdminBusinessesPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <Link
-                      to={`/admin/businesses_/${row.tenant_id}`}
+                      to={`/admin/businesses/${row.tenant_id}`}
                       className="block truncate text-sm font-semibold text-foreground underline-offset-2 hover:underline"
                     >
                       {row.name}

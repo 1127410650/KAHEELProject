@@ -138,7 +138,7 @@ function AdminVerificationsPage() {
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-foreground">
                         <Link
-                          to={`/admin/verifications_/${req.id}`}
+                          to={`/admin/verifications/${req.id}`}
                           className="underline-offset-2 hover:underline"
                         >
                           {bizName(req.tenant_id)}
