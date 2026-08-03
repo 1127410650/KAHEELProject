@@ -233,6 +233,9 @@ export function ListingCard({
   const price = priceLabel(listing, t("market.priceOnRequest"));
   const horizontal = view === "list" || view === "row";
   const tag = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel;
+  // Suppresses card navigation while (and just after) the ⋯ menu is open.
+  const navBlocked = useRef(false);
+
 
   const meta = (
     <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-1.5 text-[11px] text-muted-foreground">
