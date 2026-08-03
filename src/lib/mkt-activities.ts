@@ -229,7 +229,7 @@ export async function loadSuggestions(status?: string): Promise<ActivitySuggesti
 
 export async function reviewSuggestion(input: {
   id: string;
-  decision: "approved" | "rejected" | "linked";
+  decision: "approved" | "rejected" | "merged";
   activityId?: string | undefined;
   note?: string | undefined;
 }): Promise<void> {
