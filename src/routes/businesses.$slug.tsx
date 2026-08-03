@@ -421,7 +421,7 @@ function BusinessPage() {
               </p>
             ) : (
               <>
-                <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-3">
+                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
                   {rows.map((l) => (
                     <ListingCard key={l.id} listing={l} />
                   ))}
