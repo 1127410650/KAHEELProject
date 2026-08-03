@@ -40,22 +40,26 @@ export interface ListingFilters {
 export const PAGE_SIZE = 20;
 
 export async function loadCategories(): Promise<MktCategory[]> {
-  const { data } = await supabase
+  // A failed read must surface, not turn into an empty category tree.
+  const { data, error } = await supabase
     .from("mkt_categories")
     .select("id, parent_id, slug, name_ar, name_en, icon, sort_order")
     .eq("is_active", true)
     .order("sort_order");
+  if (error) throw error;
   return (data ?? []) as MktCategory[];
 }
 
 export async function loadListingTypes(): Promise<MktListingType[]> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("mkt_listing_types")
     .select("code, name_ar, name_en, is_request, sort_order")
     .eq("is_active", true)
     .order("sort_order");
+  if (error) throw error;
   return (data ?? []) as MktListingType[];
 }
+
 
 /** Enrich raw listings with business name, verification state and a displayable image. */
 export async function decorateListings(
