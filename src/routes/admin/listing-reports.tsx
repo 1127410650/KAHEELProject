@@ -507,13 +507,19 @@ function CaseDrawer({
   report,
   can,
   staffOptions,
+  ownerUserId,
+  reporterUserId,
   onDone,
 }: {
   report: AdminListingReport;
   can: (perm: string) => boolean;
   staffOptions: { user_id: string; label: string }[];
+  /** Ids only; the server withheld them when this admin may not see them. */
+  ownerUserId: string | null;
+  reporterUserId: string | null;
   onDone: () => void;
 }) {
+
   const { t, locale } = useI18n();
   const [reason, setReason] = useState("");
   const [assignee, setAssignee] = useState(report.assigned_to ?? "");
