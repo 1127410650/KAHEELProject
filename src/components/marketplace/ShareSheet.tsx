@@ -74,6 +74,7 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
 
   function openExternal(href: string) {
     setOpen(false);
+    track("share");
     window.open(href, "_blank", "noopener,noreferrer");
   }
 
@@ -82,6 +83,7 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
       await navigator.clipboard.writeText(link);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+      track("link_copy");
       toast.success(t("market.ad.linkCopied"));
       setOpen(false);
     } catch {
@@ -93,6 +95,7 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
     setOpen(false);
     try {
       await navigator.share({ title, text: title, url: link });
+      track("share");
     } catch {
       /* dismissed by the user */
     }
@@ -104,10 +107,12 @@ export function ShareSheet({ title, url, listingId, children }: ShareSheetProps)
       setQrData(data);
       setOpen(false);
       setQrOpen(true);
+      track("qr_open");
     } catch {
       toast.error(t("market.actions.failed"));
     }
   }
+
 
   const rows: Row[] = [
     {
