@@ -5,6 +5,7 @@ import { ShieldCheck, Loader2, QrCode } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { landingPathForSession } from "@/lib/mkt-platform";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
