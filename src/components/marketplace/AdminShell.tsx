@@ -290,7 +290,7 @@ export function AdminShell({
             </Sheet>
           )}
 
-          <Link to="/admin" className="flex min-w-0 items-center gap-2">
+          <Link to="/admin" className="flex min-h-11 min-w-0 items-center gap-2">
             <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
               <ShieldCheck className="size-4" aria-hidden />
             </span>
@@ -309,7 +309,8 @@ export function AdminShell({
           {allowed && (
             <>
               <AdminAlerts enabled={allowed} />
-              <Button asChild variant="outline" size="sm" className="min-h-9 shrink-0">
+              <Button asChild variant="outline" size="sm" className="min-h-11 shrink-0">
+
                 {/* Full page load: the marketplace opens in its own shell and the
                     admin session (and active account) stays untouched. */}
                 <a href="/?admin_preview=1">
