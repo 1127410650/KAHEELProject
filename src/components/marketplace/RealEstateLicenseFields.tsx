@@ -356,6 +356,8 @@ export function RealEstateLicenseFields({
       <p className="rounded-lg border border-border bg-secondary px-3 py-2 text-[11px] text-secondary-foreground">
         {t(`market.license.status.${value.verificationStatus}`)} — {t("market.license.statusNote")}
       </p>
-    </fieldset>
+      </fieldset>
+    </div>
+
   );
 }
