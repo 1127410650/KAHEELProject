@@ -76,6 +76,7 @@ import { Route as AdminListingsIdRouteImport } from './routes/admin/listings.$id
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users.$id'
+import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications.$id'
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
@@ -426,6 +427,11 @@ const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AdminUsersRoute,
 } as any)
+const AdminVerificationsIdRoute = AdminVerificationsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminVerificationsRoute,
+} as any)
 const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
   id: '/dashboard/ads/new',
   path: '/dashboard/ads/new',
@@ -505,7 +511,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRouteWithChildren
-  '/admin/verifications': typeof AdminVerificationsRoute
+  '/admin/verifications': typeof AdminVerificationsRouteWithChildren
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
@@ -528,6 +534,7 @@ export interface FileRoutesByFullPath {
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -579,7 +586,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRouteWithChildren
-  '/admin/verifications': typeof AdminVerificationsRoute
+  '/admin/verifications': typeof AdminVerificationsRouteWithChildren
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
@@ -602,6 +609,7 @@ export interface FileRoutesByTo {
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
@@ -656,7 +664,7 @@ export interface FileRoutesById {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRouteWithChildren
-  '/admin/verifications': typeof AdminVerificationsRoute
+  '/admin/verifications': typeof AdminVerificationsRouteWithChildren
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
@@ -679,6 +687,7 @@ export interface FileRoutesById {
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
@@ -756,6 +765,7 @@ export interface FileRouteTypes {
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
+    | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects/'
@@ -830,6 +840,7 @@ export interface FileRouteTypes {
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
+    | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/projects'
@@ -906,6 +917,7 @@ export interface FileRouteTypes {
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
+    | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
     | '/_authenticated/projects/'
@@ -1423,6 +1435,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIdRouteImport
       parentRoute: typeof AdminUsersRoute
     }
+    '/admin/verifications/$id': {
+      id: '/admin/verifications/$id'
+      path: '/$id'
+      fullPath: '/admin/verifications/$id'
+      preLoaderRoute: typeof AdminVerificationsIdRouteImport
+      parentRoute: typeof AdminVerificationsRoute
+    }
     '/dashboard/ads/new': {
       id: '/dashboard/ads/new'
       path: '/dashboard/ads/new'
@@ -1574,6 +1593,17 @@ const AdminUsersRouteWithChildren = AdminUsersRoute._addFileChildren(
   AdminUsersRouteChildren,
 )
 
+interface AdminVerificationsRouteChildren {
+  AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
+}
+
+const AdminVerificationsRouteChildren: AdminVerificationsRouteChildren = {
+  AdminVerificationsIdRoute: AdminVerificationsIdRoute,
+}
+
+const AdminVerificationsRouteWithChildren =
+  AdminVerificationsRoute._addFileChildren(AdminVerificationsRouteChildren)
+
 interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
@@ -1585,7 +1615,7 @@ interface AdminRouteRouteChildren {
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRouteWithChildren
-  AdminVerificationsRoute: typeof AdminVerificationsRoute
+  AdminVerificationsRoute: typeof AdminVerificationsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
@@ -1602,7 +1632,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminRolesRoute: AdminRolesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRouteWithChildren,
-  AdminVerificationsRoute: AdminVerificationsRoute,
+  AdminVerificationsRoute: AdminVerificationsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
