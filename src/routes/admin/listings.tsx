@@ -66,14 +66,23 @@ interface Decision {
 
 function AdminListingsPage() {
   const { t, locale } = useI18n();
-  const [status, setStatus] = useState("pending");
-  const [city, setCity] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [tenantId, setTenantId] = useState("");
-  const [q, setQ] = useState("");
+  const remembered = readAdminListState("listings", {
+    status: "pending",
+    city: "",
+    categoryId: "",
+    tenantId: "",
+    q: "",
+  });
+  const [status, setStatus] = useState(remembered.status);
+  const [city, setCity] = useState(remembered.city);
+  const [categoryId, setCategoryId] = useState(remembered.categoryId);
+  const [tenantId, setTenantId] = useState(remembered.tenantId);
+  const [q, setQ] = useState(remembered.q);
   const [open, setOpen] = useState<MktListing | null>(null);
   const [decision, setDecision] = useState<Decision | null>(null);
   const [busy, setBusy] = useState(false);
+
+
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const businesses = useQuery({
