@@ -89,7 +89,7 @@ export async function loadPersonListings(input: {
 }): Promise<ListingCardData[]> {
   const { data, error } = await supabase.rpc("mkt_public_person_listings", {
     _username: input.username,
-    _category_id: input.categoryId,
+    ...(input.categoryId ? { _category_id: input.categoryId } : {}),
     _limit: PERSON_PAGE_SIZE,
     _offset: input.page * PERSON_PAGE_SIZE,
   });
