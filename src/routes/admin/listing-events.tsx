@@ -216,9 +216,7 @@ function AdminListingEventsPage() {
             <li key={event.id} className="rounded-xl border border-border bg-card p-3">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="secondary" className="text-[11px]">
-                  {t(`market.admin.log.type.${event.event_type}`, {
-                    defaultValue: event.event_type,
-                  } as never) || event.event_type}
+                  {t(`market.admin.log.type.${event.event_type}`)}
                 </Badge>
                 {event.listing_ref && (
                   <span dir="ltr" className="text-xs font-semibold text-foreground">
