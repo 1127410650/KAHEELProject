@@ -278,8 +278,8 @@ function MyAdsPage() {
                 : "bg-secondary text-secondary-foreground"
             }`}
           >
-            {key === "all" ? t("market.filters.all") : t(`market.dash.status.${key}`)}
-            <span className="ms-1 opacity-70" dir="ltr">
+            {key === "all" ? t("market.filters.all") : t(`market.dash.status.${key}`)}{" "}
+            <span className="opacity-70" dir="ltr">
               {counts[key] ?? 0}
             </span>
           </button>
