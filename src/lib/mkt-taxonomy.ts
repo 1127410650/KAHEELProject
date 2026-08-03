@@ -45,7 +45,16 @@ export function purposesFor(rootSlug: string | null | undefined): string[] {
   return ROOT_PURPOSES[rootSlug] ?? DEFAULT_PURPOSES;
 }
 
-const FACADE = ["north", "south", "east", "west", "north_east", "north_west", "south_east", "south_west"];
+const FACADE = [
+  "north",
+  "south",
+  "east",
+  "west",
+  "north_east",
+  "north_west",
+  "south_east",
+  "south_west",
+];
 
 const F = {
   area: { key: "area", kind: "number", labelKey: "market.spec.area", unitKey: "market.spec.sqm" },
@@ -91,7 +100,16 @@ const F = {
 /** Real-estate detail fields, per subcategory slug. */
 const REAL_ESTATE: Record<string, SpecField[]> = {
   "re-apartments": [F.area, F.rooms, F.baths, F.floor, F.age, F.facade, F.furnished, F.negotiable],
-  "re-villas": [F.area, F.rooms, F.baths, F.age, F.facade, F.streetWidth, F.furnished, F.negotiable],
+  "re-villas": [
+    F.area,
+    F.rooms,
+    F.baths,
+    F.age,
+    F.facade,
+    F.streetWidth,
+    F.furnished,
+    F.negotiable,
+  ],
   "re-land": [F.area, F.facade, F.streetWidth, F.negotiable],
   "re-buildings": [F.area, F.rooms, F.baths, F.age, F.facade, F.streetWidth, F.negotiable],
   "re-offices": [F.area, F.rooms, F.baths, F.floor, F.age, F.facade, F.furnished, F.negotiable],
@@ -103,7 +121,15 @@ const REAL_ESTATE: Record<string, SpecField[]> = {
   "re-investment": [F.area, F.age, F.facade, F.streetWidth, F.negotiable],
 };
 
-const EQUIPMENT_BASE = [F.brand, F.model, F.year, F.hours, F.capacity, F.withOperator, F.negotiable];
+const EQUIPMENT_BASE = [
+  F.brand,
+  F.model,
+  F.year,
+  F.hours,
+  F.capacity,
+  F.withOperator,
+  F.negotiable,
+];
 const PRODUCT_BASE = [F.brand, F.spec, F.minOrder, F.delivery, F.negotiable];
 const SERVICE_BASE = [F.experience, F.coverage, F.response, F.warranty, F.negotiable];
 const SUPPLIER_BASE = [F.productionCapacity, F.minOrder, F.delivery, F.negotiable];
@@ -170,4 +196,36 @@ export const SPEC_FIELDS: SpecField[] = Object.values(F);
 
 export function specFieldByKey(key: string): SpecField | null {
   return SPEC_FIELDS.find((field) => field.key === key) ?? null;
+}
+
+/**
+ * The very few detail fields that belong on the first screen of the ad form,
+ * in priority order. Everything else moves into "more details", which stays
+ * collapsed and never blocks publishing.
+ */
+const PRIMARY_ORDER = [
+  "area",
+  "rooms",
+  "baths",
+  "rent_period",
+  "coverage",
+  "min_order",
+  "production_capacity",
+  "capacity",
+  "brand",
+];
+
+/** At most three primary fields, so the first screen never becomes a long form. */
+export function splitSpecFields(fields: SpecField[]): {
+  primary: SpecField[];
+  extra: SpecField[];
+} {
+  const primary: SpecField[] = [];
+  for (const key of PRIMARY_ORDER) {
+    if (primary.length >= 3) break;
+    const found = fields.find((f) => f.key === key);
+    if (found) primary.push(found);
+  }
+  const extra = fields.filter((f) => !primary.includes(f));
+  return { primary, extra };
 }
