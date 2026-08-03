@@ -421,7 +421,7 @@ export function BusinessQuickCreate({
               }}
             />
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          
           <Field id="qc_site" label={t("market.biz.website")} hint={t("market.biz.optional")}>
             <Input
               id="qc_site"
