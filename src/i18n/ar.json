@@ -2790,5 +2790,155 @@
     "retry": "إعادة المحاولة",
     "home": "الرئيسية",
     "code404": "404"
+  },
+  "admin": {
+    "console": "إدارة المنصة",
+    "menu": "القائمة",
+    "owner": "مدير النظام",
+    "account": "الحساب",
+    "previewMarket": "معاينة السوق",
+    "switchAccount": "تبديل الحساب",
+    "signOut": "تسجيل الخروج",
+    "backToMarket": "العودة إلى السوق",
+    "backToAdmin": "العودة إلى الإدارة",
+    "actionNeeded": "يحتاج إجراءً",
+    "reason": "سبب الإجراء (إلزامي)",
+    "reasonHint": "اكتب سببًا واضحًا يُسجَّل في سجل التدقيق",
+    "noteSaved": "تم حفظ الملاحظة",
+    "actionDone": "تم تنفيذ الإجراء",
+    "actionFailed": "تعذّر تنفيذ الإجراء",
+    "nav": {
+      "home": "الرئيسية",
+      "listings": "الإعلانات",
+      "listingReports": "بلاغات الإعلانات",
+      "listingEvents": "سجل عمليات الإعلانات",
+      "users": "المستخدمون",
+      "businesses": "المنشآت",
+      "verifications": "طلبات التوثيق",
+      "reports": "البلاغات",
+      "activities": "الأنشطة",
+      "geo": "الدول والمدن",
+      "roles": "الأدوار والصلاحيات",
+      "auditLog": "سجل التدقيق",
+      "settings": "إعدادات المنصة"
+    },
+    "alerts": {
+      "title": "مركز التنبيهات",
+      "empty": "لا تنبيهات حالية",
+      "listingsPending": "إعلانات بانتظار المراجعة",
+      "reportsNew": "بلاغات جديدة",
+      "verifications": "طلبات توثيق معلّقة",
+      "activitySuggestions": "أنشطة مقترحة"
+    },
+    "stats": {
+      "users": "المستخدمون",
+      "businesses": "المنشآت",
+      "published": "إعلانات منشورة",
+      "pending": "بانتظار المراجعة",
+      "reports": "بلاغات جديدة",
+      "verifications": "توثيق معلّق",
+      "restricted": "حسابات مقيّدة",
+      "suggestions": "أنشطة مقترحة"
+    },
+    "role": {
+      "systemOwner": "مدير النظام",
+      "platformAdmin": "مدير منصة",
+      "staff": "منسوب طاقم"
+    },
+    "status": {
+      "active": "نشط"
+    },
+    "restriction": {
+      "restricted": "مقيّد",
+      "suspended": "موقوف",
+      "banned": "محجوب",
+      "publishing_suspended": "نشر موقوف"
+    },
+    "verification": {
+      "verified": "موثّق",
+      "pending": "قيد المراجعة",
+      "unverified": "بدون توثيق",
+      "rejected": "مرفوض"
+    },
+    "action": {
+      "restrict": "تقييد الحساب",
+      "suspend": "إيقاف مؤقت",
+      "ban": "حجب نهائي",
+      "revokeVerification": "سحب التوثيق",
+      "lift": "رفع القيد",
+      "note": "ملاحظة داخلية",
+      "suspendPublishing": "إيقاف النشر"
+    },
+    "users": {
+      "user": "المستخدم",
+      "noName": "بدون اسم",
+      "phone": "الجوال",
+      "created": "التسجيل",
+      "lastSeen": "آخر ظهور",
+      "listings": "إعلانات",
+      "businesses": "منشآت",
+      "status": "الحالة",
+      "searchHint": "ابحث بالاسم أو البريد أو الجوال"
+    },
+    "business": {
+      "name": "المنشأة",
+      "place": "الموقع",
+      "activity": "النشاط الرئيسي",
+      "officer": "الموظف المختص",
+      "listings": "إعلانات",
+      "verification": "التوثيق",
+      "openPublic": "فتح الملف العام",
+      "searchHint": "ابحث باسم المنشأة أو الرقم"
+    },
+    "roles": {
+      "hint": "منح الأدوار وسحبها يتطلب سببًا ويُسجَّل في سجل التدقيق.",
+      "change": "تغيير الدور",
+      "makeAdmin": "منح دور مدير منصة",
+      "makeOwner": "منح دور مدير النظام",
+      "revoke": "سحب الدور",
+      "showPerms": "الصلاحيات",
+      "hidePerms": "إخفاء الصلاحيات",
+      "permChange": "تغيير صلاحية",
+      "grantedAt": "مُنح في"
+    },
+    "perm": {
+      "reports.inbox_view": "عرض صندوق البلاغات",
+      "reports.review": "مراجعة البلاغات",
+      "reports.assign": "تحويل البلاغات",
+      "reports.close": "إغلاق البلاغات",
+      "reports.reopen": "إعادة فتح البلاغات",
+      "reports.escalate": "تصعيد البلاغات",
+      "reports.merge": "دمج البلاغات",
+      "reports.add_internal_note": "ملاحظات داخلية",
+      "reports.message_advertiser": "مراسلة صاحب الإعلان",
+      "reports.message_reporter": "الرد على المبلّغ",
+      "reports.audit_view": "عرض سجل التدقيق",
+      "ads.moderation_hide": "حجب الإعلانات",
+      "ads.moderation_suspend": "إيقاف الإعلانات",
+      "accounts.restrict": "تقييد الحسابات",
+      "accounts.suspend": "إيقاف الحسابات",
+      "businesses.suspend": "إيقاف نشر المنشآت",
+      "verifications.review": "مراجعة التوثيق",
+      "appeals.review": "مراجعة الاعتراضات"
+    },
+    "audit": {
+      "searchHint": "ابحث بالإجراء أو السبب",
+      "entity": "الجهة",
+      "allEntities": "كل الجهات",
+      "actor": "المنفّذ",
+      "system": "النظام"
+    },
+    "settings": {
+      "hint": "كل تغيير في الإعدادات يُسجَّل بسببه في سجل التدقيق.",
+      "updatedAt": "آخر تحديث",
+      "confirmTitle": "تأكيد تغيير الإعداد",
+      "section": {
+        "listings": "الإعلانات",
+        "media": "الصور والوسائط",
+        "moderation": "المراجعة والرقابة",
+        "accounts": "الحسابات",
+        "general": "عام"
+      }
+    }
   }
 }

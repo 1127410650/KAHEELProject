@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
+import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { routeRuleFor } from "@/lib/routes-map";
 
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ import { AccountMenu } from "@/components/marketplace/AccountMenu";
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session } = useSession();
+  const { identity: adminIdentity } = usePlatformIdentity();
 
   const addListingHref = session
     ? undefined
@@ -78,6 +80,16 @@ export function MarketHeader() {
 
           {session ? (
             <>
+              {/* Only a platform admin sees this; it is the way back out of the
+                  public marketplace into the console. */}
+              {adminIdentity?.is_platform_admin === true && adminIdentity.restricted !== true && (
+                <Button asChild size="sm" variant="outline" className="shrink-0">
+                  <Link to="/admin" aria-label={t("admin.backToAdmin")} title={t("admin.backToAdmin")}>
+                    <ShieldCheck className="size-4" aria-hidden />
+                    <span className="hidden sm:inline">{t("admin.backToAdmin")}</span>
+                  </Link>
+                </Button>
+              )}
               <MktNotificationsBell />
               {/* The single account surface: identity, switching and management. */}
               <AccountMenu />

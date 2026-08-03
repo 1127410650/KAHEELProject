@@ -5,6 +5,7 @@ import { ShieldCheck, Loader2, QrCode } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { landingPathForSession } from "@/lib/mkt-platform";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -49,10 +50,23 @@ function AuthPage() {
   useEffect(() => setMounted(true), []);
 
 
+  // Where to land is decided by the server-side platform role, never by the
+  // signed-in email address: a platform admin lands in the console directly.
+  async function landing(): Promise<string> {
+    const next = safeNext();
+    if (next) return next;
+    try {
+      return await landingPathForSession();
+    } catch {
+      return "/select-account";
+    }
+  }
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: safeNext() ?? "/select-account", replace: true });
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) navigate({ to: await landing(), replace: true });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   async function onSubmit(event: React.FormEvent) {
@@ -72,7 +86,7 @@ function AuthPage() {
         toast.error(t("auth.invalid"));
         return;
       }
-      navigate({ to: safeNext() ?? "/select-account", replace: true });
+      navigate({ to: await landing(), replace: true });
     } catch {
       toast.error(t("auth.invalid"));
     } finally {

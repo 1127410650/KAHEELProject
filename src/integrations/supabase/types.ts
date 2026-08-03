@@ -222,7 +222,7 @@ export type Database = {
           new_value: Json | null
           old_value: Json | null
           reason: string | null
-          tenant_id: string
+          tenant_id: string | null
         }
         Insert: {
           action: string
@@ -234,7 +234,7 @@ export type Database = {
           new_value?: Json | null
           old_value?: Json | null
           reason?: string | null
-          tenant_id?: string
+          tenant_id?: string | null
         }
         Update: {
           action?: string
@@ -246,7 +246,7 @@ export type Database = {
           new_value?: Json | null
           old_value?: Json | null
           reason?: string | null
-          tenant_id?: string
+          tenant_id?: string | null
         }
         Relationships: [
           {
@@ -1487,6 +1487,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mkt_admin_notes: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          subject_id: string
+          subject_type: string
+        }
+        Insert: {
+          author_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          subject_id: string
+          subject_type: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          subject_id?: string
+          subject_type?: string
+        }
+        Relationships: []
       }
       mkt_appeals: {
         Row: {
@@ -2771,17 +2798,56 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          granted_reason: string | null
+          platform_role: string
+          updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           created_by?: string | null
+          granted_reason?: string | null
+          platform_role?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           created_by?: string | null
+          granted_reason?: string | null
+          platform_role?: string
+          updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_platform_settings: {
+        Row: {
+          created_at: string
+          description_ar: string | null
+          key: string
+          section: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          description_ar?: string | null
+          key: string
+          section: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          description_ar?: string | null
+          key?: string
+          section?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
@@ -7216,6 +7282,49 @@ export type Database = {
           parent_name_ar: string
         }[]
       }
+      mkt_admin_add_note: {
+        Args: { _body: string; _subject_id: string; _subject_type: string }
+        Returns: string
+      }
+      mkt_admin_audit_log: {
+        Args: {
+          _entity?: string
+          _limit?: number
+          _offset?: number
+          _search?: string
+        }
+        Returns: {
+          action: string
+          actor_id: string
+          actor_name: string
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          new_value: Json
+          old_value: Json
+          reason: string
+        }[]
+      }
+      mkt_admin_businesses: {
+        Args: { _limit?: number; _offset?: number; _search?: string }
+        Returns: {
+          city: string
+          country: string
+          created_at: string
+          listings_count: number
+          main_activity: string
+          name: string
+          officer_name: string
+          restriction: string
+          restriction_id: string
+          slug: string
+          status: string
+          sub_activities: string[]
+          tenant_id: string
+          verification_status: string
+        }[]
+      }
       mkt_admin_create_activity: {
         Args: {
           _group_id: string
@@ -7334,6 +7443,49 @@ export type Database = {
           updated_at: string
         }[]
       }
+      mkt_admin_notify_user: {
+        Args: { _body: string; _title: string; _user_id: string }
+        Returns: undefined
+      }
+      mkt_admin_overview: { Args: never; Returns: Json }
+      mkt_admin_roles: {
+        Args: never
+        Returns: {
+          display_name: string
+          email: string
+          granted_at: string
+          platform_role: string
+          staff_perms: string[]
+          user_id: string
+        }[]
+      }
+      mkt_admin_set_platform_role: {
+        Args: { _reason: string; _role: string; _user_id: string }
+        Returns: undefined
+      }
+      mkt_admin_set_setting: {
+        Args: { _key: string; _reason: string; _value: Json }
+        Returns: undefined
+      }
+      mkt_admin_set_staff_perm: {
+        Args: {
+          _granted: boolean
+          _perm: string
+          _reason: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      mkt_admin_subject_action: {
+        Args: {
+          _action: string
+          _days?: number
+          _reason: string
+          _subject_id: string
+          _subject_type: string
+        }
+        Returns: undefined
+      }
       mkt_admin_update_activity: {
         Args: {
           _id: string
@@ -7352,6 +7504,23 @@ export type Database = {
           _sort_order?: number
         }
         Returns: undefined
+      }
+      mkt_admin_users: {
+        Args: { _limit?: number; _offset?: number; _search?: string }
+        Returns: {
+          businesses_count: number
+          created_at: string
+          display_name: string
+          email: string
+          last_seen_at: string
+          listings_count: number
+          phone: string
+          restriction: string
+          restriction_id: string
+          user_id: string
+          username: string
+          verification_status: string
+        }[]
       }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }
@@ -7417,6 +7586,7 @@ export type Database = {
       mkt_is_platform_admin: { Args: never; Returns: boolean }
       mkt_is_super_admin: { Args: never; Returns: boolean }
       mkt_is_system_action: { Args: never; Returns: boolean }
+      mkt_is_system_owner: { Args: never; Returns: boolean }
       mkt_is_verified_business: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -7524,6 +7694,7 @@ export type Database = {
           status: string
         }[]
       }
+      mkt_my_platform_role: { Args: never; Returns: Json }
       mkt_norm_activity_text: { Args: { _t: string }; Returns: string }
       mkt_notify: {
         Args: {

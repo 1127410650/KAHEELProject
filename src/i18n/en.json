@@ -2790,5 +2790,155 @@
     "retry": "Try again",
     "home": "Home",
     "code404": "404"
+  },
+  "admin": {
+    "console": "Platform console",
+    "menu": "Menu",
+    "owner": "System owner",
+    "account": "Account",
+    "previewMarket": "Preview marketplace",
+    "switchAccount": "Switch account",
+    "signOut": "Sign out",
+    "backToMarket": "Back to marketplace",
+    "backToAdmin": "Back to console",
+    "actionNeeded": "Needs action",
+    "reason": "Reason (required)",
+    "reasonHint": "A clear reason, stored in the audit log",
+    "noteSaved": "Note saved",
+    "actionDone": "Action completed",
+    "actionFailed": "Action failed",
+    "nav": {
+      "home": "Overview",
+      "listings": "Listings",
+      "listingReports": "Listing reports",
+      "listingEvents": "Listing events",
+      "users": "Users",
+      "businesses": "Businesses",
+      "verifications": "Verifications",
+      "reports": "Reports",
+      "activities": "Activities",
+      "geo": "Countries & cities",
+      "roles": "Roles & permissions",
+      "auditLog": "Audit log",
+      "settings": "Platform settings"
+    },
+    "alerts": {
+      "title": "Alerts",
+      "empty": "Nothing needs attention",
+      "listingsPending": "Listings awaiting review",
+      "reportsNew": "New reports",
+      "verifications": "Pending verifications",
+      "activitySuggestions": "Suggested activities"
+    },
+    "stats": {
+      "users": "Users",
+      "businesses": "Businesses",
+      "published": "Published listings",
+      "pending": "Awaiting review",
+      "reports": "New reports",
+      "verifications": "Pending verifications",
+      "restricted": "Restricted accounts",
+      "suggestions": "Suggested activities"
+    },
+    "role": {
+      "systemOwner": "System owner",
+      "platformAdmin": "Platform admin",
+      "staff": "Staff member"
+    },
+    "status": {
+      "active": "Active"
+    },
+    "restriction": {
+      "restricted": "Restricted",
+      "suspended": "Suspended",
+      "banned": "Banned",
+      "publishing_suspended": "Publishing suspended"
+    },
+    "verification": {
+      "verified": "Verified",
+      "pending": "Under review",
+      "unverified": "Not verified",
+      "rejected": "Rejected"
+    },
+    "action": {
+      "restrict": "Restrict account",
+      "suspend": "Suspend",
+      "ban": "Ban",
+      "revokeVerification": "Revoke verification",
+      "lift": "Lift restriction",
+      "note": "Internal note",
+      "suspendPublishing": "Suspend publishing"
+    },
+    "users": {
+      "user": "User",
+      "noName": "Unnamed",
+      "phone": "Phone",
+      "created": "Joined",
+      "lastSeen": "Last seen",
+      "listings": "Listings",
+      "businesses": "Businesses",
+      "status": "Status",
+      "searchHint": "Search by name, email or phone"
+    },
+    "business": {
+      "name": "Business",
+      "place": "Location",
+      "activity": "Main activity",
+      "officer": "Responsible officer",
+      "listings": "Listings",
+      "verification": "Verification",
+      "openPublic": "Open public profile",
+      "searchHint": "Search by name or number"
+    },
+    "roles": {
+      "hint": "Granting or revoking a role requires a reason and is written to the audit log.",
+      "change": "Change role",
+      "makeAdmin": "Grant platform admin",
+      "makeOwner": "Grant system owner",
+      "revoke": "Revoke role",
+      "showPerms": "Permissions",
+      "hidePerms": "Hide permissions",
+      "permChange": "Change permission",
+      "grantedAt": "Granted"
+    },
+    "perm": {
+      "reports.inbox_view": "View reports inbox",
+      "reports.review": "Review reports",
+      "reports.assign": "Assign reports",
+      "reports.close": "Close reports",
+      "reports.reopen": "Reopen reports",
+      "reports.escalate": "Escalate reports",
+      "reports.merge": "Merge reports",
+      "reports.add_internal_note": "Internal notes",
+      "reports.message_advertiser": "Message advertiser",
+      "reports.message_reporter": "Reply to reporter",
+      "reports.audit_view": "View audit log",
+      "ads.moderation_hide": "Hide listings",
+      "ads.moderation_suspend": "Suspend listings",
+      "accounts.restrict": "Restrict accounts",
+      "accounts.suspend": "Suspend accounts",
+      "businesses.suspend": "Suspend business publishing",
+      "verifications.review": "Review verifications",
+      "appeals.review": "Review appeals"
+    },
+    "audit": {
+      "searchHint": "Search by action or reason",
+      "entity": "Entity",
+      "allEntities": "All entities",
+      "actor": "Actor",
+      "system": "System"
+    },
+    "settings": {
+      "hint": "Every settings change is written to the audit log with its reason.",
+      "updatedAt": "Updated",
+      "confirmTitle": "Confirm settings change",
+      "section": {
+        "listings": "Listings",
+        "media": "Images & media",
+        "moderation": "Moderation",
+        "accounts": "Accounts",
+        "general": "General"
+      }
+    }
   }
 }
