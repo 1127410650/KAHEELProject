@@ -91,7 +91,6 @@ export function useAdminListMemory<T extends object>(
       restoredForVisit.current = false;
       return;
     }
-    console.log("[alm]", key, "own", onOwnPath, "ready", ready, "guard", restoredForVisit.current, "target", read(key)?.scrollY);
     if (restoredForVisit.current || !ready) return;
     restoredForVisit.current = true;
     const target = read<T>(key)?.scrollY ?? 0;
@@ -112,7 +111,6 @@ export function useAdminListMemory<T extends object>(
     const tick = () => {
       if (cancelled) return;
       window.scrollTo({ top: target });
-      console.log("[alm tick]", attempts, window.scrollY, document.body.scrollHeight);
       lastScroll.current = window.scrollY;
       attempts += 1;
       if (attempts < 14) timer = window.setTimeout(tick, 60);
