@@ -275,7 +275,7 @@ function AdminListingsPage() {
                         />
                       ) : (
                         <AdminUserLink
-                          id={ownerIds[subjectKey("listing_owner", ad.id)] ?? null}
+                          id={ad.owner_user_id}
                           name={t("market.ad.individualAdvertiser")}
                           className="text-xs"
                         />
