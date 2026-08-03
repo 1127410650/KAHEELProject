@@ -160,7 +160,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
               className={
                 stage === "root"
                   ? "flex min-h-24 w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-4 text-center text-sm font-medium text-foreground hover:border-primary/60 hover:bg-accent"
-                  : "flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-border px-3 py-2.5 text-start text-sm text-foreground hover:border-primary/50 hover:bg-accent"
+                  : "flex min-h-[44px] w-full items-center justify-between gap-2 rounded-lg border border-border px-3 py-2.5 text-start text-sm text-foreground hover:border-primary/50 hover:bg-accent"
               }
             >
               <span className="min-w-0 break-words">{item.text}</span>
@@ -188,7 +188,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2.5 text-start text-sm"
+        className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2.5 text-start text-sm"
       >
         {pathText.length > 0 ? (
           <span className="min-w-0 break-words text-foreground">{pathText.join(" ← ")}</span>
