@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
+import { AdminSearchBox } from "@/components/marketplace/AdminSearchBox";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { markManualSignOut } from "@/lib/auth-session";
