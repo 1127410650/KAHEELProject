@@ -23,7 +23,9 @@ import {
 } from "@/lib/mkt-taxonomy";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
 import {
+  LICENSE_BLOCK_FIELD,
   licenseBlockers,
+
   loadOwnerLicense,
   RE_ROOT_SLUG,
   saveListingLicense,
