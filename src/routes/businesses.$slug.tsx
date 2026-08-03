@@ -435,7 +435,7 @@ function BusinessPage() {
                       disabled={listings.isFetchingNextPage}
                       onClick={() => void listings.fetchNextPage()}
                     >
-                      {t("market.actions.loadMore")}
+                      {t("market.person.loadMore")}
                     </Button>
                   </div>
                 )}
