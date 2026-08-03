@@ -9,6 +9,8 @@ import { routeRuleFor } from "@/lib/routes-map";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { AccessDenied } from "@/components/AccessDenied";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+
 
 /**
  * Account pages share only a title and a reading column. Navigation between them
@@ -33,7 +35,13 @@ export function DashboardShell({
   const { t } = useI18n();
   const { session, loading } = useSession();
   const navigate = useNavigate();
-  const { account, loading: accountLoading, can } = useRequireAccount(t("market.entry.revoked"));
+  const {
+    account,
+    loading: accountLoading,
+    unavailable,
+    can,
+  } = useRequireAccount(t("market.entry.revoked"));
+
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const rule = routeRuleFor(pathname);
 
@@ -67,7 +75,21 @@ export function DashboardShell({
         )}
 
         <div className="mt-5">
-          {!ready ? (
+          {unavailable && !account ? (
+            // A failed account read is never a blank page: it says so and retries.
+            <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+              <p className="text-sm text-foreground">{t("market.entry.loadFailed")}</p>
+              <Button
+                type="button"
+                className="min-h-11"
+                onClick={() => {
+                  if (typeof window !== "undefined") window.location.reload();
+                }}
+              >
+                {t("market.entry.retry")}
+              </Button>
+            </div>
+          ) : !ready ? (
             <Skeleton className="h-40 w-full rounded-xl" />
           ) : allowed ? (
             children
@@ -75,6 +97,7 @@ export function DashboardShell({
             <AccessDenied reason="forbidden" />
           )}
         </div>
+
       </div>
     </MarketShell>
   );

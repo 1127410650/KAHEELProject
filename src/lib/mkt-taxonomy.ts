@@ -203,17 +203,8 @@ export function specFieldByKey(key: string): SpecField | null {
  * in priority order. Everything else moves into "more details", which stays
  * collapsed and never blocks publishing.
  */
-const PRIMARY_ORDER = [
-  "area",
-  "rooms",
-  "baths",
-  "rent_period",
-  "coverage",
-  "min_order",
-  "production_capacity",
-  "capacity",
-  "brand",
-];
+const PRIMARY_ORDER = ["area", "rooms", "baths", "rent_period"];
+
 
 /** At most three primary fields, so the first screen never becomes a long form. */
 export function splitSpecFields(fields: SpecField[]): {

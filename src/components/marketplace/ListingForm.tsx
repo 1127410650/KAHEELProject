@@ -49,6 +49,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 interface Props {
   listing?: MktListing | undefined;
@@ -133,8 +135,15 @@ export function ListingForm({ listing }: Props) {
   const visibility = (listing?.location_visibility as "approximate" | "exact") ?? "approximate";
   const [locating, setLocating] = useState(false);
 
-  const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
-  const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
+  // One quick retry, then the form shows its own retry button instead of an
+  // endless skeleton.
+  const categories = useQuery({
+    queryKey: ["mkt", "categories"],
+    queryFn: loadCategories,
+    retry: 1,
+  });
+  const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes, retry: 1 });
+
   const accountCountry = useAccountCountry();
   const cities = useQuery({
     queryKey: ["mkt", "cities", accountCountry.data?.id],
@@ -209,12 +218,14 @@ export function ListingForm({ listing }: Props) {
     };
   }, [listing?.id]);
 
-  // ---------- draft: restore once, then autosave ----------
+  // ---------- draft: restore once per scope, then autosave ----------
+  const restoredScope = useRef<string | null>(null);
   useEffect(() => {
-    if (restored.current) return;
     // Wait for the active account: the draft scope contains its key, so
     // restoring earlier would read (and later write) the wrong draft.
     if (!listing && !account) return;
+    if (restoredScope.current === scope) return;
+    restoredScope.current = scope;
     restored.current = true;
     const draft = loadDraft(scope);
     if (!draft) return;
@@ -238,7 +249,9 @@ export function ListingForm({ listing }: Props) {
     if (draft.cityId) setCityId(draft.cityId);
     if (draft.district) setDistrict(draft.district);
     if (draft.addressText) setAddressText(draft.addressText);
-  }, [scope]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scope, account]);
+
 
   const snapshot = useCallback((): Partial<ListingDraft> => {
     // Coordinates and accuracy stay out of local storage on purpose.
@@ -348,9 +361,12 @@ export function ListingForm({ listing }: Props) {
   // ---------- validation ----------
   function fieldError(key: FieldKey): string | null {
     if (key === "path") {
-      if (!categoryId || !typeCode) return t("market.form.pathRequired");
+      // Two different mistakes, two different messages.
+      if (!categoryId) return t("market.form.pathRequired");
+      if (!typeCode) return t("market.form.typeRequired");
       return null;
     }
+
     if (key === "title") {
       if (!title.trim()) return t("market.form.titleRequired");
       if (!isValidTitle(title)) return t("market.form.titleInvalid");
@@ -626,8 +642,44 @@ export function ListingForm({ listing }: Props) {
     .concat((types.data ?? []).filter((tp) => tp.code === typeCode).map((tp) => label(tp)))
     .join(" ← ");
 
+  // The form needs the category tree and the purposes; anything else can arrive
+  // later. A failed read shows one message with a retry, never a blank page.
+  const shellLoading = categories.isPending || types.isPending;
+  const shellError = categories.isError || types.isError;
+
+  if (shellError) {
+    return (
+      <div className="mx-auto w-full max-w-2xl space-y-3 rounded-xl border border-border bg-card p-4">
+        <p className="text-sm text-foreground">{t("market.form.loadFailed")}</p>
+        <Button
+          type="button"
+          className="min-h-11"
+          onClick={() => {
+            void categories.refetch();
+            void types.refetch();
+          }}
+        >
+          {t("market.form.retry")}
+        </Button>
+      </div>
+    );
+  }
+
+  if (shellLoading) {
+    return (
+      <div className="mx-auto w-full max-w-2xl space-y-3">
+        <Skeleton className="h-10 w-full rounded-lg" />
+        <Skeleton className="h-11 w-full rounded-lg" />
+        <Skeleton className="h-24 w-full rounded-lg" />
+        <Skeleton className="h-11 w-2/3 rounded-lg" />
+        <Skeleton className="h-11 w-full rounded-lg" />
+      </div>
+    );
+  }
+
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-4 pb-28 sm:pb-4">
+    <div className="mx-auto w-full max-w-2xl space-y-4 pb-40 sm:pb-4">
+
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
         <span className="min-w-0">
           {t("market.form.publishingAs", {
@@ -734,7 +786,7 @@ export function ListingForm({ listing }: Props) {
             />
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="price_kind">{t("market.form.priceKind")}</Label>
               <select
@@ -752,11 +804,12 @@ export function ListingForm({ listing }: Props) {
               </select>
             </div>
             {priceKind !== "on_request" && (
-              <>
-                <div className="space-y-1.5">
-                  <Label htmlFor="price">
-                    {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
-                  </Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="price">
+                  {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
+                </Label>
+                {/* The currency follows the account country, so it is shown, not edited. */}
+                <div className="flex items-center gap-2">
                   <Input
                     id="price"
                     className="h-11 sm:h-9"
@@ -769,21 +822,16 @@ export function ListingForm({ listing }: Props) {
                     }}
                     onBlur={() => blur("price")}
                   />
-                  {errors.price && <p className="text-xs text-destructive">{errors.price}</p>}
+                  <span className="shrink-0 text-sm text-muted-foreground" dir="ltr">
+                    {listing?.currency ?? "SAR"}
+                  </span>
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="currency">{t("market.form.currency")}</Label>
-                  <Input
-                    id="currency"
-                    className="h-11 sm:h-9"
-                    dir="ltr"
-                    value={listing?.currency ?? "SAR"}
-                    readOnly
-                  />
-                </div>
-              </>
+                {errors.price && <p className="text-xs text-destructive">{errors.price}</p>}
+              </div>
             )}
           </div>
+
+
 
           {cityField("city")}
 
@@ -1054,25 +1102,16 @@ export function ListingForm({ listing }: Props) {
         </p>
       )}
 
-      <div className="fixed inset-x-0 bottom-16 z-30 flex flex-wrap items-center gap-2 border-t border-border bg-background px-3 py-2 sm:static sm:bottom-auto sm:z-auto sm:border-t sm:bg-transparent sm:px-0 sm:pt-3">
-        {step > 0 && (
-          <Button
-            type="button"
-            variant="ghost"
-            className="min-h-11"
-            onClick={() => setStep((prev) => prev - 1)}
-          >
-            {t("market.form.back")}
-          </Button>
-        )}
+      {/* Mobile: one clear primary button per row, above the bottom nav. */}
+      <div className="fixed inset-x-0 bottom-16 z-30 flex flex-col gap-2 border-t border-border bg-background px-3 py-2 sm:static sm:bottom-auto sm:z-auto sm:flex-row sm:items-center sm:bg-transparent sm:px-0 sm:pt-3">
         {step < STEPS.length - 1 ? (
-          <Button type="button" className="min-h-11 min-w-32" onClick={next}>
+          <Button type="button" className="min-h-11 w-full sm:w-auto sm:min-w-32" onClick={next}>
             {t("market.form.next")}
           </Button>
         ) : (
           <Button
             type="button"
-            className="min-h-11 min-w-32"
+            className="min-h-11 w-full sm:w-auto sm:min-w-32"
             disabled={busy || !canPublish}
             onClick={() => void submit(true)}
           >
@@ -1083,13 +1122,24 @@ export function ListingForm({ listing }: Props) {
         <Button
           type="button"
           variant="outline"
-          className="ms-auto min-h-11"
+          className="min-h-11 w-full sm:order-3 sm:ms-auto sm:w-auto"
           disabled={busy}
           onClick={() => void submit(false)}
         >
           {t("market.dash.saveDraft")}
         </Button>
+        {step > 0 && (
+          <Button
+            type="button"
+            variant="ghost"
+            className="min-h-11 w-full text-muted-foreground sm:order-1 sm:w-auto"
+            onClick={() => setStep((prev) => prev - 1)}
+          >
+            {t("market.form.back")}
+          </Button>
+        )}
       </div>
+
     </div>
   );
 }
