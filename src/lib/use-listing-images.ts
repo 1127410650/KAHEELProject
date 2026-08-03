@@ -293,7 +293,8 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
         if (item.kind === "stored" && item.storedId) {
           await supabase
             .from("mkt_listing_images")
-            .update({ sort_order: index, is_cover: isCover })
+            // Cover flips through the RPC so the single-cover rule never trips.
+            .update({ sort_order: index })
             .eq("id", item.storedId);
           rowIds.push(item.storedId);
           if (isCover) {
@@ -318,7 +319,7 @@ export function useListingImages({ userId, draftId, listingId }: Options): Listi
             file_hash: item.hash ?? null,
             upload_status: "ready",
             sort_order: index,
-            is_cover: isCover,
+            is_cover: false,
           })
           .select("id")
           .single();

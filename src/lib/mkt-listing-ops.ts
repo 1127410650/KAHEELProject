@@ -27,6 +27,9 @@ export type ListingOpError =
   | "invalid_duration"
   | "not_found"
   | "license_required"
+  | "image_required"
+  | "images_incomplete"
+  | "images_too_many"
   | "failed";
 
 function opError(message: string): ListingOpError {
@@ -35,6 +38,9 @@ function opError(message: string): ListingOpError {
   if (message.includes("invalid_duration")) return "invalid_duration";
   if (message.includes("not_found")) return "not_found";
   if (message.includes("RE_LICENSE_REQUIRED")) return "license_required";
+  if (message.includes("IMAGE_REQUIRED")) return "image_required";
+  if (message.includes("IMAGES_INCOMPLETE")) return "images_incomplete";
+  if (message.includes("IMAGES_TOO_MANY")) return "images_too_many";
   return "failed";
 }
 
