@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { currentPath, loginHref, resolveMedia } from "@/lib/mkt";
 import {
+  activeListingsKey,
   loadPersonCategories,
   loadPersonListings,
   loadPublicPerson,
