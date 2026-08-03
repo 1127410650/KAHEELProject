@@ -38,6 +38,8 @@ interface ShareSheetProps {
   title: string;
   /** Canonical URL to share; defaults to the current page's canonical URL. */
   url?: string | undefined;
+  /** When sharing a listing, its id — aggregate share counters are bumped. */
+  listingId?: string | undefined;
   /** Trigger element (a button); receives the click handler through asChild. */
   children: ReactNode;
 }
@@ -45,7 +47,7 @@ interface ShareSheetProps {
 type Row = { key: string; label: string; icon: ReactNode; onSelect: () => void };
 
 /** One shared share menu: bottom sheet on mobile, popover on desktop. */
-export function ShareSheet({ title, url, children }: ShareSheetProps) {
+export function ShareSheet({ title, url, listingId, children }: ShareSheetProps) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -59,7 +61,13 @@ export function ShareSheet({ title, url, children }: ShareSheetProps) {
     setCanSystemShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
   }, []);
 
+  /** Aggregate counters only; no per-visitor data is stored. */
+  function track(kind: ListingTrackKind) {
+    if (listingId) trackListingEvent(listingId, kind);
+  }
+
   const link = url ?? canonicalCurrentUrl();
+
   const targets = shareTargets(title, link);
 
   function openExternal(href: string) {
