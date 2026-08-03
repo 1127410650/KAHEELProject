@@ -281,9 +281,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
       navigate({ to: "/select-account", replace: true });
       return;
     }
-    if (isPersonal && COMPANY_ONLY_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
-      navigate({ to: "/me", replace: true });
+    if (isPersonal) {
+      navigate({ to: PERSONAL_HOME, replace: true });
     }
+
   }, [accountsLoaded, accounts.length, current, isPersonal, pathname, onSelectPage, navigate]);
 
   async function signOut() {
