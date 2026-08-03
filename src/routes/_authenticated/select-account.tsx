@@ -4,6 +4,7 @@ import { Loader2, LogOut, ShieldCheck, Search } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { markManualSignOut } from "@/lib/auth-session";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useAccounts, useEnterAccount, sortAccounts, type Account } from "@/hooks/use-accounts";
@@ -71,6 +72,7 @@ function SelectAccountPage() {
   }, [isLoading, sorted.length, profile?.always_select_account]);
 
   async function signOut() {
+    markManualSignOut();
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
   }

@@ -26,6 +26,7 @@ import { hasUnsavedChanges } from "@/lib/unsaved-changes";
 import { canSeeLink } from "@/lib/routes-map";
 import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { supabase } from "@/integrations/supabase/client";
+import { markManualSignOut } from "@/lib/auth-session";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
@@ -124,6 +125,7 @@ export function AccountMenu() {
   const allowed = (links: MenuLink[]) => links.filter((l) => canSeeLink(l.to, viewer));
 
   async function signOut() {
+    markManualSignOut();
     clear();
     await supabase.auth.signOut();
     void navigate({ to: "/" });

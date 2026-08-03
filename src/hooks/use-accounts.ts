@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import { PRESERVED_LOCAL_KEYS } from "@/lib/auth-session";
 
 export interface Account {
   tenant_id: string;
@@ -82,7 +83,9 @@ export function useEnterAccount() {
         // Tenant-scoped scratch data (open project/request, signed URLs, drafts).
         for (const store of [window.sessionStorage, window.localStorage]) {
           for (const key of Object.keys(store)) {
-            if (key.startsWith("tahqaq.")) store.removeItem(key);
+            if (key.startsWith("tahqaq.") && !PRESERVED_LOCAL_KEYS.includes(key)) {
+              store.removeItem(key);
+            }
           }
         }
         window.location.replace(accountHome(row));
