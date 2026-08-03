@@ -39,8 +39,14 @@ interface SessionContextValue {
   permissions: string[];
   can: (permission: Permission) => boolean;
   loading: boolean;
+  /**
+   * Explicit three-state auth status. `session === null` while `status` is
+   * "loading" is NOT a sign-out: it only means restoration is still running.
+   */
+  status: "loading" | "authenticated" | "unauthenticated";
   refresh: () => Promise<void>;
 }
+
 
 const SessionContext = createContext<SessionContextValue | null>(null);
 
