@@ -57,7 +57,7 @@ const REVIEW_KEYS: Record<ListingReviewAction, string> = {
   approve: "market.admin.approve",
   reject: "market.admin.reject",
   suspend: "market.admin.suspend",
-  return: "market.admin.return",
+  return: "market.admin.returnToOwner",
 };
 
 function AdminListingDetailPage() {
@@ -141,7 +141,7 @@ function AdminListingDetailPage() {
             chips={
               <>
                 <Chip tone={header.status === "published" ? "good" : "neutral"}>
-                  {t(`market.listingStatus.${header.status}`)}
+                  {t(`market.dash.status.${header.status}`)}
                 </Chip>
                 {header.reports_count > 0 && (
                   <Chip tone="bad">{`${t("admin.detail.reports")}: ${header.reports_count}`}</Chip>
@@ -309,7 +309,7 @@ function AdminListingDetailPage() {
               <Timeline
                 items={data.events.map((row) => ({
                   id: row.id,
-                  title: t(`admin.listingEvent.${row.event_type}`),
+                  title: t(`market.admin.log.type.${row.event_type}`),
                   actor: row.actor_name,
                   at: row.created_at,
                   detail:

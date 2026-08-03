@@ -171,7 +171,7 @@ function AdminUserDetailPage() {
                   title: row.title || t("admin.detail.untitled"),
                   meta: [
                     row.ref_no ? `#${row.ref_no}` : "",
-                    t(`market.listingStatus.${row.status}`),
+                    t(`market.dash.status.${row.status}`),
                     row.city ?? "",
                     formatDate(row.created_at),
                   ],
