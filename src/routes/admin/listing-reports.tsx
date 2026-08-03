@@ -442,7 +442,15 @@ function AdminListingReportsPage() {
   );
 }
 
-function ReportCard({ report, onOpen }: { report: AdminListingReport; onOpen: () => void }) {
+function ReportCard({
+  report,
+  ownerUserId,
+  onOpen,
+}: {
+  report: AdminListingReport;
+  ownerUserId: string | null;
+  onOpen: () => void;
+}) {
   const { t, locale } = useI18n();
   const overdue =
     !!report.sla_due_at &&
@@ -455,9 +463,12 @@ function ReportCard({ report, onOpen }: { report: AdminListingReport; onOpen: ()
           <p dir="ltr" className="font-mono text-xs font-bold text-foreground">
             {report.ref_no ?? "—"}
           </p>
-          <p className="mt-1 truncate text-sm font-medium text-foreground">
-            {report.listing_title ?? "—"}
-          </p>
+          <AdminListingLink
+            id={report.listing_id}
+            name={report.listing_title}
+            truncate
+            className="mt-1 min-h-11 py-2.5 text-sm font-medium"
+          />
           <p dir="ltr" className="font-mono text-[11px] text-muted-foreground">
             {report.listing_ref ?? "—"}
           </p>
@@ -472,9 +483,10 @@ function ReportCard({ report, onOpen }: { report: AdminListingReport; onOpen: ()
         {t("market.lr.col.count")}: <span dir="ltr">{report.listing_report_count}</span>
       </p>
       <p className="mt-1 text-[11px] text-muted-foreground">
-        {report.owner_label ?? "—"}
+        <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-[11px]" />
         {report.owner_business ? ` · ${report.owner_business}` : ""}
       </p>
+
       <p className="mt-1 text-[11px] text-muted-foreground">
         {report.assignee_label ?? t("market.lr.unassigned")} · {formatDateTime(report.updated_at)}
         {overdue && (
