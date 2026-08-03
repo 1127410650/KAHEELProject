@@ -1,23 +1,31 @@
+import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { CalendarDays, MapPin, User } from "lucide-react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { CalendarDays, MapPin, Pencil, Share2, User } from "lucide-react";
+import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { loadGeoLabel, loadPublicPhone } from "@/lib/mkt-geo";
 import { useSession } from "@/lib/session";
-import { LISTING_COLUMNS, resolveMedia, type MktListing } from "@/lib/mkt";
-import { decorateListings, loadUserProfileBySlug } from "@/lib/mkt-queries";
+import { currentPath, loginHref, resolveMedia } from "@/lib/mkt";
+import {
+  loadPersonCategories,
+  loadPersonListings,
+  loadPublicPerson,
+  personInitials,
+  sanitizeAbout,
+  PERSON_PAGE_SIZE,
+} from "@/lib/mkt-person";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/u/$username")({
   ssr: false,
   head: ({ params }) => {
-    const title = `${params.username} — معلن في سوق تحقّق`;
+    const title = `${params.username} — معلن فرد في سوق تحقّق`;
     const description =
-      "الملف العام للمعلن الفرد في سوق تحقّق: النبذة، المدينة، حالة التوثيق، وجميع إعلاناته المنشورة.";
+      "الملف العام للمعلن الفرد في سوق تحقّق: النبذة، المدينة، تاريخ الانضمام، وإعلاناته المنشورة.";
     return {
       meta: [
         { title },
@@ -25,8 +33,9 @@ export const Route = createFileRoute("/u/$username")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "profile" },
-        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:card", content: "summary" },
       ],
+      links: [{ rel: "canonical", href: `https://check-your-name-ai.lovable.app/u/${params.username}` }],
     };
   },
   component: UserProfilePage,
@@ -36,66 +45,66 @@ function UserProfilePage() {
   const { username } = Route.useParams();
   const { t, locale } = useI18n();
   const { session } = useSession();
+  const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
-  const profile = useQuery({
-    queryKey: ["mkt", "user-profile", username],
-    queryFn: () => loadUserProfileBySlug(username),
+  // Field-limited public read: the RPC decides whether the profile exists for
+  // the public at all, so a direct link cannot bypass the policy.
+  const person = useQuery({
+    queryKey: ["mkt", "public-person", username, session?.user.id ?? null],
+    queryFn: () => loadPublicPerson(username),
   });
 
   const avatar = useQuery({
-    queryKey: ["mkt", "user-avatar", profile.data?.avatar_url],
-    enabled: !!profile.data?.avatar_url,
+    queryKey: ["mkt", "person-avatar", person.data?.avatar_url],
+    enabled: !!person.data?.avatar_url,
     queryFn: async () => {
-      const media = await resolveMedia([profile.data!.avatar_url]);
-      return media[profile.data!.avatar_url!] ?? null;
+      const media = await resolveMedia([person.data!.avatar_url]);
+      return media[person.data!.avatar_url!] ?? null;
     },
   });
 
-  const geoLabel = useQuery({
-    queryKey: ["mkt", "geo-label", profile.data?.country_id, profile.data?.city_id, locale],
-    enabled: !!profile.data,
-    queryFn: () => loadGeoLabel(profile.data!.country_id, profile.data!.city_id, locale),
+  const categories = useQuery({
+    queryKey: ["mkt", "person-categories", username],
+    enabled: !!person.data,
+    queryFn: () => loadPersonCategories(username),
   });
 
-  const publicPhone = useQuery({
-    queryKey: ["mkt", "public-phone", profile.data?.user_id],
-    enabled: !!profile.data?.user_id,
-    queryFn: () => loadPublicPhone(profile.data!.user_id),
+  const listings = useInfiniteQuery({
+    queryKey: ["mkt", "person-listings", username, categoryId, locale],
+    enabled: !!person.data,
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) =>
+      loadPersonListings({ username, categoryId, page: pageParam as number, locale }),
+    getNextPageParam: (last, all) =>
+      (last as unknown[]).length < PERSON_PAGE_SIZE ? undefined : all.length,
   });
 
-  const listings = useQuery({
-    queryKey: ["mkt", "user-listings", profile.data?.user_id, locale],
-    enabled: !!profile.data,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("mkt_listings")
-        .select(LISTING_COLUMNS)
-        .eq("owner_user_id", profile.data!.user_id)
-        .is("tenant_id", null)
-        .eq("status", "published")
-        .is("deleted_at", null)
-        .order("published_at", { ascending: false })
-        .limit(48);
-      return decorateListings((data ?? []) as unknown as MktListing[], locale);
-    },
-  });
+  const rows = useMemo(() => (listings.data?.pages ?? []).flat(), [listings.data]);
 
-  if (profile.isLoading) {
+  if (person.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <Skeleton className="h-32 w-full rounded-xl" />
+        <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4">
+          <Skeleton className="h-28 w-full rounded-xl" />
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-40 rounded-xl" />
+            ))}
+          </div>
         </div>
       </MarketShell>
     );
   }
 
-  const me = profile.data;
+  const me = person.data;
   if (!me) {
+    // Neutral screen for missing, hidden, suspended and deleted accounts alike —
+    // the reason is never disclosed.
     return (
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="text-xl font-bold text-foreground">{t("market.person.notFound")}</h1>
+          <h1 className="text-lg font-bold text-foreground">{t("market.person.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
@@ -104,89 +113,206 @@ function UserProfilePage() {
     );
   }
 
+  const name = me.display_name || t("market.person.fallbackName");
+  const city = locale === "ar" ? me.city_ar : me.city_en || me.city_ar;
+  const about = sanitizeAbout(me.about);
+  const aboutLong = about.length > 320;
+  const contacts = [me.public_phone, me.public_whatsapp, me.public_email].filter(
+    (v): v is string => !!v,
+  );
+  const cats = categories.data ?? [];
+
+  async function share() {
+    const url = `${window.location.origin}/u/${me!.username}`;
+    const payload = { title: name, text: name, url };
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share(payload);
+        return;
+      } catch {
+        /* dismissed by the user */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("market.ad.linkCopied"));
+    } catch {
+      toast.error(t("market.actions.failed"));
+    }
+  }
+
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4 sm:py-6">
-        <header className="rounded-xl border border-border bg-card p-4 sm:p-5">
+      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+        <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5">
           <div className="flex items-start gap-3">
-            <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-muted-foreground">
+            <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-sm font-bold text-muted-foreground">
               {avatar.data ? (
-                <img src={avatar.data} alt={me.display_name} className="size-full object-cover" />
+                <img
+                  src={avatar.data}
+                  alt={name}
+                  loading="lazy"
+                  className="size-full object-cover"
+                />
               ) : (
-                <User className="size-6" aria-hidden />
+                personInitials(name) || <User className="size-6" aria-hidden />
               )}
             </span>
-            <div className="min-w-0">
-              <h1 className="truncate text-lg font-bold text-foreground sm:text-2xl">
-                {me.display_name}
+            <div className="min-w-0 flex-1">
+              <h1 className="break-words text-lg font-bold leading-tight text-foreground sm:text-2xl">
+                {name}
               </h1>
-              <p className="text-xs text-muted-foreground">@{me.username}</p>
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] text-secondary-foreground">
-                  {t("market.advertiser.individual")}
-                </span>
-                <VerifiedBadge status={me.verification_status} size="xs" />
-                {(geoLabel.data ?? me.city) && (
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin className="size-3.5" aria-hidden />
-                    {geoLabel.data ?? me.city}
+              {/* The trust check mark lives under the name only. */}
+              <VerifiedBadge status={me.verification_status} />
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                <span>{t("market.person.kindIndividual")}</span>
+                {city && (
+                  <span className="inline-flex min-w-0 items-center gap-1">
+                    <MapPin className="size-3.5 shrink-0" aria-hidden />
+                    <span className="truncate">{city}</span>
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1">
                   <CalendarDays className="size-3.5" aria-hidden />
-                  {t("market.business.joined")}:{" "}
-                  {new Date(me.joined_at).toLocaleDateString("en-GB", { timeZone: "Asia/Riyadh" })}
+                  {t("market.business.joined")}{" "}
+                  {new Date(me.joined_at).toLocaleDateString("en-GB", {
+                    timeZone: "Asia/Riyadh",
+                  })}
                 </span>
+                {me.active_listings > 0 && (
+                  <span>
+                    {me.active_listings} {t("market.ad.activeAds")}
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
-          {me.headline && <p className="mt-3 text-sm text-foreground">{me.headline}</p>}
-          {me.about && (
-            <>
-              <h2 className="mt-4 text-sm font-bold text-foreground">
-                {t("market.business.about")}
-              </h2>
-              <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-                {me.about}
-              </p>
-            </>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {me.is_owner ? (
+              <Button asChild variant="outline" size="sm" className="min-h-11 flex-1 sm:flex-none">
+                <Link to="/dashboard/profile">
+                  <Pencil className="size-4" aria-hidden />
+                  {t("market.person.editProfile")}
+                </Link>
+              </Button>
+            ) : session ? null : (
+              <Button asChild size="sm" className="min-h-11 flex-1 sm:flex-none">
+                <a href={loginHref(currentPath().split("?")[0] ?? "/", "contact")}>
+                  {t("market.ad.signInToContact")}
+                </a>
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="min-h-11 flex-1 sm:flex-none"
+              onClick={() => void share()}
+              aria-label={t("market.person.shareProfile")}
+              title={t("market.person.shareProfile")}
+            >
+              <Share2 className="size-4" aria-hidden />
+              {t("market.ad.share")}
+            </Button>
+          </div>
+
+          {!me.is_owner && session && contacts.length > 0 && (
+            <div className="mt-3 space-y-1 text-sm text-foreground" dir="ltr">
+              {contacts.map((c) => (
+                <p key={c}>{c}</p>
+              ))}
+            </div>
           )}
 
-          <h2 className="mt-4 text-sm font-bold text-foreground">{t("market.business.contact")}</h2>
-          {session ? (
-            <div className="mt-1 space-y-1 text-sm text-foreground" dir="ltr">
-              {publicPhone.data && <p>{publicPhone.data}</p>}
-              {me.show_whatsapp && me.public_whatsapp && <p>{me.public_whatsapp}</p>}
-              {me.show_email && me.public_email && <p>{me.public_email}</p>}
-              {!(
-                publicPhone.data ||
-                (me.show_whatsapp && me.public_whatsapp) ||
-                (me.show_email && me.public_email)
-              ) && <p className="text-xs text-muted-foreground">{t("market.ad.contactPrivate")}</p>}
+          {about && (
+            <div className="mt-4">
+              <h2 className="text-sm font-bold text-foreground">{t("market.business.about")}</h2>
+              <p
+                className={`mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground ${
+                  aboutLong && !aboutOpen ? "line-clamp-4" : ""
+                }`}
+              >
+                {about}
+              </p>
+              {aboutLong && (
+                <button
+                  type="button"
+                  className="mt-1 text-xs font-semibold text-primary"
+                  onClick={() => setAboutOpen((v) => !v)}
+                >
+                  {t(aboutOpen ? "market.ad.showLess" : "market.ad.showMore")}
+                </button>
+              )}
             </div>
-          ) : (
-            <p className="mt-1 text-xs text-muted-foreground">{t("market.ad.contactHidden")}</p>
           )}
         </header>
 
-        <h2 className="mt-6 text-base font-bold text-foreground">{t("market.person.listings")}</h2>
-        <div className="mt-3 flex flex-col gap-2.5 sm:hidden">
-          {(listings.data ?? []).map((l) => (
-            <ListingCard key={l.id} listing={l} view="row" />
-          ))}
-        </div>
-        <div className="mt-3 hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
-          {listings.isLoading
-            ? Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="h-56 rounded-xl" />
-              ))
-            : (listings.data ?? []).map((l) => <ListingCard key={l.id} listing={l} />)}
-        </div>
-        {!listings.isLoading && (listings.data ?? []).length === 0 && (
-          <p className="py-10 text-center text-sm text-muted-foreground">
-            {t("market.business.noListings")}
+        <h2 className="mt-5 text-base font-bold text-foreground">{t("market.person.listings")}</h2>
+
+        {cats.length > 1 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {[{ id: null, label: t("market.person.allCategories") }, ...cats.map((c) => ({
+              id: c.category_id,
+              label: locale === "ar" ? c.name_ar : c.name_en || c.name_ar,
+            }))].map((chip) => {
+              const active = categoryId === chip.id;
+              return (
+                <button
+                  key={chip.id ?? "all"}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setCategoryId(chip.id)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    active
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/40"
+                  }`}
+                >
+                  {chip.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {listings.isPending ? (
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-40 rounded-xl" />
+            ))}
+          </div>
+        ) : rows.length === 0 ? (
+          <p className="mt-3 rounded-xl border border-dashed border-border py-6 text-center text-sm text-muted-foreground">
+            {t("market.person.noListings")}
           </p>
+        ) : (
+          <>
+            <div className="mt-3 flex flex-col gap-2.5 sm:hidden">
+              {rows.map((l) => (
+                <ListingCard key={l.id} listing={l} view="row" />
+              ))}
+            </div>
+            <div className="mt-3 hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+              {rows.map((l) => (
+                <ListingCard key={l.id} listing={l} />
+              ))}
+            </div>
+            {listings.hasNextPage && (
+              <div className="mt-4 text-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="min-h-11"
+                  disabled={listings.isFetchingNextPage}
+                  onClick={() => void listings.fetchNextPage()}
+                >
+                  {t("market.person.loadMore")}
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </MarketShell>
