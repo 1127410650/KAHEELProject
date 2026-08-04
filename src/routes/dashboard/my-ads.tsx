@@ -432,7 +432,16 @@ function MyAdsPage() {
         ))}
       </div>
 
-      <ul className="space-y-3">
+      {ads.isLoading && (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="h-52 animate-pulse rounded-xl border border-border bg-card" />
+          ))}
+        </div>
+      )}
+
+      <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+
         {rows.map((ad) => {
           const ops = allowedOps(ad.status);
           const remaining = remainingLabel(ad.expires_at, {
