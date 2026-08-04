@@ -111,20 +111,25 @@ export function MarketHome() {
   const featured = useQuery({
     queryKey: ["mkt", "home", "featured", locale, geoKey],
     queryFn: () => loadListings({ ...geo, featuredOnly: true, limit: 8 }, locale),
+    retry: 1,
   });
   const latest = useQuery({
     queryKey: ["mkt", "home", "latest", locale, geoKey],
     queryFn: () => loadListings({ ...geo, limit: 12 }, locale),
+    retry: 1,
   });
 
   const featuredItems = (featured.data ?? []).slice(0, 4);
   const featuredIds = new Set(featuredItems.map((l) => l.id));
   const latestItems = (latest.data ?? []).filter((l) => !featuredIds.has(l.id)).slice(0, 4);
   const isEmpty =
-    !featured.isLoading &&
-    !latest.isLoading &&
+    !featured.isPending &&
+    !latest.isPending &&
+    !featured.isError &&
+    !latest.isError &&
     featuredItems.length === 0 &&
     latestItems.length === 0;
+
 
   return (
     <>
