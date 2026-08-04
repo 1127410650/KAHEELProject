@@ -3031,6 +3031,10 @@
           "title": "Devices",
           "desc": "Electronics and office gear"
         },
+        "schools": {
+          "title": "Schools & universities",
+          "desc": "Schools, universities, institutes and academies"
+        },
         "homeServices": {
           "title": "Home services",
           "desc": "Maintenance and operations"
