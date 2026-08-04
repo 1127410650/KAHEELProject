@@ -69,6 +69,7 @@ import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verific
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
+import { Route as DashboardStoreIndexRouteImport } from './routes/dashboard/store.index'
 import { Route as DashboardStoreNewRouteImport } from './routes/dashboard/store.new'
 import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
 
@@ -372,6 +373,11 @@ const DashboardReportsIdRoute = DashboardReportsIdRouteImport.update({
   path: '/dashboard/reports/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
+  id: '/dashboard/store/',
+  path: '/dashboard/store/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardStoreNewRoute = DashboardStoreNewRouteImport.update({
   id: '/dashboard/store/new',
   path: '/dashboard/store/new',
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
+  '/dashboard/store/': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -508,6 +515,7 @@ export interface FileRoutesByTo {
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/dashboard/reports': typeof DashboardReportsIndexRoute
+  '/dashboard/store': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRoutesById {
@@ -573,6 +581,7 @@ export interface FileRoutesById {
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
+  '/dashboard/store/': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRouteTypes {
@@ -639,6 +648,7 @@ export interface FileRouteTypes {
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
+    | '/dashboard/store/'
     | '/dashboard/ads/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -702,6 +712,7 @@ export interface FileRouteTypes {
     | '/dashboard/store/new'
     | '/admin/reports'
     | '/dashboard/reports'
+    | '/dashboard/store'
     | '/dashboard/ads/$id/edit'
   id:
     | '__root__'
@@ -766,6 +777,7 @@ export interface FileRouteTypes {
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
+    | '/dashboard/store/'
     | '/dashboard/ads/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -807,6 +819,7 @@ export interface RootRouteChildren {
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
   DashboardStoreNewRoute: typeof DashboardStoreNewRoute
   DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
+  DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
   DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
 }
 
@@ -1232,6 +1245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardReportsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/store/': {
+      id: '/dashboard/store/'
+      path: '/dashboard/store'
+      fullPath: '/dashboard/store/'
+      preLoaderRoute: typeof DashboardStoreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/store/new': {
       id: '/dashboard/store/new'
       path: '/dashboard/store/new'
@@ -1345,6 +1365,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardReportsIdRoute: DashboardReportsIdRoute,
   DashboardStoreNewRoute: DashboardStoreNewRoute,
   DashboardReportsIndexRoute: DashboardReportsIndexRoute,
+  DashboardStoreIndexRoute: DashboardStoreIndexRoute,
   DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport
