@@ -38,12 +38,21 @@ export function AdminAssignmentBar({
   const { session } = useSession();
   const queryClient = useQueryClient();
   const [dialog, setDialog] = useState<"transfer" | "release" | null>(null);
+  const [target, setTarget] = useState("");
   const [busy, setBusy] = useState(false);
 
   const assignment = useQuery({
     queryKey: ["mkt", "admin", "assignment", kind, subjectId],
     queryFn: async () => (await loadAssignments(kind, [subjectId]))[subjectId] ?? null,
     staleTime: 10_000,
+  });
+
+  // Candidate officers are only fetched when a transfer is actually started.
+  const officers = useQuery({
+    queryKey: ["mkt", "admin", "roles"],
+    enabled: dialog === "transfer",
+    staleTime: 60_000,
+    queryFn: loadAdminRoles,
   });
 
   const row = assignment.data ?? null;
