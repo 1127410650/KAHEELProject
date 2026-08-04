@@ -14,13 +14,14 @@ import { Button } from "@/components/ui/button";
 
 export function CallOverlay() {
   const { t } = useI18n();
-  const { call, accept, decline, hangUp, toggleMute, dismiss } = useCallCenter();
+  const { call, accept, decline, hangUp, toggleMute, dismiss, stopReceiving } = useCallCenter();
 
   if (!call) return null;
 
   const ended = isTerminalCallStatus(call.status);
-  const ringingIn = call.role === "callee" && call.status === "ringing";
+  const incoming = call.role === "callee" && call.status === "ringing";
   const connected = call.status === "connected";
+  const needsGesture = incoming && call.needsAudioGesture;
 
   return (
     <div
@@ -51,10 +52,11 @@ export function CallOverlay() {
         </p>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          {ringingIn && !ended && (
+          {incoming && !ended && (
             <>
               <Button size="sm" className="h-10 flex-1" onClick={() => void accept()}>
-                <Phone className="size-4" aria-hidden /> {t("market.call.accept")}
+                <Phone className="size-4" aria-hidden />
+                {needsGesture ? t("market.call.startAudio") : t("market.call.accept")}
               </Button>
               <Button
                 size="sm"
@@ -67,7 +69,7 @@ export function CallOverlay() {
             </>
           )}
 
-          {!ringingIn && !ended && (
+          {!incoming && !ended && (
             <>
               <Button
                 size="sm"
@@ -101,8 +103,18 @@ export function CallOverlay() {
           )}
         </div>
 
+        {/* Available in every state: stop new calls and end the current one. */}
+        <button
+          type="button"
+          className="mt-2 text-[11px] text-muted-foreground underline"
+          onClick={() => void stopReceiving()}
+        >
+          {t("market.call.stopReceiving")}
+        </button>
+
         <p className="mt-2 text-[11px] text-muted-foreground">{t("market.call.noPhoneHint")}</p>
       </div>
     </div>
   );
 }
+
