@@ -4,11 +4,14 @@ import { ChevronLeft, ChevronRight, Check, Pencil } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { MktCategory } from "@/lib/mkt";
+import { normalizeCategoryLabel } from "@/lib/mkt-category-alias";
+import { rootSlugRank } from "@/lib/market-primary-navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+
 
 interface Props {
   categories: MktCategory[];
