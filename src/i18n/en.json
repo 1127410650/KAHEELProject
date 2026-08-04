@@ -2370,7 +2370,7 @@
     },
     "setup": {
       "title": "Set up your marketplace account",
-      "subtitle": "Four details, then you continue to the marketplace.",
+      "subtitle": "Three details, then you continue to the marketplace.",
       "displayName": "Display name",
       "username": "Username",
       "continue": "Continue to the marketplace"

@@ -112,10 +112,10 @@ function AuthPage() {
             {t("auth.welcome")}
           </h2>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-sidebar-foreground/70">
-            {t("app.tagline")}
+            {t("market.tagline")}
           </p>
         </div>
-        <p className="text-xs text-sidebar-foreground/50">Asia/Riyadh · SAR · DD/MM/YYYY</p>
+        <span aria-hidden />
       </div>
 
       <div className="flex items-center justify-center px-5 py-12">

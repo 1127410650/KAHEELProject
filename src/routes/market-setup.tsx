@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import {
+  geoName,
   loadCountries,
   loadMyContact,
   nationalPart,
@@ -15,7 +16,6 @@ import {
   toE164,
   type PhoneVisibility,
 } from "@/lib/mkt-geo";
-import { CountryCitySelect } from "@/components/marketplace/GeoFields";
 import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/PhoneFields";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const title = "إعداد حسابك في السوق — سوق تحقّق";
-const description = "خطوة واحدة قصيرة: الدولة، المدينة، رقم الجوال، والاسم الظاهر، ثم متابعة إلى السوق.";
+const description = "خطوة واحدة قصيرة: الدولة، رقم الجوال، والاسم الظاهر، ثم متابعة إلى السوق.";
 
 export const Route = createFileRoute("/market-setup")({
   ssr: false,
@@ -42,13 +42,12 @@ export const Route = createFileRoute("/market-setup")({
 });
 
 function MarketSetupPage() {
-  const { t, dir } = useI18n();
+  const { t, dir, locale } = useI18n();
   const { session, loading } = useSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const [countryId, setCountryId] = useState<string | null>(null);
-  const [cityId, setCityId] = useState<string | null>(null);
   const [phone, setPhone] = useState("");
   const [visibility, setVisibility] = useState<PhoneVisibility>("hidden");
   const [displayName, setDisplayName] = useState("");
@@ -64,7 +63,7 @@ function MarketSetupPage() {
     queryFn: async () => {
       const { data: profile } = await supabase
         .from("mkt_user_profiles")
-        .select("username, display_name, country_id, city_id")
+        .select("username, display_name, country_id")
         .eq("user_id", session!.user.id)
         .maybeSingle();
       const contact = await loadMyContact(session!.user.id);
@@ -77,7 +76,6 @@ function MarketSetupPage() {
     const row = existing.data;
     if (!row) return;
     setCountryId((prev) => prev ?? row.profile?.country_id ?? row.contact?.country_id ?? null);
-    setCityId((prev) => prev ?? row.profile?.city_id ?? null);
     setDisplayName((prev) => prev || (row.profile?.display_name ?? ""));
     setUsername((prev) => prev || (row.profile?.username ?? ""));
     setPhone((prev) => prev || nationalPart(row.contact?.phone_e164));
@@ -99,7 +97,7 @@ function MarketSetupPage() {
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!session || !countryId || !cityId) return;
+    if (!session || !countryId) return;
     const e164 = toE164(iso2, phone);
     if (!e164) {
       setPhoneInvalid(true);
@@ -121,7 +119,6 @@ function MarketSetupPage() {
           username: handle,
           display_name: displayName.trim() || t("market.person.fallbackName"),
           country_id: countryId,
-          city_id: cityId,
         },
         { onConflict: "user_id" },
       );
@@ -158,15 +155,25 @@ function MarketSetupPage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("market.setup.subtitle")}</p>
 
         <form onSubmit={onSubmit} className="mt-5 space-y-4">
-          <CountryCitySelect
-            countryId={countryId}
-            cityId={cityId}
-            required
-            onChange={(next) => {
-              setCountryId(next.countryId);
-              setCityId(next.cityId);
-            }}
-          />
+          {/* Country only: the city is asked later, where it is actually needed
+              (a listing, a business, a search filter) — never at signup. */}
+          <div className="min-w-0 space-y-1.5">
+            <Label htmlFor="setup-country">{t("market.geo.country")}</Label>
+            <select
+              id="setup-country"
+              required
+              className="h-11 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground"
+              value={countryId ?? ""}
+              onChange={(event) => setCountryId(event.target.value || null)}
+            >
+              <option value="">{t("market.geo.pick")}</option>
+              {(countries.data ?? []).map((c) => (
+                <option key={c.id} value={c.id}>
+                  {geoName(c, locale)}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <PhoneField
             countryId={countryId}
@@ -200,7 +207,7 @@ function MarketSetupPage() {
 
           </div>
 
-          <Button type="submit" className="w-full" disabled={busy || !countryId || !cityId}>
+          <Button type="submit" className="w-full" disabled={busy || !countryId}>
             {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {t("market.setup.continue")}
           </Button>
