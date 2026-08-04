@@ -75,7 +75,7 @@ export async function transitionCall(callId: string, status: CallStatus, reason?
   const { error } = await supabase.rpc("mkt_call_transition", {
     _call_id: callId,
     _status: status,
-    _reason: reason,
+    ...(reason ? { _reason: reason } : {}),
   });
   if (error) throw error;
 }
