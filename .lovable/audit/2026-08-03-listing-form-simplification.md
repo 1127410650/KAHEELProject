@@ -231,3 +231,20 @@
   `/dashboard/ads/new`، `/dashboard/my-ads`، `/search`، `/`:
   صفر Overflow، لا شاشة فارغة، ولا ظهور لـ «30 يوم».
 - `tsgo --noEmit`: نجح.
+
+### تحقق تكميلي — 04/08/2026 03:15 UTC
+- **بيانات قديمة**: صف إعلان منشور كان لا يزال يحمل `duration_days = 30`
+  (سابق للسياسة). طُبّق ترحيل يوحّد كل الإعلانات على 7 أيام ويعيد حساب
+  `expires_at` من `published_at`. لا يوجد الآن أي صف بمدة مختلفة عن 7.
+- **التصنيف**: 13 قطاعًا جاءت من `mkt_categories` عبر `mkt-queries`
+  (`.eq("is_active", true)` + `order(sort_order)`)، لا Hardcoded، ولا خلط مع
+  `ActivityPicker` (نشاط المنشأة). التنقل بلوحة المفاتيح (Tab/Enter) ينتقل
+  للمستوى الفرعي ولا يُكمل الاختيار تلقائيًا قبل أعمق مستوى.
+- **السعر**: `checkPrice` يرفض الفراغ والنص والصفر والسالب والكبير جدًا
+  والكسور في العملات غير الكسرية؛ سعر واحد موجب + وحدة اختيارية فقط.
+- **المسودة**: `sessionStorage` بمفتاح `tahqaq.mkt.ad-draft:new:individual`
+  (مرتبط بالحساب النشط)، و`localStorage` لا يحتوي أي مسودة.
+- **Responsive Regression**: `/ads/:slug`، `/dashboard/my-ads`، `/search`، `/`
+  على 320/390/768/1024/1366/1440: صفر Overflow، لا شاشة فارغة، لا «30 يوم»،
+  وConsole بلا أخطاء.
+- `tsgo --noEmit` و `vite build`: ناجحان.
