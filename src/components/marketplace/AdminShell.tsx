@@ -71,7 +71,9 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/admin", labelKey: "admin.nav.home", icon: Gauge },
+  { to: "/admin/search", labelKey: "admin.nav.search", icon: Search },
   { to: "/admin/listings", labelKey: "admin.nav.listings", icon: Megaphone },
+
   {
     to: "/admin/listing-reports",
     labelKey: "admin.nav.listingReports",
