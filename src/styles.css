@@ -545,14 +545,81 @@ body {
  * internal pages references a `market-*` utility.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: oklch(0.2148 0.0631 268.5);
-  --color-market-navy-dark: oklch(0.1666 0.0523 269);
-  --color-market-navy-soft: oklch(0.3006 0.0716 267.5);
-  --color-market-navy-foreground: oklch(0.9821 0.004 265);
-  --color-market-silver: oklch(0.9268 0.0072 264.5);
-  --color-market-silver-line: oklch(0.8571 0.0111 264.5);
-  --color-market-silver-muted: oklch(0.7368 0.0159 264.5);
+  /* #0B1739 / #07112C / #182A55 / #FFFFFF */
+  --color-market-navy: oklch(0.2171 0.0682 266.19);
+  --color-market-navy-dark: oklch(0.187 0.0566 265.5);
+  --color-market-navy-soft: oklch(0.2957 0.0815 264.79);
+  --color-market-navy-foreground: oklch(1 0 0);
+  /* #EEF2F5 / #D7DEE6 / #BFC7D2 */
+  --color-market-silver: oklch(0.959 0.0059 239.82);
+  --color-market-silver-line: oklch(0.8976 0.0133 251.57);
+  --color-market-silver-muted: oklch(0.8268 0.0177 256.29);
 }
+
+/*
+ * `.market-surface` re-points the semantic tokens to the "كحلي" palette for the
+ * whole public marketplace tree (shell, dashboard pages, auth/registration and
+ * the static pages). Because every marketplace component already styles itself
+ * with semantic classes (`bg-primary`, `text-muted-foreground`, `border-border`
+ * …), one scope keeps the identity consistent without duplicated components.
+ * The admin console and the internal system never carry this class, so their
+ * petrol identity is untouched.
+ */
+.market-surface,
+/* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
+ * scope is mirrored onto the body whenever a marketplace shell is mounted. */
+body:has(.market-surface) {
+  /* #F6F8FA page, white cards, #102027 text */
+  --background: oklch(0.9782 0.0034 247.86);
+  --foreground: oklch(0.2328 0.0255 227.72);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2328 0.0255 227.72);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2328 0.0255 227.72);
+
+  /* primary = navy, pressed states go darker (never a bright gradient) */
+  --primary: oklch(0.2171 0.0682 266.19);
+  --primary-foreground: oklch(1 0 0);
+  --primary-dark: oklch(0.187 0.0566 265.5);
+  --primary-pressed: oklch(0.187 0.0566 265.5);
+
+  /* #EEF2F5 secondary surfaces, active state = navy text on silver */
+  --secondary: oklch(0.959 0.0059 239.82);
+  --secondary-foreground: oklch(0.2171 0.0682 266.19);
+  --muted: oklch(0.959 0.0059 239.82);
+  --muted-foreground: oklch(0.5699 0.0217 230.98);
+  --accent: oklch(0.959 0.0059 239.82);
+  --accent-foreground: oklch(0.2171 0.0682 266.19);
+
+  /* #D7DEE6 borders, visible navy focus ring */
+  --border: oklch(0.8976 0.0133 251.57);
+  --input: oklch(0.8976 0.0133 251.57);
+  --ring: oklch(0.2957 0.0815 264.79);
+
+  /* No gold in the marketplace: promotion reads as navy + silver instead. */
+  --gold: oklch(0.2171 0.0682 266.19);
+  --gold-dark: oklch(0.187 0.0566 265.5);
+  --gold-soft: oklch(0.959 0.0059 239.82);
+  --gold-foreground: oklch(1 0 0);
+
+  --sidebar: oklch(0.2171 0.0682 266.19);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.2957 0.0815 264.79);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.2957 0.0815 264.79);
+  --sidebar-primary: oklch(1 0 0);
+  --sidebar-primary-foreground: oklch(0.2171 0.0682 266.19);
+  --sidebar-ring: oklch(0.8268 0.0177 256.29);
+
+  --chart-1: oklch(0.2171 0.0682 266.19);
+  --chart-2: oklch(0.2957 0.0815 264.79);
+  --chart-3: oklch(0.5699 0.0217 230.98);
+  --chart-4: oklch(0.8268 0.0177 256.29);
+
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 
 /* Hide the horizontal scrollbar of the marketplace category rail without
  * disabling the scrolling itself. */

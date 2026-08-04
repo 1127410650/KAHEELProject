@@ -139,7 +139,7 @@ function MarketSetupPage() {
   }
 
   return (
-    <div dir={dir} className="flex min-h-screen items-start justify-center px-4 py-8">
+    <div dir={dir} className="market-surface flex min-h-screen items-start justify-center px-4 py-8">
       <div className="w-full max-w-sm">
         <div className="mb-5 flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">

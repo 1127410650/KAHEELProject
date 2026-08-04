@@ -502,7 +502,7 @@ function MyAdsPage() {
                     </span>
                     {remaining && <span className="text-foreground">{remaining}</span>}
                     {ad.promoted_until && new Date(ad.promoted_until).getTime() > Date.now() && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-gold-soft px-1.5 text-gold-dark">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 text-primary">
                         <Sparkles className="size-3" aria-hidden />
                         {t("market.promote.activeUntil", {
                           date: formatDateTime(ad.promoted_until),

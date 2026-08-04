@@ -205,7 +205,8 @@ function ChooseAccountPage() {
     "mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-3";
 
   return (
-    <div className="mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-4xl xl:max-w-5xl">
+    <div className="market-surface min-h-dvh px-3 py-6 sm:py-10">
+      <div className="mx-auto w-full max-w-xl lg:max-w-4xl xl:max-w-5xl">
       <div className="mb-5 flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <h1 className="wrap-anywhere text-lg font-bold leading-tight sm:text-2xl">
@@ -331,6 +332,8 @@ function ChooseAccountPage() {
         </p>
       ) : null}
 
+      </div>
     </div>
   );
 }
+

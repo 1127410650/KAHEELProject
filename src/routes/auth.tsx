@@ -108,7 +108,7 @@ function AuthPage() {
   if (!mounted) return null;
 
   return (
-    <div dir={dir} className="grid min-h-screen lg:grid-cols-2">
+    <div dir={dir} className="market-surface grid min-h-screen lg:grid-cols-2">
 
       <div className="relative hidden flex-col justify-between bg-sidebar p-10 lg:flex">
         <div className="flex items-center gap-3">

@@ -87,7 +87,7 @@ function NewBusinessPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-3xl">
+    <div className="market-surface mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-3xl">
       <p className="mb-3 text-[11px] text-muted-foreground">
         <Link
           to="/choose-account"
