@@ -2908,7 +2908,8 @@
       "auditLog": "Audit log",
       "settings": "Platform settings",
       "search": "Admin search",
-      "workforce": "Work distribution & staff"
+      "workforce": "Work distribution & staff",
+      "myWork": "My work"
     },
     "alerts": {
       "title": "Alerts",
@@ -3310,8 +3311,23 @@
       "err": {
         "capacity": "This officer reached their operational limit",
         "leaveRange": "Leave end date precedes its start",
-        "dates": "Both leave dates are required"
+        "dates": "Both leave dates are required",
+        "onLeave": "You cannot take work while on leave",
+        "unavailable": "Your current work state does not allow taking work"
       }
+    },
+    "myWork": {
+      "title": "My work",
+      "hint": "Set your state when you are available or busy, take work from the shared list, and move each item forward until it is done.",
+      "myState": "My state",
+      "load": "Current load",
+      "doneToday": "Done today",
+      "onLeaveNote": "You are on leave: no work is assigned to you and you cannot take any.",
+      "mineTitle": "Assigned to me",
+      "sharedTitle": "Shared list",
+      "empty": "No work",
+      "open": "Open",
+      "notStaff": "You have no platform work state."
     }
   }
 }
