@@ -329,23 +329,118 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     [attachSession, finish, t, teardown, userId],
   );
 
+  /**
+   * Answers a specific call id. Direct mode calls this without a tap when the
+   * microphone permission is already granted; otherwise the user taps
+   * "start audio" / "accept" and lands here too.
+   */
+  const answerCall = useCallback(
+    async (callId: string) => {
+      if (sessionRef.current) return;
+      clearTimers();
+      setCall((prev) => (prev ? { ...prev, needsAudioGesture: false } : prev));
+      const rtc = attachSession(callId, false);
+      try {
+        await rtc.prepareMicrophone();
+      } catch {
+        // Permission was refused: keep the call alive so the user can retry.
+        sessionRef.current = null;
+        await rtc.close(false).catch(() => undefined);
+        setCall((prev) =>
+          prev ? { ...prev, needsAudioGesture: true, errorKey: "mic_denied" } : prev,
+        );
+        return;
+      }
+      await transitionCall(callId, "connected").catch(() => undefined);
+      await rtc.connect();
+      setCall((prev) =>
+        prev ? { ...prev, status: "connected", seconds: 0, errorKey: null } : prev,
+      );
+    },
+    [attachSession, clearTimers],
+  );
+  acceptRef.current = answerCall;
 
   const accept = useCallback(async () => {
-    const current = call;
+    const current = callRef.current;
     if (!current || current.role !== "callee") return;
-    clearTimers();
-    const rtc = attachSession(current.id, false);
-    try {
-      await rtc.prepareMicrophone();
-    } catch {
-      await transitionCall(current.id, "failed", "mic_denied").catch(() => undefined);
-      await finish("failed", "mic_denied", false);
-      return;
-    }
-    await transitionCall(current.id, "connected").catch(() => undefined);
-    await rtc.connect();
-    setCall((prev) => (prev ? { ...prev, status: "connected", seconds: 0 } : prev));
-  }, [attachSession, call, clearTimers, finish]);
+    await answerCall(current.id);
+  }, [answerCall]);
+
+  const requestCall = useCallback(
+    async (listingId: string) => {
+      if (!userId) {
+        toast.error(t("market.call.error.auth_required"));
+        return false;
+      }
+      setStarting(true);
+      try {
+        await createCallRequest(listingId);
+        toast.success(t("market.call.requestSent"));
+        return true;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "generic";
+        const reason = message.match(/CALL_NOT_ALLOWED:(\w+)/)?.[1] ?? "generic";
+        toast.error(t(`market.call.error.${reason}`));
+        return false;
+      } finally {
+        setStarting(false);
+      }
+    },
+    [t, userId],
+  );
+
+  const startFromRequest = useCallback(
+    async (requestId: string) => {
+      if (sessionRef.current) {
+        toast.error(t("market.call.error.busy"));
+        return;
+      }
+      setStarting(true);
+      try {
+        const started = await startCallFromRequest(requestId);
+        const peer = await loadCallPeer(started.call_id);
+        setCall({
+          id: started.call_id,
+          role: "caller",
+          status: "requesting",
+          peerName: peer?.peer_name ?? "",
+          peerAvatar: peer?.peer_avatar ?? null,
+          listingTitle: peer?.listing_title ?? null,
+          conversationId: started.conversation_id ?? peer?.conversation_id ?? null,
+          peerUserId: null,
+          errorKey: null,
+          muted: false,
+          seconds: 0,
+          needsAudioGesture: false,
+        });
+        const rtc = attachSession(started.call_id, true);
+        try {
+          await rtc.prepareMicrophone();
+        } catch {
+          await transitionCall(started.call_id, "failed", "mic_denied").catch(() => undefined);
+          await finish("failed", "mic_denied", false);
+          return;
+        }
+        await rtc.connect();
+        ringTimer.current = setTimeout(() => {
+          void markCallMissed(started.call_id, "no_answer").catch(() => undefined);
+          void finish("no_answer", null, true);
+        }, RING_TIMEOUT_MS);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "generic";
+        const reason = message.match(/CALL_NOT_ALLOWED:(\w+)/)?.[1] ?? "generic";
+        toast.error(t(`market.call.error.${reason}`));
+        await teardown(false);
+        setCall(null);
+        throw error;
+      } finally {
+        setStarting(false);
+      }
+    },
+    [attachSession, finish, t, teardown],
+  );
+
 
   const decline = useCallback(async () => {
     const current = call;
