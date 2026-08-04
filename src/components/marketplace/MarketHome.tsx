@@ -180,7 +180,7 @@ export function MarketHome() {
         <section className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-8 text-center">
           <p className="text-sm text-muted-foreground">{t("market.emptyHome")}</p>
           <Button asChild size="sm" className="mt-3">
-            <Link to={ADD_LISTING_PATH}>
+            <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
               <Plus className="size-4" aria-hidden />
               {t("market.addListing")}
             </Link>

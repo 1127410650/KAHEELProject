@@ -359,7 +359,7 @@ function MyAdsPage() {
     <DashboardShell title={t("market.dash.myAds")}>
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Button asChild size="sm">
-          <Link to={ADD_LISTING_PATH}>{t("market.addListing")}</Link>
+          <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>{t("market.addListing")}</Link>
         </Button>
         <Button asChild size="sm" variant="outline">
           <Link to="/dashboard/points">{t("market.points.title")}</Link>

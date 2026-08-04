@@ -798,7 +798,7 @@ function SearchPage() {
                   </Button>
                 )}
                 <Button asChild size="sm">
-                  <Link to={ADD_LISTING_PATH}>{t("market.addListing")}</Link>
+                  <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>{t("market.addListing")}</Link>
                 </Button>
               </div>
             </div>
