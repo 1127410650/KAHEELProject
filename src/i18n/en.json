@@ -97,8 +97,9 @@
     "invalid": "Invalid credentials",
     "genericError": "Could not sign in, please try again",
     "welcome": "Welcome to Tahqaq",
-    "identifier": "ID, email or mobile",
-    "identifierHint": "Sign in with your national ID, email or mobile number",
+    "identifier": "Email or mobile number",
+    "identifierHint": "Enter your email or mobile number",
+
     "locked": "Account temporarily locked after failed attempts. Try again later.",
     "mustChangeTitle": "Password change required",
     "mustChangeDesc": "For your account security, set a new password before continuing.",
