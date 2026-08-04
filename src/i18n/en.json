@@ -2702,7 +2702,19 @@
       "endsIn": "Ends in {n} days",
       "endsInHours": "Ends in {n} hours",
       "endedAgo": "Ended {n} days ago",
-      "endedAgoHours": "Ended {n} hours ago"
+      "endedAgoHours": "Ended {n} hours ago",
+      "reactivate": "Reactivate for 7 days",
+      "reactivated": "Ad reactivated for 7 days",
+      "reactivateReview": "Sent for review before republishing",
+      "adminSuspended": "This ad is suspended by the platform team",
+      "accountRestricted": "This account is currently restricted",
+      "categoryInactive": "This category is currently inactive",
+      "imageRequired": "At least one photo is required",
+      "imagesIncomplete": "Some photos have not finished uploading",
+      "imagesTooMany": "Maximum of 20 photos",
+      "businessIncomplete": "Complete the business details before publishing",
+      "geoRequired": "Pick the location on the map",
+      "notFound": "Ad not found"
     },
     "lr": {
       "title": "Listing reports",
@@ -2882,6 +2894,41 @@
         "missed": "Missed call",
         "duration": "Call duration"
       }
+    },
+    "moderation": {
+      "owner": {
+        "review": "Your ad is under review after the content scan",
+        "suspected": "The content may breach the platform policy and is under review",
+        "cleared": "Reviewed — the flag was cleared"
+      }
+    },
+    "promote": {
+      "action": "Boost with points",
+      "title": "Boost this ad",
+      "confirm": "Confirm boost",
+      "processing": "Working…",
+      "success": "Ad boosted",
+      "alreadyDone": "This request was already recorded",
+      "alreadyPromoted": "This ad is already boosted",
+      "alreadyActiveUntil": "Current boost runs until {date}",
+      "activeUntil": "Boosted until {date}",
+      "insufficientPoints": "Not enough points",
+      "invalidState": "Boosting is available for published ads only",
+      "invalidDuration": "Invalid duration",
+      "priceUnavailable": "Boost pricing is unavailable right now",
+      "notFound": "Ad not found",
+      "viewPoints": "View points balance and history"
+    },
+    "points": {
+      "title": "Points",
+      "balance": "Current balance",
+      "lifetimeSpent": "Total spent",
+      "ledger": "Transaction history",
+      "empty": "No transactions yet",
+      "credit": "Credit",
+      "debit": "Debit",
+      "prev": "Previous",
+      "next": "Next"
     }
   },
   "routeError": {
@@ -2925,7 +2972,8 @@
       "search": "Admin search",
       "workforce": "Work distribution & staff",
       "myWork": "My work",
-      "attendance": "Attendance & shifts"
+      "attendance": "Attendance & shifts",
+      "contentRules": "Content rules"
     },
     "alerts": {
       "title": "Alerts",
@@ -3410,6 +3458,59 @@
         "range": "Check-out is before check-in",
         "appendOnly": "The correction trail cannot be edited or deleted"
       }
+    },
+    "moderation": {
+      "title": "Content scan",
+      "hint": "Automated scan result — advisory only; the human reviewer decides.",
+      "score": "Score",
+      "thresholds": "Decision thresholds",
+      "lastScan": "Last scan",
+      "noScans": "No scans yet",
+      "history": "Previous scans",
+      "field": "Field",
+      "weight": "Weight",
+      "dismiss": "Clear flag",
+      "dismissTitle": "Clear the scan flag",
+      "dismissDescription": "Give a clear reason for clearing this flag; the reason is recorded in the activity log.",
+      "dismissedAt": "Flag cleared at"
+    },
+    "contentRules": {
+      "title": "Content scan rules",
+      "addRule": "Add rule",
+      "editRule": "Edit rule",
+      "deleteRule": "Delete rule",
+      "searchPlaceholder": "Search pattern or notes",
+      "all": "All",
+      "activeOnly": "Active only",
+      "inactiveOnly": "Inactive only",
+      "kind": "Kind",
+      "pattern": "Pattern",
+      "lang": "Language",
+      "langAny": "Any language",
+      "category": "Category",
+      "severity": "Severity",
+      "action": "Action",
+      "weight": "Weight",
+      "status": "Status",
+      "notes": "Notes",
+      "toggleActive": "Activate / deactivate",
+      "duration": "Duration",
+      "errorPatternRequired": "A pattern is required",
+      "errorInvalidRegex": "Invalid regular expression",
+      "errorWeightRange": "Weight must be between 0 and 20",
+      "testTitle": "Test text",
+      "testPlaceholder": "Paste text to test the active rules",
+      "testHint": "An approximate preview of the active rules, not the final scan decision.",
+      "testNoMatch": "No rule matched",
+      "thresholdsTitle": "Decision thresholds",
+      "thresholdsHint": "Managed from platform settings.",
+      "reviewThreshold": "Review threshold",
+      "blockThreshold": "Block threshold",
+      "policyVersion": "Policy version",
+      "jobsTitle": "Scheduled operations",
+      "runNow": "Run now",
+      "tickSuccess": "Scheduled job completed",
+      "tickFinishedWithIssues": "The job finished with an issue"
     }
   }
 }

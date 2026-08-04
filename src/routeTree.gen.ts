@@ -26,6 +26,7 @@ import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminAttendanceRouteImport } from './routes/admin/attendance'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
+import { Route as AdminContentRulesRouteImport } from './routes/admin/content-rules'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
@@ -46,6 +47,7 @@ import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favor
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/notifications'
+import { Route as DashboardPointsRouteImport } from './routes/dashboard/points'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
@@ -145,6 +147,11 @@ const AdminAuditLogRoute = AdminAuditLogRouteImport.update({
 const AdminBusinessesRoute = AdminBusinessesRouteImport.update({
   id: '/businesses',
   path: '/businesses',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminContentRulesRoute = AdminContentRulesRouteImport.update({
+  id: '/content-rules',
+  path: '/content-rules',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminGeoRoute = AdminGeoRouteImport.update({
@@ -247,6 +254,11 @@ const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
   path: '/dashboard/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardPointsRoute = DashboardPointsRouteImport.update({
+  id: '/dashboard/points',
+  path: '/dashboard/points',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
   id: '/dashboard/profile',
   path: '/dashboard/profile',
@@ -340,6 +352,7 @@ export interface FileRoutesByFullPath {
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -360,6 +373,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
@@ -393,6 +407,7 @@ export interface FileRoutesByTo {
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -413,6 +428,7 @@ export interface FileRoutesByTo {
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
@@ -448,6 +464,7 @@ export interface FileRoutesById {
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -468,6 +485,7 @@ export interface FileRoutesById {
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
@@ -504,6 +522,7 @@ export interface FileRouteTypes {
     | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/content-rules'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -524,6 +543,7 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/notifications'
+    | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
@@ -557,6 +577,7 @@ export interface FileRouteTypes {
     | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/content-rules'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -577,6 +598,7 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/notifications'
+    | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
@@ -611,6 +633,7 @@ export interface FileRouteTypes {
     | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/content-rules'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -631,6 +654,7 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/notifications'
+    | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
@@ -671,6 +695,7 @@ export interface RootRouteChildren {
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
   DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardPointsRoute: typeof DashboardPointsRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
@@ -801,6 +826,13 @@ declare module '@tanstack/react-router' {
       path: '/businesses'
       fullPath: '/admin/businesses'
       preLoaderRoute: typeof AdminBusinessesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/content-rules': {
+      id: '/admin/content-rules'
+      path: '/content-rules'
+      fullPath: '/admin/content-rules'
+      preLoaderRoute: typeof AdminContentRulesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/geo': {
@@ -943,6 +975,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/points': {
+      id: '/dashboard/points'
+      path: '/dashboard/points'
+      fullPath: '/dashboard/points'
+      preLoaderRoute: typeof DashboardPointsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/profile': {
       id: '/dashboard/profile'
       path: '/dashboard/profile'
@@ -1056,6 +1095,7 @@ interface AdminRouteRouteChildren {
   AdminAttendanceRoute: typeof AdminAttendanceRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
+  AdminContentRulesRoute: typeof AdminContentRulesRoute
   AdminGeoRoute: typeof AdminGeoRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -1081,6 +1121,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAttendanceRoute: AdminAttendanceRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
+  AdminContentRulesRoute: AdminContentRulesRoute,
   AdminGeoRoute: AdminGeoRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
@@ -1127,6 +1168,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardMyAdsRoute: DashboardMyAdsRoute,
   DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardPointsRoute: DashboardPointsRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,

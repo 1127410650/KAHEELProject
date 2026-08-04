@@ -4,6 +4,7 @@ import {
   Bell,
   Building2,
   ChevronDown,
+  Coins,
   Flag,
   Heart,
   LayoutList,
@@ -149,6 +150,7 @@ export function AccountMenu() {
 
   const activityLinks = allowed([
     { to: "/dashboard/my-ads", label: t("market.dash.myAds"), icon: LayoutList },
+    { to: "/dashboard/points", label: t("market.points.title"), icon: Coins },
     {
       to: "/dashboard/messages",
       label: t("market.dash.messages"),

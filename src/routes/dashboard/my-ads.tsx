@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   Archive,
@@ -15,10 +15,11 @@ import {
   Pencil,
   Play,
   QrCode,
-  RefreshCw,
+  RotateCcw,
   Search,
   Send,
   Share2,
+  ShieldAlert,
   Sparkles,
   Star,
   Trash2,
@@ -28,10 +29,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatDateTime } from "@/lib/format";
 import { priceLabel, resolveMedia, type MktListing } from "@/lib/mkt";
 import {
-  LISTING_DURATIONS,
   MY_LISTING_COLUMNS,
   MY_LISTING_STATUSES,
   allowedOps,
@@ -39,16 +39,16 @@ import {
   deleteListing,
   duplicateListing,
   pauseListing,
+  reactivateListing,
   remainingLabel,
-  renewListing,
   restoreListing,
   resumeListing,
   submitListing,
   trackListingEvent,
-  type ListingDuration,
 } from "@/lib/mkt-listing-ops";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { PromoteDialog } from "@/components/marketplace/PromoteDialog";
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -125,6 +125,38 @@ function statusClass(status: string, featured: boolean): string {
   }
 }
 
+/** Op error code → user-facing message key. */
+const OP_ERROR_KEYS: Record<string, string> = {
+  invalid_state: "market.ops.invalidState",
+  forbidden: "market.ops.forbidden",
+  license_required: "market.ops.licenseRequired",
+  admin_suspended: "market.ops.adminSuspended",
+  account_restricted: "market.ops.accountRestricted",
+  category_inactive: "market.ops.categoryInactive",
+  already_promoted: "market.promote.alreadyPromoted",
+  insufficient_points: "market.promote.insufficientPoints",
+  image_required: "market.ops.imageRequired",
+  images_incomplete: "market.ops.imagesIncomplete",
+  images_too_many: "market.ops.imagesTooMany",
+  business_incomplete: "market.ops.businessIncomplete",
+  geo_required: "market.ops.geoRequired",
+  not_found: "market.ops.notFound",
+};
+
+/** Moderation hint shown to the advertiser — never an accusation, just status. */
+function moderationHint(state: string | null | undefined): { key: string; tone: string } | null {
+  switch (state) {
+    case "review":
+      return { key: "market.moderation.owner.review", tone: "text-muted-foreground" };
+    case "blocked_suspected":
+      return { key: "market.moderation.owner.suspected", tone: "text-destructive" };
+    case "cleared":
+      return { key: "market.moderation.owner.cleared", tone: "text-primary" };
+    default:
+      return null;
+  }
+}
+
 function MyAdsPage() {
   const { t, locale } = useI18n();
   const { session } = useSession();
@@ -136,6 +168,15 @@ function MyAdsPage() {
   const [sort, setSort] = useState<SortKey>("recent");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confirm, setConfirm] = useState<{ id: string; kind: "delete" | "archive" } | null>(null);
+  const [promoteFor, setPromoteFor] = useState<{ id: string; title: string } | null>(null);
+  const [, setTick] = useState(0);
+
+  // Remaining-time labels are computed from wall-clock time, so a live tick
+  // every minute keeps "ends in X" / "ended X ago" accurate without a refetch.
+  useEffect(() => {
+    const id = window.setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const ads = useQuery({
     queryKey: ["mkt", "my-ads", account?.account_key, locale],
@@ -143,7 +184,11 @@ function MyAdsPage() {
     queryFn: async () => {
       // Ads belong to the account the user entered under: a business sees its
       // own ads only, the personal account sees the ones with no entity.
-      let query = supabase.from("mkt_listings").select(MY_LISTING_COLUMNS);
+      let query = supabase
+        .from("mkt_listings")
+        .select(
+          `${MY_LISTING_COLUMNS}, moderation_state, moderation_score, last_scan_at, promoted_until`,
+        );
       query =
         account!.kind === "business"
           ? query.eq("tenant_id", account!.tenant_id!)
@@ -266,19 +311,29 @@ function MyAdsPage() {
       await ads.refetch();
     } catch (error) {
       const code = error instanceof Error ? error.message : "failed";
-      toast.error(
-        code === "invalid_state"
-          ? t("market.ops.invalidState")
-          : code === "forbidden"
-            ? t("market.ops.forbidden")
-            : code === "license_required"
-              ? t("market.ops.licenseRequired")
-              : t("market.actions.failed"),
-      );
+      toast.error(t(OP_ERROR_KEYS[code] ?? "market.actions.failed"));
     } finally {
       setBusyId(null);
     }
   }
+
+  /** Reactivation is re-scanned server-side, so the toast follows the outcome. */
+  async function onReactivate(id: string) {
+    setBusyId(id);
+    try {
+      const outcome = await reactivateListing(id);
+      toast.success(
+        outcome === "published" ? t("market.ops.reactivated") : t("market.ops.reactivateReview"),
+      );
+      await ads.refetch();
+    } catch (error) {
+      const code = error instanceof Error ? error.message : "failed";
+      toast.error(t(OP_ERROR_KEYS[code] ?? "market.actions.failed"));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
 
   async function onDuplicate(id: string) {
     setBusyId(id);
@@ -301,6 +356,9 @@ function MyAdsPage() {
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Button asChild size="sm">
           <Link to="/dashboard/ads/new">{t("market.addListing")}</Link>
+        </Button>
+        <Button asChild size="sm" variant="outline">
+          <Link to="/dashboard/points">{t("market.points.title")}</Link>
         </Button>
         <div className="relative min-w-0 flex-1 sm:max-w-xs">
           <Search
@@ -373,7 +431,16 @@ function MyAdsPage() {
         ))}
       </div>
 
-      <ul className="space-y-3">
+      {ads.isLoading && (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="h-52 animate-pulse rounded-xl border border-border bg-card" />
+          ))}
+        </div>
+      )}
+
+      <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+
         {rows.map((ad) => {
           const ops = allowedOps(ad.status);
           const remaining = remainingLabel(ad.expires_at, {
@@ -431,7 +498,16 @@ function MyAdsPage() {
                       {t("market.ops.duration")}: <span dir="ltr">{ad.duration_days ?? "—"}</span>
                     </span>
                     {remaining && <span className="text-foreground">{remaining}</span>}
+                    {ad.promoted_until && new Date(ad.promoted_until).getTime() > Date.now() && (
+                      <span className="inline-flex items-center gap-1 text-primary">
+                        <Sparkles className="size-3" aria-hidden />
+                        {t("market.promote.activeUntil", {
+                          date: formatDateTime(ad.promoted_until),
+                        })}
+                      </span>
+                    )}
                   </p>
+
 
                   <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
@@ -472,6 +548,24 @@ function MyAdsPage() {
                       </span>
                     )}
                   </p>
+
+                  {(() => {
+                    const hint = moderationHint(ad.moderation_state);
+                    if (!hint) return null;
+                    return (
+                      <p className={`mt-1 flex items-start gap-1 text-xs ${hint.tone}`}>
+                        <ShieldAlert className="mt-0.5 size-3 shrink-0" aria-hidden />
+                        <span>
+                          {t(hint.key)}
+                          {ad.last_scan_at && (
+                            <span className="ms-1 text-muted-foreground" dir="ltr">
+                              {formatDateTime(ad.last_scan_at)}
+                            </span>
+                          )}
+                        </span>
+                      </p>
+                    );
+                  })()}
 
                   {ad.rejection_reason && (
                     <p className="mt-1 text-xs text-destructive">{ad.rejection_reason}</p>
@@ -549,22 +643,21 @@ function MyAdsPage() {
                         {t("market.ops.resume")}
                       </DropdownMenuItem>
                     )}
-                    {ops.renew &&
-                      LISTING_DURATIONS.map((days) => (
+                    {ops.renew && (
+                      <DropdownMenuItem onSelect={() => void onReactivate(ad.id)}>
+                        <RotateCcw className="me-2 size-4" aria-hidden />
+                        {t("market.ops.reactivate")}
+                      </DropdownMenuItem>
+                    )}
+                    {ad.status === "published" &&
+                      !(ad.promoted_until && new Date(ad.promoted_until).getTime() > Date.now()) && (
                         <DropdownMenuItem
-                          key={days}
-                          onSelect={() =>
-                            void run(
-                              ad.id,
-                              () => renewListing(ad.id, days as ListingDuration),
-                              "market.ops.renewed",
-                            )
-                          }
+                          onSelect={() => setPromoteFor({ id: ad.id, title: ad.title })}
                         >
-                          <RefreshCw className="me-2 size-4" aria-hidden />
-                          {t("market.ops.renewFor").replace("{n}", String(days))}
+                          <Sparkles className="me-2 size-4" aria-hidden />
+                          {t("market.promote.action")}
                         </DropdownMenuItem>
-                      ))}
+                      )}
                     {ops.duplicate && (
                       <DropdownMenuItem onSelect={() => void onDuplicate(ad.id)}>
                         <Copy className="me-2 size-4" aria-hidden />
@@ -609,6 +702,16 @@ function MyAdsPage() {
         <p className="py-12 text-center text-sm text-muted-foreground">
           {all.length === 0 ? t("market.dash.noAds") : t("market.ops.noMatches")}
         </p>
+      )}
+
+      {promoteFor && (
+        <PromoteDialog
+          listingId={promoteFor.id}
+          title={promoteFor.title}
+          open={!!promoteFor}
+          onOpenChange={(open) => !open && setPromoteFor(null)}
+          onDone={() => void ads.refetch()}
+        />
       )}
 
       <AlertDialog open={!!confirm} onOpenChange={(open) => !open && setConfirm(null)}>

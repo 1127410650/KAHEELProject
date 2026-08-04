@@ -133,6 +133,12 @@ const NAV: NavItem[] = [
     icon: Activity,
     perms: ["reports.audit_view"],
   },
+  {
+    to: "/admin/content-rules",
+    labelKey: "admin.nav.contentRules",
+    icon: ShieldAlert,
+    ownerOnly: true,
+  },
   { to: "/admin/settings", labelKey: "admin.nav.settings", icon: Settings, ownerOnly: true },
 ];
 

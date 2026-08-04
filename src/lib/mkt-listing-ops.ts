@@ -32,6 +32,11 @@ export type ListingOpError =
   | "images_too_many"
   | "business_incomplete"
   | "geo_required"
+  | "admin_suspended"
+  | "account_restricted"
+  | "category_inactive"
+  | "already_promoted"
+  | "insufficient_points"
   | "failed";
 
 function opError(message: string): ListingOpError {
@@ -39,6 +44,11 @@ function opError(message: string): ListingOpError {
   if (message.includes("invalid_state")) return "invalid_state";
   if (message.includes("invalid_duration")) return "invalid_duration";
   if (message.includes("not_found")) return "not_found";
+  if (message.includes("admin_suspended")) return "admin_suspended";
+  if (message.includes("account_restricted")) return "account_restricted";
+  if (message.includes("category_inactive")) return "category_inactive";
+  if (message.includes("already_promoted")) return "already_promoted";
+  if (message.includes("insufficient_points")) return "insufficient_points";
   if (message.includes("RE_LICENSE_REQUIRED")) return "license_required";
   if (message.includes("IMAGE_REQUIRED")) return "image_required";
   if (message.includes("IMAGES_INCOMPLETE")) return "images_incomplete";
@@ -65,6 +75,16 @@ export const resumeListing = (id: string) => call(supabase.rpc("mkt_listing_resu
 
 export const renewListing = (id: string, days: ListingDuration) =>
   call(supabase.rpc("mkt_listing_renew", { _id: id, _days: days }));
+
+/**
+ * Reactivate an expired/paused ad for another organic window. The database
+ * re-scans the content first, so the result tells the caller whether the ad
+ * went live again or landed in review.
+ */
+export const reactivateListing = async (id: string): Promise<"published" | "pending"> => {
+  const result = await call(supabase.rpc("mkt_listing_reactivate", { _id: id }));
+  return (result as unknown as "published" | "pending") ?? "pending";
+};
 
 export const archiveListing = (id: string) =>
   call(supabase.rpc("mkt_listing_archive", { _id: id }));
