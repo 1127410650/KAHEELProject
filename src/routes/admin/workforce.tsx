@@ -35,7 +35,7 @@ import {
   type WorkProgress,
   type WorkState,
 } from "@/lib/mkt-workforce";
-import { claimSubject, transferSubject } from "@/lib/mkt-admin-queue";
+import { claimSubject, releaseSubject, transferSubject } from "@/lib/mkt-admin-queue";
 import { usePlatformIdentity } from "@/lib/mkt-platform";
 
 import { Button } from "@/components/ui/button";
@@ -86,7 +86,8 @@ type Pending =
   | { kind: "staff"; row: StaffRow; state?: WorkState; capacity?: number; auto?: boolean; department?: string }
   | { kind: "leaveCancel"; id: string }
   | { kind: "priority"; item: WorkItem; priority: WorkPriority }
-  | { kind: "transfer"; item: WorkItem; to: string };
+  | { kind: "transfer"; item: WorkItem; to: string }
+  | { kind: "release"; item: WorkItem };
 
 function AdminWorkforcePage() {
   const { t, locale } = useI18n();
@@ -160,6 +161,8 @@ function AdminWorkforcePage() {
         await cancelLeave(pending.id, reason);
       } else if (pending.kind === "priority") {
         await setWorkPriority(pending.item.kind, pending.item.subject_id, pending.priority, reason);
+      } else if (pending.kind === "release") {
+        await releaseSubject(pending.item.kind, pending.item.subject_id, reason);
       } else {
         await transferSubject(pending.item.kind, pending.item.subject_id, pending.to, reason);
       }
@@ -429,6 +432,17 @@ function AdminWorkforcePage() {
                       ))}
                     </SelectContent>
                   </Select>
+                  {item.assignee && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="min-h-10"
+                      disabled={busy}
+                      onClick={() => setPending({ kind: "release", item })}
+                    >
+                      {t("admin.queue.release")}
+                    </Button>
+                  )}
                   {!item.assignee && (
                     <Button
                       size="sm"
