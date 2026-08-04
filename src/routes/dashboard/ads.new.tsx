@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import {
+  FormRouteError,
+  FormRoutePending,
+} from "@/components/marketplace/FormRouteFallback";
+
 import { useI18n } from "@/i18n";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingForm } from "@/components/marketplace/ListingForm";
@@ -19,6 +24,10 @@ export const Route = createFileRoute("/dashboard/ads/new")({
     ],
   }),
   component: NewAdPage,
+  pendingComponent: FormRoutePending,
+  errorComponent: FormRouteError,
+  pendingMs: 100,
+  pendingMinMs: 200,
 });
 
 function NewAdPage() {
