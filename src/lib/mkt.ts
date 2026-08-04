@@ -109,7 +109,6 @@ export interface MktListing {
   description: string | null;
   specs: unknown;
   price: number | null;
-  price_on_request: boolean;
   price_unit: string | null;
   currency: string;
   quantity: number | null;
