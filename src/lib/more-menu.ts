@@ -15,6 +15,7 @@ import {
   LayoutList,
   ShieldAlert,
   ShieldCheck,
+  Store,
   User,
   Users,
   type LucideIcon,
