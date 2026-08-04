@@ -114,7 +114,8 @@
     "forgot": "Forgot your password?",
     "forgotSoon": "Password recovery is not available yet — please contact support.",
     "noAccount": "Don't have an account?",
-    "createAccount": "Create account"
+    "createAccount": "Create account",
+    "rights": "All rights reserved — Kahli"
   },
   "roles": {
     "accountant": "Accountant / Admin",
@@ -3051,7 +3052,8 @@
       },
       "featuredCta": "View listing",
       "featuredPrev": "Previous featured listing",
-      "featuredNext": "Next featured listing"
+      "featuredNext": "Next featured listing",
+      "all": "Listings"
     },
     "pages": {
       "about": {
