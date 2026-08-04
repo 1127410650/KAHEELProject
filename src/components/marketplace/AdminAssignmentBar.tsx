@@ -13,6 +13,7 @@ import {
   transferSubject,
   type QueueKind,
 } from "@/lib/mkt-admin-queue";
+import { loadAdminRoles } from "@/lib/mkt-platform";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import { Button } from "@/components/ui/button";
 
