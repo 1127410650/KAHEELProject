@@ -32,12 +32,15 @@ export type ListingOpError =
   | "images_too_many"
   | "business_incomplete"
   | "geo_required"
+  | "price_required"
+  | "price_invalid"
   | "admin_suspended"
   | "account_restricted"
   | "category_inactive"
   | "already_promoted"
   | "insufficient_points"
   | "failed";
+
 
 function opError(message: string): ListingOpError {
   if (message.includes("forbidden")) return "forbidden";
