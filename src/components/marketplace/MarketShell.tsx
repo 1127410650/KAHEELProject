@@ -8,7 +8,6 @@ import {
   Plus,
   Search,
   ShieldCheck,
-  Store,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
