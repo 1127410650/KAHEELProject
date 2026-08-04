@@ -74,20 +74,21 @@ function ListingSection({
       <SectionHead title={title} href={href} {...(search ? { search } : {})} />
 
       {loading ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className={i > 1 ? "hidden h-56 rounded-xl sm:block" : "h-28 w-full rounded-xl sm:h-56"} />
           ))}
         </div>
       ) : (
         <>
-          {/* Phones get two compact horizontal rows; larger screens get a grid. */}
+          {/* Phones get two compact horizontal rows; larger screens get a grid of
+              280–340px columns that stays start-aligned with one item only. */}
           <div className="flex flex-col gap-2.5 sm:hidden">
             {shown.slice(0, 2).map((listing) => (
               <ListingCard key={listing.id} listing={listing} view="row" />
             ))}
           </div>
-          <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+          <div className="hidden justify-start gap-3 sm:grid sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
             {shown.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
