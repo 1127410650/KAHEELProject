@@ -2965,7 +2965,8 @@
       "debit": "Debit",
       "prev": "Previous",
       "next": "Next"
-    }
+    },
+    "offlineNotice": "You're offline — you have not been signed out."
   },
   "routeError": {
     "notFoundTitle": "Page not found",

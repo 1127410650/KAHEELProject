@@ -117,13 +117,14 @@ export function restoreAuthStorage() {
   if (held) {
     local.setItem(key, held);
   } else {
-    // Switching to session-only mode while already signed in must not sign the
-    // user out: adopt the durable entry into the browser-session scope instead
-    // of deleting it. The `pagehide` drain then keeps it from outliving the
-    // browser session.
-    const durable = local.getItem(key);
-    if (durable) session.setItem(key, durable);
+    // No browser-session copy in session-only mode means this IS a new browser
+    // session, so nothing may be restored: drop the durable leftover instead of
+    // adopting it. Switching the preference mid-session cannot land here, because
+    // `setRememberSession()` copies the live token into the browser-session scope
+    // in the same tick — that is what keeps the current user signed in.
+    local.removeItem(key);
   }
+
 
 
   armDrain();

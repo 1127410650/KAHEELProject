@@ -31,6 +31,7 @@ import { useSignOut } from "@/lib/auth-signout";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -98,7 +99,7 @@ type MenuLink = {
 export function AccountMenu() {
   const { t } = useI18n();
   const { session } = useSession();
-  const { account: active, accounts, clear, can } = useActiveAccount();
+  const { account: active, accounts, clear, can, loading: accountLoading } = useActiveAccount();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const centralSignOut = useSignOut();
@@ -112,7 +113,24 @@ export function AccountMenu() {
     queryFn: isPlatformAdmin,
   });
 
-  if (!session || !active) return null;
+  // A signed-in visitor must NEVER see a header without an identity slot: that is
+  // the forbidden hybrid state (bell + add, no account, no visitor buttons). While
+  // the account is loading the slot is a skeleton; if it is missing or could not be
+  // read (offline), the slot links to the account picker instead of vanishing.
+  if (!session) return null;
+  if (!active) {
+    if (accountLoading) {
+      return <Skeleton aria-hidden className="h-8 w-24 shrink-0 rounded-md sm:w-36" />;
+    }
+    return (
+      <Button asChild size="sm" variant="outline" className="shrink-0">
+        <Link to="/choose-account" aria-label={t("market.entry.change")} title={t("market.entry.change")}>
+          <User className="size-4" aria-hidden />
+          <span className="hidden sm:inline">{t("market.entry.change")}</span>
+        </Link>
+      </Button>
+    );
+  }
 
   const rawName = (active.name ?? "").trim();
   const displayName =
