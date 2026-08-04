@@ -11,15 +11,20 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
@@ -75,6 +80,11 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -95,6 +105,16 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
   path: '/choose-account',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketSetupRoute = MarketSetupRouteImport.update({
   id: '/market-setup',
   path: '/market-setup',
@@ -110,6 +130,11 @@ const MoreRoute = MoreRouteImport.update({
   path: '/more',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -118,6 +143,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyInvoiceRoute = VerifyInvoiceRouteImport.update({
@@ -345,14 +375,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/$': typeof SplatRoute
+  '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
+  '/contact': typeof ContactRoute
+  '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/terms': typeof TermsRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
@@ -401,14 +436,19 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
+  '/contact': typeof ContactRoute
+  '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/terms': typeof TermsRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
@@ -459,14 +499,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/$': typeof SplatRoute
+  '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
+  '/contact': typeof ContactRoute
+  '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/terms': typeof TermsRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
@@ -518,14 +563,19 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/$'
+    | '/about'
     | '/audit'
     | '/auth'
     | '/choose-account'
+    | '/contact'
+    | '/help'
     | '/market-setup'
     | '/me'
     | '/more'
+    | '/privacy'
     | '/register'
     | '/search'
+    | '/terms'
     | '/verify-invoice'
     | '/welcome'
     | '/admin/activities'
@@ -574,14 +624,19 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/about'
     | '/audit'
     | '/auth'
     | '/choose-account'
+    | '/contact'
+    | '/help'
     | '/market-setup'
     | '/me'
     | '/more'
+    | '/privacy'
     | '/register'
     | '/search'
+    | '/terms'
     | '/verify-invoice'
     | '/welcome'
     | '/admin/activities'
@@ -631,14 +686,19 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/$'
+    | '/about'
     | '/audit'
     | '/auth'
     | '/choose-account'
+    | '/contact'
+    | '/help'
     | '/market-setup'
     | '/me'
     | '/more'
+    | '/privacy'
     | '/register'
     | '/search'
+    | '/terms'
     | '/verify-invoice'
     | '/welcome'
     | '/admin/activities'
@@ -689,14 +749,19 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
+  AboutRoute: typeof AboutRoute
   AuditRoute: typeof AuditRoute
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
+  ContactRoute: typeof ContactRoute
+  HelpRoute: typeof HelpRoute
   MarketSetupRoute: typeof MarketSetupRoute
   MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
+  PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
+  TermsRoute: typeof TermsRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
   WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
@@ -736,6 +801,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -764,6 +836,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChooseAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/market-setup': {
       id: '/market-setup'
       path: '/market-setup'
@@ -785,6 +871,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -797,6 +890,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-invoice': {
@@ -1170,14 +1270,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   SplatRoute: SplatRoute,
+  AboutRoute: AboutRoute,
   AuditRoute: AuditRoute,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
+  ContactRoute: ContactRoute,
+  HelpRoute: HelpRoute,
   MarketSetupRoute: MarketSetupRoute,
   MeRoute: MeRoute,
   MoreRoute: MoreRoute,
+  PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
+  TermsRoute: TermsRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
   WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
@@ -1203,13 +1308,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

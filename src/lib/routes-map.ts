@@ -92,6 +92,12 @@ export const ROUTE_MAP: RouteRule[] = [
 
   rule("/market-setup", "authenticated", "market"),
   rule("/more", "public", "market"),
+  // Public marketplace content pages: no session, no internal data.
+  rule("/about", "public", "market"),
+  rule("/help", "public", "market"),
+  rule("/terms", "public", "market"),
+  rule("/privacy", "public", "market"),
+  rule("/contact", "public", "market"),
   rule("/dashboard/profile", "account", "dashboard"),
   rule("/dashboard/notifications", "account", "dashboard"),
   rule("/dashboard/messages", "account", "dashboard"),

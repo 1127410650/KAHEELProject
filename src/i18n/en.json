@@ -1303,14 +1303,14 @@
     "retry": "Retry"
   },
   "market": {
-    "brand": "Tahqaq Market",
+    "brand": "Kahli",
     "tagline": "Marketplace for services, contracting and suppliers",
     "signIn": "Log in",
     "signUp": "Sign up",
     "verified": "Verified",
     "categories": "Categories",
     "addListing": "Post a listing",
-    "searchPlaceholder": "Search services, products or equipment…",
+    "searchPlaceholder": "Search for property, a car, a device or a service...",
     "noImage": "No image",
     "noResults": "No matching results",
     "emptySection": "No listings in this section yet",
@@ -1336,7 +1336,8 @@
       "browse": "Browse",
       "business": "Businesses",
       "account": "Account",
-      "rights": "All rights reserved"
+      "rights": "All rights reserved",
+      "legal": "Policies"
     },
     "filters": {
       "all": "All",
@@ -2234,19 +2235,32 @@
         "addListing": "Add a listing",
         "myAds": "My listings",
         "requests": "Quote requests",
-        "business": "Business profile",
+        "business": "Manage business",
         "profile": "Personal profile",
         "messages": "Messages",
         "notifications": "Notifications",
         "favorites": "Favourites",
         "reports": "My reports",
         "violations": "My violations",
-        "language": "Language"
+        "language": "Language",
+        "settings": "Settings",
+        "manageAccount": "Manage account",
+        "switchAccount": "Switch account",
+        "businessNew": "Create a business",
+        "security": "Security",
+        "help": "Help",
+        "about": "About",
+        "terms": "Terms and conditions",
+        "privacy": "Privacy policy",
+        "contact": "Contact the platform team",
+        "signOut": "Sign out"
       },
       "app": "App",
       "accessTitle": "Access",
       "usingAccount": "You are using: {name}",
-      "pagesSoon": "About, Help center, Contact, Terms and Privacy pages will be listed here once they exist."
+      "general": "General",
+      "legal": "Policies",
+      "session": "Session"
     },
     "person": {
       "count": {
@@ -2966,7 +2980,96 @@
       "prev": "Previous",
       "next": "Next"
     },
-    "offlineNotice": "You're offline — you have not been signed out."
+    "offlineNotice": "You're offline — you have not been signed out.",
+    "home": {
+      "banner": {
+        "title": "Post your listing easily",
+        "body": "Real estate, cars, devices, services and products in one place",
+        "cta": "Post your listing now",
+        "imageAlt": "Elegant office scene with a phone showing marketplace listings"
+      },
+      "categories": "Browse by category",
+      "featured": "Featured listings",
+      "featuredBadge": "Featured",
+      "latest": "Latest listings",
+      "strip": {
+        "label": "Marketplace categories",
+        "home": "Home",
+        "more": "More",
+        "allTitle": "All categories",
+        "searchCats": "Search categories",
+        "noCats": "No matching category",
+        "close": "Close"
+      },
+      "cats": {
+        "home": "Home",
+        "realestate": "Real estate",
+        "cars": "Cars",
+        "devices": "Devices",
+        "realdeal": "Property deals",
+        "restaurants": "Restaurants",
+        "furniture": "Furniture",
+        "services": "Services",
+        "fashion": "Fashion",
+        "jobs": "Jobs",
+        "training": "Training",
+        "events": "Events",
+        "software": "Software",
+        "gardens": "Gardens",
+        "arts": "Arts",
+        "lost": "Lost & found",
+        "projects": "Projects & investments",
+        "travel": "Travel & tourism"
+      },
+      "tiles": {
+        "realestate": {
+          "title": "Residential property",
+          "desc": "Apartments, villas and land"
+        },
+        "cars": {
+          "title": "Cars",
+          "desc": "Vehicles for sale and rent"
+        },
+        "devices": {
+          "title": "Devices",
+          "desc": "Electronics and office gear"
+        },
+        "homeServices": {
+          "title": "Home services",
+          "desc": "Maintenance and operations"
+        },
+        "equipment": {
+          "title": "Heavy equipment",
+          "desc": "Excavators, cranes and trucks"
+        },
+        "suppliers": {
+          "title": "Suppliers & businesses",
+          "desc": "Factories, supply and materials"
+        }
+      }
+    },
+    "pages": {
+      "about": {
+        "title": "About",
+        "body": "Kahli is an online marketplace for services, contracting, suppliers, equipment and real estate. Any registered user can publish as an individual or under a business, and buyers can browse, search and message advertisers directly."
+      },
+      "help": {
+        "title": "Help",
+        "body": "To publish: create an account, choose \"Post a listing\", then fill in the category, title, price, city and images. A listing runs for seven days and can be renewed. To reach an advertiser, use the message button on the listing page."
+      },
+      "terms": {
+        "title": "Terms and conditions",
+        "body": "By using the platform you agree to publish accurate information, to avoid content that breaks the law, and that each listing is the responsibility of its publisher. The platform may review or suspend any listing that breaches these terms."
+      },
+      "privacy": {
+        "title": "Privacy policy",
+        "body": "We collect the data needed to run your account, publish listings and enable contact between parties. Private contact details are not shown inside public listings, and your data is not shared with third parties for marketing."
+      },
+      "contact": {
+        "title": "Contact the platform team",
+        "body": "For any question or to report a listing, use the report button on the listing page or write to us at:"
+      }
+    }
   },
   "routeError": {
     "notFoundTitle": "Page not found",
