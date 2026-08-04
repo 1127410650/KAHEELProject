@@ -663,14 +663,11 @@ body:has(.market-surface) .shadow-raised {
  * Tailwind's global border reset resolves `--color-border` on `:root`, so a
  * border declared without an explicit colour class would fall back to the
  * internal system's petrol tint even inside the marketplace. Re-stating the
- * reset inside the scope keeps such borders silver. Admin keeps the base reset.
+ * reset inside the scope keeps such borders silver. `:where()` keeps the
+ * specificity at zero, so any explicit border utility still wins, and the admin
+ * console keeps the base reset untouched.
  */
-.market-surface *,
-.market-surface *::before,
-.market-surface *::after,
-body:has(.market-surface) [data-slot="dialog-content"] *,
-body:has(.market-surface) [data-slot="sheet-content"] *,
-body:has(.market-surface) [data-slot="popover-content"] *,
-body:has(.market-surface) [data-slot="dropdown-menu-content"] * {
+:where(.market-surface, body:has(.market-surface) [data-slot$="-content"])
+  :where(*, *::before, *::after) {
   border-color: var(--border);
 }
