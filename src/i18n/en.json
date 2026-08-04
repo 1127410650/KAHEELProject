@@ -3175,6 +3175,7 @@
       "fashion": "Fashion",
       "jobs": "Jobs",
       "training": "Training",
+      "schools": "Schools & Universities",
       "events": "Events",
       "programming": "Programming",
       "gardens": "Gardens",
@@ -3182,6 +3183,8 @@
       "lostfound": "Lost & Found",
       "projects": "Projects & Investments",
       "travel": "Travel & Tourism",
+      "schoolsEmpty": "No published listings are currently available in this category",
+      "schoolsHint": "Choose the educational institution or service type",
       "more": "More"
     }
   },
