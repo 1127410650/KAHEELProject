@@ -50,7 +50,7 @@ function inviteTokenFromUrl(): string | null {
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, dir } = useI18n();
   return (
-    <div dir={dir} className="flex min-h-screen items-center justify-center px-4 py-10">
+    <div dir={dir} className="market-surface flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">

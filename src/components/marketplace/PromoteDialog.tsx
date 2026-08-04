@@ -115,7 +115,7 @@ export function PromoteDialog({
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="size-4 text-gold-dark" aria-hidden />
+            <Sparkles className="size-4 text-primary" aria-hidden />
             {t("market.promote.title")}
           </DialogTitle>
           <DialogDescription className="truncate">{title}</DialogDescription>
@@ -129,7 +129,7 @@ export function PromoteDialog({
           <div className="space-y-3">
             <div className="flex items-center justify-between rounded-lg border border-border bg-secondary/40 px-3 py-2">
               <span className="flex items-center gap-1.5 text-sm text-foreground">
-                <Coins className="size-4 text-gold-dark" aria-hidden />
+                <Coins className="size-4 text-primary" aria-hidden />
                 {t("market.points.balance")}
               </span>
               <span className="font-semibold text-foreground" dir="ltr">
@@ -138,7 +138,7 @@ export function PromoteDialog({
             </div>
 
             {data?.active && (
-              <p className="rounded-lg bg-gold-soft px-3 py-2 text-xs text-gold-dark">
+              <p className="rounded-lg bg-secondary px-3 py-2 text-xs text-primary">
                 {t("market.promote.alreadyActiveUntil", { date: formatDateTime(data.active.ends_at) })}
               </p>
             )}
@@ -156,7 +156,7 @@ export function PromoteDialog({
                     onClick={() => setDuration(days)}
                     className={`rounded-lg border px-2 py-2.5 text-center text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                       selected
-                        ? "border-gold bg-gold-soft text-gold-dark"
+                        ? "border-primary bg-secondary text-primary"
                         : "border-border bg-card text-foreground hover:bg-accent"
                     }`}
                   >

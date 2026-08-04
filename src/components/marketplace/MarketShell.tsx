@@ -557,8 +557,8 @@ export function MarketShell({
        * action bar inside its own content. */
       className={
         bottomNav
-          ? "flex min-h-dvh flex-col overflow-x-clip bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
-          : "flex min-h-dvh flex-col overflow-x-clip bg-background"
+          ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+          : "market-surface flex min-h-dvh flex-col overflow-x-clip"
       }
     >
       <MarketHeader />
