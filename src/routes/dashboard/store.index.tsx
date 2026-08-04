@@ -1,29 +1,41 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Loader2, Store } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { ExternalLink, Loader2, Megaphone, Store, UtensilsCrossed } from "lucide-react";
+import { toast } from "sonner";
 
 import {
   FormRouteError,
   FormRoutePending,
 } from "@/components/marketplace/FormRouteFallback";
 import { useI18n } from "@/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { useMyStorefront } from "@/lib/mkt-store";
+import {
+  catalogErrorKey,
+  setListingStore,
+  useLinkableListings,
+  useStoreOverview,
+} from "@/lib/mkt-store-catalog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/dashboard/store/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "متجري — سوق تحقّق" },
+      { title: "متجري — سوق كحلي" },
       {
         name: "description",
-        content: "أدر متجرك المصغّر في سوق تحقّق: الحالة، البيانات، الأقسام والطلبات.",
+        content: "أدر متجرك المصغّر في السوق: الحالة، الأقسام والمنتجات، والإعلانات المرتبطة.",
       },
-      { property: "og:title", content: "متجري — سوق تحقّق" },
-      { property: "og:description", content: "إدارة المتجر المصغّر والطلبات." },
+      { property: "og:title", content: "متجري — سوق كحلي" },
+      { property: "og:description", content: "إدارة المتجر المصغّر وأقسامه ومنتجاته." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -36,35 +48,44 @@ export const Route = createFileRoute("/dashboard/store/")({
 
 function StoreHubPage() {
   const { t } = useI18n();
+  const queryClient = useQueryClient();
   const { account } = useActiveAccount();
-  const store = useMyStorefront(account?.account_key ?? null);
+  const accountKey = account?.account_key ?? null;
+  const store = useMyStorefront(accountKey);
+  const overview = useStoreOverview(accountKey);
+  const [busy, setBusy] = useState(false);
 
-  return (
-    <DashboardShell title={t("market.store.hubTitle")}>
-      {store.isLoading ? (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          {t("common.loading")}
+  const data = overview.data;
+
+  async function toggleOpen(next: boolean) {
+    if (!data) return;
+    setBusy(true);
+    const { error } = await supabase
+      .from("mkt_storefronts")
+      .update({ is_open_manually: next })
+      .eq("id", data.storefront_id);
+    setBusy(false);
+    if (error) {
+      toast.error(t(catalogErrorKey(error)));
+      return;
+    }
+    await queryClient.invalidateQueries({ queryKey: ["mkt", "store-overview", accountKey] });
+  }
+
+  if (store.isLoading || overview.isLoading) {
+    return (
+      <DashboardShell title={t("market.store.hubTitle")}>
+        <div className="space-y-3">
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-40 w-full" />
         </div>
-      ) : store.data ? (
-        <Card>
-          <CardContent className="space-y-4 pt-5">
-            <div className="flex flex-wrap items-center gap-2">
-              <Store className="h-5 w-5 text-primary" />
-              <span className="font-semibold">{store.data.name_ar}</span>
-              <Badge variant="secondary">{t(`market.store.status.${store.data.status}`)}</Badge>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {t(`market.store.statusHint.${store.data.status}`)}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <Button asChild>
-                <Link to="/dashboard/store/new">{t("market.store.continueSetup")}</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
+      </DashboardShell>
+    );
+  }
+
+  if (!store.data || !data) {
+    return (
+      <DashboardShell title={t("market.store.hubTitle")}>
         <Card>
           <CardContent className="space-y-3 pt-5 text-sm">
             <p className="font-medium">{t("market.store.emptyTitle")}</p>
@@ -74,7 +95,162 @@ function StoreHubPage() {
             </Button>
           </CardContent>
         </Card>
-      )}
+      </DashboardShell>
+    );
+  }
+
+  const stats = [
+    { label: t("market.store.hub.sections"), value: data.sections_count },
+    { label: t("market.store.hub.itemsPublished"), value: data.items_published },
+    { label: t("market.store.hub.itemsHidden"), value: data.items_hidden },
+    { label: t("market.store.hub.linkedAds"), value: data.linked_listings },
+  ];
+
+  return (
+    <DashboardShell title={t("market.store.hubTitle")}>
+      <div className="space-y-5">
+        <Card>
+          <CardContent className="space-y-4 pt-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <Store className="h-5 w-5 text-primary" />
+              <span className="font-semibold">{data.name_ar}</span>
+              <Badge variant="secondary">{t(`market.store.status.${data.status}`)}</Badge>
+              <Badge variant="outline">{t(`market.store.type.${data.store_type}`)}</Badge>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t(`market.store.statusHint.${data.status}`)}
+            </p>
+
+            {data.status === "published" ? (
+              <label className="flex items-center justify-between gap-3 rounded-lg border p-3 text-sm">
+                <span>{t("market.store.hub.openNow")}</span>
+                <Switch
+                  checked={data.is_open_manually}
+                  disabled={busy}
+                  onCheckedChange={(v) => void toggleOpen(v)}
+                />
+              </label>
+            ) : null}
+
+            {!data.complete ? (
+              <div className="rounded-lg border border-dashed p-3 text-sm">
+                <p className="font-medium">{t("market.store.hub.missingTitle")}</p>
+                <ul className="mt-1 list-disc space-y-0.5 ps-5 text-muted-foreground">
+                  {data.missing.map((key) => (
+                    <li key={key}>{t(`market.store.hub.missing.${key}`)}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {stats.map((stat) => (
+                <div key={stat.label} className="rounded-lg border p-3">
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-lg font-semibold">{stat.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Button asChild>
+                <Link to="/dashboard/store/catalog">
+                  <UtensilsCrossed className="me-1 h-4 w-4" />
+                  {data.store_type === "restaurant"
+                    ? t("market.store.hub.manageMenu")
+                    : t("market.store.hub.manageProducts")}
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/dashboard/store/new">{t("market.store.hub.editData")}</Link>
+              </Button>
+              {data.status === "published" ? (
+                <Button variant="outline" asChild>
+                  <Link to="/stores/$slug" params={{ slug: data.slug }}>
+                    <ExternalLink className="me-1 h-4 w-4" />
+                    {t("market.store.hub.viewPublic")}
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
+          </CardContent>
+        </Card>
+
+        <LinkedAdsCard accountKey={accountKey} storefrontId={data.storefront_id} />
+      </div>
     </DashboardShell>
+  );
+}
+
+/** Ads of the same account only; the database refuses any other store. */
+function LinkedAdsCard({
+  accountKey,
+  storefrontId,
+}: {
+  accountKey: string | null;
+  storefrontId: string;
+}) {
+  const { t } = useI18n();
+  const queryClient = useQueryClient();
+  const listings = useLinkableListings(accountKey);
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  async function toggle(listingId: string, linked: boolean) {
+    setBusyId(listingId);
+    try {
+      await setListingStore(listingId, linked ? null : storefrontId);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["mkt", "store-linkable-ads", accountKey] }),
+        queryClient.invalidateQueries({ queryKey: ["mkt", "store-overview", accountKey] }),
+      ]);
+    } catch (error) {
+      toast.error(t(catalogErrorKey(error)));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  return (
+    <Card>
+      <CardContent className="space-y-3 pt-5">
+        <div className="flex items-center gap-2">
+          <Megaphone className="h-5 w-5 text-primary" />
+          <span className="font-semibold">{t("market.store.hub.adsTitle")}</span>
+        </div>
+        <p className="text-sm text-muted-foreground">{t("market.store.hub.adsHint")}</p>
+
+        {listings.isLoading ? (
+          <Skeleton className="h-20 w-full" />
+        ) : (listings.data ?? []).length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t("market.store.hub.adsEmpty")}</p>
+        ) : (
+          <div className="space-y-2">
+            {(listings.data ?? []).map((listing) => {
+              const linked = listing.storefront_id === storefrontId;
+              return (
+                <div
+                  key={listing.id}
+                  className="flex flex-wrap items-center gap-2 rounded-lg border p-3 text-sm"
+                >
+                  <span className="min-w-0 flex-1 truncate">{listing.title}</span>
+                  <Badge variant="outline">{t(`market.store.hub.adStatus.${listing.status}`)}</Badge>
+                  <Button
+                    size="sm"
+                    variant={linked ? "outline" : "default"}
+                    disabled={busyId === listing.id}
+                    onClick={() => void toggle(listing.id, linked)}
+                  >
+                    {busyId === listing.id ? (
+                      <Loader2 className="me-1 h-4 w-4 animate-spin" />
+                    ) : null}
+                    {linked ? t("market.store.hub.unlink") : t("market.store.hub.link")}
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

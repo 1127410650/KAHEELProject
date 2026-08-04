@@ -42,6 +42,7 @@ import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminStoresRouteImport } from './routes/admin/stores'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdminWorkforceRouteImport } from './routes/admin/workforce'
@@ -59,6 +60,7 @@ import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
@@ -70,6 +72,7 @@ import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
 import { Route as DashboardStoreIndexRouteImport } from './routes/dashboard/store.index'
+import { Route as DashboardStoreCatalogRouteImport } from './routes/dashboard/store.catalog'
 import { Route as DashboardStoreNewRouteImport } from './routes/dashboard/store.new'
 import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
 
@@ -238,6 +241,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminStoresRoute = AdminStoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -323,6 +331,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoresSlugRoute = StoresSlugRouteImport.update({
+  id: '/stores/$slug',
+  path: '/stores/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UUsernameRoute = UUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
@@ -378,6 +391,11 @@ const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
   path: '/dashboard/store/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardStoreCatalogRoute = DashboardStoreCatalogRouteImport.update({
+  id: '/dashboard/store/catalog',
+  path: '/dashboard/store/catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardStoreNewRoute = DashboardStoreNewRouteImport.update({
   id: '/dashboard/store/new',
   path: '/dashboard/store/new',
@@ -422,6 +440,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stores': typeof AdminStoresRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
@@ -439,6 +458,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -448,6 +468,7 @@ export interface FileRoutesByFullPath {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
@@ -486,6 +507,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stores': typeof AdminStoresRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
@@ -503,6 +525,7 @@ export interface FileRoutesByTo {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -512,6 +535,7 @@ export interface FileRoutesByTo {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/dashboard/reports': typeof DashboardReportsIndexRoute
@@ -552,6 +576,7 @@ export interface FileRoutesById {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stores': typeof AdminStoresRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
@@ -569,6 +594,7 @@ export interface FileRoutesById {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
@@ -578,6 +604,7 @@ export interface FileRoutesById {
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
@@ -619,6 +646,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
+    | '/admin/stores'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/workforce'
@@ -636,6 +664,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
     | '/admin/businesses/$id'
@@ -645,6 +674,7 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
@@ -683,6 +713,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
+    | '/admin/stores'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/workforce'
@@ -700,6 +731,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/stores/$slug'
     | '/u/$username'
     | '/admin'
     | '/admin/businesses/$id'
@@ -709,6 +741,7 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports'
     | '/dashboard/reports'
@@ -748,6 +781,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
+    | '/admin/stores'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/workforce'
@@ -765,6 +799,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
     | '/admin/businesses_/$id'
@@ -774,6 +809,7 @@ export interface FileRouteTypes {
     | '/admin/verifications_/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
@@ -814,9 +850,11 @@ export interface RootRouteChildren {
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
+  DashboardStoreCatalogRoute: typeof DashboardStoreCatalogRoute
   DashboardStoreNewRoute: typeof DashboardStoreNewRoute
   DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
   DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
@@ -1056,6 +1094,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/stores': {
+      id: '/admin/stores'
+      path: '/stores'
+      fullPath: '/admin/stores'
+      preLoaderRoute: typeof AdminStoresRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1175,6 +1220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stores/$slug': {
+      id: '/stores/$slug'
+      path: '/stores/$slug'
+      fullPath: '/stores/$slug'
+      preLoaderRoute: typeof StoresSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$username': {
       id: '/u/$username'
       path: '/u/$username'
@@ -1252,6 +1304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardStoreIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/store/catalog': {
+      id: '/dashboard/store/catalog'
+      path: '/dashboard/store/catalog'
+      fullPath: '/dashboard/store/catalog'
+      preLoaderRoute: typeof DashboardStoreCatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/store/new': {
       id: '/dashboard/store/new'
       path: '/dashboard/store/new'
@@ -1284,6 +1343,7 @@ interface AdminRouteRouteChildren {
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStoresRoute: typeof AdminStoresRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminWorkforceRoute: typeof AdminWorkforceRoute
@@ -1311,6 +1371,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminStoresRoute: AdminStoresRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminWorkforceRoute: AdminWorkforceRoute,
@@ -1360,9 +1421,11 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
+  StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardReportsIdRoute: DashboardReportsIdRoute,
+  DashboardStoreCatalogRoute: DashboardStoreCatalogRoute,
   DashboardStoreNewRoute: DashboardStoreNewRoute,
   DashboardReportsIndexRoute: DashboardReportsIndexRoute,
   DashboardStoreIndexRoute: DashboardStoreIndexRoute,

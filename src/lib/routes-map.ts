@@ -78,6 +78,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/ads/$slug", "public", "market"),
   rule("/u/$username", "public", "market"),
   rule("/businesses/$slug", "public", "market"),
+  rule("/stores/$slug", "public", "market"),
   rule("/auth", "public", "bare"),
   rule("/register", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
@@ -112,6 +113,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/dashboard/violations", "account", "dashboard"),
   rule("/dashboard/store", "account", "dashboard"),
   rule("/dashboard/store/new", "account", "dashboard"),
+  rule("/dashboard/store/catalog", "account", "dashboard"),
   rule("/dashboard/business", "account", "dashboard", {
     allowed_identity_types: ["business"],
   }),
@@ -169,6 +171,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/geo", "admin", "admin"),
   rule("/admin/reports", "admin", "admin"),
   rule("/admin/reports/$id", "admin", "admin"),
+  rule("/admin/stores", "admin", "admin"),
   rule("/admin/activities", "admin", "admin"),
   rule("/admin/users", "admin", "admin"),
   rule("/admin/businesses", "admin", "admin"),

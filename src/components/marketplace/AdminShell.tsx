@@ -126,6 +126,7 @@ const NAV: NavItem[] = [
     icon: CalendarClock,
     perms: ["attendance.view", "attendance.manage", "attendance.approve"],
   },
+  { to: "/admin/stores", labelKey: "admin.nav.stores", icon: Store },
   { to: "/admin/activities", labelKey: "admin.nav.activities", icon: ListChecks },
   { to: "/admin/geo", labelKey: "admin.nav.geo", icon: Globe2 },
   { to: "/admin/roles", labelKey: "admin.nav.roles", icon: UserCog, ownerOnly: true },
