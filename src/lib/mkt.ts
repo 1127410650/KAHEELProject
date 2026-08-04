@@ -287,15 +287,58 @@ export function currencyLabel(code: string, locale: "ar" | "en"): string {
   return locale === "ar" ? (CURRENCY_AR[code] ?? code) : code;
 }
 
+/** Localized label for the optional classification unit next to the price. */
+const UNIT_AR: Record<string, string> = {
+  hour: "ساعة",
+  day: "يوم",
+  week: "أسبوع",
+  month: "شهر",
+  year: "سنة",
+  piece: "قطعة",
+  meter: "متر",
+  sqm: "م²",
+  ton: "طن",
+  kg: "كجم",
+  litre: "لتر",
+  trip: "رحلة",
+  service: "خدمة",
+};
+const UNIT_EN: Record<string, string> = {
+  hour: "hour",
+  day: "day",
+  week: "week",
+  month: "month",
+  year: "year",
+  piece: "piece",
+  meter: "meter",
+  sqm: "sqm",
+  ton: "ton",
+  kg: "kg",
+  litre: "litre",
+  trip: "trip",
+  service: "service",
+};
+
+export function priceUnitLabel(unit: string | null, locale: "ar" | "en" = "en"): string | null {
+  if (!unit) return null;
+  return (locale === "ar" ? UNIT_AR[unit] : UNIT_EN[unit]) ?? unit;
+}
+
+/**
+ * Unified price policy: one positive price plus an optional unit. Listings
+ * without a valid price are never published, so a dash is only ever shown for
+ * legacy drafts awaiting an edit.
+ */
 export function priceLabel(
-  listing: Pick<MktListing, "price" | "price_on_request" | "price_unit" | "currency">,
-  onRequestText: string,
+  listing: Pick<MktListing, "price" | "price_unit" | "currency">,
+  missingText = "—",
   locale: "ar" | "en" = "en",
 ): string {
-  if (listing.price_on_request || listing.price === null) return onRequestText;
+  if (listing.price === null || listing.price <= 0) return missingText;
   const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(listing.price);
   const currency = currencyLabel(listing.currency, locale);
-  return `${amount} ${currency}${listing.price_unit ? ` / ${listing.price_unit}` : ""}`;
+  const unit = priceUnitLabel(listing.price_unit, locale);
+  return `${amount} ${currency}${unit ? ` / ${unit}` : ""}`;
 }
 
 

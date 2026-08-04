@@ -39,6 +39,12 @@ import {
   saveListingLicense,
 } from "@/lib/mkt-license";
 import { imagesRequired, MAX_LISTING_IMAGES } from "@/lib/mkt-listing-media";
+import {
+  checkPrice,
+  currencyAllowsFractions,
+  normalizePriceDigits,
+  PRICE_UNITS,
+} from "@/lib/mkt-price";
 import { useListingImages } from "@/lib/use-listing-images";
 import { CategoryPicker } from "@/components/marketplace/CategoryPicker";
 import { ListingImages } from "@/components/marketplace/ListingImages";
@@ -61,7 +67,6 @@ interface Props {
 const selectClass = "h-11 w-full rounded-md border border-input bg-background px-2 text-sm sm:h-9";
 const STEPS = ["basics", "media", "reviewPublish"] as const;
 type SpecValue = string | number | boolean;
-type PriceKind = "fixed" | "from" | "on_request";
 type FieldKey = "path" | "title" | "price" | "city" | "images";
 
 /** Short summary used on cards when the advertiser did not write one. */
@@ -96,13 +101,6 @@ export function ListingForm({ listing }: Props) {
   const [summary, setSummary] = useState(listing?.summary ?? "");
   const [description, setDescription] = useState(listing?.description ?? "");
   const [price, setPrice] = useState(listing?.price != null ? String(listing.price) : "");
-  const [priceKind, setPriceKind] = useState<PriceKind>(
-    listing?.price_on_request
-      ? "on_request"
-      : storedSpecs["price_kind"] === "from"
-        ? "from"
-        : "fixed",
-  );
   const [priceUnit, setPriceUnit] = useState(listing?.price_unit ?? "");
   const [quantity, setQuantity] = useState(
     listing?.quantity != null ? String(listing.quantity) : "",
@@ -157,6 +155,9 @@ export function ListingForm({ listing }: Props) {
     enabled: !!accountCountry.data?.id,
     queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
+  // One currency per listing: it follows the account country when the listing is
+  // created and stays frozen on a published listing.
+  const currencyCode = listing?.currency ?? accountCountry.data?.currency_code ?? "SAR";
 
   const { account } = useActiveAccount();
   const myProfile = useMyUserProfile();
@@ -248,8 +249,6 @@ export function ListingForm({ listing }: Props) {
     if (draft.summary !== undefined) setSummary(draft.summary ?? "");
     if (draft.description !== undefined) setDescription(draft.description ?? "");
     if (draft.price !== undefined) setPrice(draft.price ?? "");
-    if (draft.priceKind) setPriceKind(draft.priceKind);
-    else if (draft.priceOnRequest) setPriceKind("on_request");
     if (draft.priceUnit !== undefined) setPriceUnit(draft.priceUnit ?? "");
     if (draft.quantity !== undefined) setQuantity(draft.quantity ?? "");
     if (draft.unit !== undefined) setUnit(draft.unit ?? "");
@@ -277,9 +276,7 @@ export function ListingForm({ listing }: Props) {
       summary,
       description,
       price,
-      priceKind,
       priceUnit,
-      priceOnRequest: priceKind === "on_request",
       quantity,
       unit,
       itemCondition,
@@ -304,7 +301,6 @@ export function ListingForm({ listing }: Props) {
     summary,
     description,
     price,
-    priceKind,
     priceUnit,
     quantity,
     unit,
@@ -369,7 +365,9 @@ export function ListingForm({ listing }: Props) {
       return null;
     }
     if (key === "price") {
-      if (priceKind !== "on_request" && !price.trim()) return t("market.form.priceRequired");
+      const check = checkPrice(price, currencyAllowsFractions(currencyCode));
+      if (check.error === "required") return t("market.form.priceRequired");
+      if (check.error) return t(`market.form.price.${check.error}`);
       return null;
     }
     if (key === "images") {
@@ -507,7 +505,7 @@ export function ListingForm({ listing }: Props) {
     setBusy(true);
     try {
       const cityName = (cities.data ?? []).find((c) => c.id === cityId)?.name_ar ?? null;
-      const onRequest = priceKind === "on_request";
+      const priceCheck = checkPrice(price, currencyAllowsFractions(currencyCode));
       const payload = {
         type_code: typeCode,
         category_id: categoryId,
@@ -515,9 +513,9 @@ export function ListingForm({ listing }: Props) {
         title: title.trim(),
         summary: summary.trim() || autoSummary(description),
         description: description.trim() || null,
-        specs: { ...specs, price_kind: priceKind },
-        price: onRequest || !price ? null : Number(price),
-        price_on_request: onRequest,
+        specs: specs,
+        price: priceCheck.value,
+        price_on_request: false,
         price_unit: priceUnit || null,
         keywords: keywords
           .split(/[,،]/)
@@ -837,23 +835,6 @@ export function ListingForm({ listing }: Props) {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="price_kind">{t("market.form.priceKind")}</Label>
-              <select
-                id="price_kind"
-                className={selectClass}
-                value={priceKind}
-                onChange={(e) => {
-                  touch(setPriceKind)(e.target.value as PriceKind);
-                  setErrors((prev) => ({ ...prev, price: undefined }));
-                }}
-              >
-                <option value="fixed">{t("market.form.priceFixed")}</option>
-                <option value="from">{t("market.form.priceFrom")}</option>
-                <option value="on_request">{t("market.form.priceRequest")}</option>
-              </select>
-            </div>
-            {priceKind !== "on_request" && (
-              <div className="space-y-1.5">
                 <Label htmlFor="price">
                   {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
                 </Label>
@@ -866,18 +847,42 @@ export function ListingForm({ listing }: Props) {
                     inputMode="decimal"
                     value={price}
                     onChange={(e) => {
-                      touch(setPrice)(e.target.value);
+                      touch(setPrice)(normalizePriceDigits(e.target.value));
                       setErrors((prev) => ({ ...prev, price: undefined }));
                     }}
                     onBlur={() => blur("price")}
                   />
-                  <span className="shrink-0 text-sm text-muted-foreground" dir="ltr">
-                    {listing?.currency ?? "SAR"}
+                  {/* The currency follows the account country and cannot be edited. */}
+                  <span
+                    className="shrink-0 rounded-md border border-input bg-muted px-2 py-2 text-sm text-muted-foreground"
+                    dir="ltr"
+                    aria-label={t("market.form.currencyFixed")}
+                  >
+                    {currencyCode}
                   </span>
                 </div>
-                {errors.price && <p className="text-xs text-destructive">{errors.price}</p>}
+                {errors.price ? (
+                  <p className="text-xs text-destructive">{errors.price}</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{t("market.form.currencyHint")}</p>
+                )}
               </div>
-            )}
+            <div className="space-y-1.5">
+              <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
+              <select
+                id="price_unit"
+                className={selectClass}
+                value={priceUnit}
+                onChange={(e) => touch(setPriceUnit)(e.target.value)}
+              >
+                <option value="">{t("market.form.priceUnitNone")}</option>
+                {PRICE_UNITS.map((u) => (
+                  <option key={u} value={u}>
+                    {t(`market.form.priceUnit.${u}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
 
@@ -968,15 +973,6 @@ export function ListingForm({ listing }: Props) {
               <div className="space-y-3 border-t border-border p-3">
                 <div className="grid gap-3 sm:grid-cols-2">
                   {extra.filter((f) => f.kind !== "bool").map((f) => specInput(f))}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
-                    <Input
-                      id="price_unit"
-                      className="h-11 sm:h-9"
-                      value={priceUnit}
-                      onChange={(e) => touch(setPriceUnit)(e.target.value)}
-                    />
-                  </div>
                   {showQuantity && (
                     <div className="space-y-1.5">
                       <Label htmlFor="unit">{t("market.quote.unit")}</Label>
@@ -1093,9 +1089,7 @@ export function ListingForm({ listing }: Props) {
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.dash.price")}</dt>
             <dd className="text-foreground" dir="ltr">
-              {priceKind === "on_request"
-                ? t("market.priceOnRequest")
-                : `${priceKind === "from" ? "≥ " : ""}${price || "—"} ${listing?.currency ?? "SAR"}`}
+              {`${price || "—"} ${currencyCode}`}
             </dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">

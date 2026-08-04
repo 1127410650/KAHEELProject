@@ -229,7 +229,7 @@ export function ListingCard({
   view?: "grid" | "list" | "row";
 }) {
   const { t, locale } = useI18n();
-  const price = priceLabel(listing, t("market.priceOnRequest"));
+  const price = priceLabel(listing, "—");
   const horizontal = view === "list" || view === "row";
   const tag = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel;
   // Suppresses card navigation while (and just after) the ⋯ menu is open.

@@ -17,9 +17,7 @@ export interface ListingDraft {
   summary: string;
   description: string;
   price: string;
-  priceKind: "fixed" | "from" | "on_request";
   priceUnit: string;
-  priceOnRequest: boolean;
   quantity: string;
   unit: string;
   itemCondition: string;

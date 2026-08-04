@@ -1881,6 +1881,179 @@ export type Database = {
           },
         ]
       }
+      mkt_call_blocks: {
+        Row: {
+          blocked_user_id: string
+          created_at: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          blocked_user_id: string
+          created_at?: string
+          kind?: string
+          user_id?: string
+        }
+        Update: {
+          blocked_user_id?: string
+          created_at?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_call_restrictions: {
+        Row: {
+          created_at: string
+          reason: string
+          restricted_until: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          reason: string
+          restricted_until: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          reason?: string
+          restricted_until?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_call_settings: {
+        Row: {
+          available_from: string | null
+          available_to: string | null
+          calls_enabled: boolean
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available_from?: string | null
+          available_to?: string | null
+          calls_enabled?: boolean
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          available_from?: string | null
+          available_to?: string | null
+          calls_enabled?: boolean
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_call_signals: {
+        Row: {
+          call_id: string
+          created_at: string
+          expires_at: string
+          id: number
+          kind: string
+          payload: Json
+          sender_user_id: string
+        }
+        Insert: {
+          call_id: string
+          created_at?: string
+          expires_at?: string
+          id?: number
+          kind: string
+          payload: Json
+          sender_user_id?: string
+        }
+        Update: {
+          call_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: number
+          kind?: string
+          payload?: Json
+          sender_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_call_signals_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_calls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_calls: {
+        Row: {
+          accepted_at: string | null
+          callee_user_id: string
+          caller_user_id: string
+          conversation_id: string | null
+          created_at: string
+          duration_seconds: number | null
+          end_reason: string | null
+          ended_at: string | null
+          ended_by: string | null
+          id: string
+          listing_id: string | null
+          requested_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          callee_user_id: string
+          caller_user_id: string
+          conversation_id?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          end_reason?: string | null
+          ended_at?: string | null
+          ended_by?: string | null
+          id?: string
+          listing_id?: string | null
+          requested_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          callee_user_id?: string
+          caller_user_id?: string
+          conversation_id?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          end_reason?: string | null
+          ended_at?: string | null
+          ended_by?: string | null
+          id?: string
+          listing_id?: string | null
+          requested_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_calls_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_calls_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_categories: {
         Row: {
           created_at: string
@@ -7671,6 +7844,16 @@ export type Database = {
           verification_status: string
         }[]
       }
+      mkt_admin_call_abuse: {
+        Args: { _limit?: number }
+        Returns: {
+          declined_count: number
+          no_answer_count: number
+          restricted_until: string
+          total_calls: number
+          user_id: string
+        }[]
+      }
       mkt_admin_can: { Args: { _perm: string }; Returns: boolean }
       mkt_admin_claim: {
         Args: { _kind: string; _subject_id: string }
@@ -7978,6 +8161,14 @@ export type Database = {
         Args: { _cr_number: string; _unified_number: string }
         Returns: boolean
       }
+      mkt_call_can_call: { Args: { _listing_id: string }; Returns: Json }
+      mkt_call_peer: { Args: { _call_id: string }; Returns: Json }
+      mkt_call_start: { Args: { _listing_id: string }; Returns: Json }
+      mkt_call_transition: {
+        Args: { _call_id: string; _reason?: string; _status: string }
+        Returns: Json
+      }
+      mkt_calls_sweep: { Args: never; Returns: number }
       mkt_can_manage_business: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -8026,6 +8217,7 @@ export type Database = {
       }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_auto_publish_op: { Args: never; Returns: boolean }
+      mkt_is_call_party: { Args: { _call_id: string }; Returns: boolean }
       mkt_is_listing_op: { Args: never; Returns: boolean }
       mkt_is_moderation_op: { Args: never; Returns: boolean }
       mkt_is_platform_admin: { Args: never; Returns: boolean }

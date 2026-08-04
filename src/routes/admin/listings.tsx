@@ -307,7 +307,7 @@ function AdminListingsPage() {
                           className="text-xs"
                         />
                       )}{" "}
-                      · {ad.city ?? "—"} · {priceLabel(ad, t("market.priceOnRequest"))}
+                      · {ad.city ?? "—"} · {priceLabel(ad, "—")}
                     </p>
                     {ad.rejection_reason && (
                       <p className="mt-1 text-xs text-destructive">{ad.rejection_reason}</p>

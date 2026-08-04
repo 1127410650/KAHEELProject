@@ -2323,10 +2323,6 @@
       "chooseSub": "Choose a subcategory",
       "adDescription": "Ad description",
       "moreDetails": "More details",
-      "priceKind": "Price type",
-      "priceFixed": "Fixed",
-      "priceFrom": "Starting from",
-      "priceRequest": "On request",
       "priceValue": "Price",
       "currency": "Currency",
       "keywords": "Keywords",
@@ -2336,7 +2332,7 @@
       "draftSaved": "Draft saved",
       "draftSaveFailed": "Could not save the draft, we will retry",
       "cityRequired": "Choose a city",
-      "priceRequired": "Enter a price or choose “on request”",
+      "priceRequired": "Enter a clear price for this ad",
       "imagesHint": "The first photo is the cover; you can change it.",
       "districtOptional": "District or area (optional)",
       "locationHint": "No map needed: the city is enough and the location button is optional.",
@@ -2347,7 +2343,32 @@
       "retry": "Retry",
       "searchLevel": "Search this list",
       "noResults": "No matching results",
-      "typeRequired": "Choose the listing type"
+      "typeRequired": "Choose the listing type",
+      "price": {
+        "not_a_number": "The price must be a number",
+        "zero": "The price cannot be zero",
+        "negative": "The price must be a positive number",
+        "too_large": "The price exceeds the allowed limit",
+        "fraction_not_allowed": "Fractions are not allowed for this currency"
+      },
+      "currencyFixed": "Currency follows the account country",
+      "currencyHint": "The currency is set automatically from your account country and cannot be changed.",
+      "priceUnitNone": "No unit",
+      "priceUnit": {
+        "hour": "Hour",
+        "day": "Day",
+        "week": "Week",
+        "month": "Month",
+        "year": "Year",
+        "piece": "Piece",
+        "meter": "Meter",
+        "sqm": "Sqm",
+        "ton": "Ton",
+        "kg": "Kg",
+        "litre": "Litre",
+        "trip": "Trip",
+        "service": "Service"
+      }
     },
     "geo": {
       "pick": "Choose market",
@@ -2793,6 +2814,59 @@
       "someFailed": "Some photos failed to upload — retry or remove them, then submit.",
       "attachFailed": "The photos could not be attached. Your data is saved as a draft; please retry.",
       "imagesTooMany": "Up to 20 photos per ad."
+    },
+    "call": {
+      "title": "In-platform voice call",
+      "call": "Call",
+      "enable": "Receive voice calls",
+      "enableHint": "When enabled, people can call you by voice inside the platform without seeing your phone number.",
+      "enabled": "Incoming calls enabled",
+      "disabled": "Incoming calls disabled",
+      "incoming": "Incoming call",
+      "outgoing": "Outgoing call",
+      "accept": "Accept",
+      "decline": "Decline",
+      "cancel": "Cancel",
+      "hangup": "End call",
+      "mute": "Mute microphone",
+      "unmute": "Unmute",
+      "speaker": "Speaker",
+      "retry": "Try again",
+      "block": "Block caller",
+      "blocked": "Caller blocked",
+      "report": "Report",
+      "backToChat": "Back to chat",
+      "noPhoneHint": "Phone numbers are never shown in in-platform calls.",
+      "status": {
+        "requesting": "Calling",
+        "ringing": "Ringing",
+        "connected": "Connected",
+        "declined": "Declined",
+        "no_answer": "No answer",
+        "busy": "Busy",
+        "failed": "Call failed",
+        "ended": "Ended",
+        "cancelled": "Cancelled"
+      },
+      "error": {
+        "auth_required": "Sign in to place a call",
+        "listing_unavailable": "This ad is not available for calls",
+        "self_call": "You cannot call your own ad",
+        "calls_disabled": "The advertiser has not enabled calls",
+        "blocked": "Calling is not available between these accounts",
+        "restricted": "Calling is temporarily restricted",
+        "busy": "There is already an active call",
+        "rate_limited": "You reached the call attempts limit",
+        "not_found": "Ad not found",
+        "mic_denied": "Microphone access was denied; allow it and try again",
+        "no_microphone": "No microphone is available on this device",
+        "relay_needed": "A direct connection could not be established, please use chat for now",
+        "generic": "The call could not be placed"
+      },
+      "log": {
+        "missed": "Missed call",
+        "duration": "Call duration"
+      }
     }
   },
   "routeError": {

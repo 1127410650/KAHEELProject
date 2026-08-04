@@ -241,11 +241,7 @@ function AdminListingDetailPage() {
                     { label: t("admin.detail.region"), value: header.region },
                     {
                       label: t("admin.detail.price"),
-                      value: header.price_on_request
-                        ? t("admin.detail.priceOnRequest")
-                        : header.price != null
-                          ? formatMoney(header.price, locale)
-                          : null,
+                      value: header.price != null ? formatMoney(header.price, locale) : null,
                     },
                     { label: t("admin.users.created"), value: formatDateTime(header.created_at) },
                     {

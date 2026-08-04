@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { specFieldByKey } from "@/lib/mkt-taxonomy";
-import type { MktListing } from "@/lib/mkt";
+import { priceUnitLabel, type MktListing } from "@/lib/mkt";
 
 interface Row {
   label: string;
@@ -34,7 +34,7 @@ function specRow(
  * language. Database column names and technical values never appear.
  */
 export function ListingSpecs({ listing }: { listing: MktListing }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const specs = (listing.specs && typeof listing.specs === "object" ? listing.specs : {}) as Record<
     string,
     unknown
@@ -54,9 +54,9 @@ export function ListingSpecs({ listing }: { listing: MktListing }) {
       value: t(`market.condition.${listing.item_condition}`),
     });
   }
-  // "Price on request" already sits next to the title, so it is not repeated here.
-  if (!listing.price_on_request && listing.price_unit) {
-    rows.push({ label: t("market.ad.priceUnit"), value: listing.price_unit });
+  // The price itself sits next to the title; only the optional unit repeats here.
+  if (listing.price_unit) {
+    rows.push({ label: t("market.ad.priceUnit"), value: priceUnitLabel(listing.price_unit, locale) ?? listing.price_unit });
   }
 
 

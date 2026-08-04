@@ -32,6 +32,7 @@ import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/Phone
 import { useMyUserProfile } from "@/lib/mkt-identity";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { CallSettingsToggle } from "@/components/marketplace/CallSettingsToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -650,6 +651,10 @@ function ProfilePage() {
                 </Link>
               )}
             </div>
+          </Section>
+
+          <Section title={t("market.call.title")}>
+            <CallSettingsToggle />
           </Section>
 
           <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur">

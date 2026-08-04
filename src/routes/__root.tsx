@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "@/i18n";
 import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
+import { CallCenterProvider } from "@/lib/mkt-call-center";
+import { CallOverlay } from "@/components/marketplace/CallOverlay";
 
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
@@ -156,9 +158,12 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <SessionProvider>
-          {/* Required: nested routes render here. */}
-          <Outlet />
-          <Toaster position="top-center" />
+          <CallCenterProvider>
+            {/* Required: nested routes render here. */}
+            <Outlet />
+            <CallOverlay />
+            <Toaster position="top-center" />
+          </CallCenterProvider>
         </SessionProvider>
       </I18nProvider>
     </QueryClientProvider>
