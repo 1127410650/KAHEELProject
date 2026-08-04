@@ -502,5 +502,149 @@ function LeaveDialog({
   );
 }
 
+/**
+ * One staff member: a compact card everywhere, with the secondary controls
+ * folded away on a phone so the list stays reviewable at a glance.
+ *
+ * The status is the single source of truth — there is no separate
+ * "receives work" switch that could disagree with it.
+ */
+function StaffCard({
+  row,
+  departments,
+  locale,
+  onState,
+  onDepartment,
+  onCapacity,
+  onLeave,
+}: {
+  row: StaffRow;
+  departments: DepartmentRow[];
+  locale: string;
+  onState: (state: WorkState) => void;
+  onDepartment: (department: string) => void;
+  onCapacity: (capacity: number) => void;
+  onLeave: () => void;
+}) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const atLimit = row.open_count >= row.capacity_limit;
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-3">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-foreground">
+            <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            {row.label}
+          </p>
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tabular-nums text-muted-foreground">
+            <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-foreground">
+              {t(`admin.workforce.state.${row.effective_state}`)}
+            </span>
+            <span className={atLimit ? "font-medium text-foreground" : undefined}>
+              {t("admin.workforce.load")}: {row.open_count}/{row.capacity_limit}
+            </span>
+            <span>
+              {t("admin.workforce.doneToday")}: {row.done_today}
+            </span>
+          </p>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-1.5">
+          <Select
+            value={row.effective_state}
+            disabled={row.on_leave}
+            onValueChange={(value) => onState(value as WorkState)}
+          >
+            <SelectTrigger
+              className="h-10 w-[11rem] max-w-[52vw]"
+              aria-label={t("admin.workforce.stateLabel")}
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {WORK_STATES.map((state) => (
+                <SelectItem key={state} value={state}>
+                  {t(`admin.workforce.state.${state}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="min-h-10 px-2"
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? t("admin.workforce.hideDetails") : t("admin.workforce.details")}
+            <ChevronDown
+              className={`ms-1 size-4 transition-transform ${open ? "rotate-180" : ""}`}
+              aria-hidden
+            />
+          </Button>
+        </div>
+      </div>
+
+      {open && (
+        <div className="mt-3 border-t border-border pt-3">
+          {row.email && row.email !== row.label && (
+            <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+          )}
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
+            {t("admin.workforce.stateSource")}
+          </p>
+          {row.last_assigned_at && (
+            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+              {t("admin.workforce.lastAssigned")}: {formatDateTime(row.last_assigned_at)}
+            </p>
+          )}
+          {row.on_leave && row.leave_ends_on && (
+            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+              {t("admin.workforce.leaveUntil")}: {formatDate(row.leave_ends_on)}
+            </p>
+          )}
+
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <Select value={row.department ?? ""} onValueChange={onDepartment}>
+              <SelectTrigger
+                className="h-10 w-[11rem] max-w-[52vw]"
+                aria-label={t("admin.workforce.department")}
+              >
+                <SelectValue placeholder={t("admin.workforce.department")} />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.map((dep) => (
+                  <SelectItem key={dep.code} value={dep.code}>
+                    {locale === "ar" ? dep.name_ar : dep.name_en}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              type="number"
+              min={1}
+              max={200}
+              defaultValue={row.capacity_limit}
+              className="h-10 w-20 tabular-nums"
+              aria-label={t("admin.workforce.capacity")}
+              onBlur={(event) => {
+                const next = Number(event.currentTarget.value);
+                if (!Number.isFinite(next) || next === row.capacity_limit) return;
+                onCapacity(Math.max(1, Math.min(200, next)));
+              }}
+            />
+            <Button variant="outline" size="sm" className="min-h-10" onClick={onLeave}>
+              <CalendarOff className="me-1.5 size-4" aria-hidden />
+              {t("admin.workforce.addLeave")}
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /** Self-service states a staff member may set on themselves. */
 export const selfStates = SELF_WORK_STATES;
