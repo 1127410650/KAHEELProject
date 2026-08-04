@@ -194,6 +194,7 @@ function MyWorkPage() {
       <ReasonDialog
         open={releasing !== null}
         title={t("admin.queue.release")}
+        confirmLabel={t("admin.queue.release")}
         pending={busy}
         onCancel={() => setReleasing(null)}
         onConfirm={(reason) => {
