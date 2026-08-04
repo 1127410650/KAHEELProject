@@ -444,12 +444,28 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
 
 
   const decline = useCallback(async () => {
-    const current = call;
+    const current = callRef.current;
     if (!current) return;
     clearTimers();
     await transitionCall(current.id, "declined").catch(() => undefined);
     await finish("declined", null, true);
-  }, [call, clearTimers, finish]);
+  }, [clearTimers, finish]);
+
+  /** Always-available kill switch: stop new calls and end the current one. */
+  const stopReceiving = useCallback(async () => {
+    try {
+      await stopReceivingCalls();
+      clearTimers();
+      const current = callRef.current;
+      if (current && !isTerminal(current.status)) {
+        await finish(current.status === "connected" ? "ended" : "cancelled", null, true);
+      }
+      toast.success(t("market.call.disabled"));
+    } catch {
+      toast.error(t("market.actions.failed"));
+    }
+  }, [clearTimers, finish, t]);
+
 
   const hangUp = useCallback(async () => {
     const current = call;
