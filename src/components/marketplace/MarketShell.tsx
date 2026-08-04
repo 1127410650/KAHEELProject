@@ -201,7 +201,7 @@ function useMarketSetupGate() {
 const BOTTOM_NAV_PATHS = {
   home: "/",
   messages: "/dashboard/messages",
-  add: ADD_LISTING_PATH,
+  search: SEARCH_PATH,
   alerts: "/dashboard/notifications",
   more: "/more",
 } as const;
@@ -214,12 +214,13 @@ if (import.meta.env.DEV) {
 
 /** Exactly one item is active: the longest matching prefix wins. */
 function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
-  if (pathname.startsWith("/dashboard/ads")) return "add";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.search)) return "search";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.messages)) return "messages";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.alerts)) return "alerts";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.more)) return "more";
   return "home";
 }
+
 
 /**
  * The single mobile navigation for the whole app. Signed-in users get the five
