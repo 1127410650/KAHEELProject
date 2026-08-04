@@ -50,6 +50,14 @@ interface Props {
 
 type Sheet = "location" | "contact" | null;
 
+/** A picked file or a finished recording, held back until the sender confirms. */
+interface Pending {
+  kind: "image" | "video" | "audio" | "file";
+  file: File;
+  url: string;
+  extra: Record<string, unknown>;
+}
+
 export function ChatComposer({
   conversationId,
   disabled = false,
@@ -61,13 +69,16 @@ export function ChatComposer({
   const [body, setBody] = useState("");
   const [busy, setBusy] = useState(false);
   const [sheet, setSheet] = useState<Sheet>(null);
+  const [pending, setPending] = useState<Pending | null>(null);
   const [recording, setRecording] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const recorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const started = useRef(0);
+  const keep = useRef(true);
   const fileInput = useRef<HTMLInputElement | null>(null);
   const pickKind = useRef<"image" | "video" | "file">("image");
+
 
   useEffect(() => {
     if (!recording) return;
