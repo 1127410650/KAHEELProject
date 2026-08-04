@@ -1644,6 +1644,116 @@ export type Database = {
           },
         ]
       }
+      mkt_attendance: {
+        Row: {
+          actual_minutes: number
+          approved_at: string | null
+          approved_by: string | null
+          checked_in_at: string | null
+          checked_out_at: string | null
+          created_at: string
+          created_by: string | null
+          early_leave_minutes: number
+          id: string
+          late_minutes: number
+          note: string | null
+          overtime_minutes: number
+          planned_minutes: number
+          remote: boolean
+          source: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+          work_date: string
+        }
+        Insert: {
+          actual_minutes?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          checked_in_at?: string | null
+          checked_out_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          early_leave_minutes?: number
+          id?: string
+          late_minutes?: number
+          note?: string | null
+          overtime_minutes?: number
+          planned_minutes?: number
+          remote?: boolean
+          source?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          user_id: string
+          work_date: string
+        }
+        Update: {
+          actual_minutes?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          checked_in_at?: string | null
+          checked_out_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          early_leave_minutes?: number
+          id?: string
+          late_minutes?: number
+          note?: string | null
+          overtime_minutes?: number
+          planned_minutes?: number
+          remote?: boolean
+          source?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          user_id?: string
+          work_date?: string
+        }
+        Relationships: []
+      }
+      mkt_attendance_edits: {
+        Row: {
+          actor: string | null
+          after_value: Json | null
+          attendance_id: string
+          before_value: Json | null
+          created_at: string
+          id: string
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          actor?: string | null
+          after_value?: Json | null
+          attendance_id: string
+          before_value?: Json | null
+          created_at?: string
+          id?: string
+          reason: string
+          user_id: string
+        }
+        Update: {
+          actor?: string | null
+          after_value?: Json | null
+          attendance_id?: string
+          before_value?: Json | null
+          created_at?: string
+          id?: string
+          reason?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_attendance_edits_attendance_id_fkey"
+            columns: ["attendance_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_attendance"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_business_officers: {
         Row: {
           authorization_expires_on: string | null
@@ -3823,6 +3933,48 @@ export type Database = {
           },
         ]
       }
+      mkt_shift_templates: {
+        Row: {
+          break_minutes: number
+          code: string
+          created_at: string
+          end_time: string | null
+          is_active: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          sort_order: number
+          start_time: string | null
+          updated_at: string
+        }
+        Insert: {
+          break_minutes?: number
+          code: string
+          created_at?: string
+          end_time?: string | null
+          is_active?: boolean
+          kind?: string
+          name_ar: string
+          name_en: string
+          sort_order?: number
+          start_time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          break_minutes?: number
+          code?: string
+          created_at?: string
+          end_time?: string | null
+          is_active?: boolean
+          kind?: string
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+          start_time?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_staff_departments: {
         Row: {
           created_at: string
@@ -3920,6 +4072,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      mkt_staff_shifts: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          note: string | null
+          planned_end: string | null
+          planned_minutes: number
+          planned_start: string | null
+          remote: boolean
+          template_code: string | null
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+          work_date: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          note?: string | null
+          planned_end?: string | null
+          planned_minutes?: number
+          planned_start?: string | null
+          remote?: boolean
+          template_code?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          user_id: string
+          work_date: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          note?: string | null
+          planned_end?: string | null
+          planned_minutes?: number
+          planned_start?: string | null
+          remote?: boolean
+          template_code?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          user_id?: string
+          work_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_staff_shifts_template_code_fkey"
+            columns: ["template_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_shift_templates"
+            referencedColumns: ["code"]
+          },
+        ]
       }
       mkt_staff_specialties: {
         Row: {
@@ -8484,6 +8695,86 @@ export type Database = {
         Args: { _tenant_id?: string; _user_id: string }
         Returns: Json
       }
+      mkt_attendance_admin_set: {
+        Args: {
+          _checked_in: string
+          _checked_out: string
+          _note: string
+          _reason: string
+          _remote: boolean
+          _status: string
+          _user_id: string
+          _work_date: string
+        }
+        Returns: string
+      }
+      mkt_attendance_approve: {
+        Args: { _id: string; _note?: string }
+        Returns: undefined
+      }
+      mkt_attendance_can_approve: { Args: never; Returns: boolean }
+      mkt_attendance_can_manage: { Args: never; Returns: boolean }
+      mkt_attendance_can_view: { Args: never; Returns: boolean }
+      mkt_attendance_check_in: {
+        Args: { _note?: string; _remote?: boolean }
+        Returns: string
+      }
+      mkt_attendance_check_out: { Args: { _note?: string }; Returns: string }
+      mkt_attendance_edits_list: {
+        Args: { _attendance_id: string }
+        Returns: {
+          after_value: Json
+          before_value: Json
+          created_at: string
+          id: string
+          reason: string
+        }[]
+      }
+      mkt_attendance_list: {
+        Args: { _from: string; _to: string; _user_id?: string }
+        Returns: {
+          actual_minutes: number
+          approved_at: string
+          checked_in_at: string
+          checked_out_at: string
+          early_leave_minutes: number
+          edits_count: number
+          id: string
+          label: string
+          late_minutes: number
+          note: string
+          overtime_minutes: number
+          planned_minutes: number
+          remote: boolean
+          shift_kind: string
+          shift_template: string
+          source: string
+          status: string
+          user_id: string
+          work_date: string
+        }[]
+      }
+      mkt_attendance_my: {
+        Args: { _from?: string; _to?: string }
+        Returns: {
+          actual_minutes: number
+          checked_in_at: string
+          checked_out_at: string
+          early_leave_minutes: number
+          id: string
+          late_minutes: number
+          note: string
+          overtime_minutes: number
+          planned_minutes: number
+          remote: boolean
+          shift_kind: string
+          shift_template: string
+          source: string
+          status: string
+          work_date: string
+        }[]
+      }
+      mkt_attendance_recompute: { Args: { _id: string }; Returns: undefined }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -8986,6 +9277,60 @@ export type Database = {
         Args: { _listing_id: string; _reason?: string; _to: string }
         Returns: undefined
       }
+      mkt_shift_for: {
+        Args: { _date: string; _user_id: string }
+        Returns: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          note: string | null
+          planned_end: string | null
+          planned_minutes: number
+          planned_start: string | null
+          remote: boolean
+          template_code: string | null
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+          work_date: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_staff_shifts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mkt_shift_set: {
+        Args: {
+          _note: string
+          _planned_end: string
+          _planned_start: string
+          _reason: string
+          _remote: boolean
+          _template: string
+          _user_id: string
+          _work_date: string
+        }
+        Returns: string
+      }
+      mkt_shifts_list: {
+        Args: { _from: string; _to: string; _user_id?: string }
+        Returns: {
+          id: string
+          kind: string
+          label: string
+          note: string
+          planned_end: string
+          planned_minutes: number
+          planned_start: string
+          remote: boolean
+          template_code: string
+          user_id: string
+          work_date: string
+        }[]
+      }
       mkt_slugify: { Args: { _text: string }; Returns: string }
       mkt_staff_eligible: {
         Args: { _kind: string; _user_id: string }
@@ -8993,6 +9338,11 @@ export type Database = {
       }
       mkt_staff_has: { Args: { _perm: string }; Returns: boolean }
       mkt_staff_on_leave: { Args: { _uid: string }; Returns: boolean }
+      mkt_staff_on_leave_at: {
+        Args: { _date: string; _user_id: string }
+        Returns: boolean
+      }
+      mkt_staff_on_shift: { Args: { _user_id: string }; Returns: boolean }
       mkt_staff_specialist: {
         Args: { _kind: string; _user_id: string }
         Returns: boolean
@@ -9168,6 +9518,7 @@ export type Database = {
         Returns: number
       }
       mkt_workforce_refresh_leave_states: { Args: never; Returns: number }
+      mkt_workforce_require_attendance: { Args: never; Returns: boolean }
       mkt_workforce_set_priority: {
         Args: {
           _kind: string
