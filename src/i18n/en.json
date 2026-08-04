@@ -2367,6 +2367,7 @@
         "fraction_not_allowed": "Fractions are not allowed for this currency"
       },
       "currencyFixed": "Currency follows the account country",
+      "durationFixed": "Ads run for 7 days and can be reactivated when they expire.",
       "currencyHint": "The currency is set automatically from your account country and cannot be changed.",
       "priceUnitNone": "No unit",
       "priceUnit": {

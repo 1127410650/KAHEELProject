@@ -1,4 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+
+import {
+  FormRouteError,
+  FormRoutePending,
+} from "@/components/marketplace/FormRouteFallback";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +28,10 @@ export const Route = createFileRoute("/dashboard/ads/$id/edit")({
     ],
   }),
   component: EditAdPage,
+  pendingComponent: FormRoutePending,
+  errorComponent: FormRouteError,
+  pendingMs: 100,
+  pendingMinMs: 200,
 });
 
 function EditAdPage() {
