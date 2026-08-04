@@ -547,11 +547,11 @@ function StaffCard({
 
   return (
     <div className="rounded-xl border border-border bg-card p-3">
-      <div className="flex flex-wrap items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-foreground">
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
             <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-            {row.label}
+            <span className="truncate">{row.label}</span>
           </p>
           <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tabular-nums text-muted-foreground">
             <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-foreground">
@@ -565,42 +565,43 @@ function StaffCard({
             </span>
           </p>
         </div>
-
-        <div className="flex shrink-0 items-center gap-1.5">
-          <Select
-            value={row.effective_state}
-            disabled={row.on_leave}
-            onValueChange={(value) => onState(value as WorkState)}
-          >
-            <SelectTrigger
-              className="h-10 w-[11rem] max-w-[52vw]"
-              aria-label={t("admin.workforce.stateLabel")}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {WORK_STATES.map((state) => (
-                <SelectItem key={state} value={state}>
-                  {t(`admin.workforce.state.${state}`)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="min-h-10 px-2"
-            aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
-          >
-            {open ? t("admin.workforce.hideDetails") : t("admin.workforce.details")}
-            <ChevronDown
-              className={`ms-1 size-4 transition-transform ${open ? "rotate-180" : ""}`}
-              aria-hidden
-            />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="min-h-10 shrink-0 px-2"
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? t("admin.workforce.hideDetails") : t("admin.workforce.details")}
+          <ChevronDown
+            className={`ms-1 size-4 transition-transform ${open ? "rotate-180" : ""}`}
+            aria-hidden
+          />
+        </Button>
       </div>
+
+      <div className="mt-2">
+        <Select
+          value={row.effective_state}
+          disabled={row.on_leave}
+          onValueChange={(value) => onState(value as WorkState)}
+        >
+          <SelectTrigger
+            className="h-10 w-full sm:w-[13rem]"
+            aria-label={t("admin.workforce.stateLabel")}
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {WORK_STATES.map((state) => (
+              <SelectItem key={state} value={state}>
+                {t(`admin.workforce.state.${state}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
 
       {open && (
         <div className="mt-3 border-t border-border pt-3">
