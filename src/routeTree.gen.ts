@@ -34,6 +34,7 @@ import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
+import { Route as AdminWorkforceRouteImport } from './routes/admin/workforce'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessNewRouteImport } from './routes/business.new'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
@@ -184,6 +185,11 @@ const AdminVerificationsRoute = AdminVerificationsRouteImport.update({
   path: '/verifications',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminWorkforceRoute = AdminWorkforceRouteImport.update({
+  id: '/workforce',
+  path: '/workforce',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdsSlugRoute = AdsSlugRouteImport.update({
   id: '/ads/$slug',
   path: '/ads/$slug',
@@ -330,6 +336,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
+  '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
@@ -380,6 +387,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
+  '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
@@ -432,6 +440,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
+  '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
@@ -485,6 +494,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/workforce'
     | '/ads/$slug'
     | '/business/new'
     | '/businesses/$slug'
@@ -535,6 +545,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/workforce'
     | '/ads/$slug'
     | '/business/new'
     | '/businesses/$slug'
@@ -586,6 +597,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/workforce'
     | '/ads/$slug'
     | '/business/new'
     | '/businesses/$slug'
@@ -823,6 +835,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVerificationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/workforce': {
+      id: '/admin/workforce'
+      path: '/workforce'
+      fullPath: '/admin/workforce'
+      preLoaderRoute: typeof AdminWorkforceRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/ads/$slug': {
       id: '/ads/$slug'
       path: '/ads/$slug'
@@ -1007,6 +1026,7 @@ interface AdminRouteRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
+  AdminWorkforceRoute: typeof AdminWorkforceRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
   AdminListingsIdRoute: typeof AdminListingsIdRoute
@@ -1029,6 +1049,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
+  AdminWorkforceRoute: AdminWorkforceRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminBusinessesIdRoute: AdminBusinessesIdRoute,
   AdminListingsIdRoute: AdminListingsIdRoute,
