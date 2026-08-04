@@ -139,9 +139,55 @@ export function CategoryPicker({
             onSelect: () => finish(root, c.id),
           }));
 
-  // Search never leaves the current level: it only narrows what is on screen.
-  const needle = term.trim().toLowerCase();
-  const items = needle ? all.filter((item) => item.text.toLowerCase().includes(needle)) : all;
+  /*
+   * Search at the top level looks through the WHOLE tree — Arabic name, English
+   * name and subcategories — tolerant of hamza, tāʾ marbūṭa, spaces and
+   * punctuation, and shows the full path («خدمات ← الكهرباء»). Deeper levels
+   * only narrow what is on screen.
+   */
+  const needle = normalizeCategoryLabel(term);
+  const deepMatches = useMemo(() => {
+    if (!needle || stage !== "root") return [];
+    const out: { id: string; text: string; onSelect: () => void }[] = [];
+    for (const rootCat of roots) {
+      const rootHit = [rootCat.name_ar, rootCat.name_en ?? "", rootCat.slug].some((v) =>
+        normalizeCategoryLabel(v).includes(needle),
+      );
+      if (rootHit) {
+        out.push({ id: rootCat.id, text: label(rootCat), onSelect: () => pickRoot(rootCat.id) });
+      }
+      for (const child of childrenOf(rootCat.id)) {
+        const childHit = [child.name_ar, child.name_en ?? "", child.slug].some((v) =>
+          normalizeCategoryLabel(v).includes(needle),
+        );
+        if (!childHit) continue;
+        out.push({
+          id: child.id,
+          text: `${label(rootCat)} ← ${label(child)}`,
+          onSelect: () => {
+            const grandChildren = childrenOf(child.id);
+            if (grandChildren.length === 0) {
+              finish(rootCat.id, child.id);
+              return;
+            }
+            setRoot(rootCat.id);
+            setSub(child.id);
+            setTerm("");
+            setStage("leaf");
+          },
+        });
+      }
+    }
+    return out;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [needle, stage, roots, categories, locale]);
+
+  const items = !needle
+    ? all
+    : stage === "root"
+      ? deepMatches
+      : all.filter((item) => normalizeCategoryLabel(item.text).includes(needle));
+
 
   const stageTitle = stage === "root" ? t("market.form.chooseField") : t("market.form.chooseSub");
 
