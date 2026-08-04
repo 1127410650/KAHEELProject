@@ -456,15 +456,22 @@ export function MarketShell({
 
     >
       <MarketHeader />
-      {/* `main` always grows, so a short page pushes the footer to the bottom of
-       * the viewport instead of leaving a blank strip after it. */}
-      {/* No `flex-1` stretch: the footer follows the last section directly, so a
-       * short page never shows a tall blank strip before it. */}
+      {/* `main` keeps its natural height so the footer follows the last section
+       * directly; the wrapper below (not `main`) absorbs the remaining viewport
+       * height, so a short page never shows an empty strip under the footer. */}
       <main>{children}</main>
 
-
-      {variant === "full" && <MarketFooter />}
-      {variant === "compact" && <MarketCompactFooter />}
+      {variant === "full" && (
+        <div className="flex flex-1 flex-col bg-secondary/30">
+          <MarketFooter />
+        </div>
+      )}
+      {variant === "compact" && (
+        <div className="flex flex-1 flex-col">
+          <MarketCompactFooter />
+        </div>
+      )}
+      {variant === "none" && <div className="flex-1" />}
       {bottomNav && <MarketBottomNav />}
     </div>
 
