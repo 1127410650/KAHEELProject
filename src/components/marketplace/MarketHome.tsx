@@ -9,7 +9,7 @@ import { loadListings } from "@/lib/mkt-queries";
 
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
-import { MarketHomeBanner } from "@/components/marketplace/home/MarketHomeBanner";
+import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -172,7 +172,7 @@ export function MarketHome() {
       </section>
 
       <MarketCategoryStrip />
-      <MarketHomeBanner />
+      <MarketFeaturedBanner />
       <MarketCategoryTiles />
 
       {isEmpty ? (
@@ -187,19 +187,13 @@ export function MarketHome() {
         </section>
       ) : (
         <>
-          {/* Latest first, promotions after: the feed leads with fresh stock. */}
+          {/* Promotions live in the hero banner above; this feed is fresh stock only. */}
           <ListingSection
             title={t("market.home.latest")}
             items={latestItems}
             loading={latest.isPending}
             failed={latest.isError}
             onRetry={() => void latest.refetch()}
-          />
-          <ListingSection
-            title={t("market.home.featured")}
-            badge={t("market.home.featuredBadge")}
-            items={featuredItems}
-            loading={featured.isPending}
           />
         </>
       )}

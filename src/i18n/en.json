@@ -2982,12 +2982,6 @@
     },
     "offlineNotice": "You're offline — you have not been signed out.",
     "home": {
-      "banner": {
-        "title": "Post your listing easily",
-        "body": "Real estate, cars, devices, services and products in one place",
-        "cta": "Post your listing now",
-        "imageAlt": "Elegant office scene with a phone showing marketplace listings"
-      },
       "categories": "Browse by category",
       "featured": "Featured listings",
       "featuredBadge": "Featured",
@@ -3046,7 +3040,10 @@
           "title": "Suppliers & businesses",
           "desc": "Factories, supply and materials"
         }
-      }
+      },
+      "featuredCta": "View listing",
+      "featuredPrev": "Previous featured listing",
+      "featuredNext": "Next featured listing"
     },
     "pages": {
       "about": {

@@ -22,7 +22,7 @@ export function MarketFeaturedBanner() {
   const [active, setActive] = useState(0);
 
   const featured = useQuery({
-    queryKey: ["mkt", "home", "featured-hero", locale, geoKey],
+    queryKey: ["mkt", "home", "featured", locale, geoKey],
     queryFn: () =>
       loadListings(
         {
