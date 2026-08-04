@@ -100,6 +100,11 @@ export interface AdminOverview {
   verifications_pending: number;
   restricted_accounts: number;
   activity_suggestions: number;
+  /** Operational queue counters — always consistent with the filtered lists. */
+  banned_accounts: number;
+  unassigned_requests: number;
+  assigned_to_me: number;
+  urgent_actions: number;
 }
 
 export async function loadAdminOverview(): Promise<AdminOverview> {
@@ -115,6 +120,10 @@ export async function loadAdminOverview(): Promise<AdminOverview> {
     verifications_pending: row["verifications_pending"] ?? 0,
     restricted_accounts: row["restricted_accounts"] ?? 0,
     activity_suggestions: row["activity_suggestions"] ?? 0,
+    banned_accounts: row["banned_accounts"] ?? 0,
+    unassigned_requests: row["unassigned_requests"] ?? 0,
+    assigned_to_me: row["assigned_to_me"] ?? 0,
+    urgent_actions: row["urgent_actions"] ?? 0,
   };
 }
 
