@@ -3071,7 +3071,78 @@
       }
     },
     "retry": "Retry",
-    "loadError": "Could not load listings. Check your connection and try again."
+    "loadError": "Could not load listings. Check your connection and try again.",
+    "chat": {
+      "back": "Back",
+      "more": "Options",
+      "viewAd": "View ad",
+      "empty": "No messages yet — start the conversation",
+      "placeholder": "Write a message…",
+      "send": "Send",
+      "attach": "Attach",
+      "image": "Photo",
+      "video": "Video",
+      "document": "Document",
+      "messageActions": "Message options",
+      "deleteForMe": "Delete for me",
+      "deleteForAll": "Delete for everyone",
+      "deleted": "Message deleted",
+      "mute": "Mute notifications",
+      "unmute": "Unmute notifications",
+      "block": "Block user",
+      "unblock": "Unblock",
+      "blockedDone": "User blocked",
+      "unblocked": "User unblocked",
+      "blockedNotice": "This conversation is blocked; messages cannot be sent.",
+      "report": "Report conversation",
+      "voice": {
+        "record": "Voice message",
+        "stop": "Stop and send",
+        "maxLength": "5 minutes max"
+      },
+      "location": {
+        "title": "Share location",
+        "exact": "Exact location",
+        "approx": "Approximate location",
+        "denied": "Location unavailable"
+      },
+      "contactCard": {
+        "title": "Share a contact",
+        "name": "Name",
+        "phone": "Mobile number",
+        "note": "Note",
+        "share": "Share"
+      },
+      "bank": {
+        "title": "Verified bank account",
+        "request": "Request bank details",
+        "share": "Share bank account",
+        "chooseAccount": "Choose a verified bank account",
+        "bankName": "Bank",
+        "beneficiary": "Beneficiary",
+        "iban": "IBAN",
+        "copyIban": "Copy IBAN",
+        "copied": "IBAN copied",
+        "decline": "Decline",
+        "cancel": "Cancel request",
+        "pending": "Awaiting sharing",
+        "declined": "Request declined",
+        "cancelled": "Request cancelled",
+        "sent": "Shared",
+        "none": "No verified bank accounts on this account",
+        "notice": "Only verified accounts can be shared, and every share is logged for audit."
+      },
+      "errors": {
+        "blocked": "You cannot contact this user",
+        "blockedContent": "Not sent: content not allowed",
+        "rateLimited": "Too many messages, please wait",
+        "restricted": "Your account is currently restricted from messaging",
+        "tooLarge": "File is larger than allowed",
+        "bankNotVerified": "Bank account is not verified",
+        "listingUnavailable": "Ad unavailable",
+        "micDenied": "Microphone unavailable"
+      }
+    }
   },
   "routeError": {
     "notFoundTitle": "Page not found",
