@@ -102,23 +102,70 @@ export async function loadCallPeer(callId: string): Promise<CallPeer | null> {
   return (data as unknown as CallPeer) ?? null;
 }
 
-export async function getCallSettings(): Promise<{ calls_enabled: boolean } | null> {
-  const { data } = await supabase
-    .from("mkt_call_settings")
-    .select("calls_enabled")
-    .maybeSingle();
-  return data ?? null;
+/** Availability of the account the user is currently working under. */
+export async function getCallMode(tenantId: string | null): Promise<CallMode> {
+  const query = supabase.from("mkt_call_settings").select("call_mode, tenant_id");
+  const { data } = tenantId
+    ? await query.eq("tenant_id", tenantId).maybeSingle()
+    : await query.is("tenant_id", null).maybeSingle();
+  return ((data?.call_mode as CallMode | undefined) ?? "off") satisfies CallMode;
 }
 
-export async function setCallsEnabled(enabled: boolean) {
-  const { data: auth } = await supabase.auth.getUser();
-  const uid = auth.user?.id;
-  if (!uid) throw new Error("auth_required");
-  const { error } = await supabase
-    .from("mkt_call_settings")
-    .upsert({ user_id: uid, calls_enabled: enabled }, { onConflict: "user_id" });
+/** Server side switch; turning it off also ends any call in flight. */
+export async function setCallMode(tenantId: string | null, mode: CallMode) {
+  const { error } = await supabase.rpc("mkt_call_mode_set", {
+    _tenant_id: tenantId,
+    _mode: mode,
+  });
   if (error) throw error;
 }
+
+/** "Request a call" mode: notify the advertiser instead of ringing them. */
+export async function createCallRequest(listingId: string): Promise<string> {
+  const { data, error } = await supabase.rpc("mkt_call_request_create", {
+    _listing_id: listingId,
+  });
+  if (error) throw error;
+  return data as unknown as string;
+}
+
+export async function listCallRequests(): Promise<CallRequestRow[]> {
+  const { data } = await supabase
+    .from("mkt_call_requests")
+    .select("id, listing_id, requester_user_id, status, created_at")
+    .eq("status", "open")
+    .order("created_at", { ascending: false })
+    .limit(20);
+  return (data as CallRequestRow[] | null) ?? [];
+}
+
+export async function startCallFromRequest(
+  requestId: string,
+): Promise<{ call_id: string; conversation_id: string }> {
+  const { data, error } = await supabase.rpc("mkt_call_request_start", {
+    _request_id: requestId,
+  });
+  if (error) throw error;
+  return data as unknown as { call_id: string; conversation_id: string };
+}
+
+export async function closeCallRequest(requestId: string, reason?: string) {
+  const { error } = await supabase.rpc("mkt_call_request_close", {
+    _request_id: requestId,
+    ...(reason ? { _reason: reason } : {}),
+  });
+  if (error) throw error;
+}
+
+/** Records a missed call (offline/busy/no answer) and notifies the callee. */
+export async function markCallMissed(callId: string, reason: "no_answer" | "busy" = "no_answer") {
+  const { error } = await supabase.rpc("mkt_call_missed", {
+    _call_id: callId,
+    _reason: reason,
+  });
+  if (error) throw error;
+}
+
 
 export async function blockCaller(userId: string, kind: "block" | "mute" = "block") {
   const { data: auth } = await supabase.auth.getUser();
