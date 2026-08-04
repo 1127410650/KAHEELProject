@@ -550,6 +550,24 @@ function MyAdsPage() {
                     )}
                   </p>
 
+                  {(() => {
+                    const hint = moderationHint(ad.moderation_state);
+                    if (!hint) return null;
+                    return (
+                      <p className={`mt-1 flex items-start gap-1 text-xs ${hint.tone}`}>
+                        <ShieldAlert className="mt-0.5 size-3 shrink-0" aria-hidden />
+                        <span>
+                          {t(hint.key)}
+                          {ad.last_scan_at && (
+                            <span className="ms-1 text-muted-foreground" dir="ltr">
+                              {formatDateTime(ad.last_scan_at)}
+                            </span>
+                          )}
+                        </span>
+                      </p>
+                    );
+                  })()}
+
                   {ad.rejection_reason && (
                     <p className="mt-1 text-xs text-destructive">{ad.rejection_reason}</p>
                   )}
