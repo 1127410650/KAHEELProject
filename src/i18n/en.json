@@ -3109,6 +3109,7 @@
       "verifications.review": "Review verifications",
       "appeals.review": "Review appeals",
       "workforce.manage": "Manage work distribution",
+      "workforce.override": "Override distribution limits (exceptional assignment)",
       "attendance.view": "View attendance and shifts",
       "attendance.manage": "Manage attendance and shifts",
       "attendance.approve": "Approve attendance"
