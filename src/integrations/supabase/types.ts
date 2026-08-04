@@ -3900,6 +3900,7 @@ export type Database = {
           department: string | null
           last_assigned_at: string | null
           note: string | null
+          pre_leave_state: string | null
           updated_at: string
           updated_by: string | null
           user_id: string
@@ -3912,6 +3913,7 @@ export type Database = {
           department?: string | null
           last_assigned_at?: string | null
           note?: string | null
+          pre_leave_state?: string | null
           updated_at?: string
           updated_by?: string | null
           user_id: string
@@ -3924,6 +3926,7 @@ export type Database = {
           department?: string | null
           last_assigned_at?: string | null
           note?: string | null
+          pre_leave_state?: string | null
           updated_at?: string
           updated_by?: string | null
           user_id?: string
@@ -8904,6 +8907,7 @@ export type Database = {
           subject_id: string
         }[]
       }
+      mkt_workforce_refresh_leave_states: { Args: never; Returns: number }
       mkt_workforce_set_priority: {
         Args: {
           _kind: string
