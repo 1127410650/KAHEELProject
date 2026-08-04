@@ -534,7 +534,7 @@ function AdPage() {
             {listing.title}
           </h1>
           <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
-            {priceLabel(listing, t("market.priceOnRequest"), locale)}
+            {priceLabel(listing, "—", locale)}
           </p>
 
           {categoryPath && (

@@ -169,7 +169,7 @@ async function queryListings(
   if (filters.type) query = query.eq("type_code", filters.type);
   if (filters.advertiser) query = query.eq("advertiser_type", filters.advertiser);
   if (filters.withImageOnly) query = query.not("cover_image_url", "is", null);
-  if (filters.hasPrice) query = query.eq("price_on_request", false).not("price", "is", null);
+  if (filters.hasPrice) query = query.not("price", "is", null);
   if (filters.city) query = query.eq("city", filters.city);
 
   if (filters.deal) query = query.eq("deal_kind", filters.deal);
