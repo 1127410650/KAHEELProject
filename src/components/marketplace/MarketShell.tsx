@@ -142,25 +142,9 @@ export function MarketHeader() {
 
           )}
 
-          {/* On phones the bottom bar already owns "add", so the header keeps a
-              single action instead of repeating it. While the session is still
-              unknown the action is a skeleton too, so no header ever shows an
-              action without an identity slot next to it. */}
-          {status === "loading" ? (
-            <Skeleton aria-hidden className="hidden h-8 w-28 shrink-0 rounded-md sm:block" />
-          ) : (
-          <Button
-            asChild
-            size="sm"
-            className="hidden shrink-0 bg-market-silver text-market-navy hover:bg-market-navy-foreground sm:inline-flex"
-          >
+          {/* "Add a listing" lives next to the wordmark now, so it is never
+              repeated here. */}
 
-            <a href={addHref} aria-label={t("market.addListing")}>
-              <Plus className="size-4" aria-hidden />
-              <span className="hidden sm:inline">{t("market.addListing")}</span>
-            </a>
-          </Button>
-          )}
         </div>
       </div>
       {/* Losing connectivity is not a sign-out: say so instead of degrading the
