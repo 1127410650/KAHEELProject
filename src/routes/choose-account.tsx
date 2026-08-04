@@ -230,7 +230,22 @@ function ChooseAccountPage() {
         <div className="grid place-items-center rounded-xl border border-border bg-card p-10 text-muted-foreground">
           <Loader2 className="size-5 animate-spin" aria-hidden />
         </div>
+      ) : unavailable && accounts.length === 0 ? (
+        // A failed read is a connection problem, never a sign-out: say so and retry.
+        <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+          <p className="text-sm text-foreground">{t("market.entry.offline")}</p>
+          <Button
+            type="button"
+            className="min-h-11"
+            onClick={() => {
+              if (typeof window !== "undefined") window.location.reload();
+            }}
+          >
+            {t("market.entry.retry")}
+          </Button>
+        </div>
       ) : (
+
         <div className="space-y-5">
           <section aria-labelledby="acc-personal">
             <h2
