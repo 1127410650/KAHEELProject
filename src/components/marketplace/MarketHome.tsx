@@ -151,13 +151,13 @@ export function MarketHome() {
 
   return (
     <>
-      {/* Entry strip — a real search field and one primary action. No marketing
-          copy lives inside the marketplace itself. */}
-      <section className="border-b border-border bg-secondary/40">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-2.5 px-4 py-4 sm:flex-row sm:items-center sm:py-5">
+      {/* Entry strip — a calm light band holding one white search card and one
+          primary action. No marketing copy lives inside the marketplace. */}
+      <section className="bg-background">
+        <div className="mx-auto w-full max-w-3xl px-4 pb-3 pt-4 sm:pb-4 sm:pt-6">
           <form
             role="search"
-            className="flex min-w-0 flex-1 items-center gap-2"
+            className="flex min-w-0 items-center gap-2 rounded-2xl border border-border bg-card p-2 shadow-panel"
             onSubmit={(event) => {
               event.preventDefault();
               const term = query.trim();
@@ -177,10 +177,10 @@ export function MarketHome() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t("market.searchPlaceholder")}
-                className="h-11 ps-9"
+                className="h-11 border-0 bg-transparent ps-9 shadow-none focus-visible:ring-0"
               />
             </div>
-            <Button type="submit" size="sm" className="h-11 shrink-0">
+            <Button type="submit" size="sm" className="h-11 shrink-0 rounded-xl px-4">
               {t("market.nav.search")}
             </Button>
           </form>
@@ -189,7 +189,7 @@ export function MarketHome() {
 
       {/* Fields strip — one horizontal, drag/wheel scrollable rail that keeps its
           position when the visitor comes back from a search. */}
-      <div className="border-b border-border bg-background">
+      <div className="bg-background">
         <div
           ref={railRef}
           onWheel={(event) => {
@@ -201,21 +201,22 @@ export function MarketHome() {
           onScroll={() => {
             if (railRef.current) sessionStorage.setItem(RAIL_KEY, String(railRef.current.scrollLeft));
           }}
-          className="mx-auto flex w-full max-w-7xl snap-x gap-2 overflow-x-auto overscroll-x-contain px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="mx-auto flex w-full max-w-7xl snap-x gap-2 overflow-x-auto overscroll-x-contain px-4 pb-1 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {QUICK_FILTERS.map((f) => (
             <Link
               key={f.key}
               to="/search"
               search={f.search}
-              className="inline-flex min-h-11 shrink-0 snap-start items-center gap-1.5 rounded-full border border-border bg-card px-3.5 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary/60 hover:text-primary"
+              className="inline-flex min-h-11 shrink-0 snap-start items-center gap-1.5 rounded-full border border-border bg-card px-3.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-secondary hover:text-primary"
             >
-              <f.icon className="size-3.5 shrink-0" aria-hidden />
+              <f.icon className="size-3.5 shrink-0 text-primary" aria-hidden />
               <span className="whitespace-nowrap">{t(`market.quick.${f.key}`)}</span>
             </Link>
           ))}
         </div>
       </div>
+
 
       {isEmpty ? (
         <section className="mx-auto w-full max-w-7xl px-4 py-8 text-center">
