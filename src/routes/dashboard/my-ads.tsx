@@ -705,6 +705,16 @@ function MyAdsPage() {
         </p>
       )}
 
+      {promoteFor && (
+        <PromoteDialog
+          listingId={promoteFor.id}
+          title={promoteFor.title}
+          open={!!promoteFor}
+          onOpenChange={(open) => !open && setPromoteFor(null)}
+          onDone={() => void ads.refetch()}
+        />
+      )}
+
       <AlertDialog open={!!confirm} onOpenChange={(open) => !open && setConfirm(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
