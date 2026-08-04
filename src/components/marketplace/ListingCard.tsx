@@ -224,9 +224,12 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
 export function ListingCard({
   listing,
   view = "grid",
+  origin,
 }: {
   listing: ListingCardData;
   view?: "grid" | "list" | "row";
+  /** Where the card is rendered; "search" records a search-result click. */
+  origin?: "search";
 }) {
   const { t, locale } = useI18n();
   const price = priceLabel(listing, "—", locale === "ar" ? "ar" : "en");
@@ -260,8 +263,13 @@ export function ListingCard({
           if (navBlocked.current) {
             e.preventDefault();
             e.stopPropagation();
+            return;
+          }
+          if (origin === "search") {
+            track({ event_type: "search_click", path: "/search", listing_id: listing.id });
           }
         }}
+
 
         className={
           horizontal
