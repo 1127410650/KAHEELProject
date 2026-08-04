@@ -18,7 +18,6 @@ import {
   ScrollText,
   Search,
   Settings,
-  Store,
   ShieldAlert,
   ShieldCheck,
   Store,
