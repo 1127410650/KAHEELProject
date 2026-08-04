@@ -200,7 +200,6 @@ export interface AdminListingDetail {
     category: string | null;
     subcategory: string | null;
     price: number | string | null;
-    price_on_request: boolean | null;
     currency: string | null;
     city: string | null;
     region: string | null;
