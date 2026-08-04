@@ -36,6 +36,7 @@ import {
   type WorkState,
 } from "@/lib/mkt-workforce";
 import { claimSubject, transferSubject } from "@/lib/mkt-admin-queue";
+import { usePlatformIdentity } from "@/lib/mkt-platform";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -90,6 +91,9 @@ type Pending =
 function AdminWorkforcePage() {
   const { t, locale } = useI18n();
   const queryClient = useQueryClient();
+  const { identity } = usePlatformIdentity();
+  // A limited administrator reaches this console only with the workforce permission.
+  const canManage = identity?.staff_perms.includes("workforce.manage") === true;
   const [scope, setScope] = useState<QueueScope>("all");
   const [pending, setPending] = useState<Pending | null>(null);
   const [busy, setBusy] = useState(false);
@@ -172,7 +176,7 @@ function AdminWorkforcePage() {
   ];
 
   return (
-    <AdminShell title={t("admin.nav.workforce")} staffAccess>
+    <AdminShell title={t("admin.nav.workforce")} staffAccess={canManage}>
       <p className="text-xs text-muted-foreground">{t("admin.workforce.hint")}</p>
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
