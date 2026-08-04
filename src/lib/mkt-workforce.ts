@@ -103,7 +103,7 @@ export async function loadWorkQueue(
 ): Promise<WorkItem[]> {
   const { data, error } = await supabase.rpc("mkt_workforce_queue", {
     _scope: scope,
-    _kind: kind ?? null,
+    _kind: kind ?? undefined,
     _limit: 100,
   });
   if (error) throw error;
@@ -148,11 +148,11 @@ export async function saveStaff(
 ): Promise<void> {
   const { error } = await supabase.rpc("mkt_workforce_set_staff", {
     _user_id: userId,
-    _work_state: update.work_state ?? null,
-    _capacity_limit: update.capacity_limit ?? null,
-    _accepts_auto: update.accepts_auto ?? null,
-    _department: update.department ?? null,
-    _note: update.note ?? null,
+    _work_state: update.work_state ?? undefined,
+    _capacity_limit: update.capacity_limit ?? undefined,
+    _accepts_auto: update.accepts_auto ?? undefined,
+    _department: update.department ?? undefined,
+    _note: update.note ?? undefined,
     _reason: reason,
   });
   if (error) throw error;
@@ -171,8 +171,8 @@ export async function addLeave(input: {
     _kind: input.kind,
     _starts_on: input.startsOn,
     _ends_on: input.endsOn,
-    _note: input.note ?? null,
-    _substitute: input.substitute ?? null,
+    _note: input.note ?? undefined,
+    _substitute: input.substitute ?? undefined,
   });
   if (error) throw error;
 }
@@ -213,7 +213,7 @@ export async function setWorkPriority(
 /** Distribute every unassigned item that now has an eligible, available taker. */
 export async function distributeWork(kind?: QueueKind | null): Promise<number> {
   const { data, error } = await supabase.rpc("mkt_workforce_distribute", {
-    _kind: kind ?? null,
+    _kind: kind ?? undefined,
     _limit: 50,
   });
   if (error) throw error;
@@ -231,7 +231,7 @@ export async function enqueueWork(
     _kind: kind,
     _subject_id: subjectId,
     _priority: priority,
-    _due_at: dueAt ?? null,
+    _due_at: dueAt ?? undefined,
   });
   if (error) throw error;
 }
