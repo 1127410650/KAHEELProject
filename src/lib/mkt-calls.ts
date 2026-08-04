@@ -114,9 +114,11 @@ export async function getCallMode(tenantId: string | null): Promise<CallMode> {
 /** Server side switch; turning it off also ends any call in flight. */
 export async function setCallMode(tenantId: string | null, mode: CallMode) {
   const { error } = await supabase.rpc("mkt_call_mode_set", {
-    _tenant_id: tenantId,
+    // The personal account is stored as a NULL tenant; generated types are strict.
+    _tenant_id: tenantId as unknown as string,
     _mode: mode,
   });
+
   if (error) throw error;
 }
 
