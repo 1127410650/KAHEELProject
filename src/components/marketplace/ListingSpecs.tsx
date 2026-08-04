@@ -54,9 +54,9 @@ export function ListingSpecs({ listing }: { listing: MktListing }) {
       value: t(`market.condition.${listing.item_condition}`),
     });
   }
-  // "Price on request" already sits next to the title, so it is not repeated here.
-  if (!listing.price_on_request && listing.price_unit) {
-    rows.push({ label: t("market.ad.priceUnit"), value: listing.price_unit });
+  // The price itself sits next to the title; only the optional unit repeats here.
+  if (listing.price_unit) {
+    rows.push({ label: t("market.ad.priceUnit"), value: priceUnitLabel(listing.price_unit, locale) });
   }
 
 
