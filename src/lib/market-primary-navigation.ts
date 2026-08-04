@@ -108,7 +108,7 @@ export function isNavigationOnlyField(id: string): boolean {
 export function fieldSearchParams(field: PrimaryField): Record<string, string> {
   if (!field.categorySlug) return {};
   const params: Record<string, string> = { category: field.categorySlug };
-  if (field.subcategorySlug) params.sub = field.subcategorySlug;
+  if (field.subcategorySlug) params["sub"] = field.subcategorySlug;
   return params;
 }
 
