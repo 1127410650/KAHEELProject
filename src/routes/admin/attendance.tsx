@@ -68,7 +68,7 @@ export const Route = createFileRoute("/admin/attendance")({
 type Tab = "attendance" | "shifts";
 
 function AttendanceAdminPage() {
-  const { t, lang } = useI18n();
+  const { t, locale } = useI18n();
   const queryClient = useQueryClient();
   const { identity, loading } = usePlatformIdentity();
 
@@ -376,7 +376,7 @@ function AttendanceAdminPage() {
         busy={busy}
         staff={staffList}
         templates={templates.data ?? []}
-        lang={lang}
+        lang={locale}
         onCancel={() => setPlanning(null)}
         onSubmit={(values) =>
           void run(() =>
