@@ -111,7 +111,14 @@ function PublicStorePage() {
       : []),
   ];
   const current = activeSection ?? sections[0]?.id ?? null;
-  const mapHref = locationLink(store.latitude, store.longitude);
+  const map = locationLink({
+    latitude: store.latitude,
+    longitude: store.longitude,
+    visibility: store.location_precision === "exact" ? "exact" : "approximate",
+    district: store.district,
+    city,
+    country: null,
+  });
 
   return (
     <MarketShell>
@@ -135,7 +142,7 @@ function PublicStorePage() {
               <div className="min-w-0">
                 <h1 className="flex items-center gap-2 text-lg font-semibold">
                   <span className="truncate">{name}</span>
-                  {store.verification_status === "verified" ? <VerifiedBadge /> : null}
+                  <VerifiedBadge status={store.verification_status} />
                 </h1>
                 <p className="text-sm text-muted-foreground">
                   {t(`market.store.type.${store.store_type}`)}
@@ -193,11 +200,11 @@ function PublicStorePage() {
                   </Link>
                 </Button>
               ) : null}
-              {mapHref ? (
+              {map ? (
                 <Button asChild variant="outline" size="sm">
-                  <a href={mapHref} target="_blank" rel="noreferrer noopener">
+                  <a href={map.href} target="_blank" rel="noreferrer noopener">
                     <MapPin className="me-1 h-4 w-4" />
-                    {store.location_precision === "exact"
+                    {map.precision === "exact"
                       ? t("market.ad.openLocation")
                       : t("market.ad.approximate")}
                   </a>
