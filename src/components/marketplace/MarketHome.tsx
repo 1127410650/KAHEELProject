@@ -67,7 +67,7 @@ function ListingSection({
           </Button>
         </div>
       ) : loading ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton
               key={i}
@@ -82,13 +82,16 @@ function ListingSection({
               <ListingCard key={listing.id} listing={listing} view="row" />
             ))}
           </div>
-          <div className="hidden justify-start gap-3 sm:grid sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
+          {/* Fixed column counts keep four cards on one balanced row instead of
+           * leaving an orphan card beside a wide empty gap. */}
+          <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {shown.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
         </>
       )}
+
     </section>
   );
 }
