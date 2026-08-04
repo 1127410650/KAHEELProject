@@ -19,7 +19,7 @@ export function isListingDuration(value: unknown): value is ListingDuration {
 
 /** Columns the owner dashboard needs on top of the public listing columns. */
 export const MY_LISTING_COLUMNS =
-  "id, slug, ref_no, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, keywords, price, price_on_request, price_unit, currency, city, city_id, cover_image_url, status, rejection_reason, published_at, created_at, views_count, shares_count, contact_requests_count, favorites_count, quote_requests_count, reports_count, link_copies_count, qr_opens_count, ratings_count, ratings_avg, is_featured, featured_until, featured_package, display_priority, duration_days, expires_at, paused_at, last_renewed_at";
+  "id, slug, ref_no, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, keywords, price, price_unit, currency, city, city_id, cover_image_url, status, rejection_reason, published_at, created_at, views_count, shares_count, contact_requests_count, favorites_count, quote_requests_count, reports_count, link_copies_count, qr_opens_count, ratings_count, ratings_avg, is_featured, featured_until, featured_package, display_priority, duration_days, expires_at, paused_at, last_renewed_at";
 
 export type ListingOpError =
   | "forbidden"
@@ -32,12 +32,15 @@ export type ListingOpError =
   | "images_too_many"
   | "business_incomplete"
   | "geo_required"
+  | "price_required"
+  | "price_invalid"
   | "admin_suspended"
   | "account_restricted"
   | "category_inactive"
   | "already_promoted"
   | "insufficient_points"
   | "failed";
+
 
 function opError(message: string): ListingOpError {
   if (message.includes("forbidden")) return "forbidden";
@@ -56,8 +59,16 @@ function opError(message: string): ListingOpError {
   // Publish-time gates raised by triggers, not by the submit function itself.
   if (message.includes("BUSINESS_DETAILS_INCOMPLETE")) return "business_incomplete";
   if (message.includes("GEO_LOCATION_REQUIRED")) return "geo_required";
+  if (message.includes("PRICE_REQUIRED")) return "price_required";
+  if (
+    message.includes("PRICE_INVALID") ||
+    message.includes("PRICE_TOO_LARGE") ||
+    message.includes("PRICE_UNIT_INVALID")
+  )
+    return "price_invalid";
   return "failed";
 }
+
 
 
 async function call<T>(promise: PromiseLike<{ data: T; error: { message: string } | null }>) {

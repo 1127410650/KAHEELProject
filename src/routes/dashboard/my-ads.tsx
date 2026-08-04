@@ -140,7 +140,10 @@ const OP_ERROR_KEYS: Record<string, string> = {
   images_too_many: "market.ops.imagesTooMany",
   business_incomplete: "market.ops.businessIncomplete",
   geo_required: "market.ops.geoRequired",
+  price_required: "market.ops.priceRequired",
+  price_invalid: "market.ops.priceInvalid",
   not_found: "market.ops.notFound",
+
 };
 
 /** Moderation hint shown to the advertiser — never an accusation, just status. */

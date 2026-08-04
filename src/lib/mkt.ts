@@ -109,7 +109,6 @@ export interface MktListing {
   description: string | null;
   specs: unknown;
   price: number | null;
-  price_on_request: boolean;
   price_unit: string | null;
   currency: string;
   quantity: number | null;
@@ -227,7 +226,7 @@ export const USER_PROFILE_COLUMNS =
 
 
 export const LISTING_COLUMNS =
-  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_on_request, price_unit, currency, keywords, duration_days, quantity, unit, item_condition, deal_kind, city, region, country_id, city_id, district, latitude_public, longitude_public, location_visibility, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
+  "id, slug, owner_user_id, tenant_id, advertiser_type, type_code, category_id, subcategory_id, title, summary, description, specs, price, price_unit, currency, keywords, duration_days, quantity, unit, item_condition, deal_kind, city, region, country_id, city_id, district, latitude_public, longitude_public, location_visibility, cover_image_url, status, rejection_reason, published_at, views_count, created_at";
 
 
 
@@ -330,10 +329,18 @@ export function priceUnitLabel(unit: string | null, locale: "ar" | "en" = "en"):
   return (locale === "ar" ? UNIT_AR[unit] : UNIT_EN[unit]) ?? unit;
 }
 
+/** Reader-friendly phrase for the optional unit: "لكل قطعة" / "per piece". */
+export function priceUnitPhrase(unit: string | null, locale: "ar" | "en" = "en"): string | null {
+  const label = priceUnitLabel(unit, locale);
+  if (!label) return null;
+  return locale === "ar" ? `لكل ${label}` : `per ${label}`;
+}
+
 /**
  * Unified price policy: one positive price plus an optional unit. Listings
  * without a valid price are never published, so a dash is only ever shown for
- * legacy drafts awaiting an edit.
+ * legacy drafts awaiting an edit. The unit is omitted entirely when the
+ * advertiser did not pick one.
  */
 export function priceLabel(
   listing: Pick<MktListing, "price" | "price_unit" | "currency">,
@@ -343,8 +350,8 @@ export function priceLabel(
   if (listing.price === null || listing.price <= 0) return missingText;
   const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(listing.price);
   const currency = currencyLabel(listing.currency, locale);
-  const unit = priceUnitLabel(listing.price_unit, locale);
-  return `${amount} ${currency}${unit ? ` / ${unit}` : ""}`;
+  const unit = priceUnitPhrase(listing.price_unit, locale);
+  return `${amount} ${currency}${unit ? ` ${unit}` : ""}`;
 }
 
 
