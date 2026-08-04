@@ -1507,6 +1507,8 @@ export type Database = {
           progress: string
           released_at: string | null
           released_reason: string | null
+          reopen_count: number
+          reopened_at: string | null
           subject_id: string
           transfer_reason: string | null
           transferred_from: string | null
@@ -1530,6 +1532,8 @@ export type Database = {
           progress?: string
           released_at?: string | null
           released_reason?: string | null
+          reopen_count?: number
+          reopened_at?: string | null
           subject_id: string
           transfer_reason?: string | null
           transferred_from?: string | null
@@ -1553,6 +1557,8 @@ export type Database = {
           progress?: string
           released_at?: string | null
           released_reason?: string | null
+          reopen_count?: number
+          reopened_at?: string | null
           subject_id?: string
           transfer_reason?: string | null
           transferred_from?: string | null
@@ -9532,6 +9538,10 @@ export type Database = {
         Args: { _kind: string; _priority?: string; _subject_id: string }
         Returns: undefined
       }
+      mkt_workforce_can_take: {
+        Args: { _kind: string; _user_id: string }
+        Returns: string
+      }
       mkt_workforce_cancel_leave: {
         Args: { _id: string; _reason: string }
         Returns: undefined
@@ -9576,6 +9586,7 @@ export type Database = {
         Args: { _kind?: string; _limit?: number }
         Returns: number
       }
+      mkt_workforce_done_today: { Args: { _user_id: string }; Returns: number }
       mkt_workforce_enqueue: {
         Args: {
           _due_at?: string
@@ -9654,6 +9665,10 @@ export type Database = {
         Returns: number
       }
       mkt_workforce_refresh_leave_states: { Args: never; Returns: number }
+      mkt_workforce_reopen_item: {
+        Args: { _kind: string; _priority?: string; _subject_id: string }
+        Returns: string
+      }
       mkt_workforce_require_attendance: { Args: never; Returns: boolean }
       mkt_workforce_set_priority: {
         Args: {
