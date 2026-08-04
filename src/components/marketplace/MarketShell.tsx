@@ -47,13 +47,13 @@ export function MarketHeader() {
     : `/auth?next=${encodeURIComponent("/dashboard/ads/new")}`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-40 bg-market-navy text-market-navy-foreground">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-1.5 px-3 py-2.5 sm:gap-3 sm:px-4">
         <Link to="/" className="flex shrink-0 items-center gap-2" aria-label={t("market.brand")}>
-          <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+          <span className="grid size-9 place-items-center rounded-xl bg-market-silver text-market-navy">
             <Store className="size-4" aria-hidden />
           </span>
-          <span className="hidden text-base font-bold tracking-tight text-foreground sm:inline">
+          <span className="text-base font-bold tracking-tight text-market-navy-foreground">
             {t("market.brand")}
           </span>
         </Link>
@@ -62,11 +62,12 @@ export function MarketHeader() {
         <Link
           to="/search"
           aria-label={t("market.nav.search")}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:px-3"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-market-navy-soft bg-market-navy-soft/60 px-2.5 py-1.5 text-sm font-medium text-market-navy-foreground transition-colors hover:bg-market-navy-soft sm:px-3"
         >
           <Search className="size-4" aria-hidden />
           <span className="hidden sm:inline">{t("market.nav.search")}</span>
         </Link>
+
 
         <div className="min-w-0 flex-1" />
 
@@ -75,10 +76,11 @@ export function MarketHeader() {
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
             aria-label={t("common.language")}
-            className="hidden rounded-md border border-input px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-primary sm:block"
+            className="hidden rounded-md border border-market-navy-soft px-2 py-1 text-xs font-semibold text-market-silver hover:bg-market-navy-soft sm:block"
           >
             {locale === "ar" ? "EN" : "ع"}
           </button>
+
 
           {session ? (
             <>
@@ -104,27 +106,24 @@ export function MarketHeader() {
             <>
               {/* Guest auth actions must stay text-first on phones: icon-only
                   buttons hid the primary entry points on 320–390 px screens. */}
-              <Button
-                asChild
-                size="sm"
-                variant="outline"
-                className="h-8 px-2 text-xs sm:px-3"
+              <Link
+                to="/auth"
+                aria-label={t("market.signIn")}
+                title={t("market.signIn")}
+                className="inline-flex h-8 shrink-0 items-center rounded-md border border-market-silver/70 px-2 text-xs font-semibold text-market-navy-foreground transition-colors hover:bg-market-navy-soft sm:px-3"
               >
-                <Link to="/auth" aria-label={t("market.signIn")} title={t("market.signIn")}>
-                  {t("market.signIn")}
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="sm"
-                variant="default"
-                className="h-8 px-2 text-xs sm:px-3"
+                {t("market.signIn")}
+              </Link>
+              <Link
+                to="/register"
+                aria-label={t("market.signUp")}
+                title={t("market.signUp")}
+                className="inline-flex h-8 shrink-0 items-center rounded-md bg-market-silver px-2 text-xs font-semibold text-market-navy transition-colors hover:bg-market-navy-foreground sm:px-3"
               >
-                <Link to="/register" aria-label={t("market.signUp")} title={t("market.signUp")}>
-                  {t("market.signUp")}
-                </Link>
-              </Button>
+                {t("market.signUp")}
+              </Link>
             </>
+
           )}
 
           {/* On phones the bottom bar already owns "add", so the header keeps a
@@ -134,7 +133,11 @@ export function MarketHeader() {
           {status === "loading" ? (
             <Skeleton aria-hidden className="hidden h-8 w-28 shrink-0 rounded-md sm:block" />
           ) : (
-          <Button asChild size="sm" className="hidden shrink-0 sm:inline-flex">
+          <Button
+            asChild
+            size="sm"
+            className="hidden shrink-0 bg-market-silver text-market-navy hover:bg-market-navy-foreground sm:inline-flex"
+          >
 
             {addListingHref ? (
               <a href={addListingHref} aria-label={t("market.addListing")}>
@@ -154,10 +157,11 @@ export function MarketHeader() {
       {/* Losing connectivity is not a sign-out: say so instead of degrading the
           header into a visitor state. */}
       {session && offline && (
-        <div className="border-t border-border bg-secondary/60 px-3 py-1 text-center text-[11px] font-medium text-muted-foreground sm:text-xs">
+        <div className="border-t border-market-navy-soft bg-market-navy-dark px-3 py-1 text-center text-[11px] font-medium text-market-silver sm:text-xs">
           {t("market.offlineNotice")}
         </div>
       )}
+
     </header>
   );
 }
@@ -295,11 +299,21 @@ export function MarketBottomNav() {
         },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const)
-    : ([
+    : // Guests see the same five destinations in the same order; the three
+      // private ones route through sign-in with a return path.
+      ([
         { key: "home", to: BOTTOM_NAV_PATHS.home, icon: Home, badge: 0 },
+        {
+          key: "messages",
+          to: signInHref(BOTTOM_NAV_PATHS.messages),
+          icon: MessageSquare,
+          badge: 0,
+        },
         { key: "add", to: signInHref(BOTTOM_NAV_PATHS.add), icon: Plus, badge: 0 },
+        { key: "alerts", to: signInHref(BOTTOM_NAV_PATHS.alerts), icon: Bell, badge: 0 },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const);
+
 
   const activeKey = activeBottomKey(pathname);
 
@@ -307,7 +321,7 @@ export function MarketBottomNav() {
     <nav
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-market-navy-soft bg-market-navy pb-[env(safe-area-inset-bottom)] lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
@@ -319,10 +333,10 @@ export function MarketBottomNav() {
               <span
                 className={
                   center
-                    ? "relative grid size-9 place-items-center rounded-full bg-primary text-primary-foreground shadow-sm"
+                    ? "relative grid size-9 place-items-center rounded-full bg-market-silver text-market-navy shadow-sm"
                     : active
-                      ? "relative grid size-8 place-items-center text-primary"
-                      : "relative grid size-8 place-items-center text-muted-foreground"
+                      ? "relative grid size-8 place-items-center text-market-navy-foreground"
+                      : "relative grid size-8 place-items-center text-market-silver-muted"
                 }
               >
                 <item.icon className="size-4" aria-hidden />
@@ -338,12 +352,15 @@ export function MarketBottomNav() {
               </span>
               <span
                 className={
-                  active && !center ? "truncate text-primary" : "truncate text-muted-foreground"
+                  active && !center
+                    ? "truncate text-market-navy-foreground"
+                    : "truncate text-market-silver-muted"
                 }
               >
                 {label}
               </span>
             </>
+
           );
           const className =
             "flex flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium";
@@ -410,30 +427,52 @@ export function MarketFooter() {
         { to: "/dashboard/business", label: t("market.dash.business") },
       ],
     },
+    {
+      key: "legal",
+      links: [
+        { to: "/about", label: t("market.more.links.about") },
+        { to: "/help", label: t("market.more.links.help") },
+        { to: "/terms", label: t("market.more.links.terms") },
+        { to: "/privacy", label: t("market.more.links.privacy") },
+        { to: "/contact", label: t("market.more.links.contact") },
+      ],
+    },
   ];
 
   return (
-    <footer className="mt-6 border-t border-border">
+    <footer className="mt-6 bg-market-navy text-market-navy-foreground">
       <div className="mx-auto w-full max-w-7xl px-4 py-7">
         <div className="max-w-md">
-          <p className="text-base font-bold tracking-tight text-foreground">{t("market.brand")}</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+          <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-market-silver">
             {t("market.tagline")}
           </p>
         </div>
 
-        {/* Desktop: three compact columns. */}
-        <div className="mt-6 hidden gap-8 sm:grid sm:grid-cols-3">
+        {/* Phones: the policy links only — everything else is one tap away in the
+            bottom bar, so the mobile footer stays short. */}
+        <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 sm:hidden">
+          {groups[3]!.links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="text-xs text-market-silver hover:text-market-navy-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop: four compact columns. */}
+        <div className="mt-6 hidden gap-8 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {groups.map((group) => (
             <div key={group.key} className="space-y-2">
-              <p className="text-sm font-semibold text-foreground">
-                {t(`market.footer.${group.key}`)}
-              </p>
+              <p className="text-sm font-semibold">{t(`market.footer.${group.key}`)}</p>
               {group.links.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="block text-sm text-muted-foreground hover:text-primary"
+                  className="block text-sm text-market-silver hover:text-market-navy-foreground"
                 >
                   {link.label}
                 </Link>
@@ -442,12 +481,13 @@ export function MarketFooter() {
           ))}
         </div>
       </div>
-      <p className="border-t border-border py-4 text-center text-xs text-muted-foreground">
+      <p className="border-t border-market-navy-soft py-4 text-center text-xs text-market-silver-muted">
         {t("market.footer.rights")}
       </p>
     </footer>
   );
 }
+
 
 /** Legal-only strip for long public content pages; never duplicates the bottom nav. */
 export function MarketCompactFooter() {
@@ -464,7 +504,7 @@ export function MarketCompactFooter() {
 export type FooterVariant = "full" | "compact" | "none";
 
 /** Public marketing surfaces keep the full footer. */
-const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help"];
+const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help", "/contact", "/more"];
 /** Long public content pages get the legal strip only. */
 const COMPACT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/"];
 
@@ -514,7 +554,7 @@ export function MarketShell({
       <main>{children}</main>
 
       {variant === "full" && (
-        <div className="flex flex-1 flex-col bg-secondary/30">
+        <div className="flex flex-1 flex-col bg-background">
           <MarketFooter />
         </div>
       )}

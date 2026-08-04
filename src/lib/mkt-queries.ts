@@ -33,6 +33,8 @@ export interface ListingFilters {
   advertiser?: "individual" | "business" | undefined;
   withImageOnly?: boolean | undefined;
   hasPrice?: boolean | undefined;
+  /** Home "featured" row: only listings with a live promotion window. */
+  featuredOnly?: boolean | undefined;
   page?: number | undefined;
 }
 
@@ -171,6 +173,11 @@ async function queryListings(
   if (filters.withImageOnly) query = query.not("cover_image_url", "is", null);
   if (filters.hasPrice) query = query.not("price", "is", null);
   if (filters.city) query = query.eq("city", filters.city);
+  if (filters.featuredOnly) {
+    // A promotion counts only while its window is still open.
+    query = query.eq("is_featured", true).gt("featured_until", new Date().toISOString());
+  }
+
 
   if (filters.deal) query = query.eq("deal_kind", filters.deal);
   if (filters.minPrice !== undefined) query = query.gte("price", filters.minPrice);

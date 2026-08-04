@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { MarketHome } from "@/components/marketplace/MarketHome";
+import { MarketStaticPage } from "@/components/marketplace/MarketStaticPage";
 
-const title = "كحلي — سوق العقارات والسيارات والأجهزة والخدمات";
-const description =
-  "كحلي: سوق إلكتروني للعقارات والسيارات والأجهزة والخدمات والمعدات والموردين. تصفّح الإعلانات وتواصل مع المعلن مباشرة.";
+const title = "التواصل مع إدارة المنصة — كحلي";
+const description = "طرق التواصل مع إدارة سوق «كحلي» والإبلاغ عن الإعلانات المخالفة.";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/contact")({
   ssr: false,
   head: () => ({
     meta: [
@@ -22,7 +21,7 @@ export const Route = createFileRoute("/")({
   }),
   component: () => (
     <MarketShell>
-      <MarketHome />
+      <MarketStaticPage pageKey="contact" email="support@kahli.sa" />
     </MarketShell>
   ),
 });

@@ -534,3 +534,32 @@ body {
   }
 }
 
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Public marketplace surface ("كحلي") — navy + silver.
+ *
+ * These tokens exist ONLY for the public marketplace chrome (header, bottom
+ * nav, footer, home banner). They are additive: no existing token is changed,
+ * so the admin console (`AdminShell`) and the internal system keep their own
+ * teal identity untouched. Isolation is by usage — nothing in `/admin` or the
+ * internal pages references a `market-*` utility.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-market-navy: oklch(0.2148 0.0631 268.5);
+  --color-market-navy-dark: oklch(0.1666 0.0523 269);
+  --color-market-navy-soft: oklch(0.3006 0.0716 267.5);
+  --color-market-navy-foreground: oklch(0.9821 0.004 265);
+  --color-market-silver: oklch(0.9268 0.0072 264.5);
+  --color-market-silver-line: oklch(0.8571 0.0111 264.5);
+  --color-market-silver-muted: oklch(0.7368 0.0159 264.5);
+}
+
+/* Hide the horizontal scrollbar of the marketplace category rail without
+ * disabling the scrolling itself. */
+@utility market-rail {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
