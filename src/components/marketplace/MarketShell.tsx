@@ -512,18 +512,25 @@ export function MarketBrandFooter() {
   );
 }
 
-export type FooterVariant = "full" | "compact" | "brand" | "none";
+export type FooterVariant = "full" | "compact" | "none";
 
-/** Public marketing surfaces keep the full footer. */
-const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help", "/contact"];
-/** Long public content pages get the legal strip only. */
-const COMPACT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/"];
+/**
+ * Single source of truth for the footer:
+ * - the full brand footer lives ONLY on the external guest landing page
+ *   (`/welcome`, which renders it inside its own layout);
+ * - marketplace browsing surfaces get the one-line copyright strip;
+ * - app, account, chat, wizard and admin surfaces get no footer at all.
+ */
+const COPYRIGHT_FOOTER_PATHS = ["/", "/search", "/about", "/terms", "/privacy", "/help", "/contact"];
+const COPYRIGHT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/", "/stores/"];
+const NO_FOOTER_PREFIXES = ["/admin", "/dashboard", "/chat", "/more", "/auth", "/register", "/welcome"];
 
-/** Single source of truth: app/account/admin routes end right after their content. */
 export function footerVariantForPath(pathname: string): FooterVariant {
-  if (pathname === "/more") return "brand";
-  if (FULL_FOOTER_PATHS.includes(pathname)) return "full";
-  if (COMPACT_FOOTER_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return "compact";
+  if (NO_FOOTER_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
+    return "none";
+  }
+  if (COPYRIGHT_FOOTER_PATHS.includes(pathname)) return "compact";
+  if (COPYRIGHT_FOOTER_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return "compact";
   return "none";
 }
 
@@ -551,7 +558,7 @@ export function MarketShell({
        * action bar inside its own content. */
       className={
         bottomNav
-          ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+          ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0"
           : "market-surface flex min-h-dvh flex-col overflow-x-clip"
       }
     >
@@ -561,9 +568,7 @@ export function MarketShell({
        * never a stretched navy block above the bottom nav. */}
       <main className="flex-1">{children}</main>
 
-      {variant === "full" && <MarketFooter />}
       {variant === "compact" && <MarketCompactFooter />}
-      {variant === "brand" && <MarketBrandFooter />}
       {bottomNav && <MarketBottomNav />}
     </div>
   );
