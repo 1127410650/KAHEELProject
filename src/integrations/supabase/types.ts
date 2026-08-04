@@ -2540,6 +2540,42 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_job_runs: {
+        Row: {
+          duration_ms: number | null
+          error: string | null
+          finished_at: string | null
+          id: string
+          job: string
+          ok: boolean
+          result: Json
+          source: string
+          started_at: string
+        }
+        Insert: {
+          duration_ms?: number | null
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          job: string
+          ok?: boolean
+          result?: Json
+          source?: string
+          started_at?: string
+        }
+        Update: {
+          duration_ms?: number | null
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          job?: string
+          ok?: boolean
+          result?: Json
+          source?: string
+          started_at?: string
+        }
+        Relationships: []
+      }
       mkt_listing_events: {
         Row: {
           actor_id: string | null
@@ -8601,6 +8637,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      mkt_admin_run_tick: { Args: never; Returns: Json }
       mkt_admin_scan_dismiss: {
         Args: { _reason: string; _scan_id: string }
         Returns: undefined
@@ -9243,6 +9280,7 @@ export type Database = {
         Args: { _action: string; _reason?: string; _request_id: string }
         Returns: undefined
       }
+      mkt_run_scheduled_jobs: { Args: { _source?: string }; Returns: Json }
       mkt_search_activities: {
         Args: {
           _group_id?: string
@@ -9374,6 +9412,7 @@ export type Database = {
       }
       mkt_sweep_expired_listings: { Args: never; Returns: Json }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
+      mkt_sweep_promotion_notices: { Args: never; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       mkt_user_can: { Args: { _perm: string; _uid: string }; Returns: boolean }
       mkt_wallet_for_listing: { Args: { _id: string }; Returns: string }
