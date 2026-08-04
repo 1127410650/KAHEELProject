@@ -9,7 +9,6 @@ import {
   Search,
   ShieldCheck,
   Store,
-  UserPlus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
