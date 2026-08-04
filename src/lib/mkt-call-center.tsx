@@ -80,6 +80,24 @@ function isTerminal(status: CallStatus) {
   return TERMINAL.includes(status);
 }
 
+/**
+ * Microphone permission is only requested when a call actually starts. When the
+ * browser still needs a user gesture we do not auto-answer — the panel shows a
+ * "start audio" button instead.
+ */
+async function micAlreadyGranted(): Promise<boolean> {
+  if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) return false;
+  try {
+    const status = await navigator.permissions?.query({
+      name: "microphone" as PermissionName,
+    });
+    return status?.state === "granted";
+  } catch {
+    return false;
+  }
+}
+
+
 export function CallCenterProvider({ children }: { children: ReactNode }) {
   const { session } = useSession();
   const { t } = useI18n();
