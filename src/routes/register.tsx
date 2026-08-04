@@ -2,11 +2,15 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Loader2, MailCheck, ShieldCheck, ShieldAlert } from "lucide-react";
+import { Loader2, MailCheck, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { registerAccount } from "@/lib/register.functions";
+import { signUpPublic } from "@/lib/signup.functions";
+import { signInWithIdentifier } from "@/lib/auth.functions";
+import { landingPathForSession } from "@/lib/mkt-platform";
+import { setRememberSession } from "@/lib/auth-storage";
 import { useI18n } from "@/i18n";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
@@ -18,14 +22,17 @@ export const Route = createFileRoute("/register")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إنشاء حساب بدعوة — تحقّق | Invite-only account — Tahqaq" },
+      { title: "إنشاء حساب — تحقّق | Create account — Tahqaq" },
       {
         name: "description",
         content:
-          "إنشاء الحسابات في تحقّق متاح عن طريق دعوة من المسؤول فقط؛ لا يوجد تسجيل عام.",
+          "أنشئ حسابًا فرديًا في تحقّق لاستخدام السوق العام؛ حسابات النظام الداخلي بدعوة من المسؤول.",
       },
-      { property: "og:title", content: "إنشاء حساب بدعوة — تحقّق" },
-      { property: "og:description", content: "Tahqaq accounts are created by invitation only." },
+      { property: "og:title", content: "إنشاء حساب — تحقّق" },
+      {
+        property: "og:description",
+        content: "Create an individual Tahqaq marketplace account.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -144,24 +151,10 @@ function RegisterPage() {
 
   if (!mounted) return null;
 
-  // No invitation, or an invitation that is not live: never render a sign-up form.
+  // No invitation: this is the PUBLIC marketplace sign-up (individual account).
+  // Internal system accounts still require a live invitation.
   if (!inviteToken || (preview.isSuccess && preview.data.state !== "valid") || preview.isError) {
-    return (
-      <Shell>
-        <div className="surface p-5">
-          <ShieldAlert className="size-6 text-primary" aria-hidden />
-          <h1 className="mt-3 text-lg font-bold text-foreground">
-            {t("signup.inviteRequiredTitle")}
-          </h1>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            {t("signup.inviteRequiredBody")}
-          </p>
-          <Button asChild className="mt-4 w-full">
-            <Link to="/auth">{t("signup.signIn")}</Link>
-          </Button>
-        </div>
-      </Shell>
-    );
+    return <PublicSignupForm />;
   }
 
   if (preview.isLoading) {
@@ -274,6 +267,184 @@ function RegisterPage() {
       </form>
 
       <p className="mt-5 text-center text-xs text-muted-foreground">
+        {t("signup.haveAccount")}{" "}
+        <Link to="/auth" className="font-semibold text-primary">
+          {t("signup.signIn")}
+        </Link>
+      </p>
+    </Shell>
+  );
+}
+
+
+/**
+ * Public sign-up: individual marketplace account only.
+ * No city, no account-type choice, no role. The country default follows the
+ * existing account policy (Saudi Arabia) and is not asked for here.
+ */
+function PublicSignupForm() {
+  const { t } = useI18n();
+  const navigate = useNavigate();
+  const submitSignup = useServerFn(signUpPublic);
+  const signIn = useServerFn(signInWithIdentifier);
+
+  const [busy, setBusy] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [form, setForm] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirm: "",
+  });
+  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  async function onSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (form.password !== form.confirm) {
+      toast.error(t("signup.mismatch"));
+      return;
+    }
+    setBusy(true);
+    try {
+      const result = await submitSignup({
+        data: {
+          full_name: form.full_name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          password: form.password,
+        },
+      });
+      if (!result.ok) {
+        toast.error(
+          result.error === "RATE_LIMITED"
+            ? t("signup.rateLimited")
+            : result.error === "WEAK_PASSWORD"
+              ? t("signup.weakPassword")
+              : t("signup.invalid"),
+        );
+        return;
+      }
+
+      // New accounts stay signed in on this device by default.
+      setRememberSession(true);
+      const session = await signIn({
+        data: { identifier: form.email.trim().toLowerCase(), password: form.password },
+      });
+      if (!session.ok || !session.access_token || !session.refresh_token) {
+        toast.info(t("signup.signInFailed"));
+        navigate({ to: "/auth", replace: true });
+        return;
+      }
+      const { error } = await supabase.auth.setSession({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      });
+      if (error) {
+        navigate({ to: "/auth", replace: true });
+        return;
+      }
+      toast.success(t("signup.created"));
+      let landing = "/select-account";
+      try {
+        landing = await landingPathForSession();
+      } catch {
+        /* keep the default landing */
+      }
+      navigate({ to: landing, replace: true });
+    } catch {
+      toast.error(t("signup.invalid"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Shell>
+      <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.publicTitle")}</h1>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        {t("signup.publicSubtitle")}
+      </p>
+
+      <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
+        <div className="space-y-1.5">
+          <Label htmlFor="p_full_name">{t("signup.fullName")}</Label>
+          <Input id="p_full_name" required value={form.full_name} onChange={set("full_name")} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="p_email">{t("signup.email")}</Label>
+          <Input
+            id="p_email"
+            type="email"
+            required
+            dir="ltr"
+            autoComplete="email"
+            value={form.email}
+            onChange={set("email")}
+          />
+          <p className="text-xs text-muted-foreground">{t("signup.emailHint")}</p>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="p_phone">{t("signup.phone")}</Label>
+          <Input
+            id="p_phone"
+            dir="ltr"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="05XXXXXXXX"
+            value={form.phone}
+            onChange={set("phone")}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="p_password">{t("signup.password")}</Label>
+          <Input
+            id="p_password"
+            type="password"
+            required
+            minLength={10}
+            dir="ltr"
+            autoComplete="new-password"
+            value={form.password}
+            onChange={set("password")}
+          />
+          <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="p_confirm">{t("signup.confirm")}</Label>
+          <Input
+            id="p_confirm"
+            type="password"
+            required
+            minLength={10}
+            dir="ltr"
+            autoComplete="new-password"
+            value={form.confirm}
+            onChange={set("confirm")}
+          />
+        </div>
+
+        <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+          <Checkbox
+            checked={agreed}
+            onCheckedChange={(v) => setAgreed(v === true)}
+            aria-label={t("signup.terms")}
+          />
+          <span>{t("signup.terms")}</span>
+        </label>
+
+        <Button type="submit" className="w-full" disabled={busy || !agreed}>
+          {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
+          {busy ? t("signup.submitting") : t("signup.submit")}
+        </Button>
+      </form>
+
+      <p className="mt-4 rounded-lg bg-secondary p-2.5 text-xs leading-relaxed text-muted-foreground">
+        {t("signup.individualNote")}
+      </p>
+
+      <p className="mt-4 text-center text-xs text-muted-foreground">
         {t("signup.haveAccount")}{" "}
         <Link to="/auth" className="font-semibold text-primary">
           {t("signup.signIn")}
