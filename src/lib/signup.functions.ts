@@ -13,7 +13,18 @@ import {
  * and per email on the server.
  */
 export const signUpPublic = createServerFn({ method: "POST" })
-  .inputValidator((data: PublicSignupInput) => data)
+  // Projected field by field on purpose: a request that smuggles `role`,
+  // `tenant_id` or `permissions` into the body loses them here, before the
+  // handler ever sees them.
+  .inputValidator(
+    (data: PublicSignupInput & Record<string, unknown>): PublicSignupInput => ({
+      full_name: String(data?.full_name ?? ""),
+      email: String(data?.email ?? ""),
+      phone: data?.phone == null ? undefined : String(data.phone),
+      password: String(data?.password ?? ""),
+    }),
+  )
+
   .handler(async ({ data }): Promise<PublicSignupResult> => {
     let clientKey = "unknown";
     try {
