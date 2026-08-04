@@ -65,7 +65,7 @@ export function MarketFeaturedBanner() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 pt-4 sm:pt-6">
+    <section className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 pt-4 sm:pt-6">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="flex min-w-0 items-center gap-2 text-base font-bold tracking-tight text-foreground sm:text-lg">
           <span className="truncate">{t("market.home.featured")}</span>

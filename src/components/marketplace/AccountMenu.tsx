@@ -1,8 +1,10 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
   Building2,
+  Check,
   ChevronDown,
   Coins,
   Flag,
@@ -18,6 +20,8 @@ import {
   Users,
   X,
 } from "lucide-react";
+
+import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
@@ -99,10 +103,18 @@ type MenuLink = {
 export function AccountMenu() {
   const { t } = useI18n();
   const { session } = useSession();
-  const { account: active, accounts, clear, can, loading: accountLoading } = useActiveAccount();
+  const {
+    account: active,
+    accounts,
+    clear,
+    can,
+    select,
+    loading: accountLoading,
+  } = useActiveAccount();
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
   const centralSignOut = useSignOut();
+  // Guards against a double tap while the server re-checks the membership.
+  const [switching, setSwitching] = useState<string | null>(null);
 
   const unreadMessages = useUnreadMessages(active);
   const unreadAlerts = useUnreadAlerts();
@@ -124,9 +136,9 @@ export function AccountMenu() {
     }
     return (
       <Button asChild size="sm" variant="outline" className="shrink-0">
-        <Link to="/choose-account" aria-label={t("market.entry.change")} title={t("market.entry.change")}>
+        <Link to="/dashboard/profile" aria-label={t("market.account.menu")} title={t("market.account.menu")}>
           <User className="size-4" aria-hidden />
-          <span className="hidden sm:inline">{t("market.entry.change")}</span>
+          <span className="hidden sm:inline">{t("market.account.fallbackName")}</span>
         </Link>
       </Button>
     );
@@ -149,18 +161,27 @@ export function AccountMenu() {
     await centralSignOut();
   }
 
-  function changeAccount(event: { preventDefault: () => void }) {
-    if (
-      hasUnsavedChanges() &&
-      !window.confirm(t("market.account.unsavedWarning"))
-    ) {
-      event.preventDefault();
-      return;
+  /**
+   * Switching happens in place: the choice is re-verified server-side, the
+   * previous account's cache is dropped by `select`, and the user stays on the
+   * current page. There is no separate account-selection screen.
+   */
+  async function switchAccount(accountKey: string) {
+    if (accountKey === active?.account_key || switching) return;
+    if (hasUnsavedChanges() && !window.confirm(t("market.account.unsavedWarning"))) return;
+    setSwitching(accountKey);
+    try {
+      const ok = await select(accountKey);
+      if (!ok) toast.error(t("market.entry.switchFailed"));
+    } finally {
+      setSwitching(null);
     }
-    event.preventDefault();
-    clear();
-    void navigate({ to: "/choose-account" });
   }
+
+  // Personal account first, then the businesses the user is authorised for.
+  const switchList = [...accounts].sort((a, b) =>
+    a.kind === b.kind ? a.name.localeCompare(b.name) : a.kind === "individual" ? -1 : 1,
+  );
 
   const messagesBadge = unreadMessages.data ?? 0;
   const alertsBadge = unreadAlerts.data ?? 0;
@@ -200,7 +221,7 @@ export function AccountMenu() {
       : [
           { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
           { to: "/settings", label: t("market.more.settings"), icon: Settings },
-          { to: "/choose-account", label: t("market.biz.addBusiness"), icon: Building2 },
+          { to: "/business/new", label: t("market.biz.addBusiness"), icon: Building2 },
         ],
   ).concat(
     viewer.isPlatformAdmin
@@ -264,15 +285,39 @@ export function AccountMenu() {
 
           <div className="mt-4 rounded-xl border border-border bg-card">{currentBlock}</div>
 
-          <div className="mt-2 overflow-hidden rounded-xl border border-border bg-card">
-            <button
-              type="button"
-              onClick={changeAccount}
-              className="flex w-full items-center gap-2.5 px-3 py-3 text-start text-sm text-foreground hover:bg-accent"
-            >
-              <Repeat className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              {t("market.entry.change")}
-            </button>
+          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
+            {t("market.account.switchTitle")}
+          </p>
+          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
+            {switchList.map((item) => (
+              <button
+                key={item.account_key}
+                type="button"
+                disabled={!!switching}
+                onClick={() => void switchAccount(item.account_key)}
+                className="flex w-full items-center gap-2.5 border-b border-border px-3 py-3 text-start text-sm text-foreground last:border-b-0 hover:bg-accent disabled:opacity-60"
+              >
+                <IdentityAvatar identity={item} size="sm" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-medium">{item.name}</span>
+                  <span className="block text-[11px] text-muted-foreground">
+                    {t(`market.entry.kind.${item.kind}`)}
+                  </span>
+                </span>
+                {item.account_key === active.account_key ? (
+                  <Check className="size-4 shrink-0 text-primary" aria-hidden />
+                ) : null}
+              </button>
+            ))}
+            <SheetClose asChild>
+              <Link
+                to="/business/new"
+                className="flex items-center gap-2.5 border-t border-border px-3 py-3 text-sm text-foreground hover:bg-accent"
+              >
+                <Repeat className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                {t("market.entry.newBusiness")}
+              </Link>
+            </SheetClose>
           </div>
 
           <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
@@ -328,9 +373,36 @@ export function AccountMenu() {
       <DropdownMenuContent align="end" className="w-72">
         {currentBlock}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={(e) => changeAccount(e)} className="gap-2 text-xs">
-          <Repeat className="size-4 text-muted-foreground" aria-hidden />
-          {t("market.entry.change")}
+        <DropdownMenuLabel className="text-xs text-muted-foreground">
+          {t("market.account.switchTitle")}
+        </DropdownMenuLabel>
+        {switchList.map((item) => (
+          <DropdownMenuItem
+            key={item.account_key}
+            disabled={!!switching}
+            onSelect={(e) => {
+              e.preventDefault();
+              void switchAccount(item.account_key);
+            }}
+            className="gap-2 text-xs"
+          >
+            <IdentityAvatar identity={item} size="sm" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate font-medium">{item.name}</span>
+              <span className="block text-[10px] text-muted-foreground">
+                {t(`market.entry.kind.${item.kind}`)}
+              </span>
+            </span>
+            {item.account_key === active.account_key ? (
+              <Check className="size-4 shrink-0 text-primary" aria-hidden />
+            ) : null}
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuItem asChild className="gap-2 text-xs">
+          <Link to="/business/new">
+            <Repeat className="size-4 text-muted-foreground" aria-hidden />
+            {t("market.entry.newBusiness")}
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel className="text-xs text-muted-foreground">

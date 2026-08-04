@@ -48,7 +48,7 @@ export function MarketHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-1.5 px-3 py-2.5 sm:gap-3 sm:px-4">
+      <div className="mx-auto flex w-full max-w-[1240px] items-center gap-1.5 px-3 lg:px-6 py-2.5 sm:gap-3 sm:px-4">
         <Link to="/" className="flex shrink-0 items-center gap-2" aria-label={t("market.brand")}>
           <span className="grid size-9 place-items-center rounded-xl bg-market-silver text-market-navy">
             <Store className="size-4" aria-hidden />
@@ -441,7 +441,7 @@ export function MarketFooter() {
 
   return (
     <footer className="mt-6 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto w-full max-w-7xl px-4 py-7">
+      <div className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-7">
         <div className="max-w-md">
           <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
           <p className="mt-1.5 text-sm leading-relaxed text-market-silver">
@@ -464,7 +464,7 @@ export function MarketFooter() {
         </div>
 
         {/* Desktop: four compact columns. */}
-        <div className="mt-6 hidden gap-8 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 hidden gap-8 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {groups.map((group) => (
             <div key={group.key} className="space-y-2">
               <p className="text-sm font-semibold">{t(`market.footer.${group.key}`)}</p>
@@ -494,7 +494,7 @@ export function MarketCompactFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
-      <p className="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-muted-foreground">
+      <p className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-4 text-center text-xs text-muted-foreground">
         {t("market.footer.rights")}
       </p>
     </footer>
@@ -509,7 +509,7 @@ export function MarketBrandFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-6 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto w-full max-w-7xl px-4 py-6">
+      <div className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-6">
         <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
         <p className="mt-1.5 text-sm leading-relaxed text-market-silver">{t("market.tagline")}</p>
         <p className="mt-3 text-xs text-market-silver-muted">{t("market.footer.rights")}</p>

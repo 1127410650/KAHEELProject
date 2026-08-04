@@ -86,7 +86,7 @@ export function useClearAdminCache() {
 /** Where a freshly signed-in user belongs: the console, or the normal flow. */
 export async function landingPathForSession(): Promise<string> {
   const identity = await loadPlatformIdentity();
-  return identity.is_platform_admin && !identity.restricted ? "/admin" : "/select-account";
+  return identity.is_platform_admin && !identity.restricted ? "/admin" : "/";
 }
 
 // ── Dashboard ────────────────────────────────────────────────────────────────

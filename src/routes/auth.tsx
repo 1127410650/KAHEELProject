@@ -66,7 +66,7 @@ function AuthPage() {
     try {
       return await landingPathForSession();
     } catch {
-      return "/select-account";
+      return "/";
     }
   }
 
@@ -108,28 +108,28 @@ function AuthPage() {
   if (!mounted) return null;
 
   return (
-    <div dir={dir} className="market-surface grid min-h-screen lg:grid-cols-2">
+    <div dir={dir} className="market-surface grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
 
-      <div className="relative hidden flex-col justify-between bg-sidebar p-10 lg:flex">
-        <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
-            <ShieldCheck className="size-5" aria-hidden />
-          </span>
-          <span className="text-lg font-bold text-sidebar-foreground">{t("app.name")}</span>
-        </div>
-        <div>
-          <h2 className="text-3xl font-bold leading-snug text-sidebar-foreground">
+      <div className="relative hidden flex-col justify-center bg-sidebar p-12 lg:flex">
+        <div className="mx-auto w-full max-w-md">
+          <div className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+              <ShieldCheck className="size-5" aria-hidden />
+            </span>
+            <span className="text-xl font-bold text-sidebar-foreground">{t("app.name")}</span>
+          </div>
+          <h2 className="mt-10 text-3xl font-bold leading-snug text-sidebar-foreground xl:text-4xl">
             {t("auth.welcome")}
           </h2>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-sidebar-foreground/70">
+          <p className="mt-4 text-sm leading-relaxed text-sidebar-foreground/70 xl:text-base">
             {t("market.tagline")}
           </p>
         </div>
-        <span aria-hidden />
       </div>
 
-      <div className="flex items-center justify-center px-5 py-12">
-        <div className="w-full max-w-sm">
+      <div className="flex items-center justify-center px-5 py-12 lg:px-10">
+        <div className="w-full max-w-sm lg:max-w-md">
+
           <div className="mb-8 flex items-center justify-between">
             <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground lg:hidden">
               <ShieldCheck className="size-5" aria-hidden />

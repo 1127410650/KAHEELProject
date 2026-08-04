@@ -88,7 +88,7 @@ function RegisterPage() {
   useEffect(() => setMounted(true), []);
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/choose-account", replace: true });
+      if (data.session) navigate({ to: "/", replace: true });
     });
   }, [navigate]);
 
@@ -346,7 +346,7 @@ function PublicSignupForm() {
         return;
       }
       toast.success(t("signup.created"));
-      let landing = "/select-account";
+      let landing = "/";
       try {
         landing = await landingPathForSession();
       } catch {

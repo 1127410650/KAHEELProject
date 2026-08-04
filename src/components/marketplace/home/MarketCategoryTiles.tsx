@@ -22,7 +22,7 @@ export function MarketCategoryTiles() {
   const { t, locale } = useI18n();
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
+    <section className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-5 sm:py-7">
       <h2 className="mb-3 text-base font-bold tracking-tight text-foreground sm:text-lg">
         {t("market.home.categories")}
       </h2>
