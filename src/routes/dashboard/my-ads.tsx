@@ -361,6 +361,9 @@ function MyAdsPage() {
         <Button asChild size="sm">
           <Link to="/dashboard/ads/new">{t("market.addListing")}</Link>
         </Button>
+        <Button asChild size="sm" variant="outline">
+          <Link to="/dashboard/points">{t("market.points.title")}</Link>
+        </Button>
         <div className="relative min-w-0 flex-1 sm:max-w-xs">
           <Search
             className="pointer-events-none absolute inset-y-0 my-auto size-4 text-muted-foreground start-2.5"
