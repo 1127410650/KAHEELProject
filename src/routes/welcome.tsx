@@ -225,29 +225,33 @@ function WelcomePage() {
         </section>
       </main>
 
-      <footer className="mt-auto border-t border-border bg-secondary/30">
-        <div className="mx-auto w-full max-w-6xl px-4 py-6">
-          <nav className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-muted-foreground">
-            <Link to="/more" className="hover:text-primary">
+      <footer className="mt-auto bg-market-navy text-market-navy-foreground">
+        <div className="mx-auto w-full max-w-6xl px-4 py-7">
+          <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
+          <p className="mt-1.5 max-w-md text-sm leading-relaxed text-market-silver">
+            {t("market.tagline")}
+          </p>
+          <nav className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-market-silver">
+            <Link to="/about" className="hover:text-market-navy-foreground">
               {t("welcome.footer.about")}
             </Link>
-            <Link to="/more" className="hover:text-primary">
+            <Link to="/help" className="hover:text-market-navy-foreground">
               {t("welcome.footer.help")}
             </Link>
-            <Link to="/more" className="hover:text-primary">
+            <Link to="/terms" className="hover:text-market-navy-foreground">
               {t("welcome.footer.terms")}
             </Link>
-            <Link to="/more" className="hover:text-primary">
+            <Link to="/privacy" className="hover:text-market-navy-foreground">
               {t("welcome.footer.privacy")}
             </Link>
-            <Link to="/more" className="hover:text-primary">
+            <Link to="/contact" className="hover:text-market-navy-foreground">
               {t("welcome.footer.contact")}
             </Link>
           </nav>
-          <p className="mt-3 text-[11px] text-muted-foreground">
-            {t("market.brand")} — {t("welcome.footer.rights")}
-          </p>
         </div>
+        <p className="border-t border-market-navy-soft py-4 text-center text-xs text-market-silver-muted">
+          {t("welcome.footer.rights")}
+        </p>
       </footer>
     </div>
   );

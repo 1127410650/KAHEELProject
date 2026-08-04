@@ -116,8 +116,8 @@ function AuthPage() {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col px-5 py-8 lg:px-10 lg:py-12">
-        <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center">
+      <div className="flex flex-1 flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] lg:px-10 lg:py-12">
+        <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col lg:justify-center">
           <div className="mb-6 flex items-center justify-between gap-3">
             <span className="text-xl font-bold tracking-tight text-foreground lg:hidden">
               {t("market.brand")}
@@ -211,7 +211,7 @@ function AuthPage() {
           </div>
         </div>
 
-        <p className="mt-8 text-center text-[11px] text-muted-foreground">{t("auth.rights")}</p>
+        <p className="mt-6 text-center text-[11px] text-muted-foreground">{t("auth.rights")}</p>
       </div>
     </div>
   );

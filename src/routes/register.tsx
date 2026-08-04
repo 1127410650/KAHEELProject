@@ -50,8 +50,8 @@ function inviteTokenFromUrl(): string | null {
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, dir } = useI18n();
   return (
-    <div dir={dir} className="market-surface flex min-h-screen items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
+    <div dir={dir} className="market-surface flex min-h-screen flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] sm:items-center sm:justify-center sm:py-10">
+      <div className="mx-auto w-full max-w-[440px]">
         <div className="mb-6 flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <ShieldCheck className="size-5" aria-hidden />
@@ -62,6 +62,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
         {children}
+        <p className="mt-6 text-center text-[11px] text-muted-foreground">{t("market.footer.rights")}</p>
       </div>
     </div>
   );
