@@ -136,7 +136,7 @@ function AdminBusinessesPage() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link to={`/admin/businesses/${row.tenant_id}`}>
+            <Link to="/admin/businesses/$id" params={{ id: row.tenant_id }}>
               <FolderOpen className="size-4" aria-hidden />
               {t("admin.detail.businessFile")}
             </Link>

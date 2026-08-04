@@ -221,14 +221,16 @@ function AdminListingDetailPage() {
                       label: t("admin.detail.advertiser"),
                       value: header.tenant_id ? (
                         <Link
-                          to={`/admin/businesses/${header.tenant_id}`}
+                          to="/admin/businesses/$id"
+                          params={{ id: header.tenant_id }}
                           className="text-primary underline-offset-2 hover:underline"
                         >
                           {header.tenant_name || header.tenant_id.slice(0, 8)}
                         </Link>
                       ) : header.owner_user_id ? (
                         <Link
-                          to={`/admin/users/${header.owner_user_id}`}
+                          to="/admin/users/$id"
+                          params={{ id: header.owner_user_id }}
                           className="text-primary underline-offset-2 hover:underline"
                         >
                           {header.owner_name || header.owner_user_id.slice(0, 8)}

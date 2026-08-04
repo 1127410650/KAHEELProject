@@ -151,7 +151,7 @@ function AdminVerificationDetailPage() {
             }
             actions={
               <Button asChild variant="outline" size="sm" className="min-h-11">
-                <Link to={`/admin/businesses/${header.tenant_id}`}>
+                <Link to="/admin/businesses/$id" params={{ id: header.tenant_id }}>
                   {t("admin.detail.openBusinessFile")}
                 </Link>
               </Button>
