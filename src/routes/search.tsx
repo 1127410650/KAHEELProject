@@ -16,6 +16,7 @@ import {
   loadListingsPage,
 } from "@/lib/mkt-queries";
 import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
