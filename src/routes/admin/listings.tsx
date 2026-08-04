@@ -197,21 +197,6 @@ function AdminListingsPage() {
         return list.sort((a, b) => time(b.created_at) - time(a.created_at));
     }
   }, [rows, sort, safety.data]);
-
-
-  const history = useQuery({
-    queryKey: ["mkt", "admin-listing-history", open?.id],
-    enabled: !!open,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("mkt_listing_status_history")
-        .select("id, from_status, to_status, reason, created_at")
-        .eq("listing_id", open!.id)
-        .order("created_at", { ascending: false });
-      return data ?? [];
-    },
-  });
-
   const bizName = (id: string | null) => {
     if (!id) return t("market.ad.individualAdvertiser");
     const biz = businesses.data?.find((b) => b.tenant_id === id);
@@ -230,14 +215,14 @@ function AdminListingsPage() {
       await reviewListing(decision.listing.id, decision.action, reason.trim() || undefined);
       toast.success(t("market.admin.decisionSaved"));
       setDecision(null);
-      setOpen(null);
       await listings.refetch();
-    } catch {
-      toast.error(t("market.actions.failed"));
+    } catch (error) {
+      toast.error(adminErrorMessage(error, t("market.actions.failed")));
     } finally {
       setBusy(false);
     }
   }
+
 
   return (
     <AdminShell title={t("market.admin.listings")}>
