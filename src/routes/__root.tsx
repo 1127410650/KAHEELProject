@@ -173,6 +173,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Real product analytics for every route: page views, timings, client errors.
+  useAnalyticsInstrumentation();
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
