@@ -9,7 +9,6 @@ import {
   Search,
   ShieldCheck,
   Store,
-  UserPlus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -103,25 +102,28 @@ export function MarketHeader() {
             <Skeleton aria-hidden className="h-8 w-24 shrink-0 rounded-md sm:w-36" />
           ) : (
             <>
-              <Button asChild size="sm" variant="outline">
+              {/* Guest auth actions must stay text-first on phones: icon-only
+                  buttons hid the primary entry points on 320–390 px screens. */}
+              <Button
+                asChild
+                size="sm"
+                variant="outline"
+                className="h-8 px-2 text-xs sm:px-3"
+              >
                 <Link to="/auth" aria-label={t("market.signIn")} title={t("market.signIn")}>
-                  <ShieldCheck className="size-4" aria-hidden />
-                  <span className="hidden sm:inline">{t("market.signIn")}</span>
+                  {t("market.signIn")}
                 </Link>
               </Button>
-              {/* On phones the signup action keeps a visible label: an icon-only
-                  button hid the primary entry point behind a tooltip. */}
-              <Button asChild size="sm" variant="default" className="shrink-0">
-                <Link
-                  to="/register"
-                  aria-label={t("auth.createAccount")}
-                  title={t("auth.createAccount")}
-                >
-                  <UserPlus className="size-4" aria-hidden />
-                  <span className="whitespace-nowrap">{t("auth.createAccount")}</span>
+              <Button
+                asChild
+                size="sm"
+                variant="default"
+                className="h-8 px-2 text-xs sm:px-3"
+              >
+                <Link to="/register" aria-label={t("market.signUp")} title={t("market.signUp")}>
+                  {t("market.signUp")}
                 </Link>
               </Button>
-
             </>
           )}
 

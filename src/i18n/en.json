@@ -1305,8 +1305,8 @@
   "market": {
     "brand": "Tahqaq Market",
     "tagline": "Marketplace for services, contracting and suppliers",
-    "signIn": "Sign in",
-    "signUp": "Create account",
+    "signIn": "Log in",
+    "signUp": "Sign up",
     "verified": "Verified",
     "categories": "Categories",
     "addListing": "Post a listing",
