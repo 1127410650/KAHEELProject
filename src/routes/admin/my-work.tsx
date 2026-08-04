@@ -138,6 +138,8 @@ function MyWorkPage() {
         </div>
       )}
 
+      {me && <AttendanceCard />}
+
       <WorkList
         title={t("admin.myWork.mineTitle")}
         loading={mine.isLoading}
