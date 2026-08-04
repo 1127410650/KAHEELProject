@@ -205,9 +205,10 @@ export function listingScope(account: MktAccount | null) {
 }
 
 /**
- * Gate for every private surface: the marketplace only works under one chosen
- * account, so a signed-in user without an active context is sent to the
- * selection screen (and back to where they were once they pick).
+ * Gate for every private surface. The account context resolves itself (personal
+ * account by default, remembered account when still valid), so there is no
+ * mandatory selection screen. The legacy picker is only used as a safety net for
+ * the rare case where the user holds no reachable account at all.
  */
 export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
   const state = useActiveAccount();
@@ -219,21 +220,28 @@ export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
   // in the effect deps used to re-fire the redirect endlessly ("Maximum update
   // depth exceeded") instead of settling on the picker.
   const redirected = useRef(false);
+  const warned = useRef(false);
 
   useEffect(() => {
+    if (state.revoked && revokedMessage && !warned.current) {
+      warned.current = true;
+      toast.error(revokedMessage);
+    }
     // Never redirect while the session is still being restored, and never because
     // a network/RPC failure hid the account list: that is retried, not a sign-out.
     if (sessionLoading || !session || state.loading || state.account || state.unavailable) return;
+    // An account exists and is being activated automatically — no screen needed.
+    if (state.accounts.length > 0) return;
     if (redirected.current || pathname === "/choose-account") return;
     redirected.current = true;
-    if (state.revoked && revokedMessage) toast.error(revokedMessage);
     void navigate({
       to: "/choose-account",
       search: { next: href },
       replace: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionLoading, session, state.loading, state.account, state.revoked, state.unavailable, pathname]);
+  }, [sessionLoading, session, state.loading, state.account, state.revoked, state.unavailable, state.accounts.length, pathname]);
+
 
 
   return state;
