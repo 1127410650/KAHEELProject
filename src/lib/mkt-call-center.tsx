@@ -299,6 +299,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
           errorKey: null,
           muted: false,
           seconds: 0,
+          needsAudioGesture: false,
         });
         const rtc = attachSession(started.call_id, true);
         try {
@@ -310,12 +311,14 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
         }
         await rtc.connect();
         ringTimer.current = setTimeout(() => {
-          void transitionCall(started.call_id, "no_answer").catch(() => undefined);
+          // Offline or simply not picking up: log a missed call for the callee.
+          void markCallMissed(started.call_id, "no_answer").catch(() => undefined);
           void finish("no_answer", null, true);
         }, RING_TIMEOUT_MS);
       } catch (error) {
         const message = error instanceof Error ? error.message : "generic";
-        const key = message.includes("rate") ? "rate_limited" : "generic";
+        const reason = message.match(/CALL_NOT_ALLOWED:(\w+)/)?.[1];
+        const key = reason ?? (message.includes("rate") ? "rate_limited" : "generic");
         toast.error(t(`market.call.error.${key}`));
         await teardown(false);
         setCall(null);
@@ -325,6 +328,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     },
     [attachSession, finish, t, teardown, userId],
   );
+
 
   const accept = useCallback(async () => {
     const current = call;
