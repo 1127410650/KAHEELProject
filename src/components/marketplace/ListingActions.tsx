@@ -1,21 +1,20 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Flag, Heart, MapPin, MessageSquare, QrCode, ReceiptText, Share2 } from "lucide-react";
+import { Flag, Heart, MapPin, MessageSquare, QrCode, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { currentPath, loginHref, SA_CITIES, type MktAction, type MktListing } from "@/lib/mkt";
+import { currentPath, loginHref, type MktAction, type MktListing } from "@/lib/mkt";
 import { ReportDialog } from "@/components/marketplace/ReportDialog";
 import { QrCodeButton } from "@/components/marketplace/QrCodeButton";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
 import { CallButton } from "@/components/marketplace/CallButton";
+import { chatErrorKey, openConversation, sendMessage } from "@/lib/mkt-chat";
 
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -57,8 +56,10 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   // Re-open the action the visitor picked before signing in.
   useEffect(() => {
     if (!session || !pendingAction) return;
-    if (pendingAction === "quote" || pendingAction === "contact" || pendingAction === "report") {
-      setDialog(pendingAction);
+    if (pendingAction === "quote" || pendingAction === "contact") {
+      setDialog("contact");
+    } else if (pendingAction === "report") {
+      setDialog("report");
     } else if (pendingAction === "save") {
       void toggleFavorite();
     }
@@ -214,113 +215,13 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   return (
     <>
       <div className="grid gap-2 sm:grid-cols-2">
-        <Button
-          size="lg"
-          className="sm:col-span-2"
-          onClick={() => gate("quote") && setDialog("quote")}
-        >
-          <ReceiptText className="size-4" aria-hidden />
-          {t("market.actions.requestQuote")}
-        </Button>
-        <Button
-          variant="secondary"
-          className="sm:col-span-2"
-          onClick={() => gate("contact") && setDialog("contact")}
-        >
+        <Button size="lg" className="sm:col-span-2" onClick={() => gate("contact") && setDialog("contact")}>
           <MessageSquare className="size-4" aria-hidden />
           {t("market.actions.contact")}
         </Button>
         {/* Free in-platform voice call; hides itself when not available. */}
         {!isOwner && <CallButton listingId={listing.id} className="h-11 sm:col-span-2 sm:h-10" />}
       </div>
-
-      <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{t("market.actions.requestQuote")}</DialogTitle>
-            <DialogDescription>{listing.title}</DialogDescription>
-          </DialogHeader>
-          <form
-            className="space-y-3"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void submitQuote(e.currentTarget);
-            }}
-          >
-            <div className="space-y-1.5">
-              <Label htmlFor="title">{t("market.quote.title")}</Label>
-              <Input id="title" name="title" required defaultValue={listing.title} />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="description">{t("market.quote.description")}</Label>
-              <Textarea id="description" name="description" rows={3} required />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
-                <Input id="quantity" name="quantity" dir="ltr" inputMode="decimal" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="unit">{t("market.quote.unit")}</Label>
-                <Input id="unit" name="unit" />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="city">{t("market.quote.city")}</Label>
-                <select
-                  id="city"
-                  name="city"
-                  className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-                  defaultValue={listing.city ?? ""}
-                >
-                  <option value="">{t("market.filters.allCities")}</option>
-                  {SA_CITIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="needed_date">{t("market.quote.neededDate")}</Label>
-                <Input id="needed_date" name="needed_date" type="date" dir="ltr" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="location_note">{t("market.quote.locationNote")}</Label>
-              <Input id="location_note" name="location_note" />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="budget">{t("market.quote.budget")}</Label>
-                <Input id="budget" name="budget" dir="ltr" inputMode="decimal" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="contact_phone">{t("market.quote.phone")}</Label>
-                <Input id="contact_phone" name="contact_phone" dir="ltr" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="contact_preference">{t("market.quote.contactPreference")}</Label>
-              <select
-                id="contact_preference"
-                name="contact_preference"
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-                defaultValue="in_app"
-              >
-                <option value="in_app">{t("market.quote.prefInApp")}</option>
-                <option value="phone">{t("market.quote.prefPhone")}</option>
-                <option value="whatsapp">{t("market.quote.prefWhatsapp")}</option>
-                <option value="email">{t("market.quote.prefEmail")}</option>
-              </select>
-            </div>
-            <Button type="submit" className="w-full" disabled={busy}>
-              {t("market.actions.sendQuote")}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
 
       <Dialog open={dialog === "contact"} onOpenChange={(o) => !o && setDialog(null)}>
         <DialogContent className="sm:max-w-md">
