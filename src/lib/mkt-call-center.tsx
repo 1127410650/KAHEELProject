@@ -76,6 +76,8 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ringTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tickTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const callRef = useRef<ActiveCall | null>(null);
+  callRef.current = call;
 
   const clearTimers = useCallback(() => {
     if (ringTimer.current) clearTimeout(ringTimer.current);
