@@ -41,6 +41,7 @@ import {
   deleteListing,
   duplicateListing,
   pauseListing,
+  reactivateListing,
   remainingLabel,
   renewListing,
   restoreListing,
