@@ -125,7 +125,7 @@ export function useMyStorefront(accountKey: string | null) {
     staleTime: 15_000,
     queryFn: async (): Promise<MyStorefront | null> => {
       const { data, error } = await supabase.rpc("mkt_my_storefront", {
-        _account_key: accountKey,
+        _account_key: accountKey ?? undefined,
       });
       if (error) throw error;
       return ((data ?? []) as MyStorefront[])[0] ?? null;
@@ -141,7 +141,7 @@ export function useStoreDraft(accountKey: string | null) {
     staleTime: 0,
     queryFn: async (): Promise<StoreDraft | null> => {
       const { data, error } = await supabase.rpc("mkt_store_draft", {
-        _account_key: accountKey,
+        _account_key: accountKey ?? undefined,
       });
       if (error) throw error;
       return (data as StoreDraft | null) ?? null;
@@ -177,7 +177,7 @@ export async function saveStore(
     _account_key: accountKey,
     _patch: patch as never,
     _step: step,
-    _idempotency_key: idempotencyKey ?? null,
+    _idempotency_key: idempotencyKey ?? undefined,
   });
   if (error) throw error;
   return data as string;
@@ -209,7 +209,7 @@ export async function submitStore(storefrontId: string): Promise<SubmitResult> {
     _storefront_id: storefrontId,
   });
   if (error) throw error;
-  return (data as SubmitResult) ?? { ok: false };
+  return (data as unknown as SubmitResult) ?? { ok: false };
 }
 
 /* ── media ─────────────────────────────────────────────────────────────────── */
