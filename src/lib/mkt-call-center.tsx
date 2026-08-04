@@ -331,6 +331,24 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     [teardown],
   );
 
+  /**
+   * Closing/refreshing the tab must not leave a call hanging for the other side:
+   * best-effort transition on pagehide, and the every-minute server sweep closes
+   * anything the browser could not send in time.
+   */
+  useEffect(() => {
+    const onPageHide = () => {
+      const current = callRef.current;
+      if (current && !isTerminalCallStatus(current.status)) {
+        const next: CallStatus = current.status === "connected" ? "ended" : "cancelled";
+        void transitionCall(current.id, next).catch(() => undefined);
+      }
+      void teardown(false);
+    };
+    window.addEventListener("pagehide", onPageHide);
+    return () => window.removeEventListener("pagehide", onPageHide);
+  }, [teardown]);
+
   const value = useMemo<CallCenterValue>(
     () => ({ call, placeCall, accept, decline, hangUp, toggleMute, dismiss, starting }),
     [accept, call, decline, dismiss, hangUp, placeCall, starting, toggleMute],
