@@ -13,7 +13,6 @@ import {
   LogOut,
   MessageSquare,
   Repeat,
-  Settings,
   ShieldAlert,
   ShieldCheck,
   User,
