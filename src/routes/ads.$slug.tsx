@@ -26,6 +26,7 @@ import { trackMarketActivity } from "@/lib/mkt-activity";
 import { locationLink } from "@/lib/mkt-location-link";
 import { loadPublicLicense } from "@/lib/mkt-license";
 
+import { track } from "@/lib/analytics";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ListingGallery } from "@/components/marketplace/ListingGallery";
@@ -430,6 +431,14 @@ function AdPage() {
     const row = ad.data?.listing;
     if (!row?.id || row.status !== "published") return;
     void supabase.rpc("mkt_increment_views", { _listing_id: row.id });
+    // Central analytics: a real listing view, visitors included.
+    track({
+      event_type: "listing_view",
+      path: "/ads",
+      listing_id: row.id,
+      category_id: row.category_id ?? undefined,
+      city_id: row.city_id ?? undefined,
+    });
     // Feeds "Suggested for you" — ad + category + city only.
     trackMarketActivity({
       event: "view_ad",

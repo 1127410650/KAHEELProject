@@ -812,19 +812,19 @@ function SearchPage() {
               {/* Phones show one clear card per row; two columns from tablet up. */}
               <div className="flex flex-col gap-2.5 sm:hidden">
                 {rows.map((l) => (
-                  <ListingCard key={l.id} listing={l} view="row" />
+                  <ListingCard key={l.id} listing={l} view="row" origin="search" />
                 ))}
               </div>
               <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
                 {rows.map((l) => (
-                  <ListingCard key={l.id} listing={l} />
+                  <ListingCard key={l.id} listing={l} origin="search" />
                 ))}
               </div>
             </>
           ) : (
             <div className="space-y-2.5">
               {rows.map((l) => (
-                <ListingCard key={l.id} listing={l} view="list" />
+                <ListingCard key={l.id} listing={l} view="list" origin="search" />
               ))}
             </div>
           )}
