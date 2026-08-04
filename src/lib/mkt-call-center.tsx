@@ -21,7 +21,7 @@ import {
   createCallRequest,
   loadCallPeer,
   markCallMissed,
-  setCallMode,
+  stopReceivingCalls,
   startCall,
   startCallFromRequest,
   transitionCall,
@@ -516,8 +516,32 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
   }, [teardown]);
 
   const value = useMemo<CallCenterValue>(
-    () => ({ call, placeCall, accept, decline, hangUp, toggleMute, dismiss, starting }),
-    [accept, call, decline, dismiss, hangUp, placeCall, starting, toggleMute],
+    () => ({
+      call,
+      placeCall,
+      requestCall,
+      startFromRequest,
+      accept,
+      decline,
+      hangUp,
+      toggleMute,
+      dismiss,
+      stopReceiving,
+      starting,
+    }),
+    [
+      accept,
+      call,
+      decline,
+      dismiss,
+      hangUp,
+      placeCall,
+      requestCall,
+      startFromRequest,
+      starting,
+      stopReceiving,
+      toggleMute,
+    ],
   );
 
   return (
@@ -536,6 +560,9 @@ export function useCallCenter(): CallCenterValue {
   return {
     call: null,
     placeCall: async () => undefined,
+    requestCall: async () => false,
+    startFromRequest: async () => undefined,
+    stopReceiving: async () => undefined,
     accept: async () => undefined,
     decline: async () => undefined,
     hangUp: async () => undefined,

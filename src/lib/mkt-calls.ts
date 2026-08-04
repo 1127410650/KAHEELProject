@@ -159,6 +159,12 @@ export async function closeCallRequest(requestId: string, reason?: string) {
   if (error) throw error;
 }
 
+/** Always-available kill switch across every account of the signed-in user. */
+export async function stopReceivingCalls() {
+  const { error } = await supabase.rpc("mkt_call_stop_receiving");
+  if (error) throw error;
+}
+
 /** Records a missed call (offline/busy/no answer) and notifies the callee. */
 export async function markCallMissed(callId: string, reason: "no_answer" | "busy" = "no_answer") {
   const { error } = await supabase.rpc("mkt_call_missed", {
