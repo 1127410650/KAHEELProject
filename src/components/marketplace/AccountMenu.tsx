@@ -21,6 +21,8 @@ import {
   X,
 } from "lucide-react";
 
+import { toast } from "sonner";
+
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
