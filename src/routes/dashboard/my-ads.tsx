@@ -274,28 +274,36 @@ function MyAdsPage() {
     });
   }, [all, filter, term, sort]);
 
-/** Op error code → user-facing message key. */
-const OP_ERROR_KEYS: Record<string, string> = {
-  invalid_state: "market.ops.invalidState",
-  forbidden: "market.ops.forbidden",
-  license_required: "market.ops.licenseRequired",
-  admin_suspended: "market.ops.adminSuspended",
-  account_restricted: "market.ops.accountRestricted",
-  category_inactive: "market.ops.categoryInactive",
-  already_promoted: "market.promote.alreadyPromoted",
-  insufficient_points: "market.promote.insufficientPoints",
-  image_required: "market.ops.imageRequired",
-  images_incomplete: "market.ops.imagesIncomplete",
-  images_too_many: "market.ops.imagesTooMany",
-  business_incomplete: "market.ops.businessIncomplete",
-  geo_required: "market.ops.geoRequired",
-  not_found: "market.ops.notFound",
-};
+  async function run(id: string, action: () => Promise<unknown>, successKey: string) {
+    setBusyId(id);
+    try {
+      await action();
+      toast.success(t(successKey));
+      await ads.refetch();
+    } catch (error) {
+      const code = error instanceof Error ? error.message : "failed";
+      toast.error(t(OP_ERROR_KEYS[code] ?? "market.actions.failed"));
+    } finally {
+      setBusyId(null);
+    }
+  }
 
-function MyAdsPageBody() {
-  return null;
-}
-void MyAdsPageBody;
+  /** Reactivation is re-scanned server-side, so the toast follows the outcome. */
+  async function onReactivate(id: string) {
+    setBusyId(id);
+    try {
+      const outcome = await reactivateListing(id);
+      toast.success(
+        outcome === "published" ? t("market.ops.reactivated") : t("market.ops.reactivateReview"),
+      );
+      await ads.refetch();
+    } catch (error) {
+      const code = error instanceof Error ? error.message : "failed";
+      toast.error(t(OP_ERROR_KEYS[code] ?? "market.actions.failed"));
+    } finally {
+      setBusyId(null);
+    }
+  }
 
 
   async function onDuplicate(id: string) {
