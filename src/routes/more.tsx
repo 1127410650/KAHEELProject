@@ -25,7 +25,7 @@ import {
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
-import { signOutEverywhere } from "@/lib/auth-signout";
+import { useSignOut } from "@/lib/auth-signout";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 
 const title = "المزيد — كحلي";
@@ -58,6 +58,7 @@ function MorePage() {
   const { session } = useSession();
   const { account: active } = useActiveAccount();
   const Arrow = dir === "rtl" ? ChevronLeft : ChevronRight;
+  const signOut = useSignOut();
 
   const rowClass =
     "flex min-h-12 items-center gap-3 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent";
@@ -166,7 +167,7 @@ function MorePage() {
           <Section title={t("market.more.session")}>
             <button
               type="button"
-              onClick={() => void signOutEverywhere()}
+              onClick={() => void signOut()}
               className={`${rowClass} w-full text-destructive`}
             >
               <LogOut className="size-4 shrink-0" aria-hidden />
