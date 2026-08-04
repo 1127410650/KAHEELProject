@@ -1,0 +1,1 @@
+DELETE FROM public.mkt_platform_admins WHERE granted_reason = 'qa-switch-2026-08-04-v1 admin isolation proof';
