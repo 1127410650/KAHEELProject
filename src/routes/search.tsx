@@ -15,6 +15,8 @@ import {
   loadListingTypes,
   loadListingsPage,
 } from "@/lib/mkt-queries";
+import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
@@ -95,11 +97,15 @@ export const Route = createFileRoute("/search")({
       const value = search[key];
       if (typeof value === "string" && value !== "") out[key] = value;
     }
+    // Legacy «عقار ديل» links carry an alias slug; resolve it onto the single
+    // canonical «عقارات» category so no duplicate field ever appears.
+    if (out.category) out.category = canonicalCategorySlug(out.category);
     // Entry points that predate the field selector (home quick strip, saved
     // links) still resolve to one of the five fields instead of being dropped.
     if (!out.domain) {
       if (search["advertiser"] === "business") out.domain = "business";
       else if (out.category === "real-estate") out.domain = "realestate";
+
       else if (
         out.type === "service" ||
         out.type === "product" ||

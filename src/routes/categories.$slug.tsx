@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -6,12 +6,29 @@ import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { LISTING_COLUMNS, type MktCategory, type MktListing } from "@/lib/mkt";
 import { decorateListings, loadCategories } from "@/lib/mkt-queries";
+import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/categories/$slug")({
   ssr: false,
+  // Legacy «عقار ديل» links land on the canonical «عقارات» page with their
+  // city / filters / sort / page / hash intact. `canonicalCategorySlug` is a
+  // fixed point for canonical slugs, so this can never loop.
+  beforeLoad: ({ params, location }) => {
+    const canonical = canonicalCategorySlug(params.slug);
+    if (canonical === params.slug) return;
+    throw redirect({
+      to: "/categories/$slug",
+      params: { slug: canonical },
+      search: location.search as never,
+      ...(location.hash ? { hash: location.hash } : {}),
+      replace: true,
+    });
+  },
+
+
   head: ({ params }) => {
     const title = `تصنيف ${params.slug} — سوق تحقّق`;
     const description =

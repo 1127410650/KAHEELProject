@@ -21,13 +21,16 @@ export interface HomeCategoryEntry {
   keyword?: { ar: string; en: string };
 }
 
-/** 18 chips (home + 17 fields); the rail adds a 19th "more" opener. */
+/**
+ * 17 chips (home + 16 fields); the rail adds an 18th "more" opener.
+ * «عقارات» appears exactly once: the old «عقار ديل» chip pointed at the same
+ * `real-estate` category and was removed as a duplicate (see mkt-category-alias).
+ */
 export const HOME_CATEGORIES: HomeCategoryEntry[] = [
   { key: "home", home: true },
   { key: "realestate", params: { category: "real-estate" } },
   { key: "cars", keyword: { ar: "سيارة", en: "car" } },
   { key: "devices", keyword: { ar: "جهاز", en: "device" } },
-  { key: "realdeal", params: { category: "real-estate", domain: "realestate" } },
   { key: "restaurants", keyword: { ar: "مطعم", en: "restaurant" } },
   { key: "furniture", keyword: { ar: "أثاث", en: "furniture" } },
   { key: "services", params: { type: "service" } },
