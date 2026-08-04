@@ -300,7 +300,7 @@ function AdminWorkforcePage() {
         <div className="mt-3 grid gap-2">
           {items.map((item) => (
             <div key={item.id} className="rounded-xl border border-border bg-card p-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
                 <div className="min-w-0">
                   <Link
                     to={workItemHref(item)}
