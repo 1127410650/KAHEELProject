@@ -458,7 +458,9 @@ export function MarketShell({
       <MarketHeader />
       {/* `main` always grows, so a short page pushes the footer to the bottom of
        * the viewport instead of leaving a blank strip after it. */}
-      <main className="flex-1">{children}</main>
+      {/* No `flex-1` stretch: the footer follows the last section directly, so a
+       * short page never shows a tall blank strip before it. */}
+      <main>{children}</main>
 
 
       {variant === "full" && <MarketFooter />}
