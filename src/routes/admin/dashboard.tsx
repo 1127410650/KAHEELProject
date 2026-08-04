@@ -24,7 +24,6 @@ import {
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { Skeleton } from "@/components/ui/skeleton";
-import { supabase } from "@/integrations/supabase/client";
 import {
   loadAnalyticsFields,
   loadAnalyticsFunnel,
@@ -150,17 +149,17 @@ function AnalyticsDashboardPage() {
   const ops = useQuery({ queryKey: ["an", "ops", days], queryFn: () => loadAnalyticsOps(days), ...opts });
   const geo = useQuery({ queryKey: ["an", "geo"], queryFn: () => loadAnalyticsGeo(12), ...opts });
 
-  // Live refresh: new traffic events invalidate the aggregate reads.
+  /*
+   * Live refresh without exposing raw traffic rows: the event table is
+   * deliberately not readable by the client, so the page re-runs the guarded
+   * aggregate RPCs on a 60s interval and whenever the tab regains focus.
+   */
   useEffect(() => {
-    const channel = supabase
-      .channel("analytics-live")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "mkt_analytics_events" }, () => {
-        void qc.invalidateQueries({ queryKey: ["an"] });
-      })
-      .subscribe();
-    return () => {
-      void supabase.removeChannel(channel);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void qc.invalidateQueries({ queryKey: ["an"] });
     };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, [qc]);
 
   const chartRows = useMemo(
