@@ -164,7 +164,11 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
         (payload) => {
           const row = payload.new as { id: string; status: CallStatus };
           if (row.status !== "requesting" && row.status !== "ringing") return;
-          if (sessionRef.current) return; // already busy on this device
+          if (sessionRef.current) {
+            // Already on a call on this device: the caller sees a missed call.
+            void markCallMissed(row.id, "busy").catch(() => undefined);
+            return;
+          }
           void (async () => {
             const peer = await loadCallPeer(row.id);
             setCall({
@@ -179,12 +183,18 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
               errorKey: null,
               muted: false,
               seconds: 0,
+              needsAudioGesture: false,
             });
             await transitionCall(row.id, "ringing").catch(() => undefined);
             ringTimer.current = setTimeout(() => {
-              void transitionCall(row.id, "no_answer").catch(() => undefined);
+              void markCallMissed(row.id, "no_answer").catch(() => undefined);
               void finish("no_answer", null, false);
             }, RING_TIMEOUT_MS);
+
+            // Direct mode: connect straight away when the microphone permission
+            // is already granted, otherwise ask for one tap ("start audio").
+            if (await micAlreadyGranted()) void acceptRef.current?.();
+            else setCall((prev) => (prev ? { ...prev, needsAudioGesture: true } : prev));
           })();
         },
       )
@@ -193,6 +203,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       void supabase.removeChannel(channel);
     };
   }, [userId, finish]);
+
 
   /* ------------------- peer-side status changes (both) ------------------ */
   useEffect(() => {
