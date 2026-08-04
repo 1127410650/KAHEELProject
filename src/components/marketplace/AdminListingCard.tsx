@@ -77,6 +77,14 @@ export function actionsForStatus(status: string): QuickAction[] {
         { action: "return", labelKey: "market.admin.returnToOwner" },
         { action: "suspend", labelKey: "market.admin.suspend", danger: true },
       ];
+    case "deleted":
+      return [];
+    case "draft":
+    case "hidden":
+      return [
+        { action: "return", labelKey: "market.admin.returnToOwner" },
+        { action: "suspend", labelKey: "market.admin.suspend", danger: true },
+      ];
     default:
       return [
         { action: "approve", labelKey: "market.admin.approve" },
@@ -215,7 +223,11 @@ export function AdminListingCard({
 
   const advertiserLink =
     listing.tenant_id ? (
-      <AdminBusinessLink id={listing.tenant_id} name={advertiserName} className="text-[11px]" />
+      <AdminBusinessLink
+        id={listing.tenant_id}
+        name={advertiserName === "—" ? t("market.admin.business") : advertiserName}
+        className="text-[11px]"
+      />
     ) : (
       <AdminUserLink
         id={listing.owner_user_id}
