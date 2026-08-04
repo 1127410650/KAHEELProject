@@ -148,11 +148,11 @@ export async function saveStaff(
 ): Promise<void> {
   const { error } = await supabase.rpc("mkt_workforce_set_staff", {
     _user_id: userId,
-    _work_state: update.work_state ?? undefined,
-    _capacity_limit: update.capacity_limit ?? undefined,
-    _accepts_auto: update.accepts_auto ?? undefined,
-    _department: update.department ?? undefined,
-    _note: update.note ?? undefined,
+    ...(update.work_state ? { _work_state: update.work_state } : {}),
+    ...(typeof update.capacity_limit === "number" ? { _capacity_limit: update.capacity_limit } : {}),
+    ...(typeof update.accepts_auto === "boolean" ? { _accepts_auto: update.accepts_auto } : {}),
+    ...(update.department ? { _department: update.department } : {}),
+    ...(update.note ? { _note: update.note } : {}),
     _reason: reason,
   });
   if (error) throw error;
@@ -171,8 +171,8 @@ export async function addLeave(input: {
     _kind: input.kind,
     _starts_on: input.startsOn,
     _ends_on: input.endsOn,
-    _note: input.note ?? undefined,
-    _substitute: input.substitute ?? undefined,
+    ...(input.note ? { _note: input.note } : {}),
+    ...(input.substitute ? { _substitute: input.substitute } : {}),
   });
   if (error) throw error;
 }
