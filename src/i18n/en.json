@@ -3349,12 +3349,14 @@
       "priorityLabel": "Priority",
       "progressLabel": "Processing stage",
       "confirmTitle": "Confirm operational change",
+      "details": "Details",
+      "hideDetails": "Hide details",
+      "stateSource": "The status decides auto-assignment on its own",
       "state": {
-        "available": "Available",
-        "busy": "Busy",
-        "away": "Temporarily away",
+        "available": "Available and receiving work",
+        "paused": "Not receiving work",
         "leave": "On leave",
-        "off": "Not receiving work"
+        "off": "Inactive"
       },
       "priority": {
         "urgent": "Urgent",
