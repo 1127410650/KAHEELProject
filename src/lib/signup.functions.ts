@@ -20,7 +20,7 @@ export const signUpPublic = createServerFn({ method: "POST" })
     (data: PublicSignupInput & Record<string, unknown>): PublicSignupInput => ({
       full_name: String(data?.full_name ?? ""),
       email: String(data?.email ?? ""),
-      phone: data?.phone == null ? undefined : String(data.phone),
+      phone: String(data?.phone ?? ""),
       password: String(data?.password ?? ""),
     }),
   )
