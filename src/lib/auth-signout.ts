@@ -21,11 +21,25 @@ import { clearAuthStorage } from "@/lib/auth-storage";
 /** Active-account memory key owned by `src/lib/mkt-account.tsx`. */
 const ACCOUNT_KEY = "tahqaq.mkt.account";
 
+let signingOut = false;
+
+/**
+ * True from the moment a manual sign-out starts until the browser leaves the
+ * page. Session-dependent redirects (the account picker sending signed-out
+ * visitors to `/auth`) must stand down while this is true, otherwise they race
+ * the sign-out navigation and the user lands on the sign-in page instead of the
+ * public landing page.
+ */
+export function isSigningOut(): boolean {
+  return signingOut;
+}
+
 export function useSignOut() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return async function signOut() {
+    signingOut = true;
     markManualSignOut();
     try {
       window.localStorage.removeItem(ACCOUNT_KEY);
@@ -36,6 +50,9 @@ export function useSignOut() {
     queryClient.clear();
     await supabase.auth.signOut();
     clearAuthStorage();
-    void navigate({ to: "/welcome", replace: true });
+    await navigate({ to: "/welcome", replace: true }).catch(() => {
+      if (typeof window !== "undefined") window.location.replace("/welcome");
+    });
+    signingOut = false;
   };
 }

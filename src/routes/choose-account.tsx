@@ -4,7 +4,7 @@ import { Building2, Check, Loader2, LogOut, Plus, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useSignOut } from "@/lib/auth-signout";
+import { isSigningOut, useSignOut } from "@/lib/auth-signout";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
@@ -152,11 +152,11 @@ function ChooseAccountPage() {
   const target = safeNext.startsWith("/choose-account") ? "/" : safeNext;
 
   const navigate = useNavigate();
-  const { accounts, account: activeAccount, loading, select } = useActiveAccount();
+  const { accounts, account: activeAccount, loading, unavailable, select } = useActiveAccount();
   const [pending, setPending] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!sessionLoading && !session) {
+    if (!sessionLoading && !session && !isSigningOut()) {
       // Keep the intended destination so signing in lands back here.
       const back = `/choose-account${next ? `?next=${encodeURIComponent(next)}` : ""}`;
       void navigate({ href: `/auth?next=${encodeURIComponent(back)}`, replace: true });
