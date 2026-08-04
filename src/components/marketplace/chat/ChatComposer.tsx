@@ -121,15 +121,39 @@ export function ChatComposer({
     }
   }
 
+  function stage(kind: Pending["kind"], file: File, extra: Record<string, unknown> = {}) {
+    if (file.size > CHAT_LIMITS[kind]) {
+      toast.error(t("market.chat.errors.tooLarge"));
+      return;
+    }
+    setPending({ kind, file, url: URL.createObjectURL(file), extra });
+  }
+
+  function discardPending() {
+    if (pending) URL.revokeObjectURL(pending.url);
+    setPending(null);
+  }
+
   function onFile(file: File | undefined) {
     if (!file) return;
-    void guard(() => sendAttachment(conversationId, pickKind.current, file));
+    stage(pickKind.current, file);
+  }
+
+  function confirmPending() {
+    if (!pending) return;
+    const item = pending;
+    void guard(async () => {
+      await sendAttachment(conversationId, item.kind, item.file, item.extra);
+      URL.revokeObjectURL(item.url);
+      setPending(null);
+    });
   }
 
   async function startRecording() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       chunks.current = [];
+      keep.current = true;
       const rec = new MediaRecorder(stream);
       rec.ondataavailable = (e) => {
         if (e.data.size > 0) chunks.current.push(e.data);
@@ -140,12 +164,11 @@ export function ChatComposer({
         const blob = new Blob(chunks.current, { type: rec.mimeType || "audio/webm" });
         setRecording(false);
         setElapsed(0);
-        if (seconds < 1) return;
+        if (!keep.current || seconds < 1) return;
         const ext = (rec.mimeType || "audio/webm").includes("mp4") ? "m4a" : "webm";
         const file = new File([blob], `voice-${Date.now()}.${ext}`, { type: blob.type });
-        void guard(() =>
-          sendAttachment(conversationId, "audio", file, { duration: Math.round(seconds) }),
-        );
+        // Voice notes are reviewable: the sender hears it and can delete it.
+        stage("audio", file, { duration: Math.round(seconds) });
       };
       recorder.current = rec;
       started.current = Date.now();
@@ -157,6 +180,13 @@ export function ChatComposer({
   }
 
   function stopRecording() {
+    keep.current = true;
+    recorder.current?.stop();
+    recorder.current = null;
+  }
+
+  function cancelRecording() {
+    keep.current = false;
     recorder.current?.stop();
     recorder.current = null;
   }
@@ -180,19 +210,60 @@ export function ChatComposer({
 
   if (recording) {
     return (
-      <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-card p-3">
         <span className="inline-flex size-2.5 animate-pulse rounded-full bg-destructive" aria-hidden />
         <span className="text-sm tabular-nums" dir="ltr">
           {Math.floor(elapsed / 60)}:{String(Math.floor(elapsed % 60)).padStart(2, "0")}
         </span>
         <span className="text-xs text-muted-foreground">{t("market.chat.voice.maxLength")}</span>
-        <Button size="sm" className="ms-auto" onClick={stopRecording}>
-          <Square className="size-4" aria-hidden />
-          {t("market.chat.voice.stop")}
-        </Button>
+        <div className="ms-auto flex items-center gap-2">
+          <Button size="sm" variant="ghost" onClick={cancelRecording}>
+            <Trash2 className="size-4" aria-hidden />
+            {t("market.chat.cancel")}
+          </Button>
+          <Button size="sm" onClick={stopRecording}>
+            <Square className="size-4" aria-hidden />
+            {t("market.chat.voice.stop")}
+          </Button>
+        </div>
       </div>
     );
   }
+
+  if (pending) {
+    return (
+      <div className="space-y-3 rounded-xl border border-border bg-card p-3">
+        <p className="text-sm font-semibold">
+          {pending.kind === "audio"
+            ? t("market.chat.preview.voiceTitle")
+            : t("market.chat.preview.attachTitle")}
+        </p>
+        {pending.kind === "image" ? (
+          <img src={pending.url} alt="" className="max-h-56 w-full rounded-lg object-contain" />
+        ) : pending.kind === "video" ? (
+          <video src={pending.url} controls className="max-h-56 w-full rounded-lg" />
+        ) : pending.kind === "audio" ? (
+          <audio src={pending.url} controls className="w-full" />
+        ) : (
+          <p className="flex items-center gap-2 break-all text-sm">
+            <Paperclip className="size-4 shrink-0" aria-hidden />
+            {pending.file.name}
+          </p>
+        )}
+        <div className="flex items-center gap-2">
+          <Button className="flex-1" onClick={confirmPending} disabled={busy}>
+            <Send className="size-4" aria-hidden />
+            {busy ? t("market.chat.sending") : t("market.chat.confirmSend")}
+          </Button>
+          <Button variant="secondary" onClick={discardPending} disabled={busy}>
+            <Trash2 className="size-4" aria-hidden />
+            {t("market.chat.cancel")}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="space-y-2">
