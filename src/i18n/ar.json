@@ -1717,7 +1717,22 @@
       },
       "logTab": "سجل العمليات",
       "listingReports": "بلاغات الإعلانات",
-      "owner": "المعلن"
+      "owner": "المعلن",
+      "sortRisk": "الأعلى خطورة",
+      "sortReports": "الأكثر بلاغات",
+      "sortExpiring": "الأقرب انتهاءً",
+      "results": "عدد النتائج",
+      "noImage": "لا توجد صورة",
+      "unsuspend": "رفع الإيقاف",
+      "republish": "إعادة نشر",
+      "openReports": "فتح البلاغات",
+      "moreActions": "إجراءات أخرى",
+      "loadFailed": "تعذّر تحميل الإعلانات",
+      "retry": "إعادة المحاولة",
+      "createdAt": "تاريخ النشر",
+      "expiresAt": "ينتهي",
+      "daysShort": "ي",
+      "contactRequests": "طلبات التواصل وعروض السعر"
     },
     "biz": {
       "editTab": "تعديل الملف",

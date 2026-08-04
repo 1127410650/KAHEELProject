@@ -1717,7 +1717,22 @@
       },
       "logTab": "Operations log",
       "listingReports": "Listing reports",
-      "owner": "Advertiser"
+      "owner": "Advertiser",
+      "sortRisk": "Highest risk",
+      "sortReports": "Most reported",
+      "sortExpiring": "Expiring soonest",
+      "results": "Results",
+      "noImage": "No image",
+      "unsuspend": "Lift suspension",
+      "republish": "Republish",
+      "openReports": "Open reports",
+      "moreActions": "More actions",
+      "loadFailed": "Could not load listings",
+      "retry": "Retry",
+      "createdAt": "Published",
+      "expiresAt": "Ends",
+      "daysShort": "d",
+      "contactRequests": "Contact and quote requests"
     },
     "biz": {
       "editTab": "Edit profile",
