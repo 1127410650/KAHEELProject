@@ -54,16 +54,35 @@ export function MarketHeader() {
           </span>
         </Link>
 
+        {/* Primary action next to the wordmark: an explicit, readable
+            "add a listing" control (never an ambiguous icon above 320 px).
+            On phones this replaces the old bottom-bar "+" item. */}
+        {status === "loading" ? (
+          <Skeleton aria-hidden className="h-10 w-28 shrink-0 rounded-full" />
+        ) : (
+          <a
+            href={addHref}
+            aria-label={t("market.addListing")}
+            title={t("market.addListing")}
+            className="inline-flex h-10 shrink-0 items-center gap-1 rounded-full bg-market-navy-foreground px-2.5 text-xs font-bold text-market-navy transition-colors hover:bg-market-silver sm:h-11 sm:gap-1.5 sm:px-4 sm:text-sm"
+          >
+            <Plus className="size-4" aria-hidden />
+            <span className="hidden min-[360px]:inline">{t("market.addListing")}</span>
+            <span className="min-[360px]:hidden">{t("market.bottomNav.add")}</span>
+          </a>
+        )}
 
-        {/* The single search entry point in the app chrome. */}
+        {/* Desktop keeps the header search entry point; on phones search lives
+            in the middle of the bottom bar instead. */}
         <Link
-          to="/search"
+          to={getSearchHref()}
           aria-label={t("market.nav.search")}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-market-navy-soft bg-market-navy-soft/60 px-2.5 py-1.5 text-sm font-medium text-market-navy-foreground transition-colors hover:bg-market-navy-soft sm:px-3"
+          className="hidden shrink-0 items-center gap-1.5 rounded-full border border-market-navy-soft bg-market-navy-soft/60 px-3 py-1.5 text-sm font-medium text-market-navy-foreground transition-colors hover:bg-market-navy-soft lg:inline-flex"
         >
           <Search className="size-4" aria-hidden />
-          <span className="hidden sm:inline">{t("market.nav.search")}</span>
+          <span>{t("market.nav.search")}</span>
         </Link>
+
 
 
         <div className="min-w-0 flex-1" />
