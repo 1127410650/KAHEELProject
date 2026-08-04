@@ -2260,7 +2260,9 @@
       "usingAccount": "You are using: {name}",
       "general": "General",
       "legal": "Policies",
-      "session": "Session"
+      "session": "Session",
+      "fieldsTitle": "Primary fields",
+      "fieldsHint": "Pick a field to browse its listings"
     },
     "person": {
       "count": {
@@ -3138,6 +3140,27 @@
         "listingUnavailable": "Ad unavailable",
         "micDenied": "Microphone unavailable"
       }
+    },
+    "fields": {
+      "home": "Home",
+      "realestate": "Real Estate",
+      "cars": "Cars",
+      "devices": "Devices",
+      "aqardeal": "Aqar Deal",
+      "restaurants": "Restaurants",
+      "furniture": "Furniture",
+      "services": "Services",
+      "fashion": "Fashion",
+      "jobs": "Jobs",
+      "training": "Training",
+      "events": "Events",
+      "programming": "Programming",
+      "gardens": "Gardens",
+      "arts": "Arts",
+      "lostfound": "Lost & Found",
+      "projects": "Projects & Investments",
+      "travel": "Travel & Tourism",
+      "more": "More"
     }
   },
   "routeError": {

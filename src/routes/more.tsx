@@ -19,6 +19,10 @@ import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { useSignOut } from "@/lib/auth-signout";
 import { MarketShell } from "@/components/marketplace/MarketShell";
+import {
+  PRIMARY_FIELDS,
+  fieldSearchParams,
+} from "@/lib/market-primary-navigation";
 
 const title = "المزيد — كحلي";
 const description =
@@ -95,6 +99,27 @@ function MorePage() {
             ))}
           </Section>
         ) : null}
+
+        {/*
+          * The approved extra-fields panel the «المزيد» chip opens. It reads the
+          * SAME central list as the rails and the listing form, so the labels and
+          * the order can never diverge; «الرئيسية» and «المزيد» are navigation
+          * only and are therefore not shown here.
+          */}
+        <Section title={t("market.more.fieldsTitle")}>
+          <div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-3">
+            {PRIMARY_FIELDS.filter((field) => field.kind === "field").map((field) => (
+              <Link
+                key={field.id}
+                to="/search"
+                search={fieldSearchParams(field)}
+                className="flex min-h-11 items-center rounded-xl border border-border bg-background px-3 text-sm font-medium text-foreground hover:border-primary/40 hover:text-primary"
+              >
+                <span className="min-w-0 truncate">{t(`market.fields.${field.id}`)}</span>
+              </Link>
+            ))}
+          </div>
+        </Section>
 
         <Section title={t("market.more.app")}>
           <button

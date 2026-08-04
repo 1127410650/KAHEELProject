@@ -2260,7 +2260,9 @@
       "usingAccount": "أنت تستخدم: {name}",
       "general": "عام",
       "legal": "السياسات",
-      "session": "الجلسة"
+      "session": "الجلسة",
+      "fieldsTitle": "المجالات الرئيسية",
+      "fieldsHint": "اختر مجالًا لعرض إعلاناته"
     },
     "person": {
       "count": {
@@ -3138,6 +3140,27 @@
         "listingUnavailable": "الإعلان غير متاح",
         "micDenied": "تعذّر الوصول إلى الميكروفون"
       }
+    },
+    "fields": {
+      "home": "الرئيسية",
+      "realestate": "عقارات",
+      "cars": "سيارات",
+      "devices": "أجهزة",
+      "aqardeal": "عقار ديل",
+      "restaurants": "مطاعم",
+      "furniture": "أثاث",
+      "services": "خدمات",
+      "fashion": "أزياء",
+      "jobs": "وظائف",
+      "training": "تدريب",
+      "events": "مناسبات",
+      "programming": "برمجة",
+      "gardens": "الحدائق",
+      "arts": "الفنون",
+      "lostfound": "مفقودات",
+      "projects": "مشاريع واستثمارات",
+      "travel": "الرحلات والسياحة",
+      "more": "المزيد"
     }
   },
   "routeError": {
