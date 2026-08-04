@@ -889,7 +889,7 @@ function OptionsDialog({
         </div>
 
         <DialogFooter>
-          <Button onClick={onClose}>{t("common.done")}</Button>
+          <Button onClick={onClose}>{t("common.close")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

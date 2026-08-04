@@ -233,7 +233,7 @@ function LinkedAdsCard({
                   className="flex flex-wrap items-center gap-2 rounded-lg border p-3 text-sm"
                 >
                   <span className="min-w-0 flex-1 truncate">{listing.title}</span>
-                  <Badge variant="outline">{t(`market.ad.status.${listing.status}`)}</Badge>
+                  <Badge variant="outline">{t(`market.store.hub.adStatus.${listing.status}`)}</Badge>
                   <Button
                     size="sm"
                     variant={linked ? "outline" : "default"}

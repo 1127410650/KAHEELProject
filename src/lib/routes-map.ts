@@ -112,6 +112,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/dashboard/violations", "account", "dashboard"),
   rule("/dashboard/store", "account", "dashboard"),
   rule("/dashboard/store/new", "account", "dashboard"),
+  rule("/dashboard/store/catalog", "account", "dashboard"),
   rule("/dashboard/business", "account", "dashboard", {
     allowed_identity_types: ["business"],
   }),
