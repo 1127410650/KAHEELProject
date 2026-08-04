@@ -23,15 +23,21 @@ function ListingSection({
   title,
   items,
   loading,
+  failed,
+  onRetry,
   badge,
 }: {
   title: string;
   items: Items;
   loading: boolean;
+  failed?: boolean;
+  onRetry?: () => void;
   badge?: string;
 }) {
   const { t } = useI18n();
-  if (!loading && items.length === 0) return null;
+  // Nothing to show and nothing pending: the whole section disappears instead of
+  // leaving a decorative skeleton behind.
+  if (!loading && !failed && items.length === 0) return null;
   const shown = items.slice(0, 4);
 
   return (
@@ -53,7 +59,14 @@ function ListingSection({
         </Link>
       </div>
 
-      {loading ? (
+      {failed ? (
+        <div className="rounded-xl border border-border bg-card px-4 py-6 text-center">
+          <p className="text-sm text-muted-foreground">{t("market.loadError")}</p>
+          <Button size="sm" variant="outline" className="mt-3" onClick={onRetry}>
+            {t("market.retry")}
+          </Button>
+        </div>
+      ) : loading ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton
@@ -79,6 +92,7 @@ function ListingSection({
     </section>
   );
 }
+
 
 /**
  * The public marketplace home ("كحلي"): search card, category rail, banner,
