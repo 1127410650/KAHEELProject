@@ -1760,6 +1760,59 @@ export type Database = {
           },
         ]
       }
+      mkt_bank_accounts: {
+        Row: {
+          bank_name: string
+          beneficiary_name: string
+          created_at: string
+          deleted_at: string | null
+          iban: string
+          id: string
+          owner_user_id: string
+          status: string
+          tenant_id: string | null
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          bank_name: string
+          beneficiary_name: string
+          created_at?: string
+          deleted_at?: string | null
+          iban: string
+          id?: string
+          owner_user_id?: string
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          bank_name?: string
+          beneficiary_name?: string
+          created_at?: string
+          deleted_at?: string | null
+          iban?: string
+          id?: string
+          owner_user_id?: string
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_bank_accounts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_business_officers: {
         Row: {
           authorization_expires_on: string | null
@@ -2322,6 +2375,36 @@ export type Database = {
           },
         ]
       }
+      mkt_chat_audit: {
+        Row: {
+          actor_user_id: string | null
+          conversation_id: string | null
+          created_at: string
+          event: string
+          id: string
+          message_id: string | null
+          meta: Json
+        }
+        Insert: {
+          actor_user_id?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          event: string
+          id?: string
+          message_id?: string | null
+          meta?: Json
+        }
+        Update: {
+          actor_user_id?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          event?: string
+          id?: string
+          message_id?: string | null
+          meta?: Json
+        }
+        Relationships: []
+      }
       mkt_cities: {
         Row: {
           country_id: string
@@ -2397,6 +2480,38 @@ export type Database = {
             columns: ["country_id"]
             isOneToOne: false
             referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_conversation_state: {
+        Row: {
+          conversation_id: string
+          hidden_at: string | null
+          last_read_at: string | null
+          muted: boolean
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          hidden_at?: string | null
+          last_read_at?: string | null
+          muted?: boolean
+          user_id?: string
+        }
+        Update: {
+          conversation_id?: string
+          hidden_at?: string | null
+          last_read_at?: string | null
+          muted?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_conversation_state_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
             referencedColumns: ["id"]
           },
         ]
@@ -3283,25 +3398,63 @@ export type Database = {
           },
         ]
       }
+      mkt_message_hides: {
+        Row: {
+          created_at: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          message_id: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_message_hides_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_messages: {
         Row: {
           attachment_path: string | null
           body: string
           conversation_id: string
           created_at: string
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
+          kind: string
+          moderation_state: string
+          payload: Json
           qa_batch_id: string | null
           read_at: string | null
+          reply_to_id: string | null
           sender_user_id: string
         }
         Insert: {
           attachment_path?: string | null
-          body: string
+          body?: string
           conversation_id: string
           created_at?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
+          kind?: string
+          moderation_state?: string
+          payload?: Json
           qa_batch_id?: string | null
           read_at?: string | null
+          reply_to_id?: string | null
           sender_user_id?: string
         }
         Update: {
@@ -3309,9 +3462,15 @@ export type Database = {
           body?: string
           conversation_id?: string
           created_at?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
+          kind?: string
+          moderation_state?: string
+          payload?: Json
           qa_batch_id?: string | null
           read_at?: string | null
+          reply_to_id?: string | null
           sender_user_id?: string
         }
         Relationships: [
@@ -3320,6 +3479,13 @@ export type Database = {
             columns: ["conversation_id"]
             isOneToOne: false
             referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_messages"
             referencedColumns: ["id"]
           },
         ]
