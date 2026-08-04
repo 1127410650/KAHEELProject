@@ -21,6 +21,7 @@ import { Route as MoreRouteImport } from './routes/more'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminAttendanceRouteImport } from './routes/admin/attendance'
@@ -122,6 +123,11 @@ const SearchRoute = SearchRouteImport.update({
 const VerifyInvoiceRoute = VerifyInvoiceRouteImport.update({
   id: '/verify-invoice',
   path: '/verify-invoice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -348,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
+  '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
@@ -403,6 +410,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
+  '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
@@ -460,6 +468,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
+  '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
@@ -518,6 +527,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/search'
     | '/verify-invoice'
+    | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
     | '/admin/audit-log'
@@ -573,6 +583,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/search'
     | '/verify-invoice'
+    | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
     | '/admin/audit-log'
@@ -629,6 +640,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/search'
     | '/verify-invoice'
+    | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
     | '/admin/audit-log'
@@ -686,6 +698,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
+  WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessNewRoute: typeof BusinessNewRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
@@ -791,6 +804,13 @@ declare module '@tanstack/react-router' {
       path: '/verify-invoice'
       fullPath: '/verify-invoice'
       preLoaderRoute: typeof VerifyInvoiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -1159,6 +1179,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
+  WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
   BusinessNewRoute: BusinessNewRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
