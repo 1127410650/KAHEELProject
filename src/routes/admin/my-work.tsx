@@ -22,7 +22,17 @@ import {
   type WorkState,
 } from "@/lib/mkt-workforce";
 
+import {
+  attendanceErrorKey,
+  checkIn,
+  checkOut,
+  formatMinutes,
+  loadMyAttendance,
+  riyadhToday,
+} from "@/lib/mkt-attendance";
+
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -138,6 +148,8 @@ function MyWorkPage() {
         </div>
       )}
 
+      {me && <AttendanceCard />}
+
       <WorkList
         title={t("admin.myWork.mineTitle")}
         loading={mine.isLoading}
@@ -250,6 +262,107 @@ function WorkList({
           ))}
         </div>
       )}
+    </section>
+  );
+}
+
+/**
+ * Self-declared attendance for the signed-in staff member.
+ *
+ * Manual only: nothing is inferred from being logged in or from browsing, and
+ * no location is read. Corrections are an administrator's job, not the
+ * employee's — this card can only open and close today.
+ */
+function AttendanceCard() {
+  const { t } = useI18n();
+  const queryClient = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  const [remote, setRemote] = useState(false);
+
+  const today = riyadhToday();
+  const days = useQuery({
+    queryKey: ["mkt", "admin", "myWork", "attendance"],
+    queryFn: () => loadMyAttendance(),
+  });
+  const row = (days.data ?? []).find((day) => day.work_date === today) ?? null;
+
+  async function run(action: () => Promise<void>) {
+    setBusy(true);
+    try {
+      await action();
+      toast.success(t("admin.actionDone"));
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "admin", "myWork", "attendance"] });
+    } catch (error) {
+      toast.error(t(attendanceErrorKey(error)));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="mt-4 rounded-xl border border-border bg-card p-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[11px] text-muted-foreground">{t("admin.attendance.todayTitle")}</p>
+          {days.isLoading ? (
+            <Skeleton className="mt-1 h-5 w-40 rounded" />
+          ) : !row || !row.checked_in_at ? (
+            <p className="mt-1 text-sm font-semibold text-foreground">
+              {t("admin.attendance.notCheckedIn")}
+            </p>
+          ) : (
+            <>
+              <p className="mt-1 text-sm font-semibold text-foreground">
+                {t(`admin.attendance.status.${row.status}`)}
+              </p>
+              <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                <span>
+                  {t("admin.attendance.inAt")}: {formatDateTime(row.checked_in_at)}
+                </span>
+                {row.checked_out_at && (
+                  <span>
+                    {t("admin.attendance.outAt")}: {formatDateTime(row.checked_out_at)}
+                  </span>
+                )}
+                {row.actual_minutes > 0 && (
+                  <span>
+                    {t("admin.attendance.worked")}: {formatMinutes(row.actual_minutes)}
+                  </span>
+                )}
+              </p>
+            </>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          {(!row || !row.checked_in_at) && (
+            <label className="flex items-center gap-2 text-[11px] text-muted-foreground">
+              <Switch checked={remote} onCheckedChange={setRemote} aria-label={t("admin.attendance.remoteToggle")} />
+              {t("admin.attendance.remoteToggle")}
+            </label>
+          )}
+          {!row || !row.checked_in_at ? (
+            <Button
+              size="sm"
+              className="min-h-10"
+              disabled={busy || days.isLoading}
+              onClick={() => void run(() => checkIn(remote))}
+            >
+              {t("admin.attendance.checkIn")}
+            </Button>
+          ) : !row.checked_out_at ? (
+            <Button
+              size="sm"
+              variant="outline"
+              className="min-h-10"
+              disabled={busy}
+              onClick={() => void run(() => checkOut())}
+            >
+              {t("admin.attendance.checkOut")}
+            </Button>
+          ) : null}
+        </div>
+      </div>
     </section>
   );
 }

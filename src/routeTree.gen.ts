@@ -23,6 +23,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
+import { Route as AdminAttendanceRouteImport } from './routes/admin/attendance'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
@@ -129,6 +130,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
   id: '/activities',
   path: '/activities',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAttendanceRoute = AdminAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAuditLogRoute = AdminAuditLogRouteImport.update({
@@ -331,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/admin/activities': typeof AdminActivitiesRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/geo': typeof AdminGeoRoute
@@ -383,6 +390,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/admin/activities': typeof AdminActivitiesRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/geo': typeof AdminGeoRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/admin/activities': typeof AdminActivitiesRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/geo': typeof AdminGeoRoute
@@ -492,6 +501,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/verify-invoice'
     | '/admin/activities'
+    | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/geo'
@@ -544,6 +554,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/verify-invoice'
     | '/admin/activities'
+    | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/geo'
@@ -597,6 +608,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/verify-invoice'
     | '/admin/activities'
+    | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/geo'
@@ -768,6 +780,13 @@ declare module '@tanstack/react-router' {
       path: '/activities'
       fullPath: '/admin/activities'
       preLoaderRoute: typeof AdminActivitiesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/attendance': {
+      id: '/admin/attendance'
+      path: '/attendance'
+      fullPath: '/admin/attendance'
+      preLoaderRoute: typeof AdminAttendanceRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/audit-log': {
@@ -1034,6 +1053,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRoute
+  AdminAttendanceRoute: typeof AdminAttendanceRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminGeoRoute: typeof AdminGeoRoute
@@ -1058,6 +1078,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminActivitiesRoute: AdminActivitiesRoute,
+  AdminAttendanceRoute: AdminAttendanceRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminGeoRoute: AdminGeoRoute,

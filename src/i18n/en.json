@@ -2909,7 +2909,8 @@
       "settings": "Platform settings",
       "search": "Admin search",
       "workforce": "Work distribution & staff",
-      "myWork": "My work"
+      "myWork": "My work",
+      "attendance": "Attendance & shifts"
     },
     "alerts": {
       "title": "Alerts",
@@ -3023,7 +3024,10 @@
       "businesses.suspend": "Suspend business publishing",
       "verifications.review": "Review verifications",
       "appeals.review": "Review appeals",
-      "workforce.manage": "Manage work distribution"
+      "workforce.manage": "Manage work distribution",
+      "attendance.view": "View attendance and shifts",
+      "attendance.manage": "Manage attendance and shifts",
+      "attendance.approve": "Approve attendance"
     },
     "audit": {
       "searchHint": "Search by action or reason",
@@ -3328,6 +3332,69 @@
       "empty": "No work",
       "open": "Open",
       "notStaff": "You have no platform work state."
+    },
+    "attendance": {
+      "title": "Attendance & shifts",
+      "hint": "Check-in and check-out are manual and self-declared, with no location tracking. Every administrative correction keeps the original value and requires a reason. All figures follow Riyadh time.",
+      "tab": {
+        "attendance": "Attendance log",
+        "shifts": "Shifts"
+      },
+      "from": "From date",
+      "to": "To date",
+      "date": "Date",
+      "staff": "Staff member",
+      "allStaff": "All staff",
+      "unnamed": "Staff member",
+      "empty": "No attendance records in this range",
+      "noShifts": "No planned shifts in this range",
+      "in": "Check-in",
+      "out": "Check-out",
+      "planned": "Planned",
+      "actual": "Actual",
+      "late": "Late",
+      "early": "Early leave",
+      "overtime": "Overtime",
+      "remote": "Remote work",
+      "adminEdited": "Admin corrected",
+      "note": "Note",
+      "correct": "Admin correction",
+      "approve": "Approve",
+      "trail": "Correction trail",
+      "planShift": "Plan a shift",
+      "template": "Shift template",
+      "checkIn": "Check in",
+      "checkOut": "Check out",
+      "todayTitle": "Today's attendance",
+      "notCheckedIn": "You have not checked in today",
+      "inAt": "Checked in",
+      "outAt": "Checked out",
+      "worked": "Time worked",
+      "remoteToggle": "I'm working remotely today",
+      "status": {
+        "open": "Open",
+        "present": "Present",
+        "late": "Late",
+        "early_leave": "Early leave",
+        "absent": "Absent",
+        "remote": "Remote",
+        "leave": "On leave",
+        "rest": "Rest day",
+        "holiday": "Holiday"
+      },
+      "shiftKind": {
+        "fixed": "Fixed shift",
+        "rotating": "Rotating shift",
+        "flex": "Flexible hours",
+        "rest": "Rest day",
+        "holiday": "Holiday"
+      },
+      "err": {
+        "alreadyOut": "You already checked out today",
+        "notIn": "You have not checked in yet",
+        "range": "Check-out is before check-in",
+        "appendOnly": "The correction trail cannot be edited or deleted"
+      }
     }
   }
 }
