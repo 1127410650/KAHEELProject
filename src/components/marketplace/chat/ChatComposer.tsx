@@ -8,6 +8,7 @@ import {
   Paperclip,
   Send,
   Square,
+  Trash2,
   User,
   Video,
 } from "lucide-react";
