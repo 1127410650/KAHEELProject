@@ -147,3 +147,32 @@
 ### اللقطات المضافة
 `.lovable/audit/2026-08-04-kahli-home/`: `price_ar_1366.png` ، `price_en_1366.png` ، `price_ar_390.png` ، `nofeatured_1366.png` ، `nofeatured_390.png` ، ولقطات الإثبات في 15.6.
 
+
+### 16. دمج «عقار ديل» في تصنيف «عقارات» (2026-08-04)
+
+**التشخيص:** لا يوجد تصنيف ثانٍ في قاعدة البيانات. `mkt_categories` يحتوي سجلًا واحدًا فقط للعقارات (`real-estate` / «العقارات» / `Real estate`) و11 تصنيفًا فرعيًا. «عقار ديل» كان **شريحة واجهة مكرّرة** في شريط التصنيفات (`mkt-home-nav.ts` → المفتاح `realdeal`) تشير إلى **نفس** التصنيف `real-estate` مع `domain=realestate`. لذلك لا يوجد إعلان أو تصنيف فرعي يحتاج نقلًا، ولا سجل يحتاج حذفًا.
+
+**ما نُفِّذ**
+- حُذفت شريحة `realdeal` من `HOME_CATEGORIES` ومفتاحا الترجمة `market.home.cats.realdeal` من `ar.json` و`en.json` — الشريط أصبح 17 شريحة + «المزيد» بلا فراغ وبنفس الترتيب والتصميم واللون والسحب الأفقي.
+- `src/lib/mkt-category-alias.ts` جديد: تطبيع (حالة الأحرف، المسافات، الهمزات، الترقيم، الشرطات) + خريطة المسميات القديمة → `real-estate`، ودالة `canonicalCategorySlug` ذات نقطة ثابتة (تمنع Redirect Loop بنيويًا).
+- `/categories/$slug`: `beforeLoad` يحوّل أي Slug قديم إلى `real-estate` مع الحفاظ على Query Params والمدينة والفلاتر والترتيب والصفحة وHash (`replace: true`).
+- `/search`: `validateSearch` يطبّع `category` إلى المعرّف الأساسي، فلا يظهر خياران عقاريان في البحث أو الفلاتر أو نموذج الإعلان (الجميع يقرأ التصنيفات من `mkt_categories`).
+- قاعدة البيانات: جدول `mkt_category_aliases` (قراءة عامة، كتابة للإدارة) + دالة `mkt_norm_label` + Trigger `mkt_categories_no_duplicate` يرفض أي تصنيف رئيسي مكرر بالاسم العربي أو الإنجليزي أو Slug أو Alias بعد التطبيع.
+- لا لوحة إدارة تصنيفات في المشروع؛ لم يُلمس الهيدر الإداري ولا القائمة الجانبية ولا ألوان الإدارة، ولا الشريط السفلي، ولا تصميم أي صفحة.
+
+**الأرقام**
+- إعلانات نُقلت: **0** (لا سجل تصنيف مكرر؛ 11 إعلانًا عقاريًا منها 8 منشورة بقيت على التصنيف الأساسي دون فقد).
+- تصنيفات فرعية دُمجت: **0** — و**11** تصنيفًا فرعيًا عقاريًا محفوظة كما هي.
+- مسميات بديلة أصبحت Redirect: **9** سجلات Alias (عقار ديل، عقار دليل، Real Estate Deal، Property deals، aqar-deal، realdeal، real-estate، عقارات، العقارات).
+- سجلات مكررة عُطِّلت أو حُذفت: **0** (لم توجد؛ الحُذف الوحيد كان شريحة واجهة ومفتاحي ترجمة).
+- تحقق تطبيعي: صفر تصنيفات رئيسية متطابقة بعد التطبيع.
+
+**الاختبارات (Playwright، جلسات فعلية على 320×900 و390×852 و768×1024 و1366×768)**
+- «عقار ديل» غائب تمامًا من نص الصفحة في كل المقاسات، و«عقارات» تظهر **مرة واحدة** في الشريط (`aqarat_count = 1`).
+- `/categories/real-estate` يعرض إعلانات العقارات (8 بطاقات منشورة) — لم تُفقد أي إعلانات.
+- الروابط القديمة: `/categories/real-estate-deal?city=riyadh&sort=price_asc&page=2#list` → `/categories/real-estate?city=riyadh&sort=price_asc&page=2#list` (Params + Hash محفوظة)، `/categories/aqar-deal` → `/categories/real-estate`، `/search?category=real-estate-deal&q=فيلا` → `/search?category=real-estate&q=فيلا&domain=realestate`. الرابط الأساسي لا يعيد التوجيه (لا Loop).
+- حماية التكرار: محاولة إدخال تصنيف `aqar_deal` / «عقار ديل» / `Real Estate Deal` رُفضت برسالة «يوجد تصنيف مطابق أو مسمى بديل مرتبط بتصنيف عقارات.»
+- صفر Console Errors وصفر Overflow أفقي في كل المقاسات. `tsgo --noEmit` و`vite build` ناجحان.
+- الكاش: التصنيفات تُقرأ من قاعدة البيانات عبر `loadCategories` (مفتاح واحد `["mkt","categories"]`)، والشريط بيانات ثابتة في الحزمة — فلا تكرار من Cache أو Seed، ولا بيانات Seed تعيد إنشاء «عقار ديل».
+
+**اللقطات:** `.lovable/audit/2026-08-04-kahli-home/`: `home_320.png` ، `home_390.png` ، `home_768.png` ، `home_1366.png` ، `realestate_1366.png`.
