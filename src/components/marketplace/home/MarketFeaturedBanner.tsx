@@ -129,7 +129,7 @@ function FeaturedSlide({ listing }: { listing: ListingCardData }) {
   return (
     <article className="relative w-full min-w-0 shrink-0 basis-full snap-start overflow-hidden rounded-2xl shadow-panel sm:basis-[calc(50%-0.375rem)] lg:basis-[calc(50%-0.375rem)]">
       <Link
-        to="/listing/$slug"
+        to="/ads/$slug"
         params={{ slug }}
         className="block h-[200px] w-full sm:h-[320px] lg:h-[360px]"
       >

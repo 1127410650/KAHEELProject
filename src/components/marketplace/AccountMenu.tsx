@@ -13,7 +13,6 @@ import {
   LogOut,
   MessageSquare,
   Repeat,
-  Settings,
   ShieldAlert,
   ShieldCheck,
   User,
@@ -214,13 +213,11 @@ export function AccountMenu() {
             label: t("market.identity.manageBusiness"),
             icon: Building2,
           },
-          { to: "/team", label: t("market.account.members"), icon: Users },
+          { to: "/me", label: t("market.account.members"), icon: Users },
           { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
-          { to: "/settings", label: t("market.more.settings"), icon: Settings },
         ]
       : [
           { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
-          { to: "/settings", label: t("market.more.settings"), icon: Settings },
           { to: "/business/new", label: t("market.biz.addBusiness"), icon: Building2 },
         ],
   ).concat(
