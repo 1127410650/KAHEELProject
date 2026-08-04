@@ -41,9 +41,9 @@ function ListingSection({
   const shown = items.slice(0, 4);
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-5 sm:py-7">
+    <section className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-5 sm:py-7">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="flex min-w-0 items-center gap-2 text-base font-bold tracking-tight text-foreground sm:text-lg">
+        <h2 className="flex min-w-0 items-center gap-2 text-base font-bold tracking-tight text-foreground sm:text-lg lg:text-xl">
           <span className="truncate">{title}</span>
           {badge ? (
             <span className="shrink-0 rounded-full bg-market-navy px-2 py-0.5 text-[10px] font-semibold text-market-navy-foreground">
@@ -67,7 +67,7 @@ function ListingSection({
           </Button>
         </div>
       ) : loading ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton
               key={i}
@@ -84,7 +84,7 @@ function ListingSection({
           </div>
           {/* Fixed column counts keep four cards on one balanced row instead of
            * leaving an orphan card beside a wide empty gap. */}
-          <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+          <div className="hidden gap-4 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {shown.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
@@ -176,7 +176,7 @@ export function MarketHome() {
       <MarketCategoryTiles />
 
       {isEmpty ? (
-        <section className="mx-auto w-full max-w-7xl px-4 py-8 text-center">
+        <section className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-8 text-center">
           <p className="text-sm text-muted-foreground">{t("market.emptyHome")}</p>
           <Button asChild size="sm" className="mt-3">
             <Link to="/dashboard/ads/new">
