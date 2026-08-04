@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 
 import { ADD_LISTING_PATH, addListingHref } from "@/lib/add-listing";
+import { SEARCH_PATH, getSearchHref } from "@/lib/search-href";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
