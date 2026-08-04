@@ -4,9 +4,11 @@
  * session. Deleted right after the proof screenshots are taken.
  */
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { CategoryPicker } from "@/components/marketplace/CategoryPicker";
+import { loadCategories } from "@/lib/mkt-queries";
 
 export const Route = createFileRoute("/qa-picker-preview")({
   ssr: false,
@@ -21,11 +23,13 @@ export const Route = createFileRoute("/qa-picker-preview")({
 });
 
 function QAPickerPreview() {
-  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
-  const [subcategoryId, setSubcategoryId] = useState<string | undefined>(undefined);
+  const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
+  const [categoryId, setCategoryId] = useState("");
+  const [subcategoryId, setSubcategoryId] = useState("");
   return (
     <div className="p-4">
       <CategoryPicker
+        categories={categories.data ?? []}
         categoryId={categoryId}
         subcategoryId={subcategoryId}
         onChange={(next) => {
