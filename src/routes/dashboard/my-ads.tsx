@@ -499,7 +499,16 @@ function MyAdsPage() {
                       {t("market.ops.duration")}: <span dir="ltr">{ad.duration_days ?? "—"}</span>
                     </span>
                     {remaining && <span className="text-foreground">{remaining}</span>}
+                    {ad.promoted_until && new Date(ad.promoted_until).getTime() > Date.now() && (
+                      <span className="inline-flex items-center gap-1 text-primary">
+                        <Sparkles className="size-3" aria-hidden />
+                        {t("market.promote.activeUntil", {
+                          date: formatDateTime(ad.promoted_until),
+                        })}
+                      </span>
+                    )}
                   </p>
+
 
                   <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
