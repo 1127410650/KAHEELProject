@@ -122,7 +122,7 @@ export function MarketHome() {
     retry: 1,
   });
 
-  const featuredItems = (featured.data ?? []).slice(0, 4);
+  const featuredItems = featured.data ?? [];
   const featuredIds = new Set(featuredItems.map((l) => l.id));
   const latestItems = (latest.data ?? []).filter((l) => !featuredIds.has(l.id)).slice(0, 4);
   const isEmpty =
