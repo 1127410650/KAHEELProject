@@ -2036,6 +2036,67 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_call_requests: {
+        Row: {
+          call_id: string | null
+          closed_reason: string | null
+          created_at: string
+          id: string
+          listing_id: string
+          owner_user_id: string
+          requester_user_id: string
+          status: string
+          tenant_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          call_id?: string | null
+          closed_reason?: string | null
+          created_at?: string
+          id?: string
+          listing_id: string
+          owner_user_id: string
+          requester_user_id: string
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          call_id?: string | null
+          closed_reason?: string | null
+          created_at?: string
+          id?: string
+          listing_id?: string
+          owner_user_id?: string
+          requester_user_id?: string
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_call_requests_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_calls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_call_requests_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_call_requests_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_call_restrictions: {
         Row: {
           created_at: string
@@ -2061,28 +2122,42 @@ export type Database = {
         Row: {
           available_from: string | null
           available_to: string | null
+          call_mode: string
           calls_enabled: boolean
           created_at: string
+          tenant_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           available_from?: string | null
           available_to?: string | null
+          call_mode?: string
           calls_enabled?: boolean
           created_at?: string
+          tenant_id?: string | null
           updated_at?: string
           user_id?: string
         }
         Update: {
           available_from?: string | null
           available_to?: string | null
+          call_mode?: string
           calls_enabled?: boolean
           created_at?: string
+          tenant_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mkt_call_settings_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_call_signals: {
         Row: {
@@ -8825,7 +8900,28 @@ export type Database = {
         Returns: boolean
       }
       mkt_call_can_call: { Args: { _listing_id: string }; Returns: Json }
+      mkt_call_missed: {
+        Args: { _call_id: string; _reason?: string }
+        Returns: undefined
+      }
+      mkt_call_mode: {
+        Args: { _tenant_id: string; _user_id: string }
+        Returns: string
+      }
+      mkt_call_mode_set: {
+        Args: { _mode: string; _tenant_id: string }
+        Returns: string
+      }
       mkt_call_peer: { Args: { _call_id: string }; Returns: Json }
+      mkt_call_request_close: {
+        Args: { _reason?: string; _request_id: string }
+        Returns: undefined
+      }
+      mkt_call_request_create: {
+        Args: { _listing_id: string }
+        Returns: string
+      }
+      mkt_call_request_start: { Args: { _request_id: string }; Returns: Json }
       mkt_call_start: { Args: { _listing_id: string }; Returns: Json }
       mkt_call_transition: {
         Args: { _call_id: string; _reason?: string; _status: string }
