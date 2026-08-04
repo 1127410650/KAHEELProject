@@ -22,7 +22,6 @@ import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as QaPickerPreviewRouteImport } from './routes/qa-picker-preview'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -134,11 +133,6 @@ const MoreRoute = MoreRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QaPickerPreviewRoute = QaPickerPreviewRouteImport.update({
-  id: '/qa-picker-preview',
-  path: '/qa-picker-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -391,7 +385,6 @@ export interface FileRoutesByFullPath {
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/privacy': typeof PrivacyRoute
-  '/qa-picker-preview': typeof QaPickerPreviewRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
@@ -453,7 +446,6 @@ export interface FileRoutesByTo {
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/privacy': typeof PrivacyRoute
-  '/qa-picker-preview': typeof QaPickerPreviewRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
@@ -517,7 +509,6 @@ export interface FileRoutesById {
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/privacy': typeof PrivacyRoute
-  '/qa-picker-preview': typeof QaPickerPreviewRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
@@ -582,7 +573,6 @@ export interface FileRouteTypes {
     | '/me'
     | '/more'
     | '/privacy'
-    | '/qa-picker-preview'
     | '/register'
     | '/search'
     | '/terms'
@@ -644,7 +634,6 @@ export interface FileRouteTypes {
     | '/me'
     | '/more'
     | '/privacy'
-    | '/qa-picker-preview'
     | '/register'
     | '/search'
     | '/terms'
@@ -707,7 +696,6 @@ export interface FileRouteTypes {
     | '/me'
     | '/more'
     | '/privacy'
-    | '/qa-picker-preview'
     | '/register'
     | '/search'
     | '/terms'
@@ -771,7 +759,6 @@ export interface RootRouteChildren {
   MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
   PrivacyRoute: typeof PrivacyRoute
-  QaPickerPreviewRoute: typeof QaPickerPreviewRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   TermsRoute: typeof TermsRoute
@@ -889,13 +876,6 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/qa-picker-preview': {
-      id: '/qa-picker-preview'
-      path: '/qa-picker-preview'
-      fullPath: '/qa-picker-preview'
-      preLoaderRoute: typeof QaPickerPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1300,7 +1280,6 @@ const rootRouteChildren: RootRouteChildren = {
   MeRoute: MeRoute,
   MoreRoute: MoreRoute,
   PrivacyRoute: PrivacyRoute,
-  QaPickerPreviewRoute: QaPickerPreviewRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   TermsRoute: TermsRoute,
