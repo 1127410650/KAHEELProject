@@ -554,7 +554,7 @@ export function MarketShell({
       <main>{children}</main>
 
       {variant === "full" && (
-        <div className="flex flex-1 flex-col bg-market-navy">
+        <div className="flex flex-1 flex-col bg-background">
           <MarketFooter />
         </div>
       )}
