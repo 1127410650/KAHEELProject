@@ -74,7 +74,7 @@ function useFavoriteIds() {
   });
 }
 
-function FavoriteButton({ listing }: { listing: ListingCardData }) {
+export function FavoriteButton({ listing }: { listing: ListingCardData }) {
   const { t } = useI18n();
   const { session } = useSession();
   const navigate = useNavigate();
