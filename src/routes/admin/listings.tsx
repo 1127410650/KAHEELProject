@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -8,21 +8,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import {
   BUSINESS_COLUMNS,
-  LISTING_COLUMNS,
   LISTING_STATUSES,
   SA_CITIES,
-  priceLabel,
   resolveMedia,
   type MktBusiness,
   type MktListing,
 } from "@/lib/mkt";
+import { MY_LISTING_COLUMNS } from "@/lib/mkt-listing-ops";
 import { loadCategories } from "@/lib/mkt-queries";
 import { reviewListing, type ListingReviewAction } from "@/lib/mkt-admin";
+import { adminCan } from "@/lib/mkt-admin-perms";
+import { adminErrorMessage, usePlatformIdentity } from "@/lib/mkt-platform";
 import {
-  AdminBusinessLink,
-  AdminListingLink,
-  AdminUserLink,
-} from "@/components/marketplace/AdminEntityLink";
+  loadAdvertiserSafetyMap,
+  RISK_ORDER,
+  safetyKey,
+} from "@/lib/mkt-admin-safety";
+import { AdminListingCard } from "@/components/marketplace/AdminListingCard";
 import { readAdminListState, useAdminListMemory } from "@/lib/use-admin-list-memory";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 
@@ -61,6 +63,17 @@ export const Route = createFileRoute("/admin/listings")({
 
 const selectClass = "h-9 w-full rounded-md border border-input bg-background px-2 text-sm";
 
+const SORTS = [
+  { value: "newest", labelKey: "market.sort.newest" },
+  { value: "oldest", labelKey: "market.sort.oldest" },
+  { value: "risk", labelKey: "market.admin.sortRisk" },
+  { value: "reports", labelKey: "market.admin.sortReports" },
+  { value: "views", labelKey: "market.sort.views" },
+  { value: "expiring", labelKey: "market.admin.sortExpiring" },
+] as const;
+
+type SortKey = (typeof SORTS)[number]["value"];
+
 interface Decision {
   listing: MktListing;
   action: ListingReviewAction;
@@ -69,23 +82,26 @@ interface Decision {
 function AdminListingsPage() {
   const { t, locale } = useI18n();
   const { status: statusParam } = Route.useSearch();
+  const { identity } = usePlatformIdentity();
+  const canReview = adminCan(identity, "listings.review");
   const remembered = readAdminListState("listings", {
     status: "",
     city: "",
     categoryId: "",
     tenantId: "",
     q: "",
+    sort: "newest" as string,
   });
   const [status, setStatus] = useState(statusParam ?? remembered.status);
   const [city, setCity] = useState(remembered.city);
   const [categoryId, setCategoryId] = useState(remembered.categoryId);
   const [tenantId, setTenantId] = useState(remembered.tenantId);
   const [q, setQ] = useState(remembered.q);
-  const [open, setOpen] = useState<MktListing | null>(null);
+  const [sort, setSort] = useState<SortKey>(
+    (SORTS.some((s) => s.value === remembered.sort) ? remembered.sort : "newest") as SortKey,
+  );
   const [decision, setDecision] = useState<Decision | null>(null);
   const [busy, setBusy] = useState(false);
-
-
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const businesses = useQuery({
@@ -104,40 +120,84 @@ function AdminListingsPage() {
     queryFn: async () => {
       let query = supabase
         .from("mkt_listings")
-        .select(LISTING_COLUMNS)
+        .select(MY_LISTING_COLUMNS)
         .order("created_at", { ascending: false });
       if (status) query = query.eq("status", status);
       if (city) query = query.eq("city", city);
       if (categoryId) query = query.eq("category_id", categoryId);
       if (tenantId) query = query.eq("tenant_id", tenantId);
       if (q.trim()) query = query.ilike("title", `%${q.trim()}%`);
-      const { data } = await query.limit(100);
+      const { data, error } = await query.limit(100);
+      if (error) throw error;
       return (data ?? []) as unknown as MktListing[];
     },
   });
 
   useAdminListMemory(
     "listings",
-    { status, city, categoryId, tenantId, q },
+    { status, city, categoryId, tenantId, q, sort },
     !listings.isLoading,
   );
 
+  const rows = listings.data ?? [];
 
-
-  const images = useQuery({
-    queryKey: ["mkt", "admin-listing-images", open?.id],
-    enabled: !!open,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("mkt_listing_images")
-        .select("id, url, sort_order")
-        .eq("listing_id", open!.id)
-        .order("sort_order");
-      const paths = (data ?? []).map((r) => r.url);
-      const media = await resolveMedia(paths);
-      return paths.map((p) => media[p]).filter((u): u is string => !!u);
-    },
+  const covers = useQuery({
+    queryKey: ["mkt", "admin-listing-covers", rows.map((r) => r.cover_image_url ?? "").join("|")],
+    enabled: rows.length > 0,
+    queryFn: () => resolveMedia(rows.map((r) => r.cover_image_url)),
   });
+
+  const safety = useQuery({
+    queryKey: [
+      "mkt",
+      "admin-listing-safety",
+      rows.map((r) => safetyKey(r.owner_user_id, r.tenant_id)).join("|"),
+    ],
+    enabled: rows.length > 0,
+    staleTime: 60_000,
+    queryFn: () =>
+      loadAdvertiserSafetyMap(
+        rows.map((r) => ({ userId: r.owner_user_id, tenantId: r.tenant_id })),
+      ),
+  });
+
+  const catName = (id: string | null) => {
+    if (!id) return "—";
+    const cat = (categories.data ?? []).find((c) => c.id === id);
+    if (!cat) return "—";
+    return locale === "ar" ? cat.name_ar : cat.name_en || cat.name_ar;
+  };
+
+  const sorted = useMemo(() => {
+    const map = safety.data ?? {};
+    const list = [...rows];
+    const time = (v: string | null | undefined) => (v ? new Date(v).getTime() : 0);
+    switch (sort) {
+      case "oldest":
+        return list.sort((a, b) => time(a.created_at) - time(b.created_at));
+      case "reports":
+        return list.sort((a, b) => Number(b.reports_count ?? 0) - Number(a.reports_count ?? 0));
+      case "views":
+        return list.sort((a, b) => Number(b.views_count ?? 0) - Number(a.views_count ?? 0));
+      case "expiring":
+        return list.sort(
+          (a, b) =>
+            (time(a.expires_at) || Number.MAX_SAFE_INTEGER) -
+            (time(b.expires_at) || Number.MAX_SAFE_INTEGER),
+        );
+      case "risk":
+        return list.sort((a, b) => {
+          const ra = map[safetyKey(a.owner_user_id, a.tenant_id)];
+          const rb = map[safetyKey(b.owner_user_id, b.tenant_id)];
+          const wa = ra ? RISK_ORDER[ra.risk_level] * 1000 + ra.risk_score : 0;
+          const wb = rb ? RISK_ORDER[rb.risk_level] * 1000 + rb.risk_score : 0;
+          return wb - wa;
+        });
+      default:
+        return list.sort((a, b) => time(b.created_at) - time(a.created_at));
+    }
+  }, [rows, sort, safety.data]);
+
 
   const history = useQuery({
     queryKey: ["mkt", "admin-listing-history", open?.id],
