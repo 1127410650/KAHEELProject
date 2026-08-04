@@ -302,8 +302,9 @@ function AttendanceAdminPage() {
               className="min-h-10 justify-self-start"
               onClick={() =>
                 setPlanning({
-                  userId: staffFilter === "all" ? (staffList[0]?.user_id ?? ""), date: to },
-                )
+                  userId: staffFilter === "all" ? (staffList[0]?.user_id ?? "") : staffFilter,
+                  date: to,
+                })
               }
               disabled={staffList.length === 0}
             >
