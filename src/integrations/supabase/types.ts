@@ -3900,6 +3900,7 @@ export type Database = {
           department: string | null
           last_assigned_at: string | null
           note: string | null
+          pre_leave_state: string | null
           updated_at: string
           updated_by: string | null
           user_id: string
@@ -3912,6 +3913,7 @@ export type Database = {
           department?: string | null
           last_assigned_at?: string | null
           note?: string | null
+          pre_leave_state?: string | null
           updated_at?: string
           updated_by?: string | null
           user_id: string
@@ -3924,6 +3926,7 @@ export type Database = {
           department?: string | null
           last_assigned_at?: string | null
           note?: string | null
+          pre_leave_state?: string | null
           updated_at?: string
           updated_by?: string | null
           user_id?: string
@@ -8869,6 +8872,21 @@ export type Database = {
         Returns: string
       }
       mkt_workforce_manage: { Args: never; Returns: boolean }
+      mkt_workforce_my_status: {
+        Args: never
+        Returns: {
+          accepts_auto: boolean
+          can_manage: boolean
+          capacity_limit: number
+          department: string
+          done_today: number
+          effective_state: string
+          on_leave: boolean
+          open_count: number
+          user_id: string
+          work_state: string
+        }[]
+      }
       mkt_workforce_open_count: { Args: { _uid: string }; Returns: number }
       mkt_workforce_overview: { Args: never; Returns: Json }
       mkt_workforce_pick_assignee: { Args: { _kind: string }; Returns: string }
@@ -8889,6 +8907,7 @@ export type Database = {
           subject_id: string
         }[]
       }
+      mkt_workforce_refresh_leave_states: { Args: never; Returns: number }
       mkt_workforce_set_priority: {
         Args: {
           _kind: string

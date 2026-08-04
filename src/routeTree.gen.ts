@@ -29,6 +29,7 @@ import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
+import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
@@ -158,6 +159,11 @@ const AdminListingReportsRoute = AdminListingReportsRouteImport.update({
 const AdminListingsRoute = AdminListingsRouteImport.update({
   id: '/listings',
   path: '/listings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMyWorkRoute = AdminMyWorkRouteImport.update({
+  id: '/my-work',
+  path: '/my-work',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
@@ -331,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -382,6 +389,7 @@ export interface FileRoutesByTo {
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -435,6 +443,7 @@ export interface FileRoutesById {
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -489,6 +498,7 @@ export interface FileRouteTypes {
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/my-work'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -540,6 +550,7 @@ export interface FileRouteTypes {
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/my-work'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -592,6 +603,7 @@ export interface FileRouteTypes {
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/my-work'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -798,6 +810,13 @@ declare module '@tanstack/react-router' {
       path: '/listings'
       fullPath: '/admin/listings'
       preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/my-work': {
+      id: '/admin/my-work'
+      path: '/my-work'
+      fullPath: '/admin/my-work'
+      preLoaderRoute: typeof AdminMyWorkRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/roles': {
@@ -1021,6 +1040,7 @@ interface AdminRouteRouteChildren {
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
+  AdminMyWorkRoute: typeof AdminMyWorkRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -1044,6 +1064,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
+  AdminMyWorkRoute: AdminMyWorkRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
