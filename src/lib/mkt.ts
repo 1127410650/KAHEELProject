@@ -329,18 +329,15 @@ export function priceUnitLabel(unit: string | null, locale: "ar" | "en" = "en"):
   return (locale === "ar" ? UNIT_AR[unit] : UNIT_EN[unit]) ?? unit;
 }
 
-/** Reader-friendly phrase for the optional unit: "لكل قطعة" / "per piece". */
-export function priceUnitPhrase(unit: string | null, locale: "ar" | "en" = "en"): string | null {
-  const label = priceUnitLabel(unit, locale);
-  if (!label) return null;
-  return locale === "ar" ? `لكل ${label}` : `per ${label}`;
-}
-
 /**
  * Unified price policy: one positive price plus an optional unit. Listings
  * without a valid price are never published, so a dash is only ever shown for
  * legacy drafts awaiting an edit. The unit is omitted entirely when the
  * advertiser did not pick one.
+ *
+ * Single source of truth for every marketplace surface — never re-assemble
+ * amount + currency + unit inside a component. Latin digits in both languages.
+ *   ar: "45,000 ر.س / شهر"   en: "SAR 45,000 / month"
  */
 export function priceLabel(
   listing: Pick<MktListing, "price" | "price_unit" | "currency">,
@@ -350,8 +347,9 @@ export function priceLabel(
   if (listing.price === null || listing.price <= 0) return missingText;
   const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(listing.price);
   const currency = currencyLabel(listing.currency, locale);
-  const unit = priceUnitPhrase(listing.price_unit, locale);
-  return `${amount} ${currency}${unit ? ` ${unit}` : ""}`;
+  const unit = priceUnitLabel(listing.price_unit, locale);
+  const suffix = unit ? ` / ${unit}` : "";
+  return locale === "ar" ? `${amount} ${currency}${suffix}` : `${currency} ${amount}${suffix}`;
 }
 
 
