@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
@@ -358,7 +359,7 @@ function MyAdsPage() {
     <DashboardShell title={t("market.dash.myAds")}>
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Button asChild size="sm">
-          <Link to="/dashboard/ads/new">{t("market.addListing")}</Link>
+          <Link to={ADD_LISTING_PATH}>{t("market.addListing")}</Link>
         </Button>
         <Button asChild size="sm" variant="outline">
           <Link to="/dashboard/points">{t("market.points.title")}</Link>

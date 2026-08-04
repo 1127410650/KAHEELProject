@@ -13,6 +13,7 @@ import {
   UserPlus,
 } from "lucide-react";
 
+import { addListingHref } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
 import { loadListings } from "@/lib/mkt-queries";
 import { Button } from "@/components/ui/button";
@@ -127,10 +128,10 @@ function WelcomePage() {
                 <Link to="/register">{t("welcome.hero.signUp")}</Link>
               </Button>
               <Button asChild size="lg" variant="ghost" className="min-h-11">
-                <Link to="/auth" search={{ next: "/dashboard/ads/new" }}>
+                <a href={addListingHref()}>
                   <Plus className="size-4" aria-hidden />
                   {t("welcome.hero.add")}
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

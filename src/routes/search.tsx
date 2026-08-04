@@ -3,6 +3,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LayoutGrid, List, Loader2, SlidersHorizontal, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
@@ -797,7 +798,7 @@ function SearchPage() {
                   </Button>
                 )}
                 <Button asChild size="sm">
-                  <Link to="/dashboard/ads/new">{t("market.addListing")}</Link>
+                  <Link to={ADD_LISTING_PATH}>{t("market.addListing")}</Link>
                 </Button>
               </div>
             </div>

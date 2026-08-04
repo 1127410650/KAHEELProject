@@ -121,6 +121,13 @@ export const ROUTE_MAP: RouteRule[] = [
   // has any UI. Its database tables and history are untouched; the screens,
   // sidebar and shell are deleted. Old bookmarks resolve here through the central
   // splat handler, so nothing 404s and no old shell can be reopened.
+  // Retired / guessed "add a listing" paths — the only real one is
+  // `/dashboard/ads/new` (see `src/lib/add-listing.ts`).
+  rule("/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
+  rule("/new-listing", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
+  rule("/dashboard/new-listing", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
+  rule("/dashboard/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
+  rule("/market/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
   rule("/select-account", "legacy", "bare", { legacy_redirect: "/choose-account" }),
   rule("/settings", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
   rule("/onboarding", "legacy", "bare", { legacy_redirect: "/me" }),

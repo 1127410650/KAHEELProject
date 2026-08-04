@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { rememberSession, setRememberSession } from "@/lib/auth-storage";
 import { landingPathForSession } from "@/lib/mkt-platform";
 import { signInWithIdentifier } from "@/lib/auth.functions";
+import { safeInternalPath } from "@/lib/mkt";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,8 +36,7 @@ export const Route = createFileRoute("/auth")({
 function safeNext(): string | null {
   if (typeof window === "undefined") return null;
   const raw = new URLSearchParams(window.location.search).get("next");
-  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return null;
-  return raw;
+  return safeInternalPath(raw);
 }
 
 function AuthPage() {
