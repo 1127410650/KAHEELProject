@@ -11,7 +11,7 @@ import {
   Store,
   UserPlus,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +23,7 @@ import { routeRuleFor } from "@/lib/routes-map";
 
 import { Button } from "@/components/ui/button";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 import { AccountMenu } from "@/components/marketplace/AccountMenu";
 
@@ -40,6 +41,7 @@ export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
   const { session, status } = useSession();
   const { identity: adminIdentity } = usePlatformIdentity();
+  const offline = useOffline();
 
   const addListingHref = session
     ? undefined
@@ -96,8 +98,9 @@ export function MarketHeader() {
               <AccountMenu />
             </>
           ) : status === "loading" ? (
-            // No visitor flash: reserve the slot until the session is known.
-            <span aria-hidden className="h-8 w-16 rounded-md bg-secondary sm:w-40" />
+            // No visitor flash and no blank bar: a small skeleton holds the
+            // identity slot until the local session is known.
+            <Skeleton aria-hidden className="h-8 w-24 shrink-0 rounded-md sm:w-36" />
           ) : (
             <>
               <Button asChild size="sm" variant="outline">
@@ -120,7 +123,12 @@ export function MarketHeader() {
           )}
 
           {/* On phones the bottom bar already owns "add", so the header keeps a
-              single action instead of repeating it. */}
+              single action instead of repeating it. While the session is still
+              unknown the action is a skeleton too, so no header ever shows an
+              action without an identity slot next to it. */}
+          {status === "loading" ? (
+            <Skeleton aria-hidden className="hidden h-8 w-28 shrink-0 rounded-md sm:block" />
+          ) : (
           <Button asChild size="sm" className="hidden shrink-0 sm:inline-flex">
 
             {addListingHref ? (
@@ -135,10 +143,34 @@ export function MarketHeader() {
               </Link>
             )}
           </Button>
+          )}
         </div>
       </div>
+      {/* Losing connectivity is not a sign-out: say so instead of degrading the
+          header into a visitor state. */}
+      {session && offline && (
+        <div className="border-t border-border bg-secondary/60 px-3 py-1 text-center text-[11px] font-medium text-muted-foreground sm:text-xs">
+          {t("market.offlineNotice")}
+        </div>
+      )}
     </header>
   );
+}
+
+/** Presentation-only connectivity flag for the header notice. */
+function useOffline(): boolean {
+  const [offline, setOffline] = useState(false);
+  useEffect(() => {
+    const sync = () => setOffline(typeof navigator !== "undefined" && navigator.onLine === false);
+    sync();
+    window.addEventListener("online", sync);
+    window.addEventListener("offline", sync);
+    return () => {
+      window.removeEventListener("online", sync);
+      window.removeEventListener("offline", sync);
+    };
+  }, []);
+  return offline;
 }
 
 
