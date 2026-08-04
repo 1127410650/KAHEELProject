@@ -5,8 +5,9 @@ import { useSession } from "@/lib/session";
 
 /**
  * A marketplace account is "set up" once it has an identity (username + display
- * name), an account location (country + city) and a phone number on file. The
- * short setup screen is shown only while something is missing.
+ * name), an account country and a phone number on file. The city is deliberately
+ * NOT part of signup: it is asked later, only where it is operationally needed
+ * (posting a listing, creating a business, filtering search).
  */
 export function useMarketSetupStatus() {
   const { session } = useSession();
@@ -20,7 +21,7 @@ export function useMarketSetupStatus() {
       const [{ data: profile }, { data: contact }] = await Promise.all([
         supabase
           .from("mkt_user_profiles")
-          .select("username, display_name, country_id, city_id")
+          .select("username, display_name, country_id")
           .eq("user_id", userId!)
           .maybeSingle(),
         supabase
@@ -33,7 +34,6 @@ export function useMarketSetupStatus() {
         !!profile?.username &&
         !!profile?.display_name &&
         !!profile?.country_id &&
-        !!profile?.city_id &&
         !!contact?.phone_e164;
       return { complete, needsSetup: !complete };
     },

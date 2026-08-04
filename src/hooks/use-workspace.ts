@@ -19,6 +19,10 @@ export function useWorkspaces() {
   return useQuery({
     queryKey: ["my-tenants"],
     queryFn: async (): Promise<Workspace[]> => {
+      // Guests have no workspaces at all; calling the RPC would only produce a
+      // noisy 401 while the route guard is still redirecting them to sign-in.
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) return [];
       const { data, error } = await supabase.rpc("my_tenants");
       if (error) throw error;
       return (data ?? []) as Workspace[];
@@ -26,6 +30,7 @@ export function useWorkspaces() {
     staleTime: 60_000,
   });
 }
+
 
 export function useSwitchWorkspace() {
   const queryClient = useQueryClient();

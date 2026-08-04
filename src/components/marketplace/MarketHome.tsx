@@ -1,10 +1,12 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   Building2,
   Home,
   Plus,
+  Search,
   Sparkles,
   Tag,
   Truck,
@@ -17,6 +19,7 @@ import { useSuggestedListings } from "@/lib/mkt-activity";
 
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
 
@@ -105,8 +108,23 @@ const QUICK_FILTERS = [
   { key: "business", search: { domain: "business" }, icon: Building2 },
 ] as const;
 
+/** Where the fields rail keeps its horizontal position between visits. */
+const RAIL_KEY = "mkt:home:fields-scroll";
+
 export function MarketHome() {
   const { t, locale } = useI18n();
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const railRef = useRef<HTMLDivElement | null>(null);
+
+  // Restore the rail position so returning from a search feels continuous.
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const saved = Number(sessionStorage.getItem(RAIL_KEY) ?? "0");
+    if (Number.isFinite(saved) && saved !== 0) rail.scrollLeft = saved;
+  }, []);
+
   const { preference } = useMarketPreference();
   // The home page always reflects the market the visitor picked.
   const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
@@ -133,40 +151,67 @@ export function MarketHome() {
 
   return (
     <>
-      {/* Hero — title and one primary action; search lives in the header. */}
-      <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 via-background to-background">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(to_right,var(--color-primary)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-primary)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]"
-        />
-        <div className="relative mx-auto w-full max-w-4xl px-4 py-6 text-center sm:py-9">
-          <h1 className="mx-auto max-w-3xl text-balance text-xl font-bold leading-snug tracking-tight text-foreground sm:text-3xl">
-            {t("market.hero.title")}
-          </h1>
-
-          <Button asChild size="sm" className="mt-4">
-            <Link to="/dashboard/ads/new">
-              <Plus className="size-4" aria-hidden />
-              {t("market.addListing")}
-            </Link>
-          </Button>
+      {/* Entry strip — a real search field and one primary action. No marketing
+          copy lives inside the marketplace itself. */}
+      <section className="border-b border-border bg-secondary/40">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-2.5 px-4 py-4 sm:flex-row sm:items-center sm:py-5">
+          <form
+            role="search"
+            className="flex min-w-0 flex-1 items-center gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const term = query.trim();
+              void navigate({ to: "/search", search: term ? { q: term } : {} });
+            }}
+          >
+            <label htmlFor="home-search" className="sr-only">
+              {t("market.nav.search")}
+            </label>
+            <div className="relative min-w-0 flex-1">
+              <Search
+                className="pointer-events-none absolute inset-y-0 start-3 my-auto size-4 text-muted-foreground"
+                aria-hidden
+              />
+              <Input
+                id="home-search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={t("market.searchPlaceholder")}
+                className="h-11 ps-9"
+              />
+            </div>
+            <Button type="submit" size="sm" className="h-11 shrink-0">
+              {t("market.nav.search")}
+            </Button>
+          </form>
         </div>
       </section>
 
-      {/* Fields strip — wraps into a compact grid on phones so nothing is clipped. */}
+      {/* Fields strip — one horizontal, drag/wheel scrollable rail that keeps its
+          position when the visitor comes back from a search. */}
       <div className="border-b border-border bg-background">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-2 px-4 py-3 sm:flex sm:flex-wrap sm:justify-center">
-          {QUICK_FILTERS.map((f, i) => (
+        <div
+          ref={railRef}
+          onWheel={(event) => {
+            const rail = railRef.current;
+            if (!rail) return;
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+            rail.scrollLeft += event.deltaY;
+          }}
+          onScroll={() => {
+            if (railRef.current) sessionStorage.setItem(RAIL_KEY, String(railRef.current.scrollLeft));
+          }}
+          className="mx-auto flex w-full max-w-7xl snap-x gap-2 overflow-x-auto overscroll-x-contain px-4 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {QUICK_FILTERS.map((f) => (
             <Link
               key={f.key}
               to="/search"
               search={f.search}
-              className={`inline-flex min-w-0 items-center justify-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary/60 hover:text-primary sm:w-auto sm:px-3.5 ${
-                i === QUICK_FILTERS.length - 1 ? "col-span-2 sm:col-span-1" : ""
-              }`}
+              className="inline-flex min-h-11 shrink-0 snap-start items-center gap-1.5 rounded-full border border-border bg-card px-3.5 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary/60 hover:text-primary"
             >
               <f.icon className="size-3.5 shrink-0" aria-hidden />
-              <span className="truncate">{t(`market.quick.${f.key}`)}</span>
+              <span className="whitespace-nowrap">{t(`market.quick.${f.key}`)}</span>
             </Link>
           ))}
         </div>

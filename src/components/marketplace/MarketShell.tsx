@@ -104,7 +104,10 @@ export function MarketHeader() {
 
           )}
 
-          <Button asChild size="sm" className="shrink-0">
+          {/* On phones the bottom bar already owns "add", so the header keeps a
+              single action instead of repeating it. */}
+          <Button asChild size="sm" className="hidden shrink-0 sm:inline-flex">
+
             {addListingHref ? (
               <a href={addListingHref} aria-label={t("market.addListing")}>
                 <Plus className="size-4" aria-hidden />
