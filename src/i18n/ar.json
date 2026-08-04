@@ -3139,6 +3139,28 @@
         "bankNotVerified": "الحساب البنكي غير موثق",
         "listingUnavailable": "الإعلان غير متاح",
         "micDenied": "تعذّر الوصول إلى الميكروفون"
+      },
+      "searchPlaceholder": "ابحث في المحادثات…",
+      "noResults": "لا نتائج مطابقة",
+      "threads": "المحادثات",
+      "openThread": "فتح المحادثة",
+      "unread": "غير مقروء",
+      "sending": "يُرسل…",
+      "cancel": "إلغاء",
+      "confirmSend": "إرسال",
+      "preview": {
+        "image": "صورة",
+        "video": "فيديو",
+        "audio": "رسالة صوتية",
+        "file": "مستند",
+        "location": "موقع",
+        "contact": "جهة اتصال",
+        "bank_share": "حساب بنكي",
+        "bank_request": "طلب حساب بنكي",
+        "system": "إشعار",
+        "you": "أنت:",
+        "attachTitle": "مراجعة قبل الإرسال",
+        "voiceTitle": "مراجعة الرسالة الصوتية"
       }
     },
     "fields": {
