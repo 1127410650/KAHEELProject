@@ -388,100 +388,6 @@ export function MarketBottomNav() {
 }
 
 
-interface FooterGroup {
-  key: string;
-  links: { to: string; label: string }[];
-}
-
-export function MarketFooter() {
-  const { t } = useI18n();
-
-  const groups: FooterGroup[] = [
-    {
-      key: "browse",
-      links: [
-        { to: "/", label: t("market.nav.marketplace") },
-        { to: "/search", label: t("market.nav.search") },
-        { to: "/more", label: t("market.nav.more") },
-      ],
-    },
-    {
-      key: "account",
-      links: [
-        { to: "/auth", label: t("market.signIn") },
-        { to: "/dashboard/profile", label: t("market.identity.managePersonal") },
-        { to: "/dashboard/favorites", label: t("market.more.links.favorites") },
-      ],
-    },
-    {
-      key: "business",
-      links: [
-        { to: ADD_LISTING_PATH, label: t("market.addListing") },
-        { to: "/dashboard/my-ads", label: t("market.nav.myAds") },
-        { to: "/dashboard/business", label: t("market.dash.business") },
-      ],
-    },
-    {
-      key: "legal",
-      links: [
-        { to: "/about", label: t("market.more.links.about") },
-        { to: "/help", label: t("market.more.links.help") },
-        { to: "/terms", label: t("market.more.links.terms") },
-        { to: "/privacy", label: t("market.more.links.privacy") },
-        { to: "/contact", label: t("market.more.links.contact") },
-      ],
-    },
-  ];
-
-  return (
-    <footer className="mt-6 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-7">
-        <div className="max-w-md">
-          <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-market-silver">
-            {t("market.tagline")}
-          </p>
-        </div>
-
-        {/* Phones: the policy links only — everything else is one tap away in the
-            bottom bar, so the mobile footer stays short. */}
-        <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 sm:hidden">
-          {groups[3]!.links.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className="text-xs text-market-silver hover:text-market-navy-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Desktop: four compact columns. */}
-        <div className="mt-6 hidden gap-8 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {groups.map((group) => (
-            <div key={group.key} className="space-y-2">
-              <p className="text-sm font-semibold">{t(`market.footer.${group.key}`)}</p>
-              {group.links.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="block text-sm text-market-silver hover:text-market-navy-foreground"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-      <p className="border-t border-market-navy-soft py-4 text-center text-xs text-market-silver-muted">
-        {t("market.footer.rights")}
-      </p>
-    </footer>
-  );
-}
-
 
 /** Legal-only strip for long public content pages; never duplicates the bottom nav. */
 export function MarketCompactFooter() {
@@ -495,24 +401,8 @@ export function MarketCompactFooter() {
   );
 }
 
-/**
- * Brand-only footer for pages that already list the policy links in their body
- * (currently `/more`), so nothing is duplicated.
- */
-export function MarketBrandFooter() {
-  const { t } = useI18n();
-  return (
-    <footer className="mt-6 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-6">
-        <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
-        <p className="mt-1.5 text-sm leading-relaxed text-market-silver">{t("market.tagline")}</p>
-        <p className="mt-3 text-xs text-market-silver-muted">{t("market.footer.rights")}</p>
-      </div>
-    </footer>
-  );
-}
 
-export type FooterVariant = "full" | "compact" | "none";
+export type FooterVariant = "compact" | "none";
 
 /**
  * Single source of truth for the footer:
