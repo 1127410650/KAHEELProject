@@ -129,16 +129,32 @@ export function AdminAssignmentBar({
       <ReasonDialog
         open={dialog === "transfer"}
         title={t("admin.queue.transfer")}
-        description={t("admin.queue.transferTo")}
         confirmLabel={t("admin.queue.transfer")}
-        pending={busy}
-        withTarget
-        targetLabel={t("admin.queue.transferTo")}
-        onCancel={() => setDialog(null)}
-        onConfirm={(reason, target) =>
-          void run(() => transferSubject(kind, subjectId, target ?? "", reason))
-        }
-      />
+        pending={busy || !target}
+        onCancel={() => {
+          setDialog(null);
+          setTarget("");
+        }}
+        onConfirm={(reason) => void run(() => transferSubject(kind, subjectId, target, reason))}
+      >
+        <label className="block text-xs font-medium text-foreground">
+          {t("admin.queue.transferTo")}
+          <select
+            value={target}
+            onChange={(event) => setTarget(event.target.value)}
+            className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground"
+          >
+            <option value="">—</option>
+            {(officers.data ?? [])
+              .filter((row) => row.user_id !== session?.user.id)
+              .map((row) => (
+                <option key={row.user_id} value={row.user_id}>
+                  {row.display_name || row.email || row.user_id}
+                </option>
+              ))}
+          </select>
+        </label>
+      </ReasonDialog>
     </div>
   );
 }
