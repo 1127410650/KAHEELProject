@@ -104,7 +104,7 @@ export async function sendMessage(
     _conversation_id: conversationId,
     _kind: kind,
     _body: body,
-    _payload: payload,
+    _payload: payload as never,
   });
   return unwrap(res) as unknown as string;
 }
@@ -211,7 +211,7 @@ export async function shareBank(
     _conversation_id: conversationId,
     _bank_account_id: bankAccountId,
     _account_key: accountKey,
-    _request_message_id: requestMessageId ?? null,
+    _request_message_id: requestMessageId ?? undefined,
   });
   return unwrap(res) as unknown as string;
 }
@@ -227,8 +227,8 @@ export async function setConversationState(
 ): Promise<void> {
   const res = await supabase.rpc("mkt_conversation_state_set", {
     _conversation_id: conversationId,
-    _muted: patch.muted ?? null,
-    _hidden: patch.hidden ?? null,
+    _muted: patch.muted ?? undefined,
+    _hidden: patch.hidden ?? undefined,
   });
   if (res.error) throw new ChatError(res.error.message);
 }
