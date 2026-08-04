@@ -59,6 +59,9 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
 
 /** «إدارة الحساب» — only routes that really exist today. */
 export const MANAGE_LINKS: MoreLinkDef[] = [
+  // Both account kinds may own exactly one storefront; the hub decides between
+  // "create" and "manage" from the live query, never from a constant.
+  { key: "store", to: "/dashboard/store", labelKey: "market.store.hubTitle", icon: Store },
   {
     key: "business",
     to: "/dashboard/business",
