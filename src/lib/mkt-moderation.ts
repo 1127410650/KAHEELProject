@@ -125,7 +125,8 @@ export interface ModerationRuleInput {
 
 export async function saveModerationRule(input: ModerationRuleInput): Promise<string> {
   const { data, error } = await supabase.rpc("mkt_admin_moderation_rule_save", {
-    _id: input.id ?? null,
+    // the function accepts NULL for a new rule; generated types narrow it to string
+    _id: (input.id ?? null) as unknown as string,
     _kind: input.kind,
     _pattern: input.pattern,
     _lang: input.lang,
