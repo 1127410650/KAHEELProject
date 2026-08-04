@@ -2714,7 +2714,10 @@
       "imagesTooMany": "Maximum of 20 photos",
       "businessIncomplete": "Complete the business details before publishing",
       "geoRequired": "Pick the location on the map",
+      "priceRequired": "Add a valid price before publishing",
+      "priceInvalid": "The price or its unit is not valid",
       "notFound": "Ad not found"
+
     },
     "lr": {
       "title": "Listing reports",
