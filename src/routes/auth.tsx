@@ -66,7 +66,7 @@ function AuthPage() {
     try {
       return await landingPathForSession();
     } catch {
-      return "/select-account";
+      return "/";
     }
   }
 
