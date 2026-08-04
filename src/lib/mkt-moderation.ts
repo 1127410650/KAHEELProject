@@ -135,7 +135,7 @@ export async function saveModerationRule(input: ModerationRuleInput): Promise<st
     _action: input.action,
     _weight: input.weight,
     _is_active: input.is_active,
-    _notes: input.notes,
+    _notes: (input.notes ?? null) as unknown as string,
   });
   if (error) throw error;
   return data as string;
