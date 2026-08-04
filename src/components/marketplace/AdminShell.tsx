@@ -20,6 +20,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   Store,
+  Users2,
   UserCog,
   Users,
 } from "lucide-react";
@@ -105,6 +106,12 @@ const NAV: NavItem[] = [
     labelKey: "admin.nav.reports",
     icon: ClipboardList,
     perms: ["reports.inbox_view"],
+  },
+  {
+    to: "/admin/workforce",
+    labelKey: "admin.nav.workforce",
+    icon: Users2,
+    perms: ["workforce.manage"],
   },
   { to: "/admin/activities", labelKey: "admin.nav.activities", icon: ListChecks },
   { to: "/admin/geo", labelKey: "admin.nav.geo", icon: Globe2 },
