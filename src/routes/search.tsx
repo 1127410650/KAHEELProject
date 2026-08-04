@@ -15,6 +15,8 @@ import {
   loadListingTypes,
   loadListingsPage,
 } from "@/lib/mkt-queries";
+import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
