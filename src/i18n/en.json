@@ -2538,6 +2538,7 @@
       "backToAccounts": "Back to account selection",
       "justCreated": "Business created. Select it to make it the active account.",
       "loadFailed": "Could not load your account data, please try again",
+      "offline": "Couldn’t connect right now. You have not been signed out.",
       "retry": "Retry"
     },
     "access": {

@@ -4,7 +4,7 @@ import { Building2, Check, Loader2, LogOut, Plus, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { markManualSignOut } from "@/lib/auth-session";
+import { isSigningOut, useSignOut } from "@/lib/auth-signout";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
@@ -152,11 +152,11 @@ function ChooseAccountPage() {
   const target = safeNext.startsWith("/choose-account") ? "/" : safeNext;
 
   const navigate = useNavigate();
-  const { accounts, account: activeAccount, loading, select } = useActiveAccount();
+  const { accounts, account: activeAccount, loading, unavailable, select } = useActiveAccount();
   const [pending, setPending] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!sessionLoading && !session) {
+    if (!sessionLoading && !session && !isSigningOut()) {
       // Keep the intended destination so signing in lands back here.
       const back = `/choose-account${next ? `?next=${encodeURIComponent(next)}` : ""}`;
       void navigate({ href: `/auth?next=${encodeURIComponent(back)}`, replace: true });
@@ -199,11 +199,7 @@ function ChooseAccountPage() {
   }
 
 
-  async function signOut() {
-    markManualSignOut();
-    await supabase.auth.signOut();
-    void navigate({ to: "/auth", replace: true });
-  }
+  const signOut = useSignOut();
 
   const grid =
     "mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-3";
@@ -234,7 +230,22 @@ function ChooseAccountPage() {
         <div className="grid place-items-center rounded-xl border border-border bg-card p-10 text-muted-foreground">
           <Loader2 className="size-5 animate-spin" aria-hidden />
         </div>
+      ) : unavailable && accounts.length === 0 ? (
+        // A failed read is a connection problem, never a sign-out: say so and retry.
+        <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+          <p className="text-sm text-foreground">{t("market.entry.offline")}</p>
+          <Button
+            type="button"
+            className="min-h-11"
+            onClick={() => {
+              if (typeof window !== "undefined") window.location.reload();
+            }}
+          >
+            {t("market.entry.retry")}
+          </Button>
+        </div>
       ) : (
+
         <div className="space-y-5">
           <section aria-labelledby="acc-personal">
             <h2

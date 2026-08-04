@@ -31,7 +31,7 @@ import { useI18n } from "@/i18n";
 import { AdminSearchBox } from "@/components/marketplace/AdminSearchBox";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
-import { markManualSignOut } from "@/lib/auth-session";
+import { useSignOut } from "@/lib/auth-signout";
 import {
   loadAdminOverview,
   usePlatformIdentity,
@@ -270,6 +270,7 @@ export function AdminShell({
   const { identity, loading } = usePlatformIdentity();
   const clearAdminCache = useClearAdminCache();
   const navigate = useNavigate();
+  const centralSignOut = useSignOut();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const checking = loading || (!!session && (!identity || staffChecking));
@@ -287,10 +288,8 @@ export function AdminShell({
   const displayName = profile?.full_name?.trim() || t("admin.owner");
 
   async function signOut() {
-    markManualSignOut();
     clearAdminCache();
-    await supabase.auth.signOut();
-    void navigate({ to: "/auth", replace: true });
+    await centralSignOut();
   }
 
   return (

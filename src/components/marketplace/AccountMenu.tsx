@@ -27,7 +27,7 @@ import { hasUnsavedChanges } from "@/lib/unsaved-changes";
 import { canSeeLink } from "@/lib/routes-map";
 import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { supabase } from "@/integrations/supabase/client";
-import { markManualSignOut } from "@/lib/auth-session";
+import { useSignOut } from "@/lib/auth-signout";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
@@ -101,6 +101,7 @@ export function AccountMenu() {
   const { account: active, accounts, clear, can } = useActiveAccount();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const centralSignOut = useSignOut();
 
   const unreadMessages = useUnreadMessages(active);
   const unreadAlerts = useUnreadAlerts();
@@ -126,10 +127,8 @@ export function AccountMenu() {
   const allowed = (links: MenuLink[]) => links.filter((l) => canSeeLink(l.to, viewer));
 
   async function signOut() {
-    markManualSignOut();
     clear();
-    await supabase.auth.signOut();
-    void navigate({ to: "/" });
+    await centralSignOut();
   }
 
   function changeAccount(event: { preventDefault: () => void }) {
