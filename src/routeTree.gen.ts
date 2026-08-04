@@ -26,6 +26,7 @@ import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminAttendanceRouteImport } from './routes/admin/attendance'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
+import { Route as AdminContentRulesRouteImport } from './routes/admin/content-rules'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
@@ -146,6 +147,11 @@ const AdminAuditLogRoute = AdminAuditLogRouteImport.update({
 const AdminBusinessesRoute = AdminBusinessesRouteImport.update({
   id: '/businesses',
   path: '/businesses',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminContentRulesRoute = AdminContentRulesRouteImport.update({
+  id: '/content-rules',
+  path: '/content-rules',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminGeoRoute = AdminGeoRouteImport.update({
@@ -346,6 +352,7 @@ export interface FileRoutesByFullPath {
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -400,6 +407,7 @@ export interface FileRoutesByTo {
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -456,6 +464,7 @@ export interface FileRoutesById {
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/geo': typeof AdminGeoRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -513,6 +522,7 @@ export interface FileRouteTypes {
     | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/content-rules'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -567,6 +577,7 @@ export interface FileRouteTypes {
     | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/content-rules'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -622,6 +633,7 @@ export interface FileRouteTypes {
     | '/admin/attendance'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/content-rules'
     | '/admin/geo'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -814,6 +826,13 @@ declare module '@tanstack/react-router' {
       path: '/businesses'
       fullPath: '/admin/businesses'
       preLoaderRoute: typeof AdminBusinessesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/content-rules': {
+      id: '/admin/content-rules'
+      path: '/content-rules'
+      fullPath: '/admin/content-rules'
+      preLoaderRoute: typeof AdminContentRulesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/geo': {
@@ -1076,6 +1095,7 @@ interface AdminRouteRouteChildren {
   AdminAttendanceRoute: typeof AdminAttendanceRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
+  AdminContentRulesRoute: typeof AdminContentRulesRoute
   AdminGeoRoute: typeof AdminGeoRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -1101,6 +1121,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAttendanceRoute: AdminAttendanceRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
+  AdminContentRulesRoute: AdminContentRulesRoute,
   AdminGeoRoute: AdminGeoRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,

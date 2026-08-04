@@ -240,7 +240,6 @@ function AdminContentRulesPage() {
   async function toggleActive(rule: ModerationRule, next: boolean) {
     setToggleBusy(rule.id);
     try {
-      await saveModerationRule({ ...ruleToDraft(rule), id: rule.id, is_active: next, weight: Number(rule.weight) } as never);
       await saveModerationRule({
         id: rule.id,
         kind: rule.kind,
