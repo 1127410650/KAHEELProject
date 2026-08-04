@@ -2717,7 +2717,6 @@
       "priceRequired": "Add a valid price before publishing",
       "priceInvalid": "The price or its unit is not valid",
       "notFound": "Ad not found"
-
     },
     "lr": {
       "title": "Listing reports",
@@ -2849,7 +2848,7 @@
       "title": "In-platform voice call",
       "call": "Call",
       "enable": "Receive voice calls",
-      "enableHint": "When enabled, people can call you by voice inside the platform without seeing your phone number.",
+      "enableHint": "Choose how people can call you by voice inside the platform, without seeing your phone number.",
       "enabled": "Incoming calls enabled",
       "disabled": "Incoming calls disabled",
       "incoming": "Incoming call",
@@ -2896,7 +2895,26 @@
       "log": {
         "missed": "Missed call",
         "duration": "Call duration"
-      }
+      },
+      "availability": "Call availability",
+      "messagesAlways": "Messaging is always available in every mode, and is blocked only by a block or restriction.",
+      "mode": {
+        "off": "Calls off",
+        "request": "Call request",
+        "direct": "Open calls"
+      },
+      "modeHint": {
+        "off": "No call button on your ads; messaging stays available.",
+        "request": "A “request a call” button appears and you get a notification to call back.",
+        "direct": "A call button appears and connects directly when you are available; a missed call is logged when you are busy or offline."
+      },
+      "requestCall": "Request a call",
+      "requestSent": "Call request sent",
+      "requests": "Call requests",
+      "requestPending": "Call request awaiting reply",
+      "callBack": "Call now",
+      "startAudio": "Start audio",
+      "stopReceiving": "Stop receiving calls"
     },
     "moderation": {
       "owner": {
