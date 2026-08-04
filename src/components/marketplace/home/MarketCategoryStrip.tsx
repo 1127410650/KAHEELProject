@@ -64,7 +64,7 @@ export function MarketCategoryStrip() {
             sessionStorage.setItem(RAIL_KEY, String(railRef.current.scrollLeft));
           }
         }}
-        className="market-rail mx-auto flex w-full max-w-7xl snap-x items-center gap-2 overflow-x-auto overscroll-x-contain px-3 py-2 sm:px-4"
+        className="market-rail mx-auto flex w-full max-w-[1240px] snap-x items-center gap-2 overflow-x-auto overscroll-x-contain px-3 py-2 sm:px-4 lg:px-6"
       >
         {HOME_CATEGORIES.map((entry) =>
           entry.home ? (
