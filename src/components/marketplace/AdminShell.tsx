@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import {
+  BarChart3,
   Activity,
   BadgeCheck,
   Bell,
@@ -77,6 +78,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/admin", labelKey: "admin.nav.home", icon: Gauge },
+  { to: "/admin/dashboard", labelKey: "admin.nav.analytics", icon: BarChart3 },
   { to: "/admin/search", labelKey: "admin.nav.search", icon: Search },
   { to: "/admin/my-work", labelKey: "admin.nav.myWork", icon: Briefcase, anyStaff: true },
   { to: "/admin/listings", labelKey: "admin.nav.listings", icon: Megaphone },
