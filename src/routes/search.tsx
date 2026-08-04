@@ -17,6 +17,7 @@ import {
 } from "@/lib/mkt-queries";
 import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
 import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
+import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
