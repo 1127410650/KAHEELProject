@@ -25,7 +25,6 @@ import { Button } from "@/components/ui/button";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
-import { AccountMenu } from "@/components/marketplace/AccountMenu";
 
 /**
  * The single header for every marketplace surface (public pages, account pages
@@ -112,8 +111,8 @@ export function MarketHeader() {
                 </Button>
               )}
               <MktNotificationsBell />
-              {/* The single account surface: identity, switching and management. */}
-              <AccountMenu />
+              {/* Account identity, switching and management live on /more only:
+                  the header never renders an account card or switcher. */}
             </>
           ) : status === "loading" ? (
             // No visitor flash and no blank bar: a small skeleton holds the
