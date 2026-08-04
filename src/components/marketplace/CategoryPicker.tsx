@@ -52,8 +52,24 @@ export function CategoryPicker({
     locale === "ar" ? o.name_ar : o.name_en || o.name_ar;
 
   const byId = useMemo(() => new Map(categories.map((c) => [c.id, c])), [categories]);
-  const roots = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
+  // Top level = the approved primary fields, in the approved order. Any root
+  // that is not part of the approved list (legacy data) sorts after them
+  // instead of being hidden, so nothing becomes unreachable.
+  const roots = useMemo(
+    () =>
+      categories
+        .filter((c) => !c.parent_id)
+        .slice()
+        .sort(
+          (a, b) =>
+            rootSlugRank(a.slug) - rootSlugRank(b.slug) ||
+            a.sort_order - b.sort_order ||
+            a.name_ar.localeCompare(b.name_ar, "ar"),
+        ),
+    [categories],
+  );
   const childrenOf = (id: string) => categories.filter((c) => c.parent_id === id);
+
 
   const pathText = useMemo(() => {
     const parts: string[] = [];
