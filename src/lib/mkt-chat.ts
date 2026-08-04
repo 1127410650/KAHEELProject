@@ -211,7 +211,7 @@ export async function shareBank(
     _conversation_id: conversationId,
     _bank_account_id: bankAccountId,
     _account_key: accountKey,
-    _request_message_id: requestMessageId ?? undefined,
+    ...(requestMessageId ? { _request_message_id: requestMessageId } : {}),
   });
   return unwrap(res) as unknown as string;
 }
@@ -227,8 +227,8 @@ export async function setConversationState(
 ): Promise<void> {
   const res = await supabase.rpc("mkt_conversation_state_set", {
     _conversation_id: conversationId,
-    _muted: patch.muted ?? undefined,
-    _hidden: patch.hidden ?? undefined,
+    ...(patch.muted === undefined ? {} : { _muted: patch.muted }),
+    ...(patch.hidden === undefined ? {} : { _hidden: patch.hidden }),
   });
   if (res.error) throw new ChatError(res.error.message);
 }
