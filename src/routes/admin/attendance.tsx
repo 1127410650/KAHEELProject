@@ -523,7 +523,7 @@ function CorrectionDialog({
           </div>
           <div>
             <Label htmlFor="corr-reason" className="text-[11px]">
-              {t("admin.reasonLabel")}
+              {t("admin.reason")}
             </Label>
             <Textarea
               id="corr-reason"

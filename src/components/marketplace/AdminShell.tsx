@@ -22,6 +22,7 @@ import {
   Store,
   Users2,
   Briefcase,
+  CalendarClock,
   UserCog,
   Users,
 } from "lucide-react";
@@ -116,6 +117,12 @@ const NAV: NavItem[] = [
     labelKey: "admin.nav.workforce",
     icon: Users2,
     perms: ["workforce.manage"],
+  },
+  {
+    to: "/admin/attendance",
+    labelKey: "admin.nav.attendance",
+    icon: CalendarClock,
+    perms: ["attendance.view", "attendance.manage", "attendance.approve"],
   },
   { to: "/admin/activities", labelKey: "admin.nav.activities", icon: ListChecks },
   { to: "/admin/geo", labelKey: "admin.nav.geo", icon: Globe2 },
