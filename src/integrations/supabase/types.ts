@@ -8869,6 +8869,21 @@ export type Database = {
         Returns: string
       }
       mkt_workforce_manage: { Args: never; Returns: boolean }
+      mkt_workforce_my_status: {
+        Args: never
+        Returns: {
+          accepts_auto: boolean
+          can_manage: boolean
+          capacity_limit: number
+          department: string
+          done_today: number
+          effective_state: string
+          on_leave: boolean
+          open_count: number
+          user_id: string
+          work_state: string
+        }[]
+      }
       mkt_workforce_open_count: { Args: { _uid: string }; Returns: number }
       mkt_workforce_overview: { Args: never; Returns: Json }
       mkt_workforce_pick_assignee: { Args: { _kind: string }; Returns: string }
