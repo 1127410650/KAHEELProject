@@ -1593,6 +1593,72 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_analytics_events: {
+        Row: {
+          browser: string | null
+          category_id: string | null
+          city_id: string | null
+          city_name: string | null
+          country_code: string | null
+          device: string | null
+          duration_ms: number | null
+          event_type: string
+          id: number
+          listing_id: string | null
+          message: string | null
+          meta: Json
+          occurred_at: string
+          path: string | null
+          query_text: string | null
+          result_count: number | null
+          session_id: string
+          severity: string | null
+          user_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          category_id?: string | null
+          city_id?: string | null
+          city_name?: string | null
+          country_code?: string | null
+          device?: string | null
+          duration_ms?: number | null
+          event_type: string
+          id?: never
+          listing_id?: string | null
+          message?: string | null
+          meta?: Json
+          occurred_at?: string
+          path?: string | null
+          query_text?: string | null
+          result_count?: number | null
+          session_id: string
+          severity?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          category_id?: string | null
+          city_id?: string | null
+          city_name?: string | null
+          country_code?: string | null
+          device?: string | null
+          duration_ms?: number | null
+          event_type?: string
+          id?: never
+          listing_id?: string | null
+          message?: string | null
+          meta?: Json
+          occurred_at?: string
+          path?: string | null
+          query_text?: string | null
+          result_count?: number | null
+          session_id?: string
+          severity?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       mkt_appeals: {
         Row: {
           created_at: string
@@ -9044,6 +9110,23 @@ export type Database = {
         Args: { _tenant_id?: string; _user_id: string }
         Returns: Json
       }
+      mkt_analytics_fields: { Args: { _days?: number }; Returns: Json }
+      mkt_analytics_funnel: { Args: { _days?: number }; Returns: Json }
+      mkt_analytics_geo: { Args: { _limit?: number }; Returns: Json }
+      mkt_analytics_guard: { Args: never; Returns: undefined }
+      mkt_analytics_health: { Args: { _days?: number }; Returns: Json }
+      mkt_analytics_listings: { Args: { _limit?: number }; Returns: Json }
+      mkt_analytics_ops: { Args: { _days?: number }; Returns: Json }
+      mkt_analytics_overview: { Args: never; Returns: Json }
+      mkt_analytics_people: {
+        Args: { _days?: number; _limit?: number }
+        Returns: Json
+      }
+      mkt_analytics_search: {
+        Args: { _days?: number; _limit?: number }
+        Returns: Json
+      }
+      mkt_analytics_timeseries: { Args: { _days?: number }; Returns: Json }
       mkt_attendance_admin_set: {
         Args: {
           _checked_in: string
@@ -9709,6 +9792,7 @@ export type Database = {
         Args: { _action: string; _reason?: string; _request_id: string }
         Returns: undefined
       }
+      mkt_root_category: { Args: { _id: string }; Returns: string }
       mkt_run_scheduled_jobs: { Args: { _source?: string }; Returns: Json }
       mkt_search_activities: {
         Args: {
@@ -9842,6 +9926,7 @@ export type Database = {
       mkt_sweep_expired_listings: { Args: never; Returns: Json }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_sweep_promotion_notices: { Args: never; Returns: number }
+      mkt_track: { Args: { _events: Json }; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       mkt_user_can: { Args: { _perm: string; _uid: string }; Returns: boolean }
       mkt_wallet_for_listing: { Args: { _id: string }; Returns: string }
