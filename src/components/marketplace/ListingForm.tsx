@@ -1170,8 +1170,12 @@ export function ListingForm({ listing }: Props) {
       )}
 
       {/* Sticky inside the page — it never covers a field, and it keeps clear of
-          the bottom navigation and the home indicator. */}
-      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex flex-col gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur sm:static sm:mx-0 sm:flex-row sm:items-center sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:pt-3 sm:backdrop-blur-none lg:bottom-0">
+          the bottom navigation and the home indicator. When the on-screen
+          keyboard shrinks the viewport the bar collapses to a single compact
+          row and drops the navigation offset, so the focused field stays
+          visible. */}
+      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex flex-col gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur [@media(max-height:560px)]:flex-row [@media(max-height:560px)]:items-center [@media(max-height:560px)]:gap-3 [@media(max-height:560px)]:bottom-0 [@media(max-height:560px)]:py-2 sm:static sm:mx-0 sm:flex-row sm:items-center sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:pt-3 sm:backdrop-blur-none lg:bottom-0">
+
         {step < STEPS.length - 1 ? (
           <Button type="button" className="min-h-11 w-full sm:w-auto sm:min-w-32" onClick={next}>
             {t("market.form.next")}
