@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { ShieldCheck, Loader2, QrCode } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -108,31 +108,19 @@ function AuthPage() {
   if (!mounted) return null;
 
   return (
-    <div dir={dir} className="market-surface grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
-
-      <div className="relative hidden flex-col justify-center bg-sidebar p-12 lg:flex">
-        <div className="mx-auto w-full max-w-md">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
-              <ShieldCheck className="size-5" aria-hidden />
-            </span>
-            <span className="text-xl font-bold text-sidebar-foreground">{t("app.name")}</span>
-          </div>
-          <h2 className="mt-10 text-3xl font-bold leading-snug text-sidebar-foreground xl:text-4xl">
-            {t("auth.welcome")}
-          </h2>
-          <p className="mt-4 text-sm leading-relaxed text-sidebar-foreground/70 xl:text-base">
-            {t("market.tagline")}
-          </p>
-        </div>
+    <div dir={dir} className="market-surface flex min-h-screen flex-col lg:grid lg:grid-cols-2">
+      {/* Desktop-only brand panel: the platform name and nothing else. */}
+      <div className="relative hidden flex-col items-center justify-center bg-market-navy p-12 lg:flex">
+        <span className="text-4xl font-bold tracking-tight text-market-navy-foreground">
+          {t("market.brand")}
+        </span>
       </div>
 
-      <div className="flex items-center justify-center px-5 py-12 lg:px-10">
-        <div className="w-full max-w-sm lg:max-w-md">
-
-          <div className="mb-8 flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground lg:hidden">
-              <ShieldCheck className="size-5" aria-hidden />
+      <div className="flex flex-1 flex-col px-5 py-8 lg:px-10 lg:py-12">
+        <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center">
+          <div className="mb-6 flex items-center justify-between gap-3">
+            <span className="text-xl font-bold tracking-tight text-foreground lg:hidden">
+              {t("market.brand")}
             </span>
             <div className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary p-1">
               <button
@@ -160,10 +148,9 @@ function AuthPage() {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-foreground">{t("auth.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("auth.subtitle")}</p>
+          <h1 className="text-xl font-bold text-foreground">{t("auth.signIn")}</h1>
 
-          <form onSubmit={onSubmit} className="mt-8 space-y-4">
+          <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="identifier">{t("auth.identifier")}</Label>
               <Input
@@ -171,11 +158,11 @@ function AuthPage() {
                 required
                 dir="ltr"
                 autoComplete="username"
+                className="h-12"
                 placeholder={t("auth.identifierHint")}
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground">{t("auth.identifierHint")}</p>
             </div>
 
             <div className="space-y-2">
@@ -186,63 +173,47 @@ function AuthPage() {
                 required
                 dir="ltr"
                 autoComplete="current-password"
+                className="h-12"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <label className="flex items-start gap-2.5 text-sm text-foreground">
+
+            <label className="flex items-center gap-2.5 text-sm text-foreground">
               <Checkbox
                 checked={remember}
                 onCheckedChange={(v) => setRemember(v === true)}
                 aria-label={t("auth.remember")}
               />
-              <span className="min-w-0">
-                {t("auth.remember")}
-                <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
-                  {t("auth.rememberHint")}
-                </span>
-              </span>
+              <span className="min-w-0">{t("auth.remember")}</span>
             </label>
 
-            <Button type="submit" className="w-full" disabled={submitting}>
+            <Button type="submit" className="h-12 w-full" disabled={submitting}>
               {submitting && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {submitting ? t("auth.signingIn") : t("auth.signIn")}
             </Button>
           </form>
 
-          <div className="mt-5 space-y-2 text-center text-xs text-muted-foreground">
+          <div className="mt-5 flex flex-col items-center gap-2 text-xs text-muted-foreground">
+            <button
+              type="button"
+              onClick={() => toast.info(t("auth.forgotSoon"))}
+              className="font-semibold text-muted-foreground underline hover:text-primary"
+            >
+              {t("auth.forgot")}
+            </button>
             <p>
               {t("auth.noAccount")}{" "}
               <Link to="/register" className="font-semibold text-primary">
                 {t("auth.createAccount")}
               </Link>
             </p>
-            <p>
-              {/* Recovery is not built yet: the entry point stays visible and honest. */}
-              <button
-                type="button"
-                onClick={() => toast.info(t("auth.forgotSoon"))}
-                className="font-semibold text-muted-foreground underline hover:text-primary"
-              >
-                {t("auth.forgot")}
-              </button>
-            </p>
-          </div>
-
-          <div className="mt-6 border-t border-border pt-4">
-            <Link
-              to="/verify-invoice"
-              className="flex items-center justify-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-            >
-              <QrCode className="size-4" aria-hidden />
-              {t("verify.publicLink")}
-            </Link>
-            <p className="mt-2 text-center text-xs text-muted-foreground">
-              {t("verify.publicSaveHint")}
-            </p>
           </div>
         </div>
+
+        <p className="mt-8 text-center text-[11px] text-muted-foreground">{t("auth.rights")}</p>
       </div>
     </div>
   );
 }
+
