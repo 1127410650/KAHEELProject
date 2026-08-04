@@ -3823,6 +3823,35 @@ export type Database = {
           },
         ]
       }
+      mkt_staff_departments: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          department_code: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          department_code: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          department_code?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_staff_departments_department_code_fkey"
+            columns: ["department_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_workforce_departments"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       mkt_staff_leaves: {
         Row: {
           cancelled_at: string | null
@@ -3892,15 +3921,52 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_staff_specialties: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          level: number
+          specialty_code: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          level?: number
+          specialty_code: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          level?: number
+          specialty_code?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_staff_specialties_specialty_code_fkey"
+            columns: ["specialty_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_workforce_specialties"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       mkt_staff_status: {
         Row: {
           accepts_auto: boolean
+          assign_priority: number
+          assigned_today: number
+          assigned_today_at: string | null
           capacity_limit: number
           created_at: string
           department: string | null
+          eligibility_level: number
           last_assigned_at: string | null
           note: string | null
           pre_leave_state: string | null
+          substitute_user_id: string | null
           updated_at: string
           updated_by: string | null
           user_id: string
@@ -3908,12 +3974,17 @@ export type Database = {
         }
         Insert: {
           accepts_auto?: boolean
+          assign_priority?: number
+          assigned_today?: number
+          assigned_today_at?: string | null
           capacity_limit?: number
           created_at?: string
           department?: string | null
+          eligibility_level?: number
           last_assigned_at?: string | null
           note?: string | null
           pre_leave_state?: string | null
+          substitute_user_id?: string | null
           updated_at?: string
           updated_by?: string | null
           user_id: string
@@ -3921,12 +3992,17 @@ export type Database = {
         }
         Update: {
           accepts_auto?: boolean
+          assign_priority?: number
+          assigned_today?: number
+          assigned_today_at?: string | null
           capacity_limit?: number
           created_at?: string
           department?: string | null
+          eligibility_level?: number
           last_assigned_at?: string | null
           note?: string | null
           pre_leave_state?: string | null
+          substitute_user_id?: string | null
           updated_at?: string
           updated_by?: string | null
           user_id?: string
@@ -4341,9 +4417,11 @@ export type Database = {
         Row: {
           code: string
           created_at: string
+          description: string | null
           is_active: boolean
           name_ar: string
           name_en: string
+          pause_auto_when_off: boolean
           queue_kinds: string[]
           sort_order: number
           updated_at: string
@@ -4351,9 +4429,11 @@ export type Database = {
         Insert: {
           code: string
           created_at?: string
+          description?: string | null
           is_active?: boolean
           name_ar: string
           name_en: string
+          pause_auto_when_off?: boolean
           queue_kinds?: string[]
           sort_order?: number
           updated_at?: string
@@ -4361,14 +4441,117 @@ export type Database = {
         Update: {
           code?: string
           created_at?: string
+          description?: string | null
           is_active?: boolean
           name_ar?: string
           name_en?: string
+          pause_auto_when_off?: boolean
           queue_kinds?: string[]
           sort_order?: number
           updated_at?: string
         }
         Relationships: []
+      }
+      mkt_workforce_kinds: {
+        Row: {
+          allow_general: boolean
+          created_at: string
+          default_priority: string
+          department_code: string | null
+          is_active: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          required_specialty: string | null
+          sla_minutes: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          allow_general?: boolean
+          created_at?: string
+          default_priority?: string
+          department_code?: string | null
+          is_active?: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          required_specialty?: string | null
+          sla_minutes?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          allow_general?: boolean
+          created_at?: string
+          default_priority?: string
+          department_code?: string | null
+          is_active?: boolean
+          kind?: string
+          name_ar?: string
+          name_en?: string
+          required_specialty?: string | null
+          sla_minutes?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_workforce_kinds_department_code_fkey"
+            columns: ["department_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_workforce_departments"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "mkt_workforce_kinds_required_specialty_fkey"
+            columns: ["required_specialty"]
+            isOneToOne: false
+            referencedRelation: "mkt_workforce_specialties"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      mkt_workforce_specialties: {
+        Row: {
+          code: string
+          created_at: string
+          department_code: string | null
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          department_code?: string | null
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          department_code?: string | null
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_workforce_specialties_department_code_fkey"
+            columns: ["department_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_workforce_departments"
+            referencedColumns: ["code"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -8336,6 +8519,7 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
+      mkt_departments_manage: { Args: never; Returns: boolean }
       mkt_enforce_listing: {
         Args: {
           _action: string
@@ -8803,8 +8987,16 @@ export type Database = {
         Returns: undefined
       }
       mkt_slugify: { Args: { _text: string }; Returns: string }
+      mkt_staff_eligible: {
+        Args: { _kind: string; _user_id: string }
+        Returns: boolean
+      }
       mkt_staff_has: { Args: { _perm: string }; Returns: boolean }
       mkt_staff_on_leave: { Args: { _uid: string }; Returns: boolean }
+      mkt_staff_specialist: {
+        Args: { _kind: string; _user_id: string }
+        Returns: boolean
+      }
       mkt_submit_appeal: {
         Args: { _reason: string; _report_id: string }
         Returns: string
@@ -8846,6 +9038,10 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_workforce_assigned_today: {
+        Args: { _user_id: string }
+        Returns: number
+      }
       mkt_workforce_autoqueue: {
         Args: { _kind: string; _priority?: string; _subject_id: string }
         Returns: undefined
@@ -8857,6 +9053,38 @@ export type Database = {
       mkt_workforce_close_item: {
         Args: { _kind: string; _subject_id: string }
         Returns: undefined
+      }
+      mkt_workforce_department_save: {
+        Args: {
+          _code: string
+          _description: string
+          _is_active: boolean
+          _name_ar: string
+          _name_en: string
+          _pause_auto: boolean
+          _queue_kinds: string[]
+          _sort: number
+        }
+        Returns: undefined
+      }
+      mkt_workforce_departments_overview: {
+        Args: never
+        Returns: {
+          code: string
+          description: string
+          is_active: boolean
+          kinds: Json
+          name_ar: string
+          name_en: string
+          open_count: number
+          overdue_count: number
+          pause_auto_when_off: boolean
+          queue_kinds: string[]
+          sort_order: number
+          specialties: Json
+          staff_count: number
+          unassigned_count: number
+        }[]
       }
       mkt_workforce_distribute: {
         Args: { _kind?: string; _limit?: number }
@@ -8870,6 +9098,21 @@ export type Database = {
           _subject_id: string
         }
         Returns: string
+      }
+      mkt_workforce_is_staff: { Args: never; Returns: boolean }
+      mkt_workforce_kind_save: {
+        Args: {
+          _allow_general: boolean
+          _default_priority: string
+          _department: string
+          _is_active: boolean
+          _kind: string
+          _name_ar: string
+          _name_en: string
+          _required_specialty: string
+          _sla_minutes: number
+        }
+        Returns: undefined
       }
       mkt_workforce_manage: { Args: never; Returns: boolean }
       mkt_workforce_my_status: {
@@ -8888,6 +9131,19 @@ export type Database = {
         }[]
       }
       mkt_workforce_open_count: { Args: { _uid: string }; Returns: number }
+      mkt_workforce_overdue_count: {
+        Args: { _user_id: string }
+        Returns: number
+      }
+      mkt_workforce_override_assign: {
+        Args: {
+          _kind: string
+          _reason: string
+          _subject_id: string
+          _user_id: string
+        }
+        Returns: string
+      }
       mkt_workforce_overview: { Args: never; Returns: Json }
       mkt_workforce_pick_assignee: { Args: { _kind: string }; Returns: string }
       mkt_workforce_queue: {
@@ -8906,6 +9162,10 @@ export type Database = {
           progress: string
           subject_id: string
         }[]
+      }
+      mkt_workforce_reassign_from: {
+        Args: { _reason: string; _user_id: string }
+        Returns: number
       }
       mkt_workforce_refresh_leave_states: { Args: never; Returns: number }
       mkt_workforce_set_priority: {
@@ -8930,6 +9190,30 @@ export type Database = {
           _reason: string
           _user_id: string
           _work_state: string
+        }
+        Returns: undefined
+      }
+      mkt_workforce_set_staff_profile: {
+        Args: {
+          _assign_priority: number
+          _eligibility_level: number
+          _extra_departments: string[]
+          _primary_department: string
+          _reason: string
+          _specialties: string[]
+          _substitute: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      mkt_workforce_specialty_save: {
+        Args: {
+          _code: string
+          _department: string
+          _is_active: boolean
+          _name_ar: string
+          _name_en: string
+          _sort: number
         }
         Returns: undefined
       }
