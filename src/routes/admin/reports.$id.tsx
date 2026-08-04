@@ -51,6 +51,7 @@ import {
   type StaffAccess,
 } from "@/lib/mkt-reports";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminAssignmentBar } from "@/components/marketplace/AdminAssignmentBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
