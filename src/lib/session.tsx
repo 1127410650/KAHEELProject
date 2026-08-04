@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { consumeManualSignOut } from "@/lib/auth-session";
+import { restoreAuthStorage, syncAuthStorage } from "@/lib/auth-storage";
 import { useI18n, type Locale } from "@/i18n";
 import type { Permission } from "@/lib/permissions";
 
@@ -91,6 +92,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
 
+    // Session-only mode keeps the official Supabase entry in sessionStorage;
+    // hand it back to the client before the first read so a reload never
+    // signs the user out mid-session.
+    restoreAuthStorage();
+
     supabase.auth.getSession().then(async ({ data }) => {
       if (!active) return;
       setSession(data.session);
@@ -99,6 +105,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      // Keep the persistence scope aligned after every write/refresh.
+      syncAuthStorage();
       if (event === "SIGNED_OUT") {
         // Only a real revocation (or a rejected refresh token) reaches here without
         // the manual flag; say so once instead of failing silently.
