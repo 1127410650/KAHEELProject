@@ -18,8 +18,12 @@ import {
   CallSession,
   RING_TIMEOUT_MS,
   callEligibility,
+  createCallRequest,
   loadCallPeer,
+  markCallMissed,
+  stopReceivingCalls,
   startCall,
+  startCallFromRequest,
   transitionCall,
   type CallPeer,
   type CallStatus,
@@ -41,20 +45,32 @@ export interface ActiveCall {
   muted: boolean;
   /** Seconds since the call was accepted; 0 until then. */
   seconds: number;
+  /**
+   * True when the browser refused microphone access without a user gesture, so
+   * the panel must show an explicit "start audio" button.
+   */
+  needsAudioGesture: boolean;
 }
 
 interface CallCenterValue {
   call: ActiveCall | null;
   /** Places a call for an ad; resolves once ringing starts or fails. */
   placeCall: (listingId: string) => Promise<void>;
+  /** Advertiser is in "request" mode: leave a call request instead of ringing. */
+  requestCall: (listingId: string) => Promise<boolean>;
+  /** Advertiser answers an open request by calling the requester back. */
+  startFromRequest: (requestId: string) => Promise<void>;
   accept: () => Promise<void>;
   decline: () => Promise<void>;
   hangUp: () => Promise<void>;
   toggleMute: () => void;
   dismiss: () => void;
+  /** Stops receiving calls right away and ends whatever is live. */
+  stopReceiving: () => Promise<void>;
   /** True while a call attempt is being set up (button spinner). */
   starting: boolean;
 }
+
 
 const CallCenterContext = createContext<CallCenterValue | null>(null);
 
@@ -63,6 +79,24 @@ const TERMINAL: CallStatus[] = ["declined", "no_answer", "busy", "failed", "ende
 function isTerminal(status: CallStatus) {
   return TERMINAL.includes(status);
 }
+
+/**
+ * Microphone permission is only requested when a call actually starts. When the
+ * browser still needs a user gesture we do not auto-answer — the panel shows a
+ * "start audio" button instead.
+ */
+async function micAlreadyGranted(): Promise<boolean> {
+  if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) return false;
+  try {
+    const status = await navigator.permissions?.query({
+      name: "microphone" as PermissionName,
+    });
+    return status?.state === "granted";
+  } catch {
+    return false;
+  }
+}
+
 
 export function CallCenterProvider({ children }: { children: ReactNode }) {
   const { session } = useSession();
@@ -78,6 +112,10 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
   const tickTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const callRef = useRef<ActiveCall | null>(null);
   callRef.current = call;
+  /** Lets the incoming-call listener auto-answer without a declaration cycle. */
+  const acceptRef = useRef<((callId: string) => Promise<void>) | null>(null);
+
+
 
   const clearTimers = useCallback(() => {
     if (ringTimer.current) clearTimeout(ringTimer.current);
@@ -148,7 +186,11 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
         (payload) => {
           const row = payload.new as { id: string; status: CallStatus };
           if (row.status !== "requesting" && row.status !== "ringing") return;
-          if (sessionRef.current) return; // already busy on this device
+          if (sessionRef.current) {
+            // Already on a call on this device: the caller sees a missed call.
+            void markCallMissed(row.id, "busy").catch(() => undefined);
+            return;
+          }
           void (async () => {
             const peer = await loadCallPeer(row.id);
             setCall({
@@ -163,12 +205,18 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
               errorKey: null,
               muted: false,
               seconds: 0,
+              needsAudioGesture: false,
             });
             await transitionCall(row.id, "ringing").catch(() => undefined);
             ringTimer.current = setTimeout(() => {
-              void transitionCall(row.id, "no_answer").catch(() => undefined);
+              void markCallMissed(row.id, "no_answer").catch(() => undefined);
               void finish("no_answer", null, false);
             }, RING_TIMEOUT_MS);
+
+            // Direct mode: connect straight away when the microphone permission
+            // is already granted, otherwise ask for one tap ("start audio").
+            if (await micAlreadyGranted()) void acceptRef.current?.(row.id);
+            else setCall((prev) => (prev ? { ...prev, needsAudioGesture: true } : prev));
           })();
         },
       )
@@ -177,6 +225,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       void supabase.removeChannel(channel);
     };
   }, [userId, finish]);
+
 
   /* ------------------- peer-side status changes (both) ------------------ */
   useEffect(() => {
@@ -251,6 +300,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
           errorKey: null,
           muted: false,
           seconds: 0,
+          needsAudioGesture: false,
         });
         const rtc = attachSession(started.call_id, true);
         try {
@@ -262,12 +312,14 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
         }
         await rtc.connect();
         ringTimer.current = setTimeout(() => {
-          void transitionCall(started.call_id, "no_answer").catch(() => undefined);
+          // Offline or simply not picking up: log a missed call for the callee.
+          void markCallMissed(started.call_id, "no_answer").catch(() => undefined);
           void finish("no_answer", null, true);
         }, RING_TIMEOUT_MS);
       } catch (error) {
         const message = error instanceof Error ? error.message : "generic";
-        const key = message.includes("rate") ? "rate_limited" : "generic";
+        const reason = message.match(/CALL_NOT_ALLOWED:(\w+)/)?.[1];
+        const key = reason ?? (message.includes("rate") ? "rate_limited" : "generic");
         toast.error(t(`market.call.error.${key}`));
         await teardown(false);
         setCall(null);
@@ -278,30 +330,142 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     [attachSession, finish, t, teardown, userId],
   );
 
+  /**
+   * Answers a specific call id. Direct mode calls this without a tap when the
+   * microphone permission is already granted; otherwise the user taps
+   * "start audio" / "accept" and lands here too.
+   */
+  const answerCall = useCallback(
+    async (callId: string) => {
+      if (sessionRef.current) return;
+      clearTimers();
+      setCall((prev) => (prev ? { ...prev, needsAudioGesture: false } : prev));
+      const rtc = attachSession(callId, false);
+      try {
+        await rtc.prepareMicrophone();
+      } catch {
+        // Permission was refused: keep the call alive so the user can retry.
+        sessionRef.current = null;
+        await rtc.close(false).catch(() => undefined);
+        setCall((prev) =>
+          prev ? { ...prev, needsAudioGesture: true, errorKey: "mic_denied" } : prev,
+        );
+        return;
+      }
+      await transitionCall(callId, "connected").catch(() => undefined);
+      await rtc.connect();
+      setCall((prev) =>
+        prev ? { ...prev, status: "connected", seconds: 0, errorKey: null } : prev,
+      );
+    },
+    [attachSession, clearTimers],
+  );
+  acceptRef.current = answerCall;
+
   const accept = useCallback(async () => {
-    const current = call;
+    const current = callRef.current;
     if (!current || current.role !== "callee") return;
-    clearTimers();
-    const rtc = attachSession(current.id, false);
-    try {
-      await rtc.prepareMicrophone();
-    } catch {
-      await transitionCall(current.id, "failed", "mic_denied").catch(() => undefined);
-      await finish("failed", "mic_denied", false);
-      return;
-    }
-    await transitionCall(current.id, "connected").catch(() => undefined);
-    await rtc.connect();
-    setCall((prev) => (prev ? { ...prev, status: "connected", seconds: 0 } : prev));
-  }, [attachSession, call, clearTimers, finish]);
+    await answerCall(current.id);
+  }, [answerCall]);
+
+  const requestCall = useCallback(
+    async (listingId: string) => {
+      if (!userId) {
+        toast.error(t("market.call.error.auth_required"));
+        return false;
+      }
+      setStarting(true);
+      try {
+        await createCallRequest(listingId);
+        toast.success(t("market.call.requestSent"));
+        return true;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "generic";
+        const reason = message.match(/CALL_NOT_ALLOWED:(\w+)/)?.[1] ?? "generic";
+        toast.error(t(`market.call.error.${reason}`));
+        return false;
+      } finally {
+        setStarting(false);
+      }
+    },
+    [t, userId],
+  );
+
+  const startFromRequest = useCallback(
+    async (requestId: string) => {
+      if (sessionRef.current) {
+        toast.error(t("market.call.error.busy"));
+        return;
+      }
+      setStarting(true);
+      try {
+        const started = await startCallFromRequest(requestId);
+        const peer = await loadCallPeer(started.call_id);
+        setCall({
+          id: started.call_id,
+          role: "caller",
+          status: "requesting",
+          peerName: peer?.peer_name ?? "",
+          peerAvatar: peer?.peer_avatar ?? null,
+          listingTitle: peer?.listing_title ?? null,
+          conversationId: started.conversation_id ?? peer?.conversation_id ?? null,
+          peerUserId: null,
+          errorKey: null,
+          muted: false,
+          seconds: 0,
+          needsAudioGesture: false,
+        });
+        const rtc = attachSession(started.call_id, true);
+        try {
+          await rtc.prepareMicrophone();
+        } catch {
+          await transitionCall(started.call_id, "failed", "mic_denied").catch(() => undefined);
+          await finish("failed", "mic_denied", false);
+          return;
+        }
+        await rtc.connect();
+        ringTimer.current = setTimeout(() => {
+          void markCallMissed(started.call_id, "no_answer").catch(() => undefined);
+          void finish("no_answer", null, true);
+        }, RING_TIMEOUT_MS);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "generic";
+        const reason = message.match(/CALL_NOT_ALLOWED:(\w+)/)?.[1] ?? "generic";
+        toast.error(t(`market.call.error.${reason}`));
+        await teardown(false);
+        setCall(null);
+        throw error;
+      } finally {
+        setStarting(false);
+      }
+    },
+    [attachSession, finish, t, teardown],
+  );
+
 
   const decline = useCallback(async () => {
-    const current = call;
+    const current = callRef.current;
     if (!current) return;
     clearTimers();
     await transitionCall(current.id, "declined").catch(() => undefined);
     await finish("declined", null, true);
-  }, [call, clearTimers, finish]);
+  }, [clearTimers, finish]);
+
+  /** Always-available kill switch: stop new calls and end the current one. */
+  const stopReceiving = useCallback(async () => {
+    try {
+      await stopReceivingCalls();
+      clearTimers();
+      const current = callRef.current;
+      if (current && !isTerminal(current.status)) {
+        await finish(current.status === "connected" ? "ended" : "cancelled", null, true);
+      }
+      toast.success(t("market.call.disabled"));
+    } catch {
+      toast.error(t("market.actions.failed"));
+    }
+  }, [clearTimers, finish, t]);
+
 
   const hangUp = useCallback(async () => {
     const current = call;
@@ -352,8 +516,32 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
   }, [teardown]);
 
   const value = useMemo<CallCenterValue>(
-    () => ({ call, placeCall, accept, decline, hangUp, toggleMute, dismiss, starting }),
-    [accept, call, decline, dismiss, hangUp, placeCall, starting, toggleMute],
+    () => ({
+      call,
+      placeCall,
+      requestCall,
+      startFromRequest,
+      accept,
+      decline,
+      hangUp,
+      toggleMute,
+      dismiss,
+      stopReceiving,
+      starting,
+    }),
+    [
+      accept,
+      call,
+      decline,
+      dismiss,
+      hangUp,
+      placeCall,
+      requestCall,
+      startFromRequest,
+      starting,
+      stopReceiving,
+      toggleMute,
+    ],
   );
 
   return (
@@ -372,6 +560,9 @@ export function useCallCenter(): CallCenterValue {
   return {
     call: null,
     placeCall: async () => undefined,
+    requestCall: async () => false,
+    startFromRequest: async () => undefined,
+    stopReceiving: async () => undefined,
     accept: async () => undefined,
     decline: async () => undefined,
     hangUp: async () => undefined,

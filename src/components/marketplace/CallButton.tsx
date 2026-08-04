@@ -20,7 +20,7 @@ interface Props {
 export function CallButton({ listingId, className }: Props) {
   const { t } = useI18n();
   const { session } = useSession();
-  const { placeCall, starting, call } = useCallCenter();
+  const { placeCall, requestCall, starting, call } = useCallCenter();
 
   const eligibility = useQuery({
     queryKey: ["mkt", "call-eligibility", listingId, session?.user.id ?? "anon"],
@@ -29,9 +29,13 @@ export function CallButton({ listingId, className }: Props) {
     staleTime: 60_000,
   });
 
+  // Mode "off" (or any other ineligibility) hides the button entirely; chat and
+  // quote requests stay available elsewhere in the actions row.
   if (!session || !eligibility.data?.ok) return null;
 
+  const mode = eligibility.data.mode ?? "direct";
   const busy = starting || !!call;
+  const isRequest = mode === "request";
 
   return (
     <Button
@@ -39,14 +43,15 @@ export function CallButton({ listingId, className }: Props) {
       variant="outline"
       className={className ?? "h-11 w-full sm:h-10"}
       disabled={busy}
-      onClick={() => void placeCall(listingId)}
+      onClick={() => void (isRequest ? requestCall(listingId) : placeCall(listingId))}
     >
       {starting ? (
         <Loader2 className="size-4 animate-spin" aria-hidden />
       ) : (
         <PhoneCall className="size-4" aria-hidden />
       )}
-      {t("market.call.call")}
+      {isRequest ? t("market.call.requestCall") : t("market.call.call")}
     </Button>
   );
 }
+
