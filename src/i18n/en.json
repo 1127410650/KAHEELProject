@@ -3070,7 +3070,8 @@
         "body": "For any question or to report a listing, use the report button on the listing page or write to us at:"
       }
     },
-    "retry": "Retry"
+    "retry": "Retry",
+    "loadError": "Could not load listings. Check your connection and try again."
   },
   "routeError": {
     "notFoundTitle": "Page not found",
