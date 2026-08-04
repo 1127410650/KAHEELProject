@@ -15,7 +15,6 @@ import {
   Pencil,
   Play,
   QrCode,
-  RefreshCw,
   RotateCcw,
   Search,
   Send,
@@ -33,7 +32,6 @@ import { useActiveAccount } from "@/lib/mkt-account";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { priceLabel, resolveMedia, type MktListing } from "@/lib/mkt";
 import {
-  LISTING_DURATIONS,
   MY_LISTING_COLUMNS,
   MY_LISTING_STATUSES,
   allowedOps,
@@ -43,12 +41,10 @@ import {
   pauseListing,
   reactivateListing,
   remainingLabel,
-  renewListing,
   restoreListing,
   resumeListing,
   submitListing,
   trackListingEvent,
-  type ListingDuration,
 } from "@/lib/mkt-listing-ops";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
