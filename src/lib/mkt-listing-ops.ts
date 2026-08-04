@@ -59,8 +59,16 @@ function opError(message: string): ListingOpError {
   // Publish-time gates raised by triggers, not by the submit function itself.
   if (message.includes("BUSINESS_DETAILS_INCOMPLETE")) return "business_incomplete";
   if (message.includes("GEO_LOCATION_REQUIRED")) return "geo_required";
+  if (message.includes("PRICE_REQUIRED")) return "price_required";
+  if (
+    message.includes("PRICE_INVALID") ||
+    message.includes("PRICE_TOO_LARGE") ||
+    message.includes("PRICE_UNIT_INVALID")
+  )
+    return "price_invalid";
   return "failed";
 }
+
 
 
 async function call<T>(promise: PromiseLike<{ data: T; error: { message: string } | null }>) {
