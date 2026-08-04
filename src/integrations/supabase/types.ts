@@ -8843,8 +8843,16 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_workforce_autoqueue: {
+        Args: { _kind: string; _priority?: string; _subject_id: string }
+        Returns: undefined
+      }
       mkt_workforce_cancel_leave: {
         Args: { _id: string; _reason: string }
+        Returns: undefined
+      }
+      mkt_workforce_close_item: {
+        Args: { _kind: string; _subject_id: string }
         Returns: undefined
       }
       mkt_workforce_distribute: {
