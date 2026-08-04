@@ -2394,6 +2394,154 @@ export type Database = {
           },
         ]
       }
+      mkt_cart_item_addons: {
+        Row: {
+          addon_id: string
+          addon_price_snapshot: number
+          cart_item_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          addon_id: string
+          addon_price_snapshot?: number
+          cart_item_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          addon_id?: string
+          addon_price_snapshot?: number
+          cart_item_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cart_item_addons_addon_id_fkey"
+            columns: ["addon_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_addons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_cart_item_addons_cart_item_id_fkey"
+            columns: ["cart_item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cart_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_cart_items: {
+        Row: {
+          cart_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          quantity: number
+          store_item_id: string
+          unit_price_snapshot: number
+          updated_at: string
+          variant_id: string | null
+        }
+        Insert: {
+          cart_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          quantity?: number
+          store_item_id: string
+          unit_price_snapshot?: number
+          updated_at?: string
+          variant_id?: string | null
+        }
+        Update: {
+          cart_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          quantity?: number
+          store_item_id?: string
+          unit_price_snapshot?: number
+          updated_at?: string
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cart_items_cart_id_fkey"
+            columns: ["cart_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_carts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_cart_items_store_item_id_fkey"
+            columns: ["store_item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_cart_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_item_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_carts: {
+        Row: {
+          active_account_id: string | null
+          branch_id: string | null
+          created_at: string
+          customer_user_id: string
+          expires_at: string
+          id: string
+          status: string
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          active_account_id?: string | null
+          branch_id?: string | null
+          created_at?: string
+          customer_user_id?: string
+          expires_at?: string
+          id?: string
+          status?: string
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          active_account_id?: string | null
+          branch_id?: string | null
+          created_at?: string
+          customer_user_id?: string
+          expires_at?: string
+          id?: string
+          status?: string
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_carts_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_carts_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_categories: {
         Row: {
           created_at: string
@@ -3748,6 +3896,301 @@ export type Database = {
           },
         ]
       }
+      mkt_order_item_addons: {
+        Row: {
+          addon_name_snapshot: string
+          created_at: string
+          id: string
+          order_item_id: string
+          price_snapshot: number
+        }
+        Insert: {
+          addon_name_snapshot: string
+          created_at?: string
+          id?: string
+          order_item_id: string
+          price_snapshot?: number
+        }
+        Update: {
+          addon_name_snapshot?: string
+          created_at?: string
+          id?: string
+          order_item_id?: string
+          price_snapshot?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_order_item_addons_order_item_id_fkey"
+            columns: ["order_item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_order_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_order_items: {
+        Row: {
+          addons_total: number
+          created_at: string
+          customer_notes: string | null
+          id: string
+          item_name_snapshot: string
+          line_total: number
+          order_id: string
+          quantity: number
+          store_item_id: string | null
+          unit_price: number
+          variant_name_snapshot: string | null
+        }
+        Insert: {
+          addons_total?: number
+          created_at?: string
+          customer_notes?: string | null
+          id?: string
+          item_name_snapshot: string
+          line_total: number
+          order_id: string
+          quantity: number
+          store_item_id?: string | null
+          unit_price: number
+          variant_name_snapshot?: string | null
+        }
+        Update: {
+          addons_total?: number
+          created_at?: string
+          customer_notes?: string | null
+          id?: string
+          item_name_snapshot?: string
+          line_total?: number
+          order_id?: string
+          quantity?: number
+          store_item_id?: string | null
+          unit_price?: number
+          variant_name_snapshot?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_order_items_store_item_id_fkey"
+            columns: ["store_item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_order_status_history: {
+        Row: {
+          changed_by_account_id: string | null
+          changed_by_user_id: string | null
+          created_at: string
+          id: string
+          new_status: string
+          note: string | null
+          old_status: string | null
+          order_id: string
+        }
+        Insert: {
+          changed_by_account_id?: string | null
+          changed_by_user_id?: string | null
+          created_at?: string
+          id?: string
+          new_status: string
+          note?: string | null
+          old_status?: string | null
+          order_id: string
+        }
+        Update: {
+          changed_by_account_id?: string | null
+          changed_by_user_id?: string | null
+          created_at?: string
+          id?: string
+          new_status?: string
+          note?: string | null
+          old_status?: string | null
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_order_status_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_orders: {
+        Row: {
+          accepted_at: string | null
+          branch_id: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          completed_at: string | null
+          conversation_id: string | null
+          created_at: string
+          currency_code: string
+          customer_account_id: string | null
+          customer_name_snapshot: string | null
+          customer_notes: string | null
+          customer_phone_snapshot: string | null
+          customer_user_id: string
+          delivery_address_text: string | null
+          delivery_city_id: string | null
+          delivery_district: string | null
+          delivery_fee: number
+          delivery_latitude: number | null
+          delivery_longitude: number | null
+          fulfillment_type: string
+          id: string
+          idempotency_key: string
+          location_precision: string
+          merchant_account_id: string | null
+          merchant_notes: string | null
+          merchant_tenant_id: string | null
+          merchant_user_id: string
+          order_number: string
+          order_status: string
+          payment_method: string
+          payment_provider: string | null
+          payment_reference: string | null
+          payment_status: string
+          qa_batch_id: string | null
+          share_phone_with_merchant: boolean
+          storefront_id: string
+          submitted_at: string | null
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          branch_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          completed_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          currency_code?: string
+          customer_account_id?: string | null
+          customer_name_snapshot?: string | null
+          customer_notes?: string | null
+          customer_phone_snapshot?: string | null
+          customer_user_id?: string
+          delivery_address_text?: string | null
+          delivery_city_id?: string | null
+          delivery_district?: string | null
+          delivery_fee?: number
+          delivery_latitude?: number | null
+          delivery_longitude?: number | null
+          fulfillment_type: string
+          id?: string
+          idempotency_key: string
+          location_precision?: string
+          merchant_account_id?: string | null
+          merchant_notes?: string | null
+          merchant_tenant_id?: string | null
+          merchant_user_id: string
+          order_number: string
+          order_status?: string
+          payment_method?: string
+          payment_provider?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          qa_batch_id?: string | null
+          share_phone_with_merchant?: boolean
+          storefront_id: string
+          submitted_at?: string | null
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          branch_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          completed_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          currency_code?: string
+          customer_account_id?: string | null
+          customer_name_snapshot?: string | null
+          customer_notes?: string | null
+          customer_phone_snapshot?: string | null
+          customer_user_id?: string
+          delivery_address_text?: string | null
+          delivery_city_id?: string | null
+          delivery_district?: string | null
+          delivery_fee?: number
+          delivery_latitude?: number | null
+          delivery_longitude?: number | null
+          fulfillment_type?: string
+          id?: string
+          idempotency_key?: string
+          location_precision?: string
+          merchant_account_id?: string | null
+          merchant_notes?: string | null
+          merchant_tenant_id?: string | null
+          merchant_user_id?: string
+          order_number?: string
+          order_status?: string
+          payment_method?: string
+          payment_provider?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          qa_batch_id?: string | null
+          share_phone_with_merchant?: boolean
+          storefront_id?: string
+          submitted_at?: string | null
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_orders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_orders_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_orders_delivery_city_id_fkey"
+            columns: ["delivery_city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_orders_merchant_tenant_id_fkey"
+            columns: ["merchant_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_orders_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_platform_admins: {
         Row: {
           created_at: string
@@ -4669,6 +5112,811 @@ export type Database = {
           reason?: string
         }
         Relationships: []
+      }
+      mkt_store_addon_groups: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          is_required: boolean
+          item_id: string
+          maximum_choices: number | null
+          minimum_choices: number
+          name_ar: string
+          name_en: string | null
+          selection_type: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          is_required?: boolean
+          item_id: string
+          maximum_choices?: number | null
+          minimum_choices?: number
+          name_ar: string
+          name_en?: string | null
+          selection_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          is_required?: boolean
+          item_id?: string
+          maximum_choices?: number | null
+          minimum_choices?: number
+          name_ar?: string
+          name_en?: string | null
+          selection_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_addon_groups_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_addons: {
+        Row: {
+          addon_group_id: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          is_available: boolean
+          name_ar: string
+          name_en: string | null
+          price_delta: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          addon_group_id: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          is_available?: boolean
+          name_ar: string
+          name_en?: string | null
+          price_delta?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          addon_group_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          is_available?: boolean
+          name_ar?: string
+          name_en?: string | null
+          price_delta?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_addons_addon_group_id_fkey"
+            columns: ["addon_group_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_addon_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_audit: {
+        Row: {
+          action: string
+          actor_account_id: string | null
+          actor_user_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          is_admin_action: boolean
+          new_value: Json | null
+          old_value: Json | null
+          order_id: string | null
+          reason: string | null
+          storefront_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_account_id?: string | null
+          actor_user_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          is_admin_action?: boolean
+          new_value?: Json | null
+          old_value?: Json | null
+          order_id?: string | null
+          reason?: string | null
+          storefront_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_account_id?: string | null
+          actor_user_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          is_admin_action?: boolean
+          new_value?: Json | null
+          old_value?: Json | null
+          order_id?: string | null
+          reason?: string | null
+          storefront_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_audit_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_audit_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_branches: {
+        Row: {
+          address_text: string | null
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          deleted_at: string | null
+          delivery_enabled: boolean
+          district: string | null
+          id: string
+          is_primary: boolean
+          latitude: number | null
+          longitude: number | null
+          name: string
+          pickup_enabled: boolean
+          public_phone: string | null
+          status: string
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          address_text?: string | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          delivery_enabled?: boolean
+          district?: string | null
+          id?: string
+          is_primary?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          pickup_enabled?: boolean
+          public_phone?: string | null
+          status?: string
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          address_text?: string | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          delivery_enabled?: boolean
+          district?: string | null
+          id?: string
+          is_primary?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          pickup_enabled?: boolean
+          public_phone?: string | null
+          status?: string
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_branches_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_branches_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_branches_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_cuisines: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_store_delivery_zones: {
+        Row: {
+          branch_id: string
+          city_id: string | null
+          created_at: string
+          delivery_fee: number
+          district: string | null
+          estimated_minutes_max: number | null
+          estimated_minutes_min: number | null
+          id: string
+          is_active: boolean
+          minimum_order_amount: number
+          radius_km: number | null
+          updated_at: string
+        }
+        Insert: {
+          branch_id: string
+          city_id?: string | null
+          created_at?: string
+          delivery_fee?: number
+          district?: string | null
+          estimated_minutes_max?: number | null
+          estimated_minutes_min?: number | null
+          id?: string
+          is_active?: boolean
+          minimum_order_amount?: number
+          radius_km?: number | null
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string
+          city_id?: string | null
+          created_at?: string
+          delivery_fee?: number
+          district?: string | null
+          estimated_minutes_max?: number | null
+          estimated_minutes_min?: number | null
+          id?: string
+          is_active?: boolean
+          minimum_order_amount?: number
+          radius_km?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_delivery_zones_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_delivery_zones_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_hours: {
+        Row: {
+          branch_id: string
+          closes_at: string | null
+          created_at: string
+          id: string
+          is_closed: boolean
+          opens_at: string | null
+          second_closes_at: string | null
+          second_opens_at: string | null
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          branch_id: string
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          is_closed?: boolean
+          opens_at?: string | null
+          second_closes_at?: string | null
+          second_opens_at?: string | null
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          branch_id?: string
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          is_closed?: boolean
+          opens_at?: string | null
+          second_closes_at?: string | null
+          second_opens_at?: string | null
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_hours_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_item_variants: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          fixed_price: number | null
+          id: string
+          is_available: boolean
+          item_id: string
+          name_ar: string
+          name_en: string | null
+          price_delta: number
+          sort_order: number
+          stock_quantity: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          fixed_price?: number | null
+          id?: string
+          is_available?: boolean
+          item_id: string
+          name_ar: string
+          name_en?: string | null
+          price_delta?: number
+          sort_order?: number
+          stock_quantity?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          fixed_price?: number | null
+          id?: string
+          is_available?: boolean
+          item_id?: string
+          name_ar?: string
+          name_en?: string | null
+          price_delta?: number
+          sort_order?: number
+          stock_quantity?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_item_variants_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_items: {
+        Row: {
+          allow_notes: boolean
+          base_price: number
+          compare_at_price: number | null
+          created_at: string
+          currency_code: string
+          deleted_at: string | null
+          description_ar: string | null
+          description_en: string | null
+          duration_minutes: number | null
+          id: string
+          image_path: string | null
+          is_available: boolean
+          is_featured: boolean
+          item_type: string
+          name_ar: string
+          name_en: string | null
+          preparation_minutes: number | null
+          qa_batch_id: string | null
+          section_id: string | null
+          sort_order: number
+          source_listing_id: string | null
+          stock_quantity: number | null
+          storefront_id: string
+          track_inventory: boolean
+          updated_at: string
+        }
+        Insert: {
+          allow_notes?: boolean
+          base_price?: number
+          compare_at_price?: number | null
+          created_at?: string
+          currency_code?: string
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          duration_minutes?: number | null
+          id?: string
+          image_path?: string | null
+          is_available?: boolean
+          is_featured?: boolean
+          item_type?: string
+          name_ar: string
+          name_en?: string | null
+          preparation_minutes?: number | null
+          qa_batch_id?: string | null
+          section_id?: string | null
+          sort_order?: number
+          source_listing_id?: string | null
+          stock_quantity?: number | null
+          storefront_id: string
+          track_inventory?: boolean
+          updated_at?: string
+        }
+        Update: {
+          allow_notes?: boolean
+          base_price?: number
+          compare_at_price?: number | null
+          created_at?: string
+          currency_code?: string
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          duration_minutes?: number | null
+          id?: string
+          image_path?: string | null
+          is_available?: boolean
+          is_featured?: boolean
+          item_type?: string
+          name_ar?: string
+          name_en?: string | null
+          preparation_minutes?: number | null
+          qa_batch_id?: string | null
+          section_id?: string | null
+          sort_order?: number
+          source_listing_id?: string | null
+          stock_quantity?: number | null
+          storefront_id?: string
+          track_inventory?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_items_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_sections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_items_source_listing_id_fkey"
+            columns: ["source_listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_items_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_private: {
+        Row: {
+          contact_phone: string | null
+          created_at: string
+          delivery_declaration_accepted_at: string | null
+          delivery_permit_doc_path: string | null
+          delivery_permit_expires_on: string | null
+          delivery_permit_number: string | null
+          delivery_phone: string | null
+          permit_review_note: string | null
+          permit_review_status: string
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          contact_phone?: string | null
+          created_at?: string
+          delivery_declaration_accepted_at?: string | null
+          delivery_permit_doc_path?: string | null
+          delivery_permit_expires_on?: string | null
+          delivery_permit_number?: string | null
+          delivery_phone?: string | null
+          permit_review_note?: string | null
+          permit_review_status?: string
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          contact_phone?: string | null
+          created_at?: string
+          delivery_declaration_accepted_at?: string | null
+          delivery_permit_doc_path?: string | null
+          delivery_permit_expires_on?: string | null
+          delivery_permit_number?: string | null
+          delivery_phone?: string | null
+          permit_review_note?: string | null
+          permit_review_status?: string
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_private_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_sections: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          description_ar: string | null
+          description_en: string | null
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string | null
+          sort_order: number
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en?: string | null
+          sort_order?: number
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string | null
+          sort_order?: number
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_sections_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_storefronts: {
+        Row: {
+          accepts_orders: boolean
+          address_text: string | null
+          call_enabled: boolean
+          chat_enabled: boolean
+          city_id: string | null
+          country_id: string | null
+          cover_path: string | null
+          created_at: string
+          cuisine_id: string | null
+          currency_code: string
+          deleted_at: string | null
+          delivery_fee: number
+          district: string | null
+          estimated_delivery_minutes_max: number | null
+          estimated_delivery_minutes_min: number | null
+          id: string
+          is_open_manually: boolean
+          latitude: number | null
+          location_precision: string
+          logo_path: string | null
+          longitude: number | null
+          merchant_delivery_enabled: boolean
+          minimum_order_amount: number
+          name_ar: string
+          name_en: string | null
+          orders_count: number
+          owner_user_id: string
+          pickup_enabled: boolean
+          platform_delivery_enabled: boolean
+          public_phone_enabled: boolean
+          qa_batch_id: string | null
+          short_description_ar: string | null
+          short_description_en: string | null
+          slug: string
+          status: string
+          store_type: string
+          suspension_reason: string | null
+          tenant_id: string | null
+          updated_at: string
+          verification_status: string
+          views_count: number
+        }
+        Insert: {
+          accepts_orders?: boolean
+          address_text?: string | null
+          call_enabled?: boolean
+          chat_enabled?: boolean
+          city_id?: string | null
+          country_id?: string | null
+          cover_path?: string | null
+          created_at?: string
+          cuisine_id?: string | null
+          currency_code?: string
+          deleted_at?: string | null
+          delivery_fee?: number
+          district?: string | null
+          estimated_delivery_minutes_max?: number | null
+          estimated_delivery_minutes_min?: number | null
+          id?: string
+          is_open_manually?: boolean
+          latitude?: number | null
+          location_precision?: string
+          logo_path?: string | null
+          longitude?: number | null
+          merchant_delivery_enabled?: boolean
+          minimum_order_amount?: number
+          name_ar: string
+          name_en?: string | null
+          orders_count?: number
+          owner_user_id?: string
+          pickup_enabled?: boolean
+          platform_delivery_enabled?: boolean
+          public_phone_enabled?: boolean
+          qa_batch_id?: string | null
+          short_description_ar?: string | null
+          short_description_en?: string | null
+          slug: string
+          status?: string
+          store_type?: string
+          suspension_reason?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+          verification_status?: string
+          views_count?: number
+        }
+        Update: {
+          accepts_orders?: boolean
+          address_text?: string | null
+          call_enabled?: boolean
+          chat_enabled?: boolean
+          city_id?: string | null
+          country_id?: string | null
+          cover_path?: string | null
+          created_at?: string
+          cuisine_id?: string | null
+          currency_code?: string
+          deleted_at?: string | null
+          delivery_fee?: number
+          district?: string | null
+          estimated_delivery_minutes_max?: number | null
+          estimated_delivery_minutes_min?: number | null
+          id?: string
+          is_open_manually?: boolean
+          latitude?: number | null
+          location_precision?: string
+          logo_path?: string | null
+          longitude?: number | null
+          merchant_delivery_enabled?: boolean
+          minimum_order_amount?: number
+          name_ar?: string
+          name_en?: string | null
+          orders_count?: number
+          owner_user_id?: string
+          pickup_enabled?: boolean
+          platform_delivery_enabled?: boolean
+          public_phone_enabled?: boolean
+          qa_batch_id?: string | null
+          short_description_ar?: string | null
+          short_description_en?: string | null
+          slug?: string
+          status?: string
+          store_type?: string
+          suspension_reason?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+          verification_status?: string
+          views_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_storefronts_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_storefronts_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_storefronts_cuisine_id_fkey"
+            columns: ["cuisine_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_cuisines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_storefronts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_user_activity: {
         Row: {
@@ -9291,12 +10539,15 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
+      mkt_cart_item_owner: { Args: { _cart_item_id: string }; Returns: boolean }
+      mkt_cart_owner: { Args: { _cart_id: string }; Returns: boolean }
       mkt_chat_block_set: {
         Args: { _blocked: boolean; _conversation_id: string }
         Returns: undefined
       }
       mkt_chat_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       mkt_chat_peer: { Args: { _conversation_id: string }; Returns: string }
+      mkt_commerce_flags: { Args: never; Returns: Json }
       mkt_conversation_context: {
         Args: { _conversation_id: string }
         Returns: Json
@@ -9521,6 +10772,22 @@ export type Database = {
         }[]
       }
       mkt_my_platform_role: { Args: never; Returns: Json }
+      mkt_my_storefront: {
+        Args: { _account_key?: string }
+        Returns: {
+          accepts_orders: boolean
+          cover_path: string
+          id: string
+          is_open_manually: boolean
+          logo_path: string
+          name_ar: string
+          name_en: string
+          slug: string
+          status: string
+          store_type: string
+          tenant_id: string
+        }[]
+      }
       mkt_norm_activity_text: { Args: { _t: string }; Returns: string }
       mkt_norm_digits: { Args: { _t: string }; Returns: string }
       mkt_norm_label: { Args: { _v: string }; Returns: string }
@@ -9534,6 +10801,11 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_order_item_party: {
+        Args: { _order_item_id: string }
+        Returns: boolean
+      }
+      mkt_order_party: { Args: { _order_id: string }; Returns: boolean }
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
       mkt_promotion_prices: { Args: never; Returns: Json }
@@ -9898,6 +11170,31 @@ export type Database = {
         Args: { _kind: string; _user_id: string }
         Returns: boolean
       }
+      mkt_store_addon_group_manage: {
+        Args: { _group_id: string }
+        Returns: boolean
+      }
+      mkt_store_addon_group_visible: {
+        Args: { _group_id: string }
+        Returns: boolean
+      }
+      mkt_store_admin: { Args: never; Returns: boolean }
+      mkt_store_branch_manage: {
+        Args: { _branch_id: string }
+        Returns: boolean
+      }
+      mkt_store_branch_visible: {
+        Args: { _branch_id: string }
+        Returns: boolean
+      }
+      mkt_store_item_manage: { Args: { _item_id: string }; Returns: boolean }
+      mkt_store_item_visible: { Args: { _item_id: string }; Returns: boolean }
+      mkt_store_manage: { Args: { _storefront_id: string }; Returns: boolean }
+      mkt_store_public_phone: {
+        Args: { _storefront_id: string }
+        Returns: string
+      }
+      mkt_store_visible: { Args: { _storefront_id: string }; Returns: boolean }
       mkt_submit_appeal: {
         Args: { _reason: string; _report_id: string }
         Returns: string
