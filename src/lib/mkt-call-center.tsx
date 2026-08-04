@@ -112,6 +112,9 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
   const tickTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const callRef = useRef<ActiveCall | null>(null);
   callRef.current = call;
+  /** Lets the incoming-call listener auto-answer without a declaration cycle. */
+  const acceptRef = useRef<(() => Promise<void>) | null>(null);
+
 
   const clearTimers = useCallback(() => {
     if (ringTimer.current) clearTimeout(ringTimer.current);
