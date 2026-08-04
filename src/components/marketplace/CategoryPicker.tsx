@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Check, Pencil } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -27,7 +27,13 @@ type Stage = "root" | "sub" | "leaf";
  * that field only. The picker closes itself as soon as the deepest available
  * level is chosen, and the chosen path shows as a single editable line.
  */
-export function CategoryPicker({ categories, categoryId, subcategoryId, onChange }: Props) {
+export function CategoryPicker({
+  categories,
+  categoryId,
+  subcategoryId,
+  onChange,
+  onAbort,
+}: Props) {
   const { t, locale } = useI18n();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -35,6 +41,8 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
   const [root, setRoot] = useState("");
   const [sub, setSub] = useState("");
   const [term, setTerm] = useState("");
+  /** True once a deepest-level pick was made, so a close is not a dismissal. */
+  const completed = useRef(false);
 
 
   const label = (o: { name_ar: string; name_en: string | null }) =>
@@ -68,8 +76,16 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
   }, [open]);
 
   function finish(nextRoot: string, nextSub: string) {
+    completed.current = true;
     onChange({ categoryId: nextRoot, subcategoryId: nextSub });
     setOpen(false);
+  }
+
+  /** A dismissal without a complete path is what makes the hint appear. */
+  function change(next: boolean) {
+    if (next) completed.current = false;
+    setOpen(next);
+    if (!next && !completed.current) onAbort?.();
   }
 
   function pickRoot(id: string) {
@@ -190,7 +206,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
       <span className="text-sm font-medium text-foreground">{t("market.form.categoryPath")}</span>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => change(true)}
         className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2.5 text-start text-sm"
       >
         {pathText.length > 0 ? (
@@ -209,7 +225,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
       </button>
 
       {isMobile ? (
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={change}>
           <DrawerContent className="px-4 pb-6">
             <DrawerHeader className="px-0 text-start">
               <DrawerTitle>{stageTitle}</DrawerTitle>
@@ -218,7 +234,7 @@ export function CategoryPicker({ categories, categoryId, subcategoryId, onChange
           </DrawerContent>
         </Drawer>
       ) : (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={change}>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>{stageTitle}</DialogTitle>
