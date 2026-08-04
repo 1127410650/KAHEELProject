@@ -10,6 +10,7 @@ import { currentPath, loginHref, type MktAction, type MktListing } from "@/lib/m
 import { ReportDialog } from "@/components/marketplace/ReportDialog";
 import { QrCodeButton } from "@/components/marketplace/QrCodeButton";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { track } from "@/lib/analytics";
 import { CallButton } from "@/components/marketplace/CallButton";
 import { chatErrorKey, openConversation, sendMessage } from "@/lib/mkt-chat";
 
@@ -203,9 +204,10 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
       <Button
         size="lg"
         className="w-full"
-        onClick={() =>
-          void navigate({ href: loginHref(currentPath().split("?")[0] ?? "/", "contact") })
-        }
+        onClick={() => {
+          track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
+          void navigate({ href: loginHref(currentPath().split("?")[0] ?? "/", "contact") });
+        }}
       >
         {t("market.ad.signInToContact")}
       </Button>
@@ -215,7 +217,10 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   return (
     <>
       <div className="grid gap-2 sm:grid-cols-2">
-        <Button size="lg" className="sm:col-span-2" onClick={() => gate("contact") && setDialog("contact")}>
+        <Button size="lg" className="sm:col-span-2" onClick={() => {
+            track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
+            if (gate("contact")) setDialog("contact");
+          }}>
           <MessageSquare className="size-4" aria-hidden />
           {t("market.actions.contact")}
         </Button>

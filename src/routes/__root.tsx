@@ -9,6 +9,9 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { useAnalyticsInstrumentation } from "@/hooks/use-analytics";
+
+
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "@/i18n";
@@ -173,6 +176,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Real product analytics for every route: page views, timings, client errors.
+  useAnalyticsInstrumentation();
+
+
 
   return (
     <QueryClientProvider client={queryClient}>

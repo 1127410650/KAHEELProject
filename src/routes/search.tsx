@@ -17,6 +17,7 @@ import {
 } from "@/lib/mkt-queries";
 import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
 import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
+import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
@@ -315,6 +316,51 @@ function SearchPage() {
   });
 
   const active = businessMode ? businesses : listings;
+
+  /*
+   * Search analytics: one event per settled query, with the real result count
+   * and the real client-observed duration. A query that returned nothing is
+   * recorded as `search_zero` so the admin dashboard can list the terms the
+   * marketplace has no answer for.
+   */
+  const searchStartedAt = useRef<number>(0);
+  const trackedSearchKey = useRef<string>("");
+  useEffect(() => {
+    if (active.isFetching) {
+      if (searchStartedAt.current === 0) searchStartedAt.current = performance.now();
+      return;
+    }
+    if (!active.data) return;
+    const key = JSON.stringify([listingKey, businessMode]);
+    if (trackedSearchKey.current === key) return;
+    trackedSearchKey.current = key;
+    const count = businessMode
+      ? (businesses.data?.pages ?? []).reduce((n, p) => n + p.rows.length, 0)
+      : (listings.data?.pages ?? []).reduce((n, p) => n + p.rows.length, 0);
+    const started = searchStartedAt.current;
+    searchStartedAt.current = 0;
+    track({
+      event_type: count === 0 ? "search_zero" : "search",
+      path: "/search",
+      query_text: params.q,
+      result_count: count,
+      duration_ms: started > 0 ? Math.round(performance.now() - started) : undefined,
+      category_id: subId ?? undefined,
+      city_id: params.cityId,
+    });
+  }, [
+    active.isFetching,
+    active.data,
+    businessMode,
+    businesses.data,
+    listings.data,
+    listingKey,
+    params.q,
+    params.cityId,
+    subId,
+  ]);
+
+
 
   // Defensive de-duplication: a record published between two page fetches must
   // never render twice.
@@ -766,19 +812,19 @@ function SearchPage() {
               {/* Phones show one clear card per row; two columns from tablet up. */}
               <div className="flex flex-col gap-2.5 sm:hidden">
                 {rows.map((l) => (
-                  <ListingCard key={l.id} listing={l} view="row" />
+                  <ListingCard key={l.id} listing={l} view="row" origin="search" />
                 ))}
               </div>
               <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
                 {rows.map((l) => (
-                  <ListingCard key={l.id} listing={l} />
+                  <ListingCard key={l.id} listing={l} origin="search" />
                 ))}
               </div>
             </>
           ) : (
             <div className="space-y-2.5">
               {rows.map((l) => (
-                <ListingCard key={l.id} listing={l} view="list" />
+                <ListingCard key={l.id} listing={l} view="list" origin="search" />
               ))}
             </div>
           )}
