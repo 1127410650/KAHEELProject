@@ -2375,6 +2375,44 @@ export type Database = {
           },
         ]
       }
+      mkt_category_aliases: {
+        Row: {
+          alias: string
+          alias_norm: string | null
+          category_id: string
+          created_at: string
+          id: string
+          note: string | null
+          updated_at: string
+        }
+        Insert: {
+          alias: string
+          alias_norm?: string | null
+          category_id: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alias?: string
+          alias_norm?: string | null
+          category_id?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_category_aliases_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_chat_audit: {
         Row: {
           actor_user_id: string | null
@@ -9381,6 +9419,7 @@ export type Database = {
       mkt_my_platform_role: { Args: never; Returns: Json }
       mkt_norm_activity_text: { Args: { _t: string }; Returns: string }
       mkt_norm_digits: { Args: { _t: string }; Returns: string }
+      mkt_norm_label: { Args: { _v: string }; Returns: string }
       mkt_notify: {
         Args: {
           _body?: string
