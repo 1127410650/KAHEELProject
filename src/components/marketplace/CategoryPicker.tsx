@@ -15,7 +15,10 @@ interface Props {
   categoryId: string;
   subcategoryId: string;
   onChange: (next: { categoryId: string; subcategoryId: string }) => void;
+  /** Fired when the picker is dismissed before the deepest level was chosen. */
+  onAbort?: (() => void) | undefined;
 }
+
 
 type Stage = "root" | "sub" | "leaf";
 
