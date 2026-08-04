@@ -208,6 +208,19 @@ function SearchPage() {
   const activeRoot = roots.find(
     (r) => r.slug === (domainDef?.categorySlug ?? params.category),
   );
+  /*
+   * `sub` may arrive as a real id (filter sheet) or as a slug (primary-fields
+   * rail, e.g. «عقار ديل» → `re-aqar-deal`). Both resolve to the same id, so
+   * one canonical category is queried and no duplicate field is needed.
+   */
+  const subId = useMemo(() => {
+    const value = params.sub;
+    if (!value) return undefined;
+    const list = categories.data ?? [];
+    if (list.some((c) => c.id === value)) return value;
+    return list.find((c) => c.slug === value)?.id;
+  }, [params.sub, categories.data]);
+
   const subs = useMemo(
     () => (categories.data ?? []).filter((c) => c.parent_id && c.parent_id === activeRoot?.id),
     [categories.data, activeRoot?.id],
@@ -224,7 +237,7 @@ function SearchPage() {
   const activeFilterCount = [
     params.domain,
     params.category,
-    params.sub,
+    subId,
     params.type,
     params.cityId,
     params.min,
@@ -233,7 +246,7 @@ function SearchPage() {
   ].filter(Boolean).length;
 
   /* ── results ── */
-  const listingKey = { ...params, sort, country: accountCountryIso2 };
+  const listingKey = { ...params, sub: subId, sort, country: accountCountryIso2 };
   const listings = useInfiniteQuery({
     queryKey: ["mkt", "search", "listings", listingKey, locale],
     enabled: !businessMode,
@@ -243,7 +256,7 @@ function SearchPage() {
         {
           q: params.q,
           categorySlug: domainDef?.categorySlug ?? params.category,
-          subcategoryId: params.sub,
+          subcategoryId: subId,
           type: domainDef?.typeCode ?? params.type,
           countryIso2: accountCountryIso2,
           cityId: params.cityId,
@@ -452,7 +465,7 @@ function SearchPage() {
           <Label htmlFor="f-sub">{t("market.filters.subcategory")}</Label>
           <select
             id="f-sub"
-            value={draft.sub ?? ""}
+            value={draft.sub === params.sub ? (subId ?? "") : (draft.sub ?? "")}
             onChange={(e) => setDraft({ ...draft, sub: e.target.value || undefined })}
             className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
           >
