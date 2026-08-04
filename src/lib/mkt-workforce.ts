@@ -103,7 +103,7 @@ export async function loadWorkQueue(
 ): Promise<WorkItem[]> {
   const { data, error } = await supabase.rpc("mkt_workforce_queue", {
     _scope: scope,
-    _kind: kind ?? undefined,
+    ...(kind ? { _kind: kind } : {}),
     _limit: 100,
   });
   if (error) throw error;
