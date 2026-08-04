@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 
 import { ADD_LISTING_PATH, addListingHref } from "@/lib/add-listing";
+import { SEARCH_PATH, getSearchHref } from "@/lib/search-href";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
@@ -54,16 +55,35 @@ export function MarketHeader() {
           </span>
         </Link>
 
+        {/* Primary action next to the wordmark: an explicit, readable
+            "add a listing" control (never an ambiguous icon above 320 px).
+            On phones this replaces the old bottom-bar "+" item. */}
+        {status === "loading" ? (
+          <Skeleton aria-hidden className="h-10 w-28 shrink-0 rounded-full" />
+        ) : (
+          <a
+            href={addHref}
+            aria-label={t("market.addListing")}
+            title={t("market.addListing")}
+            className="inline-flex h-10 shrink-0 items-center gap-1 rounded-full bg-market-navy-foreground px-2.5 text-xs font-bold text-market-navy transition-colors hover:bg-market-silver sm:h-11 sm:gap-1.5 sm:px-4 sm:text-sm"
+          >
+            <Plus className="size-4" aria-hidden />
+            <span className="hidden min-[360px]:inline">{t("market.addListing")}</span>
+            <span className="min-[360px]:hidden">{t("market.bottomNav.add")}</span>
+          </a>
+        )}
 
-        {/* The single search entry point in the app chrome. */}
+        {/* Desktop keeps the header search entry point; on phones search lives
+            in the middle of the bottom bar instead. */}
         <Link
-          to="/search"
+          to={getSearchHref()}
           aria-label={t("market.nav.search")}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-market-navy-soft bg-market-navy-soft/60 px-2.5 py-1.5 text-sm font-medium text-market-navy-foreground transition-colors hover:bg-market-navy-soft sm:px-3"
+          className="hidden shrink-0 items-center gap-1.5 rounded-full border border-market-navy-soft bg-market-navy-soft/60 px-3 py-1.5 text-sm font-medium text-market-navy-foreground transition-colors hover:bg-market-navy-soft lg:inline-flex"
         >
           <Search className="size-4" aria-hidden />
-          <span className="hidden sm:inline">{t("market.nav.search")}</span>
+          <span>{t("market.nav.search")}</span>
         </Link>
+
 
 
         <div className="min-w-0 flex-1" />
@@ -123,25 +143,9 @@ export function MarketHeader() {
 
           )}
 
-          {/* On phones the bottom bar already owns "add", so the header keeps a
-              single action instead of repeating it. While the session is still
-              unknown the action is a skeleton too, so no header ever shows an
-              action without an identity slot next to it. */}
-          {status === "loading" ? (
-            <Skeleton aria-hidden className="hidden h-8 w-28 shrink-0 rounded-md sm:block" />
-          ) : (
-          <Button
-            asChild
-            size="sm"
-            className="hidden shrink-0 bg-market-silver text-market-navy hover:bg-market-navy-foreground sm:inline-flex"
-          >
+          {/* "Add a listing" lives next to the wordmark now, so it is never
+              repeated here. */}
 
-            <a href={addHref} aria-label={t("market.addListing")}>
-              <Plus className="size-4" aria-hidden />
-              <span className="hidden sm:inline">{t("market.addListing")}</span>
-            </a>
-          </Button>
-          )}
         </div>
       </div>
       {/* Losing connectivity is not a sign-out: say so instead of degrading the
@@ -197,7 +201,7 @@ function useMarketSetupGate() {
 const BOTTOM_NAV_PATHS = {
   home: "/",
   messages: "/dashboard/messages",
-  add: ADD_LISTING_PATH,
+  search: SEARCH_PATH,
   alerts: "/dashboard/notifications",
   more: "/more",
 } as const;
@@ -210,12 +214,13 @@ if (import.meta.env.DEV) {
 
 /** Exactly one item is active: the longest matching prefix wins. */
 function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
-  if (pathname.startsWith("/dashboard/ads")) return "add";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.search)) return "search";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.messages)) return "messages";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.alerts)) return "alerts";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.more)) return "more";
   return "home";
 }
+
 
 /**
  * The single mobile navigation for the whole app. Signed-in users get the five
@@ -280,7 +285,7 @@ export function MarketBottomNav() {
           icon: MessageSquare,
           badge: unreadMessages.data ?? 0,
         },
-        { key: "add", to: BOTTOM_NAV_PATHS.add, icon: Plus, badge: 0 },
+        { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
         {
           key: "alerts",
           to: BOTTOM_NAV_PATHS.alerts,
@@ -299,7 +304,7 @@ export function MarketBottomNav() {
           icon: MessageSquare,
           badge: 0,
         },
-        { key: "add", to: signInHref(BOTTOM_NAV_PATHS.add), icon: Plus, badge: 0 },
+        { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
         { key: "alerts", to: signInHref(BOTTOM_NAV_PATHS.alerts), icon: Bell, badge: 0 },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const);
@@ -315,7 +320,7 @@ export function MarketBottomNav() {
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
-          const center = item.key === "add";
+          const center = item.key === "search";
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
           const inner = (
