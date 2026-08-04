@@ -157,6 +157,10 @@ function AdminVerificationDetailPage() {
             }
           />
 
+          <AdminAssignmentBar kind="verification" subjectId={id} />
+
+
+
           {canManage && header.status === "pending" && (
             <Panel title={t("admin.detail.reviewActions")}>
               <div className="flex flex-wrap gap-2">
