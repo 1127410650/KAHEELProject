@@ -644,22 +644,21 @@ function MyAdsPage() {
                         {t("market.ops.resume")}
                       </DropdownMenuItem>
                     )}
-                    {ops.renew &&
-                      LISTING_DURATIONS.map((days) => (
+                    {ops.renew && (
+                      <DropdownMenuItem onSelect={() => void onReactivate(ad.id)}>
+                        <RotateCcw className="me-2 size-4" aria-hidden />
+                        {t("market.ops.reactivate")}
+                      </DropdownMenuItem>
+                    )}
+                    {ad.status === "published" &&
+                      !(ad.promoted_until && new Date(ad.promoted_until).getTime() > Date.now()) && (
                         <DropdownMenuItem
-                          key={days}
-                          onSelect={() =>
-                            void run(
-                              ad.id,
-                              () => renewListing(ad.id, days as ListingDuration),
-                              "market.ops.renewed",
-                            )
-                          }
+                          onSelect={() => setPromoteFor({ id: ad.id, title: ad.title })}
                         >
-                          <RefreshCw className="me-2 size-4" aria-hidden />
-                          {t("market.ops.renewFor").replace("{n}", String(days))}
+                          <Sparkles className="me-2 size-4" aria-hidden />
+                          {t("market.promote.action")}
                         </DropdownMenuItem>
-                      ))}
+                      )}
                     {ops.duplicate && (
                       <DropdownMenuItem onSelect={() => void onDuplicate(ad.id)}>
                         <Copy className="me-2 size-4" aria-hidden />
