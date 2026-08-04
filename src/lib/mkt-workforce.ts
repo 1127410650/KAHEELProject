@@ -148,13 +148,14 @@ export async function saveStaff(
 ): Promise<void> {
   const { error } = await supabase.rpc("mkt_workforce_set_staff", {
     _user_id: userId,
-    ...(update.work_state ? { _work_state: update.work_state } : {}),
-    ...(typeof update.capacity_limit === "number" ? { _capacity_limit: update.capacity_limit } : {}),
-    ...(typeof update.accepts_auto === "boolean" ? { _accepts_auto: update.accepts_auto } : {}),
-    ...(update.department ? { _department: update.department } : {}),
-    ...(update.note ? { _note: update.note } : {}),
+    _work_state: update.work_state ?? null,
+    _capacity_limit: update.capacity_limit ?? null,
+    _accepts_auto: update.accepts_auto ?? null,
+    _department: update.department ?? null,
+    _note: update.note ?? null,
     _reason: reason,
-  });
+    // Every optional argument is nullable in SQL; the generated types don't model that.
+  } as never);
   if (error) throw error;
 }
 
@@ -171,9 +172,9 @@ export async function addLeave(input: {
     _kind: input.kind,
     _starts_on: input.startsOn,
     _ends_on: input.endsOn,
-    ...(input.note ? { _note: input.note } : {}),
-    ...(input.substitute ? { _substitute: input.substitute } : {}),
-  });
+    _note: input.note ?? null,
+    _substitute: input.substitute ?? null,
+  } as never);
   if (error) throw error;
 }
 
@@ -213,7 +214,7 @@ export async function setWorkPriority(
 /** Distribute every unassigned item that now has an eligible, available taker. */
 export async function distributeWork(kind?: QueueKind | null): Promise<number> {
   const { data, error } = await supabase.rpc("mkt_workforce_distribute", {
-    _kind: kind ?? undefined,
+    ...(kind ? { _kind: kind } : {}),
     _limit: 50,
   });
   if (error) throw error;
@@ -231,7 +232,7 @@ export async function enqueueWork(
     _kind: kind,
     _subject_id: subjectId,
     _priority: priority,
-    _due_at: dueAt ?? undefined,
+    ...(dueAt ? { _due_at: dueAt } : {}),
   });
   if (error) throw error;
 }

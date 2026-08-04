@@ -88,7 +88,7 @@ type Pending =
   | { kind: "transfer"; item: WorkItem; to: string };
 
 function AdminWorkforcePage() {
-  const { t, lang } = useI18n();
+  const { t, locale } = useI18n();
   const queryClient = useQueryClient();
   const [scope, setScope] = useState<QueueScope>("all");
   const [pending, setPending] = useState<Pending | null>(null);
@@ -172,7 +172,7 @@ function AdminWorkforcePage() {
   ];
 
   return (
-    <AdminShell title={t("admin.nav.workforce")} staffAccess="workforce.manage">
+    <AdminShell title={t("admin.nav.workforce")} staffAccess>
       <p className="text-xs text-muted-foreground">{t("admin.workforce.hint")}</p>
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
@@ -269,7 +269,7 @@ function AdminWorkforcePage() {
                     <SelectContent>
                       {(departments.data ?? []).map((dep) => (
                         <SelectItem key={dep.code} value={dep.code}>
-                          {lang === "ar" ? dep.name_ar : dep.name_en}
+                          {locale === "ar" ? dep.name_ar : dep.name_en}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -561,7 +561,7 @@ function LeaveDialog({
           <Button
             className="min-h-11"
             disabled={!valid || pending}
-            onClick={() => onSubmit({ kind, startsOn, endsOn, note: note || undefined })}
+            onClick={() => onSubmit({ kind, startsOn, endsOn, ...(note ? { note } : {}) })}
           >
             {t("common.confirm")}
           </Button>
