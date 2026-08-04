@@ -66,6 +66,16 @@ export const resumeListing = (id: string) => call(supabase.rpc("mkt_listing_resu
 export const renewListing = (id: string, days: ListingDuration) =>
   call(supabase.rpc("mkt_listing_renew", { _id: id, _days: days }));
 
+/**
+ * Reactivate an expired/paused ad for another organic window. The database
+ * re-scans the content first, so the result tells the caller whether the ad
+ * went live again or landed in review.
+ */
+export const reactivateListing = async (id: string): Promise<"published" | "pending"> => {
+  const result = await call(supabase.rpc("mkt_listing_reactivate", { _id: id }));
+  return (result as unknown as "published" | "pending") ?? "pending";
+};
+
 export const archiveListing = (id: string) =>
   call(supabase.rpc("mkt_listing_archive", { _id: id }));
 
