@@ -281,7 +281,7 @@ export async function loadMyWorkStatus(): Promise<MyWorkStatus | null> {
   return rows[0] ?? null;
 }
 
-/** A staff member moves themselves between available / busy / away only. */
+/** A staff member moves themselves between available and paused only. */
 export async function setMyWorkState(state: WorkState): Promise<void> {
   const { error } = await supabase.rpc("mkt_workforce_set_staff", {
     _user_id: (await supabase.auth.getUser()).data.user?.id ?? null,
