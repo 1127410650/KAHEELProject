@@ -23,10 +23,11 @@ export const Route = createFileRoute("/categories/$slug")({
       to: "/categories/$slug",
       params: { slug: canonical },
       search: location.search as never,
-      hash: location.hash || undefined,
+      ...(location.hash ? { hash: location.hash } : {}),
       replace: true,
     });
   },
+
 
   head: ({ params }) => {
     const title = `تصنيف ${params.slug} — سوق تحقّق`;
