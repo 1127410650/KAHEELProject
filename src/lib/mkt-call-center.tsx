@@ -341,7 +341,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const onPageHide = () => {
       const current = callRef.current;
-      if (current && !isTerminalCallStatus(current.status)) {
+      if (current && !isTerminal(current.status)) {
         const next: CallStatus = current.status === "connected" ? "ended" : "cancelled";
         void transitionCall(current.id, next).catch(() => undefined);
       }
