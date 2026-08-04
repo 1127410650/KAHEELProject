@@ -42,9 +42,11 @@ const description =
 
 export const Route = createFileRoute("/more")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>) => ({
-    section: search["section"] === "accounts" ? ("accounts" as const) : undefined,
-  }),
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { section?: "accounts" } =>
+    search["section"] === "accounts" ? { section: "accounts" } : {},
+
   head: () => ({
     meta: [
       { title },
