@@ -8923,6 +8923,7 @@ export type Database = {
       }
       mkt_call_request_start: { Args: { _request_id: string }; Returns: Json }
       mkt_call_start: { Args: { _listing_id: string }; Returns: Json }
+      mkt_call_stop_receiving: { Args: never; Returns: undefined }
       mkt_call_transition: {
         Args: { _call_id: string; _reason?: string; _status: string }
         Returns: Json
