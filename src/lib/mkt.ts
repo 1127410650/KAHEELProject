@@ -159,6 +159,12 @@ export interface MktListing {
   paused_at?: string | null;
   last_renewed_at?: string | null;
 
+  // Content-scan outcome and paid-boost window, both read-only for the owner.
+  moderation_state?: string | null;
+  moderation_score?: number | null;
+  last_scan_at?: string | null;
+  promoted_until?: string | null;
+
   // Paid-placement fields: stored and displayed, not yet sellable.
   is_featured?: boolean | null;
   featured_until?: string | null;
