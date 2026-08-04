@@ -147,7 +147,7 @@ export function MarketHeader() {
  * short setup screen; guests keep browsing freely.
  */
 function useMarketSetupGate() {
-  const { session, status } = useSession();
+  const { session } = useSession();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const status = useMarketSetupStatus();
@@ -194,7 +194,7 @@ function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
 export function MarketBottomNav() {
   const { t } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { session, status } = useSession();
+  const { session } = useSession();
   const { account } = useActiveAccount();
 
   // Unread messages inside the active account's conversations only.
