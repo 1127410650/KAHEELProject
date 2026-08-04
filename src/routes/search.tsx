@@ -16,6 +16,7 @@ import {
   loadListingsPage,
 } from "@/lib/mkt-queries";
 import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
@@ -185,6 +186,23 @@ function SearchPage() {
     return () => window.clearTimeout(id);
   }, [term, params.q, update]);
 
+  /*
+   * Field-name search: typing a field name or one of its aliases («مدرسة»،
+   * «جامعة»، «كلية»، «معهد» …) must open that field instead of matching the
+   * words against listing text only. Applied only when exactly one field
+   * matches and the user has not chosen a field/domain explicitly.
+   */
+  const termFieldSlug = useMemo(() => {
+    const raw = (params.q ?? "").trim();
+    if (!raw || params.category || params.domain) return undefined;
+    const hits = SELECTABLE_FIELDS.filter((f) =>
+      fieldMatches(f, raw, [t(`market.fields.${f.id}`)]),
+    );
+    const slugs = Array.from(new Set(hits.map((f) => f.categorySlug).filter(Boolean)));
+    return slugs.length === 1 ? (slugs[0] as string) : undefined;
+  }, [params.q, params.category, params.domain, t]);
+
+
   /* ── reference data ── */
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
@@ -246,7 +264,13 @@ function SearchPage() {
   ].filter(Boolean).length;
 
   /* ── results ── */
-  const listingKey = { ...params, sub: subId, sort, country: accountCountryIso2 };
+  const listingKey = {
+    ...params,
+    sub: subId,
+    sort,
+    country: accountCountryIso2,
+    field: termFieldSlug,
+  };
   const listings = useInfiniteQuery({
     queryKey: ["mkt", "search", "listings", listingKey, locale],
     enabled: !businessMode,
@@ -254,8 +278,10 @@ function SearchPage() {
     queryFn: ({ pageParam }) =>
       loadListingsPage(
         {
-          q: params.q,
-          categorySlug: domainDef?.categorySlug ?? params.category,
+          // A field-name term becomes a category filter, so it must not also be
+          // matched against the listing text (nothing would ever match).
+          q: termFieldSlug ? undefined : params.q,
+          categorySlug: domainDef?.categorySlug ?? params.category ?? termFieldSlug,
           subcategoryId: subId,
           type: domainDef?.typeCode ?? params.type,
           countryIso2: accountCountryIso2,
