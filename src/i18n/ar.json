@@ -3288,7 +3288,8 @@
         "paused": "موقوف مؤقتًا",
         "rejected": "مرفوض",
         "suspended": "معلّق",
-        "archived": "مؤرشف"
+        "archived": "مؤرشف",
+        "published": "منشور"
       },
       "statusHint": {
         "draft": "أكمل البيانات ثم أرسل المتجر للمراجعة.",
@@ -3297,7 +3298,8 @@
         "paused": "المتجر متوقف مؤقتًا ولا يستقبل طلبات.",
         "rejected": "تم رفض المتجر؛ راجع الملاحظات وأعد الإرسال.",
         "suspended": "المتجر معلّق من إدارة المنصة.",
-        "archived": "المتجر مؤرشف."
+        "archived": "المتجر مؤرشف.",
+        "published": "المتجر منشور ويظهر للعامة في السوق."
       },
       "errors": {
         "name": "أدخل اسم المتجر بالعربية.",
@@ -3312,6 +3314,109 @@
         "fulfillment": "طريقة التسليم",
         "delivery_declaration": "تعهد التوصيل",
         "cuisine": "نوع المطبخ"
+      },
+      "hub": {
+        "sections": "الأقسام",
+        "itemsPublished": "عناصر منشورة",
+        "itemsHidden": "عناصر مخفية",
+        "linkedAds": "إعلانات مرتبطة",
+        "openNow": "المتجر مفتوح الآن",
+        "missingTitle": "بيانات ناقصة قبل النشر",
+        "missing": {
+          "name": "اسم المتجر",
+          "city": "المدينة",
+          "logo": "شعار المتجر",
+          "sections": "قسم واحد على الأقل",
+          "items": "عنصر متاح واحد على الأقل"
+        },
+        "manageMenu": "إدارة المنيو",
+        "manageProducts": "إدارة المنتجات",
+        "editData": "تعديل بيانات المتجر",
+        "viewPublic": "عرض الصفحة العامة",
+        "adsTitle": "الإعلانات المرتبطة بالمتجر",
+        "adsHint": "اربط إعلاناتك المنشورة بالمتجر لتظهر في صفحته. الربط متاح لإعلانات هذا الحساب فقط.",
+        "adsEmpty": "لا توجد إعلانات لهذا الحساب.",
+        "link": "ربط",
+        "unlink": "إلغاء الربط",
+        "adStatus": {
+          "draft": "مسودة",
+          "pending": "قيد المراجعة",
+          "published": "منشور"
+        }
+      },
+      "catalog": {
+        "title": "الأقسام والمنتجات",
+        "addSection": "إضافة قسم",
+        "editSection": "تعديل القسم",
+        "sectionName": "اسم القسم",
+        "addDish": "إضافة صنف",
+        "addProduct": "إضافة منتج",
+        "sectionFirst": "أضف قسمًا أولًا ثم أضف العناصر داخله.",
+        "emptyTitle": "لا توجد أقسام بعد",
+        "emptyHint": "ابدأ بقسم واحد (مثل: المشاوي أو المشروبات) ثم أضف العناصر وأسعارها وصورها.",
+        "noSection": "بدون قسم",
+        "sectionHidden": "قسم مخفي",
+        "sectionEmpty": "لا عناصر في هذا القسم.",
+        "moveUp": "تحريك للأعلى",
+        "moveDown": "تحريك للأسفل",
+        "toggle": "إظهار أو إخفاء",
+        "unavailable": "غير متاح",
+        "featured": "مميز",
+        "groupsCount": "مجموعات الخيارات",
+        "options": "الخيارات",
+        "newItem": "عنصر جديد",
+        "editItem": "تعديل العنصر",
+        "itemName": "الاسم",
+        "section": "القسم",
+        "itemDescription": "الوصف",
+        "price": "السعر",
+        "comparePrice": "السعر قبل الخصم",
+        "prepMinutes": "مدة التحضير (دقيقة)",
+        "durationMinutes": "مدة الخدمة (دقيقة)",
+        "stock": "الكمية المتوفرة",
+        "available": "متاح للعرض والطلب",
+        "markFeatured": "عنصر مميز",
+        "trackInventory": "تتبّع المخزون",
+        "photo": "صورة العنصر",
+        "addPhoto": "إضافة صورة",
+        "replacePhoto": "استبدال الصورة",
+        "photoReady": "تم رفع الصورة",
+        "groupName": "اسم مجموعة الخيارات",
+        "groupExample": "مثل: الحجم أو الإضافات",
+        "addGroup": "إضافة مجموعة",
+        "noGroups": "لا توجد مجموعات خيارات لهذا العنصر.",
+        "single": "اختيار واحد",
+        "multiple": "اختيار متعدد",
+        "required": "إلزامي",
+        "multipleChoice": "السماح باختيار أكثر من خيار",
+        "noOptions": "لا خيارات بعد.",
+        "optionName": "اسم الخيار",
+        "optionPrice": "الزيادة"
+      },
+      "err": {
+        "generic": "تعذّر إتمام العملية، حاول مرة أخرى.",
+        "duplicateSection": "يوجد قسم بالاسم نفسه في هذا المتجر.",
+        "section_name_required": "اسم القسم مطلوب.",
+        "section_has_published_items": "لا يمكن حذف قسم يحتوي عناصر متاحة؛ انقلها أو أخفها أولًا.",
+        "section_other_store": "القسم لا يتبع هذا المتجر.",
+        "item_name_required": "اسم العنصر مطلوب.",
+        "item_price_negative": "السعر لا يمكن أن يكون سالبًا.",
+        "item_compare_price_negative": "السعر قبل الخصم لا يمكن أن يكون سالبًا.",
+        "group_name_required": "اسم مجموعة الخيارات مطلوب.",
+        "group_min_above_max": "الحد الأدنى للاختيارات أكبر من الحد الأقصى.",
+        "addon_name_required": "اسم الخيار مطلوب.",
+        "addon_price_negative": "زيادة سعر الخيار لا يمكن أن تكون سالبة.",
+        "store_account_mismatch": "لا يمكن ربط إعلان بمتجر حساب آخر.",
+        "store_not_found": "المتجر غير موجود."
+      },
+      "publicPage": {
+        "notFound": "المتجر غير متاح",
+        "notFoundHint": "قد يكون المتجر غير منشور أو تم إيقافه.",
+        "chat": "محادثة المتجر",
+        "ordersSoon": "الطلب الإلكتروني من المتجر سيتاح قريبًا.",
+        "emptyCatalog": "لم يضف المتجر أقسامًا أو منتجات بعد.",
+        "adsTitle": "إعلانات هذا المتجر",
+        "minutes": "دقيقة"
       }
     }
   },
@@ -3358,7 +3463,8 @@
       "myWork": "أعمالي",
       "attendance": "الحضور والمناوبات",
       "contentRules": "قواعد فحص المحتوى",
-      "analytics": "التحليلات والتشغيل"
+      "analytics": "التحليلات والتشغيل",
+      "stores": "المتاجر"
     },
     "alerts": {
       "title": "مركز التنبيهات",
@@ -4004,6 +4110,23 @@
       "geoTitle": "التوزيع الجغرافي",
       "city": "المدينة",
       "events": "أحداث"
+    },
+    "stores": {
+      "title": "المتاجر",
+      "searchPlaceholder": "ابحث باسم المتجر أو الرابط",
+      "all": "الكل",
+      "empty": "لا توجد متاجر مطابقة.",
+      "items": "المنتجات",
+      "reports": "البلاغات",
+      "owner": {
+        "individual": "حساب شخصي",
+        "business": "منشأة"
+      },
+      "openPublic": "الصفحة العامة",
+      "suspend": "إيقاف المتجر",
+      "reinstate": "إعادة التفعيل",
+      "requestChanges": "طلب تعديل",
+      "actionDone": "تم تنفيذ الإجراء وتسجيله."
     }
   },
   "welcome": {

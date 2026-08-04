@@ -3288,7 +3288,8 @@
         "paused": "Paused",
         "rejected": "Rejected",
         "suspended": "Suspended",
-        "archived": "Archived"
+        "archived": "Archived",
+        "published": "Published"
       },
       "statusHint": {
         "draft": "Complete the details, then submit for review.",
@@ -3297,7 +3298,8 @@
         "paused": "Your store is paused and not taking orders.",
         "rejected": "The store was rejected; review the notes and resubmit.",
         "suspended": "The store is suspended by the platform.",
-        "archived": "The store is archived."
+        "archived": "The store is archived.",
+        "published": "The store is published and visible in the marketplace."
       },
       "errors": {
         "name": "Enter the store name in Arabic.",
@@ -3312,6 +3314,109 @@
         "fulfillment": "Fulfilment",
         "delivery_declaration": "Delivery declaration",
         "cuisine": "Cuisine"
+      },
+      "hub": {
+        "sections": "Sections",
+        "itemsPublished": "Published items",
+        "itemsHidden": "Hidden items",
+        "linkedAds": "Linked ads",
+        "openNow": "Store is open now",
+        "missingTitle": "Missing before publishing",
+        "missing": {
+          "name": "Store name",
+          "city": "City",
+          "logo": "Store logo",
+          "sections": "At least one section",
+          "items": "At least one available item"
+        },
+        "manageMenu": "Manage menu",
+        "manageProducts": "Manage products",
+        "editData": "Edit store details",
+        "viewPublic": "View public page",
+        "adsTitle": "Ads linked to the store",
+        "adsHint": "Link your published ads to the store so they appear on its page. Only this account's ads can be linked.",
+        "adsEmpty": "This account has no ads.",
+        "link": "Link",
+        "unlink": "Unlink",
+        "adStatus": {
+          "draft": "Draft",
+          "pending": "Under review",
+          "published": "Published"
+        }
+      },
+      "catalog": {
+        "title": "Sections and products",
+        "addSection": "Add section",
+        "editSection": "Edit section",
+        "sectionName": "Section name",
+        "addDish": "Add dish",
+        "addProduct": "Add product",
+        "sectionFirst": "Add a section first, then add items to it.",
+        "emptyTitle": "No sections yet",
+        "emptyHint": "Start with one section (e.g. Grills or Drinks), then add items with prices and photos.",
+        "noSection": "No section",
+        "sectionHidden": "Hidden section",
+        "sectionEmpty": "No items in this section.",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "toggle": "Show or hide",
+        "unavailable": "Unavailable",
+        "featured": "Featured",
+        "groupsCount": "Option groups",
+        "options": "Options",
+        "newItem": "New item",
+        "editItem": "Edit item",
+        "itemName": "Name",
+        "section": "Section",
+        "itemDescription": "Description",
+        "price": "Price",
+        "comparePrice": "Price before discount",
+        "prepMinutes": "Preparation time (minutes)",
+        "durationMinutes": "Service duration (minutes)",
+        "stock": "Stock quantity",
+        "available": "Available to show and order",
+        "markFeatured": "Featured item",
+        "trackInventory": "Track inventory",
+        "photo": "Item photo",
+        "addPhoto": "Add photo",
+        "replacePhoto": "Replace photo",
+        "photoReady": "Photo uploaded",
+        "groupName": "Option group name",
+        "groupExample": "e.g. Size or Extras",
+        "addGroup": "Add group",
+        "noGroups": "This item has no option groups.",
+        "single": "Single choice",
+        "multiple": "Multiple choice",
+        "required": "Required",
+        "multipleChoice": "Allow more than one choice",
+        "noOptions": "No options yet.",
+        "optionName": "Option name",
+        "optionPrice": "Extra"
+      },
+      "err": {
+        "generic": "The action could not be completed, please try again.",
+        "duplicateSection": "A section with the same name already exists in this store.",
+        "section_name_required": "Section name is required.",
+        "section_has_published_items": "A section with available items cannot be deleted; move or hide them first.",
+        "section_other_store": "The section belongs to another store.",
+        "item_name_required": "Item name is required.",
+        "item_price_negative": "The price cannot be negative.",
+        "item_compare_price_negative": "The price before discount cannot be negative.",
+        "group_name_required": "Option group name is required.",
+        "group_min_above_max": "Minimum choices exceed the maximum.",
+        "addon_name_required": "Option name is required.",
+        "addon_price_negative": "The option surcharge cannot be negative.",
+        "store_account_mismatch": "An ad cannot be linked to another account's store.",
+        "store_not_found": "Store not found."
+      },
+      "publicPage": {
+        "notFound": "Store unavailable",
+        "notFoundHint": "The store may be unpublished or suspended.",
+        "chat": "Chat with the store",
+        "ordersSoon": "Online ordering from stores is coming soon.",
+        "emptyCatalog": "This store has not added sections or products yet.",
+        "adsTitle": "Ads from this store",
+        "minutes": "min"
       }
     }
   },
@@ -3358,7 +3463,8 @@
       "myWork": "My work",
       "attendance": "Attendance & shifts",
       "contentRules": "Content rules",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "stores": "Stores"
     },
     "alerts": {
       "title": "Alerts",
@@ -4004,6 +4110,23 @@
       "geoTitle": "Geographic distribution",
       "city": "City",
       "events": "Events"
+    },
+    "stores": {
+      "title": "Stores",
+      "searchPlaceholder": "Search by store name or slug",
+      "all": "All",
+      "empty": "No matching stores.",
+      "items": "Products",
+      "reports": "Reports",
+      "owner": {
+        "individual": "Personal account",
+        "business": "Business"
+      },
+      "openPublic": "Public page",
+      "suspend": "Suspend store",
+      "reinstate": "Reinstate",
+      "requestChanges": "Request changes",
+      "actionDone": "The action was applied and logged."
     }
   },
   "welcome": {
