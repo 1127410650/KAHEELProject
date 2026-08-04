@@ -1774,6 +1774,7 @@ export type Database = {
           id_type: string
           is_primary: boolean
           phone: string
+          qa_batch_id: string | null
           relation: string | null
           tenant_id: string
           updated_at: string
@@ -1792,6 +1793,7 @@ export type Database = {
           id_type: string
           is_primary?: boolean
           phone: string
+          qa_batch_id?: string | null
           relation?: string | null
           tenant_id: string
           updated_at?: string
@@ -1810,6 +1812,7 @@ export type Database = {
           id_type?: string
           is_primary?: boolean
           phone?: string
+          qa_batch_id?: string | null
           relation?: string | null
           tenant_id?: string
           updated_at?: string
@@ -1844,6 +1847,7 @@ export type Database = {
           public_phone: string | null
           public_website: string | null
           public_whatsapp: string | null
+          qa_batch_id: string | null
           region: string | null
           service_area_city_ids: string[]
           service_area_regions: string[]
@@ -1877,6 +1881,7 @@ export type Database = {
           public_phone?: string | null
           public_website?: string | null
           public_whatsapp?: string | null
+          qa_batch_id?: string | null
           region?: string | null
           service_area_city_ids?: string[]
           service_area_regions?: string[]
@@ -1910,6 +1915,7 @@ export type Database = {
           public_phone?: string | null
           public_website?: string | null
           public_whatsapp?: string | null
+          qa_batch_id?: string | null
           region?: string | null
           service_area_city_ids?: string[]
           service_area_regions?: string[]
@@ -2402,6 +2408,7 @@ export type Database = {
           id: string
           last_message_at: string
           listing_id: string
+          qa_batch_id: string | null
           seller_tenant_id: string | null
           seller_user_id: string | null
         }
@@ -2411,6 +2418,7 @@ export type Database = {
           id?: string
           last_message_at?: string
           listing_id: string
+          qa_batch_id?: string | null
           seller_tenant_id?: string | null
           seller_user_id?: string | null
         }
@@ -2420,6 +2428,7 @@ export type Database = {
           id?: string
           last_message_at?: string
           listing_id?: string
+          qa_batch_id?: string | null
           seller_tenant_id?: string | null
           seller_user_id?: string | null
         }
@@ -2575,16 +2584,19 @@ export type Database = {
         Row: {
           created_at: string
           listing_id: string
+          qa_batch_id: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
           listing_id: string
+          qa_batch_id?: string | null
           user_id?: string
         }
         Update: {
           created_at?: string
           listing_id?: string
+          qa_batch_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -2712,6 +2724,7 @@ export type Database = {
           listing_id: string
           mime_type: string | null
           original_filename: string | null
+          qa_batch_id: string | null
           sort_order: number
           storage_key: string | null
           thumbnail_key: string | null
@@ -2732,6 +2745,7 @@ export type Database = {
           listing_id: string
           mime_type?: string | null
           original_filename?: string | null
+          qa_batch_id?: string | null
           sort_order?: number
           storage_key?: string | null
           thumbnail_key?: string | null
@@ -2752,6 +2766,7 @@ export type Database = {
           listing_id?: string
           mime_type?: string | null
           original_filename?: string | null
+          qa_batch_id?: string | null
           sort_order?: number
           storage_key?: string | null
           thumbnail_key?: string | null
@@ -3055,6 +3070,7 @@ export type Database = {
           price_unit: string | null
           promoted_until: string | null
           published_at: string | null
+          qa_batch_id: string | null
           qr_opens_count: number
           quantity: number | null
           quote_requests_count: number
@@ -3126,6 +3142,7 @@ export type Database = {
           price_unit?: string | null
           promoted_until?: string | null
           published_at?: string | null
+          qa_batch_id?: string | null
           qr_opens_count?: number
           quantity?: number | null
           quote_requests_count?: number
@@ -3197,6 +3214,7 @@ export type Database = {
           price_unit?: string | null
           promoted_until?: string | null
           published_at?: string | null
+          qa_batch_id?: string | null
           qr_opens_count?: number
           quantity?: number | null
           quote_requests_count?: number
@@ -3272,6 +3290,7 @@ export type Database = {
           conversation_id: string
           created_at: string
           id: string
+          qa_batch_id: string | null
           read_at: string | null
           sender_user_id: string
         }
@@ -3281,6 +3300,7 @@ export type Database = {
           conversation_id: string
           created_at?: string
           id?: string
+          qa_batch_id?: string | null
           read_at?: string | null
           sender_user_id?: string
         }
@@ -3290,6 +3310,7 @@ export type Database = {
           conversation_id?: string
           created_at?: string
           id?: string
+          qa_batch_id?: string | null
           read_at?: string | null
           sender_user_id?: string
         }
@@ -3419,6 +3440,7 @@ export type Database = {
           created_at: string
           event: string
           id: string
+          qa_batch_id: string | null
           read_at: string | null
           report_id: string | null
           title: string
@@ -3429,6 +3451,7 @@ export type Database = {
           created_at?: string
           event: string
           id?: string
+          qa_batch_id?: string | null
           read_at?: string | null
           report_id?: string | null
           title: string
@@ -3439,6 +3462,7 @@ export type Database = {
           created_at?: string
           event?: string
           id?: string
+          qa_batch_id?: string | null
           read_at?: string | null
           report_id?: string | null
           title?: string
@@ -4384,6 +4408,7 @@ export type Database = {
           created_at: string
           event_type: string
           id: string
+          qa_batch_id: string | null
           search_query: string | null
           user_id: string
         }
@@ -4394,6 +4419,7 @@ export type Database = {
           created_at?: string
           event_type: string
           id?: string
+          qa_batch_id?: string | null
           search_query?: string | null
           user_id?: string
         }
@@ -4404,6 +4430,7 @@ export type Database = {
           created_at?: string
           event_type?: string
           id?: string
+          qa_batch_id?: string | null
           search_query?: string | null
           user_id?: string
         }
@@ -9255,6 +9282,7 @@ export type Database = {
         }[]
       }
       mkt_public_phone: { Args: { _user_id: string }; Returns: string }
+      mkt_qa_cleanup: { Args: { _batch_id: string }; Returns: Json }
       mkt_queue_perm: { Args: { _kind: string }; Returns: string }
       mkt_re_license_active: {
         Args: { p_listing_id: string }
