@@ -128,8 +128,13 @@ function AdminReportCardPage() {
         {t("market.reports.admin.backToInbox")}
       </Link>
 
+      <div className="mt-3">
+        <AdminAssignmentBar kind="report" subjectId={id} onChanged={() => void report.refetch()} />
+      </div>
+
       {report.isLoading ? (
         <Skeleton className="mt-4 h-64 w-full rounded-xl" />
+
       ) : !report.data ? (
         <p className="py-12 text-center text-sm text-muted-foreground">
           {t("market.reports.detail.notFound")}
