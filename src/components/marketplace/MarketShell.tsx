@@ -501,15 +501,33 @@ export function MarketCompactFooter() {
   );
 }
 
-export type FooterVariant = "full" | "compact" | "none";
+/**
+ * Brand-only footer for pages that already list the policy links in their body
+ * (currently `/more`), so nothing is duplicated.
+ */
+export function MarketBrandFooter() {
+  const { t } = useI18n();
+  return (
+    <footer className="mt-6 bg-market-navy text-market-navy-foreground">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6">
+        <p className="text-base font-bold tracking-tight">{t("market.brand")}</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-market-silver">{t("market.tagline")}</p>
+        <p className="mt-3 text-xs text-market-silver-muted">{t("market.footer.rights")}</p>
+      </div>
+    </footer>
+  );
+}
+
+export type FooterVariant = "full" | "compact" | "brand" | "none";
 
 /** Public marketing surfaces keep the full footer. */
-const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help", "/contact", "/more"];
+const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help", "/contact"];
 /** Long public content pages get the legal strip only. */
 const COMPACT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/"];
 
 /** Single source of truth: app/account/admin routes end right after their content. */
 export function footerVariantForPath(pathname: string): FooterVariant {
+  if (pathname === "/more") return "brand";
   if (FULL_FOOTER_PATHS.includes(pathname)) return "full";
   if (COMPACT_FOOTER_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return "compact";
   return "none";
@@ -534,9 +552,6 @@ export function MarketShell({
   return (
     <div
       dir={dir}
-      /* min-h-dvh + a growing <main> keep the footer at the natural end of the
-       * content instead of leaving a blank strip above the fixed bottom nav.
-       * The only reserved space is the nav height plus the safe area. */
       /* `overflow-x-clip` (not `hidden`) still blocks sideways scrolling but does
        * not turn the shell into a scroll container, so a page can use a sticky
        * action bar inside its own content. */
@@ -545,29 +560,19 @@ export function MarketShell({
           ? "flex min-h-dvh flex-col overflow-x-clip bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
           : "flex min-h-dvh flex-col overflow-x-clip bg-background"
       }
-
     >
       <MarketHeader />
-      {/* `main` keeps its natural height so the footer follows the last section
-       * directly; the wrapper below (not `main`) absorbs the remaining viewport
-       * height, so a short page never shows an empty strip under the footer. */}
-      <main>{children}</main>
+      {/* `main` absorbs the leftover viewport height, so a short page leaves the
+       * gap in the light page colour and the footer keeps its natural height —
+       * never a stretched navy block above the bottom nav. */}
+      <main className="flex-1">{children}</main>
 
-      {variant === "full" && (
-        <div className="flex flex-1 flex-col bg-background">
-          <MarketFooter />
-        </div>
-      )}
-      {variant === "compact" && (
-        <div className="flex flex-1 flex-col">
-          <MarketCompactFooter />
-        </div>
-      )}
-      {variant === "none" && <div className="flex-1" />}
+      {variant === "full" && <MarketFooter />}
+      {variant === "compact" && <MarketCompactFooter />}
+      {variant === "brand" && <MarketBrandFooter />}
       {bottomNav && <MarketBottomNav />}
     </div>
-
-
   );
 }
+
 
