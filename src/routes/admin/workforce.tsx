@@ -217,107 +217,16 @@ function AdminWorkforcePage() {
       ) : (
         <div className="mt-3 grid gap-2">
           {rows.map((row) => (
-            <div key={row.user_id} className="rounded-xl border border-border bg-card p-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-foreground">
-                    <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                    {row.label}
-                  </p>
-                  {row.email && row.email !== row.label && (
-                    <p className="truncate text-xs text-muted-foreground">{row.email}</p>
-                  )}
-                  <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
-                    <span>
-                      {t("admin.workforce.load")}: {row.open_count}/{row.capacity_limit}
-                    </span>
-                    <span>
-                      {t("admin.workforce.doneToday")}: {row.done_today}
-                    </span>
-                    {row.last_assigned_at && (
-                      <span>
-                        {t("admin.workforce.lastAssigned")}: {formatDateTime(row.last_assigned_at)}
-                      </span>
-                    )}
-                  </p>
-                  {row.on_leave && row.leave_ends_on && (
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">
-                      {t("admin.workforce.leaveUntil")}: {formatDate(row.leave_ends_on)}
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex shrink-0 flex-wrap items-center gap-1.5">
-                  {row.effective_state !== row.work_state && (
-                    <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
-                      {t(`admin.workforce.state.${row.effective_state}`)}
-                    </span>
-                  )}
-                  <Select
-                    value={row.work_state}
-                    onValueChange={(value) =>
-                      setPending({ kind: "staff", row, state: value as WorkState })
-                    }
-                  >
-                    <SelectTrigger className="h-10 w-[9.5rem]" aria-label={t("admin.workforce.stateLabel")}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {WORK_STATES.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {t(`admin.workforce.state.${state}`)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={row.department ?? ""}
-                    onValueChange={(value) => setPending({ kind: "staff", row, department: value })}
-                  >
-                    <SelectTrigger className="h-10 w-[9.5rem]" aria-label={t("admin.workforce.department")}>
-                      <SelectValue placeholder={t("admin.workforce.department")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(departments.data ?? []).map((dep) => (
-                        <SelectItem key={dep.code} value={dep.code}>
-                          {locale === "ar" ? dep.name_ar : dep.name_en}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <label className="flex min-h-10 items-center gap-1.5 rounded-lg bg-background px-2 text-[11px]">
-                    <span className="text-foreground">{t("admin.workforce.acceptsAuto")}</span>
-                    <Switch
-                      checked={row.accepts_auto}
-                      onCheckedChange={(next) => setPending({ kind: "staff", row, auto: next })}
-                      aria-label={t("admin.workforce.acceptsAuto")}
-                    />
-                  </label>
-                  <Input
-                    type="number"
-                    min={1}
-                    max={200}
-                    defaultValue={row.capacity_limit}
-                    className="h-10 w-20 tabular-nums"
-                    aria-label={t("admin.workforce.capacity")}
-                    onBlur={(event) => {
-                      const next = Number(event.currentTarget.value);
-                      if (!Number.isFinite(next) || next === row.capacity_limit) return;
-                      setPending({ kind: "staff", row, capacity: Math.max(1, Math.min(200, next)) });
-                    }}
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="min-h-10"
-                    onClick={() => setLeaveFor(row)}
-                  >
-                    <CalendarOff className="me-1.5 size-4" aria-hidden />
-                    {t("admin.workforce.addLeave")}
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <StaffCard
+              key={row.user_id}
+              row={row}
+              departments={departments.data ?? []}
+              locale={locale}
+              onState={(state) => setPending({ kind: "staff", row, state })}
+              onDepartment={(department) => setPending({ kind: "staff", row, department })}
+              onCapacity={(capacity) => setPending({ kind: "staff", row, capacity })}
+              onLeave={() => setLeaveFor(row)}
+            />
           ))}
         </div>
       )}
