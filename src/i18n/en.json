@@ -52,7 +52,8 @@
     "viewAll": "View all",
     "next": "Next",
     "previous": "Previous",
-    "saved": "Saved"
+    "saved": "Saved",
+    "unknown": "Unknown"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -2831,7 +2832,8 @@
       "geo": "Countries & cities",
       "roles": "Roles & permissions",
       "auditLog": "Audit log",
-      "settings": "Platform settings"
+      "settings": "Platform settings",
+      "search": "Admin search"
     },
     "alerts": {
       "title": "Alerts",
@@ -2839,7 +2841,10 @@
       "listingsPending": "Listings awaiting review",
       "reportsNew": "New reports",
       "verifications": "Pending verifications",
-      "activitySuggestions": "Suggested activities"
+      "activitySuggestions": "Suggested activities",
+      "unassigned": "Unassigned items",
+      "assignedToMe": "Items assigned to me",
+      "urgent": "Urgent actions"
     },
     "stats": {
       "users": "Users",
@@ -2849,7 +2854,11 @@
       "reports": "New reports",
       "verifications": "Pending verifications",
       "restricted": "Restricted accounts",
-      "suggestions": "Suggested activities"
+      "suggestions": "Suggested activities",
+      "unassigned": "Unassigned",
+      "assignedToMe": "Assigned to me",
+      "urgent": "Urgent actions",
+      "banned": "Banned accounts"
     },
     "role": {
       "systemOwner": "System owner",
@@ -3065,6 +3074,87 @@
       "noticeBody": "Notice body",
       "noticeSent": "Notice sent",
       "send": "Send"
-    }
+    },
+    "search": {
+      "label": "Admin search",
+      "placeholder": "Search by name, email, phone, number or ID",
+      "empty": "No matching results",
+      "all": "View all results",
+      "title": "Admin search results",
+      "hint": "Type at least two characters. Results are limited to what your permissions allow.",
+      "results": "result"
+    },
+    "queue": {
+      "title": "Work queue",
+      "claim": "Claim",
+      "claimed": "Claimed",
+      "release": "Return to queue",
+      "transfer": "Transfer to officer",
+      "transferTo": "Receiving officer",
+      "mine": "Assigned to me",
+      "unassigned": "Unassigned",
+      "assignedTo": "Assigned to",
+      "alreadyClaimed": "This item is already claimed by another officer",
+      "notHolder": "You cannot act: the item is assigned to another officer",
+      "invalidAssignee": "The selected officer is not valid",
+      "readOnly": "Read only — claim the item to act on it"
+    },
+    "safety": {
+      "title": "Advertiser safety",
+      "risk": "Risk level",
+      "verified": "Verified",
+      "emailConfirmed": "Email confirmed",
+      "phoneConfirmed": "Phone confirmed",
+      "confirmedReports": "Confirmed reports",
+      "reviewingReports": "Reports under review",
+      "invalidReports": "Invalid reports",
+      "violations": "Violations",
+      "restrictions": "Active restrictions",
+      "suspensions": "Suspensions",
+      "banned": "Banned",
+      "hasNotes": "Internal notes exist",
+      "lastViolation": "Last violation",
+      "clean": "No risk signals",
+      "hint": "A report is not a violation: only confirmed reports count."
+    },
+    "state": {
+      "new": "New",
+      "open": "Open",
+      "pending": "Pending review",
+      "pending_review": "Pending review",
+      "in_review": "In review",
+      "under_review": "Under review",
+      "needs_more": "Needs more documents",
+      "needs_info": "Needs information",
+      "needs_changes": "Needs changes",
+      "assigned": "Assigned",
+      "processing": "Processing",
+      "published": "Published",
+      "approved": "Approved",
+      "verified": "Verified",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "draft": "Draft",
+      "archived": "Archived",
+      "expired": "Expired",
+      "expiring": "Expiring soon",
+      "inactive": "Inactive",
+      "invalid": "Invalid",
+      "confirmed": "Confirmed",
+      "valid": "Confirmed",
+      "deleted": "Deleted",
+      "suspended": "Suspended",
+      "suspend_account": "Suspended",
+      "banned": "Banned",
+      "permanent_ban": "Permanent ban",
+      "rejected": "Rejected",
+      "low": "Low risk",
+      "medium": "Medium risk",
+      "high": "High risk",
+      "critical": "Critical risk",
+      "urgent": "Urgent",
+      "verification": "Verification"
+    },
+    "reasonRequired": "A reason is required"
   }
 }

@@ -52,7 +52,8 @@
     "viewAll": "عرض الكل",
     "next": "التالي",
     "previous": "السابق",
-    "saved": "تم الحفظ"
+    "saved": "تم الحفظ",
+    "unknown": "غير معروف"
   },
   "nav": {
     "dashboard": "لوحة التحكم",
@@ -2831,7 +2832,8 @@
       "geo": "الدول والمدن",
       "roles": "الأدوار والصلاحيات",
       "auditLog": "سجل التدقيق",
-      "settings": "إعدادات المنصة"
+      "settings": "إعدادات المنصة",
+      "search": "البحث الإداري"
     },
     "alerts": {
       "title": "مركز التنبيهات",
@@ -2839,7 +2841,10 @@
       "listingsPending": "إعلانات بانتظار المراجعة",
       "reportsNew": "بلاغات جديدة",
       "verifications": "طلبات توثيق معلّقة",
-      "activitySuggestions": "أنشطة مقترحة"
+      "activitySuggestions": "أنشطة مقترحة",
+      "unassigned": "عناصر غير مُسندة",
+      "assignedToMe": "عناصر مُسندة إليّ",
+      "urgent": "إجراءات عاجلة"
     },
     "stats": {
       "users": "المستخدمون",
@@ -2849,7 +2854,11 @@
       "reports": "بلاغات جديدة",
       "verifications": "توثيق معلّق",
       "restricted": "حسابات مقيّدة",
-      "suggestions": "أنشطة مقترحة"
+      "suggestions": "أنشطة مقترحة",
+      "unassigned": "غير مُسند",
+      "assignedToMe": "مُسند إليّ",
+      "urgent": "إجراءات عاجلة",
+      "banned": "حسابات محجوبة"
     },
     "role": {
       "systemOwner": "مدير النظام",
@@ -3065,6 +3074,87 @@
       "noticeBody": "نص الإشعار",
       "noticeSent": "أُرسل الإشعار",
       "send": "إرسال"
-    }
+    },
+    "search": {
+      "label": "البحث الإداري",
+      "placeholder": "ابحث بالاسم أو البريد أو الجوال أو الرقم أو المعرّف",
+      "empty": "لا نتائج مطابقة",
+      "all": "عرض كل النتائج",
+      "title": "نتائج البحث الإداري",
+      "hint": "اكتب حرفين على الأقل. البحث يشمل ما تسمح به صلاحياتك فقط.",
+      "results": "نتيجة"
+    },
+    "queue": {
+      "title": "طابور العمل",
+      "claim": "استلام",
+      "claimed": "تم الاستلام",
+      "release": "إعادة إلى الطابور",
+      "transfer": "تحويل إلى مشرف",
+      "transferTo": "المشرف المستلم",
+      "mine": "مُسند إليّ",
+      "unassigned": "غير مُسند",
+      "assignedTo": "مُسند إلى",
+      "alreadyClaimed": "العنصر مُسند بالفعل إلى مشرف آخر",
+      "notHolder": "لا يمكنك تنفيذ الإجراء: العنصر مُسند إلى مشرف آخر",
+      "invalidAssignee": "المشرف المحدد غير صالح",
+      "readOnly": "للعرض فقط — استلم العنصر لتتمكن من الإجراء"
+    },
+    "safety": {
+      "title": "سلامة المعلن",
+      "risk": "مستوى الخطورة",
+      "verified": "موثّق",
+      "emailConfirmed": "بريد مؤكد",
+      "phoneConfirmed": "جوال مؤكد",
+      "confirmedReports": "بلاغات مثبتة",
+      "reviewingReports": "بلاغات قيد المراجعة",
+      "invalidReports": "بلاغات غير صحيحة",
+      "violations": "مخالفات",
+      "restrictions": "قيود سارية",
+      "suspensions": "إيقافات",
+      "banned": "محجوب",
+      "hasNotes": "يوجد ملاحظات داخلية",
+      "lastViolation": "آخر مخالفة",
+      "clean": "لا مؤشرات خطورة",
+      "hint": "البلاغ ليس مخالفة: تُحسب البلاغات المثبتة فقط."
+    },
+    "state": {
+      "new": "جديد",
+      "open": "مفتوح",
+      "pending": "بانتظار المراجعة",
+      "pending_review": "بانتظار المراجعة",
+      "in_review": "قيد المراجعة",
+      "under_review": "قيد المراجعة",
+      "needs_more": "يحتاج مستندات إضافية",
+      "needs_info": "يحتاج معلومات",
+      "needs_changes": "يحتاج تعديلًا",
+      "assigned": "مُسند",
+      "processing": "قيد المعالجة",
+      "published": "منشور",
+      "approved": "مقبول",
+      "verified": "موثّق",
+      "resolved": "مُعالج",
+      "closed": "مُغلق",
+      "draft": "مسودة",
+      "archived": "مؤرشف",
+      "expired": "منتهي",
+      "expiring": "قارب الانتهاء",
+      "inactive": "غير نشط",
+      "invalid": "غير صحيح",
+      "confirmed": "مثبت",
+      "valid": "مثبت",
+      "deleted": "محذوف",
+      "suspended": "موقوف",
+      "suspend_account": "موقوف",
+      "banned": "محجوب",
+      "permanent_ban": "حظر دائم",
+      "rejected": "مرفوض",
+      "low": "خطورة منخفضة",
+      "medium": "خطورة متوسطة",
+      "high": "خطورة عالية",
+      "critical": "خطورة حرجة",
+      "urgent": "عاجل",
+      "verification": "توثيق"
+    },
+    "reasonRequired": "السبب إلزامي"
   }
 }
