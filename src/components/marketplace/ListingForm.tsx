@@ -155,6 +155,9 @@ export function ListingForm({ listing }: Props) {
     enabled: !!accountCountry.data?.id,
     queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
+  // One currency per listing: it follows the account country when the listing is
+  // created and stays frozen on a published listing.
+  const currencyCode = listing?.currency ?? accountCountry.data?.currency_code ?? "SAR";
 
   const { account } = useActiveAccount();
   const myProfile = useMyUserProfile();
