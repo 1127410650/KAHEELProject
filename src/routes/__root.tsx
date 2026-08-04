@@ -21,7 +21,18 @@ import { CallOverlay } from "@/components/marketplace/CallOverlay";
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
  * `RootComponent`, so they sit outside its provider tree. Each therefore has to
  * mount its own `I18nProvider`, otherwise `useI18n` runs with no provider.
+ *
+ * Colour identity: every public/marketplace route wears the "كحلي" (navy)
+ * palette, so these standalone screens carry `market-surface` too — otherwise
+ * `bg-primary` falls back to the internal system's petrol colour. Admin URLs
+ * keep the internal identity untouched, so the scope is decided from the path.
  */
+function useShellScope() {
+  const pathname =
+    typeof window === "undefined" ? "" : window.location.pathname;
+  return pathname.startsWith("/admin") ? "" : "market-surface";
+}
+
 function NotFoundComponent() {
   return (
     <I18nProvider>
@@ -32,8 +43,12 @@ function NotFoundComponent() {
 
 function NotFoundView() {
   const { t, dir } = useI18n();
+  const scope = useShellScope();
   return (
-    <div dir={dir} className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div
+      dir={dir}
+      className={`${scope} flex min-h-dvh items-center justify-center bg-background px-4 py-10`}
+    >
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">{t("routeError.notFoundTitle")}</h2>
@@ -41,7 +56,7 @@ function NotFoundView() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-dark focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t("routeError.home")}
           </Link>
@@ -63,12 +78,16 @@ function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   const { t, dir } = useI18n();
+  const scope = useShellScope();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
-    <div dir={dir} className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div
+      dir={dir}
+      className={`${scope} flex min-h-dvh items-center justify-center bg-background px-4 py-10`}
+    >
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           {t("routeError.errorTitle")}
@@ -79,13 +98,13 @@ function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-dark focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t("routeError.retry")}
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex min-h-11 items-center justify-center rounded-md border border-input bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t("routeError.home")}
           </a>
@@ -94,6 +113,7 @@ function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
     </div>
   );
 }
+
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({

@@ -620,6 +620,34 @@ body:has(.market-surface) {
   color: var(--foreground);
 }
 
+/*
+ * Elevation: the shared `--shadow-panel` / `--shadow-raised` tokens are tinted
+ * with the internal system's petrol ink. Inside the marketplace scope the same
+ * elevation is re-tinted with navy so no teal reaches a computed style, while
+ * the admin console keeps its own shadows untouched.
+ */
+.market-surface,
+body:has(.market-surface) {
+  --shadow-panel: 0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
+    0 6px 18px -12px oklch(0.2171 0.0682 266.19 / 0.14);
+  --shadow-raised: 0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
+    0 14px 32px -20px oklch(0.2171 0.0682 266.19 / 0.22);
+}
+
+.market-surface .shadow-panel,
+body:has(.market-surface) .shadow-panel {
+  box-shadow: 0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
+    0 6px 18px -12px oklch(0.2171 0.0682 266.19 / 0.14) !important;
+}
+
+.market-surface .shadow-raised,
+body:has(.market-surface) .shadow-raised {
+  box-shadow: 0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
+    0 14px 32px -20px oklch(0.2171 0.0682 266.19 / 0.22) !important;
+}
+
+
+
 
 /* Hide the horizontal scrollbar of the marketplace category rail without
  * disabling the scrolling itself. */
@@ -629,4 +657,17 @@ body:has(.market-surface) {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/*
+ * Tailwind's global border reset resolves `--color-border` on `:root`, so a
+ * border declared without an explicit colour class would fall back to the
+ * internal system's petrol tint even inside the marketplace. Re-stating the
+ * reset inside the scope keeps such borders silver. `:where()` keeps the
+ * specificity at zero, so any explicit border utility still wins, and the admin
+ * console keeps the base reset untouched.
+ */
+:where(.market-surface, body:has(.market-surface) [data-slot$="-content"])
+  :where(*, *::before, *::after) {
+  border-color: var(--border);
 }
