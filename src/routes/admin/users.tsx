@@ -205,7 +205,7 @@ function AdminUsersPage() {
           </span>
           <Link
             to="/admin/users"
-            search={{}}
+            search={{ restricted: undefined }}
             className="min-h-11 py-2.5 text-primary underline-offset-4 hover:underline"
           >
             {t("market.filters.all")}

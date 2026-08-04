@@ -81,7 +81,7 @@ function RegisterPage() {
   useEffect(() => setMounted(true), []);
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard", replace: true });
+      if (data.session) navigate({ to: "/choose-account", replace: true });
     });
   }, [navigate]);
 

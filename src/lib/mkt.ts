@@ -347,7 +347,8 @@ export function relativeTime(iso: string | null, locale: "ar" | "en"): string {
   if (!iso) return "—";
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.round(diff / 60000);
-  const fmt = new Intl.RelativeTimeFormat(locale === "ar" ? "ar-SA" : "en-GB", {
+  // Latin digits everywhere, in both languages.
+  const fmt = new Intl.RelativeTimeFormat(locale === "ar" ? "ar-SA-u-nu-latn" : "en-GB", {
     numeric: "auto",
     style: "short",
   });
