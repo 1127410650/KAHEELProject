@@ -3452,6 +3452,7 @@ export type Database = {
           slug: string | null
           specs: Json
           status: string
+          storefront_id: string | null
           subcategory_id: string | null
           summary: string | null
           tenant_id: string | null
@@ -3524,6 +3525,7 @@ export type Database = {
           slug?: string | null
           specs?: Json
           status?: string
+          storefront_id?: string | null
           subcategory_id?: string | null
           summary?: string | null
           tenant_id?: string | null
@@ -3596,6 +3598,7 @@ export type Database = {
           slug?: string | null
           specs?: Json
           status?: string
+          storefront_id?: string | null
           subcategory_id?: string | null
           summary?: string | null
           tenant_id?: string | null
@@ -3625,6 +3628,13 @@ export type Database = {
             columns: ["country_id"]
             isOneToOne: false
             referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listings_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
             referencedColumns: ["id"]
           },
           {
@@ -10292,6 +10302,46 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_admin_store_action: {
+        Args: { _action: string; _reason?: string; _storefront_id: string }
+        Returns: Json
+      }
+      mkt_admin_store_audit: {
+        Args: { _limit?: number; _storefront_id: string }
+        Returns: {
+          action: string
+          created_at: string
+          is_admin_action: boolean
+          new_value: Json
+          old_value: Json
+          reason: string
+        }[]
+      }
+      mkt_admin_stores: {
+        Args: {
+          _limit?: number
+          _offset?: number
+          _q?: string
+          _status?: string
+          _store_type?: string
+        }
+        Returns: {
+          city_name_ar: string
+          country_iso2: string
+          created_at: string
+          id: string
+          items_count: number
+          name_ar: string
+          owner_kind: string
+          owner_label: string
+          reports_count: number
+          slug: string
+          status: string
+          store_type: string
+          suspension_reason: string
+          verification_status: string
+        }[]
+      }
       mkt_admin_subject_action: {
         Args: {
           _action: string
@@ -11094,6 +11144,21 @@ export type Database = {
           score: number
         }[]
       }
+      mkt_search_stores: {
+        Args: { _country_iso2?: string; _limit?: number; _q?: string }
+        Returns: {
+          city_name_ar: string
+          city_name_en: string
+          cover_path: string
+          id: string
+          logo_path: string
+          matched_items: number
+          name_ar: string
+          name_en: string
+          slug: string
+          store_type: string
+        }[]
+      }
       mkt_set_entity_activities: {
         Args: {
           _main_activity_id: string
@@ -11200,12 +11265,26 @@ export type Database = {
       }
       mkt_store_item_manage: { Args: { _item_id: string }; Returns: boolean }
       mkt_store_item_visible: { Args: { _item_id: string }; Returns: boolean }
+      mkt_store_linkable_listings: {
+        Args: { _account_key?: string }
+        Returns: {
+          cover_image_url: string
+          id: string
+          slug: string
+          status: string
+          storefront_id: string
+          title: string
+        }[]
+      }
       mkt_store_manage: { Args: { _storefront_id: string }; Returns: boolean }
       mkt_store_open_state: { Args: { _storefront_id: string }; Returns: Json }
+      mkt_store_overview: { Args: { _account_key?: string }; Returns: Json }
+      mkt_store_public: { Args: { _slug: string }; Returns: Json }
       mkt_store_public_phone: {
         Args: { _storefront_id: string }
         Returns: string
       }
+      mkt_store_qa_cleanup: { Args: { _batch: string }; Returns: Json }
       mkt_store_save: {
         Args: {
           _account_key: string
