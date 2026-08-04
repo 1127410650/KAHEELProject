@@ -504,7 +504,7 @@ export function MarketCompactFooter() {
 export type FooterVariant = "full" | "compact" | "none";
 
 /** Public marketing surfaces keep the full footer. */
-const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help"];
+const FULL_FOOTER_PATHS = ["/", "/about", "/terms", "/privacy", "/help", "/contact", "/more"];
 /** Long public content pages get the legal strip only. */
 const COMPACT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/"];
 
@@ -554,7 +554,7 @@ export function MarketShell({
       <main>{children}</main>
 
       {variant === "full" && (
-        <div className="flex flex-1 flex-col bg-secondary/30">
+        <div className="flex flex-1 flex-col bg-market-navy">
           <MarketFooter />
         </div>
       )}

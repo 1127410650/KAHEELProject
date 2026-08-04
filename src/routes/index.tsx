@@ -3,9 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketHome } from "@/components/marketplace/MarketHome";
 
-const title = "سوق تحقّق — خدمات ومقاولات وموردين ومعدات";
+const title = "كحلي — سوق العقارات والسيارات والأجهزة والخدمات";
 const description =
-  "سوق أعمال B2B للخدمات والمقاولات ومواد البناء والمعدات: تصفّح الإعلانات واطلب عرض سعر من منشآت موثقة في السعودية.";
+  "كحلي: سوق إلكتروني للعقارات والسيارات والأجهزة والخدمات والمعدات والموردين. تصفّح الإعلانات وتواصل مع المعلن مباشرة.";
 
 export const Route = createFileRoute("/")({
   ssr: false,
