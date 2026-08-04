@@ -7,10 +7,14 @@
  * category filters — so the labels, the ids and the order can never diverge.
  * Never redeclare this list inside a component.
  *
- * Order is the approved one, 1 → 19, and must not change:
+ * Order is the approved one, 1 → 20, and must not change:
  * الرئيسية · عقارات · سيارات · أجهزة · عقار ديل · مطاعم · أثاث · خدمات ·
- * أزياء · وظائف · تدريب · مناسبات · برمجة · الحدائق · الفنون · مفقودات ·
- * مشاريع واستثمارات · الرحلات والسياحة · المزيد
+ * أزياء · وظائف · تدريب · مدارس وجامعات · مناسبات · برمجة · الحدائق ·
+ * الفنون · مفقودات · مشاريع واستثمارات · الرحلات والسياحة · المزيد
+ *
+ * «مدارس وجامعات» is a real root record in `mkt_categories`
+ * (slug `schools-universities`) with its own subcategories; «تدريب» stays a
+ * separate, untouched field.
  *
  * «عقار ديل» is NOT a second top-level category: it is a visible entry that
  * opens the single canonical «عقارات» category filtered on its real
@@ -60,6 +64,30 @@ export const PRIMARY_FIELDS: PrimaryField[] = [
   { id: "fashion", kind: "field", categorySlug: "fashion", aliases: ["ملابس", "موضة"] },
   { id: "jobs", kind: "field", categorySlug: "jobs", aliases: ["وظيفة", "توظيف"] },
   { id: "training", kind: "field", categorySlug: "training", aliases: ["دورات", "courses"] },
+  {
+    id: "schools",
+    kind: "field",
+    categorySlug: "schools-universities",
+    aliases: [
+      "التعليم",
+      "تعليم",
+      "مدارس",
+      "مدرسة",
+      "جامعات",
+      "جامعة",
+      "كليات",
+      "كلية",
+      "معاهد",
+      "معهد",
+      "أكاديميات",
+      "أكاديمية",
+      "education",
+      "schools",
+      "universities",
+      "colleges",
+      "institutes",
+    ],
+  },
   { id: "events", kind: "field", categorySlug: "events", aliases: ["مناسبة", "حفلات"] },
   { id: "programming", kind: "field", categorySlug: "programming", aliases: ["برمجيات", "software"] },
   { id: "gardens", kind: "field", categorySlug: "gardens", aliases: ["زراعة", "نباتات"] },
