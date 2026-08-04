@@ -70,6 +70,7 @@ import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
 import { Route as DashboardStoreIndexRouteImport } from './routes/dashboard/store.index'
+import { Route as DashboardStoreCatalogRouteImport } from './routes/dashboard/store.catalog'
 import { Route as DashboardStoreNewRouteImport } from './routes/dashboard/store.new'
 import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
 
@@ -378,6 +379,11 @@ const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
   path: '/dashboard/store/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardStoreCatalogRoute = DashboardStoreCatalogRouteImport.update({
+  id: '/dashboard/store/catalog',
+  path: '/dashboard/store/catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardStoreNewRoute = DashboardStoreNewRouteImport.update({
   id: '/dashboard/store/new',
   path: '/dashboard/store/new',
@@ -448,6 +454,7 @@ export interface FileRoutesByFullPath {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
@@ -512,6 +519,7 @@ export interface FileRoutesByTo {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/dashboard/reports': typeof DashboardReportsIndexRoute
@@ -578,6 +586,7 @@ export interface FileRoutesById {
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
@@ -645,6 +654,7 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
@@ -709,6 +719,7 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports'
     | '/dashboard/reports'
@@ -774,6 +785,7 @@ export interface FileRouteTypes {
     | '/admin/verifications_/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
@@ -817,6 +829,7 @@ export interface RootRouteChildren {
   UUsernameRoute: typeof UUsernameRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
+  DashboardStoreCatalogRoute: typeof DashboardStoreCatalogRoute
   DashboardStoreNewRoute: typeof DashboardStoreNewRoute
   DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
   DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
@@ -1252,6 +1265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardStoreIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/store/catalog': {
+      id: '/dashboard/store/catalog'
+      path: '/dashboard/store/catalog'
+      fullPath: '/dashboard/store/catalog'
+      preLoaderRoute: typeof DashboardStoreCatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/store/new': {
       id: '/dashboard/store/new'
       path: '/dashboard/store/new'
@@ -1363,6 +1383,7 @@ const rootRouteChildren: RootRouteChildren = {
   UUsernameRoute: UUsernameRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardReportsIdRoute: DashboardReportsIdRoute,
+  DashboardStoreCatalogRoute: DashboardStoreCatalogRoute,
   DashboardStoreNewRoute: DashboardStoreNewRoute,
   DashboardReportsIndexRoute: DashboardReportsIndexRoute,
   DashboardStoreIndexRoute: DashboardStoreIndexRoute,
@@ -1371,13 +1392,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

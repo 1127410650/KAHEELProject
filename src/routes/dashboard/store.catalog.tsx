@@ -1,4 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+
+import { supabase } from "@/integrations/supabase/client";
 
 import {
   FormRouteError,
@@ -38,6 +41,22 @@ function StoreCatalogPage() {
   const { t } = useI18n();
   const { account } = useActiveAccount();
   const store = useMyStorefront(account?.account_key ?? null);
+  // Currency follows the account country and is decided by the server; the
+  // editor only displays it.
+  const currency = useQuery({
+    queryKey: ["mkt", "store-currency", store.data?.id ?? null],
+    enabled: !!store.data?.id,
+    staleTime: 300_000,
+    queryFn: async (): Promise<string> => {
+      const { data, error } = await supabase
+        .from("mkt_storefronts")
+        .select("currency_code")
+        .eq("id", store.data!.id)
+        .single();
+      if (error) throw error;
+      return (data as { currency_code: string }).currency_code;
+    },
+  });
 
   return (
     <DashboardShell title={t("market.store.catalog.title")}>
@@ -50,7 +69,7 @@ function StoreCatalogPage() {
         <CatalogEditor
           storefrontId={store.data.id}
           storeType={store.data.store_type}
-          currency="SAR"
+          currency={currency.data ?? "SAR"}
         />
       ) : (
         <Card>
