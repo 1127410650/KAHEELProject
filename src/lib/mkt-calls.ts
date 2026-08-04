@@ -46,9 +46,24 @@ export interface CallPeer {
   accepted_at: string | null;
 }
 
+/**
+ * Per-account availability: calls off, "request a call" only, or open to
+ * everyone. Messaging is never affected by this setting.
+ */
+export type CallMode = "off" | "request" | "direct";
+
 export interface CallEligibility {
   ok: boolean;
   reason?: string;
+  mode?: CallMode;
+}
+
+export interface CallRequestRow {
+  id: string;
+  listing_id: string;
+  requester_user_id: string;
+  status: "open" | "called" | "closed";
+  created_at: string;
 }
 
 export const RING_TIMEOUT_MS = 40_000;
@@ -64,6 +79,7 @@ export async function callEligibility(listingId: string): Promise<CallEligibilit
   if (error) return { ok: false, reason: "error" };
   return (data as unknown as CallEligibility) ?? { ok: false, reason: "error" };
 }
+
 
 export async function startCall(listingId: string): Promise<{ call_id: string; conversation_id: string }> {
   const { data, error } = await supabase.rpc("mkt_call_start", { _listing_id: listingId });
