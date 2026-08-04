@@ -2907,7 +2907,8 @@
       "roles": "Roles & permissions",
       "auditLog": "Audit log",
       "settings": "Platform settings",
-      "search": "Admin search"
+      "search": "Admin search",
+      "workforce": "Work distribution & staff"
     },
     "alerts": {
       "title": "Alerts",
@@ -3020,7 +3021,8 @@
       "accounts.suspend": "Suspend accounts",
       "businesses.suspend": "Suspend business publishing",
       "verifications.review": "Review verifications",
-      "appeals.review": "Review appeals"
+      "appeals.review": "Review appeals",
+      "workforce.manage": "Manage work distribution"
     },
     "audit": {
       "searchHint": "Search by action or reason",
@@ -3229,6 +3231,87 @@
       "urgent": "Urgent",
       "verification": "Verification"
     },
-    "reasonRequired": "A reason is required"
+    "reasonRequired": "A reason is required",
+    "workforce": {
+      "hint": "A staff member's work state is entirely separate from their account state. Automatic distribution gives new work to the least loaded eligible officer who is available — never to someone on leave or at their operational limit.",
+      "staffTitle": "Staff & work state",
+      "leavesTitle": "Current leaves",
+      "queueTitle": "Shared work list",
+      "noLeaves": "No recorded leaves",
+      "emptyQueue": "No work in this list",
+      "distribute": "Distribute unassigned work",
+      "distributed": "{n} item(s) assigned",
+      "load": "Current load",
+      "doneToday": "Done today",
+      "lastAssigned": "Last assigned",
+      "leaveUntil": "On leave until",
+      "capacity": "Operational limit",
+      "acceptsAuto": "Auto-assign",
+      "department": "Department",
+      "stateLabel": "Work state",
+      "addLeave": "Add leave",
+      "cancelLeave": "Cancel leave",
+      "leaveKindLabel": "Leave type",
+      "from": "From",
+      "to": "To",
+      "noteLabel": "Note",
+      "assignee": "Responsible officer",
+      "autoAssigned": "Auto-assigned",
+      "priorityLabel": "Priority",
+      "progressLabel": "Processing stage",
+      "confirmTitle": "Confirm operational change",
+      "state": {
+        "available": "Available",
+        "busy": "Busy",
+        "away": "Temporarily away",
+        "leave": "On leave",
+        "off": "Not receiving work"
+      },
+      "priority": {
+        "urgent": "Urgent",
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "progress": {
+        "unstarted": "Not started",
+        "in_progress": "In progress",
+        "waiting_info": "Waiting for info",
+        "done": "Done"
+      },
+      "leaveKind": {
+        "annual": "Annual",
+        "sick": "Sick",
+        "emergency": "Emergency",
+        "training": "Training",
+        "other": "Other"
+      },
+      "scope": {
+        "all": "All work",
+        "unassigned": "Unassigned",
+        "mine": "Assigned to me"
+      },
+      "kind": {
+        "listing_review": "Listing review",
+        "report": "Report",
+        "verification": "Verification request",
+        "activity_suggestion": "Activity suggestion",
+        "account_review": "Account review",
+        "business_review": "Business review"
+      },
+      "stat": {
+        "unassigned": "Unassigned",
+        "open": "Open work",
+        "urgent": "Urgent",
+        "overdue": "Overdue",
+        "availableStaff": "Available staff",
+        "onLeave": "On leave"
+      },
+      "err": {
+        "capacity": "This officer reached their operational limit",
+        "leaveRange": "Leave end date precedes its start",
+        "dates": "Both leave dates are required"
+      }
+    }
   }
 }

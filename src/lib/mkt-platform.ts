@@ -284,6 +284,7 @@ export const STAFF_PERMISSIONS = [
   "businesses.suspend",
   "verifications.review",
   "appeals.review",
+  "workforce.manage",
 ] as const;
 
 export async function loadAdminRoles(): Promise<AdminRoleRow[]> {

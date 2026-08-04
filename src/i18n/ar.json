@@ -2907,7 +2907,8 @@
       "roles": "الأدوار والصلاحيات",
       "auditLog": "سجل التدقيق",
       "settings": "إعدادات المنصة",
-      "search": "البحث الإداري"
+      "search": "البحث الإداري",
+      "workforce": "توزيع الأعمال والموظفون"
     },
     "alerts": {
       "title": "مركز التنبيهات",
@@ -3020,7 +3021,8 @@
       "accounts.suspend": "إيقاف الحسابات",
       "businesses.suspend": "إيقاف نشر المنشآت",
       "verifications.review": "مراجعة التوثيق",
-      "appeals.review": "مراجعة الاعتراضات"
+      "appeals.review": "مراجعة الاعتراضات",
+      "workforce.manage": "إدارة توزيع الأعمال"
     },
     "audit": {
       "searchHint": "ابحث بالإجراء أو السبب",
@@ -3229,6 +3231,87 @@
       "urgent": "عاجل",
       "verification": "توثيق"
     },
-    "reasonRequired": "السبب إلزامي"
+    "reasonRequired": "السبب إلزامي",
+    "workforce": {
+      "hint": "حالة عمل الموظف منفصلة تمامًا عن حالة حسابه. التوزيع الآلي يُسند العمل لأقل موظف حِملًا بين المتاحين المؤهلين فقط، ولا يُسند لموظف في إجازة أو بلغ حدّه التشغيلي.",
+      "staffTitle": "الموظفون وحالة العمل",
+      "leavesTitle": "الإجازات الحالية",
+      "queueTitle": "قائمة الأعمال المشتركة",
+      "noLeaves": "لا إجازات مسجّلة",
+      "emptyQueue": "لا أعمال في هذه القائمة",
+      "distribute": "توزيع الأعمال غير المُسندة",
+      "distributed": "تم إسناد {n} عملًا",
+      "load": "الحِمل الحالي",
+      "doneToday": "منجز اليوم",
+      "lastAssigned": "آخر إسناد",
+      "leaveUntil": "في إجازة حتى",
+      "capacity": "الحد التشغيلي",
+      "acceptsAuto": "يستلم آليًا",
+      "department": "القسم",
+      "stateLabel": "حالة العمل",
+      "addLeave": "إضافة إجازة",
+      "cancelLeave": "إلغاء الإجازة",
+      "leaveKindLabel": "نوع الإجازة",
+      "from": "من تاريخ",
+      "to": "إلى تاريخ",
+      "noteLabel": "ملاحظة",
+      "assignee": "الموظف المختص",
+      "autoAssigned": "إسناد آلي",
+      "priorityLabel": "الأولوية",
+      "progressLabel": "مرحلة المعالجة",
+      "confirmTitle": "تأكيد التغيير التشغيلي",
+      "state": {
+        "available": "متاح",
+        "busy": "مشغول",
+        "away": "غائب مؤقتًا",
+        "leave": "في إجازة",
+        "off": "موقوف عن الاستلام"
+      },
+      "priority": {
+        "urgent": "عاجل",
+        "high": "مرتفع",
+        "normal": "عادي",
+        "low": "منخفض"
+      },
+      "progress": {
+        "unstarted": "لم يُبدأ",
+        "in_progress": "قيد المعالجة",
+        "waiting_info": "بانتظار معلومات",
+        "done": "منجز"
+      },
+      "leaveKind": {
+        "annual": "سنوية",
+        "sick": "مرضية",
+        "emergency": "اضطرارية",
+        "training": "تدريب",
+        "other": "أخرى"
+      },
+      "scope": {
+        "all": "كل الأعمال",
+        "unassigned": "غير مُسند",
+        "mine": "مُسند إليّ"
+      },
+      "kind": {
+        "listing_review": "مراجعة إعلان",
+        "report": "بلاغ",
+        "verification": "طلب توثيق",
+        "activity_suggestion": "اقتراح نشاط",
+        "account_review": "مراجعة حساب",
+        "business_review": "مراجعة منشأة"
+      },
+      "stat": {
+        "unassigned": "غير مُسند",
+        "open": "أعمال مفتوحة",
+        "urgent": "عاجل",
+        "overdue": "متأخر",
+        "availableStaff": "موظفون متاحون",
+        "onLeave": "في إجازة"
+      },
+      "err": {
+        "capacity": "بلغ الموظف حدّه التشغيلي",
+        "leaveRange": "تاريخ نهاية الإجازة قبل بدايتها",
+        "dates": "تاريخا الإجازة مطلوبان"
+      }
+    }
   }
 }
