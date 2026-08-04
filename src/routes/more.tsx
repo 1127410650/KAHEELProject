@@ -245,12 +245,12 @@ function MorePage() {
           <Section title={t("market.more.accessTitle")}>
             <Link to="/auth" className={rowClass}>
               <LogIn className="size-5 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 flex-1 truncate">{t("nav.signIn")}</span>
+              <span className="min-w-0 flex-1 truncate">{t("market.signIn")}</span>
               <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             </Link>
-            <Link to="/auth" search={{ mode: "signup" }} className={rowClass}>
+            <Link to="/register" className={rowClass}>
               <UserPlus className="size-5 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 flex-1 truncate">{t("nav.signUp")}</span>
+              <span className="min-w-0 flex-1 truncate">{t("market.signUp")}</span>
               <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             </Link>
           </Section>
