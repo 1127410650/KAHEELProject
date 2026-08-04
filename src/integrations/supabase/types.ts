@@ -9086,6 +9086,33 @@ export type Database = {
         }[]
       }
       mkt_attendance_recompute: { Args: { _id: string }; Returns: undefined }
+      mkt_bank_accounts_for: {
+        Args: { _account_key: string }
+        Returns: {
+          bank_name: string
+          beneficiary_name: string
+          id: string
+          last4: string
+          owner_label: string
+        }[]
+      }
+      mkt_bank_request_respond: {
+        Args: { _action: string; _message_id: string }
+        Returns: undefined
+      }
+      mkt_bank_request_send: {
+        Args: { _account_key: string; _conversation_id: string }
+        Returns: string
+      }
+      mkt_bank_share: {
+        Args: {
+          _account_key: string
+          _bank_account_id: string
+          _conversation_id: string
+          _request_message_id?: string
+        }
+        Returns: string
+      }
       mkt_business_details_complete: {
         Args: { _tenant_id: string }
         Returns: boolean
@@ -9143,6 +9170,21 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
+      mkt_chat_block_set: {
+        Args: { _blocked: boolean; _conversation_id: string }
+        Returns: undefined
+      }
+      mkt_chat_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
+      mkt_chat_peer: { Args: { _conversation_id: string }; Returns: string }
+      mkt_conversation_context: {
+        Args: { _conversation_id: string }
+        Returns: Json
+      }
+      mkt_conversation_open: { Args: { _listing_id: string }; Returns: string }
+      mkt_conversation_state_set: {
+        Args: { _conversation_id: string; _hidden?: boolean; _muted?: boolean }
+        Returns: undefined
+      }
       mkt_departments_manage: { Args: never; Returns: boolean }
       mkt_enforce_listing: {
         Args: {
@@ -9266,6 +9308,36 @@ export type Database = {
         Args: { _note?: string; _source_id: string; _target_id: string }
         Returns: undefined
       }
+      mkt_message_delete: {
+        Args: { _message_id: string; _scope?: string }
+        Returns: undefined
+      }
+      mkt_message_send: {
+        Args: {
+          _body?: string
+          _conversation_id: string
+          _kind?: string
+          _payload?: Json
+          _reply_to_id?: string
+        }
+        Returns: string
+      }
+      mkt_messages_list: {
+        Args: { _conversation_id: string; _limit?: number }
+        Returns: {
+          body: string
+          created_at: string
+          deleted_at: string
+          id: string
+          kind: string
+          mine: boolean
+          payload: Json
+          read_at: string
+          reply_to_id: string
+          sender_user_id: string
+        }[]
+      }
+      mkt_moderation_check_text: { Args: { _t: string }; Returns: Json }
       mkt_moderation_normalize: { Args: { _t: string }; Returns: string }
       mkt_moderation_scan_listing: {
         Args: { _id: string; _trigger?: string }
