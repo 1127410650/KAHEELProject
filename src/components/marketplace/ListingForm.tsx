@@ -23,6 +23,7 @@ import {
   TITLE_MIN,
   type SpecField,
 } from "@/lib/mkt-taxonomy";
+import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
 import { ORGANIC_LISTING_DAYS, submitListing } from "@/lib/mkt-listing-ops";
 import {
@@ -746,7 +747,7 @@ export function ListingForm({ listing }: Props) {
         {!listing && (
           <Link
             to="/choose-account"
-            search={{ next: "/dashboard/ads/new" }}
+            search={{ next: ADD_LISTING_PATH }}
             onClick={() => saveDraft(scope, snapshot())}
             className="font-semibold text-primary underline"
           >

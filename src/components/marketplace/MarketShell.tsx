@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { ADD_LISTING_PATH, addListingHref } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
@@ -42,9 +43,7 @@ export function MarketHeader() {
   const { identity: adminIdentity } = usePlatformIdentity();
   const offline = useOffline();
 
-  const addListingHref = session
-    ? undefined
-    : `/auth?next=${encodeURIComponent("/dashboard/ads/new")}`;
+  const addHref = addListingHref({ authenticated: !!session });
 
   return (
     <header className="sticky top-0 z-40 bg-market-navy text-market-navy-foreground">
@@ -139,17 +138,10 @@ export function MarketHeader() {
             className="hidden shrink-0 bg-market-silver text-market-navy hover:bg-market-navy-foreground sm:inline-flex"
           >
 
-            {addListingHref ? (
-              <a href={addListingHref} aria-label={t("market.addListing")}>
-                <Plus className="size-4" aria-hidden />
-                <span className="hidden sm:inline">{t("market.addListing")}</span>
-              </a>
-            ) : (
-              <Link to="/dashboard/ads/new" aria-label={t("market.addListing")}>
-                <Plus className="size-4" aria-hidden />
-                <span className="hidden sm:inline">{t("market.addListing")}</span>
-              </Link>
-            )}
+            <a href={addHref} aria-label={t("market.addListing")}>
+              <Plus className="size-4" aria-hidden />
+              <span className="hidden sm:inline">{t("market.addListing")}</span>
+            </a>
           </Button>
           )}
         </div>
@@ -207,7 +199,7 @@ function useMarketSetupGate() {
 const BOTTOM_NAV_PATHS = {
   home: "/",
   messages: "/dashboard/messages",
-  add: "/dashboard/ads/new",
+  add: ADD_LISTING_PATH,
   alerts: "/dashboard/notifications",
   more: "/more",
 } as const;
@@ -422,7 +414,7 @@ export function MarketFooter() {
     {
       key: "business",
       links: [
-        { to: "/dashboard/ads/new", label: t("market.addListing") },
+        { to: ADD_LISTING_PATH, label: t("market.addListing") },
         { to: "/dashboard/my-ads", label: t("market.nav.myAds") },
         { to: "/dashboard/business", label: t("market.dash.business") },
       ],

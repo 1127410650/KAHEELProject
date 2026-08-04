@@ -267,7 +267,8 @@ export function safeInternalPath(raw: string | null | undefined): string | null 
 export function loginHref(returnPath: string, action?: MktAction): string {
   const safe = safeInternalPath(returnPath) ?? "/";
   const withAction = action ? `${safe}${safe.includes("?") ? "&" : "?"}action=${action}` : safe;
-  return `/login?next=${encodeURIComponent(withAction)}`;
+  // `/auth` is the real sign-in route; `/login` never existed and rendered 404.
+  return `/auth?next=${encodeURIComponent(withAction)}`;
 }
 
 export function currentPath(): string {

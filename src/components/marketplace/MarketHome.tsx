@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Plus, Search } from "lucide-react";
 
+import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadListings } from "@/lib/mkt-queries";
@@ -179,7 +180,7 @@ export function MarketHome() {
         <section className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-8 text-center">
           <p className="text-sm text-muted-foreground">{t("market.emptyHome")}</p>
           <Button asChild size="sm" className="mt-3">
-            <Link to="/dashboard/ads/new">
+            <Link to={ADD_LISTING_PATH}>
               <Plus className="size-4" aria-hidden />
               {t("market.addListing")}
             </Link>
