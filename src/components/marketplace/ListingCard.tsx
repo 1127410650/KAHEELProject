@@ -5,6 +5,7 @@ import { BadgeCheck, Clock, Flag, Heart, MapPin, MoreHorizontal, Share2 } from "
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { track } from "@/lib/analytics";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { trackMarketActivity } from "@/lib/mkt-activity";
