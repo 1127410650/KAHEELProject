@@ -318,7 +318,7 @@ function AdminWorkforcePage() {
                   </p>
                 </div>
 
-                <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+                <div className="flex w-full flex-wrap items-center gap-1.5 sm:w-auto sm:shrink-0">
                   <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
                     {t(`admin.workforce.priority.${item.priority}`)}
                   </span>
@@ -328,7 +328,7 @@ function AdminWorkforcePage() {
                       setPending({ kind: "priority", item, priority: value as WorkPriority })
                     }
                   >
-                    <SelectTrigger className="h-10 w-32" aria-label={t("admin.workforce.priorityLabel")}>
+                    <SelectTrigger className="h-10 w-[calc(50%-0.375rem)] sm:w-32" aria-label={t("admin.workforce.priorityLabel")}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -345,7 +345,7 @@ function AdminWorkforcePage() {
                       void run(() => setWorkProgress(item.kind, item.subject_id, value as WorkProgress))
                     }
                   >
-                    <SelectTrigger className="h-10 w-36" aria-label={t("admin.workforce.progressLabel")}>
+                    <SelectTrigger className="h-10 w-[calc(50%-0.375rem)] sm:w-36" aria-label={t("admin.workforce.progressLabel")}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -381,7 +381,7 @@ function AdminWorkforcePage() {
                     value=""
                     onValueChange={(value) => setPending({ kind: "transfer", item, to: value })}
                   >
-                    <SelectTrigger className="h-10 w-36" aria-label={t("admin.queue.transfer")}>
+                    <SelectTrigger className="h-10 w-full sm:w-36" aria-label={t("admin.queue.transfer")}>
                       <SelectValue placeholder={t("admin.queue.transfer")} />
                     </SelectTrigger>
                     <SelectContent>
