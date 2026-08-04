@@ -21,6 +21,7 @@ import {
   ShieldCheck,
   Store,
   Users2,
+  Briefcase,
   UserCog,
   Users,
 } from "lucide-react";
@@ -69,11 +70,14 @@ interface NavItem {
   /** Visible to a limited administrator holding any of these staff perms. */
   perms?: string[];
   ownerOnly?: boolean;
+  /** Visible to every administrator, including a limited one with no perms. */
+  anyStaff?: boolean;
 }
 
 const NAV: NavItem[] = [
   { to: "/admin", labelKey: "admin.nav.home", icon: Gauge },
   { to: "/admin/search", labelKey: "admin.nav.search", icon: Search },
+  { to: "/admin/my-work", labelKey: "admin.nav.myWork", icon: Briefcase, anyStaff: true },
   { to: "/admin/listings", labelKey: "admin.nav.listings", icon: Megaphone },
 
   {
@@ -130,7 +134,9 @@ function visibleNav(identity: PlatformIdentity): NavItem[] {
   if (identity.is_platform_admin) return NAV.filter((item) => !item.ownerOnly);
   return NAV.filter(
     (item) =>
-      !item.ownerOnly && item.perms?.some((perm) => identity.staff_perms.includes(perm)) === true,
+      !item.ownerOnly &&
+      (item.anyStaff === true ||
+        item.perms?.some((perm) => identity.staff_perms.includes(perm)) === true),
   );
 }
 
