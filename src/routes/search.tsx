@@ -264,7 +264,13 @@ function SearchPage() {
   ].filter(Boolean).length;
 
   /* ── results ── */
-  const listingKey = { ...params, sub: subId, sort, country: accountCountryIso2 };
+  const listingKey = {
+    ...params,
+    sub: subId,
+    sort,
+    country: accountCountryIso2,
+    field: termFieldSlug,
+  };
   const listings = useInfiniteQuery({
     queryKey: ["mkt", "search", "listings", listingKey, locale],
     enabled: !businessMode,
@@ -272,8 +278,10 @@ function SearchPage() {
     queryFn: ({ pageParam }) =>
       loadListingsPage(
         {
-          q: params.q,
-          categorySlug: domainDef?.categorySlug ?? params.category,
+          // A field-name term becomes a category filter, so it must not also be
+          // matched against the listing text (nothing would ever match).
+          q: termFieldSlug ? undefined : params.q,
+          categorySlug: domainDef?.categorySlug ?? params.category ?? termFieldSlug,
           subcategoryId: subId,
           type: domainDef?.typeCode ?? params.type,
           countryIso2: accountCountryIso2,
