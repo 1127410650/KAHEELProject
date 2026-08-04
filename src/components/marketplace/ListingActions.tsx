@@ -97,65 +97,19 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   async function startConversation(body: string) {
     setBusy(true);
     try {
-      const { data: existing } = await supabase
-        .from("mkt_conversations")
-        .select("id")
-        .eq("listing_id", listing.id)
-        .eq("buyer_user_id", session!.user.id)
-        .maybeSingle();
-
-      let conversationId = existing?.id;
-      if (!conversationId) {
-        const { data, error } = await supabase
-          .from("mkt_conversations")
-          .insert({ listing_id: listing.id })
-          .select("id")
-          .single();
-        if (error || !data) throw error ?? new Error("insert failed");
-        conversationId = data.id;
-      }
-      const { error: msgError } = await supabase
-        .from("mkt_messages")
-        .insert({ conversation_id: conversationId, body });
-      if (msgError) throw msgError;
-
+      // One thread per visitor and ad; the server enforces blocks and limits.
+      const conversationId = await openConversation(listing.id);
+      await sendMessage(conversationId, "text", body);
       toast.success(t("market.actions.messageSent"));
       setDialog(null);
       void navigate({ to: "/dashboard/messages", search: { c: conversationId } });
-    } catch {
-      toast.error(t("market.actions.failed"));
+    } catch (error) {
+      toast.error(t(chatErrorKey(error)));
     } finally {
       setBusy(false);
     }
   }
 
-  async function submitQuote(form: HTMLFormElement) {
-    const fd = new FormData(form);
-    setBusy(true);
-    try {
-      const { error } = await supabase.from("mkt_quote_requests").insert({
-        listing_id: listing.id,
-        title: String(fd.get("title") ?? ""),
-        description: String(fd.get("description") ?? ""),
-        quantity: fd.get("quantity") ? Number(fd.get("quantity")) : null,
-        unit: (fd.get("unit") as string) || null,
-        city: (fd.get("city") as string) || null,
-        location_note: (fd.get("location_note") as string) || null,
-        needed_date: (fd.get("needed_date") as string) || null,
-        budget: fd.get("budget") ? Number(fd.get("budget")) : null,
-        contact_phone: (fd.get("contact_phone") as string) || null,
-        contact_preference: (fd.get("contact_preference") as string) || "in_app",
-      });
-      if (error) throw error;
-      toast.success(t("market.actions.quoteSent"));
-      setDialog(null);
-      void navigate({ to: "/dashboard/requests" });
-    } catch {
-      toast.error(t("market.actions.failed"));
-    } finally {
-      setBusy(false);
-    }
-  }
 
   // Compact icon row shown at the top of the ad: favourite, share, report.
   if (variant === "quick") {
