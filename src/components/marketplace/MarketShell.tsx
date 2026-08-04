@@ -285,7 +285,7 @@ export function MarketBottomNav() {
           icon: MessageSquare,
           badge: unreadMessages.data ?? 0,
         },
-        { key: "add", to: BOTTOM_NAV_PATHS.add, icon: Plus, badge: 0 },
+        { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
         {
           key: "alerts",
           to: BOTTOM_NAV_PATHS.alerts,
@@ -304,7 +304,7 @@ export function MarketBottomNav() {
           icon: MessageSquare,
           badge: 0,
         },
-        { key: "add", to: signInHref(BOTTOM_NAV_PATHS.add), icon: Plus, badge: 0 },
+        { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
         { key: "alerts", to: signInHref(BOTTOM_NAV_PATHS.alerts), icon: Bell, badge: 0 },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const);
@@ -320,7 +320,7 @@ export function MarketBottomNav() {
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
-          const center = item.key === "add";
+          const center = item.key === "search";
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
           const inner = (
