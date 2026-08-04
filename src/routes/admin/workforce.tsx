@@ -221,7 +221,9 @@ function AdminWorkforcePage() {
                     <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
                     {row.label}
                   </p>
-                  {row.email && <p className="truncate text-xs text-muted-foreground">{row.email}</p>}
+                  {row.email && row.email !== row.label && (
+                    <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+                  )}
                   <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
                     <span>
                       {t("admin.workforce.load")}: {row.open_count}/{row.capacity_limit}
@@ -243,9 +245,11 @@ function AdminWorkforcePage() {
                 </div>
 
                 <div className="flex shrink-0 flex-wrap items-center gap-1.5">
-                  <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
-                    {t(`admin.workforce.state.${row.effective_state}`)}
-                  </span>
+                  {row.effective_state !== row.work_state && (
+                    <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
+                      {t(`admin.workforce.state.${row.effective_state}`)}
+                    </span>
+                  )}
                   <Select
                     value={row.work_state}
                     onValueChange={(value) =>
