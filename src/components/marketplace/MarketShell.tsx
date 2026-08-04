@@ -445,11 +445,15 @@ export function MarketShell({
       /* min-h-dvh + a growing <main> keep the footer at the natural end of the
        * content instead of leaving a blank strip above the fixed bottom nav.
        * The only reserved space is the nav height plus the safe area. */
+      /* `overflow-x-clip` (not `hidden`) still blocks sideways scrolling but does
+       * not turn the shell into a scroll container, so a page can use a sticky
+       * action bar inside its own content. */
       className={
         bottomNav
-          ? "flex min-h-dvh flex-col overflow-x-hidden bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
-          : "flex min-h-dvh flex-col overflow-x-hidden bg-background"
+          ? "flex min-h-dvh flex-col overflow-x-clip bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+          : "flex min-h-dvh flex-col overflow-x-clip bg-background"
       }
+
     >
       <MarketHeader />
       {/* `main` always grows, so a short page pushes the footer to the bottom of

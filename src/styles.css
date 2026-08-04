@@ -315,9 +315,12 @@
 /* ------------------------------------------------------- mobile behaviour */
 html,
 body {
-  overflow-x: hidden;
+  /* `clip` blocks sideways scrolling without making the document a scroll
+     container, which is what keeps `position: sticky` working inside pages. */
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
 }
+
 
 @media (max-width: 767px) {
   /* comfortable touch targets and no accidental zoom on inputs */

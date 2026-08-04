@@ -725,7 +725,23 @@ export function ListingForm({ listing }: Props) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-4 pb-40 sm:pb-4">
+    <div
+      className="mx-auto w-full max-w-2xl space-y-4 pb-6 sm:pb-4"
+      // With the keyboard open the focused field must stay visible; the small
+      // delay lets the viewport resize before the scroll is measured.
+      onFocusCapture={(event) => {
+        if (typeof window === "undefined") return;
+        if (!window.matchMedia("(max-width: 639px)").matches) return;
+        const el = event.target;
+        if (
+          !(el instanceof HTMLInputElement) &&
+          !(el instanceof HTMLTextAreaElement) &&
+          !(el instanceof HTMLSelectElement)
+        )
+          return;
+        window.setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 250);
+      }}
+    >
 
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
         <span className="min-w-0">
@@ -747,13 +763,24 @@ export function ListingForm({ listing }: Props) {
         )}
       </p>
 
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="text-base font-semibold text-foreground">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+        <h2 className="min-w-0 truncate text-base font-semibold text-foreground">
           {t(`market.form.step.${STEPS[step]}`)}
         </h2>
-        <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
-          {t("market.form.stepOf", { n: step + 1, total: STEPS.length })}
-        </span>
+        <div className="flex shrink-0 items-center gap-2">
+          {step > 0 && (
+            <button
+              type="button"
+              className="min-h-11 text-xs font-semibold text-primary underline sm:hidden"
+              onClick={() => setStep((prev) => prev - 1)}
+            >
+              {t("market.form.back")}
+            </button>
+          )}
+          <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
+            {t("market.form.stepOf", { n: step + 1, total: STEPS.length })}
+          </span>
+        </div>
       </div>
 
       {step === 0 && (
@@ -769,7 +796,11 @@ export function ListingForm({ listing }: Props) {
                 setSubcategoryId(nextPath.subcategoryId);
                 setErrors((prev) => ({ ...prev, path: undefined }));
               }}
+              onAbort={() => {
+                if (!categoryId) setErrors((prev) => ({ ...prev, path: fieldError("path") ?? undefined }));
+              }}
             />
+            {errors.path && <p className="mt-1.5 text-xs text-destructive">{errors.path}</p>}
             {purposeOptions.length > 1 && (
               <div className="mt-3 space-y-1.5">
                 <span className="text-sm font-medium text-foreground">
@@ -797,7 +828,6 @@ export function ListingForm({ listing }: Props) {
                 </div>
               </div>
             )}
-            {errors.path && <p className="mt-1 text-xs text-destructive">{errors.path}</p>}
           </div>
 
           <div className="space-y-1.5">
@@ -1139,16 +1169,20 @@ export function ListingForm({ listing }: Props) {
         </p>
       )}
 
-      {/* Mobile: one clear primary button per row, above the bottom nav. */}
-      <div className="fixed inset-x-0 bottom-16 z-30 flex flex-col gap-2 border-t border-border bg-background px-3 py-2 sm:static sm:bottom-auto sm:z-auto sm:flex-row sm:items-center sm:bg-transparent sm:px-0 sm:pt-3">
+      {/* Sticky inside the page — it never covers a field, and it keeps clear of
+          the bottom navigation and the home indicator. When the on-screen
+          keyboard shrinks the viewport the bar collapses to a single compact
+          row so the focused field stays visible. */}
+      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex flex-col gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur [@media(max-height:560px)]:flex-row [@media(max-height:560px)]:items-center [@media(max-height:560px)]:gap-3 [@media(max-height:560px)]:py-2 sm:static sm:mx-0 sm:flex-row sm:items-center sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:pt-3 sm:backdrop-blur-none lg:bottom-0">
+
         {step < STEPS.length - 1 ? (
-          <Button type="button" className="min-h-11 w-full sm:w-auto sm:min-w-32" onClick={next}>
+          <Button type="button" className="min-h-11 w-full [@media(max-height:560px)]:min-h-10 [@media(max-height:560px)]:flex-1 sm:w-auto sm:min-w-32" onClick={next}>
             {t("market.form.next")}
           </Button>
         ) : (
           <Button
             type="button"
-            className="min-h-11 w-full sm:w-auto sm:min-w-32"
+            className="min-h-11 w-full [@media(max-height:560px)]:min-h-10 [@media(max-height:560px)]:flex-1 sm:w-auto sm:min-w-32"
             disabled={busy || !canPublish}
             onClick={() => void submit(true)}
           >
@@ -1158,8 +1192,8 @@ export function ListingForm({ listing }: Props) {
         )}
         <Button
           type="button"
-          variant="outline"
-          className="min-h-11 w-full sm:order-3 sm:ms-auto sm:w-auto"
+          variant="ghost"
+          className="min-h-11 w-full font-semibold text-primary underline [@media(max-height:560px)]:min-h-10 [@media(max-height:560px)]:w-auto sm:order-3 sm:ms-auto sm:w-auto sm:no-underline"
           disabled={busy}
           onClick={() => void submit(false)}
         >
@@ -1168,8 +1202,8 @@ export function ListingForm({ listing }: Props) {
         {step > 0 && (
           <Button
             type="button"
-            variant="ghost"
-            className="min-h-11 w-full text-muted-foreground sm:order-1 sm:w-auto"
+            variant="outline"
+            className="hidden min-h-11 text-muted-foreground sm:order-1 sm:inline-flex sm:w-auto"
             onClick={() => setStep((prev) => prev - 1)}
           >
             {t("market.form.back")}
