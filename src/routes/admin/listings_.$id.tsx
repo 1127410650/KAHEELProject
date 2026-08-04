@@ -13,6 +13,8 @@ import { adminCan } from "@/lib/mkt-admin-perms";
 import { reviewListing, type ListingReviewAction } from "@/lib/mkt-admin";
 import { loadAdminListingDetail } from "@/lib/mkt-admin-detail";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminAssignmentBar } from "@/components/marketplace/AdminAssignmentBar";
+import { AdminSafetyCard } from "@/components/marketplace/AdminSafetyCard";
 import { AdminNotes } from "@/components/marketplace/AdminNotes";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import {
@@ -160,6 +162,13 @@ function AdminListingDetailPage() {
               ) : undefined
             }
           />
+
+          <AdminAssignmentBar kind="listing_review" subjectId={id} />
+          {header.owner_user_id && (
+            <AdminSafetyCard userId={header.owner_user_id} tenantId={header.tenant_id} />
+          )}
+
+
 
           <StatGrid
             items={[

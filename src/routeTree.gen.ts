@@ -30,6 +30,7 @@ import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-e
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
+import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
@@ -161,6 +162,11 @@ const AdminListingsRoute = AdminListingsRouteImport.update({
 const AdminRolesRoute = AdminRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSearchRoute = AdminSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -320,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -369,6 +376,7 @@ export interface FileRoutesByTo {
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -472,6 +481,7 @@ export interface FileRouteTypes {
     | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/roles'
+    | '/admin/search'
     | '/admin/settings'
     | '/admin/users'
     | '/admin/verifications'
@@ -521,6 +531,7 @@ export interface FileRouteTypes {
     | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/roles'
+    | '/admin/search'
     | '/admin/settings'
     | '/admin/users'
     | '/admin/verifications'
@@ -571,6 +582,7 @@ export interface FileRouteTypes {
     | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/roles'
+    | '/admin/search'
     | '/admin/settings'
     | '/admin/users'
     | '/admin/verifications'
@@ -783,6 +795,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRolesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/search': {
+      id: '/admin/search'
+      path: '/search'
+      fullPath: '/admin/search'
+      preLoaderRoute: typeof AdminSearchRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -984,6 +1003,7 @@ interface AdminRouteRouteChildren {
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminRolesRoute: typeof AdminRolesRoute
+  AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
@@ -1005,6 +1025,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminRolesRoute: AdminRolesRoute,
+  AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
@@ -1056,13 +1077,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

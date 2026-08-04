@@ -8,6 +8,8 @@ import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { adminCan } from "@/lib/mkt-admin-perms";
 import { loadAdminUserDetail } from "@/lib/mkt-admin-detail";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminAssignmentBar } from "@/components/marketplace/AdminAssignmentBar";
+import { AdminSafetyCard } from "@/components/marketplace/AdminSafetyCard";
 import { AdminNotes } from "@/components/marketplace/AdminNotes";
 import { AdminEnforcement } from "@/components/marketplace/AdminEnforcement";
 import {
@@ -118,6 +120,11 @@ function AdminUserDetailPage() {
               </>
             }
           />
+
+          <AdminAssignmentBar kind="account_review" subjectId={id} />
+          <AdminSafetyCard userId={id} />
+
+
 
           <StatGrid
             items={[

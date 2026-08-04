@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  AlertTriangle,
   BadgeCheck,
   Building2,
   Flag,
+  Inbox,
   ListChecks,
   Megaphone,
   ShieldOff,
+  UserCheck,
   Users,
 } from "lucide-react";
 
@@ -158,8 +161,36 @@ function AdminHomePage() {
               to="/admin/activities"
               search={{ tab: "suggestions" }}
             />
-
+            <Stat
+              label={t("admin.stats.banned")}
+              value={data.banned_accounts}
+              icon={ShieldOff}
+              to="/admin/users"
+              search={{ restricted: true, state: "banned" }}
+            />
+            <Stat
+              label={t("admin.stats.unassigned")}
+              value={data.unassigned_requests}
+              icon={Inbox}
+              to="/admin/listings"
+              search={{ status: "pending", queue: "unassigned" }}
+            />
+            <Stat
+              label={t("admin.stats.assignedToMe")}
+              value={data.assigned_to_me}
+              icon={UserCheck}
+              to="/admin/listings"
+              search={{ queue: "mine" }}
+            />
+            <Stat
+              label={t("admin.stats.urgent")}
+              value={data.urgent_actions}
+              icon={AlertTriangle}
+              to="/admin/listing-reports"
+              search={{ status: "new" }}
+            />
           </div>
+
 
           <section className="mt-6 rounded-xl border border-border bg-card p-4">
             <h2 className="text-sm font-bold text-foreground">{t("admin.actionNeeded")}</h2>

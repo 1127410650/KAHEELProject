@@ -15,6 +15,7 @@ import {
   Megaphone,
   Menu,
   ScrollText,
+  Search,
   Settings,
   ShieldAlert,
   ShieldCheck,
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
+import { AdminSearchBox } from "@/components/marketplace/AdminSearchBox";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { markManualSignOut } from "@/lib/auth-session";
@@ -70,7 +72,9 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/admin", labelKey: "admin.nav.home", icon: Gauge },
+  { to: "/admin/search", labelKey: "admin.nav.search", icon: Search },
   { to: "/admin/listings", labelKey: "admin.nav.listings", icon: Megaphone },
+
   {
     to: "/admin/listing-reports",
     labelKey: "admin.nav.listingReports",
@@ -304,7 +308,8 @@ export function AdminShell({
             </span>
           </Link>
 
-          <div className="min-w-0 flex-1" />
+          {allowed ? <AdminSearchBox /> : <div className="min-w-0 flex-1" />}
+          <div className="min-w-0 flex-1 sm:hidden" />
 
           {allowed && (
             <>

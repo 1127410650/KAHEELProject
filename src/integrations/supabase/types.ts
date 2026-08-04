@@ -1488,6 +1488,54 @@ export type Database = {
           },
         ]
       }
+      mkt_admin_assignments: {
+        Row: {
+          assignee: string | null
+          claimed_at: string | null
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          id: string
+          kind: string
+          released_at: string | null
+          released_reason: string | null
+          subject_id: string
+          transfer_reason: string | null
+          transferred_from: string | null
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          claimed_at?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          released_at?: string | null
+          released_reason?: string | null
+          subject_id: string
+          transfer_reason?: string | null
+          transferred_from?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          claimed_at?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          released_at?: string | null
+          released_reason?: string | null
+          subject_id?: string
+          transfer_reason?: string | null
+          transferred_from?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_admin_notes: {
         Row: {
           author_id: string
@@ -2482,6 +2530,7 @@ export type Database = {
           country_id: string | null
           cover_image_url: string | null
           created_at: string
+          created_by_staff: string | null
           currency: string
           deal_kind: string | null
           deleted_at: string | null
@@ -2548,6 +2597,7 @@ export type Database = {
           country_id?: string | null
           cover_image_url?: string | null
           created_at?: string
+          created_by_staff?: string | null
           currency?: string
           deal_kind?: string | null
           deleted_at?: string | null
@@ -2614,6 +2664,7 @@ export type Database = {
           country_id?: string | null
           cover_image_url?: string | null
           created_at?: string
+          created_by_staff?: string | null
           currency?: string
           deal_kind?: string | null
           deleted_at?: string | null
@@ -7286,6 +7337,16 @@ export type Database = {
         Args: { _body: string; _subject_id: string; _subject_type: string }
         Returns: string
       }
+      mkt_admin_assignments_for: {
+        Args: { _kind: string; _subject_ids: string[] }
+        Returns: {
+          assignee: string
+          assignee_label: string
+          claimed_at: string
+          is_mine: boolean
+          subject_id: string
+        }[]
+      }
       mkt_admin_audit_log: {
         Args: {
           _entity?: string
@@ -7327,6 +7388,10 @@ export type Database = {
         }[]
       }
       mkt_admin_can: { Args: { _perm: string }; Returns: boolean }
+      mkt_admin_claim: {
+        Args: { _kind: string; _subject_id: string }
+        Returns: string
+      }
       mkt_admin_create_activity: {
         Args: {
           _group_id: string
@@ -7367,6 +7432,15 @@ export type Database = {
           status: string
           title: string
         }[]
+      }
+      mkt_admin_listing_create_for: {
+        Args: {
+          _owner_user_id: string
+          _reason: string
+          _tenant_id: string
+          _title: string
+        }
+        Returns: string
       }
       mkt_admin_listing_detail: { Args: { _listing_id: string }; Returns: Json }
       mkt_admin_listing_events: {
@@ -7465,6 +7539,10 @@ export type Database = {
         Returns: undefined
       }
       mkt_admin_overview: { Args: never; Returns: Json }
+      mkt_admin_release: {
+        Args: { _kind: string; _reason: string; _subject_id: string }
+        Returns: undefined
+      }
       mkt_admin_roles: {
         Args: never
         Returns: {
@@ -7476,6 +7554,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      mkt_admin_search: { Args: { _limit?: number; _q: string }; Returns: Json }
       mkt_admin_set_platform_role: {
         Args: { _reason: string; _role: string; _user_id: string }
         Returns: undefined
@@ -7510,6 +7589,15 @@ export type Database = {
           source_id: string
           user_id: string
         }[]
+      }
+      mkt_admin_transfer: {
+        Args: {
+          _kind: string
+          _reason: string
+          _subject_id: string
+          _to: string
+        }
+        Returns: string
       }
       mkt_admin_update_activity: {
         Args: {
@@ -7550,6 +7638,10 @@ export type Database = {
       }
       mkt_admin_verification_detail: {
         Args: { _request_id: string }
+        Returns: Json
+      }
+      mkt_advertiser_safety: {
+        Args: { _tenant_id?: string; _user_id: string }
         Returns: Json
       }
       mkt_business_details_complete: {
@@ -7673,6 +7765,10 @@ export type Database = {
         Args: { _days?: number; _id: string }
         Returns: string
       }
+      mkt_listing_republish: {
+        Args: { _days: number; _listing_id: string; _reason: string }
+        Returns: string
+      }
       mkt_listing_restore: { Args: { _id: string }; Returns: string }
       mkt_listing_resume: { Args: { _id: string }; Returns: string }
       mkt_listing_submit: { Args: { _id: string }; Returns: string }
@@ -7726,6 +7822,7 @@ export type Database = {
       }
       mkt_my_platform_role: { Args: never; Returns: Json }
       mkt_norm_activity_text: { Args: { _t: string }; Returns: string }
+      mkt_norm_digits: { Args: { _t: string }; Returns: string }
       mkt_notify: {
         Args: {
           _body?: string
@@ -7864,6 +7961,7 @@ export type Database = {
         }[]
       }
       mkt_public_phone: { Args: { _user_id: string }; Returns: string }
+      mkt_queue_perm: { Args: { _kind: string }; Returns: string }
       mkt_re_license_active: {
         Args: { p_listing_id: string }
         Returns: boolean
