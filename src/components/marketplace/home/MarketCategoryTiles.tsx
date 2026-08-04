@@ -7,12 +7,14 @@ import catDevices from "@/assets/market/cat-devices.jpg";
 import catHomeServices from "@/assets/market/cat-home-services.jpg";
 import catEquipment from "@/assets/market/cat-equipment.jpg";
 import catSuppliers from "@/assets/market/cat-suppliers.jpg";
+import catSchools from "@/assets/market/cat-schools.jpg";
 
 /** Every tile links to a real `/search` query, mapped to the live taxonomy. */
 const TILES = [
   { key: "realestate", image: catRealEstate, search: { category: "real-estate" } },
   { key: "cars", image: catCars, search: { q: { ar: "سيارة", en: "car" } } },
   { key: "devices", image: catDevices, search: { q: { ar: "جهاز", en: "device" } } },
+  { key: "schools", image: catSchools, search: { category: "schools-universities" } },
   { key: "homeServices", image: catHomeServices, search: { category: "maintenance" } },
   { key: "equipment", image: catEquipment, search: { category: "equipment" } },
   { key: "suppliers", image: catSuppliers, search: { category: "factories" } },
