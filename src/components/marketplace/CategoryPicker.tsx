@@ -230,7 +230,7 @@ export function CategoryPicker({
       />
       <ul
         className={
-          stage === "root"
+          stage === "root" && !needle
             ? "grid max-h-[60vh] grid-cols-2 gap-2 overflow-y-auto pe-1"
             : "max-h-[60vh] space-y-1.5 overflow-y-auto pe-1"
         }
@@ -242,13 +242,13 @@ export function CategoryPicker({
               type="button"
               onClick={item.onSelect}
               className={
-                stage === "root"
+                stage === "root" && !needle
                   ? "flex min-h-24 w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-4 text-center text-sm font-medium text-foreground hover:border-primary/60 hover:bg-accent"
                   : "flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-border px-3 py-2.5 text-start text-sm text-foreground hover:border-primary/50 hover:bg-accent"
               }
             >
               <span className="min-w-0 break-words">{item.text}</span>
-              {stage !== "root" && (
+              {(stage !== "root" || !!needle) && (
                 <span className="shrink-0 text-muted-foreground" aria-hidden>
                   {locale === "ar" ? "‹" : "›"}
                 </span>
