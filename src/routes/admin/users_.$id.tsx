@@ -119,6 +119,11 @@ function AdminUserDetailPage() {
             }
           />
 
+          <AdminAssignmentBar kind="account_review" subjectId={id} />
+          <AdminSafetyCard userId={id} />
+
+
+
           <StatGrid
             items={[
               { label: t("admin.detail.tab.listings"), value: data.counts.listings },
