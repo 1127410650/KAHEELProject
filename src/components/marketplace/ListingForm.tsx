@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { type MktListing } from "@/lib/mkt";
+import { priceLabel, type MktListing } from "@/lib/mkt";
 import { geoName, loadCities, useAccountCountry } from "@/lib/mkt-geo";
 import { loadCategories, loadListingTypes } from "@/lib/mkt-queries";
 import { useActiveAccount } from "@/lib/mkt-account";
