@@ -10,6 +10,7 @@ import { currentPath, loginHref, SA_CITIES, type MktAction, type MktListing } fr
 import { ReportDialog } from "@/components/marketplace/ReportDialog";
 import { QrCodeButton } from "@/components/marketplace/QrCodeButton";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { CallButton } from "@/components/marketplace/CallButton";
 
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
@@ -275,6 +276,8 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
           <MessageSquare className="size-4" aria-hidden />
           {t("market.actions.contact")}
         </Button>
+        {/* Free in-platform voice call; hides itself when not available. */}
+        {!isOwner && <CallButton listingId={listing.id} className="h-11 sm:col-span-2 sm:h-10" />}
       </div>
 
       <Dialog open={dialog === "quote"} onOpenChange={(o) => !o && setDialog(null)}>
