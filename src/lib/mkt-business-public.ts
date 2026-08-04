@@ -71,7 +71,6 @@ type BusinessListingRow = Pick<
   | "title"
   | "summary"
   | "price"
-  | "price_on_request"
   | "price_unit"
   | "currency"
   | "city"

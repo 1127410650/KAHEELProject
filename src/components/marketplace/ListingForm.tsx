@@ -515,7 +515,6 @@ export function ListingForm({ listing }: Props) {
         description: description.trim() || null,
         specs: specs,
         price: priceCheck.value,
-        price_on_request: false,
         price_unit: priceUnit || null,
         keywords: keywords
           .split(/[,،]/)
