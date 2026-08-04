@@ -831,9 +831,7 @@ export function ListingForm({ listing }: Props) {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {true && (
-            {priceKind !== "on_request" && (
-              <div className="space-y-1.5">
+            <div className="space-y-1.5">
                 <Label htmlFor="price">
                   {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
                 </Label>
