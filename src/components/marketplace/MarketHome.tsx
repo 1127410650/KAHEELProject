@@ -184,19 +184,23 @@ export function MarketHome() {
         </section>
       ) : (
         <>
+          {/* Latest first, promotions after: the feed leads with fresh stock. */}
+          <ListingSection
+            title={t("market.home.latest")}
+            items={latestItems}
+            loading={latest.isPending}
+            failed={latest.isError}
+            onRetry={() => void latest.refetch()}
+          />
           <ListingSection
             title={t("market.home.featured")}
             badge={t("market.home.featuredBadge")}
             items={featuredItems}
-            loading={featured.isLoading}
-          />
-          <ListingSection
-            title={t("market.home.latest")}
-            items={latestItems}
-            loading={latest.isLoading}
+            loading={featured.isPending}
           />
         </>
       )}
     </>
+
   );
 }
