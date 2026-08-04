@@ -11,6 +11,12 @@ import { ListingForm } from "@/components/marketplace/ListingForm";
 
 export const Route = createFileRoute("/dashboard/ads/new")({
   ssr: false,
+  // Only a canonical root-category slug travels in the URL; the form resolves
+  // the real id, so a label can never be saved instead of an identifier.
+  validateSearch: (search: Record<string, unknown>) => {
+    const raw = typeof search["field"] === "string" ? search["field"].toLowerCase() : "";
+    return { field: /^[a-z0-9-]{2,64}$/.test(raw) ? raw : undefined };
+  },
   head: () => ({
     meta: [
       { title: "إعلان جديد — سوق تحقّق" },
@@ -32,9 +38,10 @@ export const Route = createFileRoute("/dashboard/ads/new")({
 
 function NewAdPage() {
   const { t } = useI18n();
+  const { field } = Route.useSearch();
   return (
     <DashboardShell title={t("market.addListing")}>
-      <ListingForm />
+      <ListingForm initialFieldSlug={field ?? null} />
     </DashboardShell>
   );
 }

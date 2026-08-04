@@ -57,6 +57,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   listing?: MktListing | undefined;
+  /**
+   * Canonical root-category slug to preselect when the advertiser started from
+   * a field page. It only seeds the empty form — a restored draft wins, and the
+   * field stays fully changeable.
+   */
+  initialFieldSlug?: string | null | undefined;
 }
 
 const selectClass = "h-11 w-full rounded-md border border-input bg-background px-2 text-sm sm:h-9";
@@ -71,7 +77,7 @@ function autoSummary(description: string): string | null {
   return text.length <= 120 ? text : `${text.slice(0, 117)}…`;
 }
 
-export function ListingForm({ listing }: Props) {
+export function ListingForm({ listing, initialFieldSlug }: Props) {
   const { t, locale } = useI18n();
   const { session } = useSession();
   const navigate = useNavigate();
@@ -220,6 +226,17 @@ export function ListingForm({ listing }: Props) {
       alive = false;
     };
   }, [listing?.id]);
+
+  // A field passed from a category page seeds the empty form once, after the
+  // draft restore has had its turn, and only when nothing was chosen yet.
+  useEffect(() => {
+    if (listing || !initialFieldSlug || categoryId) return;
+    if (!restoredScope.current) return;
+    const root = (categories.data ?? []).find(
+      (c) => !c.parent_id && c.slug === initialFieldSlug,
+    );
+    if (root) setCategoryId(root.id);
+  }, [listing, initialFieldSlug, categoryId, categories.data]);
 
   // ---------- draft: restore once per scope, then autosave ----------
   const restoredScope = useRef<string | null>(null);

@@ -2,6 +2,8 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import { addListingHref } from "@/lib/add-listing";
+import { useSession } from "@/lib/session";
 import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { LISTING_COLUMNS, type MktCategory, type MktListing } from "@/lib/mkt";
@@ -50,6 +52,7 @@ export const Route = createFileRoute("/categories/$slug")({
 function CategoryPage() {
   const { slug } = Route.useParams();
   const { t, locale } = useI18n();
+  const { session } = useSession();
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const category = (categories.data ?? []).find((c) => c.slug === slug) ?? null;
@@ -132,9 +135,18 @@ function CategoryPage() {
                 : (listings.data ?? []).map((l) => <ListingCard key={l.id} listing={l} />)}
             </div>
             {!listings.isLoading && (listings.data ?? []).length === 0 && (
-              <p className="py-16 text-center text-sm text-muted-foreground">
-                {t("market.noResults")}
-              </p>
+              <div className="py-16 text-center">
+                <p className="text-sm text-muted-foreground">{t("market.noResults")}</p>
+                <a
+                  href={addListingHref({
+                    authenticated: !!session,
+                    fieldSlug: category.parent_id ? null : category.slug,
+                  })}
+                  className="mt-3 inline-block text-sm font-medium text-primary"
+                >
+                  {t("market.addListing")}
+                </a>
+              </div>
             )}
           </>
         )}
