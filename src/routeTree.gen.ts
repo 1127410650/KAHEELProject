@@ -69,6 +69,8 @@ import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verific
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
+import { Route as DashboardStoreIndexRouteImport } from './routes/dashboard/store.index'
+import { Route as DashboardStoreNewRouteImport } from './routes/dashboard/store.new'
 import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -371,6 +373,16 @@ const DashboardReportsIdRoute = DashboardReportsIdRouteImport.update({
   path: '/dashboard/reports/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
+  id: '/dashboard/store/',
+  path: '/dashboard/store/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardStoreNewRoute = DashboardStoreNewRouteImport.update({
+  id: '/dashboard/store/new',
+  path: '/dashboard/store/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
   id: '/dashboard/ads/$id/edit',
   path: '/dashboard/ads/$id/edit',
@@ -436,8 +448,10 @@ export interface FileRoutesByFullPath {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
+  '/dashboard/store/': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -498,8 +512,10 @@ export interface FileRoutesByTo {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/dashboard/reports': typeof DashboardReportsIndexRoute
+  '/dashboard/store': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRoutesById {
@@ -562,8 +578,10 @@ export interface FileRoutesById {
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
+  '/dashboard/store/': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
 }
 export interface FileRouteTypes {
@@ -627,8 +645,10 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
+    | '/dashboard/store/'
     | '/dashboard/ads/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -689,8 +709,10 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/new'
     | '/admin/reports'
     | '/dashboard/reports'
+    | '/dashboard/store'
     | '/dashboard/ads/$id/edit'
   id:
     | '__root__'
@@ -752,8 +774,10 @@ export interface FileRouteTypes {
     | '/admin/verifications_/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
+    | '/dashboard/store/'
     | '/dashboard/ads/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -793,7 +817,9 @@ export interface RootRouteChildren {
   UUsernameRoute: typeof UUsernameRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
+  DashboardStoreNewRoute: typeof DashboardStoreNewRoute
   DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
+  DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
   DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
 }
 
@@ -1219,6 +1245,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardReportsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/store/': {
+      id: '/dashboard/store/'
+      path: '/dashboard/store'
+      fullPath: '/dashboard/store/'
+      preLoaderRoute: typeof DashboardStoreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/store/new': {
+      id: '/dashboard/store/new'
+      path: '/dashboard/store/new'
+      fullPath: '/dashboard/store/new'
+      preLoaderRoute: typeof DashboardStoreNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/ads/$id/edit': {
       id: '/dashboard/ads/$id/edit'
       path: '/dashboard/ads/$id/edit'
@@ -1323,7 +1363,9 @@ const rootRouteChildren: RootRouteChildren = {
   UUsernameRoute: UUsernameRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardReportsIdRoute: DashboardReportsIdRoute,
+  DashboardStoreNewRoute: DashboardStoreNewRoute,
   DashboardReportsIndexRoute: DashboardReportsIndexRoute,
+  DashboardStoreIndexRoute: DashboardStoreIndexRoute,
   DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport

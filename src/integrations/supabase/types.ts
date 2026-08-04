@@ -5772,9 +5772,11 @@ export type Database = {
           deleted_at: string | null
           delivery_fee: number
           district: string | null
+          draft_step: number
           estimated_delivery_minutes_max: number | null
           estimated_delivery_minutes_min: number | null
           id: string
+          idempotency_key: string | null
           is_open_manually: boolean
           latitude: number | null
           location_precision: string
@@ -5815,9 +5817,11 @@ export type Database = {
           deleted_at?: string | null
           delivery_fee?: number
           district?: string | null
+          draft_step?: number
           estimated_delivery_minutes_max?: number | null
           estimated_delivery_minutes_min?: number | null
           id?: string
+          idempotency_key?: string | null
           is_open_manually?: boolean
           latitude?: number | null
           location_precision?: string
@@ -5858,9 +5862,11 @@ export type Database = {
           deleted_at?: string | null
           delivery_fee?: number
           district?: string | null
+          draft_step?: number
           estimated_delivery_minutes_max?: number | null
           estimated_delivery_minutes_min?: number | null
           id?: string
+          idempotency_key?: string | null
           is_open_manually?: boolean
           latitude?: number | null
           location_precision?: string
@@ -11187,14 +11193,34 @@ export type Database = {
         Args: { _branch_id: string }
         Returns: boolean
       }
+      mkt_store_draft: { Args: { _account_key?: string }; Returns: Json }
+      mkt_store_hours_save: {
+        Args: { _rows: Json; _storefront_id: string }
+        Returns: undefined
+      }
       mkt_store_item_manage: { Args: { _item_id: string }; Returns: boolean }
       mkt_store_item_visible: { Args: { _item_id: string }; Returns: boolean }
       mkt_store_manage: { Args: { _storefront_id: string }; Returns: boolean }
+      mkt_store_open_state: { Args: { _storefront_id: string }; Returns: Json }
       mkt_store_public_phone: {
         Args: { _storefront_id: string }
         Returns: string
       }
+      mkt_store_save: {
+        Args: {
+          _account_key: string
+          _idempotency_key?: string
+          _patch: Json
+          _step?: number
+        }
+        Returns: string
+      }
+      mkt_store_submit: { Args: { _storefront_id: string }; Returns: Json }
       mkt_store_visible: { Args: { _storefront_id: string }; Returns: boolean }
+      mkt_store_zones_save: {
+        Args: { _rows: Json; _storefront_id: string }
+        Returns: undefined
+      }
       mkt_submit_appeal: {
         Args: { _reason: string; _report_id: string }
         Returns: string
