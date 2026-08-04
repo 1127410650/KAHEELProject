@@ -156,6 +156,22 @@ function AdminWorkforcePage() {
           },
           reason,
         );
+        // The card, the badge and the counters move with the same click; the
+        // refresh below only confirms what the server already stored.
+        queryClient.setQueryData<StaffRow[]>(STAFF_KEY, (previous) =>
+          (previous ?? []).map((row) =>
+            row.user_id === pending.row.user_id
+              ? {
+                  ...row,
+                  work_state: pending.state ?? row.work_state,
+                  effective_state: row.on_leave ? "leave" : (pending.state ?? row.effective_state),
+                  accepts_auto: (pending.state ?? row.work_state) === "available" && !row.on_leave,
+                  capacity_limit: pending.capacity ?? row.capacity_limit,
+                  department: pending.department ?? row.department,
+                }
+              : row,
+          ),
+        );
       } else if (pending.kind === "leaveCancel") {
         await cancelLeave(pending.id, reason);
       } else if (pending.kind === "priority") {
