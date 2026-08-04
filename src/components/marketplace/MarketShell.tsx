@@ -361,7 +361,7 @@ export function MarketFooter() {
   ];
 
   return (
-    <footer className="mt-6 border-t border-border bg-secondary/30">
+    <footer className="mt-6 border-t border-border">
       <div className="mx-auto w-full max-w-7xl px-4 py-7">
         <div className="max-w-md">
           <p className="text-base font-bold tracking-tight text-foreground">{t("market.brand")}</p>
