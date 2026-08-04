@@ -160,12 +160,17 @@ export function useActiveAccount(): ActiveAccountState {
     void queryClient.invalidateQueries();
   }, [queryClient]);
 
-  // A single available account needs no screen.
+  // No account-selection screen: the personal account is the default context,
+  // and a still-valid remembered key is restored instead. Only when the
+  // remembered key no longer resolves do we fall back to the personal account.
   useEffect(() => {
-    if (!hydrated || accounts.isLoading || key || list.length !== 1) return;
-    void select(list[0]!.account_key);
+    if (!hydrated || accounts.isLoading || accounts.isError || list.length === 0) return;
+    if (key && list.some((a) => a.account_key === key)) return;
+    const fallback = list.find((a) => a.kind === "individual") ?? list[0]!;
+    void select(fallback.account_key);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated, accounts.isLoading, key, list.length]);
+  }, [hydrated, accounts.isLoading, accounts.isError, key, list.length]);
+
 
   const unavailable = accounts.isError;
   const revoked =
