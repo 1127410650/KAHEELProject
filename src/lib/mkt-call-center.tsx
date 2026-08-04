@@ -18,8 +18,12 @@ import {
   CallSession,
   RING_TIMEOUT_MS,
   callEligibility,
+  createCallRequest,
   loadCallPeer,
+  markCallMissed,
+  setCallMode,
   startCall,
+  startCallFromRequest,
   transitionCall,
   type CallPeer,
   type CallStatus,
@@ -41,20 +45,32 @@ export interface ActiveCall {
   muted: boolean;
   /** Seconds since the call was accepted; 0 until then. */
   seconds: number;
+  /**
+   * True when the browser refused microphone access without a user gesture, so
+   * the panel must show an explicit "start audio" button.
+   */
+  needsAudioGesture: boolean;
 }
 
 interface CallCenterValue {
   call: ActiveCall | null;
   /** Places a call for an ad; resolves once ringing starts or fails. */
   placeCall: (listingId: string) => Promise<void>;
+  /** Advertiser is in "request" mode: leave a call request instead of ringing. */
+  requestCall: (listingId: string) => Promise<boolean>;
+  /** Advertiser answers an open request by calling the requester back. */
+  startFromRequest: (requestId: string) => Promise<void>;
   accept: () => Promise<void>;
   decline: () => Promise<void>;
   hangUp: () => Promise<void>;
   toggleMute: () => void;
   dismiss: () => void;
+  /** Stops receiving calls right away and ends whatever is live. */
+  stopReceiving: () => Promise<void>;
   /** True while a call attempt is being set up (button spinner). */
   starting: boolean;
 }
+
 
 const CallCenterContext = createContext<CallCenterValue | null>(null);
 
