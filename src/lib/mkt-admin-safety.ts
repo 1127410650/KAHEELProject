@@ -62,3 +62,51 @@ export const RISK_TONE: Record<RiskLevel, "critical" | "urgent" | "pending" | "d
   medium: "pending",
   low: "done",
 };
+
+/** Ordering weight for "highest risk first" sorts. */
+export const RISK_ORDER: Record<RiskLevel, number> = {
+  critical: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+};
+
+export type SafetyKey = string;
+
+/** Stable cache/lookup key for one advertiser (user, optionally inside a tenant). */
+export function safetyKey(userId: string, tenantId?: string | null): SafetyKey {
+  return `${userId}::${tenantId ?? ""}`;
+}
+
+/**
+ * Batch read of advertiser safety for a list of subjects, used by admin lists
+ * that need the summary on every card (and want to sort by risk). Requests run
+ * in small concurrent batches so a long page never floods the API, and a single
+ * failing subject is skipped rather than failing the whole list.
+ */
+export async function loadAdvertiserSafetyMap(
+  subjects: { userId: string; tenantId?: string | null }[],
+  batchSize = 8,
+): Promise<Record<SafetyKey, AdvertiserSafety>> {
+  const unique = new Map<SafetyKey, { userId: string; tenantId?: string | null }>();
+  for (const subject of subjects) {
+    if (!subject.userId) continue;
+    unique.set(safetyKey(subject.userId, subject.tenantId), subject);
+  }
+  const entries = Array.from(unique.entries());
+  const out: Record<SafetyKey, AdvertiserSafety> = {};
+  for (let i = 0; i < entries.length; i += batchSize) {
+    const slice = entries.slice(i, i + batchSize);
+    const results = await Promise.all(
+      slice.map(async ([key, subject]) => {
+        try {
+          return [key, await loadAdvertiserSafety(subject.userId, subject.tenantId ?? null)] as const;
+        } catch {
+          return null;
+        }
+      }),
+    );
+    for (const row of results) if (row) out[row[0]] = row[1];
+  }
+  return out;
+}
