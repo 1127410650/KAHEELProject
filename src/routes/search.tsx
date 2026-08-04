@@ -18,6 +18,7 @@ import {
 import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
+import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
