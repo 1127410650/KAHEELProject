@@ -9,14 +9,19 @@ import type { QueueKind } from "@/lib/mkt-admin-queue";
  * calls and translates the errors the database raises.
  */
 
-export type WorkState = "available" | "busy" | "away" | "leave" | "off";
+/**
+ * One status per staff member — nothing else decides whether work reaches them:
+ * `available` receives automatic work, `paused` keeps current work but takes no
+ * new items, and `leave` / `off` are out of the distribution entirely.
+ */
+export type WorkState = "available" | "paused" | "leave" | "off";
 export type WorkPriority = "low" | "normal" | "high" | "urgent";
 export type WorkProgress = "unstarted" | "in_progress" | "waiting_info" | "done";
 export type LeaveKind = "annual" | "sick" | "emergency" | "training" | "other";
 export type QueueScope = "mine" | "unassigned" | "all";
 
-export const WORK_STATES: WorkState[] = ["available", "busy", "away", "leave", "off"];
-export const SELF_WORK_STATES: WorkState[] = ["available", "busy", "away"];
+export const WORK_STATES: WorkState[] = ["available", "paused", "leave", "off"];
+export const SELF_WORK_STATES: WorkState[] = ["available", "paused"];
 export const WORK_PRIORITIES: WorkPriority[] = ["urgent", "high", "normal", "low"];
 export const WORK_PROGRESS: WorkProgress[] = ["unstarted", "in_progress", "waiting_info", "done"];
 export const LEAVE_KINDS: LeaveKind[] = ["annual", "sick", "emergency", "training", "other"];
