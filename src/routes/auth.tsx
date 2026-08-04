@@ -5,12 +5,14 @@ import { ShieldCheck, Loader2, QrCode } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { rememberSession, setRememberSession } from "@/lib/auth-storage";
 import { landingPathForSession } from "@/lib/mkt-platform";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 export const Route = createFileRoute("/auth")({
@@ -44,10 +46,16 @@ function AuthPage() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // Enabled by default; the scope only changes WHERE Supabase keeps its own
+  // session entry (see `@/lib/auth-storage`).
+  const [remember, setRemember] = useState(true);
   // The route is client-only; matching the empty server shell on the first paint
   // avoids a hydration mismatch.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    setRemember(rememberSession());
+  }, []);
 
 
   // Where to land is decided by the server-side platform role, never by the
@@ -73,6 +81,8 @@ function AuthPage() {
     event.preventDefault();
     setSubmitting(true);
     try {
+      // Decide the persistence scope BEFORE the session is written.
+      setRememberSession(remember);
       const result = await signIn({ data: { identifier: identifier.trim(), password } });
       if (!result.ok || !result.access_token || !result.refresh_token) {
         toast.error(result.error === "LOCKED" ? t("auth.locked") : t("auth.invalid"));
@@ -180,15 +190,44 @@ function AuthPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            <label className="flex items-start gap-2.5 text-sm text-foreground">
+              <Checkbox
+                checked={remember}
+                onCheckedChange={(v) => setRemember(v === true)}
+                aria-label={t("auth.remember")}
+              />
+              <span className="min-w-0">
+                {t("auth.remember")}
+                <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                  {t("auth.rememberHint")}
+                </span>
+              </span>
+            </label>
+
             <Button type="submit" className="w-full" disabled={submitting}>
               {submitting && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {submitting ? t("auth.signingIn") : t("auth.signIn")}
             </Button>
           </form>
 
-          <p className="mt-5 text-center text-xs text-muted-foreground">
-            {t("signup.inviteOnlyNoteAuth")}
-          </p>
+          <div className="mt-5 space-y-2 text-center text-xs text-muted-foreground">
+            <p>
+              {t("auth.noAccount")}{" "}
+              <Link to="/register" className="font-semibold text-primary">
+                {t("auth.createAccount")}
+              </Link>
+            </p>
+            <p>
+              {/* Recovery is not built yet: the entry point stays visible and honest. */}
+              <button
+                type="button"
+                onClick={() => toast.info(t("auth.forgotSoon"))}
+                className="font-semibold text-muted-foreground underline hover:text-primary"
+              >
+                {t("auth.forgot")}
+              </button>
+            </p>
+          </div>
 
           <div className="mt-6 border-t border-border pt-4">
             <Link

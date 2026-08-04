@@ -88,7 +88,7 @@
   },
   "auth": {
     "title": "Sign In",
-    "subtitle": "No public sign-up. Authorized users only.",
+    "subtitle": "Sign in to your account. Internal system accounts are created by invitation.",
     "email": "Email",
     "password": "Password",
     "signIn": "Sign in",
@@ -108,7 +108,13 @@
     "passwordShort": "Password must be at least 8 characters",
     "passwordChanged": "Password updated",
     "passwordWeak": "Password too weak — use at least 10 characters with mixed classes, no common or sequential patterns",
-    "expired": "Your session has expired. Please sign in again."
+    "expired": "Your session has expired. Please sign in again.",
+    "remember": "Keep me signed in on this device",
+    "rememberHint": "You will stay signed in until you sign out manually or the session is revoked for security reasons.",
+    "forgot": "Forgot your password?",
+    "forgotSoon": "Password recovery is not available yet — please contact support.",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account"
   },
   "roles": {
     "accountant": "Accountant / Admin",
@@ -1081,7 +1087,14 @@
     "inviteRequiredTitle": "Accounts are invite-only",
     "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Tahqaq. If you were invited, open the invitation link sent to your email.",
     "inviteOnlySubtitle": "Complete your details to accept the invitation. The email is locked to the invited address.",
-    "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only."
+    "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only.",
+    "publicTitle": "Create account",
+    "publicSubtitle": "Create an individual account to use the marketplace. You can add a business later from your account.",
+    "individualNote": "Your account starts as an individual account. Creating a business happens later from inside the account.",
+    "emailHint": "You will use this email to sign in.",
+    "created": "Your account is ready",
+    "createdBody": "You can start using the marketplace. If this email was already registered, sign in instead.",
+    "signInFailed": "Saved. Sign in with your email and password."
   },
   "onboarding": {
     "title": "Create your workspace",

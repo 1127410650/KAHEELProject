@@ -9,6 +9,7 @@ import {
   Search,
   ShieldCheck,
   Store,
+  UserPlus,
 } from "lucide-react";
 import { useEffect } from "react";
 
@@ -37,7 +38,7 @@ import { AccountMenu } from "@/components/marketplace/AccountMenu";
  */
 export function MarketHeader() {
   const { t, locale, setLocale } = useI18n();
-  const { session } = useSession();
+  const { session, status } = useSession();
   const { identity: adminIdentity } = usePlatformIdentity();
 
   const addListingHref = session
@@ -94,14 +95,28 @@ export function MarketHeader() {
               {/* The single account surface: identity, switching and management. */}
               <AccountMenu />
             </>
+          ) : status === "loading" ? (
+            // No visitor flash: reserve the slot until the session is known.
+            <span aria-hidden className="h-8 w-16 rounded-md bg-secondary sm:w-40" />
           ) : (
-            <Button asChild size="sm" variant="outline">
-              <Link to="/auth" aria-label={t("market.signIn")} title={t("market.signIn")}>
-                <ShieldCheck className="size-4" aria-hidden />
-                <span className="hidden sm:inline">{t("market.signIn")}</span>
-              </Link>
-            </Button>
-
+            <>
+              <Button asChild size="sm" variant="outline">
+                <Link to="/auth" aria-label={t("market.signIn")} title={t("market.signIn")}>
+                  <ShieldCheck className="size-4" aria-hidden />
+                  <span className="hidden sm:inline">{t("market.signIn")}</span>
+                </Link>
+              </Button>
+              <Button asChild size="sm" variant="ghost">
+                <Link
+                  to="/register"
+                  aria-label={t("auth.createAccount")}
+                  title={t("auth.createAccount")}
+                >
+                  <UserPlus className="size-4" aria-hidden />
+                  <span className="hidden sm:inline">{t("auth.createAccount")}</span>
+                </Link>
+              </Button>
+            </>
           )}
 
           {/* On phones the bottom bar already owns "add", so the header keeps a
