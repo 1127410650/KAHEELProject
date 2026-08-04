@@ -44,6 +44,9 @@ export function addListingHref(options: AddListingOptions = {}): string {
   return `/auth?next=${encodeURIComponent(next)}`;
 }
 
+/** Canonical alias for `addListingHref` — same single source of truth. */
+export const getAddListingHref = addListingHref;
+
 /** Slugs are lowercase kebab-case; anything else is ignored, never trusted. */
 function normalizeFieldSlug(raw: string | null | undefined): string | null {
   if (!raw) return null;
