@@ -1,38 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Bell,
-  Building2,
-  Check,
-  ChevronDown,
-  Coins,
-  Flag,
-  Heart,
-  LayoutList,
-  LogOut,
-  MessageSquare,
-  Repeat,
-  ShieldAlert,
-  ShieldCheck,
-  User,
-  Users,
-  X,
-} from "lucide-react";
+import { Building2, Check, ChevronDown, LogOut, User } from "lucide-react";
 
 import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
-import { useUnreadAlerts, useUnreadMessages } from "@/lib/mkt-unread";
 import { hasUnsavedChanges } from "@/lib/unsaved-changes";
-import { canSeeLink } from "@/lib/routes-map";
 import { isPlatformAdmin } from "@/lib/mkt-admin";
-import { supabase } from "@/integrations/supabase/client";
 import { useSignOut } from "@/lib/auth-signout";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+import {
+  ACTIVITY_LINKS,
+  CREATE_BUSINESS_LABEL_KEY,
+  CREATE_BUSINESS_PATH,
+  MANAGE_LINKS,
+  visibleLinks,
+} from "@/lib/more-menu";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -43,13 +30,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 /** Round avatar / logo, falling back to the identity-kind icon. */
 function IdentityAvatar({
@@ -86,18 +66,13 @@ function looksLikePhone(value: string): boolean {
   return /^\+?\d{6,}$/.test(compact);
 }
 
-type MenuLink = {
-  to: string;
-  label: string;
-  icon: typeof User;
-  badge?: number;
-};
-
 /**
- * The one and only account menu: a dropdown on desktop and a bottom sheet on
- * mobile, both rendered from the same data. It shows the active account, links
- * to the approved account-selection screen, groups activity and management
- * links, and signs out. Nothing here grants access — every path stays guarded.
+ * The header identity slot.
+ *
+ * Mobile (<768px) has NO account overlay any more: the slot is a plain link to
+ * the accounts section of `/more`, which is the single account hub. Desktop
+ * keeps a short dropdown (active account, switching, create a business, the
+ * essential links, sign out) — it never becomes a full-page sheet.
  */
 export function AccountMenu() {
   const { t } = useI18n();
@@ -115,8 +90,6 @@ export function AccountMenu() {
   // Guards against a double tap while the server re-checks the membership.
   const [switching, setSwitching] = useState<string | null>(null);
 
-  const unreadMessages = useUnreadMessages(active);
-  const unreadAlerts = useUnreadAlerts();
   const admin = useQuery({
     queryKey: ["mkt", "is-platform-admin", session?.user.id ?? null],
     enabled: !!session,
@@ -127,7 +100,7 @@ export function AccountMenu() {
   // A signed-in visitor must NEVER see a header without an identity slot: that is
   // the forbidden hybrid state (bell + add, no account, no visitor buttons). While
   // the account is loading the slot is a skeleton; if it is missing or could not be
-  // read (offline), the slot links to the account picker instead of vanishing.
+  // read (offline), the slot links to the account hub instead of vanishing.
   if (!session) return null;
   if (!active) {
     if (accountLoading) {
@@ -135,7 +108,12 @@ export function AccountMenu() {
     }
     return (
       <Button asChild size="sm" variant="outline" className="shrink-0">
-        <Link to="/dashboard/profile" aria-label={t("market.account.menu")} title={t("market.account.menu")}>
+        <Link
+          to="/more"
+          search={{ section: "accounts" }}
+          aria-label={t("market.account.manageAccounts")}
+          title={t("market.account.manageAccounts")}
+        >
           <User className="size-4" aria-hidden />
           <span className="hidden sm:inline">{t("market.account.fallbackName")}</span>
         </Link>
@@ -153,7 +131,6 @@ export function AccountMenu() {
     can,
     isPlatformAdmin: admin.data === true,
   };
-  const allowed = (links: MenuLink[]) => links.filter((l) => canSeeLink(l.to, viewer));
 
   async function signOut() {
     clear();
@@ -163,7 +140,7 @@ export function AccountMenu() {
   /**
    * Switching happens in place: the choice is re-verified server-side, the
    * previous account's cache is dropped by `select`, and the user stays on the
-   * current page. There is no separate account-selection screen.
+   * current page.
    */
   async function switchAccount(accountKey: string) {
     if (accountKey === active?.account_key || switching) return;
@@ -182,193 +159,68 @@ export function AccountMenu() {
     a.kind === b.kind ? a.name.localeCompare(b.name) : a.kind === "individual" ? -1 : 1,
   );
 
-  const messagesBadge = unreadMessages.data ?? 0;
-  const alertsBadge = unreadAlerts.data ?? 0;
+  // Short desktop list: the two most-used activity rows plus account management.
+  const desktopLinks = [
+    ...visibleLinks(ACTIVITY_LINKS, viewer).slice(0, 2),
+    ...visibleLinks(MANAGE_LINKS, viewer),
+  ];
 
-  const activityLinks = allowed([
-    { to: "/dashboard/my-ads", label: t("market.dash.myAds"), icon: LayoutList },
-    { to: "/dashboard/points", label: t("market.points.title"), icon: Coins },
-    {
-      to: "/dashboard/messages",
-      label: t("market.dash.messages"),
-      icon: MessageSquare,
-      badge: messagesBadge,
-    },
-    {
-      to: "/dashboard/notifications",
-      label: t("market.dash.notifications"),
-      icon: Bell,
-      badge: alertsBadge,
-    },
-    { to: "/dashboard/favorites", label: t("market.dash.favorites"), icon: Heart },
-    { to: "/dashboard/reports", label: t("market.dash.reports"), icon: Flag },
-    { to: "/dashboard/violations", label: t("market.dash.violations"), icon: ShieldAlert },
-  ]);
-
-  const manageLinks = allowed(
-    active.kind === "business"
-      ? [
-          {
-            to: "/dashboard/business",
-            label: t("market.identity.manageBusiness"),
-            icon: Building2,
-          },
-          { to: "/me", label: t("market.account.members"), icon: Users },
-          { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
-        ]
-      : [
-          { to: "/dashboard/profile", label: t("market.identity.managePersonal"), icon: User },
-          { to: "/business/new", label: t("market.biz.addBusiness"), icon: Building2 },
-        ],
-  ).concat(
-    viewer.isPlatformAdmin
-      ? [{ to: "/admin", label: t("market.account.adminPanel"), icon: ShieldCheck }]
-      : [],
-  );
-
-  const trigger = (
-    <Button
-      variant="outline"
-      size="sm"
-      aria-label={t("market.account.menu")}
-      className="h-9 max-w-[120px] justify-between gap-1.5 ps-1.5 sm:max-w-[190px]"
-    >
+  const identityBlock = (
+    <span className="flex min-w-0 items-center gap-2">
       <IdentityAvatar identity={active} size="sm" />
       <span className="truncate text-xs">{displayName}</span>
-      <ChevronDown className="size-3.5 shrink-0 opacity-60" aria-hidden />
-    </Button>
+    </span>
   );
-
-  const currentBlock = (
-    <div className="flex items-center gap-2 px-2 py-2">
-      <IdentityAvatar identity={active} />
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold text-foreground">
-          {displayName}
-        </span>
-        <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          {t(`market.entry.kind.${active.kind}`)}
-          {active.verification_status === "approved" ? (
-            <VerifiedBadge status={active.verification_status} size="xs" />
-          ) : null}
-        </span>
-      </span>
-    </div>
-  );
-
-  const Badge = ({ value }: { value?: number | undefined }) =>
-    value && value > 0 ? (
-      <span className="ms-auto min-w-5 rounded-full bg-primary px-1.5 text-center text-[10px] font-semibold leading-5 text-primary-foreground">
-        {value > 99 ? "99+" : value}
-      </span>
-    ) : null;
 
   if (isMobile) {
+    // No sheet, no dialog: straight to the accounts section of the hub page.
     return (
-      <Sheet>
-        <SheetTrigger asChild>{trigger}</SheetTrigger>
-        <SheetContent
-          side="bottom"
-          hideClose
-          className="max-h-[85vh] overflow-y-auto rounded-t-2xl pb-[max(1rem,env(safe-area-inset-bottom))]"
+      <Button
+        asChild
+        variant="outline"
+        size="sm"
+        className="h-9 max-w-[120px] shrink-0 justify-start gap-1.5 ps-1.5"
+      >
+        <Link
+          to="/more"
+          search={{ section: "accounts" }}
+          aria-label={t("market.account.manageAccounts")}
+          title={displayName}
         >
-          <div className="flex items-center justify-between border-b border-border pb-3">
-            <SheetTitle className="text-base">{t("market.account.menu")}</SheetTitle>
-            <SheetClose className="rounded-sm p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-              <X className="size-4" aria-hidden />
-              <span className="sr-only">{t("common.close")}</span>
-            </SheetClose>
-          </div>
-
-          <div className="mt-4 rounded-xl border border-border bg-card">{currentBlock}</div>
-
-          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
-            {t("market.account.switchTitle")}
-          </p>
-          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
-            {switchList.map((item) => (
-              <button
-                key={item.account_key}
-                type="button"
-                disabled={!!switching}
-                onClick={() => void switchAccount(item.account_key)}
-                className="flex w-full items-center gap-2.5 border-b border-border px-3 py-3 text-start text-sm text-foreground last:border-b-0 hover:bg-accent disabled:opacity-60"
-              >
-                <IdentityAvatar identity={item} size="sm" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium">{item.name}</span>
-                  <span className="block text-[11px] text-muted-foreground">
-                    {t(`market.entry.kind.${item.kind}`)}
-                  </span>
-                </span>
-                {item.account_key === active.account_key ? (
-                  <Check className="size-4 shrink-0 text-primary" aria-hidden />
-                ) : null}
-              </button>
-            ))}
-            <SheetClose asChild>
-              <Link
-                to="/business/new"
-                className="flex items-center gap-2.5 border-t border-border px-3 py-3 text-sm text-foreground hover:bg-accent"
-              >
-                <Repeat className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                {t("market.entry.newBusiness")}
-              </Link>
-            </SheetClose>
-          </div>
-
-          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
-            {t("market.account.activityTitle")}
-          </p>
-          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
-            {activityLinks.map((link) => (
-              <SheetClose asChild key={link.to}>
-                <Link
-                  to={link.to}
-                  className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
-                >
-                  <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                  <span className="min-w-0 truncate">{link.label}</span>
-                  <Badge value={link.badge} />
-                </Link>
-              </SheetClose>
-            ))}
-          </div>
-
-          <p className="mt-4 px-1 text-xs font-semibold text-muted-foreground">
-            {t("market.account.manageTitle")}
-          </p>
-          <div className="mt-1.5 overflow-hidden rounded-xl border border-border bg-card">
-            {manageLinks.map((link) => (
-              <SheetClose asChild key={link.to}>
-                <Link
-                  to={link.to}
-                  className="flex items-center gap-2.5 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent"
-                >
-                  <link.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                  <span className="min-w-0 truncate">{link.label}</span>
-                </Link>
-              </SheetClose>
-            ))}
-            <button
-              type="button"
-              onClick={signOut}
-              className="flex w-full items-center gap-2.5 border-t border-border px-3 py-3 text-sm text-foreground hover:bg-accent"
-            >
-              <LogOut className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              {t("nav.signOut")}
-            </button>
-          </div>
-        </SheetContent>
-      </Sheet>
+          {identityBlock}
+        </Link>
+      </Button>
     );
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          aria-label={t("market.account.menu")}
+          className="h-9 max-w-[190px] justify-between gap-1.5 ps-1.5"
+        >
+          {identityBlock}
+          <ChevronDown className="size-3.5 shrink-0 opacity-60" aria-hidden />
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-72">
-        {currentBlock}
+        <div className="flex items-center gap-2 px-2 py-2">
+          <IdentityAvatar identity={active} />
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-semibold text-foreground">
+              {displayName}
+            </span>
+            <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              {t(`market.entry.kind.${active.kind}`)}
+              {active.verification_status === "approved" ? (
+                <VerifiedBadge status={active.verification_status} size="xs" />
+              ) : null}
+            </span>
+          </span>
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuLabel className="text-xs text-muted-foreground">
           {t("market.account.switchTitle")}
@@ -396,33 +248,17 @@ export function AccountMenu() {
           </DropdownMenuItem>
         ))}
         <DropdownMenuItem asChild className="gap-2 text-xs">
-          <Link to="/business/new">
-            <Repeat className="size-4 text-muted-foreground" aria-hidden />
-            {t("market.entry.newBusiness")}
+          <Link to={CREATE_BUSINESS_PATH}>
+            <Building2 className="size-4 text-muted-foreground" aria-hidden />
+            {t(CREATE_BUSINESS_LABEL_KEY)}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          {t("market.account.activityTitle")}
-        </DropdownMenuLabel>
-        {activityLinks.map((link) => (
-          <DropdownMenuItem key={link.to} asChild>
+        {desktopLinks.map((link) => (
+          <DropdownMenuItem key={link.key} asChild>
             <Link to={link.to} className="gap-2 text-xs">
               <link.icon className="size-4 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 truncate">{link.label}</span>
-              <Badge value={link.badge} />
-            </Link>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          {t("market.account.manageTitle")}
-        </DropdownMenuLabel>
-        {manageLinks.map((link) => (
-          <DropdownMenuItem key={link.to} asChild>
-            <Link to={link.to} className="gap-2 text-xs">
-              <link.icon className="size-4 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 truncate">{link.label}</span>
+              <span className="min-w-0 truncate">{t(link.labelKey)}</span>
             </Link>
           </DropdownMenuItem>
         ))}

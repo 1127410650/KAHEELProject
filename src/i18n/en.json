@@ -2463,7 +2463,9 @@
       "manageTitle": "Account management",
       "members": "Business members",
       "adminPanel": "Admin panel",
-      "unsavedWarning": "You have unsaved changes. Change account and lose them?"
+      "unsavedWarning": "You have unsaved changes. Change account and lose them?",
+      "manageAccounts": "Manage accounts",
+      "signOutConfirm": "Sign out of your account?"
     },
     "emptyHome": "No published listings yet",
     "loc": {
