@@ -48,14 +48,13 @@ export function MarketHeader() {
   return (
     <header className="sticky top-0 z-40 bg-market-navy text-market-navy-foreground">
       <div className="mx-auto flex w-full max-w-[1240px] items-center gap-1.5 px-3 lg:px-6 py-2.5 sm:gap-3 sm:px-4">
-        <Link to="/" className="flex shrink-0 items-center gap-2" aria-label={t("market.brand")}>
-          <span className="grid size-9 place-items-center rounded-xl bg-market-silver text-market-navy">
-            <Store className="size-4" aria-hidden />
-          </span>
+        {/* Wordmark only — the large icon at the far end is the single brand mark. */}
+        <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
           <span className="text-base font-bold tracking-tight text-market-navy-foreground">
             {t("market.brand")}
           </span>
         </Link>
+
 
         {/* The single search entry point in the app chrome. */}
         <Link
