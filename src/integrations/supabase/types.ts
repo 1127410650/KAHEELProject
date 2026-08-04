@@ -2448,6 +2448,69 @@ export type Database = {
           },
         ]
       }
+      mkt_listing_promotions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          duration_days: number
+          ended_at: string | null
+          ends_at: string
+          id: string
+          listing_id: string
+          op_id: string | null
+          points_spent: number
+          starts_at: string
+          status: string
+          updated_at: string
+          wallet_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          duration_days: number
+          ended_at?: string | null
+          ends_at: string
+          id?: string
+          listing_id: string
+          op_id?: string | null
+          points_spent: number
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          wallet_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          duration_days?: number
+          ended_at?: string | null
+          ends_at?: string
+          id?: string
+          listing_id?: string
+          op_id?: string | null
+          points_spent?: number
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_listing_promotions_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_listing_promotions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_point_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_listing_status_history: {
         Row: {
           actor_id: string | null
@@ -2550,6 +2613,7 @@ export type Database = {
           item_condition: string | null
           keywords: string[]
           last_renewed_at: string | null
+          last_scan_at: string | null
           latitude: number | null
           latitude_public: number | null
           link_copies_count: number
@@ -2558,11 +2622,14 @@ export type Database = {
           location_visibility: string
           longitude: number | null
           longitude_public: number | null
+          moderation_score: number
+          moderation_state: string
           owner_user_id: string
           paused_at: string | null
           price: number | null
           price_on_request: boolean
           price_unit: string | null
+          promoted_until: string | null
           published_at: string | null
           qr_opens_count: number
           quantity: number | null
@@ -2617,6 +2684,7 @@ export type Database = {
           item_condition?: string | null
           keywords?: string[]
           last_renewed_at?: string | null
+          last_scan_at?: string | null
           latitude?: number | null
           latitude_public?: number | null
           link_copies_count?: number
@@ -2625,11 +2693,14 @@ export type Database = {
           location_visibility?: string
           longitude?: number | null
           longitude_public?: number | null
+          moderation_score?: number
+          moderation_state?: string
           owner_user_id?: string
           paused_at?: string | null
           price?: number | null
           price_on_request?: boolean
           price_unit?: string | null
+          promoted_until?: string | null
           published_at?: string | null
           qr_opens_count?: number
           quantity?: number | null
@@ -2684,6 +2755,7 @@ export type Database = {
           item_condition?: string | null
           keywords?: string[]
           last_renewed_at?: string | null
+          last_scan_at?: string | null
           latitude?: number | null
           latitude_public?: number | null
           link_copies_count?: number
@@ -2692,11 +2764,14 @@ export type Database = {
           location_visibility?: string
           longitude?: number | null
           longitude_public?: number | null
+          moderation_score?: number
+          moderation_state?: string
           owner_user_id?: string
           paused_at?: string | null
           price?: number | null
           price_on_request?: boolean
           price_unit?: string | null
+          promoted_until?: string | null
           published_at?: string | null
           qr_opens_count?: number
           quantity?: number | null
@@ -2804,6 +2879,116 @@ export type Database = {
           },
         ]
       }
+      mkt_moderation_rules: {
+        Row: {
+          action: string
+          category: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          kind: string
+          lang: string
+          normalized: string | null
+          notes: string | null
+          pattern: string
+          severity: string
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          action?: string
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          kind?: string
+          lang?: string
+          normalized?: string | null
+          notes?: string | null
+          pattern: string
+          severity?: string
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          action?: string
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          kind?: string
+          lang?: string
+          normalized?: string | null
+          notes?: string | null
+          pattern?: string
+          severity?: string
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: []
+      }
+      mkt_moderation_scans: {
+        Row: {
+          content_hash: string | null
+          created_at: string
+          decision: string
+          dismiss_reason: string | null
+          dismissed_at: string | null
+          dismissed_by: string | null
+          id: string
+          listing_id: string
+          policy_version: string | null
+          rules_evaluated: number
+          scanned_at: string
+          score: number
+          signals: Json
+          trigger_source: string
+        }
+        Insert: {
+          content_hash?: string | null
+          created_at?: string
+          decision: string
+          dismiss_reason?: string | null
+          dismissed_at?: string | null
+          dismissed_by?: string | null
+          id?: string
+          listing_id: string
+          policy_version?: string | null
+          rules_evaluated?: number
+          scanned_at?: string
+          score?: number
+          signals?: Json
+          trigger_source?: string
+        }
+        Update: {
+          content_hash?: string | null
+          created_at?: string
+          decision?: string
+          dismiss_reason?: string | null
+          dismissed_at?: string | null
+          dismissed_by?: string | null
+          id?: string
+          listing_id?: string
+          policy_version?: string | null
+          rules_evaluated?: number
+          scanned_at?: string
+          score?: number
+          signals?: Json
+          trigger_source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_moderation_scans_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_notifications: {
         Row: {
           body: string | null
@@ -2899,6 +3084,105 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
           value?: Json
+        }
+        Relationships: []
+      }
+      mkt_point_ledger: {
+        Row: {
+          actor_id: string | null
+          balance_after: number
+          balance_before: number
+          created_at: string
+          direction: string
+          id: string
+          kind: string
+          listing_id: string | null
+          meta: Json
+          op_id: string | null
+          points: number
+          promotion_id: string | null
+          reason: string | null
+          wallet_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          balance_after: number
+          balance_before: number
+          created_at?: string
+          direction: string
+          id?: string
+          kind: string
+          listing_id?: string | null
+          meta?: Json
+          op_id?: string | null
+          points: number
+          promotion_id?: string | null
+          reason?: string | null
+          wallet_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          balance_after?: number
+          balance_before?: number
+          created_at?: string
+          direction?: string
+          id?: string
+          kind?: string
+          listing_id?: string | null
+          meta?: Json
+          op_id?: string | null
+          points?: number
+          promotion_id?: string | null
+          reason?: string | null
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_point_ledger_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_point_ledger_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_point_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_point_wallets: {
+        Row: {
+          account_id: string
+          account_type: string
+          balance_points: number
+          created_at: string
+          id: string
+          lifetime_granted: number
+          lifetime_spent: number
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          account_type: string
+          balance_points?: number
+          created_at?: string
+          id?: string
+          lifetime_granted?: number
+          lifetime_spent?: number
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          account_type?: string
+          balance_points?: number
+          created_at?: string
+          id?: string
+          lifetime_granted?: number
+          lifetime_spent?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -7410,6 +7694,15 @@ export type Database = {
         }
         Returns: string
       }
+      mkt_admin_grant_points: {
+        Args: {
+          _account_id: string
+          _account_type: string
+          _points: number
+          _reason: string
+        }
+        Returns: Json
+      }
       mkt_admin_listing_action: {
         Args: {
           _action: string
@@ -7474,6 +7767,7 @@ export type Database = {
         Args: { _days: number; _listing_id: string }
         Returns: undefined
       }
+      mkt_admin_listing_moderation: { Args: { _id: string }; Returns: Json }
       mkt_admin_listing_reports: {
         Args: {
           _assignee?: string
@@ -7524,6 +7818,25 @@ export type Database = {
         Args: { _kind: string; _path: string; _subject_id: string }
         Returns: undefined
       }
+      mkt_admin_moderation_rule_delete: {
+        Args: { _id: string; _reason: string }
+        Returns: undefined
+      }
+      mkt_admin_moderation_rule_save: {
+        Args: {
+          _action: string
+          _category: string
+          _id: string
+          _is_active: boolean
+          _kind: string
+          _lang: string
+          _notes: string
+          _pattern: string
+          _severity: string
+          _weight: number
+        }
+        Returns: string
+      }
       mkt_admin_notes_list: {
         Args: { _subject_id: string; _subject_type: string }
         Returns: {
@@ -7539,10 +7852,15 @@ export type Database = {
         Returns: undefined
       }
       mkt_admin_overview: { Args: never; Returns: Json }
+      mkt_admin_refund_promotion: {
+        Args: { _promotion_id: string; _reason: string }
+        Returns: Json
+      }
       mkt_admin_release: {
         Args: { _kind: string; _reason: string; _subject_id: string }
         Returns: undefined
       }
+      mkt_admin_rescan_listing: { Args: { _id: string }; Returns: Json }
       mkt_admin_roles: {
         Args: never
         Returns: {
@@ -7553,6 +7871,10 @@ export type Database = {
           staff_perms: string[]
           user_id: string
         }[]
+      }
+      mkt_admin_scan_dismiss: {
+        Args: { _reason: string; _scan_id: string }
+        Returns: undefined
       }
       mkt_admin_search: { Args: { _limit?: number; _q: string }; Returns: Json }
       mkt_admin_set_platform_role: {
@@ -7703,6 +8025,7 @@ export type Database = {
         Returns: boolean
       }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
+      mkt_is_auto_publish_op: { Args: never; Returns: boolean }
       mkt_is_listing_op: { Args: never; Returns: boolean }
       mkt_is_moderation_op: { Args: never; Returns: boolean }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
@@ -7761,6 +8084,12 @@ export type Database = {
       }
       mkt_listing_is_public: { Args: { _id: string }; Returns: boolean }
       mkt_listing_pause: { Args: { _id: string }; Returns: string }
+      mkt_listing_promote: {
+        Args: { _days: number; _id: string; _op_id: string }
+        Returns: Json
+      }
+      mkt_listing_promotion_overview: { Args: { _id: string }; Returns: Json }
+      mkt_listing_reactivate: { Args: { _id: string }; Returns: string }
       mkt_listing_renew: {
         Args: { _days?: number; _id: string }
         Returns: string
@@ -7784,6 +8113,11 @@ export type Database = {
       mkt_merge_activities: {
         Args: { _note?: string; _source_id: string; _target_id: string }
         Returns: undefined
+      }
+      mkt_moderation_normalize: { Args: { _t: string }; Returns: string }
+      mkt_moderation_scan_listing: {
+        Args: { _id: string; _trigger?: string }
+        Returns: Json
       }
       mkt_my_accounts: {
         Args: never
@@ -7835,6 +8169,7 @@ export type Database = {
       }
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
+      mkt_promotion_prices: { Args: never; Returns: Json }
       mkt_public_business: {
         Args: { _slug: string }
         Returns: {
@@ -8153,6 +8488,7 @@ export type Database = {
       mkt_sweep_expired_listings: { Args: never; Returns: Json }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
+      mkt_wallet_for_listing: { Args: { _id: string }; Returns: string }
       my_accounts: {
         Args: never
         Returns: {
