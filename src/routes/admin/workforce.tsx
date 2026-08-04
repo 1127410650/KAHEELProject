@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CalendarOff, Shuffle, UserCheck } from "lucide-react";
+import { CalendarOff, ChevronDown, Shuffle, UserCheck } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
@@ -27,6 +27,7 @@ import {
   setWorkProgress,
   workItemHref,
   workforceErrorKey,
+  type DepartmentRow,
   type LeaveKind,
   type QueueScope,
   type StaffRow,
@@ -42,7 +43,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -83,7 +83,7 @@ const STAFF_KEY = ["mkt", "admin", "workforce", "staff"];
 const OVERVIEW_KEY = ["mkt", "admin", "workforce", "overview"];
 
 type Pending =
-  | { kind: "staff"; row: StaffRow; state?: WorkState; capacity?: number; auto?: boolean; department?: string }
+  | { kind: "staff"; row: StaffRow; state?: WorkState; capacity?: number; department?: string }
   | { kind: "leaveCancel"; id: string }
   | { kind: "priority"; item: WorkItem; priority: WorkPriority }
   | { kind: "transfer"; item: WorkItem; to: string }
@@ -152,7 +152,6 @@ function AdminWorkforcePage() {
           {
             work_state: pending.state ?? null,
             capacity_limit: pending.capacity ?? null,
-            accepts_auto: pending.auto ?? null,
             department: pending.department ?? null,
           },
           reason,
