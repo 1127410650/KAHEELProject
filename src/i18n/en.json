@@ -2972,7 +2972,8 @@
       "search": "Admin search",
       "workforce": "Work distribution & staff",
       "myWork": "My work",
-      "attendance": "Attendance & shifts"
+      "attendance": "Attendance & shifts",
+      "contentRules": "Content rules"
     },
     "alerts": {
       "title": "Alerts",
@@ -3457,6 +3458,59 @@
         "range": "Check-out is before check-in",
         "appendOnly": "The correction trail cannot be edited or deleted"
       }
+    },
+    "moderation": {
+      "title": "Content scan",
+      "hint": "Automated scan result — advisory only; the human reviewer decides.",
+      "score": "Score",
+      "thresholds": "Decision thresholds",
+      "lastScan": "Last scan",
+      "noScans": "No scans yet",
+      "history": "Previous scans",
+      "field": "Field",
+      "weight": "Weight",
+      "dismiss": "Clear flag",
+      "dismissTitle": "Clear the scan flag",
+      "dismissDescription": "Give a clear reason for clearing this flag; the reason is recorded in the activity log.",
+      "dismissedAt": "Flag cleared at"
+    },
+    "contentRules": {
+      "title": "Content scan rules",
+      "addRule": "Add rule",
+      "editRule": "Edit rule",
+      "deleteRule": "Delete rule",
+      "searchPlaceholder": "Search pattern or notes",
+      "all": "All",
+      "activeOnly": "Active only",
+      "inactiveOnly": "Inactive only",
+      "kind": "Kind",
+      "pattern": "Pattern",
+      "lang": "Language",
+      "langAny": "Any language",
+      "category": "Category",
+      "severity": "Severity",
+      "action": "Action",
+      "weight": "Weight",
+      "status": "Status",
+      "notes": "Notes",
+      "toggleActive": "Activate / deactivate",
+      "duration": "Duration",
+      "errorPatternRequired": "A pattern is required",
+      "errorInvalidRegex": "Invalid regular expression",
+      "errorWeightRange": "Weight must be between 0 and 20",
+      "testTitle": "Test text",
+      "testPlaceholder": "Paste text to test the active rules",
+      "testHint": "An approximate preview of the active rules, not the final scan decision.",
+      "testNoMatch": "No rule matched",
+      "thresholdsTitle": "Decision thresholds",
+      "thresholdsHint": "Managed from platform settings.",
+      "reviewThreshold": "Review threshold",
+      "blockThreshold": "Block threshold",
+      "policyVersion": "Policy version",
+      "jobsTitle": "Scheduled operations",
+      "runNow": "Run now",
+      "tickSuccess": "Scheduled job completed",
+      "tickFinishedWithIssues": "The job finished with an issue"
     }
   }
 }
