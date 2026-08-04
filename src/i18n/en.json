@@ -2702,7 +2702,19 @@
       "endsIn": "Ends in {n} days",
       "endsInHours": "Ends in {n} hours",
       "endedAgo": "Ended {n} days ago",
-      "endedAgoHours": "Ended {n} hours ago"
+      "endedAgoHours": "Ended {n} hours ago",
+      "reactivate": "Reactivate for 7 days",
+      "reactivated": "Ad reactivated for 7 days",
+      "reactivateReview": "Sent for review before republishing",
+      "adminSuspended": "This ad is suspended by the platform team",
+      "accountRestricted": "This account is currently restricted",
+      "categoryInactive": "This category is currently inactive",
+      "imageRequired": "At least one photo is required",
+      "imagesIncomplete": "Some photos have not finished uploading",
+      "imagesTooMany": "Maximum of 20 photos",
+      "businessIncomplete": "Complete the business details before publishing",
+      "geoRequired": "Pick the location on the map",
+      "notFound": "Ad not found"
     },
     "lr": {
       "title": "Listing reports",
@@ -2882,6 +2894,41 @@
         "missed": "Missed call",
         "duration": "Call duration"
       }
+    },
+    "moderation": {
+      "owner": {
+        "review": "Your ad is under review after the content scan",
+        "suspected": "The content may breach the platform policy and is under review",
+        "cleared": "Reviewed — the flag was cleared"
+      }
+    },
+    "promote": {
+      "action": "Boost with points",
+      "title": "Boost this ad",
+      "confirm": "Confirm boost",
+      "processing": "Working…",
+      "success": "Ad boosted",
+      "alreadyDone": "This request was already recorded",
+      "alreadyPromoted": "This ad is already boosted",
+      "alreadyActiveUntil": "Current boost runs until {date}",
+      "activeUntil": "Boosted until {date}",
+      "insufficientPoints": "Not enough points",
+      "invalidState": "Boosting is available for published ads only",
+      "invalidDuration": "Invalid duration",
+      "priceUnavailable": "Boost pricing is unavailable right now",
+      "notFound": "Ad not found",
+      "viewPoints": "View points balance and history"
+    },
+    "points": {
+      "title": "Points",
+      "balance": "Current balance",
+      "lifetimeSpent": "Total spent",
+      "ledger": "Transaction history",
+      "empty": "No transactions yet",
+      "credit": "Credit",
+      "debit": "Debit",
+      "prev": "Previous",
+      "next": "Next"
     }
   },
   "routeError": {

@@ -2702,7 +2702,19 @@
       "endsIn": "ينتهي بعد {n} يومًا",
       "endsInHours": "ينتهي بعد {n} ساعة",
       "endedAgo": "انتهى منذ {n} يومًا",
-      "endedAgoHours": "انتهى منذ {n} ساعة"
+      "endedAgoHours": "انتهى منذ {n} ساعة",
+      "reactivate": "إعادة التنشيط لمدة 7 أيام",
+      "reactivated": "تم إعادة تنشيط الإعلان لمدة 7 أيام",
+      "reactivateReview": "أُرسل الإعلان للمراجعة قبل إعادة النشر",
+      "adminSuspended": "الإعلان موقوف من إدارة المنصة",
+      "accountRestricted": "الحساب مقيّد حاليًا",
+      "categoryInactive": "التصنيف غير مفعّل حاليًا",
+      "imageRequired": "يلزم إضافة صورة واحدة على الأقل",
+      "imagesIncomplete": "هناك صور لم يكتمل رفعها",
+      "imagesTooMany": "الحد الأقصى 20 صورة",
+      "businessIncomplete": "أكمل بيانات المنشأة قبل النشر",
+      "geoRequired": "يلزم تحديد الموقع على الخريطة",
+      "notFound": "الإعلان غير موجود"
     },
     "lr": {
       "title": "بلاغات الإعلانات",
@@ -2882,6 +2894,41 @@
         "missed": "مكالمة فائتة",
         "duration": "مدة المكالمة"
       }
+    },
+    "moderation": {
+      "owner": {
+        "review": "إعلانك قيد المراجعة بعد فحص المحتوى",
+        "suspected": "قد يخالف محتوى الإعلان سياسة المنصة، وهو قيد المراجعة",
+        "cleared": "تمت مراجعة الإعلان وإزالة الملاحظة"
+      }
+    },
+    "promote": {
+      "action": "تمويل الإعلان بالنقاط",
+      "title": "تمويل الإعلان",
+      "confirm": "تأكيد التمويل",
+      "processing": "جارٍ التنفيذ…",
+      "success": "تم تمويل الإعلان",
+      "alreadyDone": "العملية مسجّلة مسبقًا",
+      "alreadyPromoted": "الإعلان مموّل حاليًا",
+      "alreadyActiveUntil": "التمويل الحالي ساري حتى {date}",
+      "activeUntil": "ممول حتى {date}",
+      "insufficientPoints": "رصيد النقاط غير كافٍ",
+      "invalidState": "التمويل متاح للإعلانات المنشورة فقط",
+      "invalidDuration": "مدة غير صحيحة",
+      "priceUnavailable": "سعر التمويل غير متاح حاليًا",
+      "notFound": "الإعلان غير موجود",
+      "viewPoints": "عرض رصيد النقاط والحركات"
+    },
+    "points": {
+      "title": "النقاط",
+      "balance": "الرصيد الحالي",
+      "lifetimeSpent": "إجمالي المصروف",
+      "ledger": "سجل الحركات",
+      "empty": "لا توجد حركات بعد",
+      "credit": "إضافة",
+      "debit": "خصم",
+      "prev": "السابق",
+      "next": "التالي"
     }
   },
   "routeError": {
