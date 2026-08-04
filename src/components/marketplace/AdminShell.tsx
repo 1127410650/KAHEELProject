@@ -15,6 +15,7 @@ import {
   Megaphone,
   Menu,
   ScrollText,
+  Search,
   Settings,
   ShieldAlert,
   ShieldCheck,
