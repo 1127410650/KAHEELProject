@@ -864,7 +864,6 @@ export function ListingForm({ listing }: Props) {
                   <p className="text-xs text-muted-foreground">{t("market.form.currencyHint")}</p>
                 )}
               </div>
-            )}
             <div className="space-y-1.5">
               <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
               <select
