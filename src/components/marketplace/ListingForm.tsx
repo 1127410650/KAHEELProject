@@ -1094,8 +1094,12 @@ export function ListingForm({ listing }: Props) {
           </div>
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.dash.price")}</dt>
-            <dd className="text-foreground" dir="ltr">
-              {`${price || "—"} ${currencyCode}`}
+            <dd className="text-foreground">
+              {priceLabel(
+                { price: Number(price) || null, price_unit: priceUnit || null, currency: currencyCode },
+                "—",
+                locale === "ar" ? "ar" : "en",
+              )}
             </dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">
