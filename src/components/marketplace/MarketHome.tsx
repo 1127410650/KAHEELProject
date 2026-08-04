@@ -23,15 +23,21 @@ function ListingSection({
   title,
   items,
   loading,
+  failed,
+  onRetry,
   badge,
 }: {
   title: string;
   items: Items;
   loading: boolean;
+  failed?: boolean;
+  onRetry?: () => void;
   badge?: string;
 }) {
   const { t } = useI18n();
-  if (!loading && items.length === 0) return null;
+  // Nothing to show and nothing pending: the whole section disappears instead of
+  // leaving a decorative skeleton behind.
+  if (!loading && !failed && items.length === 0) return null;
   const shown = items.slice(0, 4);
 
   return (
@@ -53,8 +59,15 @@ function ListingSection({
         </Link>
       </div>
 
-      {loading ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
+      {failed ? (
+        <div className="rounded-xl border border-border bg-card px-4 py-6 text-center">
+          <p className="text-sm text-muted-foreground">{t("market.loadError")}</p>
+          <Button size="sm" variant="outline" className="mt-3" onClick={onRetry}>
+            {t("market.retry")}
+          </Button>
+        </div>
+      ) : loading ? (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton
               key={i}
@@ -69,16 +82,20 @@ function ListingSection({
               <ListingCard key={listing.id} listing={listing} view="row" />
             ))}
           </div>
-          <div className="hidden justify-start gap-3 sm:grid sm:grid-cols-[repeat(auto-fill,minmax(280px,340px))]">
+          {/* Fixed column counts keep four cards on one balanced row instead of
+           * leaving an orphan card beside a wide empty gap. */}
+          <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {shown.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
         </>
       )}
+
     </section>
   );
 }
+
 
 /**
  * The public marketplace home ("كحلي"): search card, category rail, banner,
@@ -97,20 +114,25 @@ export function MarketHome() {
   const featured = useQuery({
     queryKey: ["mkt", "home", "featured", locale, geoKey],
     queryFn: () => loadListings({ ...geo, featuredOnly: true, limit: 8 }, locale),
+    retry: 1,
   });
   const latest = useQuery({
     queryKey: ["mkt", "home", "latest", locale, geoKey],
     queryFn: () => loadListings({ ...geo, limit: 12 }, locale),
+    retry: 1,
   });
 
   const featuredItems = (featured.data ?? []).slice(0, 4);
   const featuredIds = new Set(featuredItems.map((l) => l.id));
   const latestItems = (latest.data ?? []).filter((l) => !featuredIds.has(l.id)).slice(0, 4);
   const isEmpty =
-    !featured.isLoading &&
-    !latest.isLoading &&
+    !featured.isPending &&
+    !latest.isPending &&
+    !featured.isError &&
+    !latest.isError &&
     featuredItems.length === 0 &&
     latestItems.length === 0;
+
 
   return (
     <>
@@ -165,19 +187,23 @@ export function MarketHome() {
         </section>
       ) : (
         <>
+          {/* Latest first, promotions after: the feed leads with fresh stock. */}
+          <ListingSection
+            title={t("market.home.latest")}
+            items={latestItems}
+            loading={latest.isPending}
+            failed={latest.isError}
+            onRetry={() => void latest.refetch()}
+          />
           <ListingSection
             title={t("market.home.featured")}
             badge={t("market.home.featuredBadge")}
             items={featuredItems}
-            loading={featured.isLoading}
-          />
-          <ListingSection
-            title={t("market.home.latest")}
-            items={latestItems}
-            loading={latest.isLoading}
+            loading={featured.isPending}
           />
         </>
       )}
     </>
+
   );
 }

@@ -1,25 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Bell,
   Building2,
   ChevronLeft,
   ChevronRight,
   FileText,
   Globe,
-  Heart,
   HelpCircle,
   Info,
-  ListOrdered,
-  LogIn,
   LogOut,
   Mail,
-  MessageSquare,
   Repeat,
   Shield,
-  ShieldAlert,
-  Store,
   User,
-  UserPlus,
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -30,7 +22,7 @@ import { MarketShell } from "@/components/marketplace/MarketShell";
 
 const title = "المزيد — كحلي";
 const description =
-  "كل أقسام سوق «كحلي» في مكان واحد: التصفح، حسابك، الإعدادات، السياسات، والتواصل مع الإدارة.";
+  "إعدادات حسابك في سوق «كحلي»، اللغة، السياسات، والتواصل مع إدارة المنصة.";
 
 export const Route = createFileRoute("/more")({
   ssr: false,
@@ -48,10 +40,10 @@ export const Route = createFileRoute("/more")({
 });
 
 /**
- * `/more` is the public marketplace menu. Signed-in visitors also get their
- * account rows here; guests get sign-in/registration instead. Nothing on this
- * page points at the admin console or the internal system, and every row leads
- * to a route that exists.
+ * `/more` holds only what the header and the bottom bar do NOT already offer:
+ * account management, language, policies and support. Browsing, search,
+ * sign-in/registration, messages, alerts and "add listing" live in the chrome,
+ * so they are deliberately absent here. Nothing points at the admin console.
  */
 function MorePage() {
   const { t, locale, setLocale, dir } = useI18n();
@@ -63,20 +55,10 @@ function MorePage() {
   const rowClass =
     "flex min-h-12 items-center gap-3 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent";
 
-  const browse = [
-    { to: "/", icon: Store, label: t("market.more.links.marketplace") },
-    { to: "/search", icon: ListOrdered, label: t("market.more.links.search") },
-  ];
-
   const accountRows = [
-    { to: "/dashboard/my-ads", icon: ListOrdered, label: t("market.more.links.myAds") },
-    { to: "/dashboard/messages", icon: MessageSquare, label: t("market.more.links.messages") },
-    { to: "/dashboard/notifications", icon: Bell, label: t("market.more.links.notifications") },
-    { to: "/dashboard/favorites", icon: Heart, label: t("market.more.links.favorites") },
     { to: "/dashboard/profile", icon: User, label: t("market.more.links.manageAccount") },
-    { to: "/dashboard/business", icon: Building2, label: t("market.more.links.business") },
-    { to: "/dashboard/reports", icon: ShieldAlert, label: t("market.more.links.reports") },
     { to: "/choose-account", icon: Repeat, label: t("market.more.links.switchAccount") },
+    { to: "/dashboard/business", icon: Building2, label: t("market.more.links.business") },
   ];
 
   const legal = [
@@ -89,7 +71,7 @@ function MorePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-3xl px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6">
+      <div className="mx-auto w-full max-w-3xl px-4 pb-6 pt-6">
         <h1 className="text-xl font-bold text-foreground">{t("market.more.title")}</h1>
 
         {session && active ? (
@@ -102,16 +84,6 @@ function MorePage() {
           <p className="mt-1 text-xs text-muted-foreground">{t("market.more.subtitle")}</p>
         )}
 
-        <Section title={t("market.more.browse")}>
-          {browse.map((row) => (
-            <Link key={row.to} to={row.to} className={rowClass}>
-              <row.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 flex-1 truncate">{row.label}</span>
-              <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-            </Link>
-          ))}
-        </Section>
-
         {session ? (
           <Section title={t("market.more.account")}>
             {accountRows.map((row) => (
@@ -122,20 +94,7 @@ function MorePage() {
               </Link>
             ))}
           </Section>
-        ) : (
-          <Section title={t("market.more.accessTitle")}>
-            <Link to="/auth" className={rowClass}>
-              <LogIn className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 flex-1 truncate">{t("market.signIn")}</span>
-              <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-            </Link>
-            <Link to="/register" className={rowClass}>
-              <UserPlus className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 flex-1 truncate">{t("market.signUp")}</span>
-              <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-            </Link>
-          </Section>
-        )}
+        ) : null}
 
         <Section title={t("market.more.app")}>
           <button
@@ -190,3 +149,4 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     </section>
   );
 }
+
