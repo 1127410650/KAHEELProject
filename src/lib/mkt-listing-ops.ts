@@ -11,7 +11,9 @@ import { removeObjects } from "@/lib/mkt-listing-media";
 
 export const LISTING_DURATIONS = [1, 3, 7, 14, 30] as const;
 export type ListingDuration = (typeof LISTING_DURATIONS)[number];
-export const DEFAULT_LISTING_DURATION: ListingDuration = 30;
+/** Organic (unpaid) ads always run for a fixed 7 days; 1/3/7/14/30 belong to paid promotion only. */
+export const ORGANIC_LISTING_DAYS = 7 as const;
+export const DEFAULT_LISTING_DURATION: ListingDuration = ORGANIC_LISTING_DAYS;
 
 export function isListingDuration(value: unknown): value is ListingDuration {
   return LISTING_DURATIONS.includes(Number(value) as ListingDuration);

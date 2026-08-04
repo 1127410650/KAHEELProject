@@ -24,13 +24,7 @@ import {
   type SpecField,
 } from "@/lib/mkt-taxonomy";
 import { clearDraft, loadDraft, saveDraft, type ListingDraft } from "@/lib/mkt-listing-draft";
-import {
-  DEFAULT_LISTING_DURATION,
-  LISTING_DURATIONS,
-  isListingDuration,
-  submitListing,
-  type ListingDuration,
-} from "@/lib/mkt-listing-ops";
+import { ORGANIC_LISTING_DAYS, submitListing } from "@/lib/mkt-listing-ops";
 import {
   LICENSE_BLOCK_FIELD,
   licenseBlockers,
@@ -112,11 +106,6 @@ export function ListingForm({ listing }: Props) {
   // Photos live in a private staging folder identified by this id, so a refresh
   // finds them again and a deleted draft can be swept clean.
   const [draftId, setDraftId] = useState<string>(() => crypto.randomUUID());
-  const [durationDays, setDurationDays] = useState<ListingDuration>(
-    isListingDuration(listing?.duration_days)
-      ? (listing!.duration_days as ListingDuration)
-      : DEFAULT_LISTING_DURATION,
-  );
 
   // Licence data of a real estate ad, kept out of the local draft on purpose.
   const [license, setLicense] = useState<LicenseFormValue>(EMPTY_LICENSE);
@@ -254,7 +243,6 @@ export function ListingForm({ listing }: Props) {
     if (draft.unit !== undefined) setUnit(draft.unit ?? "");
     if (draft.itemCondition) setItemCondition(draft.itemCondition);
     if (draft.keywords !== undefined) setKeywords(draft.keywords ?? "");
-    if (isListingDuration(draft.durationDays)) setDurationDays(draft.durationDays);
     if (draft.specs) setSpecs(draft.specs as Record<string, SpecValue>);
     if (typeof draft.step === "number") setStep(Math.min(draft.step, STEPS.length - 1));
     if (draft.cityId) setCityId(draft.cityId);
@@ -281,7 +269,7 @@ export function ListingForm({ listing }: Props) {
       unit,
       itemCondition,
       keywords,
-      durationDays,
+      durationDays: ORGANIC_LISTING_DAYS,
       cityId,
       district,
       addressText,
@@ -306,7 +294,6 @@ export function ListingForm({ listing }: Props) {
     unit,
     itemCondition,
     keywords,
-    durationDays,
     cityId,
     district,
     addressText,
@@ -534,7 +521,7 @@ export function ListingForm({ listing }: Props) {
         location_accuracy: coords.accuracy,
         location_source: coords.source,
         location_visibility: visibility,
-        duration_days: durationDays,
+        duration_days: ORGANIC_LISTING_DAYS,
       };
 
       // The row is created exactly once. A retry after a failed attach or a
@@ -924,25 +911,9 @@ export function ListingForm({ listing }: Props) {
 
           {cityField("city")}
 
-          <div className="space-y-1.5">
-            <Label htmlFor="duration_days">{t("market.ops.duration")}</Label>
-            <select
-              id="duration_days"
-              className={selectClass}
-              value={durationDays}
-              onChange={(e) => {
-                setDirty(true);
-                const value = Number(e.target.value);
-                if (isListingDuration(value)) setDurationDays(value);
-              }}
-            >
-              {LISTING_DURATIONS.map((days) => (
-                <option key={days} value={days}>
-                  {t("market.ops.durationDays").replace("{n}", String(days))}
-                </option>
-              ))}
-            </select>
-          </div>
+          <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+            {t("market.form.durationFixed")}
+          </p>
 
           {primary.length > 0 && (
             <div className="grid gap-3 sm:grid-cols-2">{primary.map((f) => specInput(f))}</div>
@@ -1143,7 +1114,7 @@ export function ListingForm({ listing }: Props) {
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.ops.duration")}</dt>
             <dd className="text-foreground">
-              {t("market.ops.durationDays").replace("{n}", String(durationDays))}
+              {t("market.ops.durationDays").replace("{n}", String(ORGANIC_LISTING_DAYS))}
             </dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">
