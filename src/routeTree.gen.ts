@@ -42,6 +42,7 @@ import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminStoresRouteImport } from './routes/admin/stores'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdminWorkforceRouteImport } from './routes/admin/workforce'
@@ -240,6 +241,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminStoresRoute = AdminStoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -434,6 +440,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stores': typeof AdminStoresRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
@@ -500,6 +507,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stores': typeof AdminStoresRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
@@ -568,6 +576,7 @@ export interface FileRoutesById {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stores': typeof AdminStoresRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
@@ -637,6 +646,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
+    | '/admin/stores'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/workforce'
@@ -703,6 +713,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
+    | '/admin/stores'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/workforce'
@@ -770,6 +781,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
+    | '/admin/stores'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/workforce'
@@ -1082,6 +1094,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/stores': {
+      id: '/admin/stores'
+      path: '/stores'
+      fullPath: '/admin/stores'
+      preLoaderRoute: typeof AdminStoresRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1324,6 +1343,7 @@ interface AdminRouteRouteChildren {
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStoresRoute: typeof AdminStoresRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminWorkforceRoute: typeof AdminWorkforceRoute
@@ -1351,6 +1371,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminStoresRoute: AdminStoresRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminWorkforceRoute: AdminWorkforceRoute,

@@ -64,9 +64,8 @@ function AdminStoresPage() {
     staleTime: 5_000,
     queryFn: async (): Promise<AdminStoreRow[]> => {
       const { data, error } = await supabase.rpc("mkt_admin_stores", {
-        _q: term || null,
-        _status: status || null,
-        _store_type: null,
+        ...(term ? { _q: term } : {}),
+        ...(status ? { _status: status } : {}),
         _limit: 50,
         _offset: 0,
       });
@@ -79,7 +78,7 @@ function AdminStoresPage() {
     const { error } = await supabase.rpc("mkt_admin_store_action", {
       _storefront_id: row.id,
       _action: action,
-      _reason: reason,
+      ...(reason ? { _reason: reason } : {}),
     });
     if (error) {
       toast.error(t(catalogErrorKey(error)));
@@ -191,6 +190,8 @@ function AdminStoresPage() {
         <ReasonDialog
           open
           title={t(`admin.stores.${pending.action === "suspend" ? "suspend" : "requestChanges"}`)}
+          confirmLabel={t("common.confirm")}
+          destructive={pending.action === "suspend"}
           onCancel={() => setPending(null)}
           onConfirm={(reason) => void act(pending.row, pending.action, reason)}
         />
