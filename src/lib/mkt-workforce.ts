@@ -255,9 +255,46 @@ export function workItemHref(item: WorkItem): string {
   }
 }
 
+export interface MyWorkStatus {
+  user_id: string;
+  work_state: WorkState;
+  effective_state: WorkState;
+  capacity_limit: number;
+  accepts_auto: boolean;
+  department: string | null;
+  open_count: number;
+  done_today: number;
+  on_leave: boolean;
+  can_manage: boolean;
+}
+
+/** The signed-in staff member's own work state — readable without workforce.manage. */
+export async function loadMyWorkStatus(): Promise<MyWorkStatus | null> {
+  const { data, error } = await supabase.rpc("mkt_workforce_my_status");
+  if (error) throw error;
+  const rows = (data ?? []) as MyWorkStatus[];
+  return rows[0] ?? null;
+}
+
+/** A staff member moves themselves between available / busy / away only. */
+export async function setMyWorkState(state: WorkState): Promise<void> {
+  const { error } = await supabase.rpc("mkt_workforce_set_staff", {
+    _user_id: (await supabase.auth.getUser()).data.user?.id ?? null,
+    _work_state: state,
+    _capacity_limit: null,
+    _accepts_auto: null,
+    _department: null,
+    _note: null,
+    _reason: null,
+  } as never);
+  if (error) throw error;
+}
+
 export function workforceErrorKey(error: unknown): string {
   const message = (error as { message?: string } | null)?.message ?? "";
   if (message.includes("capacity_reached")) return "admin.workforce.err.capacity";
+  if (message.includes("staff_on_leave")) return "admin.workforce.err.onLeave";
+  if (message.includes("staff_unavailable")) return "admin.workforce.err.unavailable";
   if (message.includes("already_claimed")) return "admin.queue.alreadyClaimed";
   if (message.includes("not_holder")) return "admin.queue.notHolder";
   if (message.includes("invalid_assignee")) return "admin.queue.invalidAssignee";
