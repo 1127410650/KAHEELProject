@@ -1,30 +1,50 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Building2,
+  Check,
   ChevronLeft,
   ChevronRight,
   FileText,
   Globe,
   HelpCircle,
   Info,
+  LogIn,
   LogOut,
   Mail,
-  Repeat,
+  Plus,
   Shield,
   User,
+  UserPlus,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { useSignOut } from "@/lib/auth-signout";
+import { isPlatformAdmin } from "@/lib/mkt-admin";
+import { hasUnsavedChanges } from "@/lib/unsaved-changes";
 import { MarketShell } from "@/components/marketplace/MarketShell";
+import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+import {
+  ACTIVITY_LINKS,
+  CREATE_BUSINESS_LABEL_KEY,
+  CREATE_BUSINESS_PATH,
+  MANAGE_LINKS,
+  visibleLinks,
+} from "@/lib/more-menu";
+
 const title = "المزيد — كحلي";
 const description =
-  "إعدادات حسابك في سوق «كحلي»، اللغة، السياسات، والتواصل مع إدارة المنصة.";
+  "إعدادات حسابك في سوق «كحلي»، التبديل بين الحسابات، اللغة، السياسات، والتواصل مع إدارة المنصة.";
 
 export const Route = createFileRoute("/more")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    section: search["section"] === "accounts" ? ("accounts" as const) : undefined,
+  }),
   head: () => ({
     meta: [
       { title },
@@ -39,26 +59,69 @@ export const Route = createFileRoute("/more")({
 });
 
 /**
- * `/more` holds only what the header and the bottom bar do NOT already offer:
- * account management, language, policies and support. Browsing, search,
- * sign-in/registration, messages, alerts and "add listing" live in the chrome,
- * so they are deliberately absent here. Nothing points at the admin console.
+ * `/more` is the single account hub on mobile: active account, account
+ * switching, creating a business, activity, account management and sign-out.
+ * Home, messages, search and alerts are deliberately absent — they live in the
+ * bottom bar. Nothing here points at the admin console for a normal user.
  */
 function MorePage() {
   const { t, locale, setLocale, dir } = useI18n();
   const { session } = useSession();
-  const { account: active } = useActiveAccount();
+  const { account: active, accounts, can, select, clear } = useActiveAccount();
   const Arrow = dir === "rtl" ? ChevronLeft : ChevronRight;
-  const signOut = useSignOut();
+  const centralSignOut = useSignOut();
+  const { section } = Route.useSearch();
+  const accountsRef = useRef<HTMLDivElement | null>(null);
+  const [switching, setSwitching] = useState<string | null>(null);
+
+  const admin = useQuery({
+    queryKey: ["mkt", "is-platform-admin", session?.user.id ?? null],
+    enabled: !!session,
+    staleTime: 5 * 60_000,
+    queryFn: isPlatformAdmin,
+  });
+
+  // Deep link from the header lands directly on the accounts section, without a
+  // full reload and without losing the active account.
+  useEffect(() => {
+    if (section !== "accounts" || !accountsRef.current) return;
+    accountsRef.current.scrollIntoView({ block: "start", behavior: "smooth" });
+  }, [section, active?.account_key]);
 
   const rowClass =
-    "flex min-h-12 items-center gap-3 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent";
+    "flex min-h-13 items-center gap-3 border-b border-border px-3 py-3 text-sm text-foreground last:border-b-0 hover:bg-accent";
 
-  const accountRows = [
-    { to: "/dashboard/profile", icon: User, label: t("market.more.links.manageAccount") },
-    { to: "/choose-account", icon: Repeat, label: t("market.more.links.switchAccount") },
-    { to: "/dashboard/business", icon: Building2, label: t("market.more.links.business") },
-  ];
+  const viewer = {
+    signedIn: !!session,
+    accountKind: active?.kind ?? null,
+    can,
+    isPlatformAdmin: admin.data === true,
+  };
+
+  const activity = session && active ? visibleLinks(ACTIVITY_LINKS, viewer) : [];
+  const manage = session && active ? visibleLinks(MANAGE_LINKS, viewer) : [];
+
+  const switchList = [...accounts].sort((a, b) =>
+    a.kind === b.kind ? a.name.localeCompare(b.name) : a.kind === "individual" ? -1 : 1,
+  );
+
+  async function switchAccount(accountKey: string) {
+    if (accountKey === active?.account_key || switching) return;
+    if (hasUnsavedChanges() && !window.confirm(t("market.account.unsavedWarning"))) return;
+    setSwitching(accountKey);
+    try {
+      const ok = await select(accountKey);
+      if (!ok) toast.error(t("market.entry.switchFailed"));
+    } finally {
+      setSwitching(null);
+    }
+  }
+
+  async function signOut() {
+    if (!window.confirm(t("market.account.signOutConfirm"))) return;
+    clear();
+    await centralSignOut();
+  }
 
   const legal = [
     { to: "/about", icon: Info, label: t("market.more.links.about") },
@@ -72,26 +135,124 @@ function MorePage() {
     <MarketShell>
       <div className="mx-auto w-full max-w-3xl px-4 pb-6 pt-6">
         <h1 className="text-xl font-bold text-foreground">{t("market.more.title")}</h1>
+        <p className="mt-1 text-xs text-muted-foreground">{t("market.more.subtitle")}</p>
 
         {session && active ? (
-          <p className="mt-1 text-xs text-muted-foreground">
-            {t("market.more.usingAccount", {
-              name: active.name || t("market.account.fallbackName"),
-            })}
-          </p>
-        ) : (
-          <p className="mt-1 text-xs text-muted-foreground">{t("market.more.subtitle")}</p>
-        )}
+          <>
+            {/* Active account card — display only, no sensitive data. */}
+            <section ref={accountsRef} className="mt-5 scroll-mt-20">
+              <h2 className="mb-2 text-sm font-bold text-foreground">
+                {t("market.more.account")}
+              </h2>
+              <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+                {active.avatar_url ? (
+                  <img
+                    src={active.avatar_url}
+                    alt=""
+                    className="size-11 shrink-0 rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground">
+                    {active.kind === "business" ? (
+                      <Building2 className="size-5" aria-hidden />
+                    ) : (
+                      <User className="size-5" aria-hidden />
+                    )}
+                  </span>
+                )}
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-foreground">
+                    {active.name || t("market.account.fallbackName")}
+                  </span>
+                  <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
+                    <span>{t(`market.entry.kind.${active.kind}`)}</span>
+                    {active.city ? <span>· {active.city}</span> : null}
+                    {active.verification_status === "approved" ? (
+                      <VerifiedBadge status={active.verification_status} size="xs" />
+                    ) : null}
+                  </span>
+                </span>
+              </div>
+            </section>
 
-        {session ? (
-          <Section title={t("market.more.account")}>
-            {accountRows.map((row) => (
-              <Link key={row.to} to={row.to} className={rowClass}>
-                <row.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                <span className="min-w-0 flex-1 truncate">{row.label}</span>
+            {/* Switching: only accounts the server says the user may enter. */}
+            <Section title={t("market.account.switchTitle")}>
+              {switchList.map((item) => (
+                <button
+                  key={item.account_key}
+                  type="button"
+                  disabled={!!switching}
+                  onClick={() => void switchAccount(item.account_key)}
+                  className={`${rowClass} w-full text-start disabled:opacity-60`}
+                >
+                  {item.kind === "business" ? (
+                    <Building2 className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+                  ) : (
+                    <User className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+                  )}
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-medium">{item.name}</span>
+                    <span className="block text-[11px] text-muted-foreground">
+                      {t(`market.entry.kind.${item.kind}`)}
+                    </span>
+                  </span>
+                  {item.account_key === active.account_key ? (
+                    <Check className="size-4 shrink-0 text-primary" aria-hidden />
+                  ) : null}
+                </button>
+              ))}
+              {/* The one and only "create a business" entry in the platform. */}
+              <Link to={CREATE_BUSINESS_PATH} className={rowClass}>
+                <Plus className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+                <span className="min-w-0 flex-1 truncate">{t(CREATE_BUSINESS_LABEL_KEY)}</span>
                 <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
               </Link>
-            ))}
+            </Section>
+
+            {activity.length ? (
+              <Section title={t("market.account.activityTitle")}>
+                {activity.map((link) => (
+                  <Link key={link.key} to={link.to} className={rowClass}>
+                    <link.icon
+                      className="size-5 shrink-0 text-muted-foreground"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 flex-1 truncate">{t(link.labelKey)}</span>
+                    <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  </Link>
+                ))}
+              </Section>
+            ) : null}
+
+            {manage.length ? (
+              <Section title={t("market.account.manageTitle")}>
+                {manage.map((link) => (
+                  <Link key={link.key} to={link.to} className={rowClass}>
+                    <link.icon
+                      className="size-5 shrink-0 text-muted-foreground"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 flex-1 truncate">{t(link.labelKey)}</span>
+                    <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  </Link>
+                ))}
+              </Section>
+            ) : null}
+          </>
+        ) : null}
+
+        {!session ? (
+          <Section title={t("market.more.accessTitle")}>
+            <Link to="/auth" className={rowClass}>
+              <LogIn className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+              <span className="min-w-0 flex-1 truncate">{t("nav.signIn")}</span>
+              <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            </Link>
+            <Link to="/auth" search={{ mode: "signup" }} className={rowClass}>
+              <UserPlus className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+              <span className="min-w-0 flex-1 truncate">{t("nav.signUp")}</span>
+              <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            </Link>
           </Section>
         ) : null}
 
@@ -102,7 +263,7 @@ function MorePage() {
             className={`${rowClass} w-full justify-between`}
           >
             <span className="flex items-center gap-3">
-              <Globe className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+              <Globe className="size-5 shrink-0 text-muted-foreground" aria-hidden />
               {t("market.more.links.language")}
             </span>
             <span className="text-xs font-semibold text-primary">
@@ -114,7 +275,7 @@ function MorePage() {
         <Section title={t("market.more.legal")}>
           {legal.map((row) => (
             <Link key={row.to} to={row.to} className={rowClass}>
-              <row.icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+              <row.icon className="size-5 shrink-0 text-muted-foreground" aria-hidden />
               <span className="min-w-0 flex-1 truncate">{row.label}</span>
               <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             </Link>
@@ -128,7 +289,7 @@ function MorePage() {
               onClick={() => void signOut()}
               className={`${rowClass} w-full text-destructive`}
             >
-              <LogOut className="size-4 shrink-0" aria-hidden />
+              <LogOut className="size-5 shrink-0" aria-hidden />
               <span className="min-w-0 flex-1 truncate text-start">
                 {t("market.more.links.signOut")}
               </span>
@@ -148,4 +309,3 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     </section>
   );
 }
-
