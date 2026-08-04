@@ -13,6 +13,7 @@ import { adminCan } from "@/lib/mkt-admin-perms";
 import { reviewVerification, type VerificationAction } from "@/lib/mkt-admin";
 import { loadAdminVerificationDetail, openSensitiveDocument } from "@/lib/mkt-admin-detail";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminAssignmentBar } from "@/components/marketplace/AdminAssignmentBar";
 import { AdminNotes } from "@/components/marketplace/AdminNotes";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import {
