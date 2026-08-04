@@ -285,6 +285,7 @@ export const STAFF_PERMISSIONS = [
   "verifications.review",
   "appeals.review",
   "workforce.manage",
+  "workforce.override",
   "attendance.view",
   "attendance.manage",
   "attendance.approve",

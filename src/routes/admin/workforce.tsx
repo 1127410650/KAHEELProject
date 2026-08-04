@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CalendarOff, Shuffle, UserCheck } from "lucide-react";
+import { CalendarOff, ChevronDown, Shuffle, UserCheck } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
@@ -27,6 +27,7 @@ import {
   setWorkProgress,
   workItemHref,
   workforceErrorKey,
+  type DepartmentRow,
   type LeaveKind,
   type QueueScope,
   type StaffRow,
@@ -42,7 +43,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -83,7 +83,7 @@ const STAFF_KEY = ["mkt", "admin", "workforce", "staff"];
 const OVERVIEW_KEY = ["mkt", "admin", "workforce", "overview"];
 
 type Pending =
-  | { kind: "staff"; row: StaffRow; state?: WorkState; capacity?: number; auto?: boolean; department?: string }
+  | { kind: "staff"; row: StaffRow; state?: WorkState; capacity?: number; department?: string }
   | { kind: "leaveCancel"; id: string }
   | { kind: "priority"; item: WorkItem; priority: WorkPriority }
   | { kind: "transfer"; item: WorkItem; to: string }
@@ -152,10 +152,25 @@ function AdminWorkforcePage() {
           {
             work_state: pending.state ?? null,
             capacity_limit: pending.capacity ?? null,
-            accepts_auto: pending.auto ?? null,
             department: pending.department ?? null,
           },
           reason,
+        );
+        // The card, the badge and the counters move with the same click; the
+        // refresh below only confirms what the server already stored.
+        queryClient.setQueryData<StaffRow[]>(STAFF_KEY, (previous) =>
+          (previous ?? []).map((row) =>
+            row.user_id === pending.row.user_id
+              ? {
+                  ...row,
+                  work_state: pending.state ?? row.work_state,
+                  effective_state: row.on_leave ? "leave" : (pending.state ?? row.effective_state),
+                  accepts_auto: (pending.state ?? row.work_state) === "available" && !row.on_leave,
+                  capacity_limit: pending.capacity ?? row.capacity_limit,
+                  department: pending.department ?? row.department,
+                }
+              : row,
+          ),
         );
       } else if (pending.kind === "leaveCancel") {
         await cancelLeave(pending.id, reason);
@@ -217,107 +232,16 @@ function AdminWorkforcePage() {
       ) : (
         <div className="mt-3 grid gap-2">
           {rows.map((row) => (
-            <div key={row.user_id} className="rounded-xl border border-border bg-card p-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-foreground">
-                    <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                    {row.label}
-                  </p>
-                  {row.email && row.email !== row.label && (
-                    <p className="truncate text-xs text-muted-foreground">{row.email}</p>
-                  )}
-                  <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
-                    <span>
-                      {t("admin.workforce.load")}: {row.open_count}/{row.capacity_limit}
-                    </span>
-                    <span>
-                      {t("admin.workforce.doneToday")}: {row.done_today}
-                    </span>
-                    {row.last_assigned_at && (
-                      <span>
-                        {t("admin.workforce.lastAssigned")}: {formatDateTime(row.last_assigned_at)}
-                      </span>
-                    )}
-                  </p>
-                  {row.on_leave && row.leave_ends_on && (
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">
-                      {t("admin.workforce.leaveUntil")}: {formatDate(row.leave_ends_on)}
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex shrink-0 flex-wrap items-center gap-1.5">
-                  {row.effective_state !== row.work_state && (
-                    <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
-                      {t(`admin.workforce.state.${row.effective_state}`)}
-                    </span>
-                  )}
-                  <Select
-                    value={row.work_state}
-                    onValueChange={(value) =>
-                      setPending({ kind: "staff", row, state: value as WorkState })
-                    }
-                  >
-                    <SelectTrigger className="h-10 w-[9.5rem]" aria-label={t("admin.workforce.stateLabel")}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {WORK_STATES.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {t(`admin.workforce.state.${state}`)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={row.department ?? ""}
-                    onValueChange={(value) => setPending({ kind: "staff", row, department: value })}
-                  >
-                    <SelectTrigger className="h-10 w-[9.5rem]" aria-label={t("admin.workforce.department")}>
-                      <SelectValue placeholder={t("admin.workforce.department")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(departments.data ?? []).map((dep) => (
-                        <SelectItem key={dep.code} value={dep.code}>
-                          {locale === "ar" ? dep.name_ar : dep.name_en}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <label className="flex min-h-10 items-center gap-1.5 rounded-lg bg-background px-2 text-[11px]">
-                    <span className="text-foreground">{t("admin.workforce.acceptsAuto")}</span>
-                    <Switch
-                      checked={row.accepts_auto}
-                      onCheckedChange={(next) => setPending({ kind: "staff", row, auto: next })}
-                      aria-label={t("admin.workforce.acceptsAuto")}
-                    />
-                  </label>
-                  <Input
-                    type="number"
-                    min={1}
-                    max={200}
-                    defaultValue={row.capacity_limit}
-                    className="h-10 w-20 tabular-nums"
-                    aria-label={t("admin.workforce.capacity")}
-                    onBlur={(event) => {
-                      const next = Number(event.currentTarget.value);
-                      if (!Number.isFinite(next) || next === row.capacity_limit) return;
-                      setPending({ kind: "staff", row, capacity: Math.max(1, Math.min(200, next)) });
-                    }}
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="min-h-10"
-                    onClick={() => setLeaveFor(row)}
-                  >
-                    <CalendarOff className="me-1.5 size-4" aria-hidden />
-                    {t("admin.workforce.addLeave")}
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <StaffCard
+              key={row.user_id}
+              row={row}
+              departments={departments.data ?? []}
+              locale={locale}
+              onState={(state) => setPending({ kind: "staff", row, state })}
+              onDepartment={(department) => setPending({ kind: "staff", row, department })}
+              onCapacity={(capacity) => setPending({ kind: "staff", row, capacity })}
+              onLeave={() => setLeaveFor(row)}
+            />
           ))}
         </div>
       )}
@@ -376,7 +300,7 @@ function AdminWorkforcePage() {
         <div className="mt-3 grid gap-2">
           {items.map((item) => (
             <div key={item.id} className="rounded-xl border border-border bg-card p-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
                 <div className="min-w-0">
                   <Link
                     to={workItemHref(item)}
@@ -394,7 +318,7 @@ function AdminWorkforcePage() {
                   </p>
                 </div>
 
-                <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+                <div className="flex w-full flex-wrap items-center gap-1.5 sm:w-auto sm:shrink-0">
                   <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
                     {t(`admin.workforce.priority.${item.priority}`)}
                   </span>
@@ -404,7 +328,7 @@ function AdminWorkforcePage() {
                       setPending({ kind: "priority", item, priority: value as WorkPriority })
                     }
                   >
-                    <SelectTrigger className="h-10 w-32" aria-label={t("admin.workforce.priorityLabel")}>
+                    <SelectTrigger className="h-10 w-[calc(50%-0.375rem)] sm:w-32" aria-label={t("admin.workforce.priorityLabel")}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -421,7 +345,7 @@ function AdminWorkforcePage() {
                       void run(() => setWorkProgress(item.kind, item.subject_id, value as WorkProgress))
                     }
                   >
-                    <SelectTrigger className="h-10 w-36" aria-label={t("admin.workforce.progressLabel")}>
+                    <SelectTrigger className="h-10 w-[calc(50%-0.375rem)] sm:w-36" aria-label={t("admin.workforce.progressLabel")}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -457,7 +381,7 @@ function AdminWorkforcePage() {
                     value=""
                     onValueChange={(value) => setPending({ kind: "transfer", item, to: value })}
                   >
-                    <SelectTrigger className="h-10 w-36" aria-label={t("admin.queue.transfer")}>
+                    <SelectTrigger className="h-10 w-full sm:w-36" aria-label={t("admin.queue.transfer")}>
                       <SelectValue placeholder={t("admin.queue.transfer")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -590,6 +514,151 @@ function LeaveDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/**
+ * One staff member: a compact card everywhere, with the secondary controls
+ * folded away on a phone so the list stays reviewable at a glance.
+ *
+ * The status is the single source of truth — there is no separate
+ * "receives work" switch that could disagree with it.
+ */
+function StaffCard({
+  row,
+  departments,
+  locale,
+  onState,
+  onDepartment,
+  onCapacity,
+  onLeave,
+}: {
+  row: StaffRow;
+  departments: DepartmentRow[];
+  locale: string;
+  onState: (state: WorkState) => void;
+  onDepartment: (department: string) => void;
+  onCapacity: (capacity: number) => void;
+  onLeave: () => void;
+}) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const atLimit = row.open_count >= row.capacity_limit;
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-3">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+            <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            <span className="truncate">{row.label}</span>
+          </p>
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tabular-nums text-muted-foreground">
+            <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-foreground">
+              {t(`admin.workforce.state.${row.effective_state}`)}
+            </span>
+            <span className={atLimit ? "font-medium text-foreground" : undefined}>
+              {t("admin.workforce.load")}: {row.open_count}/{row.capacity_limit}
+            </span>
+            <span>
+              {t("admin.workforce.doneToday")}: {row.done_today}
+            </span>
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="min-h-10 shrink-0 px-2"
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? t("admin.workforce.hideDetails") : t("admin.workforce.details")}
+          <ChevronDown
+            className={`ms-1 size-4 transition-transform ${open ? "rotate-180" : ""}`}
+            aria-hidden
+          />
+        </Button>
+      </div>
+
+      <div className="mt-2">
+        <Select
+          value={row.effective_state}
+          disabled={row.on_leave}
+          onValueChange={(value) => onState(value as WorkState)}
+        >
+          <SelectTrigger
+            className="h-10 w-full sm:w-[13rem]"
+            aria-label={t("admin.workforce.stateLabel")}
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {WORK_STATES.map((state) => (
+              <SelectItem key={state} value={state}>
+                {t(`admin.workforce.state.${state}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+
+      {open && (
+        <div className="mt-3 border-t border-border pt-3">
+          {row.email && row.email !== row.label && (
+            <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+          )}
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
+            {t("admin.workforce.stateSource")}
+          </p>
+          {row.last_assigned_at && (
+            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+              {t("admin.workforce.lastAssigned")}: {formatDateTime(row.last_assigned_at)}
+            </p>
+          )}
+          {row.on_leave && row.leave_ends_on && (
+            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+              {t("admin.workforce.leaveUntil")}: {formatDate(row.leave_ends_on)}
+            </p>
+          )}
+
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <Select value={row.department ?? ""} onValueChange={onDepartment}>
+              <SelectTrigger
+                className="h-10 w-[11rem] max-w-[52vw]"
+                aria-label={t("admin.workforce.department")}
+              >
+                <SelectValue placeholder={t("admin.workforce.department")} />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.map((dep) => (
+                  <SelectItem key={dep.code} value={dep.code}>
+                    {locale === "ar" ? dep.name_ar : dep.name_en}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              type="number"
+              min={1}
+              max={200}
+              defaultValue={row.capacity_limit}
+              className="h-10 w-20 tabular-nums"
+              aria-label={t("admin.workforce.capacity")}
+              onBlur={(event) => {
+                const next = Number(event.currentTarget.value);
+                if (!Number.isFinite(next) || next === row.capacity_limit) return;
+                onCapacity(Math.max(1, Math.min(200, next)));
+              }}
+            />
+            <Button variant="outline" size="sm" className="min-h-10" onClick={onLeave}>
+              <CalendarOff className="me-1.5 size-4" aria-hidden />
+              {t("admin.workforce.addLeave")}
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

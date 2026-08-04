@@ -3109,6 +3109,7 @@
       "verifications.review": "مراجعة التوثيق",
       "appeals.review": "مراجعة الاعتراضات",
       "workforce.manage": "إدارة توزيع الأعمال",
+      "workforce.override": "تجاوز قيود التوزيع (إسناد استثنائي)",
       "attendance.view": "عرض الحضور والمناوبات",
       "attendance.manage": "إدارة الحضور والمناوبات",
       "attendance.approve": "اعتماد الحضور"
@@ -3349,12 +3350,14 @@
       "priorityLabel": "الأولوية",
       "progressLabel": "مرحلة المعالجة",
       "confirmTitle": "تأكيد التغيير التشغيلي",
+      "details": "تفاصيل",
+      "hideDetails": "إخفاء التفاصيل",
+      "stateSource": "الحالة تحدد الاستلام الآلي تلقائيًا",
       "state": {
-        "available": "متاح",
-        "busy": "مشغول",
-        "away": "غائب مؤقتًا",
+        "available": "متاح ويستقبل أعمالًا",
+        "paused": "متوقف عن الاستلام",
         "leave": "في إجازة",
-        "off": "موقوف عن الاستلام"
+        "off": "غير نشط"
       },
       "priority": {
         "urgent": "عاجل",
