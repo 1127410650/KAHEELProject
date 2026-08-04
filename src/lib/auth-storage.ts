@@ -67,12 +67,12 @@ export function syncAuthStorage() {
     return;
   }
 
+  // Session-only mode: keep the browser-session copy in step with the token the
+  // client just wrote/refreshed. The permanent copy is dropped on `pagehide`
+  // (see `restoreAuthStorage`), so nothing durable outlives the browser session.
   const fromLocal = local.getItem(key);
-  if (fromLocal) {
-    // Supabase just wrote (or refreshed) the token: move it to the browser session.
-    session.setItem(key, fromLocal);
-    local.removeItem(key);
-  }
+  if (fromLocal) session.setItem(key, fromLocal);
+  else session.removeItem(key);
 }
 
 /**
