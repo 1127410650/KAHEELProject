@@ -59,6 +59,7 @@ import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
@@ -324,6 +325,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoresSlugRoute = StoresSlugRouteImport.update({
+  id: '/stores/$slug',
+  path: '/stores/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UUsernameRoute = UUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -510,6 +517,7 @@ export interface FileRoutesByTo {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -577,6 +585,7 @@ export interface FileRoutesById {
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
@@ -645,6 +654,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
     | '/admin/businesses/$id'
@@ -710,6 +720,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/stores/$slug'
     | '/u/$username'
     | '/admin'
     | '/admin/businesses/$id'
@@ -776,6 +787,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests'
     | '/dashboard/violations'
     | '/invite/$token'
+    | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
     | '/admin/businesses_/$id'
@@ -826,6 +838,7 @@ export interface RootRouteChildren {
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
   DashboardAdsNewRoute: typeof DashboardAdsNewRoute
   DashboardReportsIdRoute: typeof DashboardReportsIdRoute
@@ -1188,6 +1201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stores/$slug': {
+      id: '/stores/$slug'
+      path: '/stores/$slug'
+      fullPath: '/stores/$slug'
+      preLoaderRoute: typeof StoresSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$username': {
       id: '/u/$username'
       path: '/u/$username'
@@ -1380,6 +1400,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,
   InviteTokenRoute: InviteTokenRoute,
+  StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
   DashboardAdsNewRoute: DashboardAdsNewRoute,
   DashboardReportsIdRoute: DashboardReportsIdRoute,
