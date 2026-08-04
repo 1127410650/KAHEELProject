@@ -253,3 +253,29 @@ export function chatErrorKey(error: unknown): string {
   if (raw.includes("listing_unavailable")) return "market.chat.errors.listingUnavailable";
   return "market.actions.failed";
 }
+
+export interface ConversationRow {
+  id: string;
+  listing_id: string | null;
+  listing_title: string | null;
+  listing_slug: string | null;
+  listing_cover: string | null;
+  peer_name: string;
+  last_message_at: string | null;
+  last_kind: ChatKind | null;
+  last_body: string | null;
+  last_mine: boolean | null;
+  unread_count: number;
+  muted: boolean;
+}
+
+/** One round trip for the side rail: peer, ad, last message preview and unread. */
+export async function fetchConversations(): Promise<ConversationRow[]> {
+  const res = await supabase.rpc("mkt_conversations_list");
+  return (unwrap(res) as unknown as ConversationRow[]) ?? [];
+}
+
+/** Read receipts are per viewer; it never changes the peer's state. */
+export async function markRead(conversationId: string): Promise<void> {
+  await supabase.rpc("mkt_conversation_mark_read", { _conversation_id: conversationId });
+}

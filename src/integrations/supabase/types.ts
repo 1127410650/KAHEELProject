@@ -9218,10 +9218,31 @@ export type Database = {
         Args: { _conversation_id: string }
         Returns: Json
       }
+      mkt_conversation_mark_read: {
+        Args: { _conversation_id: string }
+        Returns: undefined
+      }
       mkt_conversation_open: { Args: { _listing_id: string }; Returns: string }
       mkt_conversation_state_set: {
         Args: { _conversation_id: string; _hidden?: boolean; _muted?: boolean }
         Returns: undefined
+      }
+      mkt_conversations_list: {
+        Args: never
+        Returns: {
+          id: string
+          last_body: string
+          last_kind: string
+          last_message_at: string
+          last_mine: boolean
+          listing_cover: string
+          listing_id: string
+          listing_slug: string
+          listing_title: string
+          muted: boolean
+          peer_name: string
+          unread_count: number
+        }[]
       }
       mkt_departments_manage: { Args: never; Returns: boolean }
       mkt_enforce_listing: {

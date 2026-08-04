@@ -3139,6 +3139,28 @@
         "bankNotVerified": "Bank account is not verified",
         "listingUnavailable": "Ad unavailable",
         "micDenied": "Microphone unavailable"
+      },
+      "searchPlaceholder": "Search conversations…",
+      "noResults": "No matching results",
+      "threads": "Conversations",
+      "openThread": "Open conversation",
+      "unread": "Unread",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "confirmSend": "Send",
+      "preview": {
+        "image": "Photo",
+        "video": "Video",
+        "audio": "Voice message",
+        "file": "Document",
+        "location": "Location",
+        "contact": "Contact",
+        "bank_share": "Bank account",
+        "bank_request": "Bank account request",
+        "system": "Notice",
+        "you": "You:",
+        "attachTitle": "Review before sending",
+        "voiceTitle": "Review voice message"
       }
     },
     "fields": {
