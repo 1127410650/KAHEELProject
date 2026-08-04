@@ -161,6 +161,13 @@ function AdminListingDetailPage() {
             }
           />
 
+          <AdminAssignmentBar kind="listing_review" subjectId={id} />
+          {header.owner_user_id && (
+            <AdminSafetyCard userId={header.owner_user_id} tenantId={header.tenant_id} />
+          )}
+
+
+
           <StatGrid
             items={[
               { label: t("admin.detail.views"), value: header.views_count },
