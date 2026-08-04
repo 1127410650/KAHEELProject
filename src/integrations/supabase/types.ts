@@ -1490,13 +1490,21 @@ export type Database = {
       }
       mkt_admin_assignments: {
         Row: {
+          assigned_by: string | null
           assignee: string | null
+          auto_assigned: boolean
           claimed_at: string | null
           closed_at: string | null
           closed_by: string | null
           created_at: string
+          department: string | null
+          due_at: string | null
+          first_action_at: string | null
           id: string
           kind: string
+          last_action_at: string | null
+          priority: string
+          progress: string
           released_at: string | null
           released_reason: string | null
           subject_id: string
@@ -1505,13 +1513,21 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          assigned_by?: string | null
           assignee?: string | null
+          auto_assigned?: boolean
           claimed_at?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
+          department?: string | null
+          due_at?: string | null
+          first_action_at?: string | null
           id?: string
           kind: string
+          last_action_at?: string | null
+          priority?: string
+          progress?: string
           released_at?: string | null
           released_reason?: string | null
           subject_id: string
@@ -1520,13 +1536,21 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          assigned_by?: string | null
           assignee?: string | null
+          auto_assigned?: boolean
           claimed_at?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
+          department?: string | null
+          due_at?: string | null
+          first_action_at?: string | null
           id?: string
           kind?: string
+          last_action_at?: string | null
+          priority?: string
+          progress?: string
           released_at?: string | null
           released_reason?: string | null
           subject_id?: string
@@ -3799,6 +3823,51 @@ export type Database = {
           },
         ]
       }
+      mkt_staff_leaves: {
+        Row: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          created_at: string
+          created_by: string | null
+          ends_on: string
+          id: string
+          kind: string
+          note: string | null
+          starts_on: string
+          substitute_user_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          ends_on: string
+          id?: string
+          kind?: string
+          note?: string | null
+          starts_on: string
+          substitute_user_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          ends_on?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          starts_on?: string
+          substitute_user_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mkt_staff_permissions: {
         Row: {
           created_at: string
@@ -3822,6 +3891,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      mkt_staff_status: {
+        Row: {
+          accepts_auto: boolean
+          capacity_limit: number
+          created_at: string
+          department: string | null
+          last_assigned_at: string | null
+          note: string | null
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+          work_state: string
+        }
+        Insert: {
+          accepts_auto?: boolean
+          capacity_limit?: number
+          created_at?: string
+          department?: string | null
+          last_assigned_at?: string | null
+          note?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          user_id: string
+          work_state?: string
+        }
+        Update: {
+          accepts_auto?: boolean
+          capacity_limit?: number
+          created_at?: string
+          department?: string | null
+          last_assigned_at?: string | null
+          note?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          user_id?: string
+          work_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_staff_status_department_fkey"
+            columns: ["department"]
+            isOneToOne: false
+            referencedRelation: "mkt_workforce_departments"
+            referencedColumns: ["code"]
+          },
+        ]
       }
       mkt_storage_cleanup: {
         Row: {
@@ -4217,6 +4333,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mkt_workforce_departments: {
+        Row: {
+          code: string
+          created_at: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          queue_kinds: string[]
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          queue_kinds?: string[]
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          queue_kinds?: string[]
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -8652,6 +8801,7 @@ export type Database = {
       }
       mkt_slugify: { Args: { _text: string }; Returns: string }
       mkt_staff_has: { Args: { _perm: string }; Returns: boolean }
+      mkt_staff_on_leave: { Args: { _uid: string }; Returns: boolean }
       mkt_submit_appeal: {
         Args: { _reason: string; _report_id: string }
         Returns: string
@@ -8680,7 +8830,103 @@ export type Database = {
       mkt_sweep_expired_listings: { Args: never; Returns: Json }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
+      mkt_user_can: { Args: { _perm: string; _uid: string }; Returns: boolean }
       mkt_wallet_for_listing: { Args: { _id: string }; Returns: string }
+      mkt_workforce_add_leave: {
+        Args: {
+          _ends_on: string
+          _kind: string
+          _note: string
+          _starts_on: string
+          _substitute: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      mkt_workforce_cancel_leave: {
+        Args: { _id: string; _reason: string }
+        Returns: undefined
+      }
+      mkt_workforce_distribute: {
+        Args: { _kind?: string; _limit?: number }
+        Returns: number
+      }
+      mkt_workforce_enqueue: {
+        Args: {
+          _due_at?: string
+          _kind: string
+          _priority?: string
+          _subject_id: string
+        }
+        Returns: string
+      }
+      mkt_workforce_manage: { Args: never; Returns: boolean }
+      mkt_workforce_open_count: { Args: { _uid: string }; Returns: number }
+      mkt_workforce_overview: { Args: never; Returns: Json }
+      mkt_workforce_pick_assignee: { Args: { _kind: string }; Returns: string }
+      mkt_workforce_queue: {
+        Args: { _kind?: string; _limit?: number; _scope?: string }
+        Returns: {
+          assignee: string
+          assignee_label: string
+          auto_assigned: boolean
+          claimed_at: string
+          created_at: string
+          due_at: string
+          id: string
+          is_mine: boolean
+          kind: string
+          priority: string
+          progress: string
+          subject_id: string
+        }[]
+      }
+      mkt_workforce_set_priority: {
+        Args: {
+          _kind: string
+          _priority: string
+          _reason: string
+          _subject_id: string
+        }
+        Returns: undefined
+      }
+      mkt_workforce_set_progress: {
+        Args: { _kind: string; _progress: string; _subject_id: string }
+        Returns: undefined
+      }
+      mkt_workforce_set_staff: {
+        Args: {
+          _accepts_auto: boolean
+          _capacity_limit: number
+          _department: string
+          _note: string
+          _reason: string
+          _user_id: string
+          _work_state: string
+        }
+        Returns: undefined
+      }
+      mkt_workforce_staff: {
+        Args: never
+        Returns: {
+          accepts_auto: boolean
+          capacity_limit: number
+          department: string
+          done_today: number
+          effective_state: string
+          email: string
+          label: string
+          last_assigned_at: string
+          leave_ends_on: string
+          note: string
+          on_leave: boolean
+          open_count: number
+          perms: string[]
+          platform_role: string
+          user_id: string
+          work_state: string
+        }[]
+      }
       my_accounts: {
         Args: never
         Returns: {
