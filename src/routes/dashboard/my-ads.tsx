@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   Archive,
@@ -16,9 +16,11 @@ import {
   Play,
   QrCode,
   RefreshCw,
+  RotateCcw,
   Search,
   Send,
   Share2,
+  ShieldAlert,
   Sparkles,
   Star,
   Trash2,
@@ -28,7 +30,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatDateTime } from "@/lib/format";
 import { priceLabel, resolveMedia, type MktListing } from "@/lib/mkt";
 import {
   LISTING_DURATIONS,
@@ -49,6 +51,7 @@ import {
 } from "@/lib/mkt-listing-ops";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { PromoteDialog } from "@/components/marketplace/PromoteDialog";
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -136,6 +139,15 @@ function MyAdsPage() {
   const [sort, setSort] = useState<SortKey>("recent");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confirm, setConfirm] = useState<{ id: string; kind: "delete" | "archive" } | null>(null);
+  const [promoteFor, setPromoteFor] = useState<{ id: string; title: string } | null>(null);
+  const [, setTick] = useState(0);
+
+  // Remaining-time labels are computed from wall-clock time, so a live tick
+  // every minute keeps "ends in X" / "ended X ago" accurate without a refetch.
+  useEffect(() => {
+    const id = window.setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const ads = useQuery({
     queryKey: ["mkt", "my-ads", account?.account_key, locale],
@@ -143,7 +155,11 @@ function MyAdsPage() {
     queryFn: async () => {
       // Ads belong to the account the user entered under: a business sees its
       // own ads only, the personal account sees the ones with no entity.
-      let query = supabase.from("mkt_listings").select(MY_LISTING_COLUMNS);
+      let query = supabase
+        .from("mkt_listings")
+        .select(
+          `${MY_LISTING_COLUMNS}, moderation_state, moderation_score, last_scan_at, promoted_until`,
+        );
       query =
         account!.kind === "business"
           ? query.eq("tenant_id", account!.tenant_id!)

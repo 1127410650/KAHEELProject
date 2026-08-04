@@ -97,6 +97,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/dashboard/messages", "account", "dashboard"),
   rule("/dashboard/favorites", "account", "dashboard"),
   rule("/dashboard/my-ads", "account", "dashboard"),
+  rule("/dashboard/points", "account", "dashboard"),
   rule("/dashboard/ads/new", "account", "dashboard"),
   rule("/dashboard/ads/$id/edit", "account", "dashboard"),
   rule("/dashboard/requests", "account", "dashboard"),
