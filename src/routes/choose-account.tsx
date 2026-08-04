@@ -4,7 +4,7 @@ import { Building2, Check, Loader2, LogOut, Plus, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { markManualSignOut } from "@/lib/auth-session";
+import { useSignOut } from "@/lib/auth-signout";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
@@ -199,11 +199,7 @@ function ChooseAccountPage() {
   }
 
 
-  async function signOut() {
-    markManualSignOut();
-    await supabase.auth.signOut();
-    void navigate({ to: "/auth", replace: true });
-  }
+  const signOut = useSignOut();
 
   const grid =
     "mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-3";

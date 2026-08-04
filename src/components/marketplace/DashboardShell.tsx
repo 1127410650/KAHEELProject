@@ -76,9 +76,11 @@ export function DashboardShell({
 
         <div className="mt-5">
           {unavailable && !account ? (
-            // A failed account read is never a blank page: it says so and retries.
+            // A failed account read is never a blank page and never a sign-out:
+            // it says the connection failed, states the session is intact, and retries.
             <div className="space-y-3 rounded-xl border border-border bg-card p-4">
-              <p className="text-sm text-foreground">{t("market.entry.loadFailed")}</p>
+              <p className="text-sm text-foreground">{t("market.entry.offline")}</p>
+              <p className="text-xs text-muted-foreground">{t("market.entry.loadFailed")}</p>
               <Button
                 type="button"
                 className="min-h-11"
@@ -89,6 +91,7 @@ export function DashboardShell({
                 {t("market.entry.retry")}
               </Button>
             </div>
+
           ) : !ready ? (
             <Skeleton className="h-40 w-full rounded-xl" />
           ) : allowed ? (

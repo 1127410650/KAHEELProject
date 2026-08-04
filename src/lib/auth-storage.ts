@@ -69,10 +69,37 @@ export function syncAuthStorage() {
 
   // Session-only mode: keep the browser-session copy in step with the token the
   // client just wrote/refreshed. The permanent copy is dropped on `pagehide`
-  // (see `restoreAuthStorage`), so nothing durable outlives the browser session.
+  // (see `armDrain`), so nothing durable outlives the browser session.
   const fromLocal = local.getItem(key);
   if (fromLocal) session.setItem(key, fromLocal);
   else session.removeItem(key);
+  // The mode can be switched mid-session (unchecking the box on the sign-in
+  // page after boot), so the drain is armed here too — not only on boot.
+  armDrain();
+}
+
+let drainArmed = false;
+
+/**
+ * In session-only mode nothing durable may survive the browser session: on
+ * `pagehide` the token is handed to sessionStorage and removed from
+ * localStorage. Registered at most once per page.
+ */
+function armDrain() {
+  if (drainArmed || typeof window === "undefined") return;
+  drainArmed = true;
+
+  const drain = () => {
+    const key = authStorageKey();
+    const local = safeLocal();
+    const session = safeSession();
+    if (!key || !local || !session || rememberSession()) return;
+    const current = local.getItem(key);
+    if (current) session.setItem(key, current);
+    local.removeItem(key);
+  };
+  window.addEventListener("pagehide", drain);
+  window.addEventListener("beforeunload", drain);
 }
 
 /**
@@ -87,15 +114,30 @@ export function restoreAuthStorage() {
   if (!key || !local || !session || rememberSession()) return;
 
   const held = session.getItem(key);
-  if (held) local.setItem(key, held);
-  else local.removeItem(key);
+  if (held) {
+    local.setItem(key, held);
+  } else {
+    // Switching to session-only mode while already signed in must not sign the
+    // user out: adopt the durable entry into the browser-session scope instead
+    // of deleting it. The `pagehide` drain then keeps it from outliving the
+    // browser session.
+    const durable = local.getItem(key);
+    if (durable) session.setItem(key, durable);
+  }
 
-  // Nothing durable may survive the browser session in this mode.
-  const drain = () => {
-    const current = local.getItem(key);
-    if (current) session.setItem(key, current);
-    local.removeItem(key);
-  };
-  window.addEventListener("pagehide", drain);
-  window.addEventListener("beforeunload", drain);
+
+  armDrain();
 }
+
+/** Manual sign-out: no copy of the session may survive in either scope. */
+export function clearAuthStorage() {
+  const key = authStorageKey();
+  if (!key) return;
+  try {
+    safeLocal()?.removeItem(key);
+    safeSession()?.removeItem(key);
+  } catch {
+    /* nothing durable to clean up in private mode */
+  }
+}
+
