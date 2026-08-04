@@ -215,7 +215,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
 
             // Direct mode: connect straight away when the microphone permission
             // is already granted, otherwise ask for one tap ("start audio").
-            if (await micAlreadyGranted()) void acceptRef.current?.();
+            if (await micAlreadyGranted()) void acceptRef.current?.(row.id);
             else setCall((prev) => (prev ? { ...prev, needsAudioGesture: true } : prev));
           })();
         },
