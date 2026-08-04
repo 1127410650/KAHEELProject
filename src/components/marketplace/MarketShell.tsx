@@ -109,16 +109,19 @@ export function MarketHeader() {
                   <span className="hidden sm:inline">{t("market.signIn")}</span>
                 </Link>
               </Button>
-              <Button asChild size="sm" variant="ghost">
+              {/* On phones the signup action keeps a visible label: an icon-only
+                  button hid the primary entry point behind a tooltip. */}
+              <Button asChild size="sm" variant="default" className="shrink-0">
                 <Link
                   to="/register"
                   aria-label={t("auth.createAccount")}
                   title={t("auth.createAccount")}
                 >
                   <UserPlus className="size-4" aria-hidden />
-                  <span className="hidden sm:inline">{t("auth.createAccount")}</span>
+                  <span className="whitespace-nowrap">{t("auth.createAccount")}</span>
                 </Link>
               </Button>
+
             </>
           )}
 
