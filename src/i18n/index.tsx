@@ -15,6 +15,20 @@ export type Locale = "ar" | "en";
 
 const dictionaries: Record<Locale, Record<string, unknown>> = { ar, en };
 
+// Small product-copy overrides shared by both languages. Keeping them here makes
+// the wording consistent immediately across every registration surface without
+// duplicating conditional text inside components.
+const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
+  ar: {
+    "signup.publicSubtitle": "أنشئ حسابًا لاستخدام السوق.",
+    "signup.individualNote": "يمكنك إنشاء متجر لبيع منتجات.",
+  },
+  en: {
+    "signup.publicSubtitle": "Create an account to use the marketplace.",
+    "signup.individualNote": "You can create a store to sell products.",
+  },
+};
+
 const STORAGE_KEY = "tahqaq.locale";
 
 function lookup(dict: Record<string, unknown>, key: string): string | undefined {
@@ -50,7 +64,9 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 
 function translate(locale: Locale, key: string, vars?: Vars): string {
   const value =
+    COPY_OVERRIDES[locale][key] ??
     lookup(dictionaries[locale], key) ??
+    COPY_OVERRIDES[locale === "ar" ? "en" : "ar"][key] ??
     lookup(dictionaries[locale === "ar" ? "en" : "ar"], key) ??
     fallbackLabel(key);
   if (!vars) return value;
