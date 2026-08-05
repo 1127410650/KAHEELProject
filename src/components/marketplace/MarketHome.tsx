@@ -15,7 +15,7 @@ import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoSho
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const GRID = "grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3.5 lg:grid-cols-4";
+const GRID = "grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4";
 
 export function MarketHome() {
   const { t, locale } = useI18n();
@@ -73,13 +73,13 @@ export function MarketHome() {
       <MarketDemoShowcases />
       <MarketCategoryTiles />
 
-      <section className="mx-auto w-full max-w-[1240px] px-3 pb-6 pt-4 sm:px-4 lg:px-6">
-        <h2 className="mb-3 text-sm font-bold tracking-tight text-foreground sm:text-base">
+      <section className="mx-auto w-full max-w-[1240px] px-4 pb-5 pt-2 sm:px-5 sm:pt-3 lg:px-8">
+        <h2 className="mb-2.5 text-[16px] font-black tracking-tight text-foreground sm:text-lg">
           {t("market.home.all")}
         </h2>
 
         {feed.isError ? (
-          <div className="rounded-xl border border-border bg-card px-4 py-6 text-center">
+          <div className="rounded-2xl border border-border bg-card px-4 py-6 text-center">
             <p className="text-sm text-muted-foreground">{t("market.loadError")}</p>
             <Button size="sm" variant="outline" className="mt-3" onClick={() => void feed.refetch()}>
               {t("market.retry")}
@@ -88,11 +88,11 @@ export function MarketHome() {
         ) : feed.isPending ? (
           <div className={GRID}>
             {Array.from({ length: 8 }).map((_, i) => (
-              <Skeleton key={i} className="h-56 w-full rounded-xl" />
+              <Skeleton key={i} className="h-52 w-full rounded-2xl" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card px-4 py-6 text-center">
+          <div className="rounded-2xl border border-border bg-card px-4 py-6 text-center">
             <p className="text-sm text-muted-foreground">{t("market.emptyHome")}</p>
             <Button asChild size="sm" className="mt-3">
               <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
@@ -109,9 +109,9 @@ export function MarketHome() {
               ))}
             </div>
             {feed.isFetchingNextPage && (
-              <div className={`${GRID} mt-2.5`}>
+              <div className={`${GRID} mt-2`}>
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-56 w-full rounded-xl" />
+                  <Skeleton key={i} className="h-52 w-full rounded-2xl" />
                 ))}
               </div>
             )}
