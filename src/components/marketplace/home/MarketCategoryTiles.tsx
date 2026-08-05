@@ -23,12 +23,20 @@ export function MarketCategoryTiles() {
   const { t, locale } = useI18n();
 
   return (
-    <section className="mx-auto w-full max-w-[1240px] px-4 py-4 sm:px-5 sm:py-6 lg:px-8">
-      <h2 className="mb-2.5 text-[16px] font-black tracking-tight text-foreground sm:text-lg">
-        {t("market.home.categories")}
-      </h2>
+    <section
+      id="market-categories"
+      className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-4 pb-2 pt-4 sm:px-5 sm:pt-5 lg:px-8"
+    >
+      <div className="mb-2.5">
+        <h2 className="text-[16px] font-black tracking-tight text-foreground sm:text-lg">
+          {t("market.home.categories")}
+        </h2>
+        <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
+          مرّر أفقيًا واختر المجال الذي تريد تصفحه.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
+      <div className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-0.5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3">
         {TILES.map((tile) => {
           const search =
             "q" in tile.search
@@ -40,7 +48,7 @@ export function MarketCategoryTiles() {
               key={tile.key}
               to="/search"
               search={search}
-              className="group relative overflow-hidden rounded-[1.15rem] border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.03)] last:col-span-2 sm:last:col-span-3"
+              className="group relative h-[104px] w-[148px] min-w-[148px] snap-start overflow-hidden rounded-[1.05rem] border border-border bg-card shadow-[0_4px_14px_rgb(15_23_42/0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgb(15_23_42/0.13)] sm:h-[118px] sm:w-[176px] sm:min-w-[176px]"
             >
               <img
                 src={tile.image}
@@ -48,20 +56,21 @@ export function MarketCategoryTiles() {
                 loading="lazy"
                 width={768}
                 height={576}
-                className="h-28 w-full object-cover transition-transform duration-500 group-hover:scale-[1.035] sm:h-36"
+                className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-market-navy/92 via-market-navy/10 to-transparent" aria-hidden />
-              <div className="absolute inset-x-0 bottom-0 px-3 pb-2.5 pt-5 text-market-navy-foreground">
-                <p className="truncate text-xs font-black sm:text-sm">
+              <div className="absolute inset-x-0 bottom-0 px-2.5 pb-2.5 pt-8 text-market-navy-foreground">
+                <p className="truncate text-[11px] font-black sm:text-xs">
                   {t(`market.home.tiles.${tile.key}.title`)}
                 </p>
-                <p className="truncate text-[10px] text-market-silver/90 sm:text-xs">
+                <p className="mt-0.5 truncate text-[8px] text-market-silver/90 sm:text-[9px]">
                   {t(`market.home.tiles.${tile.key}.desc`)}
                 </p>
               </div>
             </Link>
           );
         })}
+        <span aria-hidden className="w-1 shrink-0" />
       </div>
     </section>
   );
