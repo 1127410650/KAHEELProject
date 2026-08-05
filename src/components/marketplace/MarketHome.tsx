@@ -9,7 +9,6 @@ import { useMarketPreference } from "@/lib/mkt-geo";
 import { PAGE_SIZE, loadListingsPage } from "@/lib/mkt-queries";
 
 import { ListingCard } from "@/components/marketplace/ListingCard";
-import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { MarketStoreTemplates } from "@/components/marketplace/home/MarketStoreTemplates";
@@ -71,7 +70,6 @@ export function MarketHome() {
 
   return (
     <>
-      <MarketCategoryStrip />
       <MarketFeaturedBanner />
       <MarketStoreTemplates />
       <MarketDemoShowcases />
