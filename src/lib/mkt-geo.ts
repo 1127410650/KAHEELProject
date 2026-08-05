@@ -111,7 +111,7 @@ export function useMarketPreference() {
 
   useEffect(() => {
     setPreference(readStored());
-    const listener = (value: MarketPreference) => setPreference(value);
+    const listener = (value: MarketPreference) => void setPreference(value);
     listeners.add(listener);
 
     // Signed in? The country saved on the account is the single source of truth
@@ -150,7 +150,6 @@ export function useMarketPreference() {
       }
       listeners.forEach((l) => l(next));
     })();
-
 
     return () => {
       listeners.delete(listener);
@@ -216,8 +215,6 @@ export function useAccountCountry() {
   });
 }
 
-
-
 /**
  * Normalise a national number typed by a user into E.164 for the chosen country.
  * The country calling code is never duplicated: a pasted +966..., 00966... or a
@@ -247,7 +244,6 @@ export function toE164(iso2: string, input: string): string | null {
   }
   return null;
 }
-
 
 /** Digits of a supported country's calling code. */
 function callingDigits(iso2: string): string {
@@ -305,6 +301,17 @@ export async function saveMyContact(input: {
   phoneE164: string | null;
   visibility: PhoneVisibility;
 }): Promise<void> {
+  // The international mobile number is the marketplace username in every
+  // country/version. The leading plus is removed so it stays URL-safe.
+  if (input.phoneE164) {
+    const username = input.phoneE164.replace(/\D/g, "");
+    const { error: profileError } = await supabase
+      .from("mkt_user_profiles")
+      .update({ username })
+      .eq("user_id", input.userId);
+    if (profileError) throw profileError;
+  }
+
   const { error } = await supabase.from("mkt_user_contacts").upsert({
     user_id: input.userId,
     country_id: input.countryId,
