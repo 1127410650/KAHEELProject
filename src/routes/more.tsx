@@ -22,6 +22,7 @@ import { useSignOut } from "@/lib/auth-signout";
 import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { ProfileCompletionPanel } from "@/components/marketplace/ProfileCompletionPanel";
 import { ACTIVITY_LINKS, MANAGE_LINKS, visibleLinks } from "@/lib/more-menu";
 
 const title = "المزيد — كحلي";
@@ -113,6 +114,7 @@ function MorePage() {
                   </span>
                 </span>
               </div>
+              <ProfileCompletionPanel />
             </section>
 
             {activity.length ? (
@@ -157,12 +159,18 @@ function MorePage() {
         ) : null}
 
         <Section title={t("market.more.app")}>
-          <button type="button" onClick={() => setLocale(locale === "ar" ? "en" : "ar")} className={`${rowClass} w-full justify-between`}>
+          <button
+            type="button"
+            onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
+            className={`${rowClass} w-full justify-between`}
+          >
             <span className="flex items-center gap-3">
               <Globe className="size-5 shrink-0 text-muted-foreground" aria-hidden />
               {t("market.more.links.language")}
             </span>
-            <span className="text-xs font-semibold text-primary">{locale === "ar" ? "English" : "العربية"}</span>
+            <span className="text-xs font-semibold text-primary">
+              {locale === "ar" ? "English" : "العربية"}
+            </span>
           </button>
         </Section>
 
