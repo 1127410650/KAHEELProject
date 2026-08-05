@@ -4,13 +4,14 @@ import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
 
-/** Saudi-friendly normalisation: keep digits, store as +9665XXXXXXXX when possible. */
+/** Syria-mode normalisation: keep digits and store local mobile numbers as +9639XXXXXXXX. */
 export function normalizeMobile(raw: string): string {
-  const digits = (raw ?? "").replace(/[^\d+]/g, "").replace(/^\+/, "");
+  const cleaned = (raw ?? "").replace(/[^\d+]/g, "").replace(/^00/, "+");
+  const digits = cleaned.replace(/^\+/, "");
   if (!digits) return "";
-  if (digits.startsWith("966")) return `+${digits}`;
-  if (digits.startsWith("0")) return `+966${digits.slice(1)}`;
-  if (digits.startsWith("5") && digits.length === 9) return `+966${digits}`;
+  if (digits.startsWith("963")) return `+${digits}`;
+  if (digits.startsWith("0")) return `+963${digits.slice(1)}`;
+  if (digits.startsWith("9") && digits.length === 9) return `+963${digits}`;
   return `+${digits}`;
 }
 
@@ -40,7 +41,9 @@ export async function registerAccountImpl(
 
   const fullName = (input.full_name ?? "").trim();
   const password = input.password ?? "";
+  const phone = normalizeMobile(input.phone ?? "");
   if (fullName.length < 3) return { ok: false, error: "INVALID" };
+  if (!/^\+9639[0-9]{8}$/.test(phone)) return { ok: false, error: "INVALID" };
   if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -98,8 +101,9 @@ export async function registerAccountImpl(
     email_confirm: true,
     user_metadata: {
       full_name: fullName,
-      phone: normalizeMobile(input.phone ?? ""),
+      phone,
       national_id: (input.national_id ?? "").trim() || null,
+      market_country_iso2: "SY",
     },
   });
 
@@ -115,7 +119,7 @@ export async function registerAccountImpl(
     .from("profiles")
     .update({
       full_name: fullName,
-      phone: normalizeMobile(input.phone ?? "") || null,
+      phone,
       national_id: (input.national_id ?? "").trim() || null,
     })
     .eq("user_id", created.data.user.id);

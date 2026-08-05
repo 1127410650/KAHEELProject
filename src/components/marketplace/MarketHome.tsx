@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import { Grid2x2, Layers3, List, Plus } from "lucide-react";
+import { Grid2x2, Layers3, List, MapPinned, Plus } from "lucide-react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
@@ -12,6 +12,7 @@ import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoShowcases";
+import { SyriaUtilityHub } from "@/components/marketplace/home/SyriaUtilityHub";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -71,6 +72,7 @@ export function MarketHome() {
     <>
       <MarketFeaturedBanner />
       <HomeSectionNavigator />
+      <SyriaUtilityHub />
       <MarketDemoShowcases />
       <MarketCategoryTiles />
 
@@ -84,7 +86,7 @@ export function MarketHome() {
               {t("market.home.all")}
             </h2>
             <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
-              تابع النزول لمشاهدة الإعلانات من الأحدث إلى الأقدم.
+              تابع النزول لمشاهدة إعلانات سوريا من الأحدث إلى الأقدم.
             </p>
           </div>
           <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[9px] font-bold text-secondary-foreground sm:text-[10px]">
@@ -140,6 +142,7 @@ export function MarketHome() {
 
 function HomeSectionNavigator() {
   const links = [
+    { href: "#syria-directory", label: "دليل سوريا", icon: MapPinned },
     { href: "#store-worlds", label: "العوالم", icon: Layers3 },
     { href: "#market-categories", label: "الفئات", icon: Grid2x2 },
     { href: "#market-listings", label: "الإعلانات", icon: List },
@@ -148,14 +151,14 @@ function HomeSectionNavigator() {
   return (
     <nav
       aria-label="التنقل داخل الصفحة الرئيسية"
-      className="mx-auto mt-3 w-[calc(100%-2rem)] max-w-[720px] rounded-2xl border border-border/80 bg-card/95 p-1.5 shadow-[0_8px_26px_rgb(15_23_42/0.08)] backdrop-blur sm:mt-4"
+      className="mx-auto mt-3 w-[calc(100%-2rem)] max-w-[860px] overflow-hidden rounded-2xl border border-border/80 bg-card/95 p-1.5 shadow-[0_8px_26px_rgb(15_23_42/0.08)] backdrop-blur sm:mt-4"
     >
-      <div className="grid grid-cols-3 gap-1">
+      <div className="flex gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-4">
         {links.map(({ href, label, icon: Icon }) => (
           <a
             key={href}
             href={href}
-            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-black text-muted-foreground transition hover:bg-market-navy hover:text-white sm:min-h-10 sm:text-xs"
+            className="inline-flex min-h-9 min-w-[112px] flex-1 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-black text-muted-foreground transition hover:bg-market-navy hover:text-white sm:min-w-0 sm:min-h-10 sm:text-xs"
           >
             <Icon className="size-3.5" aria-hidden />
             {label}

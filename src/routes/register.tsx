@@ -22,13 +22,13 @@ export const Route = createFileRoute("/register")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إنشاء حساب — كحلي | Create account — Kahli" },
+      { title: "إنشاء حساب سوري — كحلي | Create account — Kahli" },
       {
         name: "description",
-        content: "أنشئ حسابًا فرديًا في كحلي باستخدام اسمك ورقم جوالك.",
+        content: "أنشئ حسابًا فرديًا في نسخة كحلي السورية باستخدام اسمك ورقم جوالك السوري.",
       },
-      { property: "og:title", content: "إنشاء حساب — كحلي" },
-      { property: "og:description", content: "Create an individual Kahli marketplace account." },
+      { property: "og:title", content: "إنشاء حساب سوري — كحلي" },
+      { property: "og:description", content: "Create an individual account in Kahli's Syria marketplace." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -193,6 +193,9 @@ function RegisterPage() {
           {preview.data?.masked_email ?? ""}
         </span>
       </p>
+      <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
+        نسخة سوريا فقط — استخدم رقم جوال سوري يبدأ بـ 09 أو +9639.
+      </p>
 
       <form onSubmit={onInviteSubmit} className="mt-5 space-y-3.5">
         <div className="space-y-1.5">
@@ -206,7 +209,7 @@ function RegisterPage() {
             required
             dir="ltr"
             inputMode="tel"
-            placeholder="+9665XXXXXXXX"
+            placeholder="+9639XXXXXXXX"
             value={form.phone}
             onChange={set("phone")}
           />
@@ -318,14 +321,17 @@ function PublicSignupForm() {
       : "Add your email to receive updates. You can verify it later from your account.";
   const phoneNote =
     locale === "ar"
-      ? "سيكون رقم الجوال معرف دخولك، ويُطلب التحقق منه لاحقًا لإكمال الملف."
-      : "Your phone will be your sign-in identifier and must be verified later to complete the profile.";
+      ? "استخدم رقمًا سوريًا يبدأ بـ 09 أو +9639. سيُحفظ كمعرّف دخول دون إرسال رسالة SMS."
+      : "Use a Syrian mobile starting with 09 or +9639. It is stored as your sign-in ID without an SMS.";
 
   return (
     <Shell>
       <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.publicTitle")}</h1>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
         {t("signup.publicSubtitle")}
+      </p>
+      <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
+        {locale === "ar" ? "التسجيل متاح حاليًا لسوريا فقط." : "Registration is currently available for Syria only."}
       </p>
 
       <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
@@ -342,7 +348,7 @@ function PublicSignupForm() {
             dir="ltr"
             inputMode="tel"
             autoComplete="tel"
-            placeholder="+9665XXXXXXXX"
+            placeholder="+9639XXXXXXXX"
             value={form.phone}
             onChange={set("phone")}
           />

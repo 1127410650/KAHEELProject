@@ -25,7 +25,8 @@ export type PublicSignupResult =
   | { ok: false; error: "RATE_LIMITED" | "INVALID" | "WEAK_PASSWORD" };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
-const PHONE_RE = /^\+[1-9][0-9]{7,14}$/;
+/** Syria-only public version: mobile numbers are stored as +9639XXXXXXXX. */
+const SYRIAN_MOBILE_RE = /^\+9639[0-9]{8}$/;
 
 interface ServiceRpcClient {
   rpc(
@@ -44,7 +45,7 @@ export async function publicSignupImpl(
   const password = input.password ?? "";
 
   if (fullName.length < 2 || fullName.length > 80) return { ok: false, error: "INVALID" };
-  if (!PHONE_RE.test(phone)) return { ok: false, error: "INVALID" };
+  if (!SYRIAN_MOBILE_RE.test(phone)) return { ok: false, error: "INVALID" };
   if (contactEmail && (!EMAIL_RE.test(contactEmail) || contactEmail.length > 200)) {
     return { ok: false, error: "INVALID" };
   }
@@ -90,6 +91,7 @@ export async function publicSignupImpl(
       phone,
       contact_email: contactEmail || null,
       signup_identifier: "phone",
+      market_country_iso2: "SY",
     },
   });
 
