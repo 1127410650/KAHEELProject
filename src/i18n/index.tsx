@@ -15,17 +15,36 @@ export type Locale = "ar" | "en";
 
 const dictionaries: Record<Locale, Record<string, unknown>> = { ar, en };
 
-// Small product-copy overrides shared by both languages. Keeping them here makes
-// the wording consistent immediately across every registration surface without
-// duplicating conditional text inside components.
+// Product-copy overrides keep the current public-market terminology consistent
+// without changing database names, RLS policies, or internal tenant semantics.
 const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
   ar: {
     "signup.publicSubtitle": "أنشئ حسابًا لاستخدام السوق.",
     "signup.individualNote": "يمكنك إنشاء متجر لبيع منتجات.",
+    "market.entry.kind.business": "متجر",
+    "market.entry.businessSection": "متاجري",
+    "market.entry.noBusinesses": "لا يوجد متجر حتى الآن.",
+    "market.entry.newBusiness": "إنشاء متجر",
+    "market.entry.newBusinessHint": "أنشئ متجرًا لعرض منتجاتك وإدارة إعلاناتك.",
+    "market.business.new": "إنشاء متجر",
+    "market.business.profile": "ملف المتجر",
+    "market.business.manage": "إدارة المتجر",
+    "market.more.business": "المتجر",
+    "market.form.publishingAs": "سيُنشر الإعلان من حسابك الحالي.",
   },
   en: {
     "signup.publicSubtitle": "Create an account to use the marketplace.",
     "signup.individualNote": "You can create a store to sell products.",
+    "market.entry.kind.business": "Store",
+    "market.entry.businessSection": "My stores",
+    "market.entry.noBusinesses": "No store has been created yet.",
+    "market.entry.newBusiness": "Create a store",
+    "market.entry.newBusinessHint": "Create a store to showcase products and manage listings.",
+    "market.business.new": "Create a store",
+    "market.business.profile": "Store profile",
+    "market.business.manage": "Manage store",
+    "market.more.business": "Store",
+    "market.form.publishingAs": "This listing will be published from your current account.",
   },
 };
 
@@ -93,8 +112,6 @@ function subscribeLocale(onChange: () => void) {
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  // Read from localStorage through an external store so the persisted choice is
-  // always reflected after hydration, independent of mount/remount timing.
   const locale = useSyncExternalStore(subscribeLocale, readStoredLocale, () => "ar" as Locale);
 
   const setLocale = useCallback((next: Locale) => {
@@ -123,11 +140,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
-/**
- * Fallback used when a component renders outside the provider (e.g. during an
- * HMR boundary swap). Translations still resolve; only locale switching is a
- * no-op, which is preferable to crashing the whole page.
- */
 const fallbackI18n: I18nContextValue = {
   locale: "ar",
   dir: "rtl",
