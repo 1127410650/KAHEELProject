@@ -9,9 +9,9 @@ import {
 } from "@/lib/market-primary-navigation";
 
 /**
- * Primary marketplace categories, visually merged with the header. The strip is
- * independently sticky directly below the 56px mobile header, so both rows stay
- * fixed as one navy navigation block while the page content scrolls underneath.
+ * Primary marketplace categories merged with the header. The rail is sticky,
+ * full-width, horizontally scrollable by touch, and uses safe edge spacers so
+ * the first and last chips are never clipped.
  */
 export function MarketCategoryStrip() {
   const { t, locale } = useI18n();
@@ -26,55 +26,80 @@ export function MarketCategoryStrip() {
   }
 
   const chipClass =
-    "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[11px] font-medium transition-colors sm:h-10 sm:px-3.5 sm:text-xs";
+    "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[11px] font-medium leading-none transition-colors sm:h-10 sm:px-3.5 sm:text-xs";
   const idle =
     "border-market-navy-soft/80 bg-market-navy text-market-navy-foreground/90 hover:border-market-silver hover:bg-market-navy-soft hover:text-market-navy-foreground";
   const active =
     "border-market-silver bg-market-navy-soft font-semibold text-market-navy-foreground";
 
   return (
-    <div className="sticky top-14 z-[35] -mt-px w-full border-t border-market-navy-soft/35 border-b border-market-navy-soft/60 bg-market-navy text-market-navy-foreground shadow-sm">
-      <nav
-        aria-label={t("market.home.strip.label")}
-        className="mx-auto flex w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto overscroll-x-contain bg-market-navy px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4 lg:px-6"
-      >
-        {PRIMARY_FIELDS.map((field) => {
-          const label = t(`market.fields.${field.id}`);
-          if (field.kind === "home") {
-            return (
-              <Link key={field.id} to="/" className={`${chipClass} ${idle}`}>
-                <Home className="size-3.5 shrink-0" aria-hidden />
-                <span className="whitespace-nowrap">{label}</span>
-              </Link>
-            );
-          }
-          if (field.kind === "more") {
+    <>
+      <style>{`
+        html.market-home-scrollbar-hidden,
+        html.market-home-scrollbar-hidden body {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        html.market-home-scrollbar-hidden::-webkit-scrollbar,
+        html.market-home-scrollbar-hidden body::-webkit-scrollbar {
+          display: none;
+          width: 0;
+          height: 0;
+        }
+      `}</style>
+      <ScrollBarGuard />
+      <div className="sticky top-14 z-[35] -mt-px w-full overflow-hidden border-y border-market-navy-soft/50 bg-market-navy text-market-navy-foreground shadow-sm">
+        <nav
+          aria-label={t("market.home.strip.label")}
+          className="flex w-full touch-pan-x items-center gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy py-2 [scroll-padding-inline:12px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:[scroll-padding-inline:16px]"
+        >
+          <span aria-hidden className="w-3 shrink-0 sm:w-4" />
+          {PRIMARY_FIELDS.map((field) => {
+            const label = t(`market.fields.${field.id}`);
+            if (field.kind === "home") {
+              return (
+                <Link key={field.id} to="/" className={`${chipClass} ${idle}`}>
+                  <Home className="size-3.5 shrink-0" aria-hidden />
+                  <span className="whitespace-nowrap">{label}</span>
+                </Link>
+              );
+            }
+            if (field.kind === "more") {
+              return (
+                <Link
+                  key={field.id}
+                  to="/more"
+                  className={`${chipClass} ${idle} border-market-silver/70 font-semibold`}
+                >
+                  <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
+                  <span className="whitespace-nowrap">{label}</span>
+                </Link>
+              );
+            }
+            const on = isFieldActive(field, current);
             return (
               <Link
                 key={field.id}
-                to="/more"
-                className={`${chipClass} ${idle} border-market-silver/70 font-semibold`}
+                to="/search"
+                search={{ ...kept, ...fieldSearchParams(field) }}
+                aria-current={on ? "page" : undefined}
+                className={`${chipClass} ${on ? active : idle}`}
+                lang={locale}
               >
-                <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
                 <span className="whitespace-nowrap">{label}</span>
               </Link>
             );
-          }
-          const on = isFieldActive(field, current);
-          return (
-            <Link
-              key={field.id}
-              to="/search"
-              search={{ ...kept, ...fieldSearchParams(field) }}
-              aria-current={on ? "page" : undefined}
-              className={`${chipClass} ${on ? active : idle}`}
-              lang={locale}
-            >
-              <span className="whitespace-nowrap">{label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+          })}
+          <span aria-hidden className="w-3 shrink-0 sm:w-4" />
+        </nav>
+      </div>
+    </>
   );
+}
+
+function ScrollBarGuard() {
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.add("market-home-scrollbar-hidden");
+  }
+  return null;
 }
