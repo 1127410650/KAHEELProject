@@ -30,19 +30,41 @@ export const COUNTRY_COLUMNS =
   "id, iso2, name_ar, name_en, calling_code, currency_code, sort_order";
 export const CITY_COLUMNS = "id, country_id, name_ar, name_en, sort_order";
 
+/**
+ * Temporary public-market mode. Other country rows and their data stay intact;
+ * public surfaces only read and write the Syrian market until this flag changes.
+ */
+export const ACTIVE_MARKET_ISO2 = "SY" as const;
+
 export async function loadCountries(): Promise<MktCountry[]> {
   const { data } = await supabase
     .from("mkt_countries")
     .select(COUNTRY_COLUMNS)
     .eq("is_active", true)
+    .eq("iso2", ACTIVE_MARKET_ISO2)
     .order("sort_order");
   return (data ?? []) as MktCountry[];
 }
 
 export async function loadCities(countryId?: string | null): Promise<MktCity[]> {
-  let query = supabase.from("mkt_cities").select(CITY_COLUMNS).eq("is_active", true);
-  if (countryId) query = query.eq("country_id", countryId);
-  const { data } = await query.order("sort_order");
+  let activeCountryId = countryId ?? null;
+  if (!activeCountryId) {
+    const { data: country } = await supabase
+      .from("mkt_countries")
+      .select("id")
+      .eq("iso2", ACTIVE_MARKET_ISO2)
+      .eq("is_active", true)
+      .maybeSingle();
+    activeCountryId = country?.id ?? null;
+  }
+  if (!activeCountryId) return [];
+
+  const { data } = await supabase
+    .from("mkt_cities")
+    .select(CITY_COLUMNS)
+    .eq("is_active", true)
+    .eq("country_id", activeCountryId)
+    .order("sort_order");
   return (data ?? []) as MktCity[];
 }
 
@@ -73,14 +95,14 @@ export async function loadGeoLabel(
   return parts.length > 0 ? parts.join(" — ") : null;
 }
 
-/** A visitor's browsing market: which country, and optionally which city inside it. */
+/** A visitor's browsing market: Syria, and optionally a Syrian city. */
 export interface MarketPreference {
   countryIso2: string;
   cityId: string | null;
 }
 
 const STORAGE_KEY = "tahqaq.mkt.market";
-const DEFAULT_PREFERENCE: MarketPreference = { countryIso2: "SA", cityId: null };
+const DEFAULT_PREFERENCE: MarketPreference = { countryIso2: ACTIVE_MARKET_ISO2, cityId: null };
 
 function readStored(): MarketPreference {
   if (typeof window === "undefined") return DEFAULT_PREFERENCE;
@@ -88,12 +110,10 @@ function readStored(): MarketPreference {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_PREFERENCE;
     const parsed = JSON.parse(raw) as Partial<MarketPreference>;
+    const storedWasSyria = parsed.countryIso2 === ACTIVE_MARKET_ISO2;
     return {
-      countryIso2:
-        typeof parsed.countryIso2 === "string" && /^[A-Z]{2}$/.test(parsed.countryIso2)
-          ? parsed.countryIso2
-          : DEFAULT_PREFERENCE.countryIso2,
-      cityId: typeof parsed.cityId === "string" ? parsed.cityId : null,
+      countryIso2: ACTIVE_MARKET_ISO2,
+      cityId: storedWasSyria && typeof parsed.cityId === "string" ? parsed.cityId : null,
     };
   } catch {
     return DEFAULT_PREFERENCE;
@@ -103,52 +123,57 @@ function readStored(): MarketPreference {
 const listeners = new Set<(value: MarketPreference) => void>();
 
 /**
- * The chosen market lives in local storage so guests keep it too; signed-in
- * users additionally get it mirrored to their account, best effort.
+ * The public version is temporarily Syria-only. Old Saudi or other-country
+ * preferences are ignored, not deleted, and cannot leak back into public queries.
  */
 export function useMarketPreference() {
   const [preference, setPreference] = useState<MarketPreference>(DEFAULT_PREFERENCE);
 
   useEffect(() => {
-    setPreference(readStored());
+    const stored = readStored();
+    setPreference(stored);
     const listener = (value: MarketPreference) => void setPreference(value);
     listeners.add(listener);
 
-    // Signed in? The country saved on the account is the single source of truth
-    // (defaulting to Saudi Arabia for older accounts without one); only the city
-    // stays a browsing preference.
     void (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) return;
-      const [{ data: profile }, { data: row }] = await Promise.all([
+      const { data: auth } = await supabase.auth.getSession();
+      if (!auth.session) return;
+
+      const [{ data: country }, { data: row }] = await Promise.all([
         supabase
-          .from("mkt_user_profiles")
-          .select("country_id")
-          .eq("user_id", data.session.user.id)
+          .from("mkt_countries")
+          .select("id")
+          .eq("iso2", ACTIVE_MARKET_ISO2)
+          .eq("is_active", true)
           .maybeSingle(),
         supabase
           .from("mkt_user_market_preferences")
           .select("browsing_city_id")
-          .eq("user_id", data.session.user.id)
+          .eq("user_id", auth.session.user.id)
           .maybeSingle(),
       ]);
-      let iso2 = DEFAULT_PREFERENCE.countryIso2;
-      if (profile?.country_id) {
-        const { data: country } = await supabase
-          .from("mkt_countries")
-          .select("iso2")
-          .eq("id", profile.country_id)
+
+      const candidateCityId = row?.browsing_city_id ?? stored.cityId;
+      let cityId: string | null = null;
+      if (candidateCityId && country?.id) {
+        const { data: city } = await supabase
+          .from("mkt_cities")
+          .select("id")
+          .eq("id", candidateCityId)
+          .eq("country_id", country.id)
+          .eq("is_active", true)
           .maybeSingle();
-        if (country?.iso2) iso2 = country.iso2;
+        cityId = city?.id ?? null;
       }
+
       const next: MarketPreference = {
-        countryIso2: iso2,
-        cityId: row?.browsing_city_id ?? readStored().cityId,
+        countryIso2: ACTIVE_MARKET_ISO2,
+        cityId,
       };
       if (typeof window !== "undefined") {
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       }
-      listeners.forEach((l) => l(next));
+      listeners.forEach((currentListener) => currentListener(next));
     })();
 
     return () => {
@@ -156,24 +181,41 @@ export function useMarketPreference() {
     };
   }, []);
 
-  const update = useCallback(async (next: MarketPreference) => {
+  const update = useCallback(async (requested: MarketPreference) => {
+    const { data: country } = await supabase
+      .from("mkt_countries")
+      .select("id")
+      .eq("iso2", ACTIVE_MARKET_ISO2)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    let cityId: string | null = null;
+    if (requested.cityId && country?.id) {
+      const { data: city } = await supabase
+        .from("mkt_cities")
+        .select("id")
+        .eq("id", requested.cityId)
+        .eq("country_id", country.id)
+        .eq("is_active", true)
+        .maybeSingle();
+      cityId = city?.id ?? null;
+    }
+
+    const next: MarketPreference = {
+      countryIso2: ACTIVE_MARKET_ISO2,
+      cityId,
+    };
     if (typeof window !== "undefined") {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     }
     listeners.forEach((listener) => listener(next));
 
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) return;
-    const { data: country } = await supabase
-      .from("mkt_countries")
-      .select("id")
-      .eq("iso2", next.countryIso2)
-      .maybeSingle();
-    if (!country) return;
+    const { data: auth } = await supabase.auth.getSession();
+    if (!auth.session || !country) return;
     await supabase.from("mkt_user_market_preferences").upsert({
-      user_id: data.session.user.id,
+      user_id: auth.session.user.id,
       browsing_country_id: country.id,
-      browsing_city_id: next.cityId,
+      browsing_city_id: cityId,
       updated_at: new Date().toISOString(),
     });
   }, []);
@@ -181,35 +223,15 @@ export function useMarketPreference() {
   return { preference, setPreference: update };
 }
 
-/**
- * The country stored on the signed-in account — the single source of truth for
- * every location form. Older accounts without one fall back to Saudi Arabia.
- * It is only changed from Settings → Account → Country.
- */
+/** Syria is the only selectable account country while this version is active. */
 export async function loadAccountCountry(): Promise<MktCountry | null> {
   const countries = await loadCountries();
-  const { data } = await supabase.auth.getSession();
-  const userId = data.session?.user.id;
-  let countryId: string | null = null;
-  if (userId) {
-    const { data: profile } = await supabase
-      .from("mkt_user_profiles")
-      .select("country_id")
-      .eq("user_id", userId)
-      .maybeSingle();
-    countryId = profile?.country_id ?? null;
-  }
-  return (
-    countries.find((c) => c.id === countryId) ??
-    countries.find((c) => c.iso2 === "SA") ??
-    countries[0] ??
-    null
-  );
+  return countries.find((country) => country.iso2 === ACTIVE_MARKET_ISO2) ?? countries[0] ?? null;
 }
 
 export function useAccountCountry() {
   return useQuery({
-    queryKey: ["mkt", "account-country"],
+    queryKey: ["mkt", "account-country", ACTIVE_MARKET_ISO2],
     queryFn: loadAccountCountry,
     staleTime: 5 * 60 * 1000,
   });
@@ -217,7 +239,7 @@ export function useAccountCountry() {
 
 /**
  * Normalise a national number typed by a user into E.164 for the chosen country.
- * The country calling code is never duplicated: a pasted +966..., 00966... or a
+ * The country calling code is never duplicated: a pasted +963..., 00963... or a
  * leading 0 all collapse to the same stored value.
  */
 export function toE164(iso2: string, input: string): string | null {
@@ -228,7 +250,6 @@ export function toE164(iso2: string, input: string): string | null {
   const attempt = (value: string): string | null => {
     const parsed = parsePhoneNumberFromString(value, country);
     if (!parsed || !parsed.isValid()) return null;
-    // Guard against a number that is valid but belongs to another country.
     if (parsed.country && parsed.country !== country) return null;
     return parsed.number;
   };
@@ -238,7 +259,6 @@ export function toE164(iso2: string, input: string): string | null {
   const local = cleaned.replace(/^0+/, "");
   const withCode = attempt(`+${digits}${local}`);
   if (withCode) return withCode;
-  // The calling code typed without a leading "+" must not be duplicated.
   if (digits && local.startsWith(digits)) {
     return attempt(`+${local}`);
   }
@@ -250,7 +270,7 @@ function callingDigits(iso2: string): string {
   return CALLING_CODES[iso2.toUpperCase()] ?? "";
 }
 
-/** Calling codes for the eight supported markets (mirrors mkt_countries). */
+/** Calling codes retained for stored historic data and future market reopening. */
 const CALLING_CODES: Record<string, string> = {
   SA: "966",
   KW: "965",
@@ -301,8 +321,6 @@ export async function saveMyContact(input: {
   phoneE164: string | null;
   visibility: PhoneVisibility;
 }): Promise<void> {
-  // The international mobile number is the marketplace username in every
-  // country/version. The leading plus is removed so it stays URL-safe.
   if (input.phoneE164) {
     const username = input.phoneE164.replace(/\D/g, "");
     const { error: profileError } = await supabase
@@ -316,7 +334,6 @@ export async function saveMyContact(input: {
     user_id: input.userId,
     country_id: input.countryId,
     phone_e164: input.phoneE164,
-    // No SMS/OTP provider exists, so a number is never marked verified here.
     phone_status: "unverified",
     phone_visibility: input.visibility,
     updated_at: new Date().toISOString(),
