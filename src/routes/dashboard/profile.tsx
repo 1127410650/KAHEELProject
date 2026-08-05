@@ -222,7 +222,7 @@ function ProfilePage() {
     if (draft.country_id && !window.confirm(t("market.person.countryChangeConfirm"))) return;
     setDraft((prev) => ({ ...prev, country_id: next, city_id: "" }));
     setPhone("");
-    setErrors((prev) => ({ ...prev, phone: undefined }));
+    setErrors({});
     setDirty(true);
   }
 
