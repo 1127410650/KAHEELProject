@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, LayoutGrid } from "lucide-react";
 
@@ -25,6 +26,11 @@ export function MarketCategoryStrip() {
     if (typeof value === "string" && value !== "") kept[key] = value;
   }
 
+  useEffect(() => {
+    document.documentElement.classList.add("market-home-scrollbar-hidden");
+    return () => document.documentElement.classList.remove("market-home-scrollbar-hidden");
+  }, []);
+
   const chipClass =
     "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[11px] font-medium leading-none transition-colors sm:h-10 sm:px-3.5 sm:text-xs";
   const idle =
@@ -47,8 +53,7 @@ export function MarketCategoryStrip() {
           height: 0;
         }
       `}</style>
-      <ScrollBarGuard />
-      <div className="sticky top-14 z-[35] -mt-px w-full overflow-hidden border-y border-market-navy-soft/50 bg-market-navy text-market-navy-foreground shadow-sm">
+      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden border-b border-market-navy-soft/50 bg-market-navy text-market-navy-foreground shadow-sm">
         <nav
           aria-label={t("market.home.strip.label")}
           className="flex w-full touch-pan-x items-center gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy py-2 [scroll-padding-inline:12px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:[scroll-padding-inline:16px]"
@@ -95,11 +100,4 @@ export function MarketCategoryStrip() {
       </div>
     </>
   );
-}
-
-function ScrollBarGuard() {
-  if (typeof document !== "undefined") {
-    document.documentElement.classList.add("market-home-scrollbar-hidden");
-  }
-  return null;
 }
