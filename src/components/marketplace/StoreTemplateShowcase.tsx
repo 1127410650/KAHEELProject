@@ -68,7 +68,7 @@ function Header({ template, action = "تسوق الآن" }: { template: StoreTem
 }
 
 function ProductCards({ template, icon }: { template: StoreTemplate; icon?: React.ReactNode }) {
-  const items = productsByTemplate[template.id] ?? productsByTemplate.general;
+  const items = productsByTemplate[template.id] ?? productsByTemplate["general"] ?? [];
   return (
     <div className="mt-4 grid grid-cols-3 gap-2">
       {items.map((item, index) => (
