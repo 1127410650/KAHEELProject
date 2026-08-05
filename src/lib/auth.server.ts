@@ -2,6 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
+import { normalizeMobile } from "@/lib/register.server";
 
 function publishableClient() {
   const url = process.env["SUPABASE_URL"]!;
@@ -12,7 +13,7 @@ function publishableClient() {
         const headers = new Headers(
           typeof Request !== "undefined" && input instanceof Request ? input.headers : undefined,
         );
-        if (init?.headers) new Headers(init.headers).forEach((v, k) => headers.set(k, v));
+        if (init?.headers) new Headers(init.headers).forEach((value, name) => headers.set(name, value));
         if (headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
         headers.set("apikey", key);
         return fetch(input, { ...init, headers });
@@ -30,6 +31,12 @@ export interface SignInResult {
   error?: "INVALID" | "LOCKED";
 }
 
+interface ResolvedIdentity {
+  email: string | null;
+  locked: boolean;
+  is_active: boolean;
+}
+
 export async function signInWithIdentifierImpl(
   identifier: string,
   password: string,
@@ -40,7 +47,34 @@ export async function signInWithIdentifierImpl(
   const { data: resolved } = await supabaseAdmin.rpc("resolve_login_identity", {
     _identifier: key,
   });
-  const row = Array.isArray(resolved) ? resolved[0] : null;
+  let row = (Array.isArray(resolved) ? resolved[0] : null) as ResolvedIdentity | null;
+
+  // Public phone-first accounts authenticate against a private Auth email alias.
+  // Keep the existing resolver as the primary path, but resolve the alias through
+  // the private profiles row when older database versions do not yet map phones.
+  if (!row?.email) {
+    const phone = key.includes("@") ? "" : normalizeMobile(key);
+    const profileQuery = supabaseAdmin
+      .from("profiles")
+      .select("user_id, is_active")
+      .limit(1);
+    const { data: profile } = key.includes("@")
+      ? await profileQuery.eq("email", key).maybeSingle()
+      : phone
+        ? await profileQuery.eq("phone", phone).maybeSingle()
+        : { data: null };
+
+    if (profile?.user_id) {
+      const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(profile.user_id);
+      if (authUser.user?.email) {
+        row = {
+          email: authUser.user.email,
+          locked: false,
+          is_active: profile.is_active !== false,
+        };
+      }
+    }
+  }
 
   if (row?.locked) return { ok: false, error: "LOCKED" };
 
