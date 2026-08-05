@@ -4,7 +4,13 @@
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://check-your-name-ai.lovable.app
+**Production app**: https://check-your-name-ai.vercel.app
+
+**Lovable preview**: https://check-your-name-ai.lovable.app
+
+## Deployment
+
+The production deployment is connected to the `main` branch on Vercel. New commits to `main` trigger an automatic deployment.
 
 ## Build with Lovable
 
