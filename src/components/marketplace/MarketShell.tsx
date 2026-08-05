@@ -22,41 +22,34 @@ import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { routeRuleFor } from "@/lib/routes-map";
 
 import { Button } from "@/components/ui/button";
-
 import { Skeleton } from "@/components/ui/skeleton";
 import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
+import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 
 /**
  * The single header for every marketplace surface (public pages, account pages
  * via DashboardShell, and the back office via AdminShell). Element order is
- * identical on desktop and mobile; only visibility differs by session state:
- *
- *   logo · search · language(desktop) · [notifications · account | sign-in] · add
- *
- * There is deliberately no second account switcher, no "marketplace"/"more"
- * link (the logo and the mobile nav cover those) and no legacy `/login` href.
+ * identical on desktop and mobile; only visibility differs by session state.
+ * On the public home route, the category row is rendered inside this same sticky
+ * header so both rows are one literal navy block with no gap or independent
+ * scrolling position.
  */
-export function MarketHeader() {
+export function MarketHeader({ showCategories = false }: { showCategories?: boolean }) {
   const { t, locale, setLocale } = useI18n();
   const { session, status } = useSession();
   const { identity: adminIdentity } = usePlatformIdentity();
   const offline = useOffline();
-
   const addHref = addListingHref({ authenticated: !!session });
 
   return (
-    <header className="sticky top-0 z-40 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto flex w-full max-w-[1240px] min-h-14 items-center gap-1.5 px-3 lg:px-6 py-2.5 sm:gap-3 sm:px-4">
-        {/* Wordmark only — the large icon at the far end is the single brand mark. */}
+    <header className="sticky top-0 z-40 overflow-hidden bg-market-navy text-market-navy-foreground shadow-sm">
+      <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-1.5 px-3 py-2.5 sm:gap-3 sm:px-4 lg:px-6">
         <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
           <span className="text-base font-bold tracking-tight text-market-navy-foreground">
             {t("market.brand")}
           </span>
         </Link>
 
-        {/* Primary action next to the wordmark: an explicit, readable
-            "add a listing" control (never an ambiguous icon above 320 px).
-            On phones this replaces the old bottom-bar "+" item. */}
         {status === "loading" ? (
           <Skeleton aria-hidden className="h-10 w-28 shrink-0 rounded-full" />
         ) : (
@@ -72,8 +65,6 @@ export function MarketHeader() {
           </a>
         )}
 
-        {/* Desktop keeps the header search entry point; on phones search lives
-            in the middle of the bottom bar instead. */}
         <Link
           to={getSearchHref()}
           aria-label={t("market.nav.search")}
@@ -82,8 +73,6 @@ export function MarketHeader() {
           <Search className="size-4" aria-hidden />
           <span>{t("market.nav.search")}</span>
         </Link>
-
-
 
         <div className="min-w-0 flex-1" />
 
@@ -97,11 +86,8 @@ export function MarketHeader() {
             {locale === "ar" ? "EN" : "ع"}
           </button>
 
-
           {session ? (
             <>
-              {/* Only a platform admin sees this; it is the way back out of the
-                  public marketplace into the console. */}
               {adminIdentity?.is_platform_admin === true && adminIdentity.restricted !== true && (
                 <Button asChild size="sm" variant="outline" className="shrink-0">
                   <Link to="/admin" aria-label={t("admin.backToAdmin")} title={t("admin.backToAdmin")}>
@@ -111,17 +97,11 @@ export function MarketHeader() {
                 </Button>
               )}
               <MktNotificationsBell />
-              {/* Account identity, switching and management live on /more only:
-                  the header never renders an account card or switcher. */}
             </>
           ) : status === "loading" ? (
-            // No visitor flash and no blank bar: a small skeleton holds the
-            // identity slot until the local session is known.
             <Skeleton aria-hidden className="h-8 w-24 shrink-0 rounded-md sm:w-36" />
           ) : (
             <>
-              {/* Guest auth actions must stay text-first on phones: icon-only
-                  buttons hid the primary entry points on 320–390 px screens. */}
               <Link
                 to="/auth"
                 aria-label={t("market.signIn")}
@@ -139,27 +119,21 @@ export function MarketHeader() {
                 {t("market.signUp")}
               </Link>
             </>
-
           )}
-
-          {/* "Add a listing" lives next to the wordmark now, so it is never
-              repeated here. */}
-
         </div>
       </div>
-      {/* Losing connectivity is not a sign-out: say so instead of degrading the
-          header into a visitor state. */}
+
+      {showCategories && <MarketCategoryStrip />}
+
       {session && offline && (
         <div className="border-t border-market-navy-soft bg-market-navy-dark px-3 py-1 text-center text-[11px] font-medium text-market-silver sm:text-xs">
           {t("market.offlineNotice")}
         </div>
       )}
-
     </header>
   );
 }
 
-/** Presentation-only connectivity flag for the header notice. */
 function useOffline(): boolean {
   const [offline, setOffline] = useState(false);
   useEffect(() => {
@@ -175,11 +149,6 @@ function useOffline(): boolean {
   return offline;
 }
 
-
-/**
- * Signed-in visitors with an incomplete marketplace account are sent once to the
- * short setup screen; guests keep browsing freely.
- */
 function useMarketSetupGate() {
   const { session } = useSession();
   const navigate = useNavigate();
@@ -193,10 +162,6 @@ function useMarketSetupGate() {
   }, [session, status.data?.needsSetup, pathname, navigate]);
 }
 
-/**
- * Canonical destinations for the mobile bar, taken from the route map so no
- * legacy path (`/notifications`, `/marketplace`, `/login`) can creep back in.
- */
 const BOTTOM_NAV_PATHS = {
   home: "/",
   messages: "/dashboard/messages",
@@ -211,7 +176,6 @@ if (import.meta.env.DEV) {
   }
 }
 
-/** Exactly one item is active: the longest matching prefix wins. */
 function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
   if (pathname.startsWith(BOTTOM_NAV_PATHS.search)) return "search";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.messages)) return "messages";
@@ -220,19 +184,12 @@ function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
   return "home";
 }
 
-
-/**
- * The single mobile navigation for the whole app. Signed-in users get the five
- * destinations; guests get the three public ones (private surfaces are never
- * advertised) and their "post" tap keeps the return path through sign-in.
- */
 export function MarketBottomNav() {
   const { t } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { session } = useSession();
   const { account } = useActiveAccount();
 
-  // Unread messages inside the active account's conversations only.
   const unreadMessages = useQuery({
     queryKey: ["mkt", "unread-messages", account?.account_key ?? null],
     enabled: !!session && !!account,
@@ -258,8 +215,6 @@ export function MarketBottomNav() {
     },
   });
 
-  // Marketplace notifications (mkt_notifications) — never the internal
-  // `/notifications` operational feed.
   const unreadAlerts = useQuery({
     queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
     enabled: !!session,
@@ -293,9 +248,7 @@ export function MarketBottomNav() {
         },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const)
-    : // Guests see the same five destinations in the same order; the three
-      // private ones route through sign-in with a return path.
-      ([
+    : ([
         { key: "home", to: BOTTOM_NAV_PATHS.home, icon: Home, badge: 0 },
         {
           key: "messages",
@@ -307,7 +260,6 @@ export function MarketBottomNav() {
         { key: "alerts", to: signInHref(BOTTOM_NAV_PATHS.alerts), icon: Bell, badge: 0 },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const);
-
 
   const activeKey = activeBottomKey(pathname);
 
@@ -354,10 +306,9 @@ export function MarketBottomNav() {
                 {label}
               </span>
             </>
-
           );
-          const className =
-            "flex flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium";
+          const className = "flex flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium";
+
           return (
             <li key={item.key} className="flex-1">
               {item.to.startsWith("/auth") ? (
@@ -387,30 +338,19 @@ export function MarketBottomNav() {
   );
 }
 
-
-
-/** Legal-only strip for long public content pages; never duplicates the bottom nav. */
 export function MarketCompactFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
-      <p className="mx-auto w-full max-w-[1240px] px-4 lg:px-6 py-4 text-center text-xs text-muted-foreground">
+      <p className="mx-auto w-full max-w-[1240px] px-4 py-4 text-center text-xs text-muted-foreground lg:px-6">
         {t("market.footer.rights")}
       </p>
     </footer>
   );
 }
 
-
 export type FooterVariant = "compact" | "none";
 
-/**
- * Single source of truth for the footer:
- * - the full brand footer lives ONLY on the external guest landing page
- *   (`/welcome`, which renders it inside its own layout);
- * - marketplace browsing surfaces get the one-line copyright strip;
- * - app, account, chat, wizard and admin surfaces get no footer at all.
- */
 const COPYRIGHT_FOOTER_PATHS = ["/", "/search", "/about", "/terms", "/privacy", "/help", "/contact"];
 const COPYRIGHT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/", "/stores/"];
 const NO_FOOTER_PREFIXES = ["/admin", "/dashboard", "/chat", "/more", "/auth", "/register", "/welcome"];
@@ -430,9 +370,7 @@ export function MarketShell({
   bottomNav = true,
 }: {
   children: React.ReactNode;
-  /** Override the route-derived decision (app shells pass "none"). */
   footer?: FooterVariant;
-  /** Back-office shells hide the marketplace bottom navigation entirely. */
   bottomNav?: boolean;
 }) {
   const { dir } = useI18n();
@@ -443,25 +381,16 @@ export function MarketShell({
   return (
     <div
       dir={dir}
-      /* `overflow-x-clip` (not `hidden`) still blocks sideways scrolling but does
-       * not turn the shell into a scroll container, so a page can use a sticky
-       * action bar inside its own content. */
       className={
         bottomNav
           ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0"
           : "market-surface flex min-h-dvh flex-col overflow-x-clip"
       }
     >
-      <MarketHeader />
-      {/* `main` absorbs the leftover viewport height, so a short page leaves the
-       * gap in the light page colour and the footer keeps its natural height —
-       * never a stretched navy block above the bottom nav. */}
+      <MarketHeader showCategories={pathname === "/"} />
       <main className="flex-1">{children}</main>
-
       {variant === "compact" && <MarketCompactFooter />}
       {bottomNav && <MarketBottomNav />}
     </div>
   );
 }
-
-
