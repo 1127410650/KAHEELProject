@@ -1,6 +1,6 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, LayoutGrid } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, LayoutGrid } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import {
@@ -9,11 +9,16 @@ import {
   isFieldActive,
 } from "@/lib/market-primary-navigation";
 
-/** Category row rendered inside MarketHeader as part of one sticky navy block. */
+/**
+ * One uninterrupted category rail inside the sticky marketplace header.
+ * Items keep their natural width, so no label is clipped or removed at any
+ * breakpoint. Touch, trackpad and desktop arrow controls all move the same rail.
+ */
 export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
   const railRef = useRef<HTMLElement | null>(null);
   const homeRef = useRef<HTMLAnchorElement | null>(null);
+  const [overflowing, setOverflowing] = useState(false);
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
@@ -26,9 +31,14 @@ export function MarketCategoryStrip() {
   }
 
   useLayoutEffect(() => {
-    const header = railRef.current?.closest("header");
+    const rail = railRef.current;
+    const header = rail?.closest("header");
     header?.classList.add("market-home-header");
 
+    const measure = () => {
+      if (!rail) return;
+      setOverflowing(rail.scrollWidth > rail.clientWidth + 2);
+    };
     const alignHome = () => {
       homeRef.current?.scrollIntoView({
         behavior: "auto",
@@ -37,21 +47,43 @@ export function MarketCategoryStrip() {
       });
     };
 
-    const frame = window.requestAnimationFrame(alignHome);
-    window.addEventListener("resize", alignHome);
+    const frame = window.requestAnimationFrame(() => {
+      measure();
+      alignHome();
+    });
+    const observer =
+      typeof ResizeObserver !== "undefined" && rail
+        ? new ResizeObserver(measure)
+        : null;
+    if (rail) observer?.observe(rail);
+    window.addEventListener("resize", measure);
+
     return () => {
       window.cancelAnimationFrame(frame);
-      window.removeEventListener("resize", alignHome);
+      window.removeEventListener("resize", measure);
+      observer?.disconnect();
       header?.classList.remove("market-home-header");
     };
   }, [dir]);
 
+  const scrollRail = (direction: -1 | 1) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const logicalDirection = dir === "rtl" ? -direction : direction;
+    rail.scrollBy({
+      left: logicalDirection * Math.max(260, rail.clientWidth * 0.72),
+      behavior: "smooth",
+    });
+  };
+
   const chipClass =
-    "flex h-8 w-full min-w-0 snap-start items-center justify-center gap-1 rounded-full border px-2 text-[10px] font-semibold leading-none transition-colors sm:h-9 sm:text-[11px]";
+    "flex h-8 min-w-max shrink-0 snap-start items-center justify-center gap-1.5 rounded-full border px-3.5 text-[10px] font-semibold leading-none transition-colors sm:h-9 sm:px-4 sm:text-[11px] lg:h-10 lg:px-5 lg:text-xs";
   const idle =
-    "border-market-silver/70 bg-market-navy text-market-navy-foreground/92 hover:bg-market-navy-soft";
+    "border-market-silver/70 bg-market-navy text-market-navy-foreground/95 hover:border-market-silver hover:bg-market-navy-soft";
   const active =
     "border-market-silver bg-market-navy-soft font-bold text-market-navy-foreground shadow-inner";
+  const StartIcon = dir === "rtl" ? ChevronRight : ChevronLeft;
+  const EndIcon = dir === "rtl" ? ChevronLeft : ChevronRight;
 
   return (
     <div className="w-full bg-market-navy text-market-navy-foreground">
@@ -81,10 +113,9 @@ export function MarketCategoryStrip() {
           font-size: 11px;
         }
         .market-category-rail {
-          grid-auto-columns: calc((100% - 18px) / 4);
-          scroll-snap-type: x mandatory;
           scrollbar-width: none;
           -ms-overflow-style: none;
+          scroll-padding-inline: 8px;
         }
         .market-category-rail::-webkit-scrollbar {
           display: none;
@@ -102,71 +133,90 @@ export function MarketCategoryStrip() {
             padding-inline: 16px;
             font-size: 12px;
           }
-          .market-category-rail {
-            grid-auto-columns: calc((100% - 40px) / 6);
-          }
         }
         @media (min-width: 1024px) {
           .market-home-header > div:first-child {
             padding-inline: 32px;
           }
-          .market-category-rail {
-            grid-auto-columns: calc((100% - 48px) / 7);
-          }
         }
       `}</style>
 
-      <nav
-        ref={railRef}
-        dir={dir}
-        aria-label={t("market.home.strip.label")}
-        className="market-category-rail mx-auto grid w-full max-w-[1240px] grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy px-4 pb-2 pt-0.5 sm:gap-2 sm:px-5 sm:pb-2.5 lg:px-8"
-      >
-        {PRIMARY_FIELDS.map((field) => {
-          const label = t(`market.fields.${field.id}`);
+      <div className="mx-auto flex w-full max-w-[1320px] items-center gap-2 px-2 pb-2 pt-0.5 sm:px-3 sm:pb-2.5 lg:px-5">
+        {overflowing ? (
+          <button
+            type="button"
+            onClick={() => scrollRail(-1)}
+            aria-label={locale === "ar" ? "التصنيفات السابقة" : "Previous categories"}
+            className="hidden size-9 shrink-0 place-items-center rounded-full border border-market-silver/70 bg-market-navy-soft text-market-navy-foreground transition hover:bg-market-silver hover:text-market-navy md:grid"
+          >
+            <StartIcon className="size-4" aria-hidden />
+          </button>
+        ) : null}
 
-          if (field.kind === "home") {
+        <nav
+          ref={railRef}
+          dir={dir}
+          aria-label={t("market.home.strip.label")}
+          className="market-category-rail flex min-w-0 flex-1 snap-x snap-proximity items-center gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain scroll-smooth px-2 touch-pan-x select-none sm:gap-2.5 sm:px-3"
+        >
+          {PRIMARY_FIELDS.map((field) => {
+            const label = t(`market.fields.${field.id}`);
+
+            if (field.kind === "home") {
+              return (
+                <Link
+                  ref={homeRef}
+                  key={field.id}
+                  to="/"
+                  className={`${chipClass} ${idle}`}
+                >
+                  <Home className="size-3.5 shrink-0" aria-hidden />
+                  <span className="whitespace-nowrap">{label}</span>
+                </Link>
+              );
+            }
+
+            if (field.kind === "more") {
+              return (
+                <Link
+                  key={field.id}
+                  to="/more"
+                  className={`${chipClass} ${idle}`}
+                >
+                  <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
+                  <span className="whitespace-nowrap">{label}</span>
+                </Link>
+              );
+            }
+
+            const on = isFieldActive(field, current);
             return (
               <Link
-                ref={homeRef}
                 key={field.id}
-                to="/"
-                className={`${chipClass} ${idle}`}
+                to="/search"
+                search={{ ...kept, ...fieldSearchParams(field) }}
+                aria-current={on ? "page" : undefined}
+                className={`${chipClass} ${on ? active : idle}`}
+                lang={locale}
               >
-                <Home className="size-3.5 shrink-0" aria-hidden />
-                <span className="min-w-0 truncate whitespace-nowrap">{label}</span>
+                <span className="whitespace-nowrap">{label}</span>
               </Link>
             );
-          }
+          })}
+          <span aria-hidden className="w-0.5 shrink-0" />
+        </nav>
 
-          if (field.kind === "more") {
-            return (
-              <Link
-                key={field.id}
-                to="/more"
-                className={`${chipClass} ${idle}`}
-              >
-                <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
-                <span className="min-w-0 truncate whitespace-nowrap">{label}</span>
-              </Link>
-            );
-          }
-
-          const on = isFieldActive(field, current);
-          return (
-            <Link
-              key={field.id}
-              to="/search"
-              search={{ ...kept, ...fieldSearchParams(field) }}
-              aria-current={on ? "page" : undefined}
-              className={`${chipClass} ${on ? active : idle}`}
-              lang={locale}
-            >
-              <span className="min-w-0 truncate whitespace-nowrap">{label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+        {overflowing ? (
+          <button
+            type="button"
+            onClick={() => scrollRail(1)}
+            aria-label={locale === "ar" ? "التصنيفات التالية" : "Next categories"}
+            className="hidden size-9 shrink-0 place-items-center rounded-full border border-market-silver/70 bg-market-navy-soft text-market-navy-foreground transition hover:bg-market-silver hover:text-market-navy md:grid"
+          >
+            <EndIcon className="size-4" aria-hidden />
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
