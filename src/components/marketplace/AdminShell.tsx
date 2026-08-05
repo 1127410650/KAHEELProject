@@ -460,7 +460,7 @@ export function AdminShell({
                 className="size-10 rounded-xl sm:hidden"
                 aria-label={t("admin.nav.search")}
               >
-                <Link to="/admin/search">
+                <Link to="/admin/search" search={{ q: "" }}>
                   <Search className="size-[18px]" aria-hidden />
                 </Link>
               </Button>

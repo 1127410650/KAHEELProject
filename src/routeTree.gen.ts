@@ -59,6 +59,7 @@ import { Route as DashboardPointsRouteImport } from './routes/dashboard/points'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
+import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -326,6 +327,11 @@ const DashboardViolationsRoute = DashboardViolationsRouteImport.update({
   path: '/dashboard/violations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
+  id: '/demo-stores/$worldId',
+  path: '/demo-stores/$worldId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -457,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
+  '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
@@ -524,6 +531,7 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
+  '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
@@ -593,6 +601,7 @@ export interface FileRoutesById {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
   '/dashboard/violations': typeof DashboardViolationsRoute
+  '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
@@ -663,6 +672,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
+    | '/demo-stores/$worldId'
     | '/invite/$token'
     | '/stores/$slug'
     | '/u/$username'
@@ -730,6 +740,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
+    | '/demo-stores/$worldId'
     | '/invite/$token'
     | '/stores/$slug'
     | '/u/$username'
@@ -798,6 +809,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/requests'
     | '/dashboard/violations'
+    | '/demo-stores/$worldId'
     | '/invite/$token'
     | '/stores/$slug'
     | '/u/$username'
@@ -849,6 +861,7 @@ export interface RootRouteChildren {
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
   DashboardViolationsRoute: typeof DashboardViolationsRoute
+  DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   InviteTokenRoute: typeof InviteTokenRoute
   StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
@@ -1213,6 +1226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardViolationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo-stores/$worldId': {
+      id: '/demo-stores/$worldId'
+      path: '/demo-stores/$worldId'
+      fullPath: '/demo-stores/$worldId'
+      preLoaderRoute: typeof DemoStoresWorldIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -1420,6 +1440,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
   DashboardViolationsRoute: DashboardViolationsRoute,
+  DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   InviteTokenRoute: InviteTokenRoute,
   StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
