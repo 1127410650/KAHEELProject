@@ -151,7 +151,7 @@ export function SmartListingPriceController() {
 
       if (wrapper) {
         wrapper.style.display = result.hide ? "none" : "";
-        wrapper.dataset.smartPriceUnit = "true";
+        wrapper.dataset["smartPriceUnit"] = "true";
       }
 
       let hint = document.getElementById("smart-price-unit-hint");
