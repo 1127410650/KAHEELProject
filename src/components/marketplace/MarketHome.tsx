@@ -12,7 +12,7 @@ import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoShowcases";
-import { SyriaUtilityHub } from "@/components/marketplace/home/SyriaUtilityHub";
+import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -72,7 +72,7 @@ export function MarketHome() {
     <>
       <MarketFeaturedBanner />
       <HomeSectionNavigator />
-      <SyriaUtilityHub />
+      <SyriaHomeGateway />
       <MarketDemoShowcases />
       <MarketCategoryTiles />
 
@@ -142,7 +142,7 @@ export function MarketHome() {
 
 function HomeSectionNavigator() {
   const links = [
-    { href: "#syria-directory", label: "دليل سوريا", icon: MapPinned },
+    { href: "#syria-services", label: "دليل سوريا", icon: MapPinned },
     { href: "#store-worlds", label: "العوالم", icon: Layers3 },
     { href: "#market-categories", label: "الفئات", icon: Grid2x2 },
     { href: "#market-listings", label: "الإعلانات", icon: List },
