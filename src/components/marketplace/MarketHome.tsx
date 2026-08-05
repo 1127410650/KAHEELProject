@@ -13,21 +13,14 @@ import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategor
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { MarketStoreTemplates } from "@/components/marketplace/home/MarketStoreTemplates";
+import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoShowcases";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-/** Same column counts as the real cards, so the placeholder never resizes the grid. */
 const GRID = "grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3.5 lg:grid-cols-4";
 
-/**
- * The public marketplace home ("كحلي"): the primary category rail sits directly
- * below the header, followed by featured promotions (only when real ones exist),
- * store-template discovery, category tiles, then one single feed of published
- * listings loaded in batches.
- */
 export function MarketHome() {
   const { t, locale } = useI18n();
-
   const { preference } = useMarketPreference();
   const geo = { countryIso2: preference.countryIso2, cityId: preference.cityId ?? undefined };
   const geoKey = `${preference.countryIso2}:${preference.cityId ?? "all"}`;
@@ -41,8 +34,8 @@ export function MarketHome() {
   });
 
   const items = feed.data?.pages.flatMap((p) => p.rows) ?? [];
-
   const sentinel = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const node = sentinel.current;
     if (!node) return;
@@ -60,6 +53,7 @@ export function MarketHome() {
 
   const scrollKey = `tahqaq.mkt.home.scroll:${geoKey}`;
   const restored = useRef(false);
+
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY > 0) window.sessionStorage.setItem(scrollKey, String(window.scrollY));
@@ -80,6 +74,7 @@ export function MarketHome() {
       <MarketCategoryStrip />
       <MarketFeaturedBanner />
       <MarketStoreTemplates />
+      <MarketDemoShowcases />
       <MarketCategoryTiles />
 
       <section className="mx-auto w-full max-w-[1240px] px-3 pb-6 pt-4 sm:px-4 lg:px-6">
