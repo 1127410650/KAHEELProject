@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import { Plus } from "lucide-react";
+import { Grid2x2, Layers3, List, Plus } from "lucide-react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
@@ -70,13 +70,28 @@ export function MarketHome() {
   return (
     <>
       <MarketFeaturedBanner />
+      <HomeSectionNavigator />
       <MarketDemoShowcases />
       <MarketCategoryTiles />
 
-      <section className="mx-auto w-full max-w-[1240px] px-4 pb-5 pt-2 sm:px-5 sm:pt-3 lg:px-8">
-        <h2 className="mb-2.5 text-[16px] font-black tracking-tight text-foreground sm:text-lg">
-          {t("market.home.all")}
-        </h2>
+      <section
+        id="market-listings"
+        className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-4 pb-5 pt-3 sm:px-5 sm:pt-4 lg:px-8"
+      >
+        <div className="mb-2.5 flex items-end justify-between gap-3">
+          <div>
+            <h2 className="text-[16px] font-black tracking-tight text-foreground sm:text-lg">
+              {t("market.home.all")}
+            </h2>
+            <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
+              تابع النزول لمشاهدة الإعلانات من الأحدث إلى الأقدم.
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[9px] font-bold text-secondary-foreground sm:text-[10px]">
+            <List className="size-3.5" aria-hidden />
+            أحدث الإعلانات
+          </span>
+        </div>
 
         {feed.isError ? (
           <div className="rounded-2xl border border-border bg-card px-4 py-6 text-center">
@@ -120,5 +135,33 @@ export function MarketHome() {
         )}
       </section>
     </>
+  );
+}
+
+function HomeSectionNavigator() {
+  const links = [
+    { href: "#store-worlds", label: "العوالم", icon: Layers3 },
+    { href: "#market-categories", label: "الفئات", icon: Grid2x2 },
+    { href: "#market-listings", label: "الإعلانات", icon: List },
+  ];
+
+  return (
+    <nav
+      aria-label="التنقل داخل الصفحة الرئيسية"
+      className="mx-auto mt-3 w-[calc(100%-2rem)] max-w-[720px] rounded-2xl border border-border/80 bg-card/95 p-1.5 shadow-[0_8px_26px_rgb(15_23_42/0.08)] backdrop-blur sm:mt-4"
+    >
+      <div className="grid grid-cols-3 gap-1">
+        {links.map(({ href, label, icon: Icon }) => (
+          <a
+            key={href}
+            href={href}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-black text-muted-foreground transition hover:bg-market-navy hover:text-white sm:min-h-10 sm:text-xs"
+          >
+            <Icon className="size-3.5" aria-hidden />
+            {label}
+          </a>
+        ))}
+      </div>
+    </nav>
   );
 }
