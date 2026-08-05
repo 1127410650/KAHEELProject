@@ -22,17 +22,13 @@ export const Route = createFileRoute("/register")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إنشاء حساب — تحقّق | Create account — Tahqaq" },
+      { title: "إنشاء حساب — كحلي | Create account — Kahli" },
       {
         name: "description",
-        content:
-          "أنشئ حسابًا فرديًا في تحقّق لاستخدام السوق العام؛ حسابات النظام الداخلي بدعوة من المسؤول.",
+        content: "أنشئ حسابًا فرديًا في كحلي باستخدام اسمك ورقم جوالك.",
       },
-      { property: "og:title", content: "إنشاء حساب — تحقّق" },
-      {
-        property: "og:description",
-        content: "Create an individual Tahqaq marketplace account.",
-      },
+      { property: "og:title", content: "إنشاء حساب — كحلي" },
+      { property: "og:description", content: "Create an individual Kahli marketplace account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -40,7 +36,6 @@ export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
-/** Only same-origin invite tokens are accepted; anything else is treated as absent. */
 function inviteTokenFromUrl(): string | null {
   if (typeof window === "undefined") return null;
   const raw = new URLSearchParams(window.location.search).get("invite");
@@ -50,7 +45,10 @@ function inviteTokenFromUrl(): string | null {
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, dir } = useI18n();
   return (
-    <div dir={dir} className="market-surface flex min-h-screen flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] sm:items-center sm:justify-center sm:py-10">
+    <div
+      dir={dir}
+      className="market-surface flex min-h-screen flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] sm:items-center sm:justify-center sm:py-10"
+    >
       <div className="mx-auto w-full max-w-[440px]">
         <div className="mb-6 flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
@@ -62,20 +60,22 @@ function Shell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
         {children}
-        <p className="mt-6 text-center text-[11px] text-muted-foreground">{t("market.footer.rights")}</p>
+        <p className="mt-6 text-center text-[11px] text-muted-foreground">
+          {t("market.footer.rights")}
+        </p>
       </div>
     </div>
   );
 }
 
 function RegisterPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const navigate = useNavigate();
   const submitRegister = useServerFn(registerAccount);
-
   const [mounted, setMounted] = useState(false);
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const [form, setForm] = useState({
     full_name: "",
     phone: "",
@@ -83,8 +83,8 @@ function RegisterPage() {
     password: "",
     confirm: "",
   });
-  const [agreed, setAgreed] = useState(false);
   const inviteToken = mounted ? inviteTokenFromUrl() : null;
+  const nameLabel = locale === "ar" ? "الاسم" : "Name";
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
@@ -93,7 +93,6 @@ function RegisterPage() {
     });
   }, [navigate]);
 
-  // The invitation decides whether any form is shown at all, and which email is used.
   const preview = useQuery({
     queryKey: ["invite-preview", inviteToken],
     enabled: !!inviteToken,
@@ -108,10 +107,10 @@ function RegisterPage() {
     },
   });
 
-  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({ ...prev, [key]: e.target.value }));
+  const set = (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((previous) => ({ ...previous, [key]: event.target.value }));
 
-  async function onSubmit(event: React.FormEvent) {
+  async function onInviteSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!inviteToken) return;
     if (form.password !== form.confirm) {
@@ -152,8 +151,6 @@ function RegisterPage() {
 
   if (!mounted) return null;
 
-  // No invitation: this is the PUBLIC marketplace sign-up (individual account).
-  // Internal system accounts still require a live invitation.
   if (!inviteToken || (preview.isSuccess && preview.data.state !== "valid") || preview.isError) {
     return <PublicSignupForm />;
   }
@@ -197,9 +194,9 @@ function RegisterPage() {
         </span>
       </p>
 
-      <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
+      <form onSubmit={onInviteSubmit} className="mt-5 space-y-3.5">
         <div className="space-y-1.5">
-          <Label htmlFor="full_name">{t("signup.fullName")}</Label>
+          <Label htmlFor="full_name">{nameLabel}</Label>
           <Input id="full_name" required value={form.full_name} onChange={set("full_name")} />
         </div>
         <div className="space-y-1.5">
@@ -209,7 +206,7 @@ function RegisterPage() {
             required
             dir="ltr"
             inputMode="tel"
-            placeholder="05XXXXXXXX"
+            placeholder="+9665XXXXXXXX"
             value={form.phone}
             onChange={set("phone")}
           />
@@ -224,71 +221,24 @@ function RegisterPage() {
             onChange={set("national_id")}
           />
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="password">{t("signup.password")}</Label>
-          <Input
-            id="password"
-            type="password"
-            required
-            minLength={10}
-            dir="ltr"
-            autoComplete="new-password"
-            value={form.password}
-            onChange={set("password")}
-          />
-          <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="confirm">{t("signup.confirm")}</Label>
-          <Input
-            id="confirm"
-            type="password"
-            required
-            minLength={10}
-            dir="ltr"
-            autoComplete="new-password"
-            value={form.confirm}
-            onChange={set("confirm")}
-          />
-        </div>
-
-        <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
-          <Checkbox
-            checked={agreed}
-            onCheckedChange={(v) => setAgreed(v === true)}
-            aria-label={t("signup.terms")}
-          />
-          <span>{t("signup.terms")}</span>
-        </label>
-
+        <PasswordFields form={form} set={set} />
+        <Terms checked={agreed} onChange={setAgreed} label={t("signup.terms")} />
         <Button type="submit" className="w-full" disabled={busy || !agreed}>
           {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
           {busy ? t("signup.submitting") : t("signup.submit")}
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-xs text-muted-foreground">
-        {t("signup.haveAccount")}{" "}
-        <Link to="/auth" className="font-semibold text-primary">
-          {t("signup.signIn")}
-        </Link>
-      </p>
+      <SignInLink />
     </Shell>
   );
 }
 
-
-/**
- * Public sign-up: individual marketplace account only.
- * No city, no account-type choice, no role. The country default follows the
- * existing account policy (Saudi Arabia) and is not asked for here.
- */
 function PublicSignupForm() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const navigate = useNavigate();
   const submitSignup = useServerFn(signUpPublic);
   const signIn = useServerFn(signInWithIdentifier);
-
   const [busy, setBusy] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [form, setForm] = useState({
@@ -298,8 +248,8 @@ function PublicSignupForm() {
     password: "",
     confirm: "",
   });
-  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({ ...prev, [key]: e.target.value }));
+  const set = (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((previous) => ({ ...previous, [key]: event.target.value }));
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -328,10 +278,9 @@ function PublicSignupForm() {
         return;
       }
 
-      // New accounts stay signed in on this device by default.
       setRememberSession(true);
       const session = await signIn({
-        data: { identifier: form.email.trim().toLowerCase(), password: form.password },
+        data: { identifier: form.phone.trim(), password: form.password },
       });
       if (!session.ok || !session.access_token || !session.refresh_token) {
         toast.info(t("signup.signInFailed"));
@@ -347,11 +296,11 @@ function PublicSignupForm() {
         return;
       }
       toast.success(t("signup.created"));
-      let landing = "/";
+      let landing = "/more";
       try {
         landing = await landingPathForSession();
       } catch {
-        /* keep the default landing */
+        /* keep the completion-aware fallback */
       }
       navigate({ to: landing, replace: true });
     } catch {
@@ -360,6 +309,17 @@ function PublicSignupForm() {
       setBusy(false);
     }
   }
+
+  const nameLabel = locale === "ar" ? "الاسم" : "Name";
+  const optionalEmailLabel = locale === "ar" ? "البريد الإلكتروني (اختياري)" : "Email (optional)";
+  const emailNote =
+    locale === "ar"
+      ? "ليصلك كل جديد أضف بريدك الإلكتروني. يمكنك التحقق منه لاحقًا من حسابك."
+      : "Add your email to receive updates. You can verify it later from your account.";
+  const phoneNote =
+    locale === "ar"
+      ? "سيكون رقم الجوال معرف دخولك، ويُطلب التحقق منه لاحقًا لإكمال الملف."
+      : "Your phone will be your sign-in identifier and must be verified later to complete the profile.";
 
   return (
     <Shell>
@@ -370,70 +330,40 @@ function PublicSignupForm() {
 
       <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
         <div className="space-y-1.5">
-          <Label htmlFor="p_full_name">{t("signup.fullName")}</Label>
+          <Label htmlFor="p_full_name">{nameLabel}</Label>
           <Input id="p_full_name" required value={form.full_name} onChange={set("full_name")} />
         </div>
+
         <div className="space-y-1.5">
-          <Label htmlFor="p_email">{t("signup.email")}</Label>
+          <Label htmlFor="p_phone">{t("signup.phone")}</Label>
+          <Input
+            id="p_phone"
+            required
+            dir="ltr"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="+9665XXXXXXXX"
+            value={form.phone}
+            onChange={set("phone")}
+          />
+          <p className="text-xs leading-relaxed text-muted-foreground">{phoneNote}</p>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="p_email">{optionalEmailLabel}</Label>
           <Input
             id="p_email"
             type="email"
-            required
             dir="ltr"
             autoComplete="email"
             value={form.email}
             onChange={set("email")}
           />
-          <p className="text-xs text-muted-foreground">{t("signup.emailHint")}</p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="p_phone">{t("signup.phone")}</Label>
-          <Input
-            id="p_phone"
-            dir="ltr"
-            inputMode="tel"
-            autoComplete="tel"
-            placeholder="05XXXXXXXX"
-            value={form.phone}
-            onChange={set("phone")}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="p_password">{t("signup.password")}</Label>
-          <Input
-            id="p_password"
-            type="password"
-            required
-            minLength={10}
-            dir="ltr"
-            autoComplete="new-password"
-            value={form.password}
-            onChange={set("password")}
-          />
-          <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="p_confirm">{t("signup.confirm")}</Label>
-          <Input
-            id="p_confirm"
-            type="password"
-            required
-            minLength={10}
-            dir="ltr"
-            autoComplete="new-password"
-            value={form.confirm}
-            onChange={set("confirm")}
-          />
+          <p className="text-xs leading-relaxed text-muted-foreground">{emailNote}</p>
         </div>
 
-        <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
-          <Checkbox
-            checked={agreed}
-            onCheckedChange={(v) => setAgreed(v === true)}
-            aria-label={t("signup.terms")}
-          />
-          <span>{t("signup.terms")}</span>
-        </label>
+        <PasswordFields form={form} set={set} />
+        <Terms checked={agreed} onChange={setAgreed} label={t("signup.terms")} />
 
         <Button type="submit" className="w-full" disabled={busy || !agreed}>
           {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
@@ -444,13 +374,81 @@ function PublicSignupForm() {
       <p className="mt-4 rounded-lg bg-secondary p-2.5 text-xs leading-relaxed text-muted-foreground">
         {t("signup.individualNote")}
       </p>
-
-      <p className="mt-4 text-center text-xs text-muted-foreground">
-        {t("signup.haveAccount")}{" "}
-        <Link to="/auth" className="font-semibold text-primary">
-          {t("signup.signIn")}
-        </Link>
-      </p>
+      <SignInLink />
     </Shell>
+  );
+}
+
+function PasswordFields({
+  form,
+  set,
+}: {
+  form: { password: string; confirm: string };
+  set: (key: "password" | "confirm") => (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const { t } = useI18n();
+  return (
+    <>
+      <div className="space-y-1.5">
+        <Label htmlFor="password_shared">{t("signup.password")}</Label>
+        <Input
+          id="password_shared"
+          type="password"
+          required
+          minLength={10}
+          dir="ltr"
+          autoComplete="new-password"
+          value={form.password}
+          onChange={set("password")}
+        />
+        <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="confirm_shared">{t("signup.confirm")}</Label>
+        <Input
+          id="confirm_shared"
+          type="password"
+          required
+          minLength={10}
+          dir="ltr"
+          autoComplete="new-password"
+          value={form.confirm}
+          onChange={set("confirm")}
+        />
+      </div>
+    </>
+  );
+}
+
+function Terms({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (value: boolean) => void;
+  label: string;
+}) {
+  return (
+    <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+      <Checkbox
+        checked={checked}
+        onCheckedChange={(value) => onChange(value === true)}
+        aria-label={label}
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+function SignInLink() {
+  const { t } = useI18n();
+  return (
+    <p className="mt-5 text-center text-xs text-muted-foreground">
+      {t("signup.haveAccount")}{" "}
+      <Link to="/auth" className="font-semibold text-primary">
+        {t("signup.signIn")}
+      </Link>
+    </p>
   );
 }
