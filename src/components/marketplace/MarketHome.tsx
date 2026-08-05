@@ -11,7 +11,6 @@ import { PAGE_SIZE, loadListingsPage } from "@/lib/mkt-queries";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
-import { MarketStoreTemplates } from "@/components/marketplace/home/MarketStoreTemplates";
 import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoShowcases";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -71,7 +70,6 @@ export function MarketHome() {
   return (
     <>
       <MarketFeaturedBanner />
-      <MarketStoreTemplates />
       <MarketDemoShowcases />
       <MarketCategoryTiles />
 
