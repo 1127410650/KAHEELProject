@@ -51,7 +51,6 @@ function MarketSetupPage() {
   const [phone, setPhone] = useState("");
   const [visibility, setVisibility] = useState<PhoneVisibility>("hidden");
   const [displayName, setDisplayName] = useState("");
-  const [username, setUsername] = useState("");
   const [phoneInvalid, setPhoneInvalid] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -63,7 +62,7 @@ function MarketSetupPage() {
     queryFn: async () => {
       const { data: profile } = await supabase
         .from("mkt_user_profiles")
-        .select("username, display_name, country_id")
+        .select("display_name, country_id")
         .eq("user_id", session!.user.id)
         .maybeSingle();
       const contact = await loadMyContact(session!.user.id);
@@ -77,7 +76,6 @@ function MarketSetupPage() {
     if (!row) return;
     setCountryId((prev) => prev ?? row.profile?.country_id ?? row.contact?.country_id ?? null);
     setDisplayName((prev) => prev || (row.profile?.display_name ?? ""));
-    setUsername((prev) => prev || (row.profile?.username ?? ""));
     setPhone((prev) => prev || nationalPart(row.contact?.phone_e164));
     if (row.contact?.phone_visibility) setVisibility(row.contact.phone_visibility);
   }, [existing.data]);
@@ -106,12 +104,9 @@ function MarketSetupPage() {
     setPhoneInvalid(false);
     setBusy(true);
     try {
-      // The stored handle must match the account rule: lowercase letters, digits
-      // and hyphens, 3-32 chars, starting with a letter or digit.
-      const cleaned = username.trim().toLowerCase().replace(/[_\s]+/g, "-").replace(/[^a-z0-9-]/g, "");
-      const handle = /^[a-z0-9][a-z0-9-]{2,31}$/.test(cleaned)
-        ? cleaned
-        : `u-${session.user.id.slice(0, 8)}`;
+      // Usernames are generated centrally from the full international mobile
+      // number, without the leading plus. This stays unique across countries.
+      const handle = e164.replace(/\D/g, "");
 
       const { error } = await supabase.from("mkt_user_profiles").upsert(
         {
@@ -164,7 +159,11 @@ function MarketSetupPage() {
               required
               className="h-11 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground"
               value={countryId ?? ""}
-              onChange={(event) => setCountryId(event.target.value || null)}
+              onChange={(event) => {
+                setCountryId(event.target.value || null);
+                setPhone("");
+                setPhoneInvalid(false);
+              }}
             >
               <option value="">{t("market.geo.pick")}</option>
               {(countries.data ?? []).map((c) => (
@@ -182,6 +181,11 @@ function MarketSetupPage() {
             status={existing.data?.contact?.phone_status}
             invalid={phoneInvalid}
           />
+          <p className="text-[11px] text-muted-foreground">
+            {locale === "ar"
+              ? "سيُستخدم رقم الجوال الدولي كاسم المستخدم."
+              : "Your international mobile number will be used as your username."}
+          </p>
           <PhoneVisibilityField value={visibility} onChange={setVisibility} />
 
           <div className="min-w-0 space-y-1.5">
@@ -192,19 +196,6 @@ function MarketSetupPage() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
             />
-          </div>
-
-          <div className="min-w-0 space-y-1.5">
-            <Label htmlFor="username">{t("market.setup.username")}</Label>
-            <Input
-              id="username"
-              dir="ltr"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <p className="text-[11px] text-muted-foreground">{t("market.person.usernameRule")}</p>
-
           </div>
 
           <Button type="submit" className="w-full" disabled={busy || !countryId}>
