@@ -31,6 +31,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.business.manage": "إدارة المتجر",
     "market.more.business": "المتجر",
     "market.form.publishingAs": "سيُنشر الإعلان من حسابك الحالي.",
+    "market.addListing": "إنشاء إعلان",
+    "market.createStore": "إنشاء متجر",
 
     "admin.console": "إدارة المنصة",
     "admin.consoleSubtitle": "مركز تشغيل كحلي",
@@ -64,6 +66,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.business.manage": "Manage store",
     "market.more.business": "Store",
     "market.form.publishingAs": "This listing will be published from your current account.",
+    "market.addListing": "Create listing",
+    "market.createStore": "Create store",
 
     "admin.console": "Platform management",
     "admin.consoleSubtitle": "Kahli operations center",
