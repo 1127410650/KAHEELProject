@@ -9,9 +9,9 @@ import {
 } from "@/lib/market-primary-navigation";
 
 /**
- * Fixed primary category rail for the marketplace home. It stays directly under
- * the header, uses one clean horizontal row, and never shows a browser scrollbar
- * or stores an awkward partial scroll position between visits.
+ * Primary marketplace categories, visually merged with the header. The strip is
+ * independently sticky directly below the 56px mobile header, so both rows stay
+ * fixed as one navy navigation block while the page content scrolls underneath.
  */
 export function MarketCategoryStrip() {
   const { t, locale } = useI18n();
@@ -28,15 +28,15 @@ export function MarketCategoryStrip() {
   const chipClass =
     "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[11px] font-medium transition-colors sm:h-10 sm:px-3.5 sm:text-xs";
   const idle =
-    "border-market-navy-soft/60 text-market-navy-foreground/90 hover:border-market-silver hover:bg-market-navy-soft hover:text-market-navy-foreground";
+    "border-market-navy-soft/80 bg-market-navy text-market-navy-foreground/90 hover:border-market-silver hover:bg-market-navy-soft hover:text-market-navy-foreground";
   const active =
     "border-market-silver bg-market-navy-soft font-semibold text-market-navy-foreground";
 
   return (
-    <div className="sticky top-0 z-30 border-b border-market-navy-soft/50 bg-market-navy/98 backdrop-blur">
+    <div className="sticky top-14 z-[35] -mt-px w-full border-t border-market-navy-soft/35 border-b border-market-navy-soft/60 bg-market-navy text-market-navy-foreground shadow-sm">
       <nav
         aria-label={t("market.home.strip.label")}
-        className="mx-auto flex w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto overscroll-x-contain px-3 py-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4 lg:px-6"
+        className="mx-auto flex w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto overscroll-x-contain bg-market-navy px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4 lg:px-6"
       >
         {PRIMARY_FIELDS.map((field) => {
           const label = t(`market.fields.${field.id}`);
