@@ -56,11 +56,6 @@ export function MarketCategoryStrip() {
     };
   }, [dir]);
 
-  useEffect(() => {
-    return () => {
-      if (snapTimer.current !== null) window.clearTimeout(snapTimer.current);
-    };
-  }, []);
 
   const chipClass =
     "flex h-9 w-full min-w-0 snap-start snap-always items-center justify-center gap-1 rounded-full border px-2 text-[11px] font-medium leading-none transition-colors sm:h-10 sm:text-xs";
