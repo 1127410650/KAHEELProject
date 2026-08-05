@@ -95,7 +95,7 @@ export function MarketCategoryStrip() {
         }
       `}</style>
 
-      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden border-b border-market-navy-soft/50 bg-market-navy px-3 text-market-navy-foreground shadow-sm sm:px-4">
+      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden bg-market-navy px-3 text-market-navy-foreground sm:px-4">
         <nav
           ref={railRef}
           dir={dir}
