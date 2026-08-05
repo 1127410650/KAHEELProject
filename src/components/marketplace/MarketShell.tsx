@@ -46,7 +46,7 @@ export function MarketHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-market-navy text-market-navy-foreground">
-      <div className="mx-auto flex w-full max-w-[1240px] min-h-14 items-center gap-1.5 px-3 lg:px-6 py-2.5 sm:gap-3 sm:px-4">
+      <div className="mx-auto flex w-full max-w-[1240px] min-h-14 items-center gap-1.5 px-2 sm:px-4 lg:px-6 py-2.5 sm:gap-3">
         {/* Wordmark only — the large icon at the far end is the single brand mark. */}
         <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
           <span className="text-base font-bold tracking-tight text-market-navy-foreground">
