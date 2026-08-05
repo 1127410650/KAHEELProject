@@ -41,7 +41,9 @@ export async function registerAccountImpl(
 
   const fullName = (input.full_name ?? "").trim();
   const password = input.password ?? "";
+  const phone = normalizeMobile(input.phone ?? "");
   if (fullName.length < 3) return { ok: false, error: "INVALID" };
+  if (!/^\+9639[0-9]{8}$/.test(phone)) return { ok: false, error: "INVALID" };
   if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -99,8 +101,9 @@ export async function registerAccountImpl(
     email_confirm: true,
     user_metadata: {
       full_name: fullName,
-      phone: normalizeMobile(input.phone ?? ""),
+      phone,
       national_id: (input.national_id ?? "").trim() || null,
+      market_country_iso2: "SY",
     },
   });
 
@@ -116,7 +119,7 @@ export async function registerAccountImpl(
     .from("profiles")
     .update({
       full_name: fullName,
-      phone: normalizeMobile(input.phone ?? "") || null,
+      phone,
       national_id: (input.national_id ?? "").trim() || null,
     })
     .eq("user_id", created.data.user.id);
