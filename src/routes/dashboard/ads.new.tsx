@@ -8,6 +8,7 @@ import {
 import { useI18n } from "@/i18n";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingForm } from "@/components/marketplace/ListingForm";
+import { SmartListingPriceController } from "@/components/marketplace/SmartListingPriceController";
 
 export const Route = createFileRoute("/dashboard/ads/new")({
   ssr: false,
@@ -45,6 +46,7 @@ function NewAdPage() {
         .listing-new-flow > div > p:first-of-type { display: none !important; }
       `}</style>
       <div className="listing-new-flow">
+        <SmartListingPriceController />
         <ListingForm initialFieldSlug={field ?? null} />
       </div>
     </DashboardShell>
