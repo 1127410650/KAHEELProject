@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle } from "lucide-react";
 
@@ -29,6 +30,13 @@ export function PhoneField({
   const { t, locale } = useI18n();
   const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
   const country = (countries.data ?? []).find((c) => c.id === countryId);
+  const previousCountryId = useRef<string | null>(countryId);
+
+  useEffect(() => {
+    const previous = previousCountryId.current;
+    if (previous && countryId && previous !== countryId) onChange("");
+    previousCountryId.current = countryId;
+  }, [countryId, onChange]);
 
   return (
     <div className="min-w-0 space-y-1.5">
@@ -42,9 +50,9 @@ export function PhoneField({
           inputMode="numeric"
           autoComplete="tel-national"
           className="min-w-0 flex-1"
-          placeholder="5XXXXXXXX"
+          placeholder=""
           value={value}
-          onChange={(e) => onChange(e.target.value.replace(/[^\d+]/g, ""))}
+          onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ""))}
           aria-invalid={invalid ?? false}
         />
       </div>
