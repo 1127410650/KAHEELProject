@@ -1,0 +1,47 @@
+{
+  "id": "/",
+  "name": "كحلي",
+  "short_name": "كحلي",
+  "description": "سوق كحلي للإعلانات والمنشآت والمتاجر والخدمات",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#071B33",
+  "theme_color": "#071B33",
+  "categories": ["shopping", "business", "lifestyle"],
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "إنشاء إعلان",
+      "short_name": "إعلان جديد",
+      "url": "/listings/new"
+    },
+    {
+      "name": "المحادثات",
+      "short_name": "المحادثات",
+      "url": "/messages"
+    },
+    {
+      "name": "البحث",
+      "short_name": "البحث",
+      "url": "/search"
+    }
+  ]
+}
