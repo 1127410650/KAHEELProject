@@ -62,37 +62,6 @@ export function MarketCategoryStrip() {
     };
   }, []);
 
-  const snapToNearestCompleteTab = () => {
-    if (snapTimer.current !== null) window.clearTimeout(snapTimer.current);
-    snapTimer.current = window.setTimeout(() => {
-      const rail = railRef.current;
-      if (!rail) return;
-      const railRect = rail.getBoundingClientRect();
-      const children = Array.from(rail.querySelectorAll<HTMLElement>("[data-category-tab]"));
-      if (children.length === 0) return;
-
-      const targetEdge = dir === "rtl" ? railRect.right : railRect.left;
-      let nearest = children[0]!;
-      let nearestDistance = Number.POSITIVE_INFINITY;
-
-      for (const child of children) {
-        const rect = child.getBoundingClientRect();
-        const edge = dir === "rtl" ? rect.right : rect.left;
-        const distance = Math.abs(edge - targetEdge);
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          nearest = child;
-        }
-      }
-
-      nearest.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: dir === "rtl" ? "end" : "start",
-      });
-    }, 120);
-  };
-
   const chipClass =
     "flex h-9 w-full min-w-0 snap-start snap-always items-center justify-center gap-1 rounded-full border px-2 text-[11px] font-medium leading-none transition-colors sm:h-10 sm:text-xs";
   const idle =
