@@ -1,33 +1,40 @@
 import {
+  Baby,
   Building2,
   CarFront,
   ChevronLeft,
   CircuitBoard,
+  Dumbbell,
   Factory,
+  Gamepad2,
   Hammer,
+  Heart,
   Home,
   PackageOpen,
   Palette,
   Shirt,
-  ShoppingBag,
   Sparkles,
   Store,
   UtensilsCrossed,
+  Watch,
   Wheat,
-  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
 export type StoreTemplateId =
   | "general"
+  | "women"
+  | "men"
+  | "kids"
+  | "games"
+  | "clubs"
+  | "restaurant"
   | "cars"
   | "real-estate"
   | "electronics"
-  | "fashion"
   | "furniture"
   | "contracting"
   | "agriculture"
-  | "restaurant"
   | "handmade"
   | "factory"
   | "wholesale";
@@ -44,12 +51,64 @@ export interface StoreTemplate {
 
 export const STORE_TEMPLATES: StoreTemplate[] = [
   {
+    id: "women",
+    title: "متجر نسائي",
+    description: "أزياء، عطور، عناية، حقائب وإكسسوارات بتجربة أنيقة.",
+    icon: Heart,
+    badge: "ستايل أنيق",
+    gradient: "from-fuchsia-950 via-rose-900 to-pink-500",
+    features: ["أزياء", "عطور", "عناية"],
+  },
+  {
+    id: "men",
+    title: "متجر رجالي",
+    description: "ملابس، ساعات، عطور وأسلوب رجالي عصري.",
+    icon: Watch,
+    badge: "هوية فاخرة",
+    gradient: "from-slate-950 via-blue-950 to-sky-700",
+    features: ["ملابس", "ساعات", "عطور"],
+  },
+  {
+    id: "kids",
+    title: "أطفال ومواليد",
+    description: "ملابس أطفال، مستلزمات مواليد، ألعاب وهدايا.",
+    icon: Baby,
+    gradient: "from-cyan-800 via-sky-500 to-yellow-300",
+    features: ["مواليد", "أطفال", "هدايا"],
+  },
+  {
+    id: "games",
+    title: "ألعاب وترفيه",
+    description: "ألعاب إلكترونية، أجهزة، بطاقات، وهوايات متنوعة.",
+    icon: Gamepad2,
+    badge: "ألوان حيوية",
+    gradient: "from-violet-950 via-indigo-800 to-cyan-500",
+    features: ["ألعاب", "أجهزة", "بطاقات"],
+  },
+  {
+    id: "clubs",
+    title: "نوادٍ ولياقة",
+    description: "اشتراكات، تمارين، معدات رياضية وبرامج تدريب.",
+    icon: Dumbbell,
+    gradient: "from-zinc-950 via-emerald-900 to-lime-500",
+    features: ["اشتراكات", "تدريب", "معدات"],
+  },
+  {
+    id: "restaurant",
+    title: "مطاعم وأغذية",
+    description: "قوائم طعام، طلبات، عروض يومية ومنتجات غذائية.",
+    icon: UtensilsCrossed,
+    badge: "قائمة شهية",
+    gradient: "from-red-950 via-orange-800 to-amber-400",
+    features: ["قوائم", "طلبات", "عروض"],
+  },
+  {
     id: "general",
     title: "متجر عام",
     description: "منتجات وخدمات متنوعة في واجهة واحدة مرنة.",
     icon: Store,
     badge: "الأكثر مرونة",
-    gradient: "from-slate-950 via-slate-800 to-slate-700",
+    gradient: "from-slate-950 via-slate-800 to-slate-600",
     features: ["منتجات", "عروض", "تصنيفات"],
   },
   {
@@ -57,8 +116,7 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
     title: "سيارات ومركبات",
     description: "معرض سيارات، قطع غيار، خدمات وصيانة.",
     icon: CarFront,
-    badge: "قالب مميز",
-    gradient: "from-zinc-950 via-red-950 to-red-800",
+    gradient: "from-zinc-950 via-red-950 to-red-700",
     features: ["مركبات", "تمويل", "قطع غيار"],
   },
   {
@@ -66,7 +124,7 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
     title: "عقارات",
     description: "بيع وإيجار ومشاريع ووسطاء ضمن متجر واحد.",
     icon: Building2,
-    gradient: "from-emerald-950 via-teal-900 to-cyan-800",
+    gradient: "from-emerald-950 via-teal-900 to-cyan-700",
     features: ["بيع", "إيجار", "مشاريع"],
   },
   {
@@ -74,23 +132,15 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
     title: "إلكترونيات",
     description: "أجهزة، إكسسوارات، صيانة وضمانات.",
     icon: CircuitBoard,
-    gradient: "from-indigo-950 via-violet-900 to-fuchsia-800",
+    gradient: "from-indigo-950 via-violet-900 to-fuchsia-700",
     features: ["أجهزة", "ماركات", "ضمان"],
-  },
-  {
-    id: "fashion",
-    title: "أزياء وموضة",
-    description: "ملابس، أحذية، عطور وإكسسوارات.",
-    icon: Shirt,
-    gradient: "from-rose-950 via-pink-900 to-fuchsia-700",
-    features: ["مقاسات", "ألوان", "تشكيلات"],
   },
   {
     id: "furniture",
     title: "أثاث وديكور",
     description: "أثاث منزلي ومكتبي وتصميم داخلي.",
     icon: Home,
-    gradient: "from-amber-950 via-orange-900 to-yellow-700",
+    gradient: "from-amber-950 via-orange-900 to-yellow-600",
     features: ["أثاث", "ديكور", "تفصيل"],
   },
   {
@@ -98,7 +148,7 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
     title: "مقاولات ومعدات",
     description: "خدمات تنفيذ، معدات، مواد بناء وموردون.",
     icon: Hammer,
-    gradient: "from-stone-950 via-amber-950 to-orange-800",
+    gradient: "from-stone-950 via-amber-950 to-orange-700",
     features: ["خدمات", "معدات", "مشاريع"],
   },
   {
@@ -106,23 +156,15 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
     title: "زراعة ومواشي",
     description: "منتجات زراعية، أعلاف، مواشي ومعدات.",
     icon: Wheat,
-    gradient: "from-lime-950 via-green-900 to-emerald-700",
+    gradient: "from-lime-950 via-green-900 to-emerald-600",
     features: ["محاصيل", "مواشي", "معدات"],
   },
   {
-    id: "restaurant",
-    title: "مطاعم وأغذية",
-    description: "قوائم طعام، منتجات غذائية وعروض يومية.",
-    icon: UtensilsCrossed,
-    gradient: "from-red-950 via-orange-900 to-amber-700",
-    features: ["قوائم", "طلبات", "عروض"],
-  },
-  {
     id: "handmade",
-    title: "حرف يدوية",
+    title: "حرف وهدايا",
     description: "منتجات فنية، هدايا وأعمال مخصصة.",
     icon: Palette,
-    gradient: "from-purple-950 via-indigo-900 to-sky-700",
+    gradient: "from-purple-950 via-indigo-900 to-sky-600",
     features: ["تصاميم", "طلبات خاصة", "هدايا"],
   },
   {
@@ -130,24 +172,20 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
     title: "مصنع ومنتجات",
     description: "كتالوجات جملة، قدرات إنتاج وطلبات توريد.",
     icon: Factory,
-    gradient: "from-slate-950 via-blue-950 to-cyan-800",
-    features: ["كتالوج", "توريد", "جملة"],
+    gradient: "from-slate-950 via-blue-950 to-cyan-700",
+    features: ["كتالوج", "توريد", "إنتاج"],
   },
   {
     id: "wholesale",
     title: "جملة وتوزيع",
     description: "باقات وأسعار كمية وشبكة موزعين.",
     icon: PackageOpen,
-    gradient: "from-cyan-950 via-sky-900 to-blue-700",
+    gradient: "from-cyan-950 via-sky-900 to-blue-600",
     features: ["كميات", "موزعون", "أسعار جملة"],
   },
 ];
 
-export function StoreTemplatePicker({
-  onSelect,
-}: {
-  onSelect: (template: StoreTemplate) => void;
-}) {
+export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTemplate) => void }) {
   return (
     <section className="space-y-5">
       <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-market-navy via-market-navy-dark to-primary p-5 text-market-navy-foreground shadow-raised sm:p-8">
@@ -156,16 +194,16 @@ export function StoreTemplatePicker({
         <div className="relative max-w-2xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-market-silver/30 bg-market-navy-soft/50 px-3 py-1 text-[11px] font-semibold text-market-silver">
             <Sparkles className="size-3.5" aria-hidden />
-            قوالب جاهزة حسب النشاط
+            قوالب مختلفة لكل نشاط
           </span>
           <h1 className="mt-4 text-2xl font-black leading-tight sm:text-4xl">اختر شكل متجرك</h1>
           <p className="mt-2 max-w-xl text-sm leading-7 text-market-silver-muted sm:text-base">
-            اختر القالب الأقرب لنشاطك، وسنجهز لك تجربة متجر مناسبة للتصنيفات والمنتجات والخدمات التي تقدمها.
+            كل قالب له ألوان وهوية وتجربة مناسبة لنوع المتجر، ويمكن تغييره لاحقًا دون التأثير على المنتجات.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
         {STORE_TEMPLATES.map((template) => {
           const Icon = template.icon;
           return (
@@ -173,35 +211,34 @@ export function StoreTemplatePicker({
               key={template.id}
               type="button"
               onClick={() => onSelect(template)}
-              className="group relative min-h-52 overflow-hidden rounded-2xl border border-border bg-card text-start shadow-panel transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="group relative min-h-48 overflow-hidden rounded-2xl border border-border bg-card text-start shadow-panel transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-52"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${template.gradient}`} aria-hidden />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_35%)]" aria-hidden />
-              <div className="relative flex h-full min-h-52 flex-col p-4 text-white">
-                <div className="flex items-start justify-between gap-3">
-                  <span className="grid size-12 place-items-center rounded-2xl border border-white/20 bg-white/15 backdrop-blur">
-                    <Icon className="size-6" aria-hidden />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_38%)]" aria-hidden />
+              <div className="relative flex h-full min-h-48 flex-col p-3.5 text-white sm:min-h-52 sm:p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <span className="grid size-10 place-items-center rounded-xl border border-white/20 bg-white/15 backdrop-blur sm:size-12 sm:rounded-2xl">
+                    <Icon className="size-5 sm:size-6" aria-hidden />
                   </span>
                   {template.badge ? (
-                    <span className="rounded-full border border-white/20 bg-black/20 px-2.5 py-1 text-[10px] font-bold backdrop-blur">
+                    <span className="rounded-full border border-white/20 bg-black/20 px-2 py-1 text-[9px] font-bold backdrop-blur sm:text-[10px]">
                       {template.badge}
                     </span>
                   ) : null}
                 </div>
-
-                <div className="mt-auto pt-7">
-                  <h2 className="text-lg font-black">{template.title}</h2>
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/75">{template.description}</p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {template.features.map((feature) => (
-                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-2 py-1 text-[10px] font-medium">
+                <div className="mt-auto pt-5">
+                  <h2 className="text-sm font-black sm:text-lg">{template.title}</h2>
+                  <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-white/75 sm:text-xs sm:leading-5">{template.description}</p>
+                  <div className="mt-2.5 flex flex-wrap gap-1">
+                    {template.features.slice(0, 3).map((feature) => (
+                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-1.5 py-0.5 text-[8px] font-medium sm:px-2 sm:py-1 sm:text-[10px]">
                         {feature}
                       </span>
                     ))}
                   </div>
-                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-white transition group-hover:gap-2">
+                  <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold text-white transition group-hover:gap-2 sm:text-xs">
                     اختيار القالب
-                    <ChevronLeft className="size-4" aria-hidden />
+                    <ChevronLeft className="size-3.5 sm:size-4" aria-hidden />
                   </span>
                 </div>
               </div>
@@ -213,13 +250,7 @@ export function StoreTemplatePicker({
   );
 }
 
-export function SelectedStoreTemplate({
-  template,
-  onChange,
-}: {
-  template: StoreTemplate;
-  onChange: () => void;
-}) {
+export function SelectedStoreTemplate({ template, onChange }: { template: StoreTemplate; onChange: () => void }) {
   const Icon = template.icon;
   return (
     <div className={`mb-5 overflow-hidden rounded-2xl bg-gradient-to-br ${template.gradient} p-4 text-white shadow-panel`}>
