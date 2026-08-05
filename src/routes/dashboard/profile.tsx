@@ -21,11 +21,9 @@ import {
 } from "@/lib/mkt-geo";
 import {
   AVATAR_MAX_BYTES,
-  checkUsernameShape,
   isUsernameTaken,
   isValidEmail,
   looksLikePhone,
-  normalizeUsername,
   sniffImageType,
 } from "@/lib/mkt-username";
 import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/PhoneFields";
@@ -60,15 +58,11 @@ const selectClass =
   "h-10 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground disabled:opacity-50";
 
 type Errors = Partial<
-  Record<
-    "username" | "display_name" | "city_id" | "phone" | "public_email" | "public_whatsapp",
-    string
-  >
+  Record<"display_name" | "city_id" | "phone" | "public_email" | "public_whatsapp", string>
 >;
 
 /** One editable draft of the personal profile; the business profile is never touched here. */
 interface Draft {
-  username: string;
   display_name: string;
   headline: string;
   about: string;
@@ -84,7 +78,6 @@ interface Draft {
 }
 
 const EMPTY: Draft = {
-  username: "",
   display_name: "",
   headline: "",
   about: "",
@@ -98,7 +91,6 @@ const EMPTY: Draft = {
   is_published: true,
   personalize_suggestions: true,
 };
-
 
 function Section({
   title,
@@ -174,7 +166,6 @@ function ProfilePage() {
     const fallbackCountry = (countries.data ?? []).find((c) => c.iso2 === preference.countryIso2);
     if (!countries.data) return;
     setDraft({
-      username: row?.username ?? "",
       display_name: looksLikePhone(row?.display_name ?? "") ? "" : (row?.display_name ?? ""),
       headline: row?.headline ?? "",
       about: row?.about ?? "",
@@ -221,7 +212,6 @@ function ProfilePage() {
     () => (countries.data ?? []).find((c) => c.id === draft.country_id)?.iso2 ?? "",
     [countries.data, draft.country_id],
   );
-  const usernamePreview = normalizeUsername(draft.username);
   const shownAvatar = avatarCleared ? null : (avatarPreview ?? storedAvatar.data ?? null);
 
   function onCountryChange(next: string) {
@@ -231,6 +221,8 @@ function ProfilePage() {
     }
     if (draft.country_id && !window.confirm(t("market.person.countryChangeConfirm"))) return;
     setDraft((prev) => ({ ...prev, country_id: next, city_id: "" }));
+    setPhone("");
+    setErrors((prev) => ({ ...prev, phone: undefined }));
     setDirty(true);
   }
 
@@ -256,11 +248,6 @@ function ProfilePage() {
     if (!session || busy) return;
 
     const next: Errors = {};
-    const username = normalizeUsername(draft.username);
-    const shape = checkUsernameShape(username);
-    if (shape === "format") next.username = t("market.person.usernameRule");
-    if (shape === "reserved") next.username = t("market.person.usernameReserved");
-
     const displayName = draft.display_name.trim();
     if (!displayName) next.display_name = t("market.person.nameRequired");
     else if (looksLikePhone(displayName)) next.display_name = t("market.person.nameIsPhone");
@@ -275,19 +262,16 @@ function ProfilePage() {
     if (draft.city_id && !(cities.data ?? []).some((c) => c.id === draft.city_id))
       next.city_id = t("market.person.cityRequired");
 
-    let e164: string | null = null;
-    if (phone.trim()) {
-      e164 = toE164(iso2, phone);
-      if (!e164) next.phone = t("market.person.whatsappInvalid");
-    }
+    const e164 = toE164(iso2, phone);
+    if (!e164) next.phone = t("market.phone.invalid");
+    const username = e164?.replace(/\D/g, "") ?? "";
 
-    if (Object.keys(next).length === 0 && !shape) {
-      if (await isUsernameTaken(username, session.user.id))
-        next.username = t("market.person.usernameTaken");
+    if (!next.phone && (await isUsernameTaken(username, session.user.id))) {
+      next.phone = t("market.person.usernameTaken");
     }
 
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0 || !e164) return;
 
     setBusy(true);
     try {
@@ -322,27 +306,23 @@ function ProfilePage() {
           show_whatsapp: draft.show_whatsapp,
           is_published: draft.is_published,
           personalize_suggestions: draft.personalize_suggestions,
-
         },
         { onConflict: "user_id" },
       );
       if (error) {
         if (error.code === "23505" || /username/i.test(error.message)) {
-          setErrors({ username: t("market.person.usernameTaken") });
+          setErrors({ phone: t("market.person.usernameTaken") });
           return;
         }
         throw error;
       }
 
-      // The number lives only in mkt_user_contacts, always as E.164 and unverified.
-      if (e164 || contact.data?.phone_e164) {
-        await saveMyContact({
-          userId: session.user.id,
-          countryId: draft.country_id || null,
-          phoneE164: e164,
-          visibility,
-        });
-      }
+      await saveMyContact({
+        userId: session.user.id,
+        countryId: draft.country_id || null,
+        phoneE164: e164,
+        visibility,
+      });
 
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-contact"] });
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-user-profile"] });
@@ -416,39 +396,17 @@ function ProfilePage() {
               />
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="min-w-0 space-y-1.5">
-                <Label htmlFor="username">{t("market.person.username")}</Label>
-                <Input
-                  id="username"
-                  dir="ltr"
-                  value={draft.username}
-                  onChange={(e) => set("username", normalizeUsername(e.target.value))}
-                  aria-invalid={!!errors.username}
-                  required
-                />
-                <p className="text-[11px] text-muted-foreground">
-                  {t("market.person.usernameRule")}
-                </p>
-                {usernamePreview && (
-                  <p className="truncate text-[11px] text-muted-foreground" dir="ltr">
-                    {t("market.person.usernamePreview")} /u/{usernamePreview}
-                  </p>
-                )}
-                <FieldError message={errors.username} />
-              </div>
-              <div className="min-w-0 space-y-1.5">
-                <Label htmlFor="display_name">{t("market.person.displayName")}</Label>
-                <Input
-                  id="display_name"
-                  value={draft.display_name}
-                  onChange={(e) => set("display_name", e.target.value)}
-                  placeholder={t("market.person.fallbackName")}
-                  aria-invalid={!!errors.display_name}
-                  required
-                />
-                <FieldError message={errors.display_name} />
-              </div>
+            <div className="min-w-0 space-y-1.5">
+              <Label htmlFor="display_name">{t("market.person.displayName")}</Label>
+              <Input
+                id="display_name"
+                value={draft.display_name}
+                onChange={(e) => set("display_name", e.target.value)}
+                placeholder={t("market.person.fallbackName")}
+                aria-invalid={!!errors.display_name}
+                required
+              />
+              <FieldError message={errors.display_name} />
             </div>
 
             <div className="space-y-1.5">
@@ -543,6 +501,11 @@ function ProfilePage() {
               invalid={!!errors.phone}
             />
             <p className="text-[11px] text-muted-foreground">
+              {locale === "ar"
+                ? "رقم الجوال الدولي هو اسم المستخدم لحسابك."
+                : "Your international mobile number is your account username."}
+            </p>
+            <p className="text-[11px] text-muted-foreground">
               {t("market.person.phoneStatusHint")}
             </p>
             <FieldError message={errors.phone} />
@@ -632,7 +595,6 @@ function ProfilePage() {
             <p className="text-[11px] text-muted-foreground">
               {t("market.person.personalizeHint")}
             </p>
-
 
             <div className="flex flex-wrap items-center gap-3 text-xs">
               <span className="text-muted-foreground">{t("market.person.badgeState")}</span>
