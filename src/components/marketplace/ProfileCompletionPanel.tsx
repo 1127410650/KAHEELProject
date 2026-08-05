@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   ChevronDown,
   ChevronUp,
+  Info,
   Loader2,
   Mail,
   Phone,
@@ -29,11 +30,12 @@ interface CompletionRow {
   phone_verified_at: string | null;
   ad_personalization_consent: boolean;
   is_complete: boolean;
+  storage_mode?: "rpc" | "auth_metadata";
 }
 
 interface RpcResult<T> {
   data: T | null;
-  error: { message?: string } | null;
+  error: { message?: string; code?: string } | null;
 }
 
 interface RpcClient {
@@ -41,6 +43,12 @@ interface RpcClient {
 }
 
 const rpcClient = supabase as unknown as RpcClient;
+const phoneOtpEnabled =
+  String(
+    (import.meta.env as unknown as Record<string, string | undefined>)[
+      "VITE_PHONE_OTP_ENABLED"
+    ] ?? "",
+  ).toLowerCase() === "true";
 
 function normalizePhone(value: string): string {
   const trimmed = value.trim();
@@ -51,6 +59,92 @@ function normalizePhone(value: string): string {
   if (digits.startsWith("0")) return `+966${digits.slice(1)}`;
   if (digits.startsWith("5") && digits.length === 9) return `+966${digits}`;
   return digits ? `+${digits}` : "";
+}
+
+function errorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "object" && error && "message" in error) {
+    return String((error as { message?: unknown }).message ?? "");
+  }
+  return String(error ?? "");
+}
+
+function isMissingProfileSchema(message: string): boolean {
+  const lower = message.toLowerCase();
+  return (
+    lower.includes("profile_completion_") ||
+    lower.includes("profile_private_details") ||
+    lower.includes("could not find the function") ||
+    lower.includes("schema cache") ||
+    lower.includes("pgrst202")
+  );
+}
+
+function isSmsUnavailable(message: string): boolean {
+  const lower = message.toLowerCase();
+  return (
+    lower.includes("sms provider") ||
+    lower.includes("unsupported phone provider") ||
+    lower.includes("phone provider") ||
+    lower.includes("sms is not enabled") ||
+    lower.includes("provider is not enabled") ||
+    lower.includes("twilio") ||
+    lower.includes("messagebird") ||
+    lower.includes("vonage")
+  );
+}
+
+function isEmailDeliveryUnavailable(message: string): boolean {
+  const lower = message.toLowerCase();
+  return (
+    lower.includes("email address not authorized") ||
+    lower.includes("smtp") ||
+    lower.includes("email rate limit") ||
+    lower.includes("over email send rate limit")
+  );
+}
+
+function authFallbackRow(user: {
+  email?: string | null;
+  phone?: string | null;
+  user_metadata?: Record<string, unknown> | null;
+  email_confirmed_at?: string | null;
+  phone_confirmed_at?: string | null;
+}): CompletionRow {
+  const metadata = user.user_metadata ?? {};
+  const authEmail = (user.email ?? "").trim().toLowerCase();
+  const publicEmail = String(metadata["public_email"] ?? "").trim().toLowerCase();
+  const email = publicEmail || (authEmail.endsWith("@accounts.kahli.invalid") ? "" : authEmail);
+  const phone = normalizePhone(String(metadata["phone"] ?? user.phone ?? ""));
+  const birthYearValue = Number(metadata["birth_year"] ?? 0);
+  const birthYear = Number.isInteger(birthYearValue) && birthYearValue > 0 ? birthYearValue : null;
+  const genderValue = metadata["gender"];
+  const gender = genderValue === "male" || genderValue === "female" ? genderValue : null;
+  const emailVerified =
+    !!email && !!user.email_confirmed_at && authEmail === email.toLowerCase();
+  const phoneVerified =
+    !!phone && !!user.phone_confirmed_at && normalizePhone(user.phone ?? "") === phone;
+  const fullName = String(metadata["full_name"] ?? "").trim() || null;
+
+  return {
+    full_name: fullName,
+    email: email || null,
+    phone: phone || null,
+    birth_year: birthYear,
+    gender,
+    email_verified_at: emailVerified ? user.email_confirmed_at ?? null : null,
+    phone_verified_at: phoneVerified ? user.phone_confirmed_at ?? null : null,
+    ad_personalization_consent: metadata["ad_personalization_consent"] === true,
+    is_complete:
+      !!fullName &&
+      !!email &&
+      !!phone &&
+      !!birthYear &&
+      !!gender &&
+      emailVerified &&
+      phoneVerified,
+    storage_mode: "auth_metadata",
+  };
 }
 
 export function ProfileCompletionPanel() {
@@ -75,12 +169,23 @@ export function ProfileCompletionPanel() {
   const completion = useQuery({
     queryKey: ["account", "profile-completion"],
     retry: 1,
-    queryFn: async () => {
+    queryFn: async (): Promise<CompletionRow | null> => {
       const { data, error } = await rpcClient.rpc<CompletionRow[] | CompletionRow>(
         "profile_completion_get",
       );
-      if (error) throw new Error(error.message || "PROFILE_COMPLETION_LOAD_FAILED");
-      return (Array.isArray(data) ? data[0] : data) ?? null;
+      if (!error) {
+        const row = (Array.isArray(data) ? data[0] : data) ?? null;
+        return row ? { ...row, storage_mode: "rpc" } : null;
+      }
+
+      const message = error.message || "PROFILE_COMPLETION_LOAD_FAILED";
+      if (!isMissingProfileSchema(message)) throw new Error(message);
+
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError || !authData.user) {
+        throw authError ?? new Error("PROFILE_COMPLETION_LOAD_FAILED");
+      }
+      return authFallbackRow(authData.user);
     },
   });
 
@@ -100,6 +205,7 @@ export function ProfileCompletionPanel() {
   const complete = row?.is_complete === true;
   const emailVerified = !!row?.email_verified_at;
   const phoneVerified = !!row?.phone_verified_at;
+  const usingFallback = row?.storage_mode === "auth_metadata";
   const missing = useMemo(() => {
     const items: string[] = [];
     if (!draft.email) items.push(ar ? "البريد" : "email");
@@ -111,50 +217,88 @@ export function ProfileCompletionPanel() {
     return items;
   }, [ar, draft, emailVerified, phoneVerified]);
 
-  async function save(showToast = true): Promise<boolean> {
+  function validateDraft(): {
+    email: string;
+    phone: string;
+    birthYear: number;
+    gender: "male" | "female";
+  } | null {
     const email = draft.email.trim().toLowerCase();
     const phone = normalizePhone(draft.phone);
     const birthYear = Number(draft.birthYear);
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       toast.error(ar ? "أدخل بريدًا إلكترونيًا صحيحًا." : "Enter a valid email address.");
-      return false;
+      return null;
     }
     if (!/^\+[1-9][0-9]{7,14}$/.test(phone)) {
-      toast.error(ar ? "أدخل رقم جوال صحيحًا مع مفتاح الدولة." : "Enter a valid phone with country code.");
-      return false;
+      toast.error(
+        ar
+          ? "أدخل رقم جوال صحيحًا مع مفتاح الدولة."
+          : "Enter a valid phone with country code.",
+      );
+      return null;
     }
     if (!Number.isInteger(birthYear) || birthYear < 1900 || birthYear > currentYear) {
       toast.error(ar ? "أدخل سنة ميلاد صحيحة." : "Enter a valid birth year.");
-      return false;
+      return null;
     }
     if (!draft.gender) {
       toast.error(ar ? "اختر ذكر أو أنثى." : "Select male or female.");
-      return false;
+      return null;
     }
+    return { email, phone, birthYear, gender: draft.gender };
+  }
+
+  async function save(showToast = true): Promise<boolean> {
+    const values = validateDraft();
+    if (!values) return false;
 
     setBusy(true);
     try {
       const { error } = await rpcClient.rpc("profile_completion_save", {
-        _email: email,
-        _phone: phone,
-        _birth_year: birthYear,
-        _gender: draft.gender,
+        _email: values.email,
+        _phone: values.phone,
+        _birth_year: values.birthYear,
+        _gender: values.gender,
         _ad_personalization_consent: draft.consent,
       });
-      if (error) throw new Error(error.message || "PROFILE_COMPLETION_SAVE_FAILED");
-      setDraft((previous) => ({ ...previous, email, phone }));
+
+      if (error) {
+        const message = error.message || "PROFILE_COMPLETION_SAVE_FAILED";
+        if (!isMissingProfileSchema(message)) throw new Error(message);
+
+        const { error: metadataError } = await supabase.auth.updateUser({
+          data: {
+            public_email: values.email,
+            phone: values.phone,
+            birth_year: values.birthYear,
+            gender: values.gender,
+            ad_personalization_consent: draft.consent,
+          },
+        });
+        if (metadataError) throw metadataError;
+      }
+
+      setDraft((previous) => ({
+        ...previous,
+        email: values.email,
+        phone: values.phone,
+      }));
       await completion.refetch();
-      if (showToast) toast.success(ar ? "تم حفظ بيانات الملف." : "Profile details saved.");
+      if (showToast) {
+        toast.success(ar ? "تم حفظ بيانات الملف." : "Profile details saved.");
+      }
       return true;
     } catch (error) {
+      const message = errorMessage(error);
       toast.error(
-        error instanceof Error && error.message.includes("INVALID")
+        message.includes("INVALID")
           ? ar
             ? "تحقق من البيانات المدخلة."
             : "Check the entered details."
           : ar
-            ? "تعذر حفظ البيانات الآن."
-            : "Could not save the details now.",
+            ? "تعذر حفظ البيانات. حاول مرة أخرى بعد تحديث الصفحة."
+            : "Could not save the details. Refresh the page and try again.",
       );
       return false;
     } finally {
@@ -164,7 +308,9 @@ export function ProfileCompletionPanel() {
 
   async function syncVerification() {
     const { error } = await rpcClient.rpc("profile_sync_verification");
-    if (error) throw new Error(error.message || "PROFILE_SYNC_FAILED");
+    if (error && !isMissingProfileSchema(error.message || "")) {
+      throw new Error(error.message || "PROFILE_SYNC_FAILED");
+    }
     await completion.refetch();
   }
 
@@ -172,17 +318,36 @@ export function ProfileCompletionPanel() {
     if (!(await save(false))) return;
     setEmailBusy(true);
     try {
-      const { error } = await supabase.auth.updateUser({ email: draft.email.trim().toLowerCase() });
+      const email = draft.email.trim().toLowerCase();
+      const { data: authData, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      const authEmail = authData.user?.email?.trim().toLowerCase();
+      const alreadyConfirmed =
+        authEmail === email && !!authData.user?.email_confirmed_at;
+
+      if (alreadyConfirmed) {
+        await syncVerification();
+        toast.success(ar ? "البريد الإلكتروني موثق مسبقًا." : "Email is already verified.");
+        return;
+      }
+
+      const { error } = await supabase.auth.updateUser({ email });
       if (error) throw error;
       setEmailSent(true);
       toast.success(
         ar
-          ? "أُرسل رمز أو رابط التحقق إلى بريدك حسب إعدادات البريد الحالية."
-          : "A verification code or link was sent using the current email settings.",
+          ? "أُرسل رابط أو رمز التحقق إلى بريدك. افحص الوارد والرسائل غير المرغوبة."
+          : "A verification link or code was sent. Check your inbox and spam folder.",
       );
-      await syncVerification();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : ar ? "تعذر إرسال التحقق." : "Could not send verification.");
+      const message = errorMessage(error);
+      toast.error(
+        isEmailDeliveryUnavailable(message)
+          ? ar
+            ? "إرسال البريد غير مهيأ للإنتاج بعد. يلزم تفعيل SMTP في Supabase."
+            : "Production email delivery is not configured. Enable SMTP in Supabase."
+          : message || (ar ? "تعذر إرسال تحقق البريد." : "Could not send email verification."),
+      );
     } finally {
       setEmailBusy(false);
     }
@@ -203,28 +368,54 @@ export function ProfileCompletionPanel() {
       setEmailSent(false);
       toast.success(ar ? "تم التحقق من البريد." : "Email verified.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : ar ? "الرمز غير صحيح." : "Invalid code.");
+      toast.error(errorMessage(error) || (ar ? "الرمز غير صحيح." : "Invalid code."));
     } finally {
       setEmailBusy(false);
     }
   }
 
   async function sendPhoneCode() {
+    if (!phoneOtpEnabled) {
+      toast.error(
+        ar
+          ? "خدمة رسائل الجوال غير مفعلة. يلزم ربط مزود SMS مدفوع أو تجريبي في Supabase."
+          : "SMS delivery is not enabled. Configure a paid or trial SMS provider in Supabase.",
+      );
+      return;
+    }
     if (!(await save(false))) return;
     setPhoneBusy(true);
     try {
       const phone = normalizePhone(draft.phone);
+      const { data: authData, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      const alreadyConfirmed =
+        normalizePhone(authData.user?.phone ?? "") === phone &&
+        !!authData.user?.phone_confirmed_at;
+
+      if (alreadyConfirmed) {
+        await syncVerification();
+        toast.success(ar ? "رقم الجوال موثق مسبقًا." : "Phone is already verified.");
+        return;
+      }
+
       const { error } = await supabase.auth.updateUser({ phone });
       if (error) throw error;
       setPhoneSent(true);
       toast.success(
         ar
-          ? "أُرسل رمز التحقق إلى الجوال عبر مزود الرسائل المفعّل للمنصة."
-          : "A verification code was sent through the platform's configured SMS provider.",
+          ? "أُرسل رمز التحقق عبر مزود الرسائل المفعّل."
+          : "A verification code was sent through the configured SMS provider.",
       );
-      await syncVerification();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : ar ? "تعذر إرسال رمز الجوال." : "Could not send phone code.");
+      const message = errorMessage(error);
+      toast.error(
+        isSmsUnavailable(message)
+          ? ar
+            ? "لا يوجد مزود SMS مفعّل في Supabase، لذلك لم تُرسل رسالة."
+            : "No SMS provider is enabled in Supabase, so no message was sent."
+          : message || (ar ? "تعذر إرسال رمز الجوال." : "Could not send phone code."),
+      );
     } finally {
       setPhoneBusy(false);
     }
@@ -246,7 +437,7 @@ export function ProfileCompletionPanel() {
       setPhoneSent(false);
       toast.success(ar ? "تم التحقق من الجوال." : "Phone verified.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : ar ? "الرمز غير صحيح." : "Invalid code.");
+      toast.error(errorMessage(error) || (ar ? "الرمز غير صحيح." : "Invalid code."));
     } finally {
       setPhoneBusy(false);
     }
@@ -287,7 +478,11 @@ export function ProfileCompletionPanel() {
                   : `Incomplete${missing.length ? ` — ${missing.length} remaining` : ""}`}
           </span>
         </span>
-        {open ? <ChevronUp className="size-4 text-muted-foreground" /> : <ChevronDown className="size-4 text-muted-foreground" />}
+        {open ? (
+          <ChevronUp className="size-4 text-muted-foreground" />
+        ) : (
+          <ChevronDown className="size-4 text-muted-foreground" />
+        )}
       </button>
 
       {open && (
@@ -301,6 +496,25 @@ export function ProfileCompletionPanel() {
             </span>
           </div>
 
+          {usingFallback && (
+            <div className="rounded-lg border border-amber-300/60 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-900">
+              <span className="flex items-start gap-2">
+                <Info className="mt-0.5 size-4 shrink-0" />
+                {ar
+                  ? "تم تفعيل حفظ احتياطي للحساب. يلزم تطبيق ترحيل Supabase حتى يعمل سجل الإكمال الكامل في قاعدة البيانات."
+                  : "Account fallback storage is active. Apply the Supabase migration for the full completion record."}
+              </span>
+            </div>
+          )}
+
+          {completion.isError && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-[11px] text-destructive">
+              {ar
+                ? "تعذر قراءة حالة الملف. حدّث الصفحة ثم حاول مرة أخرى."
+                : "Could not read profile status. Refresh and try again."}
+            </div>
+          )}
+
           <div className="space-y-1.5">
             <Label htmlFor="completion_email">{ar ? "البريد الإلكتروني" : "Email"}</Label>
             <Input
@@ -308,13 +522,27 @@ export function ProfileCompletionPanel() {
               type="email"
               dir="ltr"
               value={draft.email}
-              onChange={(event) => setDraft((previous) => ({ ...previous, email: event.target.value }))}
+              onChange={(event) =>
+                setDraft((previous) => ({ ...previous, email: event.target.value }))
+              }
             />
             <div className="flex flex-wrap items-center gap-2">
-              <Button type="button" size="sm" variant={emailVerified ? "secondary" : "outline"} disabled={emailBusy || emailVerified} onClick={() => void sendEmailCode()}>
+              <Button
+                type="button"
+                size="sm"
+                variant={emailVerified ? "secondary" : "outline"}
+                disabled={emailBusy || emailVerified}
+                onClick={() => void sendEmailCode()}
+              >
                 {emailBusy && <Loader2 className="size-3.5 animate-spin" />}
                 <Mail className="size-3.5" />
-                {emailVerified ? (ar ? "موثق" : "Verified") : ar ? "إرسال رمز" : "Send code"}
+                {emailVerified
+                  ? ar
+                    ? "موثق"
+                    : "Verified"
+                  : ar
+                    ? "إرسال تحقق"
+                    : "Send verification"}
               </Button>
               {emailSent && !emailVerified && (
                 <>
@@ -327,7 +555,12 @@ export function ProfileCompletionPanel() {
                     value={emailCode}
                     onChange={(event) => setEmailCode(event.target.value)}
                   />
-                  <Button type="button" size="sm" onClick={() => void verifyEmailCode()} disabled={emailBusy}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => void verifyEmailCode()}
+                    disabled={emailBusy}
+                  >
                     {ar ? "تحقق" : "Verify"}
                   </Button>
                 </>
@@ -343,13 +576,31 @@ export function ProfileCompletionPanel() {
               inputMode="tel"
               placeholder="+9665XXXXXXXX"
               value={draft.phone}
-              onChange={(event) => setDraft((previous) => ({ ...previous, phone: event.target.value }))}
+              onChange={(event) =>
+                setDraft((previous) => ({ ...previous, phone: event.target.value }))
+              }
             />
             <div className="flex flex-wrap items-center gap-2">
-              <Button type="button" size="sm" variant={phoneVerified ? "secondary" : "outline"} disabled={phoneBusy || phoneVerified} onClick={() => void sendPhoneCode()}>
+              <Button
+                type="button"
+                size="sm"
+                variant={phoneVerified ? "secondary" : "outline"}
+                disabled={phoneBusy || phoneVerified || !phoneOtpEnabled}
+                onClick={() => void sendPhoneCode()}
+              >
                 {phoneBusy && <Loader2 className="size-3.5 animate-spin" />}
                 <Phone className="size-3.5" />
-                {phoneVerified ? (ar ? "موثق" : "Verified") : ar ? "إرسال رمز" : "Send code"}
+                {phoneVerified
+                  ? ar
+                    ? "موثق"
+                    : "Verified"
+                  : phoneOtpEnabled
+                    ? ar
+                      ? "إرسال رمز"
+                      : "Send code"
+                    : ar
+                      ? "SMS غير مفعّل"
+                      : "SMS not enabled"}
               </Button>
               {phoneSent && !phoneVerified && (
                 <>
@@ -362,17 +613,31 @@ export function ProfileCompletionPanel() {
                     value={phoneCode}
                     onChange={(event) => setPhoneCode(event.target.value)}
                   />
-                  <Button type="button" size="sm" onClick={() => void verifyPhoneCode()} disabled={phoneBusy}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => void verifyPhoneCode()}
+                    disabled={phoneBusy}
+                  >
                     {ar ? "تحقق" : "Verify"}
                   </Button>
                 </>
               )}
             </div>
+            {!phoneOtpEnabled && !phoneVerified && (
+              <p className="text-[10px] leading-relaxed text-amber-700">
+                {ar
+                  ? "رسائل الجوال ليست مجانية داخل Supabase. يلزم تفعيل مزود مثل Twilio أو Vonage أو MessageBird، ثم ضبط VITE_PHONE_OTP_ENABLED=true."
+                  : "Supabase does not include free SMS delivery. Configure Twilio, Vonage, or MessageBird, then set VITE_PHONE_OTP_ENABLED=true."}
+              </p>
+            )}
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="completion_birth_year">{ar ? "سنة الميلاد" : "Birth year"}</Label>
+              <Label htmlFor="completion_birth_year">
+                {ar ? "سنة الميلاد" : "Birth year"}
+              </Label>
               <Input
                 id="completion_birth_year"
                 type="number"
@@ -382,7 +647,9 @@ export function ProfileCompletionPanel() {
                 max={currentYear}
                 placeholder={String(currentYear - 25)}
                 value={draft.birthYear}
-                onChange={(event) => setDraft((previous) => ({ ...previous, birthYear: event.target.value }))}
+                onChange={(event) =>
+                  setDraft((previous) => ({ ...previous, birthYear: event.target.value }))
+                }
               />
             </div>
             <div className="space-y-1.5">
@@ -391,7 +658,12 @@ export function ProfileCompletionPanel() {
                 id="completion_gender"
                 className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground"
                 value={draft.gender}
-                onChange={(event) => setDraft((previous) => ({ ...previous, gender: event.target.value as "" | "male" | "female" }))}
+                onChange={(event) =>
+                  setDraft((previous) => ({
+                    ...previous,
+                    gender: event.target.value as "" | "male" | "female",
+                  }))
+                }
               >
                 <option value="">{ar ? "اختر" : "Select"}</option>
                 <option value="male">{ar ? "ذكر" : "Male"}</option>
@@ -403,7 +675,9 @@ export function ProfileCompletionPanel() {
           <label className="flex items-start gap-2.5 rounded-lg border border-border p-3 text-xs leading-relaxed text-muted-foreground">
             <Checkbox
               checked={draft.consent}
-              onCheckedChange={(value) => setDraft((previous) => ({ ...previous, consent: value === true }))}
+              onCheckedChange={(value) =>
+                setDraft((previous) => ({ ...previous, consent: value === true }))
+              }
             />
             <span>
               {ar
@@ -416,12 +690,6 @@ export function ProfileCompletionPanel() {
             {busy && <Loader2 className="size-4 animate-spin" />}
             {ar ? "حفظ بيانات الملف" : "Save profile details"}
           </Button>
-
-          <p className="text-[10px] leading-relaxed text-muted-foreground">
-            {ar
-              ? "إرسال رمز الجوال يعتمد على مزود الرسائل المفعّل في إعدادات Supabase. لم تُضف خدمة مدفوعة جديدة ضمن هذا التعديل."
-              : "Phone-code delivery depends on the SMS provider enabled in Supabase. This change does not add a new paid service."}
-          </p>
         </div>
       )}
     </div>
