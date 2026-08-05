@@ -4,13 +4,14 @@ import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
 
-/** Saudi-friendly normalisation: keep digits, store as +9665XXXXXXXX when possible. */
+/** Syria-mode normalisation: keep digits and store local mobile numbers as +9639XXXXXXXX. */
 export function normalizeMobile(raw: string): string {
-  const digits = (raw ?? "").replace(/[^\d+]/g, "").replace(/^\+/, "");
+  const cleaned = (raw ?? "").replace(/[^\d+]/g, "").replace(/^00/, "+");
+  const digits = cleaned.replace(/^\+/, "");
   if (!digits) return "";
-  if (digits.startsWith("966")) return `+${digits}`;
-  if (digits.startsWith("0")) return `+966${digits.slice(1)}`;
-  if (digits.startsWith("5") && digits.length === 9) return `+966${digits}`;
+  if (digits.startsWith("963")) return `+${digits}`;
+  if (digits.startsWith("0")) return `+963${digits.slice(1)}`;
+  if (digits.startsWith("9") && digits.length === 9) return `+963${digits}`;
   return `+${digits}`;
 }
 
