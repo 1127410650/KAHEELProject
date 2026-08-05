@@ -3,6 +3,7 @@ import { ArrowRight, ChevronLeft, Eye, Layers3, Plus, Sparkles, Star } from "luc
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { DEMO_STORE_WORLDS, getDemoStoreWorld } from "@/lib/demo-store-worlds";
+import { demoWorldThemeId } from "@/lib/store-theme";
 
 export const Route = createFileRoute("/demo-stores/$worldId")({
   ssr: false,
@@ -60,7 +61,11 @@ function DemoStoreWorldPage() {
             <p className="mt-2 max-w-2xl text-xs leading-6 text-white/78 sm:text-base sm:leading-8">{world.description}</p>
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Link to="/business/new" search={{ next: "/more" }} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white px-4 text-[11px] font-black text-slate-950 shadow-lg sm:min-h-11 sm:px-5 sm:text-sm">
+              <Link
+                to="/dashboard/store/new"
+                search={{ theme: demoWorldThemeId(world.id) }}
+                className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white px-4 text-[11px] font-black text-slate-950 shadow-lg sm:min-h-11 sm:px-5 sm:text-sm"
+              >
                 <Plus className="size-4" aria-hidden />
                 أنشئ متجرًا بهذا الأسلوب
               </Link>
