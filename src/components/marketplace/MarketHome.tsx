@@ -12,6 +12,7 @@ import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
+import { MarketStoreTemplates } from "@/components/marketplace/home/MarketStoreTemplates";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -21,11 +22,8 @@ const GRID = "grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3.5 lg:grid-cols-4"
 /**
  * The public marketplace home ("كحلي"): the primary category rail sits directly
  * below the header, followed by featured promotions (only when real ones exist),
- * category tiles, then one single feed of every published listing, newest first,
- * loaded in batches.
- *
- * There is deliberately no search box here — search lives in the bottom bar on
- * phones and in the header on desktop — and no account card or switcher.
+ * store-template discovery, category tiles, then one single feed of published
+ * listings loaded in batches.
  */
 export function MarketHome() {
   const { t, locale } = useI18n();
@@ -44,7 +42,6 @@ export function MarketHome() {
 
   const items = feed.data?.pages.flatMap((p) => p.rows) ?? [];
 
-  /* ── batched loading near the end of the list ── */
   const sentinel = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const node = sentinel.current;
@@ -61,7 +58,6 @@ export function MarketHome() {
     return () => observer.disconnect();
   }, [feed.hasNextPage, feed.isFetchingNextPage, feed.fetchNextPage, items.length]);
 
-  /* ── scroll restore: opening an ad and coming back lands on the same card ── */
   const scrollKey = `tahqaq.mkt.home.scroll:${geoKey}`;
   const restored = useRef(false);
   useEffect(() => {
@@ -81,10 +77,9 @@ export function MarketHome() {
 
   return (
     <>
-      {/* Keep the primary navigation directly below the header, visually separate
-          from both the brand/actions row and the featured advertising block. */}
       <MarketCategoryStrip />
       <MarketFeaturedBanner />
+      <MarketStoreTemplates />
       <MarketCategoryTiles />
 
       <section className="mx-auto w-full max-w-[1240px] px-3 pb-6 pt-4 sm:px-4 lg:px-6">
