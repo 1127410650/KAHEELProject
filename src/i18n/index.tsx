@@ -15,8 +15,8 @@ export type Locale = "ar" | "en";
 
 const dictionaries: Record<Locale, Record<string, unknown>> = { ar, en };
 
-// Product-copy overrides keep the current public-market terminology consistent
-// without changing database names, RLS policies, or internal tenant semantics.
+// Product-copy overrides keep current terminology consistent without changing
+// database names, RLS policies, or internal tenant semantics.
 const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
   ar: {
     "signup.publicSubtitle": "أنشئ حسابًا لاستخدام السوق.",
@@ -31,6 +31,25 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.business.manage": "إدارة المتجر",
     "market.more.business": "المتجر",
     "market.form.publishingAs": "سيُنشر الإعلان من حسابك الحالي.",
+
+    "admin.console": "إدارة المنصة",
+    "admin.consoleSubtitle": "مركز تشغيل كحلي",
+    "admin.pageEyebrow": "لوحة الإدارة",
+    "admin.nav.businesses": "المنشآت",
+    "admin.stats.businesses": "المنشآت",
+    "market.admin.verifications": "توثيق المنشآت",
+    "admin.navSections.overview": "نظرة عامة",
+    "admin.navSections.market": "السوق والإعلانات",
+    "admin.navSections.accounts": "الحسابات والمنشآت",
+    "admin.navSections.operations": "التشغيل والمتابعة",
+    "admin.navSections.system": "إعدادات النظام",
+    "admin.dashboardBadge": "مركز المتابعة",
+    "admin.dashboardWelcome": "كل عمليات المنصة في مكان واحد",
+    "admin.dashboardIntro": "تابع المستخدمين والمنشآت والإعلانات والطلبات العاجلة من لوحة واضحة وسريعة.",
+    "admin.dashboardPending": "يحتاج متابعة",
+    "admin.dashboardOverview": "ملخص المنصة",
+    "admin.dashboardOverviewHint": "الأرقام الحالية مرتبطة مباشرة بصفحات الإدارة والتفاصيل.",
+    "admin.actionNeededHint": "العناصر التي تحتاج مراجعة أو قرارًا من فريق الإدارة.",
   },
   en: {
     "signup.publicSubtitle": "Create an account to use the marketplace.",
@@ -45,6 +64,25 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.business.manage": "Manage store",
     "market.more.business": "Store",
     "market.form.publishingAs": "This listing will be published from your current account.",
+
+    "admin.console": "Platform management",
+    "admin.consoleSubtitle": "Kahli operations center",
+    "admin.pageEyebrow": "Administration",
+    "admin.nav.businesses": "Businesses",
+    "admin.stats.businesses": "Businesses",
+    "market.admin.verifications": "Business verification",
+    "admin.navSections.overview": "Overview",
+    "admin.navSections.market": "Marketplace and listings",
+    "admin.navSections.accounts": "Accounts and businesses",
+    "admin.navSections.operations": "Operations and follow-up",
+    "admin.navSections.system": "System settings",
+    "admin.dashboardBadge": "Operations center",
+    "admin.dashboardWelcome": "All platform operations in one place",
+    "admin.dashboardIntro": "Monitor users, businesses, listings, and urgent work from a clear and fast dashboard.",
+    "admin.dashboardPending": "Needs attention",
+    "admin.dashboardOverview": "Platform overview",
+    "admin.dashboardOverviewHint": "Current figures link directly to their management pages.",
+    "admin.actionNeededHint": "Items that require review or a decision from the administration team.",
   },
 };
 
@@ -66,7 +104,7 @@ function fallbackLabel(key: string): string {
   return last
     .replace(/[_-]/g, " ")
     .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/^\w/, (c) => c.toUpperCase());
+    .replace(/^\w/, (character) => character.toUpperCase());
 }
 
 type Vars = Record<string, string | number>;
@@ -154,9 +192,9 @@ const fallbackI18n: I18nContextValue = {
 };
 
 export function useI18n(): I18nContextValue {
-  const ctx = useContext(I18nContext);
-  if (!ctx && import.meta.env.DEV) {
+  const context = useContext(I18nContext);
+  if (!context && import.meta.env.DEV) {
     console.warn("[i18n] useI18n rendered outside I18nProvider — using fallback dictionary.");
   }
-  return ctx ?? fallbackI18n;
+  return context ?? fallbackI18n;
 }
