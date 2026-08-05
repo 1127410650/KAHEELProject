@@ -18,7 +18,7 @@ export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
   const railRef = useRef<HTMLElement | null>(null);
   const homeRef = useRef<HTMLAnchorElement | null>(null);
-  const snapTimer = useRef<number | null>(null);
+  
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
