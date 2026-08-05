@@ -26,6 +26,9 @@ export function MarketCategoryStrip() {
   }
 
   useLayoutEffect(() => {
+    const header = railRef.current?.closest("header");
+    header?.classList.add("market-home-header");
+
     const alignHome = () => {
       homeRef.current?.scrollIntoView({
         behavior: "auto",
@@ -33,24 +36,50 @@ export function MarketCategoryStrip() {
         inline: dir === "rtl" ? "end" : "start",
       });
     };
+
     const frame = window.requestAnimationFrame(alignHome);
     window.addEventListener("resize", alignHome);
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", alignHome);
+      header?.classList.remove("market-home-header");
     };
   }, [dir]);
 
   const chipClass =
-    "flex h-9 w-full min-w-0 snap-start items-center justify-center gap-1 rounded-full border px-2 text-[11px] font-medium leading-none transition-colors sm:h-10 sm:text-xs";
+    "flex h-8 w-full min-w-0 snap-start items-center justify-center gap-1 rounded-full border px-2 text-[10px] font-semibold leading-none transition-colors sm:h-9 sm:text-[11px]";
   const idle =
-    "border-market-silver/75 bg-market-navy text-market-navy-foreground/95 hover:bg-market-navy-soft";
+    "border-market-silver/70 bg-market-navy text-market-navy-foreground/92 hover:bg-market-navy-soft";
   const active =
-    "border-market-silver bg-market-navy-soft font-semibold text-market-navy-foreground";
+    "border-market-silver bg-market-navy-soft font-bold text-market-navy-foreground shadow-inner";
 
   return (
     <div className="w-full bg-market-navy text-market-navy-foreground">
       <style>{`
+        .market-home-header > div:first-child {
+          min-height: 52px;
+          padding-inline: 16px;
+          padding-block: 6px;
+          gap: 6px;
+        }
+        .market-home-header > div:first-child > a:first-child {
+          padding-inline: 4px;
+          padding-block: 3px;
+        }
+        .market-home-header > div:first-child > a:first-child span {
+          font-size: 15px;
+          line-height: 1;
+        }
+        .market-home-header > div:first-child > a:nth-of-type(2) {
+          height: 36px;
+          padding-inline: 12px;
+          font-size: 11px;
+        }
+        .market-home-header > div:first-child > div:last-child a {
+          height: 32px;
+          padding-inline: 10px;
+          font-size: 11px;
+        }
         .market-category-rail {
           grid-auto-columns: calc((100% - 18px) / 4);
           scroll-snap-type: x mandatory;
@@ -63,11 +92,24 @@ export function MarketCategoryStrip() {
           height: 0;
         }
         @media (min-width: 640px) {
+          .market-home-header > div:first-child {
+            min-height: 56px;
+            padding-inline: 20px;
+            padding-block: 7px;
+          }
+          .market-home-header > div:first-child > a:nth-of-type(2) {
+            height: 40px;
+            padding-inline: 16px;
+            font-size: 12px;
+          }
           .market-category-rail {
             grid-auto-columns: calc((100% - 40px) / 6);
           }
         }
         @media (min-width: 1024px) {
+          .market-home-header > div:first-child {
+            padding-inline: 32px;
+          }
           .market-category-rail {
             grid-auto-columns: calc((100% - 48px) / 7);
           }
@@ -78,7 +120,7 @@ export function MarketCategoryStrip() {
         ref={railRef}
         dir={dir}
         aria-label={t("market.home.strip.label")}
-        className="market-category-rail mx-auto grid w-full max-w-[1240px] grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy px-3 pb-2.5 sm:gap-2 sm:px-4 lg:px-6"
+        className="market-category-rail mx-auto grid w-full max-w-[1240px] grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy px-4 pb-2 pt-0.5 sm:gap-2 sm:px-5 sm:pb-2.5 lg:px-8"
       >
         {PRIMARY_FIELDS.map((field) => {
           const label = t(`market.fields.${field.id}`);
