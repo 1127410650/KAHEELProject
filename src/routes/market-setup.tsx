@@ -1,14 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Loader2, Store } from "lucide-react";
+import { Flag, Loader2, Store } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import {
-  geoName,
+  ACTIVE_MARKET_ISO2,
   loadCountries,
   loadMyContact,
   nationalPart,
@@ -22,8 +22,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const title = "إعداد حسابك في السوق — سوق تحقّق";
-const description = "خطوة واحدة قصيرة: الدولة، رقم الجوال، والاسم الظاهر، ثم متابعة إلى السوق.";
+const title = "إعداد حسابك في سوريا — سوق كحلي";
+const description = "خطوة واحدة قصيرة: رقم الجوال السوري والاسم الظاهر، ثم متابعة إلى السوق.";
 
 export const Route = createFileRoute("/market-setup")({
   ssr: false,
@@ -54,7 +54,7 @@ function MarketSetupPage() {
   const [phoneInvalid, setPhoneInvalid] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const countries = useQuery({ queryKey: ["mkt", "countries", ACTIVE_MARKET_ISO2], queryFn: loadCountries });
 
   const existing = useQuery({
     queryKey: ["mkt", "setup-existing", session?.user.id],
@@ -62,7 +62,7 @@ function MarketSetupPage() {
     queryFn: async () => {
       const { data: profile } = await supabase
         .from("mkt_user_profiles")
-        .select("display_name, country_id")
+        .select("display_name")
         .eq("user_id", session!.user.id)
         .maybeSingle();
       const contact = await loadMyContact(session!.user.id);
@@ -70,33 +70,27 @@ function MarketSetupPage() {
     },
   });
 
-  // Prefill whatever is already known so nothing is asked twice.
+  useEffect(() => {
+    const syria = (countries.data ?? []).find((country) => country.iso2 === ACTIVE_MARKET_ISO2);
+    setCountryId(syria?.id ?? null);
+  }, [countries.data]);
+
   useEffect(() => {
     const row = existing.data;
     if (!row) return;
-    setCountryId((prev) => prev ?? row.profile?.country_id ?? row.contact?.country_id ?? null);
-    setDisplayName((prev) => prev || (row.profile?.display_name ?? ""));
-    setPhone((prev) => prev || nationalPart(row.contact?.phone_e164));
+    setDisplayName((previous) => previous || (row.profile?.display_name ?? ""));
+    setPhone((previous) => previous || nationalPart(row.contact?.phone_e164));
     if (row.contact?.phone_visibility) setVisibility(row.contact.phone_visibility);
   }, [existing.data]);
-
-  // Saudi Arabia is preselected: the country is asked once, here at signup.
-  useEffect(() => {
-    if (countryId) return;
-    const sa = (countries.data ?? []).find((c) => c.iso2 === "SA");
-    if (sa) setCountryId(sa.id);
-  }, [countryId, countries.data]);
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/auth", replace: true });
   }, [loading, session, navigate]);
 
-  const iso2 = (countries.data ?? []).find((c) => c.id === countryId)?.iso2 ?? "";
-
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!session || !countryId) return;
-    const e164 = toE164(iso2, phone);
+    const e164 = toE164(ACTIVE_MARKET_ISO2, phone);
     if (!e164) {
       setPhoneInvalid(true);
       return;
@@ -104,8 +98,6 @@ function MarketSetupPage() {
     setPhoneInvalid(false);
     setBusy(true);
     try {
-      // Usernames are generated centrally from the full international mobile
-      // number, without the leading plus. This stays unique across countries.
       const handle = e164.replace(/\D/g, "");
 
       const { error } = await supabase.from("mkt_user_profiles").upsert(
@@ -146,32 +138,21 @@ function MarketSetupPage() {
           </span>
         </div>
 
-        <h1 className="text-xl font-bold text-foreground">{t("market.setup.title")}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{t("market.setup.subtitle")}</p>
+        <h1 className="text-xl font-bold text-foreground">إعداد حسابك في سوريا</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          نسخة السعودية متوقفة مؤقتًا، وجميع الحسابات والإعلانات الجديدة في هذه النسخة سورية.
+        </p>
 
         <form onSubmit={onSubmit} className="mt-5 space-y-4">
-          {/* Country only: the city is asked later, where it is actually needed
-              (a listing, a business, a search filter) — never at signup. */}
-          <div className="min-w-0 space-y-1.5">
-            <Label htmlFor="setup-country">{t("market.geo.country")}</Label>
-            <select
-              id="setup-country"
-              required
-              className="h-11 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground"
-              value={countryId ?? ""}
-              onChange={(event) => {
-                setCountryId(event.target.value || null);
-                setPhone("");
-                setPhoneInvalid(false);
-              }}
-            >
-              <option value="">{t("market.geo.pick")}</option>
-              {(countries.data ?? []).map((c) => (
-                <option key={c.id} value={c.id}>
-                  {geoName(c, locale)}
-                </option>
-              ))}
-            </select>
+          <div className="space-y-1.5">
+            <Label>{t("market.geo.country")}</Label>
+            <div className="flex min-h-11 items-center gap-2 rounded-md border border-input bg-muted/35 px-3 text-sm font-bold text-foreground">
+              <Flag className="size-4 text-primary" aria-hidden />
+              <span>{locale === "en" ? "Syria" : "سوريا"}</span>
+              <span className="ms-auto rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                السوق النشط
+              </span>
+            </div>
           </div>
 
           <PhoneField
@@ -183,8 +164,8 @@ function MarketSetupPage() {
           />
           <p className="text-[11px] text-muted-foreground">
             {locale === "ar"
-              ? "سيُستخدم رقم الجوال الدولي كاسم المستخدم."
-              : "Your international mobile number will be used as your username."}
+              ? "أدخل رقمًا سوريًا. سيُحفظ دوليًا بصيغة +963 ويُستخدم كاسم المستخدم."
+              : "Enter a Syrian number. It will be stored with +963 and used as your username."}
           </p>
           <PhoneVisibilityField value={visibility} onChange={setVisibility} />
 
@@ -194,7 +175,7 @@ function MarketSetupPage() {
               id="display_name"
               required
               value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              onChange={(event) => setDisplayName(event.target.value)}
             />
           </div>
 
