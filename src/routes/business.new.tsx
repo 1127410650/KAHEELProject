@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { BusinessQuickCreate } from "@/components/marketplace/BusinessQuickCreate";
+import { StoreTemplateShowcase } from "@/components/marketplace/StoreTemplateShowcase";
 import {
   SelectedStoreTemplate,
   StoreTemplatePicker,
@@ -23,12 +24,6 @@ interface NewStoreSearch {
 const DIRTY_KEY = "store-new";
 const TEMPLATE_KEY = "tahqaq.store-template";
 
-/**
- * Public store-creation page. The first step is always template selection; the
- * existing verified store wizard opens only after the user chooses a visual
- * identity. The internal tenant model remains unchanged for permissions and
- * isolation.
- */
 export const Route = createFileRoute("/business/new")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): NewStoreSearch => {
@@ -125,11 +120,14 @@ function NewStorePage() {
         ) : (
           <>
             <SelectedStoreTemplate template={selectedTemplate} onChange={changeTemplate} />
+            <StoreTemplateShowcase template={selectedTemplate} />
 
             <div className="mb-4 rounded-2xl border border-border bg-card p-4 shadow-panel">
-              <p className="text-xs font-semibold text-muted-foreground">هوية المتجر</p>
-              <h1 className="mt-1 text-xl font-black text-foreground">{selectedTemplate.title}</h1>
-              <p className="mt-1 text-sm leading-6 text-muted-foreground">{selectedTemplate.description}</p>
+              <p className="text-xs font-semibold text-muted-foreground">بيانات المتجر</p>
+              <h1 className="mt-1 text-xl font-black text-foreground">أكمل إنشاء {selectedTemplate.title}</h1>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                المعاينة أعلاه توضح شكل المتجر، والآن أدخل البيانات الأساسية لبدء استخدامه.
+              </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {selectedTemplate.features.map((feature) => (
                   <span key={feature} className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground">
@@ -145,7 +143,7 @@ function NewStorePage() {
               </p>
             )}
 
-            <div className={`overflow-hidden rounded-3xl border border-border bg-card p-1 shadow-raised`}>
+            <div className="overflow-hidden rounded-3xl border border-border bg-card p-1 shadow-raised">
               <div className={`rounded-[1.35rem] bg-gradient-to-br ${selectedTemplate.gradient} p-1`}>
                 <div className="rounded-[1.15rem] bg-background p-3 sm:p-5">
                   <BusinessQuickCreate
