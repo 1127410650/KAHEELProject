@@ -84,19 +84,19 @@ export function MarketCategoryStrip() {
           height: 0;
         }
         .market-category-rail {
-          grid-auto-columns: calc((100% - 18px) / 4);
+          grid-auto-columns: calc((100% - 24px - 18px) / 4);
           scroll-snap-type: x mandatory;
           scroll-padding-inline: 12px;
         }
         @media (min-width: 640px) {
           .market-category-rail {
-            grid-auto-columns: calc((100% - 40px) / 6);
+            grid-auto-columns: calc((100% - 32px - 40px) / 6);
             scroll-padding-inline: 16px;
           }
         }
         @media (min-width: 1024px) {
           .market-category-rail {
-            grid-auto-columns: calc((100% - 48px) / 7);
+            grid-auto-columns: calc((100% - 32px - 48px) / 7);
           }
         }
       `}</style>
@@ -106,7 +106,6 @@ export function MarketCategoryStrip() {
           ref={railRef}
           dir={dir}
           aria-label={t("market.home.strip.label")}
-          onScroll={snapToNearestCompleteTab}
           className="market-category-rail grid w-full grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4"
         >
           {PRIMARY_FIELDS.map((field) => {
