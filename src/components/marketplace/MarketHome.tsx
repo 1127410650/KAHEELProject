@@ -19,9 +19,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 const GRID = "grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3.5 lg:grid-cols-4";
 
 /**
- * The public marketplace home ("كحلي"): featured promotions (only when real
- * ones exist), the category rail and tiles, then one single feed of every
- * published listing, newest first, loaded in batches.
+ * The public marketplace home ("كحلي"): the primary category rail sits directly
+ * below the header, followed by featured promotions (only when real ones exist),
+ * category tiles, then one single feed of every published listing, newest first,
+ * loaded in batches.
  *
  * There is deliberately no search box here — search lives in the bottom bar on
  * phones and in the header on desktop — and no account card or switcher.
@@ -80,10 +81,10 @@ export function MarketHome() {
 
   return (
     <>
-      {/* Promotions sit directly under the header; the banner hides itself
-          entirely when no live promotion exists. */}
-      <MarketFeaturedBanner />
+      {/* Keep the primary navigation directly below the header, visually separate
+          from both the brand/actions row and the featured advertising block. */}
       <MarketCategoryStrip />
+      <MarketFeaturedBanner />
       <MarketCategoryTiles />
 
       <section className="mx-auto w-full max-w-[1240px] px-3 pb-6 pt-4 sm:px-4 lg:px-6">
