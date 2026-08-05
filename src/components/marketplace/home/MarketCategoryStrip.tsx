@@ -1,5 +1,4 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
 import { Home, LayoutGrid } from "lucide-react";
 
 import { useI18n } from "@/i18n";
@@ -9,63 +8,35 @@ import {
   isFieldActive,
 } from "@/lib/market-primary-navigation";
 
-/** Keeps the rail position when the visitor returns from a search or an ad. */
-const RAIL_KEY = "mkt:home:cats-scroll";
-
 /**
- * Public marketplace primary-fields rail: ONE horizontally scrollable row, in
- * the approved order, read from `market-primary-navigation` so home, search and
- * the listing form can never show a different list.
- *
- * «الرئيسية» links to `/`, «المزيد» opens `/more` (the approved extra-fields
- * panel — the list is deliberately not repeated inside a sheet here), and every
- * other chip is a real `/search` link on a real category id.
+ * Fixed primary category rail for the marketplace home. It stays directly under
+ * the header, uses one clean horizontal row, and never shows a browser scrollbar
+ * or stores an awkward partial scroll position between visits.
  */
 export function MarketCategoryStrip() {
   const { t, locale } = useI18n();
-  const railRef = useRef<HTMLDivElement | null>(null);
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
   const current = { category: search["category"], sub: search["sub"] };
-  // City, sort and the other filters survive a field change.
   const kept: Record<string, string> = {};
   for (const key of ["cityId", "sort", "img", "min", "max"]) {
     const value = search[key];
     if (typeof value === "string" && value !== "") kept[key] = value;
   }
 
-  useEffect(() => {
-    const rail = railRef.current;
-    if (!rail) return;
-    const saved = Number(sessionStorage.getItem(RAIL_KEY) ?? "0");
-    if (Number.isFinite(saved) && saved !== 0) rail.scrollLeft = saved;
-  }, []);
-
   const chipClass =
-    "inline-flex min-h-11 shrink-0 snap-start items-center gap-1.5 rounded-full border px-3.5 text-xs font-medium transition-colors";
+    "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[11px] font-medium transition-colors sm:h-10 sm:px-3.5 sm:text-xs";
   const idle =
     "border-market-navy-soft/60 text-market-navy-foreground/90 hover:border-market-silver hover:bg-market-navy-soft hover:text-market-navy-foreground";
   const active =
-    "border-market-silver bg-market-navy-soft text-market-navy-foreground font-semibold";
+    "border-market-silver bg-market-navy-soft font-semibold text-market-navy-foreground";
 
   return (
-    <div className="border-b border-market-navy-soft/50 bg-market-navy">
-      <div
-        ref={railRef}
+    <div className="sticky top-0 z-30 border-b border-market-navy-soft/50 bg-market-navy/98 backdrop-blur">
+      <nav
         aria-label={t("market.home.strip.label")}
-        onWheel={(event) => {
-          const rail = railRef.current;
-          if (!rail) return;
-          if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-          rail.scrollLeft += event.deltaY;
-        }}
-        onScroll={() => {
-          if (railRef.current) {
-            sessionStorage.setItem(RAIL_KEY, String(railRef.current.scrollLeft));
-          }
-        }}
-        className="market-rail mx-auto flex w-full max-w-[1240px] snap-x items-center gap-2 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:px-4 lg:px-6"
+        className="mx-auto flex w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto overscroll-x-contain px-3 py-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4 lg:px-6"
       >
         {PRIMARY_FIELDS.map((field) => {
           const label = t(`market.fields.${field.id}`);
@@ -103,7 +74,7 @@ export function MarketCategoryStrip() {
             </Link>
           );
         })}
-      </div>
+      </nav>
     </div>
   );
 }
