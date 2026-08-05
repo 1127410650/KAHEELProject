@@ -6,64 +6,59 @@ import { ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { BusinessQuickCreate } from "@/components/marketplace/BusinessQuickCreate";
-import { isSafeInternalPath } from "@/lib/safe-next";
+import { isSafeInternalPath, safeInternalPath } from "@/lib/safe-next";
 import { clearUnsaved, markUnsaved } from "@/lib/unsaved-changes";
 
-interface NewBizSearch {
+interface NewStoreSearch {
   next?: string | undefined;
 }
 
-const DIRTY_KEY = "business-new";
+const DIRTY_KEY = "store-new";
 
 /**
- * Standalone "create a business" screen.
- *
- * Reached from the account picker as a secondary action — never as a modal on top
- * of it. Creating a business does NOT change the active account: the user returns
- * to the picker and chooses it explicitly.
+ * Public store-creation page. The internal tenant model remains unchanged for
+ * permissions and isolation, while the public product language is consistently
+ * "store". Creating a store never opens an account picker.
  */
 export const Route = createFileRoute("/business/new")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): NewBizSearch => {
+  validateSearch: (search: Record<string, unknown>): NewStoreSearch => {
     const raw = search["next"];
     return typeof raw === "string" && isSafeInternalPath(raw) ? { next: raw } : {};
   },
   head: () => ({
     meta: [
-      { title: "إنشاء منشأة جديدة — سوق تحقّق" },
+      { title: "إنشاء متجر جديد — سوق تحقّق" },
       {
         name: "description",
-        content:
-          "أنشئ منشأة جديدة في سوق تحقّق: البيانات النظامية، الموظف المختص، ثم إرسال مستندات التوثيق.",
+        content: "أنشئ متجرًا لعرض منتجاتك وإدارة إعلاناتك في سوق تحقّق.",
       },
-      { property: "og:title", content: "إنشاء منشأة جديدة — سوق تحقّق" },
-      { property: "og:description", content: "إضافة منشأة إلى حسابك في سوق تحقّق." },
+      { property: "og:title", content: "إنشاء متجر جديد — سوق تحقّق" },
+      { property: "og:description", content: "إضافة متجر إلى حسابك في سوق تحقّق." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: NewBusinessPage,
+  component: NewStorePage,
 });
 
-function NewBusinessPage() {
+function NewStorePage() {
   const { t } = useI18n();
   const { session, loading } = useSession();
   const { next: rawNext } = Route.useSearch();
-  const next = isSafeInternalPath(rawNext) ? rawNext : undefined;
+  const next = safeInternalPath(isSafeInternalPath(rawNext) ? rawNext : undefined);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     if (!loading && !session) {
-      const back = `/business/new${next ? `?next=${encodeURIComponent(next)}` : ""}`;
+      const back = `/business/new?next=${encodeURIComponent(next)}`;
       void navigate({ href: `/auth?next=${encodeURIComponent(back)}`, replace: true });
     }
   }, [loading, session, navigate, next]);
 
-  // Nothing sensitive is persisted anywhere: the wizard lives in page state only,
-  // so leaving the page loses it — warn only while something is unsaved.
   useEffect(() => {
     if (!dirty) {
       clearUnsaved(DIRTY_KEY);
@@ -78,24 +73,16 @@ function NewBusinessPage() {
     };
   }, [dirty]);
 
-  function backToPicker(created?: string) {
-    void navigate({
-      to: "/choose-account",
-      search: { ...(next ? { next } : {}), ...(created ? { created } : {}) },
-      replace: true,
-    });
+  function leave() {
+    void navigate({ href: next || "/more", replace: true });
   }
 
   return (
     <div className="market-surface mx-auto w-full max-w-xl px-3 py-6 sm:py-10 lg:max-w-3xl">
       <p className="mb-3 text-[11px] text-muted-foreground">
-        <Link
-          to="/choose-account"
-          search={{ ...(next ? { next } : {}) }}
-          className="inline-flex items-center gap-1 underline"
-        >
+        <Link to="/more" className="inline-flex items-center gap-1 underline">
           <ArrowUpRight className="size-3.5" aria-hidden />
-          {t("market.entry.backToAccounts")}
+          العودة إلى المزيد
         </Link>
       </p>
 
@@ -109,15 +96,13 @@ function NewBusinessPage() {
         variant="page"
         open
         onOpenChange={(open) => {
-          if (!open) backToPicker();
+          if (!open) leave();
         }}
         onDirtyChange={setDirty}
-        onCreated={(tenantId) => {
-          // The new business appears in the picker, but the active account
-          // intentionally stays unchanged — the user selects it explicitly.
+        onCreated={() => {
           setDirty(false);
           void queryClient.invalidateQueries({ queryKey: ["mkt", "my-accounts"] });
-          backToPicker(tenantId);
+          leave();
         }}
       />
     </div>
