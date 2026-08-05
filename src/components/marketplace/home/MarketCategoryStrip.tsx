@@ -84,29 +84,28 @@ export function MarketCategoryStrip() {
           height: 0;
         }
         .market-category-rail {
-          grid-auto-columns: calc((100% - 24px - 18px) / 4);
+          grid-auto-columns: calc((100% - 18px) / 4);
           scroll-snap-type: x mandatory;
-          scroll-padding-inline: 12px;
+          scroll-padding-inline: 0;
         }
         @media (min-width: 640px) {
           .market-category-rail {
-            grid-auto-columns: calc((100% - 32px - 40px) / 6);
-            scroll-padding-inline: 16px;
+            grid-auto-columns: calc((100% - 40px) / 6);
           }
         }
         @media (min-width: 1024px) {
           .market-category-rail {
-            grid-auto-columns: calc((100% - 32px - 48px) / 7);
+            grid-auto-columns: calc((100% - 48px) / 7);
           }
         }
       `}</style>
 
-      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden border-b border-market-navy-soft/50 bg-market-navy text-market-navy-foreground shadow-sm">
+      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden border-b border-market-navy-soft/50 bg-market-navy px-3 text-market-navy-foreground shadow-sm sm:px-4">
         <nav
           ref={railRef}
           dir={dir}
           aria-label={t("market.home.strip.label")}
-          className="market-category-rail grid w-full grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4"
+          className="market-category-rail grid w-full grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2"
         >
           {PRIMARY_FIELDS.map((field) => {
             const label = t(`market.fields.${field.id}`);
