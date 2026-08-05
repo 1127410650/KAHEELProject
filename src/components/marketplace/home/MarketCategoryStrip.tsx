@@ -18,7 +18,7 @@ export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
   const railRef = useRef<HTMLElement | null>(null);
   const homeRef = useRef<HTMLAnchorElement | null>(null);
-  const snapTimer = useRef<number | null>(null);
+  
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
@@ -56,42 +56,6 @@ export function MarketCategoryStrip() {
     };
   }, [dir]);
 
-  useEffect(() => {
-    return () => {
-      if (snapTimer.current !== null) window.clearTimeout(snapTimer.current);
-    };
-  }, []);
-
-  const snapToNearestCompleteTab = () => {
-    if (snapTimer.current !== null) window.clearTimeout(snapTimer.current);
-    snapTimer.current = window.setTimeout(() => {
-      const rail = railRef.current;
-      if (!rail) return;
-      const railRect = rail.getBoundingClientRect();
-      const children = Array.from(rail.querySelectorAll<HTMLElement>("[data-category-tab]"));
-      if (children.length === 0) return;
-
-      const targetEdge = dir === "rtl" ? railRect.right : railRect.left;
-      let nearest = children[0]!;
-      let nearestDistance = Number.POSITIVE_INFINITY;
-
-      for (const child of children) {
-        const rect = child.getBoundingClientRect();
-        const edge = dir === "rtl" ? rect.right : rect.left;
-        const distance = Math.abs(edge - targetEdge);
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          nearest = child;
-        }
-      }
-
-      nearest.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: dir === "rtl" ? "end" : "start",
-      });
-    }, 120);
-  };
 
   const chipClass =
     "flex h-9 w-full min-w-0 snap-start snap-always items-center justify-center gap-1 rounded-full border px-2 text-[11px] font-medium leading-none transition-colors sm:h-10 sm:text-xs";
@@ -117,12 +81,11 @@ export function MarketCategoryStrip() {
         .market-category-rail {
           grid-auto-columns: calc((100% - 18px) / 4);
           scroll-snap-type: x mandatory;
-          scroll-padding-inline: 12px;
+          scroll-padding-inline: 0;
         }
         @media (min-width: 640px) {
           .market-category-rail {
             grid-auto-columns: calc((100% - 40px) / 6);
-            scroll-padding-inline: 16px;
           }
         }
         @media (min-width: 1024px) {
@@ -132,13 +95,12 @@ export function MarketCategoryStrip() {
         }
       `}</style>
 
-      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden border-b border-market-navy-soft/50 bg-market-navy text-market-navy-foreground shadow-sm">
+      <div className="sticky top-[56px] z-[35] -mt-px w-full overflow-hidden border-b border-market-navy-soft/50 bg-market-navy px-3 text-market-navy-foreground shadow-sm sm:px-4">
         <nav
           ref={railRef}
           dir={dir}
           aria-label={t("market.home.strip.label")}
-          onScroll={snapToNearestCompleteTab}
-          className="market-category-rail grid w-full grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-4"
+          className="market-category-rail grid w-full grid-flow-col gap-1.5 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-market-navy py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-2"
         >
           {PRIMARY_FIELDS.map((field) => {
             const label = t(`market.fields.${field.id}`);
