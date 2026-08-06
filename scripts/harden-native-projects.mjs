@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -98,6 +99,85 @@ function ensureAtsPolicy(plist) {
   });
 }
 
+function stablePbxId(label) {
+  return createHash("sha1").update(`kahli:${label}`).digest("hex").slice(0, 24).toUpperCase();
+}
+
+function insertAfterLine(project, searchFrom, line) {
+  const newline = project.indexOf("\n", searchFrom);
+  if (newline < 0) throw new Error("Unable to patch the Xcode project structure.");
+  return `${project.slice(0, newline + 1)}${line}\n${project.slice(newline + 1)}`;
+}
+
+function addPrivacyManifestToXcodeProject(project) {
+  if (project.includes("PrivacyInfo.xcprivacy in Resources")) return project;
+
+  const fileRefId = stablePbxId("privacy-manifest-file-reference");
+  const buildFileId = stablePbxId("privacy-manifest-build-file");
+
+  const buildSection = "/* Begin PBXBuildFile section */";
+  const fileReferenceSection = "/* Begin PBXFileReference section */";
+  const resourcesSection = "/* Begin PBXResourcesBuildPhase section */";
+
+  const buildSectionIndex = project.indexOf(buildSection);
+  const fileReferenceSectionIndex = project.indexOf(fileReferenceSection);
+  const resourcesSectionIndex = project.indexOf(resourcesSection);
+  if (buildSectionIndex < 0 || fileReferenceSectionIndex < 0 || resourcesSectionIndex < 0) {
+    throw new Error("The Xcode project is missing required PBX sections.");
+  }
+
+  project = insertAfterLine(
+    project,
+    buildSectionIndex,
+    `\t\t${buildFileId} /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = ${fileRefId} /* PrivacyInfo.xcprivacy */; };`,
+  );
+
+  project = insertAfterLine(
+    project,
+    project.indexOf(fileReferenceSection),
+    `\t\t${fileRefId} /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };`,
+  );
+
+  const mainGroupMatch = project.match(/\bmainGroup = ([A-F0-9]{24});/);
+  if (!mainGroupMatch) throw new Error("Unable to identify the Xcode main group.");
+
+  const mainGroupObject = project.indexOf(`${mainGroupMatch[1]} = {`);
+  const mainGroupChildren = project.indexOf("children = (", mainGroupObject);
+  if (mainGroupObject < 0 || mainGroupChildren < 0) {
+    throw new Error("Unable to identify the Xcode main group children.");
+  }
+  project = insertAfterLine(
+    project,
+    mainGroupChildren,
+    `\t\t\t\t${fileRefId} /* PrivacyInfo.xcprivacy */,`,
+  );
+
+  const resourcesObject = project.indexOf("isa = PBXResourcesBuildPhase;", project.indexOf(resourcesSection));
+  const resourceFiles = project.indexOf("files = (", resourcesObject);
+  if (resourcesObject < 0 || resourceFiles < 0) {
+    throw new Error("Unable to identify the Xcode resources build phase.");
+  }
+  project = insertAfterLine(
+    project,
+    resourceFiles,
+    `\t\t\t\t${buildFileId} /* PrivacyInfo.xcprivacy in Resources */,`,
+  );
+
+  return project;
+}
+
+function writePrivacyManifest() {
+  const privacyManifestPath = "ios/App/PrivacyInfo.xcprivacy";
+  writeFileSync(
+    privacyManifestPath,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n  <key>NSPrivacyAccessedAPITypes</key>\n  <array>\n    <dict>\n      <key>NSPrivacyAccessedAPIType</key>\n      <string>NSPrivacyAccessedAPICategoryUserDefaults</string>\n      <key>NSPrivacyAccessedAPITypeReasons</key>\n      <array>\n        <string>CA92.1</string>\n      </array>\n    </dict>\n  </array>\n</dict>\n</plist>\n`,
+  );
+
+  const projectPath = "ios/App/App.xcodeproj/project.pbxproj";
+  const project = readFileSync(projectPath, "utf8");
+  writeFileSync(projectPath, addPrivacyManifestToXcodeProject(project));
+}
+
 function hardenIos() {
   const plistPath = "ios/App/App/Info.plist";
   let plist = readFileSync(plistPath, "utf8");
@@ -107,6 +187,7 @@ function hardenIos() {
   plist = setRootBoolean(plist, "LSSupportsOpeningDocumentsInPlace", false);
 
   writeFileSync(plistPath, plist);
+  writePrivacyManifest();
 }
 
 let hardenedPlatforms = 0;
