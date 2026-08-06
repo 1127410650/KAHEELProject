@@ -18,6 +18,47 @@ import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
+import { initializeNativeSecurity } from "@/lib/mobile-security";
+
+declare const __KAHLI_NATIVE_BUILD__: boolean;
+
+function createNativeContentSecurityPolicy(): string {
+  const rawSupabaseUrl = import.meta.env["VITE_SUPABASE_URL"]?.trim();
+  if (!rawSupabaseUrl) {
+    throw new Error("The native build requires VITE_SUPABASE_URL for its network policy.");
+  }
+
+  const supabaseUrl = new URL(rawSupabaseUrl);
+  if (supabaseUrl.protocol !== "https:") {
+    throw new Error("The native Content Security Policy requires an HTTPS Supabase origin.");
+  }
+
+  const realtimeUrl = new URL(supabaseUrl);
+  realtimeUrl.protocol = "wss:";
+
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${supabaseUrl.origin} ${realtimeUrl.origin}`,
+    "media-src 'self' blob: https:",
+    "worker-src 'self' blob:",
+    "child-src 'self' blob:",
+    "manifest-src 'self'",
+    "object-src 'none'",
+    "base-uri 'none'",
+    "frame-src 'none'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+}
+
+const NATIVE_CONTENT_SECURITY_POLICY = __KAHLI_NATIVE_BUILD__
+  ? createNativeContentSecurityPolicy()
+  : "";
 
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
@@ -121,7 +162,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1, viewport-fit=cover",
+      },
       { title: "كَحيل — Kaheel" },
       {
         name: "description",
@@ -150,6 +194,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png",
       },
+      ...(__KAHLI_NATIVE_BUILD__
+        ? [
+            {
+              httpEquiv: "Content-Security-Policy",
+              content: NATIVE_CONTENT_SECURITY_POLICY,
+            },
+          ]
+        : []),
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -178,15 +230,32 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Real product analytics for every route: page views, timings, client errors.
   useAnalyticsInstrumentation();
+
+  useEffect(() => {
+    let active = true;
+    let cleanup: (() => void) | undefined;
+
+    void initializeNativeSecurity()
+      .then((dispose) => {
+        if (active) cleanup = dispose;
+        else dispose();
+      })
+      .catch((error: unknown) => {
+        reportLovableError(error, { boundary: "native_security_initialization" });
+      });
+
+    return () => {
+      active = false;
+      cleanup?.();
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <SessionProvider>
           <CallCenterProvider>
-            {/* Required: nested routes render here. */}
             <Outlet />
             <CallOverlay />
             <Toaster position="top-center" />

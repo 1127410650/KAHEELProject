@@ -9,7 +9,7 @@ on:
       - package.json
       - package-lock.json
       - capacitor.config.ts
-      - mobile-shell/**
+      - vite.config.ts
       - scripts/**
       - src/lib/**
       - src/integrations/supabase/client.ts
@@ -23,7 +23,7 @@ on:
       - package.json
       - package-lock.json
       - capacitor.config.ts
-      - mobile-shell/**
+      - vite.config.ts
       - scripts/**
       - src/lib/**
       - src/integrations/supabase/client.ts
@@ -45,7 +45,6 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 45
     env:
-      MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
       MOBILE_RELEASE_BUILD: "0"
       VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
       VITE_SUPABASE_PROJECT_ID: ci-placeholder
@@ -80,8 +79,15 @@ jobs:
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
 
-      - name: Build web application
+      - name: Build normal web application
         run: npm run build
+
+      - name: Build bundled native SPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build:mobile
+          test -s dist/client/index.html
 
       - name: Generate and harden native projects
         shell: bash
@@ -99,14 +105,16 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Build iOS simulator application
-        run: >-
-          xcodebuild
-          -workspace ios/App/App.xcworkspace
-          -scheme App
-          -sdk iphonesimulator
-          -configuration Debug
-          CODE_SIGNING_ALLOWED=NO
-          build
+        shell: bash
+        run: |
+          set -euo pipefail
+          derived_data="ios/DerivedData"
+          if [ -d ios/App/App.xcworkspace ]; then
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+          else
+            xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+          fi
+          test -s "$derived_data/Build/Products/Debug-iphonesimulator/App.app/PrivacyInfo.xcprivacy"
 
       - name: Upload validated native projects
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -121,7 +129,7 @@ jobs:
             !android/local.properties
             ios
             !ios/App/Pods/**
-            !ios/App/DerivedData/**
+            !ios/DerivedData/**
 
       - name: Upload Android debug package
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
