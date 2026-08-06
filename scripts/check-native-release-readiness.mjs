@@ -1,6 +1,8 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { extname, join } from "node:path";
+import { resolveMobileOrigin } from "./mobile-origin-policy.mjs";
 
+const approvedMobileHost = resolveMobileOrigin().hostname;
 const findings = [];
 
 function report(file, reason) {
@@ -179,8 +181,8 @@ if (plist) {
     const domains = [...domainsMatch[1].matchAll(/<string>([^<]+)<\/string>/g)].map(
       (match) => match[1],
     );
-    if (domains.length !== 1 || domains[0] !== "check-your-name-ai.vercel.app") {
-      report(plistPath, "WKAppBoundDomains must contain only the reviewed production host");
+    if (domains.length !== 1 || domains[0] !== approvedMobileHost) {
+      report(plistPath, "WKAppBoundDomains must contain only the active approved host");
     }
   }
 
