@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { extname, join } from "node:path";
 
 const findings = [];
 
@@ -16,6 +17,22 @@ function requireFile(path) {
 
 function requireText(file, content, expected, reason) {
   if (!content?.includes(expected)) report(file, reason);
+}
+
+function requirePlistFalse(file, content, key) {
+  const pattern = new RegExp(`<key>${key}<\\/key>\\s*<false\\s*\\/>`);
+  if (!pattern.test(content ?? "")) report(file, `${key} must be explicitly false`);
+}
+
+function walk(directory) {
+  if (!existsSync(directory)) return [];
+  const paths = [];
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) paths.push(...walk(path));
+    else if (entry.isFile()) paths.push(path);
+  }
+  return paths;
 }
 
 const manifestPath = "android/app/src/main/AndroidManifest.xml";
@@ -41,6 +58,17 @@ if (manifest) {
     report(manifestPath, "Android manifest explicitly enables debugging");
   }
 
+  const exportedComponents = manifest.match(/android:exported\s*=\s*"true"/g) ?? [];
+  if (exportedComponents.length !== 1) {
+    report(manifestPath, "exactly one launcher activity may be exported");
+  }
+  for (const expected of [
+    "android.intent.action.MAIN",
+    "android.intent.category.LAUNCHER",
+  ]) {
+    requireText(manifestPath, manifest, expected, `launcher intent is missing ${expected}`);
+  }
+
   const forbiddenPermissions = [
     "android.permission.CAMERA",
     "android.permission.RECORD_AUDIO",
@@ -55,9 +83,28 @@ if (manifest) {
     "android.permission.BLUETOOTH_SCAN",
     "android.permission.POST_NOTIFICATIONS",
     "android.permission.MANAGE_EXTERNAL_STORAGE",
+    "android.permission.QUERY_ALL_PACKAGES",
+    "android.permission.REQUEST_INSTALL_PACKAGES",
+    "android.permission.SYSTEM_ALERT_WINDOW",
+    "android.permission.WRITE_SETTINGS",
   ];
   for (const permission of forbiddenPermissions) {
     if (manifest.includes(permission)) report(manifestPath, `contains unapproved permission ${permission}`);
+  }
+}
+
+const variablesPath = "android/variables.gradle";
+const variables = requireFile(variablesPath);
+if (variables) {
+  for (const [name, minimum] of [
+    ["minSdkVersion", 23],
+    ["compileSdkVersion", 35],
+    ["targetSdkVersion", 35],
+  ]) {
+    const match = variables.match(new RegExp(`${name}\\s*=\\s*(\\d+)`));
+    if (!match || Number(match[1]) < minimum) {
+      report(variablesPath, `${name} must be at least ${minimum}`);
+    }
   }
 }
 
@@ -84,7 +131,17 @@ if (networkConfig) {
 const extractionRulesPath = "android/app/src/main/res/xml/data_extraction_rules.xml";
 const extractionRules = requireFile(extractionRulesPath);
 if (extractionRules) {
-  for (const domain of ["root", "file", "database", "sharedpref", "external"]) {
+  for (const domain of [
+    "root",
+    "file",
+    "database",
+    "sharedpref",
+    "external",
+    "device_root",
+    "device_file",
+    "device_database",
+    "device_sharedpref",
+  ]) {
     requireText(
       extractionRulesPath,
       extractionRules,
@@ -97,17 +154,34 @@ if (extractionRules) {
 const plistPath = "ios/App/App/Info.plist";
 const plist = requireFile(plistPath);
 if (plist) {
-  for (const expected of [
+  requireText(
+    plistPath,
+    plist,
     "<key>NSAppTransportSecurity</key>",
-    "<key>NSAllowsArbitraryLoads</key>",
-    "<key>NSAllowsArbitraryLoadsInWebContent</key>",
-    "<key>NSAllowsLocalNetworking</key>",
-    "<key>WKAppBoundDomains</key>",
-    "<string>check-your-name-ai.vercel.app</string>",
-    "<key>UIFileSharingEnabled</key>",
-    "<key>LSSupportsOpeningDocumentsInPlace</key>",
+    "iOS App Transport Security dictionary is missing",
+  );
+  for (const key of [
+    "NSAllowsArbitraryLoads",
+    "NSAllowsArbitraryLoadsInWebContent",
+    "NSAllowsLocalNetworking",
+    "UIFileSharingEnabled",
+    "LSSupportsOpeningDocumentsInPlace",
   ]) {
-    requireText(plistPath, plist, expected, `iOS security setting is missing: ${expected}`);
+    requirePlistFalse(plistPath, plist, key);
+  }
+
+  const domainsMatch = plist.match(
+    /<key>WKAppBoundDomains<\/key>\s*<array>([\s\S]*?)<\/array>/,
+  );
+  if (!domainsMatch) {
+    report(plistPath, "WKAppBoundDomains is missing");
+  } else {
+    const domains = [...domainsMatch[1].matchAll(/<string>([^<]+)<\/string>/g)].map(
+      (match) => match[1],
+    );
+    if (domains.length !== 1 || domains[0] !== "check-your-name-ai.vercel.app") {
+      report(plistPath, "WKAppBoundDomains must contain only the reviewed production host");
+    }
   }
 
   const forbiddenUsageDescriptions = [
@@ -116,19 +190,45 @@ if (plist) {
     "NSLocationWhenInUseUsageDescription",
     "NSLocationAlwaysUsageDescription",
     "NSContactsUsageDescription",
+    "NSPhotoLibraryUsageDescription",
     "NSPhotoLibraryAddUsageDescription",
+    "NSSpeechRecognitionUsageDescription",
+    "NSBluetoothAlwaysUsageDescription",
   ];
   for (const key of forbiddenUsageDescriptions) {
     if (plist.includes(`<key>${key}</key>`)) report(plistPath, `contains unapproved privacy capability ${key}`);
   }
 }
 
-for (const signingPath of [
-  "android/keystore.properties",
-  "android/app/release.keystore",
-  "ios/App/App.mobileprovision",
-]) {
-  if (existsSync(signingPath)) report(signingPath, "signing material must not be stored in the source tree");
+const podfilePath = "ios/App/Podfile";
+const podfile = requireFile(podfilePath);
+if (podfile) {
+  const deployment = podfile.match(/platform\s+:ios,\s*['"](\d+(?:\.\d+)?)['"]/);
+  if (!deployment || Number(deployment[1]) < 14) {
+    report(podfilePath, "iOS deployment target must be at least 14.0");
+  }
+}
+
+for (const file of [...walk("android"), ...walk("ios")]) {
+  const extension = extname(file).toLowerCase();
+  if ([".jks", ".keystore", ".p12", ".pfx", ".mobileprovision"].includes(extension)) {
+    report(file, "signing material must not be stored in the source tree");
+  }
+
+  if (extension === ".entitlements") {
+    const entitlements = readFileSync(file, "utf8");
+    for (const key of [
+      "com.apple.developer.icloud-container-identifiers",
+      "com.apple.developer.ubiquity-container-identifiers",
+      "com.apple.security.application-groups",
+      "keychain-access-groups",
+      "com.apple.developer.associated-domains",
+    ]) {
+      if (entitlements.includes(`<key>${key}</key>`)) {
+        report(file, `contains unapproved entitlement ${key}`);
+      }
+    }
+  }
 }
 
 if (!existsSync("package-lock.json")) {
