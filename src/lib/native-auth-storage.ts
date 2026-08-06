@@ -1,3 +1,4 @@
+import { AUTH_PERSISTENCE_EVENT, rememberSession } from "@/lib/auth-storage";
 import { isNativePlatform } from "@/lib/native-platform";
 
 type AuthStorage = {
@@ -11,6 +12,7 @@ type NativeSecureStorage = typeof import("@aparajita/capacitor-secure-storage")[
 const MAX_AUTH_VALUE_BYTES = 128 * 1024;
 const NATIVE_KEY_PREFIX = "kahli.auth.";
 const INSTALL_MARKER = "kahli.native.secure-storage.initialized";
+const ephemeralSession = new Map<string, string>();
 
 function projectRef(): string {
   const explicit = import.meta.env["VITE_SUPABASE_PROJECT_ID"]?.trim();
@@ -48,6 +50,41 @@ function purgeLegacyBrowserCopies(): void {
 }
 
 let nativeStorageReady: Promise<NativeSecureStorage> | undefined;
+let persistenceTransition: Promise<void> = Promise.resolve();
+let persistenceListenerArmed = false;
+
+async function movePersistence(storage: NativeSecureStorage, remember: boolean) {
+  if (remember) {
+    for (const [key, value] of ephemeralSession) {
+      assertAllowedAuthKey(key);
+      await storage.setItem(key, value);
+    }
+    ephemeralSession.clear();
+    return;
+  }
+
+  for (const key of await storage.keys(false)) {
+    if (!key.startsWith(allowedPrefix())) continue;
+    const value = await storage.getItem(key);
+    if (value !== null) ephemeralSession.set(key, value);
+    await storage.removeItem(key);
+  }
+}
+
+function queuePersistenceTransition(storage: NativeSecureStorage, remember: boolean) {
+  persistenceTransition = persistenceTransition.then(() => movePersistence(storage, remember));
+  return persistenceTransition;
+}
+
+function armPersistenceListener(storage: NativeSecureStorage) {
+  if (persistenceListenerArmed) return;
+  persistenceListenerArmed = true;
+
+  window.addEventListener(AUTH_PERSISTENCE_EVENT, (event) => {
+    const remember = (event as CustomEvent<{ remember?: boolean }>).detail?.remember;
+    if (typeof remember === "boolean") void queuePersistenceTransition(storage, remember);
+  });
+}
 
 function configuredNativeStorage(): Promise<NativeSecureStorage> {
   if (nativeStorageReady) return nativeStorageReady;
@@ -57,18 +94,18 @@ function configuredNativeStorage(): Promise<NativeSecureStorage> {
       "@aparajita/capacitor-secure-storage"
     );
 
-    // Auth tokens must remain local to this device and unavailable while locked.
     await SecureStorage.setSynchronize(false);
     await SecureStorage.setDefaultKeychainAccess(KeychainAccess.whenUnlockedThisDeviceOnly);
     await SecureStorage.setKeyPrefix(NATIVE_KEY_PREFIX);
 
-    // iOS Keychain can survive uninstall. localStorage does not, so a missing
-    // marker identifies a fresh installation and stale auth values are removed.
-    if (window.localStorage.getItem(INSTALL_MARKER) !== "1") {
+    const freshInstall = window.localStorage.getItem(INSTALL_MARKER) !== "1";
+    if (freshInstall || !rememberSession()) {
       await SecureStorage.clear(false);
-      window.localStorage.setItem(INSTALL_MARKER, "1");
+      ephemeralSession.clear();
     }
+    if (freshInstall) window.localStorage.setItem(INSTALL_MARKER, "1");
 
+    armPersistenceListener(SecureStorage);
     return SecureStorage;
   })();
 
@@ -79,7 +116,8 @@ const nativeStorage: AuthStorage = {
   async getItem(key) {
     assertAllowedAuthKey(key);
     const storage = await configuredNativeStorage();
-    return storage.getItem(key);
+    await persistenceTransition;
+    return rememberSession() ? storage.getItem(key) : (ephemeralSession.get(key) ?? null);
   },
 
   async setItem(key, value) {
@@ -87,13 +125,23 @@ const nativeStorage: AuthStorage = {
     if (new TextEncoder().encode(value).byteLength > MAX_AUTH_VALUE_BYTES) {
       throw new Error("Rejected an oversized authentication value.");
     }
+
     const storage = await configuredNativeStorage();
-    await storage.setItem(key, value);
+    await persistenceTransition;
+    if (rememberSession()) {
+      ephemeralSession.delete(key);
+      await storage.setItem(key, value);
+    } else {
+      ephemeralSession.set(key, value);
+      await storage.removeItem(key);
+    }
   },
 
   async removeItem(key) {
     assertAllowedAuthKey(key);
+    ephemeralSession.delete(key);
     const storage = await configuredNativeStorage();
+    await persistenceTransition;
     await storage.removeItem(key);
   },
 };
@@ -102,8 +150,6 @@ export function createSupabaseAuthStorage(): AuthStorage | undefined {
   if (typeof window === "undefined") return undefined;
   if (!isNativePlatform()) return window.localStorage;
 
-  // Never migrate a previously exposed browser token into native secure storage.
-  // A first native launch must authenticate again and create a fresh secure session.
   purgeLegacyBrowserCopies();
   return nativeStorage;
 }
