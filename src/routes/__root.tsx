@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import { useAnalyticsInstrumentation } from "@/hooks/use-analytics";
 
 import appCss from "../styles.css?url";
+import mobilePrivacyCss from "../mobile-privacy.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "@/i18n";
 import { SessionProvider } from "@/lib/session";
@@ -60,16 +61,6 @@ const NATIVE_CONTENT_SECURITY_POLICY = __KAHLI_NATIVE_BUILD__
   ? createNativeContentSecurityPolicy()
   : "";
 
-/**
- * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
- * `RootComponent`, so they sit outside its provider tree. Each therefore has to
- * mount its own `I18nProvider`, otherwise `useI18n` runs with no provider.
- *
- * Colour identity: every public/marketplace route wears the "كحلي" (navy)
- * palette, so these standalone screens carry `market-surface` too — otherwise
- * `bg-primary` falls back to the internal system's petrol colour. Admin URLs
- * keep the internal identity untouched, so the scope is decided from the path.
- */
 function useShellScope() {
   const pathname = typeof window === "undefined" ? "" : window.location.pathname;
   return pathname.startsWith("/admin") ? "" : "market-surface";
@@ -163,23 +154,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "كحلي — Kahli" },
+      { title: "كَحيل — KAHEEL" },
       {
         name: "description",
-        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — KAHEEL marketplace",
       },
-      { property: "og:title", content: "كحلي — Kahli" },
+      { property: "og:title", content: "كَحيل — KAHEEL" },
       {
         property: "og:description",
-        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — KAHEEL marketplace",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
-      { name: "twitter:title", content: "كحلي — Kahli" },
+      { name: "twitter:title", content: "كَحيل — KAHEEL" },
       {
         name: "twitter:description",
-        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — KAHEEL marketplace",
       },
       {
         property: "og:image",
@@ -202,6 +193,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: mobilePrivacyCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -227,7 +219,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Real product analytics for every route: page views, timings, client errors.
   useAnalyticsInstrumentation();
 
   useEffect(() => {
@@ -254,7 +245,6 @@ function RootComponent() {
       <I18nProvider>
         <SessionProvider>
           <CallCenterProvider>
-            {/* Required: nested routes render here. */}
             <Outlet />
             <CallOverlay />
             <Toaster position="top-center" />
