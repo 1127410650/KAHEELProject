@@ -75,8 +75,26 @@ for (const [pattern, reason] of [
   [/cleartext\s*:\s*true/, "enables cleartext traffic"],
   [/allowMixedContent\s*:\s*true/, "enables mixed HTTP/HTTPS content"],
   [/webContentsDebuggingEnabled\s*:\s*true/, "enables WebView debugging"],
+  [/loggingBehavior\s*:\s*["']debug["']/, "enables native debug logging"],
+  [/allowNavigation\s*:\s*\[\s*["']\*["']\s*\]/, "allows navigation to every origin"],
+  [
+    /limitsNavigationsToAppBoundDomains\s*:\s*false/,
+    "disables the iOS app-bound-domain restriction",
+  ],
 ]) {
   if (pattern.test(capacitorConfig)) report("capacitor.config.ts", reason);
+}
+
+for (const requiredSetting of [
+  'loggingBehavior: "none"',
+  "cleartext: false",
+  "allowMixedContent: false",
+  "webContentsDebuggingEnabled: false",
+  "limitsNavigationsToAppBoundDomains: true",
+]) {
+  if (!capacitorConfig.includes(requiredSetting)) {
+    report("capacitor.config.ts", `is missing required setting: ${requiredSetting}`);
+  }
 }
 
 const configuredOrigin = process.env.MOBILE_APP_ORIGIN;
