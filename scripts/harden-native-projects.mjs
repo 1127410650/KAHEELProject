@@ -1,8 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
-const APPROVED_DOMAIN = "check-your-name-ai.vercel.app";
-
 function replaceApplicationAttribute(xml, name, value) {
   const applicationPattern = /<application\b([^>]*)>/;
   const match = xml.match(applicationPattern);
@@ -100,28 +98,11 @@ function ensureAtsPolicy(plist) {
   });
 }
 
-function ensureAppBoundDomain(plist) {
-  const arrayPattern = /<key>WKAppBoundDomains<\/key>\s*<array>([\s\S]*?)<\/array>/;
-  if (!arrayPattern.test(plist)) {
-    return insertBeforeRootDictionaryClose(
-      plist,
-      `\t<key>WKAppBoundDomains</key>\n\t<array>\n\t\t<string>${APPROVED_DOMAIN}</string>\n\t</array>`,
-    );
-  }
-
-  return plist.replace(arrayPattern, (full, body) => {
-    if (body.includes(`<string>${APPROVED_DOMAIN}</string>`)) return full;
-    const nextBody = `${body.trimEnd()}\n\t\t<string>${APPROVED_DOMAIN}</string>\n\t`;
-    return full.replace(body, nextBody);
-  });
-}
-
 function hardenIos() {
   const plistPath = "ios/App/App/Info.plist";
   let plist = readFileSync(plistPath, "utf8");
 
   plist = ensureAtsPolicy(plist);
-  plist = ensureAppBoundDomain(plist);
   plist = setRootBoolean(plist, "UIFileSharingEnabled", false);
   plist = setRootBoolean(plist, "LSSupportsOpeningDocumentsInPlace", false);
 
