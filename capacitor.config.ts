@@ -34,12 +34,7 @@ const config: CapacitorConfig = {
     limitsNavigationsToAppBoundDomains: true,
     webContentsDebuggingEnabled: false,
   },
-  includePlugins: [
-    "@capacitor/app",
-    "@capacitor/keyboard",
-    "@capacitor/status-bar",
-    "capacitor-secure-storage-plugin",
-  ],
+  includePlugins: ["@capacitor/app", "capacitor-secure-storage-plugin"],
 };
 
 export default config;
