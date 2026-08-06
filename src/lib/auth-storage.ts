@@ -1,21 +1,16 @@
 /**
  * "Keep me signed in on this device" — session persistence scope.
  *
- * There is exactly ONE Supabase client (`@/integrations/supabase/client`), it is
- * created once, and it always uses the official Supabase Auth storage key. This
- * module never invents token keys of its own: it only decides WHERE that single
- * official entry lives.
+ * Browser behavior:
+ *   remember = true  (default) -> localStorage
+ *   remember = false           -> sessionStorage for the current browser session
  *
- *   remember = true  (default) → localStorage: survives reload, new tabs and a
- *                                browser restart; Supabase refreshes the token.
- *   remember = false           → sessionStorage: the same official entry is kept
- *                                for the current browser session only, so a
- *                                reload or in-app navigation keeps the user
- *                                signed in, while closing the browser ends it.
- *
- * The only key we own is the boolean preference below — it holds no token.
+ * Native behavior is implemented by native-auth-storage.ts. It listens for the
+ * event exported here and switches between device-bound secure storage and an
+ * in-memory session store without exposing auth tokens to browser storage.
  */
 const REMEMBER_KEY = "tahqaq.auth.remember";
+export const AUTH_PERSISTENCE_EVENT = "kahli:auth-persistence-change";
 
 function authStorageKey(): string | null {
   const ref = import.meta.env["VITE_SUPABASE_PROJECT_ID"];
@@ -48,12 +43,19 @@ export function setRememberSession(remember: boolean) {
   if (!local) return;
   local.setItem(REMEMBER_KEY, remember ? "1" : "0");
   syncAuthStorage();
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent(AUTH_PERSISTENCE_EVENT, {
+        detail: { remember },
+      }),
+    );
+  }
 }
 
 /**
- * Aligns the official Supabase entry with the current preference. Called once on
- * boot (before the session is read) and after every auth state change, so a
- * refreshed token never leaks into permanent storage in session-only mode.
+ * Aligns the official Supabase browser entry with the current preference.
+ * Native auth tokens are handled separately and never copied here.
  */
 export function syncAuthStorage() {
   const key = authStorageKey();
@@ -62,29 +64,18 @@ export function syncAuthStorage() {
   if (!key || !local || !session) return;
 
   if (rememberSession()) {
-    // Persistent mode: localStorage is the source of truth; drop any leftover copy.
     session.removeItem(key);
     return;
   }
 
-  // Session-only mode: keep the browser-session copy in step with the token the
-  // client just wrote/refreshed. The permanent copy is dropped on `pagehide`
-  // (see `armDrain`), so nothing durable outlives the browser session.
   const fromLocal = local.getItem(key);
   if (fromLocal) session.setItem(key, fromLocal);
   else session.removeItem(key);
-  // The mode can be switched mid-session (unchecking the box on the sign-in
-  // page after boot), so the drain is armed here too — not only on boot.
   armDrain();
 }
 
 let drainArmed = false;
 
-/**
- * In session-only mode nothing durable may survive the browser session: on
- * `pagehide` the token is handed to sessionStorage and removed from
- * localStorage. Registered at most once per page.
- */
 function armDrain() {
   if (drainArmed || typeof window === "undefined") return;
   drainArmed = true;
@@ -102,11 +93,6 @@ function armDrain() {
   window.addEventListener("beforeunload", drain);
 }
 
-/**
- * Session-only mode keeps the token in sessionStorage, which the Supabase client
- * does not read. Copying it back into localStorage before the client is first
- * used is what makes a reload keep the user signed in.
- */
 export function restoreAuthStorage() {
   const key = authStorageKey();
   const local = safeLocal();
@@ -114,23 +100,13 @@ export function restoreAuthStorage() {
   if (!key || !local || !session || rememberSession()) return;
 
   const held = session.getItem(key);
-  if (held) {
-    local.setItem(key, held);
-  } else {
-    // No browser-session copy in session-only mode means this IS a new browser
-    // session, so nothing may be restored: drop the durable leftover instead of
-    // adopting it. Switching the preference mid-session cannot land here, because
-    // `setRememberSession()` copies the live token into the browser-session scope
-    // in the same tick — that is what keeps the current user signed in.
-    local.removeItem(key);
-  }
-
-
+  if (held) local.setItem(key, held);
+  else local.removeItem(key);
 
   armDrain();
 }
 
-/** Manual sign-out: no copy of the session may survive in either scope. */
+/** Manual sign-out: no browser copy of the session may survive. */
 export function clearAuthStorage() {
   const key = authStorageKey();
   if (!key) return;
@@ -141,4 +117,3 @@ export function clearAuthStorage() {
     /* nothing durable to clean up in private mode */
   }
 }
-
