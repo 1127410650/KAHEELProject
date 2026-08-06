@@ -7,6 +7,7 @@ function assert(condition, message) {
 const source = readFileSync("src/lib/native-auth-storage.ts", "utf8");
 const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
 const capacitorConfig = readFileSync("capacitor.config.ts", "utf8");
+const hardeningScript = readFileSync("scripts/harden-native-projects.mjs", "utf8");
 
 assert(
   packageJson.dependencies?.["@aparajita/capacitor-secure-storage"] === "7.1.0",
@@ -25,8 +26,12 @@ assert(
   "iCloud Keychain synchronization must remain disabled for auth tokens.",
 );
 assert(
-  source.includes('SecureStorage.setKeyPrefix("kahli.auth.")'),
+  source.includes('SecureStorage.setKeyPrefix(NATIVE_KEY_PREFIX)'),
   "Native auth keys must remain isolated under the reviewed prefix.",
+);
+assert(
+  source.includes('const NATIVE_KEY_PREFIX = "kahli.auth."'),
+  "The reviewed native auth prefix must remain explicit.",
 );
 assert(
   source.includes("SecureStorage.clear(false)"),
@@ -39,6 +44,14 @@ assert(
 assert(
   !capacitorConfig.includes('"capacitor-secure-storage-plugin"'),
   "Capacitor configuration still references the previous plugin.",
+);
+assert(
+  !hardeningScript.includes("SwiftKeychainWrapper"),
+  "Native hardening must not patch AppDelegate with a plugin-internal Swift dependency.",
+);
+assert(
+  !hardeningScript.includes("cap_sec"),
+  "Native hardening must not depend on an internal keychain service name.",
 );
 
 console.log("Native auth storage policy tests passed.");
