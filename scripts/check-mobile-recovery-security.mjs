@@ -1,3 +1,4 @@
+import "./check-native-platform-baseline.mjs";
 import { readFileSync } from "node:fs";
 
 const findings = [];
