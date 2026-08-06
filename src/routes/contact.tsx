@@ -21,7 +21,7 @@ export const Route = createFileRoute("/contact")({
   }),
   component: () => (
     <MarketShell>
-      <MarketStaticPage pageKey="contact" email="support@kahli.sa" />
+      <MarketStaticPage pageKey="contact" email="support@kaheel.sa" />
     </MarketShell>
   ),
 });
