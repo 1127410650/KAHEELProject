@@ -79,6 +79,9 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/u/$username", "public", "market"),
   rule("/businesses/$slug", "public", "market"),
   rule("/stores/$slug", "public", "market"),
+  rule("/demo-stores/$worldId", "public", "market"),
+  rule("/syria-guide", "public", "market"),
+  rule("/student-tools", "public", "market"),
   rule("/auth", "public", "bare"),
   rule("/register", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
@@ -210,7 +213,6 @@ export function resolveLegacyTarget(pathname: string): string | null {
   return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
 }
 
-
 /** Turns a concrete URL path into its registered pattern (`/ads/x` → `/ads/$slug`). */
 export function normalizePath(pathname: string): string {
   const clean = pathname.split("?")[0]!.split("#")[0]!.replace(/\/+$/, "") || "/";
@@ -238,7 +240,10 @@ export function requiresActiveAccount(pathname: string): boolean {
 
 /** Canonical target for a legacy path, preserving query string and hash. */
 export function canonicalHref(href: string): string | null {
-  const [pathname = "/", rest = ""] = [href.split(/[?#]/)[0], href.slice((href.split(/[?#]/)[0] ?? "").length)];
+  const [pathname = "/", rest = ""] = [
+    href.split(/[?#]/)[0],
+    href.slice((href.split(/[?#]/)[0] ?? "").length),
+  ];
   const found = routeRuleFor(pathname);
   if (!found?.legacy_redirect) return null;
   return `${found.legacy_redirect}${rest}`;
@@ -278,10 +283,7 @@ export function canSeeLink(
   if (!viewer.signedIn) return false;
   if (found.route_type === "admin") return viewer.isPlatformAdmin === true;
   if (found.requires_active_account && !viewer.accountKind) return false;
-  if (
-    viewer.accountKind &&
-    !found.allowed_identity_types.includes(viewer.accountKind)
-  )
+  if (viewer.accountKind && !found.allowed_identity_types.includes(viewer.accountKind))
     return false;
   if (found.required_permission && !viewer.can(found.required_permission)) return false;
   return true;

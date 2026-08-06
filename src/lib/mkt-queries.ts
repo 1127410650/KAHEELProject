@@ -12,6 +12,7 @@ import {
   type MktUserProfile,
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
+import { ACTIVE_MARKET_ISO2, loadCountryIdByIso2 } from "@/lib/mkt-geo";
 
 export interface ListingFilters {
   q?: string | undefined;
@@ -26,7 +27,7 @@ export interface ListingFilters {
   cityId?: string | undefined;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
-  
+
   deal?: "sale" | "rent" | undefined;
   sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | undefined;
   limit?: number | undefined;
@@ -37,7 +38,6 @@ export interface ListingFilters {
   featuredOnly?: boolean | undefined;
   page?: number | undefined;
 }
-
 
 export const PAGE_SIZE = 20;
 
@@ -61,7 +61,6 @@ export async function loadListingTypes(): Promise<MktListingType[]> {
   if (error) throw error;
   return (data ?? []) as MktListingType[];
 }
-
 
 /** Enrich raw listings with business name, verification state and a displayable image. */
 export async function decorateListings(
@@ -99,7 +98,6 @@ export async function decorateListings(
   const typeMap = new Map(types.map((tp) => [tp.code, tp]));
   const catMap = new Map(categories.map((c) => [c.id, c]));
 
-
   return rows.map((row) => {
     const biz = row.tenant_id ? bizMap.get(row.tenant_id) : undefined;
     const person = row.tenant_id ? undefined : personMap.get(row.owner_user_id);
@@ -119,14 +117,13 @@ export async function decorateListings(
       advertiserUsername: person?.username ?? null,
       businessName,
       businessSlug: biz?.slug ?? null,
-      verificationStatus: (biz?.verification_status ?? person?.verification_status) ?? null,
+      verificationStatus: biz?.verification_status ?? person?.verification_status ?? null,
       imageUrl: row.cover_image_url ? (media[row.cover_image_url] ?? null) : null,
       typeLabel: type ? (locale === "ar" ? type.name_ar : type.name_en) : undefined,
       categoryLabel: cat ? (locale === "ar" ? cat.name_ar : cat.name_en) : undefined,
       subcategoryLabel: subcat ? (locale === "ar" ? subcat.name_ar : subcat.name_en) : undefined,
     };
   });
-
 }
 
 async function queryListings(
@@ -146,12 +143,12 @@ async function queryListings(
 
   let countryId: string | undefined;
   if (filters.countryIso2) {
-    const { data } = await supabase
-      .from("mkt_countries")
-      .select("id")
-      .eq("iso2", filters.countryIso2)
-      .maybeSingle();
-    countryId = data?.id;
+    const resolvedCountryId = await loadCountryIdByIso2(
+      filters.countryIso2,
+      filters.countryIso2.toUpperCase() === ACTIVE_MARKET_ISO2,
+    );
+    if (!resolvedCountryId) return { rows: [], fetched: 0 };
+    countryId = resolvedCountryId;
   }
 
   let query = supabase
@@ -177,7 +174,6 @@ async function queryListings(
     // A promotion counts only while its window is still open.
     query = query.eq("is_featured", true).gt("featured_until", new Date().toISOString());
   }
-
 
   if (filters.deal) query = query.eq("deal_kind", filters.deal);
   if (filters.minPrice !== undefined) query = query.gte("price", filters.minPrice);
@@ -281,12 +277,12 @@ export async function loadBusinessesPage(
 ): Promise<{ rows: MktBusiness[]; logos: Record<string, string>; fetched: number }> {
   let countryId: string | undefined;
   if (filters.countryIso2) {
-    const { data } = await supabase
-      .from("mkt_countries")
-      .select("id")
-      .eq("iso2", filters.countryIso2)
-      .maybeSingle();
-    countryId = data?.id;
+    const resolvedCountryId = await loadCountryIdByIso2(
+      filters.countryIso2,
+      filters.countryIso2.toUpperCase() === ACTIVE_MARKET_ISO2,
+    );
+    if (!resolvedCountryId) return { rows: [], logos: {}, fetched: 0 };
+    countryId = resolvedCountryId;
   }
 
   let query = supabase

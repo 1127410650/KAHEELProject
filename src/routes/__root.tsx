@@ -11,7 +11,6 @@ import { useEffect, type ReactNode } from "react";
 
 import { useAnalyticsInstrumentation } from "@/hooks/use-analytics";
 
-
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "@/i18n";
@@ -31,8 +30,7 @@ import { CallOverlay } from "@/components/marketplace/CallOverlay";
  * keep the internal identity untouched, so the scope is decided from the path.
  */
 function useShellScope() {
-  const pathname =
-    typeof window === "undefined" ? "" : window.location.pathname;
+  const pathname = typeof window === "undefined" ? "" : window.location.pathname;
   return pathname.startsWith("/admin") ? "" : "market-surface";
 }
 
@@ -54,7 +52,9 @@ function NotFoundView() {
     >
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("routeError.notFoundTitle")}</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">
+          {t("routeError.notFoundTitle")}
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("routeError.notFoundBody")}</p>
         <div className="mt-6">
           <Link
@@ -117,8 +117,6 @@ function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-
-
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -127,8 +125,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "تحقّق — Tahqaq" },
       {
         name: "description",
-        content:
-          "إدارة المشاريع — Projects, invoices",
+        content: "إدارة المشاريع — Projects, invoices",
       },
       { property: "og:title", content: "تحقّق — Tahqaq" },
       {
@@ -140,17 +137,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "robots", content: "noindex" },
       { name: "twitter:title", content: "تحقّق — Tahqaq" },
       { name: "twitter:description", content: "إدارة المشاريع — Projects, invoices" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png" },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
-      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -178,8 +177,6 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   // Real product analytics for every route: page views, timings, client errors.
   useAnalyticsInstrumentation();
-
-
 
   return (
     <QueryClientProvider client={queryClient}>

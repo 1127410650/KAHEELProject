@@ -24,6 +24,8 @@ import { Route as MoreRouteImport } from './routes/more'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as StudentToolsRouteImport } from './routes/student-tools'
+import { Route as SyriaGuideRouteImport } from './routes/syria-guide'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as WelcomeRouteImport } from './routes/welcome'
@@ -150,6 +152,16 @@ const RegisterRoute = RegisterRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentToolsRoute = StudentToolsRouteImport.update({
+  id: '/student-tools',
+  path: '/student-tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SyriaGuideRoute = SyriaGuideRouteImport.update({
+  id: '/syria-guide',
+  path: '/syria-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -429,6 +441,8 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/student-tools': typeof StudentToolsRoute
+  '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
@@ -497,6 +511,8 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/student-tools': typeof StudentToolsRoute
+  '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
@@ -567,6 +583,8 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/student-tools': typeof StudentToolsRoute
+  '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
   '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
@@ -638,6 +656,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/register'
     | '/search'
+    | '/student-tools'
+    | '/syria-guide'
     | '/terms'
     | '/verify-invoice'
     | '/welcome'
@@ -706,6 +726,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/register'
     | '/search'
+    | '/student-tools'
+    | '/syria-guide'
     | '/terms'
     | '/verify-invoice'
     | '/welcome'
@@ -775,6 +797,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/register'
     | '/search'
+    | '/student-tools'
+    | '/syria-guide'
     | '/terms'
     | '/verify-invoice'
     | '/welcome'
@@ -845,6 +869,8 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
+  StudentToolsRoute: typeof StudentToolsRoute
+  SyriaGuideRoute: typeof SyriaGuideRoute
   TermsRoute: typeof TermsRoute
   VerifyInvoiceRoute: typeof VerifyInvoiceRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -979,6 +1005,20 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student-tools': {
+      id: '/student-tools'
+      path: '/student-tools'
+      fullPath: '/student-tools'
+      preLoaderRoute: typeof StudentToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/syria-guide': {
+      id: '/syria-guide'
+      path: '/syria-guide'
+      fullPath: '/syria-guide'
+      preLoaderRoute: typeof SyriaGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1424,6 +1464,8 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
+  StudentToolsRoute: StudentToolsRoute,
+  SyriaGuideRoute: SyriaGuideRoute,
   TermsRoute: TermsRoute,
   VerifyInvoiceRoute: VerifyInvoiceRoute,
   WelcomeRoute: WelcomeRoute,
@@ -1455,3 +1497,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

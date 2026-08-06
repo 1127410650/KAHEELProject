@@ -36,6 +36,41 @@ export const CITY_COLUMNS = "id, country_id, name_ar, name_en, sort_order";
  */
 export const ACTIVE_MARKET_ISO2 = "SY" as const;
 
+const countryIdRequests = new Map<string, Promise<string | null>>();
+const COUNTRY_LOOKUP_RETRY_DELAY_MS = 15_000;
+
+/**
+ * Share country lookups across simultaneous home-feed, featured-feed and
+ * preference requests. This matters on high-latency connections and also keeps
+ * a failed lookup from accidentally falling back to an unfiltered market query.
+ */
+export function loadCountryIdByIso2(iso2: string, activeOnly = false): Promise<string | null> {
+  const normalized = iso2.trim().toUpperCase();
+  const cacheKey = `${normalized}:${activeOnly ? "active" : "all"}`;
+  const cached = countryIdRequests.get(cacheKey);
+  if (cached) return cached;
+
+  const request: Promise<string | null> = (async () => {
+    let query = supabase.from("mkt_countries").select("id").eq("iso2", normalized);
+    if (activeOnly) query = query.eq("is_active", true);
+
+    const { data, error } = await query.maybeSingle();
+    if (error) throw error;
+    return data?.id ?? null;
+  })().catch((error: unknown) => {
+    // Keep the rejected request briefly so several home widgets do not hammer
+    // the same endpoint while the connection is down. A manual retry can reach
+    // the network again after this short cool-down.
+    setTimeout(() => {
+      if (countryIdRequests.get(cacheKey) === request) countryIdRequests.delete(cacheKey);
+    }, COUNTRY_LOOKUP_RETRY_DELAY_MS);
+    throw error;
+  });
+
+  countryIdRequests.set(cacheKey, request);
+  return request;
+}
+
 export async function loadCountries(): Promise<MktCountry[]> {
   const { data } = await supabase
     .from("mkt_countries")
@@ -49,13 +84,7 @@ export async function loadCountries(): Promise<MktCountry[]> {
 export async function loadCities(countryId?: string | null): Promise<MktCity[]> {
   let activeCountryId = countryId ?? null;
   if (!activeCountryId) {
-    const { data: country } = await supabase
-      .from("mkt_countries")
-      .select("id")
-      .eq("iso2", ACTIVE_MARKET_ISO2)
-      .eq("is_active", true)
-      .maybeSingle();
-    activeCountryId = country?.id ?? null;
+    activeCountryId = await loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true);
   }
   if (!activeCountryId) return [];
 
@@ -68,7 +97,10 @@ export async function loadCities(countryId?: string | null): Promise<MktCity[]> 
   return (data ?? []) as MktCity[];
 }
 
-export function geoName(row: { name_ar: string; name_en: string } | undefined, locale: "ar" | "en") {
+export function geoName(
+  row: { name_ar: string; name_en: string } | undefined,
+  locale: "ar" | "en",
+) {
   if (!row) return "";
   return locale === "en" ? row.name_en || row.name_ar : row.name_ar;
 }
@@ -139,13 +171,8 @@ export function useMarketPreference() {
       const { data: auth } = await supabase.auth.getSession();
       if (!auth.session) return;
 
-      const [{ data: country }, { data: row }] = await Promise.all([
-        supabase
-          .from("mkt_countries")
-          .select("id")
-          .eq("iso2", ACTIVE_MARKET_ISO2)
-          .eq("is_active", true)
-          .maybeSingle(),
+      const [countryId, { data: row }] = await Promise.all([
+        loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true),
         supabase
           .from("mkt_user_market_preferences")
           .select("browsing_city_id")
@@ -155,12 +182,12 @@ export function useMarketPreference() {
 
       const candidateCityId = row?.browsing_city_id ?? stored.cityId;
       let cityId: string | null = null;
-      if (candidateCityId && country?.id) {
+      if (candidateCityId && countryId) {
         const { data: city } = await supabase
           .from("mkt_cities")
           .select("id")
           .eq("id", candidateCityId)
-          .eq("country_id", country.id)
+          .eq("country_id", countryId)
           .eq("is_active", true)
           .maybeSingle();
         cityId = city?.id ?? null;
@@ -182,20 +209,15 @@ export function useMarketPreference() {
   }, []);
 
   const update = useCallback(async (requested: MarketPreference) => {
-    const { data: country } = await supabase
-      .from("mkt_countries")
-      .select("id")
-      .eq("iso2", ACTIVE_MARKET_ISO2)
-      .eq("is_active", true)
-      .maybeSingle();
+    const countryId = await loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true);
 
     let cityId: string | null = null;
-    if (requested.cityId && country?.id) {
+    if (requested.cityId && countryId) {
       const { data: city } = await supabase
         .from("mkt_cities")
         .select("id")
         .eq("id", requested.cityId)
-        .eq("country_id", country.id)
+        .eq("country_id", countryId)
         .eq("is_active", true)
         .maybeSingle();
       cityId = city?.id ?? null;
@@ -211,10 +233,10 @@ export function useMarketPreference() {
     listeners.forEach((listener) => listener(next));
 
     const { data: auth } = await supabase.auth.getSession();
-    if (!auth.session || !country) return;
+    if (!auth.session || !countryId) return;
     await supabase.from("mkt_user_market_preferences").upsert({
       user_id: auth.session.user.id,
-      browsing_country_id: country.id,
+      browsing_country_id: countryId,
       browsing_city_id: cityId,
       updated_at: new Date().toISOString(),
     });

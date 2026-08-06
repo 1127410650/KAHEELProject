@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
+import { ChevronLeft } from "lucide-react";
 
 import { useI18n } from "@/i18n";
-import catRealEstate from "@/assets/market/cat-real-estate.jpg";
-import catCars from "@/assets/market/cat-cars.jpg";
-import catDevices from "@/assets/market/cat-devices.jpg";
-import catHomeServices from "@/assets/market/cat-home-services.jpg";
-import catEquipment from "@/assets/market/cat-equipment.jpg";
-import catSuppliers from "@/assets/market/cat-suppliers.jpg";
-import catSchools from "@/assets/market/cat-schools.jpg";
+import catRealEstate from "@/assets/market/cat-real-estate.webp";
+import catCars from "@/assets/market/cat-cars.webp";
+import catDevices from "@/assets/market/cat-devices.webp";
+import catHomeServices from "@/assets/market/cat-home-services.webp";
+import catEquipment from "@/assets/market/cat-equipment.webp";
+import catSuppliers from "@/assets/market/cat-suppliers.webp";
+import catSchools from "@/assets/market/cat-schools.webp";
 
 const TILES = [
   { key: "realestate", image: catRealEstate, search: { category: "real-estate" } },
@@ -25,18 +26,27 @@ export function MarketCategoryTiles() {
   return (
     <section
       id="market-categories"
-      className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-4 pb-2 pt-4 sm:px-5 sm:pt-5 lg:px-8"
+      className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-3 pb-2 pt-4 sm:px-5 sm:pt-5 lg:px-8"
     >
-      <div className="mb-2.5">
-        <h2 className="text-[16px] font-black tracking-tight text-foreground sm:text-lg">
-          {t("market.home.categories")}
-        </h2>
-        <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
-          مرّر أفقيًا واختر المجال الذي تريد تصفحه.
-        </p>
+      <div className="mb-2.5 flex items-end justify-between gap-3">
+        <div>
+          <h2 className="text-[16px] font-black tracking-tight text-foreground sm:text-lg">
+            {t("market.home.categories")}
+          </h2>
+          <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
+            {locale === "ar" ? "تسوّق حسب القسم." : "Shop by category."}
+          </p>
+        </div>
+        <Link
+          to="/more"
+          className="inline-flex shrink-0 items-center gap-0.5 text-[10px] font-black text-primary sm:text-xs"
+        >
+          {locale === "ar" ? "عرض الكل" : "View all"}
+          <ChevronLeft className="size-3.5 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+        </Link>
       </div>
 
-      <div className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-0.5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3">
+      <div className="grid grid-cols-4 gap-x-2 gap-y-3 sm:grid-cols-7 sm:gap-3">
         {TILES.map((tile) => {
           const search =
             "q" in tile.search
@@ -44,33 +54,29 @@ export function MarketCategoryTiles() {
               : (tile.search as Record<string, string>);
 
           return (
-            <Link
-              key={tile.key}
-              to="/search"
-              search={search}
-              className="group relative h-[104px] w-[148px] min-w-[148px] snap-start overflow-hidden rounded-[1.05rem] border border-border bg-card shadow-[0_4px_14px_rgb(15_23_42/0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgb(15_23_42/0.13)] sm:h-[118px] sm:w-[176px] sm:min-w-[176px]"
-            >
-              <img
-                src={tile.image}
-                alt=""
-                loading="lazy"
-                width={768}
-                height={576}
-                className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-market-navy/92 via-market-navy/10 to-transparent" aria-hidden />
-              <div className="absolute inset-x-0 bottom-0 px-2.5 pb-2.5 pt-8 text-market-navy-foreground">
-                <p className="truncate text-[11px] font-black sm:text-xs">
-                  {t(`market.home.tiles.${tile.key}.title`)}
-                </p>
-                <p className="mt-0.5 truncate text-[8px] text-market-silver/90 sm:text-[9px]">
-                  {t(`market.home.tiles.${tile.key}.desc`)}
-                </p>
+            <Link key={tile.key} to="/search" search={search} className="group min-w-0 text-center">
+              <div className="relative mx-auto aspect-square w-full max-w-[104px] overflow-hidden rounded-2xl border border-border bg-card shadow-[0_3px_12px_rgb(15_23_42/0.07)] transition group-hover:-translate-y-0.5 group-hover:shadow-panel sm:max-w-[124px]">
+                <img
+                  src={tile.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width={256}
+                  height={256}
+                  className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.045]"
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-market-navy/40 via-transparent to-white/5"
+                  aria-hidden
+                />
               </div>
+              <p className="mt-1.5 line-clamp-2 min-h-[2.4em] text-[9px] font-black leading-[1.2] text-foreground min-[360px]:text-[10px] sm:text-xs">
+                {t(`market.home.tiles.${tile.key}.title`)}
+              </p>
+              <span className="sr-only">{t(`market.home.tiles.${tile.key}.desc`)}</span>
             </Link>
           );
         })}
-        <span aria-hidden className="w-1 shrink-0" />
       </div>
     </section>
   );

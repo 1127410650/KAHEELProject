@@ -49,19 +49,6 @@ function SyriaGuidePage() {
   return (
     <MarketShell>
       <main className="min-h-screen bg-[linear-gradient(180deg,#f4f8f6_0%,#ffffff_30%,#f8fafc_100%)] pb-8">
-        <style>{`
-          @keyframes syriaGuideDrift {
-            0%, 100% { transform: scale(1.01) translate3d(0, 0, 0); }
-            50% { transform: scale(1.07) translate3d(-1.2%, -1%, 0); }
-          }
-          .syria-guide-image {
-            animation: syriaGuideDrift 18s ease-in-out infinite;
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .syria-guide-image { animation: none; }
-          }
-        `}</style>
-
         <section className="relative isolate overflow-hidden bg-market-navy text-white">
           <img
             src="/images/syria-guide-flag.svg"
@@ -74,12 +61,14 @@ function SyriaGuidePage() {
               <ShieldCheck className="size-4" aria-hidden />
               معلومات موثقة ومصادر ظاهرة
             </span>
-            <h1 className="max-w-3xl text-3xl font-black tracking-tight sm:text-5xl">دليل سوريا 🇸🇾</h1>
+            <h1 className="max-w-3xl text-3xl font-black tracking-tight sm:text-5xl">دليل سوريا</h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-white/82 sm:text-base sm:leading-8">
               جامعات، مشافٍ، جهات حكومية، معالم أثرية وأماكن سياحية ضمن دليل واحد واضح وسهل البحث.
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-[10px] font-bold text-white/88 sm:text-xs">
-              <span className="rounded-full bg-white/10 px-3 py-1.5">{SYRIA_GUIDE_ENTITIES.length} جهة ومكان</span>
+              <span className="rounded-full bg-white/10 px-3 py-1.5">
+                {SYRIA_GUIDE_ENTITIES.length} جهة ومكان
+              </span>
               <span className="rounded-full bg-white/10 px-3 py-1.5">خرائط واتجاهات</span>
               <span className="rounded-full bg-white/10 px-3 py-1.5">تفاصيل مطوية</span>
             </div>
@@ -89,7 +78,10 @@ function SyriaGuidePage() {
         <section className="sticky top-[96px] z-20 border-b border-border/70 bg-background/94 shadow-sm backdrop-blur">
           <div className="mx-auto w-full max-w-[1240px] px-4 py-3 sm:px-6 lg:px-8">
             <label className="relative block" htmlFor="syria-guide-search">
-              <Search className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+              <Search
+                className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden
+              />
               <input
                 id="syria-guide-search"
                 value={query}
@@ -125,7 +117,9 @@ function SyriaGuidePage() {
                 <Sparkles className="size-3.5" aria-hidden />
                 افتح البطاقة لقراءة التفاصيل
               </span>
-              <h2 className="mt-1 text-xl font-black text-foreground sm:text-2xl">الجهات والأماكن</h2>
+              <h2 className="mt-1 text-xl font-black text-foreground sm:text-2xl">
+                الجهات والأماكن
+              </h2>
             </div>
             <span className="rounded-full bg-secondary px-3 py-1.5 text-[10px] font-black text-secondary-foreground sm:text-xs">
               {results.length} نتيجة
@@ -136,7 +130,9 @@ function SyriaGuidePage() {
             <div className="rounded-3xl border border-dashed border-border bg-card px-5 py-12 text-center">
               <Search className="mx-auto size-8 text-muted-foreground" aria-hidden />
               <h3 className="mt-3 text-base font-black text-foreground">لم نجد نتيجة مطابقة</h3>
-              <p className="mt-1 text-xs leading-6 text-muted-foreground">جرّب اسم المدينة أو نوع الجهة بكلمة أقصر.</p>
+              <p className="mt-1 text-xs leading-6 text-muted-foreground">
+                جرّب اسم المدينة أو نوع الجهة بكلمة أقصر.
+              </p>
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
@@ -151,7 +147,8 @@ function SyriaGuidePage() {
               <div>
                 <h2 className="text-lg font-black text-foreground">جهة غير موجودة؟</h2>
                 <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                  سنضيف نموذج الاقتراح المباشر وربطه بتنبيهات المستخدم ولوحة مدير النظام في الدفعة التالية.
+                  سنضيف نموذج الاقتراح المباشر وربطه بتنبيهات المستخدم ولوحة مدير النظام في الدفعة
+                  التالية.
                 </p>
               </div>
               <Link
@@ -178,14 +175,20 @@ function GuideEntityCard({ entity }: { entity: SyriaGuideEntity }) {
   return (
     <details className="group overflow-hidden rounded-[1.6rem] border border-border bg-card shadow-[0_8px_28px_rgb(15_23_42/0.07)] open:shadow-[0_16px_42px_rgb(15_23_42/0.12)]">
       <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-        <div className="relative h-48 overflow-hidden sm:h-56">
-          <img
-            src={entity.image}
-            alt={entity.imageAlt}
-            loading="lazy"
-            className="syria-guide-image size-full object-cover transition duration-700 group-open:scale-105"
+        <div
+          className={`relative h-40 overflow-hidden bg-gradient-to-br sm:h-48 ${gradientForCategory(entity.category)}`}
+        >
+          <div
+            className="absolute -end-8 -top-8 size-40 rounded-full border border-white/15 bg-white/10 sm:size-48"
+            aria-hidden
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent" />
+          <div
+            className="absolute end-7 top-7 text-white/18 transition duration-500 group-open:scale-110 sm:end-10 sm:top-8"
+            aria-hidden
+          >
+            {largeIconForCategory(entity.category)}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/12 to-white/5" />
           <div className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-5">
             <div className="mb-2 flex items-center justify-between gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/25 px-2.5 py-1 text-[9px] font-black backdrop-blur sm:text-[10px]">
@@ -197,10 +200,15 @@ function GuideEntityCard({ entity }: { entity: SyriaGuideEntity }) {
               </span>
             </div>
             <h3 className="text-lg font-black leading-tight sm:text-xl">{entity.name}</h3>
-            <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-white/80 sm:text-xs">{entity.shortDescription}</p>
+            <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-white/80 sm:text-xs">
+              {entity.shortDescription}
+            </p>
             <div className="mt-3 flex items-center justify-between border-t border-white/18 pt-3 text-[10px] font-bold text-white/80">
               <span>اضغط لفتح التفاصيل</span>
-              <ChevronDown className="size-4 transition duration-300 group-open:rotate-180" aria-hidden />
+              <ChevronDown
+                className="size-4 transition duration-300 group-open:rotate-180"
+                aria-hidden
+              />
             </div>
           </div>
         </div>
@@ -208,12 +216,18 @@ function GuideEntityCard({ entity }: { entity: SyriaGuideEntity }) {
 
       <div className="space-y-3 p-4 sm:p-5">
         {entity.sections.map((section, index) => (
-          <details key={`${entity.id}-${section.title}`} open={index === 0} className="rounded-2xl border border-border bg-background">
+          <details
+            key={`${entity.id}-${section.title}`}
+            open={index === 0}
+            className="rounded-2xl border border-border bg-background"
+          >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-xs font-black text-foreground [&::-webkit-details-marker]:hidden sm:text-sm">
               {section.title}
               <ChevronDown className="size-4 text-muted-foreground" aria-hidden />
             </summary>
-            <p className="border-t border-border px-4 py-3 text-xs leading-7 text-muted-foreground sm:text-sm">{section.content}</p>
+            <p className="border-t border-border px-4 py-3 text-xs leading-7 text-muted-foreground sm:text-sm">
+              {section.content}
+            </p>
           </details>
         ))}
 
@@ -301,6 +315,23 @@ function iconForCategory(category: SyriaGuideCategory) {
   if (category === "university") return <GraduationCap className="size-3.5" aria-hidden />;
   if (category === "heritage") return <Landmark className="size-3.5" aria-hidden />;
   return <TreePine className="size-3.5" aria-hidden />;
+}
+
+function largeIconForCategory(category: SyriaGuideCategory) {
+  const className = "size-20 sm:size-24";
+  if (category === "government") return <Building2 className={className} strokeWidth={1.15} />;
+  if (category === "hospital") return <Hospital className={className} strokeWidth={1.15} />;
+  if (category === "university") return <GraduationCap className={className} strokeWidth={1.15} />;
+  if (category === "heritage") return <Landmark className={className} strokeWidth={1.15} />;
+  return <TreePine className={className} strokeWidth={1.15} />;
+}
+
+function gradientForCategory(category: SyriaGuideCategory) {
+  if (category === "government") return "from-[#0b183a] via-[#12366a] to-[#28739b]";
+  if (category === "hospital") return "from-[#083344] via-[#0f766e] to-[#4e9d91]";
+  if (category === "university") return "from-[#312e81] via-[#4f46a5] to-[#7c83d5]";
+  if (category === "heritage") return "from-[#3f2b18] via-[#8a5a2b] to-[#c58b45]";
+  return "from-[#12372a] via-[#1f6c4c] to-[#73a96c]";
 }
 
 function labelForCategory(category: SyriaGuideCategory) {

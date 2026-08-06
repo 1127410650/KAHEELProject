@@ -1,3 +1,6 @@
+@import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
+
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -12,7 +15,7 @@
 @theme inline {
   --font-sans: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
   --font-display: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
-  --font-numeric: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-numeric: ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -87,8 +90,12 @@
   --color-gold-soft: var(--gold-soft);
   --color-gold-foreground: var(--gold-foreground);
 
-  --shadow-panel: 0 1px 2px oklch(0.2651 0.0319 198.75 / 0.05), 0 6px 18px -12px oklch(0.2651 0.0319 198.75 / 0.14);
-  --shadow-raised: 0 1px 3px oklch(0.2651 0.0319 198.75 / 0.07), 0 14px 32px -20px oklch(0.2651 0.0319 198.75 / 0.22);
+  --shadow-panel:
+    0 1px 2px oklch(0.2651 0.0319 198.75 / 0.05),
+    0 6px 18px -12px oklch(0.2651 0.0319 198.75 / 0.14);
+  --shadow-raised:
+    0 1px 3px oklch(0.2651 0.0319 198.75 / 0.07),
+    0 14px 32px -20px oklch(0.2651 0.0319 198.75 / 0.22);
 }
 
 :root {
@@ -287,7 +294,6 @@
   max-width: 100%;
 }
 
-
 #print-root {
   display: none;
 }
@@ -334,7 +340,6 @@
     display: none !important;
   }
 
-
   @page {
     size: A4;
     margin: 0;
@@ -349,7 +354,6 @@ body {
   overflow-x: clip;
   -webkit-text-size-adjust: 100%;
 }
-
 
 @media (max-width: 767px) {
   /* comfortable touch targets and no accidental zoom on inputs */
@@ -485,7 +489,8 @@ body {
     border-bottom: 1px solid var(--color-border);
   }
   [data-slot="dialog-content"] > form,
-  [data-slot="dialog-content"] > div:not([data-slot="dialog-header"]):not([data-slot="dialog-footer"]) {
+  [data-slot="dialog-content"]
+    > div:not([data-slot="dialog-header"]):not([data-slot="dialog-footer"]) {
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -533,7 +538,6 @@ body {
     min-height: 40px;
   }
 }
-
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Public marketplace surface ("كحلي") — navy + silver.
@@ -628,26 +632,27 @@ body:has(.market-surface) {
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
+  --shadow-panel:
+    0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
     0 6px 18px -12px oklch(0.2171 0.0682 266.19 / 0.14);
-  --shadow-raised: 0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
+  --shadow-raised:
+    0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
     0 14px 32px -20px oklch(0.2171 0.0682 266.19 / 0.22);
 }
 
 .market-surface .shadow-panel,
 body:has(.market-surface) .shadow-panel {
-  box-shadow: 0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
+  box-shadow:
+    0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
     0 6px 18px -12px oklch(0.2171 0.0682 266.19 / 0.14) !important;
 }
 
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
-  box-shadow: 0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
+  box-shadow:
+    0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
     0 14px 32px -20px oklch(0.2171 0.0682 266.19 / 0.22) !important;
 }
-
-
-
 
 /* Hide the horizontal scrollbar of the marketplace category rail without
  * disabling the scrolling itself. */

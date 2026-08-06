@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
+  GraduationCap,
   Grid2x2,
   Home,
   MessageSquare,
@@ -12,8 +13,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { ADD_LISTING_PATH, addListingHref } from "@/lib/add-listing";
-import { SEARCH_PATH, getSearchHref } from "@/lib/search-href";
+import { addListingHref } from "@/lib/add-listing";
+import { getSearchHref } from "@/lib/search-href";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
@@ -86,10 +87,11 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
         <Link
           to={getSearchHref()}
           aria-label={t("market.nav.search")}
-          className="hidden shrink-0 items-center gap-1.5 rounded-full border border-market-navy-soft bg-market-navy-soft/60 px-3 py-1.5 text-sm font-medium text-market-navy-foreground transition-colors hover:bg-market-navy-soft xl:inline-flex"
+          title={t("market.nav.search")}
+          className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-market-navy-soft bg-market-navy-soft/60 text-market-navy-foreground transition-colors hover:bg-market-navy-soft sm:size-10 xl:w-auto xl:gap-1.5 xl:px-3 xl:text-sm"
         >
           <Search className="size-4" aria-hidden />
-          <span>{t("market.nav.search")}</span>
+          <span className="hidden xl:inline">{t("market.nav.search")}</span>
         </Link>
 
         <div className="min-w-0 flex-1" />
@@ -107,8 +109,17 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
           {session ? (
             <>
               {adminIdentity?.is_platform_admin === true && adminIdentity.restricted !== true && (
-                <Button asChild size="sm" variant="outline" className="hidden shrink-0 lg:inline-flex">
-                  <Link to="/admin" aria-label={t("admin.backToAdmin")} title={t("admin.backToAdmin")}>
+                <Button
+                  asChild
+                  size="sm"
+                  variant="outline"
+                  className="hidden shrink-0 lg:inline-flex"
+                >
+                  <Link
+                    to="/admin"
+                    aria-label={t("admin.backToAdmin")}
+                    title={t("admin.backToAdmin")}
+                  >
                     <ShieldCheck className="size-4" aria-hidden />
                     <span className="hidden xl:inline">{t("admin.backToAdmin")}</span>
                   </Link>
@@ -183,7 +194,8 @@ function useMarketSetupGate() {
 const BOTTOM_NAV_PATHS = {
   home: "/",
   messages: "/dashboard/messages",
-  search: SEARCH_PATH,
+  search: getSearchHref(),
+  studentTools: "/student-tools",
   alerts: "/dashboard/notifications",
   more: "/more",
 } as const;
@@ -195,8 +207,9 @@ if (import.meta.env.DEV) {
 }
 
 function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
-  if (pathname.startsWith(BOTTOM_NAV_PATHS.search)) return "search";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.studentTools)) return "studentTools";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.messages)) return "messages";
+  if (pathname.startsWith(BOTTOM_NAV_PATHS.search)) return "search";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.alerts)) return "alerts";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.more)) return "more";
   return "home";
@@ -259,6 +272,12 @@ export function MarketBottomNav() {
         },
         { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
         {
+          key: "studentTools",
+          to: BOTTOM_NAV_PATHS.studentTools,
+          icon: GraduationCap,
+          badge: 0,
+        },
+        {
           key: "alerts",
           to: BOTTOM_NAV_PATHS.alerts,
           icon: Bell,
@@ -275,6 +294,12 @@ export function MarketBottomNav() {
           badge: 0,
         },
         { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
+        {
+          key: "studentTools",
+          to: BOTTOM_NAV_PATHS.studentTools,
+          icon: GraduationCap,
+          badge: 0,
+        },
         { key: "alerts", to: signInHref(BOTTOM_NAV_PATHS.alerts), icon: Bell, badge: 0 },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const);
@@ -289,15 +314,15 @@ export function MarketBottomNav() {
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
-          const center = item.key === "search";
+          const featured = item.key === "studentTools";
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
           const inner = (
             <>
               <span
                 className={
-                  center
-                    ? "relative grid size-9 place-items-center rounded-full bg-market-silver text-market-navy shadow-sm"
+                  featured
+                    ? "relative grid size-9 place-items-center rounded-full bg-market-silver text-market-navy shadow-sm ring-1 ring-white/30"
                     : active
                       ? "relative grid size-8 place-items-center text-market-navy-foreground"
                       : "relative grid size-8 place-items-center text-market-silver-muted"
@@ -316,19 +341,22 @@ export function MarketBottomNav() {
               </span>
               <span
                 className={
-                  active && !center
+                  active
                     ? "truncate text-market-navy-foreground"
-                    : "truncate text-market-silver-muted"
+                    : featured
+                      ? "truncate text-market-silver"
+                      : "truncate text-market-silver-muted"
                 }
               >
                 {label}
               </span>
             </>
           );
-          const className = "flex flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium";
+          const className =
+            "flex min-h-14 min-w-0 flex-col items-center gap-0.5 px-0.5 py-2 text-[9px] font-medium min-[360px]:text-[10px]";
 
           return (
-            <li key={item.key} className="flex-1">
+            <li key={item.key} className="min-w-0 flex-1">
               {item.to.startsWith("/auth") ? (
                 <a
                   href={item.to}
@@ -369,12 +397,39 @@ export function MarketCompactFooter() {
 
 export type FooterVariant = "compact" | "none";
 
-const COPYRIGHT_FOOTER_PATHS = ["/", "/search", "/about", "/terms", "/privacy", "/help", "/contact"];
-const COPYRIGHT_FOOTER_PREFIXES = ["/ads/", "/businesses/", "/u/", "/categories/", "/stores/"];
-const NO_FOOTER_PREFIXES = ["/admin", "/dashboard", "/chat", "/more", "/auth", "/register", "/welcome"];
+const COPYRIGHT_FOOTER_PATHS = [
+  "/",
+  "/search",
+  "/syria-guide",
+  "/student-tools",
+  "/about",
+  "/terms",
+  "/privacy",
+  "/help",
+  "/contact",
+];
+const COPYRIGHT_FOOTER_PREFIXES = [
+  "/ads/",
+  "/businesses/",
+  "/u/",
+  "/categories/",
+  "/stores/",
+  "/demo-stores/",
+];
+const NO_FOOTER_PREFIXES = [
+  "/admin",
+  "/dashboard",
+  "/chat",
+  "/more",
+  "/auth",
+  "/register",
+  "/welcome",
+];
 
 export function footerVariantForPath(pathname: string): FooterVariant {
-  if (NO_FOOTER_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
+  if (
+    NO_FOOTER_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
+  ) {
     return "none";
   }
   if (COPYRIGHT_FOOTER_PATHS.includes(pathname)) return "compact";
