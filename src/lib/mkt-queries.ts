@@ -12,6 +12,9 @@ import {
   type MktUserProfile,
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
+import { ACTIVE_MARKET_ISO2, loadCountryIdByIso2 } from "@/lib/mkt-geo";
+
+
 
 /**
  * Builds a safe `ilike` pattern for a PostgREST `or()` filter string.
