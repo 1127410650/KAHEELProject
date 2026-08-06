@@ -34,7 +34,7 @@ const config: CapacitorConfig = {
     limitsNavigationsToAppBoundDomains: true,
     webContentsDebuggingEnabled: false,
   },
-  includePlugins: ["@capacitor/app", "capacitor-secure-storage-plugin"],
+  includePlugins: ["@capacitor/app", "@aparajita/capacitor-secure-storage"],
 };
 
 export default config;
