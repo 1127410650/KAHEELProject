@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 const APPROVED_DOMAIN = "check-your-name-ai.vercel.app";
@@ -65,10 +65,7 @@ function insertBeforeRootDictionaryClose(plist, xml) {
 }
 
 function setRootBoolean(plist, key, value) {
-  const keyPattern = new RegExp(
-    `<key>${key}<\\/key>\\s*<(?:true|false)\\/>`,
-    "s",
-  );
+  const keyPattern = new RegExp(`<key>${key}<\\/key>\\s*<(?:true|false)\\/>`, "s");
   const replacement = `<key>${key}</key>\n\t<${value ? "true" : "false"}/>`;
 
   if (keyPattern.test(plist)) return plist.replace(keyPattern, replacement);
@@ -131,6 +128,20 @@ function hardenIos() {
   writeFileSync(plistPath, plist);
 }
 
-hardenAndroid();
-hardenIos();
-console.log("Native Android and iOS hardening applied.");
+let hardenedPlatforms = 0;
+
+if (existsSync("android/app/src/main/AndroidManifest.xml")) {
+  hardenAndroid();
+  hardenedPlatforms += 1;
+}
+
+if (existsSync("ios/App/App/Info.plist")) {
+  hardenIos();
+  hardenedPlatforms += 1;
+}
+
+if (hardenedPlatforms === 0) {
+  throw new Error("No generated Android or iOS project was found to harden.");
+}
+
+console.log(`Native hardening applied to ${hardenedPlatforms} platform(s).`);
