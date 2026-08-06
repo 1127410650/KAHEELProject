@@ -18,6 +18,10 @@ function rejectPattern(file, content, pattern, reason) {
   if (pattern.test(content)) report(file, reason);
 }
 
+function occurrenceCount(content, value) {
+  return content.split(value).length - 1;
+}
+
 const packageJson = JSON.parse(read("package.json"));
 const pinnedMobilePackages = [
   "@capacitor/app",
@@ -184,6 +188,41 @@ if (existsSync("ios/App/App/Info.plist")) {
       new RegExp(`<key>${key}<\\/key>\\s*<true\\/>`, "s"),
       `enables unsafe iOS transport option ${key}`,
     );
+  }
+
+  const privacyManifestPath = "ios/App/PrivacyInfo.xcprivacy";
+  if (!existsSync(privacyManifestPath)) {
+    report(privacyManifestPath, "is missing the Apple required-reason privacy manifest");
+  } else {
+    const privacyManifest = read(privacyManifestPath);
+    requirePattern(
+      privacyManifestPath,
+      privacyManifest,
+      /<string>NSPrivacyAccessedAPICategoryUserDefaults<\/string>/,
+      "does not declare UserDefaults access",
+    );
+    requirePattern(
+      privacyManifestPath,
+      privacyManifest,
+      /<string>CA92\.1<\/string>/,
+      "does not declare the approved CA92.1 reason",
+    );
+  }
+
+  const xcodeProjectPath = "ios/App/App.xcodeproj/project.pbxproj";
+  if (!existsSync(xcodeProjectPath)) {
+    report(xcodeProjectPath, "is missing");
+  } else {
+    const xcodeProject = read(xcodeProjectPath);
+    requirePattern(
+      xcodeProjectPath,
+      xcodeProject,
+      /path = PrivacyInfo\.xcprivacy;/,
+      "does not reference the privacy manifest",
+    );
+    if (occurrenceCount(xcodeProject, "PrivacyInfo.xcprivacy in Resources") < 2) {
+      report(xcodeProjectPath, "does not include the privacy manifest in the app resources phase");
+    }
   }
 }
 
