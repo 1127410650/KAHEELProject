@@ -5,6 +5,7 @@ function assert(condition, message) {
 }
 
 const source = readFileSync("src/lib/native-auth-storage.ts", "utf8");
+const preferenceSource = readFileSync("src/lib/auth-storage.ts", "utf8");
 const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
 const capacitorConfig = readFileSync("capacitor.config.ts", "utf8");
 const hardeningScript = readFileSync("scripts/harden-native-projects.mjs", "utf8");
@@ -26,7 +27,7 @@ assert(
   "iCloud Keychain synchronization must remain disabled for auth tokens.",
 );
 assert(
-  source.includes('SecureStorage.setKeyPrefix(NATIVE_KEY_PREFIX)'),
+  source.includes("SecureStorage.setKeyPrefix(NATIVE_KEY_PREFIX)"),
   "Native auth keys must remain isolated under the reviewed prefix.",
 );
 assert(
@@ -35,7 +36,31 @@ assert(
 );
 assert(
   source.includes("SecureStorage.clear(false)"),
-  "A fresh installation must clear stale keychain auth values.",
+  "A fresh installation or temporary session must clear persisted auth values.",
+);
+assert(
+  source.includes("const ephemeralSession = new Map<string, string>()"),
+  "Temporary native sessions must remain in memory only.",
+);
+assert(
+  source.includes("rememberSession() ? storage.getItem(key)"),
+  "Native reads must honor the persistence preference.",
+);
+assert(
+  source.includes("ephemeralSession.set(key, value)"),
+  "Temporary native writes must use the in-memory session store.",
+);
+assert(
+  source.includes("await storage.removeItem(key)"),
+  "Temporary native writes must remove any persisted counterpart.",
+);
+assert(
+  source.includes("AUTH_PERSISTENCE_EVENT"),
+  "Native storage must listen for live persistence changes.",
+);
+assert(
+  preferenceSource.includes("window.dispatchEvent"),
+  "Changing the persistence preference must notify native storage.",
 );
 assert(
   capacitorConfig.includes('"@aparajita/capacitor-secure-storage"'),
