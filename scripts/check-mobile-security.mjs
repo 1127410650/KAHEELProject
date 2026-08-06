@@ -22,9 +22,7 @@ const packageJson = JSON.parse(read("package.json"));
 const pinnedMobilePackages = [
   "@capacitor/app",
   "@capacitor/core",
-  "@capacitor/keyboard",
   "@capacitor/preferences",
-  "@capacitor/status-bar",
   "capacitor-secure-storage-plugin",
   "@capacitor/android",
   "@capacitor/cli",
