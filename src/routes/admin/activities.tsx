@@ -36,13 +36,13 @@ export const Route = createFileRoute("/admin/activities")({
   }),
   head: () => ({
     meta: [
-      { title: "إدارة الأنشطة — سوق تحقّق" },
+      { title: "إدارة الأنشطة — كحلي" },
       {
         name: "description",
         content: "إدارة قاعدة الأنشطة المرجعية: القطاعات، الأنشطة، الدمج، ومراجعة الاقتراحات.",
       },
-      { property: "og:title", content: "إدارة الأنشطة — سوق تحقّق" },
-      { property: "og:description", content: "قاعدة الأنشطة المرجعية في سوق تحقّق." },
+      { property: "og:title", content: "إدارة الأنشطة — كحلي" },
+      { property: "og:description", content: "قاعدة الأنشطة المرجعية في كحلي." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

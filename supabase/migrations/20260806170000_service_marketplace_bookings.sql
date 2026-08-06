@@ -242,6 +242,9 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public, pg_temp AS $$
   )
 $$;
 
+REVOKE ALL ON FUNCTION public.mkt_service_booking_party(uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.mkt_service_booking_party(uuid) TO authenticated, service_role;
+
 GRANT SELECT ON public.mkt_service_categories TO anon, authenticated;
 GRANT SELECT ON public.mkt_service_settings, public.mkt_service_professionals,
   public.mkt_service_professional_items, public.mkt_service_availability,
@@ -904,11 +907,11 @@ BEGIN
         'customer_name', b.customer_name_snapshot, 'customer_phone', b.customer_phone_snapshot,
         'starts_at', b.starts_at, 'ends_at', b.ends_at, 'timezone', b.timezone,
         'service_mode', b.service_mode, 'status', b.status,
-        'cancellation_window_hours', (
+        'cancellation_window_hours', COALESCE((
           SELECT x.cancellation_window_hours
           FROM public.mkt_service_settings x
           WHERE x.storefront_id = b.storefront_id
-        ),
+        ), 0),
         'total', b.total, 'currency_code', b.currency_code,
         'address_text', b.address_text, 'district', b.district,
         'customer_notes', b.customer_notes, 'provider_notes', b.provider_notes,
@@ -966,7 +969,7 @@ BEGIN
     END IF;
     SELECT cancellation_window_hours INTO v_cancel_hours
     FROM public.mkt_service_settings WHERE storefront_id = v_booking.storefront_id;
-    IF now() > v_booking.starts_at - make_interval(hours => COALESCE(v_cancel_hours, 0)) THEN
+    IF now() >= v_booking.starts_at - make_interval(hours => COALESCE(v_cancel_hours, 0)) THEN
       RAISE EXCEPTION 'cancellation_window_closed';
     END IF;
   ELSE

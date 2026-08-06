@@ -14,12 +14,12 @@ export const Route = createFileRoute("/dashboard/reports/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "بلاغاتي — سوق تحقّق" },
+      { title: "بلاغاتي — كحلي" },
       {
         name: "description",
-        content: "متابعة البلاغات التي قدّمتها عن الإعلانات في سوق تحقّق وحالة معالجتها.",
+        content: "متابعة البلاغات التي قدّمتها عن الإعلانات في كحلي وحالة معالجتها.",
       },
-      { property: "og:title", content: "بلاغاتي — سوق تحقّق" },
+      { property: "og:title", content: "بلاغاتي — كحلي" },
       { property: "og:description", content: "حالة البلاغات المقدَّمة ونتيجة المراجعة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

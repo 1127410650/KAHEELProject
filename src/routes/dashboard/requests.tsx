@@ -11,12 +11,12 @@ export const Route = createFileRoute("/dashboard/requests")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "طلبات عروض السعر — سوق تحقّق" },
+      { title: "طلبات عروض السعر — كحلي" },
       {
         name: "description",
-        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في سوق تحقّق.",
+        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في كحلي.",
       },
-      { property: "og:title", content: "طلبات عروض السعر — سوق تحقّق" },
+      { property: "og:title", content: "طلبات عروض السعر — كحلي" },
       { property: "og:description", content: "إدارة طلبات عروض السعر." },
       { name: "robots", content: "noindex" },
     ],

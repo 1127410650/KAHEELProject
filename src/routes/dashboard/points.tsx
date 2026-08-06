@@ -16,8 +16,8 @@ export const Route = createFileRoute("/dashboard/points")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "نقاطي — سوق تحقّق" },
-      { name: "description", content: "رصيد نقاطك وسجل عمليات الترويج في سوق تحقّق." },
+      { title: "نقاطي — كحلي" },
+      { name: "description", content: "رصيد نقاطك وسجل عمليات الترويج في كحلي." },
       { property: "og:type", content: "website" },
       { name: "robots", content: "noindex" },
     ],

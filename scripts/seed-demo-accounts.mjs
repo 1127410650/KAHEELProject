@@ -22,7 +22,13 @@ function slugPart(value) {
 }
 
 const supabaseUrl = required("SUPABASE_URL", process.env.VITE_SUPABASE_URL);
-const serviceRoleKey = required("SUPABASE_SERVICE_ROLE_KEY");
+const serviceRoleKey =
+  process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!serviceRoleKey) {
+  throw new Error(
+    "Missing required environment variable: SUPABASE_SECRET_KEY (or SUPABASE_SERVICE_ROLE_KEY)",
+  );
+}
 const emailDomain = required("KAHLI_QA_EMAIL_DOMAIN");
 
 if (process.env.KAHLI_QA_CONFIRM !== CONFIRMATION) {
@@ -210,7 +216,15 @@ async function main() {
   const admin = accounts.find((row) => row.definition.kind === "admin");
   const { error: adminError } = await client
     .from("mkt_platform_admins")
-    .upsert({ user_id: admin.userId }, { onConflict: "user_id" });
+    .upsert(
+      {
+        user_id: admin.userId,
+        platform_role: "platform_admin",
+        granted_reason: QA_BATCH,
+        created_by: admin.userId,
+      },
+      { onConflict: "user_id" },
+    );
   if (adminError) throw adminError;
 
   process.stdout.write(

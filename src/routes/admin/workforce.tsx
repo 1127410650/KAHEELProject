@@ -70,7 +70,7 @@ export const Route = createFileRoute("/admin/workforce")({
           "توزيع أعمال الإدارة آليًا وبعدالة بين الموظفين المتاحين، مع حالة العمل والحد التشغيلي والإجازات والقائمة المشتركة.",
       },
       { property: "og:title", content: "توزيع الأعمال والموظفون — إدارة المنصة" },
-      { property: "og:description", content: "إدارة القوى العاملة وقائمة الأعمال في منصة تحقّق." },
+      { property: "og:description", content: "إدارة القوى العاملة وقائمة الأعمال في منصة كحلي." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

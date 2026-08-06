@@ -13,12 +13,12 @@ export const Route = createFileRoute("/dashboard/favorites")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "المفضلة — سوق تحقّق" },
+      { title: "المفضلة — كحلي" },
       {
         name: "description",
-        content: "الإعلانات التي أضفتها إلى المفضلة في سوق تحقّق للخدمات والموردين.",
+        content: "الإعلانات التي أضفتها إلى المفضلة في كحلي للخدمات والموردين.",
       },
-      { property: "og:title", content: "المفضلة — سوق تحقّق" },
+      { property: "og:title", content: "المفضلة — كحلي" },
       { property: "og:description", content: "قائمة الإعلانات المحفوظة." },
       { name: "robots", content: "noindex" },
     ],

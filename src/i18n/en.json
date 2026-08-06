@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "Tahqaq",
+    "name": "Kahli",
     "tagline": "Projects, Invoices, Requests and Supervisor Custody Management",
-    "shortName": "Tahqaq"
+    "shortName": "Kahli"
   },
   "common": {
     "save": "Save",
@@ -96,7 +96,7 @@
     "signedOut": "Signed out",
     "invalid": "Invalid credentials",
     "genericError": "Could not sign in, please try again",
-    "welcome": "Welcome to Tahqaq",
+    "welcome": "Welcome to Kahli",
     "identifier": "Email or mobile number",
     "identifierHint": "Enter your email or mobile number",
     "locked": "Account temporarily locked after failed attempts. Try again later.",
@@ -1096,7 +1096,7 @@
     "passwordHint": "At least 10 characters with at least 3 different character types",
     "inviteNote": "This invitation was sent to:",
     "inviteRequiredTitle": "Accounts are invite-only",
-    "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Tahqaq. If you were invited, open the invitation link sent to your email.",
+    "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Kahli. If you were invited, open the invitation link sent to your email.",
     "inviteOnlySubtitle": "Complete your details to accept the invitation. The email is locked to the invited address.",
     "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only.",
     "publicTitle": "Create account",
@@ -1235,7 +1235,7 @@
       "OWNER_PROTECTED": "The owner membership cannot be changed",
       "NO_ACTIVE_WORKSPACE": "No active workspace"
     },
-    "shareMessage": "You have been invited to join the workspace \"{workspace}\" on Tahqaq as {role}. Accept using this link: {link} — valid for 7 days."
+    "shareMessage": "You have been invited to join the workspace \"{workspace}\" on Kahli as {role}. Accept using this link: {link} — valid for 7 days."
   },
   "start": {
     "title": "Start here",
@@ -4191,8 +4191,8 @@
   },
   "welcome": {
     "meta": {
-      "title": "Tahqaq — Real estate, services and suppliers marketplace",
-      "desc": "Tahqaq is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts, in-app messaging and calls."
+      "title": "Kahli — Real estate, services and suppliers marketplace",
+      "desc": "Kahli is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts, in-app messaging and calls."
     },
     "nav": {
       "browse": "Browse marketplace",

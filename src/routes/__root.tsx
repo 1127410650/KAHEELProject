@@ -122,21 +122,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "تحقّق — Tahqaq" },
+      { title: "كحلي — Kahli" },
       {
         name: "description",
-        content: "إدارة المشاريع — Projects, invoices",
+        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
       },
-      { property: "og:title", content: "تحقّق — Tahqaq" },
+      { property: "og:title", content: "كحلي — Kahli" },
       {
         property: "og:description",
-        content: "إدارة المشاريع — Projects, invoices",
+        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
-      { name: "twitter:title", content: "تحقّق — Tahqaq" },
-      { name: "twitter:description", content: "إدارة المشاريع — Projects, invoices" },
+      { name: "twitter:title", content: "كحلي — Kahli" },
+      {
+        name: "twitter:description",
+        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+      },
       {
         property: "og:image",
         content:

@@ -62,12 +62,12 @@ export const Route = createFileRoute("/admin/reports/$id")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "بطاقة البلاغ — إدارة سوق تحقّق" },
+      { title: "بطاقة البلاغ — إدارة كحلي" },
       {
         name: "description",
-        content: "بطاقة البلاغ في سوق تحقّق: التقييم، المراسلات، الإجراءات على الإعلان والحساب.",
+        content: "بطاقة البلاغ في كحلي: التقييم، المراسلات، الإجراءات على الإعلان والحساب.",
       },
-      { property: "og:title", content: "بطاقة البلاغ — إدارة سوق تحقّق" },
+      { property: "og:title", content: "بطاقة البلاغ — إدارة كحلي" },
       { property: "og:description", content: "معالجة البلاغ واتخاذ الإجراءات وتسجيل القرار." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

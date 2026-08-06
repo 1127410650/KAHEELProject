@@ -31,13 +31,13 @@ export const Route = createFileRoute("/admin/reports/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "صندوق البلاغات — إدارة سوق تحقّق" },
+      { title: "صندوق البلاغات — إدارة كحلي" },
       {
         name: "description",
-        content: "صندوق بلاغات سوق تحقّق: قوائم العمل، مؤشرات الأداء، والفلاتر لمعالجة البلاغات.",
+        content: "صندوق بلاغات كحلي: قوائم العمل، مؤشرات الأداء، والفلاتر لمعالجة البلاغات.",
       },
-      { property: "og:title", content: "صندوق البلاغات — إدارة سوق تحقّق" },
-      { property: "og:description", content: "معالجة بلاغات الإعلانات والحسابات في سوق تحقّق." },
+      { property: "og:title", content: "صندوق البلاغات — إدارة كحلي" },
+      { property: "og:description", content: "معالجة بلاغات الإعلانات والحسابات في كحلي." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

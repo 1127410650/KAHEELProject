@@ -40,13 +40,13 @@ export const Route = createFileRoute("/admin/listing-events")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "سجل عمليات الإعلانات — إدارة سوق تحقّق" },
+      { title: "سجل عمليات الإعلانات — إدارة كحلي" },
       {
         name: "description",
         content:
-          "سجل عمليات الإعلانات في سوق تحقّق: من فعل ماذا ومتى، مع إجراءات إدارية موثّقة بسبب مكتوب.",
+          "سجل عمليات الإعلانات في كحلي: من فعل ماذا ومتى، مع إجراءات إدارية موثّقة بسبب مكتوب.",
       },
-      { property: "og:title", content: "سجل عمليات الإعلانات — إدارة سوق تحقّق" },
+      { property: "og:title", content: "سجل عمليات الإعلانات — إدارة كحلي" },
       { property: "og:description", content: "سجل غير قابل للتعديل لكل عمليات الإعلانات." },
       { name: "robots", content: "noindex" },
     ],

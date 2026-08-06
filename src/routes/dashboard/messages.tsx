@@ -55,9 +55,9 @@ export const Route = createFileRoute("/dashboard/messages")({
     typeof search["c"] === "string" ? { c: search["c"] } : {},
   head: () => ({
     meta: [
-      { title: "المحادثات — سوق تحقّق" },
-      { name: "description", content: "محادثاتك مع المعلنين والمشترين حول إعلانات سوق تحقّق." },
-      { property: "og:title", content: "المحادثات — سوق تحقّق" },
+      { title: "المحادثات — كحلي" },
+      { name: "description", content: "محادثاتك مع المعلنين والمشترين حول إعلانات كحلي." },
+      { property: "og:title", content: "المحادثات — كحلي" },
       { property: "og:description", content: "إدارة محادثات السوق." },
       { name: "robots", content: "noindex" },
     ],

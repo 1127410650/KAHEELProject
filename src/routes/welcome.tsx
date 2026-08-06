@@ -18,9 +18,9 @@ import { loadListings } from "@/lib/mkt-queries";
 import { Button } from "@/components/ui/button";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 
-const title = "تحقّق — سوق العقارات والخدمات والموردين | Tahqaq";
+const title = "كحلي — سوق العقارات والخدمات والموردين | Kahli";
 const description =
-  "منصة تحقّق: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
+  "منصة كحلي: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
 
 export const Route = createFileRoute("/welcome")({
   head: () => ({

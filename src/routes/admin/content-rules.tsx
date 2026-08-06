@@ -57,7 +57,7 @@ export const Route = createFileRoute("/admin/content-rules")({
         content: "إدارة قواعد الفحص الآلي للإعلانات وعتبات القرار وسجل تشغيل مهمة الفحص الدورية — لمدير النظام فقط.",
       },
       { property: "og:title", content: "قواعد فحص المحتوى — إدارة المنصة" },
-      { property: "og:description", content: "إدارة قواعد فحص المحتوى في منصة تحقّق." },
+      { property: "og:description", content: "إدارة قواعد فحص المحتوى في منصة كحلي." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

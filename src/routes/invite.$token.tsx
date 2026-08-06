@@ -13,13 +13,13 @@ export const Route = createFileRoute("/invite/$token")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "دعوة للانضمام — تحقّق | Invitation — Tahqaq" },
+      { title: "دعوة للانضمام — كحلي | Invitation — Kahli" },
       {
         name: "description",
-        content: "قبول دعوة الانضمام إلى مساحة عمل في نظام تحقّق بدور وصلاحيات محددة.",
+        content: "قبول دعوة الانضمام إلى مساحة عمل في منصة كحلي بدور وصلاحيات محددة.",
       },
-      { property: "og:title", content: "دعوة للانضمام — تحقّق" },
-      { property: "og:description", content: "Accept your Tahqaq workspace invitation." },
+      { property: "og:title", content: "دعوة للانضمام — كحلي" },
+      { property: "og:description", content: "Accept your Kahli workspace invitation." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

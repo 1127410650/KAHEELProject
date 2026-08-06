@@ -37,14 +37,14 @@ export const Route = createFileRoute("/admin/verifications_/$id")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "ملف طلب التوثيق — إدارة منصة تحقّق" },
+      { title: "ملف طلب التوثيق — إدارة منصة كحلي" },
       {
         name: "description",
         content:
           "مراجعة طلب توثيق متجر: بيانات الطلب ومستنداته وسجل قراراته، مع تسجيل كل فتح لمستند حسّاس.",
       },
-      { property: "og:title", content: "ملف طلب التوثيق — إدارة منصة تحقّق" },
-      { property: "og:description", content: "مراجعة طلبات توثيق المتاجر في منصة تحقّق." },
+      { property: "og:title", content: "ملف طلب التوثيق — إدارة منصة كحلي" },
+      { property: "og:description", content: "مراجعة طلبات توثيق المتاجر في منصة كحلي." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

@@ -19,13 +19,13 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — تحقّق | Sign in — Tahqaq" },
+      { title: "تسجيل الدخول — كحلي | Sign in — Kahli" },
       {
         name: "description",
-        content: "تسجيل دخول المستخدمين المصرح لهم في نظام تحقّق لإدارة المشاريع وعهد المشرفين.",
+        content: "تسجيل دخول المستخدمين المصرح لهم في منصة كحلي لإدارة المشاريع وعهد المشرفين.",
       },
-      { property: "og:title", content: "تسجيل الدخول — تحقّق" },
-      { property: "og:description", content: "Sign in to Tahqaq — internal management system." },
+      { property: "og:title", content: "تسجيل الدخول — كحلي" },
+      { property: "og:description", content: "Sign in to Kahli — internal management system." },
     ],
   }),
   component: AuthPage,
