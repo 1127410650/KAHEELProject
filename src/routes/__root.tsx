@@ -18,6 +18,7 @@ import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
+import { initializeNativeSecurity } from "@/lib/mobile-security";
 
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
@@ -178,15 +179,32 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Real product analytics for every route: page views, timings, client errors.
   useAnalyticsInstrumentation();
+
+  useEffect(() => {
+    let active = true;
+    let cleanup: (() => void) | undefined;
+
+    void initializeNativeSecurity()
+      .then((dispose) => {
+        if (active) cleanup = dispose;
+        else dispose();
+      })
+      .catch((error: unknown) => {
+        reportLovableError(error, { boundary: "native_security_initialization" });
+      });
+
+    return () => {
+      active = false;
+      cleanup?.();
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <SessionProvider>
           <CallCenterProvider>
-            {/* Required: nested routes render here. */}
             <Outlet />
             <CallOverlay />
             <Toaster position="top-center" />
