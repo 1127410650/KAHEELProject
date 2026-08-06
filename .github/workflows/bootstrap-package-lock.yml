@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: bootstrap-reviewed-npm-lock
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   import-reviewed-lock:
@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
 
-      - name: Download the reviewed lock and peer diagnostic
+      - name: Download the reviewed standard lock
         shell: bash
         run: |
           set -euo pipefail
@@ -37,15 +37,14 @@ jobs:
 
           for attempt in $(seq 1 60); do
             if curl --fail --silent --show-error --location "$base/generation-mode.txt" -o .bootstrap-lock/generation-mode.txt \
-              && grep -qx 'legacy-peer-deps-for-diagnosis-only' .bootstrap-lock/generation-mode.txt \
+              && grep -qx 'standard' .bootstrap-lock/generation-mode.txt \
               && curl --fail --silent --show-error --location "$base/package-lock.json" -o .bootstrap-lock/package-lock.json \
-              && curl --fail --silent --show-error --location "$base/package-lock.json.sha256" -o .bootstrap-lock/package-lock.json.sha256 \
-              && curl --fail --silent --show-error --location "$base/npm-peer-resolution-error.txt" -o .bootstrap-lock/npm-peer-resolution-error.txt; then
+              && curl --fail --silent --show-error --location "$base/package-lock.json.sha256" -o .bootstrap-lock/package-lock.json.sha256; then
               break
             fi
 
             if [ "$attempt" -eq 60 ]; then
-              echo 'Reviewed preview lock was not available before timeout.' >&2
+              echo 'Reviewed standard lock was not available before timeout.' >&2
               exit 1
             fi
             sleep 10
@@ -86,7 +85,7 @@ jobs:
             'node_modules/@capacitor/core': '7.6.8',
             'node_modules/@capacitor/ios': '7.6.8',
             'node_modules/@capacitor/preferences': '7.0.4',
-            'node_modules/capacitor-secure-storage-plugin': '0.13.0',
+            'node_modules/capacitor-secure-storage-plugin': '0.12.0',
           };
           for (const [path, version] of Object.entries(required)) {
             if (lock.packages?.[path]?.version !== version) {
@@ -116,20 +115,15 @@ jobs:
           }
           NODE
 
-          test -s .bootstrap-lock/npm-peer-resolution-error.txt
-          test "$(wc -c < .bootstrap-lock/npm-peer-resolution-error.txt)" -le 100000
-
-      - name: Commit diagnostic lock for dependency repair
+      - name: Commit the reviewed lock
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p .lovable/audit
           cp .bootstrap-lock/package-lock.json package-lock.json
-          cp .bootstrap-lock/npm-peer-resolution-error.txt .lovable/audit/2026-08-07-npm-peer-resolution-error.txt
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json .lovable/audit/2026-08-07-npm-peer-resolution-error.txt
+          git add package-lock.json
           git diff --cached --check
-          git commit -m 'Capture npm dependency graph and peer conflict'
+          git commit -m 'Add deterministic npm dependency lock'
           git push origin HEAD:feat/mobile-ios-android-secure-foundation
