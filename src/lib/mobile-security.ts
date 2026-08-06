@@ -25,8 +25,9 @@ export async function initializeNativeSecurity(): Promise<Cleanup> {
     const approved = approvedDeepLink(url);
     if (!approved) return;
 
-    const destination = `${approved.pathname}${approved.search}${approved.hash}`;
-    window.location.assign(new URL(destination, APPROVED_ORIGIN).href);
+    // Use the already-validated absolute URL. Reconstructing it from a pathname
+    // could accidentally interpret a path beginning with // as a new host.
+    window.location.assign(approved.href);
   });
 
   return () => {
