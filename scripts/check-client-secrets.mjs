@@ -123,10 +123,37 @@ for (const requiredSetting of [
   "allowMixedContent: false",
   "webContentsDebuggingEnabled: false",
   "limitsNavigationsToAppBoundDomains: true",
+  "resolveMobileOrigin()",
 ]) {
   if (!capacitorConfig.includes(requiredSetting)) {
     report("capacitor.config.ts", `is missing required setting: ${requiredSetting}`);
   }
+}
+
+const mobileOriginPolicy = readFileSync("scripts/mobile-origin-policy.mjs", "utf8");
+for (const requiredControl of [
+  "MOBILE_RELEASE_BUILD",
+  "REVIEWED_MOBILE_RELEASE_ORIGIN",
+  "MOBILE_PREVIEW_ORIGIN",
+  'url.hostname.includes("-git-")',
+  "Release build blocked",
+]) {
+  if (!mobileOriginPolicy.includes(requiredControl)) {
+    report("scripts/mobile-origin-policy.mjs", `is missing release control: ${requiredControl}`);
+  }
+}
+
+const reviewedReleaseMatch = mobileOriginPolicy.match(
+  /REVIEWED_MOBILE_RELEASE_ORIGIN\s*=\s*"([^"]*)"/,
+);
+const reviewedReleaseOrigin = reviewedReleaseMatch?.[1] ?? null;
+if (reviewedReleaseOrigin === null) {
+  report("scripts/mobile-origin-policy.mjs", "cannot determine the reviewed release origin");
+} else if (
+  reviewedReleaseOrigin === "https://check-your-name-ai.vercel.app" ||
+  reviewedReleaseOrigin.includes("-git-")
+) {
+  report("scripts/mobile-origin-policy.mjs", "uses a mutable alias as the signed release origin");
 }
 
 const vercelConfig = JSON.parse(readFileSync("vercel.json", "utf8"));
@@ -154,6 +181,7 @@ for (const requiredHeader of [
 const contentSecurityPolicy = responseHeaders.get("content-security-policy") ?? "";
 for (const requiredDirective of [
   "script-src 'self'",
+  "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -181,7 +209,7 @@ for (const deniedCapability of ["camera=()", "microphone=()", "payment=()", "usb
 
 const configuredOrigin = process.env.MOBILE_APP_ORIGIN;
 if (configuredOrigin && configuredOrigin !== "https://check-your-name-ai.vercel.app") {
-  report("environment", "sets MOBILE_APP_ORIGIN to an unapproved origin");
+  report("environment", "sets MOBILE_APP_ORIGIN to an unapproved preview origin");
 }
 
 if (findings.length > 0) {
