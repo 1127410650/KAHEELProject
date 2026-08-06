@@ -4,6 +4,7 @@ import {
 } from "@/lib/mobile-origin";
 import { isNativePlatform } from "@/lib/native-platform";
 
+const APPROVED_ORIGIN = MOBILE_PUBLIC_ORIGIN;
 const MAX_DEEP_LINK_LENGTH = 4096;
 const MAX_AUTH_CODE_LENGTH = 2048;
 const FORBIDDEN_URL_CREDENTIALS = [
@@ -32,7 +33,7 @@ function approvedDeepLink(rawUrl: string): URL | null {
   try {
     const url = new URL(rawUrl);
     if (url.protocol !== "https:") return null;
-    if (url.origin !== MOBILE_PUBLIC_ORIGIN) return null;
+    if (url.origin !== APPROVED_ORIGIN) return null;
     if (url.username || url.password) return null;
     if (url.port && url.port !== "443") return null;
     if (url.pathname.startsWith("//") || url.pathname.includes("\\")) return null;
