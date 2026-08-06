@@ -1,3 +1,5 @@
+import "@/mobile-privacy.css";
+
 const PRIVACY_SHIELD_ID = "kaheel-native-privacy-shield";
 
 export function showNativePrivacyShield(): void {
