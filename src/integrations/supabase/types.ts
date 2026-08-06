@@ -10668,6 +10668,10 @@ export type Database = {
       }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_is_auto_publish_op: { Args: never; Returns: boolean }
+      mkt_is_business_principal: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_is_call_party: { Args: { _call_id: string }; Returns: boolean }
       mkt_is_listing_op: { Args: never; Returns: boolean }
       mkt_is_moderation_op: { Args: never; Returns: boolean }
