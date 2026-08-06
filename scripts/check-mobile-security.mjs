@@ -1,0 +1,170 @@
+import { existsSync, readFileSync } from "node:fs";
+
+const findings = [];
+
+function report(file, reason) {
+  findings.push({ file, reason });
+}
+
+function read(file) {
+  return readFileSync(file, "utf8");
+}
+
+function requirePattern(file, content, pattern, reason) {
+  if (!pattern.test(content)) report(file, reason);
+}
+
+function rejectPattern(file, content, pattern, reason) {
+  if (pattern.test(content)) report(file, reason);
+}
+
+const packageJson = JSON.parse(read("package.json"));
+const pinnedMobilePackages = [
+  "@capacitor/app",
+  "@capacitor/core",
+  "@capacitor/keyboard",
+  "@capacitor/preferences",
+  "@capacitor/status-bar",
+  "capacitor-secure-storage-plugin",
+  "@capacitor/android",
+  "@capacitor/cli",
+  "@capacitor/ios",
+];
+
+for (const dependency of pinnedMobilePackages) {
+  const version = packageJson.dependencies?.[dependency] ?? packageJson.devDependencies?.[dependency];
+  if (!version) {
+    report("package.json", `is missing required mobile dependency ${dependency}`);
+    continue;
+  }
+
+  if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) {
+    report("package.json", `${dependency} must use an exact version, not a range (${version})`);
+  }
+}
+
+const capacitorConfig = read("capacitor.config.ts");
+for (const [pattern, reason] of [
+  [/appId:\s*"com\.kahli\.marketplace"/, "does not use the reviewed application identifier"],
+  [/PRODUCTION_ORIGIN\s*=\s*"https:\/\/check-your-name-ai\.vercel\.app"/, "does not pin the reviewed HTTPS production origin"],
+  [/loggingBehavior:\s*"none"/, "does not disable native production logs"],
+  [/cleartext:\s*false/, "does not disable cleartext WebView traffic"],
+  [/allowMixedContent:\s*false/, "does not disable Android mixed content"],
+  [/useLegacyBridge:\s*false/, "does not disable the legacy Android JavaScript bridge"],
+  [/limitsNavigationsToAppBoundDomains:\s*true/, "does not enable iOS app-bound navigation"],
+  [/@capacitor\/preferences/, "does not include the Preferences plugin required for reinstall detection"],
+  [/capacitor-secure-storage-plugin/, "does not include native secure storage"],
+]) {
+  requirePattern("capacitor.config.ts", capacitorConfig, pattern, reason);
+}
+
+for (const [pattern, reason] of [
+  [/cleartext\s*:\s*true/, "enables cleartext traffic"],
+  [/allowMixedContent\s*:\s*true/, "enables mixed HTTP/HTTPS content"],
+  [/webContentsDebuggingEnabled\s*:\s*true/, "enables WebView debugging"],
+  [/useLegacyBridge\s*:\s*true/, "enables the legacy Android JavaScript bridge"],
+  [/allowNavigation\s*:\s*\[[^\]]*["']\*[^\]]*\]/s, "contains a wildcard navigation allowlist"],
+  [/MOBILE_APP_ORIGIN[^\n]*http:\/\//, "permits an insecure mobile origin"],
+]) {
+  rejectPattern("capacitor.config.ts", capacitorConfig, pattern, reason);
+}
+
+const authStorage = read("src/lib/native-auth-storage.ts");
+for (const [pattern, reason] of [
+  [/capacitor-secure-storage-plugin/, "does not use native secure storage"],
+  [/@capacitor\/preferences/, "does not detect first launch after reinstall"],
+  [/await\s+secureStorage\.clear\(\)/, "does not clear surviving Keychain data after reinstall"],
+  [/MAX_AUTH_VALUE_BYTES/, "does not enforce an authentication-value size limit"],
+  [/assertAllowedAuthKey/, "does not restrict secure-storage keys"],
+]) {
+  requirePattern("src/lib/native-auth-storage.ts", authStorage, pattern, reason);
+}
+
+const mobileSecurity = read("src/lib/mobile-security.ts");
+for (const [pattern, reason] of [
+  [/MAX_DEEP_LINK_LENGTH/, "does not cap deep-link length"],
+  [/url\.origin\s*!==\s*APPROVED_ORIGIN/, "does not enforce the approved deep-link origin"],
+  [/url\.pathname\.startsWith\("\/\/"\)/, "does not reject protocol-relative deep-link paths"],
+  [/App\.getLaunchUrl\(\)/, "does not validate cold-start deep links"],
+]) {
+  requirePattern("src/lib/mobile-security.ts", mobileSecurity, pattern, reason);
+}
+
+if (existsSync("android/app/src/main/AndroidManifest.xml")) {
+  const manifest = read("android/app/src/main/AndroidManifest.xml");
+  for (const [pattern, reason] of [
+    [/android:allowBackup="false"/, "does not disable Android application backup"],
+    [/android:fullBackupContent="false"/, "does not disable Android full backup"],
+    [/android:usesCleartextTraffic="false"/, "does not reject Android cleartext traffic"],
+    [/android:networkSecurityConfig="@xml\/network_security_config"/, "does not use the reviewed Android network policy"],
+  ]) {
+    requirePattern("android/app/src/main/AndroidManifest.xml", manifest, pattern, reason);
+  }
+
+  for (const permission of [
+    "android.permission.MANAGE_EXTERNAL_STORAGE",
+    "android.permission.QUERY_ALL_PACKAGES",
+    "android.permission.REQUEST_INSTALL_PACKAGES",
+    "android.permission.WRITE_EXTERNAL_STORAGE",
+  ]) {
+    if (manifest.includes(permission)) {
+      report("android/app/src/main/AndroidManifest.xml", `contains forbidden broad permission ${permission}`);
+    }
+  }
+
+  rejectPattern(
+    "android/app/src/main/AndroidManifest.xml",
+    manifest,
+    /android:debuggable="true"/,
+    "enables Android application debugging",
+  );
+
+  const networkConfigPath = "android/app/src/main/res/xml/network_security_config.xml";
+  if (!existsSync(networkConfigPath)) {
+    report(networkConfigPath, "is missing");
+  } else {
+    const networkConfig = read(networkConfigPath);
+    requirePattern(
+      networkConfigPath,
+      networkConfig,
+      /cleartextTrafficPermitted="false"/,
+      "does not block cleartext traffic",
+    );
+    rejectPattern(
+      networkConfigPath,
+      networkConfig,
+      /certificates\s+src="user"/,
+      "trusts user-installed certificate authorities",
+    );
+  }
+}
+
+if (existsSync("ios/App/App/Info.plist")) {
+  const plist = read("ios/App/App/Info.plist");
+  for (const [pattern, reason] of [
+    [/<key>NSAppTransportSecurity<\/key>/, "does not define App Transport Security"],
+    [/<key>WKAppBoundDomains<\/key>/, "does not define iOS app-bound domains"],
+    [/<string>check-your-name-ai\.vercel\.app<\/string>/, "does not bind the reviewed production domain"],
+    [/<key>UIFileSharingEnabled<\/key>\s*<false\/>/s, "does not disable iTunes/Finder file sharing"],
+    [/<key>LSSupportsOpeningDocumentsInPlace<\/key>\s*<false\/>/s, "does not disable opening app documents in place"],
+  ]) {
+    requirePattern("ios/App/App/Info.plist", plist, pattern, reason);
+  }
+
+  for (const key of ["NSAllowsArbitraryLoads", "NSAllowsArbitraryLoadsInWebContent", "NSAllowsLocalNetworking"]) {
+    rejectPattern(
+      "ios/App/App/Info.plist",
+      plist,
+      new RegExp(`<key>${key}<\\/key>\\s*<true\\/>`, "s"),
+      `enables unsafe iOS transport option ${key}`,
+    );
+  }
+}
+
+if (findings.length > 0) {
+  console.error("Mobile security check failed:");
+  for (const finding of findings) console.error(`- ${finding.file}: ${finding.reason}`);
+  process.exit(1);
+}
+
+console.log("Mobile security check passed.");
