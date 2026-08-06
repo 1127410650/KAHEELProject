@@ -21,6 +21,7 @@ function hardenAndroid() {
   for (const [name, value] of [
     ["allowBackup", "false"],
     ["fullBackupContent", "false"],
+    ["dataExtractionRules", "@xml/data_extraction_rules"],
     ["usesCleartextTraffic", "false"],
     ["networkSecurityConfig", "@xml/network_security_config"],
   ]) {
@@ -39,6 +40,12 @@ function hardenAndroid() {
     networkConfigPath,
     `<?xml version="1.0" encoding="utf-8"?>\n<network-security-config>\n  <base-config cleartextTrafficPermitted="false">\n    <trust-anchors>\n      <certificates src="system" />\n    </trust-anchors>\n  </base-config>\n</network-security-config>\n`,
   );
+
+  const extractionRulesPath = "android/app/src/main/res/xml/data_extraction_rules.xml";
+  writeFileSync(
+    extractionRulesPath,
+    `<?xml version="1.0" encoding="utf-8"?>\n<data-extraction-rules>\n  <cloud-backup>\n    <exclude domain="root" path="." />\n    <exclude domain="file" path="." />\n    <exclude domain="database" path="." />\n    <exclude domain="sharedpref" path="." />\n    <exclude domain="external" path="." />\n    <exclude domain="device_root" path="." />\n    <exclude domain="device_file" path="." />\n    <exclude domain="device_database" path="." />\n    <exclude domain="device_sharedpref" path="." />\n  </cloud-backup>\n  <device-transfer>\n    <exclude domain="root" path="." />\n    <exclude domain="file" path="." />\n    <exclude domain="database" path="." />\n    <exclude domain="sharedpref" path="." />\n    <exclude domain="external" path="." />\n    <exclude domain="device_root" path="." />\n    <exclude domain="device_file" path="." />\n    <exclude domain="device_database" path="." />\n    <exclude domain="device_sharedpref" path="." />\n  </device-transfer>\n</data-extraction-rules>\n`,
+  );
 }
 
 function addPlistEntry(plist, entry) {
@@ -46,6 +53,32 @@ function addPlistEntry(plist, entry) {
   const closing = plist.lastIndexOf("</dict>");
   if (closing < 0) throw new Error("Info.plist has no root dictionary.");
   return `${plist.slice(0, closing)}${entry.xml}\n${plist.slice(closing)}`;
+}
+
+function clearPersistedKeychainOnFreshInstall() {
+  const appDelegatePath = "ios/App/App/AppDelegate.swift";
+  let source = readFileSync(appDelegatePath, "utf8");
+  const marker = "kahli.secureStorage.firstInstall";
+
+  if (!source.includes("import SwiftKeychainWrapper")) {
+    const importAnchor = "import Capacitor";
+    if (!source.includes(importAnchor)) {
+      throw new Error("AppDelegate.swift is missing the Capacitor import.");
+    }
+    source = source.replace(importAnchor, `${importAnchor}\nimport SwiftKeychainWrapper`);
+  }
+
+  if (!source.includes(marker)) {
+    const launchFunction = /(func application\([\s\S]*?didFinishLaunchingWithOptions[\s\S]*?\)\s*->\s*Bool\s*\{)/;
+    if (!launchFunction.test(source)) {
+      throw new Error("AppDelegate.swift has no didFinishLaunchingWithOptions function.");
+    }
+
+    const firstInstallCleanup = `\n        // Keychain survives uninstall on iOS. Clear only this app's secure-storage\n        // service when UserDefaults indicates a genuinely fresh installation.\n        let secureInstallMarker = "${marker}"\n        if !UserDefaults.standard.bool(forKey: secureInstallMarker) {\n            let keychainWrapper = KeychainWrapper(serviceName: "cap_sec")\n            keychainWrapper.removeAllKeys()\n            UserDefaults.standard.set(true, forKey: secureInstallMarker)\n        }\n`;
+    source = source.replace(launchFunction, `$1${firstInstallCleanup}`);
+  }
+
+  writeFileSync(appDelegatePath, source);
 }
 
 function hardenIos() {
@@ -73,6 +106,7 @@ function hardenIos() {
 
   for (const entry of entries) plist = addPlistEntry(plist, entry);
   writeFileSync(plistPath, plist);
+  clearPersistedKeychainOnFreshInstall();
 }
 
 hardenAndroid();
