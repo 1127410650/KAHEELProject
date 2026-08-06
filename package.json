@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "build:mobile": "MOBILE_NATIVE_BUILD=1 vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -18,13 +19,13 @@
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/harden-native-projects.mjs",
     "mobile:release:check": "npm run security:mobile",
-    "mobile:sync": "npx cap sync && npm run mobile:harden",
+    "mobile:sync": "npm run build:mobile && npx cap sync && npm run mobile:harden",
     "mobile:open:android": "npx cap open android",
     "mobile:open:ios": "npx cap open ios",
     "mobile:run:android": "npx cap run android",
     "mobile:run:ios": "npx cap run ios",
     "mobile:doctor": "npx cap doctor",
-    "mobile:verify": "npm run security:mobile-all && npm run build && npx cap sync && npm run mobile:harden && npm run mobile:release:check && npx cap doctor"
+    "mobile:verify": "npm run security:mobile-all && npm run build:mobile && npx cap sync && npm run mobile:harden && npm run mobile:release:check && npx cap doctor"
   },
   "dependencies": {
     "@capacitor/app": "7.1.2",
