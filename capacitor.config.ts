@@ -1,17 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
+import { resolveMobileOrigin } from "./scripts/mobile-origin-policy.mjs";
 
-// Release builds intentionally refuse preview, local-network, and alternate origins.
-const PRODUCTION_ORIGIN = "https://check-your-name-ai.vercel.app";
-const configuredOrigin = process.env.MOBILE_APP_ORIGIN?.trim() || PRODUCTION_ORIGIN;
-const appOrigin = new URL(configuredOrigin);
-
-if (appOrigin.protocol !== "https:") {
-  throw new Error("MOBILE_APP_ORIGIN must use HTTPS.");
-}
-
-if (appOrigin.origin !== PRODUCTION_ORIGIN) {
-  throw new Error(`MOBILE_APP_ORIGIN is not approved: ${appOrigin.origin}`);
-}
+const appOrigin = resolveMobileOrigin();
 
 const config: CapacitorConfig = {
   appId: "com.kahli.marketplace",
