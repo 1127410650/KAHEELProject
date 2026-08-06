@@ -52,10 +52,11 @@ jobs:
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
 
     steps:
-      - name: Check out branch
+      - name: Check out source branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -105,7 +106,9 @@ jobs:
           build
 
       - name: Commit generated native projects
-        if: github.event_name == 'push' && github.ref_name == 'feat/mobile-ios-android-foundation'
+        if: >-
+          (github.event_name == 'push' && github.ref_name == 'feat/mobile-ios-android-foundation') ||
+          (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
         shell: bash
         run: |
           set -euo pipefail
@@ -117,4 +120,5 @@ jobs:
             exit 0
           fi
           git commit -m "chore: generate hardened native projects [skip mobile-gen]"
-          git push
+          TARGET_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          git push origin "HEAD:${TARGET_BRANCH}"
