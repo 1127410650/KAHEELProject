@@ -20,12 +20,16 @@ function decodeJwtPayload(value: string): Record<string, unknown> | null {
   }
 }
 
+function isOpaquePublishableKey(value: string): boolean {
+  return value.startsWith("sb_publishable_");
+}
+
 function assertPublishableClientKey(value: string): void {
   if (value.startsWith("sb_secret_")) {
     throw new Error("A Supabase secret key must never be bundled into the client application.");
   }
 
-  if (value.startsWith("sb_publishable_")) return;
+  if (isOpaquePublishableKey(value)) return;
 
   const payload = decodeJwtPayload(value);
   if (payload?.role === "anon") return;
@@ -67,8 +71,11 @@ function createSupabaseFetch(supabaseKey: string, supabaseOrigin: string): typeo
       new Headers(init.headers).forEach((headerValue, key) => headers.set(key, headerValue));
     }
 
-    // Publishable keys are API keys, not user bearer tokens.
-    if (headers.get("Authorization") === `Bearer ${supabaseKey}`) {
+    // Opaque publishable keys are API keys and must not be sent as bearer tokens.
+    if (
+      isOpaquePublishableKey(supabaseKey) &&
+      headers.get("Authorization") === `Bearer ${supabaseKey}`
+    ) {
       headers.delete("Authorization");
     }
 
@@ -110,7 +117,6 @@ function createSupabaseClient() {
       storage: createSupabaseAuthStorage(),
       persistSession: true,
       autoRefreshToken: true,
-      flowType: "pkce",
     },
   });
 }
