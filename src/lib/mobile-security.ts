@@ -26,9 +26,14 @@ function navigateToApprovedDeepLink(rawUrl: string): void {
   const approved = approvedDeepLink(rawUrl);
   if (!approved) return;
 
-  // Use the already-validated absolute URL. Re-resolving a pathname that begins
-  // with `//` can turn it into a protocol-relative URL and escape the allowlist.
-  if (window.location.href !== approved.href) window.location.assign(approved.href);
+  // Keep the signed application bundle loaded. Only copy the validated route
+  // into the local Capacitor origin; never navigate the WebView to remote code.
+  const localTarget = `${approved.pathname}${approved.search}${approved.hash}`;
+  const currentTarget = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (localTarget === currentTarget) return;
+
+  window.history.replaceState(window.history.state, "", localTarget);
+  window.dispatchEvent(new PopStateEvent("popstate", { state: window.history.state }));
 }
 
 export async function initializeNativeSecurity(): Promise<Cleanup> {
