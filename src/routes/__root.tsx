@@ -22,24 +22,43 @@ import { initializeNativeSecurity } from "@/lib/mobile-security";
 
 declare const __KAHLI_NATIVE_BUILD__: boolean;
 
-const NATIVE_CONTENT_SECURITY_POLICY = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  "connect-src 'self' https: wss:",
-  "media-src 'self' blob: https:",
-  "worker-src 'self' blob:",
-  "child-src 'self' blob:",
-  "manifest-src 'self'",
-  "object-src 'none'",
-  "base-uri 'none'",
-  "frame-src 'none'",
-  "frame-ancestors 'none'",
-  "form-action 'self' https:",
-  "upgrade-insecure-requests",
-].join("; ");
+function createNativeContentSecurityPolicy(): string {
+  const rawSupabaseUrl = import.meta.env["VITE_SUPABASE_URL"]?.trim();
+  if (!rawSupabaseUrl) {
+    throw new Error("The native build requires VITE_SUPABASE_URL for its network policy.");
+  }
+
+  const supabaseUrl = new URL(rawSupabaseUrl);
+  if (supabaseUrl.protocol !== "https:") {
+    throw new Error("The native Content Security Policy requires an HTTPS Supabase origin.");
+  }
+
+  const realtimeUrl = new URL(supabaseUrl);
+  realtimeUrl.protocol = "wss:";
+
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${supabaseUrl.origin} ${realtimeUrl.origin}`,
+    "media-src 'self' blob: https:",
+    "worker-src 'self' blob:",
+    "child-src 'self' blob:",
+    "manifest-src 'self'",
+    "object-src 'none'",
+    "base-uri 'none'",
+    "frame-src 'none'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+}
+
+const NATIVE_CONTENT_SECURITY_POLICY = __KAHLI_NATIVE_BUILD__
+  ? createNativeContentSecurityPolicy()
+  : "";
 
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
