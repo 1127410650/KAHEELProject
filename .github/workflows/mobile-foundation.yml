@@ -105,14 +105,16 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Build iOS simulator application
-        run: >-
-          xcodebuild
-          -workspace ios/App/App.xcworkspace
-          -scheme App
-          -sdk iphonesimulator
-          -configuration Debug
-          CODE_SIGNING_ALLOWED=NO
-          build
+        shell: bash
+        run: |
+          set -euo pipefail
+          derived_data="ios/DerivedData"
+          if [ -d ios/App/App.xcworkspace ]; then
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+          else
+            xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+          fi
+          test -s "$derived_data/Build/Products/Debug-iphonesimulator/App.app/PrivacyInfo.xcprivacy"
 
       - name: Upload validated native projects
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -127,7 +129,7 @@ jobs:
             !android/local.properties
             ios
             !ios/App/Pods/**
-            !ios/App/DerivedData/**
+            !ios/DerivedData/**
 
       - name: Upload Android debug package
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
