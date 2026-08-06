@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "npm run security:client-secrets && vite build",
+    "build:web": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -21,7 +22,7 @@
     "mobile:run:android": "npx cap run android",
     "mobile:run:ios": "npx cap run ios",
     "mobile:doctor": "npx cap doctor",
-    "mobile:verify": "npm run security:client-secrets && npm run build && npx cap sync && npm run mobile:harden && npx cap doctor"
+    "mobile:verify": "npm run build && npx cap sync && npm run mobile:harden && npx cap doctor"
   },
   "dependencies": {
     "@aparajita/capacitor-secure-storage": "7.1.0",
