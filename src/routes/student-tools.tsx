@@ -16,7 +16,7 @@ export const Route = createFileRoute("/student-tools")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "عالم الطالب — كحلي" },
+      { title: "دليل الطالب — كحلي" },
       {
         name: "description",
         content: "أدوات مجانية للطالب السوري لتلخيص النصوص وإنشاء أسئلة مراجعة محليًا.",
@@ -66,7 +66,7 @@ function StudentToolsPage() {
                     خدمة مجانية للطالب السوري
                   </span>
                   <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
-                    عالم الطالب
+                    دليل الطالب
                   </h1>
                   <p className="mt-2 max-w-xl text-xs leading-6 text-white/76 sm:text-sm sm:leading-7">
                     الصق فقرة أو درسًا للحصول على تلخيص منظم أو أسئلة مراجعة مباشرة، دون إرسال النص
