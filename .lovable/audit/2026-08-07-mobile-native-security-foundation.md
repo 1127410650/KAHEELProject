@@ -6,7 +6,7 @@
 - Draft PR: `#21`
 - Merge: **blocked**
 - Publishing to App Store / Google Play: **blocked**
-- Normal web preview builds on the branch: **passing on verified revisions; latest revision must also pass before merge**
+- Latest security-gated Vercel web preview: **passed**
 - Native Android/iOS compile: **not yet proven by an observable CI result**
 - Production dependency lockfile: **missing and required before merge**
 - Capacitor peer compatibility: **resolved** by pinning `capacitor-secure-storage-plugin` to `0.12.0`, the Capacitor 7-compatible release
@@ -33,22 +33,38 @@ No software can be guaranteed to be impossible to compromise. The release requir
 15. iOS must target version 14.0 or newer and must contain the synchronized local SPA entry point.
 16. Apple `PrivacyInfo.xcprivacy` is generated for Preferences/UserDefaults with approved reason `CA92.1`, added to Xcode resources, and must be present in the compiled `.app`.
 17. Native dependencies are pinned to an exact reviewed Capacitor 7 set. A dedicated gate rejects any drift from: Capacitor `7.6.8`, App `7.1.2`, Preferences `7.0.4`, and secure storage `0.12.0`.
-18. Signing keys, certificates, provisioning profiles, environment files, and Android local signing properties are ignored by Git.
-19. The permanent mobile GitHub Actions workflow uses read-only repository permissions and actions pinned by commit SHA.
-20. Mobile build and release commands are fail-closed: the build requires the final SPA entry point, and release verification requires both generated native projects.
-21. Temporary dependency-diagnosis workflows and public lock-export code are not retained in the reviewed branch.
+18. A full-screen privacy shield is bundled into the application and shown on inactive/pause states so App Switcher snapshots do not display the application content. Its CSS import, viewport coverage, stacking, and lifecycle listeners are fail-closed checks.
+19. Signing keys, certificates, provisioning profiles, environment files, and Android local signing properties are ignored by Git.
+20. The permanent mobile GitHub Actions workflow uses read-only repository permissions and actions pinned by commit SHA.
+21. Normal Vercel web builds run the client-secret, dependency-version, mobile-policy, recovery/PKCE, and privacy-shield checks before Vite compiles the site.
+22. Mobile build and release commands are fail-closed: the build requires the final SPA entry point, and release verification requires both generated native projects.
+23. Temporary dependency-diagnosis workflows and public lock-export code are not retained in the reviewed branch.
 
 ## Dependency compatibility finding
 
 A standard npm resolution exposed a real peer-dependency mismatch: `capacitor-secure-storage-plugin@0.13.0` targets Capacitor 8 while the application is intentionally based on Capacitor 7. The dependency was changed to `0.12.0`, whose peer range supports Capacitor 7, and an exact-version security check was added so the incompatible combination cannot return unnoticed.
 
-## Automated gates
+## Verified in the latest web preview
+
+The latest Vercel preview completed successfully while running these gates before the normal SSR build:
+
+- tracked client-secret scan;
+- exact reviewed Capacitor dependency set;
+- mobile configuration and CSP source checks;
+- password recovery and PKCE checks;
+- privacy-shield CSS and lifecycle checks;
+- normal Vite/TanStack web compilation.
+
+This verifies the source-level controls and confirms the web application still builds. It does **not** prove Android Gradle compilation, Xcode compilation, native plugin synchronization, or physical-device behavior.
+
+## Automated native gates
 
 The draft must not merge until the mobile workflow proves all of the following:
 
 - Client secret scan passes.
 - Exact reviewed mobile dependency versions pass.
 - Password-recovery and PKCE security checks pass.
+- Privacy-shield security check passes.
 - Production dependency audit reports no high/critical vulnerability.
 - Normal SSR web build passes.
 - Native SPA build produces `dist/client/index.html`.
@@ -70,7 +86,7 @@ The draft must not merge until the mobile workflow proves all of the following:
 2. Obtain an observable successful native CI run and inspect its logs and artifacts.
 3. Confirm no unexpected native permissions are introduced after plugin synchronization.
 4. Add the approved password-recovery URL to the Supabase Auth redirect allowlist and verify that no wildcard redirect is used.
-5. Run authenticated tests on Android and iOS for login, logout, refresh, reinstall, offline/online transitions, revoked sessions, and recovery completion.
+5. Run authenticated tests on Android and iOS for login, logout, refresh, reinstall, offline/online transitions, revoked sessions, recovery completion, and App Switcher privacy behavior.
 6. Test recovery links, PKCE callbacks, expired links, replay attempts, malformed codes, credential-bearing fragments, and malicious redirect inputs.
 7. Run adversarial RLS tests using real user tokens across personal accounts, entities, projects, requests, documents, and storage objects.
 8. Verify that changing identifiers, URLs, request payloads, or local application state cannot expose another tenant's data.
