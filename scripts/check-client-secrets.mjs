@@ -97,6 +97,56 @@ for (const requiredSetting of [
   }
 }
 
+const vercelConfig = JSON.parse(readFileSync("vercel.json", "utf8"));
+const responseHeaders = new Map(
+  (vercelConfig.headers ?? [])
+    .flatMap((rule) => rule.headers ?? [])
+    .map((header) => [header.key.toLowerCase(), header.value]),
+);
+
+for (const requiredHeader of [
+  "strict-transport-security",
+  "content-security-policy",
+  "permissions-policy",
+  "cross-origin-opener-policy",
+  "cross-origin-resource-policy",
+  "x-content-type-options",
+  "referrer-policy",
+  "x-frame-options",
+]) {
+  if (!responseHeaders.has(requiredHeader)) {
+    report("vercel.json", `is missing required security header: ${requiredHeader}`);
+  }
+}
+
+const contentSecurityPolicy = responseHeaders.get("content-security-policy") ?? "";
+for (const requiredDirective of [
+  "script-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+]) {
+  if (!contentSecurityPolicy.includes(requiredDirective)) {
+    report("vercel.json", `CSP is missing required directive: ${requiredDirective}`);
+  }
+}
+
+if (/script-src[^;]*https:/i.test(contentSecurityPolicy)) {
+  report("vercel.json", "CSP allows scripts from arbitrary HTTPS origins");
+}
+if (contentSecurityPolicy.includes("'unsafe-eval'")) {
+  report("vercel.json", "CSP enables unsafe JavaScript evaluation");
+}
+
+const permissionsPolicy = responseHeaders.get("permissions-policy") ?? "";
+for (const deniedCapability of ["camera=()", "microphone=()", "payment=()", "usb=()"] ) {
+  if (!permissionsPolicy.includes(deniedCapability)) {
+    report("vercel.json", `Permissions-Policy does not deny ${deniedCapability}`);
+  }
+}
+
 const configuredOrigin = process.env.MOBILE_APP_ORIGIN;
 if (configuredOrigin && configuredOrigin !== "https://check-your-name-ai.vercel.app") {
   report("environment", "sets MOBILE_APP_ORIGIN to an unapproved origin");
