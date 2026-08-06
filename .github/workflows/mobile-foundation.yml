@@ -1,6 +1,7 @@
 name: Mobile foundation security
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "feat/mobile-ios-android-*"
@@ -12,6 +13,7 @@ on:
       - scripts/check-client-secrets.mjs
       - scripts/harden-native-projects.mjs
       - scripts/test-mobile-url-policy.mjs
+      - scripts/test-native-auth-storage-policy.mjs
       - src/lib/native-platform.ts
       - src/lib/native-auth-storage.ts
       - src/lib/mobile-security.ts
@@ -31,6 +33,7 @@ on:
       - scripts/check-client-secrets.mjs
       - scripts/harden-native-projects.mjs
       - scripts/test-mobile-url-policy.mjs
+      - scripts/test-native-auth-storage-policy.mjs
       - src/lib/native-platform.ts
       - src/lib/native-auth-storage.ts
       - src/lib/mobile-security.ts
