@@ -6,7 +6,9 @@ on:
       - feat/mobile-ios-android-foundation
     paths:
       - .github/workflows/mobile-security.yml
+      - android/**
       - capacitor.config.ts
+      - ios/**
       - mobile-shell/**
       - package.json
       - scripts/check-client-secrets.mjs
@@ -73,20 +75,20 @@ jobs:
         run: npm run build
 
   bootstrap-native-projects:
-    name: Generate and compile native projects
+    name: Generate, compile, and commit native projects
     if: >-
-      github.event_name == 'push' &&
-      github.ref_name == 'feat/mobile-ios-android-foundation' &&
-      !contains(github.event.head_commit.message, '[native-bootstrap]')
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'feat/mobile-ios-android-foundation'
     runs-on: macos-latest
     timeout-minutes: 60
     permissions:
       contents: write
     steps:
-      - name: Check out feature branch
+      - name: Check out the pull request head branch
         uses: actions/checkout@v4
         with:
-          ref: feat/mobile-ios-android-foundation
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Set up Node.js
@@ -165,7 +167,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'chore: generate hardened native projects [native-bootstrap]'
-          git push origin HEAD:feat/mobile-ios-android-foundation
+          git push origin HEAD:"${GITHUB_HEAD_REF}"
 
   android-validation:
     name: Android validation
@@ -176,8 +178,15 @@ jobs:
       - name: Check out pull request
         uses: actions/checkout@v4
 
-      - name: Require generated Android project
-        run: test -f android/app/src/main/AndroidManifest.xml
+      - name: Detect committed Android project
+        id: android-state
+        shell: bash
+        run: |
+          if [ -f android/app/src/main/AndroidManifest.xml ]; then
+            echo 'was_present=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'was_present=false' >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -193,13 +202,18 @@ jobs:
       - name: Install dependencies without creating a second lockfile
         run: npm install --no-package-lock --no-audit --no-fund
 
+      - name: Generate Android project when absent
+        if: steps.android-state.outputs.was_present != 'true'
+        run: npx cap add android
+
       - name: Synchronize and harden Android
         run: npx cap sync android && npm run mobile:harden
 
       - name: Verify Android security
         run: npm run security:mobile
 
-      - name: Ensure generated Android project is committed and current
+      - name: Ensure committed Android project is current
+        if: steps.android-state.outputs.was_present == 'true'
         run: git diff --exit-code -- android
 
       - name: Compile Android debug application
@@ -218,8 +232,15 @@ jobs:
       - name: Check out pull request
         uses: actions/checkout@v4
 
-      - name: Require generated iOS project
-        run: test -f ios/App/App/Info.plist
+      - name: Detect committed iOS project
+        id: ios-state
+        shell: bash
+        run: |
+          if [ -f ios/App/App/Info.plist ]; then
+            echo 'was_present=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'was_present=false' >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -229,13 +250,18 @@ jobs:
       - name: Install dependencies without creating a second lockfile
         run: npm install --no-package-lock --no-audit --no-fund
 
+      - name: Generate iOS project when absent
+        if: steps.ios-state.outputs.was_present != 'true'
+        run: npx cap add ios
+
       - name: Synchronize and harden iOS
         run: npx cap sync ios && npm run mobile:harden
 
       - name: Verify iOS security
         run: npm run security:mobile
 
-      - name: Ensure generated iOS project is committed and current
+      - name: Ensure committed iOS project is current
+        if: steps.ios-state.outputs.was_present == 'true'
         run: git diff --exit-code -- ios
 
       - name: Compile iOS simulator application without signing
