@@ -45,14 +45,9 @@ const config: CapacitorConfig = {
     limitsNavigationsToAppBoundDomains: true,
     webContentsDebuggingEnabled: false,
   },
-  cordova: {
-    failOnUninstalledPlugins: true,
-  },
   includePlugins: [
     "@capacitor/app",
-    "@capacitor/keyboard",
     "@capacitor/preferences",
-    "@capacitor/status-bar",
     "capacitor-secure-storage-plugin",
   ],
 };
