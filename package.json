@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
-    "security:client-secrets": "node scripts/check-client-secrets.mjs",
+    "security:client-secrets": "node scripts/check-client-secrets.mjs && node --experimental-strip-types scripts/test-mobile-url-policy.mjs",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/harden-native-projects.mjs",
