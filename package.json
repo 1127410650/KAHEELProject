@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
     "security:client-secrets": "node scripts/check-client-secrets.mjs",
-    "security:mobile": "node scripts/check-mobile-security.mjs && node scripts/check-mobile-recovery-security.mjs",
+    "security:mobile": "node scripts/check-mobile-dependency-versions.mjs && node scripts/check-mobile-security.mjs && node scripts/check-mobile-recovery-security.mjs",
     "security:mobile-all": "npm run security:client-secrets && npm run security:mobile",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
