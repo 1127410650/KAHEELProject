@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
-    "security:client-secrets": "node scripts/check-client-secrets.mjs && node --experimental-strip-types scripts/test-mobile-url-policy.mjs && node scripts/test-native-auth-storage-policy.mjs",
+    "security:client-secrets": "node scripts/check-client-secrets.mjs && node --experimental-strip-types scripts/test-mobile-url-policy.mjs && node --experimental-strip-types scripts/test-supabase-url-policy.mjs && node scripts/test-native-auth-storage-policy.mjs",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/harden-native-projects.mjs",
