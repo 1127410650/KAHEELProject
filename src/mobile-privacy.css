@@ -4,6 +4,14 @@
   z-index: 2147483647;
   display: grid;
   place-items: center;
+  width: 100vw;
+  height: 100dvh;
+  padding:
+    max(1.5rem, env(safe-area-inset-top))
+    max(1.5rem, env(safe-area-inset-right))
+    max(1.5rem, env(safe-area-inset-bottom))
+    max(1.5rem, env(safe-area-inset-left));
+  overflow: hidden;
   background:
     radial-gradient(circle at 50% 35%, rgb(0 105 255 / 28%), transparent 34%),
     linear-gradient(145deg, #020617 0%, #07142f 52%, #020617 100%);
@@ -11,7 +19,11 @@
   font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
   font-size: clamp(1.5rem, 8vw, 3rem);
   font-weight: 700;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.2em;
+  text-align: center;
+  pointer-events: auto;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  contain: strict;
 }
