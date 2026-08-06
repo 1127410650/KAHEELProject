@@ -46,6 +46,8 @@ function validatedSupabaseUrl(value: string): string {
 }
 
 function createSupabaseFetch(supabaseKey: string, supabaseOrigin: string): typeof fetch {
+  const usesOpaquePublishableKey = supabaseKey.startsWith("sb_publishable_");
+
   return async (input, init) => {
     const requestUrl =
       typeof Request !== "undefined" && input instanceof Request
@@ -67,8 +69,12 @@ function createSupabaseFetch(supabaseKey: string, supabaseOrigin: string): typeo
       new Headers(init.headers).forEach((headerValue, key) => headers.set(key, headerValue));
     }
 
-    // Publishable keys are API keys, not user bearer tokens.
-    if (headers.get("Authorization") === `Bearer ${supabaseKey}`) {
+    // New opaque publishable keys belong only in `apikey`. A signed-in user's
+    // JWT remains untouched, and legacy anon JWTs retain backward compatibility.
+    if (
+      usesOpaquePublishableKey &&
+      headers.get("Authorization") === `Bearer ${supabaseKey}`
+    ) {
       headers.delete("Authorization");
     }
 
