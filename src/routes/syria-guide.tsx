@@ -28,7 +28,7 @@ export const Route = createFileRoute("/syria-guide")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "دليل سوريا — كحلي" },
+      { title: "دليل سوريا — كَحيل" },
       {
         name: "description",
         content: "دليل سوريا للجامعات والمشافي والجهات الحكومية والمعالم الأثرية والسياحية.",

@@ -38,9 +38,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/businesses/$slug")({
   ssr: false,
   head: ({ params }) => {
-    const title = `${params.slug} — متجر في كحلي`;
+    const title = `${params.slug} — متجر في كَحيل`;
     const description =
-      "الملف العام للمتجر في كحلي: النشاط، المدينة، تاريخ الانضمام، والإعلانات المنشورة.";
+      "الملف العام للمتجر في كَحيل: النشاط، المدينة، تاريخ الانضمام، والإعلانات المنشورة.";
     return {
       meta: [
         { title },

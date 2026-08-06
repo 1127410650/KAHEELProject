@@ -22,13 +22,13 @@ export const Route = createFileRoute("/register")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إنشاء حساب سوري — كحلي | Create account — Kahli" },
+      { title: "إنشاء حساب سوري — كَحيل | Create account — Kaheel" },
       {
         name: "description",
-        content: "أنشئ حسابًا فرديًا في نسخة كحلي السورية باستخدام اسمك ورقم جوالك السوري.",
+        content: "أنشئ حسابًا فرديًا في نسخة كَحيل السورية باستخدام اسمك ورقم جوالك السوري.",
       },
-      { property: "og:title", content: "إنشاء حساب سوري — كحلي" },
-      { property: "og:description", content: "Create an individual account in Kahli's Syria marketplace." },
+      { property: "og:title", content: "إنشاء حساب سوري — كَحيل" },
+      { property: "og:description", content: "Create an individual account in Kaheel's Syria marketplace." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

@@ -18,9 +18,9 @@ import { loadListings } from "@/lib/mkt-queries";
 import { Button } from "@/components/ui/button";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 
-const title = "كحلي — سوق العقارات والخدمات والموردين | Kahli";
+const title = "كَحيل — سوق العقارات والخدمات والموردين | Kaheel";
 const description =
-  "منصة كحلي: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
+  "منصة كَحيل: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
 
 export const Route = createFileRoute("/welcome")({
   head: () => ({

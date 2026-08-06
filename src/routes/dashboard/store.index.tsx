@@ -33,12 +33,12 @@ export const Route = createFileRoute("/dashboard/store/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "متجري — سوق كحلي" },
+      { title: "متجري — سوق كَحيل" },
       {
         name: "description",
         content: "أدر متجرك المصغّر في السوق: الحالة، الأقسام والمنتجات، والإعلانات المرتبطة.",
       },
-      { property: "og:title", content: "متجري — سوق كحلي" },
+      { property: "og:title", content: "متجري — سوق كَحيل" },
       { property: "og:description", content: "إدارة المتجر المصغّر وأقسامه ومنتجاته." },
       { name: "robots", content: "noindex" },
     ],

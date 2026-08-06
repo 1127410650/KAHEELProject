@@ -33,12 +33,12 @@ export const Route = createFileRoute("/dashboard/violations")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "مخالفاتي — كحلي" },
+      { title: "مخالفاتي — كَحيل" },
       {
         name: "description",
-        content: "الإجراءات المتخذة على إعلاناتك في كحلي وقيود الحساب وتقديم الاعتراضات.",
+        content: "الإجراءات المتخذة على إعلاناتك في كَحيل وقيود الحساب وتقديم الاعتراضات.",
       },
-      { property: "og:title", content: "مخالفاتي — كحلي" },
+      { property: "og:title", content: "مخالفاتي — كَحيل" },
       { property: "og:description", content: "قرارات المراجعة على إعلاناتك وحالة الاعتراضات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

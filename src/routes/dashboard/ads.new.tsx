@@ -18,12 +18,12 @@ export const Route = createFileRoute("/dashboard/ads/new")({
   },
   head: () => ({
     meta: [
-      { title: "إعلان جديد — كحلي" },
+      { title: "إعلان جديد — كَحيل" },
       {
         name: "description",
-        content: "أضف إعلان خدمة أو منتج أو معدة إلى كحلي ليُنشر بعد المراجعة.",
+        content: "أضف إعلان خدمة أو منتج أو معدة إلى كَحيل ليُنشر بعد المراجعة.",
       },
-      { property: "og:title", content: "إعلان جديد — كحلي" },
+      { property: "og:title", content: "إعلان جديد — كَحيل" },
       { property: "og:description", content: "أضف إعلانك إلى سوق الخدمات والمقاولات." },
       { name: "robots", content: "noindex" },
     ],

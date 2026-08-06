@@ -32,9 +32,9 @@ export const Route = createFileRoute("/categories/$slug")({
 
 
   head: ({ params }) => {
-    const title = `تصنيف ${params.slug} — كحلي`;
+    const title = `تصنيف ${params.slug} — كَحيل`;
     const description =
-      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل كحلي للمقاولات والتوريد.";
+      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل كَحيل للمقاولات والتوريد.";
     return {
       meta: [
         { title },

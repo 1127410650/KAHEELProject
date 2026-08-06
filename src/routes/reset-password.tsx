@@ -13,7 +13,7 @@ import { passwordPolicyError } from "@/lib/password-policy";
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
-    meta: [{ title: "تعيين كلمة مرور جديدة — كحلي" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "تعيين كلمة مرور جديدة — كَحيل" }, { name: "robots", content: "noindex" }],
   }),
   component: ResetPasswordPage,
 });

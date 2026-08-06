@@ -26,13 +26,13 @@ export const Route = createFileRoute("/admin/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إدارة المنصة — كحلي" },
+      { title: "إدارة المنصة — كَحيل" },
       {
         name: "description",
         content: "لوحة مدير النظام: نظرة سريعة على المستخدمين والمنشآت والإعلانات والبلاغات وطلبات التوثيق.",
       },
-      { property: "og:title", content: "إدارة المنصة — كحلي" },
-      { property: "og:description", content: "لوحة مدير النظام في منصة كحلي." },
+      { property: "og:title", content: "إدارة المنصة — كَحيل" },
+      { property: "og:description", content: "لوحة مدير النظام في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

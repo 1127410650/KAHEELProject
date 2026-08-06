@@ -25,7 +25,7 @@ import {
 export const Route = createFileRoute("/dashboard/service/settings")({
   ssr: false,
   head: () => ({
-    meta: [{ title: "إعدادات مقدم الخدمة — كحلي" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "إعدادات مقدم الخدمة — كَحيل" }, { name: "robots", content: "noindex" }],
   }),
   component: ProviderSettingsPage,
 });

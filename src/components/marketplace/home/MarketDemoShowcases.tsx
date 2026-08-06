@@ -102,7 +102,7 @@ export function MarketDemoShowcases() {
           <div className="min-w-0">
             <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#6d4bd1] sm:text-[10px]">
               <Sparkles className="size-3.5" aria-hidden />
-              {locale === "ar" ? "عوالم كحلي" : "Kahli worlds"}
+              {locale === "ar" ? "عوالم كَحيل" : "Kaheel worlds"}
             </span>
             <h2 className="mt-0.5 truncate text-[15px] font-black tracking-tight text-market-navy sm:text-lg">
               {locale === "ar" ? "اختر جوّك وادخل عالمك" : "Pick your vibe and enter your world"}
