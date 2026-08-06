@@ -8,7 +8,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Kahli design system — deep petrol + warm brass.
+ * Kaheel design system — deep petrol + warm brass.
  * All colors are oklch semantic tokens. Never hardcode colors in components.
  */
 
@@ -693,7 +693,7 @@ body:has(.market-surface) .shadow-raised {
   border-color: var(--border);
 }
 
-/* ───────────────────────────── Kahli home marketplace motion ────────────────
+/* ───────────────────────────── Kaheel home marketplace motion ────────────────
  * Only transform and opacity animate. The home hero therefore keeps the visual
  * energy of the supplied reference without shipping a looping video or adding
  * JavaScript work to scrolling and input. */
