@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { extname } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { extname, join } from "node:path";
 
 const binaryExtensions = new Set([
   ".avif",
@@ -15,6 +15,20 @@ const binaryExtensions = new Set([
   ".woff",
   ".woff2",
   ".zip",
+]);
+const ignoredDirectories = new Set([
+  ".git",
+  ".gradle",
+  ".nitro",
+  ".output",
+  ".vinxi",
+  ".wrangler",
+  "DerivedData",
+  "Pods",
+  "build",
+  "dist",
+  "dist-ssr",
+  "node_modules",
 ]);
 
 const findings = [];
@@ -57,16 +71,34 @@ function inspectText(file, content) {
   }
 }
 
-const trackedFiles = execFileSync("git", ["ls-files", "-z"], { encoding: "utf8" })
-  .split("\0")
-  .filter(Boolean);
+function walkSourceFiles(directory = ".") {
+  const files = [];
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (entry.isDirectory() && ignoredDirectories.has(entry.name)) continue;
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...walkSourceFiles(path));
+    else if (entry.isFile()) files.push(path.replace(/^\.\//, ""));
+  }
+  return files;
+}
 
-for (const file of trackedFiles) {
+function sourceFiles() {
+  try {
+    return execFileSync("git", ["ls-files", "-z"], { encoding: "utf8" })
+      .split("\0")
+      .filter(Boolean);
+  } catch {
+    console.warn("Git metadata unavailable; scanning the source tree instead.");
+    return walkSourceFiles();
+  }
+}
+
+for (const file of sourceFiles()) {
   if (binaryExtensions.has(extname(file).toLowerCase())) continue;
   try {
     inspectText(file, readFileSync(file, "utf8"));
   } catch {
-    // Unreadable or non-text tracked files are ignored by this text-only check.
+    // Unreadable or non-text files are ignored by this text-only check.
   }
 }
 
@@ -141,7 +173,7 @@ if (contentSecurityPolicy.includes("'unsafe-eval'")) {
 }
 
 const permissionsPolicy = responseHeaders.get("permissions-policy") ?? "";
-for (const deniedCapability of ["camera=()", "microphone=()", "payment=()", "usb=()"] ) {
+for (const deniedCapability of ["camera=()", "microphone=()", "payment=()", "usb=()"]) {
   if (!permissionsPolicy.includes(deniedCapability)) {
     report("vercel.json", `Permissions-Policy does not deny ${deniedCapability}`);
   }
