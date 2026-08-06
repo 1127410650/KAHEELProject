@@ -20,6 +20,27 @@ import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { initializeNativeSecurity } from "@/lib/mobile-security";
 
+declare const __KAHLI_NATIVE_BUILD__: boolean;
+
+const NATIVE_CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self' https: wss:",
+  "media-src 'self' blob: https:",
+  "worker-src 'self' blob:",
+  "child-src 'self' blob:",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "frame-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self' https:",
+  "upgrade-insecure-requests",
+].join("; ");
+
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
  * `RootComponent`, so they sit outside its provider tree. Each therefore has to
@@ -151,6 +172,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png",
       },
+      ...(__KAHLI_NATIVE_BUILD__
+        ? [
+            {
+              httpEquiv: "Content-Security-Policy",
+              content: NATIVE_CONTENT_SECURITY_POLICY,
+            },
+          ]
+        : []),
     ],
     links: [
       { rel: "stylesheet", href: appCss },
