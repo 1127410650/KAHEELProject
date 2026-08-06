@@ -9,6 +9,8 @@
 - Normal web preview builds on the branch: **passing on verified revisions; latest revision must also pass before merge**
 - Native Android/iOS compile: **not yet proven by an observable CI result**
 - Production dependency lockfile: **missing and required before merge**
+- Capacitor peer compatibility: **resolved** by pinning `capacitor-secure-storage-plugin` to `0.12.0`, the Capacitor 7-compatible release
+- Temporary lock-export endpoint/workflow: **removed**; no diagnostic write workflow remains in the branch
 
 No software can be guaranteed to be impossible to compromise. The release requirement is defense in depth, fail-closed behavior, strict server-side authorization, repeatable builds, and evidence from automated and adversarial tests.
 
@@ -30,16 +32,22 @@ No software can be guaranteed to be impossible to compromise. The release requir
 14. iOS arbitrary transport loads, local-network transport exceptions, file sharing, opening documents in place, and WebView debugging are prohibited.
 15. iOS must target version 14.0 or newer and must contain the synchronized local SPA entry point.
 16. Apple `PrivacyInfo.xcprivacy` is generated for Preferences/UserDefaults with approved reason `CA92.1`, added to Xcode resources, and must be present in the compiled `.app`.
-17. Native dependencies are pinned to exact versions and unnecessary plugins are excluded.
+17. Native dependencies are pinned to an exact reviewed Capacitor 7 set. A dedicated gate rejects any drift from: Capacitor `7.6.8`, App `7.1.2`, Preferences `7.0.4`, and secure storage `0.12.0`.
 18. Signing keys, certificates, provisioning profiles, environment files, and Android local signing properties are ignored by Git.
-19. GitHub Actions uses read-only repository permissions and actions pinned by commit SHA.
+19. The permanent mobile GitHub Actions workflow uses read-only repository permissions and actions pinned by commit SHA.
 20. Mobile build and release commands are fail-closed: the build requires the final SPA entry point, and release verification requires both generated native projects.
+21. Temporary dependency-diagnosis workflows and public lock-export code are not retained in the reviewed branch.
+
+## Dependency compatibility finding
+
+A standard npm resolution exposed a real peer-dependency mismatch: `capacitor-secure-storage-plugin@0.13.0` targets Capacitor 8 while the application is intentionally based on Capacitor 7. The dependency was changed to `0.12.0`, whose peer range supports Capacitor 7, and an exact-version security check was added so the incompatible combination cannot return unnoticed.
 
 ## Automated gates
 
 The draft must not merge until the mobile workflow proves all of the following:
 
 - Client secret scan passes.
+- Exact reviewed mobile dependency versions pass.
 - Password-recovery and PKCE security checks pass.
 - Production dependency audit reports no high/critical vulnerability.
 - Normal SSR web build passes.
@@ -58,7 +66,7 @@ The draft must not merge until the mobile workflow proves all of the following:
 
 ## Mandatory blockers before merge
 
-1. Generate and commit `package-lock.json`, then replace installation in CI with `npm ci` for deterministic dependency resolution.
+1. Generate and commit a deterministic dependency lock from the corrected package graph, then use frozen installation in CI. Do not use `--legacy-peer-deps` or `--force`.
 2. Obtain an observable successful native CI run and inspect its logs and artifacts.
 3. Confirm no unexpected native permissions are introduced after plugin synchronization.
 4. Add the approved password-recovery URL to the Supabase Auth redirect allowlist and verify that no wildcard redirect is used.
