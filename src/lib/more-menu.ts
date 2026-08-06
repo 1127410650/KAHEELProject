@@ -8,7 +8,8 @@
  * counters come from live queries, never from constants.
  */
 import {
-  Building2,
+  CalendarCheck2,
+  CalendarClock,
   Coins,
   Flag,
   Heart,
@@ -46,6 +47,12 @@ export interface MoreLinkDef {
 
 /** «نشاطي» — activity of the ACTIVE account. Messages/alerts live in the bottom bar. */
 export const ACTIVITY_LINKS: MoreLinkDef[] = [
+  {
+    key: "bookings",
+    to: "/dashboard/bookings",
+    labelKey: "market.services.myBookings",
+    icon: CalendarCheck2,
+  },
   { key: "my-ads", to: "/dashboard/my-ads", labelKey: "market.dash.myAds", icon: LayoutList },
   { key: "points", to: "/dashboard/points", labelKey: "market.points.title", icon: Coins },
   { key: "favorites", to: "/dashboard/favorites", labelKey: "market.dash.favorites", icon: Heart },
@@ -64,10 +71,16 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   // "create" and "manage" from the live query, never from a constant.
   { key: "store", to: "/dashboard/store", labelKey: "market.store.hubTitle", icon: Store },
   {
+    key: "service-provider",
+    to: "/dashboard/service",
+    labelKey: "market.services.providerCenter",
+    icon: CalendarClock,
+  },
+  {
     key: "business",
     to: "/dashboard/business",
     labelKey: "market.identity.manageBusiness",
-    icon: Building2,
+    icon: Store,
     kinds: ["business"],
   },
   {
@@ -107,8 +120,7 @@ export interface MoreViewer {
 export function visibleLinks(defs: MoreLinkDef[], viewer: MoreViewer): MoreLinkDef[] {
   return defs.filter((def) => {
     if (def.requires === "platformAdmin" && viewer.isPlatformAdmin !== true) return false;
-    if (def.kinds && (!viewer.accountKind || !def.kinds.includes(viewer.accountKind)))
-      return false;
+    if (def.kinds && (!viewer.accountKind || !def.kinds.includes(viewer.accountKind))) return false;
     return canSeeLink(def.to, viewer);
   });
 }

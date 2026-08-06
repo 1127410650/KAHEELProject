@@ -3,11 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Home, LayoutGrid } from "lucide-react";
 
 import { useI18n } from "@/i18n";
-import {
-  PRIMARY_FIELDS,
-  fieldSearchParams,
-  isFieldActive,
-} from "@/lib/market-primary-navigation";
+import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
 
 /**
  * One uninterrupted category rail inside the sticky marketplace header.
@@ -22,6 +18,7 @@ export function MarketCategoryStrip() {
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
   const current = { category: search["category"], sub: search["sub"] };
   const kept: Record<string, string> = {};
 
@@ -52,9 +49,7 @@ export function MarketCategoryStrip() {
       alignHome();
     });
     const observer =
-      typeof ResizeObserver !== "undefined" && rail
-        ? new ResizeObserver(measure)
-        : null;
+      typeof ResizeObserver !== "undefined" && rail ? new ResizeObserver(measure) : null;
     if (rail) observer?.observe(rail);
     window.addEventListener("resize", measure);
 
@@ -164,12 +159,7 @@ export function MarketCategoryStrip() {
 
             if (field.kind === "home") {
               return (
-                <Link
-                  ref={homeRef}
-                  key={field.id}
-                  to="/"
-                  className={`${chipClass} ${idle}`}
-                >
+                <Link ref={homeRef} key={field.id} to="/" className={`${chipClass} ${idle}`}>
                   <Home className="size-3.5 shrink-0" aria-hidden />
                   <span className="whitespace-nowrap">{label}</span>
                 </Link>
@@ -178,12 +168,26 @@ export function MarketCategoryStrip() {
 
             if (field.kind === "more") {
               return (
+                <Link key={field.id} to="/more" className={`${chipClass} ${idle}`}>
+                  <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
+                  <span className="whitespace-nowrap">{label}</span>
+                </Link>
+              );
+            }
+
+            // Services have a real booking marketplace, not only classified ads.
+            // The taxonomy id stays unchanged, while its primary destination is
+            // the canonical service directory.
+            if (field.id === "services") {
+              const on = pathname === "/services" || pathname.startsWith("/services/");
+              return (
                 <Link
                   key={field.id}
-                  to="/more"
-                  className={`${chipClass} ${idle}`}
+                  to="/services"
+                  aria-current={on ? "page" : undefined}
+                  className={`${chipClass} ${on ? active : idle}`}
+                  lang={locale}
                 >
-                  <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
                   <span className="whitespace-nowrap">{label}</span>
                 </Link>
               );

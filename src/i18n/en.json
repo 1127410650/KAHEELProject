@@ -99,7 +99,6 @@
     "welcome": "Welcome to Tahqaq",
     "identifier": "Email or mobile number",
     "identifierHint": "Enter your email or mobile number",
-
     "locked": "Account temporarily locked after failed attempts. Try again later.",
     "mustChangeTitle": "Password change required",
     "mustChangeDesc": "For your account security, set a new password before continuing.",
@@ -113,7 +112,17 @@
     "remember": "Keep me signed in on this device",
     "rememberHint": "You will stay signed in until you sign out manually or the session is revoked for security reasons.",
     "forgot": "Forgot your password?",
-    "forgotSoon": "Password recovery is not available yet — please contact support.",
+    "recoveryTitle": "Recover password",
+    "recoveryDescription": "Enter your account email and we will send a secure link to set a new password.",
+    "recoverySent": "If the email is registered, a recovery link will arrive within a few minutes.",
+    "sendRecovery": "Send recovery link",
+    "backToSignIn": "Back to sign in",
+    "resetTitle": "Set a new password",
+    "updatePassword": "Update password",
+    "recoveryChecking": "Checking the recovery link…",
+    "recoveryExpired": "This recovery link is invalid or expired. Request a new link.",
+    "requestNewRecovery": "Request a new recovery link",
+    "recoveryFailed": "Password recovery failed. Please try again.",
     "noAccount": "Don't have an account?",
     "createAccount": "Create account",
     "rights": "All rights reserved — Kahli"
@@ -841,7 +850,7 @@
     "tag": "Tag",
     "phase1": "Phase 1 (tags 1-5)",
     "phase2": "Phase 2 (cryptographic stamp)",
-    "disclaimer": "This is a local technical check of the QR code and invoice data only. It is not an official confirmation from ZATCA that the invoice or the business is valid.",
+    "disclaimer": "This is a local technical check of the QR code and invoice data only. It is not an official confirmation from ZATCA that the invoice or the store is valid.",
     "verdict": {
       "green": "Technically consistent",
       "yellow": "Needs review",
@@ -1091,8 +1100,8 @@
     "inviteOnlySubtitle": "Complete your details to accept the invitation. The email is locked to the invited address.",
     "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only.",
     "publicTitle": "Create account",
-    "publicSubtitle": "Create an individual account to use the marketplace. You can add a business later from your account.",
-    "individualNote": "Your account starts as an individual account. Creating a business happens later from inside the account.",
+    "publicSubtitle": "Create an individual account to use the marketplace. You can add a store later from your account.",
+    "individualNote": "Your account starts as an individual account. Creating a store happens later from inside the account.",
     "emailHint": "You will use this email to sign in.",
     "created": "Your account is ready",
     "createdBody": "You can start using the marketplace. If this email was already registered, sign in instead.",
@@ -1321,12 +1330,12 @@
     "viewAll": "View all",
     "hero": {
       "title": "Type everything you need here: real estate, services, suppliers, equipment and building materials",
-      "openToAll": "Publishing is open to every registered user — as an individual or under a business. The verified badge belongs to the advertiser identity."
+      "openToAll": "Publishing is open to every registered user — as an individual or under a store. The verified badge belongs to the advertiser identity."
     },
     "nav": {
       "marketplace": "Market",
       "search": "Search",
-      "verified": "Verified businesses",
+      "verified": "Verified stores",
       "requests": "Quote requests",
       "myAds": "My listings",
       "myRequests": "My requests",
@@ -1336,7 +1345,7 @@
     },
     "footer": {
       "browse": "Browse",
-      "business": "Businesses",
+      "business": "Stores",
       "account": "Account",
       "rights": "All rights reserved — Kahli",
       "legal": "Policies"
@@ -1361,6 +1370,41 @@
       "title": "Filter results",
       "advertiser": "Advertiser type"
     },
+    "realEstate": {
+      "brand": "Kahli Real Estate",
+      "eyebrow": "Curated spaces for better living",
+      "heroTitle": "Your next property is closer than you think",
+      "heroDescription": "Discover apartments, villas, land and property opportunities in a fast, clear experience.",
+      "searchLabel": "Search real estate",
+      "searchPlaceholder": "Search for a villa, apartment, land or district...",
+      "locationFallback": "Saudi Arabia",
+      "intentTitle": "What are you looking for?",
+      "intentDescription": "Choose the transaction and we will surface the most relevant properties.",
+      "propertyTypesTitle": "Explore by property type",
+      "propertyTypesDescription": "Jump straight to the category that fits your needs.",
+      "allProperties": "All properties",
+      "citiesTitle": "Explore by city",
+      "citiesDescription": "Property opportunities from the cities available to your account.",
+      "featuredTitle": "Featured picks for you",
+      "latestTitle": "Latest properties",
+      "resultsDescription": "The latest property opportunities in {location}.",
+      "featuredBadge": "Featured",
+      "filtersTitle": "Filter properties",
+      "emptyTitle": "No matching properties right now",
+      "emptyDescription": "Change the filters or be the first to publish a property in this section.",
+      "addProperty": "Post your property",
+      "showMore": "Show more",
+      "purposes": {
+        "buy": "Buy property",
+        "buyHint": "Villas, apartments and land for sale",
+        "rent": "Rent property",
+        "rentHint": "Residential and commercial rentals",
+        "wantedBuy": "Wanted to buy",
+        "wantedBuyHint": "Publish your needs for advertisers to see",
+        "wantedRent": "Wanted to rent",
+        "wantedRentHint": "Find the right space quickly"
+      }
+    },
     "sort": {
       "newest": "Newest",
       "priceAsc": "Price: low to high",
@@ -1379,13 +1423,13 @@
     },
     "sections": {
       "latest": "Latest listings",
-      "verifiedBusinesses": "Verified businesses",
+      "verifiedBusinesses": "Verified stores",
       "services": "Services & contracting",
       "products": "Products & building materials",
       "equipmentSale": "Equipment for sale",
       "equipmentRent": "Equipment for rent",
       "needs": "Supplier & contractor wanted",
-      "businesses": "Suggested businesses",
+      "businesses": "Suggested stores",
       "suggested": "Suggested for you"
     },
     "actions": {
@@ -1492,16 +1536,16 @@
     "business": {
       "joined": "Member since",
       "about": "About",
-      "listings": "Business listings",
-      "notFound": "Business not found",
+      "listings": "Store listings",
+      "notFound": "Store not found",
       "contact": "Contact details",
       "noListings": "No published listings",
       "services": "Areas of work",
       "visit": "View profile",
       "unavailable": "This profile is not available",
-      "fallbackName": "Business",
+      "fallbackName": "Store",
       "manage": "Manage profile",
-      "shareProfile": "Share business profile",
+      "shareProfile": "Share store profile",
       "goToLocation": "Go to location",
       "activities": "Activities & specialties",
       "showAllActivities": "Show all",
@@ -1518,7 +1562,7 @@
       "requests": "Quote requests",
       "messages": "Messages",
       "favorites": "Favorites",
-      "business": "Business profile",
+      "business": "Store profile",
       "views": "views",
       "view": "View",
       "edit": "Edit",
@@ -1573,13 +1617,13 @@
         "cancelled": "Cancelled",
         "expired": "Expired"
       },
-      "needsVerification": "Listings can be submitted for review only after the business is verified. You can save a draft.",
+      "needsVerification": "Listings can be submitted for review only after the store is verified. You can save a draft.",
       "reports": "My reports",
       "violations": "My violations",
       "notifications": "Alerts",
       "profile": "Personal profile",
       "publishAs": "Publish as",
-      "identityHint": "You can publish as yourself or under a business where you hold an active membership with publishing rights.",
+      "identityHint": "You can publish as yourself or under a store where you hold an active membership with publishing rights.",
       "identityLocked": "The advertiser identity cannot be changed after a listing is created.",
       "cover": "Cover",
       "makeCover": "Make cover",
@@ -1591,11 +1635,11 @@
     "admin": {
       "title": "Marketplace admin",
       "listings": "Listing review",
-      "verifications": "Business verification",
+      "verifications": "Store verification",
       "denied": "You don't have access",
       "deniedHint": "The marketplace back office is limited to platform reviewers.",
       "status": "Status",
-      "business": "Business",
+      "business": "Store",
       "search": "Search by title",
       "fullView": "Full view",
       "timeline": "Timeline",
@@ -1757,16 +1801,16 @@
       "nameEn": "Name (English)",
       "nameRequired": "Arabic name is required",
       "headline": "Headline",
-      "about": "About the business",
-      "logo": "Business logo",
+      "about": "About the store",
+      "logo": "Store logo",
       "website": "Website",
       "phone": "Phone",
       "email": "Email",
       "whatsapp": "WhatsApp",
       "showPublicly": "Show publicly",
-      "publishProfile": "Publish business profile",
-      "saved": "Business profile saved",
-      "previewNote": "This is how visitors see your business page.",
+      "publishProfile": "Publish store profile",
+      "saved": "Store profile saved",
+      "previewNote": "This is how visitors see your store page.",
       "previewBeforeSave": "Save your changes to update the public page.",
       "openPublic": "Open public page",
       "verification": "Verification",
@@ -1780,8 +1824,8 @@
       "verificationLocked": "Verification status is set by marketplace reviewers only.",
       "timeline": "Verification history",
       "noTimeline": "No verification history yet",
-      "noWorkspace": "No business workspace found",
-      "noPermission": "You can't edit this business profile",
+      "noWorkspace": "No store workspace found",
+      "noPermission": "You can't edit this store profile",
       "status": {
         "unverified": "Unverified",
         "pending": "Under review",
@@ -1790,14 +1834,14 @@
         "rejected": "Rejected",
         "needs_more": "More info needed"
       },
-      "addBusiness": "Add a business",
-      "quickCreate": "Add a new business",
-      "quickCreateHint": "Fill in the business details and its responsible officer. It is linked to your account — no new login is created.",
-      "createBusiness": "Create business",
-      "created": "Business created",
+      "addBusiness": "Add a store",
+      "quickCreate": "Add a new store",
+      "quickCreateHint": "Fill in the store details and its responsible officer. It is linked to your account — no new login is created.",
+      "createBusiness": "Create store",
+      "created": "Store created",
       "limitReached": "You have reached the maximum number of workspaces",
       "stage": {
-        "data": "Business data",
+        "data": "Store data",
         "officer": "Officer and documents",
         "verify": "Verification",
         "review": "Review and create"
@@ -1824,7 +1868,7 @@
       "crInvalid": "Commercial registration number is invalid",
       "unifiedInvalid": "Unified number is invalid",
       "datesInvalid": "Expiry date must be after the issue date",
-      "duplicate": "A business with the same number is already registered in this country",
+      "duplicate": "A store with the same number is already registered in this country",
       "mainActivity": "Main activity",
       "subActivities": "Sub activities",
       "activityRequired": "Main activity is required",
@@ -1857,7 +1901,7 @@
         "authorized": "Authorized representative",
         "employee": "Employee"
       },
-      "relation": "Relation to the business",
+      "relation": "Relation to the store",
       "officerPhone": "Officer mobile",
       "officerEmail": "Officer email",
       "authExpiry": "Authorization expiry date",
@@ -1877,14 +1921,14 @@
       "authDocRequired": "Attach the authorization letter",
       "sendVerification": "Send verification request",
       "later": "Later",
-      "incomplete": "Complete the business details before sending a verification request",
+      "incomplete": "Complete the store details before sending a verification request",
       "stepOf": "{n} of {total}",
       "crExpired": "The registration expiry date has already passed",
       "confirmData": "I confirm the data and the attached documents are correct.",
-      "confirmRequired": "Confirm the data before creating the business",
+      "confirmRequired": "Confirm the data before creating the store",
       "privateByDefault": "Private by default; never shown publicly.",
       "logoHint": "JPG, PNG or WebP; shown contained without distortion.",
-      "leaveWarning": "Leaving this page before creating the business loses what you typed; documents and sensitive data are never stored in the browser."
+      "leaveWarning": "Leaving this page before creating the store loses what you typed; documents and sensitive data are never stored in the browser."
     },
     "reports": {
       "report": "Report this listing",
@@ -2026,7 +2070,7 @@
         "no_new_requests": "Block quote requests",
         "suspend_listings": "Suspend all listings",
         "suspend_account": "Suspend account",
-        "suspend_business_publishing": "Suspend business publishing",
+        "suspend_business_publishing": "Suspend store publishing",
         "revoke_verification": "Revoke verification",
         "permanent_ban": "Permanent ban"
       },
@@ -2111,11 +2155,11 @@
         "enforceAction": "Action",
         "enforceReason": "Reason",
         "enforceDays": "Duration (days)",
-        "restrictAccount": "Account and business restrictions",
+        "restrictAccount": "Account and store restrictions",
         "restrictionType": "Restriction",
         "subject": "Subject",
         "subjectUser": "User",
-        "subjectBusiness": "Business",
+        "subjectBusiness": "Store",
         "restrictReason": "Restriction reason",
         "restrictDays": "Duration (days)",
         "restrictApply": "Apply restriction",
@@ -2195,22 +2239,22 @@
     "endOfResults": "You reached the end of the results",
     "advertiser": {
       "individual": "Individual",
-      "business": "Business",
+      "business": "Store",
       "notVerified": "Not verified"
     },
     "identity": {
       "actingAs": "Publishing as",
       "individual": "Personal account",
-      "business": "Business account",
+      "business": "Store account",
       "managePersonal": "Manage personal profile",
-      "manageBusiness": "Manage business profile"
+      "manageBusiness": "Manage store profile"
     },
     "quick": {
       "service": "Services",
       "equipment_rent": "Equipment for rent",
       "product": "Products",
       "verified": "Verified only",
-      "business": "Suppliers & businesses",
+      "business": "Suppliers & stores",
       "individual": "Individuals",
       "realestate": "Real estate"
     },
@@ -2234,11 +2278,11 @@
       "links": {
         "marketplace": "Marketplace",
         "search": "Search and filters",
-        "verified": "Verified businesses",
+        "verified": "Verified stores",
         "addListing": "Add a listing",
         "myAds": "My listings",
         "requests": "Quote requests",
-        "business": "Manage business",
+        "business": "Manage store",
         "profile": "Personal profile",
         "messages": "Messages",
         "notifications": "Notifications",
@@ -2249,7 +2293,7 @@
         "settings": "Settings",
         "manageAccount": "Manage account",
         "switchAccount": "Switch account",
-        "businessNew": "Create a business",
+        "businessNew": "Create a store",
         "security": "Security",
         "help": "Help",
         "about": "About",
@@ -2294,7 +2338,7 @@
       "sectionLocation": "Location",
       "sectionContact": "Contact details & privacy",
       "sectionVisibility": "Profile visibility",
-      "nameHint": "A person's name only. Company names belong to the business profile.",
+      "nameHint": "A person's name only. Company names belong to the store profile.",
       "nameIsPhone": "A phone number cannot be used as a name.",
       "nameRequired": "Enter a display name.",
       "usernameTaken": "This handle is already taken.",
@@ -2342,8 +2386,8 @@
       "categoryPath": "Category path",
       "choosePath": "Choose a category",
       "pathRequired": "Complete the category selection to the last stage",
-      "businessDenied": "You are not allowed to publish under this business",
-      "businessIncomplete": "Complete the business details (name, activity and contact) before submitting the listing for review.",
+      "businessDenied": "You are not allowed to publish under this store",
+      "businessIncomplete": "Complete the store details (name, activity and contact) before submitting the listing for review.",
       "geoRequired": "Select the city and service location before submitting.",
       "specs": "Additional specifications",
       "budget": "Estimated budget",
@@ -2465,7 +2509,7 @@
       "fallbackName": "Platform user",
       "activityTitle": "My activity",
       "manageTitle": "Account management",
-      "members": "Business members",
+      "members": "Store members",
       "adminPanel": "Admin panel",
       "unsavedWarning": "You have unsaved changes. Change account and lose them?",
       "manageAccounts": "Manage accounts",
@@ -2537,28 +2581,28 @@
       "change": "Change account",
       "enter": "Enter with this account",
       "browsePublic": "Browse the marketplace without an account",
-      "businessCreated": "Business created. You can now select it from the list.",
+      "businessCreated": "Store created. You can now select it from the list.",
       "workingUnder": "Working as: {name}",
       "revoked": "Your access to that account ended. Pick another account.",
       "switchFailed": "Couldn't switch account, please try again",
       "kind": {
         "individual": "Personal account",
-        "business": "Business"
+        "business": "Store"
       },
       "otherAccount": "This ad belongs to “{name}”, not the active account.",
       "switchTo": "Enter as {name}",
       "notYours": "This ad does not belong to any of your accounts.",
       "current": "Current account",
       "personalSection": "Personal account",
-      "businessSection": "Businesses you are authorised for",
-      "newBusiness": "Create a new business",
-      "newBusinessHint": "The business is added to the list; your active account does not change automatically.",
-      "noBusinesses": "No businesses are linked to your account yet.",
+      "businessSection": "Stores you are authorised for",
+      "newBusiness": "Create a new store",
+      "newBusinessHint": "The store is added to the list; your active account does not change automatically.",
+      "noBusinesses": "No stores are linked to your account yet.",
       "selectAria": "Enter with {name}",
       "unavailable": "Currently unavailable",
       "cancelToCurrent": "Cancel and return to the current account",
       "backToAccounts": "Back to account selection",
-      "justCreated": "Business created. Select it to make it the active account.",
+      "justCreated": "Store created. Select it to make it the active account.",
       "loadFailed": "Could not load your account data, please try again",
       "offline": "Couldn’t connect right now. You have not been signed out.",
       "retry": "Retry"
@@ -2584,7 +2628,7 @@
       "apply": "Apply",
       "clearFilters": "Clear filters",
       "addListingHint": "Nothing matched your search — you can post your own listing.",
-      "businessesCount": "businesses",
+      "businessesCount": "stores",
       "loadingMore": "Loading more…"
     },
     "license": {
@@ -2594,7 +2638,7 @@
       "role": {
         "owner": "Owner",
         "broker_individual": "Licensed broker (individual)",
-        "brokerage_business": "Licensed brokerage business",
+        "brokerage_business": "Licensed brokerage store",
         "authorized_agent": "Authorised agent for the owner"
       },
       "number": "Advertising licence number",
@@ -2749,7 +2793,7 @@
       "imageRequired": "At least one photo is required",
       "imagesIncomplete": "Some photos have not finished uploading",
       "imagesTooMany": "Maximum of 20 photos",
-      "businessIncomplete": "Complete the business details before publishing",
+      "businessIncomplete": "Complete the store details before publishing",
       "geoRequired": "Pick the location on the map",
       "priceRequired": "Add a valid price before publishing",
       "priceInvalid": "The price or its unit is not valid",
@@ -2794,7 +2838,7 @@
         "ref": "Report no.",
         "listing": "Listing",
         "owner": "Advertiser",
-        "business": "Owning business",
+        "business": "Owning store",
         "reason": "Reason",
         "status": "Status",
         "priority": "Priority",
@@ -2994,6 +3038,20 @@
       "featured": "Featured listings",
       "featuredBadge": "Featured",
       "latest": "Latest listings",
+      "motion": {
+        "eyebrow": "One market for every need",
+        "title": "Whatever you are looking for, find it on Kahli",
+        "description": "Property, cars, equipment or stores — discover the right listing and connect directly.",
+        "advertiser": "Advertiser",
+        "buyer": "Buyer",
+        "matched": "Deal made",
+        "items": {
+          "property": "Property",
+          "car": "Car",
+          "equipment": "Equipment",
+          "store": "Store"
+        }
+      },
       "strip": {
         "label": "Marketplace categories",
         "home": "Home",
@@ -3048,7 +3106,7 @@
           "desc": "Excavators, cranes and trucks"
         },
         "suppliers": {
-          "title": "Suppliers & businesses",
+          "title": "Suppliers & stores",
           "desc": "Factories, supply and materials"
         }
       },
@@ -3060,7 +3118,7 @@
     "pages": {
       "about": {
         "title": "About",
-        "body": "Kahli is an online marketplace for services, contracting, suppliers, equipment and real estate. Any registered user can publish as an individual or under a business, and buyers can browse, search and message advertisers directly."
+        "body": "Kahli is an online marketplace for services, contracting, suppliers, equipment and real estate. Any registered user can publish as an individual or under a store, and buyers can browse, search and message advertisers directly."
       },
       "help": {
         "title": "Help",
@@ -3452,7 +3510,7 @@
       "listingReports": "Listing reports",
       "listingEvents": "Listing events",
       "users": "Users",
-      "businesses": "Businesses",
+      "businesses": "Store accounts",
       "verifications": "Verifications",
       "reports": "Reports",
       "activities": "Activities",
@@ -3466,7 +3524,7 @@
       "attendance": "Attendance & shifts",
       "contentRules": "Content rules",
       "analytics": "Analytics",
-      "stores": "Stores"
+      "stores": "Storefronts & products"
     },
     "alerts": {
       "title": "Alerts",
@@ -3481,7 +3539,7 @@
     },
     "stats": {
       "users": "Users",
-      "businesses": "Businesses",
+      "businesses": "Stores",
       "published": "Published listings",
       "pending": "Awaiting review",
       "reports": "New reports",
@@ -3536,12 +3594,12 @@
       "created": "Joined",
       "lastSeen": "Last seen",
       "listings": "Listings",
-      "businesses": "Businesses",
+      "businesses": "Stores",
       "status": "Status",
       "searchHint": "Search by name, email or phone"
     },
     "business": {
-      "name": "Business",
+      "name": "Store",
       "place": "Location",
       "activity": "Main activity",
       "officer": "Responsible officer",
@@ -3577,7 +3635,7 @@
       "ads.moderation_suspend": "Suspend listings",
       "accounts.restrict": "Restrict accounts",
       "accounts.suspend": "Suspend accounts",
-      "businesses.suspend": "Suspend business publishing",
+      "businesses.suspend": "Suspend store publishing",
       "verifications.review": "Review verifications",
       "appeals.review": "Review appeals",
       "workforce.manage": "Manage work distribution",
@@ -3607,18 +3665,18 @@
     },
     "detail": {
       "userFile": "User file",
-      "businessFile": "Business file",
+      "businessFile": "Store file",
       "listingFile": "Listing file",
       "verificationFile": "Verification request",
       "backToUsers": "Back to users",
-      "backToBusinesses": "Back to businesses",
+      "backToBusinesses": "Back to stores",
       "backToListings": "Back to listings",
       "backToVerifications": "Back to verification requests",
       "notFound": "No record with this identifier, or you may not view it.",
       "tab": {
         "overview": "Overview",
         "listings": "Listings",
-        "businesses": "Businesses",
+        "businesses": "Stores",
         "members": "Members",
         "reports": "Reports",
         "enforcement": "Restrictions",
@@ -3627,7 +3685,7 @@
         "verification": "Verification"
       },
       "identity": "Account details",
-      "businessData": "Business details",
+      "businessData": "Store details",
       "listingData": "Listing details",
       "requestData": "Request details",
       "noCredentials": "No passwords, sessions or access tokens are shown here; the console never reads them.",
@@ -3662,7 +3720,7 @@
       "documentsDenied": "You may not view sensitive documents.",
       "docAccessLogged": "Every document you open is written to the audit log with your name and the time.",
       "openDocument": "Open document",
-      "openBusinessFile": "Open business file",
+      "openBusinessFile": "Open store file",
       "openPublicListing": "View public listing",
       "advertiser": "Advertiser",
       "category": "Category",
@@ -3861,7 +3919,7 @@
         "verification": "Verification request",
         "activity_suggestion": "Activity suggestion",
         "account_review": "Account review",
-        "business_review": "Business review"
+        "business_review": "Store review"
       },
       "stat": {
         "unassigned": "Unassigned",
@@ -4017,7 +4075,7 @@
       "sessions": "Sessions",
       "newUsers": "New users",
       "totalUsers": "Total users",
-      "businesses": "Businesses",
+      "businesses": "Stores",
       "published": "Published listings",
       "pending": "Pending review",
       "featured": "Featured listings",
@@ -4066,18 +4124,18 @@
       "mostShared": "Most shared",
       "zeroViews": "No views",
       "reported": "Most reported",
-      "peopleTitle": "Users & businesses",
+      "peopleTitle": "Users & stores",
       "inactiveUsers": "Inactive",
       "bannedUsers": "Banned",
       "deletedUsers": "Deleted",
-      "newBusinesses": "New businesses",
-      "verifiedBusinesses": "Verified businesses",
+      "newBusinesses": "New stores",
+      "verifiedBusinesses": "Verified stores",
       "topPublishers": "Top publishers",
       "topMessaged": "Top message receivers",
       "topCalled": "Top call receivers",
-      "topActiveBusinesses": "Most active businesses",
-      "topViewedBusinesses": "Most viewed businesses",
-      "topConversationBusinesses": "Most messaged businesses",
+      "topActiveBusinesses": "Most active stores",
+      "topViewedBusinesses": "Most viewed stores",
+      "topConversationBusinesses": "Most messaged stores",
       "healthTitle": "Performance, errors & security",
       "avgPageMs": "Avg page time (ms)",
       "pageViews": "Page views",
@@ -4114,7 +4172,7 @@
       "events": "Events"
     },
     "stores": {
-      "title": "Stores",
+      "title": "Storefronts & products",
       "searchPlaceholder": "Search by store name or slug",
       "all": "All",
       "empty": "No matching stores.",
@@ -4122,7 +4180,7 @@
       "reports": "Reports",
       "owner": {
         "individual": "Personal account",
-        "business": "Business"
+        "business": "Store"
       },
       "openPublic": "Public page",
       "suspend": "Suspend store",
@@ -4134,7 +4192,7 @@
   "welcome": {
     "meta": {
       "title": "Tahqaq — Real estate, services and suppliers marketplace",
-      "desc": "Tahqaq is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and business accounts, in-app messaging and calls."
+      "desc": "Tahqaq is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts, in-app messaging and calls."
     },
     "nav": {
       "browse": "Browse marketplace",
@@ -4143,7 +4201,7 @@
     },
     "hero": {
       "title": "An organized marketplace for real estate, services and suppliers",
-      "subtitle": "Publish your listing, find a trusted supplier, and talk safely inside the platform — with individual and business accounts.",
+      "subtitle": "Publish your listing, find a trusted supplier, and talk safely inside the platform — with individual and store accounts.",
       "browse": "Browse marketplace",
       "signUp": "Create account",
       "add": "Post your listing"
@@ -4154,13 +4212,13 @@
       "service": "Services",
       "product": "Products",
       "equipment": "Equipment",
-      "business": "Suppliers & businesses"
+      "business": "Suppliers & stores"
     },
     "features": {
       "title": "Platform features",
       "accounts": {
-        "title": "Individual & business accounts",
-        "desc": "A personal account or a full business profile, with fast switching."
+        "title": "Individual & store accounts",
+        "desc": "A personal account or a full store profile, with fast switching."
       },
       "listings": {
         "title": "Organized listings",
@@ -4172,7 +4230,7 @@
       },
       "verify": {
         "title": "Verification & review",
-        "desc": "Content review and business verification before trusted display."
+        "desc": "Content review and store verification before trusted display."
       },
       "countries": {
         "title": "Multi-country support",

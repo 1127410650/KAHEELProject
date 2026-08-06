@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Building2, CalendarDays, Eye, MapPin, User } from "lucide-react";
+import { CalendarDays, Eye, MapPin, Store, User } from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -35,7 +35,6 @@ import { ListingSpecs } from "@/components/marketplace/ListingSpecs";
 import { ListingLicenseSection } from "@/components/marketplace/ListingLicenseSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-
 
 interface AdSearch {
   action?: string | undefined;
@@ -170,7 +169,6 @@ async function loadAd(slug: string) {
     city: (cityRow as MktCity | null) ?? null,
     activeAds: activeAds ?? null,
   };
-
 }
 
 type AdData = NonNullable<Awaited<ReturnType<typeof loadAd>>>;
@@ -258,7 +256,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
           {logo ? (
             <img src={logo} alt="" loading="lazy" className="size-full object-cover" />
           ) : isBusiness ? (
-            <Building2 className="size-5" aria-hidden />
+            <Store className="size-5" aria-hidden />
           ) : (
             <User className="size-5" aria-hidden />
           )}
@@ -570,8 +568,7 @@ function AdPage() {
               </span>
             )}
             <span className="inline-flex items-center gap-1">
-              {t("market.ad.refNo")}:
-              <bdi dir="ltr">{listing.id.slice(0, 8).toUpperCase()}</bdi>
+              {t("market.ad.refNo")}:<bdi dir="ltr">{listing.id.slice(0, 8).toUpperCase()}</bdi>
             </span>
           </div>
 
@@ -611,14 +608,11 @@ function AdPage() {
 
           {listing.description && <DescriptionBlock text={listing.description} />}
 
-
           <ListingSpecs listing={listing} />
 
           {/* Real estate licence facts: never for other categories, and never a
            * trust badge — account verification is a separate matter. */}
           {ad.data.license && <ListingLicenseSection license={ad.data.license} />}
-
-
 
           <div className="mt-4 lg:hidden">
             <AdvertiserSection ad={ad.data} cityLabel={cityLabel} />

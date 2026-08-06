@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
-
 export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
@@ -57,7 +56,6 @@ function AuthPage() {
     setRemember(rememberSession());
   }, []);
 
-
   // Where to land is decided by the server-side platform role, never by the
   // signed-in email address: a platform admin lands in the console directly.
   async function landing(): Promise<string> {
@@ -74,7 +72,6 @@ function AuthPage() {
     supabase.auth.getSession().then(async ({ data }) => {
       if (data.session) navigate({ to: await landing(), replace: true });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   async function onSubmit(event: React.FormEvent) {
@@ -103,7 +100,6 @@ function AuthPage() {
       setSubmitting(false);
     }
   }
-
 
   if (!mounted) return null;
 
@@ -195,13 +191,12 @@ function AuthPage() {
           </form>
 
           <div className="mt-5 flex flex-col items-center gap-2 text-xs text-muted-foreground">
-            <button
-              type="button"
-              onClick={() => toast.info(t("auth.forgotSoon"))}
+            <Link
+              to="/forgot-password"
               className="font-semibold text-muted-foreground underline hover:text-primary"
             >
               {t("auth.forgot")}
-            </button>
+            </Link>
             <p>
               {t("auth.noAccount")}{" "}
               <Link to="/register" className="font-semibold text-primary">
@@ -216,4 +211,3 @@ function AuthPage() {
     </div>
   );
 }
-

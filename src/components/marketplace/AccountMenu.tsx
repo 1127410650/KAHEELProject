@@ -1,7 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Building2, Check, ChevronDown, LogOut, User } from "lucide-react";
+import { Check, ChevronDown, LogOut, Store, User } from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -32,15 +32,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 /** Round avatar / logo, falling back to the identity-kind icon. */
-function IdentityAvatar({
-  identity,
-  size = "md",
-}: {
-  identity: MktAccount;
-  size?: "sm" | "md";
-}) {
+function IdentityAvatar({ identity, size = "md" }: { identity: MktAccount; size?: "sm" | "md" }) {
   const box = size === "sm" ? "size-7" : "size-9";
-  const Icon = identity.kind === "business" ? Building2 : User;
+  const Icon = identity.kind === "business" ? Store : User;
   if (identity.avatar_url) {
     return (
       <img
@@ -87,6 +81,7 @@ export function AccountMenu() {
   } = useActiveAccount();
   const isMobile = useIsMobile();
   const centralSignOut = useSignOut();
+  const navigate = useNavigate();
   // Guards against a double tap while the server re-checks the membership.
   const [switching, setSwitching] = useState<string | null>(null);
 
@@ -138,9 +133,8 @@ export function AccountMenu() {
   }
 
   /**
-   * Switching happens in place: the choice is re-verified server-side, the
-   * previous account's cache is dropped by `select`, and the user stays on the
-   * current page.
+   * Switching is re-verified server-side, then `/me` resolves the right centre:
+   * provider bookings, seller store, business profile or personal profile.
    */
   async function switchAccount(accountKey: string) {
     if (accountKey === active?.account_key || switching) return;
@@ -149,6 +143,7 @@ export function AccountMenu() {
     try {
       const ok = await select(accountKey);
       if (!ok) toast.error(t("market.entry.switchFailed"));
+      else void navigate({ to: "/me" });
     } finally {
       setSwitching(null);
     }
@@ -249,7 +244,7 @@ export function AccountMenu() {
         ))}
         <DropdownMenuItem asChild className="gap-2 text-xs">
           <Link to={CREATE_BUSINESS_PATH}>
-            <Building2 className="size-4 text-muted-foreground" aria-hidden />
+            <Store className="size-4 text-muted-foreground" aria-hidden />
             {t(CREATE_BUSINESS_LABEL_KEY)}
           </Link>
         </DropdownMenuItem>

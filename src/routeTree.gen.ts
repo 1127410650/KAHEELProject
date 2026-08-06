@@ -17,13 +17,16 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as ServicesRouteImport } from './routes/services'
 import { Route as StudentToolsRouteImport } from './routes/student-tools'
 import { Route as SyriaGuideRouteImport } from './routes/syria-guide'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -52,6 +55,7 @@ import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessNewRouteImport } from './routes/business.new'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
+import { Route as DashboardBookingsRouteImport } from './routes/dashboard/bookings'
 import { Route as DashboardBusinessRouteImport } from './routes/dashboard/business'
 import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
@@ -60,9 +64,11 @@ import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/n
 import { Route as DashboardPointsRouteImport } from './routes/dashboard/points'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
+import { Route as DashboardServiceRouteImport } from './routes/dashboard/service'
 import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
@@ -74,10 +80,12 @@ import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verific
 import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
 import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
 import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
+import { Route as DashboardServiceSettingsRouteImport } from './routes/dashboard/service.settings'
 import { Route as DashboardStoreIndexRouteImport } from './routes/dashboard/store.index'
 import { Route as DashboardStoreCatalogRouteImport } from './routes/dashboard/store.catalog'
 import { Route as DashboardStoreNewRouteImport } from './routes/dashboard/store.new'
 import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
+import { Route as ServicesSlugItemIdBookRouteImport } from './routes/services.$slug.$itemId.book'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -119,6 +127,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
@@ -149,9 +162,19 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudentToolsRoute = StudentToolsRouteImport.update({
@@ -294,6 +317,11 @@ const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   path: '/categories/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardBookingsRoute = DashboardBookingsRouteImport.update({
+  id: '/dashboard/bookings',
+  path: '/dashboard/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardBusinessRoute = DashboardBusinessRouteImport.update({
   id: '/dashboard/business',
   path: '/dashboard/business',
@@ -334,6 +362,11 @@ const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
   path: '/dashboard/requests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardServiceRoute = DashboardServiceRouteImport.update({
+  id: '/dashboard/service',
+  path: '/dashboard/service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardViolationsRoute = DashboardViolationsRouteImport.update({
   id: '/dashboard/violations',
   path: '/dashboard/violations',
@@ -348,6 +381,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServicesRoute,
 } as any)
 const StoresSlugRoute = StoresSlugRouteImport.update({
   id: '/stores/$slug',
@@ -404,6 +442,12 @@ const DashboardReportsIdRoute = DashboardReportsIdRouteImport.update({
   path: '/dashboard/reports/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardServiceSettingsRoute =
+  DashboardServiceSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => DashboardServiceRoute,
+  } as any)
 const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
   id: '/dashboard/store/',
   path: '/dashboard/store/',
@@ -424,6 +468,11 @@ const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
   path: '/dashboard/ads/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
+  id: '/$slug/$itemId/book',
+  path: '/$slug/$itemId/book',
+  getParentRoute: () => ServicesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -434,13 +483,16 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
+  '/services': typeof ServicesRouteWithChildren
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
@@ -468,6 +520,7 @@ export interface FileRoutesByFullPath {
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/bookings': typeof DashboardBookingsRoute
   '/dashboard/business': typeof DashboardBusinessRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
@@ -476,12 +529,14 @@ export interface FileRoutesByFullPath {
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
+  '/dashboard/service': typeof DashboardServiceRouteWithChildren
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -489,12 +544,14 @@ export interface FileRoutesByFullPath {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/service/settings': typeof DashboardServiceSettingsRoute
   '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
   '/dashboard/store/': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
+  '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -504,12 +561,14 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
@@ -538,6 +597,7 @@ export interface FileRoutesByTo {
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/bookings': typeof DashboardBookingsRoute
   '/dashboard/business': typeof DashboardBusinessRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
@@ -546,12 +606,14 @@ export interface FileRoutesByTo {
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
+  '/dashboard/service': typeof DashboardServiceRouteWithChildren
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
+  '/services': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -559,12 +621,14 @@ export interface FileRoutesByTo {
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/service/settings': typeof DashboardServiceSettingsRoute
   '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/dashboard/reports': typeof DashboardReportsIndexRoute
   '/dashboard/store': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
+  '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -576,13 +640,16 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
+  '/services': typeof ServicesRouteWithChildren
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
@@ -610,6 +677,7 @@ export interface FileRoutesById {
   '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/dashboard/bookings': typeof DashboardBookingsRoute
   '/dashboard/business': typeof DashboardBusinessRoute
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
@@ -618,12 +686,14 @@ export interface FileRoutesById {
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
+  '/dashboard/service': typeof DashboardServiceRouteWithChildren
   '/dashboard/violations': typeof DashboardViolationsRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -631,12 +701,14 @@ export interface FileRoutesById {
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/dashboard/ads/new': typeof DashboardAdsNewRoute
   '/dashboard/reports/$id': typeof DashboardReportsIdRoute
+  '/dashboard/service/settings': typeof DashboardServiceSettingsRoute
   '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
   '/dashboard/store/new': typeof DashboardStoreNewRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/dashboard/reports/': typeof DashboardReportsIndexRoute
   '/dashboard/store/': typeof DashboardStoreIndexRoute
   '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
+  '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -649,13 +721,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/contact'
+    | '/forgot-password'
     | '/help'
     | '/market-setup'
     | '/me'
     | '/more'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/search'
+    | '/services'
     | '/student-tools'
     | '/syria-guide'
     | '/terms'
@@ -683,6 +758,7 @@ export interface FileRouteTypes {
     | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/bookings'
     | '/dashboard/business'
     | '/dashboard/favorites'
     | '/dashboard/messages'
@@ -691,12 +767,14 @@ export interface FileRouteTypes {
     | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
+    | '/dashboard/service'
     | '/dashboard/violations'
     | '/demo-stores/$worldId'
     | '/invite/$token'
     | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
+    | '/services/'
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
@@ -704,12 +782,14 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/service/settings'
     | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
     | '/dashboard/store/'
     | '/dashboard/ads/$id/edit'
+    | '/services/$slug/$itemId/book'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -719,12 +799,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/contact'
+    | '/forgot-password'
     | '/help'
     | '/market-setup'
     | '/me'
     | '/more'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/search'
     | '/student-tools'
     | '/syria-guide'
@@ -753,6 +835,7 @@ export interface FileRouteTypes {
     | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/bookings'
     | '/dashboard/business'
     | '/dashboard/favorites'
     | '/dashboard/messages'
@@ -761,12 +844,14 @@ export interface FileRouteTypes {
     | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
+    | '/dashboard/service'
     | '/dashboard/violations'
     | '/demo-stores/$worldId'
     | '/invite/$token'
     | '/stores/$slug'
     | '/u/$username'
     | '/admin'
+    | '/services'
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
@@ -774,12 +859,14 @@ export interface FileRouteTypes {
     | '/admin/verifications/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/service/settings'
     | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports'
     | '/dashboard/reports'
     | '/dashboard/store'
     | '/dashboard/ads/$id/edit'
+    | '/services/$slug/$itemId/book'
   id:
     | '__root__'
     | '/'
@@ -790,13 +877,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/contact'
+    | '/forgot-password'
     | '/help'
     | '/market-setup'
     | '/me'
     | '/more'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/search'
+    | '/services'
     | '/student-tools'
     | '/syria-guide'
     | '/terms'
@@ -824,6 +914,7 @@ export interface FileRouteTypes {
     | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
+    | '/dashboard/bookings'
     | '/dashboard/business'
     | '/dashboard/favorites'
     | '/dashboard/messages'
@@ -832,12 +923,14 @@ export interface FileRouteTypes {
     | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
+    | '/dashboard/service'
     | '/dashboard/violations'
     | '/demo-stores/$worldId'
     | '/invite/$token'
     | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
+    | '/services/'
     | '/admin/businesses_/$id'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
@@ -845,12 +938,14 @@ export interface FileRouteTypes {
     | '/admin/verifications_/$id'
     | '/dashboard/ads/new'
     | '/dashboard/reports/$id'
+    | '/dashboard/service/settings'
     | '/dashboard/store/catalog'
     | '/dashboard/store/new'
     | '/admin/reports/'
     | '/dashboard/reports/'
     | '/dashboard/store/'
     | '/dashboard/ads/$id/edit'
+    | '/services/$slug/$itemId/book'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -862,13 +957,16 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   ContactRoute: typeof ContactRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
   MarketSetupRoute: typeof MarketSetupRoute
   MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SearchRoute: typeof SearchRoute
+  ServicesRoute: typeof ServicesRouteWithChildren
   StudentToolsRoute: typeof StudentToolsRoute
   SyriaGuideRoute: typeof SyriaGuideRoute
   TermsRoute: typeof TermsRoute
@@ -878,6 +976,7 @@ export interface RootRouteChildren {
   BusinessNewRoute: typeof BusinessNewRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
+  DashboardBookingsRoute: typeof DashboardBookingsRoute
   DashboardBusinessRoute: typeof DashboardBusinessRoute
   DashboardFavoritesRoute: typeof DashboardFavoritesRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
@@ -886,6 +985,7 @@ export interface RootRouteChildren {
   DashboardPointsRoute: typeof DashboardPointsRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
+  DashboardServiceRoute: typeof DashboardServiceRouteWithChildren
   DashboardViolationsRoute: typeof DashboardViolationsRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -958,6 +1058,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help': {
       id: '/help'
       path: '/help'
@@ -1000,11 +1107,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/student-tools': {
@@ -1203,6 +1324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/bookings': {
+      id: '/dashboard/bookings'
+      path: '/dashboard/bookings'
+      fullPath: '/dashboard/bookings'
+      preLoaderRoute: typeof DashboardBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/business': {
       id: '/dashboard/business'
       path: '/dashboard/business'
@@ -1259,6 +1387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/service': {
+      id: '/dashboard/service'
+      path: '/dashboard/service'
+      fullPath: '/dashboard/service'
+      preLoaderRoute: typeof DashboardServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/violations': {
       id: '/dashboard/violations'
       path: '/dashboard/violations'
@@ -1279,6 +1414,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof ServicesRoute
     }
     '/stores/$slug': {
       id: '/stores/$slug'
@@ -1357,6 +1499,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardReportsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/service/settings': {
+      id: '/dashboard/service/settings'
+      path: '/settings'
+      fullPath: '/dashboard/service/settings'
+      preLoaderRoute: typeof DashboardServiceSettingsRouteImport
+      parentRoute: typeof DashboardServiceRoute
+    }
     '/dashboard/store/': {
       id: '/dashboard/store/'
       path: '/dashboard/store'
@@ -1384,6 +1533,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/ads/$id/edit'
       preLoaderRoute: typeof DashboardAdsIdEditRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/services/$slug/$itemId/book': {
+      id: '/services/$slug/$itemId/book'
+      path: '/$slug/$itemId/book'
+      fullPath: '/services/$slug/$itemId/book'
+      preLoaderRoute: typeof ServicesSlugItemIdBookRouteImport
+      parentRoute: typeof ServicesRoute
     }
   }
 }
@@ -1448,6 +1604,31 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface ServicesRouteChildren {
+  ServicesIndexRoute: typeof ServicesIndexRoute
+  ServicesSlugItemIdBookRoute: typeof ServicesSlugItemIdBookRoute
+}
+
+const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesIndexRoute: ServicesIndexRoute,
+  ServicesSlugItemIdBookRoute: ServicesSlugItemIdBookRoute,
+}
+
+const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
+  ServicesRouteChildren,
+)
+
+interface DashboardServiceRouteChildren {
+  DashboardServiceSettingsRoute: typeof DashboardServiceSettingsRoute
+}
+
+const DashboardServiceRouteChildren: DashboardServiceRouteChildren = {
+  DashboardServiceSettingsRoute: DashboardServiceSettingsRoute,
+}
+
+const DashboardServiceRouteWithChildren =
+  DashboardServiceRoute._addFileChildren(DashboardServiceRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
@@ -1457,13 +1638,16 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   ContactRoute: ContactRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,
   MarketSetupRoute: MarketSetupRoute,
   MeRoute: MeRoute,
   MoreRoute: MoreRoute,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SearchRoute: SearchRoute,
+  ServicesRoute: ServicesRouteWithChildren,
   StudentToolsRoute: StudentToolsRoute,
   SyriaGuideRoute: SyriaGuideRoute,
   TermsRoute: TermsRoute,
@@ -1473,6 +1657,7 @@ const rootRouteChildren: RootRouteChildren = {
   BusinessNewRoute: BusinessNewRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
+  DashboardBookingsRoute: DashboardBookingsRoute,
   DashboardBusinessRoute: DashboardBusinessRoute,
   DashboardFavoritesRoute: DashboardFavoritesRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
@@ -1481,6 +1666,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardPointsRoute: DashboardPointsRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
+  DashboardServiceRoute: DashboardServiceRouteWithChildren,
   DashboardViolationsRoute: DashboardViolationsRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   InviteTokenRoute: InviteTokenRoute,

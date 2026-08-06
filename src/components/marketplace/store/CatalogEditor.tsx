@@ -165,7 +165,13 @@ export function CatalogEditor({
           }
         >
           <Plus className="me-1 h-4 w-4" />
-          {withOptions ? t("market.store.catalog.addDish") : t("market.store.catalog.addProduct")}
+          {storeType === "restaurant"
+            ? t("market.store.catalog.addDish")
+            : storeType === "services"
+              ? locale === "ar"
+                ? "إضافة خدمة"
+                : "Add service"
+              : t("market.store.catalog.addProduct")}
         </Button>
         {sections.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("market.store.catalog.sectionFirst")}</p>
@@ -275,7 +281,9 @@ export function CatalogEditor({
                         </div>
                         <p className="text-sm text-muted-foreground">
                           {money(item.base_price, item.currency_code || currency, locale)}
-                          {withOptions && itemGroups.length > 0
+                          {withOptions &&
+                          !["service", "package"].includes(item.item_type) &&
+                          itemGroups.length > 0
                             ? ` · ${t("market.store.catalog.groupsCount")}: ${itemGroups.length}`
                             : ""}
                         </p>
@@ -314,7 +322,7 @@ export function CatalogEditor({
                             <EyeOff className="h-4 w-4" />
                           )}
                         </Button>
-                        {withOptions ? (
+                        {withOptions && !["service", "package"].includes(item.item_type) ? (
                           <Button variant="outline" size="sm" onClick={() => setOptionsFor(item)}>
                             {t("market.store.catalog.options")}
                           </Button>
@@ -436,17 +444,27 @@ function ItemDialog({
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const fileRef = useRef<HTMLInputElement>(null);
-  const isService = storeType === "services";
+  const defaultItemType =
+    storeType === "services"
+      ? "service"
+      : (draft.item_type ?? (storeType === "restaurant" ? "food" : "product"));
   const [form, setForm] = useState({
+    itemType: defaultItemType,
     name: draft.name_ar ?? "",
     description: draft.description_ar ?? "",
     price: draft.base_price != null ? String(draft.base_price) : "",
     compare: draft.compare_at_price != null ? String(draft.compare_at_price) : "",
     minutes:
-      (isService ? draft.duration_minutes : draft.preparation_minutes) != null
-        ? String(isService ? draft.duration_minutes : draft.preparation_minutes)
+      (["service", "package"].includes(defaultItemType)
+        ? draft.duration_minutes
+        : draft.preparation_minutes) != null
+        ? String(
+            ["service", "package"].includes(defaultItemType)
+              ? draft.duration_minutes
+              : draft.preparation_minutes,
+          )
         : "",
     sectionId: draft.section_id ?? sections[0]?.id ?? null,
     available: draft.is_available ?? true,
@@ -455,6 +473,7 @@ function ItemDialog({
     stock: draft.stock_quantity != null ? String(draft.stock_quantity) : "",
     imagePath: draft.image_path ?? null,
   });
+  const isService = ["service", "package"].includes(form.itemType);
   const [busy, setBusy] = useState(false);
 
   const priceValue = Number(form.price);
@@ -478,7 +497,7 @@ function ItemDialog({
       await saveItem(storefrontId, {
         id: draft.id,
         section_id: form.sectionId,
-        item_type: isService ? "service" : storeType === "restaurant" ? "dish" : "product",
+        item_type: form.itemType,
         name_ar: form.name,
         description_ar: form.description,
         base_price: priceValue,
@@ -509,6 +528,31 @@ function ItemDialog({
         </DialogHeader>
 
         <div className="space-y-4">
+          {storeType === "mixed" ? (
+            <div className="space-y-2">
+              <Label htmlFor="item-type">{locale === "ar" ? "نوع العنصر" : "Item type"}</Label>
+              <select
+                id="item-type"
+                className="h-11 w-full rounded-md border bg-background px-3 text-sm"
+                value={form.itemType}
+                onChange={(event) =>
+                  setForm((previous) => ({
+                    ...previous,
+                    itemType: event.target.value,
+                    trackInventory: event.target.value === "product" && previous.trackInventory,
+                  }))
+                }
+              >
+                <option value="product">{locale === "ar" ? "منتج" : "Product"}</option>
+                <option value="service">
+                  {locale === "ar" ? "خدمة بموعد" : "Bookable service"}
+                </option>
+                <option value="package">
+                  {locale === "ar" ? "باقة خدمات" : "Service package"}
+                </option>
+              </select>
+            </div>
+          ) : null}
           <div className="space-y-2">
             <Label htmlFor="item-name">{t("market.store.catalog.itemName")}</Label>
             <Input

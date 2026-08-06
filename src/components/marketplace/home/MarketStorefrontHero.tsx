@@ -1,5 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, Search, ShoppingBag, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  Building2,
+  CarFront,
+  Megaphone,
+  MessageCircleMore,
+  Search,
+  ShoppingBag,
+  Smartphone,
+  Sparkles,
+  Store,
+  type LucideIcon,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import catCars from "@/assets/market/cat-cars.webp";
@@ -51,10 +63,51 @@ const PROMOS: Promo[] = [
   },
 ];
 
-const TICKER_ITEMS = {
-  ar: ["إعلانات جديدة", "متاجر محلية", "تواصل مباشر", "عقارات وسيارات وأجهزة"],
-  en: ["Fresh listings", "Local stores", "Direct contact", "Property, cars and devices"],
-} as const;
+type TickerItem = {
+  key: string;
+  icon: LucideIcon;
+  label: { ar: string; en: string };
+  tone: string;
+};
+
+const TICKER_ITEMS: TickerItem[] = [
+  {
+    key: "fresh",
+    icon: Megaphone,
+    label: { ar: "إعلانات جديدة", en: "Fresh listings" },
+    tone: "from-[#8665ff] to-[#4934b9] shadow-[#6f55df]/25",
+  },
+  {
+    key: "stores",
+    icon: Store,
+    label: { ar: "متاجر محلية", en: "Local stores" },
+    tone: "from-[#11a683] to-[#087260] shadow-[#0d9477]/25",
+  },
+  {
+    key: "contact",
+    icon: MessageCircleMore,
+    label: { ar: "تواصل مباشر", en: "Direct contact" },
+    tone: "from-[#f59d2a] to-[#d96b15] shadow-[#e38121]/25",
+  },
+  {
+    key: "property",
+    icon: Building2,
+    label: { ar: "عقارات مختارة", en: "Selected property" },
+    tone: "from-[#3188c9] to-[#185487] shadow-[#2672ac]/25",
+  },
+  {
+    key: "cars",
+    icon: CarFront,
+    label: { ar: "سوق السيارات", en: "Car market" },
+    tone: "from-[#eb5c72] to-[#ad2947] shadow-[#d94864]/25",
+  },
+  {
+    key: "devices",
+    icon: Smartphone,
+    label: { ar: "أجهزة وتقنية", en: "Devices and tech" },
+    tone: "from-[#20a4c2] to-[#12627f] shadow-[#1b8fa9]/25",
+  },
+];
 
 /**
  * Fast, CSS-only storefront opening. It borrows the dense retail hierarchy of
@@ -133,27 +186,47 @@ export function MarketStorefrontHero() {
         ))}
       </div>
 
-      <div className="relative mt-2 overflow-hidden rounded-xl border border-market-navy/10 bg-white shadow-[0_2px_10px_rgb(15_23_42/0.05)] sm:mt-3 sm:rounded-2xl">
-        <p className="sr-only">{TICKER_ITEMS[language].join("، ")}</p>
-        <div
-          aria-hidden
-          dir={language === "ar" ? "rtl" : "ltr"}
-          className="kahli-home-ticker flex w-max items-center py-2 text-[9px] font-black text-market-navy sm:py-2.5 sm:text-[10px]"
-        >
-          {[...TICKER_ITEMS[language], ...TICKER_ITEMS[language]].map((item, index) => (
-            <span key={`${item}-${index}`} className="inline-flex items-center gap-2 px-4 sm:px-6">
-              <span className="size-1.5 rounded-full bg-market-navy-soft" />
-              {item}
-            </span>
-          ))}
-        </div>
+      <div className="relative mt-2 overflow-hidden rounded-[1.15rem] border border-market-navy/10 bg-[linear-gradient(115deg,#ffffff_0%,#f7f8ff_52%,#f5fbfa_100%)] px-1 py-1 shadow-[0_7px_24px_rgb(15_23_42/0.08)] sm:mt-3 sm:rounded-[1.45rem] sm:px-1.5 sm:py-1.5">
+        <p className="sr-only">{TICKER_ITEMS.map((item) => item.label[language]).join("، ")}</p>
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 start-0 w-10 bg-gradient-to-r from-white to-transparent sm:w-16 rtl:bg-gradient-to-l"
+          className="absolute -top-7 start-[18%] size-14 rounded-full bg-violet-300/20 blur-2xl"
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 end-0 w-10 bg-gradient-to-l from-white to-transparent sm:w-16 rtl:bg-gradient-to-r"
+          className="absolute -bottom-8 end-[15%] size-16 rounded-full bg-emerald-300/20 blur-2xl"
+        />
+        <div
+          aria-hidden
+          dir={language === "ar" ? "rtl" : "ltr"}
+          className="kahli-home-ticker relative flex w-max items-center gap-2 py-1 text-[10px] font-black text-market-navy sm:gap-2.5 sm:py-1.5 sm:text-[11px]"
+        >
+          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <span
+                key={`${item.key}-${index}`}
+                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/90 bg-white/88 py-1 pe-3 ps-1 shadow-[0_3px_12px_rgb(15_23_42/0.07)] backdrop-blur-sm sm:gap-2.5 sm:py-1.5 sm:pe-4 sm:ps-1.5"
+              >
+                <span
+                  className={`kahli-ticker-icon grid size-8 place-items-center rounded-full bg-gradient-to-br text-white shadow-lg ${item.tone} sm:size-9`}
+                  style={{ animationDelay: `${(index % TICKER_ITEMS.length) * 180}ms` }}
+                >
+                  <Icon className="size-4 sm:size-[18px]" strokeWidth={2.1} aria-hidden />
+                </span>
+                <span className="whitespace-nowrap">{item.label[language]}</span>
+              </span>
+            );
+          })}
+        </div>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 start-0 w-9 bg-gradient-to-r from-white via-white/88 to-transparent sm:w-16 rtl:bg-gradient-to-l"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 end-0 w-9 bg-gradient-to-l from-white via-white/88 to-transparent sm:w-16 rtl:bg-gradient-to-r"
         />
       </div>
 
@@ -167,13 +240,21 @@ export function MarketStorefrontHero() {
           to { transform: translateX(50%); }
         }
         .kahli-home-ticker:dir(ltr) {
-          animation: kahli-home-ticker-ltr 19s linear infinite;
+          animation: kahli-home-ticker-ltr 22s linear infinite;
         }
         .kahli-home-ticker:dir(rtl) {
-          animation: kahli-home-ticker-rtl 19s linear infinite;
+          animation: kahli-home-ticker-rtl 22s linear infinite;
+        }
+        @keyframes kahli-ticker-icon-breathe {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-1.5px) scale(1.045); }
+        }
+        .kahli-ticker-icon {
+          animation: kahli-ticker-icon-breathe 2.8s ease-in-out infinite;
         }
         @media (prefers-reduced-motion: reduce) {
-          .kahli-home-ticker { animation: none !important; }
+          .kahli-home-ticker,
+          .kahli-ticker-icon { animation: none !important; }
         }
       `}</style>
     </section>

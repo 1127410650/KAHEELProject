@@ -34,13 +34,13 @@ export const Route = createFileRoute("/admin/verifications")({
   }),
   head: () => ({
     meta: [
-      { title: "توثيق المنشآت — إدارة سوق تحقّق" },
+      { title: "توثيق المتاجر — إدارة سوق تحقّق" },
       {
         name: "description",
-        content: "مراجعة طلبات توثيق المنشآت ومستنداتها: اعتماد، رفض بسبب، أو طلب استكمال.",
+        content: "مراجعة طلبات توثيق المتاجر ومستنداتها: اعتماد، رفض بسبب، أو طلب استكمال.",
       },
-      { property: "og:title", content: "توثيق المنشآت — إدارة سوق تحقّق" },
-      { property: "og:description", content: "إدارة طلبات توثيق المنشآت في سوق تحقّق." },
+      { property: "og:title", content: "توثيق المتاجر — إدارة سوق تحقّق" },
+      { property: "og:description", content: "إدارة طلبات توثيق المتاجر في سوق تحقّق." },
       { name: "robots", content: "noindex" },
     ],
   }),

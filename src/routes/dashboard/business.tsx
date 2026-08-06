@@ -17,10 +17,7 @@ import {
   loadVerificationFiles,
   loadVerificationRequests,
 } from "@/lib/mkt-admin";
-import {
-  loadEntityActivities,
-  setEntityActivities,
-} from "@/lib/mkt-activities";
+import { loadEntityActivities, setEntityActivities } from "@/lib/mkt-activities";
 import { ActivityPicker, type ActivityValue } from "@/components/marketplace/ActivityPicker";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -34,16 +31,16 @@ export const Route = createFileRoute("/dashboard/business")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "ملف المنشأة — سوق تحقّق" },
+      { title: "ملف المتجر — سوق تحقّق" },
       {
         name: "description",
         content:
           "عدّل شعار منشأتك ونبذتها ومدينتها وبيانات التواصل والتصنيفات، وتابع حالة التوثيق.",
       },
-      { property: "og:title", content: "ملف المنشأة — سوق تحقّق" },
+      { property: "og:title", content: "ملف المتجر — سوق تحقّق" },
       {
         property: "og:description",
-        content: "إدارة ملف المنشأة العام وطلبات التوثيق في سوق تحقّق.",
+        content: "إدارة ملف المتجر العام وطلبات التوثيق في سوق تحقّق.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -151,7 +148,6 @@ function BusinessDashboardPage() {
     enabled: !!accountCountry.data?.id,
     queryFn: () => loadCities(accountCountry.data?.id ?? null),
   });
-
 
   function set<K extends keyof MktBusiness>(key: K, value: MktBusiness[K]) {
     setDraft((prev) => ({ ...(prev ?? {}), [key]: value }));
@@ -513,11 +509,7 @@ function BusinessDashboardPage() {
 
           <div className="min-w-0 space-y-1.5">
             <Label>{t("market.activity.current")}</Label>
-            <ActivityPicker
-              value={activityValue}
-              tenantId={tenantId}
-              onChange={setActivityDraft}
-            />
+            <ActivityPicker value={activityValue} tenantId={tenantId} onChange={setActivityDraft} />
           </div>
 
           <div className="space-y-1.5">

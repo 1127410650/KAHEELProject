@@ -33,6 +33,12 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.form.publishingAs": "سيُنشر الإعلان من حسابك الحالي.",
     "market.addListing": "إنشاء إعلان",
     "market.createStore": "إنشاء متجر",
+    "market.services.myBookings": "حجوزاتي",
+    "market.services.providerCenter": "مركز مقدم الخدمة",
+    "market.services.manageServices": "إدارة الخدمات",
+    "market.services.providerCenterHint":
+      "تابع طلبات المواعيد، أكّدها، وابدأ الخدمة وأنهِها من مكان واحد.",
+    "market.services.openProviderCenter": "فتح مركز الخدمة",
 
     "admin.console": "إدارة المنصة",
     "admin.consoleSubtitle": "مركز تشغيل كحلي",
@@ -47,7 +53,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "admin.navSections.system": "إعدادات النظام",
     "admin.dashboardBadge": "مركز المتابعة",
     "admin.dashboardWelcome": "كل عمليات المنصة في مكان واحد",
-    "admin.dashboardIntro": "تابع المستخدمين والمنشآت والإعلانات والطلبات العاجلة من لوحة واضحة وسريعة.",
+    "admin.dashboardIntro":
+      "تابع المستخدمين والمنشآت والإعلانات والطلبات العاجلة من لوحة واضحة وسريعة.",
     "admin.dashboardPending": "يحتاج متابعة",
     "admin.dashboardOverview": "ملخص المنصة",
     "admin.dashboardOverviewHint": "الأرقام الحالية مرتبطة مباشرة بصفحات الإدارة والتفاصيل.",
@@ -68,6 +75,12 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.form.publishingAs": "This listing will be published from your current account.",
     "market.addListing": "Create listing",
     "market.createStore": "Create store",
+    "market.services.myBookings": "My bookings",
+    "market.services.providerCenter": "Provider center",
+    "market.services.manageServices": "Manage services",
+    "market.services.providerCenterHint":
+      "Review booking requests, confirm appointments, and run each service from one place.",
+    "market.services.openProviderCenter": "Open provider center",
 
     "admin.console": "Platform management",
     "admin.consoleSubtitle": "Kahli operations center",
@@ -82,11 +95,13 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "admin.navSections.system": "System settings",
     "admin.dashboardBadge": "Operations center",
     "admin.dashboardWelcome": "All platform operations in one place",
-    "admin.dashboardIntro": "Monitor users, businesses, listings, and urgent work from a clear and fast dashboard.",
+    "admin.dashboardIntro":
+      "Monitor users, businesses, listings, and urgent work from a clear and fast dashboard.",
     "admin.dashboardPending": "Needs attention",
     "admin.dashboardOverview": "Platform overview",
     "admin.dashboardOverviewHint": "Current figures link directly to their management pages.",
-    "admin.actionNeededHint": "Items that require review or a decision from the administration team.",
+    "admin.actionNeededHint":
+      "Items that require review or a decision from the administration team.",
   },
 };
 

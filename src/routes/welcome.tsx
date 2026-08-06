@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Building2,
   Home,
   LogIn,
   Plus,
@@ -21,7 +20,7 @@ import { ListingCard } from "@/components/marketplace/ListingCard";
 
 const title = "تحقّق — سوق العقارات والخدمات والموردين | Tahqaq";
 const description =
-  "منصة تحقّق: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومنشآت ورسائل واتصال داخلي وتوثيق.";
+  "منصة تحقّق: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
 
 export const Route = createFileRoute("/welcome")({
   head: () => ({
@@ -43,7 +42,7 @@ const SECTIONS = [
   { key: "service", icon: Sparkles, search: { type: "service" } },
   { key: "product", icon: Tag, search: { type: "product" } },
   { key: "equipment", icon: Truck, search: { type: "equipment_rent" } },
-  { key: "business", icon: Building2, search: { domain: "business" } },
+  { key: "business", icon: Store, search: { domain: "business" } },
 ] as const;
 
 const FEATURES = ["accounts", "listings", "contact", "verify", "countries"] as const;
@@ -160,7 +159,10 @@ function WelcomePage() {
           <h2 className="text-lg font-bold text-foreground">{t("welcome.features.title")}</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((key) => (
-              <article key={key} className="rounded-xl border border-border bg-card p-4 shadow-panel">
+              <article
+                key={key}
+                className="rounded-xl border border-border bg-card p-4 shadow-panel"
+              >
                 <h3 className="text-sm font-bold text-foreground">
                   {t(`welcome.features.${key}.title`)}
                 </h3>

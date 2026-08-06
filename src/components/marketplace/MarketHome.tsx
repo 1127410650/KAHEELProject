@@ -75,11 +75,11 @@ export function MarketHome() {
   return (
     <>
       <MarketStorefrontHero />
+      <MarketDemoShowcases />
       <SyriaHomeGateway />
       <MarketCategoryTiles />
       <MarketDemoListings />
       <MarketFeaturedBanner />
-      <MarketDemoShowcases />
 
       <section
         id="market-listings"

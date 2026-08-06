@@ -38,18 +38,18 @@ function isInteractive(target: EventTarget | null): boolean {
   );
 }
 
-
 export const Route = createFileRoute("/admin/businesses")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "إدارة المنشآت — إدارة المنصة" },
+      { title: "إدارة المتاجر — إدارة المنصة" },
       {
         name: "description",
-        content: "قائمة المنشآت وحالة التوثيق والأنشطة والمسؤول، مع إيقاف النشر أو رفعه بسبب مسجَّل.",
+        content:
+          "قائمة المتاجر وحالة التوثيق والأنشطة والمسؤول، مع إيقاف النشر أو رفعه بسبب مسجَّل.",
       },
-      { property: "og:title", content: "إدارة المنشآت — إدارة المنصة" },
-      { property: "og:description", content: "إدارة منشآت السوق في منصة تحقّق." },
+      { property: "og:title", content: "إدارة المتاجر — إدارة المنصة" },
+      { property: "og:description", content: "إدارة متاجر السوق في منصة تحقّق." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -94,7 +94,6 @@ function AdminBusinessesPage() {
     if (isInteractive(event.target)) return;
     void navigate({ to: "/admin/businesses/$id", params: { id: tenantId } });
   }
-
 
   async function confirm(reason: string) {
     if (!pending) return;
@@ -211,12 +210,24 @@ function AdminBusinessesPage() {
             <table className="w-full table-fixed text-sm">
               <thead className="border-b border-border text-xs text-muted-foreground">
                 <tr>
-                  <th className="w-[24%] px-3 py-2 text-start font-medium">{t("admin.business.name")}</th>
-                  <th className="w-[16%] px-3 py-2 text-start font-medium">{t("admin.business.place")}</th>
-                  <th className="w-[16%] px-3 py-2 text-start font-medium">{t("admin.business.activity")}</th>
-                  <th className="w-[14%] px-3 py-2 text-start font-medium">{t("admin.business.officer")}</th>
-                  <th className="w-[10%] px-3 py-2 text-start font-medium">{t("admin.business.listings")}</th>
-                  <th className="w-[14%] px-3 py-2 text-start font-medium">{t("admin.business.verification")}</th>
+                  <th className="w-[24%] px-3 py-2 text-start font-medium">
+                    {t("admin.business.name")}
+                  </th>
+                  <th className="w-[16%] px-3 py-2 text-start font-medium">
+                    {t("admin.business.place")}
+                  </th>
+                  <th className="w-[16%] px-3 py-2 text-start font-medium">
+                    {t("admin.business.activity")}
+                  </th>
+                  <th className="w-[14%] px-3 py-2 text-start font-medium">
+                    {t("admin.business.officer")}
+                  </th>
+                  <th className="w-[10%] px-3 py-2 text-start font-medium">
+                    {t("admin.business.listings")}
+                  </th>
+                  <th className="w-[14%] px-3 py-2 text-start font-medium">
+                    {t("admin.business.verification")}
+                  </th>
                   <th className="w-[6%] px-3 py-2" />
                 </tr>
               </thead>
@@ -298,10 +309,13 @@ function AdminBusinessesPage() {
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
                   <Verification value={row.verification_status} />
                   <span className="text-muted-foreground">
-                    {t("admin.business.listings")}: <span className="tabular-nums">{row.listings_count}</span>
+                    {t("admin.business.listings")}:{" "}
+                    <span className="tabular-nums">{row.listings_count}</span>
                   </span>
                   {row.restriction && (
-                    <span className="text-destructive">{t(`admin.restriction.${row.restriction}`)}</span>
+                    <span className="text-destructive">
+                      {t(`admin.restriction.${row.restriction}`)}
+                    </span>
                   )}
                 </div>
               </div>

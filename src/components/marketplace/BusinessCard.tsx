@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Building2, MapPin } from "lucide-react";
+import { MapPin, Store } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import type { MktBusiness } from "@/lib/mkt";
@@ -36,7 +36,7 @@ export function BusinessCard({
               className="size-full object-cover"
             />
           ) : (
-            <Building2 className="size-5" aria-hidden />
+            <Store className="size-5" aria-hidden />
           )}
         </span>
         <div className="min-w-0 flex-1">

@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
-  Building2,
   CalendarDays,
   ChevronDown,
   Globe,
@@ -10,6 +9,7 @@ import {
   Navigation,
   Pencil,
   Share2,
+  Store,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -38,9 +38,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/businesses/$slug")({
   ssr: false,
   head: ({ params }) => {
-    const title = `${params.slug} — منشأة في سوق تحقّق`;
+    const title = `${params.slug} — متجر في سوق تحقّق`;
     const description =
-      "الملف العام للمنشأة في سوق تحقّق: النشاط، المدينة، تاريخ الانضمام، والإعلانات المنشورة.";
+      "الملف العام للمتجر في سوق تحقّق: النشاط، المدينة، تاريخ الانضمام، والإعلانات المنشورة.";
     return {
       meta: [
         { title },
@@ -162,7 +162,6 @@ function BusinessPage() {
   });
   const hasDetails = !!entityLabel;
 
-
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
@@ -178,7 +177,7 @@ function BusinessPage() {
                     className="size-full object-cover"
                   />
                 ) : (
-                  businessInitials(name) || <Building2 className="size-6" aria-hidden />
+                  businessInitials(name) || <Store className="size-6" aria-hidden />
                 )}
               </span>
               <div className="min-w-0 flex-1">
@@ -215,7 +214,12 @@ function BusinessPage() {
 
             <div className="mt-3 flex flex-wrap gap-2">
               {biz.can_edit ? (
-                <Button asChild variant="outline" size="sm" className="min-h-11 flex-1 sm:flex-none">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="min-h-11 flex-1 sm:flex-none"
+                >
                   <Link to="/dashboard/business">
                     <Pencil className="size-4" aria-hidden />
                     {t("market.business.manage")}
@@ -349,9 +353,7 @@ function BusinessPage() {
                   <dl className="mt-2 space-y-1 text-xs">
                     {entityLabel && (
                       <div className="flex flex-wrap gap-x-2">
-                        <dt className="text-muted-foreground">
-                          {t("market.business.entityType")}
-                        </dt>
+                        <dt className="text-muted-foreground">{t("market.business.entityType")}</dt>
                         <dd className="font-medium text-foreground">{entityLabel}</dd>
                       </div>
                     )}
@@ -395,7 +397,6 @@ function BusinessPage() {
 
             {listings.isPending ? (
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
-
                 {Array.from({ length: 4 }).map((_, i) => (
                   <Skeleton key={i} className="h-56 rounded-xl" />
                 ))}

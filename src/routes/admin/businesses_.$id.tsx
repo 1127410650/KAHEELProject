@@ -33,14 +33,14 @@ export const Route = createFileRoute("/admin/businesses_/$id")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "ملف المنشأة — إدارة منصة تحقّق" },
+      { title: "ملف المتجر — إدارة منصة تحقّق" },
       {
         name: "description",
         content:
-          "ملف إداري للمنشأة: بياناتها وأنشطتها وأعضاؤها وإعلاناتها وطلبات توثيقها وقيودها وسجل الإجراءات عليها.",
+          "ملف إداري للمتجر: بياناتها وأنشطتها وأعضاؤها وإعلاناتها وطلبات توثيقها وقيودها وسجل الإجراءات عليها.",
       },
-      { property: "og:title", content: "ملف المنشأة — إدارة منصة تحقّق" },
-      { property: "og:description", content: "ملف إداري تفصيلي للمنشأة في منصة تحقّق." },
+      { property: "og:title", content: "ملف المتجر — إدارة منصة تحقّق" },
+      { property: "og:description", content: "ملف إداري تفصيلي للمتجر في منصة تحقّق." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -141,7 +141,10 @@ function AdminBusinessDetailPage() {
               { label: t("admin.detail.tab.listings"), value: data.counts.listings },
               { label: t("admin.detail.tab.members"), value: data.counts.members },
               { label: t("admin.detail.tab.reports"), value: data.counts.reports },
-              { label: t("admin.detail.activeRestrictions"), value: data.counts.restrictions_active },
+              {
+                label: t("admin.detail.activeRestrictions"),
+                value: data.counts.restrictions_active,
+              },
             ]}
           />
 

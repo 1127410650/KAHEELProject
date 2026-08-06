@@ -41,10 +41,10 @@ export const Route = createFileRoute("/admin/verifications_/$id")({
       {
         name: "description",
         content:
-          "مراجعة طلب توثيق منشأة: بيانات الطلب ومستنداته وسجل قراراته، مع تسجيل كل فتح لمستند حسّاس.",
+          "مراجعة طلب توثيق متجر: بيانات الطلب ومستنداته وسجل قراراته، مع تسجيل كل فتح لمستند حسّاس.",
       },
       { property: "og:title", content: "ملف طلب التوثيق — إدارة منصة تحقّق" },
-      { property: "og:description", content: "مراجعة طلبات توثيق المنشآت في منصة تحقّق." },
+      { property: "og:description", content: "مراجعة طلبات توثيق المتاجر في منصة تحقّق." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -99,7 +99,9 @@ function AdminVerificationDetailPage() {
       await reviewVerification(id, decision, reason || undefined);
       toast.success(t("market.admin.decisionSaved"));
       setDecision(null);
-      await queryClient.invalidateQueries({ queryKey: ["mkt", "admin", "verification-detail", id] });
+      await queryClient.invalidateQueries({
+        queryKey: ["mkt", "admin", "verification-detail", id],
+      });
     } catch (error) {
       toast.error(adminErrorMessage(error, t("admin.actionFailed")));
     } finally {
@@ -159,8 +161,6 @@ function AdminVerificationDetailPage() {
           />
 
           <AdminAssignmentBar kind="verification" subjectId={id} />
-
-
 
           {canManage && header.status === "pending" && (
             <Panel title={t("admin.detail.reviewActions")}>
@@ -236,7 +236,9 @@ function AdminVerificationDetailPage() {
                 <EmptyState label={t("common.noData")} />
               ) : (
                 <>
-                  <p className="text-xs text-muted-foreground">{t("admin.detail.docAccessLogged")}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("admin.detail.docAccessLogged")}
+                  </p>
                   <ul className="mt-3 grid gap-2">
                     {data.files.map((file) => (
                       <li

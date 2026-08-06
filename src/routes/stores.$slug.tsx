@@ -1,6 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Clock, MapPin, MessageCircle, Phone, ShoppingBag, Sparkles, Store } from "lucide-react";
+import {
+  CalendarDays,
+  Clock,
+  MapPin,
+  MessageCircle,
+  Phone,
+  ShoppingBag,
+  Sparkles,
+  Store,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { currencyLabel, priceLabel } from "@/lib/mkt";
@@ -95,7 +104,9 @@ function PublicStorePage() {
 
   const name = locale === "ar" ? store.name_ar : store.name_en || store.name_ar;
   const description =
-    locale === "ar" ? store.short_description_ar : store.short_description_en || store.short_description_ar;
+    locale === "ar"
+      ? store.short_description_ar
+      : store.short_description_en || store.short_description_ar;
   const city = locale === "ar" ? store.city_name_ar : store.city_name_en || store.city_name_ar;
   const cover = store.cover_path ? store.media[store.cover_path] : undefined;
   const logo = store.logo_path ? store.media[store.logo_path] : undefined;
@@ -123,14 +134,22 @@ function PublicStorePage() {
     city,
     country: null,
   });
+  const serviceStore = store.store_type === "services" || store.store_type === "mixed";
 
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-5xl space-y-5 px-4 py-5">
-        <div className={`overflow-hidden rounded-[1.75rem] border bg-card shadow-panel ring-1 ${theme.ring}`}>
-          <div className={`relative h-40 w-full overflow-hidden bg-gradient-to-br ${theme.gradient} sm:h-52`}>
+        <div
+          className={`overflow-hidden rounded-[1.75rem] border bg-card shadow-panel ring-1 ${theme.ring}`}
+        >
+          <div
+            className={`relative h-40 w-full overflow-hidden bg-gradient-to-br ${theme.gradient} sm:h-52`}
+          >
             {cover ? <img src={cover} alt={name} className="size-full object-cover" /> : null}
-            <div className={`absolute inset-0 bg-gradient-to-t ${theme.softGradient}`} aria-hidden />
+            <div
+              className={`absolute inset-0 bg-gradient-to-t ${theme.softGradient}`}
+              aria-hidden
+            />
             <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md">
               <Sparkles className="size-3.5" aria-hidden />
               هوية متجر كحلي
@@ -139,7 +158,9 @@ function PublicStorePage() {
 
           <div className="space-y-4 p-4 sm:p-5">
             <div className="flex flex-wrap items-center gap-3">
-              <div className={`grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border-4 border-background bg-background shadow-lg ring-2 ${theme.ring}`}>
+              <div
+                className={`grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border-4 border-background bg-background shadow-lg ring-2 ${theme.ring}`}
+              >
                 {logo ? (
                   <img src={logo} alt={name} className="size-full object-cover" />
                 ) : (
@@ -169,18 +190,22 @@ function PublicStorePage() {
             {description ? <p className="max-w-3xl text-sm leading-7">{description}</p> : null}
 
             <div className="flex flex-wrap gap-2">
-              {store.pickup_enabled ? <Badge variant="secondary">{t("market.store.pickup")}</Badge> : null}
-              {store.delivery_enabled ? (
+              {!serviceStore && store.pickup_enabled ? (
+                <Badge variant="secondary">{t("market.store.pickup")}</Badge>
+              ) : null}
+              {!serviceStore && store.delivery_enabled ? (
                 <Badge variant="secondary">{t("market.store.merchantDelivery")}</Badge>
               ) : null}
-              {store.delivery_enabled && store.delivery_fee != null ? (
+              {!serviceStore && store.delivery_enabled && store.delivery_fee != null ? (
                 <Badge variant="outline">
-                  {t("market.store.deliveryFee")}: {money(store.delivery_fee, store.currency_code, locale)}
+                  {t("market.store.deliveryFee")}:{" "}
+                  {money(store.delivery_fee, store.currency_code, locale)}
                 </Badge>
               ) : null}
-              {store.minimum_order_amount ? (
+              {!serviceStore && store.minimum_order_amount ? (
                 <Badge variant="outline">
-                  {t("market.store.minOrder")}: {money(store.minimum_order_amount, store.currency_code, locale)}
+                  {t("market.store.minOrder")}:{" "}
+                  {money(store.minimum_order_amount, store.currency_code, locale)}
                 </Badge>
               ) : null}
             </div>
@@ -206,15 +231,25 @@ function PublicStorePage() {
                 <Button asChild variant="outline" size="sm">
                   <a href={map.href} target="_blank" rel="noreferrer noopener">
                     <MapPin className="me-1 h-4 w-4" />
-                    {map.precision === "exact" ? t("market.ad.openLocation") : t("market.ad.approximate")}
+                    {map.precision === "exact"
+                      ? t("market.ad.openLocation")
+                      : t("market.ad.approximate")}
                   </a>
                 </Button>
               ) : null}
             </div>
 
             <p className="text-xs text-muted-foreground">
-              <ShoppingBag className="me-1 inline h-3.5 w-3.5" />
-              {t("market.store.publicPage.ordersSoon")}
+              {serviceStore ? (
+                <CalendarDays className="me-1 inline h-3.5 w-3.5" />
+              ) : (
+                <ShoppingBag className="me-1 inline h-3.5 w-3.5" />
+              )}
+              {serviceStore
+                ? locale === "ar"
+                  ? "اختر الخدمة والمختص والموعد المتاح، ثم تابع الحجز من حسابك."
+                  : "Choose a service, professional and available time, then track the booking in your account."
+                : t("market.store.publicPage.ordersSoon")}
             </p>
           </div>
         </div>
@@ -246,12 +281,25 @@ function PublicStorePage() {
                 const url = item.image_path ? store.media[item.image_path] : undefined;
                 const itemName = locale === "ar" ? item.name_ar : item.name_en || item.name_ar;
                 const itemDesc =
-                  locale === "ar" ? item.description_ar : item.description_en || item.description_ar;
+                  locale === "ar"
+                    ? item.description_ar
+                    : item.description_en || item.description_ar;
+                const bookable = serviceStore && ["service", "package"].includes(item.item_type);
                 return (
-                  <div key={item.id} className={`flex gap-3 rounded-2xl border p-3 shadow-sm ${theme.surface}`}>
-                    <div className={`grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}>
+                  <div
+                    key={item.id}
+                    className={`flex gap-3 rounded-2xl border p-3 shadow-sm ${theme.surface}`}
+                  >
+                    <div
+                      className={`grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}
+                    >
                       {url ? (
-                        <img src={url} alt={itemName} loading="lazy" className="size-full object-cover" />
+                        <img
+                          src={url}
+                          alt={itemName}
+                          loading="lazy"
+                          className="size-full object-cover"
+                        />
                       ) : (
                         <ShoppingBag className="size-6 text-white/85" aria-hidden />
                       )}
@@ -263,22 +311,39 @@ function PublicStorePage() {
                           <Badge variant="outline">{t("market.store.catalog.unavailable")}</Badge>
                         ) : null}
                       </div>
-                      {itemDesc ? <p className="line-clamp-2 text-sm text-muted-foreground">{itemDesc}</p> : null}
+                      {itemDesc ? (
+                        <p className="line-clamp-2 text-sm text-muted-foreground">{itemDesc}</p>
+                      ) : null}
                       <p className={`text-sm font-black ${theme.accent}`}>
                         {money(item.base_price, item.currency_code || store.currency_code, locale)}
                       </p>
                       {item.addon_groups.length > 0 ? (
                         <p className="text-xs text-muted-foreground">
-                          {t("market.store.catalog.options")}: {item.addon_groups
-                            .map((group) => (locale === "ar" ? group.name_ar : group.name_en || group.name_ar))
+                          {t("market.store.catalog.options")}:{" "}
+                          {item.addon_groups
+                            .map((group) =>
+                              locale === "ar" ? group.name_ar : group.name_en || group.name_ar,
+                            )
                             .join(" · ")}
                         </p>
                       ) : null}
-                      {item.preparation_minutes ? (
+                      {(bookable ? item.duration_minutes : item.preparation_minutes) ? (
                         <p className="text-xs text-muted-foreground">
                           <Clock className="me-1 inline h-3.5 w-3.5" />
-                          {item.preparation_minutes} {t("market.store.publicPage.minutes")}
+                          {bookable ? item.duration_minutes : item.preparation_minutes}{" "}
+                          {t("market.store.publicPage.minutes")}
                         </p>
+                      ) : null}
+                      {bookable && item.is_available ? (
+                        <Button asChild size="sm" className="mt-2 h-8 rounded-full px-4">
+                          <Link
+                            to="/services/$slug/$itemId/book"
+                            params={{ slug: store.slug, itemId: item.id }}
+                          >
+                            <CalendarDays className="me-1 size-3.5" />
+                            {locale === "ar" ? "احجز موعدًا" : "Book appointment"}
+                          </Link>
+                        </Button>
                       ) : null}
                     </div>
                   </div>
@@ -319,7 +384,9 @@ function PublicStorePage() {
                   params={{ slug: listing.slug }}
                   className="rounded-2xl border bg-card p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel"
                 >
-                  <div className={`mb-2 grid h-28 w-full place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}>
+                  <div
+                    className={`mb-2 grid h-28 w-full place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}
+                  >
                     {listing.cover_image_url && store.media[listing.cover_image_url] ? (
                       <img
                         src={store.media[listing.cover_image_url]}

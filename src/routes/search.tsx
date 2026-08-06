@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LayoutGrid, List, Loader2, SlidersHorizontal, X } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
@@ -21,7 +21,9 @@ import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation
 import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
+import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
+import type { RealEstateSearchParams } from "@/components/marketplace/real-estate/RealEstateExperience";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -81,12 +83,16 @@ const DOMAINS: DomainDef[] = [
   { key: "business" },
 ];
 
-
-
 const SORTS = ["newest", "oldest", "price_asc", "price_desc"] as const;
 type SortKey = (typeof SORTS)[number];
 
 const VIEW_STORAGE_KEY = "tahqaq.mkt.search.view";
+
+const RealEstateExperience = lazy(() =>
+  import("@/components/marketplace/real-estate/RealEstateExperience").then((module) => ({
+    default: module.RealEstateExperience,
+  })),
+);
 
 const title = "البحث في السوق — سوق تحقّق";
 const description =
@@ -108,12 +114,7 @@ export const Route = createFileRoute("/search")({
     if (!out.domain) {
       if (search["advertiser"] === "business") out.domain = "business";
       else if (out.category === "real-estate") out.domain = "realestate";
-
-      else if (
-        out.type === "service" ||
-        out.type === "product" ||
-        out.type === "equipment_rent"
-      ) {
+      else if (out.type === "service" || out.type === "product" || out.type === "equipment_rent") {
         out.domain = out.type;
       }
     }
@@ -134,14 +135,55 @@ export const Route = createFileRoute("/search")({
 });
 
 function SearchPage() {
+  const params = Route.useSearch();
+  const realEstate = params.domain === "realestate" || params.category === "real-estate";
+
+  if (realEstate) return <RealEstateRoute params={params} />;
+  return <GenericSearchPage />;
+}
+
+function RealEstateRoute({ params }: { params: RealEstateSearchParams }) {
+  const navigate = useNavigate({ from: Route.fullPath });
+  const update = useCallback(
+    (patch: Partial<RealEstateSearchParams>) => {
+      const next: SearchParams = { ...params, ...patch };
+      for (const key of PARAM_KEYS) if (!next[key]) delete next[key];
+      void navigate({ search: next, replace: true });
+    },
+    [navigate, params],
+  );
+
+  return (
+    <Suspense fallback={<RealEstateFallback />}>
+      <RealEstateExperience params={params} onUpdate={update} />
+    </Suspense>
+  );
+}
+
+function RealEstateFallback() {
+  return (
+    <MarketShell footer="none">
+      <MarketCategoryStrip />
+      <div className="real-estate-experience bg-background">
+        <Skeleton className="h-[350px] w-full rounded-none sm:h-[430px]" />
+        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-3 py-6 sm:grid-cols-4 sm:px-5 lg:px-8">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Skeleton key={index} className="aspect-[3/4] rounded-2xl" />
+          ))}
+        </div>
+      </div>
+    </MarketShell>
+  );
+}
+
+function GenericSearchPage() {
   const { t, locale } = useI18n();
   const params = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const isMobile = useIsMobile();
 
   const domain = (DOMAINS.find((d) => d.key === params.domain)?.key ?? undefined) as
-    | DomainKey
-    | undefined;
+    DomainKey | undefined;
   const domainDef = DOMAINS.find((d) => d.key === domain);
   const sort: SortKey = (SORTS as readonly string[]).includes(params.sort ?? "")
     ? (params.sort as SortKey)
@@ -203,7 +245,6 @@ function SearchPage() {
     return slugs.length === 1 ? (slugs[0] as string) : undefined;
   }, [params.q, params.category, params.domain, t]);
 
-
   /* ── reference data ── */
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const types = useQuery({ queryKey: ["mkt", "types"], queryFn: loadListingTypes });
@@ -224,9 +265,7 @@ function SearchPage() {
     () => (categories.data ?? []).filter((c) => !c.parent_id),
     [categories.data],
   );
-  const activeRoot = roots.find(
-    (r) => r.slug === (domainDef?.categorySlug ?? params.category),
-  );
+  const activeRoot = roots.find((r) => r.slug === (domainDef?.categorySlug ?? params.category));
   /*
    * `sub` may arrive as a real id (filter sheet) or as a slug (primary-fields
    * rail, e.g. «عقار ديل» → `re-aqar-deal`). Both resolve to the same id, so
@@ -360,8 +399,6 @@ function SearchPage() {
     subId,
   ]);
 
-
-
   // Defensive de-duplication: a record published between two page fetches must
   // never render twice.
   const rows = useMemo(() => {
@@ -447,8 +484,7 @@ function SearchPage() {
     if (sheetOpen) setDraft(params);
   }, [sheetOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const draftRootSlug =
-    DOMAINS.find((d) => d.key === draft.domain)?.categorySlug ?? draft.category;
+  const draftRootSlug = DOMAINS.find((d) => d.key === draft.domain)?.categorySlug ?? draft.category;
   const draftRoot = roots.find((r) => r.slug === draftRootSlug);
   const draftSubs = (categories.data ?? []).filter(
     (c) => c.parent_id && c.parent_id === draftRoot?.id,
@@ -639,7 +675,6 @@ function SearchPage() {
         </div>
       )}
 
-
       <div className="flex gap-2 pt-1">
         <Button className="flex-1" onClick={applyFilters}>
           {t("market.search.apply")}
@@ -654,7 +689,6 @@ function SearchPage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-
         <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">
           {t("market.search.title")}
         </h1>
@@ -727,7 +761,6 @@ function SearchPage() {
                 {filterBody}
               </div>
             </SheetContent>
-
           </Sheet>
 
           <select
@@ -795,14 +828,20 @@ function SearchPage() {
                   </Button>
                 )}
                 <Button asChild size="sm">
-                  <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>{t("market.addListing")}</Link>
+                  <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
+                    {t("market.addListing")}
+                  </Link>
                 </Button>
               </div>
             </div>
           ) : businessMode ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {bizRows.map((row) => (
-                <BusinessCard key={row.business.tenant_id} business={row.business} logoUrl={row.logo} />
+                <BusinessCard
+                  key={row.business.tenant_id}
+                  business={row.business}
+                  logoUrl={row.logo}
+                />
               ))}
             </div>
           ) : view === "grid" ? (

@@ -1,13 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { ExternalLink, Loader2, Megaphone, Store, UtensilsCrossed } from "lucide-react";
+import {
+  CalendarClock,
+  ExternalLink,
+  Loader2,
+  Megaphone,
+  Store,
+  UtensilsCrossed,
+} from "lucide-react";
 import { toast } from "sonner";
 
-import {
-  FormRouteError,
-  FormRoutePending,
-} from "@/components/marketplace/FormRouteFallback";
+import { FormRouteError, FormRoutePending } from "@/components/marketplace/FormRouteFallback";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
@@ -105,6 +109,7 @@ function StoreHubPage() {
     { label: t("market.store.hub.itemsHidden"), value: data.items_hidden },
     { label: t("market.store.hub.linkedAds"), value: data.linked_listings },
   ];
+  const serviceStore = data.store_type === "services" || data.store_type === "mixed";
 
   return (
     <DashboardShell title={t("market.store.hubTitle")}>
@@ -158,7 +163,9 @@ function StoreHubPage() {
                   <UtensilsCrossed className="me-1 h-4 w-4" />
                   {data.store_type === "restaurant"
                     ? t("market.store.hub.manageMenu")
-                    : t("market.store.hub.manageProducts")}
+                    : serviceStore
+                      ? t("market.services.manageServices")
+                      : t("market.store.hub.manageProducts")}
                 </Link>
               </Button>
               <Button variant="outline" asChild>
@@ -175,6 +182,25 @@ function StoreHubPage() {
             </div>
           </CardContent>
         </Card>
+
+        {serviceStore ? (
+          <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy to-cyan-950 text-white shadow-xl">
+            <CardContent className="flex flex-wrap items-center gap-4 p-5">
+              <span className="grid size-12 place-items-center rounded-2xl bg-white/10">
+                <CalendarClock className="size-6 text-cyan-200" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-black">{t("market.services.providerCenter")}</p>
+                <p className="mt-1 text-xs leading-5 text-white/65">
+                  {t("market.services.providerCenterHint")}
+                </p>
+              </div>
+              <Button variant="secondary" asChild>
+                <Link to="/dashboard/service">{t("market.services.openProviderCenter")}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ) : null}
 
         <LinkedAdsCard accountKey={accountKey} storefrontId={data.storefront_id} />
       </div>
@@ -233,7 +259,9 @@ function LinkedAdsCard({
                   className="flex flex-wrap items-center gap-2 rounded-lg border p-3 text-sm"
                 >
                   <span className="min-w-0 flex-1 truncate">{listing.title}</span>
-                  <Badge variant="outline">{t(`market.store.hub.adStatus.${listing.status}`)}</Badge>
+                  <Badge variant="outline">
+                    {t(`market.store.hub.adStatus.${listing.status}`)}
+                  </Badge>
                   <Button
                     size="sm"
                     variant={linked ? "outline" : "default"}

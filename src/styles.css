@@ -664,6 +664,22 @@ body:has(.market-surface) .shadow-raised {
   }
 }
 
+/* The real-estate tab uses an immersive, edge-to-edge first viewport on phones.
+ * The shared mobile density pass pads every <main>, so this one surface cancels
+ * that padding without changing any other marketplace, dashboard or admin page. */
+@media (max-width: 639px) {
+  .real-estate-experience {
+    margin-inline: calc(var(--m-page-pad) * -1);
+  }
+}
+
+/* Below-the-fold real-estate rails and cards are skipped by the rendering engine
+ * until they are close to the viewport. The intrinsic size keeps scrolling stable. */
+.real-estate-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}
+
 /*
  * Tailwind's global border reset resolves `--color-border` on `:root`, so a
  * border declared without an explicit colour class would fall back to the
@@ -675,4 +691,352 @@ body:has(.market-surface) .shadow-raised {
 :where(.market-surface, body:has(.market-surface) [data-slot$="-content"])
   :where(*, *::before, *::after) {
   border-color: var(--border);
+}
+
+/* ───────────────────────────── Kahli home marketplace motion ────────────────
+ * Only transform and opacity animate. The home hero therefore keeps the visual
+ * energy of the supplied reference without shipping a looping video or adding
+ * JavaScript work to scrolling and input. */
+.market-motion-hero {
+  background:
+    radial-gradient(circle at 18% 18%, oklch(1 0 0 / 0.9), transparent 27%),
+    radial-gradient(circle at 82% 78%, oklch(0.8268 0.0177 256.29 / 0.62), transparent 31%),
+    linear-gradient(135deg, oklch(0.975 0.009 252), oklch(0.925 0.025 260));
+  contain: layout paint;
+}
+
+.market-motion-hero::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(oklch(0.2957 0.0815 264.79 / 0.14) 1px, transparent 1px);
+  background-size: 18px 18px;
+  content: "";
+  mask-image: linear-gradient(to bottom, transparent, #000 45%, transparent);
+}
+
+.market-motion-orb {
+  position: absolute;
+  z-index: -1;
+  display: block;
+  border: 1px solid oklch(1 0 0 / 0.75);
+  border-radius: 999px;
+  background: oklch(1 0 0 / 0.32);
+  animation: kahli-home-float 5.5s ease-in-out infinite;
+}
+
+.market-motion-orb-one {
+  inset-inline-start: 5%;
+  top: 19%;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.market-motion-orb-two {
+  inset-inline-end: 7%;
+  top: 9%;
+  width: 1.45rem;
+  height: 1.45rem;
+  animation-delay: -2.4s;
+}
+
+.market-motion-stage {
+  --market-motion-distance: clamp(5.25rem, 29vw, 23rem);
+  --market-motion-start: calc(-1 * var(--market-motion-distance));
+  --market-motion-end: var(--market-motion-distance);
+}
+
+[dir="rtl"] .market-motion-stage {
+  --market-motion-start: var(--market-motion-distance);
+  --market-motion-end: calc(-1 * var(--market-motion-distance));
+}
+
+.market-motion-route {
+  position: absolute;
+  right: 3.25rem;
+  bottom: 1.05rem;
+  left: 3.25rem;
+  height: 1px;
+  overflow: visible;
+  border-top: 1px dashed oklch(0.2957 0.0815 264.79 / 0.38);
+}
+
+.market-motion-route-glow {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 34%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, oklch(0.2957 0.0815 264.79 / 0.72), transparent);
+  animation: kahli-home-route-glow 4s linear infinite;
+}
+
+[dir="rtl"] .market-motion-route-glow {
+  animation-direction: reverse;
+}
+
+.market-motion-node {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  width: 3.25rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  color: oklch(0.2171 0.0682 266.19);
+  font-size: 0.55rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.market-motion-node-start {
+  inset-inline-start: 0;
+}
+
+.market-motion-node-end {
+  inset-inline-end: 0;
+}
+
+.market-motion-node-icon {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid oklch(1 0 0 / 0.92);
+  border-radius: 0.7rem;
+  background: oklch(1 0 0 / 0.86);
+  box-shadow: 0 6px 18px -10px oklch(0.2171 0.0682 266.19 / 0.5);
+  backdrop-filter: blur(6px);
+}
+
+.market-motion-node-end .market-motion-node-icon {
+  position: relative;
+}
+
+.market-motion-node-end .market-motion-node-icon::after {
+  position: absolute;
+  inset: -0.35rem;
+  z-index: -1;
+  border-radius: inherit;
+  background: oklch(0.52 0.105 165 / 0.16);
+  content: "";
+  opacity: 0;
+  animation: kahli-home-node-pulse 4s ease-out infinite;
+}
+
+.market-motion-traveller {
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  z-index: 3;
+  width: 4.4rem;
+  height: 1.85rem;
+  margin-left: -2.2rem;
+  overflow: hidden;
+  border: 1px solid oklch(1 0 0 / 0.92);
+  border-radius: 0.7rem;
+  background: oklch(1 0 0 / 0.94);
+  color: oklch(0.2171 0.0682 266.19);
+  box-shadow: 0 10px 22px -10px oklch(0.2171 0.0682 266.19 / 0.48);
+  animation: kahli-home-transfer 4s cubic-bezier(0.42, 0, 0.25, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.market-motion-kind {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  opacity: 0;
+  font-size: 0.6rem;
+  font-weight: 900;
+  white-space: nowrap;
+  animation: kahli-home-kind 16s linear infinite;
+}
+
+.market-motion-success {
+  position: absolute;
+  inset-inline-end: 2.45rem;
+  bottom: 2.5rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border: 1px solid oklch(1 0 0 / 0.92);
+  border-radius: 999px;
+  background: oklch(1 0 0 / 0.92);
+  padding: 0.25rem 0.45rem;
+  color: oklch(0.34 0.11 160);
+  font-size: 0.55rem;
+  font-weight: 900;
+  opacity: 0;
+  box-shadow: 0 7px 20px -12px oklch(0.2171 0.0682 266.19 / 0.48);
+  animation: kahli-home-success 4s ease-out infinite;
+}
+
+@keyframes kahli-home-transfer {
+  0%,
+  8% {
+    opacity: 0;
+    transform: translate3d(var(--market-motion-start), 0.2rem, 0) scale(0.82);
+  }
+  16% {
+    opacity: 1;
+    transform: translate3d(var(--market-motion-start), 0, 0) scale(1);
+  }
+  48% {
+    opacity: 1;
+    transform: translate3d(0, -0.3rem, 0) scale(1);
+  }
+  78% {
+    opacity: 1;
+    transform: translate3d(var(--market-motion-end), 0, 0) scale(1);
+  }
+  88%,
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--market-motion-end), 0.15rem, 0) scale(0.84);
+  }
+}
+
+@keyframes kahli-home-kind {
+  0%,
+  23% {
+    opacity: 1;
+  }
+  25%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes kahli-home-success {
+  0%,
+  70% {
+    opacity: 0;
+    transform: translateY(0.3rem) scale(0.78);
+  }
+  79%,
+  91% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.15rem) scale(0.92);
+  }
+}
+
+@keyframes kahli-home-node-pulse {
+  0%,
+  70% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes kahli-home-route-glow {
+  from {
+    transform: translate3d(-90%, 0, 0);
+  }
+  to {
+    transform: translate3d(285%, 0, 0);
+  }
+}
+
+@keyframes kahli-home-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -0.45rem, 0);
+  }
+}
+
+@media (min-width: 640px) {
+  .market-motion-route {
+    right: 4.5rem;
+    bottom: 1.35rem;
+    left: 4.5rem;
+  }
+
+  .market-motion-node {
+    width: 4.5rem;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+  }
+
+  .market-motion-node-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.9rem;
+  }
+
+  .market-motion-traveller {
+    bottom: 0.55rem;
+    width: 5.5rem;
+    height: 2.3rem;
+    margin-left: -2.75rem;
+    border-radius: 0.85rem;
+  }
+
+  .market-motion-kind {
+    gap: 0.4rem;
+    font-size: 0.72rem;
+  }
+
+  .market-motion-success {
+    inset-inline-end: 3.65rem;
+    bottom: 3.45rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .market-motion-home {
+    width: calc(100% + (var(--m-page-pad) * 2));
+    max-width: none;
+    margin-inline: calc(var(--m-page-pad) * -1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .market-motion-orb,
+  .market-motion-route-glow,
+  .market-motion-node-end .market-motion-node-icon::after,
+  .market-motion-success {
+    animation: none;
+  }
+
+  .market-motion-success {
+    opacity: 1;
+  }
+
+  .market-motion-traveller {
+    animation: none;
+    opacity: 1;
+    transform: translate3d(0, -0.2rem, 0);
+  }
+
+  .market-motion-kind {
+    animation: none;
+  }
+
+  .market-motion-kind:first-child {
+    opacity: 1;
+  }
 }

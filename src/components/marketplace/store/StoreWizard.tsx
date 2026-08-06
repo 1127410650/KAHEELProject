@@ -32,6 +32,7 @@ import {
   type StoreType,
   type StoreZoneRow,
 } from "@/lib/mkt-store";
+import { saveProviderSetup, useProviderSetup, type ServiceMode } from "@/lib/mkt-services";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -64,6 +65,7 @@ interface Form {
   call_enabled: boolean;
   pickup_enabled: boolean;
   merchant_delivery_enabled: boolean;
+  remote_service_enabled: boolean;
   delivery_fee: string;
   minimum_order_amount: string;
   estimated_delivery_minutes_min: string;
@@ -96,6 +98,7 @@ const EMPTY: Form = {
   call_enabled: false,
   pickup_enabled: true,
   merchant_delivery_enabled: false,
+  remote_service_enabled: false,
   delivery_fee: "0",
   minimum_order_amount: "0",
   estimated_delivery_minutes_min: "",
@@ -114,6 +117,7 @@ export function StoreWizard() {
   const { account } = useActiveAccount();
   const accountKey = account?.account_key ?? null;
   const draft = useStoreDraft(accountKey);
+  const serviceSetup = useProviderSetup(accountKey);
   const country = useAccountCountry();
   const cities = useQuery({
     queryKey: ["mkt", "cities", country.data?.id ?? ""],
@@ -146,13 +150,19 @@ export function StoreWizard() {
 
   // Restore the saved draft once: last step, values, images, location.
   useEffect(() => {
-    if (hydrated.current || draft.isLoading) return;
+    if (
+      hydrated.current ||
+      draft.isLoading ||
+      (draft.data?.store.store_type === "services" && serviceSetup.isLoading)
+    )
+      return;
     hydrated.current = true;
     const d = draft.data;
     if (!d) return;
     const s = d.store;
     setStoreId(s.id);
     setStep(Math.min(Math.max(s.draft_step || 1, 1), TOTAL_STEPS));
+    const savedModes = serviceSetup.data?.settings.service_modes ?? [];
     setForm({
       store_type: s.store_type,
       cuisine_id: s.cuisine_id ?? "",
@@ -172,8 +182,15 @@ export function StoreWizard() {
       public_phone_enabled: s.public_phone_enabled,
       chat_enabled: s.chat_enabled,
       call_enabled: s.call_enabled,
-      pickup_enabled: s.pickup_enabled,
-      merchant_delivery_enabled: s.merchant_delivery_enabled,
+      pickup_enabled:
+        s.store_type === "services" && savedModes.length > 0
+          ? savedModes.includes("at_provider")
+          : s.pickup_enabled,
+      merchant_delivery_enabled:
+        s.store_type === "services" && savedModes.length > 0
+          ? savedModes.includes("at_customer")
+          : s.merchant_delivery_enabled,
+      remote_service_enabled: savedModes.includes("remote"),
       delivery_fee: String(s.delivery_fee ?? 0),
       minimum_order_amount: String(s.minimum_order_amount ?? 0),
       estimated_delivery_minutes_min:
@@ -188,7 +205,7 @@ export function StoreWizard() {
     });
     if (d.hours.length > 0) setHours(d.hours);
     if (d.zones.length > 0) setZones(d.zones);
-  }, [draft.data, draft.isLoading]);
+  }, [draft.data, draft.isLoading, serviceSetup.data, serviceSetup.isLoading]);
 
   useEffect(() => {
     let alive = true;
@@ -262,6 +279,17 @@ export function StoreWizard() {
         delete patch["_step"];
         const id = await saveStore(accountKey, patch, target, idemKey.current);
         setStoreId(id);
+        if (form.store_type === "services") {
+          const modes: ServiceMode[] = [];
+          if (form.pickup_enabled) modes.push("at_provider");
+          if (form.merchant_delivery_enabled) modes.push("at_customer");
+          if (form.remote_service_enabled) modes.push("remote");
+          await saveProviderSetup(accountKey, {
+            category_code: serviceSetup.data?.settings.category_code ?? "other",
+            service_modes: modes,
+            professional_name: form.name_ar.trim() || "مقدم الخدمة",
+          });
+        }
         if (target >= 5 || step === 5) await saveStoreHours(id, hours);
         if (form.merchant_delivery_enabled) await saveStoreZones(id, zones);
         await queryClient.invalidateQueries({ queryKey: ["mkt", "my-storefront"] });
@@ -273,7 +301,16 @@ export function StoreWizard() {
         setSaving(false);
       }
     },
-    [accountKey, form.merchant_delivery_enabled, hours, patchFor, queryClient, step, zones],
+    [
+      accountKey,
+      form,
+      hours,
+      patchFor,
+      queryClient,
+      serviceSetup.data?.settings.category_code,
+      step,
+      zones,
+    ],
   );
 
   const next = async () => {
@@ -285,11 +322,21 @@ export function StoreWizard() {
       toast.error(t("market.store.errors.city"));
       return;
     }
-    if (step === 4 && !form.pickup_enabled && !form.merchant_delivery_enabled) {
+    if (
+      step === 4 &&
+      !form.pickup_enabled &&
+      !form.merchant_delivery_enabled &&
+      !(form.store_type === "services" && form.remote_service_enabled)
+    ) {
       toast.error(t("market.store.errors.fulfilment"));
       return;
     }
-    if (step === 4 && form.merchant_delivery_enabled && !form.delivery_declaration) {
+    if (
+      step === 4 &&
+      form.store_type !== "services" &&
+      form.merchant_delivery_enabled &&
+      !form.delivery_declaration
+    ) {
       toast.error(t("market.store.errors.declaration"));
       return;
     }
@@ -336,7 +383,11 @@ export function StoreWizard() {
       return;
     }
     set(kind === "logo" ? "logo_path" : "cover_path", result.path);
-    await saveStore(accountKey!, { [kind === "logo" ? "logo_path" : "cover_path"]: result.path }, step);
+    await saveStore(
+      accountKey!,
+      { [kind === "logo" ? "logo_path" : "cover_path"]: result.path },
+      step,
+    );
   };
 
   const pickPermit = async (file: File | null) => {
@@ -354,7 +405,11 @@ export function StoreWizard() {
   };
 
   const cityLabel = useMemo(
-    () => geoName((cities.data ?? []).find((c) => c.id === form.city_id), locale),
+    () =>
+      geoName(
+        (cities.data ?? []).find((c) => c.id === form.city_id),
+        locale,
+      ),
     [cities.data, form.city_id, locale],
   );
 
@@ -379,7 +434,13 @@ export function StoreWizard() {
         ))}
       </ol>
 
-      <h2 className="text-base font-semibold">{t(`market.store.steps.${step}`)}</h2>
+      <h2 className="text-base font-semibold">
+        {step === 4 && form.store_type === "services"
+          ? locale === "ar"
+            ? "طريقة تقديم الخدمة"
+            : "Service modes"
+          : t(`market.store.steps.${step}`)}
+      </h2>
 
       <Card>
         <CardContent className="space-y-4 pt-5">
@@ -396,7 +457,9 @@ export function StoreWizard() {
                 >
                   <Store className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <span>
-                    <span className="block text-sm font-medium">{t(`market.store.type.${type}`)}</span>
+                    <span className="block text-sm font-medium">
+                      {t(`market.store.type.${type}`)}
+                    </span>
                     <span className="block text-xs text-muted-foreground">
                       {t(`market.store.typeHint.${type}`)}
                     </span>
@@ -428,11 +491,20 @@ export function StoreWizard() {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="name_ar">{t("market.store.nameAr")}</Label>
-                <Input id="name_ar" value={form.name_ar} onChange={(e) => set("name_ar", e.target.value)} />
+                <Input
+                  id="name_ar"
+                  value={form.name_ar}
+                  onChange={(e) => set("name_ar", e.target.value)}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="name_en">{t("market.store.nameEn")}</Label>
-                <Input id="name_en" dir="ltr" value={form.name_en} onChange={(e) => set("name_en", e.target.value)} />
+                <Input
+                  id="name_en"
+                  dir="ltr"
+                  value={form.name_en}
+                  onChange={(e) => set("name_en", e.target.value)}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="desc_ar">{t("market.store.descAr")}</Label>
@@ -475,7 +547,9 @@ export function StoreWizard() {
             <div className="space-y-4">
               <p className="rounded-md bg-secondary/60 p-2 text-xs text-muted-foreground">
                 {t("market.store.countryFromAccount")}{" "}
-                <span className="font-medium text-foreground">{geoName(country.data ?? undefined, locale)}</span>
+                <span className="font-medium text-foreground">
+                  {geoName(country.data ?? undefined, locale)}
+                </span>
               </p>
               <div className="space-y-1.5">
                 <Label htmlFor="city">{t("market.store.city")}</Label>
@@ -495,7 +569,11 @@ export function StoreWizard() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="district">{t("market.store.district")}</Label>
-                <Input id="district" value={form.district} onChange={(e) => set("district", e.target.value)} />
+                <Input
+                  id="district"
+                  value={form.district}
+                  onChange={(e) => set("district", e.target.value)}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="address">{t("market.store.address")}</Label>
@@ -549,7 +627,9 @@ export function StoreWizard() {
                   id="precision"
                   className={selectClass}
                   value={form.location_precision}
-                  onChange={(e) => set("location_precision", e.target.value as "exact" | "approximate")}
+                  onChange={(e) =>
+                    set("location_precision", e.target.value as "exact" | "approximate")
+                  }
                 >
                   <option value="exact">{t("market.store.precisionExact")}</option>
                   <option value="approximate">{t("market.store.precisionApprox")}</option>
@@ -592,16 +672,42 @@ export function StoreWizard() {
           {step === 4 && (
             <div className="space-y-4">
               <ToggleRow
-                label={t("market.store.pickup")}
+                label={
+                  form.store_type === "services"
+                    ? locale === "ar"
+                      ? "في مقر مقدم الخدمة"
+                      : "At provider location"
+                    : t("market.store.pickup")
+                }
                 checked={form.pickup_enabled}
                 onChange={(v) => set("pickup_enabled", v)}
               />
               <ToggleRow
-                label={t("market.store.merchantDelivery")}
+                label={
+                  form.store_type === "services"
+                    ? locale === "ar"
+                      ? "زيارة موقع العميل"
+                      : "At customer location"
+                    : t("market.store.merchantDelivery")
+                }
                 checked={form.merchant_delivery_enabled}
                 onChange={(v) => set("merchant_delivery_enabled", v)}
               />
-              {form.merchant_delivery_enabled && (
+              {form.store_type === "services" ? (
+                <>
+                  <ToggleRow
+                    label={locale === "ar" ? "تقديم الخدمة عن بُعد" : "Remote service"}
+                    checked={form.remote_service_enabled}
+                    onChange={(value) => set("remote_service_enabled", value)}
+                  />
+                  <p className="rounded-lg bg-secondary/60 p-3 text-xs leading-5 text-muted-foreground">
+                    {locale === "ar"
+                      ? "يمكنك ضبط رسوم الزيارة والتأكيد الفوري وفاصل المواعيد لاحقًا من مركز مقدم الخدمة."
+                      : "You can set visit fees, instant confirmation and slot intervals later in the provider center."}
+                  </p>
+                </>
+              ) : null}
+              {form.store_type !== "services" && form.merchant_delivery_enabled && (
                 <div className="space-y-4 rounded-lg border border-input p-3">
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="space-y-1.5">
@@ -621,7 +727,9 @@ export function StoreWizard() {
                         id="min"
                         inputMode="decimal"
                         value={form.minimum_order_amount}
-                        onChange={(e) => set("minimum_order_amount", e.target.value.replace(/[^\d.]/g, ""))}
+                        onChange={(e) =>
+                          set("minimum_order_amount", e.target.value.replace(/[^\d.]/g, ""))
+                        }
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -652,7 +760,9 @@ export function StoreWizard() {
                         id="dphone"
                         dir="ltr"
                         value={form.delivery_phone}
-                        onChange={(e) => set("delivery_phone", e.target.value.replace(/[^\d+]/g, ""))}
+                        onChange={(e) =>
+                          set("delivery_phone", e.target.value.replace(/[^\d+]/g, ""))
+                        }
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -680,7 +790,9 @@ export function StoreWizard() {
                         accept="application/pdf,image/jpeg,image/png,image/webp"
                         onChange={(e) => void pickPermit(e.target.files?.[0] ?? null)}
                       />
-                      <p className="text-xs text-muted-foreground">{t("market.store.permitPrivate")}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {t("market.store.permitPrivate")}
+                      </p>
                     </div>
                   </div>
 
@@ -693,7 +805,9 @@ export function StoreWizard() {
                           value={zone.district ?? ""}
                           onChange={(e) =>
                             setZones((prev) =>
-                              prev.map((z, i) => (i === index ? { ...z, district: e.target.value } : z)),
+                              prev.map((z, i) =>
+                                i === index ? { ...z, district: e.target.value } : z,
+                              ),
                             )
                           }
                         />
@@ -704,7 +818,9 @@ export function StoreWizard() {
                           onChange={(e) =>
                             setZones((prev) =>
                               prev.map((z, i) =>
-                                i === index ? { ...z, delivery_fee: Number(e.target.value || 0) } : z,
+                                i === index
+                                  ? { ...z, delivery_fee: Number(e.target.value || 0) }
+                                  : z,
                               ),
                             )
                           }
@@ -775,7 +891,9 @@ export function StoreWizard() {
               {hours.map((row, index) => (
                 <div key={row.weekday} className="space-y-2 rounded-lg border border-input p-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium">{t(`market.store.weekday.${row.weekday}`)}</span>
+                    <span className="text-sm font-medium">
+                      {t(`market.store.weekday.${row.weekday}`)}
+                    </span>
                     <label className="flex items-center gap-2 text-xs">
                       <Switch
                         checked={!row.is_closed}
@@ -795,7 +913,9 @@ export function StoreWizard() {
                         value={row.opens_at ?? ""}
                         onChange={(e) =>
                           setHours((prev) =>
-                            prev.map((r, i) => (i === index ? { ...r, opens_at: e.target.value } : r)),
+                            prev.map((r, i) =>
+                              i === index ? { ...r, opens_at: e.target.value } : r,
+                            ),
                           )
                         }
                       />
@@ -804,7 +924,9 @@ export function StoreWizard() {
                         value={row.closes_at ?? ""}
                         onChange={(e) =>
                           setHours((prev) =>
-                            prev.map((r, i) => (i === index ? { ...r, closes_at: e.target.value } : r)),
+                            prev.map((r, i) =>
+                              i === index ? { ...r, closes_at: e.target.value } : r,
+                            ),
                           )
                         }
                       />
@@ -831,7 +953,11 @@ export function StoreWizard() {
               </Button>
               <ToggleRow
                 label={t("market.store.acceptsOrders")}
-                checked={form.pickup_enabled || form.merchant_delivery_enabled}
+                checked={
+                  form.pickup_enabled ||
+                  form.merchant_delivery_enabled ||
+                  (form.store_type === "services" && form.remote_service_enabled)
+                }
                 onChange={() => undefined}
                 readOnly
               />
@@ -840,15 +966,41 @@ export function StoreWizard() {
 
           {step === 6 && (
             <dl className="space-y-2 text-sm">
-              <Row label={t("market.store.type.label")} value={t(`market.store.type.${form.store_type}`)} />
+              <Row
+                label={t("market.store.type.label")}
+                value={t(`market.store.type.${form.store_type}`)}
+              />
               <Row label={t("market.store.nameAr")} value={form.name_ar} />
               <Row label={t("market.store.city")} value={cityLabel} />
               <Row label={t("market.store.district")} value={form.district} />
               <Row
-                label={t("market.store.fulfilment")}
+                label={
+                  form.store_type === "services"
+                    ? locale === "ar"
+                      ? "طريقة تقديم الخدمة"
+                      : "Service modes"
+                    : t("market.store.fulfilment")
+                }
                 value={[
-                  form.pickup_enabled ? t("market.store.pickup") : null,
-                  form.merchant_delivery_enabled ? t("market.store.merchantDelivery") : null,
+                  form.pickup_enabled
+                    ? form.store_type === "services"
+                      ? locale === "ar"
+                        ? "في مقر مقدم الخدمة"
+                        : "At provider"
+                      : t("market.store.pickup")
+                    : null,
+                  form.merchant_delivery_enabled
+                    ? form.store_type === "services"
+                      ? locale === "ar"
+                        ? "زيارة العميل"
+                        : "At customer"
+                      : t("market.store.merchantDelivery")
+                    : null,
+                  form.store_type === "services" && form.remote_service_enabled
+                    ? locale === "ar"
+                      ? "عن بُعد"
+                      : "Remote"
+                    : null,
                 ]
                   .filter(Boolean)
                   .join(" · ")}
