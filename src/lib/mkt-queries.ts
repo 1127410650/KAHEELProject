@@ -12,7 +12,27 @@ import {
   type MktUserProfile,
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
-import { ACTIVE_MARKET_ISO2, loadCountryIdByIso2 } from "@/lib/mkt-geo";
+
+/**
+ * Builds a safe `ilike` pattern for a PostgREST `or()` filter string.
+ *
+ * Commas, parentheses, dots and quotes are structural in the `or=` grammar, so
+ * raw search text must never be interpolated as-is: a crafted term could
+ * otherwise append extra filter clauses on any column. We strip the structural
+ * characters, neutralise the `like` wildcards (`%`, `_`) the user typed, and
+ * wrap the result in double quotes so the value is parsed as a single literal.
+ */
+export function safeIlikePattern(raw: string): string {
+  const cleaned = raw
+    .trim()
+    .replace(/[(),."'\\]/g, " ")
+    .replace(/[%_*]/g, " ")
+    .replace(/\s+/g, " ")
+    .slice(0, 80)
+    .trim();
+  return `"*${cleaned}*"`;
+}
+
 
 export interface ListingFilters {
   q?: string | undefined;
