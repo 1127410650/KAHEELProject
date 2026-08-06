@@ -72,7 +72,23 @@ async function movePersistence(storage: NativeSecureStorage, remember: boolean) 
 }
 
 function queuePersistenceTransition(storage: NativeSecureStorage, remember: boolean) {
-  persistenceTransition = persistenceTransition.then(() => movePersistence(storage, remember));
+  persistenceTransition = persistenceTransition
+    .catch(() => undefined)
+    .then(async () => {
+      try {
+        await movePersistence(storage, remember);
+      } catch (error) {
+        if (!remember) {
+          ephemeralSession.clear();
+          try {
+            await storage.clear(false);
+          } catch {
+            // The rejected transition remains the fail-closed signal to auth operations.
+          }
+        }
+        throw error;
+      }
+    });
   return persistenceTransition;
 }
 
@@ -82,7 +98,9 @@ function armPersistenceListener(storage: NativeSecureStorage) {
 
   window.addEventListener(AUTH_PERSISTENCE_EVENT, (event) => {
     const remember = (event as CustomEvent<{ remember?: boolean }>).detail?.remember;
-    if (typeof remember === "boolean") void queuePersistenceTransition(storage, remember);
+    if (typeof remember === "boolean") {
+      void queuePersistenceTransition(storage, remember).catch(() => undefined);
+    }
   });
 }
 
