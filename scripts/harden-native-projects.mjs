@@ -55,32 +55,6 @@ function addPlistEntry(plist, entry) {
   return `${plist.slice(0, closing)}${entry.xml}\n${plist.slice(closing)}`;
 }
 
-function clearPersistedKeychainOnFreshInstall() {
-  const appDelegatePath = "ios/App/App/AppDelegate.swift";
-  let source = readFileSync(appDelegatePath, "utf8");
-  const marker = "kahli.secureStorage.firstInstall";
-
-  if (!source.includes("import SwiftKeychainWrapper")) {
-    const importAnchor = "import Capacitor";
-    if (!source.includes(importAnchor)) {
-      throw new Error("AppDelegate.swift is missing the Capacitor import.");
-    }
-    source = source.replace(importAnchor, `${importAnchor}\nimport SwiftKeychainWrapper`);
-  }
-
-  if (!source.includes(marker)) {
-    const launchFunction = /(func application\([\s\S]*?didFinishLaunchingWithOptions[\s\S]*?\)\s*->\s*Bool\s*\{)/;
-    if (!launchFunction.test(source)) {
-      throw new Error("AppDelegate.swift has no didFinishLaunchingWithOptions function.");
-    }
-
-    const firstInstallCleanup = `\n        // Keychain survives uninstall on iOS. Clear only this app's secure-storage\n        // service when UserDefaults indicates a genuinely fresh installation.\n        let secureInstallMarker = "${marker}"\n        if !UserDefaults.standard.bool(forKey: secureInstallMarker) {\n            let keychainWrapper = KeychainWrapper(serviceName: "cap_sec")\n            keychainWrapper.removeAllKeys()\n            UserDefaults.standard.set(true, forKey: secureInstallMarker)\n        }\n`;
-    source = source.replace(launchFunction, `$1${firstInstallCleanup}`);
-  }
-
-  writeFileSync(appDelegatePath, source);
-}
-
 function hardenIos() {
   const plistPath = "ios/App/App/Info.plist";
   let plist = readFileSync(plistPath, "utf8");
@@ -106,7 +80,6 @@ function hardenIos() {
 
   for (const entry of entries) plist = addPlistEntry(plist, entry);
   writeFileSync(plistPath, plist);
-  clearPersistedKeychainOnFreshInstall();
 }
 
 hardenAndroid();
