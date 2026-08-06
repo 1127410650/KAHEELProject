@@ -3,7 +3,7 @@ name: Mobile foundation security
 on:
   push:
     branches:
-      - feat/mobile-ios-android-foundation
+      - "feat/mobile-ios-android-*"
     paths:
       - package.json
       - capacitor.config.ts
@@ -15,6 +15,7 @@ on:
       - src/lib/mobile-security.ts
       - src/integrations/supabase/client.ts
       - src/routes/__root.tsx
+      - vercel.json
       - .github/workflows/mobile-foundation.yml
   pull_request:
     branches:
@@ -30,19 +31,20 @@ on:
       - src/lib/mobile-security.ts
       - src/integrations/supabase/client.ts
       - src/routes/__root.tsx
+      - vercel.json
       - android/**
       - ios/**
       - .github/workflows/mobile-foundation.yml
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: mobile-foundation-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  verify-and-generate:
+  verify-native-foundation:
     runs-on: macos-15
     timeout-minutes: 45
     env:
@@ -52,11 +54,11 @@ jobs:
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
 
     steps:
-      - name: Check out source branch
+      - name: Check out reviewed revision
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -105,20 +107,25 @@ jobs:
           CODE_SIGNING_ALLOWED=NO
           build
 
-      - name: Commit generated native projects
-        if: >-
-          (github.event_name == 'push' && github.ref_name == 'feat/mobile-ios-android-foundation') ||
-          (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json android ios
-          if git diff --cached --quiet; then
-            echo "Native projects are already current."
-            exit 0
-          fi
-          git commit -m "chore: generate hardened native projects [skip mobile-gen]"
-          TARGET_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-          git push origin "HEAD:${TARGET_BRANCH}"
+      - name: Upload validated native projects
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-projects-${{ github.sha }}
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            package-lock.json
+            android
+            !android/.gradle/**
+            !android/local.properties
+            ios
+            !ios/App/Pods/**
+            !ios/App/DerivedData/**
+
+      - name: Upload Android debug package
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-${{ github.sha }}
+          retention-days: 7
+          if-no-files-found: error
+          path: android/app/build/outputs/apk/debug/app-debug.apk
