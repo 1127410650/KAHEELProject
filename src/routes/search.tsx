@@ -21,7 +21,6 @@ import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation
 import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
@@ -654,8 +653,6 @@ function SearchPage() {
 
   return (
     <MarketShell>
-      {/* Same primary-fields rail as the home page, from the central source. */}
-      <MarketCategoryStrip />
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
 
         <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">

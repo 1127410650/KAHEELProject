@@ -84,15 +84,18 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
           </div>
         )}
 
-        <Link
-          to={getSearchHref()}
-          aria-label={t("market.nav.search")}
-          title={t("market.nav.search")}
-          className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-market-navy-soft bg-market-navy-soft/60 text-market-navy-foreground transition-colors hover:bg-market-navy-soft sm:size-10 xl:w-auto xl:gap-1.5 xl:px-3 xl:text-sm"
-        >
-          <Search className="size-4" aria-hidden />
-          <span className="hidden xl:inline">{t("market.nav.search")}</span>
-        </Link>
+        {!showCategories && (
+          <Link
+            to={getSearchHref()}
+            aria-label={t("market.nav.search")}
+            title={t("market.nav.search")}
+            data-testid="mkt-header-search"
+            className="hidden size-9 shrink-0 items-center justify-center rounded-full border border-market-navy-soft bg-market-navy-soft/60 text-market-navy-foreground transition-colors hover:bg-market-navy-soft lg:inline-flex xl:w-auto xl:gap-1.5 xl:px-3 xl:text-sm"
+          >
+            <Search className="size-4" aria-hidden />
+            <span className="hidden xl:inline">{t("market.nav.search")}</span>
+          </Link>
+        )}
 
         <div className="min-w-0 flex-1" />
 
@@ -450,6 +453,7 @@ export function MarketShell({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useMarketSetupGate();
   const variant = footer ?? footerVariantForPath(pathname);
+  const showCategories = pathname === "/" || pathname === "/search";
 
   return (
     <div
@@ -460,7 +464,7 @@ export function MarketShell({
           : "market-surface flex min-h-dvh flex-col overflow-x-clip"
       }
     >
-      <MarketHeader showCategories={pathname === "/"} />
+      <MarketHeader showCategories={showCategories} />
       <main className="flex-1">{children}</main>
       {variant === "compact" && <MarketCompactFooter />}
       {bottomNav && <MarketBottomNav />}

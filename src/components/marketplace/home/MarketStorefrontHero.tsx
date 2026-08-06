@@ -51,6 +51,11 @@ const PROMOS: Promo[] = [
   },
 ];
 
+const TICKER_ITEMS = {
+  ar: ["إعلانات جديدة", "متاجر محلية", "تواصل مباشر", "عقارات وسيارات وأجهزة"],
+  en: ["Fresh listings", "Local stores", "Direct contact", "Property, cars and devices"],
+} as const;
+
 /**
  * Fast, CSS-only storefront opening. It borrows the dense retail hierarchy of
  * large commerce apps without copying their branding, assets or controls.
@@ -65,6 +70,7 @@ export function MarketStorefrontHero() {
         to="/search"
         search={{}}
         aria-label={t("market.nav.search")}
+        data-testid="mkt-home-search"
         className="mb-2.5 flex h-11 w-full items-center gap-2 rounded-xl border border-border bg-card px-3 text-start shadow-[0_2px_10px_rgb(15_23_42/0.06)] transition hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 sm:h-12 sm:rounded-2xl sm:px-4"
       >
         <Search className="size-[18px] shrink-0 text-market-navy" aria-hidden />
@@ -126,6 +132,50 @@ export function MarketStorefrontHero() {
           </Link>
         ))}
       </div>
+
+      <div className="relative mt-2 overflow-hidden rounded-xl border border-market-navy/10 bg-white shadow-[0_2px_10px_rgb(15_23_42/0.05)] sm:mt-3 sm:rounded-2xl">
+        <p className="sr-only">{TICKER_ITEMS[language].join("، ")}</p>
+        <div
+          aria-hidden
+          dir={language === "ar" ? "rtl" : "ltr"}
+          className="kahli-home-ticker flex w-max items-center py-2 text-[9px] font-black text-market-navy sm:py-2.5 sm:text-[10px]"
+        >
+          {[...TICKER_ITEMS[language], ...TICKER_ITEMS[language]].map((item, index) => (
+            <span key={`${item}-${index}`} className="inline-flex items-center gap-2 px-4 sm:px-6">
+              <span className="size-1.5 rounded-full bg-market-navy-soft" />
+              {item}
+            </span>
+          ))}
+        </div>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 start-0 w-10 bg-gradient-to-r from-white to-transparent sm:w-16 rtl:bg-gradient-to-l"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 end-0 w-10 bg-gradient-to-l from-white to-transparent sm:w-16 rtl:bg-gradient-to-r"
+        />
+      </div>
+
+      <style>{`
+        @keyframes kahli-home-ticker-ltr {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes kahli-home-ticker-rtl {
+          from { transform: translateX(0); }
+          to { transform: translateX(50%); }
+        }
+        .kahli-home-ticker:dir(ltr) {
+          animation: kahli-home-ticker-ltr 19s linear infinite;
+        }
+        .kahli-home-ticker:dir(rtl) {
+          animation: kahli-home-ticker-rtl 19s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .kahli-home-ticker { animation: none !important; }
+        }
+      `}</style>
     </section>
   );
 }

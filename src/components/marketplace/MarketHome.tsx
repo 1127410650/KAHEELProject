@@ -12,6 +12,7 @@ import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
 import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoShowcases";
+import { MarketDemoListings } from "@/components/marketplace/home/MarketDemoListings";
 import { MarketStorefrontHero } from "@/components/marketplace/home/MarketStorefrontHero";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { Button } from "@/components/ui/button";
@@ -76,6 +77,7 @@ export function MarketHome() {
       <MarketStorefrontHero />
       <SyriaHomeGateway />
       <MarketCategoryTiles />
+      <MarketDemoListings />
       <MarketFeaturedBanner />
       <MarketDemoShowcases />
 
