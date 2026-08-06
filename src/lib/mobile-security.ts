@@ -6,9 +6,10 @@ type Cleanup = () => void;
 export async function initializeNativeSecurity(): Promise<Cleanup> {
   if (!isNativePlatform()) return () => undefined;
 
+  const activeOrigin = window.location.origin;
   const { App } = await import("@capacitor/app");
   const appUrlListener = await App.addListener("appUrlOpen", ({ url }) => {
-    const approved = approvedMobileDeepLink(url);
+    const approved = approvedMobileDeepLink(url, activeOrigin);
     if (!approved) return;
 
     // Use the already-validated absolute URL. Reconstructing it from a pathname
