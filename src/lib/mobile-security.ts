@@ -2,6 +2,10 @@ import {
   MOBILE_PASSWORD_RECOVERY_PATH,
   MOBILE_PUBLIC_ORIGIN,
 } from "@/lib/mobile-origin";
+import {
+  hideNativePrivacyShield,
+  showNativePrivacyShield,
+} from "@/lib/mobile-privacy";
 import { isNativePlatform } from "@/lib/native-platform";
 
 const APPROVED_ORIGIN = MOBILE_PUBLIC_ORIGIN;
@@ -56,8 +60,6 @@ async function exchangeRecoveryCode(url: URL): Promise<void> {
   const code = url.searchParams.get("code");
   if (!code) return;
 
-  // Never copy an authorization code into local browser history. The code is
-  // single-use and is removed whether exchange succeeds or fails.
   url.searchParams.delete("code");
 
   if (url.pathname !== MOBILE_PASSWORD_RECOVERY_PATH || !validPkceCode(code)) return;
@@ -66,8 +68,7 @@ async function exchangeRecoveryCode(url: URL): Promise<void> {
     const { supabase } = await import("@/integrations/supabase/client");
     await supabase.auth.exchangeCodeForSession(code);
   } catch {
-    // The destination page will show the generic expired/invalid recovery state.
-    // Do not log the code or distinguish failure reasons to the user.
+    // Keep recovery failures generic and never log the single-use code.
   }
 }
 
@@ -85,9 +86,6 @@ async function handleApprovedDeepLink(rawUrl: string): Promise<void> {
   if (!approved) return;
 
   await exchangeRecoveryCode(approved);
-
-  // Keep the reviewed application bundle loaded. Only copy the sanitized route
-  // into the local Capacitor origin; never navigate the WebView to remote code.
   navigateInsideSignedBundle(approved);
 }
 
@@ -103,7 +101,19 @@ export async function initializeNativeSecurity(): Promise<Cleanup> {
     void handleApprovedDeepLink(url);
   });
 
+  const appStateListener = await App.addListener("appStateChange", ({ isActive }) => {
+    if (isActive) hideNativePrivacyShield();
+    else showNativePrivacyShield();
+  });
+
+  const pauseListener = await App.addListener("pause", showNativePrivacyShield);
+  const resumeListener = await App.addListener("resume", hideNativePrivacyShield);
+
   return () => {
+    hideNativePrivacyShield();
     void appUrlListener.remove();
+    void appStateListener.remove();
+    void pauseListener.remove();
+    void resumeListener.remove();
   };
 }
