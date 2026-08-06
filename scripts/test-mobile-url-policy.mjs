@@ -30,6 +30,17 @@ assert.equal(
   `${APPROVED_MOBILE_ORIGIN}//evil.example/auth`,
 );
 
+const immutableOrigin = "https://kahli-a1b2c3d4-reviewed.vercel.app";
+const immutableLink = approvedMobileDeepLink(
+  `${immutableOrigin}/auth/callback?code=public-test-value`,
+  immutableOrigin,
+);
+assert.equal(immutableLink?.origin, immutableOrigin);
+assert.equal(
+  approvedMobileDeepLink(`${APPROVED_MOBILE_ORIGIN}/auth`, immutableOrigin),
+  null,
+);
 assert.equal(approvedMobileDeepLink("not-a-url"), null);
+assert.equal(approvedMobileDeepLink(`${immutableOrigin}/auth`, "not-an-origin"), null);
 
 console.log("Mobile URL policy tests passed.");
