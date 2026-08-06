@@ -10,18 +10,8 @@ on:
       - package-lock.json
       - capacitor.config.ts
       - mobile-shell/**
-      - scripts/check-client-secrets.mjs
-      - scripts/check-native-release-readiness.mjs
-      - scripts/harden-native-projects.mjs
-      - scripts/test-mobile-url-policy.mjs
-      - scripts/test-native-auth-storage-policy.mjs
-      - scripts/test-supabase-url-policy.mjs
-      - src/lib/auth-storage.ts
-      - src/lib/native-platform.ts
-      - src/lib/native-auth-storage.ts
-      - src/lib/mobile-security.ts
-      - src/lib/mobile-url-policy.ts
-      - src/lib/supabase-url-policy.ts
+      - scripts/**
+      - src/lib/**
       - src/integrations/supabase/client.ts
       - src/routes/__root.tsx
       - vercel.json
@@ -34,18 +24,8 @@ on:
       - package-lock.json
       - capacitor.config.ts
       - mobile-shell/**
-      - scripts/check-client-secrets.mjs
-      - scripts/check-native-release-readiness.mjs
-      - scripts/harden-native-projects.mjs
-      - scripts/test-mobile-url-policy.mjs
-      - scripts/test-native-auth-storage-policy.mjs
-      - scripts/test-supabase-url-policy.mjs
-      - src/lib/auth-storage.ts
-      - src/lib/native-platform.ts
-      - src/lib/native-auth-storage.ts
-      - src/lib/mobile-security.ts
-      - src/lib/mobile-url-policy.ts
-      - src/lib/supabase-url-policy.ts
+      - scripts/**
+      - src/lib/**
       - src/integrations/supabase/client.ts
       - src/routes/__root.tsx
       - vercel.json
@@ -66,6 +46,7 @@ jobs:
     timeout-minutes: 45
     env:
       MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
+      MOBILE_RELEASE_BUILD: "0"
       VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
       VITE_SUPABASE_PROJECT_ID: ci-placeholder
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
