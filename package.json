@@ -16,13 +16,14 @@
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/harden-native-projects.mjs",
+    "mobile:release:check": "node scripts/check-native-release-readiness.mjs",
     "mobile:sync": "npx cap sync && npm run mobile:harden",
     "mobile:open:android": "npx cap open android",
     "mobile:open:ios": "npx cap open ios",
     "mobile:run:android": "npx cap run android",
     "mobile:run:ios": "npx cap run ios",
     "mobile:doctor": "npx cap doctor",
-    "mobile:verify": "npm run build && npx cap sync && npm run mobile:harden && npx cap doctor"
+    "mobile:verify": "npm run build && npx cap sync && npm run mobile:harden && npm run mobile:release:check && npx cap doctor"
   },
   "dependencies": {
     "@aparajita/capacitor-secure-storage": "7.1.0",
