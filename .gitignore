@@ -16,6 +16,27 @@ dist-ssr
 .nitro
 *.local
 
+# Environment files: only reviewed examples may be committed
+.env
+.env.*
+!.env.example
+!.env.mobile.example
+
+# Mobile signing material and machine-specific native files
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.cer
+*.mobileprovision
+android/local.properties
+android/keystore.properties
+android/.gradle/
+android/app/release/
+ios/App/Pods/
+ios/App/DerivedData/
+ios/App/*.xcarchive
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
