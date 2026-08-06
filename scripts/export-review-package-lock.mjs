@@ -1,11 +1,14 @@
-import { execFileSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 const REVIEW_BRANCH = "feat/mobile-ios-android-secure-foundation";
-const REVIEW_OUTPUT = "public/.well-known/mobile-review/package-lock.json";
+const REVIEW_DIR = "public/.well-known/mobile-review";
+const REVIEW_OUTPUT = `${REVIEW_DIR}/package-lock.json`;
 const CHECKSUM_OUTPUT = `${REVIEW_OUTPUT}.sha256`;
+const MODE_OUTPUT = `${REVIEW_DIR}/generation-mode.txt`;
+const PEER_ERROR_OUTPUT = `${REVIEW_DIR}/npm-peer-resolution-error.txt`;
 const NPM_REGISTRY = "https://registry.npmjs.org/";
 
 const isApprovedReviewBuild =
@@ -16,27 +19,61 @@ if (!isApprovedReviewBuild) {
   process.exit(0);
 }
 
-execFileSync(
-  "npm",
-  [
-    "install",
-    "--package-lock-only",
-    "--ignore-scripts",
-    "--no-audit",
-    "--no-fund",
-    `--registry=${NPM_REGISTRY}`,
-  ],
-  {
-    stdio: "inherit",
-    env: {
-      ...process.env,
-      npm_config_registry: NPM_REGISTRY,
-      npm_config_ignore_scripts: "true",
-      npm_config_audit: "false",
-      npm_config_fund: "false",
+mkdirSync(REVIEW_DIR, { recursive: true });
+
+const npmEnv = {
+  ...process.env,
+  npm_config_registry: NPM_REGISTRY,
+  npm_config_ignore_scripts: "true",
+  npm_config_audit: "false",
+  npm_config_fund: "false",
+  npm_config_color: "false",
+};
+
+function runLockGeneration(extraArgs = []) {
+  return spawnSync(
+    "npm",
+    [
+      "install",
+      "--package-lock-only",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      `--registry=${NPM_REGISTRY}`,
+      ...extraArgs,
+    ],
+    {
+      encoding: "utf8",
+      env: npmEnv,
+      maxBuffer: 4 * 1024 * 1024,
     },
-  },
-);
+  );
+}
+
+function sanitizedFailure(result) {
+  const combined = `${result.stdout ?? ""}\n${result.stderr ?? ""}`
+    .replaceAll(process.cwd(), "<workspace>")
+    .replace(/(npm_[A-Za-z0-9_]*(?:token|password|auth)[A-Za-z0-9_]*=)[^\s]+/gi, "$1<redacted>")
+    .replace(/(https?:\/\/)[^\s/@]+:[^\s/@]+@/g, "$1<redacted>@")
+    .trim();
+  return `${combined.slice(0, 100_000)}\n`;
+}
+
+let mode = "standard";
+let result = runLockGeneration();
+
+if (result.status !== 0) {
+  writeFileSync(PEER_ERROR_OUTPUT, sanitizedFailure(result));
+  if (existsSync("package-lock.json")) rmSync("package-lock.json");
+
+  mode = "legacy-peer-deps-for-diagnosis-only";
+  result = runLockGeneration(["--legacy-peer-deps"]);
+  if (result.status !== 0) {
+    throw new Error(`Fallback lock generation failed:\n${sanitizedFailure(result)}`);
+  }
+} else if (existsSync(PEER_ERROR_OUTPUT)) {
+  rmSync(PEER_ERROR_OUTPUT);
+}
 
 const lockText = readFileSync("package-lock.json", "utf8");
 const lock = JSON.parse(lockText);
@@ -73,8 +110,8 @@ for (const [path, version] of Object.entries(requiredMobilePackages)) {
   }
 }
 
-mkdirSync(dirname(REVIEW_OUTPUT), { recursive: true });
 writeFileSync(REVIEW_OUTPUT, lockText);
+writeFileSync(MODE_OUTPUT, `${mode}\n`);
 const checksum = createHash("sha256").update(lockText).digest("hex");
 writeFileSync(CHECKSUM_OUTPUT, `${checksum}  package-lock.json\n`);
-console.log(`Exported reviewed package lock for one-time retrieval: ${checksum}`);
+console.log(`Exported reviewed package lock (${mode}): ${checksum}`);
