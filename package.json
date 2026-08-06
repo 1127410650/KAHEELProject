@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
-    "security:client-secrets": "node scripts/check-client-secrets.mjs && node --experimental-strip-types scripts/test-mobile-url-policy.mjs && node --experimental-strip-types scripts/test-supabase-url-policy.mjs && node scripts/test-native-auth-storage-policy.mjs",
+    "security:client-secrets": "node scripts/check-client-secrets.mjs && node scripts/test-mobile-origin-policy.mjs && node --experimental-strip-types scripts/test-mobile-url-policy.mjs && node --experimental-strip-types scripts/test-supabase-url-policy.mjs && node scripts/test-native-auth-storage-policy.mjs",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/harden-native-projects.mjs",
@@ -23,7 +23,8 @@
     "mobile:run:android": "npx cap run android",
     "mobile:run:ios": "npx cap run ios",
     "mobile:doctor": "npx cap doctor",
-    "mobile:verify": "npm run build && npx cap sync && npm run mobile:harden && npm run mobile:release:check && npx cap doctor"
+    "mobile:verify": "npm run build && npx cap sync && npm run mobile:harden && npm run mobile:release:check && npx cap doctor",
+    "mobile:release:verify": "MOBILE_RELEASE_BUILD=1 npm run mobile:verify"
   },
   "dependencies": {
     "@aparajita/capacitor-secure-storage": "7.1.0",
