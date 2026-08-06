@@ -202,8 +202,9 @@ async function queryListings(
   if (filters.minPrice !== undefined) query = query.gte("price", filters.minPrice);
   if (filters.maxPrice !== undefined) query = query.lte("price", filters.maxPrice);
   if (filters.q) {
-    const term = `%${filters.q}%`;
+    const term = safeIlikePattern(filters.q);
     query = query.or(`title.ilike.${term},summary.ilike.${term},description.ilike.${term}`);
+
   }
 
   switch (filters.sort) {
@@ -316,7 +317,7 @@ export async function loadBusinessesPage(
   if (countryId) query = query.eq("country_id", countryId);
   if (filters.cityId) query = query.eq("city_id", filters.cityId);
   if (filters.q) {
-    const term = `%${filters.q}%`;
+    const term = safeIlikePattern(filters.q);
     query = query.or(
       `display_name_ar.ilike.${term},display_name_en.ilike.${term},headline.ilike.${term}`,
     );
