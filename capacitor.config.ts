@@ -30,6 +30,7 @@ const config: CapacitorConfig = {
   },
   ios: {
     allowsLinkPreview: false,
+    limitsNavigationsToAppBoundDomains: true,
     webContentsDebuggingEnabled: false,
   },
   includePlugins: [
