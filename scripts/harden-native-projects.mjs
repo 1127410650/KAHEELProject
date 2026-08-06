@@ -1,5 +1,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
+import { resolveMobileOrigin } from "./mobile-origin-policy.mjs";
+
+const approvedMobileHost = resolveMobileOrigin().hostname;
 
 function replaceApplicationAttribute(xml, name, value) {
   const applicationPattern = /<application\b([^>]*)>/;
@@ -48,8 +51,8 @@ function hardenAndroid() {
   );
 }
 
-function addPlistEntry(plist, entry) {
-  if (plist.includes(entry.marker)) return plist;
+function upsertPlistEntry(plist, entry) {
+  if (entry.pattern.test(plist)) return plist.replace(entry.pattern, entry.xml);
   const closing = plist.lastIndexOf("</dict>");
   if (closing < 0) throw new Error("Info.plist has no root dictionary.");
   return `${plist.slice(0, closing)}${entry.xml}\n${plist.slice(closing)}`;
@@ -61,24 +64,24 @@ function hardenIos() {
 
   const entries = [
     {
-      marker: "<key>NSAppTransportSecurity</key>",
-      xml: `\t<key>NSAppTransportSecurity</key>\n\t<dict>\n\t\t<key>NSAllowsArbitraryLoads</key>\n\t\t<false/>\n\t\t<key>NSAllowsArbitraryLoadsInWebContent</key>\n\t\t<false/>\n\t\t<key>NSAllowsLocalNetworking</key>\n\t\t<false/>\n\t</dict>`,
+      pattern: /\s*<key>NSAppTransportSecurity<\/key>\s*<dict>[\s\S]*?<\/dict>/,
+      xml: `\n\t<key>NSAppTransportSecurity</key>\n\t<dict>\n\t\t<key>NSAllowsArbitraryLoads</key>\n\t\t<false/>\n\t\t<key>NSAllowsArbitraryLoadsInWebContent</key>\n\t\t<false/>\n\t\t<key>NSAllowsLocalNetworking</key>\n\t\t<false/>\n\t</dict>`,
     },
     {
-      marker: "<key>WKAppBoundDomains</key>",
-      xml: `\t<key>WKAppBoundDomains</key>\n\t<array>\n\t\t<string>check-your-name-ai.vercel.app</string>\n\t</array>`,
+      pattern: /\s*<key>WKAppBoundDomains<\/key>\s*<array>[\s\S]*?<\/array>/,
+      xml: `\n\t<key>WKAppBoundDomains</key>\n\t<array>\n\t\t<string>${approvedMobileHost}</string>\n\t</array>`,
     },
     {
-      marker: "<key>UIFileSharingEnabled</key>",
-      xml: `\t<key>UIFileSharingEnabled</key>\n\t<false/>`,
+      pattern: /\s*<key>UIFileSharingEnabled<\/key>\s*<(?:true|false)\s*\/>/,
+      xml: `\n\t<key>UIFileSharingEnabled</key>\n\t<false/>`,
     },
     {
-      marker: "<key>LSSupportsOpeningDocumentsInPlace</key>",
-      xml: `\t<key>LSSupportsOpeningDocumentsInPlace</key>\n\t<false/>`,
+      pattern: /\s*<key>LSSupportsOpeningDocumentsInPlace<\/key>\s*<(?:true|false)\s*\/>/,
+      xml: `\n\t<key>LSSupportsOpeningDocumentsInPlace</key>\n\t<false/>`,
     },
   ];
 
-  for (const entry of entries) plist = addPlistEntry(plist, entry);
+  for (const entry of entries) plist = upsertPlistEntry(plist, entry);
   writeFileSync(plistPath, plist);
 }
 
