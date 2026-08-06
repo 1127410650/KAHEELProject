@@ -62,22 +62,26 @@ for (const [pattern, reason] of [
 const rootRoute = read("src/routes/__root.tsx");
 for (const [pattern, reason] of [
   [/declare const __KAHLI_NATIVE_BUILD__:\s*boolean/, "does not declare the native-build constant"],
-  [/NATIVE_CONTENT_SECURITY_POLICY/, "does not define the native Content Security Policy"],
+  [/createNativeContentSecurityPolicy/, "does not construct the native Content Security Policy"],
+  [/supabaseUrl\.protocol\s*!==\s*"https:"/, "does not reject a non-HTTPS Supabase CSP origin"],
+  [/supabaseUrl\.origin/, "does not bind native HTTP connections to the configured Supabase origin"],
+  [/realtimeUrl\.origin/, "does not bind native WebSocket connections to the configured Supabase origin"],
   [/httpEquiv:\s*"Content-Security-Policy"/, "does not emit the native CSP meta element"],
   [/"script-src 'self' 'unsafe-inline'"/, "does not restrict native scripts to the bundled application"],
-  [/"connect-src 'self' https: wss:"/, "does not constrain native network connections"],
   [/"object-src 'none'"/, "does not block plugin/object content"],
   [/"frame-src 'none'"/, "does not block embedded frames"],
   [/"base-uri 'none'"/, "does not block base URL rewriting"],
+  [/"form-action 'self'"/, "does not restrict form submissions to the local application"],
 ]) {
   requirePattern("src/routes/__root.tsx", rootRoute, pattern, reason);
 }
-rejectPattern(
-  "src/routes/__root.tsx",
-  rootRoute,
-  /unsafe-eval/,
-  "permits eval-like script execution in the native CSP",
-);
+for (const [pattern, reason] of [
+  [/unsafe-eval/, "permits eval-like script execution in the native CSP"],
+  [/"connect-src 'self' https: wss:"/, "permits connections to every HTTPS and WSS origin"],
+  [/"form-action 'self' https:"/, "permits form submission to arbitrary HTTPS origins"],
+]) {
+  rejectPattern("src/routes/__root.tsx", rootRoute, pattern, reason);
+}
 
 const capacitorConfig = read("capacitor.config.ts");
 for (const [pattern, reason] of [
@@ -116,16 +120,18 @@ if (existsSync(nativeIndexPath)) {
     [/http-equiv=["']Content-Security-Policy["']/i, "does not contain the native CSP meta element"],
     [/object-src\s+'none'/i, "does not block object content in the generated bundle"],
     [/frame-src\s+'none'/i, "does not block frames in the generated bundle"],
-    [/connect-src\s+'self'\s+https:\s+wss:/i, "does not constrain connections in the generated bundle"],
+    [/form-action\s+'self'/i, "does not restrict form submissions in the generated bundle"],
+    [/connect-src\s+'self'\s+https:\/\/[^;\s]+\s+wss:\/\/[^;\s]+/i, "does not pin generated connections to explicit HTTPS and WSS origins"],
   ]) {
     requirePattern(nativeIndexPath, nativeIndex, pattern, reason);
   }
-  rejectPattern(
-    nativeIndexPath,
-    nativeIndex,
-    /unsafe-eval/i,
-    "permits eval-like script execution in the generated bundle CSP",
-  );
+  for (const [pattern, reason] of [
+    [/unsafe-eval/i, "permits eval-like script execution in the generated bundle CSP"],
+    [/connect-src\s+'self'\s+https:\s+wss:/i, "permits connections to every HTTPS and WSS origin in the generated bundle"],
+    [/form-action\s+'self'\s+https:/i, "permits form submission to arbitrary HTTPS origins in the generated bundle"],
+  ]) {
+    rejectPattern(nativeIndexPath, nativeIndex, pattern, reason);
+  }
 }
 
 const authStorage = read("src/lib/native-auth-storage.ts");
