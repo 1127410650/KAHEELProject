@@ -1,5 +1,6 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
+// Release builds intentionally refuse preview, local-network, and alternate origins.
 const PRODUCTION_ORIGIN = "https://check-your-name-ai.vercel.app";
 const configuredOrigin = process.env.MOBILE_APP_ORIGIN?.trim() || PRODUCTION_ORIGIN;
 const appOrigin = new URL(configuredOrigin);
