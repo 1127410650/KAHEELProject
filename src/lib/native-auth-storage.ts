@@ -6,7 +6,11 @@ type AuthStorage = {
   removeItem: (key: string) => void | Promise<void>;
 };
 
+type NativeSecureStorage = typeof import("@aparajita/capacitor-secure-storage")["SecureStorage"];
+
 const MAX_AUTH_VALUE_BYTES = 128 * 1024;
+const NATIVE_KEY_PREFIX = "kahli.auth.";
+const INSTALL_MARKER = "kahli.native.secure-storage.initialized";
 
 function projectRef(): string {
   const explicit = import.meta.env["VITE_SUPABASE_PROJECT_ID"]?.trim();
@@ -43,40 +47,54 @@ function purgeLegacyBrowserCopies(): void {
   }
 }
 
-async function secureStoragePlugin() {
-  const { SecureStoragePlugin } = await import("capacitor-secure-storage-plugin");
-  return SecureStoragePlugin;
+let nativeStorageReady: Promise<NativeSecureStorage> | undefined;
+
+function configuredNativeStorage(): Promise<NativeSecureStorage> {
+  if (nativeStorageReady) return nativeStorageReady;
+
+  nativeStorageReady = (async () => {
+    const { KeychainAccess, SecureStorage } = await import(
+      "@aparajita/capacitor-secure-storage"
+    );
+
+    // Auth tokens must remain local to this device and unavailable while locked.
+    await SecureStorage.setSynchronize(false);
+    await SecureStorage.setDefaultKeychainAccess(KeychainAccess.whenUnlockedThisDeviceOnly);
+    await SecureStorage.setKeyPrefix(NATIVE_KEY_PREFIX);
+
+    // iOS Keychain can survive uninstall. localStorage does not, so a missing
+    // marker identifies a fresh installation and stale auth values are removed.
+    if (window.localStorage.getItem(INSTALL_MARKER) !== "1") {
+      await SecureStorage.clear(false);
+      window.localStorage.setItem(INSTALL_MARKER, "1");
+    }
+
+    return SecureStorage;
+  })();
+
+  return nativeStorageReady;
 }
 
 const nativeStorage: AuthStorage = {
   async getItem(key) {
     assertAllowedAuthKey(key);
-    try {
-      const plugin = await secureStoragePlugin();
-      const result = await plugin.get({ key });
-      return result.value;
-    } catch {
-      return null;
-    }
+    const storage = await configuredNativeStorage();
+    return storage.getItem(key);
   },
 
   async setItem(key, value) {
     assertAllowedAuthKey(key);
-    if (new Blob([value]).size > MAX_AUTH_VALUE_BYTES) {
+    if (new TextEncoder().encode(value).byteLength > MAX_AUTH_VALUE_BYTES) {
       throw new Error("Rejected an oversized authentication value.");
     }
-    const plugin = await secureStoragePlugin();
-    await plugin.set({ key, value });
+    const storage = await configuredNativeStorage();
+    await storage.setItem(key, value);
   },
 
   async removeItem(key) {
     assertAllowedAuthKey(key);
-    try {
-      const plugin = await secureStoragePlugin();
-      await plugin.remove({ key });
-    } catch {
-      // Removing an absent key is equivalent to a successful cleanup.
-    }
+    const storage = await configuredNativeStorage();
+    await storage.removeItem(key);
   },
 };
 
