@@ -21,7 +21,6 @@ execFileSync(
   [
     "install",
     "--package-lock-only",
-    "--legacy-peer-deps",
     "--ignore-scripts",
     "--no-audit",
     "--no-fund",
@@ -32,7 +31,6 @@ execFileSync(
     env: {
       ...process.env,
       npm_config_registry: NPM_REGISTRY,
-      npm_config_legacy_peer_deps: "true",
       npm_config_ignore_scripts: "true",
       npm_config_audit: "false",
       npm_config_fund: "false",
