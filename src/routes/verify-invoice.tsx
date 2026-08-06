@@ -9,13 +9,13 @@ export const Route = createFileRoute("/verify-invoice")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "التحقق من الفاتورة الضريبية — كحلي | Tax Invoice Verification" },
+      { title: "التحقق من الفاتورة الضريبية — كَحيل | Tax Invoice Verification" },
       {
         name: "description",
         content:
           "افحص رمز QR للفاتورة الضريبية السعودية محليًا داخل متصفحك: اسم البائع، الرقم الضريبي، التاريخ، الإجمالي والضريبة، والمنتجات والأسعار.",
       },
-      { property: "og:title", content: "التحقق من الفاتورة الضريبية — كحلي" },
+      { property: "og:title", content: "التحقق من الفاتورة الضريبية — كَحيل" },
       {
         property: "og:description",
         content: "Scan and verify a Saudi tax invoice QR code locally in your browser — free.",

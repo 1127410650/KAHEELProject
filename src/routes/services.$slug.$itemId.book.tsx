@@ -41,7 +41,7 @@ export const Route = createFileRoute("/services/$slug/$itemId/book")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "اختيار موعد الخدمة — كحلي" },
+      { title: "اختيار موعد الخدمة — كَحيل" },
       { name: "description", content: "اختر مقدم الخدمة والتاريخ والوقت ثم أكد حجزك." },
       { name: "robots", content: "noindex" },
     ],

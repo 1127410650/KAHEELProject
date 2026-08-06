@@ -41,13 +41,13 @@ export const Route = createFileRoute("/dashboard/profile")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "حسابي الشخصي — كحلي" },
+      { title: "حسابي الشخصي — كَحيل" },
       {
         name: "description",
-        content: "حرّر ملفك العام كمعلن فرد في كحلي: الاسم، النبذة، المدينة، وبيانات التواصل.",
+        content: "حرّر ملفك العام كمعلن فرد في كَحيل: الاسم، النبذة، المدينة، وبيانات التواصل.",
       },
-      { property: "og:title", content: "حسابي الشخصي — كحلي" },
-      { property: "og:description", content: "ملفك العام كمعلن فرد في كحلي." },
+      { property: "og:title", content: "حسابي الشخصي — كَحيل" },
+      { property: "og:description", content: "ملفك العام كمعلن فرد في كَحيل." },
       { name: "robots", content: "noindex" },
     ],
   }),

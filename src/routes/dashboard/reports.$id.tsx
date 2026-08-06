@@ -15,12 +15,12 @@ export const Route = createFileRoute("/dashboard/reports/$id")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "تفاصيل البلاغ — كحلي" },
+      { title: "تفاصيل البلاغ — كَحيل" },
       {
         name: "description",
-        content: "تفاصيل البلاغ المقدَّم وحالة المراجعة ومراسلة فريق مراجعة كحلي.",
+        content: "تفاصيل البلاغ المقدَّم وحالة المراجعة ومراسلة فريق مراجعة كَحيل.",
       },
-      { property: "og:title", content: "تفاصيل البلاغ — كحلي" },
+      { property: "og:title", content: "تفاصيل البلاغ — كَحيل" },
       { property: "og:description", content: "حالة البلاغ ونتيجة المراجعة والمراسلات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

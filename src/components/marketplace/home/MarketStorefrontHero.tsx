@@ -32,7 +32,7 @@ const PROMOS: Promo[] = [
     key: "everything",
     image: catDevices,
     search: {},
-    badge: { ar: "اختيارات كحلي", en: "Kahli picks" },
+    badge: { ar: "اختيارات كَحيل", en: "Kaheel picks" },
     title: { ar: "كل ما تبحث عنه أقرب", en: "Everything you need, closer" },
     description: {
       ar: "منتجات، أجهزة، متاجر وإعلانات جديدة في مكان واحد.",
@@ -132,7 +132,7 @@ export function MarketStorefrontHero() {
         </span>
         <span className="hidden shrink-0 items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[10px] font-bold text-secondary-foreground sm:inline-flex">
           <ShoppingBag className="size-3" aria-hidden />
-          {language === "ar" ? "ابحث في كحلي" : "Search Kahli"}
+          {language === "ar" ? "ابحث في كَحيل" : "Search Kaheel"}
         </span>
       </Link>
 

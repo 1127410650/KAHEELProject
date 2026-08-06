@@ -24,7 +24,7 @@ export const Route = createFileRoute("/choose-account")({
   },
   head: () => ({
     meta: [
-      { title: "جاري فتح الحساب — كحلي" },
+      { title: "جاري فتح الحساب — كَحيل" },
       { name: "robots", content: "noindex" },
     ],
   }),

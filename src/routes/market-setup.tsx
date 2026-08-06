@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const title = "إعداد حسابك في سوريا — سوق كحلي";
+const title = "إعداد حسابك في سوريا — سوق كَحيل";
 const description = "خطوة واحدة قصيرة: رقم الجوال السوري والاسم الظاهر، ثم متابعة إلى السوق.";
 
 export const Route = createFileRoute("/market-setup")({

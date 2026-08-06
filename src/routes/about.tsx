@@ -3,8 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketStaticPage } from "@/components/marketplace/MarketStaticPage";
 
-const title = "عن المنصة — كحلي";
-const description = "تعرّف على «كحلي»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
+const title = "عن المنصة — كَحيل";
+const description = "تعرّف على «كَحيل»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
 
 export const Route = createFileRoute("/about")({
   ssr: false,

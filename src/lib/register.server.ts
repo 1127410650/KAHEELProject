@@ -1,4 +1,4 @@
-// Server-only account creation. INVITE ONLY: there is no public sign-up in Kahli.
+// Server-only account creation. INVITE ONLY: there is no public sign-up in Kaheel.
 // The email always comes from the invitation row, never from the browser.
 import { createHash } from "crypto";
 

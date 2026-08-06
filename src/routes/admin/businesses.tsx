@@ -49,7 +49,7 @@ export const Route = createFileRoute("/admin/businesses")({
           "قائمة المتاجر وحالة التوثيق والأنشطة والمسؤول، مع إيقاف النشر أو رفعه بسبب مسجَّل.",
       },
       { property: "og:title", content: "إدارة المتاجر — إدارة المنصة" },
-      { property: "og:description", content: "إدارة متاجر السوق في منصة كحلي." },
+      { property: "og:description", content: "إدارة متاجر السوق في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

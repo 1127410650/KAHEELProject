@@ -26,7 +26,7 @@ export const Route = createFileRoute("/dashboard/bookings")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "حجوزاتي — كحلي" },
+      { title: "حجوزاتي — كَحيل" },
       { name: "description", content: "متابعة مواعيد الخدمات وحالاتها." },
       { name: "robots", content: "noindex" },
     ],

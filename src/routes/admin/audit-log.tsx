@@ -31,7 +31,7 @@ export const Route = createFileRoute("/admin/audit-log")({
         content: "سجل غير قابل للتعديل لكل إجراء إداري: المنفّذ، الجهة، الإجراء، السبب، والوقت بتوقيت الرياض.",
       },
       { property: "og:title", content: "سجل التدقيق — إدارة المنصة" },
-      { property: "og:description", content: "سجل التدقيق الإداري في منصة كحلي." },
+      { property: "og:description", content: "سجل التدقيق الإداري في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

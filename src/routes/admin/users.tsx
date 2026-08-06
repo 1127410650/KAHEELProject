@@ -44,7 +44,7 @@ export const Route = createFileRoute("/admin/users")({
         content: "بحث المستخدمين ومراجعة حالاتهم وتقييد أو إيقاف الحسابات بسبب مسجَّل في سجل التدقيق.",
       },
       { property: "og:title", content: "إدارة المستخدمين — إدارة المنصة" },
-      { property: "og:description", content: "إدارة حسابات المستخدمين في منصة كحلي." },
+      { property: "og:description", content: "إدارة حسابات المستخدمين في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

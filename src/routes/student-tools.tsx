@@ -16,7 +16,7 @@ export const Route = createFileRoute("/student-tools")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "دليل الطالب — كحلي" },
+      { title: "دليل الطالب — كَحيل" },
       {
         name: "description",
         content: "أدوات مجانية للطالب السوري لتلخيص النصوص وإنشاء أسئلة مراجعة محليًا.",

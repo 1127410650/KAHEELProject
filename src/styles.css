@@ -540,7 +540,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("كحلي") — navy + silver.
+ * Public marketplace surface ("كَحيل") — navy + silver.
  *
  * These tokens exist ONLY for the public marketplace chrome (header, bottom
  * nav, footer, home banner). They are additive: no existing token is changed,
@@ -561,7 +561,7 @@ body {
 }
 
 /*
- * `.market-surface` re-points the semantic tokens to the "كحلي" palette for the
+ * `.market-surface` re-points the semantic tokens to the "كَحيل" palette for the
  * whole public marketplace tree (shell, dashboard pages, auth/registration and
  * the static pages). Because every marketplace component already styles itself
  * with semantic classes (`bg-primary`, `text-muted-foreground`, `border-border`

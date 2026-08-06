@@ -24,7 +24,7 @@ import { CallOverlay } from "@/components/marketplace/CallOverlay";
  * `RootComponent`, so they sit outside its provider tree. Each therefore has to
  * mount its own `I18nProvider`, otherwise `useI18n` runs with no provider.
  *
- * Colour identity: every public/marketplace route wears the "كحلي" (navy)
+ * Colour identity: every public/marketplace route wears the "كَحيل" (navy)
  * palette, so these standalone screens carry `market-surface` too — otherwise
  * `bg-primary` falls back to the internal system's petrol colour. Admin URLs
  * keep the internal identity untouched, so the scope is decided from the path.
@@ -122,23 +122,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "كحلي — Kahli" },
+      { title: "كَحيل — Kaheel" },
       {
         name: "description",
-        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
       },
-      { property: "og:title", content: "كحلي — Kahli" },
+      { property: "og:title", content: "كَحيل — Kaheel" },
       {
         property: "og:description",
-        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
-      { name: "twitter:title", content: "كحلي — Kahli" },
+      { name: "twitter:title", content: "كَحيل — Kaheel" },
       {
         name: "twitter:description",
-        content: "منصة كحلي للسوق والخدمات والحجوزات — Kahli marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
       },
       {
         property: "og:image",
