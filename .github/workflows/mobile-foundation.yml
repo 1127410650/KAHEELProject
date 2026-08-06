@@ -11,13 +11,17 @@ on:
       - capacitor.config.ts
       - mobile-shell/**
       - scripts/check-client-secrets.mjs
+      - scripts/check-native-release-readiness.mjs
       - scripts/harden-native-projects.mjs
       - scripts/test-mobile-url-policy.mjs
       - scripts/test-native-auth-storage-policy.mjs
+      - scripts/test-supabase-url-policy.mjs
+      - src/lib/auth-storage.ts
       - src/lib/native-platform.ts
       - src/lib/native-auth-storage.ts
       - src/lib/mobile-security.ts
       - src/lib/mobile-url-policy.ts
+      - src/lib/supabase-url-policy.ts
       - src/integrations/supabase/client.ts
       - src/routes/__root.tsx
       - vercel.json
@@ -31,13 +35,17 @@ on:
       - capacitor.config.ts
       - mobile-shell/**
       - scripts/check-client-secrets.mjs
+      - scripts/check-native-release-readiness.mjs
       - scripts/harden-native-projects.mjs
       - scripts/test-mobile-url-policy.mjs
       - scripts/test-native-auth-storage-policy.mjs
+      - scripts/test-supabase-url-policy.mjs
+      - src/lib/auth-storage.ts
       - src/lib/native-platform.ts
       - src/lib/native-auth-storage.ts
       - src/lib/mobile-security.ts
       - src/lib/mobile-url-policy.ts
+      - src/lib/supabase-url-policy.ts
       - src/integrations/supabase/client.ts
       - src/routes/__root.tsx
       - vercel.json
@@ -102,6 +110,7 @@ jobs:
           if [ ! -d ios ]; then npx cap add ios; fi
           npx cap sync
           npm run mobile:harden
+          npm run mobile:release:check
           npx cap doctor
 
       - name: Build Android debug application
