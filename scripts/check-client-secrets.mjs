@@ -72,16 +72,13 @@ for (const file of trackedFiles) {
 
 const capacitorConfig = readFileSync("capacitor.config.ts", "utf8");
 for (const [pattern, reason] of [
+  [/\burl\s*:/, "loads application code from a remote WebView URL"],
+  [/allowNavigation\s*:/, "adds WebView navigation exceptions"],
   [/cleartext\s*:\s*true/, "enables cleartext traffic"],
   [/allowMixedContent\s*:\s*true/, "enables mixed HTTP/HTTPS content"],
   [/webContentsDebuggingEnabled\s*:\s*true/, "enables WebView debugging"],
 ]) {
   if (pattern.test(capacitorConfig)) report("capacitor.config.ts", reason);
-}
-
-const configuredOrigin = process.env.MOBILE_APP_ORIGIN;
-if (configuredOrigin && configuredOrigin !== "https://check-your-name-ai.vercel.app") {
-  report("environment", "sets MOBILE_APP_ORIGIN to an unapproved origin");
 }
 
 if (findings.length > 0) {
