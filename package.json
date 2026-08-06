@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
+    "security:client-secrets": "node scripts/check-client-secrets.mjs",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:sync": "npx cap sync",
@@ -19,7 +20,7 @@
     "mobile:run:android": "npx cap run android",
     "mobile:run:ios": "npx cap run ios",
     "mobile:doctor": "npx cap doctor",
-    "mobile:verify": "npm run build && npx cap sync && npx cap doctor"
+    "mobile:verify": "npm run security:client-secrets && npm run build && npx cap sync && npx cap doctor"
   },
   "dependencies": {
     "@capacitor/app": "^7.0.1",
