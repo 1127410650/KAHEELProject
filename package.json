@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "npm run security:mobile-all && vite build",
     "build:mobile": "npm run security:mobile-all && MOBILE_NATIVE_BUILD=1 vite build && MOBILE_NATIVE_ASSETS_REQUIRED=1 npm run security:mobile",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
