@@ -1,9 +1,29 @@
+import {
+  MOBILE_PASSWORD_RECOVERY_PATH,
+  MOBILE_PUBLIC_ORIGIN,
+} from "@/lib/mobile-origin";
 import { isNativePlatform } from "@/lib/native-platform";
 
-const APPROVED_ORIGIN = "https://check-your-name-ai.vercel.app";
 const MAX_DEEP_LINK_LENGTH = 4096;
+const MAX_AUTH_CODE_LENGTH = 2048;
+const FORBIDDEN_URL_CREDENTIALS = [
+  "access_token",
+  "refresh_token",
+  "provider_token",
+  "provider_refresh_token",
+];
 
 type Cleanup = () => void;
+
+function containsUrlCredential(url: URL): boolean {
+  for (const key of FORBIDDEN_URL_CREDENTIALS) {
+    if (url.searchParams.has(key)) return true;
+  }
+
+  const fragment = url.hash.startsWith("#") ? url.hash.slice(1) : url.hash;
+  const fragmentParams = new URLSearchParams(fragment);
+  return FORBIDDEN_URL_CREDENTIALS.some((key) => fragmentParams.has(key));
+}
 
 function approvedDeepLink(rawUrl: string): URL | null {
   if (!rawUrl || rawUrl.length > MAX_DEEP_LINK_LENGTH) return null;
@@ -12,22 +32,45 @@ function approvedDeepLink(rawUrl: string): URL | null {
   try {
     const url = new URL(rawUrl);
     if (url.protocol !== "https:") return null;
-    if (url.origin !== APPROVED_ORIGIN) return null;
+    if (url.origin !== MOBILE_PUBLIC_ORIGIN) return null;
     if (url.username || url.password) return null;
     if (url.port && url.port !== "443") return null;
     if (url.pathname.startsWith("//") || url.pathname.includes("\\")) return null;
+    if (containsUrlCredential(url)) return null;
     return url;
   } catch {
     return null;
   }
 }
 
-function navigateToApprovedDeepLink(rawUrl: string): void {
-  const approved = approvedDeepLink(rawUrl);
-  if (!approved) return;
+function validPkceCode(value: string): boolean {
+  return (
+    value.length >= 16 &&
+    value.length <= MAX_AUTH_CODE_LENGTH &&
+    /^[A-Za-z0-9._~-]+$/u.test(value)
+  );
+}
 
-  // Keep the signed application bundle loaded. Only copy the validated route
-  // into the local Capacitor origin; never navigate the WebView to remote code.
+async function exchangeRecoveryCode(url: URL): Promise<void> {
+  const code = url.searchParams.get("code");
+  if (!code) return;
+
+  // Never copy an authorization code into local browser history. The code is
+  // single-use and is removed whether exchange succeeds or fails.
+  url.searchParams.delete("code");
+
+  if (url.pathname !== MOBILE_PASSWORD_RECOVERY_PATH || !validPkceCode(code)) return;
+
+  try {
+    const { supabase } = await import("@/integrations/supabase/client");
+    await supabase.auth.exchangeCodeForSession(code);
+  } catch {
+    // The destination page will show the generic expired/invalid recovery state.
+    // Do not log the code or distinguish failure reasons to the user.
+  }
+}
+
+function navigateInsideSignedBundle(approved: URL): void {
   const localTarget = `${approved.pathname}${approved.search}${approved.hash}`;
   const currentTarget = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (localTarget === currentTarget) return;
@@ -36,16 +79,27 @@ function navigateToApprovedDeepLink(rawUrl: string): void {
   window.dispatchEvent(new PopStateEvent("popstate", { state: window.history.state }));
 }
 
+async function handleApprovedDeepLink(rawUrl: string): Promise<void> {
+  const approved = approvedDeepLink(rawUrl);
+  if (!approved) return;
+
+  await exchangeRecoveryCode(approved);
+
+  // Keep the reviewed application bundle loaded. Only copy the sanitized route
+  // into the local Capacitor origin; never navigate the WebView to remote code.
+  navigateInsideSignedBundle(approved);
+}
+
 export async function initializeNativeSecurity(): Promise<Cleanup> {
   if (!isNativePlatform()) return () => undefined;
 
   const { App } = await import("@capacitor/app");
 
   const launch = await App.getLaunchUrl();
-  if (launch?.url) navigateToApprovedDeepLink(launch.url);
+  if (launch?.url) await handleApprovedDeepLink(launch.url);
 
   const appUrlListener = await App.addListener("appUrlOpen", ({ url }) => {
-    navigateToApprovedDeepLink(url);
+    void handleApprovedDeepLink(url);
   });
 
   return () => {
