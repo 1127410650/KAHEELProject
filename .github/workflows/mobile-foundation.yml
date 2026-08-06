@@ -1,0 +1,124 @@
+name: Mobile foundation security
+
+on:
+  push:
+    branches:
+      - feat/mobile-ios-android-foundation
+    paths:
+      - package.json
+      - capacitor.config.ts
+      - mobile-shell/**
+      - scripts/check-client-secrets.mjs
+      - scripts/harden-native-projects.mjs
+      - src/lib/native-platform.ts
+      - src/lib/native-auth-storage.ts
+      - src/lib/mobile-security.ts
+      - src/integrations/supabase/client.ts
+      - src/routes/__root.tsx
+      - .github/workflows/mobile-foundation.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - package.json
+      - capacitor.config.ts
+      - mobile-shell/**
+      - scripts/check-client-secrets.mjs
+      - scripts/harden-native-projects.mjs
+      - src/lib/native-platform.ts
+      - src/lib/native-auth-storage.ts
+      - src/lib/mobile-security.ts
+      - src/integrations/supabase/client.ts
+      - src/routes/__root.tsx
+      - android/**
+      - ios/**
+      - .github/workflows/mobile-foundation.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mobile-foundation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-and-generate:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
+      VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
+      VITE_SUPABASE_PROJECT_ID: ci-placeholder
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
+
+    steps:
+      - name: Check out source branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install dependencies
+        run: npm install --no-fund --no-audit
+
+      - name: Reject client secrets and unsafe mobile settings
+        run: npm run security:client-secrets
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Build web application
+        run: npm run build
+
+      - name: Generate and harden native projects
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d android ]; then npx cap add android; fi
+          if [ ! -d ios ]; then npx cap add ios; fi
+          npx cap sync
+          npm run mobile:harden
+          npx cap doctor
+
+      - name: Build Android debug application
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Build iOS simulator application
+        run: >-
+          xcodebuild
+          -workspace ios/App/App.xcworkspace
+          -scheme App
+          -sdk iphonesimulator
+          -configuration Debug
+          CODE_SIGNING_ALLOWED=NO
+          build
+
+      - name: Commit generated native projects
+        if: >-
+          (github.event_name == 'push' && github.ref_name == 'feat/mobile-ios-android-foundation') ||
+          (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json android ios
+          if git diff --cached --quiet; then
+            echo "Native projects are already current."
+            exit 0
+          fi
+          git commit -m "chore: generate hardened native projects [skip mobile-gen]"
+          TARGET_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          git push origin "HEAD:${TARGET_BRANCH}"
