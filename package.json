@@ -20,6 +20,7 @@
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/configure-native-voice-permissions.mjs && node scripts/harden-native-projects.mjs && node scripts/harden-android-release.mjs",
     "mobile:release:check": "MOBILE_NATIVE_ASSETS_REQUIRED=1 MOBILE_NATIVE_PROJECTS_REQUIRED=1 npm run security:mobile",
+    "mobile:release-readiness": "node scripts/check-mobile-release-readiness.mjs",
     "mobile:sync": "npm run build:mobile && npx cap sync && npm run mobile:harden",
     "mobile:open:android": "npx cap open android",
     "mobile:open:ios": "npx cap open ios",
