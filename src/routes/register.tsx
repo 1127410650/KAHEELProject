@@ -10,7 +10,7 @@ import { registerAccount } from "@/lib/register.functions";
 import { signUpPublic } from "@/lib/signup.functions";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { landingPathForSession } from "@/lib/mkt-platform";
-import { setRememberSession } from "@/lib/auth-storage";
+import { enablePersistentSession } from "@/lib/auth-storage";
 import { useI18n } from "@/i18n";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
@@ -283,7 +283,7 @@ function PublicSignupForm() {
         return;
       }
 
-      setRememberSession(true);
+      enablePersistentSession();
       const session = await signIn({
         data: { identifier: form.phone.trim(), password: form.password },
       });

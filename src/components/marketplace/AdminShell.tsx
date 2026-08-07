@@ -278,7 +278,9 @@ function AdminSidebarBrand() {
           <ShieldCheck className="size-5" aria-hidden />
         </span>
         <span className="min-w-0">
-          <span className="block truncate text-sm font-black text-foreground">{t("admin.console")}</span>
+          <span className="block truncate text-sm font-black text-foreground">
+            {t("admin.console")}
+          </span>
           <span className="mt-0.5 block truncate text-[10px] font-medium text-muted-foreground">
             {t("admin.consoleSubtitle")}
           </span>
@@ -338,7 +340,10 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
           ) : null}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[min(20rem,92vw)] rounded-2xl border-[#dcebea] p-2 shadow-xl">
+      <PopoverContent
+        align="end"
+        className="w-[min(20rem,92vw)] rounded-2xl border-[#dcebea] p-2 shadow-xl"
+      >
         <div className="flex items-center justify-between px-2 py-2">
           <p className="text-sm font-black text-foreground">{t("admin.alerts.title")}</p>
           <span className="rounded-full bg-[#e5f6f3] px-2 py-0.5 text-[10px] font-bold text-[#087f78]">
@@ -360,7 +365,9 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
           ))}
         </div>
         {total === 0 ? (
-          <p className="px-3 py-4 text-center text-xs text-muted-foreground">{t("admin.alerts.empty")}</p>
+          <p className="px-3 py-4 text-center text-xs text-muted-foreground">
+            {t("admin.alerts.empty")}
+          </p>
         ) : null}
       </PopoverContent>
     </Popover>
@@ -392,7 +399,8 @@ export function AdminShell({
   const checking = loading || (!!session && (!identity || staffChecking));
   const admin = identity?.is_platform_admin === true && identity.restricted !== true;
   const owner = identity?.is_system_owner === true;
-  const allowed = !!session && !checking && (systemOwnerOnly ? owner : admin || staffAccess === true);
+  const allowed =
+    !!session && !checking && (systemOwnerOnly ? owner : admin || staffAccess === true);
 
   useEffect(() => {
     if (!checking && !allowed) clearAdminCache();
@@ -403,6 +411,7 @@ export function AdminShell({
   const displayName = profile?.full_name?.trim() || t("admin.owner");
 
   async function signOut() {
+    if (!window.confirm(t("market.account.signOutConfirm"))) return;
     clearAdminCache();
     await centralSignOut();
   }
@@ -488,7 +497,10 @@ export function AdminShell({
                     </span>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64 rounded-2xl border-[#dcebea] p-2 shadow-xl">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-64 rounded-2xl border-[#dcebea] p-2 shadow-xl"
+                >
                   <DropdownMenuLabel className="rounded-xl bg-[#f4f9f8] px-3 py-2 dark:bg-accent">
                     <span className="block truncate text-sm font-black">{displayName}</span>
                     <span className="mt-0.5 block text-[10px] font-medium text-muted-foreground">
@@ -535,7 +547,9 @@ export function AdminShell({
                   {title}
                 </h1>
               </div>
-              {allowed && actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+              {allowed && actions ? (
+                <div className="flex flex-wrap items-center gap-2">{actions}</div>
+              ) : null}
             </div>
 
             {checking ? (
@@ -551,7 +565,9 @@ export function AdminShell({
                 <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-secondary">
                   <ShieldAlert className="size-6 text-muted-foreground" aria-hidden />
                 </span>
-                <p className="mt-3 text-sm font-black text-foreground">{t("market.admin.denied")}</p>
+                <p className="mt-3 text-sm font-black text-foreground">
+                  {t("market.admin.denied")}
+                </p>
                 <p className="mt-1 text-xs text-muted-foreground">{t("market.admin.deniedHint")}</p>
                 <Button asChild variant="outline" size="sm" className="mt-4 rounded-xl">
                   <a href="/">{t("admin.backToMarket")}</a>
