@@ -32,6 +32,7 @@ const reviewedMobileVersions = {
   "node_modules/@capacitor/ios": "7.6.8",
   "node_modules/@capacitor/preferences": "7.0.4",
   "node_modules/capacitor-secure-storage-plugin": "0.12.0",
+  "node_modules/ajv": "8.20.0",
 };
 
 for (const [path, expectedVersion] of Object.entries(reviewedMobileVersions)) {
@@ -40,6 +41,11 @@ for (const [path, expectedVersion] of Object.entries(reviewedMobileVersions)) {
     fail(`${path} must resolve to ${expectedVersion}, received ${String(actualVersion)}`);
   }
 }
+
+const nestedAjv6 = Object.entries(lock.packages ?? {}).some(
+  ([path, entry]) => path.endsWith("/node_modules/ajv") && path !== "node_modules/ajv" && entry?.version === "6.15.0",
+);
+if (!nestedAjv6) fail("expected ESLint-compatible nested ajv@6.15.0");
 
 let resolvedCount = 0;
 for (const [path, entry] of Object.entries(lock.packages ?? {})) {
@@ -60,6 +66,28 @@ if (!/\.\.\.\(isNativeMobileBuild\s*\?\s*\{\s*nitro:\s*false\s*\}\s*:\s*\{\}\)/s
 }
 if (/defineConfig\(\{\s*nitro:\s*false\s*,/s.test(viteConfig)) {
   fail("Nitro must not be disabled unconditionally because normal web SSR still requires it");
+}
+
+const mobileSecurityScript = packageJson.scripts?.["security:mobile"] ?? "";
+if (!mobileSecurityScript.includes("node scripts/finalize-mobile-csp.mjs")) {
+  fail("security:mobile must finalize the generated native CSP before validating native assets");
+}
+
+const cspFinalizer = readFileSync("scripts/finalize-mobile-csp.mjs", "utf8");
+for (const required of [
+  "MOBILE_NATIVE_ASSETS_REQUIRED",
+  "Content-Security-Policy",
+  "object-src 'none'",
+  "frame-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "unsafe-eval",
+  "https:",
+  "wss:",
+]) {
+  if (!cspFinalizer.includes(required)) {
+    fail(`native CSP finalizer is missing reviewed control: ${required}`);
+  }
 }
 
 console.log(`Mobile reproducibility check passed (${resolvedCount} locked registry packages).`);
