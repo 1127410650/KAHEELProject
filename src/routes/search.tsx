@@ -707,134 +707,137 @@ function GenericSearchPage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">
-            {t("market.search.title")}
-          </h1>
-          {params.featured === "1" && (
-            <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
-              {t("market.homeV2.featured")}
-            </span>
-          )}
-        </div>
-
-        {/* The single search field on this page. */}
-        <form
-          className="relative mt-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            termRef.current = term;
-            update({ q: term });
-          }}
-        >
-          <Input
-            value={term}
-            onChange={(e) => setTerm(e.target.value)}
-            placeholder={t("market.search.placeholder")}
-            aria-label={t("market.search.title")}
-            className="h-11 pe-10"
-          />
-          {term !== "" && (
-            <button
-              type="button"
-              aria-label={t("market.search.clear")}
-              title={t("market.search.clear")}
-              onClick={() => {
-                setTerm("");
-                termRef.current = "";
-                update({ q: undefined });
-              }}
-              className="absolute inset-y-0 grid w-10 place-items-center text-muted-foreground end-0"
-            >
-              <X className="size-4" aria-hidden />
-            </button>
-          )}
-        </form>
-
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="shrink-0">
-                <SlidersHorizontal className="size-4" aria-hidden />
-                {t("market.search.filtersBtn")}
-                {activeFilterCount > 0 && (
-                  <span className="ms-1 grid min-w-5 place-items-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side={isMobile ? "bottom" : "right"}
-              hideClose
-              className="flex max-h-[85dvh] flex-col gap-0 p-0 sm:max-w-sm"
-            >
-              {/* Header: title + close in one flex row, no absolute positioning */}
-              <SheetHeader className="flex shrink-0 flex-row items-center justify-between gap-3 space-y-0 border-b border-border px-4 py-2 text-start">
-                <SheetTitle className="min-w-0 flex-1 truncate text-base">
-                  {t("market.filters.title")}
-                </SheetTitle>
-                <SheetClose
-                  aria-label={t("market.filters.close")}
-                  title={t("market.filters.close")}
-                  className="grid size-11 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <X className="size-5" aria-hidden />
-                </SheetClose>
-              </SheetHeader>
-              <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-                {filterBody}
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          <select
-            value={sort}
-            onChange={(e) => update({ sort: e.target.value })}
-            aria-label={t("market.filters.sort")}
-            className="h-9 min-w-0 shrink rounded-md border border-input bg-background px-2 text-sm"
-          >
-            <option value="newest">{t("market.sort.newest")}</option>
-            <option value="oldest">{t("market.sort.oldest")}</option>
-            {!businessMode && <option value="price_asc">{t("market.sort.priceAsc")}</option>}
-            {!businessMode && <option value="price_desc">{t("market.sort.priceDesc")}</option>}
-          </select>
-
-          <div className="inline-flex shrink-0 overflow-hidden rounded-md border border-input">
-            <button
-              type="button"
-              aria-label={t("market.view.grid")}
-              aria-pressed={view === "grid"}
-              onClick={() => chooseView("grid")}
-              className={
-                view === "grid"
-                  ? "bg-primary p-2 text-primary-foreground"
-                  : "p-2 text-muted-foreground"
-              }
-            >
-              <LayoutGrid className="size-4" aria-hidden />
-            </button>
-            <button
-              type="button"
-              aria-label={t("market.view.list")}
-              aria-pressed={view === "list"}
-              onClick={() => chooseView("list")}
-              className={
-                view === "list"
-                  ? "bg-primary p-2 text-primary-foreground"
-                  : "p-2 text-muted-foreground"
-              }
-            >
-              <List className="size-4" aria-hidden />
-            </button>
+        <section className="market-page-intro">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-lg font-black tracking-tight text-foreground sm:text-xl">
+              {t("market.search.title")}
+            </h1>
+            {params.featured === "1" && (
+              <span className="rounded-full bg-market-gold-soft px-3 py-1 text-xs font-bold text-market-gold">
+                {t("market.homeV2.featured")}
+              </span>
+            )}
           </div>
 
-          {!active.isLoading && (
-            <p className="ms-auto text-xs text-muted-foreground">
-              {count} {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
-            </p>
-          )}
-        </div>
+          {/* The single search field on this page. */}
+          <form
+            className="relative mt-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              termRef.current = term;
+              update({ q: term });
+            }}
+          >
+            <Input
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              placeholder={t("market.search.placeholder")}
+              aria-label={t("market.search.title")}
+              className="h-12 border-white bg-white pe-10 shadow-[0_8px_24px_rgb(11_29_67/0.07)]"
+            />
+            {term !== "" && (
+              <button
+                type="button"
+                aria-label={t("market.search.clear")}
+                title={t("market.search.clear")}
+                onClick={() => {
+                  setTerm("");
+                  termRef.current = "";
+                  update({ q: undefined });
+                }}
+                className="absolute inset-y-0 grid w-10 place-items-center text-muted-foreground end-0"
+              >
+                <X className="size-4" aria-hidden />
+              </button>
+            )}
+          </form>
+
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="shrink-0">
+                  <SlidersHorizontal className="size-4" aria-hidden />
+                  {t("market.search.filtersBtn")}
+                  {activeFilterCount > 0 && (
+                    <span className="ms-1 grid min-w-5 place-items-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side={isMobile ? "bottom" : "right"}
+                hideClose
+                className="flex max-h-[85dvh] flex-col gap-0 p-0 sm:max-w-sm"
+              >
+                {/* Header: title + close in one flex row, no absolute positioning */}
+                <SheetHeader className="flex shrink-0 flex-row items-center justify-between gap-3 space-y-0 border-b border-border px-4 py-2 text-start">
+                  <SheetTitle className="min-w-0 flex-1 truncate text-base">
+                    {t("market.filters.title")}
+                  </SheetTitle>
+                  <SheetClose
+                    aria-label={t("market.filters.close")}
+                    title={t("market.filters.close")}
+                    className="grid size-11 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <X className="size-5" aria-hidden />
+                  </SheetClose>
+                </SheetHeader>
+                <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+                  {filterBody}
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <select
+              value={sort}
+              onChange={(e) => update({ sort: e.target.value })}
+              aria-label={t("market.filters.sort")}
+              className="h-9 min-w-0 shrink rounded-xl border border-input bg-white px-2 text-sm"
+            >
+              <option value="newest">{t("market.sort.newest")}</option>
+              <option value="oldest">{t("market.sort.oldest")}</option>
+              {!businessMode && <option value="price_asc">{t("market.sort.priceAsc")}</option>}
+              {!businessMode && <option value="price_desc">{t("market.sort.priceDesc")}</option>}
+            </select>
+
+            <div className="inline-flex shrink-0 overflow-hidden rounded-xl border border-input bg-white">
+              <button
+                type="button"
+                aria-label={t("market.view.grid")}
+                aria-pressed={view === "grid"}
+                onClick={() => chooseView("grid")}
+                className={
+                  view === "grid"
+                    ? "bg-primary p-2 text-primary-foreground"
+                    : "p-2 text-muted-foreground"
+                }
+              >
+                <LayoutGrid className="size-4" aria-hidden />
+              </button>
+              <button
+                type="button"
+                aria-label={t("market.view.list")}
+                aria-pressed={view === "list"}
+                onClick={() => chooseView("list")}
+                className={
+                  view === "list"
+                    ? "bg-primary p-2 text-primary-foreground"
+                    : "p-2 text-muted-foreground"
+                }
+              >
+                <List className="size-4" aria-hidden />
+              </button>
+            </div>
+
+            {!active.isLoading && (
+              <p className="ms-auto text-xs text-muted-foreground">
+                {count}{" "}
+                {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
+              </p>
+            )}
+          </div>
+        </section>
 
         <div className="mt-4">
           {active.isLoading ? (

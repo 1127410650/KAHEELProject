@@ -102,16 +102,19 @@ function AuthPage() {
   if (!mounted) return null;
 
   return (
-    <main dir={dir} className="market-surface flex min-h-screen flex-col lg:grid lg:grid-cols-2">
+    <main
+      dir={dir}
+      className="market-surface flex min-h-screen flex-col bg-background lg:grid lg:grid-cols-2"
+    >
       {/* Desktop-only brand panel: the platform name and nothing else. */}
-      <div className="relative hidden flex-col items-center justify-center bg-market-navy p-12 lg:flex">
-        <span className="text-4xl font-bold tracking-tight text-market-navy-foreground">
+      <div className="relative hidden flex-col items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_20%_18%,rgb(84_160_255/0.3),transparent_25%),radial-gradient(circle_at_82%_78%,rgb(245_158_11/0.16),transparent_26%),linear-gradient(135deg,#07152f_0%,#0b1d43_48%,#0b5cc5_145%)] p-12 lg:flex">
+        <span className="text-5xl font-black tracking-[-0.08em] text-market-navy-foreground">
           {t("market.brand")}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] lg:px-10 lg:py-12">
-        <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col lg:justify-center">
+        <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col lg:justify-center lg:rounded-[1.75rem] lg:border lg:border-border lg:bg-white lg:p-8 lg:shadow-raised">
           <div className="mb-6 flex items-center justify-between gap-3">
             <span className="text-xl font-bold tracking-tight text-foreground lg:hidden">
               {t("market.brand")}

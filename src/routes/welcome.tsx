@@ -69,7 +69,7 @@ function WelcomePage() {
   return (
     <div
       dir={dir}
-      className="market-surface flex min-h-dvh flex-col overflow-x-clip bg-[radial-gradient(circle_at_50%_-12%,rgb(1_68_253/0.10),transparent_32%)]"
+      className="market-surface flex min-h-dvh flex-col overflow-x-clip bg-[radial-gradient(circle_at_50%_-12%,rgb(11_92_197/0.10),transparent_32%)]"
     >
       <header className="sticky top-0 z-40 border-b border-white/8 bg-market-void/90 text-white backdrop-blur-xl">
         <div className="mx-auto flex min-h-14 w-full max-w-7xl items-center gap-2 px-3 py-2 sm:px-5 lg:px-8">
@@ -109,7 +109,7 @@ function WelcomePage() {
               <span className="hidden sm:inline">{t("welcome.nav.signIn")}</span>
             </Link>
           </Button>
-          <Button asChild size="sm" className="shadow-[0_8px_24px_rgb(1_68_253/0.25)]">
+          <Button asChild size="sm" className="shadow-[0_8px_24px_rgb(11_92_197/0.25)]">
             <Link to="/register">
               <UserPlus className="size-4" aria-hidden />
               <span className="hidden sm:inline">{t("welcome.nav.signUp")}</span>
@@ -126,7 +126,7 @@ function WelcomePage() {
               aria-hidden
             />
             <span
-              className="absolute -bottom-48 -end-24 size-96 rounded-full bg-indigo-500/10 blur-3xl"
+              className="absolute -bottom-48 -end-24 size-96 rounded-full bg-market-blue/10 blur-3xl"
               aria-hidden
             />
             <div className="relative grid gap-7 px-5 py-8 sm:px-8 sm:py-11 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10 lg:px-12 lg:py-14">

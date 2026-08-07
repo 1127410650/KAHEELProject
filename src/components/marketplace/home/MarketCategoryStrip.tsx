@@ -74,13 +74,13 @@ export function MarketCategoryStrip() {
   const chipClass =
     "relative flex size-[62px] shrink-0 snap-start flex-col items-center justify-center gap-1 overflow-hidden rounded-full border px-1.5 text-center text-[8px] font-black leading-[1.12] backdrop-blur transition duration-300 after:pointer-events-none after:absolute after:inset-[3px] after:rounded-full after:border after:border-current after:opacity-[0.08] sm:size-[68px] sm:text-[9px] lg:size-[72px] lg:text-[10px]";
   const idle =
-    "border-white/75 bg-white/[0.96] text-market-navy shadow-[0_7px_18px_rgb(1_10_24/0.30),inset_0_1px_0_rgb(255_255_255/0.95)] hover:-translate-y-1 hover:border-white hover:bg-white";
+    "border-white/80 bg-white/[0.97] text-market-navy shadow-[0_7px_18px_rgb(7_21_47/0.22),inset_0_1px_0_rgb(255_255_255/0.95)] hover:-translate-y-1 hover:border-white hover:bg-white";
   const active =
-    "border-white/90 bg-[linear-gradient(145deg,#2b5e90,#0a284d)] text-white shadow-[0_8px_22px_rgb(0_0_0/0.32),inset_0_1px_0_rgb(255_255_255/0.28)]";
+    "border-white/90 bg-[linear-gradient(145deg,#1671df,#08499a)] text-white shadow-[0_8px_22px_rgb(11_92_197/0.32),inset_0_1px_0_rgb(255_255_255/0.28)]";
   const loopingFields = Array.from({ length: 3 }, () => PRIMARY_FIELDS).flat();
 
   return (
-    <div className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_20%_-40%,rgba(128,174,220,0.44),transparent_38%),linear-gradient(105deg,#020e21_0%,#08284d_48%,#04162f_100%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]">
+    <div className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_18%_-45%,rgb(84_160_255/0.48),transparent_39%),linear-gradient(105deg,#07152f_0%,#0b1d43_48%,#0b5cc5_135%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.08)]">
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"

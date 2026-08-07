@@ -549,19 +549,24 @@ body {
  * internal pages references a `market-*` utility.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: #041a36;
-  --color-market-navy-dark: #020e21;
-  --color-market-navy-soft: #123f6e;
+  --color-market-navy: #0b1d43;
+  --color-market-navy-dark: #07152f;
+  --color-market-navy-soft: #163a67;
   --color-market-navy-foreground: #ffffff;
-  --color-market-electric: #0a315d;
-  --color-market-electric-dark: #020e21;
-  --color-market-electric-bright: #d7e8f6;
-  --color-market-void: #020e21;
-  --color-market-panel: #08294f;
-  --color-market-panel-soft: #123c67;
+  --color-market-blue: #0b5cc5;
+  --color-market-blue-dark: #08499a;
+  --color-market-blue-soft: #e8f2ff;
+  --color-market-gold: #f59e0b;
+  --color-market-gold-soft: #fff4de;
+  --color-market-electric: #0b5cc5;
+  --color-market-electric-dark: #08499a;
+  --color-market-electric-bright: #e8f2ff;
+  --color-market-void: #07152f;
+  --color-market-panel: #102d58;
+  --color-market-panel-soft: #173a68;
   --color-market-silver: #ffffff;
-  --color-market-silver-line: #d3deea;
-  --color-market-silver-muted: #6f8095;
+  --color-market-silver-line: #dce5f0;
+  --color-market-silver-muted: #65758b;
 }
 
 /*
@@ -577,47 +582,47 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  --background: #f7f9fc;
-  --foreground: #041a36;
+  --background: #f6f8fc;
+  --foreground: #0b1d43;
   --card: #ffffff;
-  --card-foreground: #041a36;
+  --card-foreground: #0b1d43;
   --popover: #ffffff;
-  --popover-foreground: #041a36;
+  --popover-foreground: #0b1d43;
 
-  --primary: #041a36;
+  --primary: #0b5cc5;
   --primary-foreground: #ffffff;
-  --primary-dark: #020e21;
-  --primary-pressed: #010a18;
+  --primary-dark: #08499a;
+  --primary-pressed: #073b7d;
 
-  --secondary: #ebf1f7;
-  --secondary-foreground: #041a36;
+  --secondary: #edf3fb;
+  --secondary-foreground: #0b1d43;
   --muted: #eef3f8;
-  --muted-foreground: #607389;
-  --accent: #e4ecf4;
-  --accent-foreground: #041a36;
+  --muted-foreground: #65758b;
+  --accent: #e8f2ff;
+  --accent-foreground: #0b1d43;
 
-  --border: #d3deea;
-  --input: #c4d2e1;
-  --ring: #2a608f;
+  --border: #dce5f0;
+  --input: #cbd8e7;
+  --ring: #0b5cc5;
 
-  --gold: #041a36;
-  --gold-dark: #020e21;
-  --gold-soft: #e4ecf4;
-  --gold-foreground: #ffffff;
+  --gold: #f59e0b;
+  --gold-dark: #c77b15;
+  --gold-soft: #fff4de;
+  --gold-foreground: #59451f;
 
   --sidebar: #ffffff;
   --sidebar-foreground: #041a36;
   --sidebar-accent: #e4ecf4;
   --sidebar-accent-foreground: #041a36;
   --sidebar-border: #d3deea;
-  --sidebar-primary: #041a36;
+  --sidebar-primary: #0b5cc5;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #2a608f;
+  --sidebar-ring: #0b5cc5;
 
-  --chart-1: #041a36;
-  --chart-2: #245783;
-  --chart-3: #5f7d9c;
-  --chart-4: #95a9bd;
+  --chart-1: #0b5cc5;
+  --chart-2: #0b1d43;
+  --chart-3: #f59e0b;
+  --chart-4: #16866e;
 
   background-color: var(--background);
   color: var(--foreground);
@@ -632,8 +637,8 @@ body:has(.market-surface) {
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(3 19 41 / 0.08), 0 10px 24px -16px rgb(3 19 41 / 0.25);
-  --shadow-raised: 0 1px 3px rgb(3 19 41 / 0.1), 0 18px 42px -24px rgb(3 19 41 / 0.32);
+  --shadow-panel: 0 1px 2px rgb(11 29 67 / 0.05), 0 12px 30px -20px rgb(11 29 67 / 0.22);
+  --shadow-raised: 0 2px 5px rgb(11 29 67 / 0.08), 0 22px 52px -28px rgb(11 29 67 / 0.3);
 }
 
 .market-surface .shadow-panel,
@@ -648,6 +653,96 @@ body:has(.market-surface) .shadow-raised {
   box-shadow:
     0 1px 3px rgb(3 19 41 / 0.1),
     0 18px 42px -24px rgb(3 19 41 / 0.32) !important;
+}
+
+/* One contemporary visual language for every Kaheel marketplace/account page.
+ * Admin pages never carry `.market-surface`, so their established console
+ * layout and status palette remain isolated. */
+.market-shell > main {
+  background:
+    radial-gradient(circle at 92% 0%, rgb(11 92 197 / 0.065), transparent 24rem),
+    radial-gradient(circle at 8% 18%, rgb(245 158 11 / 0.045), transparent 20rem),
+    linear-gradient(180deg, #f9fbff 0%, var(--background) 38%, #f8fafc 100%);
+}
+
+.market-surface ::selection {
+  background: rgb(11 92 197 / 0.18);
+  color: #0b1d43;
+}
+
+.market-surface :where([data-slot="card"]) {
+  border-color: color-mix(in srgb, var(--border) 88%, white);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-panel);
+}
+
+.market-surface :where(.bg-card.border.border-border) {
+  border-color: color-mix(in srgb, var(--border) 88%, white);
+  box-shadow: var(--shadow-panel);
+}
+
+.market-surface :where([data-slot="button"]) {
+  border-radius: 0.875rem;
+  font-weight: 700;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.market-surface :where([data-slot="button"]):not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.market-surface :where([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]) {
+  border-radius: 0.875rem;
+  background: rgb(255 255 255 / 0.92);
+  box-shadow: 0 1px 2px rgb(11 29 67 / 0.035);
+}
+
+.market-surface
+  :where([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]):focus-visible {
+  border-color: rgb(11 92 197 / 0.72);
+  box-shadow: 0 0 0 3px rgb(11 92 197 / 0.12);
+}
+
+.market-page-intro {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, white);
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(circle at 94% 8%, rgb(11 92 197 / 0.12), transparent 9rem),
+    linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+  box-shadow: var(--shadow-panel);
+  padding: 1.1rem 1.2rem;
+}
+
+.market-page-intro::before {
+  position: absolute;
+  inset-block: 0.95rem;
+  inset-inline-start: 0;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--primary), #54a0ff);
+  content: "";
+}
+
+.market-section {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, white);
+  border-radius: 1.15rem;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: var(--shadow-panel);
+}
+
+@media (max-width: 639px) {
+  .market-page-intro {
+    border-radius: 1.1rem;
+    padding: 0.9rem 1rem;
+  }
 }
 
 /* Hide the horizontal scrollbar of the marketplace category rail without

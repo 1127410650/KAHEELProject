@@ -18,7 +18,7 @@ export function MarketStorefrontHero() {
         search={{}}
         aria-label={t("market.nav.search")}
         data-testid="mkt-home-search"
-        className="group mx-auto flex min-h-10 w-full max-w-[430px] items-center gap-2 rounded-xl border border-market-silver-line bg-white px-3 text-start text-[11px] font-bold text-market-navy shadow-[0_5px_16px_rgb(8_35_70/0.10)] transition hover:border-market-navy/40 hover:bg-market-panel-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-navy sm:min-h-11 sm:text-xs"
+        className="group mx-auto flex min-h-10 w-full max-w-[430px] items-center gap-2 rounded-xl border border-market-silver-line bg-white px-3 text-start text-[11px] font-bold text-market-navy shadow-[0_5px_16px_rgb(8_35_70/0.10)] transition hover:border-market-blue/40 hover:bg-market-blue-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-blue sm:min-h-11 sm:text-xs"
       >
         <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-market-navy/8 text-market-navy transition group-hover:bg-market-navy group-hover:text-white">
           <Search className="size-4" aria-hidden />

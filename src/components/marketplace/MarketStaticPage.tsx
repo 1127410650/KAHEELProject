@@ -15,22 +15,26 @@ export function MarketStaticPage({
   const { t } = useI18n();
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pb-8 pt-6">
-      <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-        {t(`market.pages.${pageKey}.title`)}
-      </h1>
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-        {t(`market.pages.${pageKey}.body`)}
-      </p>
-      {email ? (
-        <a
-          href={`mailto:${email}`}
-          dir="ltr"
-          className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
-        >
-          {email}
-        </a>
-      ) : null}
+    <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
+      <header className="market-page-intro">
+        <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          {t(`market.pages.${pageKey}.title`)}
+        </h1>
+      </header>
+      <article className="market-section mt-4 p-5 sm:p-7">
+        <p className="text-sm leading-8 text-muted-foreground">
+          {t(`market.pages.${pageKey}.body`)}
+        </p>
+        {email ? (
+          <a
+            href={`mailto:${email}`}
+            dir="ltr"
+            className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-market-blue-soft px-4 text-sm font-bold text-primary transition hover:bg-primary hover:text-primary-foreground"
+          >
+            {email}
+          </a>
+        ) : null}
+      </article>
     </div>
   );
 }

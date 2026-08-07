@@ -11,7 +11,6 @@ import { AccessDenied } from "@/components/AccessDenied";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
-
 /**
  * Account pages share only a title and a reading column. Navigation between them
  * lives in one place — the unified account menu in the header — so no page
@@ -60,19 +59,19 @@ export function DashboardShell({
     <MarketShell footer="none">
       <div
         className={
-          narrow
-            ? "mx-auto w-full max-w-[920px] px-4 py-6"
-            : "mx-auto w-full max-w-7xl px-4 py-6"
+          narrow ? "mx-auto w-full max-w-[920px] px-4 py-6" : "mx-auto w-full max-w-7xl px-4 py-6"
         }
       >
-        <h1 className="text-xl font-bold text-foreground sm:text-2xl">{title}</h1>
-        {account && (
-          <p className="mt-1 truncate text-xs text-muted-foreground">
-            {t("market.entry.workingUnder", {
-              name: account.name || t("market.account.fallbackName"),
-            })}
-          </p>
-        )}
+        <header className="market-page-intro">
+          <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">{title}</h1>
+          {account && (
+            <p className="mt-1 truncate text-xs text-muted-foreground">
+              {t("market.entry.workingUnder", {
+                name: account.name || t("market.account.fallbackName"),
+              })}
+            </p>
+          )}
+        </header>
 
         <div className="mt-5">
           {unavailable && !account ? (
@@ -91,7 +90,6 @@ export function DashboardShell({
                 {t("market.entry.retry")}
               </Button>
             </div>
-
           ) : !ready ? (
             <Skeleton className="h-40 w-full rounded-xl" />
           ) : allowed ? (
@@ -100,9 +98,7 @@ export function DashboardShell({
             <AccessDenied reason="forbidden" />
           )}
         </div>
-
       </div>
     </MarketShell>
   );
 }
-

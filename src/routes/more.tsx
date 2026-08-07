@@ -137,15 +137,17 @@ function MorePage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-3xl px-4 pb-6 pt-6">
-        <h1 className="text-xl font-bold text-foreground">{t("market.more.title")}</h1>
-        <p className="mt-1 text-xs text-muted-foreground">{t("market.more.subtitle")}</p>
+        <header className="market-page-intro">
+          <h1 className="text-xl font-black text-foreground">{t("market.more.title")}</h1>
+          <p className="mt-1 text-xs text-muted-foreground">{t("market.more.subtitle")}</p>
+        </header>
 
         {session && active ? (
           <>
             {/* Active account card — display only, no sensitive data. */}
             <section ref={accountsRef} className="mt-5 scroll-mt-20">
               <h2 className="mb-2 text-sm font-bold text-foreground">{t("market.more.account")}</h2>
-              <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+              <div className="market-section flex items-center gap-3 p-3.5">
                 {active.avatar_url ? (
                   <img
                     src={active.avatar_url}
@@ -301,7 +303,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section className="mt-5">
       <h2 className="mb-2 text-sm font-bold text-foreground">{title}</h2>
-      <div className="overflow-hidden rounded-xl border border-border bg-card">{children}</div>
+      <div className="market-section">{children}</div>
     </section>
   );
 }

@@ -24,7 +24,7 @@ export function BusinessCard({
       : business.display_name_en || business.display_name_ar;
 
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card p-3 shadow-[0_1px_2px_rgb(0_0_0/0.03)]">
+    <div className="flex flex-col rounded-2xl border border-border bg-card p-3.5 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised">
       <div className="flex items-start gap-3">
         <span className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-secondary text-muted-foreground">
           {logoUrl ? (
@@ -60,7 +60,7 @@ export function BusinessCard({
       <Link
         to="/businesses/$slug"
         params={{ slug: business.slug }}
-        className="mt-3 inline-flex h-8 items-center justify-center rounded-md border border-input text-xs font-medium text-foreground hover:border-primary/50 hover:text-primary"
+        className="mt-3 inline-flex h-9 items-center justify-center rounded-xl border border-input bg-background text-xs font-bold text-foreground transition hover:border-primary/50 hover:bg-market-blue-soft hover:text-primary"
       >
         {t("market.business.visit")}
       </Link>

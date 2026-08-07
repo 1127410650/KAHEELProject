@@ -58,36 +58,32 @@ export function MarketHeader({
     <>
       <header
         ref={headerRef}
-        className={
-          home
-            ? "fixed inset-x-0 top-0 z-40 bg-white/95 text-[#0b1d43] shadow-[0_3px_16px_rgb(11_29_67/0.06)] backdrop-blur-sm"
-            : "fixed inset-x-0 top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] text-market-navy-foreground shadow-[0_4px_14px_rgb(2_14_33/0.16)]"
-        }
+        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-market-silver-line/80 bg-white/94 text-market-navy shadow-[0_5px_24px_rgb(11_29_67/0.07)] backdrop-blur-xl"
       >
         <div
           className={
             home
               ? "mx-auto grid min-h-[74px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-5 lg:px-8"
-              : "mx-auto grid h-11 w-full max-w-[1240px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:h-12 sm:px-4 lg:px-6"
+              : "mx-auto grid min-h-[62px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[66px] sm:px-5 lg:px-8"
           }
         >
           {home ? (
             <>
               <a
                 href="/search"
-                className="flex min-w-0 items-center gap-2 justify-self-start rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-[#0b1d43]"
+                className="flex min-w-0 items-center gap-2 justify-self-start rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-market-blue"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-6 shrink-0" aria-hidden />
                 <span className="min-w-0">
                   <strong className="block truncate text-sm font-black">{locationLabel}</strong>
-                  <span className="block truncate text-[10px] text-[#6b7280]">
+                  <span className="block truncate text-[10px] text-market-silver-muted">
                     {t("market.homeV2.locationNow")}
                   </span>
                 </span>
               </a>
               <Link to="/" className="justify-self-center" aria-label={t("market.brand")}>
-                <span className="text-3xl font-black tracking-[-0.08em] text-[#0b1d43] sm:text-4xl">
+                <span className="text-3xl font-black tracking-[-0.08em] text-market-navy sm:text-4xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -95,12 +91,12 @@ export function MarketHeader({
                 href={
                   session ? "/dashboard/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                 }
-                className="relative grid size-11 justify-self-end place-items-center rounded-full outline-none hover:bg-[#f2f5f9] focus-visible:ring-2 focus-visible:ring-[#0b1d43]"
+                className="relative grid size-11 justify-self-end place-items-center rounded-full outline-none transition hover:bg-market-blue-soft focus-visible:ring-2 focus-visible:ring-market-blue"
                 aria-label={t("market.bottomNav.alerts")}
               >
                 <Bell className="size-6" aria-hidden />
                 {(unreadAlerts.data ?? 0) > 0 && (
-                  <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-[#ef4444] px-1 text-center text-[10px] font-bold leading-5 text-white">
+                  <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
                     {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
                   </span>
                 )}
@@ -109,12 +105,12 @@ export function MarketHeader({
           ) : (
             <>
               <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
-                <span className="text-[15px] font-black leading-none tracking-tight text-market-navy-foreground sm:text-base">
+                <span className="text-xl font-black leading-none tracking-[-0.06em] text-market-navy sm:text-2xl">
                   {t("market.brand")}
                 </span>
               </Link>
               <div
-                className="flex min-w-0 items-center justify-center gap-1.5 px-1 text-market-silver"
+                className="flex min-w-0 items-center justify-center gap-1.5 px-1 text-market-silver-muted"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
@@ -125,7 +121,7 @@ export function MarketHeader({
               <a
                 href={addHref}
                 aria-label={t("market.addListing")}
-                className="grid size-8 shrink-0 place-items-center rounded-full bg-market-navy-foreground text-market-navy shadow-sm transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-navy-foreground/80 sm:size-9"
+                className="grid size-10 shrink-0 justify-self-end place-items-center rounded-full bg-market-blue text-white shadow-[0_8px_20px_rgb(11_92_197/0.24)] transition hover:-translate-y-0.5 hover:bg-market-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-blue focus-visible:ring-offset-2 sm:size-11"
               >
                 <Plus className="size-5" aria-hidden />
               </a>
@@ -134,14 +130,16 @@ export function MarketHeader({
         </div>
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
-          <div className="border-t border-market-navy-soft bg-market-navy-dark px-3 py-1 text-center text-[11px] font-medium text-market-silver sm:text-xs">
+          <div className="border-t border-market-silver-line bg-market-blue-soft px-3 py-1 text-center text-[11px] font-medium text-market-navy sm:text-xs">
             {t("market.offlineNotice")}
           </div>
         )}
       </header>
       <div
         aria-hidden
-        className={home ? "h-[74px]" : showCategories ? "h-32 sm:h-[8.625rem]" : "h-11 sm:h-12"}
+        className={
+          home ? "h-[74px]" : showCategories ? "h-[9.4rem] sm:h-[10rem]" : "h-[62px] sm:h-[66px]"
+        }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />
     </>
@@ -212,7 +210,7 @@ export function MarketBottomNav() {
     <nav
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#e5e7eb] bg-white pb-[env(safe-area-inset-bottom)] text-[#0b1d43] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-market-silver-line/90 bg-white/96 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-10px_28px_rgb(11_29_67/0.07)] backdrop-blur-xl lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch px-1">
         {rawItems.map((item) => {
@@ -220,15 +218,15 @@ export function MarketBottomNav() {
           const label = t(`market.bottomNav.${item.key}`);
           const destination =
             !session && ["messages", "alerts"].includes(item.key) ? signInHref(item.to) : item.to;
-          const className = `flex min-h-[60px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-[10px] font-bold leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#0b1d43] focus-visible:ring-offset-1 min-[360px]:text-[11px] ${
-            active ? "text-[#0b1d43]" : "text-[#718096] hover:text-[#0b1d43]"
+          const className = `flex min-h-[60px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-[10px] font-bold leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-market-blue focus-visible:ring-offset-1 min-[360px]:text-[11px] ${
+            active ? "text-market-blue" : "text-market-silver-muted hover:text-market-navy"
           }`;
           const inner = (
             <>
               <span
                 className={
                   active
-                    ? "grid h-8 w-12 place-items-center rounded-2xl bg-[#e9eef7] text-[#0b1d43]"
+                    ? "grid h-8 w-12 place-items-center rounded-2xl bg-market-blue-soft text-market-blue"
                     : "grid h-8 w-12 place-items-center rounded-2xl"
                 }
               >
@@ -335,8 +333,8 @@ export function MarketShell({
       dir={dir}
       className={
         bottomNav
-          ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(4.25rem+env(safe-area-inset-bottom))] lg:pb-0"
-          : "market-surface flex min-h-dvh flex-col overflow-x-clip"
+          ? "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip pb-[calc(4.25rem+env(safe-area-inset-bottom))] lg:pb-0"
+          : "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip"
       }
     >
       <MarketHeader showCategories={showCategories} home={home} />

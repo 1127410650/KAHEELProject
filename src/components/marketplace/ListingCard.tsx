@@ -1,7 +1,16 @@
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BadgeCheck, Clock, Flag, Heart, ImageIcon, MapPin, MoreHorizontal, Share2 } from "lucide-react";
+import {
+  BadgeCheck,
+  Clock,
+  Flag,
+  Heart,
+  ImageIcon,
+  MapPin,
+  MoreHorizontal,
+  Share2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -97,7 +106,9 @@ export function FavoriteButton({ listing }: { listing: ListingCardData }) {
           cityId: listing.city_id,
         });
       }
-      toast.success(t(added ? "market.actions.savedToFavorites" : "market.actions.removedFromFavorites"));
+      toast.success(
+        t(added ? "market.actions.savedToFavorites" : "market.actions.removedFromFavorites"),
+      );
     },
     onError: () => toast.error(t("market.actions.failed")),
   });
@@ -123,7 +134,13 @@ export function FavoriteButton({ listing }: { listing: ListingCardData }) {
   );
 }
 
-function CardMenu({ listing, onInteract }: { listing: ListingCardData; onInteract: (active: boolean) => void }) {
+function CardMenu({
+  listing,
+  onInteract,
+}: {
+  listing: ListingCardData;
+  onInteract: (active: boolean) => void;
+}) {
   const { t } = useI18n();
   const [shareOpen, setShareOpen] = useState(false);
   const slug = listing.slug ?? listing.id;
@@ -176,7 +193,8 @@ function CardMenu({ listing, onInteract }: { listing: ListingCardData; onInterac
 
 function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: boolean }) {
   const { t } = useI18n();
-  const fallbackLabel = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel ?? t("market.noImage");
+  const fallbackLabel =
+    listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel ?? t("market.noImage");
 
   return (
     <div
@@ -196,8 +214,14 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
         />
       ) : (
         <div className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-market-navy/[0.04] via-secondary/70 to-primary/10 px-3 text-center">
-          <div className="absolute -end-8 -top-8 size-24 rounded-full bg-primary/10 blur-2xl" aria-hidden />
-          <div className="absolute -bottom-8 -start-8 size-24 rounded-full bg-market-navy/10 blur-2xl" aria-hidden />
+          <div
+            className="absolute -end-8 -top-8 size-24 rounded-full bg-primary/10 blur-2xl"
+            aria-hidden
+          />
+          <div
+            className="absolute -bottom-8 -start-8 size-24 rounded-full bg-market-navy/10 blur-2xl"
+            aria-hidden
+          />
           <span className="relative grid size-10 place-items-center rounded-2xl border border-border/70 bg-background/75 text-primary shadow-sm backdrop-blur">
             <ImageIcon className="size-5" aria-hidden />
           </span>
@@ -257,13 +281,17 @@ export function ListingCard({
         }}
         className={
           horizontal
-            ? "group relative flex gap-3 rounded-2xl border border-border bg-card p-2.5 shadow-[0_1px_3px_rgb(0_0_0/0.04)] transition-colors hover:border-primary/40"
-            : "group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_1px_3px_rgb(0_0_0/0.04)] transition-colors hover:border-primary/40"
+            ? "group relative flex gap-3 rounded-2xl border border-border bg-card p-2.5 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised"
+            : "group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised"
         }
       >
         <Media listing={listing} horizontal={horizontal} />
 
-        <div className={horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-2.5 sm:p-3"}>
+        <div
+          className={
+            horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-2.5 sm:p-3"
+          }
+        >
           {tag && (
             <span className="w-fit max-w-full truncate rounded-full bg-secondary px-2 py-0.5 text-[9px] font-medium text-secondary-foreground sm:text-[10px]">
               {tag}
@@ -279,9 +307,20 @@ export function ListingCard({
         </div>
       </Link>
 
-      <div className={horizontal ? "absolute top-2 z-10 flex flex-col gap-1 end-2" : "absolute top-2 z-10 flex gap-1 end-2"}>
+      <div
+        className={
+          horizontal
+            ? "absolute top-2 z-10 flex flex-col gap-1 end-2"
+            : "absolute top-2 z-10 flex gap-1 end-2"
+        }
+      >
         <FavoriteButton listing={listing} />
-        <CardMenu listing={listing} onInteract={(active) => { navBlocked.current = active; }} />
+        <CardMenu
+          listing={listing}
+          onInteract={(active) => {
+            navBlocked.current = active;
+          }}
+        />
       </div>
     </div>
   );
