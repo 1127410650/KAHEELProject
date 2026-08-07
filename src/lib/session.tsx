@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
 
 import { toast } from "sonner";
@@ -30,7 +23,6 @@ export interface Profile {
   locale: Locale;
   is_active: boolean;
   always_select_account?: boolean;
-
 }
 
 interface SessionContextValue {
@@ -50,7 +42,6 @@ interface SessionContextValue {
   status: "loading" | "authenticated" | "unauthenticated";
   refresh: () => Promise<void>;
 }
-
 
 const SessionContext = createContext<SessionContextValue | null>(null);
 
@@ -92,9 +83,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
 
-    // Session-only mode keeps the official Supabase entry in sessionStorage;
-    // hand it back to the client before the first read so a reload never
-    // signs the user out mid-session.
+    // Migrate any legacy browser-session token into the one durable Supabase
+    // entry before the first read, so reloads and browser restarts preserve it.
     restoreAuthStorage();
 
     supabase.auth.getSession().then(async ({ data }) => {
@@ -121,7 +111,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       if (event !== "TOKEN_REFRESHED") void load(nextSession?.user.id);
     });
 
-
     // Permission/role changes made by an admin apply without signing out again.
     const onFocus = () => {
       if (document.visibilityState === "visible") {
@@ -139,7 +128,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const value = useMemo<SessionContextValue>(() => {
     const isAccountant = role === "accountant";

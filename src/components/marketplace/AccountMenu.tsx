@@ -71,14 +71,7 @@ function looksLikePhone(value: string): boolean {
 export function AccountMenu() {
   const { t } = useI18n();
   const { session } = useSession();
-  const {
-    account: active,
-    accounts,
-    clear,
-    can,
-    select,
-    loading: accountLoading,
-  } = useActiveAccount();
+  const { account: active, accounts, can, select, loading: accountLoading } = useActiveAccount();
   const isMobile = useIsMobile();
   const centralSignOut = useSignOut();
   const navigate = useNavigate();
@@ -128,7 +121,7 @@ export function AccountMenu() {
   };
 
   async function signOut() {
-    clear();
+    if (!window.confirm(t("market.account.signOutConfirm"))) return;
     await centralSignOut();
   }
 

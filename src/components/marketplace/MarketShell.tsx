@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bell, Grid2x2, Home, MessageSquare, Plus, Search, ShieldCheck, Store } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { addListingHref } from "@/lib/add-listing";
 import { getSearchHref } from "@/lib/search-href";
@@ -22,137 +22,170 @@ import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategor
  * The single header for every marketplace surface (public pages, account pages
  * via DashboardShell, and the back office via AdminShell). Element order is
  * identical on desktop and mobile; only visibility differs by session state.
- * On the public home route, the category row is rendered inside this same sticky
- * header so both rows are one literal navy block with no gap or independent
- * scrolling position.
+ * On the public home route, the category row is rendered inside this same fixed
+ * header so both rows are one literal navy block. A measured spacer preserves
+ * the exact document flow without allowing either row to cover page content.
  */
 export function MarketHeader({ showCategories = false }: { showCategories?: boolean }) {
   const { t, locale, setLocale } = useI18n();
   const { session, status } = useSession();
   const { identity: adminIdentity } = usePlatformIdentity();
   const offline = useOffline();
+  const headerRef = useRef<HTMLElement | null>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const addHref = addListingHref({ authenticated: !!session });
   const storeHref = session ? "/dashboard/store" : "/auth?next=%2Fdashboard%2Fstore";
 
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const measure = () => setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
+    measure();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] text-market-navy-foreground shadow-[0_8px_24px_rgb(2_14_33/0.18)]">
-      <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-1 px-3 py-2 sm:gap-2 sm:px-4 lg:px-6">
-        <Link to="/" className="shrink-0 px-0.5" aria-label={t("market.brand")}>
-          <span className="text-sm font-bold tracking-tight text-market-navy-foreground sm:text-base">
-            {t("market.brand")}
-          </span>
-        </Link>
-
-        {status === "loading" ? (
-          <div className="flex shrink-0 items-center gap-1">
-            <Skeleton aria-hidden className="h-9 w-20 rounded-full sm:h-10 sm:w-28" />
-            <Skeleton aria-hidden className="h-9 w-20 rounded-full sm:h-10 sm:w-28" />
-          </div>
-        ) : (
-          <div className="flex min-w-0 shrink-0 items-center gap-1 sm:gap-1.5">
-            <a
-              href={addHref}
-              aria-label={t("market.addListing")}
-              title={t("market.addListing")}
-              className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full bg-market-navy-foreground px-2 text-[10px] font-bold text-market-navy transition-colors hover:bg-market-silver min-[390px]:px-2.5 min-[390px]:text-[11px] sm:h-10 sm:gap-1.5 sm:px-3.5 sm:text-xs"
-            >
-              <Plus className="size-3.5 shrink-0 sm:size-4" aria-hidden />
-              <span className="hidden min-[350px]:inline">{t("market.addListing")}</span>
-              <span className="min-[350px]:hidden">إعلان</span>
-            </a>
-
-            <a
-              href={storeHref}
-              aria-label={t("market.createStore")}
-              title={t("market.createStore")}
-              className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full border border-market-silver/75 bg-market-navy-soft/45 px-2 text-[10px] font-bold text-market-navy-foreground transition-colors hover:bg-market-navy-soft min-[390px]:px-2.5 min-[390px]:text-[11px] sm:h-10 sm:gap-1.5 sm:px-3.5 sm:text-xs"
-            >
-              <Store className="size-3.5 shrink-0 sm:size-4" aria-hidden />
-              <span className="hidden min-[350px]:inline">{t("market.createStore")}</span>
-              <span className="min-[350px]:hidden">متجر</span>
-            </a>
-          </div>
-        )}
-
-        {!showCategories && (
-          <Link
-            to={getSearchHref()}
-            aria-label={t("market.nav.search")}
-            title={t("market.nav.search")}
-            data-testid="mkt-header-search"
-            className="hidden size-9 shrink-0 items-center justify-center rounded-full border border-market-navy-soft bg-market-navy-soft/60 text-market-navy-foreground transition-colors hover:bg-market-navy-soft lg:inline-flex xl:w-auto xl:gap-1.5 xl:px-3 xl:text-sm"
-          >
-            <Search className="size-4" aria-hidden />
-            <span className="hidden xl:inline">{t("market.nav.search")}</span>
+    <>
+      <header
+        ref={headerRef}
+        className="fixed inset-x-0 top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] pt-[env(safe-area-inset-top)] text-market-navy-foreground shadow-[0_8px_24px_rgb(2_14_33/0.18)]"
+      >
+        <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-1 px-3 py-2 sm:gap-2 sm:px-4 lg:px-6">
+          <Link to="/" className="shrink-0 px-0.5" aria-label={t("market.brand")}>
+            <span className="text-sm font-bold tracking-tight text-market-navy-foreground sm:text-base">
+              {t("market.brand")}
+            </span>
           </Link>
-        )}
 
-        <div className="min-w-0 flex-1" />
-
-        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-          <button
-            type="button"
-            onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-            aria-label={t("common.language")}
-            className="hidden rounded-md border border-market-navy-soft px-2 py-1 text-xs font-semibold text-market-silver hover:bg-market-navy-soft md:block"
-          >
-            {locale === "ar" ? "EN" : "ع"}
-          </button>
-
-          {session ? (
-            <>
-              {adminIdentity?.is_platform_admin === true && adminIdentity.restricted !== true && (
-                <Button
-                  asChild
-                  size="sm"
-                  variant="outline"
-                  className="hidden shrink-0 lg:inline-flex"
-                >
-                  <Link
-                    to="/admin"
-                    aria-label={t("admin.backToAdmin")}
-                    title={t("admin.backToAdmin")}
-                  >
-                    <ShieldCheck className="size-4" aria-hidden />
-                    <span className="hidden xl:inline">{t("admin.backToAdmin")}</span>
-                  </Link>
-                </Button>
-              )}
-              <MktNotificationsBell />
-            </>
-          ) : status === "loading" ? (
-            <Skeleton aria-hidden className="h-8 w-16 shrink-0 rounded-md sm:w-28" />
+          {status === "loading" ? (
+            <div className="flex shrink-0 items-center gap-1">
+              <Skeleton aria-hidden className="h-9 w-20 rounded-full sm:h-10 sm:w-28" />
+              <Skeleton aria-hidden className="h-9 w-20 rounded-full sm:h-10 sm:w-28" />
+            </div>
           ) : (
-            <>
-              <Link
-                to="/auth"
-                aria-label={t("market.signIn")}
-                title={t("market.signIn")}
-                className="hidden h-8 shrink-0 items-center rounded-md border border-market-silver/70 px-2 text-[10px] font-semibold text-market-navy-foreground transition-colors hover:bg-market-navy-soft min-[390px]:inline-flex sm:px-3 sm:text-xs"
+            <div className="flex min-w-0 shrink-0 items-center gap-1 sm:gap-1.5">
+              <a
+                href={addHref}
+                aria-label={t("market.addListing")}
+                title={t("market.addListing")}
+                className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full bg-market-navy-foreground px-2 text-[10px] font-bold text-market-navy transition-colors hover:bg-market-silver min-[390px]:px-2.5 min-[390px]:text-[11px] sm:h-10 sm:gap-1.5 sm:px-3.5 sm:text-xs"
               >
-                {t("market.signIn")}
-              </Link>
-              <Link
-                to="/register"
-                aria-label={t("market.signUp")}
-                title={t("market.signUp")}
-                className="hidden h-8 shrink-0 items-center rounded-md bg-market-silver px-2 text-[10px] font-semibold text-market-navy transition-colors hover:bg-market-navy-foreground sm:inline-flex sm:px-3 sm:text-xs"
+                <Plus className="size-3.5 shrink-0 sm:size-4" aria-hidden />
+                <span className="hidden min-[350px]:inline">{t("market.addListing")}</span>
+                <span className="min-[350px]:hidden">إعلان</span>
+              </a>
+
+              <a
+                href={storeHref}
+                aria-label={t("market.createStore")}
+                title={t("market.createStore")}
+                className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full border border-market-silver/75 bg-market-navy-soft/45 px-2 text-[10px] font-bold text-market-navy-foreground transition-colors hover:bg-market-navy-soft min-[390px]:px-2.5 min-[390px]:text-[11px] sm:h-10 sm:gap-1.5 sm:px-3.5 sm:text-xs"
               >
-                {t("market.signUp")}
-              </Link>
-            </>
+                <Store className="size-3.5 shrink-0 sm:size-4" aria-hidden />
+                <span className="hidden min-[350px]:inline">{t("market.createStore")}</span>
+                <span className="min-[350px]:hidden">متجر</span>
+              </a>
+            </div>
           )}
-        </div>
-      </div>
 
-      {showCategories && <MarketCategoryStrip />}
+          {!showCategories && (
+            <Link
+              to={getSearchHref()}
+              aria-label={t("market.nav.search")}
+              title={t("market.nav.search")}
+              data-testid="mkt-header-search"
+              className="hidden size-9 shrink-0 items-center justify-center rounded-full border border-market-navy-soft bg-market-navy-soft/60 text-market-navy-foreground transition-colors hover:bg-market-navy-soft lg:inline-flex xl:w-auto xl:gap-1.5 xl:px-3 xl:text-sm"
+            >
+              <Search className="size-4" aria-hidden />
+              <span className="hidden xl:inline">{t("market.nav.search")}</span>
+            </Link>
+          )}
 
-      {session && offline && (
-        <div className="border-t border-market-navy-soft bg-market-navy-dark px-3 py-1 text-center text-[11px] font-medium text-market-silver sm:text-xs">
-          {t("market.offlineNotice")}
+          <div className="min-w-0 flex-1" />
+
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
+              aria-label={t("common.language")}
+              className="hidden rounded-md border border-market-navy-soft px-2 py-1 text-xs font-semibold text-market-silver hover:bg-market-navy-soft md:block"
+            >
+              {locale === "ar" ? "EN" : "ع"}
+            </button>
+
+            {session ? (
+              <>
+                {adminIdentity?.is_platform_admin === true && adminIdentity.restricted !== true && (
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="outline"
+                    className="hidden shrink-0 lg:inline-flex"
+                  >
+                    <Link
+                      to="/admin"
+                      aria-label={t("admin.backToAdmin")}
+                      title={t("admin.backToAdmin")}
+                    >
+                      <ShieldCheck className="size-4" aria-hidden />
+                      <span className="hidden xl:inline">{t("admin.backToAdmin")}</span>
+                    </Link>
+                  </Button>
+                )}
+                <MktNotificationsBell />
+              </>
+            ) : status === "loading" ? (
+              <Skeleton aria-hidden className="h-8 w-16 shrink-0 rounded-md sm:w-28" />
+            ) : (
+              <>
+                <Link
+                  to="/auth"
+                  aria-label={t("market.signIn")}
+                  title={t("market.signIn")}
+                  className="hidden h-8 shrink-0 items-center rounded-md border border-market-silver/70 px-2 text-[10px] font-semibold text-market-navy-foreground transition-colors hover:bg-market-navy-soft min-[390px]:inline-flex sm:px-3 sm:text-xs"
+                >
+                  {t("market.signIn")}
+                </Link>
+                <Link
+                  to="/register"
+                  aria-label={t("market.signUp")}
+                  title={t("market.signUp")}
+                  className="hidden h-8 shrink-0 items-center rounded-md bg-market-silver px-2 text-[10px] font-semibold text-market-navy transition-colors hover:bg-market-navy-foreground sm:inline-flex sm:px-3 sm:text-xs"
+                >
+                  {t("market.signUp")}
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      )}
-    </header>
+
+        {showCategories && <MarketCategoryStrip />}
+
+        {session && offline && (
+          <div className="border-t border-market-navy-soft bg-market-navy-dark px-3 py-1 text-center text-[11px] font-medium text-market-silver sm:text-xs">
+            {t("market.offlineNotice")}
+          </div>
+        )}
+      </header>
+      <div
+        aria-hidden
+        className={
+          showCategories
+            ? "h-[calc(8.5rem+env(safe-area-inset-top))] sm:h-[calc(9rem+env(safe-area-inset-top))]"
+            : "h-[calc(3.5rem+env(safe-area-inset-top))]"
+        }
+        style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
+      />
+    </>
   );
 }
 
@@ -296,13 +329,13 @@ export function MarketBottomNav() {
               <span
                 className={
                   active
-                    ? "relative grid size-8 place-items-center text-market-navy-foreground"
-                    : "relative grid size-8 place-items-center text-market-silver-muted"
+                    ? "relative grid size-6 place-items-center text-market-navy-foreground"
+                    : "relative grid size-6 place-items-center text-market-silver-muted"
                 }
               >
                 {item.key === "more" ? (
                   <span
-                    className="whitespace-nowrap text-[10px] font-black leading-none tracking-tight min-[360px]:text-[11px]"
+                    className="whitespace-nowrap text-[8px] font-black leading-none tracking-tight min-[360px]:text-[9px]"
                     aria-hidden
                   >
                     {locale === "ar" ? "كحيلي" : "Kaheeli"}
@@ -332,7 +365,7 @@ export function MarketBottomNav() {
             </>
           );
           const className =
-            "flex min-h-14 min-w-0 flex-col items-center gap-0.5 px-0.5 py-2 text-[9px] font-medium min-[360px]:text-[10px]";
+            "flex min-h-11 min-w-0 flex-col items-center justify-center gap-px px-0.5 py-1 text-[8px] font-medium leading-none min-[360px]:text-[9px]";
 
           return (
             <li key={item.key} className="min-w-0 flex-1">
@@ -436,7 +469,7 @@ export function MarketShell({
       dir={dir}
       className={
         bottomNav
-          ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0"
+          ? "market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(3.25rem+env(safe-area-inset-bottom))] lg:pb-0"
           : "market-surface flex min-h-dvh flex-col overflow-x-clip"
       }
     >

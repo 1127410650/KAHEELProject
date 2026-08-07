@@ -54,7 +54,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 
-
 interface Props {
   listing?: MktListing | undefined;
   /**
@@ -232,9 +231,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
   useEffect(() => {
     if (listing || !initialFieldSlug || categoryId) return;
     if (!restoredScope.current) return;
-    const root = (categories.data ?? []).find(
-      (c) => !c.parent_id && c.slug === initialFieldSlug,
-    );
+    const root = (categories.data ?? []).find((c) => !c.parent_id && c.slug === initialFieldSlug);
     if (root) setCategoryId(root.id);
   }, [listing, initialFieldSlug, categoryId, categories.data]);
 
@@ -270,7 +267,6 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
     if (draft.images?.length) media.restore(draft.images, draft.coverId ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scope, account]);
-
 
   const snapshot = useCallback((): Partial<ListingDraft> => {
     // Coordinates and accuracy stay out of local storage on purpose.
@@ -601,18 +597,20 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
         toast.error(t("market.form.geoRequired"));
       else if (message.includes("PRICE_REQUIRED") || message === "price_required")
         toast.error(t("market.ops.priceRequired"));
-      else if (message.includes("PRICE_INVALID") || message.includes("PRICE_TOO_LARGE") ||
-        message.includes("PRICE_UNIT_INVALID") || message === "price_invalid")
+      else if (
+        message.includes("PRICE_INVALID") ||
+        message.includes("PRICE_TOO_LARGE") ||
+        message.includes("PRICE_UNIT_INVALID") ||
+        message === "price_invalid"
+      )
         toast.error(t("market.ops.priceInvalid"));
       else if (message === "license_required") toast.error(t("market.license.block.missing"));
-
       else toast.error(t("market.actions.failed"));
     } finally {
       submitting.current = false;
       setBusy(false);
     }
   }
-
 
   function specInput(field: SpecField) {
     const value = specs[field.key];
@@ -752,7 +750,6 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
         window.setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 250);
       }}
     >
-
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
         <span className="min-w-0">
           {t("market.form.publishingAs", {
@@ -807,7 +804,8 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                 setErrors((prev) => ({ ...prev, path: undefined }));
               }}
               onAbort={() => {
-                if (!categoryId) setErrors((prev) => ({ ...prev, path: fieldError("path") ?? undefined }));
+                if (!categoryId)
+                  setErrors((prev) => ({ ...prev, path: fieldError("path") ?? undefined }));
               }}
             />
             {errors.path && <p className="mt-1.5 text-xs text-destructive">{errors.path}</p>}
@@ -875,38 +873,38 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
-                <Label htmlFor="price">
-                  {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
-                </Label>
-                {/* The currency follows the account country, so it is shown, not edited. */}
-                <div className="flex items-center gap-2">
-                  <Input
-                    id="price"
-                    className="h-11 sm:h-9"
-                    dir="ltr"
-                    inputMode="decimal"
-                    value={price}
-                    onChange={(e) => {
-                      touch(setPrice)(normalizePriceDigits(e.target.value));
-                      setErrors((prev) => ({ ...prev, price: undefined }));
-                    }}
-                    onBlur={() => blur("price")}
-                  />
-                  {/* The currency follows the account country and cannot be edited. */}
-                  <span
-                    className="shrink-0 rounded-md border border-input bg-muted px-2 py-2 text-sm text-muted-foreground"
-                    dir="ltr"
-                    aria-label={t("market.form.currencyFixed")}
-                  >
-                    {currencyCode}
-                  </span>
-                </div>
-                {errors.price ? (
-                  <p className="text-xs text-destructive">{errors.price}</p>
-                ) : (
-                  <p className="text-xs text-muted-foreground">{t("market.form.currencyHint")}</p>
-                )}
+              <Label htmlFor="price">
+                {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
+              </Label>
+              {/* The currency follows the account country, so it is shown, not edited. */}
+              <div className="flex items-center gap-2">
+                <Input
+                  id="price"
+                  className="h-11 sm:h-9"
+                  dir="ltr"
+                  inputMode="decimal"
+                  value={price}
+                  onChange={(e) => {
+                    touch(setPrice)(normalizePriceDigits(e.target.value));
+                    setErrors((prev) => ({ ...prev, price: undefined }));
+                  }}
+                  onBlur={() => blur("price")}
+                />
+                {/* The currency follows the account country and cannot be edited. */}
+                <span
+                  className="shrink-0 rounded-md border border-input bg-muted px-2 py-2 text-sm text-muted-foreground"
+                  dir="ltr"
+                  aria-label={t("market.form.currencyFixed")}
+                >
+                  {currencyCode}
+                </span>
               </div>
+              {errors.price ? (
+                <p className="text-xs text-destructive">{errors.price}</p>
+              ) : (
+                <p className="text-xs text-muted-foreground">{t("market.form.currencyHint")}</p>
+              )}
+            </div>
             <div className="space-y-1.5">
               <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
               <select
@@ -924,8 +922,6 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
               </select>
             </div>
           </div>
-
-
 
           {cityField("city")}
 
@@ -1114,7 +1110,11 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
             <dt className="text-muted-foreground">{t("market.dash.price")}</dt>
             <dd className="text-foreground">
               {priceLabel(
-                { price: Number(price) || null, price_unit: priceUnit || null, currency: currencyCode },
+                {
+                  price: Number(price) || null,
+                  price_unit: priceUnit || null,
+                  currency: currencyCode,
+                },
                 "—",
                 locale === "ar" ? "ar" : "en",
               )}
@@ -1171,10 +1171,13 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
           the bottom navigation and the home indicator. When the on-screen
           keyboard shrinks the viewport the bar collapses to a single compact
           row so the focused field stays visible. */}
-      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex flex-col gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur [@media(max-height:560px)]:flex-row [@media(max-height:560px)]:items-center [@media(max-height:560px)]:gap-3 [@media(max-height:560px)]:py-2 sm:static sm:mx-0 sm:flex-row sm:items-center sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:pt-3 sm:backdrop-blur-none lg:bottom-0">
-
+      <div className="sticky bottom-[calc(3.25rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex flex-col gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur [@media(max-height:560px)]:flex-row [@media(max-height:560px)]:items-center [@media(max-height:560px)]:gap-3 [@media(max-height:560px)]:py-2 sm:static sm:mx-0 sm:flex-row sm:items-center sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:pt-3 sm:backdrop-blur-none lg:bottom-0">
         {step < STEPS.length - 1 ? (
-          <Button type="button" className="min-h-11 w-full [@media(max-height:560px)]:min-h-10 [@media(max-height:560px)]:flex-1 sm:w-auto sm:min-w-32" onClick={next}>
+          <Button
+            type="button"
+            className="min-h-11 w-full [@media(max-height:560px)]:min-h-10 [@media(max-height:560px)]:flex-1 sm:w-auto sm:min-w-32"
+            onClick={next}
+          >
             {t("market.form.next")}
           </Button>
         ) : (
@@ -1208,7 +1211,6 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
           </Button>
         )}
       </div>
-
     </div>
   );
 }
