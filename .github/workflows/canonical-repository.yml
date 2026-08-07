@@ -54,7 +54,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if VITE_SUPABASE_URL=https://aaaaaaaaaaaaaaaaaaaa.supabase.co node scripts/check-project-authority.mjs --require-runtime; then
+          foreign_ref="$(printf 'a%.0s' {1..20})"
+          if VITE_SUPABASE_URL="https://${foreign_ref}.supabase.co" node scripts/check-project-authority.mjs --require-runtime; then
             echo "Authority guard incorrectly accepted a foreign Supabase project" >&2
             exit 1
           fi
