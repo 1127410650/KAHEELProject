@@ -31,11 +31,20 @@ const WORLD_ICONS: Record<DemoWorldId, LucideIcon> = {
   pets: PawPrint,
 };
 
+const WORLD_TONES = [
+  "from-[#6080ff] to-[#0144fd]",
+  "from-[#2f5cff] to-[#0c228a]",
+  "from-[#0144fd] to-[#0f194f]",
+  "from-[#416dff] to-[#10266f]",
+] as const;
+
 function WorldLink({
   world,
+  tone,
   duplicate = false,
 }: {
   world: (typeof DEMO_STORE_WORLDS)[number];
+  tone: string;
   duplicate?: boolean;
 }) {
   const WorldIcon = WORLD_ICONS[world.id];
@@ -48,7 +57,7 @@ function WorldLink({
       className="group/world w-[76px] min-w-[76px] text-center outline-none sm:w-[94px] sm:min-w-[94px]"
     >
       <div
-        className={`relative mx-auto grid size-[68px] place-items-center overflow-visible rounded-full bg-gradient-to-br ${world.gradient} shadow-[0_8px_22px_rgb(15_23_42/0.18)] ring-[3px] ring-white transition duration-300 group-hover/world:-translate-y-1 group-hover/world:scale-[1.04] group-hover/world:shadow-[0_12px_28px_rgb(15_23_42/0.22)] group-focus-visible/world:-translate-y-1 group-focus-visible/world:ring-market-silver sm:size-[84px]`}
+        className={`relative mx-auto grid size-[68px] place-items-center overflow-visible rounded-full bg-gradient-to-br ${tone} shadow-[0_10px_28px_rgb(1_68_253/0.24)] ring-[3px] ring-market-panel-soft transition duration-300 group-hover/world:-translate-y-1 group-hover/world:scale-[1.04] group-hover/world:shadow-[0_14px_34px_rgb(1_68_253/0.34)] group-focus-visible/world:-translate-y-1 group-focus-visible/world:ring-market-silver sm:size-[84px]`}
       >
         <span
           className="absolute inset-1.5 rounded-full border border-white/25 bg-[radial-gradient(circle_at_34%_26%,rgba(255,255,255,.30),transparent_42%)]"
@@ -63,12 +72,12 @@ function WorldLink({
           strokeWidth={1.7}
           aria-hidden
         />
-        <span className="absolute -bottom-1.5 start-1/2 inline-flex min-w-7 -translate-x-1/2 items-center justify-center rounded-full border-2 border-white bg-market-navy px-1.5 py-0.5 text-[8px] font-black text-white shadow-sm sm:text-[9px]">
+        <span className="absolute -bottom-1.5 start-1/2 inline-flex min-w-7 -translate-x-1/2 items-center justify-center rounded-full border-2 border-market-panel bg-market-electric px-1.5 py-0.5 text-[8px] font-black text-white shadow-sm sm:text-[9px]">
           {world.stores.length}
         </span>
       </div>
 
-      <h3 className="mt-2.5 truncate text-[10px] font-black text-market-navy sm:text-[11px]">
+      <h3 className="mt-2.5 truncate text-[10px] font-black text-market-silver sm:text-[11px]">
         {world.title}
       </h3>
       <p className="mt-0.5 truncate text-[8px] font-bold text-muted-foreground sm:text-[9px]">
@@ -88,27 +97,27 @@ export function MarketDemoShowcases() {
       aria-label={locale === "ar" ? "عوالم التسوق" : "Shopping worlds"}
       className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-3 pb-1 pt-2.5 sm:px-5 sm:pt-3 lg:px-8"
     >
-      <div className="relative overflow-hidden rounded-[1.45rem] border border-market-navy/10 bg-[linear-gradient(125deg,#f8f7ff_0%,#ffffff_47%,#f1fbf8_100%)] px-3 pb-2.5 pt-3 shadow-[0_8px_28px_rgb(15_23_42/0.08)] sm:rounded-[1.8rem] sm:px-4 sm:pb-3 sm:pt-4">
+      <div className="relative overflow-hidden rounded-[1.45rem] border border-market-silver-line bg-market-panel px-3 pb-2.5 pt-3 shadow-[0_12px_34px_rgb(0_0_0/0.24)] sm:rounded-[1.8rem] sm:px-4 sm:pb-3 sm:pt-4">
         <span
           aria-hidden
-          className="absolute -start-10 -top-14 size-36 rounded-full bg-violet-300/20 blur-3xl"
+          className="absolute -start-10 -top-14 size-36 rounded-full bg-market-electric/22 blur-3xl"
         />
         <span
           aria-hidden
-          className="absolute -bottom-16 end-[12%] size-36 rounded-full bg-emerald-300/20 blur-3xl"
+          className="absolute -bottom-16 end-[12%] size-36 rounded-full bg-market-electric-bright/16 blur-3xl"
         />
 
         <div className="relative mb-2.5 flex items-center justify-between gap-3 sm:mb-3">
           <div className="min-w-0">
-            <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#6d4bd1] sm:text-[10px]">
+            <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-market-electric-bright sm:text-[10px]">
               <Sparkles className="size-3.5" aria-hidden />
               {locale === "ar" ? "عوالم كَحيل" : "Kaheel worlds"}
             </span>
-            <h2 className="mt-0.5 truncate text-[15px] font-black tracking-tight text-market-navy sm:text-lg">
+            <h2 className="mt-0.5 truncate text-[15px] font-black tracking-tight text-market-silver sm:text-lg">
               {locale === "ar" ? "اختر جوّك وادخل عالمك" : "Pick your vibe and enter your world"}
             </h2>
           </div>
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-market-navy px-2.5 py-1.5 text-[9px] font-black text-white shadow-[0_5px_14px_rgb(15_23_42/0.18)] sm:px-3 sm:text-[10px]">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-market-electric px-2.5 py-1.5 text-[9px] font-black text-white shadow-[0_7px_18px_rgb(1_68_253/0.32)] sm:px-3 sm:text-[10px]">
             <Layers3 className="size-3.5 text-market-silver" aria-hidden />
             {DEMO_STORE_WORLDS.length} {locale === "ar" ? "عوالم" : "worlds"}
           </span>
@@ -120,26 +129,35 @@ export function MarketDemoShowcases() {
             className="kahli-worlds-track flex w-max items-start motion-reduce:translate-x-0"
           >
             <div className="flex shrink-0 items-start gap-3 pe-3 sm:gap-4 sm:pe-4">
-              {DEMO_STORE_WORLDS.map((world) => (
-                <WorldLink key={world.id} world={world} />
+              {DEMO_STORE_WORLDS.map((world, index) => (
+                <WorldLink
+                  key={world.id}
+                  world={world}
+                  tone={WORLD_TONES[index % WORLD_TONES.length] ?? WORLD_TONES[0]}
+                />
               ))}
             </div>
             <div
               aria-hidden="true"
               className="flex shrink-0 items-start gap-3 pe-3 sm:gap-4 sm:pe-4"
             >
-              {DEMO_STORE_WORLDS.map((world) => (
-                <WorldLink key={`copy-${world.id}`} world={world} duplicate />
+              {DEMO_STORE_WORLDS.map((world, index) => (
+                <WorldLink
+                  key={`copy-${world.id}`}
+                  world={world}
+                  tone={WORLD_TONES[index % WORLD_TONES.length] ?? WORLD_TONES[0]}
+                  duplicate
+                />
               ))}
             </div>
           </div>
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 start-0 w-8 bg-gradient-to-r from-[#f8f7ff] to-transparent sm:w-12 rtl:bg-gradient-to-l"
+            className="pointer-events-none absolute inset-y-0 start-0 w-8 bg-gradient-to-r from-market-panel to-transparent sm:w-12 rtl:bg-gradient-to-l"
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 end-0 w-8 bg-gradient-to-l from-[#f1fbf8] to-transparent sm:w-12 rtl:bg-gradient-to-r"
+            className="pointer-events-none absolute inset-y-0 end-0 w-8 bg-gradient-to-l from-market-panel to-transparent sm:w-12 rtl:bg-gradient-to-r"
           />
         </div>
       </div>

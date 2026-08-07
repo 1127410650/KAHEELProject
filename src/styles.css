@@ -540,7 +540,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("كَحيل") — navy + silver.
+ * Public marketplace surface ("كَحيل") — electric cobalt + space black.
  *
  * These tokens exist ONLY for the public marketplace chrome (header, bottom
  * nav, footer, home banner). They are additive: no existing token is changed,
@@ -549,15 +549,20 @@ body {
  * internal pages references a `market-*` utility.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  /* #0B1739 / #07112C / #182A55 / #FFFFFF */
-  --color-market-navy: oklch(0.2171 0.0682 266.19);
-  --color-market-navy-dark: oklch(0.187 0.0566 265.5);
-  --color-market-navy-soft: oklch(0.2957 0.0815 264.79);
-  --color-market-navy-foreground: oklch(1 0 0);
-  /* #EEF2F5 / #D7DEE6 / #BFC7D2 */
-  --color-market-silver: oklch(0.959 0.0059 239.82);
-  --color-market-silver-line: oklch(0.8976 0.0133 251.57);
-  --color-market-silver-muted: oklch(0.8268 0.0177 256.29);
+  /* Palette sampled from the user's reference, adapted into Kaheel tokens. */
+  --color-market-navy: #0144fd;
+  --color-market-navy-dark: #05060a;
+  --color-market-navy-soft: #0f194f;
+  --color-market-navy-foreground: #ffffff;
+  --color-market-electric: #0144fd;
+  --color-market-electric-dark: #012bea;
+  --color-market-electric-bright: #6080ff;
+  --color-market-void: #05060a;
+  --color-market-panel: #18191b;
+  --color-market-panel-soft: #1d202e;
+  --color-market-silver: #f1f1f1;
+  --color-market-silver-line: #2b3144;
+  --color-market-silver-muted: #a4acc0;
 }
 
 /*
@@ -573,55 +578,52 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  /* #F6F8FA page, white cards, #102027 text */
-  --background: oklch(0.9782 0.0034 247.86);
-  --foreground: oklch(0.2328 0.0255 227.72);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2328 0.0255 227.72);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2328 0.0255 227.72);
+  --background: #05060a;
+  --foreground: #f1f1f1;
+  --card: #18191b;
+  --card-foreground: #f1f1f1;
+  --popover: #1d202e;
+  --popover-foreground: #f1f1f1;
 
-  /* primary = navy, pressed states go darker (never a bright gradient) */
-  --primary: oklch(0.2171 0.0682 266.19);
-  --primary-foreground: oklch(1 0 0);
-  --primary-dark: oklch(0.187 0.0566 265.5);
-  --primary-pressed: oklch(0.187 0.0566 265.5);
+  --primary: #0144fd;
+  --primary-foreground: #ffffff;
+  --primary-dark: #012bea;
+  --primary-pressed: #0125df;
 
-  /* #EEF2F5 secondary surfaces, active state = navy text on silver */
-  --secondary: oklch(0.959 0.0059 239.82);
-  --secondary-foreground: oklch(0.2171 0.0682 266.19);
-  --muted: oklch(0.959 0.0059 239.82);
-  --muted-foreground: oklch(0.5699 0.0217 230.98);
-  --accent: oklch(0.959 0.0059 239.82);
-  --accent-foreground: oklch(0.2171 0.0682 266.19);
+  --secondary: #1d202e;
+  --secondary-foreground: #f1f1f1;
+  --muted: #1d202e;
+  --muted-foreground: #a4acc0;
+  --accent: #24283a;
+  --accent-foreground: #ffffff;
 
-  /* #D7DEE6 borders, visible navy focus ring */
-  --border: oklch(0.8976 0.0133 251.57);
-  --input: oklch(0.8976 0.0133 251.57);
-  --ring: oklch(0.2957 0.0815 264.79);
+  --border: #2b3144;
+  --input: #343b50;
+  --ring: #6080ff;
 
-  /* No gold in the marketplace: promotion reads as navy + silver instead. */
-  --gold: oklch(0.2171 0.0682 266.19);
-  --gold-dark: oklch(0.187 0.0566 265.5);
-  --gold-soft: oklch(0.959 0.0059 239.82);
-  --gold-foreground: oklch(1 0 0);
+  /* Promotion remains Kaheel blue; the marketplace never falls back to gold. */
+  --gold: #0144fd;
+  --gold-dark: #012bea;
+  --gold-soft: #0f194f;
+  --gold-foreground: #ffffff;
 
-  --sidebar: oklch(0.2171 0.0682 266.19);
-  --sidebar-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.2957 0.0815 264.79);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.2957 0.0815 264.79);
-  --sidebar-primary: oklch(1 0 0);
-  --sidebar-primary-foreground: oklch(0.2171 0.0682 266.19);
-  --sidebar-ring: oklch(0.8268 0.0177 256.29);
+  --sidebar: #090b16;
+  --sidebar-foreground: #f1f1f1;
+  --sidebar-accent: #0f194f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2b3144;
+  --sidebar-primary: #0144fd;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #6080ff;
 
-  --chart-1: oklch(0.2171 0.0682 266.19);
-  --chart-2: oklch(0.2957 0.0815 264.79);
-  --chart-3: oklch(0.5699 0.0217 230.98);
-  --chart-4: oklch(0.8268 0.0177 256.29);
+  --chart-1: #0144fd;
+  --chart-2: #6080ff;
+  --chart-3: #0c228a;
+  --chart-4: #a4acc0;
 
   background-color: var(--background);
   color: var(--foreground);
+  color-scheme: dark;
 }
 
 /*
@@ -632,26 +634,22 @@ body:has(.market-surface) {
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel:
-    0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
-    0 6px 18px -12px oklch(0.2171 0.0682 266.19 / 0.14);
-  --shadow-raised:
-    0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
-    0 14px 32px -20px oklch(0.2171 0.0682 266.19 / 0.22);
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.22), 0 10px 24px -16px rgb(1 68 253 / 0.32);
+  --shadow-raised: 0 1px 3px rgb(0 0 0 / 0.25), 0 18px 42px -24px rgb(1 68 253 / 0.38);
 }
 
 .market-surface .shadow-panel,
 body:has(.market-surface) .shadow-panel {
   box-shadow:
-    0 1px 2px oklch(0.2171 0.0682 266.19 / 0.05),
-    0 6px 18px -12px oklch(0.2171 0.0682 266.19 / 0.14) !important;
+    0 1px 2px rgb(0 0 0 / 0.22),
+    0 10px 24px -16px rgb(1 68 253 / 0.32) !important;
 }
 
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
   box-shadow:
-    0 1px 3px oklch(0.2171 0.0682 266.19 / 0.07),
-    0 14px 32px -20px oklch(0.2171 0.0682 266.19 / 0.22) !important;
+    0 1px 3px rgb(0 0 0 / 0.25),
+    0 18px 42px -24px rgb(1 68 253 / 0.38) !important;
 }
 
 /* Hide the horizontal scrollbar of the marketplace category rail without
@@ -1038,5 +1036,383 @@ body:has(.market-surface) .shadow-raised {
 
   .market-motion-kind:first-child {
     opacity: 1;
+  }
+}
+
+/* ───────────────────────────── Kaheel electric-space opening ────────────────
+ * Original code-native artwork. The electric cobalt, near-black panels and
+ * restrained glow match the requested visual direction without copying the
+ * reference site's imagery or shipping a hero video. */
+.kaheel-space-hero {
+  background:
+    radial-gradient(circle at 18% 20%, rgb(96 128 255 / 0.52), transparent 25%),
+    radial-gradient(circle at 72% 78%, rgb(1 68 253 / 0.32), transparent 32%),
+    linear-gradient(132deg, #0144fd 0%, #012bea 40%, #0f194f 74%, #05060a 100%);
+  contain: layout paint;
+}
+
+.kaheel-space-hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, transparent 0 72%, rgb(5 6 10 / 0.48) 100%);
+  content: "";
+  pointer-events: none;
+}
+
+.kaheel-space-hero h1 {
+  font-size: clamp(2rem, 7vw, 3.35rem) !important;
+}
+
+.kaheel-space-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, transparent 3%, #000 35%, transparent 92%);
+  pointer-events: none;
+}
+
+.kaheel-space-glow {
+  position: absolute;
+  z-index: -1;
+  display: block;
+  border-radius: 999px;
+  filter: blur(52px);
+  pointer-events: none;
+}
+
+.kaheel-space-glow-start {
+  inset-inline-start: -10%;
+  top: 7%;
+  width: 42%;
+  height: 58%;
+  background: rgb(255 255 255 / 0.17);
+}
+
+.kaheel-space-glow-end {
+  inset-inline-end: -8%;
+  bottom: -12%;
+  width: 45%;
+  height: 58%;
+  background: rgb(1 68 253 / 0.34);
+}
+
+.kaheel-orbit-stage {
+  isolation: isolate;
+  perspective: 900px;
+}
+
+.kaheel-orbit-stage::before {
+  position: absolute;
+  right: 12%;
+  bottom: 7%;
+  left: 12%;
+  height: 20%;
+  border-radius: 50%;
+  background: rgb(1 68 253 / 0.38);
+  content: "";
+  filter: blur(30px);
+  transform: rotateX(68deg);
+}
+
+.kaheel-orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.kaheel-orbit-ring::before,
+.kaheel-orbit-ring::after {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 18px 4px rgb(96 128 255 / 0.72);
+  content: "";
+}
+
+.kaheel-orbit-ring::before {
+  top: 7%;
+  left: 22%;
+}
+
+.kaheel-orbit-ring::after {
+  right: 8%;
+  bottom: 23%;
+  width: 5px;
+  height: 5px;
+}
+
+.kaheel-orbit-ring-outer {
+  width: min(88vw, 320px);
+  height: min(56vw, 205px);
+  animation: kaheel-orbit-breathe 6s ease-in-out infinite;
+}
+
+.kaheel-orbit-ring-inner {
+  width: min(62vw, 220px);
+  height: min(40vw, 146px);
+  border-style: dashed;
+  opacity: 0.72;
+  animation: kaheel-orbit-breathe 6s ease-in-out -3s infinite reverse;
+}
+
+.kaheel-orbit-beam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: min(78vw, 292px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 30deg,
+    transparent 0 42%,
+    rgb(96 128 255 / 0.3) 48%,
+    transparent 55% 100%
+  );
+  filter: blur(2px);
+  animation: kaheel-orbit-spin 12s linear infinite;
+  transform: translate(-50%, -50%);
+}
+
+.kaheel-orbit-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  width: 105px;
+  height: 105px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.36);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 30% 20%, rgb(255 255 255 / 0.35), transparent 28%),
+    linear-gradient(145deg, #6080ff, #0144fd 48%, #0c228a);
+  color: #fff;
+  box-shadow:
+    0 0 0 12px rgb(1 68 253 / 0.12),
+    0 26px 60px rgb(0 0 0 / 0.42),
+    0 0 46px rgb(1 68 253 / 0.46);
+  transform: translate(-50%, -50%) rotate(-6deg);
+  animation: kaheel-core-float 5s ease-in-out infinite;
+}
+
+.kaheel-orbit-core::after {
+  position: absolute;
+  inset: -70% -50%;
+  background: linear-gradient(
+    110deg,
+    transparent 42%,
+    rgb(255 255 255 / 0.25) 50%,
+    transparent 58%
+  );
+  content: "";
+  animation: kaheel-core-shine 4.8s ease-in-out infinite;
+  transform: translateX(-45%);
+}
+
+.kaheel-orbit-core-mark {
+  position: absolute;
+  bottom: 14px;
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  opacity: 0.82;
+}
+
+.kaheel-orbit-card {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 0.9rem;
+  background: rgb(24 25 27 / 0.88);
+  padding: 0.4rem 0.55rem;
+  box-shadow: 0 14px 32px rgb(0 0 0 / 0.32);
+  backdrop-filter: blur(12px);
+  will-change: transform;
+}
+
+.kaheel-orbit-card-property {
+  top: 4%;
+  left: 1%;
+  animation: kaheel-card-float-one 5.2s ease-in-out infinite;
+}
+
+.kaheel-orbit-card-car {
+  top: 17%;
+  right: -1%;
+  animation: kaheel-card-float-two 5.8s ease-in-out -1.3s infinite;
+}
+
+.kaheel-orbit-card-store {
+  right: 9%;
+  bottom: 4%;
+  animation: kaheel-card-float-one 6s ease-in-out -2.5s infinite reverse;
+}
+
+.kaheel-orbit-success {
+  position: absolute;
+  bottom: 5%;
+  left: 1%;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgb(96 128 255 / 0.46);
+  border-radius: 999px;
+  background: rgb(15 25 79 / 0.9);
+  padding: 0.35rem 0.55rem;
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 900;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.3);
+  animation: kaheel-success-pulse 4s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes kaheel-orbit-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
+}
+
+@keyframes kaheel-orbit-breathe {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: translate(-50%, -50%) scale(0.97) rotate(-4deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.03) rotate(4deg);
+  }
+}
+
+@keyframes kaheel-core-float {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(-6deg) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(-2deg) translateY(-8px);
+  }
+}
+
+@keyframes kaheel-core-shine {
+  0%,
+  64% {
+    transform: translateX(-55%);
+  }
+  82%,
+  100% {
+    transform: translateX(55%);
+  }
+}
+
+@keyframes kaheel-card-float-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-1deg);
+  }
+  50% {
+    transform: translate3d(5px, -8px, 0) rotate(1deg);
+  }
+}
+
+@keyframes kaheel-card-float-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(1deg);
+  }
+  50% {
+    transform: translate3d(-6px, -9px, 0) rotate(-1deg);
+  }
+}
+
+@keyframes kaheel-success-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.96);
+  }
+  45%,
+  70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Long home sections become paintable only near the viewport. This reduces the
+ * first render without changing their data or scroll position. */
+.market-home-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 520px;
+}
+
+@media (min-width: 640px) {
+  .kaheel-orbit-core {
+    width: 132px;
+    height: 132px;
+    border-radius: 38px;
+  }
+
+  .kaheel-orbit-ring-outer {
+    width: 390px;
+    height: 250px;
+  }
+
+  .kaheel-orbit-ring-inner {
+    width: 272px;
+    height: 178px;
+  }
+
+  .kaheel-orbit-beam {
+    width: 356px;
+  }
+
+  .kaheel-orbit-card {
+    gap: 0.55rem;
+    padding: 0.48rem 0.68rem;
+  }
+
+  .kaheel-orbit-success {
+    padding: 0.42rem 0.7rem;
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .kaheel-space-hero::after {
+    background: linear-gradient(to bottom, transparent 0 58%, rgb(5 6 10 / 0.48) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kaheel-orbit-ring,
+  .kaheel-orbit-beam,
+  .kaheel-orbit-core,
+  .kaheel-orbit-core::after,
+  .kaheel-orbit-card,
+  .kaheel-orbit-success {
+    animation: none !important;
+  }
+
+  .kaheel-orbit-core::after {
+    display: none;
   }
 }

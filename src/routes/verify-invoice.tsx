@@ -30,11 +30,8 @@ export const Route = createFileRoute("/verify-invoice")({
 function VerifyInvoicePage() {
   const { t, locale, setLocale, dir } = useI18n();
 
-  // Small, self-dismissing note instead of a permanent full-width banner.
-
-
   return (
-    <div dir={dir} className="min-h-screen bg-background">
+    <div dir={dir} className="market-surface min-h-screen bg-background">
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex min-w-0 items-center gap-2">
@@ -98,9 +95,9 @@ function VerifyInvoicePage() {
           onResult={stashVerification}
           footer={
             <div className="flex flex-col items-start gap-2 px-1">
-                              <p className="rounded-md bg-secondary px-2.5 py-1.5 text-[11px] leading-snug text-muted-foreground">
-                  {t("verify.publicSaveHint")}
-                </p>
+              <p className="rounded-md bg-secondary px-2.5 py-1.5 text-[11px] leading-snug text-muted-foreground">
+                {t("verify.publicSaveHint")}
+              </p>
               <Link
                 to="/auth"
                 search={{ next: "/invoices/verified/new" }}

@@ -104,7 +104,7 @@ function AuthPage() {
   if (!mounted) return null;
 
   return (
-    <div dir={dir} className="market-surface flex min-h-screen flex-col lg:grid lg:grid-cols-2">
+    <main dir={dir} className="market-surface flex min-h-screen flex-col lg:grid lg:grid-cols-2">
       {/* Desktop-only brand panel: the platform name and nothing else. */}
       <div className="relative hidden flex-col items-center justify-center bg-market-navy p-12 lg:flex">
         <span className="text-4xl font-bold tracking-tight text-market-navy-foreground">
@@ -208,6 +208,6 @@ function AuthPage() {
 
         <p className="mt-6 text-center text-[11px] text-muted-foreground">{t("auth.rights")}</p>
       </div>
-    </div>
+    </main>
   );
 }

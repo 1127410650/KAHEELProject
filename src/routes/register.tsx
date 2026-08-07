@@ -28,7 +28,10 @@ export const Route = createFileRoute("/register")({
         content: "أنشئ حسابًا فرديًا في نسخة كَحيل السورية باستخدام اسمك ورقم جوالك السوري.",
       },
       { property: "og:title", content: "إنشاء حساب سوري — كَحيل" },
-      { property: "og:description", content: "Create an individual account in Kaheel's Syria marketplace." },
+      {
+        property: "og:description",
+        content: "Create an individual account in Kaheel's Syria marketplace.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -45,7 +48,7 @@ function inviteTokenFromUrl(): string | null {
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, dir } = useI18n();
   return (
-    <div
+    <main
       dir={dir}
       className="market-surface flex min-h-screen flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] sm:items-center sm:justify-center sm:py-10"
     >
@@ -64,7 +67,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           {t("market.footer.rights")}
         </p>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -101,8 +104,7 @@ function RegisterPage() {
       const { data, error } = await supabase.rpc("invitation_preview", { _token: inviteToken! });
       if (error) throw error;
       const row = (Array.isArray(data) ? data[0] : data) as
-        | { state: string; masked_email: string | null }
-        | undefined;
+        { state: string; masked_email: string | null } | undefined;
       return row ?? { state: "invalid", masked_email: null };
     },
   });
@@ -331,7 +333,9 @@ function PublicSignupForm() {
         {t("signup.publicSubtitle")}
       </p>
       <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
-        {locale === "ar" ? "التسجيل متاح حاليًا لسوريا فقط." : "Registration is currently available for Syria only."}
+        {locale === "ar"
+          ? "التسجيل متاح حاليًا لسوريا فقط."
+          : "Registration is currently available for Syria only."}
       </p>
 
       <form onSubmit={onSubmit} className="mt-5 space-y-3.5">

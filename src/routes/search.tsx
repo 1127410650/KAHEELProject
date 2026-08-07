@@ -21,7 +21,6 @@ import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation
 import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
 import type { RealEstateSearchParams } from "@/components/marketplace/real-estate/RealEstateExperience";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
@@ -163,7 +162,6 @@ function RealEstateRoute({ params }: { params: RealEstateSearchParams }) {
 function RealEstateFallback() {
   return (
     <MarketShell footer="none">
-      <MarketCategoryStrip />
       <div className="real-estate-experience bg-background">
         <Skeleton className="h-[350px] w-full rounded-none sm:h-[430px]" />
         <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-3 py-6 sm:grid-cols-4 sm:px-5 lg:px-8">

@@ -70,8 +70,8 @@ export function SyriaHomeGateway() {
         <div
           className={
             isSyria
-              ? "absolute inset-0 bg-[linear-gradient(118deg,#07173f_0%,#123765_56%,#147f68_130%)]"
-              : "absolute inset-0 bg-[linear-gradient(118deg,#07173f_0%,#24356f_52%,#6b2c82_130%)]"
+              ? "absolute inset-0 bg-[linear-gradient(118deg,#05060a_0%,#0f194f_56%,#0144fd_130%)]"
+              : "absolute inset-0 bg-[linear-gradient(118deg,#05060a_0%,#10266f_52%,#0144fd_130%)]"
           }
           aria-hidden
         />
@@ -79,8 +79,8 @@ export function SyriaHomeGateway() {
         <span
           className={
             isSyria
-              ? "absolute -end-10 -top-20 size-52 rounded-full bg-emerald-300/18 blur-3xl"
-              : "absolute -end-10 -top-20 size-52 rounded-full bg-fuchsia-300/20 blur-3xl"
+              ? "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric/24 blur-3xl"
+              : "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric-bright/22 blur-3xl"
           }
           aria-hidden
         />
