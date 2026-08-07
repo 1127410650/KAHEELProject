@@ -195,7 +195,9 @@ export function MarketDemoListings() {
               id="demo-listings-title"
               className="mt-1.5 text-[17px] font-black tracking-tight text-foreground sm:text-xl"
             >
-              {language === "ar" ? "شاهد شكل إعلانك في كَحيل" : "See how your listing can look"}
+              {language === "ar"
+                ? "شاهد كيف تظهر إعلاناتك في كَحيل"
+                : "See how your listings can look in Kaheel"}
             </h2>
             <p className="mt-0.5 text-[10px] leading-5 text-muted-foreground sm:text-xs">
               {language === "ar"
