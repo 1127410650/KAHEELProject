@@ -540,7 +540,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("كَحيل") — electric cobalt + space black.
+ * Public marketplace surface ("كَحيل") — deep navy + crisp white.
  *
  * These tokens exist ONLY for the public marketplace chrome (header, bottom
  * nav, footer, home banner). They are additive: no existing token is changed,
@@ -549,20 +549,19 @@ body {
  * internal pages references a `market-*` utility.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  /* Palette sampled from the user's reference, adapted into Kaheel tokens. */
-  --color-market-navy: #0144fd;
-  --color-market-navy-dark: #05060a;
-  --color-market-navy-soft: #0f194f;
+  --color-market-navy: #0b2447;
+  --color-market-navy-dark: #081d3a;
+  --color-market-navy-soft: #173e6a;
   --color-market-navy-foreground: #ffffff;
-  --color-market-electric: #0144fd;
-  --color-market-electric-dark: #012bea;
-  --color-market-electric-bright: #6080ff;
-  --color-market-void: #05060a;
-  --color-market-panel: #18191b;
-  --color-market-panel-soft: #1d202e;
-  --color-market-silver: #f1f1f1;
-  --color-market-silver-line: #2b3144;
-  --color-market-silver-muted: #a4acc0;
+  --color-market-electric: #0b2447;
+  --color-market-electric-dark: #081d3a;
+  --color-market-electric-bright: #dbe7f2;
+  --color-market-void: #0b2447;
+  --color-market-panel: #12345a;
+  --color-market-panel-soft: #1a426d;
+  --color-market-silver: #ffffff;
+  --color-market-silver-line: #d7e0eb;
+  --color-market-silver-muted: #75849a;
 }
 
 /*
@@ -578,52 +577,51 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  --background: #05060a;
-  --foreground: #f1f1f1;
-  --card: #18191b;
-  --card-foreground: #f1f1f1;
-  --popover: #1d202e;
-  --popover-foreground: #f1f1f1;
+  --background: #f8fafc;
+  --foreground: #0b2447;
+  --card: #ffffff;
+  --card-foreground: #0b2447;
+  --popover: #ffffff;
+  --popover-foreground: #0b2447;
 
-  --primary: #0144fd;
+  --primary: #0b2447;
   --primary-foreground: #ffffff;
-  --primary-dark: #012bea;
-  --primary-pressed: #0125df;
+  --primary-dark: #081d3a;
+  --primary-pressed: #06162d;
 
-  --secondary: #1d202e;
-  --secondary-foreground: #f1f1f1;
-  --muted: #1d202e;
-  --muted-foreground: #a4acc0;
-  --accent: #24283a;
-  --accent-foreground: #ffffff;
+  --secondary: #edf2f7;
+  --secondary-foreground: #0b2447;
+  --muted: #f0f4f8;
+  --muted-foreground: #65758b;
+  --accent: #e7edf5;
+  --accent-foreground: #0b2447;
 
-  --border: #2b3144;
-  --input: #343b50;
-  --ring: #6080ff;
+  --border: #d7e0eb;
+  --input: #c9d5e3;
+  --ring: #173e6a;
 
-  /* Promotion remains Kaheel blue; the marketplace never falls back to gold. */
-  --gold: #0144fd;
-  --gold-dark: #012bea;
-  --gold-soft: #0f194f;
+  --gold: #0b2447;
+  --gold-dark: #081d3a;
+  --gold-soft: #e7edf5;
   --gold-foreground: #ffffff;
 
-  --sidebar: #090b16;
-  --sidebar-foreground: #f1f1f1;
-  --sidebar-accent: #0f194f;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #2b3144;
-  --sidebar-primary: #0144fd;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0b2447;
+  --sidebar-accent: #e7edf5;
+  --sidebar-accent-foreground: #0b2447;
+  --sidebar-border: #d7e0eb;
+  --sidebar-primary: #0b2447;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #6080ff;
+  --sidebar-ring: #173e6a;
 
-  --chart-1: #0144fd;
-  --chart-2: #6080ff;
-  --chart-3: #0c228a;
-  --chart-4: #a4acc0;
+  --chart-1: #0b2447;
+  --chart-2: #315b86;
+  --chart-3: #657f9d;
+  --chart-4: #9aa9ba;
 
   background-color: var(--background);
   color: var(--foreground);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /*
@@ -634,22 +632,22 @@ body:has(.market-surface) {
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.22), 0 10px 24px -16px rgb(1 68 253 / 0.32);
-  --shadow-raised: 0 1px 3px rgb(0 0 0 / 0.25), 0 18px 42px -24px rgb(1 68 253 / 0.38);
+  --shadow-panel: 0 1px 2px rgb(8 35 70 / 0.08), 0 10px 24px -16px rgb(8 35 70 / 0.24);
+  --shadow-raised: 0 1px 3px rgb(8 35 70 / 0.1), 0 18px 42px -24px rgb(8 35 70 / 0.3);
 }
 
 .market-surface .shadow-panel,
 body:has(.market-surface) .shadow-panel {
   box-shadow:
-    0 1px 2px rgb(0 0 0 / 0.22),
-    0 10px 24px -16px rgb(1 68 253 / 0.32) !important;
+    0 1px 2px rgb(8 35 70 / 0.08),
+    0 10px 24px -16px rgb(8 35 70 / 0.24) !important;
 }
 
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
   box-shadow:
-    0 1px 3px rgb(0 0 0 / 0.25),
-    0 18px 42px -24px rgb(1 68 253 / 0.38) !important;
+    0 1px 3px rgb(8 35 70 / 0.1),
+    0 18px 42px -24px rgb(8 35 70 / 0.3) !important;
 }
 
 /* Hide the horizontal scrollbar of the marketplace category rail without
