@@ -1,40 +1,33 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Grid2x2, Home, MessageSquare, Plus, Search, ShieldCheck, Store } from "lucide-react";
+import { Bell, Grid2x2, Home, MapPin, MessageSquare, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { addListingHref } from "@/lib/add-listing";
-import { getSearchHref } from "@/lib/search-href";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
-import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { routeRuleFor } from "@/lib/routes-map";
 
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MktNotificationsBell } from "@/components/marketplace/MktNotificationsBell";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 
 /**
- * The single header for every marketplace surface (public pages, account pages
- * via DashboardShell, and the back office via AdminShell). Element order is
- * identical on desktop and mobile; only visibility differs by session state.
- * On the public home route, the category row is rendered inside this same fixed
- * header so both rows are one literal navy block. A measured spacer preserves
- * the exact document flow without allowing either row to cover page content.
+ * The single compact header for every marketplace surface. Its first row keeps
+ * only the brand, the active customer's city and one icon-only add action. On
+ * the public home route, the category row remains directly beneath it. A
+ * measured spacer preserves document flow while the whole header stays fixed.
  */
 export function MarketHeader({ showCategories = false }: { showCategories?: boolean }) {
-  const { t, locale, setLocale } = useI18n();
-  const { session, status } = useSession();
-  const { identity: adminIdentity } = usePlatformIdentity();
+  const { t, locale } = useI18n();
+  const { session } = useSession();
+  const { account } = useActiveAccount();
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
   const addHref = addListingHref({ authenticated: !!session });
-  const storeHref = session ? "/dashboard/store" : "/auth?next=%2Fdashboard%2Fstore";
+  const locationLabel = account?.city?.trim() || (locale === "ar" ? "سوريا" : "Syria");
 
   useEffect(() => {
     const header = headerRef.current;
@@ -57,115 +50,34 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
     <>
       <header
         ref={headerRef}
-        className="fixed inset-x-0 top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] pt-[env(safe-area-inset-top)] text-market-navy-foreground shadow-[0_8px_24px_rgb(2_14_33/0.18)]"
+        className="fixed inset-x-0 top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] pt-[env(safe-area-inset-top)] text-market-navy-foreground shadow-[0_4px_14px_rgb(2_14_33/0.16)]"
       >
-        <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-1 px-3 py-2 sm:gap-2 sm:px-4 lg:px-6">
-          <Link to="/" className="shrink-0 px-0.5" aria-label={t("market.brand")}>
-            <span className="text-sm font-bold tracking-tight text-market-navy-foreground sm:text-base">
+        <div className="mx-auto grid h-11 w-full max-w-[1240px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:h-12 sm:px-4 lg:px-6">
+          <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
+            <span className="text-[15px] font-black leading-none tracking-tight text-market-navy-foreground sm:text-base">
               {t("market.brand")}
             </span>
           </Link>
 
-          {status === "loading" ? (
-            <div className="flex shrink-0 items-center gap-1">
-              <Skeleton aria-hidden className="h-9 w-20 rounded-full sm:h-10 sm:w-28" />
-              <Skeleton aria-hidden className="h-9 w-20 rounded-full sm:h-10 sm:w-28" />
-            </div>
-          ) : (
-            <div className="flex min-w-0 shrink-0 items-center gap-1 sm:gap-1.5">
-              <a
-                href={addHref}
-                aria-label={t("market.addListing")}
-                title={t("market.addListing")}
-                className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full bg-market-navy-foreground px-2 text-[10px] font-bold text-market-navy transition-colors hover:bg-market-silver min-[390px]:px-2.5 min-[390px]:text-[11px] sm:h-10 sm:gap-1.5 sm:px-3.5 sm:text-xs"
-              >
-                <Plus className="size-3.5 shrink-0 sm:size-4" aria-hidden />
-                <span className="hidden min-[350px]:inline">{t("market.addListing")}</span>
-                <span className="min-[350px]:hidden">إعلان</span>
-              </a>
-
-              <a
-                href={storeHref}
-                aria-label={t("market.createStore")}
-                title={t("market.createStore")}
-                className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full border border-market-silver/75 bg-market-navy-soft/45 px-2 text-[10px] font-bold text-market-navy-foreground transition-colors hover:bg-market-navy-soft min-[390px]:px-2.5 min-[390px]:text-[11px] sm:h-10 sm:gap-1.5 sm:px-3.5 sm:text-xs"
-              >
-                <Store className="size-3.5 shrink-0 sm:size-4" aria-hidden />
-                <span className="hidden min-[350px]:inline">{t("market.createStore")}</span>
-                <span className="min-[350px]:hidden">متجر</span>
-              </a>
-            </div>
-          )}
-
-          {!showCategories && (
-            <Link
-              to={getSearchHref()}
-              aria-label={t("market.nav.search")}
-              title={t("market.nav.search")}
-              data-testid="mkt-header-search"
-              className="hidden size-9 shrink-0 items-center justify-center rounded-full border border-market-navy-soft bg-market-navy-soft/60 text-market-navy-foreground transition-colors hover:bg-market-navy-soft lg:inline-flex xl:w-auto xl:gap-1.5 xl:px-3 xl:text-sm"
-            >
-              <Search className="size-4" aria-hidden />
-              <span className="hidden xl:inline">{t("market.nav.search")}</span>
-            </Link>
-          )}
-
-          <div className="min-w-0 flex-1" />
-
-          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-            <button
-              type="button"
-              onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-              aria-label={t("common.language")}
-              className="hidden rounded-md border border-market-navy-soft px-2 py-1 text-xs font-semibold text-market-silver hover:bg-market-navy-soft md:block"
-            >
-              {locale === "ar" ? "EN" : "ع"}
-            </button>
-
-            {session ? (
-              <>
-                {adminIdentity?.is_platform_admin === true && adminIdentity.restricted !== true && (
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                    className="hidden shrink-0 lg:inline-flex"
-                  >
-                    <Link
-                      to="/admin"
-                      aria-label={t("admin.backToAdmin")}
-                      title={t("admin.backToAdmin")}
-                    >
-                      <ShieldCheck className="size-4" aria-hidden />
-                      <span className="hidden xl:inline">{t("admin.backToAdmin")}</span>
-                    </Link>
-                  </Button>
-                )}
-                <MktNotificationsBell />
-              </>
-            ) : status === "loading" ? (
-              <Skeleton aria-hidden className="h-8 w-16 shrink-0 rounded-md sm:w-28" />
-            ) : (
-              <>
-                <Link
-                  to="/auth"
-                  aria-label={t("market.signIn")}
-                  title={t("market.signIn")}
-                  className="hidden h-8 shrink-0 items-center rounded-md border border-market-silver/70 px-2 text-[10px] font-semibold text-market-navy-foreground transition-colors hover:bg-market-navy-soft min-[390px]:inline-flex sm:px-3 sm:text-xs"
-                >
-                  {t("market.signIn")}
-                </Link>
-                <Link
-                  to="/register"
-                  aria-label={t("market.signUp")}
-                  title={t("market.signUp")}
-                  className="hidden h-8 shrink-0 items-center rounded-md bg-market-silver px-2 text-[10px] font-semibold text-market-navy transition-colors hover:bg-market-navy-foreground sm:inline-flex sm:px-3 sm:text-xs"
-                >
-                  {t("market.signUp")}
-                </Link>
-              </>
-            )}
+          <div
+            className="flex min-w-0 items-center justify-center gap-1.5 px-1 text-market-silver"
+            aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
+            title={`${t("market.geo.accountLocation")}: ${locationLabel}`}
+          >
+            <MapPin className="size-4 shrink-0" aria-hidden />
+            <span className="max-w-[12rem] truncate text-xs font-semibold sm:text-sm">
+              {locationLabel}
+            </span>
           </div>
+
+          <a
+            href={addHref}
+            aria-label={t("market.addListing")}
+            title={t("market.addListing")}
+            className="grid size-8 shrink-0 place-items-center rounded-full bg-market-navy-foreground text-market-navy shadow-sm transition-transform hover:scale-105 hover:bg-market-silver focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-navy-foreground/80 sm:size-9"
+          >
+            <Plus className="size-5" strokeWidth={2.4} aria-hidden />
+          </a>
         </div>
 
         {showCategories && <MarketCategoryStrip />}
@@ -180,8 +92,8 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
         aria-hidden
         className={
           showCategories
-            ? "h-[calc(8.5rem+env(safe-area-inset-top))] sm:h-[calc(9rem+env(safe-area-inset-top))]"
-            : "h-[calc(3.5rem+env(safe-area-inset-top))]"
+            ? "h-[calc(8rem+env(safe-area-inset-top))] sm:h-[calc(8.625rem+env(safe-area-inset-top))]"
+            : "h-[calc(2.75rem+env(safe-area-inset-top))] sm:h-[calc(3rem+env(safe-area-inset-top))]"
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />
