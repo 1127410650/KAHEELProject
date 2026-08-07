@@ -5,6 +5,7 @@ import {
   CalendarCheck2,
   Clock3,
   LogIn,
+  Settings2,
   ShieldCheck,
   Sparkles,
   Store,
@@ -24,12 +25,12 @@ export const Route = createFileRoute("/appointments")({
       {
         name: "description",
         content:
-          "كَحيل مواعيد: واجهة مستقلة لحجز المواعيد ومتابعة الدور، بحساب كَحيل موحد.",
+          "احجز الخدمات والمواعيد من كَحيل، وتابع حجوزاتك من واجهة كَحيل مواعيد بحساب واحد.",
       },
       { property: "og:title", content: "كَحيل مواعيد — KAHEEL Appointments" },
       {
         property: "og:description",
-        content: "احجز موعدك وتابع دورك من واجهة كَحيل مواعيد المستقلة.",
+        content: "حجز المواعيد والخدمات ومتابعتها من تجربة مستقلة مرتبطة بحساب كَحيل.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -44,6 +45,8 @@ function AppointmentsLandingPage() {
   const isAr = locale === "ar";
   const signedIn = status === "authenticated";
   const authHref = "/auth?next=%2Fappointments";
+  const bookingsAuthHref = "/auth?next=%2Fdashboard%2Fbookings";
+  const providerAuthHref = "/auth?next=%2Fdashboard%2Fservice";
 
   const copy = isAr
     ? {
@@ -51,54 +54,66 @@ function AppointmentsLandingPage() {
         signIn: "تسجيل الدخول",
         brand: "كَحيل مواعيد",
         eyebrow: "KAHEEL Appointments",
-        title: "موعدك أوضح، وانتظارك أقل.",
-        body: "واجهة مستقلة للمواعيد صُممت لتجمع الحجز المسبق وقائمة الانتظار ومتابعة الدور في تجربة بسيطة، مع حساب كَحيل واحد.",
-        primary: signedIn ? "ابدأ من كَحيل مواعيد" : "سجّل الدخول للمتابعة",
-        secondary: "أنا مقدم خدمة",
-        promise: "لا تنتظر مكانك… تابع دورك.",
-        step1: "احجز",
-        step1Body: "اختر مقدم الخدمة والوقت المناسب عند تفعيل دليل المواعيد.",
-        step2: "تابع دورك",
-        step2Body: "ستظهر حالة الموعد والانتظار من واجهة واحدة دون خلطها مع السوق.",
-        step3: "حان موعدك",
-        step3Body: "التنبيه والدخول إلى الجلسة سيكونان جزءًا من نفس الرحلة.",
-        providersTitle: "مساحة مستقلة لمقدمي الخدمة",
-        providersBody:
-          "ستُبنى إدارة الجداول والطوابير على نطاق مواعيد مستقل، بينما تبقى هوية المستخدم وتسجيل الدخول مشتركة مع كَحيل.",
-        accountTitle: "حساب واحد الآن، وفصل ممكن لاحقًا",
+        title: "احجز موعدك، وتابع كل شيء من مكان واحد.",
+        body: "كَحيل مواعيد واجهة مستقلة فوق نظام حجوزات كَحيل الحالي. اختر مقدم الخدمة والموعد، ثم تابع حالة الحجز من حسابك نفسه دون إنشاء حساب أو نظام حجوزات جديد.",
+        bookNow: "احجز موعدًا",
+        myBookings: "مواعيدي",
+        provider: "أنا مقدم خدمة",
+        promise: "حساب واحد. حجز واحد. متابعة أوضح.",
+        step1: "اختر الخدمة",
+        step1Body: "تصفّح الخدمات المنشورة فعليًا في كَحيل واختر مقدم الخدمة المناسب.",
+        step2: "اختر الموعد",
+        step2Body: "استخدم المواعيد المتاحة الحالية للمختص دون إنشاء تقويم مكرر.",
+        step3: "تابع الحجز",
+        step3Body: "تظهر الحجوزات القادمة والسجل والحالة داخل حساب كَحيل نفسه.",
+        providerTitle: "لديك نشاط يقدم مواعيد؟",
+        providerBody:
+          "إدارة الخدمات والمختصين وساعات العمل والحجوزات موجودة أصلًا في كَحيل. كَحيل مواعيد يستخدم هذه الطبقة نفسها حتى لا تتكرر البيانات أو الصلاحيات.",
+        providerOpen: "افتح إدارة الخدمات",
+        providerSettings: "إعدادات المواعيد",
+        accountTitle: "نفس حساب كَحيل",
         accountBody:
-          "لا ننشئ نظام دخول ثانيًا. كَحيل مواعيد يستخدم جلسة كَحيل الحالية، مع إبقاء بيانات المواعيد في نطاق منفصل قابل للنقل مستقبلًا.",
+          "تسجيل الدخول والجلسة والحساب النشط تبقى موحدة مع سوق كَحيل. لا يوجد Auth ثانٍ ولا هوية منفصلة للمواعيد.",
         signedInAs: "مسجل الدخول باسم",
-        foundation: "الأساس الآمن جاهز",
-        foundationBody:
-          "هذه المرحلة تثبت الواجهة المستقلة والهوية المشتركة فقط. لن نفعّل حجزًا أو طابورًا وهميًا قبل اعتماد طبقة البيانات والصلاحيات واختبارها.",
+        liveQueueTitle: "قائمة الانتظار الذكية",
+        liveQueueBody:
+          "الطابور المباشر ورقم الدور والوقت المتوقع سيُضاف فوق الحجز الحالي في مرحلة مستقلة، بعد ربط قاعدة KAHEEL الصحيحة واختبار RLS والتزامن. لن نعرض أرقامًا تجريبية على أنها بيانات حقيقية.",
+        currentReady: "المتاح الآن",
+        currentReadyBody:
+          "الحجز الفعلي، الأوقات المتاحة، المختصون، إدارة مقدم الخدمة، حالات الحجز، الإلغاء وسجل الحجوزات كلها تستخدم النظام الموجود أصلًا.",
       }
     : {
         market: "Go to KAHEEL Market",
         signIn: "Sign in",
         brand: "KAHEEL Appointments",
         eyebrow: "كَحيل مواعيد",
-        title: "Clearer appointments. Less waiting.",
-        body: "A standalone appointments experience for scheduled bookings, live queues and turn tracking, powered by one KAHEEL account.",
-        primary: signedIn ? "Start with KAHEEL Appointments" : "Sign in to continue",
-        secondary: "I am a service provider",
-        promise: "Track your turn instead of waiting in place.",
-        step1: "Book",
-        step1Body: "Choose a provider and suitable time once the appointments directory is enabled.",
-        step2: "Track your turn",
-        step2Body: "Appointment and queue status will live in one experience, separate from the market.",
-        step3: "It is your turn",
-        step3Body: "Notifications and session entry will be part of the same journey.",
-        providersTitle: "A dedicated provider workspace",
-        providersBody:
-          "Schedules and queues will live in an appointments-specific domain while user identity and sign-in remain shared with KAHEEL.",
-        accountTitle: "One account now, separable later",
+        title: "Book your appointment and track it in one place.",
+        body: "KAHEEL Appointments is a standalone experience built on KAHEEL's existing booking system. Choose a provider and slot, then track the booking with the same KAHEEL account—without a second auth or booking stack.",
+        bookNow: "Book an appointment",
+        myBookings: "My appointments",
+        provider: "I am a service provider",
+        promise: "One account. One booking. Clearer tracking.",
+        step1: "Choose a service",
+        step1Body: "Browse services already published in KAHEEL and choose the right provider.",
+        step2: "Choose a time",
+        step2Body: "Use the provider's existing real availability instead of a duplicate calendar.",
+        step3: "Track the booking",
+        step3Body: "Upcoming bookings, history and status stay inside the same KAHEEL account.",
+        providerTitle: "Do you offer appointment-based services?",
+        providerBody:
+          "Service setup, professionals, working hours and bookings already exist in KAHEEL. Appointments reuses the same layer so data and permissions are never duplicated.",
+        providerOpen: "Open service management",
+        providerSettings: "Appointment settings",
+        accountTitle: "Your existing KAHEEL account",
         accountBody:
-          "We do not create a second authentication system. KAHEEL Appointments reuses the current KAHEEL session while appointments data stays in an isolated domain that can be moved later.",
+          "Sign-in, session and active account remain shared with KAHEEL Market. There is no second auth system or separate appointment identity.",
         signedInAs: "Signed in as",
-        foundation: "Safe foundation is ready",
-        foundationBody:
-          "This stage establishes the standalone interface and shared identity only. Booking and queue actions stay disabled until their data and permission layer is approved and tested.",
+        liveQueueTitle: "Smart live queue",
+        liveQueueBody:
+          "Live queue position and ETA will be added on top of the current booking model in a separate phase, after the correct KAHEEL database is connected and RLS/concurrency are verified. No demo queue values are presented as real data.",
+        currentReady: "Available now",
+        currentReadyBody:
+          "Real booking, available slots, professionals, provider management, booking statuses, cancellation and booking history already use the existing KAHEEL system.",
       };
 
   const DirectionArrow = isAr ? ArrowLeft : ArrowRight;
@@ -160,31 +175,31 @@ function AppointmentsLandingPage() {
               </p>
             ) : null}
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              {signedIn ? (
-                <a
-                  href="#foundation"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground transition hover:bg-primary-dark"
-                >
-                  {copy.primary}
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button asChild className="min-h-12 rounded-xl px-5">
+                <Link to="/services/">
+                  <CalendarCheck2 className="size-4" aria-hidden />
+                  {copy.bookNow}
                   <DirectionArrow className="size-4" aria-hidden />
-                </a>
+                </Link>
+              </Button>
+
+              {signedIn ? (
+                <Button asChild variant="outline" className="min-h-12 rounded-xl px-5">
+                  <Link to="/dashboard/bookings">
+                    <Clock3 className="size-4" aria-hidden />
+                    {copy.myBookings}
+                  </Link>
+                </Button>
               ) : (
                 <a
-                  href={authHref}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground transition hover:bg-primary-dark"
+                  href={bookingsAuthHref}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 text-sm font-bold transition hover:bg-secondary"
                 >
-                  {copy.primary}
-                  <DirectionArrow className="size-4" aria-hidden />
+                  <Clock3 className="size-4" aria-hidden />
+                  {copy.myBookings}
                 </a>
               )}
-              <a
-                href="#providers"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 text-sm font-bold transition hover:bg-secondary"
-              >
-                <UsersRound className="size-4" aria-hidden />
-                {copy.secondary}
-              </a>
             </div>
           </div>
 
@@ -192,32 +207,22 @@ function AppointmentsLandingPage() {
             <div className="rounded-[1.5rem] bg-secondary/65 p-5 sm:p-6">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs font-bold text-muted-foreground">{copy.brand}</p>
-                  <p className="mt-1 text-lg font-black">{isAr ? "متابعة الموعد" : "Appointment status"}</p>
+                  <p className="text-xs font-bold text-muted-foreground">{copy.currentReady}</p>
+                  <p className="mt-1 text-lg font-black">{copy.brand}</p>
                 </div>
                 <span className="grid size-11 place-items-center rounded-2xl bg-primary text-primary-foreground">
                   <CalendarCheck2 className="size-5" aria-hidden />
                 </span>
               </div>
-
-              <div className="mt-7 space-y-3">
-                <div className="rounded-2xl border border-border bg-card p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="grid size-10 place-items-center rounded-xl bg-secondary text-primary">
-                      <Clock3 className="size-5" aria-hidden />
-                    </span>
-                    <div>
-                      <p className="text-xs text-muted-foreground">
-                        {isAr ? "الوقت المتوقع" : "Estimated time"}
-                      </p>
-                      <p className="mt-0.5 font-black">—</p>
-                    </div>
-                  </div>
+              <p className="mt-5 text-sm leading-7 text-muted-foreground">{copy.currentReadyBody}</p>
+              <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                <div className="rounded-2xl border bg-card p-3 text-xs font-bold">
+                  <Clock3 className="mb-2 size-4 text-primary" aria-hidden />
+                  {isAr ? "أوقات متاحة فعلية" : "Real availability"}
                 </div>
-                <div className="rounded-2xl border border-dashed border-border bg-background/70 p-4 text-center text-xs leading-6 text-muted-foreground">
-                  {isAr
-                    ? "لن نعرض رقم دور أو وقتًا تجريبيًا على أنه حقيقي. تظهر البيانات هنا فقط بعد ربط طبقة المواعيد الآمنة."
-                    : "No fake queue number or time is shown as real data. Live status appears here only after the secure appointments data layer is connected."}
+                <div className="rounded-2xl border bg-card p-3 text-xs font-bold">
+                  <UsersRound className="mb-2 size-4 text-primary" aria-hidden />
+                  {isAr ? "مختصون وحجوزات" : "Professionals & bookings"}
                 </div>
               </div>
             </div>
@@ -228,8 +233,8 @@ function AppointmentsLandingPage() {
       <section className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { icon: CalendarCheck2, title: copy.step1, body: copy.step1Body },
-            { icon: UsersRound, title: copy.step2, body: copy.step2Body },
+            { icon: Sparkles, title: copy.step1, body: copy.step1Body },
+            { icon: CalendarCheck2, title: copy.step2, body: copy.step2Body },
             { icon: Clock3, title: copy.step3, body: copy.step3Body },
           ].map(({ icon: Icon, title, body }, index) => (
             <article key={title} className="rounded-3xl border border-border bg-card p-5 shadow-panel sm:p-6">
@@ -246,13 +251,40 @@ function AppointmentsLandingPage() {
         </div>
       </section>
 
-      <section id="providers" className="border-y border-border bg-card">
+      <section className="border-y border-border bg-card">
         <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16">
           <div className="rounded-3xl bg-secondary/60 p-6 sm:p-8">
             <UsersRound className="size-7 text-primary" aria-hidden />
-            <h2 className="mt-4 text-2xl font-black">{copy.providersTitle}</h2>
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">{copy.providersBody}</p>
+            <h2 className="mt-4 text-2xl font-black">{copy.providerTitle}</h2>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">{copy.providerBody}</p>
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              {signedIn ? (
+                <Button asChild>
+                  <Link to="/dashboard/service">
+                    <UsersRound className="size-4" aria-hidden />
+                    {copy.providerOpen}
+                  </Link>
+                </Button>
+              ) : (
+                <a
+                  href={providerAuthHref}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-primary-foreground transition hover:bg-primary-dark"
+                >
+                  <UsersRound className="size-4" aria-hidden />
+                  {copy.provider}
+                </a>
+              )}
+              {signedIn ? (
+                <Button asChild variant="outline">
+                  <Link to="/dashboard/service/settings">
+                    <Settings2 className="size-4" aria-hidden />
+                    {copy.providerSettings}
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
           </div>
+
           <div className="rounded-3xl border border-border p-6 sm:p-8">
             <ShieldCheck className="size-7 text-primary" aria-hidden />
             <h2 className="mt-4 text-2xl font-black">{copy.accountTitle}</h2>
@@ -261,32 +293,18 @@ function AppointmentsLandingPage() {
         </div>
       </section>
 
-      <section id="foundation" className="mx-auto w-full max-w-4xl px-4 py-14 text-center sm:px-6 lg:py-20">
+      <section className="mx-auto w-full max-w-4xl px-4 py-14 text-center sm:px-6 lg:py-20">
         <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-secondary text-primary">
-          <ShieldCheck className="size-6" aria-hidden />
+          <Clock3 className="size-6" aria-hidden />
         </span>
-        <h2 className="mt-4 text-2xl font-black sm:text-3xl">{copy.foundation}</h2>
+        <h2 className="mt-4 text-2xl font-black">{copy.liveQueueTitle}</h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-          {copy.foundationBody}
+          {copy.liveQueueBody}
         </p>
-        {!signedIn ? (
-          <a
-            href={authHref}
-            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground transition hover:bg-primary-dark"
-          >
-            {copy.signIn}
-            <DirectionArrow className="size-4" aria-hidden />
-          </a>
-        ) : null}
       </section>
 
-      <footer className="border-t border-border bg-card">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p>© 2026 KAHEEL — {isAr ? "كَحيل مواعيد" : "Appointments"}</p>
-          <Link to="/" className="font-bold text-foreground hover:text-primary">
-            {copy.market}
-          </Link>
-        </div>
+      <footer className="border-t border-border px-4 py-6 text-center text-xs text-muted-foreground">
+        {isAr ? "كَحيل مواعيد · مرتبط بمنصة كَحيل" : "KAHEEL Appointments · Connected to KAHEEL"}
       </footer>
     </main>
   );
