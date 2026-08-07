@@ -4,15 +4,18 @@
 
 - Branch: `feat/mobile-ios-android-secure-foundation`
 - Draft PR: `#21`
-- Base synchronization: **current with `main` (`behind = 0`)** after maintenance sync PR `#29`
+- Base synchronization: **current with latest `main` (`behind = 0`)** at the final validation point
 - Merge: **blocked pending the live-backend/device checks listed below**
 - Store publishing/signing: **blocked**
 - Latest Vercel preview on the synchronized mobile head: **passed**
-- Latest read-only Native CI after the newest Kaheel session/navigation changes: **passed end-to-end**
+- Final read-only Native CI: **passed end-to-end**
 - Deterministic npm lock: **committed and proven with clean `npm ci`**
-- Android debug APK: **compiled successfully and retained as a short-lived artifact**
-- iOS Simulator application: **compiled successfully without signing**
-- Compiled iOS privacy manifest: **verified inside `App.app`**
+- Production dependency audit: **0 high/critical vulnerabilities in final CI**
+- Android debug APK: **compiled successfully**
+- Android unsigned Release APK: **compiled successfully with R8 minification and resource shrinking**
+- Android merged Release manifest: **checked after dependency manifest merging**
+- iOS Release simulator application: **compiled successfully without signing**
+- Compiled iOS privacy manifest: **verified inside the Release `App.app`**
 - Read-only adversarial Supabase RLS/Storage harness: **implemented; live execution still pending isolated QA credentials/records**
 
 No software can be guaranteed impossible to compromise. The release requirement remains defense in depth, fail-closed behavior, strict server-side authorization, repeatable builds, adversarial authorization testing, and evidence from real devices before public distribution.
@@ -20,8 +23,8 @@ No software can be guaranteed impossible to compromise. The release requirement 
 ## Architecture and security controls implemented
 
 1. The native application bundles the reviewed SPA inside the Android/iOS application package. Production application code is not loaded through Capacitor `server.url` or `allowNavigation`.
-2. Normal web SSR remains enabled. Nitro is disabled **only** during the native SPA build so TanStack Start can produce the local prerender server/output required for `dist/client/index.html`.
-3. Supabase RLS/server authorization remains the authority for data access. The client-side application does not receive service-role or secret keys.
+2. Normal web SSR remains enabled. Nitro is disabled **only** during the native SPA build so TanStack Start can produce the local prerender output required for `dist/client/index.html`.
+3. Supabase RLS/server authorization remains the authority for data access. The client application does not receive service-role or secret keys.
 4. Native sessions use Keychain/Keystore-backed secure storage. A first-install marker clears iOS Keychain session material that can survive uninstall/reinstall.
 5. Native authentication storage accepts only the current Supabase auth key prefix and applies a bounded value size.
 6. Supabase client requests are constrained to the configured HTTPS origin, use PKCE, omit browser-cookie authority, and reject unsafe redirects.
@@ -29,16 +32,31 @@ No software can be guaranteed impossible to compromise. The release requirement 
 8. Password recovery uses the approved HTTPS recovery route. PKCE codes are exchanged only on `/reset-password`, removed before local history navigation, and are not logged.
 9. The final generated native SPA receives exactly one reviewed Content Security Policy. The finalizer rejects unsafe/non-HTTPS Supabase origins and verifies explicit HTTPS/WSS connection origins, `object-src 'none'`, `frame-src 'none'`, `frame-ancestors 'none'`, `base-uri 'none'`, `form-action 'self'`, and no `unsafe-eval`.
 10. Android cleartext traffic, mixed content, application backup, broad storage/package/install permissions, user-installed CA trust, and WebView debugging are prohibited.
-11. iOS arbitrary transport loads, local-network transport exceptions, file sharing, opening documents in place, and WebView debugging are prohibited.
-12. Android baseline is API 23 or newer. The generated project uses compile/target API 35 in validation.
-13. iOS deployment target is 14.0 or newer.
-14. Apple `PrivacyInfo.xcprivacy` declares UserDefaults required-reason API use with reason `CA92.1`, is linked into Xcode resources, and is verified in the compiled simulator `.app`.
-15. Native dependencies are pinned to the reviewed Capacitor 7 set: Core/Android/iOS/CLI `7.6.8`, App `7.1.2`, Preferences `7.0.4`, secure storage `0.12.0`.
-16. A full-screen privacy shield is bundled and shown for inactive/pause states so App Switcher snapshots do not expose application content.
-17. The existing WebRTC voice feature receives least-privilege microphone access only: Android `RECORD_AUDIO` and iOS `NSMicrophoneUsageDescription`. Camera, location, broad storage, and unrelated permissions were not added.
-18. `viewport-fit=cover`, dynamic viewport units, and safe-area insets are guarded for notches, Dynamic Island, rounded corners, and bottom gesture areas.
-19. Signing keys, certificates, provisioning profiles, environment secrets, APNs/FCM secrets, and Android local signing properties are not committed.
-20. Permanent Native CI has `contents: read`, checkout does not persist credentials, and GitHub Actions are pinned to immutable commit SHAs.
+11. Android Release enables R8 minification, resource shrinking, and the optimized default ProGuard configuration. Release builds are explicitly rejected if they use the debug signing key.
+12. Android FileProvider exposure is restricted to app-owned cache only. The default broad `external-path` generated by the template is replaced and release checks reject external/root paths.
+13. The Android **merged Release manifest** is checked after library manifests are combined. Unexpected `uses-permission` entries or exported components fail CI.
+14. iOS arbitrary transport loads, local-network transport exceptions, file sharing, opening documents in place, and WebView debugging are prohibited.
+15. Android baseline is API 23 or newer. The generated project uses compile/target API 35 in validation.
+16. iOS deployment target is 14.0 or newer.
+17. Apple `PrivacyInfo.xcprivacy` declares UserDefaults required-reason API use with reason `CA92.1`, is linked into Xcode resources, and is verified in the compiled Release simulator `.app`.
+18. Native dependencies are pinned to the reviewed Capacitor 7 set: Core/Android/iOS/CLI `7.6.8`, App `7.1.2`, Preferences `7.0.4`, secure storage `0.12.0`.
+19. A full-screen privacy shield is bundled and shown for inactive/pause states so App Switcher snapshots do not expose application content.
+20. The existing WebRTC voice feature receives least-privilege microphone access only: Android `RECORD_AUDIO` and iOS `NSMicrophoneUsageDescription`. Camera, location, broad storage, and unrelated permissions were not added.
+21. `viewport-fit=cover`, dynamic viewport units, and safe-area insets are guarded for notches, Dynamic Island, rounded corners, and bottom gesture areas.
+22. Signing keys, certificates, provisioning profiles, environment secrets, APNs/FCM secrets, and Android local signing properties are not committed.
+23. Permanent Native CI has `contents: read`, checkout does not persist credentials, and GitHub Actions are pinned to immutable commit SHAs.
+
+## Android merged-manifest findings
+
+The validated Release manifest contained only the expected effective application permissions:
+
+- `android.permission.INTERNET`
+- `android.permission.RECORD_AUDIO`
+- the package-scoped AndroidX `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`
+
+The merged manifest did **not** add camera, location, external-storage, package-install, query-all-packages, or manage-external-storage permissions.
+
+Exported-component review is fail-closed. The expected launcher activity is allowed. AndroidX ProfileInstaller's exported receiver is allowed only when it remains protected by `android.permission.DUMP`. FileProvider must remain `android:exported="false"` with URI grants explicitly enabled and paths restricted to app-owned cache.
 
 ## Dependency reproducibility findings and fixes
 
@@ -56,9 +74,11 @@ The committed npm lock is lockfile v3 and is guarded so that:
 - resolved entries must contain SHA-512 integrity values;
 - Native CI installs from the committed lock with `npm ci --ignore-scripts --no-fund --no-audit` rather than regenerating dependencies.
 
-## Latest validated CI evidence
+## Final validated CI evidence
 
-Latest read-only workflow run: `31201353655`, after synchronizing the two newest `main` commits through maintenance PR `#29` and preserving PR `#21` as Draft.
+Final read-only workflow run: `31205922750`.
+
+Validated source head: `726bcf442954b415412469872ade17f9a6ef2d99`.
 
 Every validation step completed successfully:
 
@@ -71,21 +91,23 @@ Every validation step completed successfully:
 7. Android/iOS hardening and native release checks.
 8. Capacitor Doctor.
 9. Android `assembleDebug` compilation.
-10. iOS Simulator Xcode compilation with signing disabled.
-11. Verification that `PrivacyInfo.xcprivacy` exists inside the compiled `App.app`.
-12. Upload of generated native projects and Android debug APK as short-lived review artifacts.
+10. Android `assembleRelease` compilation with R8/resource shrinking.
+11. Verification that the Release mapping file exists.
+12. Post-merge Android Release manifest permission/exported-component security gate.
+13. iOS **Release** Simulator Xcode compilation with signing disabled.
+14. Verification that `PrivacyInfo.xcprivacy` exists inside the compiled Release `App.app`.
+15. Upload of generated native projects, Android debug APK, and Android unsigned Release APK as short-lived review artifacts.
 
-Artifacts from run `31201353655`:
+Artifacts from run `31205922750`:
 
-- Android debug artifact ID `9003084830`, SHA-256 digest `8edcab6780b45af30285b814e8ce4b12861756840e1e5212f9abca8c8239d6f4`.
-- Native projects artifact ID `9003083877`, SHA-256 digest `ab8396d7f24b0fc9ccd632691f62dd7ea2a1e44aa45c0fecd5545564297f70a6`.
-- Both artifacts expire on 2026-08-14.
-
-A generated-project review confirmed the expected permission posture: the final Android application manifest requests `INTERNET` and `RECORD_AUDIO`; iOS contains the microphone usage description and reviewed transport/privacy settings, without adding camera, location, or broad storage permission.
+- Android unsigned Release artifact ID `9004850302`, SHA-256 digest `35b54a23a58b1de4aa285b073842307e465d71e7d475e3a95116f509483df4e4`.
+- Android debug artifact ID `9004849453`, SHA-256 digest `7749378dfa245cecbcfa4258f9478e057789a6534729c750a3ed0b1c11f792a2`.
+- Native projects artifact ID `9004847824`, SHA-256 digest `a85ec3c92b9c1b7b4955fe85a2c72880e0b8fac575cbcc8661cd38eaebd2a319`.
+- All three artifacts expire on 2026-08-14.
 
 ## Adversarial Supabase isolation harness
 
-A separate manual workflow, `.github/workflows/supabase-adversarial-rls.yml`, and script, `scripts/test-adversarial-rls.mjs`, were added for live authorization testing without weakening normal CI.
+A separate manual workflow, `.github/workflows/supabase-adversarial-rls.yml`, and script, `scripts/test-adversarial-rls.mjs`, exist for live authorization testing without weakening normal CI.
 
 The harness is deliberately read-only and requires the explicit confirmation string `RLS-QA-READONLY`. It also requires two different authenticated QA users, two different tenants, two projects, two attachment records, and two private storage objects. It rejects expired/non-authenticated/service-role credentials and pins the reviewed Supabase project reference `fdmovlxyqebtgzhsroac` unless an explicit custom-domain override is supplied.
 
@@ -116,7 +138,7 @@ The source/build foundation is complete, but these items remain mandatory before
 
 1. Add and verify `https://check-your-name-ai.vercel.app/reset-password` in the actual Supabase Auth redirect allowlist, with no wildcard, then test it against the real Auth configuration.
 2. Configure isolated QA secrets/records and execute the manual read-only RLS/Storage workflow successfully in both directions. Then run write-path/payload-tampering authorization tests in a dedicated disposable QA dataset before public release.
-3. Run authenticated real-device tests on Android and iPhone for login, logout, refresh, reinstall behavior, offline/online transition, revoked session behavior, recovery completion, microphone allow/deny, Safe Area rendering, and App Switcher privacy.
+3. Run authenticated real-device tests on Android and iPhone for login, logout, refresh, reinstall behavior, offline/online transition, revoked session behavior, recovery completion, microphone allow/deny, Safe Area rendering, App Switcher privacy, and actual Release behavior.
 4. Test recovery callbacks adversarially against real Auth: expired/replayed/malformed codes, credential-bearing fragments, unapproved origins, and malicious redirect inputs.
 5. Confirm the final App Store Bundle ID and Android Application ID before signing. The current technical identifier remains `com.kahli.marketplace` and must not be silently changed without the final identifier decision.
 6. Configure release signing outside the repository and document signing-key/provisioning rotation and recovery procedures.
