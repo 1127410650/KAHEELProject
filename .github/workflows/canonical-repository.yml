@@ -40,3 +40,54 @@ jobs:
 
       - name: Verify repository, Supabase, deployment, and duplicate roots
         run: node scripts/check-project-authority.mjs --require-runtime
+
+      - name: Prove a foreign repository is blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          if GITHUB_REPOSITORY=1127410650/unauthorized-copy node scripts/check-project-authority.mjs --require-runtime; then
+            echo "Authority guard incorrectly accepted a foreign repository" >&2
+            exit 1
+          fi
+
+      - name: Prove a foreign Supabase project is blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          if VITE_SUPABASE_URL=https://aaaaaaaaaaaaaaaaaaaa.supabase.co node scripts/check-project-authority.mjs --require-runtime; then
+            echo "Authority guard incorrectly accepted a foreign Supabase project" >&2
+            exit 1
+          fi
+
+      - name: Prove a duplicate Vercel project identity is blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          if env \
+            -u GITHUB_REPOSITORY \
+            -u GITHUB_REPOSITORY_ID \
+            -u GITHUB_ACTIONS \
+            CI=true \
+            VERCEL=1 \
+            VERCEL_GIT_REPO_OWNER=1127410650 \
+            VERCEL_GIT_REPO_SLUG=unauthorized-copy \
+            VERCEL_PROJECT_PRODUCTION_URL=unauthorized-copy.vercel.app \
+            node scripts/check-project-authority.mjs --require-runtime; then
+            echo "Authority guard incorrectly accepted a duplicate Vercel identity" >&2
+            exit 1
+          fi
+
+      - name: Prove an unknown CI platform is blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          if env \
+            -u GITHUB_REPOSITORY \
+            -u GITHUB_REPOSITORY_ID \
+            -u GITHUB_ACTIONS \
+            -u VERCEL \
+            CI=true \
+            node scripts/check-project-authority.mjs --require-runtime; then
+            echo "Authority guard incorrectly accepted an unknown CI platform" >&2
+            exit 1
+          fi
