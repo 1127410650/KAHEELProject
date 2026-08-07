@@ -70,8 +70,21 @@ jobs:
           java-version: 21
           check-latest: false
 
-      - name: Install locked dependencies without lifecycle scripts
-        run: npm ci --ignore-scripts --no-fund --no-audit
+      - name: Regenerate candidate lock and prove clean install
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --ignore-scripts --no-fund --no-audit --registry=https://registry.npmjs.org/
+          rm -rf node_modules
+          npm ci --ignore-scripts --no-fund --no-audit
+
+      - name: Upload clean-install lock candidate
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: reviewed-lock-candidate-${{ github.sha }}
+          retention-days: 1
+          if-no-files-found: error
+          path: package-lock.json
 
       - name: Reject client secrets and unsafe mobile settings
         run: npm run security:client-secrets
