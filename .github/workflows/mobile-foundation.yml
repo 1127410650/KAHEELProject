@@ -47,8 +47,8 @@ jobs:
     env:
       MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
       MOBILE_RELEASE_BUILD: "0"
-      VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
-      VITE_SUPABASE_PROJECT_ID: ci-placeholder
+      VITE_SUPABASE_URL: https://rgpnhzovtceitqxpiilf.supabase.co
+      VITE_SUPABASE_PROJECT_ID: rgpnhzovtceitqxpiilf
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
 
     steps:

@@ -4,7 +4,24 @@
 //     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+
+// Keep this check in Vite itself so direct `vite build`/`vite dev` invocations
+// cannot bypass the package-script guard used by CI, Vercel, and Lovable.
+for (const script of [
+  "./scripts/check-canonical-repository.mjs",
+  "./scripts/check-canonical-infrastructure.mjs",
+]) {
+  execFileSync(
+    process.execPath,
+    [fileURLToPath(new URL(script, import.meta.url)), "--require-runtime"],
+    {
+      stdio: "inherit",
+    },
+  );
+}
 
 export default defineConfig({
   tanstackStart: {

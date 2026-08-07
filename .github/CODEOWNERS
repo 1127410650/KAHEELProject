@@ -1,0 +1,8 @@
+# Canonical infrastructure controls require review by the repository owner.
+/.github/CODEOWNERS @1127410650
+/.github/workflows/canonical-repository.yml @1127410650
+/AGENTS.md @1127410650
+/docs/CANONICAL_REPOSITORY.md @1127410650
+/scripts/check-canonical-repository.mjs @1127410650
+/scripts/check-canonical-infrastructure.mjs @1127410650
+/supabase/config.toml @1127410650

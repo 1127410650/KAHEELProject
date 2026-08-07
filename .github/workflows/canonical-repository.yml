@@ -2,13 +2,7 @@ name: Canonical repository guard
 
 on:
   push:
-    branches:
-      - main
-      - "agent/**"
-      - "feat/**"
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -18,6 +12,9 @@ jobs:
   verify-canonical-repository:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      VITE_SUPABASE_URL: https://rgpnhzovtceitqxpiilf.supabase.co
+      VITE_SUPABASE_PROJECT_ID: rgpnhzovtceitqxpiilf
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -31,5 +28,5 @@ jobs:
           node-version: 22
           package-manager-cache: false
 
-      - name: Verify canonical KAHEEL repository
-        run: node scripts/check-canonical-repository.mjs
+      - name: Reject non-canonical repository or Supabase configuration
+        run: npm run guard:canonical
