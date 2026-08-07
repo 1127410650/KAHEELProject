@@ -1,32 +1,35 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, MapPin, Pause, Play, Sparkles } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { MapPin, Sparkles } from "lucide-react";
 
-import { useI18n } from "@/i18n";
 import catCars from "@/assets/market/cat-cars.webp";
 import catDevices from "@/assets/market/cat-devices.webp";
 import catEquipment from "@/assets/market/cat-equipment.webp";
 import catHomeServices from "@/assets/market/cat-home-services.webp";
 import catRealEstate from "@/assets/market/cat-real-estate.webp";
 import catSuppliers from "@/assets/market/cat-suppliers.webp";
+import { useAutoLoopRail } from "@/components/marketplace/home/useAutoLoopRail";
+import { useI18n } from "@/i18n";
+import { DEMO_STORE_WORLDS } from "@/lib/demo-store-worlds";
+
+type Localized = { ar: string; en: string };
 
 type DemoListing = {
   id: string;
   image: string;
-  title: { ar: string; en: string };
-  category: { ar: string; en: string };
-  price: { ar: string; en: string };
-  city: { ar: string; en: string };
+  title: Localized;
+  category: Localized;
+  price: Localized;
+  city: Localized;
   search: Record<string, string>;
 };
 
-const DEMO_LISTINGS: DemoListing[] = [
+const FEATURED_DEMOS: DemoListing[] = [
   {
     id: "demo-home",
     image: catRealEstate,
     title: { ar: "شقة عائلية بإطلالة مفتوحة", en: "Family apartment with an open view" },
     category: { ar: "عقارات", en: "Property" },
-    price: { ar: "سعر توضيحي ٣٢٠ مليون ل.س", en: "Sample price SYP 320m" },
+    price: { ar: "٣٢٠ مليون ل.س", en: "SYP 320m" },
     city: { ar: "دمشق", en: "Damascus" },
     search: { category: "real-estate" },
   },
@@ -35,292 +38,198 @@ const DEMO_LISTINGS: DemoListing[] = [
     image: catCars,
     title: { ar: "سيارة اقتصادية بحالة ممتازة", en: "Economical car in excellent condition" },
     category: { ar: "سيارات", en: "Cars" },
-    price: { ar: "سعر توضيحي ١١٥ مليون ل.س", en: "Sample price SYP 115m" },
+    price: { ar: "١١٥ مليون ل.س", en: "SYP 115m" },
     city: { ar: "حلب", en: "Aleppo" },
-    search: { q: "سيارة" },
+    search: { category: "cars" },
   },
   {
     id: "demo-laptop",
     image: catDevices,
     title: { ar: "حاسوب محمول للدراسة والعمل", en: "Laptop for study and work" },
     category: { ar: "أجهزة", en: "Devices" },
-    price: { ar: "سعر توضيحي ٦٫٨ مليون ل.س", en: "Sample price SYP 6.8m" },
+    price: { ar: "٦٫٨ مليون ل.س", en: "SYP 6.8m" },
     city: { ar: "دمشق", en: "Damascus" },
-    search: { q: "جهاز" },
+    search: { category: "devices" },
   },
   {
     id: "demo-service",
     image: catHomeServices,
     title: { ar: "فني صيانة منزلية عند الطلب", en: "On-demand home maintenance" },
     category: { ar: "خدمات", en: "Services" },
-    price: { ar: "السعر حسب الخدمة", en: "Price by service" },
+    price: { ar: "ابتداءً من ١٥٠ ألف ل.س", en: "From SYP 150k" },
     city: { ar: "حمص", en: "Homs" },
-    search: { category: "maintenance" },
+    search: { category: "services" },
   },
   {
     id: "demo-equipment",
     image: catEquipment,
     title: { ar: "معدات ورشة جاهزة للتشغيل", en: "Workshop equipment ready to operate" },
     category: { ar: "معدات", en: "Equipment" },
-    price: { ar: "السعر عند التواصل", en: "Contact for price" },
+    price: { ar: "٤٢ مليون ل.س", en: "SYP 42m" },
     city: { ar: "ريف دمشق", en: "Rural Damascus" },
-    search: { category: "equipment" },
+    search: { q: "معدات" },
   },
   {
     id: "demo-supplier",
     image: catSuppliers,
-    title: { ar: "مورد مواد وتجهيزات للمشاريع", en: "Project materials and equipment supplier" },
+    title: { ar: "مواد وتجهيزات للمشاريع", en: "Project materials and equipment" },
     category: { ar: "موردون", en: "Suppliers" },
     price: { ar: "اطلب عرض سعر", en: "Request a quote" },
     city: { ar: "اللاذقية", en: "Latakia" },
-    search: { category: "factories" },
+    search: { q: "مورد" },
   },
 ];
 
-const AUTOPLAY_MS = 3_800;
+const DEMO_PRICES: Localized[] = [
+  { ar: "٢٨٠ ألف ل.س", en: "SYP 280k" },
+  { ar: "٧٥٠ ألف ل.س", en: "SYP 750k" },
+  { ar: "١٫٢ مليون ل.س", en: "SYP 1.2m" },
+  { ar: "٩٥ ألف ل.س", en: "SYP 95k" },
+  { ar: "٤٤٠ ألف ل.س", en: "SYP 440k" },
+  { ar: "٢٫٤ مليون ل.س", en: "SYP 2.4m" },
+];
+
+const DEMO_CITIES: Localized[] = [
+  { ar: "دمشق", en: "Damascus" },
+  { ar: "حلب", en: "Aleppo" },
+  { ar: "حمص", en: "Homs" },
+  { ar: "اللاذقية", en: "Latakia" },
+];
+
+const STORE_DEMOS: DemoListing[] = DEMO_STORE_WORLDS.flatMap((world, worldIndex) =>
+  world.stores.slice(0, 2).map((store, storeIndex) => {
+    const index = worldIndex * 2 + storeIndex;
+    const firstTag = store.tags[0] ?? world.shortTitle;
+    return {
+      id: `demo-${world.id}-${storeIndex}`,
+      image: store.image,
+      title: {
+        ar: `${firstTag} مختارة من ${store.name}`,
+        en: `${world.shortTitle} pick from ${store.name}`,
+      },
+      category: { ar: world.shortTitle, en: world.shortTitle },
+      price: DEMO_PRICES[index % DEMO_PRICES.length]!,
+      city: DEMO_CITIES[index % DEMO_CITIES.length]!,
+      search: { q: firstTag },
+    };
+  }),
+).slice(0, 12);
+
+const DEMO_LISTINGS = [...FEATURED_DEMOS, ...STORE_DEMOS];
+
+function compactImage(source: string) {
+  return source.replace(/w=\d+/, "w=440").replace(/q=\d+/, "q=78");
+}
 
 /**
- * A presentation-only rail that makes an empty/new marketplace feel tangible.
- * Every card is visibly marked as a demo and links to real search results; it
- * never writes fake listings to Supabase and never opens a fictional ad route.
+ * Dense presentation-only listing rows. Every card is visibly marked as a
+ * demo and links to real search results; no fictional listing is persisted.
  */
 export function MarketDemoListings() {
-  const { locale, dir } = useI18n();
-  const language = locale === "ar" ? "ar" : "en";
-  const railRef = useRef<HTMLDivElement | null>(null);
-  const resumeTimerRef = useRef<number | null>(null);
-  const scrollFrameRef = useRef<number | null>(null);
-  const [active, setActive] = useState(0);
-  const [manualPaused, setManualPaused] = useState(false);
-  const [interactionPaused, setInteractionPaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  useEffect(
-    () => () => {
-      if (resumeTimerRef.current !== null) window.clearTimeout(resumeTimerRef.current);
-      if (scrollFrameRef.current !== null) cancelAnimationFrame(scrollFrameRef.current);
-    },
-    [],
-  );
-
-  const slides = useCallback(() => {
-    const rail = railRef.current;
-    return rail ? Array.from(rail.querySelectorAll<HTMLElement>("[data-demo-listing]")) : [];
-  }, []);
-
-  const scrollToIndex = useCallback(
-    (index: number, behavior: ScrollBehavior = "smooth") => {
-      const rail = railRef.current;
-      const list = slides();
-      if (!rail || list.length === 0) return;
-      const normalized = ((index % list.length) + list.length) % list.length;
-      const target = list[normalized];
-      if (!target) return;
-      const railRect = rail.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      const left =
-        rail.scrollLeft +
-        (dir === "rtl" ? targetRect.right - railRect.right : targetRect.left - railRect.left);
-      rail.scrollTo({ left, behavior });
-      setActive(normalized);
-    },
-    [dir, slides],
-  );
-
-  const pauseAfterInteraction = useCallback(() => {
-    setInteractionPaused(true);
-    if (resumeTimerRef.current !== null) window.clearTimeout(resumeTimerRef.current);
-    resumeTimerRef.current = window.setTimeout(() => setInteractionPaused(false), 7_000);
-  }, []);
-
-  const onScroll = useCallback(() => {
-    const rail = railRef.current;
-    if (!rail) return;
-    if (scrollFrameRef.current !== null) cancelAnimationFrame(scrollFrameRef.current);
-    scrollFrameRef.current = requestAnimationFrame(() => {
-      const railRect = rail.getBoundingClientRect();
-      const center = railRect.left + railRect.width / 2;
-      let nearest = 0;
-      let distance = Number.POSITIVE_INFINITY;
-
-      slides().forEach((slide, index) => {
-        const rect = slide.getBoundingClientRect();
-        const nextDistance = Math.abs(rect.left + rect.width / 2 - center);
-        if (nextDistance < distance) {
-          nearest = index;
-          distance = nextDistance;
-        }
-      });
-      setActive(nearest);
-    });
-  }, [slides]);
-
-  useEffect(() => {
-    if (manualPaused || interactionPaused || reducedMotion || document.hidden) return;
-    const timer = window.setTimeout(() => scrollToIndex(active + 1), AUTOPLAY_MS);
-    return () => window.clearTimeout(timer);
-  }, [active, interactionPaused, manualPaused, reducedMotion, scrollToIndex]);
-
-  const move = (direction: -1 | 1) => {
-    pauseAfterInteraction();
-    scrollToIndex(active + direction);
-  };
-
-  const previousIcon = dir === "rtl" ? ChevronRight : ChevronLeft;
-  const nextIcon = dir === "rtl" ? ChevronLeft : ChevronRight;
-  const PreviousIcon = previousIcon;
-  const NextIcon = nextIcon;
+  const { locale } = useI18n();
+  const firstRow = DEMO_LISTINGS.filter((_, index) => index % 2 === 0);
+  const secondRow = DEMO_LISTINGS.filter((_, index) => index % 2 === 1);
 
   return (
     <section
       aria-labelledby="demo-listings-title"
-      className="mx-auto w-full max-w-[1240px] px-3 pb-2 pt-4 sm:px-5 sm:pt-5 lg:px-8"
+      className="mx-auto w-full max-w-[1240px] px-3 pb-2 pt-5 sm:px-5 sm:pt-7 lg:px-8"
     >
-      <div className="overflow-hidden rounded-[1.35rem] border border-market-navy/10 bg-gradient-to-b from-white to-market-silver/55 shadow-[0_10px_30px_rgb(15_23_42/0.08)] sm:rounded-[1.75rem]">
-        <div className="flex items-start justify-between gap-3 px-3.5 pb-2.5 pt-3.5 sm:px-5 sm:pt-5">
-          <div className="min-w-0">
-            <span className="inline-flex items-center gap-1 rounded-full bg-market-navy px-2.5 py-1 text-[9px] font-black text-white sm:text-[10px]">
-              <Sparkles className="size-3" aria-hidden />
-              {language === "ar" ? "جولة سريعة" : "Quick tour"}
-            </span>
+      <div className="overflow-hidden rounded-[1.4rem] border border-market-silver-line bg-[linear-gradient(180deg,#ffffff_0%,#f3f7fb_100%)] py-3.5 shadow-[0_14px_34px_rgb(3_19_41/0.10)] sm:rounded-[1.8rem] sm:py-5">
+        <div className="mb-3 flex items-end justify-between gap-3 px-3.5 sm:mb-4 sm:px-5">
+          <div>
+            <p className="inline-flex items-center gap-1 text-[9px] font-black text-market-navy-soft sm:text-[10px]">
+              <Sparkles className="size-3.5" aria-hidden />
+              {locale === "ar" ? "إعلانات كَحيل" : "Kaheel listings"}
+            </p>
             <h2
               id="demo-listings-title"
-              className="mt-1.5 text-[17px] font-black tracking-tight text-foreground sm:text-xl"
+              className="mt-0.5 text-[17px] font-black tracking-tight text-market-navy sm:text-xl"
             >
-              {language === "ar" ? "شاهد شكل إعلانك في كَحيل" : "See how your listing can look"}
+              {locale === "ar" ? "كل شوي بتلاقي شي" : "Always something new"}
             </h2>
-            <p className="mt-0.5 text-[10px] leading-5 text-muted-foreground sm:text-xs">
-              {language === "ar"
-                ? "نماذج عرض تجريبية فقط — لا تمثل إعلانات منشورة أو عروضًا حقيقية."
-                : "Presentation demos only — these are not published listings or real offers."}
+            <p className="mt-0.5 text-[9px] font-medium text-market-silver-muted sm:text-[10px]">
+              {locale === "ar"
+                ? "نماذج تجريبية للعرض فقط — الإعلانات الحقيقية تظهر في القائمة أسفلها."
+                : "Demo previews only — live listings appear in the feed below."}
             </p>
           </div>
-
-          <div className="flex shrink-0 items-center gap-1">
-            <button
-              type="button"
-              onClick={() => move(-1)}
-              aria-label={language === "ar" ? "النموذج السابق" : "Previous demo"}
-              className="grid size-8 place-items-center rounded-full border border-border bg-white text-market-navy shadow-sm transition hover:border-market-navy/30 hover:bg-secondary"
-            >
-              <PreviousIcon className="size-4" aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => setManualPaused((current) => !current)}
-              aria-label={
-                manualPaused
-                  ? language === "ar"
-                    ? "تشغيل الحركة"
-                    : "Play motion"
-                  : language === "ar"
-                    ? "إيقاف الحركة"
-                    : "Pause motion"
-              }
-              aria-pressed={manualPaused}
-              className={
-                reducedMotion
-                  ? "hidden"
-                  : "grid size-8 place-items-center rounded-full border border-border bg-white text-market-navy shadow-sm transition hover:border-market-navy/30 hover:bg-secondary"
-              }
-            >
-              {manualPaused ? (
-                <Play className="size-3.5" aria-hidden />
-              ) : (
-                <Pause className="size-3.5" aria-hidden />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => move(1)}
-              aria-label={language === "ar" ? "النموذج التالي" : "Next demo"}
-              className="grid size-8 place-items-center rounded-full border border-border bg-white text-market-navy shadow-sm transition hover:border-market-navy/30 hover:bg-secondary"
-            >
-              <NextIcon className="size-4" aria-hidden />
-            </button>
-          </div>
+          <span className="shrink-0 rounded-full bg-market-navy px-2.5 py-1 text-[8px] font-black text-white sm:text-[9px]">
+            {DEMO_LISTINGS.length} {locale === "ar" ? "نموذجًا" : "demos"}
+          </span>
         </div>
 
-        <div
-          ref={railRef}
-          onScroll={onScroll}
-          onPointerDown={pauseAfterInteraction}
-          onWheel={pauseAfterInteraction}
-          className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain scroll-smooth px-3.5 pb-3.5 touch-pan-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3 sm:px-5 sm:pb-5"
-        >
-          {DEMO_LISTINGS.map((listing, index) => (
-            <article
-              key={listing.id}
-              data-demo-listing
-              className="group w-[46%] min-w-[46%] max-w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/85 bg-white shadow-[0_3px_14px_rgb(15_23_42/0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-market-navy/20 hover:shadow-[0_8px_22px_rgb(15_23_42/0.12)] min-[420px]:w-[42%] min-[420px]:min-w-[42%] sm:w-[210px] sm:min-w-[210px]"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-                <img
-                  src={listing.image}
-                  alt=""
-                  width={480}
-                  height={360}
-                  loading={index < 2 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-market-navy/55 via-transparent to-white/10"
-                  aria-hidden
-                />
-                <span className="absolute start-2 top-2 rounded-full border border-white/40 bg-white/92 px-2 py-1 text-[8px] font-black text-market-navy shadow-sm backdrop-blur sm:text-[9px]">
-                  {language === "ar" ? "نموذج تجريبي" : "Demo listing"}
-                </span>
-                <span className="absolute bottom-2 start-2 rounded-full bg-market-navy/88 px-2 py-1 text-[8px] font-bold text-white backdrop-blur sm:text-[9px]">
-                  {listing.category[language]}
-                </span>
-              </div>
-
-              <div className="p-2.5 sm:p-3">
-                <h3 className="line-clamp-2 min-h-[2.6em] text-[11px] font-black leading-[1.3] text-foreground sm:text-[13px]">
-                  {listing.title[language]}
-                </h3>
-                <p className="mt-1.5 line-clamp-1 text-[10px] font-black text-market-navy sm:text-[11px]">
-                  {listing.price[language]}
-                </p>
-                <div className="mt-1.5 flex items-center gap-1 text-[9px] text-muted-foreground sm:text-[10px]">
-                  <MapPin className="size-3 shrink-0" aria-hidden />
-                  <span className="truncate">{listing.city[language]}</span>
-                </div>
-                <Link
-                  to="/search"
-                  search={listing.search}
-                  className="mt-2.5 inline-flex min-h-9 w-full items-center justify-center rounded-xl bg-secondary px-2 py-1 text-center text-[9px] font-black leading-4 text-secondary-foreground transition hover:bg-market-navy hover:text-white sm:text-[10px]"
-                >
-                  {language === "ar" ? "شاهد الإعلانات الحقيقية" : "View real listings"}
-                </Link>
-              </div>
-            </article>
-          ))}
-          <span aria-hidden className="w-0.5 shrink-0" />
-        </div>
-
-        <div className="flex items-center justify-center gap-1.5 pb-3 sm:pb-4" aria-hidden>
-          {DEMO_LISTINGS.map((listing, index) => (
-            <span
-              key={listing.id}
-              className={
-                index === active
-                  ? "h-1.5 w-5 rounded-full bg-market-navy transition-all"
-                  : "size-1.5 rounded-full bg-market-silver-line transition-all"
-              }
-            />
-          ))}
+        <div className="space-y-2.5 sm:space-y-3">
+          <ListingRail listings={firstRow} direction={1} locale={locale} />
+          <ListingRail listings={secondRow} direction={-1} locale={locale} />
         </div>
       </div>
     </section>
+  );
+}
+
+function ListingRail({
+  listings,
+  direction,
+  locale,
+}: {
+  listings: DemoListing[];
+  direction: -1 | 1;
+  locale: "ar" | "en";
+}) {
+  const { railRef, interactionProps } = useAutoLoopRail(direction, direction === 1 ? 11 : 9);
+  const language = locale === "ar" ? "ar" : "en";
+  const loopingListings = Array.from({ length: 3 }, () => listings).flat();
+
+  return (
+    <div
+      ref={railRef}
+      dir="ltr"
+      {...interactionProps}
+      className="flex w-full gap-2.5 overflow-x-auto overflow-y-hidden overscroll-x-contain px-3.5 py-0.5 touch-pan-x select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3 sm:px-5"
+    >
+      {loopingListings.map((listing, index) => {
+        const duplicate = Math.floor(index / listings.length) !== 1;
+        return (
+          <Link
+            key={`${listing.id}-${index}`}
+            to="/search"
+            search={listing.search}
+            aria-hidden={duplicate ? true : undefined}
+            tabIndex={duplicate ? -1 : undefined}
+            className="group/listing w-[164px] shrink-0 overflow-hidden rounded-[1.1rem] border border-market-silver-line bg-white shadow-[0_7px_18px_rgb(3_19_41/0.10)] transition duration-300 hover:-translate-y-1 hover:border-market-navy/25 hover:shadow-[0_12px_26px_rgb(3_19_41/0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-navy sm:w-[190px] sm:rounded-[1.25rem]"
+          >
+            <div className="relative h-[88px] overflow-hidden bg-market-panel-soft sm:h-[104px]">
+              <img
+                src={compactImage(listing.image)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="size-full object-cover transition duration-700 group-hover/listing:scale-[1.06]"
+              />
+              <span className="absolute inset-0 bg-gradient-to-t from-[#031329]/66 via-transparent to-transparent" />
+              <span className="absolute start-2 top-2 rounded-full border border-white/20 bg-[#031329]/82 px-2 py-1 text-[7px] font-black text-white backdrop-blur sm:text-[8px]">
+                {language === "ar" ? "تجريبي" : "Demo"}
+              </span>
+              <span className="absolute bottom-2 start-2 max-w-[80%] truncate rounded-full bg-white/92 px-2 py-1 text-[7px] font-black text-market-navy sm:text-[8px]">
+                {listing.category[language]}
+              </span>
+            </div>
+            <div className="p-2.5" dir={locale === "ar" ? "rtl" : "ltr"}>
+              <h3 className="line-clamp-2 min-h-[2.5em] text-[10px] font-black leading-[1.28] text-market-navy sm:text-[11px]">
+                {listing.title[language]}
+              </h3>
+              <p className="num mt-1.5 truncate text-[9px] font-black text-market-navy-soft sm:text-[10px]">
+                {listing.price[language]}
+              </p>
+              <p className="mt-1 flex items-center gap-1 text-[8px] font-bold text-market-silver-muted sm:text-[9px]">
+                <MapPin className="size-3 shrink-0" aria-hidden />
+                <span className="truncate">{listing.city[language]}</span>
+              </p>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
   );
 }

@@ -62,9 +62,7 @@ export function MarketFeaturedBanner() {
 
   const slides = useCallback(() => {
     const rail = railRef.current;
-    return rail
-      ? Array.from(rail.querySelectorAll<HTMLElement>("[data-promo-slide]"))
-      : [];
+    return rail ? Array.from(rail.querySelectorAll<HTMLElement>("[data-promo-slide]")) : [];
   }, []);
 
   const scrollToIndex = useCallback(
@@ -244,13 +242,7 @@ export function MarketFeaturedBanner() {
   );
 }
 
-function FeaturedSlide({
-  listing,
-  priority,
-}: {
-  listing: ListingCardData;
-  priority: boolean;
-}) {
+function FeaturedSlide({ listing, priority }: { listing: ListingCardData; priority: boolean }) {
   const { t, locale } = useI18n();
   const slug = listing.slug ?? listing.id;
   const price = priceLabel(listing, "", locale);
@@ -279,7 +271,7 @@ function FeaturedSlide({
           />
         )}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-market-navy/92 via-market-navy/30 to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-market-void/95 via-market-electric/35 to-transparent"
           aria-hidden
         />
         <span className="absolute start-3 top-3 rounded-full bg-market-silver px-2.5 py-1 text-[10px] font-bold text-market-navy sm:text-[11px]">

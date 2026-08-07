@@ -1,16 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Bell,
-  GraduationCap,
-  Grid2x2,
-  Home,
-  MessageSquare,
-  Plus,
-  Search,
-  ShieldCheck,
-  Store,
-} from "lucide-react";
+import { Bell, Grid2x2, Home, MessageSquare, Plus, Search, ShieldCheck, Store } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { addListingHref } from "@/lib/add-listing";
@@ -45,7 +35,7 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
   const storeHref = session ? "/dashboard/store" : "/auth?next=%2Fdashboard%2Fstore";
 
   return (
-    <header className="sticky top-0 z-40 overflow-hidden bg-market-navy text-market-navy-foreground shadow-sm">
+    <header className="sticky top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] text-market-navy-foreground shadow-[0_8px_24px_rgb(2_14_33/0.18)]">
       <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-1 px-3 py-2 sm:gap-2 sm:px-4 lg:px-6">
         <Link to="/" className="shrink-0 px-0.5" aria-label={t("market.brand")}>
           <span className="text-sm font-bold tracking-tight text-market-navy-foreground sm:text-base">
@@ -197,8 +187,6 @@ function useMarketSetupGate() {
 const BOTTOM_NAV_PATHS = {
   home: "/",
   messages: "/dashboard/messages",
-  search: getSearchHref(),
-  studentTools: "/student-tools",
   alerts: "/dashboard/notifications",
   more: "/more",
 } as const;
@@ -210,16 +198,14 @@ if (import.meta.env.DEV) {
 }
 
 function activeBottomKey(pathname: string): keyof typeof BOTTOM_NAV_PATHS {
-  if (pathname.startsWith(BOTTOM_NAV_PATHS.studentTools)) return "studentTools";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.messages)) return "messages";
-  if (pathname.startsWith(BOTTOM_NAV_PATHS.search)) return "search";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.alerts)) return "alerts";
   if (pathname.startsWith(BOTTOM_NAV_PATHS.more)) return "more";
   return "home";
 }
 
 export function MarketBottomNav() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { session } = useSession();
   const { account } = useActiveAccount();
@@ -273,13 +259,6 @@ export function MarketBottomNav() {
           icon: MessageSquare,
           badge: unreadMessages.data ?? 0,
         },
-        { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
-        {
-          key: "studentTools",
-          to: BOTTOM_NAV_PATHS.studentTools,
-          icon: GraduationCap,
-          badge: 0,
-        },
         {
           key: "alerts",
           to: BOTTOM_NAV_PATHS.alerts,
@@ -296,13 +275,6 @@ export function MarketBottomNav() {
           icon: MessageSquare,
           badge: 0,
         },
-        { key: "search", to: BOTTOM_NAV_PATHS.search, icon: Search, badge: 0 },
-        {
-          key: "studentTools",
-          to: BOTTOM_NAV_PATHS.studentTools,
-          icon: GraduationCap,
-          badge: 0,
-        },
         { key: "alerts", to: signInHref(BOTTOM_NAV_PATHS.alerts), icon: Bell, badge: 0 },
         { key: "more", to: BOTTOM_NAV_PATHS.more, icon: Grid2x2, badge: 0 },
       ] as const);
@@ -317,21 +289,27 @@ export function MarketBottomNav() {
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
         {items.map((item) => {
-          const featured = item.key === "studentTools";
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
           const inner = (
             <>
               <span
                 className={
-                  featured
-                    ? "relative grid size-9 place-items-center rounded-full bg-market-silver text-market-navy shadow-sm ring-1 ring-white/30"
-                    : active
-                      ? "relative grid size-8 place-items-center text-market-navy-foreground"
-                      : "relative grid size-8 place-items-center text-market-silver-muted"
+                  active
+                    ? "relative grid size-8 place-items-center text-market-navy-foreground"
+                    : "relative grid size-8 place-items-center text-market-silver-muted"
                 }
               >
-                <item.icon className="size-4" aria-hidden />
+                {item.key === "more" ? (
+                  <span
+                    className="whitespace-nowrap text-[10px] font-black leading-none tracking-tight min-[360px]:text-[11px]"
+                    aria-hidden
+                  >
+                    {locale === "ar" ? "كحيلي" : "Kaheeli"}
+                  </span>
+                ) : (
+                  <item.icon className="size-4" aria-hidden />
+                )}
                 {item.badge > 0 && (
                   <span
                     data-testid={`mkt-bottom-badge-${item.key}`}
@@ -346,9 +324,7 @@ export function MarketBottomNav() {
                 className={
                   active
                     ? "truncate text-market-navy-foreground"
-                    : featured
-                      ? "truncate text-market-silver"
-                      : "truncate text-market-silver-muted"
+                    : "truncate text-market-silver-muted"
                 }
               >
                 {label}

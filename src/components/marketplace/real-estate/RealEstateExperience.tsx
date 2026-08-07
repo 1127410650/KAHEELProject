@@ -17,7 +17,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import realEstateHero from "@/assets/market/cat-real-estate-hero.webp";
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { FavoriteButton, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -252,7 +251,6 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 
   return (
     <MarketShell footer="none">
-      <MarketCategoryStrip />
       <div className="real-estate-experience bg-background">
         <section className="relative isolate min-h-[350px] overflow-hidden bg-market-navy sm:min-h-[430px]">
           <img

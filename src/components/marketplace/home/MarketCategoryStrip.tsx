@@ -1,20 +1,65 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, Home, LayoutGrid } from "lucide-react";
+import {
+  Armchair,
+  BriefcaseBusiness,
+  Building2,
+  CarFront,
+  Code2,
+  GraduationCap,
+  HandCoins,
+  Home,
+  LayoutGrid,
+  Lightbulb,
+  Palette,
+  PartyPopper,
+  Plane,
+  School,
+  SearchX,
+  Shirt,
+  Smartphone,
+  Sparkles,
+  Trees,
+  Utensils,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
+import { useAutoLoopRail } from "@/components/marketplace/home/useAutoLoopRail";
+
+const FIELD_ICONS: Record<string, LucideIcon> = {
+  home: Home,
+  realestate: Building2,
+  cars: CarFront,
+  devices: Smartphone,
+  aqardeal: HandCoins,
+  restaurants: Utensils,
+  furniture: Armchair,
+  services: Wrench,
+  fashion: Shirt,
+  jobs: BriefcaseBusiness,
+  training: GraduationCap,
+  schools: School,
+  events: PartyPopper,
+  programming: Code2,
+  gardens: Trees,
+  arts: Palette,
+  lostfound: SearchX,
+  projects: Lightbulb,
+  travel: Plane,
+  more: LayoutGrid,
+};
 
 /**
- * One uninterrupted category rail inside the sticky marketplace header.
- * Items keep their natural width, so no label is clipped or removed at any
- * breakpoint. Touch, trackpad and desktop arrow controls all move the same rail.
+ * A continuous row of compact category circles. Three identical groups make
+ * the loop seamless while the native rail stays swipeable on touch screens.
  */
 export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
-  const railRef = useRef<HTMLElement | null>(null);
-  const homeRef = useRef<HTMLAnchorElement | null>(null);
-  const [overflowing, setOverflowing] = useState(false);
+  const headerMarkerRef = useRef<HTMLDivElement | null>(null);
+  const { railRef, interactionProps } = useAutoLoopRail<HTMLElement>(1, 15);
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
@@ -28,60 +73,30 @@ export function MarketCategoryStrip() {
   }
 
   useLayoutEffect(() => {
-    const rail = railRef.current;
-    const header = rail?.closest("header");
+    const header = headerMarkerRef.current?.closest("header");
     header?.classList.add("market-home-header");
-
-    const measure = () => {
-      if (!rail) return;
-      setOverflowing(rail.scrollWidth > rail.clientWidth + 2);
-    };
-    const alignHome = () => {
-      homeRef.current?.scrollIntoView({
-        behavior: "auto",
-        block: "nearest",
-        inline: dir === "rtl" ? "end" : "start",
-      });
-    };
-
-    const frame = window.requestAnimationFrame(() => {
-      measure();
-      alignHome();
-    });
-    const observer =
-      typeof ResizeObserver !== "undefined" && rail ? new ResizeObserver(measure) : null;
-    if (rail) observer?.observe(rail);
-    window.addEventListener("resize", measure);
-
     return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("resize", measure);
-      observer?.disconnect();
       header?.classList.remove("market-home-header");
     };
-  }, [dir]);
-
-  const scrollRail = (direction: -1 | 1) => {
-    const rail = railRef.current;
-    if (!rail) return;
-    const logicalDirection = dir === "rtl" ? -direction : direction;
-    rail.scrollBy({
-      left: logicalDirection * Math.max(260, rail.clientWidth * 0.72),
-      behavior: "smooth",
-    });
-  };
+  }, []);
 
   const chipClass =
-    "flex h-8 min-w-max shrink-0 snap-start items-center justify-center gap-1.5 rounded-full border px-3.5 text-[10px] font-semibold leading-none transition-colors sm:h-9 sm:px-4 sm:text-[11px] lg:h-10 lg:px-5 lg:text-xs";
+    "relative flex size-[62px] shrink-0 snap-start flex-col items-center justify-center gap-1 overflow-hidden rounded-full border px-1.5 text-center text-[8px] font-black leading-[1.12] backdrop-blur transition duration-300 after:pointer-events-none after:absolute after:inset-[3px] after:rounded-full after:border after:border-current after:opacity-[0.08] sm:size-[68px] sm:text-[9px] lg:size-[72px] lg:text-[10px]";
   const idle =
-    "border-market-silver/70 bg-market-navy text-market-navy-foreground/95 hover:border-market-silver hover:bg-market-navy-soft";
+    "border-white/75 bg-white/[0.96] text-market-navy shadow-[0_7px_18px_rgb(1_10_24/0.30),inset_0_1px_0_rgb(255_255_255/0.95)] hover:-translate-y-1 hover:border-white hover:bg-white";
   const active =
-    "border-market-silver bg-market-navy-soft font-bold text-market-navy-foreground shadow-inner";
-  const StartIcon = dir === "rtl" ? ChevronRight : ChevronLeft;
-  const EndIcon = dir === "rtl" ? ChevronLeft : ChevronRight;
+    "border-white/90 bg-[linear-gradient(145deg,#2b5e90,#0a284d)] text-white shadow-[0_8px_22px_rgb(0_0_0/0.32),inset_0_1px_0_rgb(255_255_255/0.28)]";
+  const loopingFields = Array.from({ length: 3 }, () => PRIMARY_FIELDS).flat();
 
   return (
-    <div className="w-full bg-market-navy text-market-navy-foreground">
+    <div
+      ref={headerMarkerRef}
+      className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_20%_-40%,rgba(128,174,220,0.44),transparent_38%),linear-gradient(105deg,#020e21_0%,#08284d_48%,#04162f_100%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]"
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
+      />
       <style>{`
         .market-home-header > div:first-child {
           min-height: 52px;
@@ -110,7 +125,7 @@ export function MarketCategoryStrip() {
         .market-category-rail {
           scrollbar-width: none;
           -ms-overflow-style: none;
-          scroll-padding-inline: 8px;
+          scroll-padding-inline: 10px;
         }
         .market-category-rail::-webkit-scrollbar {
           display: none;
@@ -136,41 +151,53 @@ export function MarketCategoryStrip() {
         }
       `}</style>
 
-      <div className="mx-auto flex w-full max-w-[1320px] items-center gap-2 px-2 pb-2 pt-0.5 sm:px-3 sm:pb-2.5 lg:px-5">
-        {overflowing ? (
-          <button
-            type="button"
-            onClick={() => scrollRail(-1)}
-            aria-label={locale === "ar" ? "التصنيفات السابقة" : "Previous categories"}
-            className="hidden size-9 shrink-0 place-items-center rounded-full border border-market-silver/70 bg-market-navy-soft text-market-navy-foreground transition hover:bg-market-silver hover:text-market-navy md:grid"
-          >
-            <StartIcon className="size-4" aria-hidden />
-          </button>
-        ) : null}
-
+      <div className="mx-auto w-full max-w-[1320px] px-0 pb-2 pt-1 sm:pb-2.5">
         <nav
           ref={railRef}
-          dir={dir}
+          dir="ltr"
           aria-label={t("market.home.strip.label")}
-          className="market-category-rail flex min-w-0 flex-1 snap-x snap-proximity items-center gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain scroll-smooth px-2 touch-pan-x select-none sm:gap-2.5 sm:px-3"
+          {...interactionProps}
+          className="market-category-rail flex w-full snap-x snap-proximity items-center gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-2 py-1 touch-pan-x select-none sm:gap-2.5 sm:px-3 lg:px-5"
         >
-          {PRIMARY_FIELDS.map((field) => {
+          {loopingFields.map((field, index) => {
             const label = t(`market.fields.${field.id}`);
+            const key = `${field.id}-${index}`;
+            const Icon = FIELD_ICONS[field.id] ?? Sparkles;
+            const duplicate = Math.floor(index / PRIMARY_FIELDS.length) !== 1;
+            const accessibilityProps = duplicate
+              ? ({ "aria-hidden": true, tabIndex: -1 } as const)
+              : {};
 
             if (field.kind === "home") {
               return (
-                <Link ref={homeRef} key={field.id} to="/" className={`${chipClass} ${idle}`}>
-                  <Home className="size-3.5 shrink-0" aria-hidden />
-                  <span className="whitespace-nowrap">{label}</span>
+                <Link
+                  key={key}
+                  to="/"
+                  className={`${chipClass} ${idle}`}
+                  lang={locale}
+                  {...accessibilityProps}
+                >
+                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
+                  <span className="line-clamp-2 max-w-full" dir={dir}>
+                    {label}
+                  </span>
                 </Link>
               );
             }
 
             if (field.kind === "more") {
               return (
-                <Link key={field.id} to="/more" className={`${chipClass} ${idle}`}>
-                  <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
-                  <span className="whitespace-nowrap">{label}</span>
+                <Link
+                  key={key}
+                  to="/more"
+                  className={`${chipClass} ${idle}`}
+                  lang={locale}
+                  {...accessibilityProps}
+                >
+                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
+                  <span className="line-clamp-2 max-w-full" dir={dir}>
+                    {label}
+                  </span>
                 </Link>
               );
             }
@@ -182,13 +209,17 @@ export function MarketCategoryStrip() {
               const on = pathname === "/services" || pathname.startsWith("/services/");
               return (
                 <Link
-                  key={field.id}
+                  key={key}
                   to="/services"
                   aria-current={on ? "page" : undefined}
                   className={`${chipClass} ${on ? active : idle}`}
                   lang={locale}
+                  {...accessibilityProps}
                 >
-                  <span className="whitespace-nowrap">{label}</span>
+                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
+                  <span className="line-clamp-2 max-w-full" dir={dir}>
+                    {label}
+                  </span>
                 </Link>
               );
             }
@@ -196,30 +227,22 @@ export function MarketCategoryStrip() {
             const on = isFieldActive(field, current);
             return (
               <Link
-                key={field.id}
+                key={key}
                 to="/search"
                 search={{ ...kept, ...fieldSearchParams(field) }}
                 aria-current={on ? "page" : undefined}
                 className={`${chipClass} ${on ? active : idle}`}
                 lang={locale}
+                {...accessibilityProps}
               >
-                <span className="whitespace-nowrap">{label}</span>
+                <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
+                <span className="line-clamp-2 max-w-full" dir={dir}>
+                  {label}
+                </span>
               </Link>
             );
           })}
-          <span aria-hidden className="w-0.5 shrink-0" />
         </nav>
-
-        {overflowing ? (
-          <button
-            type="button"
-            onClick={() => scrollRail(1)}
-            aria-label={locale === "ar" ? "التصنيفات التالية" : "Next categories"}
-            className="hidden size-9 shrink-0 place-items-center rounded-full border border-market-silver/70 bg-market-navy-soft text-market-navy-foreground transition hover:bg-market-silver hover:text-market-navy md:grid"
-          >
-            <EndIcon className="size-4" aria-hidden />
-          </button>
-        ) : null}
       </div>
     </div>
   );
