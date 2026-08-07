@@ -70,31 +70,8 @@ jobs:
           java-version: 21
           check-latest: false
 
-      - name: Install dependencies
-        run: npm install --no-fund --no-audit
-
-      - name: Capture deterministic lock and adapter diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          diagnostic_root=".ci/mobile-build-diagnostics"
-          mkdir -p "$diagnostic_root/lovable" "$diagnostic_root/tanstack"
-          cp package-lock.json "$diagnostic_root/package-lock.json"
-          cp node_modules/@lovable.dev/vite-tanstack-config/package.json "$diagnostic_root/lovable/package.json"
-          cp -R node_modules/@lovable.dev/vite-tanstack-config/dist "$diagnostic_root/lovable/dist"
-          cp node_modules/@tanstack/start-plugin-core/package.json "$diagnostic_root/tanstack/package.json"
-          cp node_modules/@tanstack/start-plugin-core/dist/esm/prerender.js "$diagnostic_root/tanstack/prerender.js"
-          cp -R node_modules/@tanstack/start-plugin-core/dist/esm/vite/preview-server-plugin "$diagnostic_root/tanstack/preview-server-plugin"
-          find "$diagnostic_root" -type f -print | LC_ALL=C sort > "$diagnostic_root/files.txt"
-
-      - name: Upload lock and adapter diagnostics
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: mobile-build-diagnostics-${{ github.sha }}
-          retention-days: 1
-          if-no-files-found: error
-          include-hidden-files: true
-          path: .ci/mobile-build-diagnostics
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-fund --no-audit
 
       - name: Reject client secrets and unsafe mobile settings
         run: npm run security:client-secrets
