@@ -28,7 +28,7 @@ export function CallOverlay() {
       role="dialog"
       aria-modal="true"
       aria-label={t("market.call.title")}
-      className="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-[60] p-3 sm:inset-x-auto sm:end-4 sm:bottom-4 sm:w-80"
+      className="fixed inset-x-0 bottom-[calc(3.25rem+env(safe-area-inset-bottom))] z-[60] p-3 sm:inset-x-auto sm:end-4 sm:bottom-4 sm:w-80"
     >
       <div className="rounded-2xl border border-border bg-card p-4 shadow-lg">
         <p className="text-xs text-muted-foreground">
@@ -117,4 +117,3 @@ export function CallOverlay() {
     </div>
   );
 }
-
