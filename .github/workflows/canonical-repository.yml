@@ -1,11 +1,7 @@
-name: Canonical repository guard
+name: KAHEEL project authority guard
 
 on:
   push:
-    branches:
-      - main
-      - "agent/**"
-      - "feat/**"
   pull_request:
     branches:
       - main
@@ -14,12 +10,23 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: kaheel-authority-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  verify-canonical-repository:
+  verify-project-authority:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      VITE_SUPABASE_URL: https://fdmovlxyqebtgzhsroac.supabase.co
+      VITE_SUPABASE_PROJECT_ID: fdmovlxyqebtgzhsroac
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
+      VITE_SITE_ORIGIN: https://check-your-name-ai.vercel.app
+      MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
+
     steps:
-      - name: Check out repository
+      - name: Check out canonical repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
@@ -31,5 +38,5 @@ jobs:
           node-version: 22
           package-manager-cache: false
 
-      - name: Verify canonical KAHEEL repository
-        run: node scripts/check-canonical-repository.mjs
+      - name: Verify repository, Supabase, deployment, and duplicate roots
+        run: node scripts/check-project-authority.mjs --require-runtime
