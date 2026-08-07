@@ -9,6 +9,11 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 const isNativeMobileBuild = process.env.MOBILE_NATIVE_BUILD === "1";
 
 export default defineConfig({
+  // The native SPA needs TanStack Start's own temporary server output at
+  // dist/server/server.js while prerendering its local index.html shell.
+  // Lovable's Nitro deploy adapter intentionally remains enabled for normal
+  // web/SSR builds, but must not replace that server output in native builds.
+  ...(isNativeMobileBuild ? { nitro: false } : {}),
   vite: {
     define: {
       __KAHLI_NATIVE_BUILD__: JSON.stringify(isNativeMobileBuild),
@@ -16,7 +21,7 @@ export default defineConfig({
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this for the normal web deployment.
+    // The normal web deployment is still handled by nitro/vite.
     server: { entry: "server" },
     // Native binaries must contain their reviewed web code. SPA mode generates a
     // client-only index.html for Capacitor without changing the normal SSR build.
