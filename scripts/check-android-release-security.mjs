@@ -22,7 +22,7 @@ for (const [pattern, reason] of [
   [/shrinkResources true/, "does not enable resource shrinking"],
   [/proguard-android-optimize\.txt/, "does not require optimized default ProGuard rules"],
   [/<cache-path name="shared_cache" path="\." \/>/, "does not restrict FileProvider to app-owned cache"],
-  [/signingConfigs\.debug/, "does not reject debug signing in release builds"],
+  [/Android release build must never use the debug signing key\./, "does not reject debug signing in release builds"],
 ]) {
   requirePattern(hardenerPath, hardener, pattern, reason);
 }
