@@ -128,26 +128,26 @@ export function MarketStorefrontHero() {
   const copy = HERO_COPY[language];
 
   return (
-    <section className="market-motion-home mx-auto w-full max-w-[1240px] px-3 pb-1 pt-2.5 sm:px-5 sm:pt-4 lg:px-8">
+    <section className="market-motion-home mx-auto w-full max-w-[1240px] px-3 pb-1 pt-2 sm:px-5 sm:pt-3 lg:px-8">
       <div
         data-testid="kaheel-home-hero"
-        className="kaheel-space-hero relative isolate overflow-hidden rounded-[1.55rem] border border-market-silver-line/70 bg-market-void text-market-silver shadow-[0_24px_80px_rgb(1_20_105/0.30)] sm:rounded-[2.15rem]"
+        className="kaheel-space-hero relative isolate overflow-hidden rounded-[1.35rem] border border-market-silver-line/70 bg-market-void text-market-silver shadow-[0_18px_58px_rgb(1_20_105/0.26)] sm:rounded-[1.85rem]"
       >
         <span className="kaheel-space-grid" aria-hidden />
         <span className="kaheel-space-glow kaheel-space-glow-start" aria-hidden />
         <span className="kaheel-space-glow kaheel-space-glow-end" aria-hidden />
 
-        <div className="relative grid min-h-[480px] items-center gap-4 px-4 pb-5 pt-6 sm:min-h-[530px] sm:px-7 sm:pb-7 sm:pt-9 md:grid-cols-[1.05fr_0.95fr] md:gap-6 lg:min-h-[500px] lg:px-10 lg:py-10">
+        <div className="relative grid min-h-[318px] items-center gap-3 px-4 py-4 sm:min-h-[350px] sm:px-6 sm:py-6 md:min-h-[420px] md:grid-cols-[1.05fr_0.95fr] md:gap-5 lg:min-h-[440px] lg:px-9 lg:py-8">
           <div className="relative z-10 min-w-0 md:max-w-[36rem]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/16 bg-white/8 px-3 py-1.5 text-[9px] font-black text-market-silver backdrop-blur-md sm:text-[11px]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/16 bg-white/8 px-2.5 py-1 text-[8px] font-black text-market-silver backdrop-blur-md sm:px-3 sm:py-1.5 sm:text-[10px]">
               <Sparkles className="size-3.5 text-market-electric" aria-hidden />
               {copy.eyebrow}
             </span>
 
-            <h1 className="mt-3 max-w-[22ch] text-balance text-[2rem] font-black leading-[1.13] tracking-[-0.035em] text-white sm:mt-4 sm:text-[2.9rem] lg:text-[3.35rem]">
+            <h1 className="mt-2.5 max-w-[22ch] text-balance text-[1.65rem] font-black leading-[1.12] tracking-[-0.035em] text-white sm:mt-3 sm:text-[2.35rem] lg:text-[3rem]">
               {copy.title}
             </h1>
-            <p className="mt-2.5 max-w-[35rem] text-[11px] leading-6 text-market-silver-muted sm:mt-3 sm:text-sm sm:leading-7">
+            <p className="mt-2 line-clamp-2 max-w-[35rem] text-[10px] leading-5 text-market-silver-muted sm:mt-2.5 sm:text-[13px] sm:leading-6">
               {copy.body}
             </p>
 
@@ -156,7 +156,7 @@ export function MarketStorefrontHero() {
               search={{}}
               aria-label={t("market.nav.search")}
               data-testid="mkt-home-search"
-              className="group mt-4 flex min-h-14 w-full max-w-[39rem] items-center gap-2 rounded-full border border-white/14 bg-market-panel/95 py-1 pe-1 ps-4 text-start shadow-[0_16px_38px_rgb(0_0_0/0.34)] backdrop-blur-xl transition hover:border-market-electric/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-electric sm:mt-5 sm:min-h-16 sm:ps-5"
+              className="group mt-3 flex min-h-12 w-full max-w-[39rem] items-center gap-2 rounded-full border border-white/14 bg-market-panel/95 py-1 pe-1 ps-3.5 text-start shadow-[0_12px_30px_rgb(0_0_0/0.30)] backdrop-blur-xl transition hover:border-market-electric/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-electric sm:mt-4 sm:min-h-14 sm:ps-5"
             >
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-xs font-bold text-white/92 sm:text-sm">
@@ -170,12 +170,12 @@ export function MarketStorefrontHero() {
                 className="size-[18px] shrink-0 text-market-silver-muted transition group-hover:text-white"
                 aria-hidden
               />
-              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-market-electric text-white shadow-[0_8px_24px_rgb(1_68_253/0.42)] transition group-hover:bg-market-electric-dark sm:size-14">
-                <Search className="size-5 sm:size-6" aria-hidden />
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-market-electric text-white shadow-[0_8px_24px_rgb(1_68_253/0.42)] transition group-hover:bg-market-electric-dark sm:size-12">
+                <Search className="size-[18px] sm:size-5" aria-hidden />
               </span>
             </Link>
 
-            <div className="mt-3 grid grid-cols-4 gap-1.5 sm:mt-4 sm:max-w-[39rem] sm:gap-2">
+            <div className="mt-2.5 grid grid-cols-4 gap-1.5 sm:mt-3 sm:max-w-[39rem] sm:gap-2">
               {QUICK_LINKS.map((item) => {
                 const Icon = item.icon;
                 const search =
@@ -192,7 +192,7 @@ export function MarketStorefrontHero() {
                     key={item.key}
                     to="/search"
                     search={search}
-                    className="group/quick flex min-w-0 flex-col items-center justify-center gap-1 rounded-2xl border border-white/10 bg-white/[0.055] px-1.5 py-2 text-center text-[9px] font-black text-market-silver-muted backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-market-electric/55 hover:bg-market-electric/12 hover:text-white sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-[11px]"
+                    className="group/quick flex min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl border border-white/10 bg-white/[0.055] px-1 py-1.5 text-center text-[8px] font-black text-market-silver-muted backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-market-electric/55 hover:bg-market-electric/12 hover:text-white sm:flex-row sm:gap-1.5 sm:rounded-2xl sm:px-2.5 sm:py-2 sm:text-[10px]"
                   >
                     <Icon
                       className="size-4 shrink-0 text-market-electric-bright transition group-hover/quick:text-white"
@@ -206,7 +206,7 @@ export function MarketStorefrontHero() {
           </div>
 
           <div
-            className="kaheel-orbit-stage relative mx-auto h-[230px] w-full max-w-[360px] self-end md:h-[350px] md:max-w-[430px] md:self-center"
+            className="kaheel-orbit-stage relative mx-auto hidden h-[310px] w-full max-w-[390px] self-center md:block lg:h-[330px] lg:max-w-[420px]"
             aria-hidden
           >
             <span className="kaheel-orbit-ring kaheel-orbit-ring-outer" />
