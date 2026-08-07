@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs"
+    "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
+    "repository:check": "node scripts/check-canonical-repository.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
