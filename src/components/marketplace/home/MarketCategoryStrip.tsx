@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Armchair,
@@ -58,7 +58,6 @@ const FIELD_ICONS: Record<string, LucideIcon> = {
  */
 export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
-  const headerMarkerRef = useRef<HTMLDivElement | null>(null);
   const { railRef, interactionProps } = useAutoLoopRail<HTMLElement>(1, 15);
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
@@ -72,14 +71,6 @@ export function MarketCategoryStrip() {
     if (typeof value === "string" && value !== "") kept[key] = value;
   }
 
-  useLayoutEffect(() => {
-    const header = headerMarkerRef.current?.closest("header");
-    header?.classList.add("market-home-header");
-    return () => {
-      header?.classList.remove("market-home-header");
-    };
-  }, []);
-
   const chipClass =
     "relative flex size-[62px] shrink-0 snap-start flex-col items-center justify-center gap-1 overflow-hidden rounded-full border px-1.5 text-center text-[8px] font-black leading-[1.12] backdrop-blur transition duration-300 after:pointer-events-none after:absolute after:inset-[3px] after:rounded-full after:border after:border-current after:opacity-[0.08] sm:size-[68px] sm:text-[9px] lg:size-[72px] lg:text-[10px]";
   const idle =
@@ -89,39 +80,12 @@ export function MarketCategoryStrip() {
   const loopingFields = Array.from({ length: 3 }, () => PRIMARY_FIELDS).flat();
 
   return (
-    <div
-      ref={headerMarkerRef}
-      className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_20%_-40%,rgba(128,174,220,0.44),transparent_38%),linear-gradient(105deg,#020e21_0%,#08284d_48%,#04162f_100%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]"
-    >
+    <div className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_20%_-40%,rgba(128,174,220,0.44),transparent_38%),linear-gradient(105deg,#020e21_0%,#08284d_48%,#04162f_100%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]">
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
       />
       <style>{`
-        .market-home-header > div:first-child {
-          min-height: 52px;
-          padding-inline: 16px;
-          padding-block: 6px;
-          gap: 6px;
-        }
-        .market-home-header > div:first-child > a:first-child {
-          padding-inline: 4px;
-          padding-block: 3px;
-        }
-        .market-home-header > div:first-child > a:first-child span {
-          font-size: 15px;
-          line-height: 1;
-        }
-        .market-home-header > div:first-child > a:nth-of-type(2) {
-          height: 36px;
-          padding-inline: 12px;
-          font-size: 11px;
-        }
-        .market-home-header > div:first-child > div:last-child a {
-          height: 32px;
-          padding-inline: 10px;
-          font-size: 11px;
-        }
         .market-category-rail {
           scrollbar-width: none;
           -ms-overflow-style: none;
@@ -131,23 +95,6 @@ export function MarketCategoryStrip() {
           display: none;
           width: 0;
           height: 0;
-        }
-        @media (min-width: 640px) {
-          .market-home-header > div:first-child {
-            min-height: 56px;
-            padding-inline: 20px;
-            padding-block: 7px;
-          }
-          .market-home-header > div:first-child > a:nth-of-type(2) {
-            height: 40px;
-            padding-inline: 16px;
-            font-size: 12px;
-          }
-        }
-        @media (min-width: 1024px) {
-          .market-home-header > div:first-child {
-            padding-inline: 32px;
-          }
         }
       `}</style>
 
