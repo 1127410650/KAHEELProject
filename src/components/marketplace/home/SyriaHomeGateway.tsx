@@ -26,7 +26,7 @@ const ROTATION_MS = 4_000;
 /**
  * One compact service advert in the original gateway position. It alternates
  * vertically between the Syria and student guides without adding another home
- * row or a heavy media asset.
+ * row, a visible countdown, or a heavy media asset.
  */
 export function SyriaHomeGateway() {
   const [active, setActive] = useState(0);
@@ -58,7 +58,7 @@ export function SyriaHomeGateway() {
       aria-label="دليل سوريا ودليل الطالب"
       aria-roledescription="إعلان متناوب"
       role="region"
-      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 pb-1 pt-2 sm:px-5 sm:pt-3 lg:px-8"
+      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 pb-1 pt-2 sm:px-5 sm:pt-2.5 lg:px-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -66,7 +66,7 @@ export function SyriaHomeGateway() {
         if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
       }}
     >
-      <div className="relative min-h-[128px] overflow-hidden rounded-[1.35rem] border border-market-navy/10 bg-market-navy shadow-[0_10px_30px_rgb(15_23_42/0.13)] sm:min-h-[148px] sm:max-w-[680px] sm:rounded-[1.75rem]">
+      <div className="relative min-h-[104px] overflow-hidden rounded-[1.2rem] border border-market-navy/10 bg-market-navy shadow-[0_8px_24px_rgb(15_23_42/0.12)] sm:min-h-[120px] sm:max-w-[640px] sm:rounded-[1.5rem]">
         <div
           className={
             isSyria
@@ -94,12 +94,12 @@ export function SyriaHomeGateway() {
           to={gateway.to}
           className={
             reducedMotion
-              ? "group relative z-10 flex min-h-[128px] items-center gap-3 px-4 py-4 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[148px] sm:gap-4 sm:px-5"
-              : "kahli-guide-slide group relative z-10 flex min-h-[128px] items-center gap-3 px-4 py-4 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[148px] sm:gap-4 sm:px-5"
+              ? "group relative z-10 flex min-h-[104px] items-center gap-2.5 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[120px] sm:gap-3 sm:px-4"
+              : "kahli-guide-slide group relative z-10 flex min-h-[104px] items-center gap-2.5 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[120px] sm:gap-3 sm:px-4"
           }
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
-          <span className="relative grid size-[72px] shrink-0 place-items-center overflow-hidden rounded-[1.3rem] border border-white/18 bg-white/12 shadow-[0_10px_26px_rgb(0_0_0/0.16)] backdrop-blur-sm sm:size-[88px] sm:rounded-[1.55rem]">
+          <span className="relative grid size-[58px] shrink-0 place-items-center overflow-hidden rounded-[1rem] border border-white/18 bg-white/12 shadow-[0_8px_22px_rgb(0_0_0/0.15)] backdrop-blur-sm sm:size-[68px] sm:rounded-[1.2rem]">
             {isSyria ? (
               <>
                 <img
@@ -109,31 +109,31 @@ export function SyriaHomeGateway() {
                   height={176}
                   className="absolute inset-0 size-full object-cover opacity-55"
                 />
-                <MapPinned className="relative size-8 drop-shadow sm:size-9" aria-hidden />
+                <MapPinned className="relative size-7 drop-shadow sm:size-8" aria-hidden />
               </>
             ) : (
               <>
                 <BookOpen
-                  className="absolute -bottom-1 -start-1 size-10 rotate-[-10deg] text-white/13 sm:size-12"
+                  className="absolute -bottom-1 -start-1 size-9 rotate-[-10deg] text-white/13 sm:size-10"
                   aria-hidden
                 />
-                <GraduationCap className="relative size-8 drop-shadow sm:size-9" aria-hidden />
+                <GraduationCap className="relative size-7 drop-shadow sm:size-8" aria-hidden />
               </>
             )}
           </span>
 
           <div className="min-w-0 flex-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/14 bg-white/10 px-2 py-1 text-[9px] font-black text-market-silver backdrop-blur-sm sm:text-[10px]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/14 bg-white/10 px-1.5 py-0.5 text-[8px] font-black text-market-silver backdrop-blur-sm sm:px-2 sm:text-[9px]">
               <Sparkles className="size-3" aria-hidden />
               {gateway.eyebrow}
             </span>
-            <h2 className="mt-1.5 text-xl font-black leading-none tracking-tight sm:text-2xl">
+            <h2 className="mt-1 text-lg font-black leading-none tracking-tight sm:text-xl">
               {gateway.title}
             </h2>
-            <p className="mt-1.5 line-clamp-2 max-w-[28rem] text-[10px] leading-5 text-white/72 sm:text-xs sm:leading-6">
+            <p className="mt-1 line-clamp-1 max-w-[28rem] text-[9px] leading-4 text-white/72 sm:text-[11px] sm:leading-5">
               {gateway.description}
             </p>
-            <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-market-silver sm:text-xs">
+            <span className="mt-1.5 inline-flex items-center gap-1 text-[9px] font-black text-market-silver sm:text-[11px]">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
             </span>
@@ -154,20 +154,12 @@ export function SyriaHomeGateway() {
               aria-pressed={active === index}
               className={
                 active === index
-                  ? "h-7 w-1.5 rounded-full bg-market-silver shadow-[0_0_10px_rgb(255_255_255/0.45)] transition-all"
+                  ? "h-5 w-1.5 rounded-full bg-market-silver shadow-[0_0_10px_rgb(255_255_255/0.45)] transition-all"
                   : "size-1.5 rounded-full bg-white/38 transition-all hover:bg-white/70"
               }
             />
           ))}
         </div>
-
-        {!reducedMotion && !paused ? (
-          <span
-            key={`progress-${active}`}
-            className="kahli-guide-progress absolute inset-x-0 bottom-0 z-20 h-0.5 origin-right bg-market-silver/85"
-            aria-hidden
-          />
-        ) : null}
       </div>
 
       <style>{`
@@ -175,19 +167,11 @@ export function SyriaHomeGateway() {
           from { opacity: 0; transform: translateY(13px) scale(.992); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes kahli-guide-progress {
-          from { transform: scaleX(0); }
-          to { transform: scaleX(1); }
-        }
         .kahli-guide-slide {
           animation: kahli-guide-slide-in 520ms cubic-bezier(.2,.8,.2,1) both;
         }
-        .kahli-guide-progress {
-          animation: kahli-guide-progress ${ROTATION_MS}ms linear both;
-        }
         @media (prefers-reduced-motion: reduce) {
-          .kahli-guide-slide,
-          .kahli-guide-progress { animation: none !important; }
+          .kahli-guide-slide { animation: none !important; }
         }
       `}</style>
     </section>

@@ -54,10 +54,10 @@ function WorldLink({
       to="/demo-stores/$worldId"
       params={{ worldId: world.id }}
       tabIndex={duplicate ? -1 : undefined}
-      className="group/world w-[76px] min-w-[76px] text-center outline-none sm:w-[94px] sm:min-w-[94px]"
+      className="group/world w-[62px] min-w-[62px] text-center outline-none sm:w-[82px] sm:min-w-[82px]"
     >
       <div
-        className={`relative mx-auto grid size-[68px] place-items-center overflow-visible rounded-full bg-gradient-to-br ${tone} shadow-[0_10px_28px_rgb(1_68_253/0.24)] ring-[3px] ring-market-panel-soft transition duration-300 group-hover/world:-translate-y-1 group-hover/world:scale-[1.04] group-hover/world:shadow-[0_14px_34px_rgb(1_68_253/0.34)] group-focus-visible/world:-translate-y-1 group-focus-visible/world:ring-market-silver sm:size-[84px]`}
+        className={`relative mx-auto grid size-[54px] place-items-center overflow-visible rounded-full bg-gradient-to-br ${tone} shadow-[0_8px_22px_rgb(1_68_253/0.22)] ring-2 ring-market-panel-soft transition duration-300 group-hover/world:-translate-y-1 group-hover/world:scale-[1.04] group-hover/world:shadow-[0_12px_28px_rgb(1_68_253/0.30)] group-focus-visible/world:-translate-y-1 group-focus-visible/world:ring-market-silver sm:size-[70px] sm:ring-[3px]`}
       >
         <span
           className="absolute inset-1.5 rounded-full border border-white/25 bg-[radial-gradient(circle_at_34%_26%,rgba(255,255,255,.30),transparent_42%)]"
@@ -68,7 +68,7 @@ function WorldLink({
           aria-hidden
         />
         <WorldIcon
-          className="relative size-7 text-white drop-shadow-md transition duration-300 group-hover/world:scale-110 sm:size-8"
+          className="relative size-5.5 text-white drop-shadow-md transition duration-300 group-hover/world:scale-110 sm:size-7"
           strokeWidth={1.7}
           aria-hidden
         />
@@ -77,7 +77,7 @@ function WorldLink({
         </span>
       </div>
 
-      <h3 className="mt-2.5 truncate text-[10px] font-black text-market-silver sm:text-[11px]">
+      <h3 className="mt-2 truncate text-[9px] font-black text-market-silver sm:text-[10px]">
         {world.title}
       </h3>
       <p className="mt-0.5 truncate text-[8px] font-bold text-muted-foreground sm:text-[9px]">
@@ -95,9 +95,9 @@ export function MarketDemoShowcases() {
     <section
       id="store-worlds"
       aria-label={locale === "ar" ? "عوالم التسوق" : "Shopping worlds"}
-      className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-3 pb-1 pt-2.5 sm:px-5 sm:pt-3 lg:px-8"
+      className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-3 pb-1 pt-2 sm:px-5 sm:pt-2.5 lg:px-8"
     >
-      <div className="relative overflow-hidden rounded-[1.45rem] border border-market-silver-line bg-market-panel px-3 pb-2.5 pt-3 shadow-[0_12px_34px_rgb(0_0_0/0.24)] sm:rounded-[1.8rem] sm:px-4 sm:pb-3 sm:pt-4">
+      <div className="relative overflow-hidden rounded-[1.25rem] border border-market-silver-line bg-market-panel px-2.5 pb-2 pt-2.5 shadow-[0_10px_28px_rgb(0_0_0/0.22)] sm:rounded-[1.6rem] sm:px-3.5 sm:pb-2.5 sm:pt-3">
         <span
           aria-hidden
           className="absolute -start-10 -top-14 size-36 rounded-full bg-market-electric/22 blur-3xl"
@@ -107,17 +107,17 @@ export function MarketDemoShowcases() {
           className="absolute -bottom-16 end-[12%] size-36 rounded-full bg-market-electric-bright/16 blur-3xl"
         />
 
-        <div className="relative mb-2.5 flex items-center justify-between gap-3 sm:mb-3">
+        <div className="relative mb-1.5 flex items-center justify-between gap-3 sm:mb-2">
           <div className="min-w-0">
             <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-market-electric-bright sm:text-[10px]">
               <Sparkles className="size-3.5" aria-hidden />
               {locale === "ar" ? "عوالم كَحيل" : "Kaheel worlds"}
             </span>
-            <h2 className="mt-0.5 truncate text-[15px] font-black tracking-tight text-market-silver sm:text-lg">
+            <h2 className="mt-0.5 truncate text-[14px] font-black tracking-tight text-market-silver sm:text-base">
               {locale === "ar" ? "اختر جوّك وادخل عالمك" : "Pick your vibe and enter your world"}
             </h2>
           </div>
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-market-electric px-2.5 py-1.5 text-[9px] font-black text-white shadow-[0_7px_18px_rgb(1_68_253/0.32)] sm:px-3 sm:text-[10px]">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-market-electric px-2 py-1 text-[8px] font-black text-white shadow-[0_6px_16px_rgb(1_68_253/0.28)] sm:px-2.5 sm:text-[9px]">
             <Layers3 className="size-3.5 text-market-silver" aria-hidden />
             {DEMO_STORE_WORLDS.length} {locale === "ar" ? "عوالم" : "worlds"}
           </span>
@@ -128,7 +128,7 @@ export function MarketDemoShowcases() {
             dir={dir}
             className="kahli-worlds-track flex w-max items-start motion-reduce:translate-x-0"
           >
-            <div className="flex shrink-0 items-start gap-3 pe-3 sm:gap-4 sm:pe-4">
+            <div className="flex shrink-0 items-start gap-2.5 pe-2.5 sm:gap-3 sm:pe-3">
               {DEMO_STORE_WORLDS.map((world, index) => (
                 <WorldLink
                   key={world.id}
@@ -139,7 +139,7 @@ export function MarketDemoShowcases() {
             </div>
             <div
               aria-hidden="true"
-              className="flex shrink-0 items-start gap-3 pe-3 sm:gap-4 sm:pe-4"
+              className="flex shrink-0 items-start gap-2.5 pe-2.5 sm:gap-3 sm:pe-3"
             >
               {DEMO_STORE_WORLDS.map((world, index) => (
                 <WorldLink
