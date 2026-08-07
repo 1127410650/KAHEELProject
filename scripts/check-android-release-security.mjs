@@ -51,8 +51,21 @@ if (existsSync(gradlePath)) {
   }
   rejectPattern(
     gradlePath,
+    gradle,
     /release\s*\{[\s\S]*?signingConfig\s+signingConfigs\.debug/,
     "release build uses the debug signing key",
+  );
+  rejectPattern(
+    gradlePath,
+    gradle,
+    /release\s*\{[\s\S]*?minifyEnabled\s+false/,
+    "release explicitly disables R8 minification",
+  );
+  rejectPattern(
+    gradlePath,
+    gradle,
+    /release\s*\{[\s\S]*?shrinkResources\s+false/,
+    "release explicitly disables resource shrinking",
   );
 }
 
@@ -70,6 +83,7 @@ if (existsSync(filePathsPath)) {
   );
   rejectPattern(
     filePathsPath,
+    filePaths,
     /<external-path|<external-files-path|<root-path/,
     "FileProvider exposes external or root storage",
   );
