@@ -1,0 +1,96 @@
+name: Bootstrap reviewed mobile lock
+
+on:
+  push:
+    branches:
+      - feat/mobile-ios-android-secure-foundation
+    paths:
+      - .github/workflows/bootstrap-reviewed-mobile-lock.yml
+
+permissions:
+  contents: write
+
+jobs:
+  commit-reviewed-lock:
+    if: github.repository == '1127410650/check-your-name-ai' && github.ref == 'refs/heads/feat/mobile-ios-android-secure-foundation'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out exact branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: feat/mobile-ios-android-secure-foundation
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Generate and verify reviewed lock
+        shell: bash
+        env:
+          EXPECTED_LOCK_SHA256: d6db5b8eed3ec1533426a629bec6aa729d05d4988dec19b7b94b3fec8ee21ff3
+        run: |
+          set -euo pipefail
+          npm install --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          printf '%s  %s\n' "$EXPECTED_LOCK_SHA256" package-lock.json | sha256sum --check --strict
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const root = lock.packages?.[''];
+          if (lock.lockfileVersion !== 3 || !root) throw new Error('Expected npm package-lock v3.');
+
+          for (const section of ['dependencies', 'devDependencies']) {
+            const expected = packageJson[section] ?? {};
+            const actual = root[section] ?? {};
+            if (JSON.stringify(expected) !== JSON.stringify(actual)) {
+              throw new Error(`Lock root does not exactly match package.json ${section}.`);
+            }
+          }
+
+          const reviewed = {
+            'node_modules/@capacitor/android': '7.6.8',
+            'node_modules/@capacitor/app': '7.1.2',
+            'node_modules/@capacitor/cli': '7.6.8',
+            'node_modules/@capacitor/core': '7.6.8',
+            'node_modules/@capacitor/ios': '7.6.8',
+            'node_modules/@capacitor/preferences': '7.0.4',
+            'node_modules/capacitor-secure-storage-plugin': '0.12.0',
+          };
+          for (const [path, version] of Object.entries(reviewed)) {
+            if (lock.packages?.[path]?.version !== version) {
+              throw new Error(`Unexpected ${path} version.`);
+            }
+          }
+
+          let resolvedCount = 0;
+          for (const [path, entry] of Object.entries(lock.packages ?? {})) {
+            if (!entry || typeof entry !== 'object' || entry.resolved === undefined) continue;
+            if (typeof entry.resolved !== 'string' || !entry.resolved.startsWith('https://registry.npmjs.org/')) {
+              throw new Error(`Unapproved package source at ${path}: ${String(entry.resolved)}`);
+            }
+            if (typeof entry.integrity !== 'string' || !entry.integrity.startsWith('sha512-')) {
+              throw new Error(`Missing SHA-512 integrity for ${path}.`);
+            }
+            resolvedCount += 1;
+          }
+          if (resolvedCount < 600) throw new Error(`Unexpectedly small dependency graph: ${resolvedCount}`);
+          NODE
+
+      - name: Commit lock and remove bootstrap workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/bootstrap-reviewed-mobile-lock.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json .github/workflows/bootstrap-reviewed-mobile-lock.yml
+          git diff --cached --check
+          git commit -m 'Lock reviewed mobile dependencies'
+          git push origin HEAD:feat/mobile-ios-android-secure-foundation
