@@ -112,6 +112,9 @@ jobs:
           ./gradlew assembleRelease
           test -s app/build/outputs/apk/release/app-release-unsigned.apk
           test -s app/build/outputs/mapping/release/mapping.txt
+          merged_manifest="$(find app/build/intermediates/merged_manifests/release -name AndroidManifest.xml -type f -print -quit)"
+          test -n "$merged_manifest"
+          ANDROID_MERGED_MANIFEST="$merged_manifest" node ../scripts/check-android-merged-manifest.mjs
 
       - name: Build iOS release simulator application
         shell: bash
