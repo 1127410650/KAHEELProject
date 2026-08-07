@@ -1,0 +1,11 @@
+# Canonical project authority files require explicit owner review when branch
+# protection is enabled. These paths control repository identity, Supabase
+# identity, deployment identity, native application IDs, and build gates.
+/.kaheel/project-authority.json @1127410650
+/scripts/check-project-authority.mjs @1127410650
+/scripts/check-canonical-repository.mjs @1127410650
+/.github/workflows/ @1127410650
+/supabase/config.toml @1127410650
+/capacitor.config.* @1127410650
+/package.json @1127410650
+/vercel.json @1127410650
