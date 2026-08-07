@@ -184,7 +184,7 @@ export function MarketDemoListings() {
       aria-labelledby="demo-listings-title"
       className="mx-auto w-full max-w-[1240px] px-3 pb-2 pt-4 sm:px-5 sm:pt-5 lg:px-8"
     >
-      <div className="overflow-hidden rounded-[1.35rem] border border-market-navy/10 bg-gradient-to-b from-white to-market-silver/55 shadow-[0_10px_30px_rgb(15_23_42/0.08)] sm:rounded-[1.75rem]">
+      <div className="overflow-hidden rounded-[1.35rem] border border-market-silver-line bg-gradient-to-b from-market-panel to-market-void shadow-[0_14px_36px_rgb(0_0_0/0.24)] sm:rounded-[1.75rem]">
         <div className="flex items-start justify-between gap-3 px-3.5 pb-2.5 pt-3.5 sm:px-5 sm:pt-5">
           <div className="min-w-0">
             <span className="inline-flex items-center gap-1 rounded-full bg-market-navy px-2.5 py-1 text-[9px] font-black text-white sm:text-[10px]">
@@ -209,7 +209,7 @@ export function MarketDemoListings() {
               type="button"
               onClick={() => move(-1)}
               aria-label={language === "ar" ? "النموذج السابق" : "Previous demo"}
-              className="grid size-8 place-items-center rounded-full border border-border bg-white text-market-navy shadow-sm transition hover:border-market-navy/30 hover:bg-secondary"
+              className="grid size-8 place-items-center rounded-full border border-border bg-market-panel-soft text-market-silver shadow-sm transition hover:border-market-electric/60 hover:bg-market-electric hover:text-white"
             >
               <PreviousIcon className="size-4" aria-hidden />
             </button>
@@ -229,7 +229,7 @@ export function MarketDemoListings() {
               className={
                 reducedMotion
                   ? "hidden"
-                  : "grid size-8 place-items-center rounded-full border border-border bg-white text-market-navy shadow-sm transition hover:border-market-navy/30 hover:bg-secondary"
+                  : "grid size-8 place-items-center rounded-full border border-border bg-market-panel-soft text-market-silver shadow-sm transition hover:border-market-electric/60 hover:bg-market-electric hover:text-white"
               }
             >
               {manualPaused ? (
@@ -242,7 +242,7 @@ export function MarketDemoListings() {
               type="button"
               onClick={() => move(1)}
               aria-label={language === "ar" ? "النموذج التالي" : "Next demo"}
-              className="grid size-8 place-items-center rounded-full border border-border bg-white text-market-navy shadow-sm transition hover:border-market-navy/30 hover:bg-secondary"
+              className="grid size-8 place-items-center rounded-full border border-border bg-market-panel-soft text-market-silver shadow-sm transition hover:border-market-electric/60 hover:bg-market-electric hover:text-white"
             >
               <NextIcon className="size-4" aria-hidden />
             </button>
@@ -256,11 +256,11 @@ export function MarketDemoListings() {
           onWheel={pauseAfterInteraction}
           className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain scroll-smooth px-3.5 pb-3.5 touch-pan-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3 sm:px-5 sm:pb-5"
         >
-          {DEMO_LISTINGS.map((listing, index) => (
+          {DEMO_LISTINGS.map((listing) => (
             <article
               key={listing.id}
               data-demo-listing
-              className="group w-[46%] min-w-[46%] max-w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/85 bg-white shadow-[0_3px_14px_rgb(15_23_42/0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-market-navy/20 hover:shadow-[0_8px_22px_rgb(15_23_42/0.12)] min-[420px]:w-[42%] min-[420px]:min-w-[42%] sm:w-[210px] sm:min-w-[210px]"
+              className="group w-[46%] min-w-[46%] max-w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/85 bg-market-panel-soft shadow-[0_5px_18px_rgb(0_0_0/0.22)] transition duration-300 hover:-translate-y-0.5 hover:border-market-electric/45 hover:shadow-[0_10px_28px_rgb(1_68_253/0.18)] min-[420px]:w-[42%] min-[420px]:min-w-[42%] sm:w-[210px] sm:min-w-[210px]"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
                 <img
@@ -268,15 +268,15 @@ export function MarketDemoListings() {
                   alt=""
                   width={480}
                   height={360}
-                  loading={index < 2 ? "eager" : "lazy"}
+                  loading="lazy"
                   decoding="async"
                   className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-market-navy/55 via-transparent to-white/10"
+                  className="absolute inset-0 bg-gradient-to-t from-market-void/80 via-market-electric/12 to-white/5"
                   aria-hidden
                 />
-                <span className="absolute start-2 top-2 rounded-full border border-white/40 bg-white/92 px-2 py-1 text-[8px] font-black text-market-navy shadow-sm backdrop-blur sm:text-[9px]">
+                <span className="absolute start-2 top-2 rounded-full border border-white/18 bg-market-panel/92 px-2 py-1 text-[8px] font-black text-white shadow-sm backdrop-blur sm:text-[9px]">
                   {language === "ar" ? "نموذج تجريبي" : "Demo listing"}
                 </span>
                 <span className="absolute bottom-2 start-2 rounded-full bg-market-navy/88 px-2 py-1 text-[8px] font-bold text-white backdrop-blur sm:text-[9px]">
@@ -288,7 +288,7 @@ export function MarketDemoListings() {
                 <h3 className="line-clamp-2 min-h-[2.6em] text-[11px] font-black leading-[1.3] text-foreground sm:text-[13px]">
                   {listing.title[language]}
                 </h3>
-                <p className="mt-1.5 line-clamp-1 text-[10px] font-black text-market-navy sm:text-[11px]">
+                <p className="mt-1.5 line-clamp-1 text-[10px] font-black text-market-electric-bright sm:text-[11px]">
                   {listing.price[language]}
                 </p>
                 <div className="mt-1.5 flex items-center gap-1 text-[9px] text-muted-foreground sm:text-[10px]">

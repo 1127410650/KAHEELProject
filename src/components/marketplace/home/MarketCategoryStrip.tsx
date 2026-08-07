@@ -81,7 +81,7 @@ export function MarketCategoryStrip() {
   const EndIcon = dir === "rtl" ? ChevronLeft : ChevronRight;
 
   return (
-    <div className="w-full bg-market-navy text-market-navy-foreground">
+    <div className="w-full border-t border-white/12 bg-market-navy text-market-navy-foreground">
       <style>{`
         .market-home-header > div:first-child {
           min-height: 52px;

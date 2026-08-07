@@ -75,11 +75,19 @@ export function MarketHome() {
   return (
     <>
       <MarketStorefrontHero />
-      <MarketDemoShowcases />
-      <SyriaHomeGateway />
-      <MarketCategoryTiles />
-      <MarketDemoListings />
       <MarketFeaturedBanner />
+      <div className="market-home-deferred">
+        <MarketDemoShowcases />
+      </div>
+      <div className="market-home-deferred">
+        <SyriaHomeGateway />
+      </div>
+      <div className="market-home-deferred">
+        <MarketCategoryTiles />
+      </div>
+      <div className="market-home-deferred">
+        <MarketDemoListings />
+      </div>
 
       <section
         id="market-listings"

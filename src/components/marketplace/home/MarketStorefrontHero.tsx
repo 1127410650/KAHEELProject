@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import {
-  ArrowLeft,
   Building2,
   CarFront,
-  Megaphone,
+  Check,
   MessageCircleMore,
   Search,
   ShoppingBag,
+  SlidersHorizontal,
   Smartphone,
   Sparkles,
   Store,
@@ -14,192 +14,247 @@ import {
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
-import catCars from "@/assets/market/cat-cars.webp";
-import catDevices from "@/assets/market/cat-devices.webp";
-import catRealEstate from "@/assets/market/cat-real-estate.webp";
 
-type Promo = {
+type Language = "ar" | "en";
+
+type QuickLink = {
   key: string;
-  image: string;
+  icon: LucideIcon;
+  label: Record<Language, string>;
   search: Record<string, string>;
-  badge: { ar: string; en: string };
-  title: { ar: string; en: string };
-  description: { ar: string; en: string };
 };
 
-const PROMOS: Promo[] = [
-  {
-    key: "everything",
-    image: catDevices,
-    search: {},
-    badge: { ar: "اختيارات كَحيل", en: "Kaheel picks" },
-    title: { ar: "كل ما تبحث عنه أقرب", en: "Everything you need, closer" },
-    description: {
-      ar: "منتجات، أجهزة، متاجر وإعلانات جديدة في مكان واحد.",
-      en: "Products, devices, stores and new listings in one place.",
-    },
-  },
+const QUICK_LINKS: QuickLink[] = [
   {
     key: "property",
-    image: catRealEstate,
+    icon: Building2,
+    label: { ar: "عقارات", en: "Property" },
     search: { category: "real-estate" },
-    badge: { ar: "عالم العقار", en: "Property world" },
-    title: { ar: "بيتك يبدأ من هنا", en: "Your next home starts here" },
-    description: {
-      ar: "استكشف أحدث العقارات للبيع والإيجار.",
-      en: "Explore the latest properties for sale and rent.",
-    },
   },
   {
     key: "cars",
-    image: catCars,
-    search: { category: "cars" },
-    badge: { ar: "سوق السيارات", en: "Car market" },
-    title: { ar: "اختر سيارتك بثقة", en: "Find your car with confidence" },
-    description: {
-      ar: "عروض سيارات حديثة من الأفراد والمتاجر.",
-      en: "Fresh car offers from people and stores.",
-    },
+    icon: CarFront,
+    label: { ar: "سيارات", en: "Cars" },
+    search: { q: "car" },
+  },
+  {
+    key: "devices",
+    icon: Smartphone,
+    label: { ar: "أجهزة", en: "Devices" },
+    search: { q: "device" },
+  },
+  {
+    key: "stores",
+    icon: Store,
+    label: { ar: "متاجر", en: "Stores" },
+    search: { q: "store" },
   },
 ];
 
 type TickerItem = {
   key: string;
   icon: LucideIcon;
-  label: { ar: string; en: string };
+  label: Record<Language, string>;
   tone: string;
 };
 
 const TICKER_ITEMS: TickerItem[] = [
   {
     key: "fresh",
-    icon: Megaphone,
+    icon: Sparkles,
     label: { ar: "إعلانات جديدة", en: "Fresh listings" },
-    tone: "from-[#8665ff] to-[#4934b9] shadow-[#6f55df]/25",
+    tone: "from-[#0144fd] to-[#012bea] shadow-[#0144fd]/30",
   },
   {
     key: "stores",
     icon: Store,
     label: { ar: "متاجر محلية", en: "Local stores" },
-    tone: "from-[#11a683] to-[#087260] shadow-[#0d9477]/25",
+    tone: "from-[#2f5cff] to-[#0c228a] shadow-[#2f5cff]/25",
   },
   {
     key: "contact",
     icon: MessageCircleMore,
     label: { ar: "تواصل مباشر", en: "Direct contact" },
-    tone: "from-[#f59d2a] to-[#d96b15] shadow-[#e38121]/25",
+    tone: "from-[#416dff] to-[#10266f] shadow-[#416dff]/25",
   },
   {
     key: "property",
     icon: Building2,
     label: { ar: "عقارات مختارة", en: "Selected property" },
-    tone: "from-[#3188c9] to-[#185487] shadow-[#2672ac]/25",
+    tone: "from-[#013af8] to-[#08185f] shadow-[#013af8]/25",
   },
   {
     key: "cars",
     icon: CarFront,
     label: { ar: "سوق السيارات", en: "Car market" },
-    tone: "from-[#eb5c72] to-[#ad2947] shadow-[#d94864]/25",
+    tone: "from-[#244df1] to-[#0f194f] shadow-[#244df1]/25",
   },
   {
     key: "devices",
     icon: Smartphone,
     label: { ar: "أجهزة وتقنية", en: "Devices and tech" },
-    tone: "from-[#20a4c2] to-[#12627f] shadow-[#1b8fa9]/25",
+    tone: "from-[#6080ff] to-[#18389f] shadow-[#6080ff]/25",
   },
 ];
 
+const HERO_COPY: Record<
+  Language,
+  { eyebrow: string; title: string; body: string; search: string; hint: string }
+> = {
+  ar: {
+    eyebrow: "سوق كَحيل — كل شيء يتحرّك معك",
+    title: "اكتشف السوق بطريقة أسرع وأذكى",
+    body: "عقارات وسيارات وأجهزة ومتاجر وخدمات؛ ابحث وتواصل من مكان واحد.",
+    search: "ابحث عمّا تحتاجه…",
+    hint: "بحث سريع داخل كَحيل",
+  },
+  en: {
+    eyebrow: "Kaheel marketplace — everything moves with you",
+    title: "Discover the market, faster and smarter",
+    body: "Property, cars, devices, stores and services — search and connect in one place.",
+    search: "Search for what you need…",
+    hint: "Fast search across Kaheel",
+  },
+};
+
 /**
- * Fast, CSS-only storefront opening. It borrows the dense retail hierarchy of
- * large commerce apps without copying their branding, assets or controls.
+ * An original, CSS-only marketplace opening inspired by the supplied reference's
+ * electric-blue depth and restrained motion. No external video, borrowed asset,
+ * timer, or scroll listener is needed, so the first viewport stays lightweight.
  */
 export function MarketStorefrontHero() {
   const { locale, t } = useI18n();
-  const language = locale === "ar" ? "ar" : "en";
+  const language: Language = locale === "ar" ? "ar" : "en";
+  const copy = HERO_COPY[language];
 
   return (
-    <section className="mx-auto w-full max-w-[1240px] px-3 pb-1 pt-2.5 sm:px-5 sm:pt-4 lg:px-8">
-      <Link
-        to="/search"
-        search={{}}
-        aria-label={t("market.nav.search")}
-        data-testid="mkt-home-search"
-        className="mb-2.5 flex h-11 w-full items-center gap-2 rounded-xl border border-border bg-card px-3 text-start shadow-[0_2px_10px_rgb(15_23_42/0.06)] transition hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 sm:h-12 sm:rounded-2xl sm:px-4"
+    <section className="market-motion-home mx-auto w-full max-w-[1240px] px-3 pb-1 pt-2.5 sm:px-5 sm:pt-4 lg:px-8">
+      <div
+        data-testid="kaheel-home-hero"
+        className="kaheel-space-hero relative isolate overflow-hidden rounded-[1.55rem] border border-market-silver-line/70 bg-market-void text-market-silver shadow-[0_24px_80px_rgb(1_20_105/0.30)] sm:rounded-[2.15rem]"
       >
-        <Search className="size-[18px] shrink-0 text-market-navy" aria-hidden />
-        <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground sm:text-sm">
-          {t("market.searchPlaceholder")}
-        </span>
-        <span className="hidden shrink-0 items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[10px] font-bold text-secondary-foreground sm:inline-flex">
-          <ShoppingBag className="size-3" aria-hidden />
-          {language === "ar" ? "ابحث في كَحيل" : "Search Kaheel"}
-        </span>
-      </Link>
+        <span className="kaheel-space-grid" aria-hidden />
+        <span className="kaheel-space-glow kaheel-space-glow-start" aria-hidden />
+        <span className="kaheel-space-glow kaheel-space-glow-end" aria-hidden />
 
-      <div className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-[1.4fr_1fr_1fr] sm:gap-3">
-        {PROMOS.map((promo, index) => (
-          <Link
-            key={promo.key}
-            to="/search"
-            search={
-              promo.key === "cars" ? { q: language === "ar" ? "سيارة" : "car" } : promo.search
-            }
-            className="group relative h-[154px] min-w-[86%] snap-center overflow-hidden rounded-2xl bg-market-navy shadow-[0_8px_26px_rgb(15_23_42/0.14)] sm:h-[206px] sm:min-w-0 sm:snap-start"
-          >
-            <img
-              src={promo.image}
-              alt=""
-              width={768}
-              height={576}
-              loading={index === 0 ? "eager" : "lazy"}
-              fetchPriority={index === 0 ? "high" : "low"}
-              decoding="async"
-              className="size-full object-cover transition duration-700 group-hover:scale-[1.035]"
-            />
-            <div
-              className="absolute inset-0 bg-gradient-to-l from-market-navy/96 via-market-navy/72 to-market-navy/12"
-              aria-hidden
-            />
-            <div className="absolute inset-0 flex flex-col items-start justify-center p-4 text-white sm:p-5">
-              <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/12 px-2.5 py-1 text-[9px] font-black backdrop-blur-sm sm:text-[10px]">
-                <Sparkles className="size-3" aria-hidden />
-                {promo.badge[language]}
+        <div className="relative grid min-h-[480px] items-center gap-4 px-4 pb-5 pt-6 sm:min-h-[530px] sm:px-7 sm:pb-7 sm:pt-9 md:grid-cols-[1.05fr_0.95fr] md:gap-6 lg:min-h-[500px] lg:px-10 lg:py-10">
+          <div className="relative z-10 min-w-0 md:max-w-[36rem]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/16 bg-white/8 px-3 py-1.5 text-[9px] font-black text-market-silver backdrop-blur-md sm:text-[11px]">
+              <Sparkles className="size-3.5 text-market-electric" aria-hidden />
+              {copy.eyebrow}
+            </span>
+
+            <h1 className="mt-3 max-w-[22ch] text-balance text-[2rem] font-black leading-[1.13] tracking-[-0.035em] text-white sm:mt-4 sm:text-[2.9rem] lg:text-[3.35rem]">
+              {copy.title}
+            </h1>
+            <p className="mt-2.5 max-w-[35rem] text-[11px] leading-6 text-market-silver-muted sm:mt-3 sm:text-sm sm:leading-7">
+              {copy.body}
+            </p>
+
+            <Link
+              to="/search"
+              search={{}}
+              aria-label={t("market.nav.search")}
+              data-testid="mkt-home-search"
+              className="group mt-4 flex min-h-14 w-full max-w-[39rem] items-center gap-2 rounded-full border border-white/14 bg-market-panel/95 py-1 pe-1 ps-4 text-start shadow-[0_16px_38px_rgb(0_0_0/0.34)] backdrop-blur-xl transition hover:border-market-electric/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-electric sm:mt-5 sm:min-h-16 sm:ps-5"
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-xs font-bold text-white/92 sm:text-sm">
+                  {copy.search}
+                </span>
+                <span className="mt-0.5 hidden text-[9px] text-market-silver-muted min-[360px]:block sm:text-[10px]">
+                  {copy.hint}
+                </span>
               </span>
-              <h1
-                className={
-                  index === 0
-                    ? "mt-2 max-w-[16rem] text-xl font-black leading-tight tracking-tight sm:text-3xl"
-                    : "mt-2 max-w-[13rem] text-lg font-black leading-tight tracking-tight sm:text-xl"
-                }
-              >
-                {promo.title[language]}
-              </h1>
-              <p className="mt-1.5 line-clamp-2 max-w-[17rem] text-[10px] leading-5 text-white/78 sm:text-xs sm:leading-6">
-                {promo.description[language]}
-              </p>
-              <span className="mt-2.5 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[10px] font-black text-market-navy shadow-sm sm:text-xs">
-                {language === "ar" ? "تسوّق الآن" : "Explore now"}
-                <ArrowLeft className="size-3.5 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+              <SlidersHorizontal
+                className="size-[18px] shrink-0 text-market-silver-muted transition group-hover:text-white"
+                aria-hidden
+              />
+              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-market-electric text-white shadow-[0_8px_24px_rgb(1_68_253/0.42)] transition group-hover:bg-market-electric-dark sm:size-14">
+                <Search className="size-5 sm:size-6" aria-hidden />
               </span>
+            </Link>
+
+            <div className="mt-3 grid grid-cols-4 gap-1.5 sm:mt-4 sm:max-w-[39rem] sm:gap-2">
+              {QUICK_LINKS.map((item) => {
+                const Icon = item.icon;
+                const search =
+                  item.key === "cars"
+                    ? { q: language === "ar" ? "سيارة" : "car" }
+                    : item.key === "devices"
+                      ? { q: language === "ar" ? "جهاز" : "device" }
+                      : item.key === "stores"
+                        ? { q: language === "ar" ? "متجر" : "store" }
+                        : item.search;
+
+                return (
+                  <Link
+                    key={item.key}
+                    to="/search"
+                    search={search}
+                    className="group/quick flex min-w-0 flex-col items-center justify-center gap-1 rounded-2xl border border-white/10 bg-white/[0.055] px-1.5 py-2 text-center text-[9px] font-black text-market-silver-muted backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-market-electric/55 hover:bg-market-electric/12 hover:text-white sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-[11px]"
+                  >
+                    <Icon
+                      className="size-4 shrink-0 text-market-electric-bright transition group-hover/quick:text-white"
+                      aria-hidden
+                    />
+                    <span className="truncate">{item.label[language]}</span>
+                  </Link>
+                );
+              })}
             </div>
-          </Link>
-        ))}
+          </div>
+
+          <div
+            className="kaheel-orbit-stage relative mx-auto h-[230px] w-full max-w-[360px] self-end md:h-[350px] md:max-w-[430px] md:self-center"
+            aria-hidden
+          >
+            <span className="kaheel-orbit-ring kaheel-orbit-ring-outer" />
+            <span className="kaheel-orbit-ring kaheel-orbit-ring-inner" />
+            <span className="kaheel-orbit-beam" />
+
+            <span className="kaheel-orbit-core">
+              <span className="kaheel-orbit-core-mark">كَحيل</span>
+              <ShoppingBag className="size-7 sm:size-9" strokeWidth={1.7} />
+            </span>
+
+            <MotionCard
+              className="kaheel-orbit-card-property"
+              icon={Building2}
+              label={language === "ar" ? "عقار جديد" : "New property"}
+            />
+            <MotionCard
+              className="kaheel-orbit-card-car"
+              icon={CarFront}
+              label={language === "ar" ? "سيارة" : "Car"}
+            />
+            <MotionCard
+              className="kaheel-orbit-card-store"
+              icon={Store}
+              label={language === "ar" ? "متجر" : "Store"}
+            />
+            <span className="kaheel-orbit-success">
+              <Check className="size-3.5" />
+              {language === "ar" ? "تم التواصل" : "Connected"}
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div className="relative mt-2 overflow-hidden rounded-[1.15rem] border border-market-navy/10 bg-[linear-gradient(115deg,#ffffff_0%,#f7f8ff_52%,#f5fbfa_100%)] px-1 py-1 shadow-[0_7px_24px_rgb(15_23_42/0.08)] sm:mt-3 sm:rounded-[1.45rem] sm:px-1.5 sm:py-1.5">
+      <div className="relative mt-2 overflow-hidden rounded-[1.15rem] border border-market-silver-line bg-market-panel px-1 py-1 shadow-[0_10px_28px_rgb(0_0_0/0.20)] sm:mt-3 sm:rounded-[1.45rem] sm:px-1.5 sm:py-1.5">
         <p className="sr-only">{TICKER_ITEMS.map((item) => item.label[language]).join("، ")}</p>
         <span
           aria-hidden
-          className="absolute -top-7 start-[18%] size-14 rounded-full bg-violet-300/20 blur-2xl"
+          className="absolute -top-8 start-[18%] size-16 rounded-full bg-market-electric/18 blur-2xl"
         />
         <span
           aria-hidden
-          className="absolute -bottom-8 end-[15%] size-16 rounded-full bg-emerald-300/20 blur-2xl"
+          className="absolute -bottom-8 end-[15%] size-16 rounded-full bg-market-electric-bright/12 blur-2xl"
         />
         <div
           aria-hidden
           dir={language === "ar" ? "rtl" : "ltr"}
-          className="kahli-home-ticker relative flex w-max items-center gap-2 py-1 text-[10px] font-black text-market-navy sm:gap-2.5 sm:py-1.5 sm:text-[11px]"
+          className="kahli-home-ticker relative flex w-max items-center gap-2 py-1 text-[10px] font-black text-market-silver sm:gap-2.5 sm:py-1.5 sm:text-[11px]"
         >
           {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, index) => {
             const Icon = item.icon;
@@ -207,7 +262,7 @@ export function MarketStorefrontHero() {
             return (
               <span
                 key={`${item.key}-${index}`}
-                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/90 bg-white/88 py-1 pe-3 ps-1 shadow-[0_3px_12px_rgb(15_23_42/0.07)] backdrop-blur-sm sm:gap-2.5 sm:py-1.5 sm:pe-4 sm:ps-1.5"
+                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] py-1 pe-3 ps-1 shadow-[0_5px_16px_rgb(0_0_0/0.18)] backdrop-blur-sm sm:gap-2.5 sm:py-1.5 sm:pe-4 sm:ps-1.5"
               >
                 <span
                   className={`kahli-ticker-icon grid size-8 place-items-center rounded-full bg-gradient-to-br text-white shadow-lg ${item.tone} sm:size-9`}
@@ -222,11 +277,11 @@ export function MarketStorefrontHero() {
         </div>
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 start-0 w-9 bg-gradient-to-r from-white via-white/88 to-transparent sm:w-16 rtl:bg-gradient-to-l"
+          className="pointer-events-none absolute inset-y-0 start-0 w-9 bg-gradient-to-r from-market-panel via-market-panel/90 to-transparent sm:w-16 rtl:bg-gradient-to-l"
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 end-0 w-9 bg-gradient-to-l from-white via-white/88 to-transparent sm:w-16 rtl:bg-gradient-to-r"
+          className="pointer-events-none absolute inset-y-0 end-0 w-9 bg-gradient-to-l from-market-panel via-market-panel/90 to-transparent sm:w-16 rtl:bg-gradient-to-r"
         />
       </div>
 
@@ -240,10 +295,10 @@ export function MarketStorefrontHero() {
           to { transform: translateX(50%); }
         }
         .kahli-home-ticker:dir(ltr) {
-          animation: kahli-home-ticker-ltr 22s linear infinite;
+          animation: kahli-home-ticker-ltr 24s linear infinite;
         }
         .kahli-home-ticker:dir(rtl) {
-          animation: kahli-home-ticker-rtl 22s linear infinite;
+          animation: kahli-home-ticker-rtl 24s linear infinite;
         }
         @keyframes kahli-ticker-icon-breathe {
           0%, 100% { transform: translateY(0) scale(1); }
@@ -258,5 +313,26 @@ export function MarketStorefrontHero() {
         }
       `}</style>
     </section>
+  );
+}
+
+function MotionCard({
+  className,
+  icon: Icon,
+  label,
+}: {
+  className: string;
+  icon: LucideIcon;
+  label: string;
+}) {
+  return (
+    <span className={`kaheel-orbit-card ${className}`}>
+      <span className="grid size-7 place-items-center rounded-lg bg-market-electric text-white shadow-[0_6px_18px_rgb(1_68_253/0.36)]">
+        <Icon className="size-4" strokeWidth={1.8} />
+      </span>
+      <span className="whitespace-nowrap text-[9px] font-black text-white sm:text-[10px]">
+        {label}
+      </span>
+    </span>
   );
 }
