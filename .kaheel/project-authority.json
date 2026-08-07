@@ -13,8 +13,12 @@
   "deployment": {
     "public_origin": "https://check-your-name-ai.vercel.app",
     "vercel": {
+      "project_id": "prj_OeJq9TShLOrJkHCMCtrX2uEJSLJV",
+      "org_id": "team_5U6h5f6CWoHmohhpAyPir7P1",
+      "git_provider": "github",
       "git_owner": "1127410650",
       "git_repository": "KAHEELProject",
+      "git_repository_id": "1318292196",
       "production_host": "check-your-name-ai.vercel.app"
     }
   },
