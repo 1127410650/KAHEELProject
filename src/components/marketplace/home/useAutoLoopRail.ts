@@ -16,6 +16,8 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
   const lastFrameRef = useRef<number | null>(null);
   const holdingRef = useRef(false);
   const pauseUntilRef = useRef(0);
+  const groupWidthRef = useRef(0);
+  const visibleRef = useRef(true);
 
   const pause = useCallback((milliseconds = 1_800) => {
     pauseUntilRef.current = performance.now() + milliseconds;
@@ -36,9 +38,12 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    const groupWidth = () => rail.scrollWidth / 3;
+    const measure = () => {
+      groupWidthRef.current = rail.scrollWidth / 3;
+    };
     const centreRail = () => {
-      const width = groupWidth();
+      measure();
+      const width = groupWidthRef.current;
       if (width > 0 && (rail.scrollLeft <= 1 || rail.scrollLeft >= width * 2)) {
         rail.scrollLeft = width;
       }
@@ -50,12 +55,13 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
       const previous = lastFrameRef.current ?? now;
       lastFrameRef.current = now;
       const elapsed = Math.min(now - previous, 32);
-      const width = groupWidth();
+      const width = groupWidthRef.current;
 
       if (
         width > 0 &&
         !reducedMotion.matches &&
         !holdingRef.current &&
+        visibleRef.current &&
         now >= pauseUntilRef.current &&
         document.visibilityState === "visible"
       ) {
@@ -72,11 +78,23 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
 
     frameRef.current = window.requestAnimationFrame(tick);
     const onResize = () => window.requestAnimationFrame(centreRail);
+    const resizeObserver = new ResizeObserver(centreRail);
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry?.isIntersecting ?? true;
+        lastFrameRef.current = null;
+      },
+      { rootMargin: "180px" },
+    );
+    resizeObserver.observe(rail);
+    visibilityObserver.observe(rail);
     window.addEventListener("resize", onResize);
 
     return () => {
       window.cancelAnimationFrame(firstFrame);
       if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+      resizeObserver.disconnect();
+      visibilityObserver.disconnect();
       window.removeEventListener("resize", onResize);
     };
   }, [direction, speed]);

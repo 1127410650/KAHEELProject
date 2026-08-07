@@ -1,10 +1,56 @@
 import { useLayoutEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, LayoutGrid } from "lucide-react";
+import {
+  Armchair,
+  BriefcaseBusiness,
+  Building2,
+  CarFront,
+  Code2,
+  GraduationCap,
+  HandCoins,
+  Home,
+  LayoutGrid,
+  Lightbulb,
+  Palette,
+  PartyPopper,
+  Plane,
+  School,
+  SearchX,
+  Shirt,
+  Smartphone,
+  Sparkles,
+  Trees,
+  Utensils,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
 import { useAutoLoopRail } from "@/components/marketplace/home/useAutoLoopRail";
+
+const FIELD_ICONS: Record<string, LucideIcon> = {
+  home: Home,
+  realestate: Building2,
+  cars: CarFront,
+  devices: Smartphone,
+  aqardeal: HandCoins,
+  restaurants: Utensils,
+  furniture: Armchair,
+  services: Wrench,
+  fashion: Shirt,
+  jobs: BriefcaseBusiness,
+  training: GraduationCap,
+  schools: School,
+  events: PartyPopper,
+  programming: Code2,
+  gardens: Trees,
+  arts: Palette,
+  lostfound: SearchX,
+  projects: Lightbulb,
+  travel: Plane,
+  more: LayoutGrid,
+};
 
 /**
  * A continuous row of compact category circles. Three identical groups make
@@ -35,18 +81,22 @@ export function MarketCategoryStrip() {
   }, []);
 
   const chipClass =
-    "flex size-[58px] shrink-0 snap-start flex-col items-center justify-center gap-1 rounded-full border px-1.5 text-center text-[8px] font-black leading-[1.15] transition duration-300 sm:size-[64px] sm:text-[9px] lg:size-[68px] lg:text-[10px]";
+    "relative flex size-[62px] shrink-0 snap-start flex-col items-center justify-center gap-1 overflow-hidden rounded-full border px-1.5 text-center text-[8px] font-black leading-[1.12] backdrop-blur transition duration-300 after:pointer-events-none after:absolute after:inset-[3px] after:rounded-full after:border after:border-current after:opacity-[0.08] sm:size-[68px] sm:text-[9px] lg:size-[72px] lg:text-[10px]";
   const idle =
-    "border-white/55 bg-white text-market-navy shadow-[0_4px_14px_rgb(8_35_70/0.16)] hover:-translate-y-0.5 hover:border-white";
+    "border-white/75 bg-white/[0.96] text-market-navy shadow-[0_7px_18px_rgb(1_10_24/0.30),inset_0_1px_0_rgb(255_255_255/0.95)] hover:-translate-y-1 hover:border-white hover:bg-white";
   const active =
-    "border-white bg-market-navy-soft text-white shadow-[0_4px_16px_rgb(255_255_255/0.18)]";
+    "border-white/90 bg-[linear-gradient(145deg,#2b5e90,#0a284d)] text-white shadow-[0_8px_22px_rgb(0_0_0/0.32),inset_0_1px_0_rgb(255_255_255/0.28)]";
   const loopingFields = Array.from({ length: 3 }, () => PRIMARY_FIELDS).flat();
 
   return (
     <div
       ref={headerMarkerRef}
-      className="w-full border-t border-white/18 bg-market-navy text-market-navy-foreground"
+      className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_20%_-40%,rgba(128,174,220,0.44),transparent_38%),linear-gradient(105deg,#020e21_0%,#08284d_48%,#04162f_100%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]"
     >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
+      />
       <style>{`
         .market-home-header > div:first-child {
           min-height: 52px;
@@ -112,6 +162,7 @@ export function MarketCategoryStrip() {
           {loopingFields.map((field, index) => {
             const label = t(`market.fields.${field.id}`);
             const key = `${field.id}-${index}`;
+            const Icon = FIELD_ICONS[field.id] ?? Sparkles;
             const duplicate = Math.floor(index / PRIMARY_FIELDS.length) !== 1;
             const accessibilityProps = duplicate
               ? ({ "aria-hidden": true, tabIndex: -1 } as const)
@@ -126,7 +177,7 @@ export function MarketCategoryStrip() {
                   lang={locale}
                   {...accessibilityProps}
                 >
-                  <Home className="size-3.5 shrink-0 sm:size-4" aria-hidden />
+                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
                   <span className="line-clamp-2 max-w-full" dir={dir}>
                     {label}
                   </span>
@@ -143,7 +194,7 @@ export function MarketCategoryStrip() {
                   lang={locale}
                   {...accessibilityProps}
                 >
-                  <LayoutGrid className="size-3.5 shrink-0 sm:size-4" aria-hidden />
+                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
                   <span className="line-clamp-2 max-w-full" dir={dir}>
                     {label}
                   </span>
@@ -165,6 +216,7 @@ export function MarketCategoryStrip() {
                   lang={locale}
                   {...accessibilityProps}
                 >
+                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
                   <span className="line-clamp-2 max-w-full" dir={dir}>
                     {label}
                   </span>
@@ -183,6 +235,7 @@ export function MarketCategoryStrip() {
                 lang={locale}
                 {...accessibilityProps}
               >
+                <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
                 <span className="line-clamp-2 max-w-full" dir={dir}>
                   {label}
                 </span>
