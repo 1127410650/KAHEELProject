@@ -549,19 +549,19 @@ body {
  * internal pages references a `market-*` utility.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: #0b2447;
-  --color-market-navy-dark: #081d3a;
-  --color-market-navy-soft: #173e6a;
+  --color-market-navy: #041a36;
+  --color-market-navy-dark: #020e21;
+  --color-market-navy-soft: #123f6e;
   --color-market-navy-foreground: #ffffff;
-  --color-market-electric: #0b2447;
-  --color-market-electric-dark: #081d3a;
-  --color-market-electric-bright: #dbe7f2;
-  --color-market-void: #0b2447;
-  --color-market-panel: #12345a;
-  --color-market-panel-soft: #1a426d;
+  --color-market-electric: #0a315d;
+  --color-market-electric-dark: #020e21;
+  --color-market-electric-bright: #d7e8f6;
+  --color-market-void: #020e21;
+  --color-market-panel: #08294f;
+  --color-market-panel-soft: #123c67;
   --color-market-silver: #ffffff;
-  --color-market-silver-line: #d7e0eb;
-  --color-market-silver-muted: #75849a;
+  --color-market-silver-line: #d3deea;
+  --color-market-silver-muted: #6f8095;
 }
 
 /*
@@ -577,47 +577,47 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  --background: #f8fafc;
-  --foreground: #0b2447;
+  --background: #f7f9fc;
+  --foreground: #041a36;
   --card: #ffffff;
-  --card-foreground: #0b2447;
+  --card-foreground: #041a36;
   --popover: #ffffff;
-  --popover-foreground: #0b2447;
+  --popover-foreground: #041a36;
 
-  --primary: #0b2447;
+  --primary: #041a36;
   --primary-foreground: #ffffff;
-  --primary-dark: #081d3a;
-  --primary-pressed: #06162d;
+  --primary-dark: #020e21;
+  --primary-pressed: #010a18;
 
-  --secondary: #edf2f7;
-  --secondary-foreground: #0b2447;
-  --muted: #f0f4f8;
-  --muted-foreground: #65758b;
-  --accent: #e7edf5;
-  --accent-foreground: #0b2447;
+  --secondary: #ebf1f7;
+  --secondary-foreground: #041a36;
+  --muted: #eef3f8;
+  --muted-foreground: #607389;
+  --accent: #e4ecf4;
+  --accent-foreground: #041a36;
 
-  --border: #d7e0eb;
-  --input: #c9d5e3;
-  --ring: #173e6a;
+  --border: #d3deea;
+  --input: #c4d2e1;
+  --ring: #2a608f;
 
-  --gold: #0b2447;
-  --gold-dark: #081d3a;
-  --gold-soft: #e7edf5;
+  --gold: #041a36;
+  --gold-dark: #020e21;
+  --gold-soft: #e4ecf4;
   --gold-foreground: #ffffff;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #0b2447;
-  --sidebar-accent: #e7edf5;
-  --sidebar-accent-foreground: #0b2447;
-  --sidebar-border: #d7e0eb;
-  --sidebar-primary: #0b2447;
+  --sidebar-foreground: #041a36;
+  --sidebar-accent: #e4ecf4;
+  --sidebar-accent-foreground: #041a36;
+  --sidebar-border: #d3deea;
+  --sidebar-primary: #041a36;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #173e6a;
+  --sidebar-ring: #2a608f;
 
-  --chart-1: #0b2447;
-  --chart-2: #315b86;
-  --chart-3: #657f9d;
-  --chart-4: #9aa9ba;
+  --chart-1: #041a36;
+  --chart-2: #245783;
+  --chart-3: #5f7d9c;
+  --chart-4: #95a9bd;
 
   background-color: var(--background);
   color: var(--foreground);
@@ -632,22 +632,22 @@ body:has(.market-surface) {
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(8 35 70 / 0.08), 0 10px 24px -16px rgb(8 35 70 / 0.24);
-  --shadow-raised: 0 1px 3px rgb(8 35 70 / 0.1), 0 18px 42px -24px rgb(8 35 70 / 0.3);
+  --shadow-panel: 0 1px 2px rgb(3 19 41 / 0.08), 0 10px 24px -16px rgb(3 19 41 / 0.25);
+  --shadow-raised: 0 1px 3px rgb(3 19 41 / 0.1), 0 18px 42px -24px rgb(3 19 41 / 0.32);
 }
 
 .market-surface .shadow-panel,
 body:has(.market-surface) .shadow-panel {
   box-shadow:
-    0 1px 2px rgb(8 35 70 / 0.08),
-    0 10px 24px -16px rgb(8 35 70 / 0.24) !important;
+    0 1px 2px rgb(3 19 41 / 0.08),
+    0 10px 24px -16px rgb(3 19 41 / 0.25) !important;
 }
 
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
   box-shadow:
-    0 1px 3px rgb(8 35 70 / 0.1),
-    0 18px 42px -24px rgb(8 35 70 / 0.3) !important;
+    0 1px 3px rgb(3 19 41 / 0.1),
+    0 18px 42px -24px rgb(3 19 41 / 0.32) !important;
 }
 
 /* Hide the horizontal scrollbar of the marketplace category rail without

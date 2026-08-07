@@ -35,7 +35,7 @@ export function MarketHeader({ showCategories = false }: { showCategories?: bool
   const storeHref = session ? "/dashboard/store" : "/auth?next=%2Fdashboard%2Fstore";
 
   return (
-    <header className="sticky top-0 z-40 overflow-hidden bg-market-navy text-market-navy-foreground shadow-sm">
+    <header className="sticky top-0 z-40 overflow-hidden bg-[linear-gradient(110deg,#020e21_0%,#062344_52%,#03152d_100%)] text-market-navy-foreground shadow-[0_8px_24px_rgb(2_14_33/0.18)]">
       <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-1 px-3 py-2 sm:gap-2 sm:px-4 lg:px-6">
         <Link to="/" className="shrink-0 px-0.5" aria-label={t("market.brand")}>
           <span className="text-sm font-bold tracking-tight text-market-navy-foreground sm:text-base">
