@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "repository": {
+    "full_name": "1127410650/KAHEELProject",
+    "id": "1318292196",
+    "default_branch": "main"
+  },
+  "supabase": {
+    "project_ref": "fdmovlxyqebtgzhsroac",
+    "origin": "https://fdmovlxyqebtgzhsroac.supabase.co",
+    "config_path": "supabase/config.toml"
+  },
+  "deployment": {
+    "public_origin": "https://check-your-name-ai.vercel.app",
+    "vercel": {
+      "git_owner": "1127410650",
+      "git_repository": "KAHEELProject",
+      "production_host": "check-your-name-ai.vercel.app"
+    }
+  },
+  "native": {
+    "application_id": "com.kahli.marketplace"
+  },
+  "policy": {
+    "allow_unknown_ci": false,
+    "allow_additional_git_remotes": false,
+    "allow_additional_supabase_configs": false,
+    "allow_unapproved_supabase_origins": false,
+    "allow_unapproved_native_application_ids": false
+  }
+}
