@@ -10,9 +10,7 @@ import { PAGE_SIZE, loadListingsPage } from "@/lib/mkt-queries";
 
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketFeaturedBanner } from "@/components/marketplace/home/MarketFeaturedBanner";
-import { MarketCategoryTiles } from "@/components/marketplace/home/MarketCategoryTiles";
 import { MarketDemoShowcases } from "@/components/marketplace/home/MarketDemoShowcases";
-import { MarketDemoListings } from "@/components/marketplace/home/MarketDemoListings";
 import { MarketStorefrontHero } from "@/components/marketplace/home/MarketStorefrontHero";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { Button } from "@/components/ui/button";
@@ -75,18 +73,12 @@ export function MarketHome() {
   return (
     <>
       <MarketStorefrontHero />
-      <MarketFeaturedBanner />
       <div className="market-home-deferred">
         <MarketDemoShowcases />
       </div>
+      <MarketFeaturedBanner />
       <div className="market-home-deferred">
         <SyriaHomeGateway />
-      </div>
-      <div className="market-home-deferred">
-        <MarketCategoryTiles />
-      </div>
-      <div className="market-home-deferred">
-        <MarketDemoListings />
       </div>
 
       <section

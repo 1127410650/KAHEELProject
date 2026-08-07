@@ -66,12 +66,12 @@ export function SyriaHomeGateway() {
         if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
       }}
     >
-      <div className="relative min-h-[84px] overflow-hidden rounded-[1rem] border border-market-navy/10 bg-market-navy shadow-[0_7px_20px_rgb(15_23_42/0.11)] sm:min-h-[104px] sm:max-w-[600px] sm:rounded-[1.3rem]">
+      <div className="relative min-h-[84px] overflow-hidden rounded-[1rem] border border-market-silver-line bg-market-panel shadow-[0_7px_20px_rgb(0_0_0/0.14)] sm:min-h-[104px] sm:max-w-[600px] sm:rounded-[1.3rem]">
         <div
           className={
             isSyria
-              ? "absolute inset-0 bg-[linear-gradient(118deg,#05060a_0%,#0f194f_56%,#0144fd_130%)]"
-              : "absolute inset-0 bg-[linear-gradient(118deg,#05060a_0%,#10266f_52%,#0144fd_130%)]"
+              ? "absolute inset-0 bg-[linear-gradient(118deg,#080a0f_0%,#111722_72%,#0144fd_165%)]"
+              : "absolute inset-0 bg-[linear-gradient(118deg,#080a0f_0%,#121824_72%,#416dff_165%)]"
           }
           aria-hidden
         />
@@ -79,13 +79,13 @@ export function SyriaHomeGateway() {
         <span
           className={
             isSyria
-              ? "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric/24 blur-3xl"
-              : "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric-bright/22 blur-3xl"
+              ? "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric/12 blur-3xl"
+              : "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric-bright/11 blur-3xl"
           }
           aria-hidden
         />
         <span
-          className="absolute -bottom-16 start-14 size-40 rounded-full bg-market-electric/10 blur-3xl"
+          className="absolute -bottom-16 start-14 size-40 rounded-full bg-market-electric/5 blur-3xl"
           aria-hidden
         />
 
