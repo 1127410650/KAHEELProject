@@ -4,14 +4,22 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "preinstall": "node scripts/check-project-authority.mjs",
+    "predev": "node scripts/check-project-authority.mjs --require-runtime",
     "dev": "vite dev",
+    "prebuild": "node scripts/check-project-authority.mjs --require-runtime",
     "build": "vite build",
+    "prebuild:dev": "node scripts/check-project-authority.mjs --require-runtime",
     "build:dev": "vite build --mode development",
+    "prepreview": "node scripts/check-project-authority.mjs --require-runtime",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "preseed:qa-accounts": "node scripts/check-project-authority.mjs --require-runtime",
     "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
-    "repository:check": "node scripts/check-canonical-repository.mjs"
+    "authority:check": "node scripts/check-project-authority.mjs",
+    "authority:check:runtime": "node scripts/check-project-authority.mjs --require-runtime",
+    "repository:check": "npm run authority:check"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
