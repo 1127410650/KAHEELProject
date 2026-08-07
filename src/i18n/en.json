@@ -2260,6 +2260,10 @@
     },
     "bottomNav": {
       "home": "Home",
+      "market": "Market",
+      "orders": "Orders",
+      "favorites": "Favorites",
+      "account": "Account",
       "search": "Search",
       "studentTools": "Student guide",
       "add": "Post",
@@ -3033,6 +3037,70 @@
       "next": "Next"
     },
     "offlineNotice": "You're offline — you have not been signed out.",
+    "homeV2": {
+      "locationNow": "Now in your area",
+      "searchPlaceholder": "Search restaurants, groceries, property or cars",
+      "detailedSearch": "Detailed search",
+      "mainFields": "Main categories",
+      "secondaryServices": "More services and categories",
+      "nearbyRestaurants": "Nearby restaurant offers",
+      "noRestaurantOffers": "There are no real restaurant offers in your city right now.",
+      "featured": "Featured listings",
+      "noFeatured": "There are no active featured listings in this category right now.",
+      "quickActions": "Quick actions",
+      "hero": {
+        "badge": "Up to 50% off",
+        "fast": "Fast",
+        "title": "Great offers",
+        "desc": "Fast delivery for less",
+        "cta": "Shop now"
+      },
+      "fields": {
+        "restaurants": {
+          "title": "Restaurants",
+          "desc": "Favourite dishes from restaurants you love",
+          "cta": "Order now"
+        },
+        "groceries": {
+          "title": "Groceries",
+          "desc": "Everything you need from nearby stores",
+          "cta": "Shop now"
+        },
+        "realEstate": {
+          "title": "Property",
+          "desc": "Apartments, villas and land for sale or rent",
+          "cta": "Explore"
+        },
+        "cars": { "title": "Cars", "desc": "Buy and sell new and used cars", "cta": "Browse cars" }
+      },
+      "services": {
+        "homeServices": "Home services",
+        "electronics": "Electronics",
+        "gifts": "Gifts & flowers",
+        "sweets": "Sweets",
+        "cafes": "Cafés",
+        "pharmacies": "Pharmacies",
+        "more": "More",
+        "kids": "Kids",
+        "beauty": "Beauty",
+        "sports": "Sports",
+        "fashion": "Fashion",
+        "moving": "Moving & furniture"
+      },
+      "filters": {
+        "all": "All",
+        "realEstate": "Property",
+        "cars": "Cars",
+        "devices": "Devices",
+        "jobs": "Jobs",
+        "services": "Services"
+      },
+      "actions": {
+        "add": { "title": "Post a listing", "desc": "Sell or rent with ease" },
+        "service": { "title": "Request a service", "desc": "Get any service now" },
+        "ai": { "title": "Kaheel AI", "desc": "Your smart assistant" }
+      }
+    },
     "home": {
       "categories": "Browse by category",
       "featured": "Featured listings",

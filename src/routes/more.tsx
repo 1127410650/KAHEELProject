@@ -37,9 +37,9 @@ import {
   visibleLinks,
 } from "@/lib/more-menu";
 
-const title = "المزيد — كَحيل";
+const title = "المزيد — گحيل";
 const description =
-  "إعدادات حسابك في سوق «كَحيل»، التبديل بين الحسابات، اللغة، السياسات، والتواصل مع إدارة المنصة.";
+  "إعدادات حسابك في سوق «گحيل»، التبديل بين الحسابات، اللغة، السياسات، والتواصل مع إدارة المنصة.";
 
 export const Route = createFileRoute("/more")({
   ssr: false,

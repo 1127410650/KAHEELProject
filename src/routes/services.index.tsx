@@ -35,12 +35,12 @@ export const Route = createFileRoute("/services/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "حجز الخدمات والمواعيد — كَحيل" },
+      { title: "حجز الخدمات والمواعيد — گحيل" },
       {
         name: "description",
-        content: "اكتشف مقدمي الخدمات واحجز الموعد والمختص المناسب من سوق كَحيل.",
+        content: "اكتشف مقدمي الخدمات واحجز الموعد والمختص المناسب من سوق گحيل.",
       },
-      { property: "og:title", content: "خدمات كَحيل — احجز موعدك" },
+      { property: "og:title", content: "خدمات گحيل — احجز موعدك" },
       { name: "robots", content: "index, follow" },
     ],
   }),

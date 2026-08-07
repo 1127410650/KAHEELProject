@@ -49,6 +49,8 @@ export interface SearchParams {
   min?: string | undefined;
   max?: string | undefined;
   img?: string | undefined;
+  featured?: string | undefined;
+  filters?: 1 | undefined;
   sort?: string | undefined;
 }
 
@@ -62,6 +64,8 @@ const PARAM_KEYS = [
   "min",
   "max",
   "img",
+  "featured",
+  "filters",
   "sort",
 ] as const;
 
@@ -93,7 +97,7 @@ const RealEstateExperience = lazy(() =>
   })),
 );
 
-const title = "البحث في السوق — كَحيل";
+const title = "البحث في السوق — گحيل";
 const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
 
@@ -102,12 +106,17 @@ export const Route = createFileRoute("/search")({
   validateSearch: (search: Record<string, unknown>): SearchParams => {
     const out: SearchParams = {};
     for (const key of PARAM_KEYS) {
+      if (key === "filters") continue;
       const value = search[key];
       if (typeof value === "string" && value !== "") out[key] = value;
     }
+    if (search["filters"] === "1" || search["filters"] === 1 || search["filters"] === true)
+      out.filters = 1;
     // Legacy «عقار ديل» links carry an alias slug; resolve it onto the single
     // canonical «عقارات» category so no duplicate field ever appears.
     if (out.category) out.category = canonicalCategorySlug(out.category);
+    if (out.featured !== "1") delete out.featured;
+    if (out.filters !== 1) delete out.filters;
     // Entry points that predate the field selector (home quick strip, saved
     // links) still resolve to one of the five fields instead of being dropped.
     if (!out.domain) {
@@ -299,6 +308,7 @@ function GenericSearchPage() {
     params.min,
     params.max,
     params.img,
+    params.featured,
   ].filter(Boolean).length;
 
   /* ── results ── */
@@ -327,6 +337,7 @@ function GenericSearchPage() {
           minPrice: params.min ? Number(params.min) : undefined,
           maxPrice: params.max ? Number(params.max) : undefined,
           withImageOnly: params.img === "1",
+          featuredOnly: params.featured === "1",
           sort,
         },
         locale,
@@ -476,8 +487,11 @@ function GenericSearchPage() {
   }, [count, scrollKey, active.hasNextPage, active.isFetchingNextPage, active.fetchNextPage]);
 
   /* ── filters sheet ── */
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(params.filters === 1);
   const [draft, setDraft] = useState<SearchParams>(params);
+  useEffect(() => {
+    if (params.filters === 1) setSheetOpen(true);
+  }, [params.filters]);
   useEffect(() => {
     if (sheetOpen) setDraft(params);
   }, [sheetOpen]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -512,6 +526,7 @@ function GenericSearchPage() {
 
   function applyFilters() {
     const next: SearchParams = { ...draft, q: params.q };
+    delete next.filters;
     for (const key of PARAM_KEYS) if (!next[key]) delete next[key];
     setSheetOpen(false);
     void navigate({ search: next, replace: true });
@@ -523,6 +538,11 @@ function GenericSearchPage() {
     if (params.q) next.q = params.q;
     if (params.sort) next.sort = params.sort;
     void navigate({ search: next, replace: true });
+  }
+
+  function setFilterSheetOpen(open: boolean) {
+    setSheetOpen(open);
+    if (!open && params.filters === 1) update({ filters: undefined });
   }
 
   const filterBody = (
@@ -687,9 +707,16 @@ function GenericSearchPage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-        <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">
-          {t("market.search.title")}
-        </h1>
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">
+            {t("market.search.title")}
+          </h1>
+          {params.featured === "1" && (
+            <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
+              {t("market.homeV2.featured")}
+            </span>
+          )}
+        </div>
 
         {/* The single search field on this page. */}
         <form
@@ -725,7 +752,7 @@ function GenericSearchPage() {
         </form>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="sm" className="shrink-0">
                 <SlidersHorizontal className="size-4" aria-hidden />
