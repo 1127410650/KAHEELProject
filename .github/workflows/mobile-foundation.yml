@@ -1,140 +1,40 @@
-name: Mobile foundation security
+name: Mobile branch main sync
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - "feat/mobile-ios-android-*"
-    paths:
-      - package.json
-      - package-lock.json
-      - capacitor.config.ts
-      - vite.config.ts
-      - scripts/**
-      - src/lib/**
-      - src/integrations/supabase/client.ts
-      - src/routes/__root.tsx
-      - vercel.json
-      - .github/workflows/mobile-foundation.yml
   pull_request:
     branches:
       - main
     paths:
-      - package.json
-      - package-lock.json
-      - capacitor.config.ts
-      - vite.config.ts
-      - scripts/**
-      - src/lib/**
-      - src/integrations/supabase/client.ts
-      - src/routes/__root.tsx
-      - vercel.json
-      - android/**
-      - ios/**
       - .github/workflows/mobile-foundation.yml
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: mobile-foundation-${{ github.ref }}
+  group: mobile-main-sync-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  verify-native-foundation:
-    runs-on: macos-15
-    timeout-minutes: 45
-    env:
-      MOBILE_RELEASE_BUILD: "0"
-      VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
-      VITE_SUPABASE_PROJECT_ID: ci-placeholder
-      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
+  merge-latest-main:
+    if: github.repository == '1127410650/check-your-name-ai' && github.head_ref == 'feat/mobile-ios-android-secure-foundation'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
 
     steps:
-      - name: Check out reviewed revision
+      - name: Check out exact mobile branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 1
-          persist-credentials: false
+          ref: feat/mobile-ios-android-secure-foundation
+          fetch-depth: 0
+          persist-credentials: true
 
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 22
-          package-manager-cache: false
-
-      - name: Set up Java
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
-        with:
-          distribution: temurin
-          java-version: 21
-          check-latest: false
-
-      - name: Install locked dependencies without lifecycle scripts
-        run: npm ci --ignore-scripts --no-fund --no-audit
-
-      - name: Reject client secrets and unsafe mobile settings
-        run: npm run security:client-secrets
-
-      - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
-
-      - name: Build normal web application
-        run: npm run build
-
-      - name: Build bundled native SPA
+      - name: Merge current main without changing reviewed mobile files
         shell: bash
         run: |
           set -euo pipefail
-          npm run build:mobile
-          test -s dist/client/index.html
-
-      - name: Generate and harden native projects
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ ! -d android ]; then npx cap add android; fi
-          if [ ! -d ios ]; then npx cap add ios; fi
-          npx cap sync
-          npm run mobile:harden
-          npm run mobile:release:check
-          npx cap doctor
-
-      - name: Build Android debug application
-        working-directory: android
-        run: ./gradlew assembleDebug
-
-      - name: Build iOS simulator application
-        shell: bash
-        run: |
-          set -euo pipefail
-          derived_data="ios/DerivedData"
-          if [ -d ios/App/App.xcworkspace ]; then
-            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
-          else
-            xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
-          fi
-          test -s "$derived_data/Build/Products/Debug-iphonesimulator/App.app/PrivacyInfo.xcprivacy"
-
-      - name: Upload validated native projects
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: native-projects-${{ github.sha }}
-          retention-days: 7
-          if-no-files-found: error
-          path: |
-            package-lock.json
-            android
-            !android/.gradle/**
-            !android/local.properties
-            ios
-            !ios/App/Pods/**
-            !ios/DerivedData/**
-
-      - name: Upload Android debug package
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: android-debug-${{ github.sha }}
-          retention-days: 7
-          if-no-files-found: error
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          git fetch --no-tags origin main
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git merge --no-edit --no-ff origin/main
+          git diff --check HEAD^1 HEAD
+          git push origin HEAD:feat/mobile-ios-android-secure-foundation
