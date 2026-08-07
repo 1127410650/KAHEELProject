@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const AUTHORITY_PATH = resolve(ROOT, ".kaheel/project-authority.json");
 const REQUIRE_RUNTIME = process.argv.includes("--require-runtime");
+const STATIC_ONLY = process.argv.includes("--static");
 
 const LOCKED = Object.freeze({
   repositoryFullName: "1127410650/KAHEELProject",
@@ -14,8 +15,12 @@ const LOCKED = Object.freeze({
   supabaseProjectRef: "fdmovlxyqebtgzhsroac",
   supabaseOrigin: "https://fdmovlxyqebtgzhsroac.supabase.co",
   publicOrigin: "https://check-your-name-ai.vercel.app",
+  vercelProjectId: "prj_OeJq9TShLOrJkHCMCtrX2uEJSLJV",
+  vercelOrgId: "team_5U6h5f6CWoHmohhpAyPir7P1",
+  vercelGitProvider: "github",
   vercelGitOwner: "1127410650",
   vercelGitRepository: "KAHEELProject",
+  vercelGitRepositoryId: "1318292196",
   vercelProductionHost: "check-your-name-ai.vercel.app",
   nativeApplicationId: "com.kahli.marketplace",
 });
@@ -127,7 +132,7 @@ function operationalFiles(allFiles) {
   ]);
   return allFiles.filter((absolute) => {
     const file = normalizedRelative(absolute);
-    const top = file.split("/", 1)[0];
+    const top = file.split("/")[0];
     if ([".github", ".kaheel", "scripts", "src", "supabase"].includes(top)) return true;
     return rootFiles.has(file);
   });
@@ -178,8 +183,12 @@ if (authority) {
     [authority.supabase?.origin, LOCKED.supabaseOrigin, "supabase.origin"],
     [authority.supabase?.config_path, "supabase/config.toml", "supabase.config_path"],
     [authority.deployment?.public_origin, LOCKED.publicOrigin, "deployment.public_origin"],
+    [authority.deployment?.vercel?.project_id, LOCKED.vercelProjectId, "deployment.vercel.project_id"],
+    [authority.deployment?.vercel?.org_id, LOCKED.vercelOrgId, "deployment.vercel.org_id"],
+    [authority.deployment?.vercel?.git_provider, LOCKED.vercelGitProvider, "deployment.vercel.git_provider"],
     [authority.deployment?.vercel?.git_owner, LOCKED.vercelGitOwner, "deployment.vercel.git_owner"],
     [authority.deployment?.vercel?.git_repository, LOCKED.vercelGitRepository, "deployment.vercel.git_repository"],
+    [String(authority.deployment?.vercel?.git_repository_id ?? ""), LOCKED.vercelGitRepositoryId, "deployment.vercel.git_repository_id"],
     [authority.deployment?.vercel?.production_host, LOCKED.vercelProductionHost, "deployment.vercel.production_host"],
     [authority.native?.application_id, LOCKED.nativeApplicationId, "native.application_id"],
   ];
@@ -277,40 +286,7 @@ for (const file of browserSupabaseClients) {
   }
 }
 
-const githubRepository = environmentValue("GITHUB_REPOSITORY");
-const githubRepositoryId = environmentValue("GITHUB_REPOSITORY_ID");
-const isGithubActions = Boolean(githubRepository || environmentValue("GITHUB_ACTIONS") === "true");
-if (isGithubActions) {
-  if (githubRepository !== LOCKED.repositoryFullName) {
-    report(`GitHub Actions repository must be ${LOCKED.repositoryFullName}`);
-  }
-  if (githubRepositoryId && githubRepositoryId !== LOCKED.repositoryId) {
-    report(`GitHub repository id must be ${LOCKED.repositoryId}`);
-  }
-}
-
-const isVercel = environmentValue("VERCEL") === "1";
-if (isVercel) {
-  if (environmentValue("VERCEL_GIT_REPO_OWNER") !== LOCKED.vercelGitOwner) {
-    report(`Vercel must be connected to GitHub owner ${LOCKED.vercelGitOwner}`);
-  }
-  if (environmentValue("VERCEL_GIT_REPO_SLUG") !== LOCKED.vercelGitRepository) {
-    report(`Vercel must be connected only to repository ${LOCKED.vercelGitRepository}`);
-  }
-  const productionUrl = environmentValue("VERCEL_PROJECT_PRODUCTION_URL");
-  if (!productionUrl) {
-    report("Vercel must expose VERCEL_PROJECT_PRODUCTION_URL for project identity verification");
-  } else if (normalizeHttpsOrigin(productionUrl) !== LOCKED.publicOrigin) {
-    report(`Vercel production URL must remain ${LOCKED.publicOrigin}`);
-  }
-}
-
-const isCi = ["1", "true"].includes(String(environmentValue("CI") ?? "").toLowerCase());
-if (isCi && !isGithubActions && !isVercel) {
-  report("unknown CI/build platform is blocked; only canonical GitHub Actions and canonical Vercel are approved");
-}
-
-function inspectGitRemotes() {
+function inspectGitRemotes({ required }) {
   try {
     const names = execFileSync("git", ["remote"], {
       cwd: ROOT,
@@ -340,63 +316,126 @@ function inspectGitRemotes() {
     }
     return true;
   } catch {
+    if (required) report("the canonical Git checkout and origin remote could not be verified");
     return false;
   }
 }
 
-const hasGitRepository = inspectGitRemotes();
-if (!isGithubActions && !isVercel && !isCi && !hasGitRepository) {
-  report("build/install outside an approved platform requires a local checkout with the canonical Git origin");
-}
+const hasGitRepository = inspectGitRemotes({ required: false });
 
-const supabaseUrlVariables = [
-  "VITE_SUPABASE_URL",
-  "SUPABASE_URL",
-  "NEXT_PUBLIC_SUPABASE_URL",
-  "PUBLIC_SUPABASE_URL",
-];
-let hasRuntimeSupabaseUrl = false;
-for (const name of supabaseUrlVariables) {
-  const value = environmentValue(name);
-  if (!value) continue;
-  hasRuntimeSupabaseUrl = true;
-  if (normalizeHttpsOrigin(value) !== LOCKED.supabaseOrigin) {
-    report(`${name} must point only to ${LOCKED.supabaseOrigin}`);
+if (!STATIC_ONLY) {
+  const githubRepository = environmentValue("GITHUB_REPOSITORY");
+  const githubRepositoryId = environmentValue("GITHUB_REPOSITORY_ID");
+  const isGithubActions = Boolean(githubRepository || environmentValue("GITHUB_ACTIONS") === "true");
+  if (isGithubActions) {
+    if (githubRepository !== LOCKED.repositoryFullName) {
+      report(`GitHub Actions repository must be ${LOCKED.repositoryFullName}`);
+    }
+    if (githubRepositoryId && githubRepositoryId !== LOCKED.repositoryId) {
+      report(`GitHub repository id must be ${LOCKED.repositoryId}`);
+    }
   }
-}
 
-for (const name of [
-  "VITE_SUPABASE_PROJECT_ID",
-  "SUPABASE_PROJECT_ID",
-  "SUPABASE_PROJECT_REF",
-]) {
-  const value = environmentValue(name);
-  if (value && value !== LOCKED.supabaseProjectRef) {
-    report(`${name} must be ${LOCKED.supabaseProjectRef}`);
+  const isVercel = Boolean(
+    environmentValue("VERCEL") === "1" ||
+      environmentValue("VERCEL_PROJECT_ID") ||
+      environmentValue("VERCEL_ENV") ||
+      environmentValue("VERCEL_URL"),
+  );
+  if (isVercel) {
+    if (environmentValue("VERCEL_PROJECT_ID") !== LOCKED.vercelProjectId) {
+      report(
+        `Vercel project id must be ${LOCKED.vercelProjectId}; enable Automatically expose System Environment Variables for this project`,
+      );
+    }
+    const orgId = environmentValue("VERCEL_ORG_ID");
+    if (orgId && orgId !== LOCKED.vercelOrgId) {
+      report(`Vercel org id must be ${LOCKED.vercelOrgId}`);
+    }
+    if (environmentValue("VERCEL_GIT_PROVIDER") !== LOCKED.vercelGitProvider) {
+      report(`Vercel Git provider must be ${LOCKED.vercelGitProvider}`);
+    }
+    if (environmentValue("VERCEL_GIT_REPO_OWNER") !== LOCKED.vercelGitOwner) {
+      report(`Vercel must be connected to GitHub owner ${LOCKED.vercelGitOwner}`);
+    }
+    if (environmentValue("VERCEL_GIT_REPO_SLUG") !== LOCKED.vercelGitRepository) {
+      report(`Vercel must be connected only to repository ${LOCKED.vercelGitRepository}`);
+    }
+    if (String(environmentValue("VERCEL_GIT_REPO_ID") ?? "") !== LOCKED.vercelGitRepositoryId) {
+      report(`Vercel Git repository id must be ${LOCKED.vercelGitRepositoryId}`);
+    }
+    const productionUrl = environmentValue("VERCEL_PROJECT_PRODUCTION_URL");
+    if (!productionUrl) {
+      report("Vercel must expose VERCEL_PROJECT_PRODUCTION_URL for project identity verification");
+    } else if (normalizeHttpsOrigin(productionUrl) !== LOCKED.publicOrigin) {
+      report(`Vercel production URL must remain ${LOCKED.publicOrigin}`);
+    }
   }
-}
 
-for (const name of ["VITE_SITE_ORIGIN", "SITE_ORIGIN", "MOBILE_APP_ORIGIN"]) {
-  const value = environmentValue(name);
-  if (value && normalizeHttpsOrigin(value) !== LOCKED.publicOrigin) {
-    report(`${name} must remain ${LOCKED.publicOrigin}`);
+  const isCi = ["1", "true"].includes(String(environmentValue("CI") ?? "").toLowerCase());
+  if (isCi && !isGithubActions && !isVercel) {
+    report("unknown CI/build platform is blocked; only canonical GitHub Actions and canonical Vercel are approved");
   }
-}
+  if (!isGithubActions && !isVercel && !isCi && !hasGitRepository) {
+    report("build outside an approved platform requires a local checkout with the canonical Git origin");
+  }
 
-for (const name of [
-  "VITE_SUPABASE_PUBLISHABLE_KEY",
-  "SUPABASE_PUBLISHABLE_KEY",
-  "SUPABASE_ANON_KEY",
-]) {
-  const value = environmentValue(name);
-  if (value?.startsWith("sb_secret_")) report(`${name} contains a forbidden secret Supabase key`);
-}
-for (const name of ["SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEY"]) {
-  if (environmentValue(name)) report(`${name} must never be present in a client/build environment`);
-}
+  const supabaseUrlVariables = [
+    "VITE_SUPABASE_URL",
+    "SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "PUBLIC_SUPABASE_URL",
+  ];
+  let hasRuntimeSupabaseUrl = false;
+  for (const name of supabaseUrlVariables) {
+    const value = environmentValue(name);
+    if (!value) continue;
+    hasRuntimeSupabaseUrl = true;
+    if (normalizeHttpsOrigin(value) !== LOCKED.supabaseOrigin) {
+      report(`${name} must point only to ${LOCKED.supabaseOrigin}`);
+    }
+  }
 
-if (REQUIRE_RUNTIME && !hasRuntimeSupabaseUrl) {
-  report(`runtime/build must explicitly provide ${LOCKED.supabaseOrigin} through an approved Supabase URL variable`);
+  for (const name of [
+    "VITE_SUPABASE_PROJECT_ID",
+    "SUPABASE_PROJECT_ID",
+    "SUPABASE_PROJECT_REF",
+  ]) {
+    const value = environmentValue(name);
+    if (value && value !== LOCKED.supabaseProjectRef) {
+      report(`${name} must be ${LOCKED.supabaseProjectRef}`);
+    }
+  }
+
+  for (const name of ["VITE_SITE_ORIGIN", "SITE_ORIGIN", "MOBILE_APP_ORIGIN"]) {
+    const value = environmentValue(name);
+    if (value && normalizeHttpsOrigin(value) !== LOCKED.publicOrigin) {
+      report(`${name} must remain ${LOCKED.publicOrigin}`);
+    }
+  }
+
+  for (const name of [
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_ANON_KEY",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "PUBLIC_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_SERVICE_ROLE_KEY",
+    "NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY",
+    "PUBLIC_SUPABASE_SERVICE_ROLE_KEY",
+    "VITE_SUPABASE_SECRET_KEY",
+    "NEXT_PUBLIC_SUPABASE_SECRET_KEY",
+    "PUBLIC_SUPABASE_SECRET_KEY",
+  ]) {
+    const value = environmentValue(name);
+    if (!value) continue;
+    if (name.includes("SERVICE_ROLE") || name.includes("SECRET_KEY") || value.startsWith("sb_secret_")) {
+      report(`${name} exposes a forbidden Supabase admin/secret key to client or build output`);
+    }
+  }
+
+  if (REQUIRE_RUNTIME && !hasRuntimeSupabaseUrl) {
+    report(`runtime/build must explicitly provide ${LOCKED.supabaseOrigin} through an approved Supabase URL variable`);
+  }
 }
 
 const androidGradle = resolve(ROOT, "android/app/build.gradle");
@@ -428,6 +467,6 @@ if (findings.length) {
 
 console.log(
   `KAHEEL authority verified: ${LOCKED.repositoryFullName} / Supabase ${LOCKED.supabaseProjectRef}${
-    REQUIRE_RUNTIME ? " / runtime identity verified" : ""
+    STATIC_ONLY ? " / static source" : REQUIRE_RUNTIME ? " / runtime identity" : ""
   }.`,
 );
