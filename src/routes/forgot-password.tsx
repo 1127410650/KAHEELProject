@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
+import { MOBILE_PASSWORD_RECOVERY_REDIRECT } from "@/lib/mobile-origin";
+import { isNativePlatform } from "@/lib/native-platform";
 
 export const Route = createFileRoute("/forgot-password")({
   ssr: false,
@@ -27,7 +29,9 @@ function ForgotPasswordPage() {
     event.preventDefault();
     setBusy(true);
     try {
-      const redirectTo = `${window.location.origin}/reset-password`;
+      const redirectTo = isNativePlatform()
+        ? MOBILE_PASSWORD_RECOVERY_REDIRECT
+        : new URL("/reset-password", window.location.origin).href;
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
       if (error) throw error;
       // Keep the response identical whether the address exists or not.

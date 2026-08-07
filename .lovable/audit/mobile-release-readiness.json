@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "application_id": "com.kahli.marketplace",
+  "application_id_approved": false,
+  "supabase_recovery_allowlist": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "supabase_rls_storage": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "android_real_device_release": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "ios_real_device_release": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "android_release_signing": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "ios_release_signing": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "universal_app_links": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "independent_penetration_test": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "store_privacy_disclosures": {
+    "verified": false,
+    "evidence_ref": ""
+  },
+  "unresolved_critical_high": null
+}

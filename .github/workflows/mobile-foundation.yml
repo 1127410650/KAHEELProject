@@ -9,7 +9,7 @@ on:
       - package.json
       - package-lock.json
       - capacitor.config.ts
-      - mobile-shell/**
+      - vite.config.ts
       - scripts/**
       - src/lib/**
       - src/integrations/supabase/client.ts
@@ -23,7 +23,7 @@ on:
       - package.json
       - package-lock.json
       - capacitor.config.ts
-      - mobile-shell/**
+      - vite.config.ts
       - scripts/**
       - src/lib/**
       - src/integrations/supabase/client.ts
@@ -43,9 +43,8 @@ concurrency:
 jobs:
   verify-native-foundation:
     runs-on: macos-15
-    timeout-minutes: 45
+    timeout-minutes: 50
     env:
-      MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
       MOBILE_RELEASE_BUILD: "0"
       VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
       VITE_SUPABASE_PROJECT_ID: ci-placeholder
@@ -71,8 +70,8 @@ jobs:
           java-version: 21
           check-latest: false
 
-      - name: Install dependencies
-        run: npm install --no-fund --no-audit
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-fund --no-audit
 
       - name: Reject client secrets and unsafe mobile settings
         run: npm run security:client-secrets
@@ -80,8 +79,15 @@ jobs:
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
 
-      - name: Build web application
+      - name: Build normal web application
         run: npm run build
+
+      - name: Build bundled native SPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build:mobile
+          test -s dist/client/index.html
 
       - name: Generate and harden native projects
         shell: bash
@@ -98,15 +104,29 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug
 
-      - name: Build iOS simulator application
-        run: >-
-          xcodebuild
-          -workspace ios/App/App.xcworkspace
-          -scheme App
-          -sdk iphonesimulator
-          -configuration Debug
-          CODE_SIGNING_ALLOWED=NO
-          build
+      - name: Build Android unsigned release application
+        shell: bash
+        working-directory: android
+        run: |
+          set -euo pipefail
+          ./gradlew assembleRelease
+          test -s app/build/outputs/apk/release/app-release-unsigned.apk
+          test -s app/build/outputs/mapping/release/mapping.txt
+          merged_manifest="$(find app/build/intermediates/merged_manifests/release -name AndroidManifest.xml -type f -print -quit)"
+          test -n "$merged_manifest"
+          ANDROID_MERGED_MANIFEST="$merged_manifest" node ../scripts/check-android-merged-manifest.mjs
+
+      - name: Build iOS release simulator application
+        shell: bash
+        run: |
+          set -euo pipefail
+          derived_data="ios/DerivedData"
+          if [ -d ios/App/App.xcworkspace ]; then
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Release -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+          else
+            xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Release -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+          fi
+          test -s "$derived_data/Build/Products/Release-iphonesimulator/App.app/PrivacyInfo.xcprivacy"
 
       - name: Upload validated native projects
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -121,7 +141,7 @@ jobs:
             !android/local.properties
             ios
             !ios/App/Pods/**
-            !ios/App/DerivedData/**
+            !ios/DerivedData/**
 
       - name: Upload Android debug package
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -130,3 +150,11 @@ jobs:
           retention-days: 7
           if-no-files-found: error
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Android unsigned release package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-release-unsigned-${{ github.sha }}
+          retention-days: 7
+          if-no-files-found: error
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk

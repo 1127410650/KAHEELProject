@@ -1,0 +1,52 @@
+name: Supabase adversarial RLS
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type RLS-QA-READONLY to run against the isolated QA records configured in repository secrets.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-adversarial-rls
+  cancel-in-progress: false
+
+jobs:
+  verify-cross-tenant-isolation:
+    if: github.event.inputs.confirmation == 'RLS-QA-READONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      RLS_TEST_SUPABASE_URL: ${{ secrets.RLS_QA_SUPABASE_URL }}
+      RLS_TEST_PUBLISHABLE_KEY: ${{ secrets.RLS_QA_PUBLISHABLE_KEY }}
+      RLS_TEST_USER_A_ACCESS_TOKEN: ${{ secrets.RLS_QA_USER_A_ACCESS_TOKEN }}
+      RLS_TEST_USER_B_ACCESS_TOKEN: ${{ secrets.RLS_QA_USER_B_ACCESS_TOKEN }}
+      RLS_TEST_TENANT_A_ID: ${{ secrets.RLS_QA_TENANT_A_ID }}
+      RLS_TEST_TENANT_B_ID: ${{ secrets.RLS_QA_TENANT_B_ID }}
+      RLS_TEST_PROJECT_A_ID: ${{ secrets.RLS_QA_PROJECT_A_ID }}
+      RLS_TEST_PROJECT_B_ID: ${{ secrets.RLS_QA_PROJECT_B_ID }}
+      RLS_TEST_ATTACHMENT_A_ID: ${{ secrets.RLS_QA_ATTACHMENT_A_ID }}
+      RLS_TEST_ATTACHMENT_B_ID: ${{ secrets.RLS_QA_ATTACHMENT_B_ID }}
+      RLS_TEST_STORAGE_BUCKET: ${{ secrets.RLS_QA_STORAGE_BUCKET }}
+      RLS_TEST_STORAGE_A_PATH: ${{ secrets.RLS_QA_STORAGE_A_PATH }}
+      RLS_TEST_STORAGE_B_PATH: ${{ secrets.RLS_QA_STORAGE_B_PATH }}
+
+    steps:
+      - name: Check out reviewed revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Run read-only cross-tenant RLS and Storage probes
+        run: node scripts/test-adversarial-rls.mjs
