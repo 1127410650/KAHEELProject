@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "preinstall": "node scripts/check-project-authority.mjs",
+    "preinstall": "node scripts/check-project-authority.mjs --static",
     "predev": "node scripts/check-project-authority.mjs --require-runtime",
     "dev": "vite dev",
     "prebuild": "node scripts/check-project-authority.mjs --require-runtime",
