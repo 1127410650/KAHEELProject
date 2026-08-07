@@ -15,6 +15,7 @@
     "security:client-secrets": "node scripts/check-client-secrets.mjs",
     "security:mobile": "node scripts/check-mobile-dependency-versions.mjs && node scripts/check-mobile-reproducibility.mjs && node scripts/finalize-mobile-csp.mjs && node scripts/check-mobile-security.mjs && node scripts/check-mobile-recovery-security.mjs && node scripts/check-mobile-privacy-security.mjs && node scripts/check-mobile-voice-permissions.mjs && node scripts/check-mobile-safe-area.mjs",
     "security:mobile-all": "npm run security:client-secrets && npm run security:mobile",
+    "security:rls-adversarial": "node scripts/test-adversarial-rls.mjs",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:harden": "node scripts/configure-native-voice-permissions.mjs && node scripts/harden-native-projects.mjs",
