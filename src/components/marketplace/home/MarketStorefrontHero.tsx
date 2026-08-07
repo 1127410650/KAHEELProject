@@ -128,26 +128,31 @@ export function MarketStorefrontHero() {
   const copy = HERO_COPY[language];
 
   return (
-    <section className="market-motion-home mx-auto w-full max-w-[1240px] px-3 pb-1 pt-2 sm:px-5 sm:pt-3 lg:px-8">
+    <section className="market-motion-home mx-auto w-full max-w-[1240px] px-3 pb-1 pt-1.5 sm:px-5 sm:pt-2.5 lg:px-8">
       <div
         data-testid="kaheel-home-hero"
-        className="kaheel-space-hero relative isolate overflow-hidden rounded-[1.35rem] border border-market-silver-line/70 bg-market-void text-market-silver shadow-[0_18px_58px_rgb(1_20_105/0.26)] sm:rounded-[1.85rem]"
+        className="kaheel-space-hero relative isolate overflow-hidden rounded-[1.15rem] border border-market-silver-line/70 bg-market-void text-market-silver shadow-[0_14px_44px_rgb(1_20_105/0.23)] sm:rounded-[1.65rem]"
       >
         <span className="kaheel-space-grid" aria-hidden />
         <span className="kaheel-space-glow kaheel-space-glow-start" aria-hidden />
         <span className="kaheel-space-glow kaheel-space-glow-end" aria-hidden />
 
-        <div className="relative grid min-h-[318px] items-center gap-3 px-4 py-4 sm:min-h-[350px] sm:px-6 sm:py-6 md:min-h-[420px] md:grid-cols-[1.05fr_0.95fr] md:gap-5 lg:min-h-[440px] lg:px-9 lg:py-8">
-          <div className="relative z-10 min-w-0 md:max-w-[36rem]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/16 bg-white/8 px-2.5 py-1 text-[8px] font-black text-market-silver backdrop-blur-md sm:px-3 sm:py-1.5 sm:text-[10px]">
-              <Sparkles className="size-3.5 text-market-electric" aria-hidden />
+        <div className="relative grid min-h-[258px] items-center gap-2.5 px-3.5 py-3 sm:min-h-[300px] sm:px-5 sm:py-5 md:min-h-[360px] md:grid-cols-[1.05fr_0.95fr] md:gap-4 lg:min-h-[380px] lg:px-8 lg:py-7">
+          <div className="kaheel-hero-copy relative z-10 min-w-0 md:max-w-[36rem]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/16 bg-white/8 px-2 py-0.5 text-[8px] font-black text-market-silver backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[9px]">
+              <Sparkles className="size-3 text-market-electric sm:size-3.5" aria-hidden />
               {copy.eyebrow}
             </span>
 
-            <h1 className="mt-2.5 max-w-[22ch] text-balance text-[1.65rem] font-black leading-[1.12] tracking-[-0.035em] text-white sm:mt-3 sm:text-[2.35rem] lg:text-[3rem]">
+            <h1
+              data-language={language}
+              className={`mt-2 text-balance font-black leading-[1.1] tracking-[-0.035em] text-white sm:mt-2.5 ${
+                language === "ar" ? "max-w-none whitespace-nowrap" : "max-w-[22ch]"
+              }`}
+            >
               {copy.title}
             </h1>
-            <p className="mt-2 line-clamp-2 max-w-[35rem] text-[10px] leading-5 text-market-silver-muted sm:mt-2.5 sm:text-[13px] sm:leading-6">
+            <p className="mt-1.5 line-clamp-1 max-w-[35rem] text-[9px] leading-4 text-market-silver-muted sm:mt-2 sm:line-clamp-2 sm:text-xs sm:leading-5">
               {copy.body}
             </p>
 
@@ -156,26 +161,26 @@ export function MarketStorefrontHero() {
               search={{}}
               aria-label={t("market.nav.search")}
               data-testid="mkt-home-search"
-              className="group mt-3 flex min-h-12 w-full max-w-[39rem] items-center gap-2 rounded-full border border-white/14 bg-market-panel/95 py-1 pe-1 ps-3.5 text-start shadow-[0_12px_30px_rgb(0_0_0/0.30)] backdrop-blur-xl transition hover:border-market-electric/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-electric sm:mt-4 sm:min-h-14 sm:ps-5"
+              className="group mt-2.5 flex min-h-11 w-full max-w-[39rem] items-center gap-1.5 rounded-full border border-white/14 bg-market-panel/95 py-1 pe-1 ps-3 text-start shadow-[0_10px_24px_rgb(0_0_0/0.28)] backdrop-blur-xl transition hover:border-market-electric/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-electric sm:mt-3 sm:min-h-12 sm:ps-4"
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-xs font-bold text-white/92 sm:text-sm">
+                <span className="block truncate text-[11px] font-bold text-white/92 sm:text-[13px]">
                   {copy.search}
                 </span>
-                <span className="mt-0.5 hidden text-[9px] text-market-silver-muted min-[360px]:block sm:text-[10px]">
+                <span className="mt-0.5 hidden text-[8px] text-market-silver-muted min-[420px]:block sm:text-[9px]">
                   {copy.hint}
                 </span>
               </span>
               <SlidersHorizontal
-                className="size-[18px] shrink-0 text-market-silver-muted transition group-hover:text-white"
+                className="size-4 shrink-0 text-market-silver-muted transition group-hover:text-white sm:size-[18px]"
                 aria-hidden
               />
-              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-market-electric text-white shadow-[0_8px_24px_rgb(1_68_253/0.42)] transition group-hover:bg-market-electric-dark sm:size-12">
-                <Search className="size-[18px] sm:size-5" aria-hidden />
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-market-electric text-white shadow-[0_7px_20px_rgb(1_68_253/0.38)] transition group-hover:bg-market-electric-dark sm:size-10">
+                <Search className="size-4 sm:size-[18px]" aria-hidden />
               </span>
             </Link>
 
-            <div className="mt-2.5 grid grid-cols-4 gap-1.5 sm:mt-3 sm:max-w-[39rem] sm:gap-2">
+            <div className="mt-2 grid grid-cols-4 gap-1 sm:mt-2.5 sm:max-w-[39rem] sm:gap-1.5">
               {QUICK_LINKS.map((item) => {
                 const Icon = item.icon;
                 const search =
@@ -192,10 +197,10 @@ export function MarketStorefrontHero() {
                     key={item.key}
                     to="/search"
                     search={search}
-                    className="group/quick flex min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl border border-white/10 bg-white/[0.055] px-1 py-1.5 text-center text-[8px] font-black text-market-silver-muted backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-market-electric/55 hover:bg-market-electric/12 hover:text-white sm:flex-row sm:gap-1.5 sm:rounded-2xl sm:px-2.5 sm:py-2 sm:text-[10px]"
+                    className="group/quick flex min-h-8 min-w-0 flex-col items-center justify-center rounded-lg border border-white/10 bg-white/[0.055] px-0.5 py-1 text-center text-[7px] font-black text-market-silver-muted backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-market-electric/55 hover:bg-market-electric/12 hover:text-white sm:min-h-9 sm:flex-row sm:gap-1 sm:rounded-xl sm:px-2 sm:py-1.5 sm:text-[9px]"
                   >
                     <Icon
-                      className="size-4 shrink-0 text-market-electric-bright transition group-hover/quick:text-white"
+                      className="size-3.5 shrink-0 text-market-electric-bright transition group-hover/quick:text-white sm:size-4"
                       aria-hidden
                     />
                     <span className="truncate">{item.label[language]}</span>
@@ -206,7 +211,7 @@ export function MarketStorefrontHero() {
           </div>
 
           <div
-            className="kaheel-orbit-stage relative mx-auto hidden h-[310px] w-full max-w-[390px] self-center md:block lg:h-[330px] lg:max-w-[420px]"
+            className="kaheel-orbit-stage relative mx-auto hidden h-[280px] w-full max-w-[360px] self-center md:block lg:h-[300px] lg:max-w-[390px]"
             aria-hidden
           >
             <span className="kaheel-orbit-ring kaheel-orbit-ring-outer" />
@@ -241,7 +246,7 @@ export function MarketStorefrontHero() {
         </div>
       </div>
 
-      <div className="relative mt-2 overflow-hidden rounded-[1.15rem] border border-market-silver-line bg-market-panel px-1 py-1 shadow-[0_10px_28px_rgb(0_0_0/0.20)] sm:mt-3 sm:rounded-[1.45rem] sm:px-1.5 sm:py-1.5">
+      <div className="relative mt-1.5 overflow-hidden rounded-[1rem] border border-market-silver-line bg-market-panel px-0.5 py-0.5 shadow-[0_8px_22px_rgb(0_0_0/0.18)] sm:mt-2.5 sm:rounded-[1.3rem] sm:px-1 sm:py-1">
         <p className="sr-only">{TICKER_ITEMS.map((item) => item.label[language]).join("، ")}</p>
         <span
           aria-hidden
@@ -254,7 +259,7 @@ export function MarketStorefrontHero() {
         <div
           aria-hidden
           dir={language === "ar" ? "rtl" : "ltr"}
-          className="kahli-home-ticker relative flex w-max items-center gap-2 py-1 text-[10px] font-black text-market-silver sm:gap-2.5 sm:py-1.5 sm:text-[11px]"
+          className="kahli-home-ticker relative flex w-max items-center gap-1.5 py-0.5 text-[9px] font-black text-market-silver sm:gap-2 sm:py-1 sm:text-[10px]"
         >
           {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, index) => {
             const Icon = item.icon;
@@ -262,13 +267,13 @@ export function MarketStorefrontHero() {
             return (
               <span
                 key={`${item.key}-${index}`}
-                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] py-1 pe-3 ps-1 shadow-[0_5px_16px_rgb(0_0_0/0.18)] backdrop-blur-sm sm:gap-2.5 sm:py-1.5 sm:pe-4 sm:ps-1.5"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.055] py-0.5 pe-2.5 ps-0.5 shadow-[0_4px_14px_rgb(0_0_0/0.16)] backdrop-blur-sm sm:gap-2 sm:py-1 sm:pe-3 sm:ps-1"
               >
                 <span
-                  className={`kahli-ticker-icon grid size-8 place-items-center rounded-full bg-gradient-to-br text-white shadow-lg ${item.tone} sm:size-9`}
+                  className={`kahli-ticker-icon grid size-7 place-items-center rounded-full bg-gradient-to-br text-white shadow-lg ${item.tone} sm:size-8`}
                   style={{ animationDelay: `${(index % TICKER_ITEMS.length) * 180}ms` }}
                 >
-                  <Icon className="size-4 sm:size-[18px]" strokeWidth={2.1} aria-hidden />
+                  <Icon className="size-3.5 sm:size-4" strokeWidth={2.1} aria-hidden />
                 </span>
                 <span className="whitespace-nowrap">{item.label[language]}</span>
               </span>

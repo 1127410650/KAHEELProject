@@ -1060,8 +1060,16 @@ body:has(.market-surface) .shadow-raised {
   pointer-events: none;
 }
 
+.kaheel-hero-copy {
+  container-type: inline-size;
+}
+
 .kaheel-space-hero h1 {
-  font-size: clamp(1.65rem, 6.5vw, 3rem) !important;
+  font-size: clamp(1.35rem, 6.2cqw, 2.7rem) !important;
+}
+
+.kaheel-space-hero h1[data-language="ar"] {
+  font-size: clamp(0.98rem, 5cqw, 2.25rem) !important;
 }
 
 .kaheel-space-grid {
