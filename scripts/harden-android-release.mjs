@@ -5,7 +5,8 @@ const gradlePath = "android/app/build.gradle";
 const filePathsPath = "android/app/src/main/res/xml/file_paths.xml";
 
 if (!existsSync(gradlePath)) {
-  throw new Error("Generated Android project is missing android/app/build.gradle.");
+  console.log("Android project not present; skipping Android release hardening.");
+  process.exit(0);
 }
 
 let gradle = readFileSync(gradlePath, "utf8");
