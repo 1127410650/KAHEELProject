@@ -39,7 +39,7 @@ export function MarketDemoShowcases() {
             <div className="min-w-0">
               <p className="inline-flex items-center gap-1 text-[9px] font-black text-[#b9d1ea] sm:text-[10px]">
                 <Sparkles className="size-3" aria-hidden />
-                {locale === "ar" ? "عوالم كَحيل" : "Kaheel worlds"}
+                {locale === "ar" ? "عوالم گحيل" : "Gohail worlds"}
               </p>
               <h2
                 id="store-worlds-title"

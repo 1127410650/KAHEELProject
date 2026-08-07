@@ -140,7 +140,7 @@ export function MarketDemoListings() {
           <div>
             <p className="inline-flex items-center gap-1 text-[9px] font-black text-market-navy-soft sm:text-[10px]">
               <Sparkles className="size-3.5" aria-hidden />
-              {locale === "ar" ? "إعلانات كَحيل" : "Kaheel listings"}
+              {locale === "ar" ? "إعلانات گحيل" : "Gohail listings"}
             </p>
             <h2
               id="demo-listings-title"

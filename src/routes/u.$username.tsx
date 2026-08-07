@@ -26,9 +26,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/u/$username")({
   ssr: false,
   head: ({ params }) => {
-    const title = `${params.username} — معلن فرد في كَحيل`;
+    const title = `${params.username} — معلن فرد في گحيل`;
     const description =
-      "الملف العام للمعلن الفرد في كَحيل: النبذة، المدينة، تاريخ الانضمام، وإعلاناته المنشورة.";
+      "الملف العام للمعلن الفرد في گحيل: النبذة، المدينة، تاريخ الانضمام، وإعلاناته المنشورة.";
     return {
       meta: [
         { title },
@@ -38,7 +38,9 @@ export const Route = createFileRoute("/u/$username")({
         { property: "og:type", content: "profile" },
         { name: "twitter:card", content: "summary" },
       ],
-      links: [{ rel: "canonical", href: `https://check-your-name-ai.lovable.app/u/${params.username}` }],
+      links: [
+        { rel: "canonical", href: canonicalUrl(`/u/${params.username}`) },
+      ],
     };
   },
   component: UserProfilePage,

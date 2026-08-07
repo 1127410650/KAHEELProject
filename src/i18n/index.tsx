@@ -41,7 +41,7 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.services.openProviderCenter": "فتح مركز الخدمة",
 
     "admin.console": "إدارة المنصة",
-    "admin.consoleSubtitle": "مركز تشغيل كَحيل",
+    "admin.consoleSubtitle": "مركز تشغيل گحيل",
     "admin.pageEyebrow": "لوحة الإدارة",
     "admin.nav.businesses": "المنشآت",
     "admin.stats.businesses": "المنشآت",
@@ -83,7 +83,7 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.services.openProviderCenter": "Open provider center",
 
     "admin.console": "Platform management",
-    "admin.consoleSubtitle": "Kaheel operations center",
+    "admin.consoleSubtitle": "Gohail operations center",
     "admin.pageEyebrow": "Administration",
     "admin.nav.businesses": "Businesses",
     "admin.stats.businesses": "Businesses",

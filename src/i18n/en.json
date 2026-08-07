@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "Kaheel",
+    "name": "Gohail",
     "tagline": "Projects, Invoices, Requests and Supervisor Custody Management",
-    "shortName": "Kaheel"
+    "shortName": "Gohail"
   },
   "common": {
     "save": "Save",
@@ -96,7 +96,7 @@
     "signedOut": "Signed out",
     "invalid": "Invalid credentials",
     "genericError": "Could not sign in, please try again",
-    "welcome": "Welcome to Kaheel",
+    "welcome": "Welcome to Gohail",
     "identifier": "Email or mobile number",
     "identifierHint": "Enter your email or mobile number",
     "locked": "Account temporarily locked after failed attempts. Try again later.",
@@ -125,7 +125,7 @@
     "recoveryFailed": "Password recovery failed. Please try again.",
     "noAccount": "Don't have an account?",
     "createAccount": "Create account",
-    "rights": "All rights reserved — Kaheel"
+    "rights": "All rights reserved — Gohail"
   },
   "roles": {
     "accountant": "Accountant / Admin",
@@ -1096,7 +1096,7 @@
     "passwordHint": "At least 10 characters with at least 3 different character types",
     "inviteNote": "This invitation was sent to:",
     "inviteRequiredTitle": "Accounts are invite-only",
-    "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Kaheel. If you were invited, open the invitation link sent to your email.",
+    "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Gohail. If you were invited, open the invitation link sent to your email.",
     "inviteOnlySubtitle": "Complete your details to accept the invitation. The email is locked to the invited address.",
     "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only.",
     "publicTitle": "Create account",
@@ -1235,7 +1235,7 @@
       "OWNER_PROTECTED": "The owner membership cannot be changed",
       "NO_ACTIVE_WORKSPACE": "No active workspace"
     },
-    "shareMessage": "You have been invited to join the workspace \"{workspace}\" on Kaheel as {role}. Accept using this link: {link} — valid for 7 days."
+    "shareMessage": "You have been invited to join the workspace \"{workspace}\" on Gohail as {role}. Accept using this link: {link} — valid for 7 days."
   },
   "start": {
     "title": "Start here",
@@ -1314,7 +1314,7 @@
     "retry": "Retry"
   },
   "market": {
-    "brand": "Kaheel",
+    "brand": "Gohail",
     "tagline": "Marketplace for services, contracting and suppliers",
     "signIn": "Log in",
     "signUp": "Sign up",
@@ -1347,7 +1347,7 @@
       "browse": "Browse",
       "business": "Stores",
       "account": "Account",
-      "rights": "All rights reserved — Kaheel",
+      "rights": "All rights reserved — Gohail",
       "legal": "Policies"
     },
     "filters": {
@@ -1371,7 +1371,7 @@
       "advertiser": "Advertiser type"
     },
     "realEstate": {
-      "brand": "Kaheel Real Estate",
+      "brand": "Gohail Real Estate",
       "eyebrow": "Curated spaces for better living",
       "heroTitle": "Your next property is closer than you think",
       "heroDescription": "Discover apartments, villas, land and property opportunities in a fast, clear experience.",
@@ -3098,7 +3098,7 @@
       "actions": {
         "add": { "title": "Post a listing", "desc": "Sell or rent with ease" },
         "service": { "title": "Request a service", "desc": "Get any service now" },
-        "ai": { "title": "Kaheel AI", "desc": "Your smart assistant" }
+        "ai": { "title": "Gohail AI", "desc": "Your smart assistant" }
       }
     },
     "home": {
@@ -3108,7 +3108,7 @@
       "latest": "Latest listings",
       "motion": {
         "eyebrow": "One market for every need",
-        "title": "Whatever you are looking for, find it on Kaheel",
+        "title": "Whatever you are looking for, find it on Gohail",
         "description": "Property, cars, equipment or stores — discover the right listing and connect directly.",
         "advertiser": "Advertiser",
         "buyer": "Buyer",
@@ -3186,7 +3186,7 @@
     "pages": {
       "about": {
         "title": "About",
-        "body": "Kaheel is an online marketplace for services, contracting, suppliers, equipment and real estate. Any registered user can publish as an individual or under a store, and buyers can browse, search and message advertisers directly."
+        "body": "Gohail is an online marketplace for services, contracting, suppliers, equipment and real estate. Any registered user can publish as an individual or under a store, and buyers can browse, search and message advertisers directly."
       },
       "help": {
         "title": "Help",
@@ -4259,8 +4259,8 @@
   },
   "welcome": {
     "meta": {
-      "title": "Kaheel — Real estate, services and suppliers marketplace",
-      "desc": "Kaheel is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts, in-app messaging and calls."
+      "title": "Gohail — Real estate, services and suppliers marketplace",
+      "desc": "Gohail is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts, in-app messaging and calls."
     },
     "nav": {
       "browse": "Browse marketplace",
@@ -4333,7 +4333,7 @@
       "terms": "Terms",
       "privacy": "Privacy",
       "contact": "Contact us",
-      "rights": "All rights reserved — Kaheel"
+      "rights": "All rights reserved — Gohail"
     }
   }
 }

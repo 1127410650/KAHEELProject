@@ -34,13 +34,13 @@ export const Route = createFileRoute("/admin/verifications")({
   }),
   head: () => ({
     meta: [
-      { title: "توثيق المتاجر — إدارة كَحيل" },
+      { title: "توثيق المتاجر — إدارة گحيل" },
       {
         name: "description",
         content: "مراجعة طلبات توثيق المتاجر ومستنداتها: اعتماد، رفض بسبب، أو طلب استكمال.",
       },
-      { property: "og:title", content: "توثيق المتاجر — إدارة كَحيل" },
-      { property: "og:description", content: "إدارة طلبات توثيق المتاجر في كَحيل." },
+      { property: "og:title", content: "توثيق المتاجر — إدارة گحيل" },
+      { property: "og:description", content: "إدارة طلبات توثيق المتاجر في گحيل." },
       { name: "robots", content: "noindex" },
     ],
   }),

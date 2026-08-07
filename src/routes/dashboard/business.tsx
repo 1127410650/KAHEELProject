@@ -31,16 +31,16 @@ export const Route = createFileRoute("/dashboard/business")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "ملف المتجر — كَحيل" },
+      { title: "ملف المتجر — گحيل" },
       {
         name: "description",
         content:
           "عدّل شعار منشأتك ونبذتها ومدينتها وبيانات التواصل والتصنيفات، وتابع حالة التوثيق.",
       },
-      { property: "og:title", content: "ملف المتجر — كَحيل" },
+      { property: "og:title", content: "ملف المتجر — گحيل" },
       {
         property: "og:description",
-        content: "إدارة ملف المتجر العام وطلبات التوثيق في كَحيل.",
+        content: "إدارة ملف المتجر العام وطلبات التوثيق في گحيل.",
       },
       { name: "robots", content: "noindex" },
     ],

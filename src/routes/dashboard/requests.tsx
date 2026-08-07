@@ -11,12 +11,12 @@ export const Route = createFileRoute("/dashboard/requests")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "طلبات عروض السعر — كَحيل" },
+      { title: "طلبات عروض السعر — گحيل" },
       {
         name: "description",
-        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في كَحيل.",
+        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في گحيل.",
       },
-      { property: "og:title", content: "طلبات عروض السعر — كَحيل" },
+      { property: "og:title", content: "طلبات عروض السعر — گحيل" },
       { property: "og:description", content: "إدارة طلبات عروض السعر." },
       { name: "robots", content: "noindex" },
     ],

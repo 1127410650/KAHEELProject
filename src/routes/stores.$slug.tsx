@@ -27,9 +27,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/stores/$slug")({
   ssr: false,
   head: ({ params }) => {
-    const title = `متجر ${params.slug} — سوق كَحيل`;
+    const title = `متجر ${params.slug} — سوق گحيل`;
     const description =
-      "صفحة المتجر: الأقسام والمنتجات والأسعار وأوقات العمل والموقع وطرق التواصل داخل سوق كَحيل.";
+      "صفحة المتجر: الأقسام والمنتجات والأسعار وأوقات العمل والموقع وطرق التواصل داخل سوق گحيل.";
     return {
       meta: [
         { title },
@@ -152,7 +152,7 @@ function PublicStorePage() {
             />
             <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md">
               <Sparkles className="size-3.5" aria-hidden />
-              هوية متجر كَحيل
+              هوية متجر گحيل
             </span>
           </div>
 

@@ -1,12 +1,11 @@
-# Besme Check
+# KAHEEL Project — منصة گحيل
 
-تصميم برنامج باسم تحقق
-
-This project was built with [Lovable](https://lovable.dev).
+المستودع الأساسي والوحيد لمنصة **گحيل (Gohail)**، ويضم تطبيق السوق العام
+ولوحات الحسابات والإدارة وتكامل Supabase.
 
 **Production app**: https://check-your-name-ai.vercel.app
 
-**Lovable preview**: https://check-your-name-ai.lovable.app
+**GitHub repository**: https://github.com/1127410650/KAHEELProject
 
 ## Deployment
 
@@ -25,8 +24,8 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone https://github.com/1127410650/KAHEELProject.git
+cd KAHEELProject
 npm i
 npm run dev
 ```

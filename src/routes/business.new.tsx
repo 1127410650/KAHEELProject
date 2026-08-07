@@ -23,12 +23,12 @@ export const Route = createFileRoute("/business/new")({
   },
   head: () => ({
     meta: [
-      { title: "إضافة منشأة جديدة — كَحيل" },
+      { title: "إضافة منشأة جديدة — گحيل" },
       {
         name: "description",
-        content: "أضف بيانات منشأتك الرسمية وارفع مستندات التفويض للمراجعة داخل كَحيل.",
+        content: "أضف بيانات منشأتك الرسمية وارفع مستندات التفويض للمراجعة داخل گحيل.",
       },
-      { property: "og:title", content: "إضافة منشأة جديدة — كَحيل" },
+      { property: "og:title", content: "إضافة منشأة جديدة — گحيل" },
       { property: "og:description", content: "إنشاء ملف منشأة وربطه بصاحبه أو المفوض عنها." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

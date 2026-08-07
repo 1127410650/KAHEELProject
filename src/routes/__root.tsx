@@ -15,6 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "@/i18n";
 import { SessionProvider } from "@/lib/session";
+import { canonicalUrl } from "@/lib/share-links";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
@@ -24,7 +25,7 @@ import { CallOverlay } from "@/components/marketplace/CallOverlay";
  * `RootComponent`, so they sit outside its provider tree. Each therefore has to
  * mount its own `I18nProvider`, otherwise `useI18n` runs with no provider.
  *
- * Colour identity: every public/marketplace route wears the "كَحيل" (navy)
+ * Colour identity: every public/marketplace route wears the "گحيل" (navy)
  * palette, so these standalone screens carry `market-surface` too — otherwise
  * `bg-primary` falls back to the internal system's petrol colour. Admin URLs
  * keep the internal identity untouched, so the scope is decided from the path.
@@ -122,34 +123,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "كَحيل — Kaheel" },
+      { title: "گحيل — Gohail" },
       {
         name: "description",
-        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
+        content: "منصة گحيل للسوق والخدمات والحجوزات — Gohail marketplace",
       },
-      { property: "og:title", content: "كَحيل — Kaheel" },
+      { property: "og:title", content: "گحيل — Gohail" },
       {
         property: "og:description",
-        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
+        content: "منصة گحيل للسوق والخدمات والحجوزات — Gohail marketplace",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
-      { name: "twitter:title", content: "كَحيل — Kaheel" },
+      { name: "twitter:title", content: "گحيل — Gohail" },
       {
         name: "twitter:description",
-        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
+        content: "منصة گحيل للسوق والخدمات والحجوزات — Gohail marketplace",
       },
-      {
-        property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb09ea2d-c4ed-441d-b8ab-d06367838354/id-preview-7340c000--e4af4416-92f0-4e72-9296-39a81d60b485.lovable.app-1785492854791.png",
-      },
+      { property: "og:image", content: canonicalUrl("/og-gohail.png") },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "گحيل — Gohail Marketplace" },
+      { name: "twitter:image", content: canonicalUrl("/og-gohail.png") },
+      { name: "twitter:image:alt", content: "گحيل — Gohail Marketplace" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

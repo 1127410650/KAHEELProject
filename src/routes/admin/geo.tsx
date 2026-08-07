@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const title = "الدول والمدن — إدارة كَحيل";
+const title = "الدول والمدن — إدارة گحيل";
 const description = "إدارة الدول والمدن المتاحة في السوق ومراجعة المدن المقترحة من المستخدمين.";
 
 export const Route = createFileRoute("/admin/geo")({

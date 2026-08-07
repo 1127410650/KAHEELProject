@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/forgot-password")({
   ssr: false,
   head: () => ({
-    meta: [{ title: "استعادة كلمة المرور — كَحيل" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "استعادة كلمة المرور — گحيل" }, { name: "robots", content: "noindex" }],
   }),
   component: ForgotPasswordPage,
 });
