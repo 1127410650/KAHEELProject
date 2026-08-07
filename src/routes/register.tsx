@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { signUpPublic } from "@/lib/signup.functions";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { landingPathForSession } from "@/lib/mkt-platform";
 import { enablePersistentSession } from "@/lib/auth-storage";
+import { safeInternalPath } from "@/lib/mkt";
 import { useI18n } from "@/i18n";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,18 @@ function inviteTokenFromUrl(): string | null {
   if (typeof window === "undefined") return null;
   const raw = new URLSearchParams(window.location.search).get("invite");
   return raw && /^[a-f0-9]{16,128}$/i.test(raw) ? raw : null;
+}
+
+/** Shared sign-up can be opened from any KAHEEL surface without allowing an external redirect. */
+function safeNextFromUrl(): string | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("next");
+  return safeInternalPath(raw);
+}
+
+function sharedAuthHref(): string {
+  const next = safeNextFromUrl();
+  return next ? `/auth?next=${encodeURIComponent(next)}` : "/auth";
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -92,7 +105,8 @@ function RegisterPage() {
   useEffect(() => setMounted(true), []);
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/", replace: true });
+      if (!data.session) return;
+      navigate({ to: safeNextFromUrl() ?? "/", replace: true });
     });
   }, [navigate]);
 
@@ -178,7 +192,7 @@ function RegisterPage() {
             {t("signup.checkEmailBody")}
           </p>
           <Button asChild className="mt-4 w-full">
-            <Link to="/auth">{t("signup.signIn")}</Link>
+            <a href={sharedAuthHref()}>{t("signup.signIn")}</a>
           </Button>
         </div>
       </Shell>
@@ -289,7 +303,7 @@ function PublicSignupForm() {
       });
       if (!session.ok || !session.access_token || !session.refresh_token) {
         toast.info(t("signup.signInFailed"));
-        navigate({ to: "/auth", replace: true });
+        window.location.replace(sharedAuthHref());
         return;
       }
       const { error } = await supabase.auth.setSession({
@@ -297,10 +311,17 @@ function PublicSignupForm() {
         refresh_token: session.refresh_token,
       });
       if (error) {
-        navigate({ to: "/auth", replace: true });
+        window.location.replace(sharedAuthHref());
         return;
       }
       toast.success(t("signup.created"));
+
+      const requestedLanding = safeNextFromUrl();
+      if (requestedLanding) {
+        navigate({ to: requestedLanding, replace: true });
+        return;
+      }
+
       let landing = "/more";
       try {
         landing = await landingPathForSession();
@@ -456,9 +477,9 @@ function SignInLink() {
   return (
     <p className="mt-5 text-center text-xs text-muted-foreground">
       {t("signup.haveAccount")}{" "}
-      <Link to="/auth" className="font-semibold text-primary">
+      <a href={sharedAuthHref()} className="font-semibold text-primary">
         {t("signup.signIn")}
-      </Link>
+      </a>
     </p>
   );
 }
