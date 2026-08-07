@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -37,6 +37,12 @@ function safeNext(): string | null {
   return safeInternalPath(raw);
 }
 
+/** Keep the same safe return path when moving between the shared auth pages. */
+function authSiblingHref(path: "/register" | "/forgot-password"): string {
+  const next = safeNext();
+  return next ? `${path}?next=${encodeURIComponent(next)}` : path;
+}
+
 function AuthPage() {
   const { t, locale, setLocale, dir } = useI18n();
   const navigate = useNavigate();
@@ -55,7 +61,8 @@ function AuthPage() {
   }, []);
 
   // Where to land is decided by the server-side platform role, never by the
-  // signed-in email address: a platform admin lands in the console directly.
+  // signed-in email address. A safe `next` only overrides that default when the
+  // user intentionally entered auth from another KAHEEL surface.
   async function landing(): Promise<string> {
     const next = safeNext();
     if (next) return next;
@@ -100,6 +107,9 @@ function AuthPage() {
   }
 
   if (!mounted) return null;
+
+  const registerHref = authSiblingHref("/register");
+  const forgotHref = authSiblingHref("/forgot-password");
 
   return (
     <main
@@ -183,17 +193,17 @@ function AuthPage() {
           </form>
 
           <div className="mt-5 flex flex-col items-center gap-2 text-xs text-muted-foreground">
-            <Link
-              to="/forgot-password"
+            <a
+              href={forgotHref}
               className="font-semibold text-muted-foreground underline hover:text-primary"
             >
               {t("auth.forgot")}
-            </Link>
+            </a>
             <p>
               {t("auth.noAccount")}{" "}
-              <Link to="/register" className="font-semibold text-primary">
+              <a href={registerHref} className="font-semibold text-primary">
                 {t("auth.createAccount")}
-              </Link>
+              </a>
             </p>
           </div>
         </div>
