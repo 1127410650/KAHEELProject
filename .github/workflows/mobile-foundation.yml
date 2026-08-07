@@ -1,61 +1,34 @@
-name: Mobile foundation security
+name: Mobile foundation lock bootstrap
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - "feat/mobile-ios-android-*"
-    paths:
-      - package.json
-      - package-lock.json
-      - capacitor.config.ts
-      - vite.config.ts
-      - scripts/**
-      - src/lib/**
-      - src/integrations/supabase/client.ts
-      - src/routes/__root.tsx
-      - vercel.json
-      - .github/workflows/mobile-foundation.yml
   pull_request:
     branches:
       - main
     paths:
       - package.json
       - package-lock.json
-      - capacitor.config.ts
-      - vite.config.ts
-      - scripts/**
-      - src/lib/**
-      - src/integrations/supabase/client.ts
-      - src/routes/__root.tsx
-      - vercel.json
-      - android/**
-      - ios/**
       - .github/workflows/mobile-foundation.yml
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: mobile-foundation-${{ github.ref }}
+  group: mobile-lock-bootstrap-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  verify-native-foundation:
-    runs-on: macos-15
-    timeout-minutes: 45
-    env:
-      MOBILE_RELEASE_BUILD: "0"
-      VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
-      VITE_SUPABASE_PROJECT_ID: ci-placeholder
-      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
+  commit-reviewed-lock:
+    if: github.repository == '1127410650/check-your-name-ai' && github.head_ref == 'feat/mobile-ios-android-secure-foundation'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
 
     steps:
-      - name: Check out reviewed revision
+      - name: Check out exact mobile branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: feat/mobile-ios-android-secure-foundation
           fetch-depth: 1
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -63,91 +36,216 @@ jobs:
           node-version: 22
           package-manager-cache: false
 
-      - name: Set up Java
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
-        with:
-          distribution: temurin
-          java-version: 21
-          check-latest: false
-
-      - name: Regenerate candidate lock and prove clean install
+      - name: Generate and prove reviewed lock
         shell: bash
+        env:
+          EXPECTED_LOCK_SHA256: ed30a85ee9163b0bd4fcbd7101d7204e7795561a9831a059d0e15a79df3606a4
         run: |
           set -euo pipefail
-          npm install --ignore-scripts --no-fund --no-audit --registry=https://registry.npmjs.org/
+          npm install --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          printf '%s  %s\n' "$EXPECTED_LOCK_SHA256" package-lock.json | sha256sum --check --strict
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const root = lock.packages?.[''];
+          if (lock.lockfileVersion !== 3 || !root) throw new Error('Expected npm package-lock v3.');
+
+          for (const section of ['dependencies', 'devDependencies']) {
+            if (JSON.stringify(packageJson[section] ?? {}) !== JSON.stringify(root[section] ?? {})) {
+              throw new Error(`Lock root does not exactly match package.json ${section}.`);
+            }
+          }
+
+          const reviewed = {
+            'node_modules/@capacitor/android': '7.6.8',
+            'node_modules/@capacitor/app': '7.1.2',
+            'node_modules/@capacitor/cli': '7.6.8',
+            'node_modules/@capacitor/core': '7.6.8',
+            'node_modules/@capacitor/ios': '7.6.8',
+            'node_modules/@capacitor/preferences': '7.0.4',
+            'node_modules/capacitor-secure-storage-plugin': '0.12.0',
+            'node_modules/ajv': '8.20.0',
+          };
+          for (const [path, version] of Object.entries(reviewed)) {
+            if (lock.packages?.[path]?.version !== version) throw new Error(`Unexpected ${path} version.`);
+          }
+
+          const nestedAjv6 = Object.entries(lock.packages ?? {}).some(
+            ([path, entry]) => path.endsWith('/node_modules/ajv') && path !== 'node_modules/ajv' && entry?.version === '6.15.0',
+          );
+          if (!nestedAjv6) throw new Error('Expected nested ajv@6.15.0 for ESLint compatibility.');
+
+          let resolvedCount = 0;
+          for (const [path, entry] of Object.entries(lock.packages ?? {})) {
+            if (!entry || typeof entry !== 'object' || entry.resolved === undefined) continue;
+            if (typeof entry.resolved !== 'string' || !entry.resolved.startsWith('https://registry.npmjs.org/')) {
+              throw new Error(`Unapproved package source at ${path}: ${String(entry.resolved)}`);
+            }
+            if (typeof entry.integrity !== 'string' || !entry.integrity.startsWith('sha512-')) {
+              throw new Error(`Missing SHA-512 integrity for ${path}.`);
+            }
+            resolvedCount += 1;
+          }
+          if (resolvedCount < 600) throw new Error(`Unexpected dependency graph size: ${resolvedCount}`);
+          NODE
+
           rm -rf node_modules
-          npm ci --ignore-scripts --no-fund --no-audit
+          npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Upload clean-install lock candidate
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: reviewed-lock-candidate-${{ github.sha }}
-          retention-days: 1
-          if-no-files-found: error
-          path: package-lock.json
-
-      - name: Reject client secrets and unsafe mobile settings
-        run: npm run security:client-secrets
-
-      - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
-
-      - name: Build normal web application
-        run: npm run build
-
-      - name: Build bundled native SPA
+      - name: Restore permanent read-only native workflow and commit lock
         shell: bash
         run: |
           set -euo pipefail
-          npm run build:mobile
-          test -s dist/client/index.html
+          cat > .github/workflows/mobile-foundation.yml <<'YAML'
+          name: Mobile foundation security
 
-      - name: Generate and harden native projects
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ ! -d android ]; then npx cap add android; fi
-          if [ ! -d ios ]; then npx cap add ios; fi
-          npx cap sync
-          npm run mobile:harden
-          npm run mobile:release:check
-          npx cap doctor
+          on:
+            workflow_dispatch:
+            push:
+              branches:
+                - "feat/mobile-ios-android-*"
+              paths:
+                - package.json
+                - package-lock.json
+                - capacitor.config.ts
+                - vite.config.ts
+                - scripts/**
+                - src/lib/**
+                - src/integrations/supabase/client.ts
+                - src/routes/__root.tsx
+                - vercel.json
+                - .github/workflows/mobile-foundation.yml
+            pull_request:
+              branches:
+                - main
+              paths:
+                - package.json
+                - package-lock.json
+                - capacitor.config.ts
+                - vite.config.ts
+                - scripts/**
+                - src/lib/**
+                - src/integrations/supabase/client.ts
+                - src/routes/__root.tsx
+                - vercel.json
+                - android/**
+                - ios/**
+                - .github/workflows/mobile-foundation.yml
 
-      - name: Build Android debug application
-        working-directory: android
-        run: ./gradlew assembleDebug
+          permissions:
+            contents: read
 
-      - name: Build iOS simulator application
-        shell: bash
-        run: |
-          set -euo pipefail
-          derived_data="ios/DerivedData"
-          if [ -d ios/App/App.xcworkspace ]; then
-            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
-          else
-            xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
-          fi
-          test -s "$derived_data/Build/Products/Debug-iphonesimulator/App.app/PrivacyInfo.xcprivacy"
+          concurrency:
+            group: mobile-foundation-${{ github.ref }}
+            cancel-in-progress: true
 
-      - name: Upload validated native projects
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: native-projects-${{ github.sha }}
-          retention-days: 7
-          if-no-files-found: error
-          path: |
-            package-lock.json
-            android
-            !android/.gradle/**
-            !android/local.properties
-            ios
-            !ios/App/Pods/**
-            !ios/DerivedData/**
+          jobs:
+            verify-native-foundation:
+              runs-on: macos-15
+              timeout-minutes: 45
+              env:
+                MOBILE_RELEASE_BUILD: "0"
+                VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
+                VITE_SUPABASE_PROJECT_ID: ci-placeholder
+                VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
 
-      - name: Upload Android debug package
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: android-debug-${{ github.sha }}
-          retention-days: 7
-          if-no-files-found: error
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+              steps:
+                - name: Check out reviewed revision
+                  uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+                  with:
+                    fetch-depth: 1
+                    persist-credentials: false
+
+                - name: Set up Node.js
+                  uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+                  with:
+                    node-version: 22
+                    package-manager-cache: false
+
+                - name: Set up Java
+                  uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+                  with:
+                    distribution: temurin
+                    java-version: 21
+                    check-latest: false
+
+                - name: Install locked dependencies without lifecycle scripts
+                  run: npm ci --ignore-scripts --no-fund --no-audit
+
+                - name: Reject client secrets and unsafe mobile settings
+                  run: npm run security:client-secrets
+
+                - name: Audit production dependencies
+                  run: npm audit --omit=dev --audit-level=high
+
+                - name: Build normal web application
+                  run: npm run build
+
+                - name: Build bundled native SPA
+                  shell: bash
+                  run: |
+                    set -euo pipefail
+                    npm run build:mobile
+                    test -s dist/client/index.html
+
+                - name: Generate and harden native projects
+                  shell: bash
+                  run: |
+                    set -euo pipefail
+                    if [ ! -d android ]; then npx cap add android; fi
+                    if [ ! -d ios ]; then npx cap add ios; fi
+                    npx cap sync
+                    npm run mobile:harden
+                    npm run mobile:release:check
+                    npx cap doctor
+
+                - name: Build Android debug application
+                  working-directory: android
+                  run: ./gradlew assembleDebug
+
+                - name: Build iOS simulator application
+                  shell: bash
+                  run: |
+                    set -euo pipefail
+                    derived_data="ios/DerivedData"
+                    if [ -d ios/App/App.xcworkspace ]; then
+                      xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+                    else
+                      xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+                    fi
+                    test -s "$derived_data/Build/Products/Debug-iphonesimulator/App.app/PrivacyInfo.xcprivacy"
+
+                - name: Upload validated native projects
+                  uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+                  with:
+                    name: native-projects-${{ github.sha }}
+                    retention-days: 7
+                    if-no-files-found: error
+                    path: |
+                      package-lock.json
+                      android
+                      !android/.gradle/**
+                      !android/local.properties
+                      ios
+                      !ios/App/Pods/**
+                      !ios/DerivedData/**
+
+                - name: Upload Android debug package
+                  uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+                  with:
+                    name: android-debug-${{ github.sha }}
+                    retention-days: 7
+                    if-no-files-found: error
+                    path: android/app/build/outputs/apk/debug/app-debug.apk
+          YAML
+
+          rm -f .github/workflows/bootstrap-reviewed-mobile-lock.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json .github/workflows/mobile-foundation.yml
+          git add -A .github/workflows/bootstrap-reviewed-mobile-lock.yml
+          git diff --cached --check
+          git commit -m 'Lock verified mobile dependency graph'
+          git push origin HEAD:feat/mobile-ios-android-secure-foundation
