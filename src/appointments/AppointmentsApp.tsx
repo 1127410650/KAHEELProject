@@ -43,7 +43,8 @@ import {
 } from "./api";
 import { CustomerArea, type Busy } from "./CustomerArea";
 import { ProviderArea } from "./ProviderArea";
-import { AUTH_URL, MARKET_URL, REGISTER_URL, getCopy, today } from "./copy";
+import { ProviderMarketAccess } from "./ProviderMarketAccess";
+import { AUTH_URL, MARKET_URL, getCopy, today } from "./copy";
 import { Card, Empty, Pill, Spinner, cx, money } from "./ui";
 
 type View = "discover" | "mine" | "provider";
@@ -139,9 +140,13 @@ export function AppointmentsApp() {
     if (view === "provider") void loadDashboard();
   }, [view, activeProviderId, providerDate]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (session.profile?.full_name) setCustomerName(session.profile.full_name);
-    if (session.profile?.phone) setCustomerPhone(session.profile.phone);
-  }, [session.profile]);
+    const appointmentName = context?.profile?.display_name;
+    const appointmentPhone = context?.profile?.phone_e164;
+    if (appointmentName) setCustomerName(appointmentName);
+    else if (session.profile?.full_name) setCustomerName(session.profile.full_name);
+    if (appointmentPhone) setCustomerPhone(appointmentPhone);
+    else if (session.profile?.phone) setCustomerPhone(session.profile.phone);
+  }, [context?.profile, session.profile]);
   useEffect(() => {
     if (view === "discover" || session.status !== "authenticated") return;
     const timer = window.setInterval(() => {
@@ -180,7 +185,7 @@ export function AppointmentsApp() {
 
   async function submitAppointment(event: FormEvent) {
     event.preventDefault();
-    if (!selectedProvider || !selectedService || !selectedSlot) return;
+    if (!selectedProvider || !selectedService || !selectedSlot || !context?.profile) return;
     setBusy("book");
     try {
       await createAppointment({
@@ -205,7 +210,7 @@ export function AppointmentsApp() {
   }
 
   async function submitQueue() {
-    if (!selectedProvider || !selectedService) return;
+    if (!selectedProvider || !selectedService || !context?.profile) return;
     setBusy("queue");
     try {
       await joinQueue({
@@ -264,6 +269,10 @@ export function AppointmentsApp() {
     { id: "mine" as const, label: copy.mine, icon: CalendarCheck2 },
     { id: "provider" as const, label: copy.provider, icon: UsersRound },
   ];
+
+  const providerAccessRequired =
+    session.status !== "authenticated" ||
+    (!contextLoading && !context?.provider_eligible && !(context?.providers.length ?? 0));
 
   return (
     <main dir={dir} className="min-h-dvh bg-background pb-20 text-foreground md:pb-0">
@@ -339,22 +348,28 @@ export function AppointmentsApp() {
       ) : null}
 
       {view === "provider" ? (
-        <ProviderArea
-          copy={copy}
-          locale={locale}
-          status={session.status}
-          context={context}
-          contextLoading={contextLoading}
-          providerId={activeProviderId}
-          onProviderId={setActiveProviderId}
-          date={providerDate}
-          onDate={setProviderDate}
-          dashboard={dashboard}
-          loading={dashboardLoading}
-          busy={busy}
-          setBusy={setBusy}
-          onRefresh={async () => { await loadContext(); await loadDashboard(); }}
-        />
+        session.status === "loading" || (session.status === "authenticated" && contextLoading) ? (
+          <ProviderMarketAccess copy={copy} locale={locale} loading />
+        ) : providerAccessRequired ? (
+          <ProviderMarketAccess copy={copy} locale={locale} />
+        ) : (
+          <ProviderArea
+            copy={copy}
+            locale={locale}
+            status={session.status}
+            context={context}
+            contextLoading={contextLoading}
+            providerId={activeProviderId}
+            onProviderId={setActiveProviderId}
+            date={providerDate}
+            onDate={setProviderDate}
+            dashboard={dashboard}
+            loading={dashboardLoading}
+            busy={busy}
+            setBusy={setBusy}
+            onRefresh={async () => { await loadContext(); await loadDashboard(); }}
+          />
+        )
       ) : null}
 
       {selectedProvider && selectedService ? (
@@ -363,6 +378,7 @@ export function AppointmentsApp() {
           locale={locale}
           isAr={isAr}
           status={session.status}
+          profileReady={Boolean(context?.profile?.display_name && context?.profile?.phone_e164)}
           provider={selectedProvider}
           service={selectedService}
           date={bookingDate}
@@ -375,8 +391,6 @@ export function AppointmentsApp() {
           busy={busy}
           setDate={(value) => void changeBookingDate(value)}
           setSlot={setSelectedSlot}
-          setName={setCustomerName}
-          setPhone={setCustomerPhone}
           setNotes={setCustomerNotes}
           onClose={closeBooking}
           onSubmit={submitAppointment}
@@ -527,6 +541,7 @@ function BookingPanel({
   locale,
   isAr,
   status,
+  profileReady,
   provider,
   service,
   date,
@@ -539,8 +554,6 @@ function BookingPanel({
   busy,
   setDate,
   setSlot,
-  setName,
-  setPhone,
   setNotes,
   onClose,
   onSubmit,
@@ -550,6 +563,7 @@ function BookingPanel({
   locale: "ar" | "en";
   isAr: boolean;
   status: "loading" | "authenticated" | "unauthenticated";
+  profileReady: boolean;
   provider: PublicProvider;
   service: AppointmentService;
   date: string;
@@ -562,8 +576,6 @@ function BookingPanel({
   busy: Busy;
   setDate: (value: string) => void;
   setSlot: (value: string) => void;
-  setName: (value: string) => void;
-  setPhone: (value: string) => void;
   setNotes: (value: string) => void;
   onClose: () => void;
   onSubmit: (event: FormEvent) => Promise<void>;
@@ -583,17 +595,29 @@ function BookingPanel({
           <Button variant="ghost" size="sm" onClick={onClose}>×</Button>
         </div>
 
-        {status !== "authenticated" ? (
+        {status !== "authenticated" || !profileReady ? (
           <div className="mt-6 rounded-2xl bg-secondary p-5 text-center">
             <ShieldCheck className="mx-auto size-7 text-primary" />
-            <p className="mt-3 text-sm font-bold">{copy.loginFirst}</p>
-            <div className="mt-4 flex justify-center gap-2">
-              <Button asChild><a href={AUTH_URL}>{copy.signIn}</a></Button>
-              <Button asChild variant="outline"><a href={REGISTER_URL}>{copy.register}</a></Button>
-            </div>
+            <p className="mt-3 text-sm font-bold leading-7">{copy.loginFirst}</p>
+            <Button asChild className="mt-4 min-h-11">
+              <a href={AUTH_URL}>{copy.signIn}</a>
+            </Button>
           </div>
         ) : (
           <form className="mt-6 space-y-5" onSubmit={(event) => void onSubmit(event)}>
+            <div className="flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 p-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
+                <ShieldCheck className="size-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-black">{name}</p>
+                <p dir="ltr" className="mt-1 truncate text-start text-xs text-muted-foreground">{phone}</p>
+              </div>
+              <span className="ms-auto text-[10px] font-black text-primary">
+                {isAr ? "جوال موثق" : "Verified mobile"}
+              </span>
+            </div>
+
             {service.booking_mode !== "queue" ? (
               <>
                 <div>
@@ -630,16 +654,6 @@ function BookingPanel({
                 </div>
               </>
             ) : null}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="customer-name">{copy.name}</Label>
-                <Input id="customer-name" className="mt-2" value={name} onChange={(event) => setName(event.target.value)} />
-              </div>
-              <div>
-                <Label htmlFor="customer-phone">{copy.phone}</Label>
-                <Input id="customer-phone" className="mt-2" inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value)} />
-              </div>
-            </div>
             <div>
               <Label htmlFor="customer-notes">{copy.notes}</Label>
               <Textarea id="customer-notes" className="mt-2" value={notes} onChange={(event) => setNotes(event.target.value)} />
