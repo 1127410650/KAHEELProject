@@ -126,14 +126,17 @@ export interface CustomerQueue {
   estimated_wait_minutes: number;
 }
 
+export interface AppointmentProfile {
+  user_id: string;
+  display_name: string | null;
+  phone_e164: string | null;
+  locale: "ar" | "en";
+  timezone: string;
+}
+
 export interface MyContext {
-  profile: {
-    user_id: string;
-    display_name: string | null;
-    phone_e164: string | null;
-    locale: "ar" | "en";
-    timezone: string;
-  } | null;
+  profile: AppointmentProfile | null;
+  provider_eligible: boolean;
   providers: MyProvider[];
   appointments: CustomerAppointment[];
   queues: CustomerQueue[];
@@ -243,6 +246,12 @@ export function getAvailableSlots(providerId: string, serviceId: string, date: s
 
 export function getMyContext() {
   return rpc<MyContext>("appt_my_context");
+}
+
+export function completeAppointmentProfile(displayName: string) {
+  return rpc<AppointmentProfile>("appt_complete_phone_profile", {
+    _display_name: displayName.trim(),
+  });
 }
 
 export function createProvider(input: {
@@ -375,6 +384,10 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
   const message = String((error as { message?: string })?.message ?? error ?? "");
   const key = [
     "auth_required",
+    "appointment_profile_required",
+    "phone_not_verified",
+    "profile_name_required",
+    "provider_registration_required",
     "provider_unavailable",
     "provider_not_found",
     "service_unavailable",
@@ -391,6 +404,10 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
 
   const ar: Record<string, string> = {
     auth_required: "سجّل الدخول لإكمال العملية.",
+    appointment_profile_required: "تحقق من رقم جوالك أولًا لإكمال الحجز.",
+    phone_not_verified: "لم يكتمل توثيق رقم الجوال.",
+    profile_name_required: "أدخل الاسم الكامل بشكل صحيح.",
+    provider_registration_required: "تسجيل مقدم الخدمة يبدأ من حساب سوق كَحيل.",
     provider_unavailable: "مقدم الخدمة غير متاح حاليًا.",
     provider_not_found: "لم يتم العثور على مقدم الخدمة.",
     service_unavailable: "الخدمة غير متاحة للحجز حاليًا.",
@@ -406,6 +423,10 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
   };
   const en: Record<string, string> = {
     auth_required: "Sign in to continue.",
+    appointment_profile_required: "Verify your mobile number before booking.",
+    phone_not_verified: "The mobile number has not been verified.",
+    profile_name_required: "Enter a valid full name.",
+    provider_registration_required: "Provider registration starts with a KAHEEL Market account.",
     provider_unavailable: "The provider is currently unavailable.",
     provider_not_found: "Provider not found.",
     service_unavailable: "The service is not currently bookable.",
