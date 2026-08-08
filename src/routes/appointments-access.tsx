@@ -12,6 +12,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { completeAppointmentProfile, getMyContext } from "@/appointments/api";
+import { MARKET_AUTH_URL, MARKET_URL, REGISTER_URL } from "@/appointments/copy";
+import { maskAppointmentPhone, normalizeAppointmentPhone } from "@/appointments/phone";
+import { Card } from "@/appointments/ui";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,10 +24,6 @@ import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { enablePersistentSession } from "@/lib/auth-storage";
 import { useSession } from "@/lib/session";
-import { completeAppointmentProfile, getMyContext } from "@/appointments/api";
-import { MARKET_AUTH_URL, MARKET_URL, REGISTER_URL } from "@/appointments/copy";
-import { maskAppointmentPhone, normalizeAppointmentPhone } from "@/appointments/phone";
-import { Card } from "@/appointments/ui";
 
 export const Route = createFileRoute("/appointments-access")({
   ssr: false,
@@ -47,13 +47,19 @@ export const Route = createFileRoute("/appointments-access")({
 type VerificationType = "sms" | "phone_change";
 type Step = "details" | "code" | "done";
 
+/** Keep passwordless appointment access inside the appointments product only. */
 function safeNext() {
   if (typeof window === "undefined") return "/appointments";
-  const value = new URLSearchParams(window.location.search).get("next") || "/appointments";
-  if (!value.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
+  const raw = new URLSearchParams(window.location.search).get("next") || "/appointments";
+  try {
+    const target = new URL(raw, window.location.origin);
+    const appointmentPath =
+      target.pathname === "/appointments" || target.pathname.startsWith("/appointments/");
+    if (target.origin !== window.location.origin || !appointmentPath) return "/appointments";
+    return `${target.pathname}${target.search}${target.hash}`;
+  } catch {
     return "/appointments";
   }
-  return value;
 }
 
 function authMessage(error: unknown, isAr: boolean) {
@@ -62,11 +68,6 @@ function authMessage(error: unknown, isAr: boolean) {
     return isAr
       ? "تم طلب الرمز عدة مرات. انتظر قليلًا ثم حاول مجددًا."
       : "Too many code requests. Please wait before trying again.";
-  }
-  if (message.includes("expired") || message.includes("invalid token") || message.includes("otp")) {
-    return isAr
-      ? "الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزًا جديدًا."
-      : "The code is invalid or expired. Request a new code.";
   }
   if (
     message.includes("sms") ||
@@ -77,8 +78,16 @@ function authMessage(error: unknown, isAr: boolean) {
       ? "تعذر إرسال رسالة التحقق حاليًا. تحقق من إعداد خدمة الرسائل وحاول لاحقًا."
       : "The verification message could not be sent. Check the SMS service configuration.";
   }
+  if (message.includes("expired") || message.includes("invalid token") || message.includes("otp")) {
+    return isAr
+      ? "الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزًا جديدًا."
+      : "The code is invalid or expired. Request a new code.";
+  }
   if (message.includes("phone_not_verified")) {
     return isAr ? "لم يكتمل توثيق رقم الجوال." : "The mobile number was not verified.";
+  }
+  if (message.includes("profile_name_required")) {
+    return isAr ? "أدخل الاسم الكامل بشكل صحيح." : "Enter a valid full name.";
   }
   return isAr
     ? "تعذر إكمال التحقق. راجع البيانات وحاول مرة أخرى."
@@ -110,9 +119,7 @@ function AppointmentsAccessPage() {
 
     const user = session.session?.user;
     setFullName((current) =>
-      current ||
-      session.profile?.full_name ||
-      String(user?.user_metadata?.["full_name"] ?? ""),
+      current || session.profile?.full_name || String(user?.user_metadata?.["full_name"] ?? ""),
     );
     setPhone((current) => current || user?.phone || session.profile?.phone || "");
 
@@ -252,7 +259,10 @@ function AppointmentsAccessPage() {
   if (checking || session.status === "loading") {
     return (
       <main dir={dir} className="grid min-h-dvh place-items-center bg-background p-6">
-        <Loader2 className="size-7 animate-spin text-primary" aria-label={isAr ? "جاري التحميل" : "Loading"} />
+        <Loader2
+          className="size-7 animate-spin text-primary"
+          aria-label={isAr ? "جاري التحميل" : "Loading"}
+        />
       </main>
     );
   }
@@ -262,7 +272,9 @@ function AppointmentsAccessPage() {
       <header className="border-b border-border/80 bg-background/95">
         <div className="mx-auto flex min-h-16 w-full max-w-6xl items-center gap-3 px-4 sm:px-6">
           <a href="/appointments" className="min-w-0">
-            <strong className="block truncate text-base font-black">{isAr ? "كَحيل مواعيد" : "KAHEEL Appointments"}</strong>
+            <strong className="block truncate text-base font-black">
+              {isAr ? "كَحيل مواعيد" : "KAHEEL Appointments"}
+            </strong>
             <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
               {isAr ? "KAHEEL Appointments" : "كَحيل مواعيد"}
             </span>
@@ -272,7 +284,9 @@ function AppointmentsAccessPage() {
             <Button asChild size="sm" variant="outline" className="h-10 rounded-xl">
               <a href={MARKET_URL}>
                 <Store className="size-4" />
-                <span className="hidden sm:inline">{isAr ? "اذهب إلى سوق كَحيل" : "Go to KAHEEL Market"}</span>
+                <span className="hidden sm:inline">
+                  {isAr ? "اذهب إلى سوق كَحيل" : "Go to KAHEEL Market"}
+                </span>
                 <span className="sm:hidden">كَحيل</span>
               </a>
             </Button>
@@ -313,7 +327,9 @@ function AppointmentsAccessPage() {
 
               <div className="mt-6 space-y-4">
                 <div>
-                  <Label htmlFor="appointments-full-name">{isAr ? "الاسم الكامل" : "Full name"}</Label>
+                  <Label htmlFor="appointments-full-name">
+                    {isAr ? "الاسم الكامل" : "Full name"}
+                  </Label>
                   <Input
                     id="appointments-full-name"
                     autoComplete="name"
@@ -325,21 +341,23 @@ function AppointmentsAccessPage() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="appointments-phone">{isAr ? "رقم الجوال" : "Mobile number"}</Label>
+                  <Label htmlFor="appointments-phone">
+                    {isAr ? "رقم الجوال" : "Mobile number"}
+                  </Label>
                   <Input
                     id="appointments-phone"
                     dir="ltr"
                     inputMode="tel"
                     autoComplete="tel"
                     className="mt-2 h-12 text-start"
-                    placeholder="+9639XXXXXXXX"
+                    placeholder="+9665XXXXXXXX أو +9639XXXXXXXX"
                     required
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
                   />
                   <p className="mt-2 text-[11px] leading-5 text-muted-foreground">
                     {isAr
-                      ? "استخدم مفتاح الدولة. نقبل أيضًا 09 للسعودية؟ لا، 09 لسوريا و05 للسعودية تلقائيًا."
+                      ? "استخدم مفتاح الدولة. ويمكنك أيضًا إدخال الرقم السوري بصيغة 09 أو السعودي بصيغة 05."
                       : "Use the country code. Syrian 09 and Saudi 05 formats are also accepted automatically."}
                   </p>
                 </div>
@@ -354,14 +372,20 @@ function AppointmentsAccessPage() {
               {session.status === "unauthenticated" ? (
                 <div className="mt-6 border-t border-border pt-5 text-center">
                   <p className="text-xs text-muted-foreground">
-                    {isAr ? "مقدم خدمة أو لديك حساب في سوق كَحيل؟" : "A provider or already have a KAHEEL Market account?"}
+                    {isAr
+                      ? "مقدم خدمة أو لديك حساب في سوق كَحيل؟"
+                      : "A provider or already have a KAHEEL Market account?"}
                   </p>
                   <div className="mt-3 flex flex-col gap-2 sm:flex-row">
                     <Button asChild variant="outline" className="flex-1">
-                      <a href={MARKET_AUTH_URL}>{isAr ? "دخول حساب كَحيل" : "KAHEEL account sign-in"}</a>
+                      <a href={MARKET_AUTH_URL}>
+                        {isAr ? "دخول حساب كَحيل" : "KAHEEL account sign-in"}
+                      </a>
                     </Button>
                     <Button asChild variant="ghost" className="flex-1">
-                      <a href={REGISTER_URL}>{isAr ? "التسجيل في السوق" : "Market registration"}</a>
+                      <a href={REGISTER_URL}>
+                        {isAr ? "التسجيل في السوق" : "Market registration"}
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -374,13 +398,19 @@ function AppointmentsAccessPage() {
               <span className="grid size-12 place-items-center rounded-2xl bg-secondary text-primary">
                 <KeyRound className="size-6" />
               </span>
-              <h1 className="mt-4 text-2xl font-black">{isAr ? "أدخل رمز التحقق" : "Enter the verification code"}</h1>
+              <h1 className="mt-4 text-2xl font-black">
+                {isAr ? "أدخل رمز التحقق" : "Enter the verification code"}
+              </h1>
               <p className="mt-2 text-sm leading-7 text-muted-foreground">
                 {isAr ? "أرسلنا الرمز إلى" : "We sent the code to"}{" "}
-                <span dir="ltr" className="font-black text-foreground">{maskAppointmentPhone(phone)}</span>
+                <span dir="ltr" className="font-black text-foreground">
+                  {maskAppointmentPhone(phone)}
+                </span>
               </p>
               <div className="mt-6">
-                <Label htmlFor="appointments-token">{isAr ? "رمز التحقق" : "Verification code"}</Label>
+                <Label htmlFor="appointments-token">
+                  {isAr ? "رمز التحقق" : "Verification code"}
+                </Label>
                 <Input
                   id="appointments-token"
                   dir="ltr"
@@ -394,7 +424,11 @@ function AppointmentsAccessPage() {
                   onChange={(event) => setToken(event.target.value.replace(/\D/g, ""))}
                 />
               </div>
-              <Button type="submit" className="mt-6 h-12 w-full rounded-xl" disabled={busy || token.length < 6}>
+              <Button
+                type="submit"
+                className="mt-6 h-12 w-full rounded-xl"
+                disabled={busy || token.length < 6}
+              >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : <ShieldCheck className="size-4" />}
                 {isAr ? "تحقق ومتابعة" : "Verify and continue"}
               </Button>
@@ -428,9 +462,11 @@ function AppointmentsAccessPage() {
           ) : null}
 
           {step === "done" ? (
-            <div className="py-8 text-center">
+            <div className="py-8 text-center" aria-live="polite">
               <CheckCircle2 className="mx-auto size-12 text-primary" />
-              <h1 className="mt-4 text-2xl font-black">{isAr ? "تم التحقق بنجاح" : "Verified successfully"}</h1>
+              <h1 className="mt-4 text-2xl font-black">
+                {isAr ? "تم التحقق بنجاح" : "Verified successfully"}
+              </h1>
               <p className="mt-2 text-sm text-muted-foreground">
                 {isAr ? "جاري إعادتك إلى المواعيد…" : "Returning you to appointments…"}
               </p>
