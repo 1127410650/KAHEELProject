@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/dialog";
 import { ActivityPicker, type ActivityValue } from "@/components/marketplace/ActivityPicker";
 import { setEntityActivities } from "@/lib/mkt-activities";
+import { saveProviderProfile, useProviderCategories } from "@/lib/mkt-provider-network";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,6 +79,7 @@ export function BusinessQuickCreate({
   const { session } = useSession();
   const queryClient = useQueryClient();
   const country = useAccountCountry();
+  const providerCategories = useProviderCategories();
   const cities = useQuery({
     queryKey: ["mkt", "cities", country.data?.id],
     enabled: !!country.data?.id,
@@ -91,7 +93,8 @@ export function BusinessQuickCreate({
   // ---- stage 1: business ----
   const [tradeName, setTradeName] = useState("");
   const [tradeNameEn, setTradeNameEn] = useState("");
-  const [entityType, setEntityType] = useState<string>("establishment");
+  const [entityType, setEntityType] = useState<string>("sole_proprietorship");
+  const [providerCategoryCode, setProviderCategoryCode] = useState("marketplace_seller");
   // The activity always comes from the reference taxonomy: the user picks it,
   // nothing is matched or approved automatically, and an unlisted activity can
   // only be sent as a suggestion for staff review.
@@ -141,6 +144,7 @@ export function BusinessQuickCreate({
 
   function businessError(): string | null {
     if (tradeName.trim().length < 2) return t("market.biz.nameRequired");
+    if (!providerCategoryCode) return t("market.biz.providerCategoryRequired");
     if (!activity.main) return t("market.biz.activityRequired");
     if (!cityId) return t("market.geo.pickCity");
     return null;
@@ -204,7 +208,7 @@ export function BusinessQuickCreate({
 
       const businessPhone = e164(phone) ?? phone.trim();
       const { data: created, error: rpcError } = await supabase.rpc("create_workspace", {
-        _tenant_type: "establishment",
+        _tenant_type: "store",
         _name_ar: tradeName.trim(),
         ...(tradeNameEn.trim() ? { _name_en: tradeNameEn.trim() } : {}),
         _legal_name: legalName.trim(),
@@ -213,6 +217,7 @@ export function BusinessQuickCreate({
         _phone: businessPhone,
         _email: email.trim(),
         _activity: mainActivityText,
+        _provider_type: providerCategoryCode,
         _contact_info: {},
         _confirm_duplicate: false,
       });
@@ -339,6 +344,22 @@ export function BusinessQuickCreate({
         }
       }
 
+      // One work account owns one storefront. The selected category enables
+      // products, services, appointments, delivery or mixed capabilities.
+      // If this optional bootstrap is interrupted, the already-created account
+      // remains valid and can be completed from /dashboard/network.
+      try {
+        await saveProviderProfile({
+          accountKey: `business:${tid}`,
+          categoryCode: providerCategoryCode,
+          headlineAr: about,
+          acceptsPartnerRequests: true,
+        });
+      } catch {
+        // Account creation must never be rolled back client-side after the
+        // authoritative workspace RPC has committed.
+      }
+
       onCreated(tid);
     } catch {
       toast.error(t("market.actions.failed"));
@@ -358,8 +379,10 @@ export function BusinessQuickCreate({
       description={t("market.biz.quickCreateHint")}
     >
       <p className="text-[11px] font-medium text-muted-foreground">
-        {t("market.biz.stepOf").replace("{n}", String(stage + 1)).replace("{total}", "3")} ·{" "}
-        {t(`market.biz.stage.${(["data", "officer", "review"] as const)[stage]}`)}
+        {t("market.biz.stepOf")
+          .replace("{n}", String(stage + 1))
+          .replace("{total}", "3")}{" "}
+        · {t(`market.biz.stage.${(["data", "officer", "review"] as const)[stage]}`)}
       </p>
 
       {stage === 0 && (
@@ -396,7 +419,25 @@ export function BusinessQuickCreate({
                 ))}
               </select>
             </Field>
-            <Field id="qc_city" label={t("market.geo.city")} hint={t("market.loc.countryFromAccount")}>
+            <Field id="qc_provider_category" label={t("market.biz.providerCategory")}>
+              <select
+                id="qc_provider_category"
+                className={selectClass}
+                value={providerCategoryCode}
+                onChange={(e) => set(setProviderCategoryCode)(e.target.value)}
+              >
+                {(providerCategories.data ?? []).map((value) => (
+                  <option key={value.code} value={value.code}>
+                    {locale === "ar" ? value.name_ar : value.name_en}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field
+              id="qc_city"
+              label={t("market.geo.city")}
+              hint={t("market.loc.countryFromAccount")}
+            >
               <select
                 id="qc_city"
                 className={selectClass}
@@ -421,7 +462,7 @@ export function BusinessQuickCreate({
               }}
             />
           </div>
-          
+
           <Field id="qc_site" label={t("market.biz.website")} hint={t("market.biz.optional")}>
             <Input
               id="qc_site"
@@ -490,7 +531,11 @@ export function BusinessQuickCreate({
                 onChange={(e) => set(setCrNumber)(e.target.value)}
               />
             </Field>
-            <Field id="qc_unified" label={t("market.biz.unifiedNumber")} hint={t("market.biz.optional")}>
+            <Field
+              id="qc_unified"
+              label={t("market.biz.unifiedNumber")}
+              hint={t("market.biz.optional")}
+            >
               <Input
                 id="qc_unified"
                 dir="ltr"
@@ -510,7 +555,11 @@ export function BusinessQuickCreate({
                 onChange={(e) => set(setCrExpiry)(e.target.value)}
               />
             </Field>
-            <Field id="qc_phone" label={t("market.biz.contactPhone")} hint={t("market.biz.privateByDefault")}>
+            <Field
+              id="qc_phone"
+              label={t("market.biz.contactPhone")}
+              hint={t("market.biz.privateByDefault")}
+            >
               <Input
                 id="qc_phone"
                 dir="ltr"
@@ -520,7 +569,11 @@ export function BusinessQuickCreate({
                 onChange={(e) => set(setPhone)(e.target.value)}
               />
             </Field>
-            <Field id="qc_email" label={t("market.biz.contactEmail")} hint={t("market.biz.privateByDefault")}>
+            <Field
+              id="qc_email"
+              label={t("market.biz.contactEmail")}
+              hint={t("market.biz.privateByDefault")}
+            >
               <Input
                 id="qc_email"
                 dir="ltr"
@@ -577,7 +630,11 @@ export function BusinessQuickCreate({
                 onChange={(e) => set(setIdNumber)(e.target.value)}
               />
             </Field>
-            <Field id="qc_ophone" label={t("market.biz.officerPhone")} hint={t("market.biz.privateByDefault")}>
+            <Field
+              id="qc_ophone"
+              label={t("market.biz.officerPhone")}
+              hint={t("market.biz.privateByDefault")}
+            >
               <Input
                 id="qc_ophone"
                 dir="ltr"
@@ -587,7 +644,11 @@ export function BusinessQuickCreate({
                 onChange={(e) => set(setOfficerPhone)(e.target.value)}
               />
             </Field>
-            <Field id="qc_oemail" label={t("market.biz.officerEmail")} hint={t("market.biz.optional")}>
+            <Field
+              id="qc_oemail"
+              label={t("market.biz.officerEmail")}
+              hint={t("market.biz.optional")}
+            >
               <Input
                 id="qc_oemail"
                 dir="ltr"
@@ -599,7 +660,11 @@ export function BusinessQuickCreate({
             </Field>
             {capacity !== "owner" && (
               <>
-                <Field id="qc_relation" label={t("market.biz.relation")} hint={t("market.biz.optional")}>
+                <Field
+                  id="qc_relation"
+                  label={t("market.biz.relation")}
+                  hint={t("market.biz.optional")}
+                >
                   <Input
                     id="qc_relation"
                     value={relation}
@@ -607,7 +672,11 @@ export function BusinessQuickCreate({
                     onChange={(e) => set(setRelation)(e.target.value)}
                   />
                 </Field>
-                <Field id="qc_authexp" label={t("market.biz.authExpiry")} hint={t("market.biz.optional")}>
+                <Field
+                  id="qc_authexp"
+                  label={t("market.biz.authExpiry")}
+                  hint={t("market.biz.optional")}
+                >
                   <Input
                     id="qc_authexp"
                     type="date"
@@ -641,7 +710,11 @@ export function BusinessQuickCreate({
               </Field>
             ),
           )}
-          <Field id="qc_note" label={t("market.biz.verificationNote")} hint={t("market.biz.optional")}>
+          <Field
+            id="qc_note"
+            label={t("market.biz.verificationNote")}
+            hint={t("market.biz.optional")}
+          >
             <Textarea
               id="qc_note"
               rows={2}
@@ -657,10 +730,24 @@ export function BusinessQuickCreate({
         <div className="space-y-3">
           <ReviewGroup title={t("market.biz.stage.data")} onEdit={() => setStage(0)}>
             <Row label={t("market.biz.nameAr")} value={tradeName.trim()} />
-            {tradeNameEn.trim() ? <Row label={t("market.biz.nameEn")} value={tradeNameEn.trim()} /> : null}
+            {tradeNameEn.trim() ? (
+              <Row label={t("market.biz.nameEn")} value={tradeNameEn.trim()} />
+            ) : null}
             <Row label={t("market.biz.entityType")} value={t(`market.biz.entity.${entityType}`)} />
+            <Row
+              label={t("market.biz.providerCategory")}
+              value={(() => {
+                const category = providerCategories.data?.find(
+                  (item) => item.code === providerCategoryCode,
+                );
+                return category ? (locale === "ar" ? category.name_ar : category.name_en) : "—";
+              })()}
+            />
             <Row label={t("market.biz.mainActivity")} value={mainActivityText || "—"} />
-            <Row label={t("market.biz.subActivities")} value={subActivityNames.join(" · ") || "—"} />
+            <Row
+              label={t("market.biz.subActivities")}
+              value={subActivityNames.join(" · ") || "—"}
+            />
             <Row label={t("market.geo.city")} value={city ? geoName(city, locale) : "—"} />
           </ReviewGroup>
 

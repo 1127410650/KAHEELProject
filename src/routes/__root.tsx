@@ -144,9 +144,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: canonicalUrl("/og-gohail.png") },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "گحيل — Gohail Marketplace" },
+      { property: "og:image:alt", content: "گحيل — Gohail" },
       { name: "twitter:image", content: canonicalUrl("/og-gohail.png") },
-      { name: "twitter:image:alt", content: "گحيل — Gohail Marketplace" },
+      { name: "twitter:image:alt", content: "گحيل — Gohail" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

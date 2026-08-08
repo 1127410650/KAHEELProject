@@ -48,6 +48,7 @@ export interface StoreItem {
   is_featured: boolean;
   allow_notes: boolean;
   sort_order: number;
+  source_listing_id: string | null;
 }
 
 export interface StoreAddonOption {
@@ -338,6 +339,7 @@ export interface ItemInput {
   is_featured?: boolean | undefined;
   allow_notes?: boolean | undefined;
   sort_order?: number | undefined;
+  source_listing_id?: string | null | undefined;
 }
 
 export async function saveItem(storefrontId: string, input: ItemInput): Promise<string> {
@@ -357,6 +359,7 @@ export async function saveItem(storefrontId: string, input: ItemInput): Promise<
     is_available: input.is_available ?? true,
     is_featured: input.is_featured ?? false,
     allow_notes: input.allow_notes ?? true,
+    source_listing_id: input.source_listing_id ?? null,
     ...(input.sort_order === undefined ? {} : { sort_order: input.sort_order }),
   };
   if (input.id) {
@@ -407,7 +410,8 @@ export async function uploadItemImage(
 ): Promise<{ path: string } | { error: string }> {
   const prepared = await prepareFile(file);
   if (prepared.error) return { error: prepared.error };
-  const ext = prepared.mime === "image/png" ? "png" : prepared.mime === "image/webp" ? "webp" : "jpg";
+  const ext =
+    prepared.mime === "image/png" ? "png" : prepared.mime === "image/webp" ? "webp" : "jpg";
   const path = `stores/${storefrontId}/item-${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from(MKT_BUCKET).upload(path, prepared.blob, {
     contentType: prepared.mime,
@@ -440,7 +444,10 @@ export async function saveAddonGroup(itemId: string, input: GroupInput): Promise
     ...(input.sort_order === undefined ? {} : { sort_order: input.sort_order }),
   };
   if (input.id) {
-    const { error } = await supabase.from("mkt_store_addon_groups").update(patch).eq("id", input.id);
+    const { error } = await supabase
+      .from("mkt_store_addon_groups")
+      .update(patch)
+      .eq("id", input.id);
     if (error) throw error;
     return input.id;
   }
@@ -460,7 +467,10 @@ export async function deleteAddonGroup(groupId: string): Promise<void> {
     .update({ deleted_at: stamp })
     .eq("id", groupId);
   if (error) throw error;
-  await supabase.from("mkt_store_addons").update({ deleted_at: stamp }).eq("addon_group_id", groupId);
+  await supabase
+    .from("mkt_store_addons")
+    .update({ deleted_at: stamp })
+    .eq("addon_group_id", groupId);
 }
 
 export interface OptionInput {
@@ -507,6 +517,26 @@ export interface LinkableListing {
   status: string;
   storefront_id: string | null;
   cover_image_url: string | null;
+}
+
+/** Listings already attached to this storefront and eligible for an item CTA. */
+export function useStorefrontListings(storefrontId: string | null) {
+  return useQuery({
+    queryKey: ["mkt", "storefront-item-listings", storefrontId],
+    enabled: !!storefrontId,
+    staleTime: 5_000,
+    queryFn: async (): Promise<LinkableListing[]> => {
+      const call = supabase.rpc as unknown as (
+        name: string,
+        params: Record<string, unknown>,
+      ) => PromiseLike<{ data: unknown; error: { message?: string } | null }>;
+      const { data, error } = await call("mkt_store_item_linked_listings", {
+        _storefront_id: storefrontId!,
+      });
+      if (error) throw error;
+      return (data ?? []) as unknown as LinkableListing[];
+    },
+  });
 }
 
 export function useLinkableListings(accountKey: string | null) {
@@ -579,7 +609,8 @@ const GUARD_KEYS = [
 /** Map a database guard message to a translation key under `market.store.err`. */
 export function catalogErrorKey(error: unknown): string {
   const message = (error as { message?: string } | null)?.message ?? "";
-  if (message.includes("mkt_store_sections_unique_name")) return "market.store.err.duplicateSection";
+  if (message.includes("mkt_store_sections_unique_name"))
+    return "market.store.err.duplicateSection";
   const hit = GUARD_KEYS.find((key) => message.includes(key));
   return hit ? `market.store.err.${hit}` : "market.store.err.generic";
 }
