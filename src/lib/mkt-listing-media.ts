@@ -9,6 +9,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { supabasePublicConfig } from "@/integrations/supabase/public-config";
 import { MKT_BUCKET } from "@/lib/mkt";
 
 /** Actual policy limit shown in the UI — keep the texts in sync with this. */
@@ -171,8 +172,7 @@ export async function uploadWithProgress(
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
   if (!token) throw new Error("NO_SESSION");
-  const base = import.meta.env["VITE_SUPABASE_URL"] as string;
-  const apiKey = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string;
+  const { url: base, publishableKey: apiKey } = supabasePublicConfig;
 
   await new Promise<void>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -233,7 +233,12 @@ export async function attachObject(from: string, to: string): Promise<string> {
 }
 
 /** Categories whose ads are meaningless without a photo. */
-const IMAGE_REQUIRED_ROOTS = new Set(["real-estate", "equipment", "building-materials", "factories"]);
+const IMAGE_REQUIRED_ROOTS = new Set([
+  "real-estate",
+  "equipment",
+  "building-materials",
+  "factories",
+]);
 
 export function imagesRequired(rootSlug: string | null, isWanted: boolean): boolean {
   if (isWanted) return false;
