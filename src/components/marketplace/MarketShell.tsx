@@ -11,6 +11,7 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
+import kaheelLogo from "@/assets/kaheel-logo.png";
 
 export function MarketHeader({
   showCategories = false,
