@@ -12,8 +12,7 @@ import { loadPlatformIdentity } from "@/lib/mkt-platform";
  * one place. This route resolves the caller server-side and forwards them to the
  * single approved destination, so no old link 404s and no old UI can be reopened:
  *  - platform admin        → `/admin`
- *  - service-store account → `/dashboard/service`
- *  - seller-store account  → `/dashboard/store`
+ *  - approved work account → `/dashboard/operations`
  *  - business without store→ `/dashboard/business`
  *  - personal without store→ `/dashboard/profile`
  *  - no account chosen yet → `/choose-account`
@@ -50,10 +49,8 @@ export const Route = createFileRoute("/me")({
           _account_key: account.account_key,
         });
         const storefront = storefronts?.[0];
-        if (storefront?.store_type === "services" || storefront?.store_type === "mixed") {
-          target = "/dashboard/service";
-        } else if (storefront) {
-          target = "/dashboard/store";
+        if (storefront) {
+          target = "/dashboard/operations";
         } else {
           target = account.kind === "business" ? "/dashboard/business" : "/dashboard/profile";
         }

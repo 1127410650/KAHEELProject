@@ -24,11 +24,11 @@ export function MarketStoreTemplates() {
           </p>
         </div>
         <Link
-          to="/business/new"
-          search={{ next: "/more" }}
+          to="/join"
+          search={{ kind: "seller" }}
           className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full border border-border bg-card px-3 text-[10px] font-bold text-foreground shadow-sm hover:bg-muted sm:text-xs"
         >
-          إنشاء متجر
+          انضم كبائع
           <ArrowLeft className="size-3.5" aria-hidden />
         </Link>
       </div>
@@ -39,11 +39,14 @@ export function MarketStoreTemplates() {
           return (
             <Link
               key={template.id}
-              to="/business/new"
-              search={{ next: "/more" }}
+              to="/join"
+              search={{ kind: "seller" }}
               className={`group relative min-h-36 w-[46%] min-w-[46%] snap-start overflow-hidden rounded-2xl bg-gradient-to-br ${template.gradient} p-3 text-white shadow-panel transition hover:-translate-y-0.5 hover:shadow-raised sm:w-auto sm:min-w-0`}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_42%)]" aria-hidden />
+              <div
+                className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_42%)]"
+                aria-hidden
+              />
               <div className="relative flex h-full min-h-30 flex-col">
                 <span className="grid size-10 place-items-center rounded-xl border border-white/20 bg-white/15 backdrop-blur">
                   <Icon className="size-5" aria-hidden />

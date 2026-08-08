@@ -26,6 +26,7 @@ import {
   ShieldCheck,
   Store,
   UserCog,
+  UserRoundCheck,
   Users,
   Users2,
 } from "lucide-react";
@@ -126,6 +127,13 @@ const NAV: NavItem[] = [
     to: "/admin/verifications",
     labelKey: "admin.nav.verifications",
     icon: BadgeCheck,
+    section: "accounts",
+    perms: ["verifications.review"],
+  },
+  {
+    to: "/admin/join-applications",
+    labelKey: "admin.nav.joinApplications",
+    icon: UserRoundCheck,
     section: "accounts",
     perms: ["verifications.review"],
   },

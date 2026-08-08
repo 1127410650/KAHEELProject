@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { MarketStaticPage } from "@/components/marketplace/MarketStaticPage";
+import { MarketStaticSection } from "@/components/marketplace/MarketStaticPage";
+import { useI18n } from "@/i18n";
 
 const title = "عن المنصة — گحيل";
-const description = "تعرّف على «گحيل»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
+const description =
+  "تعرّف على «گحيل»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
 
 export const Route = createFileRoute("/about")({
   ssr: false,
@@ -19,9 +21,28 @@ export const Route = createFileRoute("/about")({
       { name: "robots", content: "index, follow" },
     ],
   }),
-  component: () => (
-    <MarketShell>
-      <MarketStaticPage pageKey="about" />
-    </MarketShell>
-  ),
+  component: PoliciesPage,
 });
+
+function PoliciesPage() {
+  const { locale } = useI18n();
+  return (
+    <MarketShell>
+      <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
+        <header className="market-page-intro">
+          <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">
+            {locale === "ar" ? "عن المنصة والسياسات" : "About & policies"}
+          </h1>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {locale === "ar"
+              ? "عن گحيل، وشروط الاستخدام، وسياسة الخصوصية في صفحة واحدة."
+              : "About Gohail, terms of use and privacy in one place."}
+          </p>
+        </header>
+        <MarketStaticSection pageKey="about" />
+        <MarketStaticSection pageKey="terms" />
+        <MarketStaticSection pageKey="privacy" />
+      </div>
+    </MarketShell>
+  );
+}

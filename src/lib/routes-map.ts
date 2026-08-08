@@ -92,9 +92,10 @@ export const ROUTE_MAP: RouteRule[] = [
 
   // ── ب. Signed in ────────────────────────────────────────────────────────────
   rule("/choose-account", "authenticated", "bare"),
-  // Standalone business creation: signed in, no active account required, and
-  // deliberately outside any shell so the picker never hosts it in a modal.
-  rule("/business/new", "authenticated", "bare"),
+  rule("/join", "authenticated", "bare"),
+  // Retained for old bookmarks; every new seller/provider starts through the
+  // reviewed join flow instead of creating an immediately active store.
+  rule("/business/new", "legacy", "bare", { legacy_redirect: "/join?kind=seller" }),
 
   rule("/market-setup", "authenticated", "market"),
   rule("/more", "public", "market"),
@@ -117,12 +118,30 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/dashboard/reports", "account", "dashboard"),
   rule("/dashboard/reports/$id", "account", "dashboard"),
   rule("/dashboard/violations", "account", "dashboard"),
-  rule("/dashboard/store", "account", "dashboard"),
-  rule("/dashboard/store/new", "account", "dashboard"),
-  rule("/dashboard/store/catalog", "account", "dashboard"),
-  rule("/dashboard/network", "account", "dashboard"),
-  rule("/dashboard/service", "account", "dashboard"),
-  rule("/dashboard/service/settings", "account", "dashboard"),
+  rule("/dashboard/operations", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/orders", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/store", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/store/new", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/store/catalog", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/network", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/service", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
+  rule("/dashboard/service/settings", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
   rule("/dashboard/business", "account", "dashboard", {
     allowed_identity_types: ["business"],
   }),
@@ -181,6 +200,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/listing-events", "admin", "admin"),
   rule("/admin/listing-reports", "admin", "admin"),
   rule("/admin/verifications", "admin", "admin"),
+  rule("/admin/join-applications", "admin", "admin"),
   rule("/admin/geo", "admin", "admin"),
   rule("/admin/reports", "admin", "admin"),
   rule("/admin/reports/$id", "admin", "admin"),

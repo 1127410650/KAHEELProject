@@ -13,13 +13,8 @@ import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { useSignOut } from "@/lib/auth-signout";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
-import {
-  ACTIVITY_LINKS,
-  CREATE_BUSINESS_LABEL_KEY,
-  CREATE_BUSINESS_PATH,
-  MANAGE_LINKS,
-  visibleLinks,
-} from "@/lib/more-menu";
+import { ACTIVITY_LINKS, MANAGE_LINKS, visibleLinks } from "@/lib/more-menu";
+import { useOperationalAccess } from "@/lib/mkt-provider-onboarding";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -77,6 +72,7 @@ export function AccountMenu() {
   const navigate = useNavigate();
   // Guards against a double tap while the server re-checks the membership.
   const [switching, setSwitching] = useState<string | null>(null);
+  const operational = useOperationalAccess(active?.account_key ?? null);
 
   const admin = useQuery({
     queryKey: ["mkt", "is-platform-admin", session?.user.id ?? null],
@@ -118,6 +114,8 @@ export function AccountMenu() {
     accountKind: active.kind,
     can,
     isPlatformAdmin: admin.data === true,
+    providerApproved: active.kind === "business" && operational.data?.allowed === true,
+    providerCapabilities: operational.data?.capabilities ?? [],
   };
 
   async function signOut() {
@@ -235,12 +233,14 @@ export function AccountMenu() {
             ) : null}
           </DropdownMenuItem>
         ))}
-        <DropdownMenuItem asChild className="gap-2 text-xs">
-          <Link to={CREATE_BUSINESS_PATH}>
-            <Store className="size-4 text-muted-foreground" aria-hidden />
-            {t(CREATE_BUSINESS_LABEL_KEY)}
-          </Link>
-        </DropdownMenuItem>
+        {active.kind === "individual" ? (
+          <DropdownMenuItem asChild className="gap-2 text-xs">
+            <Link to="/join" search={{ kind: "seller" }}>
+              <Store className="size-4 text-muted-foreground" aria-hidden />
+              {t("market.more.links.joinSeller")}
+            </Link>
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuSeparator />
         {desktopLinks.map((link) => (
           <DropdownMenuItem key={link.key} asChild>

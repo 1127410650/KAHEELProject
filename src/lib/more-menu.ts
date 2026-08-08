@@ -12,9 +12,11 @@ import {
   CalendarClock,
   Coins,
   Flag,
+  Gauge,
   Heart,
   LayoutList,
   Network,
+  PackageCheck,
   ShieldAlert,
   ShieldCheck,
   Store,
@@ -43,7 +45,9 @@ export interface MoreLinkDef {
   /** Live counter source, when the row has one. */
   badge?: MoreBadgeSource;
   /** Extra gate beyond the route rules (e.g. platform admin). */
-  requires?: "platformAdmin";
+  requires?: "platformAdmin" | "approvedProvider";
+  /** At least one capability must be granted by the approved provider category. */
+  capabilities?: string[];
 }
 
 /** «نشاطي» — activity of the ACTIVE account. Messages/alerts live in the bottom bar. */
@@ -53,6 +57,7 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
     to: "/dashboard/bookings",
     labelKey: "market.services.myBookings",
     icon: CalendarCheck2,
+    kinds: ["individual"],
   },
   { key: "my-ads", to: "/dashboard/my-ads", labelKey: "market.dash.myAds", icon: LayoutList },
   { key: "points", to: "/dashboard/points", labelKey: "market.points.title", icon: Coins },
@@ -68,20 +73,49 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
 
 /** «إدارة الحساب» — only routes that really exist today. */
 export const MANAGE_LINKS: MoreLinkDef[] = [
-  // Both account kinds may own exactly one storefront; the hub decides between
-  // "create" and "manage" from the live query, never from a constant.
-  { key: "store", to: "/dashboard/store", labelKey: "market.store.hubTitle", icon: Store },
+  {
+    key: "operations",
+    to: "/dashboard/operations",
+    labelKey: "market.operations.title",
+    icon: Gauge,
+    kinds: ["business"],
+    requires: "approvedProvider",
+  },
+  {
+    key: "orders",
+    to: "/dashboard/orders",
+    labelKey: "market.operations.orders",
+    icon: PackageCheck,
+    kinds: ["business"],
+    requires: "approvedProvider",
+    capabilities: ["orders.receive"],
+  },
+  {
+    key: "store",
+    to: "/dashboard/store",
+    labelKey: "market.store.hubTitle",
+    icon: Store,
+    kinds: ["business"],
+    requires: "approvedProvider",
+    capabilities: ["catalog.products", "catalog.services"],
+  },
   {
     key: "provider-network",
     to: "/dashboard/network",
     labelKey: "market.account.providerNetwork",
     icon: Network,
+    kinds: ["business"],
+    requires: "approvedProvider",
+    capabilities: ["relationships.manage", "integrations.manage"],
   },
   {
     key: "service-provider",
     to: "/dashboard/service",
     labelKey: "market.services.providerCenter",
     icon: CalendarClock,
+    kinds: ["business"],
+    requires: "approvedProvider",
+    capabilities: ["bookings.receive"],
   },
   {
     key: "business",
@@ -102,6 +136,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
     to: "/dashboard/profile",
     labelKey: "market.identity.managePersonal",
     icon: User,
+    kinds: ["individual"],
   },
   {
     key: "admin",
@@ -112,21 +147,25 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
 ];
 
-/** The one approved path (and the one approved label) for creating a business. */
-export const CREATE_BUSINESS_PATH = "/business/new";
-export const CREATE_BUSINESS_LABEL_KEY = "market.entry.newBusiness";
-
 export interface MoreViewer {
   signedIn: boolean;
   accountKind: AccountKind | null;
   can: (permission: string) => boolean;
   isPlatformAdmin?: boolean;
+  providerApproved?: boolean;
+  providerCapabilities?: string[];
 }
 
 /** Filter a definition list for one viewer — the only allowed visibility logic. */
 export function visibleLinks(defs: MoreLinkDef[], viewer: MoreViewer): MoreLinkDef[] {
   return defs.filter((def) => {
     if (def.requires === "platformAdmin" && viewer.isPlatformAdmin !== true) return false;
+    if (def.requires === "approvedProvider" && viewer.providerApproved !== true) return false;
+    if (
+      def.capabilities?.length &&
+      !def.capabilities.some((capability) => viewer.providerCapabilities?.includes(capability))
+    )
+      return false;
     if (def.kinds && (!viewer.accountKind || !def.kinds.includes(viewer.accountKind))) return false;
     return canSeeLink(def.to, viewer);
   });
