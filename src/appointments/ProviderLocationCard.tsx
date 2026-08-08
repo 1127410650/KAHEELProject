@@ -6,20 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import {
-  appointmentErrorMessage,
-  saveProvider,
-  type ProviderDashboard,
-} from "./api";
+import { appointmentErrorMessage, type ProviderDashboard } from "./api";
 import {
   providerTypeLabel,
   providerTypes,
-  type ProviderLocationFields,
+  saveProviderLocation,
   type ProviderType,
 } from "./directory-api";
 import { Card } from "./ui";
-
-type ProviderWithLocation = ProviderDashboard["provider"] & ProviderLocationFields;
 
 interface SelectedLocation {
   latitude: number;
@@ -36,9 +30,11 @@ export function ProviderLocationCard({
   dashboard: ProviderDashboard;
   onRefresh: () => Promise<void>;
 }) {
-  const provider = dashboard.provider as ProviderWithLocation;
+  const provider = dashboard.provider;
   const isAr = locale === "ar";
-  const [providerType, setProviderType] = useState<ProviderType>(provider.provider_type || "other");
+  const [providerType, setProviderType] = useState<ProviderType>(
+    (provider.provider_type as ProviderType) || "other",
+  );
   const [city, setCity] = useState(provider.city ?? "");
   const [district, setDistrict] = useState(provider.district ?? "");
   const [address, setAddress] = useState(provider.address_text ?? "");
@@ -48,13 +44,19 @@ export function ProviderLocationCard({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setProviderType(provider.provider_type || "other");
+    setProviderType((provider.provider_type as ProviderType) || "other");
     setCity(provider.city ?? "");
     setDistrict(provider.district ?? "");
     setAddress(provider.address_text ?? "");
     setSelectedLocation(null);
     setClearLocation(false);
-  }, [provider.id, provider.provider_type, provider.city, provider.district, provider.address_text]);
+  }, [
+    provider.id,
+    provider.provider_type,
+    provider.city,
+    provider.district,
+    provider.address_text,
+  ]);
 
   const text = useMemo(
     () =>
@@ -131,24 +133,17 @@ export function ProviderLocationCard({
   async function save() {
     setSaving(true);
     try {
-      const patch: Record<string, unknown> = {
-        provider_type: providerType,
-        city: city.trim() || null,
-        district: district.trim() || null,
-        address_text: address.trim() || null,
-      };
-
-      if (clearLocation) {
-        patch.latitude = null;
-        patch.longitude = null;
-        patch.location_accuracy_meters = null;
-      } else if (selectedLocation) {
-        patch.latitude = selectedLocation.latitude;
-        patch.longitude = selectedLocation.longitude;
-        patch.location_accuracy_meters = Math.round(selectedLocation.accuracy);
-      }
-
-      await saveProvider(provider.id, patch);
+      await saveProviderLocation({
+        providerId: provider.id,
+        providerType,
+        city,
+        district,
+        addressText: address,
+        latitude: selectedLocation?.latitude,
+        longitude: selectedLocation?.longitude,
+        accuracyMeters: selectedLocation?.accuracy,
+        clearLocation,
+      });
       toast.success(text.saved);
       await onRefresh();
     } catch (error) {
@@ -158,15 +153,15 @@ export function ProviderLocationCard({
     }
   }
 
-  const shownLocation = selectedLocation ?? (
-    provider.latitude != null && provider.longitude != null && !clearLocation
+  const shownLocation =
+    selectedLocation ??
+    (provider.latitude != null && provider.longitude != null && !clearLocation
       ? {
           latitude: provider.latitude,
           longitude: provider.longitude,
           accuracy: provider.location_accuracy_meters ?? 0,
         }
-      : null
-  );
+      : null);
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
@@ -190,21 +185,38 @@ export function ProviderLocationCard({
                 className="mt-2 h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
               >
                 {providerTypes.map((type) => (
-                  <option key={type} value={type}>{providerTypeLabel(type, locale)}</option>
+                  <option key={type} value={type}>
+                    {providerTypeLabel(type, locale)}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
               <Label htmlFor="directory-city">{text.city}</Label>
-              <Input id="directory-city" className="mt-2 h-11" value={city} onChange={(event) => setCity(event.target.value)} />
+              <Input
+                id="directory-city"
+                className="mt-2 h-11"
+                value={city}
+                onChange={(event) => setCity(event.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="directory-district">{text.district}</Label>
-              <Input id="directory-district" className="mt-2 h-11" value={district} onChange={(event) => setDistrict(event.target.value)} />
+              <Input
+                id="directory-district"
+                className="mt-2 h-11"
+                value={district}
+                onChange={(event) => setDistrict(event.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="directory-address">{text.address}</Label>
-              <Input id="directory-address" className="mt-2 h-11" value={address} onChange={(event) => setAddress(event.target.value)} />
+              <Input
+                id="directory-address"
+                className="mt-2 h-11"
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -230,14 +242,25 @@ export function ProviderLocationCard({
               ) : (
                 <div>
                   <strong className="block text-sm">{text.capture}</strong>
-                  <p className="mt-1 text-xs leading-6 text-muted-foreground">{text.captureHint}</p>
+                  <p className="mt-1 text-xs leading-6 text-muted-foreground">
+                    {text.captureHint}
+                  </p>
                 </div>
               )}
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <Button type="button" variant="outline" onClick={locate} disabled={locating || saving}>
-                {locating ? <Loader2 className="size-4 animate-spin" /> : <LocateFixed className="size-4" />}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={locate}
+                disabled={locating || saving}
+              >
+                {locating ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <LocateFixed className="size-4" />
+                )}
                 {text.capture}
               </Button>
               {shownLocation ? (
