@@ -8,6 +8,15 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// Lovable may opt previews into Vite's experimental full-bundle dev mode.
+// This app relies on TanStack Start virtual modules and SSR, which currently
+// fail during the first preview request in bundled-dev mode. Keep Lovable's
+// stable classic dev pipeline until upstream virtual-module support is ready.
+// Production builds (including Vercel) are unaffected by this preview-only opt-out.
+if (process.env["LOVABLE_SANDBOX"] === "1") {
+  process.env["LOVABLE_FEATURE_BUNDLED_DEV"] = "false";
+}
+
 // Keep this check in Vite itself so direct `vite build`/`vite dev` invocations
 // cannot bypass the package-script guard used by CI, Vercel, and Lovable.
 for (const script of [
