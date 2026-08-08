@@ -3,7 +3,7 @@ import { CalendarCheck2, Clock3, Loader2, Plus, RefreshCw, ShieldCheck } from "l
 import { Button } from "@/components/ui/button";
 
 import type { CustomerAppointment, CustomerQueue, MyContext } from "./api";
-import { AUTH_URL, REGISTER_URL, statusAr, statusEn, type Copy } from "./copy";
+import { AUTH_URL, MARKET_AUTH_URL, statusAr, statusEn, type Copy } from "./copy";
 import { Card, Empty, Pill, Spinner, dateTime } from "./ui";
 
 export type Busy = string | null;
@@ -35,10 +35,10 @@ export function CustomerArea({
   if (status === "loading" || loading) {
     return <div className="mx-auto max-w-7xl px-4 py-12"><Spinner label={copy.mine} /></div>;
   }
-  if (status === "unauthenticated") return <AuthRequired copy={copy} />;
+  if (status === "unauthenticated" || !context?.profile) return <AuthRequired copy={copy} locale={locale} />;
 
-  const appointments = context?.appointments ?? [];
-  const queues = context?.queues ?? [];
+  const appointments = context.appointments ?? [];
+  const queues = context.queues ?? [];
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
@@ -145,16 +145,22 @@ export function CustomerArea({
   );
 }
 
-export function AuthRequired({ copy }: { copy: Copy }) {
+export function AuthRequired({ copy, locale = "ar" }: { copy: Copy; locale?: "ar" | "en" }) {
+  const isAr = locale === "ar";
   return (
     <section className="mx-auto max-w-xl px-4 py-16">
       <Card className="p-8 text-center">
         <ShieldCheck className="mx-auto size-10 text-primary" />
         <h1 className="mt-4 text-2xl font-black">{copy.loginFirst}</h1>
-        <div className="mt-6 flex justify-center gap-2">
-          <Button asChild><a href={AUTH_URL}>{copy.signIn}</a></Button>
-          <Button asChild variant="outline"><a href={REGISTER_URL}>{copy.register}</a></Button>
-        </div>
+        <Button asChild className="mt-6 min-h-11">
+          <a href={AUTH_URL}>{copy.signIn}</a>
+        </Button>
+        <p className="mt-5 text-xs text-muted-foreground">
+          {isAr ? "لديك حساب في سوق كَحيل؟" : "Already have a KAHEEL Market account?"}{" "}
+          <a href={MARKET_AUTH_URL} className="font-bold text-primary hover:underline">
+            {isAr ? "سجّل الدخول من هنا" : "Sign in here"}
+          </a>
+        </p>
       </Card>
     </section>
   );
