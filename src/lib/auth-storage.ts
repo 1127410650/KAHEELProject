@@ -9,19 +9,12 @@
  * Sessions are cleared only by the central explicit sign-out path or by a real
  * Supabase security revocation (password reset, disabled user, revoked token).
  */
+import { supabasePublicConfig } from "@/integrations/supabase/public-config";
+
 const REMEMBER_KEY = "tahqaq.auth.remember";
 
-function authStorageKey(): string | null {
-  const explicitRef = import.meta.env["VITE_SUPABASE_PROJECT_ID"];
-  const url = import.meta.env["VITE_SUPABASE_URL"];
-  let urlRef: string | null = null;
-  try {
-    urlRef = url ? new URL(url).hostname.split(".")[0] || null : null;
-  } catch {
-    urlRef = null;
-  }
-  const ref = explicitRef || urlRef;
-  return ref ? `sb-${ref}-auth-token` : null;
+function authStorageKey(): string {
+  return `sb-${supabasePublicConfig.projectId}-auth-token`;
 }
 
 function safeLocal(): Storage | null {
@@ -100,7 +93,6 @@ export function restoreAuthStorage() {
 /** Manual sign-out: no copy of the session may survive in either scope. */
 export function clearAuthStorage() {
   const key = authStorageKey();
-  if (!key) return;
   try {
     safeLocal()?.removeItem(key);
     safeSession()?.removeItem(key);
