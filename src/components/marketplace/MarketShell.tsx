@@ -11,6 +11,7 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
+import kaheelLogo from "@/assets/kaheel-logo.png";
 
 export function MarketHeader({
   showCategories = false,
@@ -82,7 +83,20 @@ export function MarketHeader({
                   </span>
                 </span>
               </a>
-              <Link to="/" className="justify-self-center" aria-label={t("market.brand")}>
+              <Link
+                to="/"
+                className="flex items-center gap-2 justify-self-center"
+                aria-label={t("market.brand")}
+              >
+                <img
+                  src={kaheelLogo}
+                  alt=""
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  className="size-9 shrink-0 rounded-lg sm:size-10"
+                  aria-hidden
+                />
                 <span className="text-3xl font-black tracking-[-0.08em] text-market-navy sm:text-4xl">
                   {t("market.brand")}
                 </span>
@@ -104,7 +118,20 @@ export function MarketHeader({
             </>
           ) : (
             <>
-              <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
+              <Link
+                to="/"
+                className="flex shrink-0 items-center gap-1.5"
+                aria-label={t("market.brand")}
+              >
+                <img
+                  src={kaheelLogo}
+                  alt=""
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  className="size-7 shrink-0 rounded-md sm:size-8"
+                  aria-hidden
+                />
                 <span className="text-xl font-black leading-none tracking-[-0.06em] text-market-navy sm:text-2xl">
                   {t("market.brand")}
                 </span>

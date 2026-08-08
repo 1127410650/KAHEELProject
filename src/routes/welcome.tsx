@@ -20,6 +20,7 @@ import { loadListings } from "@/lib/mkt-queries";
 import { Button } from "@/components/ui/button";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketDemoListings } from "@/components/marketplace/home/MarketDemoListings";
+import kaheelLogo from "@/assets/kaheel-logo.png";
 
 const title = "گحيل — سوق العقارات والخدمات والموردين | Gohail";
 const description =
@@ -74,9 +75,14 @@ function WelcomePage() {
       <header className="sticky top-0 z-40 border-b border-white/8 bg-market-void/90 text-white backdrop-blur-xl">
         <div className="mx-auto flex min-h-14 w-full max-w-7xl items-center gap-2 px-3 py-2 sm:px-5 lg:px-8">
           <Link to="/welcome" className="flex shrink-0 items-center gap-2">
-            <span className="grid size-9 place-items-center rounded-xl border border-white/10 bg-white/[0.06] text-market-electric-bright shadow-[0_8px_24px_rgb(0_0_0/0.22)]">
-              <Store className="size-4" aria-hidden />
-            </span>
+            <img
+              src={kaheelLogo}
+              alt=""
+              width={1024}
+              height={1024}
+              className="size-9 shrink-0 rounded-xl shadow-[0_8px_24px_rgb(0_0_0/0.22)]"
+              aria-hidden
+            />
             <span className="text-base font-black tracking-tight">{t("market.brand")}</span>
           </Link>
 
