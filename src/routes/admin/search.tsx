@@ -37,7 +37,7 @@ export const Route = createFileRoute("/admin/search")({
           "بحث موحّد داخل لوحة الإدارة عن المستخدمين والمتاجر والإعلانات والبلاغات وطلبات التوثيق.",
       },
       { property: "og:title", content: "البحث الإداري — إدارة المنصة" },
-      { property: "og:description", content: "بحث موحّد داخل لوحة إدارة منصة كَحيل." },
+      { property: "og:description", content: "بحث موحّد داخل لوحة إدارة منصة گحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

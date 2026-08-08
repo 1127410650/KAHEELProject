@@ -3,7 +3,8 @@
 - **اسم النسخة**: `pre-registration-lockdown-2026-08-01T14:54Z`
 - **وقت الإنشاء**: 2026-08-01 14:54:57 UTC (17:54 Asia/Riyadh)
 - **Commit الثابت قبل الإصلاح**: `d7fe207`
-- **Supabase project ref**: `fdmovlxyqebtgzhsroac`
+- **Supabase project ref**: retired; the only current canonical project is
+  `KAHEELProject` (`rgpnhzovtceitqxpiilf`).
 
 ## بصمة القاعدة وقت النسخة
 

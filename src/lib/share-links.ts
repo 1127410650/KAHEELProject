@@ -5,7 +5,18 @@
  * the canonical site origin plus the path, dropping query strings and hashes so
  * two visitors always share the same address.
  */
-export const SITE_ORIGIN = "https://check-your-name-ai.lovable.app";
+const configuredOrigin = String(import.meta.env["VITE_SITE_ORIGIN"] ?? "").trim();
+
+/**
+ * Vercel is the production source of truth. A custom domain can be supplied at
+ * build time without changing code. The browser location is intentionally not
+ * used here so copied links from local, Lovable or Vercel previews never leak a
+ * temporary host.
+ */
+export const SITE_ORIGIN = (configuredOrigin || "https://check-your-name-ai.vercel.app").replace(
+  /\/+$/,
+  "",
+);
 
 /** Canonical absolute URL for an internal path (query/hash stripped). */
 export function canonicalUrl(path: string): string {

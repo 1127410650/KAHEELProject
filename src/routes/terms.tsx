@@ -3,8 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketStaticPage } from "@/components/marketplace/MarketStaticPage";
 
-const title = "الشروط والأحكام — كَحيل";
-const description = "شروط استخدام سوق «كَحيل» ومسؤوليات ناشري الإعلانات ومراجعة المحتوى.";
+const title = "الشروط والأحكام — گحيل";
+const description = "شروط استخدام سوق «گحيل» ومسؤوليات ناشري الإعلانات ومراجعة المحتوى.";
 
 export const Route = createFileRoute("/terms")({
   ssr: false,

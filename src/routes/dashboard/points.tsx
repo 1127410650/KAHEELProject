@@ -16,8 +16,8 @@ export const Route = createFileRoute("/dashboard/points")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "نقاطي — كَحيل" },
-      { name: "description", content: "رصيد نقاطك وسجل عمليات الترويج في كَحيل." },
+      { title: "نقاطي — گحيل" },
+      { name: "description", content: "رصيد نقاطك وسجل عمليات الترويج في گحيل." },
       { property: "og:type", content: "website" },
       { name: "robots", content: "noindex" },
     ],

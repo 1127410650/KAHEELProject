@@ -38,7 +38,7 @@ export const Route = createFileRoute("/admin/roles")({
         content: "منح دور مدير المنصة وسحبه وتحديد صلاحيات الطاقم لكل منسوب، مع تسجيل كل تغيير في سجل التدقيق.",
       },
       { property: "og:title", content: "الأدوار والصلاحيات — إدارة المنصة" },
-      { property: "og:description", content: "إدارة أدوار وصلاحيات طاقم منصة كَحيل." },
+      { property: "og:description", content: "إدارة أدوار وصلاحيات طاقم منصة گحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

@@ -42,13 +42,13 @@ export const Route = createFileRoute("/admin/dashboard")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "منصة التحليلات والتشغيل — كَحيل" },
+      { title: "منصة التحليلات والتشغيل — گحيل" },
       {
         name: "description",
         content:
           "لوحة التحليلات والتشغيل المركزية: المستخدمون، الإعلانات، المجالات، البحث، الأداء، الأمان، والمحادثات.",
       },
-      { property: "og:title", content: "منصة التحليلات والتشغيل — كَحيل" },
+      { property: "og:title", content: "منصة التحليلات والتشغيل — گحيل" },
       { property: "og:description", content: "تحليلات حية للسوق العام ولوحة مدير النظام." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

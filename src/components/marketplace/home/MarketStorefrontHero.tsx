@@ -24,7 +24,7 @@ export function MarketStorefrontHero() {
           <Search className="size-4" aria-hidden />
         </span>
         <span className="min-w-0 flex-1 truncate">
-          {locale === "ar" ? "البحث في كَحيل" : "Search Kaheel"}
+          {locale === "ar" ? "البحث في گحيل" : "Search Gohail"}
         </span>
       </Link>
     </section>

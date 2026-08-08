@@ -47,8 +47,8 @@ jobs:
     env:
       MOBILE_APP_ORIGIN: https://check-your-name-ai.vercel.app
       MOBILE_RELEASE_BUILD: "0"
-      VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
-      VITE_SUPABASE_PROJECT_ID: ci-placeholder
+      VITE_SUPABASE_URL: https://rgpnhzovtceitqxpiilf.supabase.co
+      VITE_SUPABASE_PROJECT_ID: rgpnhzovtceitqxpiilf
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_public_only_placeholder
 
     steps:
@@ -64,26 +64,65 @@ jobs:
           node-version: 22
           package-manager-cache: false
 
+      - name: Verify canonical repository and Supabase authority
+        run: npm run guard:canonical
+
+      - name: Detect complete native foundation
+        id: mobile
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f capacitor.config.ts ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "The native app is paused on this revision; no Capacitor foundation is present."
+            exit 0
+          fi
+
+          for required in package-lock.json scripts/check-client-secrets.mjs scripts/harden-native-projects.mjs; do
+            if [ ! -f "$required" ]; then
+              echo "Partial native foundation detected: missing $required" >&2
+              exit 1
+            fi
+          done
+
+          node <<'NODE'
+          const pkg = require('./package.json');
+          for (const name of ['security:client-secrets', 'mobile:harden', 'mobile:release:check']) {
+            if (!pkg.scripts?.[name]) throw new Error(`Partial native foundation: missing npm script ${name}`);
+          }
+          NODE
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Report paused native application
+        if: steps.mobile.outputs.ready != 'true'
+        run: echo "Canonical checks passed; native build skipped while تطبيق كحيل is paused."
+
       - name: Set up Java
+        if: steps.mobile.outputs.ready == 'true'
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
         with:
           distribution: temurin
           java-version: 21
           check-latest: false
 
-      - name: Install dependencies
-        run: npm install --no-fund --no-audit
+      - name: Install locked dependencies without lifecycle scripts
+        if: steps.mobile.outputs.ready == 'true'
+        run: npm ci --ignore-scripts --no-fund --no-audit
 
       - name: Reject client secrets and unsafe mobile settings
+        if: steps.mobile.outputs.ready == 'true'
         run: npm run security:client-secrets
 
       - name: Audit production dependencies
+        if: steps.mobile.outputs.ready == 'true'
         run: npm audit --omit=dev --audit-level=high
 
       - name: Build web application
+        if: steps.mobile.outputs.ready == 'true'
         run: npm run build
 
       - name: Generate and harden native projects
+        if: steps.mobile.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -95,20 +134,23 @@ jobs:
           npx cap doctor
 
       - name: Build Android debug application
+        if: steps.mobile.outputs.ready == 'true'
         working-directory: android
         run: ./gradlew assembleDebug
 
       - name: Build iOS simulator application
-        run: >-
-          xcodebuild
-          -workspace ios/App/App.xcworkspace
-          -scheme App
-          -sdk iphonesimulator
-          -configuration Debug
-          CODE_SIGNING_ALLOWED=NO
-          build
+        if: steps.mobile.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -d ios/App/App.xcworkspace ]; then
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug CODE_SIGNING_ALLOWED=NO build
+          else
+            xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug CODE_SIGNING_ALLOWED=NO build
+          fi
 
       - name: Upload validated native projects
+        if: steps.mobile.outputs.ready == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-projects-${{ github.sha }}
@@ -124,6 +166,7 @@ jobs:
             !ios/App/DerivedData/**
 
       - name: Upload Android debug package
+        if: steps.mobile.outputs.ready == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: android-debug-${{ github.sha }}

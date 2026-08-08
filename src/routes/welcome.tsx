@@ -21,9 +21,9 @@ import { Button } from "@/components/ui/button";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketDemoListings } from "@/components/marketplace/home/MarketDemoListings";
 
-const title = "كَحيل — سوق العقارات والخدمات والموردين | Kaheel";
+const title = "گحيل — سوق العقارات والخدمات والموردين | Gohail";
 const description =
-  "منصة كَحيل: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
+  "منصة گحيل: سوق عام منظم للعقارات والخدمات والمنتجات والمعدات والموردين، بحسابات أفراد ومتاجر ورسائل واتصال داخلي وتوثيق.";
 
 export const Route = createFileRoute("/welcome")({
   head: () => ({

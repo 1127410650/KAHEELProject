@@ -1,17 +1,19 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "kaheel-project",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
-    "preview": "vite preview",
+    "dev": "npm run guard:canonical && vite dev",
+    "build": "npm run guard:canonical && vite build",
+    "build:dev": "npm run guard:canonical && vite build --mode development",
+    "preview": "npm run guard:canonical && node .output/server/index.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "seed:qa-accounts": "node scripts/seed-demo-accounts.mjs",
-    "repository:check": "node scripts/check-canonical-repository.mjs"
+    "seed:qa-accounts": "npm run guard:canonical && node scripts/seed-demo-accounts.mjs",
+    "repository:check": "node scripts/check-canonical-repository.mjs",
+    "infrastructure:check": "node scripts/check-canonical-infrastructure.mjs",
+    "guard:canonical": "node scripts/check-canonical-repository.mjs && node scripts/check-canonical-infrastructure.mjs --require-runtime"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -90,7 +92,6 @@
     "@vitejs/plugin-react": "^5.2.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.6",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",

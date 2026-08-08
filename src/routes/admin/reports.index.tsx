@@ -31,13 +31,13 @@ export const Route = createFileRoute("/admin/reports/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "صندوق البلاغات — إدارة كَحيل" },
+      { title: "صندوق البلاغات — إدارة گحيل" },
       {
         name: "description",
-        content: "صندوق بلاغات كَحيل: قوائم العمل، مؤشرات الأداء، والفلاتر لمعالجة البلاغات.",
+        content: "صندوق بلاغات گحيل: قوائم العمل، مؤشرات الأداء، والفلاتر لمعالجة البلاغات.",
       },
-      { property: "og:title", content: "صندوق البلاغات — إدارة كَحيل" },
-      { property: "og:description", content: "معالجة بلاغات الإعلانات والحسابات في كَحيل." },
+      { property: "og:title", content: "صندوق البلاغات — إدارة گحيل" },
+      { property: "og:description", content: "معالجة بلاغات الإعلانات والحسابات في گحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

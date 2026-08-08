@@ -1,4 +1,4 @@
--- Private account-completion data is isolated from the general profiles table.
+-- KAHEEL private account-completion data is isolated from the general profiles table.
 -- Public marketplace views never read this table.
 create table if not exists public.profile_private_details (
   user_id uuid primary key references auth.users(id) on delete cascade,

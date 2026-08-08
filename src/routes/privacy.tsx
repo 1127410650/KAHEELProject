@@ -3,8 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketStaticPage } from "@/components/marketplace/MarketStaticPage";
 
-const title = "سياسة الخصوصية — كَحيل";
-const description = "كيف نجمع بيانات الحساب والإعلانات في «كَحيل» ونحمي بيانات التواصل الخاصة.";
+const title = "سياسة الخصوصية — گحيل";
+const description = "كيف نجمع بيانات الحساب والإعلانات في «گحيل» ونحمي بيانات التواصل الخاصة.";
 
 export const Route = createFileRoute("/privacy")({
   ssr: false,

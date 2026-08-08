@@ -58,13 +58,13 @@ export const Route = createFileRoute("/admin/listing-reports")({
   }),
   head: () => ({
     meta: [
-      { title: "بلاغات الإعلانات — إدارة كَحيل" },
+      { title: "بلاغات الإعلانات — إدارة گحيل" },
       {
         name: "description",
         content:
-          "لوحة بلاغات الإعلانات في كَحيل: دورة حالات مقيّدة، إجراءات موثّقة بسبب، وحماية كاملة لهوية المبلّغ.",
+          "لوحة بلاغات الإعلانات في گحيل: دورة حالات مقيّدة، إجراءات موثّقة بسبب، وحماية كاملة لهوية المبلّغ.",
       },
-      { property: "og:title", content: "بلاغات الإعلانات — إدارة كَحيل" },
+      { property: "og:title", content: "بلاغات الإعلانات — إدارة گحيل" },
       { property: "og:description", content: "معالجة بلاغات الإعلانات مع حماية هوية المبلّغ." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

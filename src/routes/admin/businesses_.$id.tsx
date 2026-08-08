@@ -33,14 +33,14 @@ export const Route = createFileRoute("/admin/businesses_/$id")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "ملف المتجر — إدارة منصة كَحيل" },
+      { title: "ملف المتجر — إدارة منصة گحيل" },
       {
         name: "description",
         content:
           "ملف إداري للمتجر: بياناتها وأنشطتها وأعضاؤها وإعلاناتها وطلبات توثيقها وقيودها وسجل الإجراءات عليها.",
       },
-      { property: "og:title", content: "ملف المتجر — إدارة منصة كَحيل" },
-      { property: "og:description", content: "ملف إداري تفصيلي للمتجر في منصة كَحيل." },
+      { property: "og:title", content: "ملف المتجر — إدارة منصة گحيل" },
+      { property: "og:description", content: "ملف إداري تفصيلي للمتجر في منصة گحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

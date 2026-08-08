@@ -40,14 +40,14 @@ export const Route = createFileRoute("/admin/listings_/$id")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "ملف الإعلان — إدارة منصة كَحيل" },
+      { title: "ملف الإعلان — إدارة منصة گحيل" },
       {
         name: "description",
         content:
           "ملف إداري للإعلان: بياناته وصوره ومؤشراته وبلاغاته وسجل حالاته الكامل، مع قرارات المراجعة داخل لوحة الإدارة.",
       },
-      { property: "og:title", content: "ملف الإعلان — إدارة منصة كَحيل" },
-      { property: "og:description", content: "ملف إداري تفصيلي للإعلان في منصة كَحيل." },
+      { property: "og:title", content: "ملف الإعلان — إدارة منصة گحيل" },
+      { property: "og:description", content: "ملف إداري تفصيلي للإعلان في منصة گحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

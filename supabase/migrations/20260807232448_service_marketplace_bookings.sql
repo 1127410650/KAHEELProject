@@ -1,5 +1,5 @@
 -- ============================================================================
--- Kahli service marketplace
+-- KAHEEL service marketplace
 -- One storefront model for retail sellers and service providers. This migration
 -- adds booking-specific data only; it deliberately reuses mkt_storefronts and
 -- mkt_store_items so the platform never grows a second, conflicting store model.

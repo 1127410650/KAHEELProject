@@ -17,12 +17,12 @@ export const Route = createFileRoute("/dashboard/notifications")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "تنبيهات السوق — كَحيل" },
+      { title: "تنبيهات السوق — گحيل" },
       {
         name: "description",
-        content: "تنبيهات البلاغات والمخالفات والاعتراضات الخاصة بحسابك في كَحيل.",
+        content: "تنبيهات البلاغات والمخالفات والاعتراضات الخاصة بحسابك في گحيل.",
       },
-      { property: "og:title", content: "تنبيهات السوق — كَحيل" },
+      { property: "og:title", content: "تنبيهات السوق — گحيل" },
       { property: "og:description", content: "متابعة تنبيهات البلاغات والقرارات والاعتراضات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

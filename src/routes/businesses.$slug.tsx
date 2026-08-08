@@ -38,9 +38,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/businesses/$slug")({
   ssr: false,
   head: ({ params }) => {
-    const title = `${params.slug} — متجر في كَحيل`;
+    const title = `${params.slug} — متجر في گحيل`;
     const description =
-      "الملف العام للمتجر في كَحيل: النشاط، المدينة، تاريخ الانضمام، والإعلانات المنشورة.";
+      "الملف العام للمتجر في گحيل: النشاط، المدينة، تاريخ الانضمام، والإعلانات المنشورة.";
     return {
       meta: [
         { title },
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/businesses/$slug")({
       links: [
         {
           rel: "canonical",
-          href: `https://check-your-name-ai.lovable.app/businesses/${params.slug}`,
+          href: canonicalUrl(`/businesses/${params.slug}`),
         },
       ],
     };

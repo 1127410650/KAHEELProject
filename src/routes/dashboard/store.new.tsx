@@ -35,12 +35,12 @@ export const Route = createFileRoute("/dashboard/store/new")({
   },
   head: () => ({
     meta: [
-      { title: "متجر جديد — كَحيل" },
+      { title: "متجر جديد — گحيل" },
       {
         name: "description",
-        content: "اختر هوية متجرك ثم أكمل بياناته وكتالوجه داخل كَحيل.",
+        content: "اختر هوية متجرك ثم أكمل بياناته وكتالوجه داخل گحيل.",
       },
-      { property: "og:title", content: "متجر جديد — كَحيل" },
+      { property: "og:title", content: "متجر جديد — گحيل" },
       { property: "og:description", content: "أنشئ متجرًا مصغّرًا بهوية تناسب نشاطك." },
       { name: "robots", content: "noindex" },
     ],

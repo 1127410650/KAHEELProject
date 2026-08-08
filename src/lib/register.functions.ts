@@ -1,7 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 
-import { registerAccountImpl, type RegisterInput, type RegisterResult } from "@/lib/register.server";
+import {
+  registerAccountImpl,
+  type RegisterInput,
+  type RegisterResult,
+} from "@/lib/register.server";
 
 /**
  * Invite-only account creation. There is no public sign-up: the handler refuses
@@ -9,7 +13,7 @@ import { registerAccountImpl, type RegisterInput, type RegisterResult } from "@/
  * invitation, never from the browser. Rate limited server-side.
  */
 export const registerAccount = createServerFn({ method: "POST" })
-  .inputValidator((data: RegisterInput) => data)
+  .validator((data: RegisterInput) => data)
   .handler(async ({ data }): Promise<RegisterResult> => {
     let clientKey = "unknown";
     try {

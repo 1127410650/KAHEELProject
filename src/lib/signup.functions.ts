@@ -16,14 +16,12 @@ export const signUpPublic = createServerFn({ method: "POST" })
   // Projected field by field on purpose: a request that smuggles `role`,
   // `tenant_id` or `permissions` into the body loses them here, before the
   // handler ever sees them.
-  .inputValidator(
-    (data: PublicSignupInput & Record<string, unknown>): PublicSignupInput => ({
-      full_name: String(data?.full_name ?? ""),
-      email: String(data?.email ?? ""),
-      phone: String(data?.phone ?? ""),
-      password: String(data?.password ?? ""),
-    }),
-  )
+  .validator((data: PublicSignupInput & Record<string, unknown>): PublicSignupInput => ({
+    full_name: String(data?.full_name ?? ""),
+    email: String(data?.email ?? ""),
+    phone: String(data?.phone ?? ""),
+    password: String(data?.password ?? ""),
+  }))
 
   .handler(async ({ data }): Promise<PublicSignupResult> => {
     let clientKey = "unknown";

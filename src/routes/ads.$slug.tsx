@@ -45,9 +45,9 @@ export const Route = createFileRoute("/ads/$slug")({
   validateSearch: (search: Record<string, unknown>): AdSearch =>
     typeof search["action"] === "string" ? { action: search["action"] } : {},
   head: ({ params }) => {
-    const title = `إعلان ${params.slug} — كَحيل`;
+    const title = `إعلان ${params.slug} — گحيل`;
     const description =
-      "تفاصيل الإعلان والسعر والمواصفات وبيانات المعلن في كَحيل للخدمات والمقاولات.";
+      "تفاصيل الإعلان والسعر والمواصفات وبيانات المعلن في گحيل للخدمات والمقاولات.";
     return {
       meta: [
         { title },
