@@ -10573,6 +10573,7 @@ export type Database = {
         Returns: string
       }
       mkt_call_request_start: { Args: { _request_id: string }; Returns: Json }
+      mkt_call_signals_purge_expired: { Args: never; Returns: undefined }
       mkt_call_start: { Args: { _listing_id: string }; Returns: Json }
       mkt_call_stop_receiving: { Args: never; Returns: undefined }
       mkt_call_transition: {
@@ -10590,6 +10591,10 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_review_identity: { Args: never; Returns: boolean }
+      mkt_can_review_identity_for: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_can_view_conversation: {
         Args: { _conversation_id: string }
         Returns: boolean
@@ -10755,6 +10760,10 @@ export type Database = {
       mkt_listing_track_share: { Args: { _id: string }; Returns: undefined }
       mkt_log_listing_event: {
         Args: { _event_type: string; _listing_id: string; _meta?: Json }
+        Returns: undefined
+      }
+      mkt_log_registry_review: {
+        Args: { _tenant_id: string }
         Returns: undefined
       }
       mkt_merge_activities: {
