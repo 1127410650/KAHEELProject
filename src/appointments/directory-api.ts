@@ -39,15 +39,21 @@ const callRpc = supabase.rpc as unknown as (
   error: { message: string; code?: string } | null;
 }>;
 
-export async function getNearbyDirectory(input: {
+async function rpc<T>(functionName: string, params?: Record<string, unknown>): Promise<T> {
+  const { data, error } = await callRpc(functionName, params);
+  if (error) throw error;
+  return data as T;
+}
+
+export function getNearbyDirectory(input: {
   latitude: number;
   longitude: number;
   radiusKm: number;
   providerType?: ProviderType | null;
   query?: string;
   limit?: number;
-}): Promise<DirectoryProvider[]> {
-  const { data, error } = await callRpc("appt_nearby_directory", {
+}) {
+  return rpc<DirectoryProvider[]>("appt_nearby_directory", {
     _latitude: input.latitude,
     _longitude: input.longitude,
     _radius_km: input.radiusKm,
@@ -55,8 +61,31 @@ export async function getNearbyDirectory(input: {
     _q: input.query?.trim() || null,
     _limit: input.limit ?? 30,
   });
-  if (error) throw error;
-  return (data ?? []) as DirectoryProvider[];
+}
+
+export function saveProviderLocation(input: {
+  providerId: string;
+  providerType: ProviderType;
+  city?: string;
+  district?: string;
+  addressText?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  accuracyMeters?: number | null;
+  clearLocation?: boolean;
+}) {
+  return rpc<ProviderLocationFields>("appt_save_provider_location", {
+    _provider_id: input.providerId,
+    _provider_type: input.providerType,
+    _city: input.city?.trim() || null,
+    _district: input.district?.trim() || null,
+    _address_text: input.addressText?.trim() || null,
+    _latitude: input.latitude ?? null,
+    _longitude: input.longitude ?? null,
+    _accuracy_meters:
+      input.accuracyMeters == null ? null : Math.max(0, Math.round(input.accuracyMeters)),
+    _clear_location: input.clearLocation === true,
+  });
 }
 
 export const providerTypes: ProviderType[] = [
