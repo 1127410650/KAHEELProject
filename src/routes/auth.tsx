@@ -10,6 +10,7 @@ import { landingPathForSession } from "@/lib/mkt-platform";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { safeInternalPath } from "@/lib/mkt";
 import { useI18n } from "@/i18n";
+import kaheelLogo from "@/assets/kaheel-logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

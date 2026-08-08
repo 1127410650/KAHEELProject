@@ -20,6 +20,7 @@ import { loadListings } from "@/lib/mkt-queries";
 import { Button } from "@/components/ui/button";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketDemoListings } from "@/components/marketplace/home/MarketDemoListings";
+import kaheelLogo from "@/assets/kaheel-logo.png";
 
 const title = "گحيل — سوق العقارات والخدمات والموردين | Gohail";
 const description =
