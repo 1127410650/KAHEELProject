@@ -1,13 +1,14 @@
--- KAHEEL Appointments customer identity boundary.
--- Customers verify their mobile through Supabase Auth OTP and keep only an
--- appointment-scoped profile. Provider creation remains restricted to users
--- that already have an active shared KAHEEL account.
+-- KAHEEL Appointments passwordless customer access.
+-- This migration changes appointment-owned objects only. It never writes to
+-- KAHEEL Market tables. The sole shared-account check is a read-only lookup in
+-- public.profiles so provider registration remains a Market-controlled flow.
 
 CREATE UNIQUE INDEX IF NOT EXISTS appt_profiles_phone_unique
   ON public.appt_profiles (phone_e164)
   WHERE phone_e164 IS NOT NULL;
 
--- Customer profile writes pass only through the verified-phone RPC.
+-- Appointment customers cannot write or replace their verified identity
+-- directly. The verified-phone RPC below is the only write path.
 DROP POLICY IF EXISTS appt_profiles_own_insert ON public.appt_profiles;
 DROP POLICY IF EXISTS appt_profiles_own_update ON public.appt_profiles;
 REVOKE INSERT, UPDATE ON public.appt_profiles FROM authenticated;
@@ -28,8 +29,21 @@ AS $$
     )
 $$;
 
-REVOKE ALL ON FUNCTION public.appt_has_market_account() FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.appt_has_market_account() TO authenticated, service_role;
+CREATE OR REPLACE FUNCTION public.appt_verified_profile()
+RETURNS jsonb
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+  SELECT to_jsonb(p)
+  FROM public.appt_profiles p
+  JOIN auth.users u ON u.id = p.user_id
+  WHERE p.user_id = auth.uid()
+    AND u.phone_confirmed_at IS NOT NULL
+    AND u.phone = p.phone_e164
+  LIMIT 1
+$$;
 
 CREATE OR REPLACE FUNCTION public.appt_complete_phone_profile(_display_name text)
 RETURNS jsonb
@@ -109,11 +123,8 @@ BEGIN
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.appt_complete_phone_profile(text) FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.appt_complete_phone_profile(text) TO authenticated, service_role;
-
--- Even if a client sends another name or phone to an existing booking RPC, the
--- database overwrites it with the verified appointment profile.
+-- The existing booking RPC signatures are preserved. This trigger discards any
+-- client-supplied name or phone and snapshots the verified appointment profile.
 CREATE OR REPLACE FUNCTION public.appt_enforce_verified_customer()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -146,9 +157,6 @@ BEGIN
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.appt_enforce_verified_customer()
-  FROM PUBLIC, anon, authenticated;
-
 DROP TRIGGER IF EXISTS appt_appointments_verified_customer
   ON public.appt_appointments;
 CREATE TRIGGER appt_appointments_verified_customer
@@ -163,243 +171,46 @@ CREATE TRIGGER appt_queue_verified_customer
   FOR EACH ROW
   EXECUTE FUNCTION public.appt_enforce_verified_customer();
 
-CREATE OR REPLACE FUNCTION public.appt_my_context()
-RETURNS jsonb
-LANGUAGE plpgsql
-STABLE
-SECURITY DEFINER
-SET search_path = public, pg_temp
-AS $$
-DECLARE
-  v_user uuid := auth.uid();
-BEGIN
-  IF v_user IS NULL THEN
-    RAISE EXCEPTION 'auth_required';
-  END IF;
-
-  RETURN jsonb_build_object(
-    'profile', (
-      SELECT to_jsonb(p)
-      FROM public.appt_profiles p
-      JOIN auth.users u ON u.id = p.user_id
-      WHERE p.user_id = v_user
-        AND u.phone_confirmed_at IS NOT NULL
-        AND u.phone = p.phone_e164
-    ),
-    'provider_eligible', public.appt_has_market_account(),
-    'providers', coalesce((
-      SELECT jsonb_agg(jsonb_build_object(
-        'id', p.id,
-        'slug', p.slug,
-        'name_ar', p.name_ar,
-        'name_en', p.name_en,
-        'city', p.city,
-        'status', p.status,
-        'accepts_bookings', p.accepts_bookings,
-        'role', CASE WHEN p.owner_user_id = v_user THEN 'owner' ELSE m.role END,
-        'permissions', CASE WHEN p.owner_user_id = v_user
-          THEN ARRAY['appointments.manage']::text[]
-          ELSE coalesce(m.permissions, ARRAY[]::text[])
-        END
-      ) ORDER BY p.created_at DESC)
-      FROM public.appt_providers p
-      LEFT JOIN public.appt_provider_members m
-        ON m.provider_id = p.id
-       AND m.user_id = v_user
-       AND m.is_active
-      WHERE p.deleted_at IS NULL
-        AND (p.owner_user_id = v_user OR m.user_id IS NOT NULL)
-    ), '[]'::jsonb),
-    'appointments', coalesce((
-      SELECT jsonb_agg(jsonb_build_object(
-        'id', a.id,
-        'appointment_number', a.appointment_number,
-        'provider_id', a.provider_id,
-        'provider_name', p.name_ar,
-        'provider_slug', p.slug,
-        'service_id', a.service_id,
-        'service_name', s.name_ar,
-        'starts_at', a.starts_at,
-        'ends_at', a.ends_at,
-        'timezone', a.timezone,
-        'status', a.status,
-        'source', a.source,
-        'customer_notes', a.customer_notes,
-        'provider_notes', a.provider_notes,
-        'created_at', a.created_at
-      ) ORDER BY a.starts_at DESC)
-      FROM public.appt_appointments a
-      JOIN public.appt_providers p ON p.id = a.provider_id
-      JOIN public.appt_services s ON s.id = a.service_id
-      WHERE a.customer_user_id = v_user
-      LIMIT 100
-    ), '[]'::jsonb),
-    'queues', coalesce((
-      SELECT jsonb_agg(jsonb_build_object(
-        'id', q.id,
-        'provider_id', q.provider_id,
-        'provider_name', p.name_ar,
-        'provider_slug', p.slug,
-        'service_id', q.service_id,
-        'service_name', s.name_ar,
-        'queue_date', q.queue_date,
-        'queue_number', q.queue_number,
-        'status', q.status,
-        'joined_at', q.joined_at,
-        'waiting_ahead', (
-          SELECT count(*)
-          FROM public.appt_queue_entries ahead
-          WHERE ahead.provider_id = q.provider_id
-            AND ahead.queue_date = q.queue_date
-            AND ahead.status = 'waiting'
-            AND ahead.queue_number < q.queue_number
-        ),
-        'estimated_wait_minutes', (
-          SELECT count(*)
-          FROM public.appt_queue_entries ahead
-          WHERE ahead.provider_id = q.provider_id
-            AND ahead.queue_date = q.queue_date
-            AND ahead.status = 'waiting'
-            AND ahead.queue_number < q.queue_number
-        ) * (
-          SELECT cfg.average_service_minutes
-          FROM public.appt_provider_settings cfg
-          WHERE cfg.provider_id = q.provider_id
-        )
-      ) ORDER BY q.joined_at DESC)
-      FROM public.appt_queue_entries q
-      JOIN public.appt_providers p ON p.id = q.provider_id
-      JOIN public.appt_services s ON s.id = q.service_id
-      WHERE q.customer_user_id = v_user
-        AND q.status IN ('waiting', 'called', 'serving')
-    ), '[]'::jsonb)
-  );
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION public.appt_create_provider(
-  _name_ar text,
-  _name_en text DEFAULT NULL,
-  _slug text DEFAULT NULL,
-  _city text DEFAULT NULL,
-  _timezone text DEFAULT 'Asia/Riyadh'
-)
-RETURNS uuid
+-- A phone-only appointment customer must never become a provider by calling the
+-- existing provider RPC. Provider eligibility remains controlled by the shared
+-- KAHEEL account record; no Market business table is read or written.
+CREATE OR REPLACE FUNCTION public.appt_enforce_provider_market_account()
+RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $$
-DECLARE
-  v_provider_id uuid;
-  v_slug text;
-  v_day smallint;
 BEGIN
-  IF auth.uid() IS NULL THEN
-    RAISE EXCEPTION 'auth_required';
-  END IF;
-  IF NOT public.appt_has_market_account() THEN
+  IF auth.uid() IS NOT NULL
+     AND NEW.owner_user_id = auth.uid()
+     AND NOT public.appt_has_market_account() THEN
     RAISE EXCEPTION 'provider_registration_required';
   END IF;
-  IF nullif(btrim(coalesce(_name_ar, '')), '') IS NULL THEN
-    RAISE EXCEPTION 'provider_name_required';
-  END IF;
-
-  v_slug := lower(regexp_replace(
-    coalesce(
-      nullif(btrim(_slug), ''),
-      nullif(btrim(_name_en), ''),
-      'provider-' || substr(gen_random_uuid()::text, 1, 8)
-    ),
-    '[^a-zA-Z0-9_-]+',
-    '-',
-    'g'
-  ));
-  v_slug := trim(both '-' from v_slug);
-  IF v_slug = '' THEN
-    v_slug := 'provider-' || substr(gen_random_uuid()::text, 1, 8);
-  END IF;
-  IF EXISTS (
-    SELECT 1
-    FROM public.appt_providers p
-    WHERE lower(p.slug) = v_slug
-      AND p.deleted_at IS NULL
-  ) THEN
-    v_slug := v_slug || '-' || substr(gen_random_uuid()::text, 1, 6);
-  END IF;
-
-  INSERT INTO public.appt_providers (
-    owner_user_id,
-    slug,
-    name_ar,
-    name_en,
-    city,
-    timezone
-  ) VALUES (
-    auth.uid(),
-    v_slug,
-    btrim(_name_ar),
-    nullif(btrim(coalesce(_name_en, '')), ''),
-    nullif(btrim(coalesce(_city, '')), ''),
-    coalesce(nullif(btrim(_timezone), ''), 'Asia/Riyadh')
-  )
-  RETURNING id INTO v_provider_id;
-
-  INSERT INTO public.appt_provider_members (
-    provider_id,
-    user_id,
-    role,
-    permissions
-  ) VALUES (
-    v_provider_id,
-    auth.uid(),
-    'owner',
-    ARRAY['appointments.manage']::text[]
-  );
-
-  INSERT INTO public.appt_provider_settings (provider_id)
-  VALUES (v_provider_id);
-
-  FOREACH v_day IN ARRAY ARRAY[0,1,2,3,4]::smallint[] LOOP
-    INSERT INTO public.appt_availability (
-      provider_id,
-      weekday,
-      starts_at,
-      ends_at,
-      slot_interval_minutes
-    ) VALUES (
-      v_provider_id,
-      v_day,
-      '09:00',
-      '17:00',
-      30
-    );
-  END LOOP;
-
-  INSERT INTO public.appt_audit_log (
-    provider_id,
-    actor_user_id,
-    entity_type,
-    entity_id,
-    action,
-    new_value
-  ) VALUES (
-    v_provider_id,
-    auth.uid(),
-    'provider',
-    v_provider_id,
-    'create',
-    jsonb_build_object('name_ar', btrim(_name_ar), 'slug', v_slug)
-  );
-
-  RETURN v_provider_id;
+  RETURN NEW;
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.appt_my_context() FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.appt_create_provider(text,text,text,text,text)
-  FROM PUBLIC, anon;
+DROP TRIGGER IF EXISTS appt_provider_market_account_guard
+  ON public.appt_providers;
+CREATE TRIGGER appt_provider_market_account_guard
+  BEFORE INSERT ON public.appt_providers
+  FOR EACH ROW
+  EXECUTE FUNCTION public.appt_enforce_provider_market_account();
 
-GRANT EXECUTE ON FUNCTION public.appt_my_context()
+REVOKE ALL ON FUNCTION public.appt_has_market_account()
+  FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.appt_verified_profile()
+  FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.appt_complete_phone_profile(text)
+  FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.appt_enforce_verified_customer()
+  FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.appt_enforce_provider_market_account()
+  FROM PUBLIC, anon, authenticated;
+
+GRANT EXECUTE ON FUNCTION public.appt_has_market_account()
   TO authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.appt_create_provider(text,text,text,text,text)
+GRANT EXECUTE ON FUNCTION public.appt_verified_profile()
+  TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.appt_complete_phone_profile(text)
   TO authenticated, service_role;
