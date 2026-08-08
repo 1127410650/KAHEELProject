@@ -3,7 +3,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const EXPECTED_SUPABASE_REF = "rgpnhzovtceitqxpiilf";
-const EXPECTED_SUPABASE_NAME = "KAHEEL Project";
+const EXPECTED_SUPABASE_NAME = "KAHEELProject";
 const EXPECTED_SUPABASE_URL = `https://${EXPECTED_SUPABASE_REF}.supabase.co`;
 const RETIRED_SUPABASE_REFS = new Set(["fdmovlxyqebtgzhsroac"]);
 const ROOT = fileURLToPath(new URL("../", import.meta.url));

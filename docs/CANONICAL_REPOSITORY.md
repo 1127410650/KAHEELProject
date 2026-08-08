@@ -9,7 +9,7 @@ Default branch: `main`
 
 The single canonical Supabase project is:
 
-`KAHEEL Project` (`rgpnhzovtceitqxpiilf`)
+`KAHEELProject` (`rgpnhzovtceitqxpiilf`)
 
 ## Policy
 

@@ -59,19 +59,20 @@ export function parseUblXml(xml: string): PrintedInvoice | null {
     const itemNode = childrenByLocalName(line, "Item")[0];
     const priceNode = childrenByLocalName(line, "Price")[0];
     const taxNode = childrenByLocalName(line, "TaxTotal")[0];
-    const categoryNode = itemNode ? childrenByLocalName(itemNode, "ClassifiedTaxCategory")[0] : undefined;
+    const categoryNode = itemNode
+      ? childrenByLocalName(itemNode, "ClassifiedTaxCategory")[0]
+      : undefined;
     const name = itemNode ? textOf(itemNode, "Name") : undefined;
     if (!name) continue;
-    const quantityNode = childrenByLocalName(line, "InvoicedQuantity")[0] ??
+    const quantityNode =
+      childrenByLocalName(line, "InvoicedQuantity")[0] ??
       childrenByLocalName(line, "CreditedQuantity")[0];
     lineItems.push({
       name,
       ...(itemNode && textOf(itemNode, "Description")
         ? { description: textOf(itemNode, "Description")! }
         : {}),
-      ...(quantityNode?.textContent
-        ? { quantity: quantityNode.textContent.trim() }
-        : {}),
+      ...(quantityNode?.textContent ? { quantity: quantityNode.textContent.trim() } : {}),
       ...(quantityNode?.getAttribute("unitCode")
         ? { unit: quantityNode.getAttribute("unitCode")! }
         : {}),
@@ -110,14 +111,10 @@ export function parseUblXml(xml: string): PrintedInvoice | null {
     ...(buyer && textOf(buyer, "RegistrationName", "Name")
       ? { buyerName: textOf(buyer, "RegistrationName", "Name")! }
       : {}),
-    ...(buyer && textOf(buyer, "CompanyID")
-      ? { buyerVatNumber: textOf(buyer, "CompanyID")! }
-      : {}),
+    ...(buyer && textOf(buyer, "CompanyID") ? { buyerVatNumber: textOf(buyer, "CompanyID")! } : {}),
     ...(textOf(doc, "cbc:ID", "ID") ? { invoiceNo: textOf(doc, "cbc:ID", "ID")! } : {}),
     ...(textOf(doc, "UUID") ? { uuid: textOf(doc, "UUID")! } : {}),
-    ...(textOf(doc, "InvoiceTypeCode")
-      ? { invoiceTypeCode: textOf(doc, "InvoiceTypeCode")! }
-      : {}),
+    ...(textOf(doc, "InvoiceTypeCode") ? { invoiceTypeCode: textOf(doc, "InvoiceTypeCode")! } : {}),
     ...(issueDate ? { timestamp: issueTime ? `${issueDate}T${issueTime}` : issueDate } : {}),
     ...(textOf(doc, "DocumentCurrencyCode")
       ? { currency: textOf(doc, "DocumentCurrencyCode")! }
@@ -166,20 +163,29 @@ export function parseInvoiceText(rawText: string, method: ExtractionMethod): Pri
   const amount = "([0-9]{1,3}(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?|[0-9]+(?:\\.[0-9]{1,2})?)";
 
   const vatNumber = firstMatch(text, [
-    /(?:الرقم\s*الضريبي|رقم\s*التسجيل\s*الضريبي|VAT\s*(?:Reg(?:istration)?\.?\s*)?(?:No\.?|Number|#)?)\s*[:\-]?\s*(3\d{13}3)/i,
+    /(?:الرقم\s*الضريبي|رقم\s*التسجيل\s*الضريبي|VAT\s*(?:Reg(?:istration)?\.?\s*)?(?:No\.?|Number|#)?)\s*[:-]?\s*(3\d{13}3)/i,
     /\b(3\d{13}3)\b/,
   ]);
   const total = firstMatch(text, [
-    new RegExp(`(?:الإجمالي\\s*(?:مع|شامل)[^0-9]{0,20}|المجموع\\s*الكلي|Total\\s*(?:with|incl\\.?|including)[^0-9]{0,20}|Grand\\s*Total|Total\\s*Amount\\s*Due)\\s*[:\\-]?\\s*(?:SAR|ر\\.س|﷼)?\\s*${amount}`, "i"),
+    new RegExp(
+      `(?:الإجمالي\\s*(?:مع|شامل)[^0-9]{0,20}|المجموع\\s*الكلي|Total\\s*(?:with|incl\\.?|including)[^0-9]{0,20}|Grand\\s*Total|Total\\s*Amount\\s*Due)\\s*[:\\-]?\\s*(?:SAR|ر\\.س|﷼)?\\s*${amount}`,
+      "i",
+    ),
   ]);
   const vatTotal = firstMatch(text, [
-    new RegExp(`(?:ضريبة\\s*القيمة\\s*المضافة|إجمالي\\s*الضريبة|VAT\\s*(?:Amount|Total)|Total\\s*VAT)\\s*(?:\\(?15%\\)?)?\\s*[:\\-]?\\s*(?:SAR|ر\\.س|﷼)?\\s*${amount}`, "i"),
+    new RegExp(
+      `(?:ضريبة\\s*القيمة\\s*المضافة|إجمالي\\s*الضريبة|VAT\\s*(?:Amount|Total)|Total\\s*VAT)\\s*(?:\\(?15%\\)?)?\\s*[:\\-]?\\s*(?:SAR|ر\\.س|﷼)?\\s*${amount}`,
+      "i",
+    ),
   ]);
   const netTotal = firstMatch(text, [
-    new RegExp(`(?:الإجمالي\\s*(?:قبل|بدون)[^0-9]{0,20}|المبلغ\\s*الخاضع\\s*للضريبة|Total\\s*(?:excl\\.?|before|excluding)[^0-9]{0,20}|Taxable\\s*Amount|Subtotal)\\s*[:\\-]?\\s*(?:SAR|ر\\.س|﷼)?\\s*${amount}`, "i"),
+    new RegExp(
+      `(?:الإجمالي\\s*(?:قبل|بدون)[^0-9]{0,20}|المبلغ\\s*الخاضع\\s*للضريبة|Total\\s*(?:excl\\.?|before|excluding)[^0-9]{0,20}|Taxable\\s*Amount|Subtotal)\\s*[:\\-]?\\s*(?:SAR|ر\\.س|﷼)?\\s*${amount}`,
+      "i",
+    ),
   ]);
   const invoiceNo = firstMatch(text, [
-    /(?:رقم\s*الفاتورة|فاتورة\s*رقم|Invoice\s*(?:No\.?|Number|#))\s*[:\-]?\s*([A-Za-z0-9\-/]{3,32})/i,
+    /(?:رقم\s*الفاتورة|فاتورة\s*رقم|Invoice\s*(?:No\.?|Number|#))\s*[:-]?\s*([A-Za-z0-9/-]{3,32})/i,
   ]);
   const timestamp = firstMatch(text, [
     /\b(\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2})?)?)\b/,
@@ -188,7 +194,7 @@ export function parseInvoiceText(rawText: string, method: ExtractionMethod): Pri
   const sellerLine = text
     .split("\n")
     .map((line) => line.trim())
-    .find((line) => line.length > 3 && !/^[0-9\s.,:\-]+$/.test(line));
+    .find((line) => line.length > 3 && !/^[0-9\s.,:-]+$/.test(line));
 
   const clean = (value?: string) => (value ? value.replace(/,/g, "") : undefined);
 

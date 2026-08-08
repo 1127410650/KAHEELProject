@@ -1,4 +1,4 @@
--- Free profile-completion mode:
+-- KAHEEL free profile-completion mode:
 -- email verification remains the only verification requirement;
 -- phone is stored as a contact number after format validation, without SMS.
 

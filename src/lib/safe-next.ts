@@ -12,7 +12,13 @@ export function safeInternalPath(raw: string | null | undefined): string {
   const value = raw.trim();
   if (!value.startsWith("/")) return "/";
   if (value.startsWith("//") || value.startsWith("/\\")) return "/";
-  if (/[\u0000-\u001f\s]/.test(value)) return "/";
+  if (
+    Array.from(value).some((character) => {
+      const codePoint = character.codePointAt(0) ?? 0;
+      return codePoint <= 0x1f || /\s/u.test(character);
+    })
+  )
+    return "/";
   if (/^\/+[a-z][a-z0-9+.-]*:/i.test(value)) return "/";
   return value;
 }

@@ -9,5 +9,5 @@ const schema = z.object({
 });
 
 export const signInWithIdentifier = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => schema.parse(data))
+  .validator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => signInWithIdentifierImpl(data.identifier, data.password));

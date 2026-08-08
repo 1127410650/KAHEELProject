@@ -24,6 +24,9 @@ for (const script of [
 }
 
 export default defineConfig({
+  // Vercel auto-detects its deployment preset. Local builds use a runnable
+  // Node server so `npm run preview` exercises the actual Nitro output.
+  nitro: process.env["VERCEL"] === "1" ? true : { preset: "node-server" },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

@@ -1,4 +1,4 @@
--- Storefront visual identity.
+-- KAHEEL storefront visual identity.
 -- Additive only: existing storefronts keep working with the general theme.
 
 alter table public.mkt_storefronts
