@@ -6,16 +6,16 @@ export const Route = createFileRoute("/appointments")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "كَحيل مواعيد — KAHEEL Appointments" },
+      { title: "كَحيل مواعيد ودليل — KAHEEL Appointments" },
       {
         name: "description",
         content:
-          "تطبيق مستقل لحجز المواعيد وقائمة الانتظار المباشرة، مرتبط بحساب كَحيل الموحد وقابل للفصل مستقبلًا.",
+          "ابحث عن المراكز والعيادات والصيدليات القريبة، واحجز موعدك أو تابع قائمة الانتظار عبر كَحيل مواعيد.",
       },
-      { property: "og:title", content: "كَحيل مواعيد — KAHEEL Appointments" },
+      { property: "og:title", content: "كَحيل مواعيد ودليل — KAHEEL Appointments" },
       {
         property: "og:description",
-        content: "احجز موعدك أو تابع دورك مباشرة عبر كَحيل مواعيد.",
+        content: "أماكن وخدمات قريبة، حجز مواعيد، وقائمة انتظار مباشرة ضمن تجربة كَحيل المستقلة.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
