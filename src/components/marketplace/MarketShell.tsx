@@ -279,6 +279,7 @@ export type FooterVariant = "compact" | "none";
 const COPYRIGHT_FOOTER_PATHS = [
   "/",
   "/search",
+  "/demo",
   "/syria-guide",
   "/student-tools",
   "/about",
