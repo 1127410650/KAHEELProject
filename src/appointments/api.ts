@@ -197,6 +197,15 @@ export interface MarketLink {
   linked_at: string | null;
 }
 
+export interface ProviderLocationSnapshot {
+  provider_id: string;
+  provider_type: string;
+  latitude: number | null;
+  longitude: number | null;
+  location_confirmed_at: string | null;
+  location_accuracy_meters: number | null;
+}
+
 export interface ProviderDashboard {
   provider: {
     id: string;
@@ -206,6 +215,11 @@ export interface ProviderDashboard {
     city: string | null;
     district: string | null;
     address_text: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    provider_type: string;
+    location_confirmed_at: string | null;
+    location_accuracy_meters: number | null;
     timezone: string;
     status: ProviderStatus;
     accepts_bookings: boolean;
@@ -244,8 +258,20 @@ export function getAvailableSlots(providerId: string, serviceId: string, date: s
   });
 }
 
-export function getMyContext() {
-  return rpc<MyContext>("appt_my_context");
+export async function getMyContext(): Promise<MyContext> {
+  const [context, profile, providerEligible] = await Promise.all([
+    rpc<Omit<MyContext, "profile" | "provider_eligible"> & { profile: AppointmentProfile | null }>(
+      "appt_my_context",
+    ),
+    rpc<AppointmentProfile | null>("appt_verified_profile"),
+    rpc<boolean>("appt_has_market_account"),
+  ]);
+
+  return {
+    ...context,
+    profile,
+    provider_eligible: providerEligible,
+  };
 }
 
 export function completeAppointmentProfile(displayName: string) {
@@ -270,11 +296,31 @@ export function createProvider(input: {
   });
 }
 
-export function getProviderDashboard(providerId: string, date?: string) {
-  return rpc<ProviderDashboard>("appt_provider_dashboard", {
-    _provider_id: providerId,
-    _date: date || null,
-  });
+export async function getProviderDashboard(
+  providerId: string,
+  date?: string,
+): Promise<ProviderDashboard> {
+  const [dashboard, location] = await Promise.all([
+    rpc<ProviderDashboard>("appt_provider_dashboard", {
+      _provider_id: providerId,
+      _date: date || null,
+    }),
+    rpc<ProviderLocationSnapshot>("appt_provider_location_context", {
+      _provider_id: providerId,
+    }),
+  ]);
+
+  return {
+    ...dashboard,
+    provider: {
+      ...dashboard.provider,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      provider_type: location.provider_type,
+      location_confirmed_at: location.location_confirmed_at,
+      location_accuracy_meters: location.location_accuracy_meters,
+    },
+  };
 }
 
 export function saveProvider(
@@ -386,6 +432,7 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
     "auth_required",
     "appointment_profile_required",
     "phone_not_verified",
+    "phone_already_linked",
     "profile_name_required",
     "provider_registration_required",
     "provider_unavailable",
@@ -397,6 +444,8 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
     "advance_limit_exceeded",
     "queue_disabled",
     "queue_service_unavailable",
+    "invalid_provider_type",
+    "invalid_location",
     "invalid_transition",
     "cancellation_window_closed",
     "forbidden",
@@ -406,6 +455,7 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
     auth_required: "سجّل الدخول لإكمال العملية.",
     appointment_profile_required: "تحقق من رقم جوالك أولًا لإكمال الحجز.",
     phone_not_verified: "لم يكتمل توثيق رقم الجوال.",
+    phone_already_linked: "رقم الجوال مرتبط بحساب مواعيد آخر.",
     profile_name_required: "أدخل الاسم الكامل بشكل صحيح.",
     provider_registration_required: "تسجيل مقدم الخدمة يبدأ من حساب سوق كَحيل.",
     provider_unavailable: "مقدم الخدمة غير متاح حاليًا.",
@@ -417,6 +467,8 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
     advance_limit_exceeded: "الموعد يتجاوز أقصى مدة للحجز المسبق.",
     queue_disabled: "قائمة الانتظار متوقفة حاليًا.",
     queue_service_unavailable: "هذه الخدمة لا تدعم الانتظار المباشر.",
+    invalid_provider_type: "نوع الجهة غير صالح.",
+    invalid_location: "بيانات موقع المنشأة غير صحيحة.",
     invalid_transition: "لا يمكن تنفيذ هذا الإجراء في الحالة الحالية.",
     cancellation_window_closed: "انتهت مهلة الإلغاء الإلكتروني.",
     forbidden: "ليست لديك صلاحية لتنفيذ هذا الإجراء.",
@@ -425,6 +477,7 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
     auth_required: "Sign in to continue.",
     appointment_profile_required: "Verify your mobile number before booking.",
     phone_not_verified: "The mobile number has not been verified.",
+    phone_already_linked: "This mobile number is linked to another appointments account.",
     profile_name_required: "Enter a valid full name.",
     provider_registration_required: "Provider registration starts with a KAHEEL Market account.",
     provider_unavailable: "The provider is currently unavailable.",
@@ -436,6 +489,8 @@ export function appointmentErrorMessage(error: unknown, locale: "ar" | "en") {
     advance_limit_exceeded: "This date exceeds the provider's advance booking limit.",
     queue_disabled: "The live queue is currently paused.",
     queue_service_unavailable: "This service does not support the live queue.",
+    invalid_provider_type: "The provider type is invalid.",
+    invalid_location: "The provider location is invalid.",
     invalid_transition: "This action is unavailable in the current state.",
     cancellation_window_closed: "The online cancellation window has closed.",
     forbidden: "You do not have permission to perform this action.",
