@@ -1,1 +1,0 @@
-delete from public.mkt_listings where title like 'QA-SEED%';

@@ -1,1 +1,0 @@
-UPDATE public.mkt_listings SET deleted_at = now(), views_count = 0 WHERE slug IN ('qa-temp-full-listing','qa-temp-empty-listing');

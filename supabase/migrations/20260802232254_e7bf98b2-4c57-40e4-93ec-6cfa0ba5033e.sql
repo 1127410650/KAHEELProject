@@ -1,1 +1,0 @@
-update public.mkt_listings set status='draft', deleted_at=now() where id in ('11111111-1111-4111-8111-111111111111','22222222-2222-4222-8222-222222222222');

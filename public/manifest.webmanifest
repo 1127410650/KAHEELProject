@@ -1,0 +1,13 @@
+{
+  "name": "كَحيل مواعيد — KAHEEL Appointments",
+  "short_name": "كَحيل مواعيد",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5faf7",
+  "theme_color": "#0f6a4a",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/kaheel-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

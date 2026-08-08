@@ -1,1 +1,0 @@
-DROP FUNCTION IF EXISTS public.mkt_admin_businesses(text, integer);

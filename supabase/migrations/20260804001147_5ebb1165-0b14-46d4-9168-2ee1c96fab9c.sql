@@ -1,1 +1,0 @@
-UPDATE public.mkt_countries SET is_active = false WHERE iso2 IN ('KW','AE');

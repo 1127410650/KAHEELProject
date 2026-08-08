@@ -1,31 +1,34 @@
-# KAHEEL Project — منصة گحيل
+# كَحيل مواعيد — KAHEEL Appointments
 
-المستودع الأساسي والوحيد لمنصة **گحيل (Gohail)**، ويضم تطبيق السوق العام
-ولوحات الحسابات والإدارة وتكامل Supabase.
+نسخة مستقلة بالكامل لتجربة حجز المواعيد وقائمة الانتظار والدليل القريب، محفوظة على الفرع المعزول `standalone/kaheel-appointments` فقط. لا تُدمج هذه الشجرة مباشرة في `main` ولا تقرأ أو تعدل بيانات سوق كَحيل.
 
-**Production app**: https://check-your-name-ai.vercel.app
+## الجاهز الآن
 
-**GitHub repository**: https://github.com/1127410650/KAHEELProject
+- تطبيق عربي/إنجليزي متجاوب للجوال والكمبيوتر.
+- بحث بالاسم والخدمة والمدينة والتصنيف.
+- بحث قريب بالموقع، مع خيار موقع تجريبي في الرياض.
+- 12 تصنيفًا كاملًا، منها المراكز الطبية والعيادات والصيدليات والمختبرات والأسنان والأشعة والعلاج الطبيعي والرعاية المنزلية والبيطري والعناية والجمال والاستشارات وخدمات أخرى.
+- 24 حساب مقدم خدمة تجريبيًا، حسابان لكل تصنيف.
+- 48 خدمة، و8 عملاء تجريبيين، ومواعيد وطوابير اختبار جاهزة.
+- دخول عميل تجريبي بالاسم والجوال ورمز OTP دون كلمة مرور. رمز العرض: `123456`.
+- لوحة مقدم خدمة، تأكيد وبدء وإنهاء المواعيد، وإدارة الدور المباشر.
+- مخطط Supabase مستقل بجداول تبدأ بـ `appt_` وسياسات RLS، دون أي مرجع إلى `mkt_*`.
+- رابط سوق كَحيل اختياري فقط بوصفه جسرًا خارجيًا للمستقبل.
 
-## Deployment
+## التشغيل
 
-The production deployment is connected to the `main` branch on Vercel. New commits to `main` trigger an automatic deployment.
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e4af4416-92f0-4e72-9296-39a81d60b485).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone https://github.com/1127410650/KAHEELProject.git
-cd KAHEELProject
-npm i
+```bash
+npm test
+npm run build
 npm run dev
 ```
+
+أول تشغيل يفك حزمة المصدر الموجودة تحت `archive/` تلقائيًا، ثم ينفذ الاختبارات أو البناء. لا توجد حزم npm خارجية مطلوبة للنسخة التجريبية.
+
+## حسابات العرض
+
+داخل التطبيق يوجد مبدل حسابات مقدم الخدمة يعرض جميع الحسابات الـ24 مرتبة حسب التصنيف. دخول العميل يستخدم أي اسم ورقم تجريبي مع الرمز `123456`. جميع الأرقام والبيانات خيالية وغير مرتبطة بأشخاص أو منشآت حقيقية.
+
+## الربط لاحقًا
+
+الربط مع السوق يتم لاحقًا فقط عبر SSO أو API موقّع ومعرّفات خارجية. لا توجد مفاتيح أجنبية أو استعلامات مشتركة بين قاعدة المواعيد وقاعدة السوق في هذا المشروع.

@@ -1,0 +1,26 @@
+name: KAHEEL Appointments standalone CI
+
+on:
+  push:
+    branches:
+      - "standalone/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - run: npm run build
+      - name: Verify isolated contract
+        run: |
+          ! grep -R "public\\.mkt_" supabase/migrations
+          ! grep -R "public\\.profiles" supabase/migrations
