@@ -21,6 +21,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as JoinRouteImport } from './routes/join'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
@@ -41,6 +42,7 @@ import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminContentRulesRouteImport } from './routes/admin/content-rules'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminGeoRouteImport } from './routes/admin/geo'
+import { Route as AdminJoinApplicationsRouteImport } from './routes/admin/join-applications'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
@@ -63,6 +65,8 @@ import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messag
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
 import { Route as DashboardNetworkRouteImport } from './routes/dashboard/network'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/notifications'
+import { Route as DashboardOperationsRouteImport } from './routes/dashboard/operations'
+import { Route as DashboardOrdersRouteImport } from './routes/dashboard/orders'
 import { Route as DashboardPointsRouteImport } from './routes/dashboard/points'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
@@ -147,6 +151,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketSetupRoute = MarketSetupRouteImport.update({
@@ -247,6 +256,11 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
 const AdminGeoRoute = AdminGeoRouteImport.update({
   id: '/geo',
   path: '/geo',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJoinApplicationsRoute = AdminJoinApplicationsRouteImport.update({
+  id: '/join-applications',
+  path: '/join-applications',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -357,6 +371,16 @@ const DashboardNetworkRoute = DashboardNetworkRouteImport.update({
 const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
   id: '/dashboard/notifications',
   path: '/dashboard/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardOperationsRoute = DashboardOperationsRouteImport.update({
+  id: '/dashboard/operations',
+  path: '/dashboard/operations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardOrdersRoute = DashboardOrdersRouteImport.update({
+  id: '/dashboard/orders',
+  path: '/dashboard/orders',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardPointsRoute = DashboardPointsRouteImport.update({
@@ -499,6 +523,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
+  '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
@@ -518,6 +543,7 @@ export interface FileRoutesByFullPath {
   '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/geo': typeof AdminGeoRoute
+  '/admin/join-applications': typeof AdminJoinApplicationsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -540,6 +566,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/network': typeof DashboardNetworkRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/operations': typeof DashboardOperationsRoute
+  '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
@@ -579,6 +607,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
+  '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
@@ -597,6 +626,7 @@ export interface FileRoutesByTo {
   '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/geo': typeof AdminGeoRoute
+  '/admin/join-applications': typeof AdminJoinApplicationsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -619,6 +649,8 @@ export interface FileRoutesByTo {
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/network': typeof DashboardNetworkRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/operations': typeof DashboardOperationsRoute
+  '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
@@ -660,6 +692,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
+  '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
@@ -679,6 +712,7 @@ export interface FileRoutesById {
   '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/geo': typeof AdminGeoRoute
+  '/admin/join-applications': typeof AdminJoinApplicationsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -701,6 +735,8 @@ export interface FileRoutesById {
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
   '/dashboard/network': typeof DashboardNetworkRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/operations': typeof DashboardOperationsRoute
+  '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
@@ -743,6 +779,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/forgot-password'
     | '/help'
+    | '/join'
     | '/market-setup'
     | '/me'
     | '/more'
@@ -762,6 +799,7 @@ export interface FileRouteTypes {
     | '/admin/content-rules'
     | '/admin/dashboard'
     | '/admin/geo'
+    | '/admin/join-applications'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -784,6 +822,8 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/network'
     | '/dashboard/notifications'
+    | '/dashboard/operations'
+    | '/dashboard/orders'
     | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
@@ -823,6 +863,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/forgot-password'
     | '/help'
+    | '/join'
     | '/market-setup'
     | '/me'
     | '/more'
@@ -841,6 +882,7 @@ export interface FileRouteTypes {
     | '/admin/content-rules'
     | '/admin/dashboard'
     | '/admin/geo'
+    | '/admin/join-applications'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -863,6 +905,8 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/network'
     | '/dashboard/notifications'
+    | '/dashboard/operations'
+    | '/dashboard/orders'
     | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
@@ -903,6 +947,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/forgot-password'
     | '/help'
+    | '/join'
     | '/market-setup'
     | '/me'
     | '/more'
@@ -922,6 +967,7 @@ export interface FileRouteTypes {
     | '/admin/content-rules'
     | '/admin/dashboard'
     | '/admin/geo'
+    | '/admin/join-applications'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -944,6 +990,8 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/network'
     | '/dashboard/notifications'
+    | '/dashboard/operations'
+    | '/dashboard/orders'
     | '/dashboard/points'
     | '/dashboard/profile'
     | '/dashboard/requests'
@@ -985,6 +1033,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
+  JoinRoute: typeof JoinRoute
   MarketSetupRoute: typeof MarketSetupRoute
   MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
@@ -1008,6 +1057,8 @@ export interface RootRouteChildren {
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
   DashboardNetworkRoute: typeof DashboardNetworkRoute
   DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardOperationsRoute: typeof DashboardOperationsRoute
+  DashboardOrdersRoute: typeof DashboardOrdersRoute
   DashboardPointsRoute: typeof DashboardPointsRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
@@ -1110,6 +1161,13 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/market-setup': {
@@ -1250,6 +1308,13 @@ declare module '@tanstack/react-router' {
       path: '/geo'
       fullPath: '/admin/geo'
       preLoaderRoute: typeof AdminGeoRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/join-applications': {
+      id: '/admin/join-applications'
+      path: '/join-applications'
+      fullPath: '/admin/join-applications'
+      preLoaderRoute: typeof AdminJoinApplicationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -1404,6 +1469,20 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/notifications'
       fullPath: '/dashboard/notifications'
       preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/operations': {
+      id: '/dashboard/operations'
+      path: '/dashboard/operations'
+      fullPath: '/dashboard/operations'
+      preLoaderRoute: typeof DashboardOperationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/orders': {
+      id: '/dashboard/orders'
+      path: '/dashboard/orders'
+      fullPath: '/dashboard/orders'
+      preLoaderRoute: typeof DashboardOrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/points': {
@@ -1592,6 +1671,7 @@ interface AdminRouteRouteChildren {
   AdminContentRulesRoute: typeof AdminContentRulesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminGeoRoute: typeof AdminGeoRoute
+  AdminJoinApplicationsRoute: typeof AdminJoinApplicationsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
@@ -1620,6 +1700,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminContentRulesRoute: AdminContentRulesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminGeoRoute: AdminGeoRoute,
+  AdminJoinApplicationsRoute: AdminJoinApplicationsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
@@ -1682,6 +1763,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,
+  JoinRoute: JoinRoute,
   MarketSetupRoute: MarketSetupRoute,
   MeRoute: MeRoute,
   MoreRoute: MoreRoute,
@@ -1705,6 +1787,8 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardMyAdsRoute: DashboardMyAdsRoute,
   DashboardNetworkRoute: DashboardNetworkRoute,
   DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardOperationsRoute: DashboardOperationsRoute,
+  DashboardOrdersRoute: DashboardOrdersRoute,
   DashboardPointsRoute: DashboardPointsRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
@@ -1725,3 +1809,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

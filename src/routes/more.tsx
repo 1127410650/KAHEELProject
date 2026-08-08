@@ -1,22 +1,21 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  Bike,
+  Building2,
   Check,
   ChevronLeft,
   ChevronRight,
-  FileText,
   Globe,
   HelpCircle,
-  Info,
   LogIn,
   LogOut,
-  Mail,
-  Plus,
   Shield,
   Store,
   User,
   UserPlus,
+  UserRoundCog,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,13 +28,14 @@ import { hasUnsavedChanges } from "@/lib/unsaved-changes";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ProfileCompletionPanel } from "@/components/marketplace/ProfileCompletionPanel";
+import { ACTIVITY_LINKS, MANAGE_LINKS, visibleLinks } from "@/lib/more-menu";
 import {
-  ACTIVITY_LINKS,
-  CREATE_BUSINESS_LABEL_KEY,
-  CREATE_BUSINESS_PATH,
-  MANAGE_LINKS,
-  visibleLinks,
-} from "@/lib/more-menu";
+  useMyJoinApplications,
+  useOperationalAccess,
+  type JoinApplication,
+  type JoinApplicationKind,
+  type JoinApplicationStatus,
+} from "@/lib/mkt-provider-onboarding";
 
 const title = "المزيد — گحيل";
 const description =
@@ -72,9 +72,13 @@ function MorePage() {
   const Arrow = dir === "rtl" ? ChevronLeft : ChevronRight;
   const centralSignOut = useSignOut();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { section } = Route.useSearch();
   const accountsRef = useRef<HTMLDivElement | null>(null);
+  const promotedApplicationRef = useRef<string | null>(null);
   const [switching, setSwitching] = useState<string | null>(null);
+  const applications = useMyJoinApplications(!!session);
+  const operational = useOperationalAccess(active?.account_key ?? null);
 
   const admin = useQuery({
     queryKey: ["mkt", "is-platform-admin", session?.user.id ?? null],
@@ -98,6 +102,8 @@ function MorePage() {
     accountKind: active?.kind ?? null,
     can,
     isPlatformAdmin: admin.data === true,
+    providerApproved: active?.kind === "business" && operational.data?.allowed === true,
+    providerCapabilities: operational.data?.capabilities ?? [],
   };
 
   const activity = session && active ? visibleLinks(ACTIVITY_LINKS, viewer) : [];
@@ -106,6 +112,35 @@ function MorePage() {
   const switchList = [...accounts].sort((a, b) =>
     a.kind === b.kind ? a.name.localeCompare(b.name) : a.kind === "individual" ? -1 : 1,
   );
+
+  const approvedBusiness = applications.data?.find(
+    (item) =>
+      item.status === "approved" &&
+      item.tenant_id &&
+      (item.application_kind === "seller" || item.application_kind === "service_provider"),
+  );
+
+  // Approval changes the operational identity. The Auth user remains the owner,
+  // while the visible session context moves to the newly approved work account.
+  useEffect(() => {
+    if (
+      !approvedBusiness ||
+      active?.kind === "business" ||
+      switching ||
+      promotedApplicationRef.current === approvedBusiness.id
+    )
+      return;
+    promotedApplicationRef.current = approvedBusiness.id;
+    const moveToWorkAccount = async () => {
+      setSwitching(approvedBusiness.account_key);
+      await queryClient.invalidateQueries({ queryKey: ["mkt", "my-accounts"] });
+      const ok = await select(approvedBusiness.account_key);
+      if (ok) void navigate({ to: "/dashboard/operations", replace: true });
+      else promotedApplicationRef.current = null;
+      setSwitching(null);
+    };
+    void moveToWorkAccount();
+  }, [active?.kind, approvedBusiness, navigate, queryClient, select, switching]);
 
   async function switchAccount(accountKey: string) {
     if (accountKey === active?.account_key || switching) return;
@@ -127,11 +162,8 @@ function MorePage() {
   }
 
   const legal = [
-    { to: "/about", icon: Info, label: t("market.more.links.about") },
-    { to: "/help", icon: HelpCircle, label: t("market.more.links.help") },
-    { to: "/terms", icon: FileText, label: t("market.more.links.terms") },
-    { to: "/privacy", icon: Shield, label: t("market.more.links.privacy") },
-    { to: "/contact", icon: Mail, label: t("market.more.links.contact") },
+    { to: "/help", icon: HelpCircle, label: t("market.more.links.support") },
+    { to: "/about", icon: Shield, label: t("market.more.links.policies") },
   ];
 
   return (
@@ -179,6 +211,14 @@ function MorePage() {
               <ProfileCompletionPanel />
             </section>
 
+            {active.kind === "individual" ? (
+              <JoinSection
+                locale={locale}
+                rowClass={rowClass}
+                applications={applications.data ?? []}
+              />
+            ) : null}
+
             {/* Switching: only accounts the server says the user may enter. */}
             <Section title={t("market.account.switchTitle")}>
               {switchList.map((item) => (
@@ -205,12 +245,6 @@ function MorePage() {
                   ) : null}
                 </button>
               ))}
-              {/* The one and only "create a business" entry in the platform. */}
-              <Link to={CREATE_BUSINESS_PATH} className={rowClass}>
-                <Plus className="size-5 shrink-0 text-muted-foreground" aria-hidden />
-                <span className="min-w-0 flex-1 truncate">{t(CREATE_BUSINESS_LABEL_KEY)}</span>
-                <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              </Link>
             </Section>
 
             {activity.length ? (
@@ -305,5 +339,133 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       <h2 className="mb-2 text-sm font-bold text-foreground">{title}</h2>
       <div className="market-section">{children}</div>
     </section>
+  );
+}
+
+const JOIN_OPTIONS: Array<{
+  kind: JoinApplicationKind;
+  icon: typeof Store;
+  titleAr: string;
+  titleEn: string;
+  hintAr: string;
+  hintEn: string;
+}> = [
+  {
+    kind: "platform_team",
+    icon: UserRoundCog,
+    titleAr: "انضم لفريق العمل",
+    titleEn: "Join our team",
+    hintAr: "التشغيل، الدعم، المبيعات، التسويق والتقنية.",
+    hintEn: "Operations, support, sales, marketing and technology.",
+  },
+  {
+    kind: "delivery_team",
+    icon: Bike,
+    titleAr: "انضم لفريق التوصيل",
+    titleEn: "Join the delivery team",
+    hintAr: "قدّم بياناتك ووسيلة التوصيل وساعات العمل.",
+    hintEn: "Submit your details, vehicle and working hours.",
+  },
+  {
+    kind: "seller",
+    icon: Store,
+    titleAr: "انضم كبائع",
+    titleEn: "Join as a seller",
+    hintAr: "مطاعم، مقاهٍ، نوادٍ، مستشفيات، جامعات وكل نشاط يبيع.",
+    hintEn: "Restaurants, cafés, clubs, hospitals, universities and every seller.",
+  },
+  {
+    kind: "service_provider",
+    icon: Building2,
+    titleAr: "انضم لنا كمقدم خدمة",
+    titleEn: "Join as a service provider",
+    hintAr: "طبيب، حلاق، نجار، حداد، صيانة، شركات نقل وغيرها.",
+    hintEn: "Doctors, barbers, carpenters, maintenance, transport companies and more.",
+  },
+];
+
+const STATUS_LABELS: Record<JoinApplicationStatus, { ar: string; en: string }> = {
+  pending: { ar: "بانتظار المراجعة", en: "Pending review" },
+  in_review: { ar: "قيد المراجعة", en: "In review" },
+  needs_more: { ar: "يتطلب استكمالًا", en: "More information needed" },
+  approved: { ar: "مقبول", en: "Approved" },
+  rejected: { ar: "غير مقبول", en: "Not approved" },
+  withdrawn: { ar: "مسحوب", en: "Withdrawn" },
+};
+
+function JoinSection({
+  locale,
+  rowClass,
+  applications,
+}: {
+  locale: "ar" | "en";
+  rowClass: string;
+  applications: JoinApplication[];
+}) {
+  const Arrow = locale === "ar" ? ChevronLeft : ChevronRight;
+  const latest = new Map<JoinApplicationKind, JoinApplication>();
+  applications.forEach((application) => {
+    if (!latest.has(application.application_kind))
+      latest.set(application.application_kind, application);
+  });
+  const openBusinessApplication = applications.some(
+    (application) =>
+      (application.application_kind === "seller" ||
+        application.application_kind === "service_provider") &&
+      ["pending", "in_review", "needs_more", "approved"].includes(application.status),
+  );
+
+  return (
+    <Section title={locale === "ar" ? "انضم إلى گحيل" : "Join Gohail"}>
+      {JOIN_OPTIONS.map((option) => {
+        const application = latest.get(option.kind);
+        const resumable =
+          application?.status === "pending" || application?.status === "needs_more";
+        const businessKind = option.kind === "seller" || option.kind === "service_provider";
+        const locked =
+          application?.status === "in_review" ||
+          application?.status === "approved" ||
+          (businessKind && openBusinessApplication && !resumable);
+        const content = (
+          <>
+            <option.icon className="size-5 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 flex-1 text-start">
+              <span className="block font-semibold">
+                {locale === "ar" ? option.titleAr : option.titleEn}
+              </span>
+              <span className="mt-0.5 block text-[11px] leading-5 text-muted-foreground">
+                {locale === "ar" ? option.hintAr : option.hintEn}
+              </span>
+              {application ? (
+                <span
+                  className={`mt-1.5 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                    application.status === "approved"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : application.status === "rejected" || application.status === "withdrawn"
+                        ? "bg-secondary text-muted-foreground"
+                        : "bg-amber-100 text-amber-800"
+                  }`}
+                >
+                  {STATUS_LABELS[application.status][locale]}
+                </span>
+              ) : null}
+            </span>
+            {!locked ? (
+              <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            ) : null}
+          </>
+        );
+
+        return locked ? (
+          <div key={option.kind} className={`${rowClass} bg-secondary/20`} aria-disabled="true">
+            {content}
+          </div>
+        ) : (
+          <Link key={option.kind} to="/join" search={{ kind: option.kind }} className={rowClass}>
+            {content}
+          </Link>
+        );
+      })}
+    </Section>
   );
 }

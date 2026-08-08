@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Pencil } from "lucide-react";
 import { toast } from "sonner";
@@ -35,6 +35,14 @@ import {
 import { ActivityPicker, type ActivityValue } from "@/components/marketplace/ActivityPicker";
 import { setEntityActivities } from "@/lib/mkt-activities";
 import { saveProviderProfile, useProviderCategories } from "@/lib/mkt-provider-network";
+import {
+  finalizeJoinApplication,
+  joinErrorMessage,
+  markJoinApplicationIncomplete,
+  prepareJoinWorkspace,
+  submitJoinApplication,
+  uploadJoinDocument,
+} from "@/lib/mkt-provider-onboarding";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -52,6 +60,8 @@ interface Props {
   variant?: "dialog" | "page";
   /** Called while the wizard holds data the user has not submitted yet. */
   onDirtyChange?: (dirty: boolean) => void;
+  /** Reviewed operator flow. Omitted only for legacy/admin-created workspaces. */
+  joinKind?: "seller" | "service_provider";
 }
 
 const selectClass =
@@ -74,6 +84,7 @@ export function BusinessQuickCreate({
   onCreated,
   variant = "dialog",
   onDirtyChange,
+  joinKind,
 }: Props) {
   const { t, locale } = useI18n();
   const { session } = useSession();
@@ -121,6 +132,34 @@ export function BusinessQuickCreate({
   const [authExpiry, setAuthExpiry] = useState("");
   const [docs, setDocs] = useState<Partial<Record<DocKind, File>>>({});
   const [note, setNote] = useState("");
+
+  const availableProviderCategories = useMemo(() => {
+    const rows = providerCategories.data ?? [];
+    if (joinKind === "seller") {
+      return rows.filter(
+        (row) =>
+          row.capabilities.includes("catalog.products") ||
+          row.capabilities.includes("orders.receive"),
+      );
+    }
+    if (joinKind === "service_provider") {
+      return rows.filter(
+        (row) =>
+          row.capabilities.includes("catalog.services") ||
+          row.capabilities.includes("bookings.receive") ||
+          row.capabilities.includes("jobs.receive") ||
+          row.capabilities.includes("quotes.receive"),
+      );
+    }
+    return rows;
+  }, [joinKind, providerCategories.data]);
+
+  useEffect(() => {
+    const first = availableProviderCategories[0];
+    if (first && !availableProviderCategories.some((row) => row.code === providerCategoryCode)) {
+      setProviderCategoryCode(first.code);
+    }
+  }, [availableProviderCategories, providerCategoryCode]);
 
   const iso2 = country.data?.iso2 ?? "SA";
   const city = (cities.data ?? []).find((c) => c.id === cityId);
@@ -200,38 +239,56 @@ export function BusinessQuickCreate({
     }
     if (busy) return;
     setBusy(true);
+    let joinApplicationId: string | null = null;
     try {
-      if (await isOfficialNumberTaken(crNumber, unifiedNumber)) {
+      if (!joinKind && (await isOfficialNumberTaken(crNumber, unifiedNumber))) {
         toast.error(t("market.biz.duplicate"));
         return;
       }
 
       const businessPhone = e164(phone) ?? phone.trim();
-      const { data: created, error: rpcError } = await supabase.rpc("create_workspace", {
-        _tenant_type: "store",
-        _name_ar: tradeName.trim(),
-        ...(tradeNameEn.trim() ? { _name_en: tradeNameEn.trim() } : {}),
-        _legal_name: legalName.trim(),
-        ...(crNumber.trim() ? { _cr_number: normalizeOfficialNumber(crNumber) } : {}),
-        ...(city?.name_ar ? { _city: city.name_ar } : {}),
-        _phone: businessPhone,
-        _email: email.trim(),
-        _activity: mainActivityText,
-        _provider_type: providerCategoryCode,
-        _contact_info: {},
-        _confirm_duplicate: false,
-      });
-      if (rpcError || !created) {
-        toast.error(
-          (rpcError?.message ?? "").includes("WORKSPACE_LIMIT_REACHED")
-            ? t("market.biz.limitReached")
-            : t("market.actions.failed"),
-        );
-        return;
+      let tid: string;
+      if (joinKind) {
+        tid = await prepareJoinWorkspace({
+          kind: joinKind,
+          providerCategoryCode,
+          nameAr: tradeName.trim(),
+          nameEn: tradeNameEn.trim() || null,
+          legalName: legalName.trim(),
+          crNumber: normalizeOfficialNumber(crNumber) || null,
+          unifiedNumber: normalizeOfficialNumber(unifiedNumber) || null,
+          city: city?.name_ar ?? null,
+          phone: businessPhone,
+          email: email.trim(),
+          activity: mainActivityText,
+        });
+      } else {
+        const { data: created, error: rpcError } = await supabase.rpc("create_workspace", {
+          _tenant_type: "store",
+          _name_ar: tradeName.trim(),
+          ...(tradeNameEn.trim() ? { _name_en: tradeNameEn.trim() } : {}),
+          _legal_name: legalName.trim(),
+          ...(crNumber.trim() ? { _cr_number: normalizeOfficialNumber(crNumber) } : {}),
+          ...(city?.name_ar ? { _city: city.name_ar } : {}),
+          _phone: businessPhone,
+          _email: email.trim(),
+          _activity: mainActivityText,
+          _provider_type: providerCategoryCode,
+          _contact_info: {},
+          _confirm_duplicate: false,
+        });
+        if (rpcError || !created) {
+          toast.error(
+            (rpcError?.message ?? "").includes("WORKSPACE_LIMIT_REACHED")
+              ? t("market.biz.limitReached")
+              : t("market.actions.failed"),
+          );
+          return;
+        }
+        tid = created as unknown as string;
       }
-      const tid = created as unknown as string;
 
-      const { error: profileError } = await supabase.from("mkt_business_profiles").insert({
+      const profileValues = {
         tenant_id: tid,
         slug: `biz-${tid.slice(0, 8)}`,
         display_name_ar: tradeName.trim(),
@@ -246,11 +303,15 @@ export function BusinessQuickCreate({
         public_phone: businessPhone,
         public_email: email.trim(),
         public_website: website.trim() || null,
-        is_published: true,
-      });
+        is_published: !joinKind,
+      };
+      const profileWrite = joinKind
+        ? supabase.from("mkt_business_profiles").upsert(profileValues, { onConflict: "tenant_id" })
+        : supabase.from("mkt_business_profiles").insert(profileValues);
+      const { error: profileError } = await profileWrite;
       if (profileError) throw profileError;
 
-      const { error: registryError } = await supabase.from("mkt_business_registry").insert({
+      const registryValues = {
         tenant_id: tid,
         entity_type: entityType,
         legal_name: legalName.trim(),
@@ -261,7 +322,11 @@ export function BusinessQuickCreate({
         sub_activities: subActivityNames,
         contact_phone: businessPhone,
         contact_email: email.trim(),
-      });
+      };
+      const registryWrite = joinKind
+        ? supabase.from("mkt_business_registry").upsert(registryValues, { onConflict: "tenant_id" })
+        : supabase.from("mkt_business_registry").insert(registryValues);
+      const { error: registryError } = await registryWrite;
       if (registryError) {
         toast.error(
           registryError.message.includes("unique") || registryError.code === "23505"
@@ -271,7 +336,7 @@ export function BusinessQuickCreate({
         return;
       }
 
-      const { error: officerInsertError } = await supabase.from("mkt_business_officers").insert({
+      const officerValues = {
         tenant_id: tid,
         user_id: session?.user.id ?? null,
         full_name: officerName.trim(),
@@ -282,8 +347,30 @@ export function BusinessQuickCreate({
         phone: e164(officerPhone) ?? officerPhone.trim(),
         email: officerEmail.trim() || null,
         authorization_expires_on: capacity === "owner" ? null : authExpiry || null,
-      });
-      if (officerInsertError) throw officerInsertError;
+      };
+      if (joinKind) {
+        const { data: existingOfficer, error: officerLookupError } = await supabase
+          .from("mkt_business_officers")
+          .select("id")
+          .eq("tenant_id", tid)
+          .eq("is_primary", true)
+          .limit(1)
+          .maybeSingle();
+        if (officerLookupError) throw officerLookupError;
+        const officerWrite = existingOfficer
+          ? supabase
+              .from("mkt_business_officers")
+              .update(officerValues)
+              .eq("id", existingOfficer.id)
+          : supabase.from("mkt_business_officers").insert(officerValues);
+        const { error: officerWriteError } = await officerWrite;
+        if (officerWriteError) throw officerWriteError;
+      } else {
+        const { error: officerInsertError } = await supabase
+          .from("mkt_business_officers")
+          .insert(officerValues);
+        if (officerInsertError) throw officerInsertError;
+      }
 
       if (logo) {
         const ext = logo.name.split(".").pop()?.toLowerCase() ?? "png";
@@ -301,7 +388,7 @@ export function BusinessQuickCreate({
 
       // Documents always travel with a verification request; the review outcome
       // belongs to the marketplace staff, not to this form.
-      if (session) {
+      if (session && !joinKind) {
         const { data: request } = await supabase
           .from("mkt_verification_requests")
           .insert({
@@ -329,7 +416,6 @@ export function BusinessQuickCreate({
       await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-businesses"] });
       onDirtyChange?.(false);
-      toast.success(t("market.biz.created"));
       // Reference activities are linked through the guarded RPC (ownership,
       // one main activity, same sector). A failure here never blocks creation.
       if (activity.main) {
@@ -344,25 +430,76 @@ export function BusinessQuickCreate({
         }
       }
 
-      // One work account owns one storefront. The selected category enables
-      // products, services, appointments, delivery or mixed capabilities.
-      // If this optional bootstrap is interrupted, the already-created account
-      // remains valid and can be completed from /dashboard/network.
-      try {
-        await saveProviderProfile({
-          accountKey: `business:${tid}`,
-          categoryCode: providerCategoryCode,
-          headlineAr: about,
-          acceptsPartnerRequests: true,
+      if (joinKind) {
+        // The reviewed onboarding RPC bootstraps the storefront/profile in a
+        // locked draft state. The work account is not exposed until approval.
+        const payload = {
+          full_name: officerName.trim(),
+          phone: e164(officerPhone) ?? officerPhone.trim(),
+          email: officerEmail.trim() || email.trim(),
+          headline_ar: about.trim() || null,
+          activity: mainActivityText,
+          note: note.trim() || null,
+        };
+        joinApplicationId = await submitJoinApplication({
+          kind: joinKind,
+          tenantId: tid,
+          providerCategoryCode,
+          payload,
         });
-      } catch {
-        // Account creation must never be rolled back client-side after the
-        // authoritative workspace RPC has committed.
+        if (!session) throw new Error("auth_required");
+        const joinDocumentKinds = {
+          cr: "commercial_registration",
+          authorization: "authorization",
+          id: "identity",
+          other: "other",
+        } as const;
+        for (const kind of DOC_ORDER) {
+          const file = docs[kind];
+          if (!file) continue;
+          await uploadJoinDocument({
+            applicationId: joinApplicationId,
+            userId: session.user.id,
+            kind: joinDocumentKinds[kind],
+            file,
+          });
+        }
+        await finalizeJoinApplication({
+          applicationId: joinApplicationId,
+          providerCategoryCode,
+          payload,
+        });
+        await queryClient.invalidateQueries({ queryKey: ["mkt", "join-applications"] });
+        toast.success(
+          locale === "ar"
+            ? "تم إرسال طلب الانضمام للمراجعة."
+            : "Your join application was sent for review.",
+        );
+      } else {
+        // Legacy/admin-created businesses keep the original immediate bootstrap.
+        try {
+          await saveProviderProfile({
+            accountKey: `business:${tid}`,
+            categoryCode: providerCategoryCode,
+            headlineAr: about,
+            acceptsPartnerRequests: true,
+          });
+        } catch {
+          // The business exists; its profile can be completed from the network page.
+        }
+        toast.success(t("market.biz.created"));
       }
 
       onCreated(tid);
-    } catch {
-      toast.error(t("market.actions.failed"));
+    } catch (error) {
+      if (joinApplicationId) {
+        try {
+          await markJoinApplicationIncomplete(joinApplicationId);
+        } catch {
+          // The application remains locked server-side and can be resumed later.
+        }
+      }
+      toast.error(joinKind ? joinErrorMessage(error, locale) : t("market.actions.failed"));
     } finally {
       setBusy(false);
     }
@@ -426,7 +563,7 @@ export function BusinessQuickCreate({
                 value={providerCategoryCode}
                 onChange={(e) => set(setProviderCategoryCode)(e.target.value)}
               >
-                {(providerCategories.data ?? []).map((value) => (
+                {availableProviderCategories.map((value) => (
                   <option key={value.code} value={value.code}>
                     {locale === "ar" ? value.name_ar : value.name_en}
                   </option>

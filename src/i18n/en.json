@@ -1101,7 +1101,7 @@
     "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only.",
     "publicTitle": "Create account",
     "publicSubtitle": "Create an individual account to use the marketplace. You can add a store later from your account.",
-    "individualNote": "Your account starts as an individual account. Creating a store happens later from inside the account.",
+    "individualNote": "Your account starts as an individual account. You can apply to join as a seller or service provider from inside the account.",
     "emailHint": "You will use this email to sign in.",
     "created": "Your account is ready",
     "createdBody": "You can start using the marketplace. If this email was already registered, sign in instead.",
@@ -2306,6 +2306,9 @@
         "terms": "Terms and conditions",
         "privacy": "Privacy policy",
         "contact": "Contact the platform team",
+        "support": "Help & contact",
+        "policies": "About & policies",
+        "joinSeller": "Join as a seller",
         "signOut": "Sign out"
       },
       "app": "App",
@@ -2317,6 +2320,10 @@
       "fieldsTitle": "Primary fields",
       "fieldsHint": "Pick a field to browse its listings",
       "store": "My store"
+    },
+    "operations": {
+      "title": "Operations center",
+      "orders": "Order management"
     },
     "person": {
       "count": {
@@ -3583,6 +3590,7 @@
       "users": "Users",
       "businesses": "Store accounts",
       "verifications": "Verifications",
+      "joinApplications": "Join applications",
       "reports": "Reports",
       "activities": "Activities",
       "geo": "Countries & cities",

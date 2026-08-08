@@ -20,12 +20,12 @@ const dictionaries: Record<Locale, Record<string, unknown>> = { ar, en };
 const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
   ar: {
     "signup.publicSubtitle": "أنشئ حسابًا لاستخدام السوق.",
-    "signup.individualNote": "يمكنك إنشاء متجر لبيع منتجات.",
+    "signup.individualNote": "يمكنك التقديم للانضمام كبائع أو مقدم خدمة من داخل حسابك.",
     "market.entry.kind.business": "متجر",
     "market.entry.businessSection": "متاجري",
     "market.entry.noBusinesses": "لا يوجد متجر حتى الآن.",
-    "market.entry.newBusiness": "إنشاء متجر",
-    "market.entry.newBusinessHint": "أنشئ متجرًا لعرض منتجاتك وإدارة إعلاناتك.",
+    "market.entry.newBusiness": "انضم كبائع",
+    "market.entry.newBusinessHint": "قدّم طلب الانضمام ويُفعّل حساب العمل بعد المراجعة والقبول.",
     "market.business.new": "إنشاء متجر",
     "market.business.profile": "ملف المتجر",
     "market.business.manage": "إدارة المتجر",
@@ -64,12 +64,14 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
   },
   en: {
     "signup.publicSubtitle": "Create an account to use the marketplace.",
-    "signup.individualNote": "You can create a store to sell products.",
+    "signup.individualNote":
+      "You can apply to join as a seller or service provider from your account.",
     "market.entry.kind.business": "Store",
     "market.entry.businessSection": "My stores",
     "market.entry.noBusinesses": "No store has been created yet.",
-    "market.entry.newBusiness": "Create a store",
-    "market.entry.newBusinessHint": "Create a store to showcase products and manage listings.",
+    "market.entry.newBusiness": "Join as a seller",
+    "market.entry.newBusinessHint":
+      "Apply to join; the work account activates after review and approval.",
     "market.business.new": "Create a store",
     "market.business.profile": "Store profile",
     "market.business.manage": "Manage store",
