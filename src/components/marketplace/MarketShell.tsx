@@ -118,7 +118,20 @@ export function MarketHeader({
             </>
           ) : (
             <>
-              <Link to="/" className="shrink-0" aria-label={t("market.brand")}>
+              <Link
+                to="/"
+                className="flex shrink-0 items-center gap-1.5"
+                aria-label={t("market.brand")}
+              >
+                <img
+                  src={kaheelLogo}
+                  alt=""
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  className="size-7 shrink-0 rounded-md sm:size-8"
+                  aria-hidden
+                />
                 <span className="text-xl font-black leading-none tracking-[-0.06em] text-market-navy sm:text-2xl">
                   {t("market.brand")}
                 </span>
