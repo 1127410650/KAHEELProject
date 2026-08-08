@@ -18,6 +18,7 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
@@ -131,6 +132,11 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -490,6 +496,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
@@ -649,6 +657,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/market-setup': typeof MarketSetupRoute
@@ -731,6 +740,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/contact'
+    | '/demo'
     | '/forgot-password'
     | '/help'
     | '/market-setup'
@@ -810,6 +820,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/contact'
+    | '/demo'
     | '/forgot-password'
     | '/help'
     | '/market-setup'
@@ -889,6 +900,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/contact'
+    | '/demo'
     | '/forgot-password'
     | '/help'
     | '/market-setup'
@@ -970,6 +982,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   ContactRoute: typeof ContactRoute
+  DemoRoute: typeof DemoRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
   MarketSetupRoute: typeof MarketSetupRoute
@@ -1076,6 +1089,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -1659,6 +1679,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   ContactRoute: ContactRoute,
+  DemoRoute: DemoRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,
   MarketSetupRoute: MarketSetupRoute,

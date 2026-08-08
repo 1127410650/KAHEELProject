@@ -81,6 +81,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/stores/$slug", "public", "market"),
   rule("/services", "public", "market"),
   rule("/services/$slug/$itemId/book", "public", "market"),
+  rule("/demo", "public", "market"),
   rule("/demo-stores/$worldId", "public", "market"),
   rule("/syria-guide", "public", "market"),
   rule("/student-tools", "public", "market"),
