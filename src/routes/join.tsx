@@ -96,7 +96,7 @@ const COPY: Record<
 
 function JoinPage() {
   const { locale, dir } = useI18n();
-  const { kind } = Route.useSearch();
+  const { kind } = Route.useSearch() as JoinSearch;
   const { session, loading } = useSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
