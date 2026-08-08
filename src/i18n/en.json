@@ -1141,7 +1141,7 @@
     "hasInvite": "You have a pending invitation — open the link you received to accept it.",
     "types": {
       "company": "Company",
-      "establishment": "Establishment",
+      "store": "Store",
       "property_owner": "Property owner",
       "project_owner": "Project owner",
       "individual": "Individual",
@@ -1268,7 +1268,7 @@
     "current": "Current account",
     "types": {
       "company": "Company",
-      "establishment": "Establishment",
+      "store": "Store",
       "owner": "Owner",
       "individual": "Personal account",
       "service_provider": "Service provider"
@@ -1850,8 +1850,10 @@
       "tradeName": "Trade name",
       "legalNameRequired": "Legal name is required",
       "entityType": "Entity type",
+      "providerCategory": "Store account category",
+      "providerCategoryRequired": "Choose the store account category",
       "entity": {
-        "establishment": "Establishment",
+        "sole_proprietorship": "Sole proprietorship",
         "company": "Company",
         "office": "Office",
         "factory": "Factory",
@@ -2602,6 +2604,7 @@
       "newBusiness": "Create a new store",
       "newBusinessHint": "The store is added to the list; your active account does not change automatically.",
       "noBusinesses": "No stores are linked to your account yet.",
+      "providerNetwork": "Store type & partner network",
       "selectAria": "Enter with {name}",
       "unavailable": "Currently unavailable",
       "cancelToCurrent": "Cancel and return to the current account",
@@ -2703,7 +2706,7 @@
       "completeNote": "Complete fields do not mean the licence is verified; the platform reviews it."
     },
     "entity": {
-      "establishment": "Establishment",
+      "sole_proprietorship": "Sole proprietorship",
       "company": "Company",
       "office": "Office",
       "factory": "Factory",

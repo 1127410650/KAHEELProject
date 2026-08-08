@@ -23,13 +23,13 @@ export const Route = createFileRoute("/business/new")({
   },
   head: () => ({
     meta: [
-      { title: "إضافة منشأة جديدة — گحيل" },
+      { title: "إنشاء متجر جديد — گحيل" },
       {
         name: "description",
-        content: "أضف بيانات منشأتك الرسمية وارفع مستندات التفويض للمراجعة داخل گحيل.",
+        content: "أنشئ حساب متجر وحدد فئته وارفع مستندات التفويض للمراجعة داخل گحيل.",
       },
-      { property: "og:title", content: "إضافة منشأة جديدة — گحيل" },
-      { property: "og:description", content: "إنشاء ملف منشأة وربطه بصاحبه أو المفوض عنها." },
+      { property: "og:title", content: "إنشاء متجر جديد — گحيل" },
+      { property: "og:description", content: "إنشاء حساب متجر وربطه بصاحبه أو المفوض عنه." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -86,10 +86,11 @@ function NewBusinessPage() {
           <span className="grid size-11 place-items-center rounded-2xl bg-primary/10 text-primary">
             <Building2 className="size-5" aria-hidden />
           </span>
-          <p className="mt-4 text-xs font-bold text-primary">ملف المنشأة</p>
-          <h1 className="mt-1 text-2xl font-black text-foreground">أضف منشأتك الرسمية</h1>
+          <p className="mt-4 text-xs font-bold text-primary">حساب متجر</p>
+          <h1 className="mt-1 text-2xl font-black text-foreground">أنشئ متجرك وحدد فئته</h1>
           <p className="mt-2 text-sm leading-7 text-muted-foreground">
-            هذه الصفحة مخصصة لبيانات المنشأة والتفويض. اختيار هوية المتجر أصبح داخل مسار إنشاء المتجر نفسه.
+            حساب واحد للمتجر مع بياناته الرسمية، وخدماته أو منتجاته أو حجوزاته بحسب الفئة التي
+            تختارها.
           </p>
         </div>
 

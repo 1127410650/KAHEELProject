@@ -39,22 +39,24 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.services.providerCenterHint":
       "تابع طلبات المواعيد، أكّدها، وابدأ الخدمة وأنهِها من مكان واحد.",
     "market.services.openProviderCenter": "فتح مركز الخدمة",
+    "market.services.bookNow": "احجز موعدًا",
+    "market.store.openStore": "فتح المتجر",
 
     "admin.console": "إدارة المنصة",
     "admin.consoleSubtitle": "مركز تشغيل گحيل",
     "admin.pageEyebrow": "لوحة الإدارة",
-    "admin.nav.businesses": "المنشآت",
-    "admin.stats.businesses": "المنشآت",
-    "market.admin.verifications": "توثيق المنشآت",
+    "admin.nav.businesses": "المتاجر",
+    "admin.stats.businesses": "المتاجر",
+    "market.admin.verifications": "توثيق المتاجر",
     "admin.navSections.overview": "نظرة عامة",
     "admin.navSections.market": "السوق والإعلانات",
-    "admin.navSections.accounts": "الحسابات والمنشآت",
+    "admin.navSections.accounts": "الحسابات والمتاجر",
     "admin.navSections.operations": "التشغيل والمتابعة",
     "admin.navSections.system": "إعدادات النظام",
     "admin.dashboardBadge": "مركز المتابعة",
     "admin.dashboardWelcome": "كل عمليات المنصة في مكان واحد",
     "admin.dashboardIntro":
-      "تابع المستخدمين والمنشآت والإعلانات والطلبات العاجلة من لوحة واضحة وسريعة.",
+      "تابع المستخدمين والمتاجر والإعلانات والطلبات العاجلة من لوحة واضحة وسريعة.",
     "admin.dashboardPending": "يحتاج متابعة",
     "admin.dashboardOverview": "ملخص المنصة",
     "admin.dashboardOverviewHint": "الأرقام الحالية مرتبطة مباشرة بصفحات الإدارة والتفاصيل.",
@@ -81,6 +83,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.services.providerCenterHint":
       "Review booking requests, confirm appointments, and run each service from one place.",
     "market.services.openProviderCenter": "Open provider center",
+    "market.services.bookNow": "Book an appointment",
+    "market.store.openStore": "Open store",
 
     "admin.console": "Platform management",
     "admin.consoleSubtitle": "Gohail operations center",

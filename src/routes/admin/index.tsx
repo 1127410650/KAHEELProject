@@ -29,7 +29,8 @@ export const Route = createFileRoute("/admin/")({
       { title: "إدارة المنصة — گحيل" },
       {
         name: "description",
-        content: "لوحة مدير النظام: نظرة سريعة على المستخدمين والمنشآت والإعلانات والبلاغات وطلبات التوثيق.",
+        content:
+          "لوحة مدير النظام: نظرة سريعة على المستخدمين والمتاجر والإعلانات والبلاغات وطلبات التوثيق.",
       },
       { property: "og:title", content: "إدارة المنصة — گحيل" },
       { property: "og:description", content: "لوحة مدير النظام في منصة گحيل." },
@@ -115,11 +116,18 @@ function Stat({
         <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${palette.icon}`}>
           <Icon className="size-[17px]" aria-hidden />
         </span>
-        <Arrow className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-[#087f78]" aria-hidden />
+        <Arrow
+          className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-[#087f78]"
+          aria-hidden
+        />
       </div>
       <div className="mt-3">
-        <p className="truncate text-[11px] font-semibold text-muted-foreground sm:text-xs">{label}</p>
-        <p className={`mt-1 text-2xl font-black tabular-nums tracking-tight sm:text-[28px] ${palette.value}`}>
+        <p className="truncate text-[11px] font-semibold text-muted-foreground sm:text-xs">
+          {label}
+        </p>
+        <p
+          className={`mt-1 text-2xl font-black tabular-nums tracking-tight sm:text-[28px] ${palette.value}`}
+        >
           {value.toLocaleString("en-US")}
         </p>
       </div>
@@ -177,7 +185,10 @@ function ActionRow({
       >
         {count}
       </span>
-      <Arrow className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-[#087f78]" aria-hidden />
+      <Arrow
+        className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-[#087f78]"
+        aria-hidden
+      />
     </Link>
   );
 }
@@ -202,15 +213,23 @@ function AdminHomePage() {
       ) : (
         <div className="space-y-5">
           <section className="relative overflow-hidden rounded-2xl border border-[#cfe5e2] bg-gradient-to-l from-[#087f78] via-[#0b9188] to-[#13a096] px-4 py-4 text-white shadow-[0_14px_34px_rgba(8,127,120,0.16)] sm:px-5 sm:py-5">
-            <div className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl" aria-hidden />
-            <div className="absolute -bottom-20 end-10 size-48 rounded-full bg-cyan-200/10 blur-3xl" aria-hidden />
+            <div
+              className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl"
+              aria-hidden
+            />
+            <div
+              className="absolute -bottom-20 end-10 size-48 rounded-full bg-cyan-200/10 blur-3xl"
+              aria-hidden
+            />
             <div className="relative flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold backdrop-blur">
                   <Sparkles className="size-3.5" aria-hidden />
                   {t("admin.dashboardBadge")}
                 </span>
-                <h2 className="mt-2 text-lg font-black sm:text-2xl">{t("admin.dashboardWelcome")}</h2>
+                <h2 className="mt-2 text-lg font-black sm:text-2xl">
+                  {t("admin.dashboardWelcome")}
+                </h2>
                 <p className="mt-1 max-w-2xl text-[11px] leading-5 text-white/75 sm:text-sm sm:leading-6">
                   {t("admin.dashboardIntro")}
                 </p>
@@ -227,7 +246,9 @@ function AdminHomePage() {
           <section>
             <div className="mb-3 flex items-end justify-between gap-3">
               <div>
-                <h2 className="text-sm font-black text-foreground sm:text-base">{t("admin.dashboardOverview")}</h2>
+                <h2 className="text-sm font-black text-foreground sm:text-base">
+                  {t("admin.dashboardOverview")}
+                </h2>
                 <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
                   {t("admin.dashboardOverviewHint")}
                 </p>
@@ -235,7 +256,13 @@ function AdminHomePage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-              <Stat label={t("admin.stats.users")} value={data.users} icon={Users} to="/admin/users" tone="teal" />
+              <Stat
+                label={t("admin.stats.users")}
+                value={data.users}
+                icon={Users}
+                to="/admin/users"
+                tone="teal"
+              />
               <Stat
                 label={t("admin.stats.businesses")}
                 value={data.businesses}
@@ -335,7 +362,10 @@ function AdminHomePage() {
                 </p>
               </div>
               <span className="rounded-full bg-[#e5f6f3] px-3 py-1 text-[10px] font-black text-[#087f78] dark:bg-primary/15 dark:text-primary">
-                {data.listings_pending + data.reports_new + data.verifications_pending + data.activity_suggestions}
+                {data.listings_pending +
+                  data.reports_new +
+                  data.verifications_pending +
+                  data.activity_suggestions}
               </span>
             </div>
 

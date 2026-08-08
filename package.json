@@ -13,7 +13,8 @@
     "seed:qa-accounts": "npm run guard:canonical && node scripts/seed-demo-accounts.mjs",
     "repository:check": "node scripts/check-canonical-repository.mjs",
     "infrastructure:check": "node scripts/check-canonical-infrastructure.mjs",
-    "guard:canonical": "node scripts/check-canonical-repository.mjs && node scripts/check-canonical-infrastructure.mjs --require-runtime"
+    "project-link:check": "node scripts/check-project-link-foundation.mjs",
+    "guard:canonical": "node scripts/check-canonical-repository.mjs && node scripts/check-canonical-infrastructure.mjs --require-runtime && node scripts/check-project-link-foundation.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

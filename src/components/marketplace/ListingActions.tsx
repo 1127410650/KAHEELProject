@@ -1,6 +1,15 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Flag, Heart, MapPin, MessageSquare, QrCode, Share2 } from "lucide-react";
+import {
+  CalendarDays,
+  Flag,
+  Heart,
+  MapPin,
+  MessageSquare,
+  QrCode,
+  Share2,
+  Store,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +22,7 @@ import { ShareSheet } from "@/components/marketplace/ShareSheet";
 import { track } from "@/lib/analytics";
 import { CallButton } from "@/components/marketplace/CallButton";
 import { chatErrorKey, openConversation, sendMessage } from "@/lib/mkt-chat";
+import { useListingCommerceAction } from "@/lib/mkt-provider-network";
 
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
@@ -43,6 +53,31 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const isOwner = session?.user.id === listing.owner_user_id;
+  const commerceAction = useListingCommerceAction(variant === "panel" ? listing.id : null);
+
+  const commerceButton = commerceAction.data ? (
+    commerceAction.data.action_kind === "book" ? (
+      <Button size="lg" className="w-full" asChild>
+        <Link
+          to="/services/$slug/$itemId/book"
+          params={{
+            slug: commerceAction.data.store_slug,
+            itemId: commerceAction.data.item_id,
+          }}
+        >
+          <CalendarDays className="size-4" aria-hidden />
+          {t("market.services.bookNow")}
+        </Link>
+      </Button>
+    ) : (
+      <Button size="lg" className="w-full" asChild>
+        <Link to="/stores/$slug" params={{ slug: commerceAction.data.store_slug }}>
+          <Store className="size-4" aria-hidden />
+          {t("market.store.openStore")}
+        </Link>
+      </Button>
+    )
+  ) : null;
 
   useEffect(() => {
     if (!session) return;
@@ -111,7 +146,6 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
       setBusy(false);
     }
   }
-
 
   // Compact icon row shown at the top of the ad: favourite, share, report.
   if (variant === "quick") {
@@ -201,26 +235,36 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   // only appear once there is a session, so nothing is duplicated.
   if (!session) {
     return (
-      <Button
-        size="lg"
-        className="w-full"
-        onClick={() => {
-          track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
-          void navigate({ href: loginHref(currentPath().split("?")[0] ?? "/", "contact") });
-        }}
-      >
-        {t("market.ad.signInToContact")}
-      </Button>
+      <div className="grid gap-2">
+        {commerceButton}
+        <Button
+          size="lg"
+          className="w-full"
+          variant={commerceButton ? "outline" : "default"}
+          onClick={() => {
+            track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
+            void navigate({ href: loginHref(currentPath().split("?")[0] ?? "/", "contact") });
+          }}
+        >
+          {t("market.ad.signInToContact")}
+        </Button>
+      </div>
     );
   }
 
   return (
     <>
       <div className="grid gap-2 sm:grid-cols-2">
-        <Button size="lg" className="sm:col-span-2" onClick={() => {
+        {commerceButton ? <div className="sm:col-span-2">{commerceButton}</div> : null}
+        <Button
+          size="lg"
+          className="sm:col-span-2"
+          variant={commerceButton ? "outline" : "default"}
+          onClick={() => {
             track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
             if (gate("contact")) setDialog("contact");
-          }}>
+          }}
+        >
           <MessageSquare className="size-4" aria-hidden />
           {t("market.actions.contact")}
         </Button>

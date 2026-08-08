@@ -1,4 +1,4 @@
-export const MARKET_URL = import.meta.env.VITE_KAHEEL_MARKET_URL?.trim() || "/";
+export const MARKET_URL = import.meta.env["VITE_KAHEEL_MARKET_URL"]?.trim() || "/";
 export const AUTH_URL = "/auth?next=%2Fappointments";
 export const REGISTER_URL = "/register";
 export const today = () => new Date().toISOString().slice(0, 10);

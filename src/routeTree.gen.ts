@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
@@ -30,7 +31,6 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as StudentToolsRouteImport } from './routes/student-tools'
 import { Route as SyriaGuideRouteImport } from './routes/syria-guide'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as VerifyInvoiceRouteImport } from './routes/verify-invoice'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
@@ -60,6 +60,7 @@ import { Route as DashboardBusinessRouteImport } from './routes/dashboard/busine
 import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
 import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
+import { Route as DashboardNetworkRouteImport } from './routes/dashboard/network'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/notifications'
 import { Route as DashboardPointsRouteImport } from './routes/dashboard/points'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
@@ -105,6 +106,11 @@ const AboutRoute = AboutRouteImport.update({
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppointmentsRoute = AppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditRoute = AuditRouteImport.update({
@@ -190,11 +196,6 @@ const SyriaGuideRoute = SyriaGuideRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerifyInvoiceRoute = VerifyInvoiceRouteImport.update({
-  id: '/verify-invoice',
-  path: '/verify-invoice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WelcomeRoute = WelcomeRouteImport.update({
@@ -342,6 +343,11 @@ const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
   path: '/dashboard/my-ads',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardNetworkRoute = DashboardNetworkRouteImport.update({
+  id: '/dashboard/network',
+  path: '/dashboard/network',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
   id: '/dashboard/notifications',
   path: '/dashboard/notifications',
@@ -479,6 +485,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/appointments': typeof AppointmentsRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
@@ -496,7 +503,6 @@ export interface FileRoutesByFullPath {
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
-  '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -525,6 +531,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/network': typeof DashboardNetworkRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
@@ -557,6 +564,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/appointments': typeof AppointmentsRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
@@ -573,7 +581,6 @@ export interface FileRoutesByTo {
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
-  '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -602,6 +609,7 @@ export interface FileRoutesByTo {
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/network': typeof DashboardNetworkRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
@@ -636,6 +644,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/appointments': typeof AppointmentsRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
@@ -653,7 +662,6 @@ export interface FileRoutesById {
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
   '/terms': typeof TermsRoute
-  '/verify-invoice': typeof VerifyInvoiceRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -682,6 +690,7 @@ export interface FileRoutesById {
   '/dashboard/favorites': typeof DashboardFavoritesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/my-ads': typeof DashboardMyAdsRoute
+  '/dashboard/network': typeof DashboardNetworkRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/points': typeof DashboardPointsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
@@ -717,6 +726,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/$'
     | '/about'
+    | '/appointments'
     | '/audit'
     | '/auth'
     | '/choose-account'
@@ -734,7 +744,6 @@ export interface FileRouteTypes {
     | '/student-tools'
     | '/syria-guide'
     | '/terms'
-    | '/verify-invoice'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -763,6 +772,7 @@ export interface FileRouteTypes {
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/network'
     | '/dashboard/notifications'
     | '/dashboard/points'
     | '/dashboard/profile'
@@ -795,6 +805,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$'
     | '/about'
+    | '/appointments'
     | '/audit'
     | '/auth'
     | '/choose-account'
@@ -811,7 +822,6 @@ export interface FileRouteTypes {
     | '/student-tools'
     | '/syria-guide'
     | '/terms'
-    | '/verify-invoice'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -840,6 +850,7 @@ export interface FileRouteTypes {
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/network'
     | '/dashboard/notifications'
     | '/dashboard/points'
     | '/dashboard/profile'
@@ -873,6 +884,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/$'
     | '/about'
+    | '/appointments'
     | '/audit'
     | '/auth'
     | '/choose-account'
@@ -890,7 +902,6 @@ export interface FileRouteTypes {
     | '/student-tools'
     | '/syria-guide'
     | '/terms'
-    | '/verify-invoice'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -919,6 +930,7 @@ export interface FileRouteTypes {
     | '/dashboard/favorites'
     | '/dashboard/messages'
     | '/dashboard/my-ads'
+    | '/dashboard/network'
     | '/dashboard/notifications'
     | '/dashboard/points'
     | '/dashboard/profile'
@@ -953,6 +965,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
+  AppointmentsRoute: typeof AppointmentsRoute
   AuditRoute: typeof AuditRoute
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
@@ -970,7 +983,6 @@ export interface RootRouteChildren {
   StudentToolsRoute: typeof StudentToolsRoute
   SyriaGuideRoute: typeof SyriaGuideRoute
   TermsRoute: typeof TermsRoute
-  VerifyInvoiceRoute: typeof VerifyInvoiceRoute
   WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessNewRoute: typeof BusinessNewRoute
@@ -981,6 +993,7 @@ export interface RootRouteChildren {
   DashboardFavoritesRoute: typeof DashboardFavoritesRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardMyAdsRoute: typeof DashboardMyAdsRoute
+  DashboardNetworkRoute: typeof DashboardNetworkRoute
   DashboardNotificationsRoute: typeof DashboardNotificationsRoute
   DashboardPointsRoute: typeof DashboardPointsRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
@@ -1028,6 +1041,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appointments': {
+      id: '/appointments'
+      path: '/appointments'
+      fullPath: '/appointments'
+      preLoaderRoute: typeof AppointmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit': {
@@ -1147,13 +1167,6 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify-invoice': {
-      id: '/verify-invoice'
-      path: '/verify-invoice'
-      fullPath: '/verify-invoice'
-      preLoaderRoute: typeof VerifyInvoiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/welcome': {
@@ -1357,6 +1370,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/my-ads'
       fullPath: '/dashboard/my-ads'
       preLoaderRoute: typeof DashboardMyAdsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/network': {
+      id: '/dashboard/network'
+      path: '/dashboard/network'
+      fullPath: '/dashboard/network'
+      preLoaderRoute: typeof DashboardNetworkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/notifications': {
@@ -1634,6 +1654,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
+  AppointmentsRoute: AppointmentsRoute,
   AuditRoute: AuditRoute,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
@@ -1651,7 +1672,6 @@ const rootRouteChildren: RootRouteChildren = {
   StudentToolsRoute: StudentToolsRoute,
   SyriaGuideRoute: SyriaGuideRoute,
   TermsRoute: TermsRoute,
-  VerifyInvoiceRoute: VerifyInvoiceRoute,
   WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
   BusinessNewRoute: BusinessNewRoute,
@@ -1662,6 +1682,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardFavoritesRoute: DashboardFavoritesRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardMyAdsRoute: DashboardMyAdsRoute,
+  DashboardNetworkRoute: DashboardNetworkRoute,
   DashboardNotificationsRoute: DashboardNotificationsRoute,
   DashboardPointsRoute: DashboardPointsRoute,
   DashboardProfileRoute: DashboardProfileRoute,

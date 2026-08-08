@@ -1,10 +1,11 @@
 import { useMemo, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   CalendarDays,
   ChevronDown,
   Globe,
+  Loader2,
   MapPin,
   Navigation,
   Pencil,
@@ -15,6 +16,7 @@ import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
+import { useActiveAccount } from "@/lib/mkt-account";
 import { currentPath, loginHref, resolveMedia } from "@/lib/mkt";
 import { locationLink } from "@/lib/mkt-location-link";
 import {
@@ -67,10 +69,18 @@ function BusinessPage() {
   const { slug } = Route.useParams();
   const { t, locale } = useI18n();
   const { session } = useSession();
+  const navigate = useNavigate();
+  const {
+    account: activeAccount,
+    accounts,
+    loading: accountsLoading,
+    select: selectAccount,
+  } = useActiveAccount();
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [allActivities, setAllActivities] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [openingDashboard, setOpeningDashboard] = useState(false);
 
   // Field-limited public read: the RPC decides whether the profile exists for
   // the public at all, so a direct link cannot bypass the policy.
@@ -133,6 +143,40 @@ function BusinessPage() {
         </div>
       </MarketShell>
     );
+  }
+
+  const businessSlug = biz.slug;
+
+  async function openBusinessDashboard() {
+    if (openingDashboard) return;
+
+    // `can_edit` proves membership server-side, but the dashboard is deliberately
+    // scoped to the ACTIVE marketplace account. A platform administrator may also
+    // own this business while their personal account is active; opening the route
+    // directly would therefore be denied correctly. Resolve the matching account
+    // from the server-provided list, activate it (which also aligns
+    // `active_tenant_id`), then navigate. No admin bypass or tenant id is exposed.
+    const target = accounts.find(
+      (candidate) => candidate.kind === "business" && candidate.slug === businessSlug,
+    );
+    if (!target) {
+      toast.error(t("market.entry.switchFailed"));
+      return;
+    }
+
+    setOpeningDashboard(true);
+    try {
+      if (activeAccount?.account_key !== target.account_key) {
+        const selected = await selectAccount(target.account_key);
+        if (!selected) {
+          toast.error(t("market.entry.switchFailed"));
+          return;
+        }
+      }
+      await navigate({ to: "/dashboard/business" });
+    } finally {
+      setOpeningDashboard(false);
+    }
   }
 
   const name =
@@ -215,15 +259,19 @@ function BusinessPage() {
             <div className="mt-3 flex flex-wrap gap-2">
               {biz.can_edit ? (
                 <Button
-                  asChild
+                  type="button"
                   variant="outline"
                   size="sm"
+                  disabled={accountsLoading || openingDashboard}
+                  onClick={() => void openBusinessDashboard()}
                   className="min-h-11 flex-1 sm:flex-none"
                 >
-                  <Link to="/dashboard/business">
+                  {openingDashboard ? (
+                    <Loader2 className="size-4 animate-spin" aria-hidden />
+                  ) : (
                     <Pencil className="size-4" aria-hidden />
-                    {t("market.business.manage")}
-                  </Link>
+                  )}
+                  {t("market.business.manage")}
                 </Button>
               ) : biz.is_member ? null : session ? null : (
                 <Button asChild size="sm" className="min-h-11 flex-1 sm:flex-none">

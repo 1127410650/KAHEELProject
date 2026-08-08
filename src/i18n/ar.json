@@ -1141,7 +1141,7 @@
     "hasInvite": "لديك دعوة معلقة. يمكنك قبولها من الرابط المرسل إليك.",
     "types": {
       "company": "شركة",
-      "establishment": "مؤسسة",
+      "store": "متجر",
       "property_owner": "مالك عقار",
       "project_owner": "مالك مشروع",
       "individual": "فرد",
@@ -1268,7 +1268,7 @@
     "current": "الحساب الحالي",
     "types": {
       "company": "شركة",
-      "establishment": "مؤسسة",
+      "store": "متجر",
       "owner": "مالك",
       "individual": "حساب شخصي",
       "service_provider": "مقدم خدمة"
@@ -1850,8 +1850,10 @@
       "tradeName": "الاسم التجاري",
       "legalNameRequired": "الاسم القانوني مطلوب",
       "entityType": "نوع الكيان",
+      "providerCategory": "فئة حساب المتجر",
+      "providerCategoryRequired": "اختر فئة حساب المتجر",
       "entity": {
-        "establishment": "مؤسسة",
+        "sole_proprietorship": "ملكية فردية",
         "company": "شركة",
         "office": "مكتب",
         "factory": "مصنع",
@@ -2602,6 +2604,7 @@
       "newBusiness": "إنشاء متجر جديد",
       "newBusinessHint": "يُضاف المتجر إلى القائمة، ولا يتغير حسابك النشط تلقائيًا.",
       "noBusinesses": "لا توجد متاجر مرتبطة بحسابك بعد.",
+      "providerNetwork": "نوع المتجر وشبكة الشركاء",
       "selectAria": "الدخول بحساب {name}",
       "unavailable": "غير متاح حاليًا",
       "cancelToCurrent": "إلغاء والعودة إلى الحساب الحالي",
@@ -2703,7 +2706,7 @@
       "completeNote": "اكتمال الحقول لا يعني توثيق الترخيص؛ تراجعه الإدارة."
     },
     "entity": {
-      "establishment": "مؤسسة",
+      "sole_proprietorship": "مؤسسة فردية",
       "company": "شركة",
       "office": "مكتب",
       "factory": "مصنع",

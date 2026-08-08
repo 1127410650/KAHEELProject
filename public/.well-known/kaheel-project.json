@@ -1,0 +1,23 @@
+{
+  "protocol": "kaheel-project-link/v1",
+  "project_id": "kaheel-market",
+  "project_type": "marketplace",
+  "display_name": {
+    "ar": "گحيل",
+    "en": "Gohail"
+  },
+  "discovery_path": "/.well-known/kaheel-project.json",
+  "linking": {
+    "direction": "bidirectional",
+    "data_mode": "references-only",
+    "authorization": "explicit",
+    "status": "foundation"
+  },
+  "capabilities": ["identity-reference", "account-reference", "deep-link"],
+  "security": {
+    "auto_trust": false,
+    "shared_database": false,
+    "shared_service_role": false,
+    "permission_inheritance": false
+  }
+}

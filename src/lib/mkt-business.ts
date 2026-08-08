@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
 
 export const ENTITY_TYPES = [
-  "establishment",
+  "sole_proprietorship",
   "company",
   "office",
   "factory",
@@ -147,7 +147,6 @@ export async function isOfficialNumberTaken(cr: string, unified: string): Promis
   });
   return data === true;
 }
-
 
 export interface DocUpload {
   kind: DocKind;

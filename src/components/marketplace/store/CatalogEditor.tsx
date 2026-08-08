@@ -39,6 +39,8 @@ import {
   setItemAvailability,
   uploadItemImage,
   useStoreCatalog,
+  useStorefrontListings,
+  type LinkableListing,
   type StoreAddonGroup,
   type StoreItem,
   type StoreSection,
@@ -78,6 +80,7 @@ export function CatalogEditor({
   const { t, locale } = useI18n();
   const queryClient = useQueryClient();
   const catalog = useStoreCatalog(storefrontId);
+  const storefrontListings = useStorefrontListings(storefrontId);
   const withOptions = storeType === "restaurant" || storeType === "mixed";
 
   const [sectionDraft, setSectionDraft] = useState<{ id?: string; name: string } | null>(null);
@@ -90,8 +93,8 @@ export function CatalogEditor({
 
   const fail = (error: unknown) => toast.error(t(catalogErrorKey(error)));
 
-  const sections = catalog.data?.sections ?? [];
-  const items = catalog.data?.items ?? [];
+  const sections = useMemo(() => catalog.data?.sections ?? [], [catalog.data?.sections]);
+  const items = useMemo(() => catalog.data?.items ?? [], [catalog.data?.items]);
   const groups = catalog.data?.groups ?? [];
   const media = catalog.data?.media ?? {};
 
@@ -403,6 +406,13 @@ export function CatalogEditor({
           currency={currency}
           sections={sections}
           draft={itemDraft}
+          listings={(storefrontListings.data ?? []).filter(
+            (listing) =>
+              listing.id === itemDraft.source_listing_id ||
+              !items.some(
+                (item) => item.id !== itemDraft.id && item.source_listing_id === listing.id,
+              ),
+          )}
           onClose={() => setItemDraft(null)}
           onSaved={() => {
             setItemDraft(null);
@@ -432,6 +442,7 @@ function ItemDialog({
   storeType,
   currency,
   sections,
+  listings,
   draft,
   onClose,
   onSaved,
@@ -440,6 +451,7 @@ function ItemDialog({
   storeType: string;
   currency: string;
   sections: StoreSection[];
+  listings: LinkableListing[];
   draft: Partial<StoreItem>;
   onClose: () => void;
   onSaved: () => void;
@@ -472,6 +484,7 @@ function ItemDialog({
     trackInventory: draft.track_inventory ?? false,
     stock: draft.stock_quantity != null ? String(draft.stock_quantity) : "",
     imagePath: draft.image_path ?? null,
+    sourceListingId: draft.source_listing_id ?? null,
   });
   const isService = ["service", "package"].includes(form.itemType);
   const [busy, setBusy] = useState(false);
@@ -509,6 +522,7 @@ function ItemDialog({
         stock_quantity: form.trackInventory ? Number(form.stock || 0) : null,
         is_available: form.available,
         is_featured: form.featured,
+        source_listing_id: form.sourceListingId,
       });
       onSaved();
     } catch (error) {
@@ -586,6 +600,35 @@ function ItemDialog({
               value={form.description}
               onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="item-listing">
+              {locale === "ar" ? "الإعلان المرتبط" : "Linked listing"}
+            </Label>
+            <select
+              id="item-listing"
+              value={form.sourceListingId ?? ""}
+              onChange={(event) =>
+                setForm((previous) => ({
+                  ...previous,
+                  sourceListingId: event.target.value || null,
+                }))
+              }
+              className="h-11 w-full rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="">{locale === "ar" ? "بدون إعلان مرتبط" : "No linked listing"}</option>
+              {listings.map((listing) => (
+                <option key={listing.id} value={listing.id}>
+                  {listing.title} · {listing.status}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs leading-5 text-muted-foreground">
+              {locale === "ar"
+                ? "يجب ربط الإعلان بالمتجر أولًا. عند ربط خدمة يظهر زر الحجز داخل الإعلان نفسه."
+                : "Attach the listing to this store first. A linked service gets a booking button on the listing page."}
+            </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">

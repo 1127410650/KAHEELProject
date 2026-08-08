@@ -87,8 +87,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/auth", "public", "bare"),
   rule("/register", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
-  // Public utility: anonymous checking only — saving requires sign-in + account.
-  rule("/verify-invoice", "public", "bare"),
+  rule("/appointments", "legacy", "bare", { legacy_redirect: "/services" }),
 
   // ── ب. Signed in ────────────────────────────────────────────────────────────
   rule("/choose-account", "authenticated", "bare"),
@@ -120,6 +119,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/dashboard/store", "account", "dashboard"),
   rule("/dashboard/store/new", "account", "dashboard"),
   rule("/dashboard/store/catalog", "account", "dashboard"),
+  rule("/dashboard/network", "account", "dashboard"),
   rule("/dashboard/service", "account", "dashboard"),
   rule("/dashboard/service/settings", "account", "dashboard"),
   rule("/dashboard/business", "account", "dashboard", {
@@ -155,7 +155,11 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/products", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/invoices", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/invoices_/$id/lines", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/invoices_/verified/new", "legacy", "bare", { legacy_redirect: "/verify-invoice" }),
+  // The retired tax-invoice verifier was a browser utility and never owned the
+  // historical invoice tables. Old bookmarks return to the marketplace; no
+  // database row, function or migration is deleted by retiring this UI route.
+  rule("/verify-invoice", "legacy", "bare", { legacy_redirect: "/" }),
+  rule("/invoices_/verified/new", "legacy", "bare", { legacy_redirect: "/" }),
   rule("/custody", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/my-custody", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/my-documents", "legacy", "bare", { legacy_redirect: "/me" }),
