@@ -95,12 +95,22 @@ for (const [label, value] of [
   if (value) assertRepository(label, value);
 }
 
+// The Lovable build sandbox clones from Lovable's managed mirror of the approved
+// repository, so its origin is not a github.com URL. That managed host is trusted
+// evidence; any other non-approved remote still fails closed.
+const LOVABLE_MANAGED_REMOTE =
+  /^(?:https:\/\/(?:[^@/]+@)?git\.private\.lovable-[a-z0-9-]+\.code\.storage\/|s3:\/\/lovable-repositories\/)/i;
+
 try {
   const remote = execFileSync("git", ["remote", "get-url", "origin"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
   }).trim();
-  assertRepository("local origin", remote);
+  if (LOVABLE_MANAGED_REMOTE.test(remote)) {
+    evidence.push("local origin: Lovable managed mirror of " + EXPECTED_REPOSITORY);
+  } else {
+    assertRepository("local origin", remote);
+  }
 } catch (error) {
   if (evidence.length === 0) {
     fail("no canonical repository evidence was available from CI, Vercel, or local Git");
@@ -109,6 +119,7 @@ try {
     fail("the local Git origin conflicts with the approved repository");
   }
 }
+
 
 if (evidence.length === 0) {
   fail("no canonical repository evidence was available");
