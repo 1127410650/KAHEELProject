@@ -3,7 +3,6 @@ import {
   Outlet,
   Link,
   createRootRouteWithContext,
-  useRouter,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -19,6 +18,7 @@ import { canonicalUrl } from "@/lib/share-links";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
+import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
 
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
@@ -70,21 +70,21 @@ function NotFoundView() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error }: { error: Error; reset: () => void }) {
   return (
     <I18nProvider>
-      <ErrorView error={error} reset={reset} />
+      <ErrorView error={error} />
     </I18nProvider>
   );
 }
 
-function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorView({ error }: { error: Error }) {
   console.error(error);
-  const router = useRouter();
   const { t, dir } = useI18n();
   const scope = useShellScope();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    recoverStaleAssetOnce(error);
   }, [error]);
 
   return (
@@ -99,8 +99,10 @@ function ErrorView({ error, reset }: { error: Error; reset: () => void }) {
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
-              router.invalidate();
-              reset();
+              // A root failure often comes from an old deployment chunk or an
+              // initialization error. A real page reload fetches the latest
+              // asset manifest and restarts providers cleanly on the same URL.
+              window.location.reload();
             }}
             className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-dark focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
           >

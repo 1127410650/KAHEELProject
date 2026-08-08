@@ -112,6 +112,7 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
 };
 
 const STORAGE_KEY = "tahqaq.locale";
+let memoryLocale: Locale | null = null;
 
 function lookup(dict: Record<string, unknown>, key: string): string | undefined {
   const parts = key.split(".");
@@ -159,8 +160,13 @@ function translate(locale: Locale, key: string, vars?: Vars): string {
 
 function readStoredLocale(): Locale {
   if (typeof window === "undefined") return "ar";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  return stored === "en" ? "en" : "ar";
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    const locale = stored === "en" ? "en" : stored === "ar" ? "ar" : memoryLocale;
+    return locale ?? "ar";
+  } catch {
+    return memoryLocale ?? "ar";
+  }
 }
 
 const localeListeners = new Set<() => void>();
@@ -178,7 +184,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const locale = useSyncExternalStore(subscribeLocale, readStoredLocale, () => "ar" as Locale);
 
   const setLocale = useCallback((next: Locale) => {
-    window.localStorage.setItem(STORAGE_KEY, next);
+    memoryLocale = next;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // The selected locale still applies to this render through subscribers;
+      // it simply cannot persist when the browser denies local storage.
+    }
     for (const listener of localeListeners) listener();
   }, []);
 
@@ -208,7 +220,12 @@ const fallbackI18n: I18nContextValue = {
   dir: "rtl",
   setLocale: (next) => {
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(STORAGE_KEY, next);
+      memoryLocale = next;
+      try {
+        window.localStorage.setItem(STORAGE_KEY, next);
+      } catch {
+        // Keep the standalone error/404 boundary usable in embedded previews.
+      }
       for (const listener of localeListeners) listener();
     }
   },
