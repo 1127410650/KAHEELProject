@@ -82,7 +82,20 @@ export function MarketHeader({
                   </span>
                 </span>
               </a>
-              <Link to="/" className="justify-self-center" aria-label={t("market.brand")}>
+              <Link
+                to="/"
+                className="flex items-center gap-2 justify-self-center"
+                aria-label={t("market.brand")}
+              >
+                <img
+                  src={kaheelLogo}
+                  alt=""
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  className="size-9 shrink-0 rounded-lg sm:size-10"
+                  aria-hidden
+                />
                 <span className="text-3xl font-black tracking-[-0.08em] text-market-navy sm:text-4xl">
                   {t("market.brand")}
                 </span>
