@@ -42,6 +42,7 @@ import { useSession } from "@/lib/session";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadListings, type ListingFilters } from "@/lib/mkt-queries";
 import { SELECTABLE_FIELDS } from "@/lib/market-primary-navigation";
+import { LIVE_DEMO_VISIBLE } from "@/lib/live-demo";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -172,6 +173,8 @@ export function MarketHome() {
         </div>
 
         <HeroBanner />
+
+        {LIVE_DEMO_VISIBLE ? <LiveDemoEntry /> : null}
 
         <section aria-labelledby="home-fields-title">
           <h2 id="home-fields-title" className="sr-only">
@@ -318,6 +321,43 @@ function HeroBanner() {
         </span>
       </div>
     </a>
+  );
+}
+
+function LiveDemoEntry() {
+  const { locale } = useI18n();
+  return (
+    <Link
+      to="/demo"
+      className="group relative flex min-h-[112px] overflow-hidden rounded-[24px] bg-[#071d46] px-4 py-4 text-white shadow-[0_14px_34px_rgb(7_29_70/0.18)] outline-none ring-1 ring-white/60 transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#0b5cc5] sm:min-h-[124px] sm:px-6"
+    >
+      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#1685ff]/45 blur-3xl" />
+      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-cyan-300/20 blur-3xl" />
+      <div className="relative flex w-full items-center gap-3 sm:gap-5">
+        <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/10 sm:size-14">
+          <Sparkles className="size-6 text-cyan-200" aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-cyan-200 sm:text-[10px]">
+            <span className="size-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
+            {locale === "ar" ? "بيئة تجريبية حيّة" : "Live demo environment"}
+          </span>
+          <strong className="mt-1 block text-base font-black sm:text-xl">
+            {locale === "ar"
+              ? "جرّب كل أنواع الحسابات قبل الإطلاق"
+              : "Explore every account type before launch"}
+          </strong>
+          <span className="mt-1 block line-clamp-1 text-[9px] text-white/62 sm:text-xs">
+            {locale === "ar"
+              ? "عميل، متجر، عيادة، حلاق، محطة، ناقل، وإدارة المنصة"
+              : "Customer, store, clinic, barber, station, carrier, and platform operations"}
+          </span>
+        </span>
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#071d46] shadow-lg transition group-hover:-translate-x-1 rtl:group-hover:translate-x-1">
+          <ChevronLeft className="size-5 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+        </span>
+      </div>
+    </Link>
   );
 }
 
