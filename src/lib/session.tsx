@@ -69,8 +69,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setProfile(profileRow as unknown as Profile);
       // The profile locale is only a default: never override an explicit choice
       // the user already made in this browser.
-      const chosen =
-        typeof window !== "undefined" ? window.localStorage.getItem("tahqaq.locale") : null;
+      let chosen: string | null = null;
+      try {
+        chosen =
+          typeof window !== "undefined" ? window.localStorage.getItem("tahqaq.locale") : null;
+      } catch {
+        // Embedded/private previews can deny storage. The profile locale remains
+        // the safe default and the session must continue loading.
+      }
       if (chosen !== "ar" && chosen !== "en") {
         setLocale((profileRow as unknown as Profile).locale ?? "ar");
       }

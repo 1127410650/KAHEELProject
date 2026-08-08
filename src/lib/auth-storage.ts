@@ -46,13 +46,18 @@ export function enablePersistentSession() {
   const session = safeSession();
   const key = authStorageKey();
   if (!local) return;
-  local.setItem(REMEMBER_KEY, "1");
-  if (key && session) {
-    const held = session.getItem(key);
-    if (!local.getItem(key) && held) local.setItem(key, held);
-    session.removeItem(key);
+  try {
+    local.setItem(REMEMBER_KEY, "1");
+    if (key && session) {
+      const held = session.getItem(key);
+      if (!local.getItem(key) && held) local.setItem(key, held);
+      session.removeItem(key);
+    }
+    syncAuthStorage();
+  } catch {
+    // Some embedded/private browsers expose Storage but reject its methods.
+    // Supabase's safe adapter keeps the current page session usable in memory.
   }
-  syncAuthStorage();
 }
 
 /**
@@ -63,10 +68,14 @@ export function syncAuthStorage() {
   const local = safeLocal();
   const session = safeSession();
   if (!key || !local || !session) return;
-  local.setItem(REMEMBER_KEY, "1");
-  const held = session.getItem(key);
-  if (!local.getItem(key) && held) local.setItem(key, held);
-  session.removeItem(key);
+  try {
+    local.setItem(REMEMBER_KEY, "1");
+    const held = session.getItem(key);
+    if (!local.getItem(key) && held) local.setItem(key, held);
+    session.removeItem(key);
+  } catch {
+    // Persistence is best-effort when the browser denies storage operations.
+  }
 }
 
 /**
@@ -78,10 +87,14 @@ export function restoreAuthStorage() {
   const local = safeLocal();
   const session = safeSession();
   if (!key || !local || !session) return;
-  local.setItem(REMEMBER_KEY, "1");
-  const held = session.getItem(key);
-  if (!local.getItem(key) && held) local.setItem(key, held);
-  session.removeItem(key);
+  try {
+    local.setItem(REMEMBER_KEY, "1");
+    const held = session.getItem(key);
+    if (!local.getItem(key) && held) local.setItem(key, held);
+    session.removeItem(key);
+  } catch {
+    // Do not let an embedded preview crash while session restoration starts.
+  }
 }
 
 /** Manual sign-out: no copy of the session may survive in either scope. */
