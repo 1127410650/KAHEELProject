@@ -2008,6 +2008,7 @@ export type Database = {
         Row: {
           address: string | null
           address_status: string | null
+          alt_names: string | null
           category: string | null
           city: string | null
           completeness: number | null
@@ -2025,17 +2026,25 @@ export type Database = {
           name_en: string | null
           notes: string | null
           opening_hours: string | null
+          operational_status: string | null
+          ownership: string | null
           phone: string | null
           phone_status: string | null
+          region: string | null
+          retrieved_at: string | null
           sector: string | null
+          services: string | null
           slug: string
           source_date: string | null
+          source_extra: string | null
           source_label: string | null
           source_ref: string | null
           source_type: string | null
           stars: number | null
           subcategory: string | null
+          subdistrict: string | null
           updated_at: string
+          verification_note: string | null
           verification_status: string
           website: string | null
           whatsapp: string | null
@@ -2045,6 +2054,7 @@ export type Database = {
         Insert: {
           address?: string | null
           address_status?: string | null
+          alt_names?: string | null
           category?: string | null
           city?: string | null
           completeness?: number | null
@@ -2062,17 +2072,25 @@ export type Database = {
           name_en?: string | null
           notes?: string | null
           opening_hours?: string | null
+          operational_status?: string | null
+          ownership?: string | null
           phone?: string | null
           phone_status?: string | null
+          region?: string | null
+          retrieved_at?: string | null
           sector?: string | null
+          services?: string | null
           slug: string
           source_date?: string | null
+          source_extra?: string | null
           source_label?: string | null
           source_ref?: string | null
           source_type?: string | null
           stars?: number | null
           subcategory?: string | null
+          subdistrict?: string | null
           updated_at?: string
+          verification_note?: string | null
           verification_status?: string
           website?: string | null
           whatsapp?: string | null
@@ -2082,6 +2100,7 @@ export type Database = {
         Update: {
           address?: string | null
           address_status?: string | null
+          alt_names?: string | null
           category?: string | null
           city?: string | null
           completeness?: number | null
@@ -2099,17 +2118,25 @@ export type Database = {
           name_en?: string | null
           notes?: string | null
           opening_hours?: string | null
+          operational_status?: string | null
+          ownership?: string | null
           phone?: string | null
           phone_status?: string | null
+          region?: string | null
+          retrieved_at?: string | null
           sector?: string | null
+          services?: string | null
           slug?: string
           source_date?: string | null
+          source_extra?: string | null
           source_label?: string | null
           source_ref?: string | null
           source_type?: string | null
           stars?: number | null
           subcategory?: string | null
+          subdistrict?: string | null
           updated_at?: string
+          verification_note?: string | null
           verification_status?: string
           website?: string | null
           whatsapp?: string | null
