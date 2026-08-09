@@ -30,6 +30,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
   Sheet,
   SheetClose,
   SheetContent,
@@ -137,7 +138,9 @@ export const Route = createFileRoute("/search")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/search"),
     ],
+    links: canonicalLinks("/search"),
   }),
   component: SearchPage,
 });

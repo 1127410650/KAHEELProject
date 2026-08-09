@@ -26,6 +26,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/i18n";
 import { currencyLabel } from "@/lib/mkt";
 import {
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
   useServiceCategories,
   useServiceDirectory,
   type ServiceCategory,
@@ -42,7 +43,9 @@ export const Route = createFileRoute("/services/")({
       },
       { property: "og:title", content: "خدمات گحيل — احجز موعدك" },
       { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/services"),
     ],
+    links: canonicalLinks("/services"),
   }),
   component: ServicesMarketplacePage,
 });

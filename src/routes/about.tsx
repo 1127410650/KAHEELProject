@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketStaticSection } from "@/components/marketplace/MarketStaticPage";
 import { useI18n } from "@/i18n";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 const title = "عن المنصة — گحيل";
 const description =
@@ -19,7 +20,9 @@ export const Route = createFileRoute("/about")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/about"),
     ],
+    links: canonicalLinks("/about"),
   }),
   component: PoliciesPage,
 });
