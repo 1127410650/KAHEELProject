@@ -243,8 +243,20 @@ export function buildGuideFacets(rows: GuideFacetRow[], filters: GuideFilters): 
 /** Human label for a record's source, with its date when present. */
 export function sourceLabel(place: GuidePlace): string | null {
   const name = (place.source_label ?? "").trim() || (isOpenStreetMap(place) ? "OpenStreetMap" : "");
-  const source = name || (place.source_type ?? "").trim();
-  if (!source) return null;
+  const raw = name || (place.source_type ?? "").trim();
+  if (!raw) return null;
+  // Some records store a bare URL as the source; show a readable name instead.
+  const source = /^https?:\/\//.test(raw)
+    ? raw.includes("openstreetmap")
+      ? "OpenStreetMap"
+      : (() => {
+          try {
+            return new URL(raw).hostname.replace(/^www\./, "");
+          } catch {
+            return raw;
+          }
+        })()
+    : raw;
   const date = (place.source_date ?? "").trim();
   if (!date) return source;
   const parsed = new Date(date);
@@ -253,6 +265,7 @@ export function sourceLabel(place: GuidePlace): string | null {
     : `${String(parsed.getUTCDate()).padStart(2, "0")}/${String(parsed.getUTCMonth() + 1).padStart(2, "0")}/${parsed.getUTCFullYear()}`;
   return `${source} — ${shown}`;
 }
+
 
 
 /** Directions link: the record's own map URL, else a plain place search. */
