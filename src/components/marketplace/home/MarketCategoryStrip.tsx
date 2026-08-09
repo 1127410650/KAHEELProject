@@ -157,7 +157,7 @@ function StripTile({
       {/* Full name, wrapped over at most two lines — never clipped. */}
       <span
         dir={dir}
-        className="flex h-[26px] w-full items-start justify-center whitespace-normal break-words text-[10px] font-black leading-[1.25] text-market-navy-foreground/95 sm:text-[11px]"
+        className="flex min-h-[26px] w-full items-start justify-center whitespace-normal break-words text-[10px] font-black leading-[1.25] text-market-navy-foreground/95 sm:text-[11px]"
       >
         {label}
       </span>
