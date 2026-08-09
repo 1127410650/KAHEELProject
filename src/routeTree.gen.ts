@@ -24,6 +24,7 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
+import { Route as MyRouteRouteImport } from './routes/my/route'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
@@ -162,6 +163,11 @@ const MeRoute = MeRouteImport.update({
 const MoreRoute = MoreRouteImport.update({
   id: '/more',
   path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyRouteRoute = MyRouteRouteImport.update({
+  id: '/my',
+  path: '/my',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -345,44 +351,44 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyBookingsRoute = MyBookingsRouteImport.update({
-  id: '/my/bookings',
-  path: '/my/bookings',
-  getParentRoute: () => rootRouteImport,
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyFavoritesRoute = MyFavoritesRouteImport.update({
-  id: '/my/favorites',
-  path: '/my/favorites',
-  getParentRoute: () => rootRouteImport,
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyMessagesRoute = MyMessagesRouteImport.update({
-  id: '/my/messages',
-  path: '/my/messages',
-  getParentRoute: () => rootRouteImport,
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyNotificationsRoute = MyNotificationsRouteImport.update({
-  id: '/my/notifications',
-  path: '/my/notifications',
-  getParentRoute: () => rootRouteImport,
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyProfileRoute = MyProfileRouteImport.update({
-  id: '/my/profile',
-  path: '/my/profile',
-  getParentRoute: () => rootRouteImport,
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyQuotesRoute = MyQuotesRouteImport.update({
-  id: '/my/quotes',
-  path: '/my/quotes',
-  getParentRoute: () => rootRouteImport,
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyViolationsRoute = MyViolationsRouteImport.update({
-  id: '/my/violations',
-  path: '/my/violations',
-  getParentRoute: () => rootRouteImport,
+  id: '/violations',
+  path: '/violations',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyWalletRoute = MyWalletRouteImport.update({
-  id: '/my/wallet',
-  path: '/my/wallet',
-  getParentRoute: () => rootRouteImport,
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const ServicesIndexRoute = ServicesIndexRouteImport.update({
   id: '/',
@@ -456,29 +462,29 @@ const BusinessStoreNewRoute = BusinessStoreNewRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyAdsIndexRoute = MyAdsIndexRouteImport.update({
-  id: '/my/ads/',
-  path: '/my/ads/',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads/',
+  path: '/ads/',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyAdsNewRoute = MyAdsNewRouteImport.update({
-  id: '/my/ads/new',
-  path: '/my/ads/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads/new',
+  path: '/ads/new',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyReportsIndexRoute = MyReportsIndexRouteImport.update({
-  id: '/my/reports/',
-  path: '/my/reports/',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyReportsIdRoute = MyReportsIdRouteImport.update({
-  id: '/my/reports/$id',
-  path: '/my/reports/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports/$id',
+  path: '/reports/$id',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyAdsIdEditRoute = MyAdsIdEditRouteImport.update({
-  id: '/my/ads/$id/edit',
-  path: '/my/ads/$id/edit',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads/$id/edit',
+  path: '/ads/$id/edit',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
   id: '/$slug/$itemId/book',
@@ -490,6 +496,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRoute
+  '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
@@ -570,6 +577,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
+  '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
@@ -651,6 +659,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRoute
+  '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
@@ -734,6 +743,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/my'
     | '/$'
     | '/about'
     | '/audit'
@@ -814,6 +824,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/my'
     | '/$'
     | '/about'
     | '/audit'
@@ -894,6 +905,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/my'
     | '/$'
     | '/about'
     | '/audit'
@@ -976,6 +988,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRoute
+  MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AuditRoute: typeof AuditRoute
@@ -1003,27 +1016,14 @@ export interface RootRouteChildren {
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   InviteTokenRoute: typeof InviteTokenRoute
-  MyBookingsRoute: typeof MyBookingsRoute
-  MyFavoritesRoute: typeof MyFavoritesRoute
-  MyMessagesRoute: typeof MyMessagesRoute
-  MyNotificationsRoute: typeof MyNotificationsRoute
-  MyProfileRoute: typeof MyProfileRoute
-  MyQuotesRoute: typeof MyQuotesRoute
-  MyViolationsRoute: typeof MyViolationsRoute
-  MyWalletRoute: typeof MyWalletRoute
   StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
   BusinessIndexRoute: typeof BusinessIndexRoute
   BusinessServicesSettingsRoute: typeof BusinessServicesSettingsRoute
   BusinessStoreCatalogRoute: typeof BusinessStoreCatalogRoute
   BusinessStoreNewRoute: typeof BusinessStoreNewRoute
-  MyAdsNewRoute: typeof MyAdsNewRoute
-  MyReportsIdRoute: typeof MyReportsIdRoute
   BusinessServicesIndexRoute: typeof BusinessServicesIndexRoute
   BusinessStoreIndexRoute: typeof BusinessStoreIndexRoute
-  MyAdsIndexRoute: typeof MyAdsIndexRoute
-  MyReportsIndexRoute: typeof MyReportsIndexRoute
-  MyAdsIdEditRoute: typeof MyAdsIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1131,6 +1131,13 @@ declare module '@tanstack/react-router' {
       path: '/more'
       fullPath: '/more'
       preLoaderRoute: typeof MoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my': {
+      id: '/my'
+      path: '/my'
+      fullPath: '/my'
+      preLoaderRoute: typeof MyRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1387,59 +1394,59 @@ declare module '@tanstack/react-router' {
     }
     '/my/bookings': {
       id: '/my/bookings'
-      path: '/my/bookings'
+      path: '/bookings'
       fullPath: '/my/bookings'
       preLoaderRoute: typeof MyBookingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/favorites': {
       id: '/my/favorites'
-      path: '/my/favorites'
+      path: '/favorites'
       fullPath: '/my/favorites'
       preLoaderRoute: typeof MyFavoritesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/messages': {
       id: '/my/messages'
-      path: '/my/messages'
+      path: '/messages'
       fullPath: '/my/messages'
       preLoaderRoute: typeof MyMessagesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/notifications': {
       id: '/my/notifications'
-      path: '/my/notifications'
+      path: '/notifications'
       fullPath: '/my/notifications'
       preLoaderRoute: typeof MyNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/profile': {
       id: '/my/profile'
-      path: '/my/profile'
+      path: '/profile'
       fullPath: '/my/profile'
       preLoaderRoute: typeof MyProfileRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/quotes': {
       id: '/my/quotes'
-      path: '/my/quotes'
+      path: '/quotes'
       fullPath: '/my/quotes'
       preLoaderRoute: typeof MyQuotesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/violations': {
       id: '/my/violations'
-      path: '/my/violations'
+      path: '/violations'
       fullPath: '/my/violations'
       preLoaderRoute: typeof MyViolationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/wallet': {
       id: '/my/wallet'
-      path: '/my/wallet'
+      path: '/wallet'
       fullPath: '/my/wallet'
       preLoaderRoute: typeof MyWalletRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/services/': {
       id: '/services/'
@@ -1541,38 +1548,38 @@ declare module '@tanstack/react-router' {
     }
     '/my/ads/': {
       id: '/my/ads/'
-      path: '/my/ads'
+      path: '/ads'
       fullPath: '/my/ads/'
       preLoaderRoute: typeof MyAdsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/ads/new': {
       id: '/my/ads/new'
-      path: '/my/ads/new'
+      path: '/ads/new'
       fullPath: '/my/ads/new'
       preLoaderRoute: typeof MyAdsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/reports/': {
       id: '/my/reports/'
-      path: '/my/reports'
+      path: '/reports'
       fullPath: '/my/reports/'
       preLoaderRoute: typeof MyReportsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/reports/$id': {
       id: '/my/reports/$id'
-      path: '/my/reports/$id'
+      path: '/reports/$id'
       fullPath: '/my/reports/$id'
       preLoaderRoute: typeof MyReportsIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/ads/$id/edit': {
       id: '/my/ads/$id/edit'
-      path: '/my/ads/$id/edit'
+      path: '/ads/$id/edit'
       fullPath: '/my/ads/$id/edit'
       preLoaderRoute: typeof MyAdsIdEditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/services/$slug/$itemId/book': {
       id: '/services/$slug/$itemId/book'
@@ -1646,6 +1653,41 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface MyRouteRouteChildren {
+  MyBookingsRoute: typeof MyBookingsRoute
+  MyFavoritesRoute: typeof MyFavoritesRoute
+  MyMessagesRoute: typeof MyMessagesRoute
+  MyNotificationsRoute: typeof MyNotificationsRoute
+  MyProfileRoute: typeof MyProfileRoute
+  MyQuotesRoute: typeof MyQuotesRoute
+  MyViolationsRoute: typeof MyViolationsRoute
+  MyWalletRoute: typeof MyWalletRoute
+  MyAdsNewRoute: typeof MyAdsNewRoute
+  MyReportsIdRoute: typeof MyReportsIdRoute
+  MyAdsIndexRoute: typeof MyAdsIndexRoute
+  MyReportsIndexRoute: typeof MyReportsIndexRoute
+  MyAdsIdEditRoute: typeof MyAdsIdEditRoute
+}
+
+const MyRouteRouteChildren: MyRouteRouteChildren = {
+  MyBookingsRoute: MyBookingsRoute,
+  MyFavoritesRoute: MyFavoritesRoute,
+  MyMessagesRoute: MyMessagesRoute,
+  MyNotificationsRoute: MyNotificationsRoute,
+  MyProfileRoute: MyProfileRoute,
+  MyQuotesRoute: MyQuotesRoute,
+  MyViolationsRoute: MyViolationsRoute,
+  MyWalletRoute: MyWalletRoute,
+  MyAdsNewRoute: MyAdsNewRoute,
+  MyReportsIdRoute: MyReportsIdRoute,
+  MyAdsIndexRoute: MyAdsIndexRoute,
+  MyReportsIndexRoute: MyReportsIndexRoute,
+  MyAdsIdEditRoute: MyAdsIdEditRoute,
+}
+
+const MyRouteRouteWithChildren =
+  MyRouteRoute._addFileChildren(MyRouteRouteChildren)
+
 interface ServicesRouteChildren {
   ServicesIndexRoute: typeof ServicesIndexRoute
   ServicesSlugItemIdBookRoute: typeof ServicesSlugItemIdBookRoute
@@ -1664,6 +1706,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRoute,
+  MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AuditRoute: AuditRoute,
@@ -1691,27 +1734,14 @@ const rootRouteChildren: RootRouteChildren = {
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   InviteTokenRoute: InviteTokenRoute,
-  MyBookingsRoute: MyBookingsRoute,
-  MyFavoritesRoute: MyFavoritesRoute,
-  MyMessagesRoute: MyMessagesRoute,
-  MyNotificationsRoute: MyNotificationsRoute,
-  MyProfileRoute: MyProfileRoute,
-  MyQuotesRoute: MyQuotesRoute,
-  MyViolationsRoute: MyViolationsRoute,
-  MyWalletRoute: MyWalletRoute,
   StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
   BusinessIndexRoute: BusinessIndexRoute,
   BusinessServicesSettingsRoute: BusinessServicesSettingsRoute,
   BusinessStoreCatalogRoute: BusinessStoreCatalogRoute,
   BusinessStoreNewRoute: BusinessStoreNewRoute,
-  MyAdsNewRoute: MyAdsNewRoute,
-  MyReportsIdRoute: MyReportsIdRoute,
   BusinessServicesIndexRoute: BusinessServicesIndexRoute,
   BusinessStoreIndexRoute: BusinessStoreIndexRoute,
-  MyAdsIndexRoute: MyAdsIndexRoute,
-  MyReportsIndexRoute: MyReportsIndexRoute,
-  MyAdsIdEditRoute: MyAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
