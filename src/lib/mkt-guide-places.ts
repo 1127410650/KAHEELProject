@@ -115,6 +115,8 @@ export async function fetchGuidePlaces(
   if (filters.sector) request = request.eq("sector", filters.sector);
   if (filters.governorate) request = request.eq("governorate", filters.governorate);
   if (filters.category) request = request.eq("category", filters.category);
+  if (filters.subcategory) request = request.eq("subcategory", filters.subcategory);
+
 
   const from = page * GUIDE_PAGE_SIZE;
   const { data, error, count } = await request
