@@ -9,7 +9,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Coins, Loader2, Wallet } from "lucide-react";
+import { Loader2, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/my/ad-credit")({
 });
 
 function AdCreditPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { account } = useActiveAccount();
 
   const accountKey = account ? `${account.kind}:${account.tenant_id ?? "self"}` : null;
@@ -77,7 +77,7 @@ function AdCreditPage() {
   }
 
   return (
-    <DashboardShell title={t("market.adCredit.title")} icon={Coins}>
+    <DashboardShell title={t("market.adCredit.title")}>
       <div className="space-y-4">
         <Card>
           <CardContent className="p-4">
@@ -133,7 +133,7 @@ function AdCreditPage() {
                     {formatNumber(p.credits)}
                   </span>
                   <span className="block text-xs text-muted-foreground">
-                    {formatMoney(p.priceSar)}
+                    {formatMoney(p.priceSar, locale)}
                   </span>
                 </button>
               ))}
