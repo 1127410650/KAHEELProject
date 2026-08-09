@@ -1,64 +1,19 @@
-
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  Armchair,
-  BriefcaseBusiness,
-  Building2,
-  CarFront,
-  Code2,
-  GraduationCap,
-  Home,
-  LayoutGrid,
-  Lightbulb,
-  Palette,
-  PartyPopper,
-  Plane,
-  School,
-  SearchX,
-  Shirt,
-  Smartphone,
-  Sparkles,
-  Trees,
-  Utensils,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
+import { Home, LayoutGrid } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
-import { useAutoLoopRail } from "@/components/marketplace/home/useAutoLoopRail";
-
-const FIELD_ICONS: Record<string, LucideIcon> = {
-  home: Home,
-  realestate: Building2,
-  cars: CarFront,
-  devices: Smartphone,
-  restaurants: Utensils,
-  furniture: Armchair,
-  services: Wrench,
-  fashion: Shirt,
-  jobs: BriefcaseBusiness,
-  training: GraduationCap,
-  schools: School,
-  events: PartyPopper,
-  programming: Code2,
-  gardens: Trees,
-  arts: Palette,
-  lostfound: SearchX,
-  projects: Lightbulb,
-  travel: Plane,
-  more: LayoutGrid,
-};
+import { CATEGORY_IMAGE_SIZE, categoryImage } from "@/lib/market-category-images";
+import { useMarqueeRail } from "@/components/marketplace/home/useMarqueeRail";
 
 /**
- * Two stacked rows of compact category circles that scroll horizontally as one
- * rail. Three identical groups make the loop seamless — each group is its own
- * two-row grid so `scrollWidth / 3` stays exact — while the native rail keeps
- * snapping smoothly under touch.
+ * Two stacked rows of photo tiles that drift as one marquee. The track renders
+ * the field list twice and moves with a GPU-composited transform, so the motion
+ * is perfectly smooth and touch can drag or pause it.
  */
 export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
-  const { railRef, interactionProps } = useAutoLoopRail<HTMLElement>(1, 15);
+  const { trackRef, interactionProps } = useMarqueeRail<HTMLDivElement>(1, 20);
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, string | undefined>,
   });
@@ -71,58 +26,73 @@ export function MarketCategoryStrip() {
     if (typeof value === "string" && value !== "") kept[key] = value;
   }
 
-  const chipClass =
-    "relative flex size-[62px] shrink-0 snap-start flex-col items-center justify-center gap-1 overflow-hidden rounded-full border px-1.5 text-center text-[8px] font-black leading-[1.12] backdrop-blur transition duration-300 after:pointer-events-none after:absolute after:inset-[3px] after:rounded-full after:border after:border-current after:opacity-[0.08] sm:size-[68px] sm:text-[9px] lg:size-[72px] lg:text-[10px]";
-  const idle =
-    "border-white/80 bg-white/[0.97] text-market-navy shadow-[0_7px_18px_rgb(36_0_70/0.24),inset_0_1px_0_rgb(255_255_255/0.95)] hover:-translate-y-1 hover:border-white hover:bg-white";
-  const active =
-    "border-white/90 bg-[linear-gradient(145deg,#9d4edd,#5a189a)] text-white shadow-[0_8px_22px_rgb(60_9_108/0.34),inset_0_1px_0_rgb(255_255_255/0.28)]";
+  // Every tile reserves the same box: a square photo plus two label lines, so
+  // no photo or label length can move a neighbour while images decode.
+  const tileClass =
+    "group flex w-[68px] shrink-0 flex-col items-center gap-1 text-center outline-none sm:w-[76px] lg:w-[82px]";
+  const frameClass =
+    "grid size-[56px] place-items-center overflow-hidden rounded-[18px] border transition duration-300 sm:size-[62px] lg:size-[66px]";
+  const idleFrame =
+    "border-white/70 bg-white shadow-[0_6px_16px_rgb(36_0_70/0.26),inset_0_1px_0_rgb(255_255_255/0.9)] group-hover:-translate-y-0.5";
+  const activeFrame =
+    "border-white bg-[linear-gradient(145deg,#9d4edd,#5a189a)] shadow-[0_8px_22px_rgb(60_9_108/0.4),inset_0_1px_0_rgb(255_255_255/0.3)]";
+  const labelClass =
+    "line-clamp-2 h-[24px] w-full overflow-hidden text-[9px] font-black leading-[1.2] text-market-navy-foreground/95 sm:h-[26px] sm:text-[10px]";
 
-  const renderChip = (
-    field: (typeof PRIMARY_FIELDS)[number],
-    groupIndex: number,
-  ) => {
+  const renderTile = (field: (typeof PRIMARY_FIELDS)[number], groupIndex: number) => {
     const label = t(`market.fields.${field.id}`);
     const key = `${field.id}-${groupIndex}`;
-    const Icon = FIELD_ICONS[field.id] ?? Sparkles;
-    // Only the middle group is real content; the copies exist for the loop.
+    const photo = categoryImage(field.id);
+    // Only the first group is real content; the copy exists for the loop.
     const accessibilityProps =
-      groupIndex === 1 ? {} : ({ "aria-hidden": true, tabIndex: -1 } as const);
+      groupIndex === 0 ? {} : ({ "aria-hidden": true, tabIndex: -1 } as const);
 
-    const body = (
+    const frame = (on: boolean) => (
+      <span className={`${frameClass} ${on ? activeFrame : idleFrame}`}>
+        {photo ? (
+          <img
+            src={photo}
+            alt=""
+            width={CATEGORY_IMAGE_SIZE}
+            height={CATEGORY_IMAGE_SIZE}
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className="size-full object-cover"
+            style={{ aspectRatio: "1 / 1" }}
+          />
+        ) : field.kind === "home" ? (
+          <Home className="size-5 text-market-blue" aria-hidden />
+        ) : (
+          <LayoutGrid className="size-5 text-market-blue" aria-hidden />
+        )}
+      </span>
+    );
+
+    const body = (on: boolean) => (
       <>
-        <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
-        <span className="line-clamp-2 max-w-full" dir={dir}>
+        {frame(on)}
+        <span className={labelClass} dir={dir}>
           {label}
         </span>
       </>
     );
 
-    if (field.kind === "home") {
-      return (
-        <Link key={key} to="/" className={`${chipClass} ${idle}`} lang={locale} {...accessibilityProps}>
-          {body}
-        </Link>
-      );
-    }
-
-    if (field.kind === "more") {
+    if (field.kind === "home" || field.kind === "more") {
       return (
         <Link
           key={key}
-          to="/more"
-          className={`${chipClass} ${idle}`}
+          to={field.kind === "home" ? "/" : "/more"}
+          className={tileClass}
           lang={locale}
           {...accessibilityProps}
         >
-          {body}
+          {body(false)}
         </Link>
       );
     }
 
     // Services have a real booking marketplace, not only classified ads.
-    // The taxonomy id stays unchanged, while its primary destination is
-    // the canonical service directory.
     if (field.id === "services") {
       const on = pathname === "/services" || pathname.startsWith("/services/");
       return (
@@ -130,11 +100,11 @@ export function MarketCategoryStrip() {
           key={key}
           to="/services"
           aria-current={on ? "page" : undefined}
-          className={`${chipClass} ${on ? active : idle}`}
+          className={tileClass}
           lang={locale}
           {...accessibilityProps}
         >
-          {body}
+          {body(on)}
         </Link>
       );
     }
@@ -146,11 +116,11 @@ export function MarketCategoryStrip() {
         to="/search"
         search={{ ...kept, ...fieldSearchParams(field) }}
         aria-current={on ? "page" : undefined}
-        className={`${chipClass} ${on ? active : idle}`}
+        className={tileClass}
         lang={locale}
         {...accessibilityProps}
       >
-        {body}
+        {body(on)}
       </Link>
     );
   };
@@ -161,38 +131,29 @@ export function MarketCategoryStrip() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
       />
-      <style>{`
-        .market-category-rail {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          scroll-padding-inline: 10px;
-        }
-        .market-category-rail::-webkit-scrollbar {
-          display: none;
-          width: 0;
-          height: 0;
-        }
-      `}</style>
 
-      <div className="mx-auto w-full max-w-[1320px] px-0 pb-2 pt-1 sm:pb-2.5">
+      <div className="mx-auto w-full max-w-[1320px] px-0 pb-2.5 pt-2">
         <nav
-          ref={railRef}
           dir="ltr"
           aria-label={t("market.home.strip.label")}
-          {...interactionProps}
-          className="market-category-rail flex w-full snap-x snap-proximity items-start gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-2 py-1 touch-pan-x select-none sm:gap-2.5 sm:px-3 lg:px-5"
+          className="w-full overflow-hidden px-2 touch-pan-y select-none sm:px-3 lg:px-5"
         >
-          {[0, 1, 2].map((groupIndex) => (
-            <div
-              key={groupIndex}
-              className="grid shrink-0 grid-flow-col grid-rows-2 gap-2 sm:gap-2.5"
-            >
-              {PRIMARY_FIELDS.map((field) => renderChip(field, groupIndex))}
-            </div>
-          ))}
+          <div
+            ref={trackRef}
+            {...interactionProps}
+            className="flex w-max items-start gap-2 will-change-transform sm:gap-2.5"
+          >
+            {[0, 1].map((groupIndex) => (
+              <div
+                key={groupIndex}
+                className="grid shrink-0 grid-flow-col grid-rows-2 gap-2 sm:gap-2.5"
+              >
+                {PRIMARY_FIELDS.map((field) => renderTile(field, groupIndex))}
+              </div>
+            ))}
+          </div>
         </nav>
       </div>
     </div>
   );
 }
-
