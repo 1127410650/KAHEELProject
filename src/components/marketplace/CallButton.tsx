@@ -8,24 +8,36 @@ import { Loader2, PhoneCall } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { callEligibility } from "@/lib/mkt-calls";
+import { callEligibility, conversationCallEligibility } from "@/lib/mkt-calls";
 import { useCallCenter } from "@/lib/mkt-call-center";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-  listingId: string;
+  /** Ad the call is about; omitted when calling from an open conversation. */
+  listingId?: string | undefined;
+  /**
+   * When set, the call rides on the conversation instead of the ad, so both the
+   * buyer and the advertiser can ring each other from the chat header.
+   */
+  conversationId?: string | undefined;
   className?: string;
 }
 
-export function CallButton({ listingId, className }: Props) {
+export function CallButton({ listingId, conversationId, className }: Props) {
   const { t } = useI18n();
   const { session } = useSession();
-  const { placeCall, requestCall, starting, call } = useCallCenter();
+  const { placeCall, placeConversationCall, requestCall, starting, call } = useCallCenter();
 
   const eligibility = useQuery({
-    queryKey: ["mkt", "call-eligibility", listingId, session?.user.id ?? "anon"],
-    enabled: !!session,
-    queryFn: () => callEligibility(listingId),
+    queryKey: [
+      "mkt",
+      "call-eligibility",
+      conversationId ? `c:${conversationId}` : `l:${listingId}`,
+      session?.user.id ?? "anon",
+    ],
+    enabled: !!session && (!!conversationId || !!listingId),
+    queryFn: () =>
+      conversationId ? conversationCallEligibility(conversationId) : callEligibility(listingId!),
     staleTime: 60_000,
   });
 
@@ -35,7 +47,8 @@ export function CallButton({ listingId, className }: Props) {
 
   const mode = eligibility.data.mode ?? "direct";
   const busy = starting || !!call;
-  const isRequest = mode === "request";
+  // Inside an open thread the two sides already talk, so a call always rings.
+  const isRequest = mode === "request" && !conversationId;
 
   return (
     <Button
@@ -43,7 +56,13 @@ export function CallButton({ listingId, className }: Props) {
       variant="outline"
       className={className ?? "h-11 w-full sm:h-10"}
       disabled={busy}
-      onClick={() => void (isRequest ? requestCall(listingId) : placeCall(listingId))}
+      onClick={() =>
+        void (conversationId
+          ? placeConversationCall(conversationId)
+          : isRequest
+            ? requestCall(listingId!)
+            : placeCall(listingId!))
+      }
     >
       {starting ? (
         <Loader2 className="size-4 animate-spin" aria-hidden />
