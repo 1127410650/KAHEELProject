@@ -27,14 +27,14 @@ export function LottieBox({
     type Anim = { destroy: () => void; goToAndStop: (value: number, isFrame?: boolean) => void };
     let animation: Anim | null = null;
 
-    (window as any).__lottie = { start: true };
     void (async () => {
       try {
+        // The ESM build is imported by path: the package ships no `exports` map,
+        // and the UMD entry cannot be pre-bundled here.
         const [{ default: lottie }, response] = await Promise.all([
           import("lottie-web/build/player/esm/lottie_light.min.js"),
           fetch(src, { cache: "force-cache" }),
         ]);
-        (window as any).__lottie.fetched = [response.status, typeof lottie];
         if (disposed || !response.ok) return;
         const animationData = (await response.json()) as unknown;
         if (disposed) return;
@@ -47,13 +47,12 @@ export function LottieBox({
           animationData,
           rendererSettings: { progressiveLoad: true, preserveAspectRatio: "xMidYMid slice" },
         }) as unknown as Anim;
-        (window as any).__lottie.loaded = [!!animation, host.childElementCount, reduced];
         if (reduced) animation?.goToAndStop(0, true);
-      } catch (error) {
-        (window as any).__lottie.error = String(error);
+      } catch {
         /* a failed campaign asset must never break the page */
       }
     })();
+
 
     return () => {
       disposed = true;
