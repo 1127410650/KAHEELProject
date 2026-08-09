@@ -1888,6 +1888,16 @@ body:has(.market-surface) {
   85% { transform: translateX(1px) rotate(-4deg); }
   100% { transform: translateX(0) rotate(0deg); }
 }
+/* مشهد التعارف: كَحيل يقفز خفيفًا بينما يقدّمه الزعيم كَحيلان. */
+@keyframes kaheel-mascot-duo-hop {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+}
+/* طبقة زجاجية شفافة تظهر بهدوء خلف بطاقة التعارف. */
+@keyframes kaheel-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 @keyframes kaheel-popup-in-bottom {
   from { opacity: 0; transform: translateY(28px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
