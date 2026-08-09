@@ -58,7 +58,12 @@ function SyriaGuidePage() {
     setPage(0);
   }, [debouncedQuery, filters.sector, filters.governorate, filters.category]);
 
-  const facets = useQuery({ queryKey: ["guide-facets"], queryFn: fetchGuideFacets });
+  const facets = useQuery({
+    queryKey: ["guide-facets"],
+    queryFn: fetchGuideFacets,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
   const places = useQuery({
     queryKey: ["guide-places", effective, page],
     queryFn: () => fetchGuidePlaces(effective, page),
