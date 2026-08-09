@@ -20,6 +20,8 @@ import {
   type MascotPose,
 } from "@/components/marketplace/campaign/Mascot";
 import { MASCOT_PERSONA, MASCOT_KINDS, PopupMascot } from "@/components/marketplace/campaign/PopupMascot";
+import { MascotWalk } from "@/components/marketplace/campaign/MascotWalk";
+import { MASCOT_WALK } from "@/lib/mascot-walk-frames";
 import { MASCOT_ASSETS, MASCOT_NAMES } from "@/lib/mascot-assets";
 import { MASCOT_TIMING, DROP_ANIMATION_MS } from "@/lib/mascot-tap";
 import {
