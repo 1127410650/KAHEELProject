@@ -143,8 +143,10 @@ export function SyriaHomeGateway() {
           </div>
         </Link>
 
+        {/* مؤشر الدليل: هدف لمس مريح 40px مع نقطة صغيرة مرئية، وطبقة مطلقة
+            في الأسفل فلا يمتد الزر كشريط عمودي ولا يزيد ارتفاع البطاقة. */}
         <div
-          className="relative z-20 flex items-center justify-center gap-1.5 pb-2.5 sm:pb-3"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-center"
           aria-label="اختر الدليل"
           role="group"
         >
@@ -155,14 +157,20 @@ export function SyriaHomeGateway() {
               onClick={() => setActive(index)}
               aria-label={`عرض ${item.title}`}
               aria-pressed={active === index}
-              className={
-                active === index
-                  ? "h-1 w-4 rounded-full bg-market-electric-bright transition-all"
-                  : "size-1 rounded-full bg-market-electric-bright/40 transition-all hover:bg-market-electric-bright/70"
-              }
-            />
+              className="pointer-events-auto grid h-8 w-6 place-items-center"
+            >
+              <span
+                aria-hidden
+                className={
+                  active === index
+                    ? "block h-1 w-4 rounded-full bg-market-electric-bright transition-all"
+                    : "block size-1 rounded-full bg-market-electric-bright/45 transition-all"
+                }
+              />
+            </button>
           ))}
         </div>
+
 
       </div>
 
