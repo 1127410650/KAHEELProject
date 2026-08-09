@@ -59,7 +59,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/admin/workforce")({
+export const Route = createFileRoute("/admin/staff/workload")({
   ssr: false,
   head: () => ({
     meta: [

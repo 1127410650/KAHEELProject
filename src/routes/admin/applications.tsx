@@ -25,7 +25,7 @@ import {
 } from "@/lib/mkt-provider-onboarding";
 import { usePlatformIdentity } from "@/lib/mkt-platform";
 
-export const Route = createFileRoute("/admin/join-applications")({
+export const Route = createFileRoute("/admin/applications")({
   ssr: false,
   head: () => ({
     meta: [{ title: "طلبات الانضمام — إدارة گحيل" }, { name: "robots", content: "noindex" }],

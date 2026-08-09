@@ -45,7 +45,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const Route = createFileRoute("/admin/attendance")({
+export const Route = createFileRoute("/admin/staff/attendance")({
   ssr: false,
   head: () => ({
     meta: [

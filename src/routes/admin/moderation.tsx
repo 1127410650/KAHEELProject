@@ -47,7 +47,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const Route = createFileRoute("/admin/content-rules")({
+export const Route = createFileRoute("/admin/moderation")({
   ssr: false,
   head: () => ({
     meta: [

@@ -131,7 +131,7 @@ const NAV: NavItem[] = [
     perms: ["verifications.review"],
   },
   {
-    to: "/admin/join-applications",
+    to: "/admin/applications",
     labelKey: "admin.nav.joinApplications",
     icon: UserRoundCheck,
     section: "accounts",
@@ -145,26 +145,26 @@ const NAV: NavItem[] = [
     perms: ["reports.inbox_view"],
   },
   {
-    to: "/admin/workforce",
+    to: "/admin/staff/workload",
     labelKey: "admin.nav.workforce",
     icon: Users2,
     section: "operations",
     perms: ["workforce.manage"],
   },
   {
-    to: "/admin/attendance",
+    to: "/admin/staff/attendance",
     labelKey: "admin.nav.attendance",
     icon: CalendarClock,
     section: "operations",
     perms: ["attendance.view", "attendance.manage", "attendance.approve"],
   },
   {
-    to: "/admin/activities",
+    to: "/admin/taxonomy",
     labelKey: "admin.nav.activities",
     icon: ListChecks,
     section: "operations",
   },
-  { to: "/admin/geo", labelKey: "admin.nav.geo", icon: Globe2, section: "system" },
+  { to: "/admin/locations", labelKey: "admin.nav.geo", icon: Globe2, section: "system" },
   {
     to: "/admin/roles",
     labelKey: "admin.nav.roles",
@@ -180,7 +180,7 @@ const NAV: NavItem[] = [
     perms: ["reports.audit_view"],
   },
   {
-    to: "/admin/content-rules",
+    to: "/admin/moderation",
     labelKey: "admin.nav.contentRules",
     icon: ShieldAlert,
     section: "system",
@@ -326,7 +326,7 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
     {
       key: "admin.alerts.activitySuggestions",
       value: overview.data?.activity_suggestions ?? 0,
-      to: "/admin/activities",
+      to: "/admin/taxonomy",
     },
   ];
   const total = rows.reduce((sum, row) => sum + row.value, 0);

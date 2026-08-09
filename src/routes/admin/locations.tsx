@@ -16,7 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const title = "الدول والمدن — إدارة گحيل";
 const description = "إدارة الدول والمدن المتاحة في السوق ومراجعة المدن المقترحة من المستخدمين.";
 
-export const Route = createFileRoute("/admin/geo")({
+export const Route = createFileRoute("/admin/locations")({
   ssr: false,
   head: () => ({
     meta: [

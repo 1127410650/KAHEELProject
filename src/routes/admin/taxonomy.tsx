@@ -29,7 +29,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/admin/activities")({
+export const Route = createFileRoute("/admin/taxonomy")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>) => ({
     tab: typeof search["tab"] === "string" ? (search["tab"] as string) : undefined,
