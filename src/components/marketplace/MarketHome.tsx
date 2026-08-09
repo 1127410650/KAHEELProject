@@ -49,6 +49,9 @@ import { SELECTABLE_FIELDS } from "@/lib/market-primary-navigation";
 import { LIVE_DEMO_VISIBLE } from "@/lib/live-demo";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
+import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
+import { Reveal } from "@/components/marketplace/home/Reveal";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
