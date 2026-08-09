@@ -115,6 +115,14 @@ export const ROUTE_MAP: RouteRule[] = [
   // canonical URL: the old address keeps its search signals through a 301.
   rule("/welcome", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/appointments", "legacy", "bare", { legacy_redirect: "/services" }),
+  // A shared booking link is `/services/$slug/$itemId/book`, so a visitor who
+  // trims it lands on `/services/$slug` — a page that never existed. The provider
+  // slug IS the storefront slug, so its public store page is the honest parent.
+  rule("/services/$slug", "legacy", "market", {
+    legacy_redirect: "/stores/$slug",
+    is_public: true,
+  }),
+
 
   // The single "where do I belong?" resolver. Replaces the retired `/me` and
   // `/audit` shells; it is client-side and never indexed (see `routes/go.tsx`).

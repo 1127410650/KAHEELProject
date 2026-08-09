@@ -3,6 +3,8 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { serverRedirectFor } from "./lib/routes-map";
+import { sitemapResponse } from "./lib/sitemap.server";
+
 
 
 type ServerEntry = {
@@ -114,8 +116,15 @@ function permanentRedirect(request: Request): Response | null {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const { pathname } = new URL(request.url);
+      if (pathname === "/sitemap.xml" && (request.method === "GET" || request.method === "HEAD")) {
+        return await sitemapResponse();
+      }
+
       const redirect = permanentRedirect(request);
       if (redirect) return redirect;
+
+
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
