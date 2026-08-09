@@ -232,6 +232,9 @@ export function PromoPopupHost() {
     window.clearTimeout(fadeTimerRef.current);
     if (mute) mutePopups(24);
     openRef.current = false;
+    // الإفراج عن المسرح مع بدء فترة الصمت الإجبارية بعد الإغلاق.
+    releaseRef.current?.(true);
+    releaseRef.current = null;
     try {
       sessionStorage.removeItem(RESUME_KEY);
     } catch {
@@ -243,6 +246,7 @@ export function PromoPopupHost() {
       setLeaving(false);
     }, 260);
   }, []);
+
 
   /** فهرس جديد بلا تكرار متتالٍ. */
   const rotate = (size: number, last: React.MutableRefObject<number>): number => {
