@@ -95,9 +95,10 @@ export function SyriaHomeGateway() {
           to={gateway.to}
           className={
             reducedMotion
-              ? "group relative z-10 flex min-h-[84px] items-center gap-2 px-2.5 py-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[104px] sm:gap-2.5 sm:px-3.5 sm:py-2.5"
-              : "kahli-guide-slide group relative z-10 flex min-h-[84px] items-center gap-2 px-2.5 py-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[104px] sm:gap-2.5 sm:px-3.5 sm:py-2.5"
+              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:gap-4 sm:px-5 sm:py-4"
+              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:gap-4 sm:px-5 sm:py-4"
           }
+
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
           <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border border-white/18 bg-white/12 shadow-[0_6px_18px_rgb(0_0_0/0.14)] backdrop-blur-sm sm:size-[58px] sm:rounded-[1rem]">
