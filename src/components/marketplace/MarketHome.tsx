@@ -68,28 +68,28 @@ const MAIN_FIELDS = [
     href: `/search?category=${primaryCategory("restaurants")}`,
     icon: Utensils,
     image: null,
-    tone: "from-[#7b2cbf] via-[#5a189a] to-[#240046]",
+    tone: "linear-gradient(168deg,#7b2cbf 0%,#5a189a 52%,#240046 100%)",
   },
   {
     key: "groceries",
     href: "/search?domain=product",
     icon: ShoppingBasket,
     image: null,
-    tone: "from-[#9d4edd] via-[#7b2cbf] to-[#3c096c]",
+    tone: "linear-gradient(168deg,#9d4edd 0%,#7b2cbf 50%,#3c096c 100%)",
   },
   {
     key: "realEstate",
     href: `/search?category=${primaryCategory("realestate")}`,
     icon: Building2,
     image: propertyImage,
-    tone: "from-[#9d4edd] via-[#5a189a] to-[#240046]",
+    tone: "linear-gradient(168deg,#9d4edd 0%,#5a189a 50%,#240046 100%)",
   },
   {
     key: "cars",
     href: `/search?category=${primaryCategory("cars")}`,
     icon: Car,
     image: carImage,
-    tone: "from-[#5a189a] via-[#3c096c] to-[#10002b]",
+    tone: "linear-gradient(168deg,#5a189a 0%,#3c096c 48%,#10002b 100%)",
   },
 ] as const;
 
@@ -342,7 +342,8 @@ function MainFieldCard({
   return (
     <a
       href={field.href}
-      className={`group k-deep k-lift relative min-h-[208px] min-w-0 bg-gradient-to-b ${field.tone} p-3 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[260px] sm:p-4 lg:min-h-[292px]`}
+      style={{ backgroundImage: field.tone }}
+      className="group k-deep k-lift relative min-h-[208px] min-w-0 p-3 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[260px] sm:p-4 lg:min-h-[292px]"
     >
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
