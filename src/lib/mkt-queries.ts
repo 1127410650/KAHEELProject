@@ -159,6 +159,33 @@ export async function decorateListings(
   });
 }
 
+/**
+ * Real-estate minimums (rooms / baths / area) live inside `mkt_listings.specs`,
+ * so they are applied here on the fetched rows instead of in SQL.
+ */
+function filterBySpecMinimums(
+  rows: ListingCardData[],
+  filters: ListingFilters,
+): ListingCardData[] {
+  const { minRooms, minBaths, minArea } = filters;
+  if (minRooms === undefined && minBaths === undefined && minArea === undefined) return rows;
+  const value = (specs: Record<string, unknown>, key: string): number | null => {
+    const parsed = Number(specs[key]);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+  return rows.filter((row) => {
+    const specs = (row.specs && typeof row.specs === "object" ? row.specs : {}) as Record<
+      string,
+      unknown
+    >;
+    if (minRooms !== undefined && (value(specs, "rooms") ?? -1) < minRooms) return false;
+    if (minBaths !== undefined && (value(specs, "baths") ?? -1) < minBaths) return false;
+    if (minArea !== undefined && (value(specs, "area") ?? -1) < minArea) return false;
+    return true;
+  });
+}
+
+
 async function queryListings(
   filters: ListingFilters,
   locale: "ar" | "en",
