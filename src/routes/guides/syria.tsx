@@ -8,10 +8,13 @@ import { GuidePlaceCard } from "@/components/marketplace/GuidePlaceCard";
 import {
   EMPTY_GUIDE_FILTERS,
   GUIDE_PAGE_SIZE,
-  fetchGuideFacets,
+  buildGuideFacets,
+  fetchGuideFacetRows,
   fetchGuidePlaces,
+  type GuideFacetOption,
   type GuideFilters,
 } from "@/lib/mkt-guide-places";
+
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/guides/syria")({
