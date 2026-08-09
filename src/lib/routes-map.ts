@@ -104,9 +104,16 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/forgot-password", "public", "bare"),
   rule("/reset-password", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
-  // Marketing entry page. Kept public and indexable; it is not the home page.
-  rule("/welcome", "public", "market"),
+  // `/welcome` was a second landing page that duplicated `/` (same hero, same
+  // sections, same listings) while drifting behind it — it still carried the
+  // pre-rebrand name and was linked from nowhere in the app. One home page, one
+  // canonical URL: the old address keeps its search signals through a 301.
+  rule("/welcome", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/appointments", "legacy", "bare", { legacy_redirect: "/services" }),
+
+  // The single "where do I belong?" resolver. Replaces the retired `/me` and
+  // `/audit` shells; it is client-side and never indexed (see `routes/go.tsx`).
+  rule("/go", "authenticated", "bare"),
 
 
   // ── ب. Signed in ────────────────────────────────────────────────────────────
