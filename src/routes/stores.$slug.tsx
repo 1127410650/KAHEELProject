@@ -257,6 +257,8 @@ function PublicStorePage() {
           </div>
         </div>
 
+        <StoreOffersStrip storefrontId={store.id} currency={store.currency_code} />
+
         {sections.length === 0 ? (
           <Card className={theme.surface}>
             <CardContent className="pt-5 text-sm text-muted-foreground">
