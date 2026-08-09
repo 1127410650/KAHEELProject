@@ -39,6 +39,10 @@ export interface Campaign {
   cta_ar: string;
   cta_en: string;
   click_url: string;
+  /** Entry side of the compact popup: 'auto' | bottom | top | left | right. */
+  popup_side: string;
+  /** Mascot drawn in the popup: 'auto' | moto | lounge | wave | peek. */
+  popup_mascot: string;
   priority: number;
   status: CampaignStatus;
   starts_at: string;
@@ -51,7 +55,7 @@ export interface Campaign {
 const COLUMNS =
   "id, slug, placement, asset_kind, asset_path, poster_path, asset_width, asset_height, " +
   "title_ar, title_en, subtitle_ar, subtitle_en, badge_ar, badge_en, cta_ar, cta_en, " +
-  "click_url, priority, status, starts_at, ends_at, impressions, clicks, created_at";
+  "click_url, popup_side, popup_mascot, priority, status, starts_at, ends_at, impressions, clicks, created_at";
 
 /** Per-kind ceilings, in bytes. Kept small on purpose: these load on first paint. */
 export const CAMPAIGN_LIMITS: Record<CampaignAssetKind, number> = {
