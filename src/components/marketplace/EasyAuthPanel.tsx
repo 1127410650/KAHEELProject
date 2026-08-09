@@ -92,7 +92,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
         email: email.trim(),
         options: {
           shouldCreateUser: true,
-          data: e164 ? { phone_e164: e164, full_name: fullName.trim() } : undefined,
+          data: { phone_e164: e164 ?? "", full_name: fullName.trim() },
         },
       });
       if (error) {
