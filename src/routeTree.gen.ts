@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
-import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
@@ -23,14 +22,12 @@ import { Route as GoRouteImport } from './routes/go'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
-import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as MyRouteRouteImport } from './routes/my/route'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
@@ -111,11 +108,6 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuditRoute = AuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -161,11 +153,6 @@ const MarketSetupRoute = MarketSetupRouteImport.update({
   path: '/market-setup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MeRoute = MeRouteImport.update({
-  id: '/me',
-  path: '/me',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MoreRoute = MoreRouteImport.update({
   id: '/more',
   path: '/more',
@@ -194,11 +181,6 @@ const SearchRoute = SearchRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WelcomeRoute = WelcomeRouteImport.update({
-  id: '/welcome',
-  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -505,7 +487,6 @@ export interface FileRoutesByFullPath {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -514,13 +495,11 @@ export interface FileRoutesByFullPath {
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
-  '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
-  '/welcome': typeof WelcomeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -586,7 +565,6 @@ export interface FileRoutesByTo {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -595,12 +573,10 @@ export interface FileRoutesByTo {
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
-  '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
-  '/welcome': typeof WelcomeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -669,7 +645,6 @@ export interface FileRoutesById {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -678,13 +653,11 @@ export interface FileRoutesById {
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
-  '/me': typeof MeRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
-  '/welcome': typeof WelcomeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -754,7 +727,6 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
-    | '/audit'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -763,13 +735,11 @@ export interface FileRouteTypes {
     | '/help'
     | '/join'
     | '/market-setup'
-    | '/me'
     | '/more'
     | '/register'
     | '/reset-password'
     | '/search'
     | '/services'
-    | '/welcome'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -835,7 +805,6 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
-    | '/audit'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -844,12 +813,10 @@ export interface FileRouteTypes {
     | '/help'
     | '/join'
     | '/market-setup'
-    | '/me'
     | '/more'
     | '/register'
     | '/reset-password'
     | '/search'
-    | '/welcome'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -917,7 +884,6 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
-    | '/audit'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -926,13 +892,11 @@ export interface FileRouteTypes {
     | '/help'
     | '/join'
     | '/market-setup'
-    | '/me'
     | '/more'
     | '/register'
     | '/reset-password'
     | '/search'
     | '/services'
-    | '/welcome'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -1001,7 +965,6 @@ export interface RootRouteChildren {
   MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
-  AuditRoute: typeof AuditRoute
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
@@ -1010,13 +973,11 @@ export interface RootRouteChildren {
   HelpRoute: typeof HelpRoute
   JoinRoute: typeof JoinRoute
   MarketSetupRoute: typeof MarketSetupRoute
-  MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SearchRoute: typeof SearchRoute
   ServicesRoute: typeof ServicesRouteWithChildren
-  WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -1056,13 +1017,6 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit': {
-      id: '/audit'
-      path: '/audit'
-      fullPath: '/audit'
-      preLoaderRoute: typeof AuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1128,13 +1082,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/me': {
-      id: '/me'
-      path: '/me'
-      fullPath: '/me'
-      preLoaderRoute: typeof MeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/more': {
       id: '/more'
       path: '/more'
@@ -1175,13 +1122,6 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/welcome': {
-      id: '/welcome'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -1746,7 +1686,6 @@ const rootRouteChildren: RootRouteChildren = {
   MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
-  AuditRoute: AuditRoute,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
@@ -1755,13 +1694,11 @@ const rootRouteChildren: RootRouteChildren = {
   HelpRoute: HelpRoute,
   JoinRoute: JoinRoute,
   MarketSetupRoute: MarketSetupRoute,
-  MeRoute: MeRoute,
   MoreRoute: MoreRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SearchRoute: SearchRoute,
   ServicesRoute: ServicesRouteWithChildren,
-  WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
