@@ -130,7 +130,12 @@ export function PropertyCard({
   };
 
   return (
-    <article className="group k-surface relative flex flex-col overflow-hidden rounded-3xl transition duration-200 hover:-translate-y-0.5 hover:shadow-raised">
+    <article
+      className={`group k-surface relative flex flex-col overflow-hidden rounded-3xl transition duration-200 hover:-translate-y-0.5 hover:shadow-raised ${
+        featured || activePromotion(listing) ? "k-featured" : ""
+      }`}
+    >
+
       <div
         className="relative aspect-[4/3] w-full overflow-hidden bg-muted"
         onTouchStart={(event) => {
