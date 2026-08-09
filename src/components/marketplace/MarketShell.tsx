@@ -346,10 +346,7 @@ const COPYRIGHT_FOOTER_PATHS = [
   "/syria-guide",
   "/student-tools",
   "/about",
-  "/terms",
-  "/privacy",
   "/help",
-  "/contact",
 ];
 const COPYRIGHT_FOOTER_PREFIXES = [
   "/ads/",
