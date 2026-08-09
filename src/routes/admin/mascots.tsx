@@ -20,6 +20,8 @@ import {
   type MascotPose,
 } from "@/components/marketplace/campaign/Mascot";
 import { MASCOT_PERSONA, MASCOT_KINDS, PopupMascot } from "@/components/marketplace/campaign/PopupMascot";
+import { MascotWalk } from "@/components/marketplace/campaign/MascotWalk";
+import { MASCOT_WALK } from "@/lib/mascot-walk-frames";
 import { MASCOT_ASSETS, MASCOT_NAMES } from "@/lib/mascot-assets";
 import { MASCOT_TIMING, DROP_ANIMATION_MS } from "@/lib/mascot-tap";
 import {
@@ -137,6 +139,52 @@ function MascotsPreviewPage() {
                     <span className="text-[11px] text-muted-foreground">{pose}</span>
                   </div>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+        {/* إطارات المشي — الأربعة لكل شخصية بجانب المشي الحقيقي المتحرك. */}
+        {(["kaheel", "kaheelan"] as MascotName[]).map((name) => (
+          <Card key={`${name}-walk`} data-walk-card={name}>
+            <CardContent className="space-y-3 p-4">
+              <h2 className="text-sm font-semibold">
+                {ar ? "إطارات المشي — " : "Walk frames — "}
+                {name === "kaheel" ? (ar ? "كَحيل" : "Kaheel") : ar ? "كَحيلان" : "Kaheelan"}
+              </h2>
+              <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
+                {MASCOT_WALK[name].frames.map((src, index) => (
+                  <div
+                    key={src}
+                    className="flex flex-col items-center gap-2 rounded-lg border bg-muted/30 p-2"
+                  >
+                    <img
+                      src={src}
+                      alt={`${name} walk frame ${index + 1}`}
+                      width={MASCOT_WALK[name].width}
+                      height={MASCOT_WALK[name].height}
+                      className="h-24 w-auto object-contain"
+                    />
+                    <span className="text-[11px] text-muted-foreground">#{index + 1}</span>
+                  </div>
+                ))}
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-2">
+                  <MascotWalk name={name} lang={ar ? "ar" : "en"} className="h-24" />
+                  <span className="text-[11px] text-muted-foreground">
+                    {ar ? "مشي حقيقي" : "live walk"}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-2">
+                  <MascotWalk
+                    name={name}
+                    lang={ar ? "ar" : "en"}
+                    facing={-1}
+                    className="h-24"
+                  />
+                  <span className="text-[11px] text-muted-foreground">
+                    {ar ? "الاتجاه المعاكس" : "flipped"}
+                  </span>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -21,7 +21,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
-import { Mascot } from "@/components/marketplace/campaign/Mascot";
+import { MascotWalk } from "@/components/marketplace/campaign/MascotWalk";
 import { useI18n } from "@/i18n";
 import { useCallCenter } from "@/lib/mkt-call-center";
 import {
@@ -156,24 +156,16 @@ export function MascotRoam() {
         >
           {scene.copy}
         </span>
-        {/* الجسم: هزّة خطوة خفيفة، ولكَحيلان التفاتة يمين/يسار وفتل شارب. */}
-        <span
-          style={{
-            animation: search
-              ? `mascot-roam-search ${duration} ease-in-out both`
-              : `mascot-roam-step 0.9s ease-in-out infinite`,
-            animationPlayState: paused ? "paused" : "running",
-          }}
-          className="block h-[68px] w-auto sm:h-[78px]"
-        >
-          <Mascot
-            name={search ? "kaheelan" : "kaheel"}
-            pose={search ? "mustache" : "wave"}
-            lang={ar ? "ar" : "en"}
-            size="sm"
-            className="h-full w-auto"
-          />
-        </span>
+        {/* الجسم: مشي حقيقي بتسلسل الإطارات الأربعة + ارتدادة وميلان خفيفين،
+            والاتجاه يُقلب بـ scaleX فتمشي الشخصية لوجهها لا بظهرها. */}
+        <MascotWalk
+          name={search ? "kaheelan" : "kaheel"}
+          lang={ar ? "ar" : "en"}
+          facing={toEnd ? 1 : -1}
+          paused={paused}
+          className="h-[68px] sm:h-[78px]"
+        />
+
       </div>
     </div>
   );
