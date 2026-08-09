@@ -55,6 +55,13 @@ export interface PopupPacing {
   roamIntervalMs: number;
   /** مدة مشهد التجوّل الواحد (المشي من حافة إلى حافة). */
   roamDurationMs: number;
+  // ── حدود «شخصية واحدة فقط وبتكرار قليل» (مسرح الشخصيات) ───────────────────
+  /** أدنى فاصل بين أي ظهورين لأي شخصية، بزمن التصفح النشط. */
+  mascotMinGapMs: number;
+  /** حد أقصى لظهورات الشخصيات في الجلسة الواحدة. */
+  mascotMaxPerSession: number;
+  /** فترة صمت إجبارية بعد إغلاق أي بطاقة. */
+  mascotQuietAfterCloseMs: number;
 }
 
 export const DEFAULT_PACING: PopupPacing = {
@@ -70,9 +77,12 @@ export const DEFAULT_PACING: PopupPacing = {
   rapidWindowMs: 3_000,
   entranceMs: 6_000,
   roamEnabled: true,
-  roamFirstDelayMs: 25_000,
-  roamIntervalMs: 150_000,
+  roamFirstDelayMs: 90_000,
+  roamIntervalMs: 300_000,
   roamDurationMs: 14_000,
+  mascotMinGapMs: 300_000,
+  mascotMaxPerSession: 3,
+  mascotQuietAfterCloseMs: 120_000,
 };
 
 /** Clamps admin input so a typo can never turn the cards into a nuisance. */
@@ -93,9 +103,19 @@ export function normalisePacing(raw: Record<string, unknown> | null | undefined)
     rapidTaps: num("rapid_taps", DEFAULT_PACING.rapidTaps, 3, 15),
     rapidWindowMs: num("rapid_window_ms", DEFAULT_PACING.rapidWindowMs, 1_000, 15_000),
     entranceMs: num("entrance_ms", DEFAULT_PACING.entranceMs, 2_000, 20_000),
-    roamFirstDelayMs: num("roam_first_delay_ms", DEFAULT_PACING.roamFirstDelayMs, 3_000, 600_000),
-    roamIntervalMs: num("roam_interval_ms", DEFAULT_PACING.roamIntervalMs, 20_000, 3_600_000),
+    roamFirstDelayMs: num("roam_first_delay_ms", DEFAULT_PACING.roamFirstDelayMs, 10_000, 600_000),
+    roamIntervalMs: num("roam_interval_ms", DEFAULT_PACING.roamIntervalMs, 60_000, 3_600_000),
     roamDurationMs: num("roam_duration_ms", DEFAULT_PACING.roamDurationMs, 6_000, 40_000),
+    // الحدود الصارمة: لا أقل من دقيقتين بين ظهورين، ولا أكثر من ٦ في الجلسة،
+    // ولا صمت أقل من ٣٠ ثانية بعد الإغلاق — حتى لو أُدخل رقم صغير بالخطأ.
+    mascotMinGapMs: num("mascot_min_gap_ms", DEFAULT_PACING.mascotMinGapMs, 120_000, 3_600_000),
+    mascotMaxPerSession: num("mascot_max_per_session", DEFAULT_PACING.mascotMaxPerSession, 0, 6),
+    mascotQuietAfterCloseMs: num(
+      "mascot_quiet_after_close_ms",
+      DEFAULT_PACING.mascotQuietAfterCloseMs,
+      30_000,
+      1_800_000,
+    ),
     roamEnabled: raw?.["roam_enabled"] !== false,
     enabled: raw?.["enabled"] !== false,
   };
@@ -120,15 +140,10 @@ export function usePopupPacing() {
     gcTime: 30 * 60_000,
     queryFn: loadPopupPacing,
   });
-  return {
-    ...DEFAULT_PACING,
-    ...(query.data ?? {}),
-    firstDelayMs: 3000,
-    pageSettleMs: 0,
-    autoDismissMs: 60000,
-    minGapMs: 0,
-  };
+  // لا تجاوزات تطوير هنا: الأرقام المعتمدة من لوحة الإدارة هي الحاكم الوحيد.
+  return { ...DEFAULT_PACING, ...(query.data ?? {}) };
 }
+
 
 // ── "Not today" mute ────────────────────────────────────────────────────────
 const MUTE_KEY = "kaheel.popup.mutedUntil";
