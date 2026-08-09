@@ -11,6 +11,8 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
+import { LocationSheet } from "@/components/marketplace/LocationSheet";
+
 import kaheelLogo from "@/assets/kaheel-logo.png";
 
 export function MarketHeader({
@@ -26,8 +28,15 @@ export function MarketHeader({
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [locationOpen, setLocationOpenState] = useState(false);
+  const [locationMounted, setLocationMounted] = useState(false);
+  const setLocationOpen = (value: boolean) => {
+    if (value) setLocationMounted(true);
+    setLocationOpenState(value);
+  };
   const addHref = addListingHref({ authenticated: !!session });
   const locationLabel = account?.city?.trim() || (locale === "ar" ? "سوريا" : "Syria");
+
   const unreadAlerts = useQuery({
     queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
     enabled: !!session && home,
@@ -219,7 +228,10 @@ export function MarketHeader({
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />
+      {/* Mounted only after a tap so the sheet never costs anything on first paint. */}
+      {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
     </>
+
   );
 }
 
