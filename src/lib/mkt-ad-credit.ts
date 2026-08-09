@@ -194,9 +194,12 @@ export function useAdminGrantAdCredit() {
         _wallet_id: walletId,
         _amount: amount,
         _kind: kind,
-        _note: note ?? undefined,
-        _price_sar: priceSar ?? undefined,
+        // Optional RPC arguments are omitted rather than sent as null so the
+        // function's own defaults apply.
+        ...(note ? { _note: note } : {}),
+        ...(priceSar != null ? { _price_sar: priceSar } : {}),
       });
+
       if (error) throw error;
       return data as unknown as number;
     },
