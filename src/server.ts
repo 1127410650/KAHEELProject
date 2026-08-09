@@ -3,6 +3,8 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { serverRedirectFor } from "./lib/routes-map";
+import { sitemapResponse } from "./lib/sitemap.server";
+
 
 
 type ServerEntry = {
