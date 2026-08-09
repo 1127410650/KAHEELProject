@@ -246,9 +246,11 @@ export function MarketHome() {
           <SectionHeading
             id="featured-title"
             icon={Star}
+            tone="gold"
             title={t("market.homeV2.featured" as HomeKey)}
             href="/search?featured=1"
           />
+
           <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
             {FEATURE_FILTERS.map(([key, slug]) => (
               <button
