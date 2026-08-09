@@ -13,10 +13,13 @@ export function LottieBox({
   src,
   loop = true,
   className,
+  /** `slice` fills a banner; `meet` keeps a small illustration fully visible. */
+  fit = "slice",
 }: {
   src: string;
   loop?: boolean;
   className?: string;
+  fit?: "slice" | "meet";
 }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
 
@@ -45,7 +48,7 @@ export function LottieBox({
           loop: reduced ? false : loop,
           autoplay: !reduced,
           animationData,
-          rendererSettings: { progressiveLoad: true, preserveAspectRatio: "xMidYMid slice" },
+          rendererSettings: { progressiveLoad: true, preserveAspectRatio: `xMidYMid ${fit}` },
         }) as unknown as Anim;
         if (reduced) animation?.goToAndStop(0, true);
       } catch {
@@ -58,7 +61,7 @@ export function LottieBox({
       disposed = true;
       animation?.destroy();
     };
-  }, [src, loop]);
+  }, [src, loop, fit]);
 
   return <div ref={hostRef} className={className} aria-hidden />;
 }

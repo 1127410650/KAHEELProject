@@ -95,7 +95,7 @@ export function DemoParcelScene({ scene }: { scene: DemoSceneCopy["scene"] }) {
   }, []);
 
   const box = useMemo(
-    () => (inView ? <LottieBox src={scene} className="size-full" /> : null),
+    () => (inView ? <LottieBox src={scene} className="size-full" fit="meet" /> : null),
     [inView, scene],
   );
 
