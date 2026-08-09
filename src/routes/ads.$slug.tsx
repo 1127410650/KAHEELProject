@@ -35,6 +35,7 @@ import { ListingSpecs } from "@/components/marketplace/ListingSpecs";
 import { ListingLicenseSection } from "@/components/marketplace/ListingLicenseSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 interface AdSearch {
   action?: string | undefined;
@@ -57,7 +58,9 @@ export const Route = createFileRoute("/ads/$slug")({
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "robots", content: "index, follow" },
+        ...canonicalMeta(`/ads/${params.slug}`),
       ],
+      links: canonicalLinks(`/ads/${params.slug}`),
     };
   },
   component: AdPage,

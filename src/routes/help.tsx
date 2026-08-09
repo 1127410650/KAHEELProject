@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketStaticSection } from "@/components/marketplace/MarketStaticPage";
 import { useI18n } from "@/i18n";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 const title = "المساعدة — گحيل";
 const description = "كيف تنشر إعلانًا في «گحيل»، وكيف تتواصل مع المعلنين، ومدة الإعلان وتجديده.";
@@ -18,7 +19,9 @@ export const Route = createFileRoute("/help")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/help"),
     ],
+    links: canonicalLinks("/help"),
   }),
   component: SupportPage,
 });

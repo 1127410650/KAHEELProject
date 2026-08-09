@@ -12,6 +12,7 @@ import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/categories/$slug")({
   ssr: false,
@@ -43,7 +44,10 @@ export const Route = createFileRoute("/categories/$slug")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "robots", content: "index, follow" },
+        ...canonicalMeta(`/categories/${params.slug}`),
       ],
+      links: canonicalLinks(`/categories/${params.slug}`),
     };
   },
   component: CategoryPage,

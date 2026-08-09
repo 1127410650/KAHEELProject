@@ -18,6 +18,7 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
@@ -136,6 +137,11 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoRoute = DemoRouteImport.update({
@@ -339,74 +345,74 @@ const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardBookingsRoute = DashboardBookingsRouteImport.update({
-  id: '/dashboard/bookings',
-  path: '/dashboard/bookings',
-  getParentRoute: () => rootRouteImport,
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardBusinessRoute = DashboardBusinessRouteImport.update({
-  id: '/dashboard/business',
-  path: '/dashboard/business',
-  getParentRoute: () => rootRouteImport,
+  id: '/business',
+  path: '/business',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardFavoritesRoute = DashboardFavoritesRouteImport.update({
-  id: '/dashboard/favorites',
-  path: '/dashboard/favorites',
-  getParentRoute: () => rootRouteImport,
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
-  id: '/dashboard/messages',
-  path: '/dashboard/messages',
-  getParentRoute: () => rootRouteImport,
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
-  id: '/dashboard/my-ads',
-  path: '/dashboard/my-ads',
-  getParentRoute: () => rootRouteImport,
+  id: '/my-ads',
+  path: '/my-ads',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardNetworkRoute = DashboardNetworkRouteImport.update({
-  id: '/dashboard/network',
-  path: '/dashboard/network',
-  getParentRoute: () => rootRouteImport,
+  id: '/network',
+  path: '/network',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
-  id: '/dashboard/notifications',
-  path: '/dashboard/notifications',
-  getParentRoute: () => rootRouteImport,
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardOperationsRoute = DashboardOperationsRouteImport.update({
-  id: '/dashboard/operations',
-  path: '/dashboard/operations',
-  getParentRoute: () => rootRouteImport,
+  id: '/operations',
+  path: '/operations',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardOrdersRoute = DashboardOrdersRouteImport.update({
-  id: '/dashboard/orders',
-  path: '/dashboard/orders',
-  getParentRoute: () => rootRouteImport,
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardPointsRoute = DashboardPointsRouteImport.update({
-  id: '/dashboard/points',
-  path: '/dashboard/points',
-  getParentRoute: () => rootRouteImport,
+  id: '/points',
+  path: '/points',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: '/dashboard/profile',
-  path: '/dashboard/profile',
-  getParentRoute: () => rootRouteImport,
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
-  id: '/dashboard/requests',
-  path: '/dashboard/requests',
-  getParentRoute: () => rootRouteImport,
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardServiceRoute = DashboardServiceRouteImport.update({
-  id: '/dashboard/service',
-  path: '/dashboard/service',
-  getParentRoute: () => rootRouteImport,
+  id: '/service',
+  path: '/service',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardViolationsRoute = DashboardViolationsRouteImport.update({
-  id: '/dashboard/violations',
-  path: '/dashboard/violations',
-  getParentRoute: () => rootRouteImport,
+  id: '/violations',
+  path: '/violations',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
   id: '/demo-stores/$worldId',
@@ -464,19 +470,19 @@ const AdminVerificationsIdRoute = AdminVerificationsIdRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
-  id: '/dashboard/ads/new',
-  path: '/dashboard/ads/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads/new',
+  path: '/ads/new',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardReportsIndexRoute = DashboardReportsIndexRouteImport.update({
-  id: '/dashboard/reports/',
-  path: '/dashboard/reports/',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardReportsIdRoute = DashboardReportsIdRouteImport.update({
-  id: '/dashboard/reports/$id',
-  path: '/dashboard/reports/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports/$id',
+  path: '/reports/$id',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardServiceSettingsRoute =
   DashboardServiceSettingsRouteImport.update({
@@ -485,24 +491,24 @@ const DashboardServiceSettingsRoute =
     getParentRoute: () => DashboardServiceRoute,
   } as any)
 const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
-  id: '/dashboard/store/',
-  path: '/dashboard/store/',
-  getParentRoute: () => rootRouteImport,
+  id: '/store/',
+  path: '/store/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardStoreCatalogRoute = DashboardStoreCatalogRouteImport.update({
-  id: '/dashboard/store/catalog',
-  path: '/dashboard/store/catalog',
-  getParentRoute: () => rootRouteImport,
+  id: '/store/catalog',
+  path: '/store/catalog',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardStoreNewRoute = DashboardStoreNewRouteImport.update({
-  id: '/dashboard/store/new',
-  path: '/dashboard/store/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/store/new',
+  path: '/store/new',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
-  id: '/dashboard/ads/$id/edit',
-  path: '/dashboard/ads/$id/edit',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads/$id/edit',
+  path: '/ads/$id/edit',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
   id: '/$slug/$itemId/book',
@@ -513,6 +519,7 @@ const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/appointments': typeof AppointmentsRoute
@@ -597,6 +604,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/appointments': typeof AppointmentsRoute
@@ -682,6 +690,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/appointments': typeof AppointmentsRoute
@@ -769,6 +778,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/dashboard'
     | '/$'
     | '/about'
     | '/appointments'
@@ -853,6 +863,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/$'
     | '/about'
     | '/appointments'
@@ -937,6 +948,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/dashboard'
     | '/$'
     | '/about'
     | '/appointments'
@@ -1023,6 +1035,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AppointmentsRoute: typeof AppointmentsRoute
@@ -1050,31 +1063,10 @@ export interface RootRouteChildren {
   BusinessNewRoute: typeof BusinessNewRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
-  DashboardBookingsRoute: typeof DashboardBookingsRoute
-  DashboardBusinessRoute: typeof DashboardBusinessRoute
-  DashboardFavoritesRoute: typeof DashboardFavoritesRoute
-  DashboardMessagesRoute: typeof DashboardMessagesRoute
-  DashboardMyAdsRoute: typeof DashboardMyAdsRoute
-  DashboardNetworkRoute: typeof DashboardNetworkRoute
-  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
-  DashboardOperationsRoute: typeof DashboardOperationsRoute
-  DashboardOrdersRoute: typeof DashboardOrdersRoute
-  DashboardPointsRoute: typeof DashboardPointsRoute
-  DashboardProfileRoute: typeof DashboardProfileRoute
-  DashboardRequestsRoute: typeof DashboardRequestsRoute
-  DashboardServiceRoute: typeof DashboardServiceRouteWithChildren
-  DashboardViolationsRoute: typeof DashboardViolationsRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   InviteTokenRoute: typeof InviteTokenRoute
   StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
-  DashboardAdsNewRoute: typeof DashboardAdsNewRoute
-  DashboardReportsIdRoute: typeof DashboardReportsIdRoute
-  DashboardStoreCatalogRoute: typeof DashboardStoreCatalogRoute
-  DashboardStoreNewRoute: typeof DashboardStoreNewRoute
-  DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
-  DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
-  DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1140,6 +1132,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -1424,101 +1423,101 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/bookings': {
       id: '/dashboard/bookings'
-      path: '/dashboard/bookings'
+      path: '/bookings'
       fullPath: '/dashboard/bookings'
       preLoaderRoute: typeof DashboardBookingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/business': {
       id: '/dashboard/business'
-      path: '/dashboard/business'
+      path: '/business'
       fullPath: '/dashboard/business'
       preLoaderRoute: typeof DashboardBusinessRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/favorites': {
       id: '/dashboard/favorites'
-      path: '/dashboard/favorites'
+      path: '/favorites'
       fullPath: '/dashboard/favorites'
       preLoaderRoute: typeof DashboardFavoritesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/messages': {
       id: '/dashboard/messages'
-      path: '/dashboard/messages'
+      path: '/messages'
       fullPath: '/dashboard/messages'
       preLoaderRoute: typeof DashboardMessagesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/my-ads': {
       id: '/dashboard/my-ads'
-      path: '/dashboard/my-ads'
+      path: '/my-ads'
       fullPath: '/dashboard/my-ads'
       preLoaderRoute: typeof DashboardMyAdsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/network': {
       id: '/dashboard/network'
-      path: '/dashboard/network'
+      path: '/network'
       fullPath: '/dashboard/network'
       preLoaderRoute: typeof DashboardNetworkRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/notifications': {
       id: '/dashboard/notifications'
-      path: '/dashboard/notifications'
+      path: '/notifications'
       fullPath: '/dashboard/notifications'
       preLoaderRoute: typeof DashboardNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/operations': {
       id: '/dashboard/operations'
-      path: '/dashboard/operations'
+      path: '/operations'
       fullPath: '/dashboard/operations'
       preLoaderRoute: typeof DashboardOperationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/orders': {
       id: '/dashboard/orders'
-      path: '/dashboard/orders'
+      path: '/orders'
       fullPath: '/dashboard/orders'
       preLoaderRoute: typeof DashboardOrdersRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/points': {
       id: '/dashboard/points'
-      path: '/dashboard/points'
+      path: '/points'
       fullPath: '/dashboard/points'
       preLoaderRoute: typeof DashboardPointsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/profile': {
       id: '/dashboard/profile'
-      path: '/dashboard/profile'
+      path: '/profile'
       fullPath: '/dashboard/profile'
       preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/requests': {
       id: '/dashboard/requests'
-      path: '/dashboard/requests'
+      path: '/requests'
       fullPath: '/dashboard/requests'
       preLoaderRoute: typeof DashboardRequestsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/service': {
       id: '/dashboard/service'
-      path: '/dashboard/service'
+      path: '/service'
       fullPath: '/dashboard/service'
       preLoaderRoute: typeof DashboardServiceRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/violations': {
       id: '/dashboard/violations'
-      path: '/dashboard/violations'
+      path: '/violations'
       fullPath: '/dashboard/violations'
       preLoaderRoute: typeof DashboardViolationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/demo-stores/$worldId': {
       id: '/demo-stores/$worldId'
@@ -1599,24 +1598,24 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/ads/new': {
       id: '/dashboard/ads/new'
-      path: '/dashboard/ads/new'
+      path: '/ads/new'
       fullPath: '/dashboard/ads/new'
       preLoaderRoute: typeof DashboardAdsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/reports/': {
       id: '/dashboard/reports/'
-      path: '/dashboard/reports'
+      path: '/reports'
       fullPath: '/dashboard/reports/'
       preLoaderRoute: typeof DashboardReportsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/reports/$id': {
       id: '/dashboard/reports/$id'
-      path: '/dashboard/reports/$id'
+      path: '/reports/$id'
       fullPath: '/dashboard/reports/$id'
       preLoaderRoute: typeof DashboardReportsIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/service/settings': {
       id: '/dashboard/service/settings'
@@ -1627,31 +1626,31 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/store/': {
       id: '/dashboard/store/'
-      path: '/dashboard/store'
+      path: '/store'
       fullPath: '/dashboard/store/'
       preLoaderRoute: typeof DashboardStoreIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/store/catalog': {
       id: '/dashboard/store/catalog'
-      path: '/dashboard/store/catalog'
+      path: '/store/catalog'
       fullPath: '/dashboard/store/catalog'
       preLoaderRoute: typeof DashboardStoreCatalogRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/store/new': {
       id: '/dashboard/store/new'
-      path: '/dashboard/store/new'
+      path: '/store/new'
       fullPath: '/dashboard/store/new'
       preLoaderRoute: typeof DashboardStoreNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/ads/$id/edit': {
       id: '/dashboard/ads/$id/edit'
-      path: '/dashboard/ads/$id/edit'
+      path: '/ads/$id/edit'
       fullPath: '/dashboard/ads/$id/edit'
       preLoaderRoute: typeof DashboardAdsIdEditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/services/$slug/$itemId/book': {
       id: '/services/$slug/$itemId/book'
@@ -1725,6 +1724,69 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface DashboardServiceRouteChildren {
+  DashboardServiceSettingsRoute: typeof DashboardServiceSettingsRoute
+}
+
+const DashboardServiceRouteChildren: DashboardServiceRouteChildren = {
+  DashboardServiceSettingsRoute: DashboardServiceSettingsRoute,
+}
+
+const DashboardServiceRouteWithChildren =
+  DashboardServiceRoute._addFileChildren(DashboardServiceRouteChildren)
+
+interface DashboardRouteRouteChildren {
+  DashboardBookingsRoute: typeof DashboardBookingsRoute
+  DashboardBusinessRoute: typeof DashboardBusinessRoute
+  DashboardFavoritesRoute: typeof DashboardFavoritesRoute
+  DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardMyAdsRoute: typeof DashboardMyAdsRoute
+  DashboardNetworkRoute: typeof DashboardNetworkRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardOperationsRoute: typeof DashboardOperationsRoute
+  DashboardOrdersRoute: typeof DashboardOrdersRoute
+  DashboardPointsRoute: typeof DashboardPointsRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardRequestsRoute: typeof DashboardRequestsRoute
+  DashboardServiceRoute: typeof DashboardServiceRouteWithChildren
+  DashboardViolationsRoute: typeof DashboardViolationsRoute
+  DashboardAdsNewRoute: typeof DashboardAdsNewRoute
+  DashboardReportsIdRoute: typeof DashboardReportsIdRoute
+  DashboardStoreCatalogRoute: typeof DashboardStoreCatalogRoute
+  DashboardStoreNewRoute: typeof DashboardStoreNewRoute
+  DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
+  DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
+  DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardBookingsRoute: DashboardBookingsRoute,
+  DashboardBusinessRoute: DashboardBusinessRoute,
+  DashboardFavoritesRoute: DashboardFavoritesRoute,
+  DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardMyAdsRoute: DashboardMyAdsRoute,
+  DashboardNetworkRoute: DashboardNetworkRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardOperationsRoute: DashboardOperationsRoute,
+  DashboardOrdersRoute: DashboardOrdersRoute,
+  DashboardPointsRoute: DashboardPointsRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardRequestsRoute: DashboardRequestsRoute,
+  DashboardServiceRoute: DashboardServiceRouteWithChildren,
+  DashboardViolationsRoute: DashboardViolationsRoute,
+  DashboardAdsNewRoute: DashboardAdsNewRoute,
+  DashboardReportsIdRoute: DashboardReportsIdRoute,
+  DashboardStoreCatalogRoute: DashboardStoreCatalogRoute,
+  DashboardStoreNewRoute: DashboardStoreNewRoute,
+  DashboardReportsIndexRoute: DashboardReportsIndexRoute,
+  DashboardStoreIndexRoute: DashboardStoreIndexRoute,
+  DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 interface ServicesRouteChildren {
   ServicesIndexRoute: typeof ServicesIndexRoute
   ServicesSlugItemIdBookRoute: typeof ServicesSlugItemIdBookRoute
@@ -1739,20 +1801,10 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
   ServicesRouteChildren,
 )
 
-interface DashboardServiceRouteChildren {
-  DashboardServiceSettingsRoute: typeof DashboardServiceSettingsRoute
-}
-
-const DashboardServiceRouteChildren: DashboardServiceRouteChildren = {
-  DashboardServiceSettingsRoute: DashboardServiceSettingsRoute,
-}
-
-const DashboardServiceRouteWithChildren =
-  DashboardServiceRoute._addFileChildren(DashboardServiceRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AppointmentsRoute: AppointmentsRoute,
@@ -1780,42 +1832,11 @@ const rootRouteChildren: RootRouteChildren = {
   BusinessNewRoute: BusinessNewRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
-  DashboardBookingsRoute: DashboardBookingsRoute,
-  DashboardBusinessRoute: DashboardBusinessRoute,
-  DashboardFavoritesRoute: DashboardFavoritesRoute,
-  DashboardMessagesRoute: DashboardMessagesRoute,
-  DashboardMyAdsRoute: DashboardMyAdsRoute,
-  DashboardNetworkRoute: DashboardNetworkRoute,
-  DashboardNotificationsRoute: DashboardNotificationsRoute,
-  DashboardOperationsRoute: DashboardOperationsRoute,
-  DashboardOrdersRoute: DashboardOrdersRoute,
-  DashboardPointsRoute: DashboardPointsRoute,
-  DashboardProfileRoute: DashboardProfileRoute,
-  DashboardRequestsRoute: DashboardRequestsRoute,
-  DashboardServiceRoute: DashboardServiceRouteWithChildren,
-  DashboardViolationsRoute: DashboardViolationsRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   InviteTokenRoute: InviteTokenRoute,
   StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
-  DashboardAdsNewRoute: DashboardAdsNewRoute,
-  DashboardReportsIdRoute: DashboardReportsIdRoute,
-  DashboardStoreCatalogRoute: DashboardStoreCatalogRoute,
-  DashboardStoreNewRoute: DashboardStoreNewRoute,
-  DashboardReportsIndexRoute: DashboardReportsIndexRoute,
-  DashboardStoreIndexRoute: DashboardStoreIndexRoute,
-  DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

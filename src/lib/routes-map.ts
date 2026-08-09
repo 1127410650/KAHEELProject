@@ -87,8 +87,13 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/student-tools", "public", "market"),
   rule("/auth", "public", "bare"),
   rule("/register", "public", "bare"),
+  rule("/forgot-password", "public", "bare"),
+  rule("/reset-password", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
+  // Marketing entry page. Kept public and indexable; it is not the home page.
+  rule("/welcome", "public", "market"),
   rule("/appointments", "legacy", "bare", { legacy_redirect: "/services" }),
+
 
   // ── ب. Signed in ────────────────────────────────────────────────────────────
   rule("/choose-account", "authenticated", "bare"),
@@ -102,9 +107,14 @@ export const ROUTE_MAP: RouteRule[] = [
   // Public marketplace content pages: no session, no internal data.
   rule("/about", "public", "market"),
   rule("/help", "public", "market"),
-  rule("/terms", "public", "market"),
-  rule("/privacy", "public", "market"),
-  rule("/contact", "public", "market"),
+  // The policy and contact texts live inside `/about` and `/help`; these three
+  // paths only forward to the right section, so they are legacy, not public
+  // destinations of their own (otherwise navigation and search treat them as
+  // separate pages that immediately bounce).
+  rule("/terms", "legacy", "market", { legacy_redirect: "/about#terms", is_public: true }),
+  rule("/privacy", "legacy", "market", { legacy_redirect: "/about#privacy", is_public: true }),
+  rule("/contact", "legacy", "market", { legacy_redirect: "/help#contact", is_public: true }),
+
   rule("/dashboard/profile", "account", "dashboard"),
   rule("/dashboard/notifications", "account", "dashboard"),
   rule("/dashboard/messages", "account", "dashboard"),
@@ -211,6 +221,22 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/roles", "admin", "admin"),
   rule("/admin/audit-log", "admin", "admin"),
   rule("/admin/settings", "admin", "admin"),
+  // Back-office pages that existed as route files without a rule: without an
+  // entry here the shells could not decide whether to show their links, and the
+  // path fell through as "unknown" instead of "admin only".
+  rule("/admin/dashboard", "admin", "admin"),
+  rule("/admin/my-work", "admin", "admin"),
+  rule("/admin/search", "admin", "admin"),
+  rule("/admin/content-rules", "admin", "admin"),
+  rule("/admin/attendance", "admin", "admin"),
+  rule("/admin/workforce", "admin", "admin"),
+  // Detail screens. The route files use the `_` escape (`listings_.$id.tsx`) so
+  // they do not nest under the list page; the URL they serve is the plain one.
+  rule("/admin/listings/$id", "admin", "admin"),
+  rule("/admin/businesses/$id", "admin", "admin"),
+  rule("/admin/users/$id", "admin", "admin"),
+  rule("/admin/verifications/$id", "admin", "admin"),
+
 
   // ── هـ. Legacy / duplicated ────────────────────────────────────────────────
   // These paths no longer have a route file of their own: the central splat
@@ -243,9 +269,35 @@ export function resolveLegacyTarget(pathname: string): string | null {
   return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
 }
 
+/**
+ * Locale/region prefix support (`/sa-ar/ads/x`, `/sy-en/search`).
+ *
+ * The platform is single-locale today, so nothing produces these prefixes yet.
+ * Matching them here means the whole route layer (rules, guards, redirects) is
+ * already prefix-agnostic: turning localisation on later adds a prefix, it does
+ * not require rewriting every rule.
+ */
+export const LOCALE_PREFIX_PATTERN = /^[a-z]{2}-[a-z]{2}$/;
+
+/** `/sa-ar/ads/x` → `{ locale: "sa-ar", path: "/ads/x" }`; otherwise `locale: null`. */
+export function splitLocalePrefix(pathname: string): { locale: string | null; path: string } {
+  const clean = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const first = clean.split("/")[1] ?? "";
+  if (!LOCALE_PREFIX_PATTERN.test(first)) return { locale: null, path: clean };
+  return { locale: first, path: clean.slice(first.length + 1) || "/" };
+}
+
+/** Re-applies a locale prefix to an internal target path. */
+export function withLocalePrefix(target: string, locale: string | null): string {
+  if (!locale) return target;
+  return target === "/" ? `/${locale}` : `/${locale}${target}`;
+}
+
 /** Turns a concrete URL path into its registered pattern (`/ads/x` → `/ads/$slug`). */
 export function normalizePath(pathname: string): string {
-  const clean = pathname.split("?")[0]!.split("#")[0]!.replace(/\/+$/, "") || "/";
+  const raw = pathname.split("?")[0]!.split("#")[0]!;
+  const { path } = splitLocalePrefix(raw);
+  const clean = path.replace(/\/+$/, "") || "/";
   if (BY_PATH.has(clean)) return clean;
   const segments = clean.split("/");
   for (const candidate of ROUTE_MAP) {
@@ -255,6 +307,30 @@ export function normalizePath(pathname: string): string {
   }
   return clean;
 }
+
+/**
+ * Paths whose destination depends on who is asking (`/me`, `/audit`): a platform
+ * admin, a work account and a personal account each land somewhere different.
+ * They must NEVER be answered with a cacheable 301 — the browser and any proxy
+ * would pin one identity's destination for everyone.
+ */
+const IDENTITY_DEPENDENT_PATHS = new Set(["/me", "/audit"]);
+
+/**
+ * Permanent (301) target for a retired URL, resolved on the server before the
+ * app renders — so an indexed or bookmarked link keeps its search signals
+ * instead of being moved by a client-side redirect the crawler never follows.
+ *
+ * Returns `null` when the path is current, unknown, or identity-dependent.
+ */
+export function serverRedirectFor(pathname: string): string | null {
+  const { locale, path } = splitLocalePrefix(pathname.split("?")[0]!.split("#")[0]!);
+  const found = routeRuleFor(path);
+  if (!found || found.route_type !== "legacy" || !found.legacy_redirect) return null;
+  if (IDENTITY_DEPENDENT_PATHS.has(found.path)) return null;
+  return withLocalePrefix(found.legacy_redirect, locale);
+}
+
 
 export function routeRuleFor(pathname: string): RouteRule | null {
   return BY_PATH.get(normalizePath(pathname)) ?? null;

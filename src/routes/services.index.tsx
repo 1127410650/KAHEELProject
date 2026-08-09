@@ -31,6 +31,8 @@ import {
   type ServiceCategory,
 } from "@/lib/mkt-services";
 
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
+
 export const Route = createFileRoute("/services/")({
   ssr: false,
   head: () => ({
@@ -42,7 +44,9 @@ export const Route = createFileRoute("/services/")({
       },
       { property: "og:title", content: "خدمات گحيل — احجز موعدك" },
       { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/services"),
     ],
+    links: canonicalLinks("/services"),
   }),
   component: ServicesMarketplacePage,
 });

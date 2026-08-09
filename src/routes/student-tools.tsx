@@ -11,6 +11,7 @@ import { useMemo, useState } from "react";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { createStudyQuestions, summarizeLocally } from "@/lib/syria-directory";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/student-tools")({
   ssr: false,
@@ -21,7 +22,10 @@ export const Route = createFileRoute("/student-tools")({
         name: "description",
         content: "أدوات مجانية للطالب السوري لتلخيص النصوص وإنشاء أسئلة مراجعة محليًا.",
       },
+      { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/student-tools"),
     ],
+    links: canonicalLinks("/student-tools"),
   }),
   component: StudentToolsPage,
 });

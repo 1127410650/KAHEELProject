@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/stores/$slug")({
   ssr: false,
@@ -39,7 +40,9 @@ export const Route = createFileRoute("/stores/$slug")({
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "robots", content: "index, follow" },
+        ...canonicalMeta(`/stores/${params.slug}`),
       ],
+      links: canonicalLinks(`/stores/${params.slug}`),
     };
   },
   component: PublicStorePage,

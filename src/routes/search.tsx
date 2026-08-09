@@ -101,6 +101,8 @@ const title = "البحث في السوق — گحيل";
 const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
 
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
+
 export const Route = createFileRoute("/search")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): SearchParams => {
@@ -137,7 +139,9 @@ export const Route = createFileRoute("/search")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/search"),
     ],
+    links: canonicalLinks("/search"),
   }),
   component: SearchPage,
 });

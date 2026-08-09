@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { MarketDemoListings } from "@/components/marketplace/home/MarketDemoListings";
 import kaheelLogo from "@/assets/kaheel-logo.png";
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 const title = "گحيل — سوق العقارات والخدمات والموردين | Gohail";
 const description =
@@ -35,7 +36,10 @@ export const Route = createFileRoute("/welcome")({
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "index, follow" },
+      ...canonicalMeta("/welcome"),
     ],
+    links: canonicalLinks("/welcome"),
   }),
   component: WelcomePage,
 });

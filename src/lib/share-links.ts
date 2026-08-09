@@ -41,3 +41,20 @@ export function shareTargets(title: string, url: string) {
     email: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text)}`,
   };
 }
+
+/**
+ * Canonical address of a public page.
+ *
+ * A page reachable with tracking parameters, a trailing slash or a retired alias
+ * must still declare ONE address, otherwise search engines split its signals
+ * across variants. Leaf routes only: a canonical on the root route would be
+ * concatenated into every page.
+ */
+export function canonicalLinks(path: string): { rel: string; href: string }[] {
+  return [{ rel: "canonical", href: canonicalUrl(path) }];
+}
+
+/** `og:url` for the same page, so social previews quote the canonical address. */
+export function canonicalMeta(path: string): { property: string; content: string }[] {
+  return [{ property: "og:url", content: canonicalUrl(path) }];
+}
