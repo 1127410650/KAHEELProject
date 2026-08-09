@@ -482,6 +482,93 @@ export type Database = {
           },
         ]
       }
+      mkt_ad_credit_topups: {
+        Row: {
+          amount: number | null
+          created_at: string
+          credits: number
+          currency: string
+          entry_id: string | null
+          id: string
+          method: string
+          paid_at: string | null
+          provider: string | null
+          provider_payment_id: string | null
+          provider_session_id: string | null
+          receipt_path: string | null
+          reject_reason: string | null
+          requested_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sender_note: string | null
+          status: string
+          transfer_ref: string | null
+          updated_at: string
+          wallet_id: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          credits: number
+          currency?: string
+          entry_id?: string | null
+          id?: string
+          method: string
+          paid_at?: string | null
+          provider?: string | null
+          provider_payment_id?: string | null
+          provider_session_id?: string | null
+          receipt_path?: string | null
+          reject_reason?: string | null
+          requested_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sender_note?: string | null
+          status?: string
+          transfer_ref?: string | null
+          updated_at?: string
+          wallet_id: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          credits?: number
+          currency?: string
+          entry_id?: string | null
+          id?: string
+          method?: string
+          paid_at?: string | null
+          provider?: string | null
+          provider_payment_id?: string | null
+          provider_session_id?: string | null
+          receipt_path?: string | null
+          reject_reason?: string | null
+          requested_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sender_note?: string | null
+          status?: string
+          transfer_ref?: string | null
+          updated_at?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_ad_credit_topups_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_credit_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_ad_credit_topups_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_credit_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_ad_credit_wallets: {
         Row: {
           balance: number
@@ -7664,6 +7751,34 @@ export type Database = {
       }
       mkt_ad_credit_request_purchase: {
         Args: { _amount: number; _price_sar?: number; _tenant_id?: string }
+        Returns: string
+      }
+      mkt_ad_credit_topup_cancel: {
+        Args: { _topup_id: string }
+        Returns: boolean
+      }
+      mkt_ad_credit_topup_methods: { Args: never; Returns: Json }
+      mkt_ad_credit_topup_review: {
+        Args: {
+          _approve: boolean
+          _credits_override?: number
+          _payment_ref?: string
+          _reject_reason?: string
+          _topup_id: string
+        }
+        Returns: number
+      }
+      mkt_ad_credit_topup_submit: {
+        Args: {
+          _amount: number
+          _credits: number
+          _currency?: string
+          _method: string
+          _receipt_path?: string
+          _sender_note?: string
+          _tenant_id?: string
+          _transfer_ref?: string
+        }
         Returns: string
       }
       mkt_ad_credit_wallet: {
