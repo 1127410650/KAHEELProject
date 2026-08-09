@@ -2245,6 +2245,330 @@ export type Database = {
           },
         ]
       }
+      mkt_errand_captains: {
+        Row: {
+          city_id: string | null
+          created_at: string
+          display_name: string
+          id: string
+          is_online: boolean
+          jobs_done: number
+          last_lat: number | null
+          last_lng: number | null
+          last_seen_at: string | null
+          phone: string | null
+          rating_avg: number
+          rating_count: number
+          status: string
+          updated_at: string
+          user_id: string
+          vehicle: string | null
+        }
+        Insert: {
+          city_id?: string | null
+          created_at?: string
+          display_name: string
+          id?: string
+          is_online?: boolean
+          jobs_done?: number
+          last_lat?: number | null
+          last_lng?: number | null
+          last_seen_at?: string | null
+          phone?: string | null
+          rating_avg?: number
+          rating_count?: number
+          status?: string
+          updated_at?: string
+          user_id: string
+          vehicle?: string | null
+        }
+        Update: {
+          city_id?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_online?: boolean
+          jobs_done?: number
+          last_lat?: number | null
+          last_lng?: number | null
+          last_seen_at?: string | null
+          phone?: string | null
+          rating_avg?: number
+          rating_count?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+          vehicle?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_errand_captains_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_errand_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          note: string | null
+          request_id: string
+          to_status: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          request_id: string
+          to_status: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          request_id?: string
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_errand_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_errand_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_errand_offers: {
+        Row: {
+          captain_id: string
+          created_at: string
+          eta_minutes: number | null
+          fee: number
+          id: string
+          note: string | null
+          request_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          captain_id: string
+          created_at?: string
+          eta_minutes?: number | null
+          fee: number
+          id?: string
+          note?: string | null
+          request_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          captain_id?: string
+          created_at?: string
+          eta_minutes?: number | null
+          fee?: number
+          id?: string
+          note?: string | null
+          request_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_errand_offers_captain_id_fkey"
+            columns: ["captain_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_errand_captains"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_errand_offers_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_errand_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_errand_requests: {
+        Row: {
+          accepted_at: string | null
+          accepted_offer_id: string | null
+          budget_estimate: number | null
+          cancel_reason: string | null
+          captain_id: string | null
+          city_id: string | null
+          created_at: string
+          currency: string
+          delivered_at: string | null
+          delivery_fee: number | null
+          details: string
+          dropoff_details: string | null
+          dropoff_label: string
+          dropoff_lat: number | null
+          dropoff_lng: number | null
+          id: string
+          offers_count: number
+          photo_path: string | null
+          pickup_details: string | null
+          pickup_label: string | null
+          pickup_lat: number | null
+          pickup_lng: number | null
+          rating: number | null
+          rating_comment: string | null
+          service_slug: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_offer_id?: string | null
+          budget_estimate?: number | null
+          cancel_reason?: string | null
+          captain_id?: string | null
+          city_id?: string | null
+          created_at?: string
+          currency?: string
+          delivered_at?: string | null
+          delivery_fee?: number | null
+          details: string
+          dropoff_details?: string | null
+          dropoff_label: string
+          dropoff_lat?: number | null
+          dropoff_lng?: number | null
+          id?: string
+          offers_count?: number
+          photo_path?: string | null
+          pickup_details?: string | null
+          pickup_label?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
+          rating?: number | null
+          rating_comment?: string | null
+          service_slug: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_offer_id?: string | null
+          budget_estimate?: number | null
+          cancel_reason?: string | null
+          captain_id?: string | null
+          city_id?: string | null
+          created_at?: string
+          currency?: string
+          delivered_at?: string | null
+          delivery_fee?: number | null
+          details?: string
+          dropoff_details?: string | null
+          dropoff_label?: string
+          dropoff_lat?: number | null
+          dropoff_lng?: number | null
+          id?: string
+          offers_count?: number
+          photo_path?: string | null
+          pickup_details?: string | null
+          pickup_label?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
+          rating?: number | null
+          rating_comment?: string | null
+          service_slug?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_errand_requests_accepted_offer_fkey"
+            columns: ["accepted_offer_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_errand_offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_errand_requests_captain_id_fkey"
+            columns: ["captain_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_errand_captains"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_errand_requests_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_errand_requests_service_slug_fkey"
+            columns: ["service_slug"]
+            isOneToOne: false
+            referencedRelation: "mkt_errand_services"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
+      mkt_errand_services: {
+        Row: {
+          created_at: string
+          icon: string
+          id: string
+          is_active: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          needs_pickup: boolean
+          slug: string
+          sort_order: number
+          tagline_ar: string
+          tagline_en: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          kind?: string
+          name_ar: string
+          name_en: string
+          needs_pickup?: boolean
+          slug: string
+          sort_order?: number
+          tagline_ar?: string
+          tagline_en?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          kind?: string
+          name_ar?: string
+          name_en?: string
+          needs_pickup?: boolean
+          slug?: string
+          sort_order?: number
+          tagline_ar?: string
+          tagline_en?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_external_integrations: {
         Row: {
           config_public: Json
@@ -9268,6 +9592,40 @@ export type Database = {
           parent_id: string
         }[]
       }
+      mkt_errand_advance: {
+        Args: { _request_id: string; _to_status: string }
+        Returns: undefined
+      }
+      mkt_errand_cancel: {
+        Args: { _reason?: string; _request_id: string }
+        Returns: undefined
+      }
+      mkt_errand_contact: {
+        Args: { _request_id: string }
+        Returns: {
+          display_name: string
+          phone: string
+          role: string
+        }[]
+      }
+      mkt_errand_decide_offer: {
+        Args: { _accept: boolean; _offer_id: string }
+        Returns: undefined
+      }
+      mkt_errand_photo_can_read: { Args: { _name: string }; Returns: boolean }
+      mkt_errand_place_offer: {
+        Args: {
+          _eta_minutes?: number
+          _fee: number
+          _note?: string
+          _request_id: string
+        }
+        Returns: string
+      }
+      mkt_errand_rate: {
+        Args: { _comment?: string; _rating: number; _request_id: string }
+        Returns: undefined
+      }
       mkt_expire_re_licenses: { Args: never; Returns: number }
       mkt_external_integration_save: {
         Args: {
@@ -9380,6 +9738,7 @@ export type Database = {
         Returns: boolean
       }
       mkt_is_call_party: { Args: { _call_id: string }; Returns: boolean }
+      mkt_is_errand_captain: { Args: never; Returns: boolean }
       mkt_is_listing_op: { Args: never; Returns: boolean }
       mkt_is_moderation_op: { Args: never; Returns: boolean }
       mkt_is_platform_admin: { Args: never; Returns: boolean }
