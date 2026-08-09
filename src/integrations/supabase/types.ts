@@ -7757,6 +7757,31 @@ export type Database = {
         Args: { _topup_id: string }
         Returns: boolean
       }
+      mkt_ad_credit_topup_card_attach: {
+        Args: { _session_id: string; _topup_id: string }
+        Returns: boolean
+      }
+      mkt_ad_credit_topup_card_fail: {
+        Args: { _reason?: string; _session_id: string; _status?: string }
+        Returns: boolean
+      }
+      mkt_ad_credit_topup_card_refund: {
+        Args: { _payment_id: string; _reason?: string }
+        Returns: Json
+      }
+      mkt_ad_credit_topup_card_settle: {
+        Args: {
+          _amount?: number
+          _currency?: string
+          _payment_id?: string
+          _session_id: string
+        }
+        Returns: Json
+      }
+      mkt_ad_credit_topup_card_start: {
+        Args: { _credits: number; _tenant_id?: string }
+        Returns: Json
+      }
       mkt_ad_credit_topup_methods: { Args: never; Returns: Json }
       mkt_ad_credit_topup_review: {
         Args: {
