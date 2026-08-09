@@ -5466,6 +5466,8 @@ export type Database = {
           decor_path: string | null
           decor_url: string | null
           ends_at: string | null
+          headline_ar: string
+          headline_en: string
           id: string
           image_height: number
           image_path: string | null
@@ -5484,6 +5486,8 @@ export type Database = {
           slug: string
           starts_at: string
           status: string
+          subheadline_ar: string
+          subheadline_en: string
           updated_at: string
         }
         Insert: {
@@ -5493,6 +5497,8 @@ export type Database = {
           decor_path?: string | null
           decor_url?: string | null
           ends_at?: string | null
+          headline_ar?: string
+          headline_en?: string
           id?: string
           image_height?: number
           image_path?: string | null
@@ -5511,6 +5517,8 @@ export type Database = {
           slug: string
           starts_at?: string
           status?: string
+          subheadline_ar?: string
+          subheadline_en?: string
           updated_at?: string
         }
         Update: {
@@ -5520,6 +5528,8 @@ export type Database = {
           decor_path?: string | null
           decor_url?: string | null
           ends_at?: string | null
+          headline_ar?: string
+          headline_en?: string
           id?: string
           image_height?: number
           image_path?: string | null
@@ -5538,6 +5548,8 @@ export type Database = {
           slug?: string
           starts_at?: string
           status?: string
+          subheadline_ar?: string
+          subheadline_en?: string
           updated_at?: string
         }
         Relationships: []
