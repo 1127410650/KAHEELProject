@@ -374,7 +374,7 @@ export function PromoPopupHost() {
           >
 
             <div className="mb-1 flex items-start justify-between gap-2">
-              <p className="text-[13px] font-black leading-tight text-[#240046] [overflow-wrap:anywhere]">
+              <p className="py-0.5 text-[13px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
                 {card.title}
               </p>
               {closeButtons}
@@ -431,7 +431,7 @@ export function PromoPopupHost() {
           <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
         </div>
 
-        <p className="w-full shrink-0 text-[17px] font-black leading-tight text-[#240046] [overflow-wrap:anywhere]">
+        <p className="w-full shrink-0 py-0.5 text-[17px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
           {card.title}
         </p>
         <p className="w-full shrink-0 text-[13.5px] font-semibold leading-relaxed text-[#3c096c] [overflow-wrap:anywhere]">
