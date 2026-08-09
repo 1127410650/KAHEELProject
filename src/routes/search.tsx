@@ -854,12 +854,22 @@ function GenericSearchPage() {
                 <List className="size-4" aria-hidden />
               </button>
             </div>
-
-
           </div>
+
+          {/* The result count owns a fixed-height line of its own: its text can
+              change length without ever re-wrapping the toolbar above it. */}
+          <p
+            className={`mt-2 flex h-5 items-center justify-end text-xs font-semibold text-muted-foreground transition-opacity duration-200 ${
+              active.isLoading ? "opacity-0" : "opacity-100"
+            }`}
+            aria-live="polite"
+          >
+            {count} {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
+          </p>
         </section>
 
         <div className="k-reserve mt-4">
+
           {active.isLoading ? (
             <>
               {/* Placeholders mirror the real cards box-for-box — row cards on
