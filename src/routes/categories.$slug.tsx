@@ -104,7 +104,15 @@ function CategoryPage() {
 
   const parentSlug =
     (categories.data ?? []).find((c) => c.id === category?.parent_id)?.slug ?? null;
-  const kidsWorld = isKidsWorld([category?.slug, parentSlug]);
+  const parentName =
+    (categories.data ?? []).find((c) => c.id === category?.parent_id)?.name_ar ?? null;
+  const kidsWorld = isKidsWorld([
+    category?.slug,
+    parentSlug,
+    category?.name_ar,
+    category?.name_en,
+    parentName,
+  ]);
 
   const name = (c: MktCategory) => (locale === "ar" ? c.name_ar : c.name_en || c.name_ar);
 

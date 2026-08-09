@@ -100,11 +100,13 @@ export function kidsFriendFor(
   return FRIEND_ORDER[index % FRIEND_ORDER.length]!;
 }
 
-/** هل هذا التصنيف داخل عالم الأطفال؟ */
-export function isKidsWorld(slugs: Array<string | null | undefined>): boolean {
-  return slugs.some((slug) => {
-    if (!slug) return false;
-    const value = slug.toLowerCase();
-    return value === "kids" || value.startsWith("kids-") || value.includes("atfal");
+/** هل هذا التصنيف داخل عالم الأطفال؟ (يقبل slugs وأسماء) */
+const KIDS_TOKENS = ["kids", "kid", "atfal", "child", "baby", "أطفال", "اطفال", "طفل", "رضع", "رضّع", "مواليد"];
+
+export function isKidsWorld(values: Array<string | null | undefined>): boolean {
+  return values.some((value) => {
+    if (!value) return false;
+    const v = value.toLowerCase();
+    return KIDS_TOKENS.some((token) => v.includes(token.toLowerCase()));
   });
 }
