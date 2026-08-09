@@ -5924,6 +5924,39 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_structure_guard_events: {
+        Row: {
+          command_tag: string
+          created_at: string
+          id: string
+          object_identity: string
+          outcome: string
+          performed_by: string
+          performed_by_uid: string | null
+          reason: string | null
+        }
+        Insert: {
+          command_tag: string
+          created_at?: string
+          id?: string
+          object_identity: string
+          outcome: string
+          performed_by: string
+          performed_by_uid?: string | null
+          reason?: string | null
+        }
+        Update: {
+          command_tag?: string
+          created_at?: string
+          id?: string
+          object_identity?: string
+          outcome?: string
+          performed_by?: string
+          performed_by_uid?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
       mkt_structure_guard_rejections: {
         Row: {
           attempted_by: string
@@ -9357,8 +9390,11 @@ export type Database = {
         Returns: string
       }
       structure_guard_enable: { Args: never; Returns: undefined }
-      structure_guard_flush_rejections: { Args: never; Returns: number }
       structure_guard_is_enabled: { Args: never; Returns: boolean }
+      structure_guard_log_rejection: {
+        Args: { _command: string; _object: string; _reason?: string }
+        Returns: string
+      }
       tenant_members_list: {
         Args: never
         Returns: {
