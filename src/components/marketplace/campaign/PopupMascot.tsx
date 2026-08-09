@@ -161,6 +161,79 @@ function Boss() {
   );
 }
 
+/**
+ * مشهد التعارف: «الزعيم كَحيلان» يلف طرف شماغه ويشير إلى «كَحيل» وهو يلوّح.
+ *
+ * رسم متجهي داخلي بعرض 2:1 يملأ أعلى البطاقة، فلا طلب شبكة ولا هزّة تخطيط.
+ */
+export function PopupDuoScene() {
+  return (
+    <svg
+      viewBox="0 0 168 92"
+      role="presentation"
+      aria-hidden="true"
+      className="size-full"
+    >
+      <ellipse cx="84" cy="86" rx="72" ry="6" fill={ACCENT} opacity="0.18" />
+      <circle cx="118" cy="44" r="40" fill={ACCENT} opacity="0.14" />
+
+      {/* الزعيم كَحيلان */}
+      <g
+        className="animate-[kaheel-mascot-boss-enter_3s_ease-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <path d="M18 88V64a19 19 0 0 1 38 0v24z" fill={BODY} />
+        <path d="M20 62c8 6 26 6 34 0l3 8c-10 7-30 7-40 0z" fill={CLOTH} />
+        <g
+          className="origin-[50px_66px] animate-[kaheel-mascot-boss-scarf_3s_ease-in-out_infinite] motion-reduce:animate-none"
+          style={{ transformBox: "view-box" }}
+        >
+          <path d="M48 64c9 1 16 6 20 14l-8 3c-4-7-9-10-14-11z" fill={CLOTH_DARK} />
+        </g>
+        <path d="M18 40a19 19 0 0 1 38 0v6c-4-6-10-9-19-9s-15 3-19 9z" fill={CLOTH} />
+        <path d="M17 40c0 16 6 26 10 30-8-4-13-15-13-30z" fill={CLOTH_DARK} />
+        <path d="M57 40c0 15-5 26-13 30 4-4 10-14 10-30z" fill={CLOTH_DARK} />
+        <path d="M16 40h42" stroke={CLOTH_DARK} strokeWidth="3" strokeLinecap="round" />
+        <circle cx="37" cy="43" r="12.5" fill={SKIN} />
+        <path d="M30 36l6 3M45 36l-6 3" stroke={HAIR} strokeWidth="2.3" strokeLinecap="round" />
+        <circle cx="33" cy="44" r="2.5" fill={HAIR} />
+        <circle cx="43" cy="44" r="2.5" fill={HAIR} />
+        <path d="M32 51c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.3" strokeLinecap="round" fill="none" />
+        {/* الإصبع يقدّم كَحيل للناس */}
+        <g
+          className="origin-[54px_66px] animate-[kaheel-mascot-boss-point_3s_ease-in-out_infinite] motion-reduce:animate-none"
+          style={{ transformBox: "view-box" }}
+        >
+          <path d="M54 66l14-4" stroke={BODY_DARK} strokeWidth="8" strokeLinecap="round" />
+          <circle cx="71" cy="61" r="5.5" fill={SKIN} />
+          <path d="M76 60l6-2" stroke={SKIN} strokeWidth="4" strokeLinecap="round" />
+        </g>
+      </g>
+
+      {/* كَحيل يلوّح */}
+      <g
+        className="animate-[kaheel-mascot-duo-hop_2.4s_ease-in-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <path d="M100 88V66a17 17 0 0 1 34 0v22z" fill={BODY} />
+        <path d="M100 70h34" stroke={BODY_DARK} strokeWidth="3" strokeLinecap="round" />
+        <circle cx="117" cy="46" r="13" fill={SKIN} />
+        <path d="M104 44a13 13 0 0 1 26 0z" fill={HAIR} />
+        <circle cx="112" cy="47" r="2.6" fill={HAIR} />
+        <circle cx="123" cy="47" r="2.6" fill={HAIR} />
+        <path d="M112 53c3 3 8 3 11 0" stroke={HAIR} strokeWidth="2.3" strokeLinecap="round" fill="none" />
+        <g
+          className="origin-[136px_68px] animate-[kaheel-mascot-wave_1.1s_ease-in-out_infinite] motion-reduce:animate-none"
+          style={{ transformBox: "view-box" }}
+        >
+          <path d="M133 68l14-14" stroke={BODY_DARK} strokeWidth="8" strokeLinecap="round" />
+          <circle cx="149" cy="52" r="6.5" fill={SKIN} />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
 const MAP: Record<MascotKind, () => React.ReactElement> = {
   moto: Moto,
   lounge: Lounge,
@@ -168,9 +241,17 @@ const MAP: Record<MascotKind, () => React.ReactElement> = {
   peek: Peek,
   parcel: Parcel,
   boss: Boss,
+  duo: Wave,
 };
 
 export function PopupMascot({ kind }: { kind: MascotKind }) {
+  if (kind === "duo") {
+    return (
+      <div className="h-[5.5rem] w-full sm:h-24">
+        <PopupDuoScene />
+      </div>
+    );
+  }
   const Scene = MAP[kind] ?? Wave;
   return (
     <div className="size-16 shrink-0 sm:size-20">
