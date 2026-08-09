@@ -39,6 +39,7 @@ import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-e
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
 import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
+import { Route as AdminMascotsRouteImport } from './routes/admin/mascots'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
@@ -243,6 +244,11 @@ const AdminListingsRoute = AdminListingsRouteImport.update({
 const AdminLocationsRoute = AdminLocationsRouteImport.update({
   id: '/locations',
   path: '/locations',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMascotsRoute = AdminMascotsRouteImport.update({
+  id: '/mascots',
+  path: '/mascots',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminModerationRoute = AdminModerationRouteImport.update({
@@ -554,6 +560,7 @@ export interface FileRoutesByFullPath {
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/locations': typeof AdminLocationsRoute
+  '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
@@ -638,6 +645,7 @@ export interface FileRoutesByTo {
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/locations': typeof AdminLocationsRoute
+  '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
@@ -726,6 +734,7 @@ export interface FileRoutesById {
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/locations': typeof AdminLocationsRoute
+  '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
@@ -815,6 +824,7 @@ export interface FileRouteTypes {
     | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/locations'
+    | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
     | '/admin/roles'
@@ -899,6 +909,7 @@ export interface FileRouteTypes {
     | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/locations'
+    | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
     | '/admin/roles'
@@ -986,6 +997,7 @@ export interface FileRouteTypes {
     | '/admin/listing-reports'
     | '/admin/listings'
     | '/admin/locations'
+    | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
     | '/admin/roles'
@@ -1288,6 +1300,13 @@ declare module '@tanstack/react-router' {
       path: '/locations'
       fullPath: '/admin/locations'
       preLoaderRoute: typeof AdminLocationsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/mascots': {
+      id: '/admin/mascots'
+      path: '/mascots'
+      fullPath: '/admin/mascots'
+      preLoaderRoute: typeof AdminMascotsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/moderation': {
@@ -1689,6 +1708,7 @@ interface AdminRouteRouteChildren {
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
+  AdminMascotsRoute: typeof AdminMascotsRoute
   AdminModerationRoute: typeof AdminModerationRoute
   AdminMyWorkRoute: typeof AdminMyWorkRoute
   AdminRolesRoute: typeof AdminRolesRoute
@@ -1720,6 +1740,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminLocationsRoute: AdminLocationsRoute,
+  AdminMascotsRoute: AdminMascotsRoute,
   AdminModerationRoute: AdminModerationRoute,
   AdminMyWorkRoute: AdminMyWorkRoute,
   AdminRolesRoute: AdminRolesRoute,

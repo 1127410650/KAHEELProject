@@ -16,15 +16,29 @@
  * وهذا مقصود: حين تصل صور الوضعيات المنفصلة من صاحب المنصة يكفي إضافة
  * `src` للوضعية في `POSES` ولا يتغيّر أي موضع نداء في المنصة.
  *
+ * ## أين تُستبدل الأصول؟
+ * ليس هنا. الصور كلها في `src/lib/mascot-assets.ts` (نسخة مؤقتة SVG ونسخة
+ * نهائية)، وهذا الملف يقرأ منها فقط. استبدال الرسم النهائي = تعديل سطر واحد
+ * هناك، بلا أي لمس لكود الحركة أو المنطق. صفحة `/admin/mascots` تعرض كل
+ * الوضعيات والحركات وتبدّل بين النسختين.
+ *
  * ## الضوابط
- * • WebP شفاف مضغوط، أبعاد صريحة (`width`/`height`) ⇒ صفر هزّة تخطيط.
+ * • أبعاد صريحة (`width`/`height`) ⇒ صفر هزّة تخطيط.
  * • `loading="lazy"` إلا إذا طُلب `priority`.
  * • كل الحركات CSS ومعطّلة تحت `prefers-reduced-motion` عبر `motion-reduce`.
  */
-import kaheelBase from "@/assets/characters/kaheel.webp";
-import kaheelanBase from "@/assets/characters/kaheelan.webp";
+import { useSyncExternalStore } from "react";
 
-export type MascotName = "kaheel" | "kaheelan";
+import {
+  activeMascotVariant,
+  mascotAsset,
+  subscribeMascotVariant,
+  DEFAULT_MASCOT_VARIANT,
+  type MascotName,
+  type MascotVariant,
+} from "@/lib/mascot-assets";
+
+export type { MascotName, MascotVariant };
 
 /** وضعيات «كَحيل» الرسمية. */
 export type KaheelPose = "welcome" | "present" | "thanks" | "idle";
@@ -41,11 +55,15 @@ export type KaheelanPose =
 
 export type MascotPose = KaheelPose | KaheelanPose;
 
-/** الأصل الأساسي لكل شخصية، وأبعاده الحقيقية (لحساب النسبة بلا هزّة). */
-const BASE: Record<MascotName, { src: string; width: number; height: number }> = {
-  kaheel: { src: kaheelBase, width: 288, height: 900 },
-  kaheelan: { src: kaheelanBase, width: 536, height: 900 },
-};
+/** النسخة الفعّالة كحالة تفاعلية — تبديلها من لوحة المعاينة يعيد الرسم فورًا. */
+export function useMascotVariant(): MascotVariant {
+  return useSyncExternalStore(
+    subscribeMascotVariant,
+    activeMascotVariant,
+    () => DEFAULT_MASCOT_VARIANT,
+  );
+}
+
 
 interface PoseSpec {
   /** تحويل ثابت يبني الوضعية من الأصل الأساسي. */
@@ -147,6 +165,7 @@ export function Mascot({
   className,
   animated = true,
   priority = false,
+  variant,
 }: {
   name: MascotName;
   pose?: MascotPose;
@@ -154,8 +173,11 @@ export function Mascot({
   className?: string;
   animated?: boolean;
   priority?: boolean;
+  /** لتجاوز النسخة الفعّالة في المعاينة فقط. */
+  variant?: MascotVariant | undefined;
 }) {
-  const base = BASE[name];
+  const active = useMascotVariant();
+  const base = mascotAsset(name, variant ?? active);
   const spec = specFor(name, pose ?? DEFAULT_POSE[name]);
 
   return (
@@ -183,15 +205,32 @@ export function MascotDuo({
   lang = "ar",
   animated = true,
   className,
+  variant,
 }: {
   lang?: "ar" | "en";
   animated?: boolean;
   className?: string;
+  variant?: MascotVariant | undefined;
 }) {
   return (
     <div className={`flex items-end justify-center gap-1 ${className ?? "h-full"}`}>
-      <Mascot name="kaheel" pose="welcome" lang={lang} animated={animated} className="h-full w-auto" />
-      <Mascot name="kaheelan" pose="wave" lang={lang} animated={animated} className="h-full w-auto" />
+      <Mascot
+        name="kaheel"
+        pose="welcome"
+        lang={lang}
+        animated={animated}
+        variant={variant}
+        className="h-full w-auto"
+      />
+      <Mascot
+        name="kaheelan"
+        pose="wave"
+        lang={lang}
+        animated={animated}
+        variant={variant}
+        className="h-full w-auto"
+      />
     </div>
   );
 }
+
