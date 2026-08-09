@@ -2411,10 +2411,17 @@ body:has(.market-surface) {
   animation: k-season-peek 5s ease-in-out infinite;
   animation-play-state: paused;
 }
+.k-season-wave {
+  transform-origin: 0% 50%;
+  animation: k-season-wave 4.2s ease-in-out infinite;
+  animation-play-state: paused;
+  will-change: transform;
+}
 .k-season-run .k-season-float,
 .k-season-run .k-season-twinkle,
 .k-season-run .k-season-shimmer,
-.k-season-run .k-season-peek {
+.k-season-run .k-season-peek,
+.k-season-run .k-season-wave {
   animation-play-state: running;
 }
 
@@ -2423,11 +2430,14 @@ body:has(.market-surface) {
   .k-season-twinkle,
   .k-season-shimmer,
   .k-season-peek,
+  .k-season-wave,
   .k-season-run .k-season-float,
   .k-season-run .k-season-twinkle,
   .k-season-run .k-season-shimmer,
-  .k-season-run .k-season-peek {
+  .k-season-run .k-season-peek,
+  .k-season-run .k-season-wave {
     animation: none !important;
   }
   .k-season-shimmer { display: none; }
+
 }
