@@ -12,7 +12,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, MessageSquare, Phone } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,13 @@ import { Label } from "@/components/ui/label";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { enablePersistentSession } from "@/lib/auth-storage";
-import { otpProviderStatus, requestPhoneOtp, verifyPhoneOtp } from "@/lib/otp.functions";
+import {
+  otpChannelsForPhone,
+  otpProviderStatus,
+  requestPhoneOtp,
+  verifyPhoneOtp,
+} from "@/lib/otp.functions";
+import type { OtpChannel } from "@/lib/otp-channels";
 import { DEFAULT_DIAL, DIAL_CODES, isAcceptablePhone, normalizePhone } from "@/lib/phone-normalize";
 import { usePhoneOnlyDials } from "@/lib/mkt-markets";
 
@@ -37,16 +43,18 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   const requestOtp = useServerFn(requestPhoneOtp);
   const verifyOtp = useServerFn(verifyPhoneOtp);
   const readProviders = useServerFn(otpProviderStatus);
+  const readChannels = useServerFn(otpChannelsForPhone);
 
   const [dial, setDial] = useState(DEFAULT_DIAL);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
-  const [channel, setChannel] = useState<"whatsapp" | "sms">("whatsapp");
+  // القناة لا يختارها المستخدم: المحوّل الخادمي يقررها من مفتاح الدولة.
+  const [channels, setChannels] = useState<OtpChannel[] | null>(null);
   const [code, setCode] = useState("");
   const [stage, setStage] = useState<"identify" | "code">("identify");
   const [busy, setBusy] = useState(false);
-  const [providers, setProviders] = useState<{ whatsapp: boolean; sms: boolean } | null>(null);
+  const [providers, setProviders] = useState<{ sms: boolean; whatsapp: boolean } | null>(null);
 
   // The panel reacts to the dial code immediately: Syrian numbers never see the
   // email field, foreign numbers always do.
@@ -56,12 +64,32 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   const phoneReady = isAcceptablePhone(dial, phone);
   const emailReady = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
   const providersOff = providers !== null && !providers.whatsapp && !providers.sms;
+  const phoneChannel = channels?.[0] ?? null;
 
   useEffect(() => {
     readProviders()
-      .then(setProviders)
+      .then((status) => setProviders({ sms: status.sms, whatsapp: status.whatsapp }))
       .catch(() => setProviders({ whatsapp: false, sms: false }));
   }, [readProviders]);
+
+  // القنوات المتاحة تُقرأ لكل مفتاح دولة من إعداد لوحة الإدارة.
+  useEffect(() => {
+    if (!phoneReady || !e164) {
+      setChannels(null);
+      return;
+    }
+    let alive = true;
+    readChannels({ data: { phone: e164 } })
+      .then((list) => {
+        if (alive) setChannels(list);
+      })
+      .catch(() => {
+        if (alive) setChannels([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [readChannels, e164, phoneReady]);
 
   async function send() {
     if (isPhoneOnly || !emailReady) {
@@ -74,10 +102,15 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
     try {
       enablePersistentSession();
       if (isPhoneOnly) {
-        const result = await requestOtp({ data: { phone: e164!, channel } });
+        const result = await requestOtp({ data: { phone: e164!, channel: phoneChannel } });
         if (!result.ok) {
           toast.error(
-            result.error === "PROVIDER_UNCONFIGURED"
+            result.error === "COOLDOWN"
+              ? t("market.easyAuth.cooldown").replace(
+                  "{seconds}",
+                  String(result.retry_after_seconds ?? 60),
+                )
+              : result.error === "PROVIDER_UNCONFIGURED"
               ? t("market.easyAuth.disabled")
               : result.error === "RATE_LIMITED"
                 ? t("market.easyAuth.rateLimited")
@@ -234,29 +267,17 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
 
           {isPhoneOnly && (
             <div className="space-y-2">
-              <span className="text-sm font-semibold text-foreground">
-                {t("market.easyAuth.channel")}
-              </span>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant={channel === "whatsapp" ? "default" : "outline"}
-                  className="h-11 flex-1"
-                  onClick={() => setChannel("whatsapp")}
-                >
-                  <MessageSquare className="size-4" aria-hidden />
-                  {t("market.easyAuth.whatsapp")}
-                </Button>
-                <Button
-                  type="button"
-                  variant={channel === "sms" ? "default" : "outline"}
-                  className="h-11 flex-1"
-                  onClick={() => setChannel("sms")}
-                >
-                  <Phone className="size-4" aria-hidden />
-                  {t("market.easyAuth.sms")}
-                </Button>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                {t("market.easyAuth.channelAuto").replace(
+                  "{channel}",
+                  phoneChannel === "whatsapp"
+                    ? t("market.easyAuth.whatsapp")
+                    : phoneChannel === "email"
+                      ? t("market.easyAuth.emailChannel")
+                      : t("market.easyAuth.sms"),
+                )}
+              </p>
+              <p className="text-xs text-muted-foreground">{t("market.easyAuth.syriaSmsOnly")}</p>
               {providersOff && (
                 <p
                   data-testid="otp-disabled-note"

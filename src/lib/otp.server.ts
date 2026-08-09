@@ -1,17 +1,13 @@
 /**
- * Server-only phone sign-in with a one-time code (Syria-first flow).
+ * Server-only phone sign-in with a one-time code.
  *
- * Delivery providers are pluggable and DISABLED until their secrets exist:
- *  - WhatsApp Cloud API → WHATSAPP_TOKEN + WHATSAPP_PHONE_NUMBER_ID
- *  - SMS (Twilio or a local gateway) → TWILIO_ACCOUNT_SID + TWILIO_AUTH_TOKEN + TWILIO_FROM
+ * التوجيه كله في محوّل المزوّدين (`otp-providers.server.ts`): هذا الملف لا يعرف
+ * أي مزوّد ولا أي مفتاح دولة. الأرقام السورية تُخدم بـ SMS محلي، وغير السورية
+ * بواتساب أو بالبريد، والقنوات تُفعّل من لوحة الإدارة.
  *
- * When no provider is configured, `requestOtpImpl` reports
- * `PROVIDER_UNCONFIGURED` and NO code is created — the flow is visibly off
- * instead of pretending to work.
- *
- * Security: codes are stored only as a salted SHA-256 hash, expire in minutes,
- * allow a limited number of attempts, and every send is rate limited per phone
- * and per client key through `rate_limit_hit`.
+ * Security: الكود يُخزّن كبصمة SHA-256 مملّحة، ينتهي خلال ٥ دقائق، ٣ محاولات
+ * إدخال كحد أقصى، منع إعادة إرسال قبل ٦٠ ثانية، وحدود لكل رقم ولكل IP
+ * (ساعة ويوم) عبر `rate_limit_hit` — كل رسالة تكلّف مالًا.
  */
 import { createHash, randomInt, timingSafeEqual } from "crypto";
 
@@ -19,27 +15,52 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
 import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
+import {
+  channelsFor,
+  hashPhone,
+  loadChannelConfig,
+  providerConfigured,
+  sendOtp,
+  type OtpChannel,
+} from "@/lib/otp-providers.server";
 
-/** Code lifetime and attempt budget. */
+/** Code lifetime, attempt budget and resend cooldown. */
 export const OTP_TTL_MINUTES = 5;
-export const OTP_MAX_ATTEMPTS = 5;
+export const OTP_MAX_ATTEMPTS = 3;
+export const OTP_RESEND_SECONDS = 60;
 
-export type OtpChannel = "whatsapp" | "sms";
+export type { OtpChannel };
 
 export interface ProviderStatus {
-  whatsapp: boolean;
+  /** القنوات القابلة للإرسال فعلًا (قناة مفعّلة + مفاتيح مزوّد موجودة). */
   sms: boolean;
+  whatsapp: boolean;
+  email: boolean;
+  providers: { channel: string; provider: string; enabled: boolean; configured: boolean }[];
 }
 
-export function providerStatusImpl(): ProviderStatus {
+export async function providerStatusImpl(): Promise<ProviderStatus> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const config = await loadChannelConfig(supabaseAdmin);
+  const live = (channel: OtpChannel) =>
+    config.some((row) => row.channel === channel && row.is_enabled && providerConfigured(row.provider));
   return {
-    whatsapp: !!(process.env["WHATSAPP_TOKEN"] && process.env["WHATSAPP_PHONE_NUMBER_ID"]),
-    sms: !!(
-      process.env["TWILIO_ACCOUNT_SID"] &&
-      process.env["TWILIO_AUTH_TOKEN"] &&
-      process.env["TWILIO_FROM"]
-    ),
+    sms: live("sms"),
+    whatsapp: live("whatsapp"),
+    email: live("email"),
+    providers: config.map((row) => ({
+      channel: row.channel,
+      provider: row.provider,
+      enabled: row.is_enabled,
+      configured: providerConfigured(row.provider),
+    })),
   };
+}
+
+/** القنوات المتاحة لرقم معيّن (لعرضها في الواجهة). */
+export async function channelsForPhoneImpl(phone: string): Promise<OtpChannel[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return channelsFor(phone, await loadChannelConfig(supabaseAdmin));
 }
 
 function hashCode(phone: string, code: string): string {
@@ -53,94 +74,74 @@ function equalHash(a: string, b: string): boolean {
   return left.length === right.length && timingSafeEqual(left, right);
 }
 
-async function sendWhatsApp(phone: string, code: string): Promise<boolean> {
-  const token = process.env["WHATSAPP_TOKEN"];
-  const from = process.env["WHATSAPP_PHONE_NUMBER_ID"];
-  const template = process.env["WHATSAPP_OTP_TEMPLATE"] ?? "";
-  if (!token || !from) return false;
-  const body = template
-    ? {
-        messaging_product: "whatsapp",
-        to: phone.replace("+", ""),
-        type: "template",
-        template: {
-          name: template,
-          language: { code: "ar" },
-          components: [{ type: "body", parameters: [{ type: "text", text: code }] }],
-        },
-      }
-    : {
-        messaging_product: "whatsapp",
-        to: phone.replace("+", ""),
-        type: "text",
-        text: { body: `كَحيل — رمز الدخول: ${code}` },
-      };
-  const response = await fetch(`https://graph.facebook.com/v20.0/${from}/messages`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return response.ok;
-}
-
-async function sendSms(phone: string, code: string): Promise<boolean> {
-  const sid = process.env["TWILIO_ACCOUNT_SID"];
-  const token = process.env["TWILIO_AUTH_TOKEN"];
-  const from = process.env["TWILIO_FROM"];
-  if (!sid || !token || !from) return false;
-  const params = new URLSearchParams({ To: phone, From: from, Body: `Kaheel code: ${code}` });
-  const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${Buffer.from(`${sid}:${token}`).toString("base64")}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: params.toString(),
-  });
-  return response.ok;
-}
-
 export type RequestOtpResult =
-  | { ok: true; channel: OtpChannel; expires_in_minutes: number }
-  | { ok: false; error: "INVALID_PHONE" | "RATE_LIMITED" | "PROVIDER_UNCONFIGURED" | "SEND_FAILED" };
+  | { ok: true; channel: OtpChannel; expires_in_minutes: number; resend_after_seconds: number }
+  | {
+      ok: false;
+      error: "INVALID_PHONE" | "RATE_LIMITED" | "COOLDOWN" | "PROVIDER_UNCONFIGURED" | "SEND_FAILED";
+      retry_after_seconds?: number;
+    };
 
 export async function requestOtpImpl(
   phone: string,
-  preferred: OtpChannel,
+  preferred: OtpChannel | null,
   clientKey: string,
 ): Promise<RequestOtpResult> {
   if (!/^\+[1-9][0-9]{7,14}$/.test(phone)) return { ok: false, error: "INVALID_PHONE" };
 
-  const status = providerStatusImpl();
-  const channel: OtpChannel | null = status[preferred]
-    ? preferred
-    : status.whatsapp
-      ? "whatsapp"
-      : status.sms
-        ? "sms"
-        : null;
-  if (!channel) return { ok: false, error: "PROVIDER_UNCONFIGURED" };
-
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const { data: phoneOk } = await supabaseAdmin.rpc("rate_limit_hit", {
-    _bucket: "otp_phone",
-    _key: phone,
-    _limit: 5,
-    _window: "01:00:00",
-  });
-  if (phoneOk === false) return { ok: false, error: "RATE_LIMITED" };
-  const { data: ipOk } = await supabaseAdmin.rpc("rate_limit_hit", {
-    _bucket: "otp_ip",
-    _key: clientKey,
-    _limit: 15,
-    _window: "01:00:00",
-  });
-  if (ipOk === false) return { ok: false, error: "RATE_LIMITED" };
+  // منع إعادة الإرسال قبل ٦٠ ثانية: أحدث سطر لهذا الرقم يحدد الانتظار.
+  const { data: recent } = await supabaseAdmin
+    .from("mkt_otp_sends")
+    .select("created_at")
+    .eq("phone_hash", hashPhone(phone))
+    .eq("status", "sent")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (recent) {
+    const elapsed = (Date.now() - Date.parse(recent.created_at)) / 1000;
+    if (elapsed < OTP_RESEND_SECONDS)
+      return {
+        ok: false,
+        error: "COOLDOWN",
+        retry_after_seconds: Math.ceil(OTP_RESEND_SECONDS - elapsed),
+      };
+  }
+
+  // حدود صارمة: لكل رقم ولكل عميل، بالساعة وباليوم.
+  const limits: { bucket: string; key: string; limit: number; window: string }[] = [
+    { bucket: "otp_phone_hour", key: phone, limit: 3, window: "01:00:00" },
+    { bucket: "otp_phone_day", key: phone, limit: 8, window: "24:00:00" },
+    { bucket: "otp_ip_hour", key: clientKey, limit: 10, window: "01:00:00" },
+    { bucket: "otp_ip_day", key: clientKey, limit: 30, window: "24:00:00" },
+  ];
+  for (const rule of limits) {
+    const { data: allowed } = await supabaseAdmin.rpc("rate_limit_hit", {
+      _bucket: rule.bucket,
+      _key: rule.key,
+      _limit: rule.limit,
+      _window: rule.window,
+    });
+    if (allowed === false) return { ok: false, error: "RATE_LIMITED" };
+  }
 
   const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
-  const sent = channel === "whatsapp" ? await sendWhatsApp(phone, code) : await sendSms(phone, code);
-  if (!sent) return { ok: false, error: "SEND_FAILED" };
+  const outcome = await sendOtp(supabaseAdmin, {
+    phone,
+    code,
+    countryIso2: await resolveMarketIso2ByPhone(phone),
+    idempotencyKey: `${hashPhone(phone).slice(0, 24)}:${Date.now()}`,
+    preferred,
+  });
+
+  if (!outcome.ok) {
+    return {
+      ok: false,
+      error: outcome.status === "unconfigured" ? "PROVIDER_UNCONFIGURED" : "SEND_FAILED",
+    };
+  }
 
   // Older live codes for this phone become unusable as soon as a new one is sent.
   await supabaseAdmin
@@ -151,16 +152,21 @@ export async function requestOtpImpl(
 
   await supabaseAdmin.from("mkt_login_otps").insert({
     phone,
-    channel,
+    channel: outcome.channel,
     code_hash: hashCode(phone, code),
     expires_at: new Date(Date.now() + OTP_TTL_MINUTES * 60_000).toISOString(),
     max_attempts: OTP_MAX_ATTEMPTS,
     delivered: true,
-    provider: channel === "whatsapp" ? "whatsapp_cloud_api" : "sms_gateway",
+    provider: outcome.provider,
     request_key: clientKey.slice(0, 120),
   });
 
-  return { ok: true, channel, expires_in_minutes: OTP_TTL_MINUTES };
+  return {
+    ok: true,
+    channel: outcome.channel,
+    expires_in_minutes: OTP_TTL_MINUTES,
+    resend_after_seconds: OTP_RESEND_SECONDS,
+  };
 }
 
 export type VerifyOtpResult =

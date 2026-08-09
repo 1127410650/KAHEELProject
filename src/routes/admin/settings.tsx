@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
+import { OtpChannelsCard } from "@/components/marketplace/campaign/OtpChannelsCard";
 import { formatDateTime } from "@/lib/format";
 import {
   adminErrorMessage,
@@ -155,6 +156,10 @@ function AdminSettingsPage() {
           ))}
         </div>
       )}
+
+      <div className="mt-4">
+        <OtpChannelsCard />
+      </div>
 
       <ReasonDialog
         open={!!pending}

@@ -100,6 +100,7 @@ import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
+import { Route as ApiPublicOtpLinksyriaStatusRouteImport } from './routes/api/public/otp/linksyria-status'
 import { Route as MyAdsIdEditRouteImport } from './routes/my/ads.$id.edit'
 import { Route as ServicesSlugItemIdBookRouteImport } from './routes/services.$slug.$itemId.book'
 
@@ -561,6 +562,12 @@ const ApiPublicAdCreditGatewayWebhookRoute =
     path: '/api/public/ad-credit/gateway-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicOtpLinksyriaStatusRoute =
+  ApiPublicOtpLinksyriaStatusRouteImport.update({
+    id: '/api/public/otp/linksyria-status',
+    path: '/api/public/otp/linksyria-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MyAdsIdEditRoute = MyAdsIdEditRouteImport.update({
   id: '/ads/$id/edit',
   path: '/ads/$id/edit',
@@ -664,6 +671,7 @@ export interface FileRoutesByFullPath {
   '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
+  '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
@@ -756,6 +764,7 @@ export interface FileRoutesByTo {
   '/my/errands': typeof MyErrandsIndexRoute
   '/my/reports': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
+  '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
@@ -852,6 +861,7 @@ export interface FileRoutesById {
   '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
+  '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
@@ -949,6 +959,7 @@ export interface FileRouteTypes {
     | '/my/errands/'
     | '/my/reports/'
     | '/api/public/ad-credit/gateway-webhook'
+    | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   fileRoutesByTo: FileRoutesByTo
@@ -1041,6 +1052,7 @@ export interface FileRouteTypes {
     | '/my/errands'
     | '/my/reports'
     | '/api/public/ad-credit/gateway-webhook'
+    | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   id:
@@ -1136,6 +1148,7 @@ export interface FileRouteTypes {
     | '/my/errands/'
     | '/my/reports/'
     | '/api/public/ad-credit/gateway-webhook'
+    | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   fileRoutesById: FileRoutesById
@@ -1173,6 +1186,7 @@ export interface RootRouteChildren {
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
   GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
   ApiPublicAdCreditGatewayWebhookRoute: typeof ApiPublicAdCreditGatewayWebhookRoute
+  ApiPublicOtpLinksyriaStatusRoute: typeof ApiPublicOtpLinksyriaStatusRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1814,6 +1828,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicAdCreditGatewayWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/otp/linksyria-status': {
+      id: '/api/public/otp/linksyria-status'
+      path: '/api/public/otp/linksyria-status'
+      fullPath: '/api/public/otp/linksyria-status'
+      preLoaderRoute: typeof ApiPublicOtpLinksyriaStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my/ads/$id/edit': {
       id: '/my/ads/$id/edit'
       path: '/ads/$id/edit'
@@ -2025,6 +2046,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,
   GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
   ApiPublicAdCreditGatewayWebhookRoute: ApiPublicAdCreditGatewayWebhookRoute,
+  ApiPublicOtpLinksyriaStatusRoute: ApiPublicOtpLinksyriaStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1983,6 +1983,9 @@
         "note": "What you reported",
         "files": "Attachments",
         "noFiles": "No attachments.",
+        "channelAuto": "Delivery: {channel} — chosen automatically from your country code.",
+        "syriaSmsOnly": "Syrian numbers receive the code by SMS only; WhatsApp is not supported in Syria.",
+        "cooldown": "Wait {seconds} seconds before resending.",
         "channel": "Messages with the review team",
         "channelHint": "This thread is only between you and the review team.",
         "replyPlaceholder": "Write your reply or add more information…",
@@ -4489,6 +4492,17 @@
       "reinstate": "Reinstate",
       "requestChanges": "Request changes",
       "actionDone": "The action was applied and logged."
+    },
+    "otp": {
+      "title": "Sign-in code channels (OTP)",
+      "hint": "Syrian numbers (+963) use SMS only; WhatsApp is not supported in Syria. Toggle each channel and provider, with 30-day success rate and cost.",
+      "configured": "Keys present",
+      "missingKeys": "Keys missing",
+      "toggle": "Enable channel",
+      "sent30": "Sends (30 days)",
+      "successRate": "Success rate",
+      "cost": "Estimated cost",
+      "recent": "Recent sends"
     }
   }
 }
