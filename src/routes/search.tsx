@@ -20,6 +20,9 @@ import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-
 import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
 import { track } from "@/lib/analytics";
 
+import { PageStack, PageNoticeBar } from "@/components/marketplace/layout/PageStack";
+import { useKaheelProgressSteps } from "@/lib/mkt-progress";
+import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import {
   ListingCard,
@@ -717,8 +720,23 @@ function GenericSearchPage() {
     </div>
   );
 
+  const progressSteps = useKaheelProgressSteps();
+
   return (
     <MarketShell>
+      {/* الطبقات ٣–٧ من البنية الموحّدة، بنفس الترتيب في كل صفحات المنصة. */}
+      <PageStack
+        search={false}
+        notice={
+          <PageNoticeBar id="search-scope">
+            {locale === "ar"
+              ? "النتائج مرتّبة حسب موقعك — بدّل الموقع من أعلى الصفحة"
+              : "Results follow your location — switch it from the header"}
+          </PageNoticeBar>
+        }
+        banner={<HomeAdStrip addHref="/my/listings/new" />}
+        progress={progressSteps}
+      />
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
         <section className="market-page-intro">
           <div className="flex flex-wrap items-center gap-2">

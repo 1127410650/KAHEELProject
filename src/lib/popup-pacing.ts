@@ -46,6 +46,15 @@ export interface PopupPacing {
   rapidWindowMs: number;
   /** مدة مشهد دخول كَحيلان إلى قسم «الناس». */
   entranceMs: number;
+  // ── تجوّل الشخصيتين عبر الصفحات ───────────────────────────────────────────
+  /** تشغيل/إيقاف التجوّل كليًا من لوحة الإدارة. */
+  roamEnabled: boolean;
+  /** مهلة قبل أول تجوّل في الزيارة. */
+  roamFirstDelayMs: number;
+  /** الفاصل بين تجوّلين. */
+  roamIntervalMs: number;
+  /** مدة مشهد التجوّل الواحد (المشي من حافة إلى حافة). */
+  roamDurationMs: number;
 }
 
 export const DEFAULT_PACING: PopupPacing = {
@@ -60,6 +69,10 @@ export const DEFAULT_PACING: PopupPacing = {
   rapidTaps: 6,
   rapidWindowMs: 3_000,
   entranceMs: 6_000,
+  roamEnabled: true,
+  roamFirstDelayMs: 25_000,
+  roamIntervalMs: 150_000,
+  roamDurationMs: 14_000,
 };
 
 /** Clamps admin input so a typo can never turn the cards into a nuisance. */
@@ -80,6 +93,10 @@ export function normalisePacing(raw: Record<string, unknown> | null | undefined)
     rapidTaps: num("rapid_taps", DEFAULT_PACING.rapidTaps, 3, 15),
     rapidWindowMs: num("rapid_window_ms", DEFAULT_PACING.rapidWindowMs, 1_000, 15_000),
     entranceMs: num("entrance_ms", DEFAULT_PACING.entranceMs, 2_000, 20_000),
+    roamFirstDelayMs: num("roam_first_delay_ms", DEFAULT_PACING.roamFirstDelayMs, 3_000, 600_000),
+    roamIntervalMs: num("roam_interval_ms", DEFAULT_PACING.roamIntervalMs, 20_000, 3_600_000),
+    roamDurationMs: num("roam_duration_ms", DEFAULT_PACING.roamDurationMs, 6_000, 40_000),
+    roamEnabled: raw?.["roam_enabled"] !== false,
     enabled: raw?.["enabled"] !== false,
   };
 }

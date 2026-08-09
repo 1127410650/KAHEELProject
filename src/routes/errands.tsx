@@ -14,6 +14,9 @@ import { useMemo, useRef, useState } from "react";
 import { Camera, Loader2, PackageSearch, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { PageStack, PageNoticeBar } from "@/components/marketplace/layout/PageStack";
+import { useKaheelProgressSteps } from "@/lib/mkt-progress";
+import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
 import { ErrandPointPicker } from "@/components/marketplace/errands/ErrandPointPicker";
@@ -142,8 +145,20 @@ function ErrandsPage() {
     }
   }
 
+  const progressSteps = useKaheelProgressSteps();
+
   return (
     <MarketShell>
+      <PageStack
+        width="narrow"
+        notice={
+          <PageNoticeBar id="errands-hours">
+            {ar ? "الكباتن متاحون من ٨ صباحًا حتى ١١ مساءً" : "Captains are available 8am–11pm"}
+          </PageNoticeBar>
+        }
+        banner={<HomeAdStrip addHref="/my/listings/new" />}
+        progress={progressSteps}
+      />
       <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
         {/* رأس الخدمة: كَحيلان بيوعد إنه هو الواسطة */}
         <section className="relative mb-3 overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/15 via-background to-background p-3">

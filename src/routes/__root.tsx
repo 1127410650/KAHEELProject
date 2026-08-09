@@ -20,6 +20,7 @@ import { canonicalUrl } from "@/lib/share-links";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { PromoPopupHost } from "@/components/marketplace/campaign/PromoPopupHost";
+import { MascotRoam } from "@/components/marketplace/campaign/MascotRoam";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
 
@@ -199,6 +200,7 @@ function RootComponent() {
             <Outlet />
             <CallOverlay />
             <PromoPopupHost />
+            <MascotRoam />
             <Toaster position="top-center" />
           </CallCenterProvider>
         </SessionProvider>
