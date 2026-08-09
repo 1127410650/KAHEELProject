@@ -158,14 +158,14 @@ export function PromoPopupHost() {
         key={card.key}
         data-kaheel-drop-card
         role="status"
-        className={`pointer-events-auto relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
+        className={`pointer-events-none relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
       >
         <div className="absolute end-2 top-2 flex gap-1">
           <button
             type="button"
             onClick={() => dismiss(true)}
             aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-            className="grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
+            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
           >
             <EyeOff className="size-3" aria-hidden />
           </button>
@@ -173,7 +173,7 @@ export function PromoPopupHost() {
             type="button"
             onClick={() => dismiss()}
             aria-label={ar ? "إغلاق" : "Close"}
-            className="grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
+            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
           >
             <X className="size-3" aria-hidden />
           </button>
