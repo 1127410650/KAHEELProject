@@ -182,13 +182,8 @@ export function MarketHeader({
                 </span>
               </button>
 
-              <a
-                href={addHref}
-                aria-label={t("market.addListing")}
-                className="grid size-10 shrink-0 justify-self-end place-items-center rounded-full bg-market-gold text-[#240046] shadow-[0_8px_20px_rgb(16_0_43/0.3)] transition hover:-translate-y-0.5 hover:bg-[#f8b62d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#3c096c] sm:size-11"
-              >
-                <Plus className="size-5" aria-hidden />
-              </a>
+              <AddListingButton href={addHref} className="justify-self-end" />
+
             </>
           )}
         </div>
