@@ -179,7 +179,9 @@ export function SeasonalLayer({
           height={mascotDims?.height}
           loading="lazy"
           decoding="async"
-          className="k-season-peek absolute top-0 h-[124%] max-h-none w-auto object-contain opacity-95 ltr:right-3 rtl:left-3"
+          /* على الشاشات الضيقة تُخفى الإطلالة: لا مساحة آمنة فيها بلا تغطية
+             التصنيفات أو البطاقات. تظهر من sm فما فوق حيث يوجد فراغ حقيقي. */
+          className="k-season-peek absolute top-0 hidden h-[124%] max-h-none w-auto object-contain opacity-95 ltr:right-16 rtl:left-16 lg:block"
         />
       ) : null}
     </div>
