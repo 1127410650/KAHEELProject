@@ -1,76 +1,169 @@
-# جرد كامل قبل التنظيف — قاعدة البيانات والمشروع
+# إعادة تنظيم مسارات گحيل — دراسة وخطة
 
-لم يُعدّل أي شيء. كل رقم أدناه مقروء الآن من قاعدة الإنتاج `rgpnhzovtceitqxpiilf` ومن ملفات الكود.
+دراسة فقط، لا تنفيذ. كل ما يلي مقروء الآن من `src/routes/` (84 تعريف مسار) ومن `src/lib/routes-map.ts`.
 
-## 1) صورة عامة
+## 1) خريطة المسارات الحالية
 
-- جداول `public`: 190 جدولًا (منها 111 تبدأ بـ `mkt_`).
-- RLS مُفعّل على **كل** الجداول. جدول واحد فقط بلا أي سياسة: `rate_events` (RLS مفعّل + 0 سياسة ⇒ مغلق فعليًا لكل الأدوار).
-- حاويات التخزين: 5.
+### أ. عام (زائر) — طبقة السوق `MarketShell`
+| المسار | الوظيفة |
+|---|---|
+| `/` | الرئيسية (إعلانات + مجالات + قوالب متاجر) |
+| `/search` | البحث والتصفية |
+| `/categories/$slug` | صفحة مجال/تصنيف |
+| `/ads/$slug` | صفحة إعلان |
+| `/stores/$slug` | صفحة متجر عامة |
+| `/businesses/$slug` | صفحة منشأة |
+| `/u/$username` | ملف مستخدم عام |
+| `/services` (+ `/services/`) | دليل الخدمات (المسار الأب طبقة، والمحتوى في `services.index`) |
+| `/services/$slug/$itemId/book` | حجز خدمة |
+| `/syria-guide` · `/student-tools` | محتوى مرجعي (دليل سوريا، أدوات الطلاب) |
+| `/about` · `/help` · `/terms` · `/privacy` | صفحات ثابتة |
+| `/contact` | **تحويل** إلى `/help#contact` |
+| `/welcome` | صفحة تعريفية بالمنصة — محتواها يكرر `/` |
+| `/demo` · `/demo-stores/$worldId` | بيئة تجريبية (noindex، محجوبة بعلم `LIVE_DEMO_VISIBLE`) |
+| `/more` | قائمة «المزيد» للجوال (public في الخريطة لكنها تعرض إدارة حسابات) |
 
-## 2) جداول النظام القديم (تحقّق) غير المستخدمة في گحيل
+### ب. الدخول والانتقال (بلا طبقة)
+`/auth` (دخول) · `/register` (تسجيل) · `/forgot-password` · `/reset-password` · `/invite/$token` (دعوة) · `/choose-account` (اختيار الحساب) · `/join` (طلب حساب بائع/مزوّد) · `/market-setup` (إكمال بيانات سوريا) · `/me` (تحويل ذكي حسب الهوية) · `/audit` (تحويل) · `/appointments` · `/business/new` · `/$` (معالج المسارات القديمة المركزي)
 
-مجموعة كاملة لا يستدعيها كود گحيل ولا أي سياسة/دالة `mkt_*` (الأعداد = صفوف فعلية):
+### ج. لوحة المستخدم `/dashboard/*` — `DashboardShell`
+- حساب شخصي أو منشأة: `profile` · `notifications` · `messages` · `favorites` · `bookings` · `my-ads` · `points` · `ads/new` · `ads/$id/edit` · `requests` · `reports` · `reports/$id` · `violations`
+- منشأة فقط (تشغيلي): `operations` · `orders` · `store/` · `store/new` · `store/catalog` · `network` · `service` · `service/settings` · `business`
 
-| المجموعة | الجداول | الصفوف |
-|---|---|---|
-| المشاريع | `projects` 24، `project_members` 6، `project_supervisors` 5، `supervisors` 31 | 66 |
-| الطلبات | `requests` 38، `request_status_history` 89، `request_messages` 10، `request_reminders` 5، `request_message_reads` 0، `request_change_requests` 0، `request_field_versions` 0 | 142 |
-| العهدة | `custody_transactions` 28 | 28 |
-| الفواتير | `invoices` 2، `invoice_line_items` 2، `invoice_status_history` 3، `invoice_verifications` 1 | 8 |
-| الموردون والمنتجات | `suppliers` 3، `unified_products` 0، `product_catalog` 0، `product_aliases` 0، `product_price_history` 0، `product_unit_conversions` 0 | 3 |
-| الملف العقاري | 17 جدول `property_*` | **0 كلها** |
-| تحليل المستندات | `document_analyses`، `document_analysis_runs`، `document_analysis_fields`، `document_analysis_conflicts` | **0 كلها** |
-| المواعيد (نموذج مستقل) | 12 جدول `appt_*` | **0 كلها** |
-| مرافق قديمة | `attachments` 3، `audit_log` 602، `app_settings` 5، `login_attempts` 2، `rate_events` 8، `profile_private_details` 0، `account_link_reviews` 9 | 629 |
+### د. الإدارة `/admin/*` — `AdminShell`
+`/admin` (طبقة + `index`) · `dashboard` (تحليلات) · `my-work` · `search` · `listings` + `listings_/$id` · `listing-events` · `listing-reports` · `reports` + `reports/$id` · `verifications` + `verifications_/$id` · `join-applications` · `businesses` + `businesses_/$id` · `users` + `users_/$id` · `stores` · `activities` · `geo` · `roles` · `content-rules` · `attendance` · `workforce` · `audit-log` · `settings`
 
-نقاط ربط يجب الانتباه لها قبل أي حذف:
-- `tenants` ليست جدولًا قديمًا: 18 مفتاحًا أجنبيًا من جداول `mkt_*` تشير إليها، و24 دالة `mkt_*` تستعملها. **تبقى.**
-- 71 مفتاحًا أجنبيًا يشير إلى `tenants`، و25 إلى `projects`، و10 إلى `requests`. أي حذف يجب أن يكون بترتيب التبعية أو بـ `CASCADE` محسوب.
-- `notifications` (54 صفًا) جدول النظام القديم؛ گحيل تستخدم `mkt_notifications` (95 صفًا). لا يوجد `from("notifications")` في الكود، لكن 9 دوال قديمة تكتب فيه — يحتاج تأكيدًا قبل الحذف.
+## 2) تقييم التنظيم الحالي
 
-## 3) الجداول المستخدمة فعليًا في گحيل
+**تكرار وتداخل**
+- `/welcome` يكرر الرئيسية `/` بمحتوى تسويقي؛ لا رابط داخلي يقوده كصفحة أولى.
+- `/contact` صفحة كاملة صارت مجرد تحويل، ومع ذلك ما زالت مسجّلة كـ `public` في الخريطة — تناقض يجعلها قابلة للظهور في التنقل والفهرسة.
+- ثلاث بوابات دخول للأعمال: `/join` و `/business/new` (تحويل) و `/market-setup`؛ وثلاث بوابات تحويل ذكي: `/me` و `/audit` و `/$`.
+- تقارير في مكانين بنفس الاسم: `/dashboard/reports` (بلاغاتي) و `/admin/reports` (البلاغات إدارياً) و `/admin/listing-reports` (بلاغات الإعلانات) — الفرق بين الأخيرين غير واضح من الاسم.
+- `/admin` و `/admin/dashboard` و `/admin/my-work` ثلاث «نقاط بداية» للإدارة.
 
-- كل `mkt_*` الفعّالة: `mkt_listings` 66، `mkt_listing_images` 64، `mkt_activities` 141، `mkt_categories` 93، `mkt_cities` 110، `mkt_storefronts` 4، `mkt_store_items` 6، `mkt_conversations`/`mkt_messages`، `mkt_reports`، `mkt_notifications`، `mkt_analytics_events` 1701، `mkt_syria_*` (6677 + 895 + 105)، إلخ.
-- الجداول المشتركة التي تخدم گحيل ولا تُحذف: `profiles` 100، `user_roles` 9، `user_permissions` 46، `tenants` 112، `tenant_memberships` 87، `tenant_invitations` 18.
-- 31 جدول `mkt_*` بـ 0 صف (سلة/مكالمات/دمج أنشطة…) — ميزات مبنية غير مستعملة بعد، ليست بقايا قديمة.
+**أسماء لا تعكس الوظيفة**
+- `/dashboard/requests` = طلبات عروض الأسعار (`mkt_quote_requests`) — الاسم عام ومورث من النظام القديم.
+- `/dashboard/operations` = لوحة تشغيل المنشأة؛ اسم غامض للمستخدم.
+- `/dashboard/network` = شبكة المزوّدين. `/dashboard/points` = المحفظة والنقاط. `/dashboard/violations` = المخالفات.
+- `/dashboard/my-ads` مقابل `/dashboard/ads/new` — مساران لنفس الكيان باسمين مختلفين.
+- `/u/$username` اختصار غير مفهوم.
+- `/admin/geo` · `/admin/content-rules` · `/admin/listing-events` أسماء تقنية.
+- بادئة `/dashboard` نفسها مورثة من لوحة «تحقّق» القديمة.
 
-## 4) المسارات في الكود
+**التسلسل الهرمي**
+- الفصل الأساسي سليم: عام → دخول → `/dashboard` → `/admin`، وطبقة `admin/route.tsx` تحمي فرعها، و`DashboardShell` يفرض الدخول والحساب النشط.
+- لكن لا يوجد `dashboard/route.tsx` كطبقة أب: كل صفحة تستورد `DashboardShell` بنفسها، فالحماية متكررة لا مركزية، ولا يوجد `/dashboard` كصفحة (مسجّل legacy → `/me`).
+- خلط في المستويات: `/join` و`/choose-account` و`/market-setup` و`/me` مسارات جذرية مع أنها كلها «انتقال بعد الدخول».
+- المنشأة والحساب الشخصي يتشاركان نفس الفرع `/dashboard` دون تمييز في الرابط، والفصل يحدث فقط عبر `allowed_identity_types` في الخريطة.
 
-- گحيل — عام: `/`، `/search`، `/categories/$slug`، `/ads/$slug`، `/u/$username`، `/businesses/$slug`، `/stores/$slug`، `/services*`، `/demo*`، `/syria-guide`، `/student-tools`، `/about`،`/help`،`/terms`،`/privacy`،`/contact`، `/auth`، `/register`، `/forgot-password`، `/reset-password`، `/invite/$token`.
-- گحيل — لوحات: 16 مسار `/dashboard/*`، و`/admin/*` (24 مسارًا)، `/choose-account`، `/join`، `/me`، `/more`، `/market-setup`، `/welcome`.
-- قديم/إعادة توجيه فقط: `/audit` (يحوّل إلى `/admin/audit-log` أو `/me`)، `/appointments` (يحوّل إلى `/services`)، `/business/new`، والمسارات القديمة كلها (`/projects`, `/requests`, `/invoices`, `/custody`, `/supervisors`, `/verify-invoice` …) لم تعد ملفات مستقلة بل تُحل عبر `src/routes/$.tsx` و`src/lib/routes-map.ts`.
-- ملفات كود قديمة غير مربوطة بأي مسار (يتيمة): `src/appointments/*` (4 ملفات، `AppointmentsApp` غير مستورد)، `src/components/InvoiceVerifier.tsx` + `src/lib/invoice-parse.ts`/`invoice-save.ts`/`invoice-scan.ts`/`zatca.ts`/`pdf-extract.ts` (تستورد بعضها فقط)، `src/lib/requests.ts`، `src/lib/project-link.ts` (غير مستورد إطلاقًا).
-- `/dashboard/requests` اسم قديم لكن يقرأ `mkt_quote_requests` — مسار گحيل، لا يُلمس.
+**فراغات في خريطة المسارات (مهم)** — مسارات موجودة فعلاً وغير مسجّلة في `ROUTE_MAP`، فلا تحصل على قاعدة صلاحية ولا طبقة معلنة:
+`/welcome` · `/forgot-password` · `/reset-password` · `/demo-stores/$worldId` · `/dashboard/violations` · `/admin/dashboard` · `/admin/my-work` · `/admin/search` · `/admin/attendance` · `/admin/workforce` · `/admin/content-rules` · وكل صفحات التفصيل `listings_/$id` · `businesses_/$id` · `users_/$id` · `verifications_/$id`.
 
-## 5) حالة RLS
+**مسارات يتيمة أو شبه ميتة**
+- `/welcome` (لا رابط داخلي يشير إليها كمدخل).
+- `/demo` و `/demo-stores/$worldId` معطّلتان بعلم؛ تبقى فقط للعرض الداخلي.
+- `/audit` و `/business/new` و `/appointments` ملفات مسار كاملة لمجرد تحويل، ويمكن استيعاب اثنين منها في `/$`.
+- 40+ قاعدة `legacy` في الخريطة كلها من النظام القديم؛ عدّاد الاستخدام موجود (`logLegacyRoute`) لكن التخزين محلي في المتصفح فقط، فلا يمكن معرفة أي رابط قديم ما زال مستخدماً فعلياً.
 
-- 190/190 جدولًا بـ RLS مُفعّل؛ لا جدول مكشوف بلا حماية.
-- القراءة العامة (`anon`) ممنوحة لـ 26 جدولًا، وكلها محتوى عام مقصود ومقيّد: `mkt_listings`، `mkt_listing_images`، `mkt_categories`، `mkt_cities`، `mkt_countries`، `mkt_activities`، `mkt_user_profiles` و`mkt_business_profiles` بشرط `is_published`، ودليل سوريا.
-- ثلاث سياسات `anon` بشرط `true` (بلا فلترة): `mkt_activity_aliases`، `mkt_syria_technical_institutes`، `mkt_syria_university_programs` — بيانات مرجعية عامة، مقبول لكنه يستحق مراجعة صريحة.
-- `mkt_join_applications` + مستنداتها + أحداثها: سياسة `USING (false)` لكل الأدوار (يمر عبر دوال آمنة فقط) — سليم.
-- جداول `appt_*` (0 صف) تمنح `anon` قراءة الدلائل — نموذج مواعيد غير مستخدم؛ تُغلق مع تقاعده.
-- `rate_events`: 0 سياسة ⇒ لا يقرأ منه أحد عبر الـ API؛ لا حاجة لسياسة إن كان سيُحذف.
+**نقطة SEO حرجة**: كل التحويلات الحالية تحدث في المتصفح (`ssr: false` + `beforeLoad` + `redirect`)، وليست 301. جوجل لا يمرّر إشارات الفهرسة عبرها، والزاحف يرى صفحة فارغة أولاً. أي إعادة تسمية تحتاج تحويلاً على الخادم لتبقى الروابط المفهرسة سليمة.
 
-## 6) حاويات التخزين
+## 3) الهيكل المقترح
 
-| الحاوية | عام؟ | كائنات | الحجم | المحتوى |
-|---|---|---|---|---|
-| `mkt-media` | لا | 27 | 5.7 MB | صور إعلانات گحيل ومتاجرها — **مستخدمة** |
-| `mkt-chat` | لا | 2 | 87 KB | مرفقات المحادثات — **مستخدمة** |
-| `attachments` | لا | 8 | 1.8 MB | مرفقات النظام القديم (طلبات/مشاريع) |
-| `invoice-files` | لا | 0 | 0 | فواتير النظام القديم — فارغة |
-| `database_export_06_08_26` | لا | 0 | 0 | حاوية تصدير مؤقتة — فارغة |
+المبدأ: **الرابط الظاهر يشرح نفسه** · فصل صريح بين ثلاث مناطق · مسار واحد لكل وظيفة · طبقة أب واحدة لكل منطقة.
 
-## 7) التنظيف المقترح لاحقًا (للموافقة عليه في دفعة منفصلة)
+```text
+عام (SSR + فهرسة)
+  /                         الرئيسية
+  /search                   البحث
+  /c/$slug        →  /categories/$slug   (يبقى كما هو)
+  /ads/$slug                إعلان
+  /stores/$slug             متجر
+  /businesses/$slug         منشأة
+  /profiles/$username       ملف عام            (بديل /u/$username)
+  /services · /services/$slug/$itemId/book
+  /guides/syria · /guides/students             (بديل /syria-guide · /student-tools)
+  /about · /help · /terms · /privacy
+  /more                     قائمة الجوال (noindex)
 
-1. **دفعة صفرية المخاطر**: حذف الجداول الفارغة تمامًا (17 `property_*` + 4 تحليل مستندات + 12 `appt_*` + 4 منتجات) وحذف الحاويتين الفارغتين، وحذف ملفات الكود اليتيمة أعلاه.
-2. **دفعة تحتاج أرشفة أولًا**: `projects`/`requests`/`custody_transactions`/`invoices`/`supervisors`/`suppliers`/`attachments`/`audit_log`/`notifications` — تصدير CSV لكل جدول إلى `/mnt/documents/` قبل الحذف، ثم حذف بترتيب التبعية، ثم حذف الدوال والمشغّلات المرتبطة فقط بها.
-3. **لا تُلمس**: `profiles`، `user_roles`، `user_permissions`، `tenants`، `tenant_memberships`، `tenant_invitations`، وكل `mkt_*`، وحاويتا `mkt-media`/`mkt-chat`.
-4. تحقق بعد كل دفعة: تشغيل الـ linter، فتح الرئيسية + إعلان + لوحة الحساب + `/admin` والتأكد من صفر أخطاء وحدة التحكم.
+الدخول والانتقال  /account/*
+  /auth · /auth/register · /auth/forgot · /auth/reset · /auth/invite/$token
+  /account/choose           اختيار الحساب      (بديل /choose-account)
+  /account/apply            طلب حساب بائع/مزوّد (بديل /join)
+  /account/setup            إكمال بيانات سوريا (بديل /market-setup)
+  /go                       تحويل ذكي واحد     (يستوعب /me + /audit)
+
+لوحة الحساب  /my/*            (طبقة أب واحدة: دخول + حساب نشط)
+  /my                       نظرة عامة (جديدة، تحل مكان /dashboard الميت)
+  /my/profile · /my/notifications · /my/messages · /my/favorites
+  /my/ads · /my/ads/new · /my/ads/$id/edit
+  /my/bookings · /my/quotes            (بديل requests)
+  /my/wallet                           (بديل points)
+  /my/reports · /my/reports/$id · /my/violations
+
+لوحة المنشأة  /business/*      (طبقة أب: حساب نشط من نوع business)
+  /business                 لوحة التشغيل        (بديل operations)
+  /business/profile         (بديل dashboard/business)
+  /business/orders
+  /business/store · /business/store/new · /business/store/catalog
+  /business/services · /business/services/settings
+  /business/partners        (بديل network)
+
+الإدارة  /admin/*            (كما هي، مع توضيح أسماء)
+  /admin                    نقطة واحدة (تدمج index + dashboard + my-work تبويبات)
+  /admin/listings (+ /$id) · /admin/listings/events
+  /admin/reports (+ /$id) · /admin/reports/listings   (بديل listing-reports)
+  /admin/verifications (+ /$id) · /admin/applications (بديل join-applications)
+  /admin/users (+ /$id) · /admin/businesses (+ /$id) · /admin/stores
+  /admin/taxonomy (بديل activities) · /admin/locations (بديل geo)
+  /admin/roles · /admin/moderation (بديل content-rules)
+  /admin/staff/attendance · /admin/staff/workforce
+  /admin/audit-log · /admin/settings · /admin/search
+```
+
+**قرار مطلوب قبل التنفيذ — شكل «الأسماء العربية-الودية»:**
+1. **موصى به**: روابط لاتينية قصيرة مفهومة (`/my/quotes`, `/business/store`) وعنوان عربي واضح في الواجهة و`head()`. آمن للنسخ والمشاركة والفهرسة وبلا ترميز `%D8`.
+2. روابط عربية حرفية (`/حسابي/عروض-الأسعار`). ممكنة تقنياً لكن تظهر مشفّرة في الواتساب والتحليلات، وتضاعف التحويلات.
+3. هجين: عربي للمحتوى العام فقط (`/خدمات`) ولاتيني للوحات.
+
+الشجرة أعلاه مكتوبة على الخيار 1؛ إن اخترت 2 أو 3 أعيد صياغتها قبل أي تنفيذ.
+
+## 4) خطة التنفيذ المرحلية
+
+**دفعة 0 — أساس التحويل الدائم (بدون أي تغيير مرئي)**
+- إضافة تحويل 301 على الخادم لكل مسار قديم/متغيّر بدل التحويل في المتصفح، مع الحفاظ على `?query` و`#hash`.
+- إضافة `canonical` لكل صفحة عامة.
+- **الخطر**: منخفض؛ حلقة تحويل إن تعارضت قاعدة خادمية مع `beforeLoad`. **الاختبار**: كل مسار قديم يعيد 301 مرة واحدة إلى هدف يعيد 200.
+
+**دفعة 1 — إغلاق فراغات الخريطة (بلا إعادة تسمية)**
+- تسجيل الـ 15 مسارًا الناقص في `ROUTE_MAP` بقواعده الصحيحة، وتصحيح `/contact` إلى legacy و`/more` إلى authenticated-ish حسب محتواها الفعلي.
+- **الخطر**: منخفض–متوسط؛ قاعدة أضيق مما يجب تخفي رابطاً في التنقل. **الاختبار**: فتح كل مسار بأربع هويات (زائر/فرد/منشأة/إدارة).
+
+**دفعة 2 — طبقات أب مركزية**
+- `dashboard/route.tsx` (لاحقاً `my/route.tsx`) و`business/route.tsx` تحملان الحماية والصدفة مرة واحدة، وتُنظّف الصفحات من تكرار `DashboardShell`.
+- **الخطر**: متوسط؛ خطأ في الطبقة يعطّل كل الفرع. **الاختبار**: كل صفحة داخل الفرع + تحديث الصفحة + رجوع المتصفح.
+
+**دفعة 3 — تنظيف الميت**
+- حذف `/welcome` (أو دمج أقسامها المفيدة في `/`) و`/contact` كملف، وإلغاء ملفي `/appointments` و`/business/new` لصالح `/$`، وتوحيد `/me` + `/audit` في `/go`.
+- **الخطر**: منخفض بشرط أن يسبقها 301. **الاختبار**: الروابط القديمة كلها تصل لهدف صحيح.
+
+**دفعة 4 — إعادة تسمية منطقة الحساب** `/dashboard/* → /my/*` + فصل `/business/*`
+- الأكبر: تغيير أسماء ملفات، وتحديث كل `<Link to>` و`navigate` و`add-listing.ts` و`more-menu.ts` و`session`/`me` والأهداف بعد الدخول.
+- **الخطر**: عالٍ؛ أي رابط منسي يسقط في 404، وروابط `next=` المحفوظة قد تشير للقديم. **التقليل**: 301 من الدفعة 0 يغطي القديم، ومنع دمج أي `to="/dashboard`. **الاختبار**: بحث نصي شامل لصفر إشارة للمسارات القديمة + جولة Playwright على كل صفحة.
+
+**دفعة 5 — إعادة تسمية العام** (`/u` → `/profiles`، `/syria-guide` → `/guides/syria`)
+- **الخطر**: عالٍ على SEO — هذه هي الروابط المفهرسة والمشاركة. **التقليل**: 301 + `canonical` + إبقاء القديم عاملاً بلا حد زمني. **الاختبار**: فحص فهرسة بعد النشر.
+
+**دفعة 6 — تسمية الإدارة**
+- داخلي بالكامل، لا أثر SEO. **الخطر**: منخفض. **الاختبار**: تنقل `AdminShell` + الصلاحيات.
+
+**دفعة 7 — إغلاق**
+- تحديث `src/routes/README.md` وخريطة الروابط، وسجل خادمي لعدد طلبات المسارات القديمة (بدل التخزين المحلي) لتقرير التقاعد لاحقاً.
 
 ## تفاصيل تقنية
 
-- الأعداد من `pg_stat_user_tables.n_live_tup`؛ RLS والسياسات من `pg_class.relrowsecurity` و`pg_policies`؛ التبعيات من `pg_constraint` و`pg_proc.prosrc`؛ التخزين من `storage.buckets`/`storage.objects`.
-- عدّاد «دوال تشير إلى الجدول» يعتمد مطابقة نصية داخل نص الدالة، فقد يشمل تطابقات جزئية (مثل `requests` داخل `mkt_quote_requests`)؛ سيُتحقق منها جدولًا بجدول قبل أي حذف.
-- يظل حظر الـ canonical guard كما هو؛ لا شيء في هذا الجرد يعدّله.
+- المصدر الوحيد للصلاحيات يبقى `src/lib/routes-map.ts`؛ قاعدة البيانات (RLS + `has_perm` + `mkt_account_context`) تبقى الجهة الوحيدة التي تمنح، ولا شيء في الخطة يمسّها.
+- التحويل الدائم يحتاج مسارات خادمية (`server.handlers`) أو معالجة على الحافة، لأن `beforeLoad` مع `ssr:false` تحويل عميل لا 301.
+- إعادة التسمية تتم بنقل ملفات وتحديث سلسلة `createFileRoute` المطابقة للاسم؛ `src/routeTree.gen.ts` يُعاد توليده تلقائياً ولا يُحرَّر.
+- لا تغيير في قاعدة البيانات ولا في المخطط ولا في التخزين في أي دفعة.
+- حظر الـ canonical guard يبقى موقوفاً كما هو؛ لا شيء هنا يعدّله.
