@@ -262,6 +262,8 @@ export function PromoPopupHost() {
       ? (campaign.popup_mascot as MascotKind)
       : plan.mascot;
   const vertical = side === "top" || side === "bottom";
+  /** مشهد التعارف: بطاقة مضغوطة عمودية تملؤها الشخصيتان. */
+  const duo = mascot === "duo";
 
   // Finger drag: follow the finger, dismiss past the threshold, spring back otherwise.
   let startX = 0;
