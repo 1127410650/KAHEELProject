@@ -44,6 +44,7 @@ export const Route = createFileRoute("/categories/$slug")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "robots", content: "index, follow" },
         ...canonicalMeta(`/categories/${params.slug}`),
       ],
       links: canonicalLinks(`/categories/${params.slug}`),

@@ -22,6 +22,7 @@ export const Route = createFileRoute("/student-tools")({
         name: "description",
         content: "أدوات مجانية للطالب السوري لتلخيص النصوص وإنشاء أسئلة مراجعة محليًا.",
       },
+      { name: "robots", content: "index, follow" },
       ...canonicalMeta("/student-tools"),
     ],
     links: canonicalLinks("/student-tools"),

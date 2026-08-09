@@ -34,6 +34,7 @@ export const Route = createFileRoute("/syria-guide")({
         name: "description",
         content: "دليل سوريا للجامعات والمشافي والجهات الحكومية والمعالم الأثرية والسياحية.",
       },
+      { name: "robots", content: "index, follow" },
       ...canonicalMeta("/syria-guide"),
     ],
     links: canonicalLinks("/syria-guide"),
