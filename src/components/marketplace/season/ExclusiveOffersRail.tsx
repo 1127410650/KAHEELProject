@@ -2,10 +2,14 @@
  * «عروض حصرية» — مساحة مختارة يديرها مدير النظام.
  *
  * البطاقات تجلس فوق طبقة موسمية مخصّصة (موضع `exclusive`) فتُحسّ بارزة عن بقية
- * الصفحة، والنص فوق حجاب تدرّج يضمن التباين. المساحة كلها بارتفاع محجوز مسبقًا
- * فلا شيء يتحرّك عند وصول البيانات: إذا لا توجد عروض نشطة لا يُرسم أي شيء —
- * ولأن الجلب يبدأ قبل الرسم، لا يظهر هيكل فارغ ثم يختفي.
+ * الصفحة، والنص فوق حجاب تدرّج يضمن التباين.
+ *
+ * صفر هزّة تخطيط: ارتفاع المساحة ثابت (`RAIL_HEIGHT`) لا يتغيّر بعدد البطاقات،
+ * ونتذكّر في `localStorage` أن هناك عروضًا فعّالة، فتُحجز المساحة من أول رسم في
+ * الزيارات التالية ولا يُدفع شيء عند وصول البيانات. وإذا لم تكن هناك عروض لا
+ * تُحجز مساحة فارغة إطلاقًا.
  */
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 
@@ -13,20 +17,56 @@ import { useI18n } from "@/i18n";
 import { useExclusiveOffers } from "@/lib/mkt-seasons";
 import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
 
+const RAIL_HEIGHT = "13.25rem";
+const MEMORY_KEY = "kaheel.exclusive.present";
+
+function remembered(): boolean {
+  try {
+    return window.localStorage.getItem(MEMORY_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function remember(present: boolean) {
+  try {
+    if (present) window.localStorage.setItem(MEMORY_KEY, "1");
+    else window.localStorage.removeItem(MEMORY_KEY);
+  } catch {
+    /* التخزين المحلي قد يكون محجوبًا: الحجز تحسين فقط، لا شرط للعمل */
+  }
+}
+
 export function ExclusiveOffersRail() {
   const { locale } = useI18n();
   const ar = locale === "ar";
-  const { data } = useExclusiveOffers();
+  const { data, isPending } = useExclusiveOffers();
   const offers = data ?? [];
+  const [reserve, setReserve] = useState(false);
 
-  if (offers.length === 0) return null;
+  // القراءة بعد الترطيب حتى لا يختلف رسم الخادم عن المتصفح.
+  useEffect(() => setReserve(remembered()), []);
+
+  useEffect(() => {
+    if (!data) return;
+    remember(data.length > 0);
+  }, [data]);
+
+  if (offers.length === 0) {
+    if (isPending && reserve) {
+      return <div aria-hidden style={{ height: RAIL_HEIGHT }} />;
+    }
+    return null;
+  }
 
   return (
     <section
       aria-labelledby="exclusive-offers-title"
+      style={{ height: RAIL_HEIGHT }}
       className="relative isolate overflow-hidden rounded-3xl bg-[linear-gradient(130deg,#240046,#5a189a)] p-4 text-white shadow-[0_18px_40px_-24px_rgb(36_0_70/0.75)]"
     >
       <SeasonalLayer placement="exclusive" showMascot={false} />
+
 
       <div className="relative z-10">
         <header className="flex items-center gap-2">
