@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -10,8 +10,10 @@ import {
   MapPin,
   MoreHorizontal,
   Share2,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+
 
 import { supabase } from "@/integrations/supabase/client";
 import { track } from "@/lib/analytics";
