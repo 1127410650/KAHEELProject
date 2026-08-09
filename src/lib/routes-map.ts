@@ -85,6 +85,11 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/demo-stores/$worldId", "public", "market"),
   rule("/guides/syria", "public", "market"),
   rule("/guides/students", "public", "market"),
+  // Detail page of a guide entry. Its file uses the `_` escape
+  // (`guides/syria_.$slug.tsx`) so it does not nest under the list page; the URL
+  // it serves — and the rule below — is the plain one.
+  rule("/guides/syria/$slug", "public", "market"),
+
   // Renamed public pages. `/u/x` said nothing about what it shows, and the two
   // guides sat at the root as if they were sections of the platform. They now
   // live under self-describing prefixes; the old URLs are indexed, so they keep
