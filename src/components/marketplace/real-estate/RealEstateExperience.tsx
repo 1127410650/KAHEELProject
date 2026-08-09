@@ -414,7 +414,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                     <Skeleton key={index} className="h-10 w-24 shrink-0 rounded-full" />
                   ))}
               </div>
+              {/* The indexed, shareable page of the category. Without this link
+                  `/categories/real-estate` was a canonical destination no
+                  visitor could reach from the interface. */}
+              <Link
+                to="/categories/$slug"
+                params={{ slug: "real-estate" }}
+                className="mt-3 inline-block text-xs font-bold text-primary underline-offset-4 hover:underline"
+              >
+                {t("market.search.categoryPage")}
+              </Link>
             </div>
+
 
             <div className="real-estate-deferred mt-7">
               <SectionHeading
