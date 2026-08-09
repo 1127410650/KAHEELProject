@@ -39,7 +39,7 @@ export function KaheelStories() {
   if (list.length === 0) return null;
 
   return (
-    <section aria-label={ar ? "ستوريات كَحيل" : "Kaheel stories"} className="min-h-[92px]">
+    <section aria-label={ar ? "ستوريات كَحيل" : "Kaheel stories"} className="min-h-[112px]">
       <ul className="flex list-none gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {list.map((story, index) => {
           const isSeen = seen.includes(story.id);
