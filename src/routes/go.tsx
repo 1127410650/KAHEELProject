@@ -24,7 +24,7 @@ type GoSearch = { next?: string | undefined };
 export const Route = createFileRoute("/go")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): GoSearch => ({
-    next: typeof search.next === "string" ? search.next : undefined,
+    next: typeof search["next"] === "string" ? search["next"] : undefined,
   }),
   head: () => ({
     meta: [
