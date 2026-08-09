@@ -14,6 +14,8 @@ const HAIR = "#240046";
 const BODY = "#7b2cbf";
 const BODY_DARK = "#5a189a";
 const ACCENT = "#c77dff";
+const CLOTH = "#f7f2fb";
+const CLOTH_DARK = "#d8c7ea";
 
 function Frame({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
