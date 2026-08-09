@@ -100,7 +100,7 @@ export interface ResolvedOffer extends ExclusiveOffer {
 }
 
 const SEASON_COLUMNS =
-  "id, slug, label_ar, label_en, placement, section_key, image_url, image_path, image_width, image_height, decor_url, decor_path, motif, overlay, accent, mascot, mascot_url, mascot_path, priority, status, starts_at, ends_at";
+  "id, slug, label_ar, label_en, placement, section_key, image_url, image_path, image_width, image_height, decor_url, decor_path, motif, overlay, accent, mascot, mascot_url, mascot_path, headline_ar, headline_en, subheadline_ar, subheadline_en, priority, status, starts_at, ends_at";
 
 const OFFER_COLUMNS =
   "id, slug, title_ar, title_en, subtitle_ar, subtitle_en, badge_ar, badge_en, cta_ar, cta_en, click_url, image_url, image_path, backdrop_id, priority, status, starts_at, ends_at";
