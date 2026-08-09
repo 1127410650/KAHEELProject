@@ -143,7 +143,7 @@ export function SyriaHomeGateway() {
         </Link>
 
         <div
-          className="absolute inset-y-0 end-2 z-20 flex flex-col items-center justify-center gap-1 sm:end-2.5"
+          className="relative z-20 flex items-center justify-center gap-1.5 pb-2.5 sm:pb-3"
           aria-label="اختر الدليل"
           role="group"
         >
@@ -156,12 +156,13 @@ export function SyriaHomeGateway() {
               aria-pressed={active === index}
               className={
                 active === index
-                  ? "h-4 w-1 rounded-full bg-market-electric-bright transition-all"
-                  : "size-1.5 rounded-full bg-market-electric-bright/30 transition-all hover:bg-market-electric-bright/65"
+                  ? "h-1.5 w-5 rounded-full bg-market-electric-bright transition-all"
+                  : "size-1.5 rounded-full bg-market-electric-bright/35 transition-all hover:bg-market-electric-bright/70"
               }
             />
           ))}
         </div>
+
       </div>
 
       <style>{`
