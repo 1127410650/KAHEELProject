@@ -12,6 +12,8 @@ import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { BackdropLayer } from "@/components/marketplace/BackdropLayer";
+import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
+
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
 import kaheelLogo from "@/assets/kaheel-logo.png";
@@ -71,13 +73,15 @@ export function MarketHeader({
         ref={headerRef}
         className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-white/15 bg-[linear-gradient(112deg,#240046_0%,#3c096c_56%,#5a189a_118%)] text-white shadow-[0_7px_28px_rgb(36_0_70/0.22)] backdrop-blur-xl"
       >
+        <SeasonalLayer placement="header" />
         <div
           className={
             home
-              ? "mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
-              : "mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
+              ? "relative z-10 mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
+              : "relative z-10 mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
           }
         >
+
           {home ? (
             <>
               <button

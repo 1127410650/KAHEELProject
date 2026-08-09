@@ -2569,6 +2569,106 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_exclusive_offers: {
+        Row: {
+          backdrop_id: string | null
+          badge_ar: string
+          badge_en: string
+          click_url: string
+          created_at: string
+          created_by: string | null
+          cta_ar: string
+          cta_en: string
+          ends_at: string | null
+          id: string
+          image_path: string | null
+          image_url: string | null
+          listing_id: string | null
+          priority: number
+          slug: string
+          starts_at: string
+          status: string
+          storefront_id: string | null
+          subtitle_ar: string
+          subtitle_en: string
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          backdrop_id?: string | null
+          badge_ar?: string
+          badge_en?: string
+          click_url?: string
+          created_at?: string
+          created_by?: string | null
+          cta_ar?: string
+          cta_en?: string
+          ends_at?: string | null
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          listing_id?: string | null
+          priority?: number
+          slug: string
+          starts_at?: string
+          status?: string
+          storefront_id?: string | null
+          subtitle_ar?: string
+          subtitle_en?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Update: {
+          backdrop_id?: string | null
+          badge_ar?: string
+          badge_en?: string
+          click_url?: string
+          created_at?: string
+          created_by?: string | null
+          cta_ar?: string
+          cta_en?: string
+          ends_at?: string | null
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          listing_id?: string | null
+          priority?: number
+          slug?: string
+          starts_at?: string
+          status?: string
+          storefront_id?: string | null
+          subtitle_ar?: string
+          subtitle_en?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_exclusive_offers_backdrop_id_fkey"
+            columns: ["backdrop_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_seasonal_backdrops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_exclusive_offers_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_exclusive_offers_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_external_integrations: {
         Row: {
           config_public: Json
@@ -5357,6 +5457,90 @@ export type Database = {
             referencedColumns: ["code"]
           },
         ]
+      }
+      mkt_seasonal_backdrops: {
+        Row: {
+          accent: string
+          created_at: string
+          created_by: string | null
+          decor_path: string | null
+          decor_url: string | null
+          ends_at: string | null
+          id: string
+          image_height: number
+          image_path: string | null
+          image_url: string | null
+          image_width: number
+          label_ar: string
+          label_en: string
+          mascot: string
+          mascot_path: string | null
+          mascot_url: string | null
+          motif: string
+          overlay: string
+          placement: string
+          priority: number
+          section_key: string
+          slug: string
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accent?: string
+          created_at?: string
+          created_by?: string | null
+          decor_path?: string | null
+          decor_url?: string | null
+          ends_at?: string | null
+          id?: string
+          image_height?: number
+          image_path?: string | null
+          image_url?: string | null
+          image_width?: number
+          label_ar?: string
+          label_en?: string
+          mascot?: string
+          mascot_path?: string | null
+          mascot_url?: string | null
+          motif?: string
+          overlay?: string
+          placement?: string
+          priority?: number
+          section_key?: string
+          slug: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accent?: string
+          created_at?: string
+          created_by?: string | null
+          decor_path?: string | null
+          decor_url?: string | null
+          ends_at?: string | null
+          id?: string
+          image_height?: number
+          image_path?: string | null
+          image_url?: string | null
+          image_width?: number
+          label_ar?: string
+          label_en?: string
+          mascot?: string
+          mascot_path?: string | null
+          mascot_url?: string | null
+          motif?: string
+          overlay?: string
+          placement?: string
+          priority?: number
+          section_key?: string
+          slug?: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       mkt_service_availability: {
         Row: {

@@ -49,6 +49,10 @@ import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/Listi
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
 import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
+import { ExclusiveOffersRail } from "@/components/marketplace/season/ExclusiveOffersRail";
+import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
+
+
 import { FeaturedGuideStrip } from "@/components/marketplace/home/FeaturedGuideStrip";
 import { HomeSearchBar } from "@/components/marketplace/home/HomeSearchBar";
 
@@ -179,13 +183,17 @@ export function MarketHome() {
 
         <Reveal as="section">
 
-          <section aria-labelledby="home-fields-title">
+          <section
+            aria-labelledby="home-fields-title"
+            className="relative isolate overflow-hidden rounded-3xl"
+          >
+            <SeasonalLayer placement="stores" showMascot={false} />
             <h2 id="home-fields-title" className="sr-only">
               {t("market.homeV2.mainFields" as HomeKey)}
             </h2>
             <div
               ref={fieldsRef}
-              className="grid grid-cols-[repeat(auto-fit,minmax(148px,1fr))] gap-2 sm:gap-3"
+              className="relative z-10 grid grid-cols-[repeat(auto-fit,minmax(148px,1fr))] gap-2 sm:gap-3"
             >
               {MAIN_FIELDS.map((field, index) => (
                 <MainFieldCard
@@ -197,9 +205,15 @@ export function MarketHome() {
               ))}
             </div>
           </section>
+
         </Reveal>
 
         <HomeAdStrip addHref={addHref} />
+
+        <Reveal>
+          <ExclusiveOffersRail />
+        </Reveal>
+
 
         <Reveal>
           <BenefitsStrip />

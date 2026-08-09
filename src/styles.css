@@ -2361,3 +2361,65 @@ body:has(.market-surface) {
 @media (prefers-reduced-motion: reduce) {
   [data-kaheel-roam] { display: none !important; }
 }
+
+/* ═══ الطبقة الموسمية المزخرفة — حركة محسوسة لا مزعجة ═══
+   كل الحركات على transform/opacity فقط، ومعلّقة (paused) حتى تدخل الطبقة
+   الشاشة: `.k-season-run` يُضاف بواسطة IntersectionObserver، فالطبقة الخارجة
+   من الشاشة لا تستهلك معالجًا. */
+@keyframes k-season-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.02); }
+  50% { transform: translate3d(0, -10px, 0) scale(1.04); }
+}
+@keyframes k-season-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+@keyframes k-season-shimmer {
+  0% { transform: translate3d(-140%, 0, 0) skewX(-14deg); opacity: 0; }
+  35% { opacity: 0.5; }
+  100% { transform: translate3d(420%, 0, 0) skewX(-14deg); opacity: 0; }
+}
+@keyframes k-season-peek {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1.5deg); }
+  50% { transform: translate3d(0, -4px, 0) rotate(1.5deg); }
+}
+
+.k-season-float {
+  animation: k-season-float 6s ease-in-out infinite;
+  animation-play-state: paused;
+  will-change: transform;
+}
+.k-season-twinkle {
+  animation: k-season-twinkle 4.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.k-season-shimmer {
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.22), transparent);
+  animation: k-season-shimmer 9s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.k-season-peek {
+  transform-origin: 50% 100%;
+  animation: k-season-peek 5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.k-season-run .k-season-float,
+.k-season-run .k-season-twinkle,
+.k-season-run .k-season-shimmer,
+.k-season-run .k-season-peek {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-season-float,
+  .k-season-twinkle,
+  .k-season-shimmer,
+  .k-season-peek,
+  .k-season-run .k-season-float,
+  .k-season-run .k-season-twinkle,
+  .k-season-run .k-season-shimmer,
+  .k-season-run .k-season-peek {
+    animation: none !important;
+  }
+  .k-season-shimmer { display: none; }
+}
