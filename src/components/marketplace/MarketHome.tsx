@@ -687,6 +687,3 @@ function QuickAction({
     </a>
   );
 }
-
-  );
-}
