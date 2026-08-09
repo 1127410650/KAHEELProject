@@ -112,12 +112,12 @@ export function MascotRoam() {
     let first = 0;
     let cycle = 0;
     const run = () => {
-      if (blockedNow()) { console.debug('[roamdbg] blocked'); return; }
+      if (blockedNow()) return;
       const kind: RoamScene = Math.random() < 0.5 ? "stroll" : "search";
       // القاعدة الأولى: شخصية واحدة فقط، وبتكرار قليل، ولا تكرار للنوع نفسه.
       if (!canShowMascot(`roam:${kind}`, limits)) {
         const other: RoamScene = kind === "stroll" ? "search" : "stroll";
-        if (!canShowMascot(`roam:${other}`, limits)) { console.debug('[roamdbg] limits'); return; }
+        if (!canShowMascot(`roam:${other}`, limits)) return;
         return start(other);
       }
       start(kind);
@@ -130,7 +130,6 @@ export function MascotRoam() {
         bottomInset: 84,
         pad: 14,
       });
-      console.debug('[roamdbg] band', JSON.stringify(band));
       if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return;
       releaseRef.current = acquireStage(`roam:${kind}`);
       keyRef.current += 1;
