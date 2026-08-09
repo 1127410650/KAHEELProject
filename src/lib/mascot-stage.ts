@@ -171,9 +171,17 @@ function viewportObstacles(pad: number): [number, number, number, number][] {
   const out: [number, number, number, number][] = [];
   document.querySelectorAll<HTMLElement>(OBSTACLES).forEach((el) => {
     if (el.closest("[data-kaheel-stage]")) return;
+    // الزخرفة الخالصة (خلفيات، أعلام، طبقات موسمية) ليست محتوى يُحمى منه:
+    // تتجاهل النقر ولا تحمل نصًا، ولولا استثناؤها لغطّت الشاشة كلها ومنعت
+    // أي ظهور للشخصية.
+    const decorative =
+      !(el.textContent ?? "").trim() &&
+      window.getComputedStyle(el).pointerEvents === "none";
+    if (decorative) return;
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) return;
     if (r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw) return;
+
     out.push([r.left - pad, r.top - pad, r.right + pad, r.bottom + pad]);
   });
   return out;
