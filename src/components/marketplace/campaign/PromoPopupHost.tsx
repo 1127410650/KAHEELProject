@@ -262,6 +262,8 @@ export function PromoPopupHost() {
       ? (campaign.popup_mascot as MascotKind)
       : plan.mascot;
   const vertical = side === "top" || side === "bottom";
+  /** مشهد التعارف: بطاقة مضغوطة عمودية تملؤها الشخصيتان. */
+  const duo = mascot === "duo";
 
   // Finger drag: follow the finger, dismiss past the threshold, spring back otherwise.
   let startX = 0;
@@ -281,11 +283,23 @@ export function PromoPopupHost() {
   };
 
   return (
-    <div
-      className={`pointer-events-none fixed z-[80] flex p-3 sm:p-4 ${POSITION[side]}`}
-      aria-live="polite"
-    >
+    <>
+      {/*
+        طبقة زجاجية شفافة جدًا: ضباب خفيف وتدرج بنفسجي باهت يبقي الصفحة ظاهرة
+        وراءه بوضوح. `pointer-events-none` فالتصفح يكمل تحتها بلا حجب.
+      */}
       <div
+        aria-hidden
+        className={`pointer-events-none fixed inset-0 z-[79] bg-gradient-to-b from-[#c77dff]/10 via-[#7b2cbf]/[0.07] to-[#240046]/10 backdrop-blur-[3px] animate-[kaheel-scrim-in_0.35s_ease-out] motion-reduce:animate-none ${
+          closing ? "opacity-0 transition-opacity duration-200" : ""
+        }`}
+      />
+      <div
+        className={`pointer-events-none fixed z-[80] flex p-3 sm:p-4 ${POSITION[side]}`}
+        aria-live="polite"
+      >
+      <div
+
         ref={cardRef}
         role="dialog"
         aria-label={title}
@@ -302,9 +316,11 @@ export function PromoPopupHost() {
               }
             : undefined
         }
-        className={`pointer-events-auto relative flex w-full max-w-[22rem] touch-pan-y items-center gap-3 rounded-3xl border border-white/60 bg-white/90 p-3 pe-9 shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none ${
-          closing ? "animate-[kaheel-popup-out_0.2s_ease-in_forwards]" : ENTER[side]
-        }`}
+        className={`pointer-events-auto relative flex w-full touch-pan-y rounded-3xl border border-white/60 bg-white/90 shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none ${
+          duo
+            ? "max-w-[16.5rem] flex-col items-center gap-1 p-2.5 pb-3"
+            : "max-w-[22rem] items-center gap-3 p-3 pe-9"
+        } ${closing ? "animate-[kaheel-popup-out_0.2s_ease-in_forwards]" : ENTER[side]}`}
       >
         <div className="absolute end-2 top-2 flex flex-col items-center gap-1">
           <button
@@ -343,7 +359,7 @@ export function PromoPopupHost() {
 
         <PopupMascot kind={mascot} />
 
-        <div className="min-w-0 flex-1 text-start">
+        <div className={`min-w-0 ${duo ? "w-full text-center" : "flex-1 text-start"}`}>
           {badge ? (
             <span className="inline-flex rounded-full bg-[#240046] px-2 py-0.5 text-[10px] font-bold text-white">
               {badge}
@@ -351,7 +367,9 @@ export function PromoPopupHost() {
           ) : null}
           <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{title}</p>
           {subtitle ? (
-            <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#5a189a]">
+            <p
+              className={`${duo ? "line-clamp-3" : "line-clamp-2"} text-[11px] font-bold leading-snug text-[#5a189a]`}
+            >
               {subtitle}
             </p>
           ) : null}
@@ -361,12 +379,14 @@ export function PromoPopupHost() {
               if (campaign) trackCampaign(campaign.id, "click");
               close("click");
             }}
-            className="mt-2 inline-flex min-h-8 items-center justify-center rounded-full bg-[#3c096c] px-4 text-[11px] font-bold text-white shadow-[0_8px_18px_rgb(60_9_108/0.25)]"
+            className={`inline-flex min-h-8 items-center justify-center rounded-full bg-[#3c096c] px-4 text-[11px] font-bold text-white shadow-[0_8px_18px_rgb(60_9_108/0.25)] ${duo ? "mt-1.5" : "mt-2"}`}
           >
             {cta || (ar ? "تصفح الآن" : "Browse now")}
           </a>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
+

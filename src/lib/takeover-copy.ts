@@ -58,6 +58,22 @@ const AR_POOL: PopupCopy[] = [
   { title: "لا تقلي ما شفت! 🙈", subtitle: "خلص صار عندك علم… القرار إلك", mascot: "peek" },
   { title: "العرض عم يستنّاك 🎁", subtitle: "وإذا تأخرت… بيروح لغيرك", mascot: "parcel" },
   { title: "كَحيل بيحبك 💜", subtitle: "وعشان هيك جابلك أحلى العروض", mascot: "lounge" },
+  // مشهد التعارف بالشخصيتين
+  {
+    title: "تعرّف علينا! 👋",
+    subtitle: "أنا كَحيلان… وهاد ابن خالتي كَحيل، وسوا منجيبلك أحلى العروض 😎",
+    mascot: "duo",
+  },
+  {
+    title: "صار لازم نتعرّف 🧣",
+    subtitle: "أنا الزعيم كَحيلان، وهاد كَحيل… ومن هون وطالع العروض علينا",
+    mascot: "duo",
+  },
+  {
+    title: "أهلًا وسهلًا فيك 💜",
+    subtitle: "كَحيل وكَحيلان بخدمتك، وما منقصّر",
+    mascot: "duo",
+  },
 ];
 
 const EN_POOL: PopupCopy[] = [
@@ -106,6 +122,22 @@ const EN_POOL: PopupCopy[] = [
   { title: "Don't say we didn't tell you! 🙈", subtitle: "Now you know — the call is yours", mascot: "peek" },
   { title: "The offer is waiting 🎁", subtitle: "Wait too long and someone else takes it", mascot: "parcel" },
   { title: "Kaheel loves you 💜", subtitle: "That's why we brought you the best offers", mascot: "lounge" },
+  // The pair introducing themselves
+  {
+    title: "Meet us! 👋",
+    subtitle: "I'm Kaheelan… and this is my cousin Kaheel. Together we bring you the best offers 😎",
+    mascot: "duo",
+  },
+  {
+    title: "Time we got introduced 🧣",
+    subtitle: "I'm Chief Kaheelan, and this is Kaheel — from here on, the offers are on us",
+    mascot: "duo",
+  },
+  {
+    title: "You're very welcome 💜",
+    subtitle: "Kaheel and Kaheelan at your service — we never cut corners",
+    mascot: "duo",
+  },
 ];
 
 /** Picks a stable random line for the current mount. */
