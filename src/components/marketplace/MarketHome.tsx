@@ -372,7 +372,7 @@ function MainFieldCard({
         <p className="mt-0.5 line-clamp-2 text-[13px] font-medium leading-[1.35] text-white/92">
           {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
         </p>
-        <span className="k-pop mt-1 inline-flex w-fit max-w-full items-center rounded-full bg-white px-2 py-0.5 text-[13px] font-black leading-5 text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_6px_14px_-8px_rgb(36_0_70/0.45)]">
+        <span className="k-pop mt-1 inline-flex w-fit max-w-full items-center whitespace-nowrap rounded-full bg-white px-2 py-0.5 text-[13px] font-black leading-5 text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_6px_14px_-8px_rgb(36_0_70/0.45)]">
           <span className="truncate">{t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}</span>
           <ChevronLeft className="ms-0.5 size-3.5 shrink-0 rtl:rotate-0 ltr:rotate-180" aria-hidden />
         </span>
