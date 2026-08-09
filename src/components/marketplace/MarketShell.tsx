@@ -89,8 +89,8 @@ export function MarketHeader({
         <div
           className={
             home
-              ? "relative z-10 mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
-              : "relative z-10 mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
+              ? "relative z-10 mx-auto grid min-h-[46px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[50px] sm:px-5 lg:px-8"
+              : "relative z-10 mx-auto grid min-h-[46px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[50px] sm:px-5 lg:px-8"
           }
         >
 
@@ -102,7 +102,7 @@ export function MarketHeader({
                 className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
-                <MapPin className="size-5 shrink-0" aria-hidden />
+                <MapPin className="size-[18px] shrink-0" aria-hidden />
                 <span className="min-w-0">
                   <strong className="block truncate text-sm font-black leading-tight">
                     {locationLabel}
@@ -124,10 +124,10 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-8 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-9"
+                  className="size-7 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-8"
                   aria-hidden
                 />
-                <span className="text-[26px] font-black leading-none tracking-[-0.07em] text-white sm:text-3xl">
+                <span className="text-[21px] font-black leading-none tracking-[-0.07em] text-white sm:text-2xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -136,7 +136,7 @@ export function MarketHeader({
                   href={
                     session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                   }
-                  className="relative grid size-10 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                  className="relative grid size-9 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
                   aria-label={t("market.bottomNav.alerts")}
                 >
                   <Bell className="size-5" aria-hidden />
