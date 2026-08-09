@@ -363,3 +363,31 @@ export function ListingCardSkeleton() {
     </div>
   );
 }
+
+/**
+ * The loading placeholder for `ListingCard` in row/list view. Same padding and
+ * same 84px (112px from `sm`) media square as the real card, so the mobile
+ * search results list holds its height from the first paint.
+ */
+export function ListingRowSkeleton() {
+  return (
+    <div className="k-surface flex gap-3 p-2.5" aria-hidden>
+      <div className="k-skel size-[84px] shrink-0 rounded-xl sm:size-28" />
+      <div className="flex min-w-0 flex-1 flex-col pe-9">
+        <span className="flex h-[18px] items-center">
+          <span className="k-skel h-3.5 w-16 rounded-full" />
+        </span>
+        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+          <span className="k-skel block h-[0.95em] w-full rounded" />
+          <span className="k-skel block h-[0.95em] w-2/3 rounded" />
+        </div>
+        <span className="mt-1 flex h-[20px] items-center">
+          <span className="k-skel h-3.5 w-20 rounded" />
+        </span>
+        <span className="mt-auto flex h-[26px] items-center pt-1.5">
+          <span className="k-skel h-3 w-28 rounded" />
+        </span>
+      </div>
+    </div>
+  );
+}

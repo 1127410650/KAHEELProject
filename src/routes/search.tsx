@@ -850,24 +850,39 @@ function GenericSearchPage() {
               </button>
             </div>
 
-            {!active.isLoading && (
-              <p className="ms-auto text-xs text-muted-foreground">
-                {count}{" "}
-                {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
-              </p>
-            )}
+            {/* Always in flow, only its text fades in: the toolbar keeps the
+                exact same height before and after the count resolves. */}
+            <p
+              className={`ms-auto text-xs font-semibold text-muted-foreground transition-opacity duration-200 ${
+                active.isLoading ? "opacity-0" : "opacity-100"
+              }`}
+              aria-live="polite"
+            >
+              {count}{" "}
+              {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
+            </p>
           </div>
         </section>
 
-        <div className="mt-4">
+        <div className="k-reserve mt-4">
           {active.isLoading ? (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 w-full rounded-xl sm:h-56" />
-              ))}
-            </div>
+            <>
+              {/* Placeholders mirror the real cards box-for-box — row cards on
+                  phones, grid cards from `sm` — so results swap in without any
+                  reflow. */}
+              <div className="flex flex-col gap-2.5 sm:hidden">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <ListingRowSkeleton key={i} />
+                ))}
+              </div>
+              <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <ListingCardSkeleton key={i} />
+                ))}
+              </div>
+            </>
           ) : empty ? (
-            <div className="rounded-xl border border-dashed border-border px-4 py-8 text-center">
+            <div className="k-surface border-dashed px-4 py-8 text-center">
               <p className="text-sm font-medium text-foreground">{t("market.noResults")}</p>
               <div className="mt-3 flex flex-wrap justify-center gap-2">
                 {activeFilterCount > 0 && (
