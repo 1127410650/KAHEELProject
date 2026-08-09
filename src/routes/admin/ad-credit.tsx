@@ -21,6 +21,7 @@ import {
   useAllAdCreditWallets,
   type AdCreditKind,
 } from "@/lib/mkt-ad-credit";
+import { AdCreditTopupQueue } from "@/components/marketplace/AdCreditTopupQueue";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
