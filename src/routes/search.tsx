@@ -21,7 +21,12 @@ import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation
 import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
+import {
+  ListingCard,
+  ListingCardSkeleton,
+  ListingRowSkeleton,
+  type ListingCardData,
+} from "@/components/marketplace/ListingCard";
 import type { RealEstateSearchParams } from "@/components/marketplace/real-estate/RealEstateExperience";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
