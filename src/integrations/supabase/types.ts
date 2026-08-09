@@ -2188,6 +2188,47 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_guide_outreach: {
+        Row: {
+          batch_id: string | null
+          channel: string
+          created_at: string
+          id: string
+          note: string | null
+          place_id: string | null
+          place_slug: string
+          sent_by: string
+        }
+        Insert: {
+          batch_id?: string | null
+          channel?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          place_id?: string | null
+          place_slug: string
+          sent_by?: string
+        }
+        Update: {
+          batch_id?: string | null
+          channel?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          place_id?: string | null
+          place_slug?: string
+          sent_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_outreach_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_guide_places: {
         Row: {
           address: string | null
