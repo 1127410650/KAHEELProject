@@ -21,7 +21,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
-import { Mascot } from "@/components/marketplace/campaign/Mascot";
+import { MascotWalk } from "@/components/marketplace/campaign/MascotWalk";
 import { useI18n } from "@/i18n";
 import { useCallCenter } from "@/lib/mkt-call-center";
 import {
