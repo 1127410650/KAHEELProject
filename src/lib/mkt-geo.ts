@@ -31,10 +31,10 @@ export const COUNTRY_COLUMNS =
 export const CITY_COLUMNS = "id, country_id, name_ar, name_en, sort_order";
 
 /**
- * Temporary public-market mode. Other country rows and their data stay intact;
- * public surfaces only read and write the Syrian market until this flag changes.
+ * نطاق السوق لا يُكتب في الكود: يُقرأ من `mkt_countries` عبر `mkt-markets`.
+ * `FALLBACK_MARKET_ISO2` تُستخدم فقط قبل وصول الإعدادات أو عند انقطاع الشبكة.
  */
-export const ACTIVE_MARKET_ISO2 = "SY" as const;
+export { FALLBACK_MARKET_ISO2 } from "@/lib/mkt-markets";
 
 const countryIdRequests = new Map<string, Promise<string | null>>();
 const COUNTRY_LOOKUP_RETRY_DELAY_MS = 15_000;
@@ -52,7 +52,7 @@ export function loadCountryIdByIso2(iso2: string, activeOnly = false): Promise<s
 
   const request: Promise<string | null> = (async () => {
     let query = supabase.from("mkt_countries").select("id").eq("iso2", normalized);
-    if (activeOnly) query = query.eq("is_active", true);
+    if (activeOnly) query = query.eq("is_active", true).eq("is_market_enabled", true);
 
     const { data, error } = await query.maybeSingle();
     if (error) throw error;
@@ -71,20 +71,29 @@ export function loadCountryIdByIso2(iso2: string, activeOnly = false): Promise<s
   return request;
 }
 
+/** الدول المتاحة للجمهور = الدول المفعّلة للسوق من لوحة الإدارة. */
 export async function loadCountries(): Promise<MktCountry[]> {
+  const markets = await loadEnabledMarkets().catch(() => []);
+  return markets as unknown as MktCountry[];
+}
+
+/** كل الدول (بما فيها المعطّلة) — للوحة الإدارة فقط. */
+export async function loadAllCountries(): Promise<
+  (MktCountry & { is_active: boolean; is_market_enabled: boolean; phone_only_otp: boolean; is_default_market: boolean })[]
+> {
   const { data } = await supabase
     .from("mkt_countries")
-    .select(COUNTRY_COLUMNS)
-    .eq("is_active", true)
-    .eq("iso2", ACTIVE_MARKET_ISO2)
+    .select(
+      "id, iso2, name_ar, name_en, calling_code, currency_code, sort_order, is_active, is_market_enabled, phone_only_otp, is_default_market",
+    )
     .order("sort_order");
-  return (data ?? []) as MktCountry[];
+  return (data ?? []) as never;
 }
 
 export async function loadCities(countryId?: string | null): Promise<MktCity[]> {
   let activeCountryId = countryId ?? null;
   if (!activeCountryId) {
-    activeCountryId = await loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true);
+    activeCountryId = await loadCountryIdByIso2(await defaultMarketIso2(), true);
   }
   if (!activeCountryId) return [];
 
@@ -96,6 +105,7 @@ export async function loadCities(countryId?: string | null): Promise<MktCity[]> 
     .order("sort_order");
   return (data ?? []) as MktCity[];
 }
+
 
 export function geoName(
   row: { name_ar: string; name_en: string } | undefined,
