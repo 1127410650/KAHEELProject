@@ -121,20 +121,48 @@ const MAIN_FIELDS = [
   },
 ] as const;
 
+/**
+ * Secondary service tiles.
+ *
+ * Every tile carries the exact destination it promises: the category root plus a
+ * search term when the tile is narrower than its category (a pharmacy is not
+ * «all services»). No tile points at a page that cannot answer its own label.
+ */
 const SERVICES = [
-  ["homeServices", "services", House, "bg-[#e0aaff]/38 text-[#3c096c]"],
-  ["electronics", "devices", Laptop, "bg-[#c77dff]/30 text-[#5a189a]"],
-  ["gifts", "events", Gift, "bg-[#e0aaff]/46 text-[#7b2cbf]"],
-  ["sweets", "restaurants", IceCreamBowl, "bg-[#c77dff]/34 text-[#3c096c]"],
-  ["cafes", "restaurants", Coffee, "bg-[#e0aaff]/34 text-[#5a189a]"],
-  ["pharmacies", "services", HeartPulse, "bg-[#9d4edd]/18 text-[#3c096c]"],
-  ["more", "", MoreHorizontal, "bg-[#e0aaff]/32 text-[#240046]"],
-  ["kids", "fashion", Baby, "bg-[#c77dff]/24 text-[#7b2cbf]"],
-  ["beauty", "services", Flower2, "bg-[#e0aaff]/52 text-[#5a189a]"],
-  ["sports", "services", Dumbbell, "bg-[#9d4edd]/16 text-[#3c096c]"],
-  ["fashion", "fashion", Shirt, "bg-[#c77dff]/28 text-[#7b2cbf]"],
-  ["moving", "furniture", Package, "bg-[#e0aaff]/38 text-[#5a189a]"],
+  { key: "homeServices", href: "/search?category=services", icon: House },
+  { key: "electronics", href: "/search?category=devices", icon: Laptop },
+  { key: "gifts", href: "/search?category=events&q=%D9%87%D8%AF%D8%A7%D9%8A%D8%A7", icon: Gift },
+  {
+    key: "sweets",
+    href: "/search?category=restaurants&q=%D8%AD%D9%84%D9%88%D9%8A%D8%A7%D8%AA",
+    icon: IceCreamBowl,
+  },
+  {
+    key: "cafes",
+    href: "/search?category=restaurants&q=%D9%83%D8%A7%D9%81%D9%8A%D9%87",
+    icon: Coffee,
+  },
+  {
+    key: "pharmacies",
+    href: "/search?category=services&q=%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9",
+    icon: HeartPulse,
+  },
+  { key: "more", href: "/more", icon: MoreHorizontal },
+  { key: "kids", href: "/search?category=fashion&q=%D8%A3%D8%B7%D9%81%D8%A7%D9%84", icon: Baby },
+  {
+    key: "beauty",
+    href: "/search?category=services&q=%D8%AA%D8%AC%D9%85%D9%8A%D9%84",
+    icon: Flower2,
+  },
+  {
+    key: "sports",
+    href: "/search?category=services&q=%D8%B1%D9%8A%D8%A7%D8%B6%D8%A9",
+    icon: Dumbbell,
+  },
+  { key: "fashion", href: "/search?category=fashion", icon: Shirt },
+  { key: "moving", href: "/search?category=furniture&q=%D9%86%D9%82%D9%84", icon: Package },
 ] as const;
+
 
 const FEATURE_FILTERS = [
   ["all", ""],
