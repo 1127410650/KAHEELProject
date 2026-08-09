@@ -2004,6 +2004,120 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_guide_places: {
+        Row: {
+          address: string | null
+          address_status: string | null
+          category: string | null
+          city: string | null
+          completeness: number | null
+          created_at: string
+          district: string | null
+          email: string | null
+          governorate: string | null
+          id: string
+          is_published: boolean
+          latitude: number | null
+          longitude: number | null
+          map_url: string | null
+          map_url_status: string | null
+          name_ar: string
+          name_en: string | null
+          notes: string | null
+          opening_hours: string | null
+          phone: string | null
+          phone_status: string | null
+          sector: string | null
+          slug: string
+          source_date: string | null
+          source_label: string | null
+          source_ref: string | null
+          source_type: string | null
+          stars: number | null
+          subcategory: string | null
+          updated_at: string
+          verification_status: string
+          website: string | null
+          whatsapp: string | null
+          whatsapp_link: string | null
+          whatsapp_status: string | null
+        }
+        Insert: {
+          address?: string | null
+          address_status?: string | null
+          category?: string | null
+          city?: string | null
+          completeness?: number | null
+          created_at?: string
+          district?: string | null
+          email?: string | null
+          governorate?: string | null
+          id?: string
+          is_published?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          map_url?: string | null
+          map_url_status?: string | null
+          name_ar: string
+          name_en?: string | null
+          notes?: string | null
+          opening_hours?: string | null
+          phone?: string | null
+          phone_status?: string | null
+          sector?: string | null
+          slug: string
+          source_date?: string | null
+          source_label?: string | null
+          source_ref?: string | null
+          source_type?: string | null
+          stars?: number | null
+          subcategory?: string | null
+          updated_at?: string
+          verification_status?: string
+          website?: string | null
+          whatsapp?: string | null
+          whatsapp_link?: string | null
+          whatsapp_status?: string | null
+        }
+        Update: {
+          address?: string | null
+          address_status?: string | null
+          category?: string | null
+          city?: string | null
+          completeness?: number | null
+          created_at?: string
+          district?: string | null
+          email?: string | null
+          governorate?: string | null
+          id?: string
+          is_published?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          map_url?: string | null
+          map_url_status?: string | null
+          name_ar?: string
+          name_en?: string | null
+          notes?: string | null
+          opening_hours?: string | null
+          phone?: string | null
+          phone_status?: string | null
+          sector?: string | null
+          slug?: string
+          source_date?: string | null
+          source_label?: string | null
+          source_ref?: string | null
+          source_type?: string | null
+          stars?: number | null
+          subcategory?: string | null
+          updated_at?: string
+          verification_status?: string
+          website?: string | null
+          whatsapp?: string | null
+          whatsapp_link?: string | null
+          whatsapp_status?: string | null
+        }
+        Relationships: []
+      }
       mkt_integration_catalog: {
         Row: {
           code: string

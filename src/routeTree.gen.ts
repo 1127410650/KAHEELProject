@@ -81,6 +81,7 @@ import { Route as BusinessServicesSettingsRouteImport } from './routes/business/
 import { Route as BusinessStoreIndexRouteImport } from './routes/business/store.index'
 import { Route as BusinessStoreCatalogRouteImport } from './routes/business/store.catalog'
 import { Route as BusinessStoreNewRouteImport } from './routes/business/store.new'
+import { Route as GuidesSyriaSlugRouteImport } from './routes/guides/syria_.$slug'
 import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
@@ -449,6 +450,11 @@ const BusinessStoreNewRoute = BusinessStoreNewRouteImport.update({
   path: '/store/new',
   getParentRoute: () => BusinessRouteRoute,
 } as any)
+const GuidesSyriaSlugRoute = GuidesSyriaSlugRouteImport.update({
+  id: '/guides/syria_/$slug',
+  path: '/guides/syria/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyAdsIndexRoute = MyAdsIndexRouteImport.update({
   id: '/ads/',
   path: '/ads/',
@@ -550,6 +556,7 @@ export interface FileRoutesByFullPath {
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
+  '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
@@ -627,6 +634,7 @@ export interface FileRoutesByTo {
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
+  '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports': typeof AdminReportsIndexRoute
@@ -708,6 +716,7 @@ export interface FileRoutesById {
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
+  '/guides/syria_/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
@@ -790,6 +799,7 @@ export interface FileRouteTypes {
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
+    | '/guides/syria/$slug'
     | '/my/ads/new'
     | '/my/reports/$id'
     | '/admin/reports/'
@@ -867,6 +877,7 @@ export interface FileRouteTypes {
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
+    | '/guides/syria/$slug'
     | '/my/ads/new'
     | '/my/reports/$id'
     | '/admin/reports'
@@ -947,6 +958,7 @@ export interface FileRouteTypes {
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
+    | '/guides/syria_/$slug'
     | '/my/ads/new'
     | '/my/reports/$id'
     | '/admin/reports/'
@@ -987,6 +999,7 @@ export interface RootRouteChildren {
   InviteTokenRoute: typeof InviteTokenRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
+  GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1495,6 +1508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessStoreNewRouteImport
       parentRoute: typeof BusinessRouteRoute
     }
+    '/guides/syria_/$slug': {
+      id: '/guides/syria_/$slug'
+      path: '/guides/syria/$slug'
+      fullPath: '/guides/syria/$slug'
+      preLoaderRoute: typeof GuidesSyriaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my/ads/': {
       id: '/my/ads/'
       path: '/ads'
@@ -1708,6 +1728,7 @@ const rootRouteChildren: RootRouteChildren = {
   InviteTokenRoute: InviteTokenRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
+  GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
