@@ -1,169 +1,84 @@
-# إعادة تنظيم مسارات گحيل — دراسة وخطة
+# تقرير جرد — الدفعة 3 (بدون أي تنفيذ)
 
-دراسة فقط، لا تنفيذ. كل ما يلي مقروء الآن من `src/routes/` (84 تعريف مسار) ومن `src/lib/routes-map.ts`.
+جرد فقط. لم يُعدَّل أو يُحذف أي ملف، ولم تُلمس قاعدة البيانات.
 
-## 1) خريطة المسارات الحالية
+نتيجة أولية مهمة: `me.tsx` و`audit.tsx` **غير موجودين أصلًا** كملفات مسار — تم حذفهما في دفعة سابقة، وبقي لكل منهما تحويل 301 فقط (`/me → /go`، `/audit → /go?next=audit-log`). أما `demo` فهو **حيّ ومربوط من الصفحة الرئيسية**. الموت الحقيقي وجدته في مكان آخر: مكوّنات صفحة رئيسية غير مستوردة من أي ملف.
 
-### أ. عام (زائر) — طبقة السوق `MarketShell`
-| المسار | الوظيفة |
-|---|---|
-| `/` | الرئيسية (إعلانات + مجالات + قوالب متاجر) |
-| `/search` | البحث والتصفية |
-| `/categories/$slug` | صفحة مجال/تصنيف |
-| `/ads/$slug` | صفحة إعلان |
-| `/stores/$slug` | صفحة متجر عامة |
-| `/businesses/$slug` | صفحة منشأة |
-| `/u/$username` | ملف مستخدم عام |
-| `/services` (+ `/services/`) | دليل الخدمات (المسار الأب طبقة، والمحتوى في `services.index`) |
-| `/services/$slug/$itemId/book` | حجز خدمة |
-| `/syria-guide` · `/student-tools` | محتوى مرجعي (دليل سوريا، أدوات الطلاب) |
-| `/about` · `/help` · `/terms` · `/privacy` | صفحات ثابتة |
-| `/contact` | **تحويل** إلى `/help#contact` |
-| `/welcome` | صفحة تعريفية بالمنصة — محتواها يكرر `/` |
-| `/demo` · `/demo-stores/$worldId` | بيئة تجريبية (noindex، محجوبة بعلم `LIVE_DEMO_VISIBLE`) |
-| `/more` | قائمة «المزيد» للجوال (public في الخريطة لكنها تعرض إدارة حسابات) |
+## 1) جرد المسارات المشتبه بها
 
-### ب. الدخول والانتقال (بلا طبقة)
-`/auth` (دخول) · `/register` (تسجيل) · `/forgot-password` · `/reset-password` · `/invite/$token` (دعوة) · `/choose-account` (اختيار الحساب) · `/join` (طلب حساب بائع/مزوّد) · `/market-setup` (إكمال بيانات سوريا) · `/me` (تحويل ذكي حسب الهوية) · `/audit` (تحويل) · `/appointments` · `/business/new` · `/$` (معالج المسارات القديمة المركزي)
+المسح: 78 ملف مسار، مقابل `ROUTE_MAP` (482 سطرًا)، مع عدّ كل إشارة نصية في `src/` خارج ملف المسار نفسه.
 
-### ج. لوحة المستخدم `/dashboard/*` — `DashboardShell`
-- حساب شخصي أو منشأة: `profile` · `notifications` · `messages` · `favorites` · `bookings` · `my-ads` · `points` · `ads/new` · `ads/$id/edit` · `requests` · `reports` · `reports/$id` · `violations`
-- منشأة فقط (تشغيلي): `operations` · `orders` · `store/` · `store/new` · `store/catalog` · `network` · `service` · `service/settings` · `business`
+| المسار | الملف | في ROUTE_MAP؟ | 301 | إشارات في الكود | وصول من الواجهة | قاعدة بيانات / تخزين | التصنيف | مخاطر الحذف |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `/me` | لا ملف | نعم (legacy) | نعم → `/go` | 0 | لا | لا | **تحويل فقط — لا شيء ليُحذف** | حذف القاعدة يُنتج 404 لروابط قديمة |
+| `/audit` | لا ملف | نعم (legacy) | نعم → `/go?next=audit-log` | 0 | لا | لا | **تحويل فقط** | نفس ما سبق |
+| `/demo` | `routes/demo.tsx` | نعم (public) | لا | 2: `MarketHome.tsx:316`، `MarketShell.tsx:345` | **نعم** — بطاقة «البيئة التجريبية» في الرئيسية | **صفر** — `live-demo.ts` بيانات ثابتة بالكامل | **حيّ يُستخدم** | إخفاء واجهة عرض تسويقية ظاهرة للزوار |
+| `/demo-stores/$worldId` | `routes/demo-stores.$worldId.tsx` | نعم (public) | لا | 3: `LiveDemoEnvironment.tsx:175`، `MarketDemoShowcases.tsx:116,167` (**ميت**) | فقط من داخل `/demo` | **صفر** — `demo-store-worlds.ts` ثابت | **حيّ (تابع لـ `/demo`)** | تعطيل روابط داخل `/demo` |
+| `/categories/$slug` | `routes/categories.$slug.tsx` | نعم (public) | لا (لكنه **هدف** توحيد «عقار ديل») | 0 إشارة داخلة؛ يشير لنفسه فقط | لا يوجد أي زر أو قائمة | **يقرأ**: `mkt_listings` + التصنيفات | **مشكوك فيه — لكن لا يُحذف** | صفحة عامة قابلة للفهرسة وهدف canonical لأسماء «عقار ديل»؛ حذفه يكسر SEO |
+| `/my/quotes` | `routes/my/quotes.tsx` | نعم (account) | نعم من `/dashboard/requests` | 0 | **لا** — غير مدرج في `more-menu.ts` | **يقرأ**: `mkt_quote_requests` | **حيّ لكن غير مكتشف** — النقص في القائمة لا في المسار | حذفه يفقد الشاشة الوحيدة لعروض الأسعار؛ الإصلاح إضافته للقائمة |
+| `/reset-password` | `routes/reset-password.tsx` | نعم | لا | 0 | لا (يأتي من بريد Supabase) | جلسة Supabase | **حيّ** | كسر استعادة كلمة المرور |
+| `/invite/$token` | `routes/invite.$token.tsx` | نعم | لا | 0 | لا (يأتي من رابط دعوة) | يقرأ/يكتب الدعوات | **حيّ** | كسر الدعوات |
+| `/admin/my-work` | `routes/admin/my-work.tsx` | نعم | لا | 1: `AdminShell.tsx:80` | نعم (قائمة الإدارة) | نعم | **حيّ** | — |
+| `/admin/{listings,users,businesses,verifications}_/$id` | ملفات `_.$id` | نعم | لا | 0 لصيغة `_/` (الروابط تستخدم الـ URL النظيف) | نعم | نعم | **حيّ** — صفر الإشارات مجرد فرق في الصياغة | لا شيء؛ ليست ميتة |
+| `/$` (splat) | `routes/$.tsx` | — | يحلّ كل التحويلات | — | — | لا | **حيّ وحرج** | تعطيل كل الروابط القديمة والـ 404 الحقيقي |
 
-### د. الإدارة `/admin/*` — `AdminShell`
-`/admin` (طبقة + `index`) · `dashboard` (تحليلات) · `my-work` · `search` · `listings` + `listings_/$id` · `listing-events` · `listing-reports` · `reports` + `reports/$id` · `verifications` + `verifications_/$id` · `join-applications` · `businesses` + `businesses_/$id` · `users` + `users_/$id` · `stores` · `activities` · `geo` · `roles` · `content-rules` · `attendance` · `workforce` · `audit-log` · `settings`
+### الموت الحقيقي: مكوّنات غير مستوردة من أي ملف
 
-## 2) تقييم التنظيم الحالي
+`MarketHome.tsx` يستورد من `components/marketplace/home/` عنصرًا واحدًا فقط (`SyriaHomeGateway`). الباقي بلا أي مستورد في المستودع:
 
-**تكرار وتداخل**
-- `/welcome` يكرر الرئيسية `/` بمحتوى تسويقي؛ لا رابط داخلي يقوده كصفحة أولى.
-- `/contact` صفحة كاملة صارت مجرد تحويل، ومع ذلك ما زالت مسجّلة كـ `public` في الخريطة — تناقض يجعلها قابلة للظهور في التنقل والفهرسة.
-- ثلاث بوابات دخول للأعمال: `/join` و `/business/new` (تحويل) و `/market-setup`؛ وثلاث بوابات تحويل ذكي: `/me` و `/audit` و `/$`.
-- تقارير في مكانين بنفس الاسم: `/dashboard/reports` (بلاغاتي) و `/admin/reports` (البلاغات إدارياً) و `/admin/listing-reports` (بلاغات الإعلانات) — الفرق بين الأخيرين غير واضح من الاسم.
-- `/admin` و `/admin/dashboard` و `/admin/my-work` ثلاث «نقاط بداية» للإدارة.
+| الملف | مستوردون | يقرأ قاعدة بيانات؟ |
+| --- | --- | --- |
+| `home/MarketCategoryTiles.tsx` | 0 | لا |
+| `home/MarketDemoListings.tsx` | 0 | نعم (إعلانات) |
+| `home/MarketDemoShowcases.tsx` | 0 | لا |
+| `home/MarketFeaturedBanner.tsx` | 0 | لا |
+| `home/MarketStoreTemplates.tsx` | 0 | لا |
+| `home/MarketStorefrontHero.tsx` | 0 | لا |
+| `home/SyriaUtilityHub.tsx` | 0 | لا |
 
-**أسماء لا تعكس الوظيفة**
-- `/dashboard/requests` = طلبات عروض الأسعار (`mkt_quote_requests`) — الاسم عام ومورث من النظام القديم.
-- `/dashboard/operations` = لوحة تشغيل المنشأة؛ اسم غامض للمستخدم.
-- `/dashboard/network` = شبكة المزوّدين. `/dashboard/points` = المحفظة والنقاط. `/dashboard/violations` = المخالفات.
-- `/dashboard/my-ads` مقابل `/dashboard/ads/new` — مساران لنفس الكيان باسمين مختلفين.
-- `/u/$username` اختصار غير مفهوم.
-- `/admin/geo` · `/admin/content-rules` · `/admin/listing-events` أسماء تقنية.
-- بادئة `/dashboard` نفسها مورثة من لوحة «تحقّق» القديمة.
+`home/useAutoLoopRail.ts` مستخدم من `MarketCategoryStrip` (حيّ) ومن اثنين من الميتة أعلاه — يبقى.
 
-**التسلسل الهرمي**
-- الفصل الأساسي سليم: عام → دخول → `/dashboard` → `/admin`، وطبقة `admin/route.tsx` تحمي فرعها، و`DashboardShell` يفرض الدخول والحساب النشط.
-- لكن لا يوجد `dashboard/route.tsx` كطبقة أب: كل صفحة تستورد `DashboardShell` بنفسها، فالحماية متكررة لا مركزية، ولا يوجد `/dashboard` كصفحة (مسجّل legacy → `/me`).
-- خلط في المستويات: `/join` و`/choose-account` و`/market-setup` و`/me` مسارات جذرية مع أنها كلها «انتقال بعد الدخول».
-- المنشأة والحساب الشخصي يتشاركان نفس الفرع `/dashboard` دون تمييز في الرابط، والفصل يحدث فقط عبر `allowed_identity_types` في الخريطة.
+هذه **ميتة مؤكدة**: حذفها لا يغيّر بكسل واحد في الواجهة ولا يلمس أي جدول. الخطر الوحيد أنها قد تكون «نسخة قادمة» للرئيسية محفوظة عن قصد.
 
-**فراغات في خريطة المسارات (مهم)** — مسارات موجودة فعلاً وغير مسجّلة في `ROUTE_MAP`، فلا تحصل على قاعدة صلاحية ولا طبقة معلنة:
-`/welcome` · `/forgot-password` · `/reset-password` · `/demo-stores/$worldId` · `/dashboard/violations` · `/admin/dashboard` · `/admin/my-work` · `/admin/search` · `/admin/attendance` · `/admin/workforce` · `/admin/content-rules` · وكل صفحات التفصيل `listings_/$id` · `businesses_/$id` · `users_/$id` · `verifications_/$id`.
+## 2) تحذير Hydration — المصدر الدقيق
 
-**مسارات يتيمة أو شبه ميتة**
-- `/welcome` (لا رابط داخلي يشير إليها كمدخل).
-- `/demo` و `/demo-stores/$worldId` معطّلتان بعلم؛ تبقى فقط للعرض الداخلي.
-- `/audit` و `/business/new` و `/appointments` ملفات مسار كاملة لمجرد تحويل، ويمكن استيعاب اثنين منها في `/$`.
-- 40+ قاعدة `legacy` في الخريطة كلها من النظام القديم؛ عدّاد الاستخدام موجود (`logLegacyRoute`) لكن التخزين محلي في المتصفح فقط، فلا يمكن معرفة أي رابط قديم ما زال مستخدماً فعلياً.
+**المكان:** `src/routes/__root.tsx:33-36`
 
-**نقطة SEO حرجة**: كل التحويلات الحالية تحدث في المتصفح (`ssr: false` + `beforeLoad` + `redirect`)، وليست 301. جوجل لا يمرّر إشارات الفهرسة عبرها، والزاحف يرى صفحة فارغة أولاً. أي إعادة تسمية تحتاج تحويلاً على الخادم لتبقى الروابط المفهرسة سليمة.
-
-## 3) الهيكل المقترح
-
-المبدأ: **الرابط الظاهر يشرح نفسه** · فصل صريح بين ثلاث مناطق · مسار واحد لكل وظيفة · طبقة أب واحدة لكل منطقة.
-
-```text
-عام (SSR + فهرسة)
-  /                         الرئيسية
-  /search                   البحث
-  /c/$slug        →  /categories/$slug   (يبقى كما هو)
-  /ads/$slug                إعلان
-  /stores/$slug             متجر
-  /businesses/$slug         منشأة
-  /profiles/$username       ملف عام            (بديل /u/$username)
-  /services · /services/$slug/$itemId/book
-  /guides/syria · /guides/students             (بديل /syria-guide · /student-tools)
-  /about · /help · /terms · /privacy
-  /more                     قائمة الجوال (noindex)
-
-الدخول والانتقال  /account/*
-  /auth · /auth/register · /auth/forgot · /auth/reset · /auth/invite/$token
-  /account/choose           اختيار الحساب      (بديل /choose-account)
-  /account/apply            طلب حساب بائع/مزوّد (بديل /join)
-  /account/setup            إكمال بيانات سوريا (بديل /market-setup)
-  /go                       تحويل ذكي واحد     (يستوعب /me + /audit)
-
-لوحة الحساب  /my/*            (طبقة أب واحدة: دخول + حساب نشط)
-  /my                       نظرة عامة (جديدة، تحل مكان /dashboard الميت)
-  /my/profile · /my/notifications · /my/messages · /my/favorites
-  /my/ads · /my/ads/new · /my/ads/$id/edit
-  /my/bookings · /my/quotes            (بديل requests)
-  /my/wallet                           (بديل points)
-  /my/reports · /my/reports/$id · /my/violations
-
-لوحة المنشأة  /business/*      (طبقة أب: حساب نشط من نوع business)
-  /business                 لوحة التشغيل        (بديل operations)
-  /business/profile         (بديل dashboard/business)
-  /business/orders
-  /business/store · /business/store/new · /business/store/catalog
-  /business/services · /business/services/settings
-  /business/partners        (بديل network)
-
-الإدارة  /admin/*            (كما هي، مع توضيح أسماء)
-  /admin                    نقطة واحدة (تدمج index + dashboard + my-work تبويبات)
-  /admin/listings (+ /$id) · /admin/listings/events
-  /admin/reports (+ /$id) · /admin/reports/listings   (بديل listing-reports)
-  /admin/verifications (+ /$id) · /admin/applications (بديل join-applications)
-  /admin/users (+ /$id) · /admin/businesses (+ /$id) · /admin/stores
-  /admin/taxonomy (بديل activities) · /admin/locations (بديل geo)
-  /admin/roles · /admin/moderation (بديل content-rules)
-  /admin/staff/attendance · /admin/staff/workforce
-  /admin/audit-log · /admin/settings · /admin/search
+```ts
+function useShellScope() {
+  const pathname = typeof window === "undefined" ? "" : window.location.pathname;
+  return pathname.startsWith("/admin") ? "" : "market-surface";
+}
 ```
 
-**قرار مطلوب قبل التنفيذ — شكل «الأسماء العربية-الودية»:**
-1. **موصى به**: روابط لاتينية قصيرة مفهومة (`/my/quotes`, `/business/store`) وعنوان عربي واضح في الواجهة و`head()`. آمن للنسخ والمشاركة والفهرسة وبلا ترميز `%D8`.
-2. روابط عربية حرفية (`/حسابي/عروض-الأسعار`). ممكنة تقنياً لكن تظهر مشفّرة في الواتساب والتحليلات، وتضاعف التحويلات.
-3. هجين: عربي للمحتوى العام فقط (`/خدمات`) ولاتيني للوحات.
+**السبب التقني:** فرع خادم/عميل داخل الرندر. على الخادم `pathname = ""`، و`"".startsWith("/admin")` تساوي `false`، فيُرسل `class="market-surface …"`. في المتصفح يُقرأ المسار الحقيقي، فإن كان تحت `/admin` تصبح النتيجة `""` → اختلاف سمة `className` بين HTML الخادم والعميل. يظهر فقط في `NotFoundView` و`ErrorView` لأنهما المكوّنان الوحيدان اللذان ينادونه، وقد ظهر بعد تحويل 404 إلى SSR في هذه الدفعة.
 
-الشجرة أعلاه مكتوبة على الخيار 1؛ إن اخترت 2 أو 3 أعيد صياغتها قبل أي تنفيذ.
+**تأكيد بالتجربة:**
+- `curl /admin/no-such-xyz` → HTML الخادم يحتوي `class="market-surface flex min-h-dvh …"`.
+- المتصفح على نفس الرابط: `A tree hydrated but some attributes of the server rendered HTML didn't match the client properties… - A server/client branch \`if (typeof window !== 'undefined')\``.
+- بقية المسارات المفحوصة (`/`, `/about`, `/search`, `/auth`, `/help`, `/guides/syria`, `/demo`, 404 عام) → صفر تحذير.
 
-## 4) خطة التنفيذ المرحلية
+**أبسط إصلاح (سطران، بلا إعادة هيكلة):** استبدال قراءة `window` بمسار الراوتر نفسه، وهو متاح ومتطابق بين الخادم والعميل:
 
-**دفعة 0 — أساس التحويل الدائم (بدون أي تغيير مرئي)**
-- إضافة تحويل 301 على الخادم لكل مسار قديم/متغيّر بدل التحويل في المتصفح، مع الحفاظ على `?query` و`#hash`.
-- إضافة `canonical` لكل صفحة عامة.
-- **الخطر**: منخفض؛ حلقة تحويل إن تعارضت قاعدة خادمية مع `beforeLoad`. **الاختبار**: كل مسار قديم يعيد 301 مرة واحدة إلى هدف يعيد 200.
+```ts
+const pathname = useRouterState({ select: (s) => s.location.pathname });
+return pathname.startsWith("/admin") ? "" : "market-surface";
+```
 
-**دفعة 1 — إغلاق فراغات الخريطة (بلا إعادة تسمية)**
-- تسجيل الـ 15 مسارًا الناقص في `ROUTE_MAP` بقواعده الصحيحة، وتصحيح `/contact` إلى legacy و`/more` إلى authenticated-ish حسب محتواها الفعلي.
-- **الخطر**: منخفض–متوسط؛ قاعدة أضيق مما يجب تخفي رابطاً في التنقل. **الاختبار**: فتح كل مسار بأربع هويات (زائر/فرد/منشأة/إدارة).
+بديل أبسط منه إن أردنا صفر تغيير سلوكي: تثبيت `""` كقيمة أولية على الجانبين وتطبيق النطاق داخل `useEffect` — لكن حل `useRouterState` أنظف ويحفظ الشكل الصحيح من أول رندر.
 
-**دفعة 2 — طبقات أب مركزية**
-- `dashboard/route.tsx` (لاحقاً `my/route.tsx`) و`business/route.tsx` تحملان الحماية والصدفة مرة واحدة، وتُنظّف الصفحات من تكرار `DashboardShell`.
-- **الخطر**: متوسط؛ خطأ في الطبقة يعطّل كل الفرع. **الاختبار**: كل صفحة داخل الفرع + تحديث الصفحة + رجوع المتصفح.
+## 3) ترتيب تنفيذ آمن (عند الموافقة)
 
-**دفعة 3 — تنظيف الميت**
-- حذف `/welcome` (أو دمج أقسامها المفيدة في `/`) و`/contact` كملف، وإلغاء ملفي `/appointments` و`/business/new` لصالح `/$`، وتوحيد `/me` + `/audit` في `/go`.
-- **الخطر**: منخفض بشرط أن يسبقها 301. **الاختبار**: الروابط القديمة كلها تصل لهدف صحيح.
+كل خطوة مستقلة وقابلة للتراجع وحدها.
 
-**دفعة 4 — إعادة تسمية منطقة الحساب** `/dashboard/* → /my/*` + فصل `/business/*`
-- الأكبر: تغيير أسماء ملفات، وتحديث كل `<Link to>` و`navigate` و`add-listing.ts` و`more-menu.ts` و`session`/`me` والأهداف بعد الدخول.
-- **الخطر**: عالٍ؛ أي رابط منسي يسقط في 404، وروابط `next=` المحفوظة قد تشير للقديم. **التقليل**: 301 من الدفعة 0 يغطي القديم، ومنع دمج أي `to="/dashboard`. **الاختبار**: بحث نصي شامل لصفر إشارة للمسارات القديمة + جولة Playwright على كل صفحة.
+1. **إصلاح Hydration** — `__root.tsx` فقط. لا علاقة له بالحذف، وأقل خطرًا، لذا أولًا. التحقق: `/admin/no-such-xyz` بلا تحذير + 404 يظل 404 حقيقيًا.
+2. **إظهار `/my/quotes` في القائمة** — إضافة مدخل في `more-menu.ts`. إصلاح اكتشاف، لا حذف.
+3. **قرار المكوّنات الميتة السبعة** — لا أحذفها قبل جوابك: هل هي مسودة رئيسية قادمة أم مخلّفات؟ إن كانت مخلّفات: أرشفة نصية للملفات السبعة في `.lovable/audit/` ثم الحذف، ثم `guard:structure` وفحص متصفح للرئيسية.
+4. **إبقاء `/demo` و`/demo-stores` كما هما** — أو حذف الاثنين معًا كوحدة واحدة إن قررت أن البيئة التجريبية لم تعد مطلوبة للعرض العام (يشمل `demo.tsx`, `demo-stores.$worldId.tsx`, `LiveDemoEnvironment.tsx`, `live-demo.ts`, `demo-store-worlds.ts`, بطاقة الرئيسية، وقاعدتَي ROUTE_MAP). حذف واحد منهما فقط يُنتج روابط مكسورة.
+5. **إبقاء `/categories/$slug`** — ليس ميتًا وظيفيًا: هدف canonical مفهرس. إن أردت تقليصه لاحقًا فبتحويل 301 إلى `/search?category=…` لا بحذف.
+6. **إبقاء كل قواعد legacy في ROUTE_MAP** — التقاعد يُقرَّر من سجل `[legacy-route]` بعد فترة مراقبة حقيقية، لا الآن.
 
-**دفعة 5 — إعادة تسمية العام** (`/u` → `/profiles`، `/syria-guide` → `/guides/syria`)
-- **الخطر**: عالٍ على SEO — هذه هي الروابط المفهرسة والمشاركة. **التقليل**: 301 + `canonical` + إبقاء القديم عاملاً بلا حد زمني. **الاختبار**: فحص فهرسة بعد النشر.
-
-**دفعة 6 — تسمية الإدارة**
-- داخلي بالكامل، لا أثر SEO. **الخطر**: منخفض. **الاختبار**: تنقل `AdminShell` + الصلاحيات.
-
-**دفعة 7 — إغلاق**
-- تحديث `src/routes/README.md` وخريطة الروابط، وسجل خادمي لعدد طلبات المسارات القديمة (بدل التخزين المحلي) لتقرير التقاعد لاحقاً.
-
-## تفاصيل تقنية
-
-- المصدر الوحيد للصلاحيات يبقى `src/lib/routes-map.ts`؛ قاعدة البيانات (RLS + `has_perm` + `mkt_account_context`) تبقى الجهة الوحيدة التي تمنح، ولا شيء في الخطة يمسّها.
-- التحويل الدائم يحتاج مسارات خادمية (`server.handlers`) أو معالجة على الحافة، لأن `beforeLoad` مع `ssr:false` تحويل عميل لا 301.
-- إعادة التسمية تتم بنقل ملفات وتحديث سلسلة `createFileRoute` المطابقة للاسم؛ `src/routeTree.gen.ts` يُعاد توليده تلقائياً ولا يُحرَّر.
-- لا تغيير في قاعدة البيانات ولا في المخطط ولا في التخزين في أي دفعة.
-- حظر الـ canonical guard يبقى موقوفاً كما هو؛ لا شيء هنا يعدّله.
+### ما يحتاج أرشفة قبل الحذف
+- الملفات السبعة الميتة (خطوة 3) — أرشفة نصية فقط.
+- حزمة `/demo` كاملة (خطوة 4) إن اختِير حذفها — أرشفة نصية فقط.
+- **لا شيء يحتاج أرشفة بيانات**: لا مسار من المرشحين للحذف يملك جدولًا أو حاوية تخزين خاصة به. `MarketDemoListings` و`/categories/$slug` و`/my/quotes` **يقرأون** جداول مشتركة ولا يكتبون فيها ولا يملكونها.
