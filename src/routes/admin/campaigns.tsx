@@ -27,7 +27,9 @@ import {
   type CampaignPlacement,
   type CampaignStatus,
 } from "@/lib/mkt-campaigns";
+import type { UploadedAiAsset } from "@/lib/mkt-ai-image";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AiImageStudio } from "@/components/marketplace/campaign/AiImageStudio";
 import { PopupPacingCard } from "@/components/marketplace/campaign/PopupPacingCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -101,6 +103,7 @@ function AdminCampaignsPage() {
   const [popupMascot, setPopupMascot] = useState("auto");
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
+  const [aiAsset, setAiAsset] = useState<UploadedAiAsset | null>(null);
 
   const rows = list.data ?? [];
   const totals = useMemo(
@@ -115,8 +118,8 @@ function AdminCampaignsPage() {
     `${formatNumber(Math.round(CAMPAIGN_LIMITS[kind] / 1024))} KB`;
 
   async function submit() {
-    if (!file) {
-      toast.error(ar ? "اختر ملف الحملة أولًا" : "Pick a campaign file first");
+    if (!file && !aiAsset) {
+      toast.error(ar ? "اختر ملف الحملة أو ولّد صورة" : "Pick a file or generate an image");
       return;
     }
     if (!slug.trim()) {
@@ -125,7 +128,36 @@ function AdminCampaignsPage() {
     }
     setBusy(true);
     try {
-      const prepared = await prepareCampaignAsset(file);
+      if (!file && aiAsset) {
+        // The generated candidate is already validated and uploaded.
+        await save.mutateAsync({
+          values: {
+            slug: slug.trim(),
+            placement,
+            asset_kind: "webp",
+            asset_path: aiAsset.path,
+            asset_width: aiAsset.width,
+            asset_height: aiAsset.height,
+            title_ar: titleAr,
+            title_en: titleEn,
+            subtitle_ar: subtitleAr,
+            subtitle_en: subtitleEn,
+            badge_ar: badgeAr,
+            badge_en: badgeEn,
+            cta_ar: ctaAr,
+            cta_en: ctaEn,
+            click_url: clickUrl || "/search",
+            popup_side: popupSide,
+            popup_mascot: popupMascot,
+            status: "draft",
+          },
+        });
+        toast.success(ar ? "أُنشئت الحملة كمسودة" : "Campaign created as a draft");
+        setSlug("");
+        setAiAsset(null);
+        return;
+      }
+      const prepared = await prepareCampaignAsset(file as File);
       if (prepared.error === "type") {
         toast.error(ar ? "نوع الملف غير مدعوم" : "Unsupported file type");
         return;
@@ -197,6 +229,8 @@ function AdminCampaignsPage() {
         </header>
 
         <PopupPacingCard />
+
+        <AiImageStudio onApproved={(asset) => setAiAsset(asset)} />
 
         <Card>
           <CardContent className="space-y-4 p-4">
@@ -312,6 +346,21 @@ function AdminCampaignsPage() {
                     ? "Lottie ≤ 300KB · WebP ≤ 1MB · MP4 ≤ 2MB"
                     : "Lottie ≤ 300KB · WebP ≤ 1MB · MP4 ≤ 2MB"}
                 </p>
+                {aiAsset ? (
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">
+                      {ar ? "صورة مولّدة جاهزة" : "Generated image ready"}
+                    </Badge>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setAiAsset(null)}
+                    >
+                      {ar ? "إزالة" : "Clear"}
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </div>
             <Button type="button" onClick={() => void submit()} disabled={busy}>
@@ -356,6 +405,33 @@ function AdminCampaignsPage() {
                       {row.status}
                     </Badge>
                     <div className="flex flex-wrap gap-2">
+                      {aiAsset ? (
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          onClick={() =>
+                            void save
+                              .mutateAsync({
+                                id: row.id,
+                                values: {
+                                  asset_kind: "webp",
+                                  asset_path: aiAsset.path,
+                                  asset_width: aiAsset.width,
+                                  asset_height: aiAsset.height,
+                                },
+                              })
+                              .then(() =>
+                                toast.success(ar ? "رُبطت الصورة بالحملة" : "Image attached"),
+                              )
+                              .catch((error: unknown) =>
+                                toast.error(error instanceof Error ? error.message : "ERROR"),
+                              )
+                          }
+                        >
+                          {ar ? "ربط الصورة المولّدة" : "Attach generated image"}
+                        </Button>
+                      ) : null}
                       {STATUSES.filter((status) => status !== row.status).map((status) => (
                         <Button
                           key={status}

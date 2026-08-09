@@ -843,6 +843,54 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_ai_image_jobs: {
+        Row: {
+          asset_path: string | null
+          bytes: number
+          cost_credits: number
+          created_at: string
+          detail: string | null
+          finished_at: string | null
+          id: string
+          model: string
+          preset: string | null
+          prompt: string
+          size_key: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          asset_path?: string | null
+          bytes?: number
+          cost_credits?: number
+          created_at?: string
+          detail?: string | null
+          finished_at?: string | null
+          id?: string
+          model: string
+          preset?: string | null
+          prompt: string
+          size_key: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          asset_path?: string | null
+          bytes?: number
+          cost_credits?: number
+          created_at?: string
+          detail?: string | null
+          finished_at?: string | null
+          id?: string
+          model?: string
+          preset?: string | null
+          prompt?: string
+          size_key?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mkt_analytics_events: {
         Row: {
           browser: string | null
@@ -8502,6 +8550,26 @@ export type Database = {
       mkt_advertiser_safety: {
         Args: { _tenant_id?: string; _user_id: string }
         Returns: Json
+      }
+      mkt_ai_image_claim: {
+        Args: {
+          _model: string
+          _preset?: string
+          _prompt: string
+          _size_key: string
+        }
+        Returns: Json
+      }
+      mkt_ai_image_finish: {
+        Args: {
+          _asset_path?: string
+          _bytes?: number
+          _cost?: number
+          _detail?: string
+          _job_id: string
+          _status: string
+        }
+        Returns: undefined
       }
       mkt_analytics_fields: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_funnel: { Args: { _days?: number }; Returns: Json }
