@@ -5,10 +5,10 @@ import { loadPlatformIdentity } from "@/lib/mkt-platform";
 /**
  * Single resolver for "where does *this* caller belong?".
  *
- * `/me` and `/audit` are the two legacy entry points that cannot become server
- * 301s, because their destination depends on who is asking — a cacheable
- * permanent redirect would pin one identity's destination for everybody. They
- * both delegate here so the answer is defined in exactly one place.
+ * `/go` is the only route that asks: its destination depends on who is asking, so
+ * it can never become a cacheable server 301 — a permanent redirect would pin one
+ * identity's destination for everybody. The retired `/me` and `/audit` shells now
+ * 301 to `/go`, which delegates here, so the answer lives in exactly one place.
  *
  * The returned path grants nothing: every destination runs its own guard.
  */
@@ -34,9 +34,9 @@ export async function resolveIdentityLanding(): Promise<LandingTarget | null> {
 
   if (isAdmin) return { href: "/admin", isAdmin: true };
 
-  // No account chosen yet → the picker, carrying the personal dashboard as the
+  // No account chosen yet → the picker, carrying the personal profile as the
   // destination so the user never lands back on a retired screen.
-  let href = "/choose-account?next=%2Fdashboard%2Fprofile";
+  let href = "/choose-account?next=%2Fmy%2Fprofile";
   const key = rememberedAccountKey();
   const account = key ? await verifyAccount(key) : null;
   if (account) {

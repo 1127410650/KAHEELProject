@@ -126,7 +126,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "members",
-    to: "/me",
+    to: "/go",
     labelKey: "market.account.members",
     icon: Users,
     kinds: ["business"],

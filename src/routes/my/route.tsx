@@ -28,10 +28,10 @@ export const Route = createFileRoute("/my")({
     }
 
     // `/my` itself is not a page: the right landing screen depends on the caller
-    // (admin console / work account / personal account), and `/me` resolves that
+    // (admin console / work account / personal account), and `/go` resolves that
     // in one place.
     const path = location.pathname.replace(/\/+$/, "");
-    if (path === "/my") throw redirect({ to: "/me", replace: true });
+    if (path === "/my") throw redirect({ to: "/go", replace: true });
   },
 
   component: () => <Outlet />,

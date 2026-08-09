@@ -104,9 +104,16 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/forgot-password", "public", "bare"),
   rule("/reset-password", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
-  // Marketing entry page. Kept public and indexable; it is not the home page.
-  rule("/welcome", "public", "market"),
+  // `/welcome` was a second landing page that duplicated `/` (same hero, same
+  // sections, same listings) while drifting behind it — it still carried the
+  // pre-rebrand name and was linked from nowhere in the app. One home page, one
+  // canonical URL: the old address keeps its search signals through a 301.
+  rule("/welcome", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/appointments", "legacy", "bare", { legacy_redirect: "/services" }),
+
+  // The single "where do I belong?" resolver. Replaces the retired `/me` and
+  // `/audit` shells; it is client-side and never indexed (see `routes/go.tsx`).
+  rule("/go", "authenticated", "bare"),
 
 
   // ── ب. Signed in ────────────────────────────────────────────────────────────
@@ -221,37 +228,37 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/market/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
   rule("/select-account", "legacy", "bare", { legacy_redirect: "/choose-account" }),
   rule("/settings", "legacy", "bare", { legacy_redirect: "/my/profile" }),
-  rule("/onboarding", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/onboarding", "legacy", "bare", { legacy_redirect: "/go" }),
   rule("/notifications", "legacy", "bare", { legacy_redirect: "/my/notifications" }),
-  rule("/portal", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/dashboard", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/projects", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/projects/$id", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/projects_/$id/requests", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/requests", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/requests/$id", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/suppliers", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/products", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/invoices", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/invoices_/$id/lines", "legacy", "bare", { legacy_redirect: "/me" }),
+  rule("/portal", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/dashboard", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/projects", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/projects/$id", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/projects_/$id/requests", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/requests", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/requests/$id", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/suppliers", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/products", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/invoices", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/invoices_/$id/lines", "legacy", "bare", { legacy_redirect: "/go" }),
   // The retired tax-invoice verifier was a browser utility and never owned the
   // historical invoice tables. Old bookmarks return to the marketplace; no
   // database row, function or migration is deleted by retiring this UI route.
   rule("/verify-invoice", "legacy", "bare", { legacy_redirect: "/" }),
   rule("/invoices_/verified/new", "legacy", "bare", { legacy_redirect: "/" }),
-  rule("/custody", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/my-custody", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/my-documents", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/supervisors", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/supervisors/$id", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/team", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/users", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/invitations", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/reports", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/trash", "legacy", "bare", { legacy_redirect: "/me" }),
-  // `src/routes/audit.tsx` owns `/audit` so the destination can depend on the
-  // caller (admin → the operations log); this entry records the fallback.
-  rule("/audit", "legacy", "bare", { legacy_redirect: "/admin/audit-log" }),
+  rule("/custody", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/my-custody", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/my-documents", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/supervisors", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/supervisors/$id", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/team", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/users", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/invitations", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/reports", "legacy", "bare", { legacy_redirect: "/go" }),
+  rule("/trash", "legacy", "bare", { legacy_redirect: "/go" }),
+  // The retired internal operations console. It now goes through `/go`, which
+  // resolves the caller and sends an admin on to the single operations log.
+  rule("/audit", "legacy", "bare", { legacy_redirect: "/go?next=audit-log" }),
 
   // ── د. Marketplace back office ─────────────────────────────────────────────
   rule("/admin", "admin", "admin"),
@@ -309,10 +316,9 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/sign-up", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
   rule("/home", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/market", "legacy", "market", { legacy_redirect: "/", is_public: true }),
-  // The old personal dashboard. `src/routes/me.tsx` still owns the path so the
-  // destination can depend on who is asking (admin console / business dashboard /
-  // personal dashboard); this entry records the canonical fallback.
-  rule("/me", "legacy", "bare", { legacy_redirect: "/my/profile" }),
+  // The old personal dashboard. Its own route file is gone: `/go` is now the one
+  // place that decides where a caller belongs, so this is a plain 301.
+  rule("/me", "legacy", "bare", { legacy_redirect: "/go" }),
 ];
 
 const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
@@ -393,25 +399,21 @@ function applyParams(target: string, rulePath: string, concretePath: string): st
 
 
 /**
- * Paths whose destination depends on who is asking (`/me`, `/audit`): a platform
- * admin, a work account and a personal account each land somewhere different.
- * They must NEVER be answered with a cacheable 301 — the browser and any proxy
- * would pin one identity's destination for everyone.
- */
-const IDENTITY_DEPENDENT_PATHS = new Set(["/me", "/audit"]);
-
-/**
  * Permanent (301) target for a retired URL, resolved on the server before the
  * app renders — so an indexed or bookmarked link keeps its search signals
  * instead of being moved by a client-side redirect the crawler never follows.
  *
- * Returns `null` when the path is current, unknown, or identity-dependent.
+ * Every legacy target here is identity-independent, which is what makes a
+ * cacheable 301 safe: the one destination that depends on who is asking is
+ * `/go`, and that page resolves the caller client-side instead of being a
+ * redirect rule. `/me` and `/audit` therefore 301 to `/go`, never past it.
+ *
+ * Returns `null` when the path is current or unknown.
  */
 export function serverRedirectFor(pathname: string): string | null {
   const { locale, path } = splitLocalePrefix(pathname.split("?")[0]!.split("#")[0]!);
   const found = routeRuleFor(path);
   if (!found || found.route_type !== "legacy" || !found.legacy_redirect) return null;
-  if (IDENTITY_DEPENDENT_PATHS.has(found.path)) return null;
   return withLocalePrefix(applyParams(found.legacy_redirect, found.path, path), locale);
 }
 

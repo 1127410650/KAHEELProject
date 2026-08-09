@@ -3087,7 +3087,11 @@
           "desc": "Apartments, villas and land for sale or rent",
           "cta": "Explore"
         },
-        "cars": { "title": "Cars", "desc": "Buy and sell new and used cars", "cta": "Browse cars" }
+        "cars": {
+          "title": "Cars",
+          "desc": "Buy and sell new and used cars",
+          "cta": "Browse cars"
+        }
       },
       "services": {
         "homeServices": "Home services",
@@ -3112,9 +3116,18 @@
         "services": "Services"
       },
       "actions": {
-        "add": { "title": "Post a listing", "desc": "Sell or rent with ease" },
-        "service": { "title": "Request a service", "desc": "Get any service now" },
-        "ai": { "title": "Gohail AI", "desc": "Your smart assistant" }
+        "add": {
+          "title": "Post a listing",
+          "desc": "Sell or rent with ease"
+        },
+        "service": {
+          "title": "Request a service",
+          "desc": "Get any service now"
+        },
+        "ai": {
+          "title": "Gohail AI",
+          "desc": "Your smart assistant"
+        }
       }
     },
     "home": {
@@ -4272,85 +4285,6 @@
       "reinstate": "Reinstate",
       "requestChanges": "Request changes",
       "actionDone": "The action was applied and logged."
-    }
-  },
-  "welcome": {
-    "meta": {
-      "title": "Gohail — Real estate, services and suppliers marketplace",
-      "desc": "Gohail is an organized public marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts, in-app messaging and calls."
-    },
-    "nav": {
-      "browse": "Browse marketplace",
-      "signIn": "Sign in",
-      "signUp": "Create account"
-    },
-    "hero": {
-      "title": "Sell, buy and run your business in one place",
-      "subtitle": "A modern marketplace for real estate, services, products, equipment and suppliers, with individual and store accounts and safe in-app communication.",
-      "browse": "Browse marketplace",
-      "signUp": "Create account",
-      "add": "Post your listing"
-    },
-    "sections": {
-      "title": "Sections",
-      "realestate": "Real estate",
-      "service": "Services",
-      "product": "Products",
-      "equipment": "Equipment",
-      "business": "Suppliers & stores"
-    },
-    "features": {
-      "title": "Platform features",
-      "accounts": {
-        "title": "Individual & store accounts",
-        "desc": "A personal account or a full store profile, with fast switching."
-      },
-      "listings": {
-        "title": "Organized listings",
-        "desc": "Clear categories, specifications and precise search filters."
-      },
-      "contact": {
-        "title": "In-app messages & calls",
-        "desc": "Chat and voice calls inside the platform without exposing your number."
-      },
-      "verify": {
-        "title": "Verification & review",
-        "desc": "Content review and store verification before trusted display."
-      },
-      "countries": {
-        "title": "Multi-country support",
-        "desc": "Multiple markets and cities; currency follows the account country."
-      }
-    },
-    "latest": {
-      "title": "Latest listings",
-      "viewAll": "View all"
-    },
-    "trust": {
-      "title": "Trust & safety",
-      "items": [
-        "Automated and staff review of published content.",
-        "Phone numbers and session data are never exposed publicly.",
-        "Messaging and calls happen inside the platform.",
-        "An audit trail for sensitive actions."
-      ]
-    },
-    "faq": {
-      "title": "FAQ",
-      "q1": "Do I need an account to browse?",
-      "a1": "No. Browsing is open to everyone; an account is only needed to post or contact.",
-      "q2": "How do I post a listing?",
-      "a2": "Create an account, then choose “Post your listing” and complete the short form.",
-      "q3": "Will my phone number be shown?",
-      "a3": "No. Contact happens through in-app messages or calls without revealing your number."
-    },
-    "footer": {
-      "about": "About",
-      "help": "Help",
-      "terms": "Terms",
-      "privacy": "Privacy",
-      "contact": "Contact us",
-      "rights": "All rights reserved — Gohail"
     }
   }
 }
