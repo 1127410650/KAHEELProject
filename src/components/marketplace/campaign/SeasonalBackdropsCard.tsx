@@ -77,6 +77,11 @@ export function SeasonalBackdropsCard() {
   const [priority, setPriority] = useState("0");
   const [startsAt, setStartsAt] = useState("");
   const [endsAt, setEndsAt] = useState("");
+  const [headlineAr, setHeadlineAr] = useState("");
+  const [headlineEn, setHeadlineEn] = useState("");
+  const [subAr, setSubAr] = useState("");
+  const [subEn, setSubEn] = useState("");
+
   const [image, setImage] = useState<Upload | null>(null);
   const [decor, setDecor] = useState<Upload | null>(null);
   const [mascotFile, setMascotFile] = useState<Upload | null>(null);
