@@ -179,9 +179,10 @@ export function SeasonalLayer({
           height={mascotDims?.height}
           loading="lazy"
           decoding="async"
-          /* على الشاشات الضيقة تُخفى الإطلالة: لا مساحة آمنة فيها بلا تغطية
-             التصنيفات أو البطاقات. تظهر من sm فما فوق حيث يوجد فراغ حقيقي. */
-          className="k-season-peek absolute top-0 hidden h-[124%] max-h-none w-auto object-contain opacity-95 ltr:right-16 rtl:left-16 lg:block"
+          /* شخصية كاملة **واقفة على الخط السفلي للهيدر**: `bottom-0` مع ارتفاع
+             أصغر من ارتفاع الطبقة ⇒ لا قطع عند الساق ولا عند الكاحل. وتُخفى تحت
+             lg لأن الهيدر الضيق لا يترك فراغًا بلا تغطية الشعار أو الجرس. */
+          className="k-season-peek absolute bottom-0 hidden h-[86%] max-h-none w-auto object-contain opacity-95 ltr:right-[13.5rem] rtl:left-[13.5rem] lg:block"
         />
       ) : null}
     </div>
