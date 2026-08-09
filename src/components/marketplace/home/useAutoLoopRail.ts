@@ -65,13 +65,28 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
         now >= pauseUntilRef.current &&
         document.visibilityState === "visible"
       ) {
-        rail.scrollLeft += direction * speed * (elapsed / 1_000);
+        // `scrollLeft` rounds to whole pixels, so a slow rail would never move
+        // if each frame's fraction were written straight back. The exact
+        // position is kept here and only whole pixels are handed to the DOM.
+        const drift = rail.scrollLeft - Math.round(positionRef.current);
+        if (Math.abs(drift) > 1) positionRef.current = rail.scrollLeft;
+        positionRef.current += direction * speed * (elapsed / 1_000);
+        rail.scrollLeft = Math.round(positionRef.current);
+      } else {
+        positionRef.current = rail.scrollLeft;
       }
 
       if (width > 0) {
-        if (rail.scrollLeft >= width * 2) rail.scrollLeft -= width;
-        if (rail.scrollLeft <= 0) rail.scrollLeft += width;
+        if (rail.scrollLeft >= width * 2) {
+          rail.scrollLeft -= width;
+          positionRef.current -= width;
+        }
+        if (rail.scrollLeft <= 0) {
+          rail.scrollLeft += width;
+          positionRef.current += width;
+        }
       }
+
 
       frameRef.current = window.requestAnimationFrame(tick);
     };
