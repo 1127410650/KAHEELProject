@@ -24,11 +24,9 @@ import { EyeOff, X } from "lucide-react";
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
-  DROP_COOLDOWN_MS,
   DROP_VISIBLE_MS,
-  emptyBurst,
+  decideDrop,
   prefersReducedMotion,
-  registerTap,
   tapTarget,
 } from "@/lib/mascot-tap";
 import { useCallCenter } from "@/lib/mkt-call-center";
@@ -67,8 +65,6 @@ export function PromoPopupHost() {
   const [card, setCard] = useState<DropCard | null>(null);
   const [leaving, setLeaving] = useState(false);
 
-  const burstRef = useRef(emptyBurst());
-  const lastDropRef = useRef(0);
   const lastCopyRef = useRef(-1);
   const lastRapidRef = useRef(-1);
   const keyRef = useRef(0);
@@ -126,17 +122,10 @@ export function PromoPopupHost() {
     const onTap = (event: PointerEvent | MouseEvent) => {
       const target = tapTarget(event);
       if (!target) return;
-      const now = Date.now();
-      const rapid = registerTap(burstRef.current, now);
       if (blocked()) return;
-      if (rapid) {
-        show(true);
-        lastDropRef.current = now;
-        return;
-      }
-      if (now - lastDropRef.current < DROP_COOLDOWN_MS) return;
-      lastDropRef.current = now;
-      show(false);
+      const { drop, rapid } = decideDrop();
+      if (!drop) return;
+      show(rapid);
     };
     window.addEventListener("pointerdown", onTap, { capture: true, passive: true });
     return () => window.removeEventListener("pointerdown", onTap, { capture: true });
