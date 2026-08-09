@@ -24,11 +24,9 @@ import { EyeOff, X } from "lucide-react";
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
-  DROP_COOLDOWN_MS,
   DROP_VISIBLE_MS,
-  emptyBurst,
+  decideDrop,
   prefersReducedMotion,
-  registerTap,
   tapTarget,
 } from "@/lib/mascot-tap";
 import { useCallCenter } from "@/lib/mkt-call-center";
@@ -41,8 +39,8 @@ import {
   usePopupPacing,
 } from "@/lib/popup-pacing";
 import {
-  popupCopyAt,
-  popupCopyCount,
+  bossCopyAt,
+  bossCopyCount,
   rapidTapCopyAt,
   rapidTapCopyCount,
 } from "@/lib/takeover-copy";
@@ -67,8 +65,6 @@ export function PromoPopupHost() {
   const [card, setCard] = useState<DropCard | null>(null);
   const [leaving, setLeaving] = useState(false);
 
-  const burstRef = useRef(emptyBurst());
-  const lastDropRef = useRef(0);
   const lastCopyRef = useRef(-1);
   const lastRapidRef = useRef(-1);
   const keyRef = useRef(0);
@@ -106,14 +102,14 @@ export function PromoPopupHost() {
         lastRapidRef.current = index;
         copy = rapidTapCopyAt(ar, index);
       } else {
-        const size = popupCopyCount(ar);
+        const size = bossCopyCount(ar);
         let index = Math.floor(Math.random() * size);
         if (size > 1 && index === lastCopyRef.current) index = (index + 1) % size;
         lastCopyRef.current = index;
-        copy = popupCopyAt(ar, index);
+        copy = bossCopyAt(ar, index);
       }
       setLeaving(false);
-      setCard({ key: keyRef.current, rapid, ...copy });
+      setCard({ key: keyRef.current, rapid, ...copy, mascot: "boss" });
 
       window.clearTimeout(hideTimerRef.current);
       hideTimerRef.current = window.setTimeout(() => dismiss(), DROP_VISIBLE_MS);
@@ -126,17 +122,10 @@ export function PromoPopupHost() {
     const onTap = (event: PointerEvent | MouseEvent) => {
       const target = tapTarget(event);
       if (!target) return;
-      const now = Date.now();
-      const rapid = registerTap(burstRef.current, now);
       if (blocked()) return;
-      if (rapid) {
-        show(true);
-        lastDropRef.current = now;
-        return;
-      }
-      if (now - lastDropRef.current < DROP_COOLDOWN_MS) return;
-      lastDropRef.current = now;
-      show(false);
+      const { drop, rapid } = decideDrop();
+      if (!drop) return;
+      show(rapid);
     };
     window.addEventListener("pointerdown", onTap, { capture: true, passive: true });
     return () => window.removeEventListener("pointerdown", onTap, { capture: true });
@@ -158,7 +147,7 @@ export function PromoPopupHost() {
     ? "animate-[kaheel-tap-fade_0.22s_ease-in_forwards]"
     : calm
       ? "animate-[kaheel-scrim-in_0.2s_ease-out]"
-      : "animate-[kaheel-tap-drop_0.95s_cubic-bezier(0.34,1.56,0.64,1)_both]";
+      : "animate-[kaheel-tap-drop_0.78s_cubic-bezier(0.22,0.9,0.3,1)_both]";
 
   return (
     <div
@@ -169,14 +158,14 @@ export function PromoPopupHost() {
         key={card.key}
         data-kaheel-drop-card
         role="status"
-        className={`pointer-events-auto relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
+        className={`pointer-events-none relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
       >
         <div className="absolute end-2 top-2 flex gap-1">
           <button
             type="button"
             onClick={() => dismiss(true)}
             aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-            className="grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
+            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
           >
             <EyeOff className="size-3" aria-hidden />
           </button>
@@ -184,13 +173,21 @@ export function PromoPopupHost() {
             type="button"
             onClick={() => dismiss()}
             aria-label={ar ? "إغلاق" : "Close"}
-            className="grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
+            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
           >
             <X className="size-3" aria-hidden />
           </button>
         </div>
 
-        <PopupMascot kind={card.mascot} />
+        <div
+          className={
+            calm || leaving
+              ? ""
+              : "animate-[kaheel-tap-wobble_0.78s_ease-out_both] motion-reduce:animate-none"
+          }
+        >
+          <PopupMascot kind={card.mascot} />
+        </div>
 
         <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{card.title}</p>
         <p className="line-clamp-3 text-[11px] font-bold leading-snug text-[#5a189a]">

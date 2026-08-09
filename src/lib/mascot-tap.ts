@@ -13,7 +13,7 @@
 /** فاصل مريح بين سقوطين، فالمزحة تبقى لطيفة ولا تصير ضجيجًا. */
 export const DROP_COOLDOWN_MS = 18_000;
 /** مدة بقاء الشخصية على الشاشة (سقوط + ارتداد + اختفاء). */
-export const DROP_VISIBLE_MS = 1_800;
+export const DROP_VISIBLE_MS = 1_200;
 
 /** نافذة رصد الكبس السريع. */
 export const RAPID_WINDOW_MS = 4_000;
@@ -75,4 +75,24 @@ export function registerTap(burst: TapBurst, now = Date.now()): boolean {
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined" || !window.matchMedia) return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+/**
+ * حالة مشتركة على مستوى الوحدة: المضيف قد يُعاد تركيبه مع تغيّر الشجرة، ولو
+ * حفظنا العدّاد في `useRef` لصار كل تركيب جديد يصفّر الفاصل وعدّاد الكبس.
+ * لذلك نُبقي الحالة هنا: فاصل السقوط وعدّاد الكبس يعيشان مع الصفحة نفسها.
+ */
+const sharedBurst = emptyBurst();
+let lastDropAt = 0;
+
+/** يسجّل ضغطة ويرجع القرار: هل نُسقط الشخصية؟ وهل هي مزحة كبس؟ */
+export function decideDrop(now = Date.now()): { drop: boolean; rapid: boolean } {
+  const rapid = registerTap(sharedBurst, now);
+  if (rapid) {
+    lastDropAt = now;
+    return { drop: true, rapid: true };
+  }
+  if (now - lastDropAt < DROP_COOLDOWN_MS) return { drop: false, rapid: false };
+  lastDropAt = now;
+  return { drop: true, rapid: false };
 }

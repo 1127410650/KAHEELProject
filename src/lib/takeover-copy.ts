@@ -224,6 +224,22 @@ export function popupCopyAt(ar: boolean, index: number): PopupCopy {
   return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
 }
 
+// ── نصوص الزعيم كَحيلان وحده: هو الشخصية التي تسقط عند اللمس ────────────────
+const AR_BOSS = AR_POOL.filter((copy) => copy.mascot === "boss");
+const EN_BOSS = EN_POOL.filter((copy) => copy.mascot === "boss");
+
+/** عدد نصوص الزعيم كَحيلان للغة الحالية. */
+export function bossCopyCount(ar: boolean): number {
+  return (ar ? AR_BOSS : EN_BOSS).length;
+}
+
+/** نص الزعيم كَحيلان عند فهرس معيّن (بالتدوير) مع لاحقة «بواسطتي». */
+export function bossCopyAt(ar: boolean, index: number): PopupCopy {
+  const pool = ar ? AR_BOSS : EN_BOSS;
+  const size = pool.length;
+  return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
+}
+
 // ── مزحة الكبس المتكرر: الزعيم كَحيلان يتدخّل بمزح لطيف ───────────────────
 const AR_RAPID: PopupCopy[] = [
   { title: "يكفي تكبس! كسرت الشاشة 😂", subtitle: "شوي شوي عليها، الله يخليك", mascot: "boss" },
