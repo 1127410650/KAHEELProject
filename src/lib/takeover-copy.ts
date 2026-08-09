@@ -1,39 +1,43 @@
 /**
- * Default copy for the popup campaigns (welcome takeover, category popups).
+ * نصوص النوافذ الترويجية، موزّعة على شخصيتَي المنصة حسب نبرة كل رسالة.
  *
- * Providers can set `title_ar/subtitle_ar` (and the English pair) per campaign
- * from the admin panel. When a campaign leaves them empty we fall back to one of
- * these friendly lines — simplified Modern Standard Arabic with a light Syrian
- * touch, always warm and respectful. Each line names the mascot that fits it, so
- * the drawing and the wording always tell the same little joke.
+ * توزيع الأدوار (مرجع ثابت):
+ * • «كَحيل» — الوجه الرسمي: الترحيب، التعريف، الشكر، الطمأنة، التوجيه. نبرة
+ *   مؤدبة هادئة بلا ضغط. مشاهده: `wave` / `lounge` / `peek`.
+ * • «الزعيم كَحيلان» — ابن خالته وزعيم الحارة: العروض، الخصومات، التشويق،
+ *   المزاح. تهديداته مزحة واضحة تنتهي بابتسامة. مشاهده: `boss` / `parcel` / `moto`.
+ * • مشهد التعارف `duo` — كَحيلان يقدّم نفسه ثم يقدّم كَحيل.
+ *
+ * كل سطر يسمّي مشهده، فالمشهد يحدّد الشخصية عبر `MASCOT_PERSONA`، وبهذا لا
+ * تختلف نبرة النص عن الشخصية الظاهرة في الرسم أبدًا.
+ *
+ * المزوّد يقدر يكتب `title_ar/subtitle_ar` (والزوج الإنجليزي) لكل حملة من لوحة
+ * الإدارة؛ وعند تركها فارغة نستخدم أحد هذه السطور.
  */
 import type { MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 
 export type PopupCopy = { title: string; subtitle: string; mascot: MascotKind };
 
-// Add new lines by appending to these arrays — nothing else needs to change.
+// أضف سطورًا جديدة بإلحاقها بهذه المصفوفات — لا شيء آخر يحتاج تعديلًا.
 const AR_POOL: PopupCopy[] = [
-  // مشهد الطرد الساقط
-  { title: "أوف… وصلتك بخير! 📦", subtitle: "امسك العرض يا كابتن، في ناس رح تسرقه منك 😄", mascot: "parcel" },
-  { title: "طلعت من الصندوق مشانك بس! 🙋‍♂️", subtitle: "وإذا ما مسكت العرض، بس بس… بس بس", mascot: "parcel" },
-  { title: "كسّرت ظهري وأنا نازل! 😩", subtitle: "يعني الأقل تشوف العرض شوي", mascot: "parcel" },
-  { title: "الطرد وصل… وأنا كمان 📦", subtitle: "خد العرض ولا تسأل شو صار فيني", mascot: "parcel" },
-  { title: "وقعت من فوق ومو زعلان 😌", subtitle: "المهم وصلك العرض سالم", mascot: "parcel" },
-  // مشهد الشخصية المستلقية
-  { title: "لك يا حرام… زعلتني عليك 😂", subtitle: "كنت ضايع بدوني، اعترف!", mascot: "lounge" },
-  { title: "أنا مرتاح وإنت عم تتفرّج؟ 😎", subtitle: "قوم شوف العرض وريّحني", mascot: "lounge" },
-  // مشهد الدبّاب
-  { title: "لك وين مسرّع يا معلّم؟ 🏍️", subtitle: "العرض هون، ما بدو منك غير ثانيتين", mascot: "moto" },
-  { title: "لحقتك بالدبّاب! 🏍️💨", subtitle: "مشان ما يفوتك هالعرض، شو هالتعب", mascot: "moto" },
-  // مشهد يطل بفضول
-  { title: "عم راقبك من زمان 👀", subtitle: "وشكلك محتاج هالعرض أكتر مني", mascot: "peek" },
-  { title: "لا تخاف… أنا بس 🙈", subtitle: "جاي أذكّرك في عرض ناطرك", mascot: "peek" },
-  { title: "شفتك وإنت بتتجاهلني 😏", subtitle: "طيب شوف العرض وبعدين تجاهلني", mascot: "peek" },
-  // مشهد الوداع
-  { title: "ماشي… روح الله معك 👋", subtitle: "بس لا تقول ما قلتلك في عرض", mascot: "wave" },
-  { title: "سكّر، سكّر… ما في زعل 😌", subtitle: "بس بكرا لا تقول ما حدا خبّرني", mascot: "wave" },
-  { title: "راجع؟ عرفت إنك بترجع 😄", subtitle: "العرض لسا هون، ما راح لحدا", mascot: "wave" },
-  // «الزعيم كَحيلان — ابن خالتو لكَحيل»: زعامة فكاهية بلا عدوانية
+  // ── كَحيل: ترحيب وتعريف وشكر وطمأنة وتوجيه ──────────────────────────────
+  { title: "أهلًا وسهلًا فيك 💜", subtitle: "نورت كَحيل، وإذا احتجت شي أنا موجود", mascot: "wave" },
+  { title: "أهلًا فيك بكَحيل 👋", subtitle: "كل الخدمات والمتاجر في مكان واحد، ومنوفّر عليك الوقت", mascot: "wave" },
+  { title: "تشرّفنا بزيارتك 🙏", subtitle: "تصفّح براحتك، وأنا جاهز لأي مساعدة", mascot: "wave" },
+  { title: "شكرًا لثقتك 💜", subtitle: "منقدّر وقتك، ومنشتغل ليصير كل شي أسهل عليك", mascot: "wave" },
+  { title: "رجعت؟ نورتنا 😊", subtitle: "كل شي مرتّب كما تركته", mascot: "wave" },
+  { title: "بالخدمة دائمًا 🤝", subtitle: "كَحيل معك من أول سؤال لآخر خطوة", mascot: "wave" },
+  { title: "خد وقتك بالتصفّح 😊", subtitle: "المزوّدون موثوقون والأسعار واضحة", mascot: "lounge" },
+  { title: "ما في استعجال 🌿", subtitle: "راحتك أهم شي، والعروض تبقى موجودة", mascot: "lounge" },
+  { title: "كل شي محفوظ عندك 👌", subtitle: "طلباتك ومحادثاتك بتلاقيها وقت ما بدك", mascot: "lounge" },
+  { title: "عم نجهّزلك أحلى العروض 🌸", subtitle: "مزوّدون موثوقون وأسعار واضحة", mascot: "lounge" },
+  { title: "تذكير صغير 🔔", subtitle: "في عروض قريبة منك، إذا حبيت تشوفها", mascot: "peek" },
+  { title: "ما بدنا نزعجك 🙂", subtitle: "بس حبينا نخبرك في جديد بالقرب منك", mascot: "peek" },
+  { title: "محتاج مساعدة؟ 💬", subtitle: "اسألنا وقت ما بدك، ومنجاوبك بأسرع وقت", mascot: "peek" },
+  { title: "معلومة سريعة ℹ️", subtitle: "منقدر نوصّلك بالمزوّد المناسب بخطوة واحدة", mascot: "peek" },
+  { title: "إذا ما لقيت اللي بدك 🌷", subtitle: "خبّرنا ومنساعدك نلاقيه", mascot: "peek" },
+
+  // ── الزعيم كَحيلان: عروض وتشويق ومزاح زعامة ─────────────────────────────
   { title: "تعرف مع مين عم تحكي؟ 😤", subtitle: "أنا الزعيم كَحيلان… وهالعرض بأمري إلك", mascot: "boss" },
   { title: "لف الشماغ وقال… 🧣", subtitle: "العرض هاد ما بيروح إلا لواحد ذكي مثلك", mascot: "boss" },
   { title: "أنا ابن خالتو لكَحيل! 😎", subtitle: "يعني العرض من عند الأهل، خدو ولا تحرجني", mascot: "boss" },
@@ -42,23 +46,37 @@ const AR_POOL: PopupCopy[] = [
   { title: "لا تخليني أعصّب 😤", subtitle: "شوف العرض بالذوق أحسنلك 😄", mascot: "boss" },
   { title: "كلمة زعيم وخلصنا 🧣", subtitle: "هالعرض إلك، ولا حدا بيقدر ياخده", mascot: "boss" },
   { title: "أنا ما بحب الرفض 😏", subtitle: "بس منك… ماشي، شوف العرض وبس", mascot: "boss" },
-  // نصوص عامة سابقة — محفوظة كما هي
-  { title: "لا تروح بعيد… كل شي بتدوّر عليه هون بكَحيل 👋", subtitle: "تصفّح العروض القريبة منك بخطوة واحدة", mascot: "wave" },
-  { title: "شو رأيك تشوف العروض قبل ما تطير؟ 🎁", subtitle: "عروض اليوم مختارة بعناية لك", mascot: "moto" },
-  { title: "عم نجهّزلك أحلى العروض… تفضّل شوفها", subtitle: "مزوّدون موثوقون وأسعار واضحة", mascot: "lounge" },
-  { title: "فرصتك اليوم… وبكرا منشوف غيرها 😊", subtitle: "ألقِ نظرة سريعة قبل أن تنتهي", mascot: "peek" },
-  { title: "أهلًا فيك بكَحيل… خلّينا نوفّر عليك الوقت", subtitle: "كل الخدمات والمتاجر في مكان واحد", mascot: "wave" },
+  { title: "أنا مرتاح وإنت عم تتفرّج؟ 😎", subtitle: "قوم شوف العرض وريّحني", mascot: "boss" },
+  { title: "لك يا حرام… زعلتني عليك 😂", subtitle: "كنت ضايع بدوني، اعترف!", mascot: "boss" },
+  { title: "عم راقبك من زمان 👀", subtitle: "وشكلك محتاج هالعرض أكتر مني", mascot: "boss" },
+  { title: "شفتك وإنت بتتجاهلني 😏", subtitle: "طيب شوف العرض وبعدين تجاهلني", mascot: "boss" },
+  { title: "إذا سكّرت رح تندم 😌", subtitle: "مو تهديد… نصيحة من قلب 😄", mascot: "boss" },
+  { title: "ماشي… روح الله معك 👋", subtitle: "بس لا تقول ما قلتلك في عرض", mascot: "boss" },
+  { title: "سكّر، سكّر… ما في زعل 😌", subtitle: "بس بكرا لا تقول ما حدا خبّرني", mascot: "boss" },
+  { title: "راجع؟ عرفت إنك بترجع 😄", subtitle: "العرض لسا هون، ما راح لحدا", mascot: "boss" },
+  { title: "لا تقلي ما شفت! 🙈", subtitle: "خلص صار عندك علم… والقرار إلك", mascot: "boss" },
+  { title: "صراحة؟ العرض هيدا حلو 🔥", subtitle: "وإذا ما عجبك، سكّر ونحنا مو زعلانين", mascot: "boss" },
+  // كَحيلان يوصل العرض بنفسه — مشهد الطرد
+  { title: "أوف… وصلتك بخير! 📦", subtitle: "امسك العرض يا كابتن، في ناس رح تسرقه منك 😄", mascot: "parcel" },
+  { title: "طلعت من الصندوق مشانك بس! 🙋‍♂️", subtitle: "وإذا ما مسكت العرض، بس بس… بس بس", mascot: "parcel" },
+  { title: "كسّرت ظهري وأنا نازل! 😩", subtitle: "يعني الأقل تشوف العرض شوي", mascot: "parcel" },
+  { title: "الطرد وصل… وأنا كمان 📦", subtitle: "خد العرض ولا تسأل شو صار فيني", mascot: "parcel" },
+  { title: "وقعت من فوق ومو زعلان 😌", subtitle: "المهم وصلك العرض سالم", mascot: "parcel" },
+  { title: "العرض عم يستنّاك 🎁", subtitle: "وإذا تأخرت… بيروح لغيرك", mascot: "parcel" },
+  // كَحيلان يلحق بالعرض — مشهد الدبّاب
+  { title: "لك وين مسرّع يا معلّم؟ 🏍️", subtitle: "العرض هون، ما بدو منك غير ثانيتين", mascot: "moto" },
+  { title: "لحقتك بالدبّاب! 🏍️💨", subtitle: "مشان ما يفوتك هالعرض، شو هالتعب", mascot: "moto" },
   { title: "وين رايح؟ 🏃‍♂️", subtitle: "العرض لسا ما خلص… تعا شوفه دقيقة وبعدين روح", mascot: "moto" },
   { title: "لك شو هالسرعة! 😄", subtitle: "خمس ثواني بس… يمكن تلاقي شي يعجبك", mascot: "moto" },
-  { title: "ما بدنا نزعجك… بس 👀", subtitle: "في عرض هون كتير منيح، وحرام يفوتك", mascot: "peek" },
-  { title: "إذا سكّرت رح تندم 😌", subtitle: "مو تهديد… نصيحة من قلب", mascot: "lounge" },
-  { title: "تعا لهون شوي 👋", subtitle: "كَحيل جمّعلك كل شي… وما بقى إلا تشوف", mascot: "peek" },
-  { title: "صراحة؟ العرض هيدا حلو 🔥", subtitle: "وإذا ما عجبك، سكّر ونحنا مو زعلانين", mascot: "lounge" },
   { title: "دقيقة بس وبتكفّي ⏱️", subtitle: "شوف العروض وبعدين إنت وشطارتك", mascot: "moto" },
-  { title: "لا تقلي ما شفت! 🙈", subtitle: "خلص صار عندك علم… القرار إلك", mascot: "peek" },
-  { title: "العرض عم يستنّاك 🎁", subtitle: "وإذا تأخرت… بيروح لغيرك", mascot: "parcel" },
-  { title: "كَحيل بيحبك 💜", subtitle: "وعشان هيك جابلك أحلى العروض", mascot: "lounge" },
-  // مشهد التعارف بالشخصيتين
+  { title: "شو رأيك تشوف العروض قبل ما تطير؟ 🎁", subtitle: "عروض اليوم مختارة بعناية إلك", mascot: "moto" },
+
+  // ── مشهد التعارف: كَحيلان يقدّم نفسه ثم يقدّم كَحيل ──────────────────────
+  {
+    title: "أنا الزعيم كَحيلان… زعيم الحارة 🧣",
+    subtitle: "وهاد ابن خالتي كَحيل، مؤدب ومحترم، ومنجيبلكم أحلى العروض سوا 😎",
+    mascot: "duo",
+  },
   {
     title: "تعرّف علينا! 👋",
     subtitle: "أنا كَحيلان… وهاد ابن خالتي كَحيل، وسوا منجيبلك أحلى العروض 😎",
@@ -69,78 +87,78 @@ const AR_POOL: PopupCopy[] = [
     subtitle: "أنا الزعيم كَحيلان، وهاد كَحيل… ومن هون وطالع العروض علينا",
     mascot: "duo",
   },
-  {
-    title: "أهلًا وسهلًا فيك 💜",
-    subtitle: "كَحيل وكَحيلان بخدمتك، وما منقصّر",
-    mascot: "duo",
-  },
 ];
 
 const EN_POOL: PopupCopy[] = [
-  // Parcel drop
-  { title: "Phew… delivered in one piece! 📦", subtitle: "Grab the offer, captain — someone else is eyeing it 😄", mascot: "parcel" },
-  { title: "I climbed out of the box just for you! 🙋‍♂️", subtitle: "And if you skip the offer… well, well", mascot: "parcel" },
-  { title: "I nearly broke my back landing here! 😩", subtitle: "The least you can do is take a look", mascot: "parcel" },
-  { title: "The parcel arrived… and so did I 📦", subtitle: "Take the offer, don't ask how I got here", mascot: "parcel" },
-  { title: "Fell from up there and I'm still fine 😌", subtitle: "What matters is your offer arrived safe", mascot: "parcel" },
-  // Lounging
-  { title: "Aww… now you got me sulking 😂", subtitle: "You were lost without me, admit it!", mascot: "lounge" },
-  { title: "I'm comfy and you're just watching? 😎", subtitle: "Go check the offer and put me at ease", mascot: "lounge" },
-  // Scooter
-  { title: "Where's the rush, boss? 🏍️", subtitle: "The offer is right here — two seconds, tops", mascot: "moto" },
-  { title: "Caught up with you on my scooter! 🏍️💨", subtitle: "All so you wouldn't miss this one", mascot: "moto" },
-  // Peeking
-  { title: "I've been watching a while 👀", subtitle: "And you need this offer more than I do", mascot: "peek" },
-  { title: "Don't worry… it's only me 🙈", subtitle: "Just here to mention an offer waiting for you", mascot: "peek" },
-  { title: "I saw you ignoring me 😏", subtitle: "Fine — see the offer, then ignore me", mascot: "peek" },
-  // Farewell
-  { title: "Alright… take care 👋", subtitle: "Just don't say we never mentioned an offer", mascot: "wave" },
-  { title: "Close it, close it… no hard feelings 😌", subtitle: "Only don't say nobody told you tomorrow", mascot: "wave" },
-  { title: "Back already? Knew you would 😄", subtitle: "The offer is still here, nobody took it", mascot: "wave" },
-  // "Chief Kaheelan — Kaheel's cousin": mock bossiness, all in good fun
+  // ── Kaheel: welcome, intro, thanks, reassurance, guidance ───────────────
+  { title: "Welcome — glad you're here 💜", subtitle: "I'm Kaheel. If you need anything, I'm right here", mascot: "wave" },
+  { title: "Welcome to Kaheel 👋", subtitle: "Every service and store in one place, to save you time", mascot: "wave" },
+  { title: "Thanks for stopping by 🙏", subtitle: "Browse at your own pace — happy to help anytime", mascot: "wave" },
+  { title: "Thank you for your trust 💜", subtitle: "We value your time and keep making things simpler", mascot: "wave" },
+  { title: "Back again? Lovely 😊", subtitle: "Everything is just as you left it", mascot: "wave" },
+  { title: "At your service, always 🤝", subtitle: "Kaheel is with you from the first question to the last step", mascot: "wave" },
+  { title: "Take your time browsing 😊", subtitle: "Trusted providers and clear prices", mascot: "lounge" },
+  { title: "No rush at all 🌿", subtitle: "Your comfort comes first — the offers will still be here", mascot: "lounge" },
+  { title: "Everything is saved for you 👌", subtitle: "Your orders and chats are here whenever you need them", mascot: "lounge" },
+  { title: "We're lining up great offers 🌸", subtitle: "Trusted providers, clear pricing", mascot: "lounge" },
+  { title: "Just a small reminder 🔔", subtitle: "There are offers near you, if you'd like a look", mascot: "peek" },
+  { title: "We don't mean to interrupt 🙂", subtitle: "Only letting you know what's new nearby", mascot: "peek" },
+  { title: "Need a hand? 💬", subtitle: "Ask anytime — we'll get back to you quickly", mascot: "peek" },
+  { title: "Quick note ℹ️", subtitle: "We can connect you with the right provider in one step", mascot: "peek" },
+  { title: "Didn't find what you need? 🌷", subtitle: "Tell us and we'll help you find it", mascot: "peek" },
+
+  // ── Chief Kaheelan: offers, teasers, playful bossiness ──────────────────
   { title: "Do you know who you're talking to? 😤", subtitle: "I'm Chief Kaheelan… and this offer is yours by my order", mascot: "boss" },
   { title: "He flicked the shemagh and said… 🧣", subtitle: "This offer only goes to someone smart like you", mascot: "boss" },
   { title: "I'm Kaheel's own cousin! 😎", subtitle: "So the offer comes from family — take it, don't embarrass me", mascot: "boss" },
   { title: "What? Closing it on my face? 😠", subtitle: "Fine, close it… right after you see the offer", mascot: "boss" },
   { title: "Around here, I'm the chief 👉", subtitle: "And the offer is my order — no discussion", mascot: "boss" },
   { title: "Don't make me get cross 😤", subtitle: "Just take a nice look at the offer 😄", mascot: "boss" },
-  { title: "The chief has spoken 🧣", subtitle: "This offer is yours, nobody else can take it", mascot: "boss" },
-  { title: "I don't take no for an answer 😏", subtitle: "But from you… fine. Just see the offer", mascot: "boss" },
-  // Earlier general lines — kept as they were
-  { title: "Everything you need is right here 👋", subtitle: "Browse nearby offers in one tap", mascot: "wave" },
-  { title: "Care to see today's offers first? 🎁", subtitle: "Hand-picked deals, just for you", mascot: "moto" },
-  { title: "We lined up the best offers for you", subtitle: "Trusted providers, clear prices", mascot: "lounge" },
-  { title: "Today's chance — tomorrow brings more 😊", subtitle: "Take a quick look before it ends", mascot: "peek" },
-  { title: "Welcome to Kaheel — let's save you time", subtitle: "Every service and store in one place", mascot: "wave" },
-  { title: "Where are you off to? 🏃‍♂️", subtitle: "The offer is still on — one minute, then go", mascot: "moto" },
-  { title: "Whoa, that was fast! 😄", subtitle: "Five seconds… you might spot something you like", mascot: "moto" },
-  { title: "We won't bother you… but 👀", subtitle: "There's a really good offer here, don't miss it", mascot: "peek" },
-  { title: "You might regret closing this 😌", subtitle: "Not a threat — friendly advice", mascot: "lounge" },
-  { title: "Come over here a sec 👋", subtitle: "Kaheel gathered it all — all that's left is a look", mascot: "peek" },
-  { title: "Honestly? This one is good 🔥", subtitle: "And if you don't like it, close it — no hard feelings", mascot: "lounge" },
-  { title: "One minute is plenty ⏱️", subtitle: "See the offers, then it's all yours", mascot: "moto" },
-  { title: "Don't say we didn't tell you! 🙈", subtitle: "Now you know — the call is yours", mascot: "peek" },
-  { title: "The offer is waiting 🎁", subtitle: "Wait too long and someone else takes it", mascot: "parcel" },
-  { title: "Kaheel loves you 💜", subtitle: "That's why we brought you the best offers", mascot: "lounge" },
-  // The pair introducing themselves
+  { title: "Chief's word, case closed 🧣", subtitle: "This offer is yours and nobody can take it", mascot: "boss" },
+  { title: "I don't take no for an answer 😏", subtitle: "But from you… fine, just see the offer", mascot: "boss" },
+  { title: "I'm comfy and you're just watching? 😎", subtitle: "Go check the offer and put me at ease", mascot: "boss" },
+  { title: "Aww… now you got me sulking 😂", subtitle: "You were lost without me, admit it!", mascot: "boss" },
+  { title: "I've been watching a while 👀", subtitle: "And you need this offer more than I do", mascot: "boss" },
+  { title: "I saw you ignoring me 😏", subtitle: "Fine — see the offer, then ignore me", mascot: "boss" },
+  { title: "Close it and you'll regret it 😌", subtitle: "Not a threat… friendly advice 😄", mascot: "boss" },
+  { title: "Alright… take care 👋", subtitle: "Just don't say we never mentioned an offer", mascot: "boss" },
+  { title: "Close it, close it… no hard feelings 😌", subtitle: "Only don't say nobody told you tomorrow", mascot: "boss" },
+  { title: "Back already? Knew you would 😄", subtitle: "The offer is still here, nobody took it", mascot: "boss" },
+  { title: "Don't tell me you didn't see it! 🙈", subtitle: "Now you know — the choice is yours", mascot: "boss" },
+  { title: "Honestly? This offer is good 🔥", subtitle: "And if you don't like it, close it — no hard feelings", mascot: "boss" },
+  // Kaheelan delivers the offer himself — parcel scene
+  { title: "Phew… delivered in one piece! 📦", subtitle: "Grab the offer, captain — someone else is eyeing it 😄", mascot: "parcel" },
+  { title: "I climbed out of the box just for you! 🙋‍♂️", subtitle: "And if you skip the offer… well, well", mascot: "parcel" },
+  { title: "I nearly broke my back landing here! 😩", subtitle: "The least you can do is take a look", mascot: "parcel" },
+  { title: "The parcel arrived… and so did I 📦", subtitle: "Take the offer, don't ask how I got here", mascot: "parcel" },
+  { title: "Fell from up there and I'm still fine 😌", subtitle: "What matters is your offer arrived safe", mascot: "parcel" },
+  { title: "Your offer is waiting 🎁", subtitle: "Wait too long and it goes to someone else", mascot: "parcel" },
+  // Kaheelan races after you — scooter scene
+  { title: "Where's the rush, boss? 🏍️", subtitle: "The offer is right here — two seconds, tops", mascot: "moto" },
+  { title: "Caught up with you on my scooter! 🏍️💨", subtitle: "All so you wouldn't miss this one", mascot: "moto" },
+  { title: "Where are you off to? 🏃‍♂️", subtitle: "The offer isn't over — one minute, then go", mascot: "moto" },
+  { title: "What's the hurry! 😄", subtitle: "Five seconds… you might find something you like", mascot: "moto" },
+  { title: "One minute is plenty ⏱️", subtitle: "See the offers, then you're on your way", mascot: "moto" },
+  { title: "Fancy a look before you fly off? 🎁", subtitle: "Today's offers, hand-picked for you", mascot: "moto" },
+
+  // ── Intro scene: Kaheelan introduces himself, then Kaheel ───────────────
   {
-    title: "Meet us! 👋",
+    title: "I'm Chief Kaheelan… chief of the block 🧣",
+    subtitle: "And this is my cousin Kaheel — polite and proper. Together we bring you the best offers 😎",
+    mascot: "duo",
+  },
+  {
+    title: "Let's get acquainted! 👋",
     subtitle: "I'm Kaheelan… and this is my cousin Kaheel. Together we bring you the best offers 😎",
     mascot: "duo",
   },
   {
-    title: "Time we got introduced 🧣",
-    subtitle: "I'm Chief Kaheelan, and this is Kaheel — from here on, the offers are on us",
-    mascot: "duo",
-  },
-  {
-    title: "You're very welcome 💜",
-    subtitle: "Kaheel and Kaheelan at your service — we never cut corners",
+    title: "About time we met 🧣",
+    subtitle: "I'm Chief Kaheelan, and this is Kaheel… from here on, the offers are on us",
     mascot: "duo",
   },
 ];
 
-/** Picks a stable random line for the current mount. */
 export function pickPopupCopy(ar: boolean, seed = Math.random()): PopupCopy {
   const pool = ar ? AR_POOL : EN_POOL;
   return pool[Math.floor(seed * pool.length) % pool.length]!;
