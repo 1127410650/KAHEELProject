@@ -1,7 +1,7 @@
 /**
  * مضيف الشخصيتين — «تسقط الشخصية، وتُفتح الوجهة».
  *
- * ثلاثة مشاهد فقط، كلها فوق الصفحة بلا حجب وبلا هزّة تخطيط:
+ * أربعة مشاهد فقط، كلها فوق الصفحة بلا حجب وبلا هزّة تخطيط:
  *  ١) **السقوط عند اللمس**: عند لمس المستخدم لعنصر (رابط/زر/وجهة) يهوي
  *     «الزعيم كَحيلان» من الأعلى مائلًا، يرتطم فينضغط عرضًا، يرتد فيستطيل، ثلاث
  *     طبّات متناقصة، ثم يستقر — كلها في 1.05 ثانية. الوجهة تُفتح في نفس اللحظة
@@ -9,13 +9,21 @@
  *  ٢) **مزحة الكبس المتكرر**: ٦ ضغطات خلال ٣ ثوانٍ ⇒ كَحيلان بمزحة «يكفي تكبس!».
  *  ٣) **دخول قسم الناس**: عند فتح القسم يدخل كَحيلان من الجانب بحركة واثقة
  *     ويلف كوفيته، مع فقاعة كلام مرحة.
+ *  ٤) **الإطلالة**: بين حين وآخر يطلّ كَحيلان **برأسه وكتفه فقط** من حافة الشاشة
+ *     (يمين/يسار/أسفل) كأنه يختلس النظر — بلا بطاقة كاملة، فقاعة كلام قصيرة فقط.
+ *
+ * ## جهة الظهور تتنوّع — لا من الأعلى فقط
+ *  • كل ظهور يختار جهة عشوائية من خمس: أسفل، أعلى، يمين، يسار، الزاوية السفلية.
+ *  • لا تتكرّر الجهة نفسها مرتين متتاليتين (`nextEntrySide` يحفظ الأخيرة).
+ *  • لكل جهة دخول بـ spring خفيف وخروج **بنفس الاتجاه** عند الإغلاق.
+ *  • جهة الإطلالة تتنوّع كذلك بنفس القاعدة (`nextPeekSide`).
  *
  * ## الإغلاق اليدوي حصرًا
  *  • **لا مؤقّت اختفاء إطلاقًا**: البطاقة تبقى ظاهرة حتى يضغط المستخدم زر × .
  *  • لا تُغلق بالضغط خارجها ولا بالتمرير ولا بالملاحة ولا بأي تفاعل آخر.
  *  • زر × كبير (36px) وموضعه ثابت أعلى البطاقة، وبجانبه «عدم الإظهار» (٢٤ ساعة).
- *  • بطاقة واحدة فقط: لا تظهر بطاقة جديدة ما دامت واحدة مفتوحة (`openRef`).
- *  • البطاقة مرساة أسفل الشاشة فوق الشريط السفلي فلا تحجب المحتوى.
+ *  • مشهد واحد فقط: لا يظهر شيء جديد ما دام واحد مفتوحًا (`openRef`) — والإطلالة
+ *    تخضع لنفس القاعدة، فلا تظهر فوق بطاقة.
  *
  * ضمانات التصميم:
  *  • `position: fixed` + `pointer-events-none` على الغلاف ⇒ صفر هزّة تخطيط
@@ -30,10 +38,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { EyeOff, X } from "lucide-react";
 
+import { MascotPeek } from "@/components/marketplace/campaign/MascotPeek";
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
-  MASCOT_TIMING,
+  ENTRY_POSITION,
+  ENTRY_ANIMATION,
+  ENTRY_ORIGIN,
+  PEEK_LAYOUT,
+  nextEntrySide,
+  nextPeekSide,
+  type EntrySide,
+  type PeekSide,
+} from "@/lib/mascot-entry";
+import {
   configureMascotTiming,
   decideDrop,
   prefersReducedMotion,
@@ -54,11 +72,16 @@ import {
   bossCopyCount,
   entranceCopyAt,
   entranceCopyCount,
+  peekCopyAt,
+  peekCopyCount,
   rapidTapCopyAt,
   rapidTapCopyCount,
 } from "@/lib/takeover-copy";
 
-type CardMode = "drop" | "rapid" | "entrance";
+type CardMode = "drop" | "rapid" | "entrance" | "peek";
+
+/** كم من مشاهد اللمس تكون إطلالة رأس بدلًا من بطاقة كاملة. */
+const PEEK_SHARE = 0.35;
 
 /**
  * بعض اللمسات تفتح الوجهة بتحميل كامل للصفحة (روابط عادية، فتح خارجي، تحديث)،
@@ -80,7 +103,9 @@ interface ResumeRecord {
   mascot: MascotKind;
   mode: CardMode;
   from: "start" | "end";
-  /** طابع زمني لنهاية عمر البطاقة. */
+  side: EntrySide;
+  peekSide: PeekSide;
+  /** طابع زمني لنهاية نافذة الاستئناف. */
   until: number;
 }
 
@@ -106,6 +131,10 @@ interface MascotCard {
   mode: CardMode;
   /** جهة الدخول لمشهد قسم الناس. */
   from: "start" | "end";
+  /** جهة ظهور البطاقة الكاملة — تتنوّع في كل مرة. */
+  side: EntrySide;
+  /** حافة الإطلالة لمشهد «يطلّ برأسه». */
+  peekSide: PeekSide;
 }
 
 export function PromoPopupHost() {
@@ -121,10 +150,11 @@ export function PromoPopupHost() {
   const lastCopyRef = useRef(-1);
   const lastRapidRef = useRef(-1);
   const lastEntranceRef = useRef(-1);
+  const lastPeekRef = useRef(-1);
   const keyRef = useRef(0);
   /** مؤقّت حركة الخروج فقط — لا يوجد مؤقّت اختفاء تلقائي. */
   const fadeTimerRef = useRef(0);
-  /** بطاقة مفتوحة الآن؟ لمنع ظهور بطاقة ثانية فوقها. */
+  /** مشهد مفتوح الآن؟ لمنع ظهور ثانٍ فوقه. */
   const openRef = useRef(false);
 
   // التوقيتات كلها من لوحة الإدارة — تُطبَّق أول ما تصل الإعدادات.
@@ -147,7 +177,7 @@ export function PromoPopupHost() {
   /** بوابات الأدب: أي واحدة منها تمنع المزحة بلا أن تمنع الوجهة. */
   const blocked = useCallback((): boolean => {
     if (!pacing.enabled) return true;
-    // بطاقة واحدة فقط في الشاشة: ما دامت مفتوحة لا تظهر بطاقة جديدة.
+    // مشهد واحد فقط في الشاشة: ما دام مفتوحًا لا يظهر مشهد جديد.
     if (openRef.current) return true;
     if (popupsMuted() || popupsSuppressed()) return true;
     if (call) return true;
@@ -159,7 +189,7 @@ export function PromoPopupHost() {
 
   /**
    * الإغلاق اليدوي حصرًا — لا مؤقّت اختفاء في المنصة إطلاقًا. المؤقّت الوحيد هنا
-   * هو زمن حركة الخروج الناعمة (220ms) بعد ضغط المستخدم على الزر.
+   * هو زمن حركة الخروج بنفس اتجاه الدخول (260ms) بعد ضغط المستخدم على الزر.
    */
   const dismiss = useCallback((mute?: boolean) => {
     window.clearTimeout(fadeTimerRef.current);
@@ -174,7 +204,7 @@ export function PromoPopupHost() {
     fadeTimerRef.current = window.setTimeout(() => {
       setCard(null);
       setLeaving(false);
-    }, 220);
+    }, 260);
   }, []);
 
   /** فهرس جديد بلا تكرار متتالٍ. */
@@ -193,26 +223,40 @@ export function PromoPopupHost() {
         copy = rapidTapCopyAt(ar, rotate(rapidTapCopyCount(ar), lastRapidRef));
       } else if (mode === "entrance") {
         copy = entranceCopyAt(ar, rotate(entranceCopyCount(ar), lastEntranceRef));
+      } else if (mode === "peek") {
+        copy = peekCopyAt(ar, rotate(peekCopyCount(ar), lastPeekRef));
       } else {
         copy = bossCopyAt(ar, rotate(bossCopyCount(ar), lastCopyRef));
       }
       window.clearTimeout(fadeTimerRef.current);
       openRef.current = true;
       setLeaving(false);
+      // جهة جديدة في كل ظهور، ولا تتكرّر الجهة السابقة.
+      const side = nextEntrySide();
+      const peekSide = nextPeekSide();
       setCard({
         key: keyRef.current,
         mode,
         from: Math.random() < 0.5 ? "start" : "end",
+        side,
+        peekSide,
         ...copy,
       });
 
       if (mode !== "entrance") {
         try {
-          // نافذة استئناف قصيرة: تخصّ الانتقال الحالي فقط ولا تُعيد بطاقة قديمة
-          // بعد ذلك. البطاقة نفسها بعد ظهورها تبقى حتى الإغلاق اليدوي.
+          // نافذة استئناف قصيرة: تخصّ الانتقال الحالي فقط ولا تُعيد مشهدًا قديمًا
+          // بعد ذلك. المشهد نفسه بعد ظهوره يبقى حتى الإغلاق اليدوي.
           sessionStorage.setItem(
             RESUME_KEY,
-            JSON.stringify({ mode, from: "start", ...copy, until: Date.now() + RESUME_WINDOW_MS }),
+            JSON.stringify({
+              mode,
+              from: "start",
+              side,
+              peekSide,
+              ...copy,
+              until: Date.now() + RESUME_WINDOW_MS,
+            }),
           );
         } catch {
           /* التخزين ممتلئ أو محجوب: المشهد يبقى داخل الصفحة فقط. */
@@ -230,7 +274,12 @@ export function PromoPopupHost() {
       if (blocked()) return;
       const { drop, rapid } = decideDrop();
       if (!drop) return;
-      show(rapid ? "rapid" : "drop");
+      if (rapid) {
+        show("rapid");
+        return;
+      }
+      // بين حين وآخر: إطلالة رأس خفيفة بدل البطاقة الكاملة.
+      show(Math.random() < PEEK_SHARE ? "peek" : "drop");
     };
     window.addEventListener("pointerdown", onTap, { capture: true, passive: true });
     return () => window.removeEventListener("pointerdown", onTap, { capture: true });
@@ -252,7 +301,7 @@ export function PromoPopupHost() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // استئناف مشهد سقوط بدأ قبل تحميل كامل للصفحة — ثم يبقى حتى الإغلاق اليدوي.
+  // استئناف مشهد بدأ قبل تحميل كامل للصفحة — ثم يبقى حتى الإغلاق اليدوي.
   useEffect(() => {
     const record = readResume();
     if (!record || blocked()) return;
@@ -267,15 +316,91 @@ export function PromoPopupHost() {
   if (!card) return null;
 
   const calm = prefersReducedMotion();
-  const entrance = card.mode === "entrance";
 
+  const closeButtons = (
+    <div className="flex gap-1.5">
+      <button
+        type="button"
+        onClick={() => dismiss(true)}
+        aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
+        className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
+      >
+        <EyeOff className="size-4" aria-hidden />
+      </button>
+      <button
+        type="button"
+        onClick={() => dismiss()}
+        aria-label={ar ? "إغلاق" : "Close"}
+        className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046] text-white shadow-md"
+      >
+        <X className="size-5" aria-hidden />
+      </button>
+    </div>
+  );
+
+  // ── مشهد الإطلالة: رأس وكتف فقط من الحافة، بلا بطاقة كاملة ────────────────
+  if (card.mode === "peek") {
+    const layout = PEEK_LAYOUT[card.peekSide];
+    /**
+     * الحركة تُكتب في `style` لا في كلاس: أسماء الحركات تُختار وقت التشغيل،
+     * وTailwind لا يولّد كلاسات من نصوص متغيّرة — فالـ inline style هو الطريق
+     * الوحيد الذي يضمن عمل كل الجهات فعلًا.
+     */
+    const peekAnimation = calm
+      ? leaving
+        ? "kaheel-tap-fade 0.22s ease-in forwards"
+        : "kaheel-scrim-in 0.2s ease-out"
+      : leaving
+        ? `${layout.animation.out} 0.26s ease-in forwards`
+        : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
+
+    return (
+      <div className="pointer-events-none fixed inset-0 z-[80]" aria-live="polite">
+        <div
+          key={card.key}
+          data-kaheel-drop-card
+          data-kaheel-peek={card.peekSide}
+          role="status"
+          // dir=ltr على الصفّ فقط: ترتيب الشخصية والفقاعة فيزيائي لا منطقي،
+          // فتبقى الإطلالة من نفس الحافة في العربية والإنجليزية على حد سواء.
+          dir="ltr"
+          style={{ transformOrigin: layout.origin, animation: peekAnimation }}
+          className={`pointer-events-none absolute flex items-end gap-1.5 ${layout.row} ${layout.position}`}
+        >
+          <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
+          <div
+            dir={ar ? "rtl" : "ltr"}
+            className="mb-2 max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl"
+          >
+
+            <div className="mb-1 flex items-start justify-between gap-2">
+              <p className="line-clamp-2 text-[13px] font-black leading-tight text-[#240046]">
+                {card.title}
+              </p>
+              {closeButtons}
+            </div>
+            <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#5a189a]">
+              {card.subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const entrance = card.mode === "entrance";
+  const sideMotion = ENTRY_ANIMATION[card.side];
+
+  // نفس السبب: الجهة تُختار وقت التشغيل، فالحركة في `style` لتعمل كل الجهات.
   const animation = leaving
-    ? "animate-[kaheel-tap-fade_0.22s_ease-in_forwards]"
+    ? calm
+      ? "kaheel-tap-fade 0.22s ease-in forwards"
+      : `${sideMotion.out} 0.26s ease-in forwards`
     : calm
-      ? "animate-[kaheel-scrim-in_0.2s_ease-out]"
+      ? "kaheel-scrim-in 0.2s ease-out"
       : entrance
-        ? `animate-[mascot-enter-${card.from}_0.62s_cubic-bezier(0.2,0.9,0.3,1)_both]`
-        : "animate-[mascot-drop_1.05s_cubic-bezier(0.22,0.9,0.3,1)_both]";
+        ? `mascot-enter-${card.from} 0.62s cubic-bezier(0.2,0.9,0.3,1) both`
+        : `${sideMotion.in} 0.62s cubic-bezier(0.22,0.9,0.3,1) both`;
 
   const bodyMotion =
     calm || leaving
@@ -285,37 +410,23 @@ export function PromoPopupHost() {
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
   return (
-    <div
-      className={`pointer-events-none fixed inset-0 z-[80] flex items-end p-4 pb-24 ${
-        entrance ? "justify-start" : "justify-center"
-      }`}
-      aria-live="polite"
-    >
+    <div className="pointer-events-none fixed inset-0 z-[80]" aria-live="polite">
       <div
         key={card.key}
         data-kaheel-drop-card
+        data-kaheel-side={card.side}
         role="status"
-        style={{ transformOrigin: "bottom center" }}
-        className={`pointer-events-none relative flex w-full max-w-[17rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
+        style={{
+          transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
+          animation,
+        }}
+        className={`pointer-events-none absolute flex w-[17rem] max-w-[calc(100vw-1.5rem)] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
+          entrance ? "bottom-24 left-3" : ENTRY_POSITION[card.side]
+        }`}
       >
-        <div className="absolute end-2 top-2 flex gap-1.5">
-          <button
-            type="button"
-            onClick={() => dismiss(true)}
-            aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-            className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
-          >
-            <EyeOff className="size-4" aria-hidden />
-          </button>
-          <button
-            type="button"
-            onClick={() => dismiss()}
-            aria-label={ar ? "إغلاق" : "Close"}
-            className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046] text-white shadow-md"
-          >
-            <X className="size-5" aria-hidden />
-          </button>
-        </div>
+
+
+        <div className="absolute end-2 top-2">{closeButtons}</div>
 
         <div className={bodyMotion}>
           <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} />

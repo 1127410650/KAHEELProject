@@ -352,3 +352,40 @@ export function nextShortGreetingIndex(previous = -1, seed = Math.random()): num
   const offset = 1 + (Math.floor(seed * (size - 1)) % (size - 1));
   return (previous + offset) % size;
 }
+
+// ── «كَحيلان يطلّ برأسه»: إطلالة صغيرة من الحافة، نبرة الواسطة الفكاهية ──────
+/**
+ * نصوص مشهد الإطلالة (رأس وكتف فقط من حافة الشاشة). كلها لكَحيلان — الواسطة
+ * الفكاهية — ولا تحتاج لاحقة «بواسطتي» لأن الواسطة هي أصل المزحة هنا.
+ */
+const AR_PEEK: PopupCopy[] = [
+  { title: "لو محتاج شي علّمني 👀", subtitle: "ترا عندي واسطة كبيرة", mascot: "boss" },
+  { title: "بس همسة… 🤫", subtitle: "أنا واسطتك هون، لا تكسف", mascot: "boss" },
+  { title: "شفتك محتار 😏", subtitle: "قلّي شو بدّك وأنا بدبّرها", mascot: "boss" },
+  { title: "أنا الواسطة يا معلّم 🧣", subtitle: "كلمة مني وبتمشي أمورك", mascot: "boss" },
+  { title: "مطوّل بالتفكير؟ 🤨", subtitle: "خلص، أنا بزبّطك… بواسطتي", mascot: "boss" },
+  { title: "تكرم عينك 😎", subtitle: "بس قول وأنا بجيبلك ياها", mascot: "boss" },
+  { title: "لا تحتار وتتعب حالك 💜", subtitle: "عندك واسطة، وأنا هي", mascot: "boss" },
+];
+
+const EN_PEEK: PopupCopy[] = [
+  { title: "Need anything? Just say 👀", subtitle: "I've got serious connections", mascot: "boss" },
+  { title: "Just a whisper… 🤫", subtitle: "I'm your inside man here — no need to be shy", mascot: "boss" },
+  { title: "You look undecided 😏", subtitle: "Tell me what you need and I'll sort it", mascot: "boss" },
+  { title: "I'm the connection, boss 🧣", subtitle: "One word from me and it's done", mascot: "boss" },
+  { title: "Still thinking it over? 🤨", subtitle: "Enough — I'll fix it for you… through me", mascot: "boss" },
+  { title: "Consider it done 😎", subtitle: "Just say the word and I'll bring it", mascot: "boss" },
+  { title: "Don't tire yourself out 💜", subtitle: "You've got a connection — it's me", mascot: "boss" },
+];
+
+/** عدد نصوص الإطلالة للغة الحالية. */
+export function peekCopyCount(ar: boolean): number {
+  return (ar ? AR_PEEK : EN_PEEK).length;
+}
+
+/** نص الإطلالة عند فهرس معيّن (بالتدوير) — المضيف يمنع التكرار المتتالي. */
+export function peekCopyAt(ar: boolean, index: number): PopupCopy {
+  const pool = ar ? AR_PEEK : EN_PEEK;
+  const size = pool.length;
+  return pool[((index % size) + size) % size]!;
+}
