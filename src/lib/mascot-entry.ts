@@ -60,11 +60,13 @@ export function resetEntrySides(): void {
  * `-translate-x-1/2`، لأن `transform` محجوز لحركة الدخول والخروج.
  */
 export const ENTRY_POSITION: Record<EntrySide, string> = {
-  bottom: "bottom-24 left-0 right-0 mx-auto",
-  top: "top-4 left-0 right-0 mx-auto",
-  right: "right-3 inset-y-0 my-auto h-fit",
-  left: "left-3 inset-y-0 my-auto h-fit",
-  corner: "bottom-24 right-3",
+  // كل الإحداثيات نسبية للغلاف الآمن في `PromoPopupHost` (الغلاف نفسه يبتعد عن
+  // الهيدر وشريط التنقل)، فلا تحتاج البطاقة أي إزاحة تتجاوز حدوده.
+  bottom: "bottom-0 left-0 right-0 mx-auto w-fit",
+  top: "top-0 left-0 right-0 mx-auto w-fit",
+  right: "right-0 inset-y-0 my-auto h-fit",
+  left: "left-0 inset-y-0 my-auto h-fit",
+  corner: "bottom-0 right-0",
 };
 
 /** حركة الدخول (spring خفيف) وحركة الخروج بنفس الاتجاه. */
@@ -94,21 +96,21 @@ export const PEEK_LAYOUT: Record<
   { position: string; row: string; animation: { in: string; out: string }; origin: string }
 > = {
   right: {
-    position: "bottom-24 right-0",
+    position: "bottom-0 right-0",
     // الصفّ يُرسم بـ dir=ltr دائمًا (انظر المضيف) فالترتيب فيزيائي: الشخصية يمينًا.
     row: "flex-row-reverse",
     animation: { in: "mascot-peek-right", out: "mascot-peek-out-right" },
     origin: "bottom right",
   },
   left: {
-    position: "bottom-24 left-0",
+    position: "bottom-0 left-0",
     // الشخصية يسارًا عند الحافة، والفقاعة إلى يمينها.
     row: "flex-row",
     animation: { in: "mascot-peek-left", out: "mascot-peek-out-left" },
     origin: "bottom left",
   },
   bottom: {
-    position: "bottom-16 left-0 right-0 mx-auto w-fit",
+    position: "bottom-0 left-0 right-0 mx-auto w-fit",
     row: "flex-row",
     animation: { in: "mascot-peek-bottom", out: "mascot-peek-out-bottom" },
     origin: "bottom center",

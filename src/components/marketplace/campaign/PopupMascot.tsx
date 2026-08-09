@@ -86,7 +86,8 @@ export function PopupMascot({
   scale?: "card" | "hero";
 }) {
   const persona = MASCOT_PERSONA[kind] ?? "kaheel";
-  const height = scale === "hero" ? "h-40 sm:h-44" : "h-[5.5rem] sm:h-24";
+  // الاحتواء أولوية على الحجم: على الشاشات الضيقة (320px) تصغر الصورة، والنص لا يصغر.
+  const height = scale === "hero" ? "h-24 min-[360px]:h-28 sm:h-32" : "h-[5.5rem] sm:h-24";
 
   if (persona === "duo") {
     return (
