@@ -218,13 +218,6 @@ export function MarketHeader({
                   {label}
                 </a>
               ))}
-              <a
-                href={addHref}
-                className="ms-auto inline-flex min-h-8 shrink-0 items-center gap-1.5 rounded-full bg-market-gold px-4 text-[11px] font-black text-[#240046] shadow-sm outline-none transition hover:bg-[#f8b62d] focus-visible:ring-2 focus-visible:ring-white sm:text-xs"
-              >
-                <Plus className="size-4" aria-hidden />
-                {t("market.addListing")}
-              </a>
             </div>
           </nav>
         )}
