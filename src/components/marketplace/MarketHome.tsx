@@ -177,30 +177,43 @@ export function MarketHome() {
           </Link>
         </div>
 
-        <HeroBanner />
+        <PromoCarousel addHref={addHref} />
 
-        <section aria-labelledby="home-fields-title">
-          <h2 id="home-fields-title" className="sr-only">
-            {t("market.homeV2.mainFields" as HomeKey)}
-          </h2>
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-4">
-            {MAIN_FIELDS.map((field) => (
-              <MainFieldCard
-                key={field.key}
-                field={field}
-                liveImage={liveCategoryImages[field.key]}
-              />
-            ))}
-          </div>
-        </section>
+        <Reveal as="section">
+          <section aria-labelledby="home-fields-title">
+            <h2 id="home-fields-title" className="sr-only">
+              {t("market.homeV2.mainFields" as HomeKey)}
+            </h2>
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-4">
+              {MAIN_FIELDS.map((field) => (
+                <MainFieldCard
+                  key={field.key}
+                  field={field}
+                  liveImage={liveCategoryImages[field.key]}
+                />
+              ))}
+            </div>
+          </section>
+        </Reveal>
 
-        <BenefitsStrip />
+        <Reveal>
+          <BenefitsStrip />
+        </Reveal>
 
-        <SecondaryServices />
+        <Reveal>
+          <SecondaryServices />
+        </Reveal>
 
-        <SyriaHomeGateway />
+        <Reveal>
+          <SyriaHomeGateway />
+        </Reveal>
 
-        {LIVE_DEMO_VISIBLE ? <LiveDemoEntry /> : null}
+        {LIVE_DEMO_VISIBLE ? (
+          <Reveal>
+            <LiveDemoEntry />
+          </Reveal>
+        ) : null}
+
 
         <ListingRail
           title={t("market.homeV2.nearbyRestaurants" as HomeKey)}
