@@ -21,7 +21,12 @@ import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation
 import { track } from "@/lib/analytics";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { ListingCard, type ListingCardData } from "@/components/marketplace/ListingCard";
+import {
+  ListingCard,
+  ListingCardSkeleton,
+  ListingRowSkeleton,
+  type ListingCardData,
+} from "@/components/marketplace/ListingCard";
 import type { RealEstateSearchParams } from "@/components/marketplace/real-estate/RealEstateExperience";
 import { BusinessCard } from "@/components/marketplace/BusinessCard";
 import { Button } from "@/components/ui/button";
@@ -753,7 +758,7 @@ function GenericSearchPage() {
               onChange={(e) => setTerm(e.target.value)}
               placeholder={t("market.search.placeholder")}
               aria-label={t("market.search.title")}
-              className="h-12 border-white bg-white pe-10 shadow-[0_8px_24px_rgb(11_29_67/0.07)]"
+              className="k-surface h-12 rounded-[16px] bg-white pe-10 text-sm shadow-none"
             />
             {term !== "" && (
               <button
@@ -772,10 +777,10 @@ function GenericSearchPage() {
             )}
           </form>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className="mt-3 flex items-center gap-2">
             <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="shrink-0">
+                <Button variant="outline" size="sm" className="k-press h-9 shrink-0 rounded-xl border-primary/30 font-bold">
                   <SlidersHorizontal className="size-4" aria-hidden />
                   {t("market.search.filtersBtn")}
                   {activeFilterCount > 0 && (
@@ -813,7 +818,7 @@ function GenericSearchPage() {
               value={sort}
               onChange={(e) => update({ sort: e.target.value })}
               aria-label={t("market.filters.sort")}
-              className="h-9 min-w-0 shrink rounded-xl border border-input bg-white px-2 text-sm"
+              className="k-press h-9 min-w-0 shrink rounded-xl border border-primary/25 bg-white px-2 text-sm font-semibold"
             >
               <option value="newest">{t("market.sort.newest")}</option>
               <option value="oldest">{t("market.sort.oldest")}</option>
@@ -821,7 +826,7 @@ function GenericSearchPage() {
               {!businessMode && <option value="price_desc">{t("market.sort.priceDesc")}</option>}
             </select>
 
-            <div className="inline-flex shrink-0 overflow-hidden rounded-xl border border-input bg-white">
+            <div className="inline-flex shrink-0 overflow-hidden rounded-xl border border-primary/25 bg-white">
               <button
                 type="button"
                 aria-label={t("market.view.grid")}
@@ -829,8 +834,8 @@ function GenericSearchPage() {
                 onClick={() => chooseView("grid")}
                 className={
                   view === "grid"
-                    ? "bg-primary p-2 text-primary-foreground"
-                    : "p-2 text-muted-foreground"
+                    ? "k-press bg-[linear-gradient(140deg,var(--color-primary),color-mix(in_srgb,var(--color-primary)_70%,black))] p-2 text-primary-foreground"
+                    : "k-press p-2 text-muted-foreground hover:bg-primary/8"
                 }
               >
                 <LayoutGrid className="size-4" aria-hidden />
@@ -842,32 +847,47 @@ function GenericSearchPage() {
                 onClick={() => chooseView("list")}
                 className={
                   view === "list"
-                    ? "bg-primary p-2 text-primary-foreground"
-                    : "p-2 text-muted-foreground"
+                    ? "k-press bg-[linear-gradient(140deg,var(--color-primary),color-mix(in_srgb,var(--color-primary)_70%,black))] p-2 text-primary-foreground"
+                    : "k-press p-2 text-muted-foreground hover:bg-primary/8"
                 }
               >
                 <List className="size-4" aria-hidden />
               </button>
             </div>
-
-            {!active.isLoading && (
-              <p className="ms-auto text-xs text-muted-foreground">
-                {count}{" "}
-                {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
-              </p>
-            )}
           </div>
+
+          {/* The result count owns a fixed-height line of its own: its text can
+              change length without ever re-wrapping the toolbar above it. */}
+          <p
+            className={`mt-2 flex h-5 items-center justify-end text-xs font-semibold text-muted-foreground transition-opacity duration-200 ${
+              active.isLoading ? "opacity-0" : "opacity-100"
+            }`}
+            aria-live="polite"
+          >
+            {count} {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
+          </p>
         </section>
 
-        <div className="mt-4">
+        <div className={active.isLoading ? "k-reserve mt-4" : "mt-4"}>
+
           {active.isLoading ? (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 w-full rounded-xl sm:h-56" />
-              ))}
-            </div>
+            <>
+              {/* Placeholders mirror the real cards box-for-box — row cards on
+                  phones, grid cards from `sm` — so results swap in without any
+                  reflow. */}
+              <div className="flex flex-col gap-2.5 sm:hidden">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <ListingRowSkeleton key={i} />
+                ))}
+              </div>
+              <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <ListingCardSkeleton key={i} />
+                ))}
+              </div>
+            </>
           ) : empty ? (
-            <div className="rounded-xl border border-dashed border-border px-4 py-8 text-center">
+            <div className="k-surface border-dashed px-4 py-8 text-center">
               <p className="text-sm font-medium text-foreground">{t("market.noResults")}</p>
               <div className="mt-3 flex flex-wrap justify-center gap-2">
                 {activeFilterCount > 0 && (

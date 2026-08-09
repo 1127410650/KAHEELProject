@@ -13,8 +13,8 @@
  */
 
 @theme inline {
-  --font-sans: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
-  --font-display: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans Arabic", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif;
+  --font-display: "IBM Plex Sans Arabic", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif;
   --font-numeric: ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -714,9 +714,12 @@ body:has(.market-surface) .shadow-raised {
   border: 1px solid color-mix(in srgb, var(--border) 80%, white);
   border-radius: 1.35rem;
   background:
-    radial-gradient(circle at 94% 8%, rgb(157 78 221 / 0.15), transparent 9rem),
-    linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, #e0aaff 14%, white) 100%);
-  box-shadow: var(--shadow-panel);
+    radial-gradient(circle at 96% -10%, rgb(157 78 221 / 0.2), transparent 11rem),
+    radial-gradient(circle at 2% 120%, rgb(224 170 255 / 0.28), transparent 10rem),
+    linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, #e0aaff 12%, white) 100%);
+  box-shadow:
+    0 1px 1px rgb(36 0 70 / 0.04), 0 4px 10px -4px rgb(36 0 70 / 0.08),
+    0 20px 34px -20px rgb(36 0 70 / 0.2), inset 0 1px 0 #fff;
   padding: 1.1rem 1.2rem;
 }
 
@@ -735,7 +738,9 @@ body:has(.market-surface) .shadow-raised {
   border: 1px solid color-mix(in srgb, var(--border) 88%, white);
   border-radius: 1.15rem;
   background: rgb(255 255 255 / 0.96);
-  box-shadow: var(--shadow-panel);
+  box-shadow:
+    0 1px 1px rgb(36 0 70 / 0.04), 0 3px 8px -3px rgb(36 0 70 / 0.07),
+    0 16px 28px -18px rgb(36 0 70 / 0.18);
 }
 
 /* ───────────────────────── Compact page hero band ─────────────────────────
@@ -1600,5 +1605,244 @@ body:has(.market-surface) .shadow-raised {
 
   .market-promo-rail {
     scroll-behavior: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   KAHEEL VISUAL LANGUAGE (v3) — "amethyst depth"
+   ---------------------------------------------------------------------------
+   One vocabulary for the public marketplace: layered amethyst light instead of
+   flat purple fills, multi-layer shadows instead of one blur, a fixed
+   typographic ladder, and micro-interactions that only move opacity/transform
+   so no rule here can shift layout. Every utility collapses to a static state
+   under `prefers-reduced-motion`.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* A metric-matched fallback so the Arabic text never jumps when the webfont
+   swaps in. `size-adjust` lines the fallback's x-height up with IBM Plex Sans
+   Arabic, and the family is listed before the generics in `--font-sans`. */
+@font-face {
+  font-family: "Kaheel Arabic Fallback";
+  src: local("Segoe UI"), local("Noto Sans Arabic"), local("Arial"), local("Helvetica");
+  size-adjust: 96%;
+  ascent-override: 96%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+  font-display: swap;
+}
+
+
+.market-surface,
+body:has(.market-surface) {
+  /* motion */
+  --k-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --k-ease-spring: cubic-bezier(0.34, 1.42, 0.64, 1);
+  --k-fast: 140ms;
+  --k-mid: 240ms;
+
+  /* layered elevation — three stacked layers read as real depth */
+  --k-shadow-1:
+    0 1px 1px rgb(36 0 70 / 0.04), 0 2px 4px rgb(36 0 70 / 0.04),
+    0 8px 16px -10px rgb(36 0 70 / 0.1);
+  --k-shadow-2:
+    0 1px 1px rgb(36 0 70 / 0.05), 0 4px 8px -2px rgb(36 0 70 / 0.06),
+    0 16px 28px -14px rgb(36 0 70 / 0.16);
+  --k-shadow-3:
+    0 1px 2px rgb(36 0 70 / 0.06), 0 8px 16px -6px rgb(36 0 70 / 0.1),
+    0 28px 52px -20px rgb(36 0 70 / 0.24);
+  --k-glow: 0 10px 30px -12px rgb(157 78 221 / 0.5);
+
+  /* gradient stock */
+  --k-grad-deep: linear-gradient(155deg, #240046 0%, #3c096c 46%, #7b2cbf 100%);
+  --k-grad-royal: linear-gradient(150deg, #5a189a 0%, #7b2cbf 52%, #9d4edd 100%);
+  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, color-mix(in srgb, #e0aaff 22%, white) 100%);
+}
+
+/* ── surfaces ─────────────────────────────────────────────────────────── */
+
+/* The default content card: crisp white, hairline amethyst edge, three-layer
+   shadow, and a lift that only transforms. */
+@utility k-surface {
+  position: relative;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, #c77dff 30%, white);
+  background: #fff;
+  box-shadow: var(--k-shadow-1, 0 8px 16px -10px rgb(36 0 70 / 0.1));
+  transition:
+    box-shadow var(--k-mid, 240ms) var(--k-ease, ease),
+    transform var(--k-mid, 240ms) var(--k-ease, ease),
+    border-color var(--k-mid, 240ms) var(--k-ease, ease);
+}
+
+@utility k-lift {
+  transition:
+    box-shadow var(--k-mid, 240ms) var(--k-ease, ease),
+    transform var(--k-mid, 240ms) var(--k-ease, ease),
+    border-color var(--k-mid, 240ms) var(--k-ease, ease);
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, #9d4edd 52%, white);
+    box-shadow: var(--k-shadow-3, 0 28px 52px -20px rgb(36 0 70 / 0.24));
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.988);
+    box-shadow: var(--k-shadow-1, 0 8px 16px -10px rgb(36 0 70 / 0.1));
+    transition-duration: var(--k-fast, 140ms);
+  }
+}
+
+/* Deep amethyst panel: gradient base + top sheen + soft inner rim. Used for
+   the dark hero/field panels instead of a flat purple block. */
+@utility k-deep {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: var(--k-grad-deep, linear-gradient(155deg, #240046, #7b2cbf));
+  color: #fff;
+  box-shadow:
+    var(--k-shadow-2, 0 16px 28px -14px rgb(36 0 70 / 0.16)),
+    inset 0 1px 0 rgb(255 255 255 / 0.16);
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    content: "";
+    background:
+      radial-gradient(ellipse at 82% -12%, rgb(224 170 255 / 0.4), transparent 58%),
+      radial-gradient(ellipse at 4% 108%, rgb(157 78 221 / 0.42), transparent 55%);
+    pointer-events: none;
+  }
+}
+
+/* Frosted glass chip/badge that sits on top of a deep panel or an image. */
+@utility k-glass {
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.14);
+  backdrop-filter: blur(10px) saturate(1.3);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.24);
+}
+
+/* ── typography ladder ────────────────────────────────────────────────── */
+
+@utility k-eyebrow {
+  font-size: 0.625rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1rem;
+  text-transform: none;
+  color: #7b2cbf;
+}
+
+@utility k-h1 {
+  font-size: clamp(1.5rem, 5.6vw, 2.35rem);
+  font-weight: 900;
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  color: #240046;
+}
+
+@utility k-h2 {
+  font-size: clamp(1.2rem, 4.4vw, 1.6rem);
+  font-weight: 900;
+  line-height: 1.24;
+  letter-spacing: -0.01em;
+  color: #240046;
+}
+
+@utility k-h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #240046;
+}
+
+@utility k-sub {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #5a189a;
+}
+
+/* ── micro-interactions ──────────────────────────────────────────────── */
+
+/* Touch response: a small, quick press with no layout involvement. */
+@utility k-press {
+  transition:
+    transform var(--k-fast, 140ms) var(--k-ease, ease),
+    background-color var(--k-fast, 140ms) var(--k-ease, ease),
+    color var(--k-fast, 140ms) var(--k-ease, ease),
+    box-shadow var(--k-fast, 140ms) var(--k-ease, ease);
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.955);
+  }
+}
+
+/* ── loading placeholders ─────────────────────────────────────────────── */
+
+/* A skeleton that occupies exactly the final box: callers set the geometry,
+   this only paints the sweep. */
+@utility k-skel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: color-mix(in srgb, #e0aaff 26%, white);
+
+  /* The sweep animates `background-position` only: no transform, no paint
+     containment surprises, and nothing a layout-shift observer can attribute
+     to a moving box. */
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      rgb(255 255 255 / 0.72) 50%,
+      transparent 80%
+    );
+    background-repeat: no-repeat;
+    background-size: 220% 100%;
+    background-position: 220% 0;
+    animation: k-sweep 1.6s var(--k-ease, ease) infinite;
+  }
+}
+
+@keyframes k-sweep {
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* ── space reservation ───────────────────────────────────────────────── */
+
+/* Any late-loading region keeps its first-paint height, so the footer and
+   everything after it never moves once painted. */
+@utility k-reserve {
+  min-height: 62svh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-surface,
+  .k-lift,
+  .k-press {
+    transition: none !important;
+  }
+
+  .k-lift:hover,
+  .k-lift:active,
+  .k-press:active {
+    transform: none !important;
+  }
+
+  .k-skel::after {
+    animation: none;
+    opacity: 0.5;
   }
 }

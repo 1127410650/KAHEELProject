@@ -250,7 +250,8 @@ export function ListingCard({
   const navBlocked = useRef(false);
 
   const meta = (
-    <div className="mt-auto flex flex-wrap items-center gap-x-2.5 gap-y-1 pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
+    <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
+
       {listing.city && (
         <span className="inline-flex min-w-0 items-center gap-1">
           <MapPin className="size-3 shrink-0" aria-hidden />
@@ -281,8 +282,8 @@ export function ListingCard({
         }}
         className={
           horizontal
-            ? "group relative flex gap-3 rounded-2xl border border-border bg-card p-2.5 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised"
-            : "group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised"
+            ? "group k-surface k-lift relative flex gap-3 p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            : "group k-surface k-lift relative flex flex-col overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
         }
       >
         <Media listing={listing} horizontal={horizontal} />
@@ -292,20 +293,29 @@ export function ListingCard({
             horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-2.5 sm:p-3"
           }
         >
-          {tag && (
-            <span className="w-fit max-w-full truncate rounded-full bg-secondary px-2 py-0.5 text-[9px] font-medium text-secondary-foreground sm:text-[10px]">
-              {tag}
-            </span>
-          )}
+          {/* The tag row always occupies its line, so a listing without a
+              category never renders a shorter card than its neighbours. */}
+          <span className="flex h-[18px] items-center">
+            {tag ? (
+              <span className="max-w-full truncate rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold text-primary sm:text-[10px]">
+                {tag}
+              </span>
+            ) : null}
+          </span>
 
-          <h3 className="mt-1.5 line-clamp-2 text-[13px] font-bold leading-snug text-foreground sm:text-sm">
+          {/* Two reserved lines: the height is identical for one- and
+              two-line titles, which is what keeps the rails shift-free. */}
+          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-[13px] font-extrabold leading-[1.3] tracking-tight text-foreground sm:text-sm">
             {listing.title}
           </h3>
 
-          <p className="mt-1 text-[13px] font-black text-primary sm:text-sm">{price}</p>
+          <p className="mt-1 flex h-[20px] items-center text-[13px] font-black text-primary sm:text-sm">
+            {price}
+          </p>
           {meta}
         </div>
       </Link>
+
 
       <div
         className={
@@ -321,6 +331,62 @@ export function ListingCard({
             navBlocked.current = active;
           }}
         />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The loading placeholder for `ListingCard` in grid view. Its geometry mirrors
+ * the real card box-for-box (5/4 media, one tag line, two title lines, price,
+ * meta), so swapping data in never changes a rail's height.
+ */
+export function ListingCardSkeleton() {
+  return (
+    <div className="k-surface flex flex-col overflow-hidden" aria-hidden>
+      <div className="k-skel aspect-[5/4] w-full rounded-none" />
+      <div className="flex flex-1 flex-col p-2.5 sm:p-3">
+        <span className="flex h-[18px] items-center">
+          <span className="k-skel h-3.5 w-14 rounded-full" />
+        </span>
+        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+          <span className="k-skel block h-[0.95em] w-full rounded" />
+          <span className="k-skel block h-[0.95em] w-3/5 rounded" />
+        </div>
+        <span className="mt-1 flex h-[20px] items-center">
+          <span className="k-skel h-3.5 w-16 rounded" />
+        </span>
+        <span className="mt-auto flex h-[26px] items-center pt-1.5">
+          <span className="k-skel h-3 w-24 rounded" />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The loading placeholder for `ListingCard` in row/list view. Same padding and
+ * same 84px (112px from `sm`) media square as the real card, so the mobile
+ * search results list holds its height from the first paint.
+ */
+export function ListingRowSkeleton() {
+  return (
+    <div className="k-surface flex gap-3 p-2.5" aria-hidden>
+      <div className="k-skel size-[84px] shrink-0 rounded-xl sm:size-28" />
+      <div className="flex min-w-0 flex-1 flex-col pe-9">
+        <span className="flex h-[18px] items-center">
+          <span className="k-skel h-3.5 w-16 rounded-full" />
+        </span>
+        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+          <span className="k-skel block h-[0.95em] w-full rounded" />
+          <span className="k-skel block h-[0.95em] w-2/3 rounded" />
+        </div>
+        <span className="mt-1 flex h-[20px] items-center">
+          <span className="k-skel h-3.5 w-20 rounded" />
+        </span>
+        <span className="mt-auto flex h-[26px] items-center pt-1.5">
+          <span className="k-skel h-3 w-28 rounded" />
+        </span>
       </div>
     </div>
   );
