@@ -4,17 +4,50 @@
  * Deliberately minimal per policy: peer name, ad title, state, duration, and
  * only the controls the state allows (accept/decline while ringing, mute and
  * end while connected). No numbers, no recording controls.
+ *
+ * There is no TURN relay, so a call can genuinely fail behind a closed NAT. In
+ * that case the panel says so plainly and offers a way out — WhatsApp or a
+ * phone call when the advertiser published a number, chat otherwise — instead
+ * of leaving the user staring at a stuck "connecting".
  */
-import { Mic, MicOff, Phone, PhoneOff } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Mic, MicOff, MessageCircle, Phone, PhoneOff } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import { useI18n } from "@/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { formatCallDuration } from "@/lib/mkt-calls";
 import { isTerminalCallStatus, useCallCenter } from "@/lib/mkt-call-center";
 import { Button } from "@/components/ui/button";
 
+/** Only a phone the advertiser explicitly published is ever returned here. */
+function usePublishedFallbackPhone(listingId: string | null, enabled: boolean) {
+  return useQuery({
+    queryKey: ["mkt", "call-fallback-phone", listingId],
+    enabled: enabled && !!listingId,
+    staleTime: 60_000,
+    queryFn: async (): Promise<string | null> => {
+      const { data: listing } = await supabase
+        .from("mkt_listings")
+        .select("owner_user_id")
+        .eq("id", listingId!)
+        .maybeSingle();
+      const owner = listing?.owner_user_id;
+      if (!owner) return null;
+      const { data } = await supabase.rpc("mkt_public_phone", { _user_id: owner });
+      const phone = typeof data === "string" ? data.trim() : "";
+      return phone || null;
+    },
+  });
+}
+
 export function CallOverlay() {
   const { t } = useI18n();
   const { call, accept, decline, hangUp, toggleMute, dismiss, stopReceiving } = useCallCenter();
+
+  // A relay would have been needed: the direct peer-to-peer path was blocked.
+  const relayFailed = call?.status === "failed" && call.errorKey === "relay_needed";
+  const fallbackPhone = usePublishedFallbackPhone(call?.listingId ?? null, !!relayFailed);
 
   if (!call) return null;
 
@@ -22,6 +55,13 @@ export function CallOverlay() {
   const incoming = call.role === "callee" && call.status === "ringing";
   const connected = call.status === "connected";
   const needsGesture = incoming && call.needsAudioGesture;
+  const phone = relayFailed ? fallbackPhone.data ?? null : null;
+  const whatsappHref = phone
+    ? `https://wa.me/${phone.replace(/[^\d]/g, "")}?text=${encodeURIComponent(
+        call.listingTitle ?? "",
+      )}`
+    : null;
+
 
   return (
     <div
@@ -102,6 +142,40 @@ export function CallOverlay() {
             </Button>
           )}
         </div>
+
+        {relayFailed && (
+          <div className="mt-3 rounded-xl border border-border bg-muted/40 p-3">
+            <p className="text-xs text-foreground">{t("market.call.fallback.title")}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {whatsappHref && (
+                <Button asChild size="sm" variant="outline" className="h-9">
+                  <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="size-4" aria-hidden />
+                    {t("market.call.fallback.whatsapp")}
+                  </a>
+                </Button>
+              )}
+              {phone && (
+                <Button asChild size="sm" variant="outline" className="h-9">
+                  <a href={`tel:${phone}`} dir="ltr">
+                    <Phone className="size-4" aria-hidden />
+                    {t("market.call.fallback.phone")}
+                  </a>
+                </Button>
+              )}
+              <Button asChild size="sm" variant="outline" className="h-9">
+                <Link to="/my/messages" onClick={dismiss}>
+                  {t("market.call.fallback.chat")}
+                </Link>
+              </Button>
+            </div>
+            {!phone && (
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                {t("market.call.fallback.noPhone")}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Available in every state: stop new calls and end the current one. */}
         <button

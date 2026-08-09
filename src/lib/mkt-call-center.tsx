@@ -38,6 +38,8 @@ export interface ActiveCall {
   peerName: string;
   peerAvatar: string | null;
   listingTitle: string | null;
+  /** Kept so a failed peer-to-peer call can offer the ad's published contact. */
+  listingId: string | null;
   conversationId: string | null;
   peerUserId: string | null;
   /** Set when the call ended for a reason the user should see. */
@@ -200,6 +202,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
               peerName: peer?.peer_name ?? "",
               peerAvatar: peer?.peer_avatar ?? null,
               listingTitle: peer?.listing_title ?? null,
+              listingId: peer?.listing_id ?? null,
               conversationId: peer?.conversation_id ?? null,
               peerUserId: null,
               errorKey: null,
@@ -295,6 +298,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
           peerName: peer?.peer_name ?? "",
           peerAvatar: peer?.peer_avatar ?? null,
           listingTitle: peer?.listing_title ?? null,
+          listingId: peer?.listing_id ?? null,
           conversationId: started.conversation_id ?? peer?.conversation_id ?? null,
           peerUserId: null,
           errorKey: null,
@@ -408,6 +412,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
           peerName: peer?.peer_name ?? "",
           peerAvatar: peer?.peer_avatar ?? null,
           listingTitle: peer?.listing_title ?? null,
+          listingId: peer?.listing_id ?? null,
           conversationId: started.conversation_id ?? peer?.conversation_id ?? null,
           peerUserId: null,
           errorKey: null,
