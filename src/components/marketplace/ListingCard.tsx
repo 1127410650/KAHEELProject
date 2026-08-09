@@ -291,6 +291,8 @@ export function ListingCard({
   const horizontal = view === "list" || view === "row";
   const tag = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel;
   const navBlocked = useRef(false);
+  const featured = activeFeatured(listing);
+
 
   const meta = (
     <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
