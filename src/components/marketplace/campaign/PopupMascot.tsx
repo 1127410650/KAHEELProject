@@ -103,13 +103,13 @@ function KaheelanHead({
           </g>
         </>
       ) : null}
-      {/* أطراف الغترة على الجانبين */}
-      <path d="M-21-2c0 16 6 26 10 30-8-4-13-15-13-30z" fill={CLOTH_DARK} />
-      <path d="M21-2c0 15-5 26-13 30 4-4 10-14 10-30z" fill={CLOTH_DARK} />
+      {/* أطراف الغترة على الجانبين — ملاصقة للرأس */}
+      <path d="M-14-2c0 12 4 20 8 24-7-3-11-12-11-24z" fill={CLOTH_DARK} />
+      <path d="M14-2c0 12-4 20-8 24 7-3 11-12 11-24z" fill={CLOTH_DARK} />
       <circle cx="0" cy="0" r="13" fill={SKIN} />
       {/* الغترة على الرأس */}
-      <path d="M-20-2a20 20 0 0 1 40 0v6c-4-6-10-9-20-9s-16 3-20 9z" fill={CLOTH} />
-      <path d="M-22-2h44" stroke={CLOTH_DARK} strokeWidth="3" strokeLinecap="round" />
+      <path d="M-14.5-2a14.5 14.5 0 0 1 29 0v3c-4-4.5-9-6.5-14.5-6.5s-10.5 2-14.5 6.5z" fill={CLOTH} />
+      <path d="M-15-2h30" stroke={CLOTH_DARK} strokeWidth="2.6" strokeLinecap="round" />
       {/* حاجب مرفوع وابتسامة خبيثة */}
       <path d="M-8-7l7 3M8-7l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
       <circle cx="-5" cy="1" r="2.6" fill={HAIR} />
