@@ -72,7 +72,15 @@ export interface TopupMethodsConfig {
     instructionsAr: string;
     instructionsEn: string;
   };
-  cardGateway: { enabled: boolean; provider: string };
+  cardGateway: {
+    enabled: boolean;
+    provider: string;
+    /** Charge currency for card payments, decided by the platform. */
+    currency: TopupCurrency;
+    /** Published packs; the price is re-read server-side on checkout. */
+    packs: readonly { credits: number; amount: number }[];
+  };
+
 }
 
 export function useTopupMethods(enabled = true) {
