@@ -17,13 +17,14 @@ import { useMemo, useState } from "react";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import {
-import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
   SYRIA_GUIDE_CATEGORIES,
   SYRIA_GUIDE_ENTITIES,
   searchSyriaGuide,
   type SyriaGuideCategory,
   type SyriaGuideEntity,
 } from "@/lib/syria-guide-data";
+
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/syria-guide")({
   ssr: false,

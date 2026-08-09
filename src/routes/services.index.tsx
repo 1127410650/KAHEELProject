@@ -26,11 +26,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/i18n";
 import { currencyLabel } from "@/lib/mkt";
 import {
-import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
   useServiceCategories,
   useServiceDirectory,
   type ServiceCategory,
 } from "@/lib/mkt-services";
+
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/services/")({
   ssr: false,

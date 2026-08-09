@@ -30,7 +30,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
   Sheet,
   SheetClose,
   SheetContent,
@@ -101,6 +100,8 @@ const RealEstateExperience = lazy(() =>
 const title = "البحث في السوق — گحيل";
 const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
+
+import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/search")({
   ssr: false,
