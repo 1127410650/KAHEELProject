@@ -29,18 +29,13 @@
  * • `loading="lazy"` إلا إذا طُلب `priority`.
  * • كل الحركات CSS ومعطّلة تحت `prefers-reduced-motion` عبر `motion-reduce`.
  */
-import { useSyncExternalStore } from "react";
-
 import {
-  activeMascotVariant,
   mascotAsset,
-  subscribeMascotVariant,
-  DEFAULT_MASCOT_VARIANT,
   type MascotName,
-  type MascotVariant,
+  type MascotSize,
 } from "@/lib/mascot-assets";
 
-export type { MascotName, MascotVariant };
+export type { MascotName, MascotSize };
 
 /** وضعيات «كَحيل» الرسمية. */
 export type KaheelPose = "welcome" | "present" | "thanks" | "idle";
@@ -57,14 +52,6 @@ export type KaheelanPose =
 
 export type MascotPose = KaheelPose | KaheelanPose;
 
-/** النسخة الفعّالة كحالة تفاعلية — تبديلها من لوحة المعاينة يعيد الرسم فورًا. */
-export function useMascotVariant(): MascotVariant {
-  return useSyncExternalStore(
-    subscribeMascotVariant,
-    activeMascotVariant,
-    () => DEFAULT_MASCOT_VARIANT,
-  );
-}
 
 
 interface PoseSpec {
@@ -167,7 +154,7 @@ export function Mascot({
   className,
   animated = true,
   priority = false,
-  variant,
+  size = "full",
 }: {
   name: MascotName;
   pose?: MascotPose;
@@ -175,11 +162,10 @@ export function Mascot({
   className?: string;
   animated?: boolean;
   priority?: boolean;
-  /** لتجاوز النسخة الفعّالة في المعاينة فقط. */
-  variant?: MascotVariant | undefined;
+  /** حجم الأصل: `sm` للأماكن الصغيرة — نفس الرسم المعتمد ببايتات أقل. */
+  size?: MascotSize;
 }) {
-  const active = useMascotVariant();
-  const base = mascotAsset(name, variant ?? active);
+  const base = mascotAsset(name, size);
   const spec = specFor(name, pose ?? DEFAULT_POSE[name]);
 
   return (
@@ -207,12 +193,12 @@ export function MascotDuo({
   lang = "ar",
   animated = true,
   className,
-  variant,
+  size = "sm",
 }: {
   lang?: "ar" | "en";
   animated?: boolean;
   className?: string;
-  variant?: MascotVariant | undefined;
+  size?: MascotSize;
 }) {
   return (
     <div className={`flex items-end justify-center gap-1 ${className ?? "h-full"}`}>
@@ -221,7 +207,7 @@ export function MascotDuo({
         pose="welcome"
         lang={lang}
         animated={animated}
-        variant={variant}
+        size={size}
         className="h-full w-auto"
       />
       <Mascot
@@ -229,7 +215,7 @@ export function MascotDuo({
         pose="wave"
         lang={lang}
         animated={animated}
-        variant={variant}
+        size={size}
         className="h-full w-auto"
       />
     </div>

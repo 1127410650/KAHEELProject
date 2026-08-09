@@ -20,13 +20,7 @@ import {
   type MascotPose,
 } from "@/components/marketplace/campaign/Mascot";
 import { MASCOT_PERSONA, MASCOT_KINDS, PopupMascot } from "@/components/marketplace/campaign/PopupMascot";
-import {
-  MASCOT_ASSETS,
-  MASCOT_VARIANTS,
-  activeMascotVariant,
-  setMascotVariant,
-  type MascotVariant,
-} from "@/lib/mascot-assets";
+import { MASCOT_ASSETS, MASCOT_NAMES } from "@/lib/mascot-assets";
 import { MASCOT_TIMING, DROP_ANIMATION_MS } from "@/lib/mascot-tap";
 import {
   bossCopyAt,
@@ -75,13 +69,7 @@ const DEMOS: { id: Demo; ar: string; en: string; ms: number }[] = [
 function MascotsPreviewPage() {
   const { locale } = useI18n();
   const ar = locale === "ar";
-  const [variant, setVariant] = useState<MascotVariant>(() => activeMascotVariant());
   const [demo, setDemo] = useState<{ id: Demo; run: number } | null>(null);
-
-  const applyVariant = (next: MascotVariant) => {
-    setVariant(next);
-    setMascotVariant(next);
-  };
 
   const playDemo = (id: Demo) => {
     setDemo((prev) => ({ id, run: (prev?.run ?? 0) + 1 }));
@@ -95,35 +83,27 @@ function MascotsPreviewPage() {
             <div className="flex flex-wrap items-center gap-2">
               <Smile className="size-4 text-primary" aria-hidden />
               <h2 className="text-sm font-semibold">
-                {ar ? "نسخة الأصول المعروضة" : "Displayed asset set"}
+                {ar ? "الشكل المعتمد للشخصيتين" : "Approved mascot look"}
               </h2>
-              <Badge variant="secondary">
-                {MASCOT_ASSETS[variant].kaheel.note[ar ? "ar" : "en"]}
-              </Badge>
+              <Badge variant="secondary">{ar ? "لا يُغيَّر" : "Locked"}</Badge>
             </div>
             <p className="text-xs text-muted-foreground">
               {ar
-                ? "التبديل هنا يخصّ جهازك فقط لمعاينة الشكل. الرسم النهائي يُستبدل بسطر واحد في src/lib/mascot-assets.ts."
-                : "Switching here affects this device only. Swapping the final art is one line in src/lib/mascot-assets.ts."}
+                ? "الشكل المعتمد — لا يُغيَّر إلا بطلب صريح من صاحب المنصة. كل الوضعيات تُشتق من نفس الصورتين بتحويلات CSS."
+                : "Approved look — changed only on the owner's explicit request. Every pose is derived from these two images via CSS."}
             </p>
-            <div className="flex flex-wrap gap-2">
-              {MASCOT_VARIANTS.map((item) => (
-                <Button
-                  key={item}
-                  size="sm"
-                  variant={item === variant ? "default" : "outline"}
-                  onClick={() => applyVariant(item)}
-                >
-                  {item === "final"
-                    ? ar
-                      ? "الأصول المعتمدة"
-                      : "Approved assets"
-                    : ar
-                      ? "أشكال مؤقتة (SVG)"
-                      : "Temporary SVG"}
-                </Button>
+            <ul className="space-y-2">
+              {MASCOT_NAMES.map((name) => (
+                <li key={name} className="rounded-lg border bg-muted/20 p-2 text-xs">
+                  <p className="font-semibold">{name}</p>
+                  <p className="text-muted-foreground">{MASCOT_ASSETS[name].note[ar ? "ar" : "en"]}</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground/80">
+                    full {MASCOT_ASSETS[name].full.width}×{MASCOT_ASSETS[name].full.height} · sm{" "}
+                    {MASCOT_ASSETS[name].sm.width}×{MASCOT_ASSETS[name].sm.height}
+                  </p>
+                </li>
               ))}
-            </div>
+            </ul>
           </CardContent>
         </Card>
 
@@ -150,7 +130,7 @@ function MascotsPreviewPage() {
                         name={name}
                         pose={pose}
                         lang={ar ? "ar" : "en"}
-                        variant={variant}
+                        size="sm"
                         className="h-28 w-auto"
                       />
                     </div>
@@ -187,7 +167,6 @@ function MascotsPreviewPage() {
                     name={demo.id === "drop" || demo.id === "rapid" || demo.id === "entrance" ? "kaheelan" : "kaheelan"}
                     pose={demo.id === "entrance" ? "wave" : "idle"}
                     lang={ar ? "ar" : "en"}
-                    variant={variant}
                     animated={false}
                     className="h-48 w-auto animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none"
                   />
@@ -212,7 +191,7 @@ function MascotsPreviewPage() {
               {ar ? "مشهد التعارف (الشخصيتان معًا)" : "Duo introduction scene"}
             </h2>
             <div className="flex h-44 items-end justify-center rounded-lg border bg-muted/30">
-              <MascotDuo lang={ar ? "ar" : "en"} variant={variant} className="h-40" />
+              <MascotDuo lang={ar ? "ar" : "en"} className="h-40" />
             </div>
           </CardContent>
         </Card>
