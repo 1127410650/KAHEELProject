@@ -9,6 +9,7 @@
  */
 import {
   CalendarCheck2,
+  Megaphone,
   CalendarClock,
   Coins,
   FileText,
