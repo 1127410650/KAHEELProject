@@ -132,6 +132,8 @@ export function PromoPopupHost() {
   /** بوابات الأدب: أي واحدة منها تمنع المزحة بلا أن تمنع الوجهة. */
   const blocked = useCallback((): boolean => {
     if (!pacing.enabled) return true;
+    // بطاقة واحدة فقط في الشاشة: ما دامت مفتوحة لا تظهر بطاقة جديدة.
+    if (openRef.current) return true;
     if (popupsMuted() || popupsSuppressed()) return true;
     if (call) return true;
     if (isQuietPath(pathname)) return true;
@@ -140,11 +142,21 @@ export function PromoPopupHost() {
     return false;
   }, [call, pacing.enabled, pathname]);
 
+  /**
+   * الإغلاق اليدوي حصرًا — لا مؤقّت اختفاء في المنصة إطلاقًا. المؤقّت الوحيد هنا
+   * هو زمن حركة الخروج الناعمة (220ms) بعد ضغط المستخدم على الزر.
+   */
   const dismiss = useCallback((mute?: boolean) => {
-    window.clearTimeout(hideTimerRef.current);
+    window.clearTimeout(fadeTimerRef.current);
     if (mute) mutePopups(24);
+    openRef.current = false;
+    try {
+      sessionStorage.removeItem(RESUME_KEY);
+    } catch {
+      /* التخزين محجوب: لا شيء لنحذفه. */
+    }
     setLeaving(true);
-    hideTimerRef.current = window.setTimeout(() => {
+    fadeTimerRef.current = window.setTimeout(() => {
       setCard(null);
       setLeaving(false);
     }, 220);
@@ -169,6 +181,8 @@ export function PromoPopupHost() {
       } else {
         copy = bossCopyAt(ar, rotate(bossCopyCount(ar), lastCopyRef));
       }
+      window.clearTimeout(fadeTimerRef.current);
+      openRef.current = true;
       setLeaving(false);
       setCard({
         key: keyRef.current,
@@ -177,21 +191,20 @@ export function PromoPopupHost() {
         ...copy,
       });
 
-      const life = mode === "entrance" ? MASCOT_TIMING.entranceMs : MASCOT_TIMING.dropVisibleMs;
       if (mode !== "entrance") {
         try {
+          // نافذة استئناف قصيرة: تخصّ الانتقال الحالي فقط ولا تُعيد بطاقة قديمة
+          // بعد ذلك. البطاقة نفسها بعد ظهورها تبقى حتى الإغلاق اليدوي.
           sessionStorage.setItem(
             RESUME_KEY,
-            JSON.stringify({ mode, from: "start", ...copy, until: Date.now() + life }),
+            JSON.stringify({ mode, from: "start", ...copy, until: Date.now() + RESUME_WINDOW_MS }),
           );
         } catch {
           /* التخزين ممتلئ أو محجوب: المشهد يبقى داخل الصفحة فقط. */
         }
       }
-      window.clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = window.setTimeout(() => dismiss(), life);
     },
-    [ar, dismiss],
+    [ar],
   );
 
   // الاستماع في مرحلة الالتقاط: نقرأ الحدث فقط، ثم نترك المتصفح يكمل عمله.
