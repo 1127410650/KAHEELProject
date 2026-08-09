@@ -868,7 +868,7 @@ function GenericSearchPage() {
           </p>
         </section>
 
-        <div className="k-reserve mt-4">
+        <div className={active.isLoading ? "k-reserve mt-4" : "mt-4"}>
 
           {active.isLoading ? (
             <>
