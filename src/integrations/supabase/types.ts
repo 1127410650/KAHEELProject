@@ -3112,6 +3112,7 @@ export type Database = {
           category: string | null
           city: string | null
           completeness: number | null
+          country_iso2: string
           created_at: string
           district: string | null
           email: string | null
@@ -3158,6 +3159,7 @@ export type Database = {
           category?: string | null
           city?: string | null
           completeness?: number | null
+          country_iso2?: string
           created_at?: string
           district?: string | null
           email?: string | null
@@ -3204,6 +3206,7 @@ export type Database = {
           category?: string | null
           city?: string | null
           completeness?: number | null
+          country_iso2?: string
           created_at?: string
           district?: string | null
           email?: string | null
