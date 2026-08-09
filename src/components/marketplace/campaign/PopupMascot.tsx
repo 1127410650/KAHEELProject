@@ -133,20 +133,20 @@ function KaheelanHead({
       <path d="M-8-7l7 3M8-7l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
       <circle cx="-5" cy="1" r="2.6" fill={HAIR} />
       <circle cx="6" cy="1" r="2.6" fill={HAIR} />
-      <path d="M-5 9.8c3.5 2.2 8 1.4 10-1.8" stroke={HAIR} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      <path d="M-4.5 10.4c3.2 2 7.5 1.2 9.5-1.8" stroke={HAIR} strokeWidth="2.2" strokeLinecap="round" fill="none" />
       {/* شارب معقوف — علامة ثابتة لكَحيلان في كل المشاهد */}
       <g
         className={
           twirl
-            ? "origin-[0px_5px] animate-[kaheel-mascot-mustache_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
+            ? "origin-[0px_6px] animate-[kaheel-mascot-mustache_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
             : undefined
         }
         style={twirl ? { transformBox: "view-box" } : undefined}
       >
         <path
-          d="M0 4.8C-2.4 3.2-5.6 3.2-7.8 4.6-9 5.4-8.4 3.6-7 3M0 4.8C2.4 3.2 5.6 3.2 7.8 4.6 9 5.4 8.4 3.6 7 3"
+          d="M0 6.2C-2.4 4.8-5.8 4.9-7.9 6.4-9 7.2-8.5 5.4-7.1 4.9M0 6.2C2.4 4.8 5.8 4.9 7.9 6.4 9 7.2 8.5 5.4 7.1 4.9"
           stroke={HAIR}
-          strokeWidth="1.9"
+          strokeWidth="1.5"
           strokeLinecap="round"
           fill="none"
         />
