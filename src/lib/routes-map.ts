@@ -344,6 +344,28 @@ export function normalizePath(pathname: string): string {
 }
 
 /**
+ * Carries the dynamic segments of a concrete path into a redirect target, so a
+ * renamed detail URL keeps its id: `/dashboard/ads/17/edit` with the rule
+ * `/dashboard/ads/$id/edit → /my/ads/$id/edit` resolves to `/my/ads/17/edit`.
+ *
+ * Without this the literal `$id` would be served as a path segment.
+ */
+function applyParams(target: string, rulePath: string, concretePath: string): string {
+  if (!target.includes("$")) return target;
+  const ruleParts = rulePath.split("/");
+  const actualParts = concretePath.replace(/\/+$/, "").split("/");
+  const params = new Map<string, string>();
+  ruleParts.forEach((part, i) => {
+    if (part.startsWith("$") && actualParts[i]) params.set(part, actualParts[i]!);
+  });
+  return target
+    .split("/")
+    .map((part) => (part.startsWith("$") ? (params.get(part) ?? part) : part))
+    .join("/");
+}
+
+
+/**
  * Paths whose destination depends on who is asking (`/me`, `/audit`): a platform
  * admin, a work account and a personal account each land somewhere different.
  * They must NEVER be answered with a cacheable 301 — the browser and any proxy
