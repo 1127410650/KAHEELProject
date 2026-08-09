@@ -61,7 +61,7 @@ export function useAdCreditWallet(accountKey: string | null, tenantId: string | 
     staleTime: 15_000,
     queryFn: async (): Promise<AdCreditWallet> => {
       const { data, error } = await supabase.rpc("mkt_ad_credit_wallet", {
-        _tenant_id: tenantId,
+        _tenant_id: tenantId ?? undefined,
       });
       if (error) throw error;
       return data as unknown as AdCreditWallet;
@@ -94,7 +94,7 @@ export function useRequestAdCredit(tenantId: string | null) {
       const { data, error } = await supabase.rpc("mkt_ad_credit_request_purchase", {
         _amount: credits,
         _price_sar: priceSar,
-        _tenant_id: tenantId,
+        _tenant_id: tenantId ?? undefined,
       });
       if (error) throw error;
       return data as unknown as string;
@@ -121,8 +121,8 @@ export function useConsumeAdCredit(tenantId: string | null) {
       const { data, error } = await supabase.rpc("mkt_ad_credit_consume", {
         _amount: credits,
         _reference_type: referenceType,
-        _reference_id: referenceId ?? null,
-        _tenant_id: tenantId,
+        _reference_id: referenceId ?? undefined,
+        _tenant_id: tenantId ?? undefined,
       });
       if (error) throw error;
       return data as unknown as number;
@@ -194,8 +194,8 @@ export function useAdminGrantAdCredit() {
         _wallet_id: walletId,
         _amount: amount,
         _kind: kind,
-        _note: note ?? null,
-        _price_sar: priceSar ?? null,
+        _note: note ?? undefined,
+        _price_sar: priceSar ?? undefined,
       });
       if (error) throw error;
       return data as unknown as number;
@@ -213,7 +213,7 @@ export function useAdminSettleAdCredit() {
     mutationFn: async ({ entryId, paymentRef }: { entryId: string; paymentRef?: string | null }) => {
       const { data, error } = await supabase.rpc("mkt_ad_credit_admin_settle", {
         _entry_id: entryId,
-        _payment_ref: paymentRef ?? null,
+        _payment_ref: paymentRef ?? undefined,
       });
       if (error) throw error;
       return data as unknown as number;
