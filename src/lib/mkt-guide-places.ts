@@ -170,17 +170,30 @@ export interface GuideFacets {
 /**
  * Facet rows are fetched once and cached; the dependent option lists and their
  * counts are then derived in memory so changing a filter never hits the network.
+ * The read is paginated because the Data API caps a single response at 1,000 rows,
+ * which would otherwise make the counts silently wrong.
  */
 export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
-  const { data, error } = await supabase
-    .from("mkt_guide_places")
-    .select("sector,governorate,category,subcategory")
-    .eq("is_published", true)
-    .limit(10000);
+  const CHUNK = 1000;
+  const rows: GuideFacetRow[] = [];
 
-  if (error) throw error;
-  return (data ?? []) as GuideFacetRow[];
+  for (let from = 0; from < 20000; from += CHUNK) {
+    const { data, error } = await supabase
+      .from("mkt_guide_places")
+      .select("sector,governorate,category,subcategory")
+      .eq("is_published", true)
+      .order("id", { ascending: true })
+      .range(from, from + CHUNK - 1);
+
+    if (error) throw error;
+    const chunk = (data ?? []) as GuideFacetRow[];
+    rows.push(...chunk);
+    if (chunk.length < CHUNK) break;
+  }
+
+  return rows;
 }
+
 
 function tally(
   rows: GuideFacetRow[],
