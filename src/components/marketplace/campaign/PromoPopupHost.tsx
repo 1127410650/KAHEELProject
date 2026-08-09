@@ -361,11 +361,17 @@ export function PromoPopupHost() {
           data-kaheel-drop-card
           data-kaheel-peek={card.peekSide}
           role="status"
+          // dir=ltr على الصفّ فقط: ترتيب الشخصية والفقاعة فيزيائي لا منطقي،
+          // فتبقى الإطلالة من نفس الحافة في العربية والإنجليزية على حد سواء.
+          dir="ltr"
           style={{ transformOrigin: layout.origin, animation: peekAnimation }}
           className={`pointer-events-none absolute flex items-end gap-1.5 ${layout.row} ${layout.position}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
-          <div className="mb-2 max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl">
+          <div
+            dir={ar ? "rtl" : "ltr"}
+            className="mb-2 max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl"
+          >
 
             <div className="mb-1 flex items-start justify-between gap-2">
               <p className="line-clamp-2 text-[13px] font-black leading-tight text-[#240046]">

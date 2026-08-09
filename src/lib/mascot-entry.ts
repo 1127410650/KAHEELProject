@@ -95,12 +95,14 @@ export const PEEK_LAYOUT: Record<
 > = {
   right: {
     position: "bottom-24 right-0",
+    // الصفّ يُرسم بـ dir=ltr دائمًا (انظر المضيف) فالترتيب فيزيائي: الشخصية يمينًا.
     row: "flex-row-reverse",
     animation: { in: "mascot-peek-right", out: "mascot-peek-out-right" },
     origin: "bottom right",
   },
   left: {
     position: "bottom-24 left-0",
+    // الشخصية يسارًا عند الحافة، والفقاعة إلى يمينها.
     row: "flex-row",
     animation: { in: "mascot-peek-left", out: "mascot-peek-out-left" },
     origin: "bottom left",
