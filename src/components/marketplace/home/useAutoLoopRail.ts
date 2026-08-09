@@ -18,6 +18,8 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
   const pauseUntilRef = useRef(0);
   const groupWidthRef = useRef(0);
   const visibleRef = useRef(true);
+  const positionRef = useRef(0);
+
 
   const pause = useCallback((milliseconds = 1_800) => {
     pauseUntilRef.current = performance.now() + milliseconds;
