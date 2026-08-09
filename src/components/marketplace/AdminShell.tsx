@@ -27,6 +27,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   Smile,
+  ShieldQuestion,
   Store,
   UserCog,
   UserRoundCheck,
@@ -112,6 +113,13 @@ const NAV: NavItem[] = [
     icon: Store,
     section: "market",
   },
+  {
+    to: "/admin/guide-queue",
+    labelKey: "admin.nav.guideQueue",
+    icon: ShieldQuestion,
+    section: "market",
+  },
+
   {
     to: "/admin/ad-credit",
     labelKey: "admin.nav.adCredit",

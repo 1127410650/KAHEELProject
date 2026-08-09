@@ -5,15 +5,16 @@ import { useEffect, useMemo, useState } from "react";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { GuidePlaceCard } from "@/components/marketplace/GuidePlaceCard";
+import { GuideFilterBar } from "@/components/marketplace/guide/GuideFilterBar";
 import {
   EMPTY_GUIDE_FILTERS,
   GUIDE_PAGE_SIZE,
   buildGuideFacets,
   fetchGuideFacetRows,
   fetchGuidePlaces,
-  type GuideFacetOption,
   type GuideFilters,
 } from "@/lib/mkt-guide-places";
+
 
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
@@ -129,41 +130,14 @@ function SyriaGuidePage() {
               />
             </label>
 
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-              <FilterSelect
-                label="القطاع"
-                value={filters.sector}
-                options={facets.sectors}
-                onChange={(value) =>
-                  setFilters((current) => ({
-                    ...current,
-                    sector: value,
-                    category: "",
-                    subcategory: "",
-                  }))
-                }
-              />
-              <FilterSelect
-                label="المحافظة"
-                value={filters.governorate}
-                options={facets.governorates}
-                onChange={(value) => setFilters((current) => ({ ...current, governorate: value }))}
-              />
-              <FilterSelect
-                label="التصنيف"
-                value={filters.category}
-                options={facets.categories}
-                onChange={(value) =>
-                  setFilters((current) => ({ ...current, category: value, subcategory: "" }))
-                }
-              />
-              <FilterSelect
-                label="التصنيف الفرعي"
-                value={filters.subcategory}
-                options={facets.subcategories}
-                onChange={(value) => setFilters((current) => ({ ...current, subcategory: value }))}
-              />
-            </div>
+            <GuideFilterBar
+              filters={filters}
+              facets={facets}
+              total={total}
+              loading={places.isLoading}
+              onChange={setFilters}
+            />
+
 
           </div>
         </section>
@@ -229,39 +203,5 @@ function SyriaGuidePage() {
         </section>
       </main>
     </MarketShell>
-  );
-}
-
-function FilterSelect({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  options: GuideFacetOption[];
-  onChange: (value: string) => void;
-}) {
-  const total = options.reduce((sum, option) => sum + option.count, 0);
-  return (
-    <label className="block">
-      <span className="sr-only">{label}</span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="h-10 w-full rounded-2xl border border-input bg-background px-3 text-[12px] font-bold outline-none transition focus:border-market-navy focus:ring-2 focus:ring-market-navy/15"
-      >
-        <option value="">
-          {label}: الكل{total > 0 ? ` (${total.toLocaleString("en-US")})` : ""}
-        </option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.value} ({option.count.toLocaleString("en-US")})
-          </option>
-        ))}
-
-      </select>
-    </label>
   );
 }

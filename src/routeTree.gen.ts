@@ -35,6 +35,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
@@ -224,6 +225,11 @@ const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
+  id: '/guide-queue',
+  path: '/guide-queue',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -556,6 +562,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -641,6 +648,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -730,6 +738,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -820,6 +829,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -905,6 +915,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -993,6 +1004,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1272,6 +1284,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/guide-queue': {
+      id: '/admin/guide-queue'
+      path: '/guide-queue'
+      fullPath: '/admin/guide-queue'
+      preLoaderRoute: typeof AdminGuideQueueRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -1704,6 +1723,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminGuideQueueRoute: typeof AdminGuideQueueRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
@@ -1736,6 +1756,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminGuideQueueRoute: AdminGuideQueueRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,

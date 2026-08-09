@@ -4,6 +4,8 @@ import { ArrowRight, Clock, Mail, MapPin, Star } from "lucide-react";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { GuidePlaceActions, GuidePlaceBadges } from "@/components/marketplace/GuidePlaceCard";
+import { GuidePlaceCommunity } from "@/components/marketplace/guide/GuidePlaceCommunity";
+
 import { fetchGuidePlace } from "@/lib/mkt-guide-places";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
@@ -97,6 +99,8 @@ function GuidePlacePage() {
               </div>
             </section>
 
+            <GuidePlaceCommunity placeId={data.id} placeName={data.name_ar} />
+
             <section className="rounded-3xl border border-border/80 bg-card p-5 text-[12px] leading-7 sm:p-6">
               <h2 className="mb-2 text-sm font-black">المصدر والتحقق</h2>
               <p className="text-muted-foreground">
@@ -105,6 +109,7 @@ function GuidePlacePage() {
               </p>
               {data.notes ? <p className="mt-2 text-muted-foreground">{data.notes}</p> : null}
             </section>
+
           </article>
         )}
       </main>
