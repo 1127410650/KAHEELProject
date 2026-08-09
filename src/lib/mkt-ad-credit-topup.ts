@@ -24,11 +24,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
+import { createAdCreditCheckout } from "@/lib/mkt-ad-credit-gateway.functions";
 import { isRealDocument } from "@/lib/mkt-business";
 
 export type TopupMethod = "sham_cash" | "bank_transfer" | "card_gateway";
-export type TopupStatus = "pending" | "approved" | "rejected" | "cancelled";
+export type TopupStatus =
+  | "pending"
+  | "approved"
+  | "rejected"
+  | "cancelled"
+  | "failed"
+  | "expired"
+  | "refunded";
 export type TopupCurrency = "SYP" | "SAR" | "USD" | "TRY";
+
 
 export const TOPUP_CURRENCIES: readonly TopupCurrency[] = ["SYP", "SAR", "USD", "TRY"];
 
@@ -64,7 +73,15 @@ export interface TopupMethodsConfig {
     instructionsAr: string;
     instructionsEn: string;
   };
-  cardGateway: { enabled: boolean; provider: string };
+  cardGateway: {
+    enabled: boolean;
+    provider: string;
+    /** Charge currency for card payments, decided by the platform. */
+    currency: TopupCurrency;
+    /** Published packs; the price is re-read server-side on checkout. */
+    packs: readonly { credits: number; amount: number }[];
+  };
+
 }
 
 export function useTopupMethods(enabled = true) {
@@ -89,7 +106,19 @@ export function useTopupMethods(enabled = true) {
         cardGateway: {
           enabled: card["enabled"] === true,
           provider: String(card["provider"] ?? "stripe"),
+          currency: (TOPUP_CURRENCIES.includes(String(card["currency"]) as TopupCurrency)
+            ? String(card["currency"])
+            : "SAR") as TopupCurrency,
+          packs: Array.isArray(card["packs"])
+            ? (card["packs"] as Record<string, unknown>[])
+                .map((pack) => ({
+                  credits: Number(pack["credits"]),
+                  amount: Number(pack["amount"]),
+                }))
+                .filter((pack) => Number.isInteger(pack.credits) && pack.credits > 0)
+            : [],
         },
+
       };
     },
   });
@@ -248,4 +277,29 @@ export async function receiptSignedUrl(path: string): Promise<string | null> {
   const { data, error } = await supabase.storage.from(MKT_BUCKET).createSignedUrl(path, 120);
   if (error) return null;
   return data?.signedUrl ?? null;
+}
+
+/* ── card gateway ─────────────────────────────────────────────────────────── */
+
+/**
+ * Opens a hosted card checkout for a published pack.
+ *
+ * The caller sends only the pack size: the amount is resolved server-side, and
+ * the wallet is credited by the verified webhook — never by returning here.
+ */
+export function useStartCardCheckout(tenantId: string | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (credits: number) => {
+      const result = await createAdCreditCheckout({
+        data: { credits, tenantId: tenantId ?? null },
+      });
+      if (!result.ok || !result.url) throw new Error(result.reason ?? "provider_error");
+      return result.url;
+    },
+    onSuccess: (url) => {
+      void queryClient.invalidateQueries({ queryKey: ["mkt", "ad-credit-topups"] });
+      window.location.assign(url);
+    },
+  });
 }
