@@ -1936,6 +1936,20 @@ body:has(.market-surface) {
   from { opacity: 0; transform: translateX(32px) scale(0.97); }
   to { opacity: 1; transform: translateX(0) scale(1); }
 }
+/* سقوط الشخصية إلى منتصف الشاشة بارتداد لطيف عند لمس المستخدم لعنصر. */
+@keyframes kaheel-tap-drop {
+  0% { opacity: 0; transform: translateY(-46vh) scale(0.82) rotate(-8deg); }
+  55% { opacity: 1; transform: translateY(0) scale(1.04) rotate(2deg); }
+  70% { transform: translateY(-9px) scale(0.99) rotate(-2deg); }
+  84% { transform: translateY(0) scale(1.02) rotate(1deg); }
+  92% { transform: translateY(-3px) scale(1); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+/* اختفاء ناعم بعد الارتداد. */
+@keyframes kaheel-tap-fade {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-10px) scale(0.94); }
+}
 @keyframes kaheel-popup-out {
   from { opacity: 1; transform: translateY(0) scale(1); }
   to { opacity: 0; transform: translateY(10px) scale(0.96); }
