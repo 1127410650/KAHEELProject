@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as DemoRouteImport } from './routes/demo'
+import { Route as DevFeaturedPreviewRouteImport } from './routes/dev-featured-preview'
 import { Route as ErrandsRouteImport } from './routes/errands'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoRouteImport } from './routes/go'
@@ -144,6 +145,11 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevFeaturedPreviewRoute = DevFeaturedPreviewRouteImport.update({
+  id: '/dev-featured-preview',
+  path: '/dev-featured-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ErrandsRoute = ErrandsRouteImport.update({
@@ -601,6 +607,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
+  '/dev-featured-preview': typeof DevFeaturedPreviewRoute
   '/errands': typeof ErrandsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
@@ -697,6 +704,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
+  '/dev-featured-preview': typeof DevFeaturedPreviewRoute
   '/errands': typeof ErrandsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
@@ -795,6 +803,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
+  '/dev-featured-preview': typeof DevFeaturedPreviewRoute
   '/errands': typeof ErrandsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
@@ -895,6 +904,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
+    | '/dev-featured-preview'
     | '/errands'
     | '/forgot-password'
     | '/go'
@@ -991,6 +1001,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
+    | '/dev-featured-preview'
     | '/errands'
     | '/forgot-password'
     | '/go'
@@ -1088,6 +1099,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
+    | '/dev-featured-preview'
     | '/errands'
     | '/forgot-password'
     | '/go'
@@ -1187,6 +1199,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
+  DevFeaturedPreviewRoute: typeof DevFeaturedPreviewRoute
   ErrandsRoute: typeof ErrandsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoRoute: typeof GoRoute
@@ -1271,6 +1284,13 @@ declare module '@tanstack/react-router' {
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev-featured-preview': {
+      id: '/dev-featured-preview'
+      path: '/dev-featured-preview'
+      fullPath: '/dev-featured-preview'
+      preLoaderRoute: typeof DevFeaturedPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/errands': {
@@ -2063,6 +2083,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
+  DevFeaturedPreviewRoute: DevFeaturedPreviewRoute,
   ErrandsRoute: ErrandsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GoRoute: GoRoute,
@@ -2093,3 +2114,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
