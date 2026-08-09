@@ -1626,10 +1626,6 @@ body:has(.market-surface) .shadow-raised {
   font-display: swap;
 }
 
-@theme inline {
-  --font-sans: "IBM Plex Sans Arabic", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif;
-  --font-display: "IBM Plex Sans Arabic", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif;
-}
 
 .market-surface,
 body:has(.market-surface) {
