@@ -35,6 +35,7 @@ import type { UploadedAiAsset } from "@/lib/mkt-ai-image";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { AiImageStudio } from "@/components/marketplace/campaign/AiImageStudio";
 import { PopupPacingCard } from "@/components/marketplace/campaign/PopupPacingCard";
+import { StoriesManager } from "@/components/marketplace/campaign/StoriesManager";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -233,6 +234,9 @@ function AdminCampaignsPage() {
         </header>
 
         <PopupPacingCard />
+
+        <StoriesManager />
+
 
         <AiImageStudio onApproved={(asset) => setAiAsset(asset)} />
 

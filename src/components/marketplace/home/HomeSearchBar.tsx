@@ -1,0 +1,80 @@
+/**
+ * شريط البحث المضغوط في الصفحة الرئيسية.
+ *
+ * • ارتفاع مضغوط (44px جوال / 48px شاشة كبيرة) بدل 56–60px السابق.
+ * • زر «البحث التفصيلي» أيقونة فقط على الجوال، ونص على الشاشات الأوسع.
+ * • نص متناوب كل 3 ثوانٍ بحركة انزلاق رأسي CSS خفيفة، يتوقف عند تركيز
+ *   المستخدم على الحقل ويُحترم فيه `prefers-reduced-motion`.
+ * • الارتفاع محجوز بأبعاد ثابتة للنص المتناوب ⇒ صفر هزّة تخطيط.
+ */
+import { Link } from "@tanstack/react-router";
+import { Search, SlidersHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { useI18n } from "@/i18n";
+
+const HINTS: { ar: string; en: string }[] = [
+  { ar: "ابحث عن مطعم…", en: "Search for a restaurant…" },
+  { ar: "ابحث عن شقة للإيجار…", en: "Search for an apartment to rent…" },
+  { ar: "ابحث عن سيارة…", en: "Search for a car…" },
+  { ar: "ابحث عن مقاضي…", en: "Search for groceries…" },
+  { ar: "ابحث عن خدمة…", en: "Search for a service…" },
+  { ar: "ابحث عن وظيفة…", en: "Search for a job…" },
+];
+
+const ROTATE_MS = 3000;
+
+export function HomeSearchBar({ label, detailedLabel }: { label: string; detailedLabel: string }) {
+  const { locale } = useI18n();
+  const ar = locale === "ar";
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(
+      () => setIndex((current) => (current + 1) % HINTS.length),
+      ROTATE_MS,
+    );
+    return () => window.clearInterval(timer);
+  }, [paused]);
+
+  const hint = HINTS[index]!;
+
+  return (
+    <div
+      className="k-surface flex min-h-11 overflow-hidden rounded-2xl focus-within:border-[#9d4edd]/60 focus-within:ring-2 focus-within:ring-[#7b2cbf]/30 sm:min-h-12"
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
+      <Link
+        to="/search"
+        search={{}}
+        aria-label={label}
+        className="flex min-w-0 flex-1 items-center gap-2.5 px-3.5 text-[#5a189a] outline-none"
+      >
+        <Search className="size-[18px] shrink-0 text-[#3c096c]" aria-hidden />
+        {/* ارتفاع ثابت للسطر: النص يتبدّل داخله بلا أي تحرّك للشريط */}
+        <span className="relative h-[18px] min-w-0 flex-1 overflow-hidden">
+          <span
+            key={index}
+            className="absolute inset-0 flex items-center truncate text-xs font-semibold leading-[18px] animate-[k-search-hint_3s_ease-in-out_both] motion-reduce:animate-none sm:text-sm"
+          >
+            {ar ? hint.ar : hint.en}
+          </span>
+        </span>
+      </Link>
+      <Link
+        to="/search"
+        search={{ filters: 1 }}
+        aria-label={detailedLabel}
+        title={detailedLabel}
+        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-xl bg-[linear-gradient(140deg,#7b2cbf,#5a189a)] px-2.5 text-[11px] font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
+      >
+        <SlidersHorizontal className="size-4" aria-hidden />
+        <span className="hidden sm:inline">{detailedLabel}</span>
+      </Link>
+    </div>
+  );
+}
