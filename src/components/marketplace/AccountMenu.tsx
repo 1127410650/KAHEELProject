@@ -1,7 +1,15 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Check, ChevronDown, LogOut, Store, User } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Check,
+  ChevronDown,
+  LogOut,
+  ShieldCheck,
+  Store,
+  User,
+} from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -29,7 +37,14 @@ import {
 /** Round avatar / logo, falling back to the identity-kind icon. */
 function IdentityAvatar({ identity, size = "md" }: { identity: MktAccount; size?: "sm" | "md" }) {
   const box = size === "sm" ? "size-7" : "size-9";
-  const Icon = identity.kind === "business" ? Store : User;
+  const Icon =
+    identity.classification === "system_admin"
+      ? ShieldCheck
+      : identity.classification === "service_provider"
+        ? BriefcaseBusiness
+        : identity.classification === "store"
+          ? Store
+          : User;
   if (identity.avatar_url) {
     return (
       <img
@@ -200,7 +215,7 @@ export function AccountMenu() {
               {displayName}
             </span>
             <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-              {t(`market.entry.kind.${active.kind}`)}
+              {t(`market.entry.classification.${active.classification}`)}
               {active.verification_status === "approved" ? (
                 <VerifiedBadge status={active.verification_status} size="xs" />
               ) : null}
@@ -225,7 +240,7 @@ export function AccountMenu() {
             <span className="min-w-0 flex-1">
               <span className="block truncate font-medium">{item.name}</span>
               <span className="block text-[10px] text-muted-foreground">
-                {t(`market.entry.kind.${item.kind}`)}
+                {t(`market.entry.classification.${item.classification}`)}
               </span>
             </span>
             {item.account_key === active.account_key ? (
@@ -233,7 +248,7 @@ export function AccountMenu() {
             ) : null}
           </DropdownMenuItem>
         ))}
-        {active.kind === "individual" ? (
+        {active.classification === "customer" ? (
           <DropdownMenuItem asChild className="gap-2 text-xs">
             <Link to="/join" search={{ kind: "seller" }}>
               <Store className="size-4 text-muted-foreground" aria-hidden />

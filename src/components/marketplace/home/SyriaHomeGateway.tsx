@@ -70,8 +70,8 @@ export function SyriaHomeGateway() {
         <div
           className={
             isSyria
-              ? "absolute inset-0 bg-[linear-gradient(118deg,#080a0f_0%,#111722_72%,#0144fd_165%)]"
-              : "absolute inset-0 bg-[linear-gradient(118deg,#080a0f_0%,#121824_72%,#416dff_165%)]"
+              ? "absolute inset-0 bg-[linear-gradient(118deg,#10002b_0%,#3c096c_72%,#7b2cbf_165%)]"
+              : "absolute inset-0 bg-[linear-gradient(118deg,#10002b_0%,#240046_72%,#9d4edd_165%)]"
           }
           aria-hidden
         />

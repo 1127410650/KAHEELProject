@@ -30,7 +30,7 @@ export function MarketDemoShowcases() {
         aria-labelledby="store-worlds-title"
         className="mx-auto w-full max-w-[1240px] scroll-mt-28 px-3 pb-1 pt-3 sm:px-5 sm:pt-4 lg:px-8"
       >
-        <div className="relative isolate overflow-hidden rounded-[1.4rem] border border-white/12 bg-[radial-gradient(circle_at_12%_0%,rgba(102,151,204,0.35),transparent_32%),linear-gradient(135deg,#031329_0%,#082a52_54%,#051a36_100%)] py-3.5 text-white shadow-[0_18px_46px_rgb(3_19_41/0.24)] sm:rounded-[1.8rem] sm:py-5">
+        <div className="relative isolate overflow-hidden rounded-[1.4rem] border border-white/12 bg-[radial-gradient(circle_at_12%_0%,rgba(199,125,255,0.32),transparent_32%),linear-gradient(135deg,#240046_0%,#5a189a_54%,#3c096c_100%)] py-3.5 text-white shadow-[0_18px_46px_rgb(36_0_70/0.24)] sm:rounded-[1.8rem] sm:py-5">
           <div
             className="pointer-events-none absolute -end-16 -top-20 size-56 rounded-full border border-white/10 bg-white/[0.035]"
             aria-hidden
@@ -178,8 +178,8 @@ function StoreRail({ locale }: { locale: "ar" | "en" }) {
                 decoding="async"
                 className="size-full object-cover transition duration-700 group-hover/store:scale-[1.04]"
               />
-              <span className="absolute inset-0 bg-gradient-to-t from-[#031329]/92 via-[#031329]/28 to-transparent" />
-              <span className="absolute start-2.5 top-2.5 rounded-full border border-white/20 bg-[#031329]/78 px-2 py-1 text-[8px] font-black text-white backdrop-blur">
+              <span className="absolute inset-0 bg-gradient-to-t from-[#240046]/92 via-[#240046]/28 to-transparent" />
+              <span className="absolute start-2.5 top-2.5 rounded-full border border-white/20 bg-[#240046]/78 px-2 py-1 text-[8px] font-black text-white backdrop-blur">
                 {locale === "ar" ? "نموذج متجر" : "Demo store"}
               </span>
               <span className="absolute bottom-2.5 end-2.5 inline-flex items-center gap-1 rounded-full bg-white/92 px-2 py-1 text-[8px] font-black text-market-navy shadow-sm">
@@ -211,7 +211,7 @@ function StoreRail({ locale }: { locale: "ar" | "en" }) {
                       decoding="async"
                       className="size-full object-cover transition duration-500 group-hover/store:scale-[1.03]"
                     />
-                    <span className="absolute inset-0 bg-gradient-to-t from-[#031329]/76 via-transparent to-transparent" />
+                    <span className="absolute inset-0 bg-gradient-to-t from-[#240046]/76 via-transparent to-transparent" />
                     <span className="absolute bottom-1 start-1 max-w-[calc(100%-0.5rem)] truncate rounded-full bg-white/90 px-1.5 py-0.5 text-[6px] font-black text-market-navy sm:text-[7px]">
                       {locale === "ar" ? "إعلان" : "Ad"} {previewIndex + 1}
                     </span>

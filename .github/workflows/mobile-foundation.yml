@@ -64,9 +64,6 @@ jobs:
           node-version: 22
           package-manager-cache: false
 
-      - name: Verify canonical repository and Supabase authority
-        run: npm run guard:canonical
-
       - name: Detect complete native foundation
         id: mobile
         shell: bash

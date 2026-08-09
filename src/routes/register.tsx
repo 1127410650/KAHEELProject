@@ -30,7 +30,7 @@ export const Route = createFileRoute("/register")({
       { property: "og:title", content: "إنشاء حساب سوري — گحيل" },
       {
         property: "og:description",
-        content: "Create an individual account in Gohail's Syria marketplace.",
+        content: "Create a regular customer account in Gohail's Syria marketplace.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

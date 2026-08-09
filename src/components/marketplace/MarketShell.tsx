@@ -59,12 +59,12 @@ export function MarketHeader({
     <>
       <header
         ref={headerRef}
-        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-market-silver-line/80 bg-white/94 text-market-navy shadow-[0_5px_24px_rgb(11_29_67/0.07)] backdrop-blur-xl"
+        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-white/15 bg-[linear-gradient(112deg,#240046_0%,#3c096c_56%,#5a189a_118%)] text-white shadow-[0_7px_28px_rgb(36_0_70/0.22)] backdrop-blur-xl"
       >
         <div
           className={
             home
-              ? "mx-auto grid min-h-[74px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-5 lg:px-8"
+              ? "mx-auto grid min-h-[68px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-5 lg:px-8"
               : "mx-auto grid min-h-[62px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[66px] sm:px-5 lg:px-8"
           }
         >
@@ -72,13 +72,13 @@ export function MarketHeader({
             <>
               <a
                 href="/search"
-                className="flex min-w-0 items-center gap-2 justify-self-start rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-market-blue"
+                className="flex min-w-0 items-center gap-2 justify-self-start rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-6 shrink-0" aria-hidden />
                 <span className="min-w-0">
                   <strong className="block truncate text-sm font-black">{locationLabel}</strong>
-                  <span className="block truncate text-[10px] text-market-silver-muted">
+                  <span className="block truncate text-[10px] text-[#e0aaff]">
                     {t("market.homeV2.locationNow")}
                   </span>
                 </span>
@@ -94,10 +94,10 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-9 shrink-0 rounded-lg sm:size-10"
+                  className="size-9 shrink-0 rounded-xl bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-10"
                   aria-hidden
                 />
-                <span className="text-3xl font-black tracking-[-0.08em] text-market-navy sm:text-4xl">
+                <span className="text-3xl font-black tracking-[-0.08em] text-white sm:text-4xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -105,7 +105,7 @@ export function MarketHeader({
                 href={
                   session ? "/dashboard/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                 }
-                className="relative grid size-11 justify-self-end place-items-center rounded-full outline-none transition hover:bg-market-blue-soft focus-visible:ring-2 focus-visible:ring-market-blue"
+                className="relative grid size-11 justify-self-end place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={t("market.bottomNav.alerts")}
               >
                 <Bell className="size-6" aria-hidden />
@@ -129,15 +129,15 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-7 shrink-0 rounded-md sm:size-8"
+                  className="size-7 shrink-0 rounded-lg bg-white p-0.5 sm:size-8"
                   aria-hidden
                 />
-                <span className="text-xl font-black leading-none tracking-[-0.06em] text-market-navy sm:text-2xl">
+                <span className="text-xl font-black leading-none tracking-[-0.06em] text-white sm:text-2xl">
                   {t("market.brand")}
                 </span>
               </Link>
               <div
-                className="flex min-w-0 items-center justify-center gap-1.5 px-1 text-market-silver-muted"
+                className="flex min-w-0 items-center justify-center gap-1.5 px-1 text-[#e0aaff]"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
@@ -148,16 +148,52 @@ export function MarketHeader({
               <a
                 href={addHref}
                 aria-label={t("market.addListing")}
-                className="grid size-10 shrink-0 justify-self-end place-items-center rounded-full bg-market-blue text-white shadow-[0_8px_20px_rgb(11_92_197/0.24)] transition hover:-translate-y-0.5 hover:bg-market-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-market-blue focus-visible:ring-offset-2 sm:size-11"
+                className="grid size-10 shrink-0 justify-self-end place-items-center rounded-full bg-market-gold text-[#240046] shadow-[0_8px_20px_rgb(16_0_43/0.3)] transition hover:-translate-y-0.5 hover:bg-[#f8b62d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#3c096c] sm:size-11"
               >
                 <Plus className="size-5" aria-hidden />
               </a>
             </>
           )}
         </div>
+        {home && (
+          <nav
+            aria-label={t("market.nav.menu")}
+            className="border-t border-white/12 bg-[#240046]/92"
+          >
+            <div className="mx-auto flex min-h-[46px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+              {[
+                [t("market.bottomNav.home"), "/"],
+                [t("market.homeV2.fields.restaurants.title"), "/search?category=restaurants"],
+                [t("market.homeV2.fields.groceries.title"), "/search?domain=product"],
+                [t("market.homeV2.fields.realEstate.title"), "/search?category=real-estate"],
+                [t("market.homeV2.fields.cars.title"), "/search?category=cars"],
+                [t("market.homeV2.filters.services"), "/services"],
+              ].map(([label, href], index) => (
+                <a
+                  key={href}
+                  href={href}
+                  className={
+                    index === 0
+                      ? "inline-flex min-h-9 shrink-0 items-center rounded-full bg-white px-4 text-[11px] font-black text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
+                      : "inline-flex min-h-9 shrink-0 items-center rounded-full px-3.5 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
+                  }
+                >
+                  {label}
+                </a>
+              ))}
+              <a
+                href={addHref}
+                className="ms-auto inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-market-gold px-4 text-[11px] font-black text-[#240046] shadow-sm outline-none transition hover:bg-[#f8b62d] focus-visible:ring-2 focus-visible:ring-white sm:text-xs"
+              >
+                <Plus className="size-4" aria-hidden />
+                {t("market.addListing")}
+              </a>
+            </div>
+          </nav>
+        )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
-          <div className="border-t border-market-silver-line bg-market-blue-soft px-3 py-1 text-center text-[11px] font-medium text-market-navy sm:text-xs">
+          <div className="border-t border-white/14 bg-[#e0aaff] px-3 py-1 text-center text-[11px] font-medium text-[#240046] sm:text-xs">
             {t("market.offlineNotice")}
           </div>
         )}
@@ -165,7 +201,7 @@ export function MarketHeader({
       <div
         aria-hidden
         className={
-          home ? "h-[74px]" : showCategories ? "h-[9.4rem] sm:h-[10rem]" : "h-[62px] sm:h-[66px]"
+          home ? "h-[114px]" : showCategories ? "h-[9.4rem] sm:h-[10rem]" : "h-[62px] sm:h-[66px]"
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />
@@ -237,7 +273,7 @@ export function MarketBottomNav() {
     <nav
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-market-silver-line/90 bg-white/96 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-10px_28px_rgb(11_29_67/0.07)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#c77dff]/45 bg-white/96 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-10px_28px_rgb(60_9_108/0.1)] backdrop-blur-xl lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch px-1">
         {rawItems.map((item) => {

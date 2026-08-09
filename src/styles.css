@@ -540,7 +540,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("گحيل") — deep navy + crisp white.
+ * Public marketplace surface ("گحيل") — amethyst + crisp white.
  *
  * These tokens exist ONLY for the public marketplace chrome (header, bottom
  * nav, footer, home banner). They are additive: no existing token is changed,
@@ -549,24 +549,24 @@ body {
  * internal pages references a `market-*` utility.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: #0b1d43;
-  --color-market-navy-dark: #07152f;
-  --color-market-navy-soft: #163a67;
+  --color-market-navy: #3c096c;
+  --color-market-navy-dark: #10002b;
+  --color-market-navy-soft: #5a189a;
   --color-market-navy-foreground: #ffffff;
-  --color-market-blue: #0b5cc5;
-  --color-market-blue-dark: #08499a;
-  --color-market-blue-soft: #e8f2ff;
+  --color-market-blue: #7b2cbf;
+  --color-market-blue-dark: #5a189a;
+  --color-market-blue-soft: #e0aaff;
   --color-market-gold: #f59e0b;
   --color-market-gold-soft: #fff4de;
-  --color-market-electric: #0b5cc5;
-  --color-market-electric-dark: #08499a;
-  --color-market-electric-bright: #e8f2ff;
-  --color-market-void: #07152f;
-  --color-market-panel: #102d58;
-  --color-market-panel-soft: #173a68;
+  --color-market-electric: #9d4edd;
+  --color-market-electric-dark: #7b2cbf;
+  --color-market-electric-bright: #e0aaff;
+  --color-market-void: #10002b;
+  --color-market-panel: #240046;
+  --color-market-panel-soft: #3c096c;
   --color-market-silver: #ffffff;
-  --color-market-silver-line: #dce5f0;
-  --color-market-silver-muted: #65758b;
+  --color-market-silver-line: #e0aaff;
+  --color-market-silver-muted: #5a189a;
 }
 
 /*
@@ -582,28 +582,28 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  --background: #f6f8fc;
-  --foreground: #0b1d43;
+  --background: #ffffff;
+  --foreground: #240046;
   --card: #ffffff;
-  --card-foreground: #0b1d43;
+  --card-foreground: #240046;
   --popover: #ffffff;
-  --popover-foreground: #0b1d43;
+  --popover-foreground: #240046;
 
-  --primary: #0b5cc5;
+  --primary: #7b2cbf;
   --primary-foreground: #ffffff;
-  --primary-dark: #08499a;
-  --primary-pressed: #073b7d;
+  --primary-dark: #5a189a;
+  --primary-pressed: #3c096c;
 
-  --secondary: #edf3fb;
-  --secondary-foreground: #0b1d43;
-  --muted: #eef3f8;
-  --muted-foreground: #65758b;
-  --accent: #e8f2ff;
-  --accent-foreground: #0b1d43;
+  --secondary: color-mix(in srgb, #e0aaff 24%, white);
+  --secondary-foreground: #3c096c;
+  --muted: color-mix(in srgb, #e0aaff 18%, white);
+  --muted-foreground: #5a189a;
+  --accent: color-mix(in srgb, #c77dff 20%, white);
+  --accent-foreground: #3c096c;
 
-  --border: #dce5f0;
-  --input: #cbd8e7;
-  --ring: #0b5cc5;
+  --border: color-mix(in srgb, #c77dff 48%, white);
+  --input: color-mix(in srgb, #9d4edd 42%, white);
+  --ring: #7b2cbf;
 
   --gold: #f59e0b;
   --gold-dark: #c77b15;
@@ -611,18 +611,18 @@ body:has(.market-surface) {
   --gold-foreground: #59451f;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #041a36;
-  --sidebar-accent: #e4ecf4;
-  --sidebar-accent-foreground: #041a36;
-  --sidebar-border: #d3deea;
-  --sidebar-primary: #0b5cc5;
+  --sidebar-foreground: #240046;
+  --sidebar-accent: color-mix(in srgb, #e0aaff 24%, white);
+  --sidebar-accent-foreground: #240046;
+  --sidebar-border: color-mix(in srgb, #c77dff 48%, white);
+  --sidebar-primary: #7b2cbf;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #0b5cc5;
+  --sidebar-ring: #7b2cbf;
 
-  --chart-1: #0b5cc5;
-  --chart-2: #0b1d43;
+  --chart-1: #7b2cbf;
+  --chart-2: #3c096c;
   --chart-3: #f59e0b;
-  --chart-4: #16866e;
+  --chart-4: #9d4edd;
 
   background-color: var(--background);
   color: var(--foreground);
@@ -637,22 +637,22 @@ body:has(.market-surface) {
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(11 29 67 / 0.05), 0 12px 30px -20px rgb(11 29 67 / 0.22);
-  --shadow-raised: 0 2px 5px rgb(11 29 67 / 0.08), 0 22px 52px -28px rgb(11 29 67 / 0.3);
+  --shadow-panel: 0 1px 2px rgb(60 9 108 / 0.05), 0 12px 30px -20px rgb(60 9 108 / 0.24);
+  --shadow-raised: 0 2px 5px rgb(60 9 108 / 0.08), 0 22px 52px -28px rgb(36 0 70 / 0.32);
 }
 
 .market-surface .shadow-panel,
 body:has(.market-surface) .shadow-panel {
   box-shadow:
-    0 1px 2px rgb(3 19 41 / 0.08),
-    0 10px 24px -16px rgb(3 19 41 / 0.25) !important;
+    0 1px 2px rgb(60 9 108 / 0.08),
+    0 10px 24px -16px rgb(36 0 70 / 0.25) !important;
 }
 
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
   box-shadow:
-    0 1px 3px rgb(3 19 41 / 0.1),
-    0 18px 42px -24px rgb(3 19 41 / 0.32) !important;
+    0 1px 3px rgb(60 9 108 / 0.1),
+    0 18px 42px -24px rgb(36 0 70 / 0.32) !important;
 }
 
 /* One contemporary visual language for every Gohail marketplace/account page.
@@ -660,14 +660,14 @@ body:has(.market-surface) .shadow-raised {
  * layout and status palette remain isolated. */
 .market-shell > main {
   background:
-    radial-gradient(circle at 92% 0%, rgb(11 92 197 / 0.065), transparent 24rem),
+    radial-gradient(circle at 92% 0%, rgb(157 78 221 / 0.07), transparent 24rem),
     radial-gradient(circle at 8% 18%, rgb(245 158 11 / 0.045), transparent 20rem),
-    linear-gradient(180deg, #f9fbff 0%, var(--background) 38%, #f8fafc 100%);
+    linear-gradient(180deg, #ffffff 0%, var(--background) 38%, #ffffff 100%);
 }
 
 .market-surface ::selection {
-  background: rgb(11 92 197 / 0.18);
-  color: #0b1d43;
+  background: rgb(199 125 255 / 0.32);
+  color: #240046;
 }
 
 .market-surface :where([data-slot="card"]) {
@@ -699,13 +699,13 @@ body:has(.market-surface) .shadow-raised {
 .market-surface :where([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]) {
   border-radius: 0.875rem;
   background: rgb(255 255 255 / 0.92);
-  box-shadow: 0 1px 2px rgb(11 29 67 / 0.035);
+  box-shadow: 0 1px 2px rgb(60 9 108 / 0.04);
 }
 
 .market-surface
   :where([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]):focus-visible {
-  border-color: rgb(11 92 197 / 0.72);
-  box-shadow: 0 0 0 3px rgb(11 92 197 / 0.12);
+  border-color: rgb(123 44 191 / 0.72);
+  box-shadow: 0 0 0 3px rgb(157 78 221 / 0.16);
 }
 
 .market-page-intro {
@@ -714,8 +714,8 @@ body:has(.market-surface) .shadow-raised {
   border: 1px solid color-mix(in srgb, var(--border) 80%, white);
   border-radius: 1.35rem;
   background:
-    radial-gradient(circle at 94% 8%, rgb(11 92 197 / 0.12), transparent 9rem),
-    linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    radial-gradient(circle at 94% 8%, rgb(157 78 221 / 0.15), transparent 9rem),
+    linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, #e0aaff 14%, white) 100%);
   box-shadow: var(--shadow-panel);
   padding: 1.1rem 1.2rem;
 }
@@ -726,7 +726,7 @@ body:has(.market-surface) .shadow-raised {
   inset-inline-start: 0;
   width: 4px;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--primary), #54a0ff);
+  background: linear-gradient(180deg, #3c096c, #c77dff);
   content: "";
 }
 

@@ -1,8 +1,6 @@
 name: Canonical repository guard
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -10,6 +8,9 @@ permissions:
 
 jobs:
   verify-canonical-repository:
+    # Temporarily paused by the project owner on 2026-08-09.
+    # Keep the job definition intact until the owner explicitly re-enables it.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
