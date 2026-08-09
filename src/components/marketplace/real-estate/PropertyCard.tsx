@@ -183,12 +183,8 @@ export function PropertyCard({
               {deal}
             </span>
           )}
-          {(featured || activePromotion(listing)) && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-[10px] font-bold text-primary shadow-sm backdrop-blur">
-              <Sparkles className="size-3" aria-hidden />
-              {t("market.realEstate.featuredBadge")}
-            </span>
-          )}
+          {(featured || activePromotion(listing)) && <FeaturedChip />}
+
         </div>
 
         <div className="absolute top-2.5 z-10 end-2.5">
