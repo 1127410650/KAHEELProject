@@ -258,7 +258,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
   return (
     <MarketShell footer="none">
       <div className="real-estate-experience bg-background">
-        <section className="relative isolate min-h-[350px] overflow-hidden bg-market-navy sm:min-h-[430px]">
+        <section className="relative isolate min-h-[240px] overflow-hidden bg-market-navy sm:min-h-[280px]">
           <img
             src={realEstateHero}
             alt=""
@@ -272,7 +272,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
           />
           <div className="absolute inset-0 bg-gradient-to-b from-market-navy/25 via-market-navy/55 to-market-navy-dark" />
 
-          <div className="relative mx-auto flex min-h-[350px] w-full max-w-[1240px] flex-col px-4 pb-16 pt-8 sm:min-h-[430px] sm:px-6 sm:pb-24 sm:pt-14 lg:px-8">
+          <div className="market-hero-band relative mx-auto flex min-h-[240px] w-full max-w-[1240px] flex-col px-4 pb-10 sm:min-h-[280px] sm:px-6 sm:pb-14 lg:px-8">
             <div className="flex items-center justify-between gap-3 text-market-navy-foreground">
               <span className="inline-flex items-center gap-2 rounded-full border border-market-navy-foreground/25 bg-market-navy/45 px-3 py-1.5 text-xs font-semibold shadow-sm">
                 <Building2 className="size-4" aria-hidden />
@@ -284,14 +284,14 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </span>
             </div>
 
-            <div className="my-auto max-w-2xl py-8 text-market-navy-foreground sm:py-10">
+            <div className="my-auto max-w-2xl py-3 text-market-navy-foreground sm:py-4">
               <p className="text-xs font-semibold tracking-wide text-market-silver sm:text-sm">
                 {t("market.realEstate.eyebrow")}
               </p>
-              <h1 className="mt-2 text-3xl font-bold leading-tight tracking-tight sm:text-5xl">
+              <h1 className="mt-1.5 font-bold leading-tight tracking-tight">
                 {t("market.realEstate.heroTitle")}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-market-silver sm:text-base">
+              <p className="mt-1.5 max-w-xl text-market-silver">
                 {t("market.realEstate.heroDescription")}
               </p>
             </div>
