@@ -62,6 +62,8 @@ export interface PopupPacing {
   mascotMaxPerSession: number;
   /** فترة صمت إجبارية بعد إغلاق أي بطاقة. */
   mascotQuietAfterCloseMs: number;
+  /** مدة سكون التمرير المطلوبة قبل الظهور (الزائر ثبت على منطقة يقرأها). */
+  mascotIdleMs: number;
 }
 
 export const DEFAULT_PACING: PopupPacing = {
@@ -80,9 +82,10 @@ export const DEFAULT_PACING: PopupPacing = {
   roamFirstDelayMs: 90_000,
   roamIntervalMs: 300_000,
   roamDurationMs: 14_000,
-  mascotMinGapMs: 300_000,
-  mascotMaxPerSession: 3,
-  mascotQuietAfterCloseMs: 120_000,
+  mascotMinGapMs: 50_000,
+  mascotMaxPerSession: 6,
+  mascotQuietAfterCloseMs: 45_000,
+  mascotIdleMs: 2_500,
 };
 
 /** Clamps admin input so a typo can never turn the cards into a nuisance. */
@@ -106,16 +109,18 @@ export function normalisePacing(raw: Record<string, unknown> | null | undefined)
     roamFirstDelayMs: num("roam_first_delay_ms", DEFAULT_PACING.roamFirstDelayMs, 10_000, 600_000),
     roamIntervalMs: num("roam_interval_ms", DEFAULT_PACING.roamIntervalMs, 60_000, 3_600_000),
     roamDurationMs: num("roam_duration_ms", DEFAULT_PACING.roamDurationMs, 6_000, 40_000),
-    // الحدود الصارمة: لا أقل من دقيقتين بين ظهورين، ولا أكثر من ٦ في الجلسة،
-    // ولا صمت أقل من ٣٠ ثانية بعد الإغلاق — حتى لو أُدخل رقم صغير بالخطأ.
-    mascotMinGapMs: num("mascot_min_gap_ms", DEFAULT_PACING.mascotMinGapMs, 120_000, 3_600_000),
-    mascotMaxPerSession: num("mascot_max_per_session", DEFAULT_PACING.mascotMaxPerSession, 0, 6),
+    // الظهور مرتبط بسكون التمرير، والحدود تمنع الإزعاج: لا أقل من ٢٠ ثانية بين
+    // ظهورين، ولا أكثر من ٨ في الجلسة، ولا سكون أقصر من ثانية — حتى لو أُدخل
+    // رقم صغير بالخطأ من لوحة الإدارة.
+    mascotMinGapMs: num("mascot_min_gap_ms", DEFAULT_PACING.mascotMinGapMs, 20_000, 3_600_000),
+    mascotMaxPerSession: num("mascot_max_per_session", DEFAULT_PACING.mascotMaxPerSession, 0, 8),
     mascotQuietAfterCloseMs: num(
       "mascot_quiet_after_close_ms",
       DEFAULT_PACING.mascotQuietAfterCloseMs,
-      30_000,
+      15_000,
       1_800_000,
     ),
+    mascotIdleMs: num("mascot_idle_ms", DEFAULT_PACING.mascotIdleMs, 1_000, 10_000),
     roamEnabled: raw?.["roam_enabled"] !== false,
     enabled: raw?.["enabled"] !== false,
   };
