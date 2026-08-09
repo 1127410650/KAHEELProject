@@ -114,6 +114,12 @@ const NAV: NavItem[] = [
     section: "market",
   },
   {
+    to: "/admin/errands",
+    labelKey: "admin.nav.errands",
+    icon: Store,
+    section: "market",
+  },
+  {
     to: "/admin/guide-queue",
     labelKey: "admin.nav.guideQueue",
     icon: ShieldQuestion,
