@@ -46,12 +46,60 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+/**
+ * Permanent redirects for retired URLs — decided here, before the app renders.
+ *
+ * A client-side `beforeLoad` redirect is invisible to a crawler (it sees an
+ * empty shell) and passes no search signal. Answering with a real 301 keeps
+ * every indexed or bookmarked link working AND transfers its ranking to the
+ * canonical URL, which is what makes the coming route renames safe.
+ *
+ * Only document navigations are considered: assets, server functions and API
+ * routes are handed to the app untouched, and identity-dependent paths
+ * (`/me`, `/audit`) are deliberately never 301'd — see `routes-map.ts`.
+ */
+function permanentRedirect(request: Request): Response | null {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+
+  const url = new URL(request.url);
+  const path = url.pathname;
+  if (
+    path.startsWith("/api/") ||
+    path.startsWith("/_serverFn") ||
+    path.startsWith("/_build") ||
+    path.startsWith("/assets/") ||
+    path.startsWith("/@") ||
+    path.startsWith("/node_modules/") ||
+    path.startsWith("/lovable") ||
+    path.includes(".")
+  ) {
+    return null;
+  }
+
+  const target = serverRedirectFor(path);
+  // No rule: normalise a trailing slash so `/about/` and `/about` are one URL.
+  const resolved =
+    target ?? (path.length > 1 && path.endsWith("/") ? path.replace(/\/+$/, "") : null);
+  if (!resolved) return null;
+
+  const [targetPath = resolved, targetHash = ""] = resolved.split("#");
+  const location = `${targetPath}${targetPath.includes("?") ? "" : url.search}${targetHash ? `#${targetHash}` : ""}`;
+  return new Response(null, {
+    status: 301,
+    headers: { location, "cache-control": "public, max-age=3600" },
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const redirect = permanentRedirect(request);
+      if (redirect) return redirect;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
+
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
