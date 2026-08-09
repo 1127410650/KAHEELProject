@@ -147,7 +147,7 @@ function Moto() {
       <path d="M34 68h40l-6-14H44z" fill={BODY} />
       <path d="M70 54l10-10" stroke={BODY_DARK} strokeWidth="5" strokeLinecap="round" />
       <path d="M46 52c2-12 8-18 16-18l8 4-6 8-8 2-4 6z" fill={BODY_DARK} />
-      <KaheelanHead x={64} y={28} r={11} scarf />
+      <KaheelanHead x={66} y={26} r={9} scarf={false} />
     </Frame>
   );
 }
@@ -198,7 +198,7 @@ function Parcel() {
   return (
     <Frame className="animate-[kaheel-mascot-drop_2.4s_ease-in-out_infinite] motion-reduce:animate-none">
       <ellipse cx="48" cy="86" rx="30" ry="5" fill={HAIR} opacity="0.2" />
-      <KaheelanHead x={48} y={38} r={13} scarf={false} />
+      <KaheelanHead x={48} y={30} r={10} scarf={false} />
       <path d="M62 54l12-12" stroke={ACCENT} strokeWidth="7" strokeLinecap="round" />
       <rect x="22" y="52" width="52" height="32" rx="7" fill={BODY} />
       <rect x="43" y="52" width="10" height="32" fill={ACCENT} opacity="0.7" />
