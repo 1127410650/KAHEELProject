@@ -521,7 +521,7 @@ function SectionHeading({
         <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-[linear-gradient(145deg,#f3e3ff,#e0aaff)] text-[#5a189a] shadow-[inset_0_1px_0_#fff,0_5px_12px_-6px_rgb(60_9_108/0.45)] sm:size-9">
           <Icon className="size-4 sm:size-5" aria-hidden />
         </span>
-        <span className="truncate">{title}</span>
+        <span className="text-balance break-words">{title}</span>
       </h2>
       <a
         href={href}
