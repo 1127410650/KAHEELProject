@@ -103,11 +103,12 @@ function GuidePlacePage() {
                     href={`mailto:${data.email}`}
                   />
                 ) : null}
-                {data.stars !== null ? (
+                {/* 0 stars means "unrated" in the imported registry, not a real score. */}
+                {data.stars !== null && data.stars > 0 ? (
                   <Row
                     icon={<Star className="size-3.5" aria-hidden />}
                     label="التقييم"
-                    value={String(data.stars)}
+                    value={`${data.stars} نجوم`}
                   />
                 ) : null}
               </dl>
