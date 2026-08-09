@@ -1,30 +1,41 @@
-// Shared password strength policy. Used by the invite-only sign-up server function
-// and by the forced password-change dialog, so both paths reject the same weak inputs.
-const COMMON_PASSWORDS = [
+// Shared password policy. Deliberately light: six characters is the only length
+// rule, with no character-class requirements, because the audience types on
+// phones and a hostile policy pushes people to reuse or write down passwords.
+//
+// The protections that actually matter stay in place elsewhere and are NOT
+// replaced by complexity rules:
+//  - sign-in rate limiting (login_attempts / rate_limit_hit buckets),
+//  - hashed storage in Supabase Auth,
+//  - and the tiny blocklist below for the handful of passwords that attackers
+//    try first on every account.
+const BLOCKED_PASSWORDS = new Set([
+  "123456",
+  "1234567",
+  "12345678",
+  "123456789",
+  "1234567890",
+  "111111",
+  "000000",
   "password",
+  "password1",
   "passw0rd",
   "qwerty",
-  "welcome",
+  "qwerty123",
+  "abc123",
   "iloveyou",
-  "admin",
+  "welcome",
+  "admin123",
   "letmein",
-  "tahqaq",
-];
+  "123123",
+  "kaheel",
+  "kahil",
+]);
+
+export const MIN_PASSWORD_LENGTH = 6;
 
 export function passwordPolicyError(password: string): "WEAK_PASSWORD" | null {
   const value = password ?? "";
-  if (value.length < 10) return "WEAK_PASSWORD";
-  const lower = value.toLowerCase();
-  if (COMMON_PASSWORDS.some((c) => lower.includes(c))) return "WEAK_PASSWORD";
-  if (/^(.)\1+$/.test(value)) return "WEAK_PASSWORD";
-  // Sequential runs of 5+ digits or letters (123456789, abcdef...), forwards or backwards.
-  const seq = "01234567890abcdefghijklmnopqrstuvwxyz";
-  for (let i = 0; i + 5 <= lower.length; i += 1) {
-    const chunk = lower.slice(i, i + 5);
-    const rev = chunk.split("").reverse().join("");
-    if (seq.includes(chunk) || seq.includes(rev)) return "WEAK_PASSWORD";
-  }
-  const classes = [/[a-z]/, /[A-Z]/, /\d/, /[^A-Za-z0-9]/].filter((r) => r.test(value)).length;
-  if (classes < 3) return "WEAK_PASSWORD";
+  if (value.length < MIN_PASSWORD_LENGTH) return "WEAK_PASSWORD";
+  if (BLOCKED_PASSWORDS.has(value.toLowerCase().trim())) return "WEAK_PASSWORD";
   return null;
 }

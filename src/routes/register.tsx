@@ -6,12 +6,14 @@ import { Loader2, MailCheck, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { MIN_PASSWORD_LENGTH } from "@/lib/password-policy";
 import { registerAccount } from "@/lib/register.functions";
 import { signUpPublic } from "@/lib/signup.functions";
 import { signInWithIdentifier } from "@/lib/auth.functions";
 import { landingPathForSession } from "@/lib/mkt-platform";
 import { enablePersistentSession } from "@/lib/auth-storage";
 import { useI18n } from "@/i18n";
+import { DEFAULT_DIAL, DIAL_CODES, normalizePhone } from "@/lib/phone-normalize";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,6 +88,7 @@ function RegisterPage() {
     password: "",
     confirm: "",
   });
+  const [dial, setDial] = useState(DEFAULT_DIAL);
   const inviteToken = mounted ? inviteTokenFromUrl() : null;
   const nameLabel = locale === "ar" ? "الاسم" : "Name";
 
@@ -119,12 +122,17 @@ function RegisterPage() {
       toast.error(t("signup.mismatch"));
       return;
     }
+    const phone = normalizePhone(dial, form.phone);
+    if (!phone) {
+      toast.error(t("signup.phoneInvalid"));
+      return;
+    }
     setBusy(true);
     try {
       const result = await submitRegister({
         data: {
           full_name: form.full_name.trim(),
-          phone: form.phone.trim(),
+          phone,
           national_id: form.national_id.trim(),
           password: form.password,
           origin: window.location.origin,
@@ -196,7 +204,7 @@ function RegisterPage() {
         </span>
       </p>
       <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
-        نسخة سوريا فقط — استخدم رقم جوال سوري يبدأ بـ 09 أو +9639.
+        {t("signup.adsSyriaOnly")}
       </p>
 
       <form onSubmit={onInviteSubmit} className="mt-5 space-y-3.5">
@@ -204,18 +212,13 @@ function RegisterPage() {
           <Label htmlFor="full_name">{nameLabel}</Label>
           <Input id="full_name" required value={form.full_name} onChange={set("full_name")} />
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="phone">{t("signup.phone")}</Label>
-          <Input
-            id="phone"
-            required
-            dir="ltr"
-            inputMode="tel"
-            placeholder="+9639XXXXXXXX"
-            value={form.phone}
-            onChange={set("phone")}
-          />
-        </div>
+        <PhoneField
+          id="phone"
+          dial={dial}
+          onDialChange={setDial}
+          value={form.phone}
+          onChange={set("phone")}
+        />
         <div className="space-y-1.5">
           <Label htmlFor="national_id">{t("signup.nationalId")}</Label>
           <Input
@@ -246,6 +249,7 @@ function PublicSignupForm() {
   const signIn = useServerFn(signInWithIdentifier);
   const [busy, setBusy] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [dial, setDial] = useState(DEFAULT_DIAL);
   const [form, setForm] = useState({
     full_name: "",
     email: "",
@@ -262,13 +266,18 @@ function PublicSignupForm() {
       toast.error(t("signup.mismatch"));
       return;
     }
+    const phone = normalizePhone(dial, form.phone);
+    if (!phone) {
+      toast.error(t("signup.phoneInvalid"));
+      return;
+    }
     setBusy(true);
     try {
       const result = await submitSignup({
         data: {
           full_name: form.full_name.trim(),
           email: form.email.trim(),
-          phone: form.phone.trim(),
+          phone,
           password: form.password,
         },
       });
@@ -285,7 +294,7 @@ function PublicSignupForm() {
 
       enablePersistentSession();
       const session = await signIn({
-        data: { identifier: form.phone.trim(), password: form.password },
+        data: { identifier: phone, password: form.password },
       });
       if (!session.ok || !session.access_token || !session.refresh_token) {
         toast.info(t("signup.signInFailed"));
@@ -323,8 +332,8 @@ function PublicSignupForm() {
       : "Add your email to receive updates. You can verify it later from your account.";
   const phoneNote =
     locale === "ar"
-      ? "استخدم رقمًا سوريًا يبدأ بـ 09 أو +9639. سيُحفظ كمعرّف دخول دون إرسال رسالة SMS."
-      : "Use a Syrian mobile starting with 09 or +9639. It is stored as your sign-in ID without an SMS.";
+      ? "اكتب رقمك مع الصفر أو بدونه — نُصلّح الصيغة تلقائيًا. يُحفظ كمعرّف دخول دون رسالة SMS."
+      : "Type your number with or without the leading zero — we normalise it. Stored as your sign-in ID, no SMS.";
 
   return (
     <Shell>
@@ -333,9 +342,7 @@ function PublicSignupForm() {
         {t("signup.publicSubtitle")}
       </p>
       <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
-        {locale === "ar"
-          ? "التسجيل متاح حاليًا لسوريا فقط."
-          : "Registration is currently available for Syria only."}
+        {t("signup.adsSyriaOnly")}
       </p>
 
       <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
@@ -344,20 +351,14 @@ function PublicSignupForm() {
           <Input id="p_full_name" required value={form.full_name} onChange={set("full_name")} />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="p_phone">{t("signup.phone")}</Label>
-          <Input
-            id="p_phone"
-            required
-            dir="ltr"
-            inputMode="tel"
-            autoComplete="tel"
-            placeholder="+9639XXXXXXXX"
-            value={form.phone}
-            onChange={set("phone")}
-          />
-          <p className="text-xs leading-relaxed text-muted-foreground">{phoneNote}</p>
-        </div>
+        <PhoneField
+          id="p_phone"
+          dial={dial}
+          onDialChange={setDial}
+          value={form.phone}
+          onChange={set("phone")}
+          note={phoneNote}
+        />
 
         <div className="space-y-1.5">
           <Label htmlFor="p_email">{optionalEmailLabel}</Label>
@@ -389,6 +390,59 @@ function PublicSignupForm() {
   );
 }
 
+/**
+ * Dial code + local number. Syria stays the visible default, but any dial code
+ * can be picked, and the local box tolerates a leading zero or no zero at all —
+ * normalisation happens on submit, so the user never sees a format error.
+ */
+function PhoneField({
+  id,
+  dial,
+  onDialChange,
+  value,
+  onChange,
+  note,
+}: {
+  id: string;
+  dial: string;
+  onDialChange: (value: string) => void;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  note?: string;
+}) {
+  const { t, locale } = useI18n();
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={id}>{t("signup.phone")}</Label>
+      <div className="flex gap-2" dir="ltr">
+        <select
+          aria-label={locale === "ar" ? "مفتاح الدولة" : "Country code"}
+          value={dial}
+          onChange={(event) => onDialChange(event.target.value)}
+          className="num h-10 w-[7.5rem] shrink-0 rounded-lg border border-input bg-background px-2 text-sm text-foreground"
+        >
+          {DIAL_CODES.map((row) => (
+            <option key={row.iso2} value={row.dial}>
+              +{row.dial} {locale === "ar" ? row.name_ar : row.name_en}
+            </option>
+          ))}
+        </select>
+        <Input
+          id={id}
+          required
+          dir="ltr"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="09XXXXXXXX"
+          value={value}
+          onChange={onChange}
+        />
+      </div>
+      {note && <p className="text-xs leading-relaxed text-muted-foreground">{note}</p>}
+    </div>
+  );
+}
+
 function PasswordFields({
   form,
   set,
@@ -405,7 +459,7 @@ function PasswordFields({
           id="password_shared"
           type="password"
           required
-          minLength={10}
+          minLength={MIN_PASSWORD_LENGTH}
           dir="ltr"
           autoComplete="new-password"
           value={form.password}
@@ -419,7 +473,7 @@ function PasswordFields({
           id="confirm_shared"
           type="password"
           required
-          minLength={10}
+          minLength={MIN_PASSWORD_LENGTH}
           dir="ltr"
           autoComplete="new-password"
           value={form.confirm}

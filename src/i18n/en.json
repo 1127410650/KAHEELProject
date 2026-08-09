@@ -1091,9 +1091,9 @@
     "haveAccount": "Already have an account?",
     "signIn": "Sign in",
     "rateLimited": "Too many attempts, please try again later",
-    "weakPassword": "Password too weak — use at least 10 characters with mixed classes, no common or sequential patterns",
+    "weakPassword": "Password is too short or too common — use at least 6 characters and avoid 123456",
     "invalid": "Please check the entered data",
-    "passwordHint": "At least 10 characters with at least 3 different character types",
+    "passwordHint": "At least 6 characters (letters or numbers) — no complex rules",
     "inviteNote": "This invitation was sent to:",
     "inviteRequiredTitle": "Accounts are invite-only",
     "inviteRequiredBody": "Accounts are created by an administrator invitation only. There is no public sign-up in Kaheel. If you were invited, open the invitation link sent to your email.",
@@ -1105,7 +1105,9 @@
     "emailHint": "You will use this email to sign in.",
     "created": "Your account is ready",
     "createdBody": "You can start using the marketplace. If this email was already registered, sign in instead.",
-    "signInFailed": "Saved. Sign in with your email and password."
+    "signInFailed": "Saved. Sign in with your email and password.",
+    "phoneInvalid": "That number looks incomplete — check the digits and the country code",
+    "adsSyriaOnly": "Listings are available in Syria only for now — signing up works with any number"
   },
   "onboarding": {
     "title": "Create your workspace",

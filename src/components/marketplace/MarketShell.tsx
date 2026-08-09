@@ -11,6 +11,8 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
+import { LocationSheet } from "@/components/marketplace/LocationSheet";
+
 import kaheelLogo from "@/assets/kaheel-logo.png";
 
 export function MarketHeader({
@@ -26,8 +28,15 @@ export function MarketHeader({
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [locationOpen, setLocationOpenState] = useState(false);
+  const [locationMounted, setLocationMounted] = useState(false);
+  const setLocationOpen = (value: boolean) => {
+    if (value) setLocationMounted(true);
+    setLocationOpenState(value);
+  };
   const addHref = addListingHref({ authenticated: !!session });
   const locationLabel = account?.city?.trim() || (locale === "ar" ? "سوريا" : "Syria");
+
   const unreadAlerts = useQuery({
     queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
     enabled: !!session && home,
@@ -70,9 +79,10 @@ export function MarketHeader({
         >
           {home ? (
             <>
-              <a
-                href="/search"
-                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-white"
+              <button
+                type="button"
+                onClick={() => setLocationOpen(true)}
+                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-5 shrink-0" aria-hidden />
@@ -84,7 +94,8 @@ export function MarketHeader({
                     {t("market.homeV2.locationNow")}
                   </span>
                 </span>
-              </a>
+              </button>
+
               <Link
                 to="/"
                 className="flex items-center gap-1.5 justify-self-center"
@@ -138,15 +149,18 @@ export function MarketHeader({
                   {t("market.brand")}
                 </span>
               </Link>
-              <div
-                className="flex min-w-0 items-center justify-center gap-1.5 px-1 text-[#e0aaff]"
+              <button
+                type="button"
+                onClick={() => setLocationOpen(true)}
+                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-[#e0aaff] outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
                 <span className="max-w-[12rem] truncate text-xs font-semibold sm:text-sm">
                   {locationLabel}
                 </span>
-              </div>
+              </button>
+
               <a
                 href={addHref}
                 aria-label={t("market.addListing")}
@@ -214,7 +228,10 @@ export function MarketHeader({
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />
+      {/* Mounted only after a tap so the sheet never costs anything on first paint. */}
+      {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
     </>
+
   );
 }
 
