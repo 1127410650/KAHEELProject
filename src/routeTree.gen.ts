@@ -31,25 +31,23 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
-import { Route as AdminAttendanceRouteImport } from './routes/admin/attendance'
+import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
-import { Route as AdminContentRulesRouteImport } from './routes/admin/content-rules'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
-import { Route as AdminGeoRouteImport } from './routes/admin/geo'
-import { Route as AdminJoinApplicationsRouteImport } from './routes/admin/join-applications'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
+import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
+import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
+import { Route as AdminTaxonomyRouteImport } from './routes/admin/taxonomy'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
-import { Route as AdminWorkforceRouteImport } from './routes/admin/workforce'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as BusinessIndexRouteImport } from './routes/business/index'
 import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
@@ -76,6 +74,8 @@ import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
+import { Route as AdminStaffAttendanceRouteImport } from './routes/admin/staff.attendance'
+import { Route as AdminStaffWorkloadRouteImport } from './routes/admin/staff.workload'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as BusinessServicesIndexRouteImport } from './routes/business/services.index'
@@ -200,14 +200,9 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
-  id: '/activities',
-  path: '/activities',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminAttendanceRoute = AdminAttendanceRouteImport.update({
-  id: '/attendance',
-  path: '/attendance',
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAuditLogRoute = AdminAuditLogRouteImport.update({
@@ -220,24 +215,9 @@ const AdminBusinessesRoute = AdminBusinessesRouteImport.update({
   path: '/businesses',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminContentRulesRoute = AdminContentRulesRouteImport.update({
-  id: '/content-rules',
-  path: '/content-rules',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminGeoRoute = AdminGeoRouteImport.update({
-  id: '/geo',
-  path: '/geo',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminJoinApplicationsRoute = AdminJoinApplicationsRouteImport.update({
-  id: '/join-applications',
-  path: '/join-applications',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -253,6 +233,16 @@ const AdminListingReportsRoute = AdminListingReportsRouteImport.update({
 const AdminListingsRoute = AdminListingsRouteImport.update({
   id: '/listings',
   path: '/listings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLocationsRoute = AdminLocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminModerationRoute = AdminModerationRouteImport.update({
+  id: '/moderation',
+  path: '/moderation',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminMyWorkRoute = AdminMyWorkRouteImport.update({
@@ -280,6 +270,11 @@ const AdminStoresRoute = AdminStoresRouteImport.update({
   path: '/stores',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminTaxonomyRoute = AdminTaxonomyRouteImport.update({
+  id: '/taxonomy',
+  path: '/taxonomy',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -288,11 +283,6 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
 const AdminVerificationsRoute = AdminVerificationsRouteImport.update({
   id: '/verifications',
   path: '/verifications',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminWorkforceRoute = AdminWorkforceRouteImport.update({
-  id: '/workforce',
-  path: '/workforce',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdsSlugRoute = AdsSlugRouteImport.update({
@@ -425,6 +415,16 @@ const AdminReportsIdRoute = AdminReportsIdRouteImport.update({
   path: '/reports/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminStaffAttendanceRoute = AdminStaffAttendanceRouteImport.update({
+  id: '/staff/attendance',
+  path: '/staff/attendance',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminStaffWorkloadRoute = AdminStaffWorkloadRouteImport.update({
+  id: '/staff/workload',
+  path: '/staff/workload',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
   id: '/users_/$id',
   path: '/users/$id',
@@ -514,25 +514,23 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/welcome': typeof WelcomeRoute
-  '/admin/activities': typeof AdminActivitiesRoute
-  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
-  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/geo': typeof AdminGeoRoute
-  '/admin/join-applications': typeof AdminJoinApplicationsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/locations': typeof AdminLocationsRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
-  '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
@@ -559,6 +557,8 @@ export interface FileRoutesByFullPath {
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
+  '/admin/staff/workload': typeof AdminStaffWorkloadRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
@@ -593,25 +593,23 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/welcome': typeof WelcomeRoute
-  '/admin/activities': typeof AdminActivitiesRoute
-  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
-  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/geo': typeof AdminGeoRoute
-  '/admin/join-applications': typeof AdminJoinApplicationsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/locations': typeof AdminLocationsRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
-  '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
@@ -638,6 +636,8 @@ export interface FileRoutesByTo {
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
+  '/admin/staff/workload': typeof AdminStaffWorkloadRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
@@ -676,25 +676,23 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/welcome': typeof WelcomeRoute
-  '/admin/activities': typeof AdminActivitiesRoute
-  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
-  '/admin/content-rules': typeof AdminContentRulesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/geo': typeof AdminGeoRoute
-  '/admin/join-applications': typeof AdminJoinApplicationsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
+  '/admin/locations': typeof AdminLocationsRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
-  '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
@@ -721,6 +719,8 @@ export interface FileRoutesById {
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
+  '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
+  '/admin/staff/workload': typeof AdminStaffWorkloadRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
@@ -760,25 +760,23 @@ export interface FileRouteTypes {
     | '/search'
     | '/services'
     | '/welcome'
-    | '/admin/activities'
-    | '/admin/attendance'
+    | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
-    | '/admin/content-rules'
     | '/admin/dashboard'
-    | '/admin/geo'
-    | '/admin/join-applications'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/locations'
+    | '/admin/moderation'
     | '/admin/my-work'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
-    | '/admin/workforce'
     | '/ads/$slug'
     | '/business/orders'
     | '/business/partners'
@@ -805,6 +803,8 @@ export interface FileRouteTypes {
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
+    | '/admin/staff/attendance'
+    | '/admin/staff/workload'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/business/services/settings'
@@ -839,25 +839,23 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/welcome'
-    | '/admin/activities'
-    | '/admin/attendance'
+    | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
-    | '/admin/content-rules'
     | '/admin/dashboard'
-    | '/admin/geo'
-    | '/admin/join-applications'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/locations'
+    | '/admin/moderation'
     | '/admin/my-work'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
-    | '/admin/workforce'
     | '/ads/$slug'
     | '/business/orders'
     | '/business/partners'
@@ -884,6 +882,8 @@ export interface FileRouteTypes {
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
+    | '/admin/staff/attendance'
+    | '/admin/staff/workload'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/business/services/settings'
@@ -921,25 +921,23 @@ export interface FileRouteTypes {
     | '/search'
     | '/services'
     | '/welcome'
-    | '/admin/activities'
-    | '/admin/attendance'
+    | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
-    | '/admin/content-rules'
     | '/admin/dashboard'
-    | '/admin/geo'
-    | '/admin/join-applications'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
+    | '/admin/locations'
+    | '/admin/moderation'
     | '/admin/my-work'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
-    | '/admin/workforce'
     | '/ads/$slug'
     | '/business/orders'
     | '/business/partners'
@@ -966,6 +964,8 @@ export interface FileRouteTypes {
     | '/admin/businesses_/$id'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
+    | '/admin/staff/attendance'
+    | '/admin/staff/workload'
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
     | '/business/services/settings'
@@ -1171,18 +1171,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/activities': {
-      id: '/admin/activities'
-      path: '/activities'
-      fullPath: '/admin/activities'
-      preLoaderRoute: typeof AdminActivitiesRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/attendance': {
-      id: '/admin/attendance'
-      path: '/attendance'
-      fullPath: '/admin/attendance'
-      preLoaderRoute: typeof AdminAttendanceRouteImport
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/audit-log': {
@@ -1199,32 +1192,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBusinessesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/content-rules': {
-      id: '/admin/content-rules'
-      path: '/content-rules'
-      fullPath: '/admin/content-rules'
-      preLoaderRoute: typeof AdminContentRulesRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/geo': {
-      id: '/admin/geo'
-      path: '/geo'
-      fullPath: '/admin/geo'
-      preLoaderRoute: typeof AdminGeoRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/join-applications': {
-      id: '/admin/join-applications'
-      path: '/join-applications'
-      fullPath: '/admin/join-applications'
-      preLoaderRoute: typeof AdminJoinApplicationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -1246,6 +1218,20 @@ declare module '@tanstack/react-router' {
       path: '/listings'
       fullPath: '/admin/listings'
       preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/locations': {
+      id: '/admin/locations'
+      path: '/locations'
+      fullPath: '/admin/locations'
+      preLoaderRoute: typeof AdminLocationsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/moderation': {
+      id: '/admin/moderation'
+      path: '/moderation'
+      fullPath: '/admin/moderation'
+      preLoaderRoute: typeof AdminModerationRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/my-work': {
@@ -1283,6 +1269,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStoresRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/taxonomy': {
+      id: '/admin/taxonomy'
+      path: '/taxonomy'
+      fullPath: '/admin/taxonomy'
+      preLoaderRoute: typeof AdminTaxonomyRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1295,13 +1288,6 @@ declare module '@tanstack/react-router' {
       path: '/verifications'
       fullPath: '/admin/verifications'
       preLoaderRoute: typeof AdminVerificationsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/workforce': {
-      id: '/admin/workforce'
-      path: '/workforce'
-      fullPath: '/admin/workforce'
-      preLoaderRoute: typeof AdminWorkforceRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/ads/$slug': {
@@ -1486,6 +1472,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportsIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/staff/attendance': {
+      id: '/admin/staff/attendance'
+      path: '/staff/attendance'
+      fullPath: '/admin/staff/attendance'
+      preLoaderRoute: typeof AdminStaffAttendanceRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/staff/workload': {
+      id: '/admin/staff/workload'
+      path: '/staff/workload'
+      fullPath: '/admin/staff/workload'
+      preLoaderRoute: typeof AdminStaffWorkloadRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users_/$id': {
       id: '/admin/users_/$id'
       path: '/users/$id'
@@ -1581,58 +1581,58 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteRouteChildren {
-  AdminActivitiesRoute: typeof AdminActivitiesRoute
-  AdminAttendanceRoute: typeof AdminAttendanceRoute
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
-  AdminContentRulesRoute: typeof AdminContentRulesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminGeoRoute: typeof AdminGeoRoute
-  AdminJoinApplicationsRoute: typeof AdminJoinApplicationsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
+  AdminLocationsRoute: typeof AdminLocationsRoute
+  AdminModerationRoute: typeof AdminModerationRoute
   AdminMyWorkRoute: typeof AdminMyWorkRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStoresRoute: typeof AdminStoresRoute
+  AdminTaxonomyRoute: typeof AdminTaxonomyRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
-  AdminWorkforceRoute: typeof AdminWorkforceRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
   AdminListingsIdRoute: typeof AdminListingsIdRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
+  AdminStaffAttendanceRoute: typeof AdminStaffAttendanceRoute
+  AdminStaffWorkloadRoute: typeof AdminStaffWorkloadRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminActivitiesRoute: AdminActivitiesRoute,
-  AdminAttendanceRoute: AdminAttendanceRoute,
+  AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
-  AdminContentRulesRoute: AdminContentRulesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
-  AdminGeoRoute: AdminGeoRoute,
-  AdminJoinApplicationsRoute: AdminJoinApplicationsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
+  AdminLocationsRoute: AdminLocationsRoute,
+  AdminModerationRoute: AdminModerationRoute,
   AdminMyWorkRoute: AdminMyWorkRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStoresRoute: AdminStoresRoute,
+  AdminTaxonomyRoute: AdminTaxonomyRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
-  AdminWorkforceRoute: AdminWorkforceRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminBusinessesIdRoute: AdminBusinessesIdRoute,
   AdminListingsIdRoute: AdminListingsIdRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
+  AdminStaffAttendanceRoute: AdminStaffAttendanceRoute,
+  AdminStaffWorkloadRoute: AdminStaffWorkloadRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
