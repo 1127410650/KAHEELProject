@@ -129,20 +129,24 @@ export function MarketHeader({
                   {t("market.brand")}
                 </span>
               </Link>
-              <a
-                href={
-                  session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
-                }
-                className="relative grid size-10 justify-self-end place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
-                aria-label={t("market.bottomNav.alerts")}
-              >
-                <Bell className="size-5" aria-hidden />
-                {(unreadAlerts.data ?? 0) > 0 && (
-                  <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
-                    {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
-                  </span>
-                )}
-              </a>
+              <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
+                <a
+                  href={
+                    session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
+                  }
+                  className="relative grid size-10 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                  aria-label={t("market.bottomNav.alerts")}
+                >
+                  <Bell className="size-5" aria-hidden />
+                  {(unreadAlerts.data ?? 0) > 0 && (
+                    <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
+                      {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
+                    </span>
+                  )}
+                </a>
+                <AddListingButton href={addHref} />
+              </div>
+
             </>
           ) : (
             <>
