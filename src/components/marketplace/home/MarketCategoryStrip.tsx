@@ -11,6 +11,12 @@ import { useMarqueeRail } from "@/components/marketplace/home/useMarqueeRail";
  * the field list twice and moves with a GPU-composited transform, so the motion
  * is perfectly smooth and touch can drag or pause it.
  */
+/**
+ * The rail carries real fields only: the "home" and "more" tiles were removed
+ * because the header and the bottom bar already own those destinations.
+ */
+const STRIP_FIELDS = PRIMARY_FIELDS.filter((field) => field.kind === "field");
+
 export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
   const { trackRef, interactionProps } = useMarqueeRail<HTMLDivElement>(1, 20);
@@ -39,7 +45,7 @@ export function MarketCategoryStrip() {
   const labelClass =
     "line-clamp-2 h-[24px] w-full overflow-hidden text-[9px] font-black leading-[1.2] text-market-navy-foreground/95 sm:h-[26px] sm:text-[10px]";
 
-  const renderTile = (field: (typeof PRIMARY_FIELDS)[number], groupIndex: number) => {
+  const renderTile = (field: (typeof STRIP_FIELDS)[number], groupIndex: number) => {
     const label = t(`market.fields.${field.id}`);
     const key = `${field.id}-${groupIndex}`;
     const photo = categoryImage(field.id);
@@ -148,7 +154,7 @@ export function MarketCategoryStrip() {
                 key={groupIndex}
                 className="grid shrink-0 grid-flow-col grid-rows-2 gap-2 sm:gap-2.5"
               >
-                {PRIMARY_FIELDS.map((field) => renderTile(field, groupIndex))}
+                {STRIP_FIELDS.map((field) => renderTile(field, groupIndex))}
               </div>
             ))}
           </div>

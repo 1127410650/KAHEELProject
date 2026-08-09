@@ -3024,7 +3024,9 @@
       "requestPending": "طلب اتصال بانتظار الرد",
       "callBack": "اتصل الآن",
       "startAudio": "بدء الصوت",
-      "stopReceiving": "إيقاف استقبال الاتصالات"
+      "stopReceiving": "إيقاف استقبال الاتصالات",
+      "minimize": "تصغير",
+      "returnToCall": "العودة للمكالمة"
     },
     "moderation": {
       "owner": {
