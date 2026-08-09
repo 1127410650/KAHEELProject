@@ -50,8 +50,10 @@ export function useSignOut() {
     queryClient.clear();
     await supabase.auth.signOut();
     clearAuthStorage();
-    await navigate({ to: "/welcome", replace: true }).catch(() => {
-      if (typeof window !== "undefined") window.location.replace("/welcome");
+    // The home page is where a signed-out visitor belongs: `/welcome` was a
+    // duplicate landing page and is retired.
+    await navigate({ to: "/", replace: true }).catch(() => {
+      if (typeof window !== "undefined") window.location.replace("/");
     });
     signingOut = false;
   };
