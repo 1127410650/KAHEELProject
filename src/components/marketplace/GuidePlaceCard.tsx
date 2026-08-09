@@ -84,11 +84,16 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
   };
 
   const share = async () => {
+    const nav =
+      typeof navigator === "undefined"
+        ? null
+        : (navigator as Navigator & { share?: (data: { title?: string; text?: string }) => Promise<void> });
+    if (!nav) return;
     try {
-      if (typeof navigator !== "undefined" && "share" in navigator) {
-        await navigator.share({ title: "منصة كَحيل", text: message });
+      if (typeof nav.share === "function") {
+        await nav.share({ title: "منصة كَحيل", text: message });
       } else {
-        await navigator.clipboard.writeText(message);
+        await nav.clipboard.writeText(message);
         toast.success("تم نسخ نص الدعوة مع رابط المنصة وملف التعريف");
       }
       log("share");
@@ -96,6 +101,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
       /* the visitor dismissed the share sheet — nothing to record */
     }
   };
+
 
   const base =
     "inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-black transition hover:border-market-navy/40 hover:text-market-navy";
