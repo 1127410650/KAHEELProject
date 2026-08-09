@@ -511,13 +511,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </div>
 
               {featuredRows.length > 0 && (
-                <div className="market-rail -mx-3 mt-4 flex snap-x gap-3 overflow-x-auto px-3 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+                <div className="market-rail -mx-3 mt-4 flex snap-x gap-3 overflow-x-auto px-3 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
                   {featuredRows.map((listing, index) => (
                     <div
                       key={listing.id}
-                      className="w-[78vw] max-w-[340px] shrink-0 snap-center sm:w-auto sm:max-w-none"
+                      className="w-[82vw] max-w-[380px] shrink-0 snap-center sm:w-auto sm:max-w-none"
                     >
-                      <EstateCard listing={listing} priority={index < 2} featured />
+                      <PropertyCard
+                        listing={listing}
+                        images={galleryFor(listing.id)}
+                        priority={index < 2}
+                        featured
+                      />
                     </div>
                   ))}
                 </div>
@@ -530,9 +535,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               )}
 
               {listings.isLoading ? (
-                <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <Skeleton key={index} className="aspect-[3/4] rounded-2xl" />
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <PropertyCardSkeleton key={index} />
                   ))}
                 </div>
               ) : listings.isError ? (
@@ -544,10 +549,8 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 </div>
               ) : rows.length === 0 ? (
                 <div className="mt-4 overflow-hidden rounded-3xl border border-border bg-card p-6 text-center shadow-panel sm:p-10">
-                  <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-market-silver text-market-navy">
-                    <Building2 className="size-6" aria-hidden />
-                  </span>
-                  <h2 className="mt-4 text-lg font-bold text-foreground">
+                  <Mascot name="kaheel" pose="present" size="sm" className="mx-auto h-28 w-auto" />
+                  <h2 className="mt-3 text-lg font-bold text-foreground">
                     {t("market.realEstate.emptyTitle")}
                   </h2>
                   <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
@@ -565,12 +568,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                   </div>
                 </div>
               ) : (
-                <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
                   {rows.map((listing, index) => (
-                    <EstateCard key={listing.id} listing={listing} priority={index < 4} />
+                    <PropertyCard
+                      key={listing.id}
+                      listing={listing}
+                      images={galleryFor(listing.id)}
+                      priority={index < 2}
+                    />
                   ))}
                 </div>
               )}
+
 
               {listings.hasNextPage && (
                 <div className="mt-6 flex justify-center">
