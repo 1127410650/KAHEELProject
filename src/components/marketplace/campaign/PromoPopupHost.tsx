@@ -385,15 +385,16 @@ export function PromoPopupHost() {
   const entrance = card.mode === "entrance";
   const sideMotion = ENTRY_ANIMATION[card.side];
 
+  // نفس السبب: الجهة تُختار وقت التشغيل، فالحركة في `style` لتعمل كل الجهات.
   const animation = leaving
     ? calm
-      ? "animate-[kaheel-tap-fade_0.22s_ease-in_forwards]"
-      : `animate-[${sideMotion.out}_0.26s_ease-in_forwards]`
+      ? "kaheel-tap-fade 0.22s ease-in forwards"
+      : `${sideMotion.out} 0.26s ease-in forwards`
     : calm
-      ? "animate-[kaheel-scrim-in_0.2s_ease-out]"
+      ? "kaheel-scrim-in 0.2s ease-out"
       : entrance
-        ? `animate-[mascot-enter-${card.from}_0.62s_cubic-bezier(0.2,0.9,0.3,1)_both]`
-        : `animate-[${sideMotion.in}_0.62s_cubic-bezier(0.22,0.9,0.3,1)_both]`;
+        ? `mascot-enter-${card.from} 0.62s cubic-bezier(0.2,0.9,0.3,1) both`
+        : `${sideMotion.in} 0.62s cubic-bezier(0.22,0.9,0.3,1) both`;
 
   const bodyMotion =
     calm || leaving
@@ -414,9 +415,13 @@ export function PromoPopupHost() {
         data-kaheel-drop-card
         data-kaheel-side={card.side}
         role="status"
-        style={{ transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side] }}
-        className={`pointer-events-none relative flex w-full max-w-[17rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
+        style={{
+          transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
+          animation,
+        }}
+        className="pointer-events-none relative flex w-full max-w-[17rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl"
       >
+
         <div className="absolute end-2 top-2">{closeButtons}</div>
 
         <div className={bodyMotion}>
