@@ -12,6 +12,7 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useI18n } from "@/i18n";
+import { nextShortGreetingIndex, shortGreetingAt } from "@/lib/takeover-copy";
 
 const HINTS: { ar: string; en: string }[] = [
   { ar: "ابحث عن مطعم…", en: "Search for a restaurant…" },
@@ -23,24 +24,34 @@ const HINTS: { ar: string; en: string }[] = [
 ];
 
 const ROTATE_MS = 3000;
+/** بعد كل دورتين اقتراح بحث يظهر ترحيب قصير من كَحيل (سطر واحد، بلا التفاف). */
+const GREETING_EVERY = 3;
 
 export function HomeSearchBar({ label, detailedLabel }: { label: string; detailedLabel: string }) {
   const { locale } = useI18n();
   const ar = locale === "ar";
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  // فهرس الترحيب يتغيّر عند كل ظهور، بلا تكرار متتالٍ لنفس السطر.
+  const [greeting, setGreeting] = useState(() => nextShortGreetingIndex());
 
   useEffect(() => {
     if (paused) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(
-      () => setIndex((current) => (current + 1) % HINTS.length),
-      ROTATE_MS,
-    );
+    const timer = window.setInterval(() => {
+      setIndex((current) => {
+        const next = current + 1;
+        if (next % GREETING_EVERY === 0) setGreeting((last) => nextShortGreetingIndex(last));
+        return next % (HINTS.length * GREETING_EVERY);
+      });
+    }, ROTATE_MS);
     return () => window.clearInterval(timer);
   }, [paused]);
 
-  const hint = HINTS[index]!;
+  // كل خطوة ثالثة ترحيب من كَحيل، وما بينها اقتراحات البحث المعتادة.
+  const showGreeting = index % GREETING_EVERY === 0;
+  const hint = HINTS[Math.floor(index / GREETING_EVERY) % HINTS.length]!;
+  const line = showGreeting ? shortGreetingAt(ar, greeting) : ar ? hint.ar : hint.en;
 
   return (
     <div
@@ -61,7 +72,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
             key={index}
             className="absolute inset-0 flex items-center truncate text-xs font-semibold leading-[18px] animate-[k-search-hint_3s_ease-in-out_both] motion-reduce:animate-none sm:text-sm"
           >
-            {ar ? hint.ar : hint.en}
+            {line}
           </span>
         </span>
       </Link>
