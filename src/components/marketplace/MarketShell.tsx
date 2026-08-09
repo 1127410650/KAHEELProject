@@ -276,7 +276,7 @@ export function MarketBottomNav() {
     <nav
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#c77dff]/45 bg-white/96 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-10px_28px_rgb(60_9_108/0.1)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#c77dff]/40 bg-white/92 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-1px_0_rgb(199_125_255/0.35),0_-8px_20px_-10px_rgb(60_9_108/0.28),0_-24px_40px_-28px_rgb(60_9_108/0.45)] backdrop-blur-xl lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch px-1">
         {rawItems.map((item) => {
@@ -284,7 +284,7 @@ export function MarketBottomNav() {
           const label = t(`market.bottomNav.${item.key}`);
           const destination =
             !session && ["messages", "alerts"].includes(item.key) ? signInHref(item.to) : item.to;
-          const className = `flex min-h-[60px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-[10px] font-bold leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-market-blue focus-visible:ring-offset-1 min-[360px]:text-[11px] ${
+          const className = `k-press flex min-h-[60px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-[10px] font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-market-blue focus-visible:ring-offset-1 min-[360px]:text-[11px] ${
             active ? "text-market-blue" : "text-market-silver-muted hover:text-market-navy"
           }`;
           const inner = (
@@ -292,8 +292,8 @@ export function MarketBottomNav() {
               <span
                 className={
                   active
-                    ? "grid h-8 w-12 place-items-center rounded-2xl bg-market-blue-soft text-market-blue"
-                    : "grid h-8 w-12 place-items-center rounded-2xl"
+                    ? "grid h-8 w-12 place-items-center rounded-2xl bg-[radial-gradient(circle_at_50%_18%,#f3e3ff,#e0aaff)] text-market-blue shadow-[inset_0_1px_0_#fff,0_6px_14px_-8px_rgb(60_9_108/0.65)] transition-transform duration-200"
+                    : "grid h-8 w-12 place-items-center rounded-2xl transition-transform duration-200"
                 }
               >
                 <item.icon className="size-[21px]" strokeWidth={active ? 2.4 : 2} aria-hidden />
