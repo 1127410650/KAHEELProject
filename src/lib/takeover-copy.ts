@@ -13,10 +13,27 @@ export type PopupCopy = { title: string; subtitle: string; mascot: MascotKind };
 
 // Add new lines by appending to these arrays — nothing else needs to change.
 const AR_POOL: PopupCopy[] = [
-  { title: "يا حرام… زعلتني عليك 😂", subtitle: "كنت ضايع بدوني!", mascot: "lounge" },
-  { title: "لك وين مسرّع؟ 🏍️", subtitle: "العرض هون… ما بدو منك غير ثانيتين", mascot: "moto" },
-  { title: "ماشي… روح 👋", subtitle: "بس لا تقول ما قلتلك في عرض", mascot: "wave" },
-  { title: "عم راقبك 👀", subtitle: "شكلك محتاج هالعرض", mascot: "peek" },
+  // مشهد الطرد الساقط
+  { title: "أوف… وصلتك بخير! 📦", subtitle: "امسك العرض يا كابتن، في ناس رح تسرقه منك 😄", mascot: "parcel" },
+  { title: "طلعت من الصندوق مشانك بس! 🙋‍♂️", subtitle: "وإذا ما مسكت العرض، بس بس… بس بس", mascot: "parcel" },
+  { title: "كسّرت ظهري وأنا نازل! 😩", subtitle: "يعني الأقل تشوف العرض شوي", mascot: "parcel" },
+  { title: "الطرد وصل… وأنا كمان 📦", subtitle: "خد العرض ولا تسأل شو صار فيني", mascot: "parcel" },
+  { title: "وقعت من فوق ومو زعلان 😌", subtitle: "المهم وصلك العرض سالم", mascot: "parcel" },
+  // مشهد الشخصية المستلقية
+  { title: "لك يا حرام… زعلتني عليك 😂", subtitle: "كنت ضايع بدوني، اعترف!", mascot: "lounge" },
+  { title: "أنا مرتاح وإنت عم تتفرّج؟ 😎", subtitle: "قوم شوف العرض وريّحني", mascot: "lounge" },
+  // مشهد الدبّاب
+  { title: "لك وين مسرّع يا معلّم؟ 🏍️", subtitle: "العرض هون، ما بدو منك غير ثانيتين", mascot: "moto" },
+  { title: "لحقتك بالدبّاب! 🏍️💨", subtitle: "مشان ما يفوتك هالعرض، شو هالتعب", mascot: "moto" },
+  // مشهد يطل بفضول
+  { title: "عم راقبك من زمان 👀", subtitle: "وشكلك محتاج هالعرض أكتر مني", mascot: "peek" },
+  { title: "لا تخاف… أنا بس 🙈", subtitle: "جاي أذكّرك في عرض ناطرك", mascot: "peek" },
+  { title: "شفتك وإنت بتتجاهلني 😏", subtitle: "طيب شوف العرض وبعدين تجاهلني", mascot: "peek" },
+  // مشهد الوداع
+  { title: "ماشي… روح الله معك 👋", subtitle: "بس لا تقول ما قلتلك في عرض", mascot: "wave" },
+  { title: "سكّر، سكّر… ما في زعل 😌", subtitle: "بس بكرا لا تقول ما حدا خبّرني", mascot: "wave" },
+  { title: "راجع؟ عرفت إنك بترجع 😄", subtitle: "العرض لسا هون، ما راح لحدا", mascot: "wave" },
+  // نصوص عامة سابقة — محفوظة كما هي
   { title: "لا تروح بعيد… كل شي بتدوّر عليه هون بكَحيل 👋", subtitle: "تصفّح العروض القريبة منك بخطوة واحدة", mascot: "wave" },
   { title: "شو رأيك تشوف العروض قبل ما تطير؟ 🎁", subtitle: "عروض اليوم مختارة بعناية لك", mascot: "moto" },
   { title: "عم نجهّزلك أحلى العروض… تفضّل شوفها", subtitle: "مزوّدون موثوقون وأسعار واضحة", mascot: "lounge" },
@@ -30,15 +47,32 @@ const AR_POOL: PopupCopy[] = [
   { title: "صراحة؟ العرض هيدا حلو 🔥", subtitle: "وإذا ما عجبك، سكّر ونحنا مو زعلانين", mascot: "lounge" },
   { title: "دقيقة بس وبتكفّي ⏱️", subtitle: "شوف العروض وبعدين إنت وشطارتك", mascot: "moto" },
   { title: "لا تقلي ما شفت! 🙈", subtitle: "خلص صار عندك علم… القرار إلك", mascot: "peek" },
-  { title: "العرض عم يستنّاك 🎁", subtitle: "وإذا تأخرت… بيروح لغيرك", mascot: "wave" },
+  { title: "العرض عم يستنّاك 🎁", subtitle: "وإذا تأخرت… بيروح لغيرك", mascot: "parcel" },
   { title: "كَحيل بيحبك 💜", subtitle: "وعشان هيك جابلك أحلى العروض", mascot: "lounge" },
 ];
 
 const EN_POOL: PopupCopy[] = [
-  { title: "Aww… you left without me 😂", subtitle: "Admit it, you were lost", mascot: "lounge" },
-  { title: "Where's the rush? 🏍️", subtitle: "The offer is right here — two seconds, tops", mascot: "moto" },
-  { title: "Fine… off you go 👋", subtitle: "Just don't say we never mentioned an offer", mascot: "wave" },
-  { title: "I'm watching you 👀", subtitle: "Looks like you need this one", mascot: "peek" },
+  // Parcel drop
+  { title: "Phew… delivered in one piece! 📦", subtitle: "Grab the offer, captain — someone else is eyeing it 😄", mascot: "parcel" },
+  { title: "I climbed out of the box just for you! 🙋‍♂️", subtitle: "And if you skip the offer… well, well", mascot: "parcel" },
+  { title: "I nearly broke my back landing here! 😩", subtitle: "The least you can do is take a look", mascot: "parcel" },
+  { title: "The parcel arrived… and so did I 📦", subtitle: "Take the offer, don't ask how I got here", mascot: "parcel" },
+  { title: "Fell from up there and I'm still fine 😌", subtitle: "What matters is your offer arrived safe", mascot: "parcel" },
+  // Lounging
+  { title: "Aww… now you got me sulking 😂", subtitle: "You were lost without me, admit it!", mascot: "lounge" },
+  { title: "I'm comfy and you're just watching? 😎", subtitle: "Go check the offer and put me at ease", mascot: "lounge" },
+  // Scooter
+  { title: "Where's the rush, boss? 🏍️", subtitle: "The offer is right here — two seconds, tops", mascot: "moto" },
+  { title: "Caught up with you on my scooter! 🏍️💨", subtitle: "All so you wouldn't miss this one", mascot: "moto" },
+  // Peeking
+  { title: "I've been watching a while 👀", subtitle: "And you need this offer more than I do", mascot: "peek" },
+  { title: "Don't worry… it's only me 🙈", subtitle: "Just here to mention an offer waiting for you", mascot: "peek" },
+  { title: "I saw you ignoring me 😏", subtitle: "Fine — see the offer, then ignore me", mascot: "peek" },
+  // Farewell
+  { title: "Alright… take care 👋", subtitle: "Just don't say we never mentioned an offer", mascot: "wave" },
+  { title: "Close it, close it… no hard feelings 😌", subtitle: "Only don't say nobody told you tomorrow", mascot: "wave" },
+  { title: "Back already? Knew you would 😄", subtitle: "The offer is still here, nobody took it", mascot: "wave" },
+  // Earlier general lines — kept as they were
   { title: "Everything you need is right here 👋", subtitle: "Browse nearby offers in one tap", mascot: "wave" },
   { title: "Care to see today's offers first? 🎁", subtitle: "Hand-picked deals, just for you", mascot: "moto" },
   { title: "We lined up the best offers for you", subtitle: "Trusted providers, clear prices", mascot: "lounge" },
@@ -52,7 +86,7 @@ const EN_POOL: PopupCopy[] = [
   { title: "Honestly? This one is good 🔥", subtitle: "And if you don't like it, close it — no hard feelings", mascot: "lounge" },
   { title: "One minute is plenty ⏱️", subtitle: "See the offers, then it's all yours", mascot: "moto" },
   { title: "Don't say we didn't tell you! 🙈", subtitle: "Now you know — the call is yours", mascot: "peek" },
-  { title: "The offer is waiting 🎁", subtitle: "Wait too long and someone else takes it", mascot: "wave" },
+  { title: "The offer is waiting 🎁", subtitle: "Wait too long and someone else takes it", mascot: "parcel" },
   { title: "Kaheel loves you 💜", subtitle: "That's why we brought you the best offers", mascot: "lounge" },
 ];
 

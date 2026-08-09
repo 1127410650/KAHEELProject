@@ -63,13 +63,14 @@ const SIDE_LABEL: Record<(typeof SIDES)[number], [string, string]> = {
   left: ["من اليسار", "Left"],
   right: ["من اليمين", "Right"],
 };
-const MASCOTS = ["auto", "moto", "lounge", "wave", "peek"] as const;
+const MASCOTS = ["auto", "moto", "lounge", "wave", "peek", "parcel"] as const;
 const MASCOT_LABEL: Record<(typeof MASCOTS)[number], [string, string]> = {
   auto: ["حسب النص", "Match copy"],
   moto: ["على الدبّاب", "Scooter"],
   lounge: ["مرتاح", "Lounging"],
   wave: ["يلوّح", "Waving"],
   peek: ["يطل بفضول", "Peeking"],
+  parcel: ["طرد ساقط", "Parcel drop"],
 };
 
 function AdminCampaignsPage() {

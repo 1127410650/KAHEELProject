@@ -74,16 +74,21 @@ function planCard(state: PopupSessionState, ar: boolean): CardPlan {
   let copyIndex = Math.floor(Math.random() * size);
   if (size > 1 && copyIndex === state.lastCopy) copyIndex = (copyIndex + 1) % size;
 
+  // Keep wording and drawing telling the same joke: when the mascot would repeat
+  // back to back, walk the pool for another line instead of swapping the drawing.
+  for (let step = 0; step < size; step += 1) {
+    const candidate = (copyIndex + step) % size;
+    if (candidate === state.lastCopy) continue;
+    if (popupCopyAt(ar, candidate).mascot !== state.lastMascot) {
+      copyIndex = candidate;
+      break;
+    }
+  }
+
   const sides = POPUP_SIDES.filter((side) => side !== state.lastSide);
   const side = (sides[Math.floor(Math.random() * sides.length)] ?? "bottom") as PopupSide;
 
-  let mascot = popupCopyAt(ar, copyIndex).mascot;
-  if (mascot === state.lastMascot) {
-    const others: MascotKind[] = (["moto", "lounge", "wave", "peek"] as MascotKind[]).filter(
-      (kind) => kind !== state.lastMascot,
-    );
-    mascot = others[Math.floor(Math.random() * others.length)] ?? mascot;
-  }
+  const mascot: MascotKind = popupCopyAt(ar, copyIndex).mascot;
   return { copyIndex, mascot, side, campaignIndex: state.shown };
 }
 
