@@ -7,6 +7,13 @@ import {
 } from "libphonenumber-js";
 
 import { supabase } from "@/integrations/supabase/client";
+import {
+  FALLBACK_MARKET_ISO2,
+  defaultMarketIso2,
+  isEnabledMarket,
+  loadDefaultMarket,
+  loadEnabledMarkets,
+} from "@/lib/mkt-markets";
 
 export interface MktCountry {
   id: string;
