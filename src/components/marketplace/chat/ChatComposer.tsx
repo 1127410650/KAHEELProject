@@ -49,7 +49,15 @@ interface Props {
   onSent: () => void;
   onBankShare: () => void;
   onBankRequest: () => void;
+  /** Throttled "typing…" signal for the peer. */
+  onTyping?: () => void;
+  /**
+   * When supplied, plain text is handed to the parent so it can show the bubble
+   * immediately and own the retry; the composer clears the box right away.
+   */
+  onTextSend?: (text: string) => void;
 }
+
 
 type Sheet = "location" | "contact" | null;
 
@@ -68,7 +76,10 @@ export function ChatComposer({
   onSent,
   onBankShare,
   onBankRequest,
+  onTyping,
+  onTextSend,
 }: Props) {
+
   const { t } = useI18n();
   const [body, setBody] = useState(initialDraft ?? "");
   const [busy, setBusy] = useState(false);
@@ -120,11 +131,28 @@ export function ChatComposer({
   function sendText() {
     const text = body.trim();
     if (!text) return;
+    if (onTextSend) {
+      // Optimistic path: the bubble appears instantly, the parent confirms it.
+      setBody("");
+      onTextSend(text);
+      return;
+    }
     void guard(async () => {
       await sendMessage(conversationId, "text", text);
       setBody("");
     });
   }
+
+  // "typing…" is throttled so a fast typist produces one signal every 3s.
+  const lastTyping = useRef(0);
+  function signalTyping() {
+    if (!onTyping) return;
+    const now = Date.now();
+    if (now - lastTyping.current < 3000) return;
+    lastTyping.current = now;
+    onTyping();
+  }
+
 
   function pick(kind: "image" | "video" | "file") {
     pickKind.current = kind;
@@ -337,7 +365,11 @@ export function ChatComposer({
           rows={1}
           value={body}
           disabled={disabled || busy}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={(e) => {
+            setBody(e.target.value);
+            signalTyping();
+          }}
+
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();

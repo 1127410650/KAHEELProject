@@ -3307,6 +3307,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           deleted_by: string | null
+          delivered_at: string | null
           id: string
           kind: string
           moderation_state: string
@@ -3323,6 +3324,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           deleted_by?: string | null
+          delivered_at?: string | null
           id?: string
           kind?: string
           moderation_state?: string
@@ -3339,6 +3341,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           deleted_by?: string | null
+          delivered_at?: string | null
           id?: string
           kind?: string
           moderation_state?: string
@@ -6685,6 +6688,35 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_typing: {
+        Row: {
+          conversation_id: string
+          typing_until: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          typing_until?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          typing_until?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_typing_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_user_activity: {
         Row: {
           ad_id: string | null
@@ -8538,6 +8570,10 @@ export type Database = {
         Args: { _conversation_id: string }
         Returns: Json
       }
+      mkt_conversation_mark_delivered: {
+        Args: { _conversation_id: string }
+        Returns: undefined
+      }
       mkt_conversation_mark_read: {
         Args: { _conversation_id: string }
         Returns: undefined
@@ -8825,6 +8861,7 @@ export type Database = {
           body: string
           created_at: string
           deleted_at: string
+          delivered_at: string
           id: string
           kind: string
           mine: boolean
@@ -9616,6 +9653,11 @@ export type Database = {
         Returns: boolean
       }
       mkt_track: { Args: { _events: Json }; Returns: number }
+      mkt_typing_peer: { Args: { _conversation_id: string }; Returns: boolean }
+      mkt_typing_ping: {
+        Args: { _conversation_id: string; _seconds?: number }
+        Returns: undefined
+      }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       mkt_user_can: { Args: { _perm: string; _uid: string }; Returns: boolean }
       mkt_wallet_for_listing: { Args: { _id: string }; Returns: string }

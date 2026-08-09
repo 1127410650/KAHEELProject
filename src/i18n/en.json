@@ -3336,7 +3336,24 @@
         "you": "You:",
         "attachTitle": "Review before sending",
         "voiceTitle": "Review voice message"
-      }
+      },
+      "receipt": {
+        "sending": "Sending…",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "failed": "Failed to send",
+        "retry": "Retry"
+      },
+      "day": {
+        "today": "Today",
+        "yesterday": "Yesterday"
+      },
+      "typing": "typing…",
+      "emptyTitle": "No messages yet",
+      "emptyHint": "Send the first message to start the conversation.",
+      "newMessages": "New messages",
+      "jumpToLatest": "Jump to latest"
     },
     "fields": {
       "home": "Home",

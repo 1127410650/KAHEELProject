@@ -33,6 +33,33 @@ export function formatDateTime(value: string | Date | null | undefined): string 
   return `${get("day")}/${get("month")}/${get("year")} ${get("hour")}:${get("minute")}`;
 }
 
+/** HH:mm (24h), Asia/Riyadh, Latin digits — for chat bubbles. */
+export function formatTime(value: string | Date | null | undefined): string {
+  if (!value) return "";
+  const date = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(date.getTime())) return "";
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: TIMEZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return `${get("hour")}:${get("minute")}`;
+}
+
+/** YYYY-MM-DD key of an instant in Asia/Riyadh, used to group chat by day. */
+export function dayKeyInRiyadh(value: string | Date): string {
+  const date = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
 /** Today's date in Asia/Riyadh as YYYY-MM-DD (for date inputs). */
 export function todayInRiyadh(): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
