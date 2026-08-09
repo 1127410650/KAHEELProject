@@ -49,6 +49,9 @@ import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/Listi
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
 import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
+import { HomeSearchBar } from "@/components/marketplace/home/HomeSearchBar";
+import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
+
 import { Reveal } from "@/components/marketplace/home/Reveal";
 
 import { Button } from "@/components/ui/button";
@@ -157,30 +160,17 @@ export function MarketHome() {
   return (
     <div className="bg-white pb-5 text-[#240046]">
       <div className="mx-auto w-full max-w-[1240px] space-y-4 px-3 pb-3 pt-3 sm:space-y-6 sm:px-5 lg:px-8">
-        <div className="k-surface flex min-h-[56px] overflow-hidden rounded-[20px] focus-within:border-[#9d4edd]/60 focus-within:ring-2 focus-within:ring-[#7b2cbf]/30 sm:min-h-[60px]">
-          <Link
-            to="/search"
-            search={{}}
-            aria-label={t("market.homeV2.searchPlaceholder" as HomeKey)}
-            className="flex min-w-0 flex-1 items-center gap-3 px-4 text-xs font-medium text-[#5a189a] outline-none sm:text-sm"
-          >
-            <Search className="size-5 shrink-0 text-[#3c096c] sm:size-6" aria-hidden />
-            <span className="truncate">{t("market.homeV2.searchPlaceholder" as HomeKey)}</span>
-          </Link>
-          <Link
-            to="/search"
-            search={{ filters: 1 }}
-            aria-label={t("market.homeV2.detailedSearch" as HomeKey)}
-            className="k-press group m-1.5 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[15px] bg-[linear-gradient(140deg,#7b2cbf,#5a189a)] px-3 text-[11px] font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] min-[380px]:px-4 min-[380px]:text-xs"
-          >
-            <SlidersHorizontal className="size-4" aria-hidden />
-            <span>{t("market.homeV2.detailedSearch" as HomeKey)}</span>
-          </Link>
-        </div>
+        <HomeSearchBar
+          label={t("market.homeV2.searchPlaceholder" as HomeKey)}
+          detailedLabel={t("market.homeV2.detailedSearch" as HomeKey)}
+        />
 
         <PromoCarousel addHref={addHref} />
 
+        <KaheelStories />
+
         <Reveal as="section">
+
           <section aria-labelledby="home-fields-title">
             <h2 id="home-fields-title" className="sr-only">
               {t("market.homeV2.mainFields" as HomeKey)}

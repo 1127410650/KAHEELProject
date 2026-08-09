@@ -6534,6 +6534,122 @@ export type Database = {
           },
         ]
       }
+      mkt_stories: {
+        Row: {
+          body_ar: string
+          body_en: string
+          click_url: string
+          clicks: number
+          created_at: string
+          created_by: string | null
+          cta_ar: string
+          cta_en: string
+          ends_at: string | null
+          gradient: string
+          id: string
+          image_height: number
+          image_path: string | null
+          image_width: number
+          mascot: string
+          mascot_pose: string
+          priority: number
+          slug: string
+          starts_at: string
+          status: string
+          title_ar: string
+          title_en: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          body_ar?: string
+          body_en?: string
+          click_url?: string
+          clicks?: number
+          created_at?: string
+          created_by?: string | null
+          cta_ar?: string
+          cta_en?: string
+          ends_at?: string | null
+          gradient?: string
+          id?: string
+          image_height?: number
+          image_path?: string | null
+          image_width?: number
+          mascot?: string
+          mascot_pose?: string
+          priority?: number
+          slug: string
+          starts_at?: string
+          status?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          body_ar?: string
+          body_en?: string
+          click_url?: string
+          clicks?: number
+          created_at?: string
+          created_by?: string | null
+          cta_ar?: string
+          cta_en?: string
+          ends_at?: string | null
+          gradient?: string
+          id?: string
+          image_height?: number
+          image_path?: string | null
+          image_width?: number
+          mascot?: string
+          mascot_pose?: string
+          priority?: number
+          slug?: string
+          starts_at?: string
+          status?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
+      mkt_story_events: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          session_key: string | null
+          story_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          session_key?: string | null
+          story_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          session_key?: string | null
+          story_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_story_events_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_structure_guard: {
         Row: {
           disabled_at: string | null
@@ -9801,6 +9917,10 @@ export type Database = {
       mkt_store_visible: { Args: { _storefront_id: string }; Returns: boolean }
       mkt_store_zones_save: {
         Args: { _rows: Json; _storefront_id: string }
+        Returns: undefined
+      }
+      mkt_story_track: {
+        Args: { _kind: string; _session_key?: string; _story_id: string }
         Returns: undefined
       }
       mkt_submit_appeal: {
