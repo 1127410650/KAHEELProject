@@ -416,7 +416,6 @@ export function serverRedirectFor(pathname: string): string | null {
   if (!found || found.route_type !== "legacy" || !found.legacy_redirect) return null;
   return withLocalePrefix(applyParams(found.legacy_redirect, found.path, path), locale);
 }
-}
 
 
 export function routeRuleFor(pathname: string): RouteRule | null {
