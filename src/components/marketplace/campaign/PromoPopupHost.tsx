@@ -1,95 +1,60 @@
 /**
- * Promo popup host — one light card at a time, on a paced rotation.
+ * مضيف الشخصية عند اللمس — «تسقط الشخصية، وتُفتح الوجهة».
  *
- * Mounted once in the root layout so a card can appear anywhere the visitor is
- * browsing, and unmounted content-wise the rest of the time (it renders `null`
- * whenever no card is due, so there is nothing on the page to cost CPU).
+ * السلوك المعتمد من صاحب المنصة: لا ظهور تلقائي مقتحم. عند لمس المستخدم
+ * لعنصر (رابط/زر/وجهة) تسقط الشخصية من أعلى إلى منتصف الشاشة بحركة سقوط
+ * وارتداد لطيف، ثم تختفي بنعومة. الوجهة تُفتح في نفس اللحظة — البطاقة لا
+ * تعترض الضغطة ولا تؤخّرها أبدًا.
  *
- * Zero layout shift by construction: the card is `position: fixed` with
- * `pointer-events-none` on its wrapper, mounts only after hydration, and never
- * participates in document flow. There is no backdrop, no scroll lock, no
- * focus trap — the page stays fully usable underneath.
+ * ولمزحة الكبس المتكرر: خمس ضغطات سريعة متتالية تُنزل «الزعيم كَحيلان» بمزحة
+ * لطيفة عن كثرة الكبس، بتدوير بلا تكرار متتالٍ.
  *
- * All rhythm and politeness rules live in `@/lib/popup-pacing`.
+ * ضمانات التصميم:
+ *  • `position: fixed` + `pointer-events-none` على الغلاف ⇒ صفر هزّة تخطيط
+ *    وصفر اعتراض للتمرير أو الضغط. لا حجب للشاشة ولا قفل تمرير.
+ *  • الاستماع في مرحلة الالتقاط بلا `preventDefault` ⇒ الملاحة تكمل طبيعية.
+ *  • احترام `prefers-reduced-motion`: ظهور واختفاء ناعم بلا سقوط أو ارتداد.
+ *  • بوابات الأدب من `@/lib/popup-pacing`: لا شيء أثناء الكتابة أو مكالمة أو
+ *    في المسارات الهادئة، ولا شيء بعد «عدم الإظهار اليوم».
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { EyeOff, X } from "lucide-react";
 
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
-import { trackCampaign, useLiveCampaigns } from "@/lib/mkt-campaigns";
+import {
+  DROP_COOLDOWN_MS,
+  DROP_VISIBLE_MS,
+  emptyBurst,
+  prefersReducedMotion,
+  registerTap,
+  tapTarget,
+} from "@/lib/mascot-tap";
 import { useCallCenter } from "@/lib/mkt-call-center";
 import {
   isQuietPath,
   isTypingNow,
-  loadPopupSession,
   mutePopups,
   popupsMuted,
   popupsSuppressed,
-  savePopupSession,
   usePopupPacing,
-  type PopupSessionState,
 } from "@/lib/popup-pacing";
 import {
-  POPUP_SIDES,
   popupCopyAt,
   popupCopyCount,
-  type PopupSide,
+  rapidTapCopyAt,
+  rapidTapCopyCount,
 } from "@/lib/takeover-copy";
 
-/** A close faster than this reads as irritation, not as a decision. */
-const QUICK_CLOSE_MS = 2_000;
-/** Blocked attempts retry on this cheap cadence instead of polling. */
-const RETRY_MS = 20_000;
-/** Browsing counts as "active" while the visitor touched the page recently. */
-const ACTIVE_WINDOW_MS = 90_000;
-/** Drag distance that dismisses the card. */
-const SWIPE_PX = 60;
-
-const POSITION: Record<PopupSide, string> = {
-  bottom: "inset-x-0 bottom-20 justify-center sm:bottom-6",
-  top: "inset-x-0 top-16 justify-center",
-  left: "inset-y-0 left-0 items-end justify-start pb-24 sm:items-center sm:pb-0",
-  right: "inset-y-0 right-0 items-end justify-end pb-24 sm:items-center sm:pb-0",
-};
-
-const ENTER: Record<PopupSide, string> = {
-  bottom: "animate-[kaheel-popup-in-bottom_0.42s_cubic-bezier(0.16,1,0.3,1)]",
-  top: "animate-[kaheel-popup-in-top_0.42s_cubic-bezier(0.16,1,0.3,1)]",
-  left: "animate-[kaheel-popup-in-left_0.42s_cubic-bezier(0.16,1,0.3,1)]",
-  right: "animate-[kaheel-popup-in-right_0.42s_cubic-bezier(0.16,1,0.3,1)]",
-};
-
-interface CardPlan {
-  copyIndex: number;
+interface DropCard {
+  /** مفتاح يجبر إعادة تشغيل الحركة عند كل سقوط. */
+  key: number;
+  title: string;
+  subtitle: string;
   mascot: MascotKind;
-  side: PopupSide;
-  campaignIndex: number;
-}
-
-/** Picks the next line/mascot/side, never repeating the previous one. */
-function planCard(state: PopupSessionState, ar: boolean): CardPlan {
-  const size = popupCopyCount(ar);
-  let copyIndex = Math.floor(Math.random() * size);
-  if (size > 1 && copyIndex === state.lastCopy) copyIndex = (copyIndex + 1) % size;
-
-  // Keep wording and drawing telling the same joke: when the mascot would repeat
-  // back to back, walk the pool for another line instead of swapping the drawing.
-  for (let step = 0; step < size; step += 1) {
-    const candidate = (copyIndex + step) % size;
-    if (candidate === state.lastCopy) continue;
-    if (popupCopyAt(ar, candidate).mascot !== state.lastMascot) {
-      copyIndex = candidate;
-      break;
-    }
-  }
-
-  const sides = POPUP_SIDES.filter((side) => side !== state.lastSide);
-  const side = (sides[Math.floor(Math.random() * sides.length)] ?? "bottom") as PopupSide;
-
-  const mascot: MascotKind = popupCopyAt(ar, copyIndex).mascot;
-  return { copyIndex, mascot, side, campaignIndex: state.shown };
+  /** مزحة الكبس المتكرر تُقرأ بنبرة مختلفة، فنميّزها للتوثيق فقط. */
+  rapid: boolean;
 }
 
 export function PromoPopupHost() {
@@ -98,295 +63,140 @@ export function PromoPopupHost() {
   const pacing = usePopupPacing();
   const { call } = useCallCenter();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const { data: campaigns } = useLiveCampaigns("welcome_takeover");
 
-  const [plan, setPlan] = useState<CardPlan | null>(null);
-  const [closing, setClosing] = useState(false);
-  const [drag, setDrag] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [card, setCard] = useState<DropCard | null>(null);
+  const [leaving, setLeaving] = useState(false);
 
-  const cardRef = useRef<HTMLDivElement>(null);
-  const shownAtRef = useRef(0);
-  const lastActivityRef = useRef(Date.now());
-  const pageReadyAtRef = useRef(Date.now());
-  const sessionRef = useRef<PopupSessionState>({
-    shown: 0,
-    lastCopy: -1,
-    lastMascot: "",
-    lastSide: "",
-    quickCloses: 0,
-    stopped: false,
-  });
-  const hydratedRef = useRef(false);
+  const burstRef = useRef(emptyBurst());
+  const lastDropRef = useRef(0);
+  const lastCopyRef = useRef(-1);
+  const lastRapidRef = useRef(-1);
+  const keyRef = useRef(0);
+  const hideTimerRef = useRef(0);
 
-  // localStorage/sessionStorage are only readable after hydration.
-  useEffect(() => {
-    sessionRef.current = loadPopupSession();
-    hydratedRef.current = true;
-  }, []);
-
-  // Any page navigation restarts the settle window.
-  useEffect(() => {
-    pageReadyAtRef.current = Date.now();
-  }, [pathname]);
-
-  // Cheap activity signal: passive listeners that only stamp a timestamp.
-  useEffect(() => {
-    const stamp = () => {
-      lastActivityRef.current = Date.now();
-    };
-    const events: (keyof WindowEventMap)[] = ["pointerdown", "scroll", "keydown"];
-    events.forEach((event) => window.addEventListener(event, stamp, { passive: true }));
-    document.addEventListener("visibilitychange", stamp, { passive: true });
-    return () => {
-      events.forEach((event) => window.removeEventListener(event, stamp));
-      document.removeEventListener("visibilitychange", stamp);
-    };
-  }, []);
-
+  /** بوابات الأدب: أي واحدة منها تمنع المزحة بلا أن تمنع الوجهة. */
   const blocked = useCallback((): boolean => {
-    if (!hydratedRef.current) return true;
     if (!pacing.enabled) return true;
-    if (sessionRef.current.stopped) return true;
-    if (sessionRef.current.shown >= pacing.maxPerSession) return true;
-    if (popupsMuted()) return true;
-    if (popupsSuppressed()) return true;
+    if (popupsMuted() || popupsSuppressed()) return true;
     if (call) return true;
     if (isQuietPath(pathname)) return true;
     if (isTypingNow()) return true;
     if (document.visibilityState !== "visible") return true;
-    if (Date.now() - pageReadyAtRef.current < pacing.pageSettleMs) return true;
-    if (Date.now() - lastActivityRef.current > ACTIVE_WINDOW_MS) return true;
     return false;
-  }, [call, pacing, pathname]);
+  }, [call, pacing.enabled, pathname]);
 
-  // One self-rescheduling timer — no interval, no work while idle.
+  const dismiss = useCallback((mute?: boolean) => {
+    window.clearTimeout(hideTimerRef.current);
+    if (mute) mutePopups(24);
+    setLeaving(true);
+    hideTimerRef.current = window.setTimeout(() => {
+      setCard(null);
+      setLeaving(false);
+    }, 220);
+  }, []);
+
+  const show = useCallback(
+    (rapid: boolean) => {
+      keyRef.current += 1;
+      let copy;
+      if (rapid) {
+        const size = rapidTapCopyCount(ar);
+        let index = Math.floor(Math.random() * size);
+        if (size > 1 && index === lastRapidRef.current) index = (index + 1) % size;
+        lastRapidRef.current = index;
+        copy = rapidTapCopyAt(ar, index);
+      } else {
+        const size = popupCopyCount(ar);
+        let index = Math.floor(Math.random() * size);
+        if (size > 1 && index === lastCopyRef.current) index = (index + 1) % size;
+        lastCopyRef.current = index;
+        copy = popupCopyAt(ar, index);
+      }
+      setLeaving(false);
+      setCard({ key: keyRef.current, rapid, ...copy });
+
+      window.clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = window.setTimeout(() => dismiss(), DROP_VISIBLE_MS);
+    },
+    [ar, dismiss],
+  );
+
+  // الاستماع في مرحلة الالتقاط: نقرأ الحدث فقط، ثم نترك المتصفح يكمل عمله.
   useEffect(() => {
-    if (plan) return;
-    let timer = 0;
-    const shown = sessionRef.current.shown;
-    const delay = shown === 0 ? pacing.firstDelayMs : pacing.intervalMs;
-
-    const attempt = () => {
-      if (blocked()) {
-        timer = window.setTimeout(attempt, RETRY_MS);
+    const onTap = (event: PointerEvent | MouseEvent) => {
+      const target = tapTarget(event);
+      if (!target) return;
+      const now = Date.now();
+      const rapid = registerTap(burstRef.current, now);
+      if (blocked()) return;
+      if (rapid) {
+        show(true);
+        lastDropRef.current = now;
         return;
       }
-      setPlan(planCard(sessionRef.current, ar));
+      if (now - lastDropRef.current < DROP_COOLDOWN_MS) return;
+      lastDropRef.current = now;
+      show(false);
     };
+    window.addEventListener("pointerdown", onTap, { capture: true, passive: true });
+    return () => window.removeEventListener("pointerdown", onTap, { capture: true });
+  }, [blocked, show]);
 
-    timer = window.setTimeout(attempt, delay);
-    return () => window.clearTimeout(timer);
-  }, [plan, pacing, blocked, ar]);
-
-  const campaign = useMemo(() => {
-    const list = campaigns ?? [];
-    if (!plan || list.length === 0) return undefined;
-    return list[plan.campaignIndex % list.length];
-  }, [campaigns, plan]);
-
-  // Count the impression once the card is actually on screen.
+  // الملاحة إلى وجهة جديدة تُنهي المزحة بهدوء — الشخصية لا تتبع المستخدم.
   useEffect(() => {
-    if (!plan) return;
-    shownAtRef.current = Date.now();
-    const next: PopupSessionState = {
-      ...sessionRef.current,
-      shown: sessionRef.current.shown + 1,
-      lastCopy: plan.copyIndex,
-      lastMascot: plan.mascot,
-      lastSide: plan.side,
-    };
-    sessionRef.current = next;
-    savePopupSession(next);
-    if (campaign) trackCampaign(campaign.id, "impression");
-  }, [plan, campaign]);
+    window.clearTimeout(hideTimerRef.current);
+    setCard(null);
+    setLeaving(false);
+  }, [pathname]);
 
-  const close = useCallback(
-    (reason: "user" | "idle" | "click") => {
-      if (reason === "user") {
-        const fast = Date.now() - shownAtRef.current < QUICK_CLOSE_MS;
-        const quickCloses = fast ? sessionRef.current.quickCloses + 1 : 0;
-        const next: PopupSessionState = {
-          ...sessionRef.current,
-          quickCloses,
-          // Two impatient closes in a row: stop for the rest of the session.
-          stopped: quickCloses >= 2,
-        };
-        sessionRef.current = next;
-        savePopupSession(next);
-      }
-      setClosing(true);
-      setMenuOpen(false);
-      window.setTimeout(() => {
-        setClosing(false);
-        setDrag(0);
-        setPlan(null);
-      }, 200);
-    },
-    [],
-  );
+  useEffect(() => () => window.clearTimeout(hideTimerRef.current), []);
 
-  // Escape, tap outside and the idle timeout all dismiss the card.
-  useEffect(() => {
-    if (!plan) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") close("user");
-    };
-    const onPointer = (event: PointerEvent) => {
-      if (!cardRef.current?.contains(event.target as Node)) close("idle");
-    };
-    const idle = window.setTimeout(() => close("idle"), pacing.autoDismissMs);
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("pointerdown", onPointer);
-    return () => {
-      window.clearTimeout(idle);
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("pointerdown", onPointer);
-    };
-  }, [plan, close, pacing.autoDismissMs]);
+  if (!card) return null;
 
-  if (!plan) return null;
-
-  const fallback = popupCopyAt(ar, plan.copyIndex);
-  const title = (ar ? campaign?.title_ar : campaign?.title_en) || fallback.title;
-  const subtitle = (ar ? campaign?.subtitle_ar : campaign?.subtitle_en) || fallback.subtitle;
-  const badge = ar ? campaign?.badge_ar : campaign?.badge_en;
-  const cta = ar ? campaign?.cta_ar : campaign?.cta_en;
-  const href = campaign?.click_url || "/search";
-  const side: PopupSide =
-    campaign?.popup_side && campaign.popup_side !== "auto"
-      ? (campaign.popup_side as PopupSide)
-      : plan.side;
-  const mascot: MascotKind =
-    campaign?.popup_mascot && campaign.popup_mascot !== "auto"
-      ? (campaign.popup_mascot as MascotKind)
-      : ((new URLSearchParams(window.location.search).get("m") as MascotKind) || plan.mascot);
-  const vertical = side === "top" || side === "bottom";
-  /** مشهد التعارف: بطاقة مضغوطة عمودية تملؤها الشخصيتان. */
-  const duo = mascot === "duo";
-
-  // Finger drag: follow the finger, dismiss past the threshold, spring back otherwise.
-  let startX = 0;
-  let startY = 0;
-  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    startX = event.clientX;
-    startY = event.clientY;
-  };
-  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.buttons !== 1) return;
-    const delta = vertical ? event.clientY - startY : event.clientX - startX;
-    setDrag(delta);
-  };
-  const onPointerUp = () => {
-    if (Math.abs(drag) > SWIPE_PX) close("user");
-    else setDrag(0);
-  };
+  const calm = prefersReducedMotion();
+  const animation = leaving
+    ? "animate-[kaheel-tap-fade_0.22s_ease-in_forwards]"
+    : calm
+      ? "animate-[kaheel-scrim-in_0.2s_ease-out]"
+      : "animate-[kaheel-tap-drop_0.95s_cubic-bezier(0.34,1.56,0.64,1)_both]";
 
   return (
-    <>
-      {/*
-        طبقة زجاجية شفافة جدًا: ضباب خفيف وتدرج بنفسجي باهت يبقي الصفحة ظاهرة
-        وراءه بوضوح. `pointer-events-none` فالتصفح يكمل تحتها بلا حجب.
-      */}
+    <div
+      className="pointer-events-none fixed inset-0 z-[80] flex items-center justify-center p-4"
+      aria-live="polite"
+    >
       <div
-        aria-hidden
-        className={`pointer-events-none fixed inset-0 z-[79] bg-gradient-to-b from-[#c77dff]/10 via-[#7b2cbf]/[0.07] to-[#240046]/10 backdrop-blur-[3px] animate-[kaheel-scrim-in_0.35s_ease-out] motion-reduce:animate-none ${
-          closing ? "opacity-0 transition-opacity duration-200" : ""
-        }`}
-      />
-      <div
-        className={`pointer-events-none fixed z-[80] flex p-3 sm:p-4 ${POSITION[side]}`}
-        aria-live="polite"
+        key={card.key}
+        data-kaheel-drop-card
+        role="status"
+        className={`pointer-events-auto relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
       >
-      <div
-
-        ref={cardRef}
-        role="dialog"
-        aria-label={title}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-        style={
-          drag
-            ? {
-                transform: vertical ? `translateY(${drag}px)` : `translateX(${drag}px)`,
-                opacity: Math.max(0.35, 1 - Math.abs(drag) / 220),
-                transition: "none",
-              }
-            : undefined
-        }
-        className={`pointer-events-auto relative flex w-full touch-pan-y rounded-3xl border border-white/60 bg-white/90 shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none ${
-          duo
-            ? "max-w-[16.5rem] flex-col items-center gap-1 p-2.5 pb-3"
-            : "max-w-[22rem] items-center gap-3 p-3 pe-9"
-        } ${closing ? "animate-[kaheel-popup-out_0.2s_ease-in_forwards]" : ENTER[side]}`}
-      >
-        <div className="absolute end-2 top-2 flex flex-col items-center gap-1">
+        <div className="absolute end-2 top-2 flex gap-1">
           <button
             type="button"
-            onClick={() => close("user")}
+            onClick={() => dismiss(true)}
+            aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
+            className="grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
+          >
+            <EyeOff className="size-3" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => dismiss()}
             aria-label={ar ? "إغلاق" : "Close"}
-            className="grid size-7 place-items-center rounded-full bg-[#240046]/80 text-white transition-transform hover:scale-105 motion-reduce:transition-none"
+            className="grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
           >
-            <X className="size-3.5" aria-hidden />
-          </button>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-label={ar ? "خيارات الإظهار" : "Display options"}
-            aria-expanded={menuOpen}
-            className="grid size-7 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c] transition-transform hover:scale-105 motion-reduce:transition-none"
-          >
-            <EyeOff className="size-3.5" aria-hidden />
+            <X className="size-3" aria-hidden />
           </button>
         </div>
 
-        {menuOpen ? (
-          <div className="absolute end-10 top-8 z-10 rounded-2xl border border-white/70 bg-white p-1 shadow-lg">
-            <button
-              type="button"
-              onClick={() => {
-                mutePopups(24);
-                close("user");
-              }}
-              className="whitespace-nowrap rounded-xl px-3 py-2 text-[11px] font-bold text-[#3c096c] hover:bg-[#f3ecff]"
-            >
-              {ar ? "عدم الإظهار اليوم" : "Don't show today"}
-            </button>
-          </div>
-        ) : null}
+        <PopupMascot kind={card.mascot} />
 
-        <PopupMascot kind={mascot} />
-
-        <div className={`min-w-0 ${duo ? "w-full text-center" : "flex-1 text-start"}`}>
-          {badge ? (
-            <span className="inline-flex rounded-full bg-[#240046] px-2 py-0.5 text-[10px] font-bold text-white">
-              {badge}
-            </span>
-          ) : null}
-          <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{title}</p>
-          {subtitle ? (
-            <p
-              className={`${duo ? "line-clamp-3" : "line-clamp-2"} text-[11px] font-bold leading-snug text-[#5a189a]`}
-            >
-              {subtitle}
-            </p>
-          ) : null}
-          <a
-            href={href}
-            onClick={() => {
-              if (campaign) trackCampaign(campaign.id, "click");
-              close("click");
-            }}
-            className={`inline-flex min-h-8 items-center justify-center rounded-full bg-[#3c096c] px-4 text-[11px] font-bold text-white shadow-[0_8px_18px_rgb(60_9_108/0.25)] ${duo ? "mt-1.5" : "mt-2"}`}
-          >
-            {cta || (ar ? "تصفح الآن" : "Browse now")}
-          </a>
-        </div>
-        </div>
+        <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{card.title}</p>
+        <p className="line-clamp-3 text-[11px] font-bold leading-snug text-[#5a189a]">
+          {card.subtitle}
+        </p>
       </div>
-    </>
+    </div>
   );
 }
-
