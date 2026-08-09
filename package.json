@@ -67,6 +67,7 @@
     "jsqr": "^1.4.0",
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.13.10",
+    "lottie-web": "^5.13.0",
     "lucide-react": "^0.575.0",
     "pdfjs-dist": "^6.2.108",
     "qrcode": "^1.5.4",

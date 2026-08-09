@@ -426,6 +426,128 @@ export type Database = {
           },
         ]
       }
+      mkt_ad_campaign_events: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          id: string
+          kind: string
+          session_key: string | null
+          user_id: string | null
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          id?: string
+          kind: string
+          session_key?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          session_key?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_ad_campaign_events_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_ad_campaigns: {
+        Row: {
+          asset_height: number
+          asset_kind: string
+          asset_path: string
+          asset_width: number
+          badge_ar: string
+          badge_en: string
+          click_url: string
+          clicks: number
+          created_at: string
+          created_by: string | null
+          cta_ar: string
+          cta_en: string
+          ends_at: string | null
+          id: string
+          impressions: number
+          placement: string
+          poster_path: string | null
+          priority: number
+          slug: string
+          starts_at: string
+          status: string
+          subtitle_ar: string
+          subtitle_en: string
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          asset_height?: number
+          asset_kind?: string
+          asset_path: string
+          asset_width?: number
+          badge_ar?: string
+          badge_en?: string
+          click_url?: string
+          clicks?: number
+          created_at?: string
+          created_by?: string | null
+          cta_ar?: string
+          cta_en?: string
+          ends_at?: string | null
+          id?: string
+          impressions?: number
+          placement?: string
+          poster_path?: string | null
+          priority?: number
+          slug: string
+          starts_at?: string
+          status?: string
+          subtitle_ar?: string
+          subtitle_en?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Update: {
+          asset_height?: number
+          asset_kind?: string
+          asset_path?: string
+          asset_width?: number
+          badge_ar?: string
+          badge_en?: string
+          click_url?: string
+          clicks?: number
+          created_at?: string
+          created_by?: string | null
+          cta_ar?: string
+          cta_en?: string
+          ends_at?: string | null
+          id?: string
+          impressions?: number
+          placement?: string
+          poster_path?: string | null
+          priority?: number
+          slug?: string
+          starts_at?: string
+          status?: string
+          subtitle_ar?: string
+          subtitle_en?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_ad_credit_entries: {
         Row: {
           actor_user_id: string | null
@@ -7794,6 +7916,10 @@ export type Database = {
           score: number
           tenant_id: string
         }[]
+      }
+      mkt_ad_campaign_track: {
+        Args: { _campaign_id: string; _kind: string; _session_key?: string }
+        Returns: undefined
       }
       mkt_ad_credit_admin_grant: {
         Args: {

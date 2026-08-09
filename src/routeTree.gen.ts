@@ -33,6 +33,7 @@ import { Route as AdminAdCreditRouteImport } from './routes/admin/ad-credit'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
+import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
@@ -212,6 +213,11 @@ const AdminAuditLogRoute = AdminAuditLogRouteImport.update({
 const AdminBusinessesRoute = AdminBusinessesRouteImport.update({
   id: '/businesses',
   path: '/businesses',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -542,6 +548,7 @@ export interface FileRoutesByFullPath {
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -625,6 +632,7 @@ export interface FileRoutesByTo {
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -712,6 +720,7 @@ export interface FileRoutesById {
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
+  '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -800,6 +809,7 @@ export interface FileRouteTypes {
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/campaigns'
     | '/admin/dashboard'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -883,6 +893,7 @@ export interface FileRouteTypes {
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/campaigns'
     | '/admin/dashboard'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -969,6 +980,7 @@ export interface FileRouteTypes {
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
+    | '/admin/campaigns'
     | '/admin/dashboard'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1234,6 +1246,13 @@ declare module '@tanstack/react-router' {
       path: '/businesses'
       fullPath: '/admin/businesses'
       preLoaderRoute: typeof AdminBusinessesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/campaigns': {
+      id: '/admin/campaigns'
+      path: '/campaigns'
+      fullPath: '/admin/campaigns'
+      preLoaderRoute: typeof AdminCampaignsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/dashboard': {
@@ -1664,6 +1683,7 @@ interface AdminRouteRouteChildren {
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
+  AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -1694,6 +1714,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
+  AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,

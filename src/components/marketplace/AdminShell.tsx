@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   Coins,
+  Clapperboard,
   Activity,
   BadgeCheck,
   BarChart3,
@@ -114,6 +115,12 @@ const NAV: NavItem[] = [
     to: "/admin/ad-credit",
     labelKey: "admin.nav.adCredit",
     icon: Coins,
+    section: "market",
+  },
+  {
+    to: "/admin/campaigns",
+    labelKey: "admin.nav.campaigns",
+    icon: Clapperboard,
     section: "market",
   },
   {
