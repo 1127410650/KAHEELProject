@@ -434,9 +434,12 @@ export function PromoPopupHost() {
         }`}
       >
         {/* الشخصية وحدها — خلفية شفافة تمامًا، وزر × صغير ملاصق لها. */}
-        <div className={`relative min-h-0 shrink ${bodyMotion}`}>
-          <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
+        <div className="relative flex min-h-0 w-full shrink justify-center">
+          <div className={`min-h-0 max-w-full overflow-hidden ${bodyMotion}`}>
+            <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
+          </div>
           <div className="absolute -top-1 end-0 flex flex-col gap-1">
+
             <button
               type="button"
               onClick={() => dismiss()}
