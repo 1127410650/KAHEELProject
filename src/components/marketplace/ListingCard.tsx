@@ -325,11 +325,13 @@ export function ListingCard({
             track({ event_type: "search_click", path: "/search", listing_id: listing.id });
           }
         }}
-        className={
+        className={[
           horizontal
             ? "group k-surface k-lift relative flex gap-3 p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-            : "group k-surface k-lift relative flex flex-col overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-        }
+            : "group k-surface k-lift relative flex flex-col overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
+          featured ? "k-featured" : "",
+        ].join(" ")}
+
       >
         <Media listing={listing} horizontal={horizontal} />
 
