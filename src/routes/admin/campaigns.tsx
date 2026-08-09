@@ -54,6 +54,22 @@ export const Route = createFileRoute("/admin/campaigns")({
 
 const PLACEMENTS: CampaignPlacement[] = ["home_banner", "home_strip", "welcome_takeover"];
 const STATUSES: CampaignStatus[] = ["draft", "active", "paused", "ended"];
+const SIDES = ["auto", "bottom", "top", "left", "right"] as const;
+const SIDE_LABEL: Record<(typeof SIDES)[number], [string, string]> = {
+  auto: ["عشوائي", "Random"],
+  bottom: ["من الأسفل", "Bottom"],
+  top: ["من الأعلى", "Top"],
+  left: ["من اليسار", "Left"],
+  right: ["من اليمين", "Right"],
+};
+const MASCOTS = ["auto", "moto", "lounge", "wave", "peek"] as const;
+const MASCOT_LABEL: Record<(typeof MASCOTS)[number], [string, string]> = {
+  auto: ["حسب النص", "Match copy"],
+  moto: ["على الدبّاب", "Scooter"],
+  lounge: ["مرتاح", "Lounging"],
+  wave: ["يلوّح", "Waving"],
+  peek: ["يطل بفضول", "Peeking"],
+};
 
 function AdminCampaignsPage() {
   const { locale } = useI18n();
@@ -73,6 +89,8 @@ function AdminCampaignsPage() {
   const [ctaAr, setCtaAr] = useState("");
   const [ctaEn, setCtaEn] = useState("");
   const [clickUrl, setClickUrl] = useState("/search");
+  const [popupSide, setPopupSide] = useState("auto");
+  const [popupMascot, setPopupMascot] = useState("auto");
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -136,6 +154,8 @@ function AdminCampaignsPage() {
           cta_ar: ctaAr,
           cta_en: ctaEn,
           click_url: clickUrl || "/search",
+          popup_side: popupSide,
+          popup_mascot: popupMascot,
           status: "draft",
         },
       });
@@ -198,6 +218,38 @@ function AdminCampaignsPage() {
                           : ar
                             ? "نافذة ترحيب"
                             : "Welcome takeover"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label>{ar ? "جهة ظهور النافذة" : "Popup side"}</Label>
+                <div className="flex flex-wrap gap-2">
+                  {SIDES.map((item) => (
+                    <Button
+                      key={item}
+                      type="button"
+                      size="sm"
+                      variant={popupSide === item ? "default" : "outline"}
+                      onClick={() => setPopupSide(item)}
+                    >
+                      {SIDE_LABEL[item][ar ? 0 : 1]}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label>{ar ? "الشخصية المرحة" : "Mascot"}</Label>
+                <div className="flex flex-wrap gap-2">
+                  {MASCOTS.map((item) => (
+                    <Button
+                      key={item}
+                      type="button"
+                      size="sm"
+                      variant={popupMascot === item ? "default" : "outline"}
+                      onClick={() => setPopupMascot(item)}
+                    >
+                      {MASCOT_LABEL[item][ar ? 0 : 1]}
                     </Button>
                   ))}
                 </div>

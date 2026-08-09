@@ -1,15 +1,17 @@
 /**
- * Welcome takeover — the full-screen animated campaign a visitor sees at most
- * once every 24 hours (`kaheel.takeover.lastSeen` in localStorage).
+ * Welcome popup — a compact ad card a visitor sees at most once every 24 hours
+ * (`kaheel.takeover.lastSeen` in localStorage).
  *
- * It mounts only after hydration and only when a live `welcome_takeover`
- * campaign exists, so it can never shift the first paint. Closing it, opening
- * its offer, Escape and a backdrop tap all mark it as seen.
+ * Deliberately *not* a full-screen takeover: there is no blocking overlay, the
+ * page stays scrollable and clickable, and the card slides in from one side
+ * (random, or fixed per campaign via `popup_side`), auto-dismisses after a few
+ * seconds and closes on Escape, on the close button, or on any tap outside it.
+ * It mounts only after hydration, so it can never shift the first paint.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 
-import { CampaignAsset } from "@/components/marketplace/campaign/CampaignAsset";
+import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
   markTakeoverSeen,
@@ -17,7 +19,24 @@ import {
   trackCampaign,
   useLiveCampaigns,
 } from "@/lib/mkt-campaigns";
-import { pickPopupCopy } from "@/lib/takeover-copy";
+import { pickPopupCopy, pickPopupSide, type PopupSide } from "@/lib/takeover-copy";
+
+/** How long the card lingers when the visitor ignores it. */
+const AUTO_DISMISS_MS = 7000;
+
+const POSITION: Record<PopupSide, string> = {
+  bottom: "inset-x-0 bottom-20 justify-center sm:bottom-6",
+  top: "inset-x-0 top-4 justify-center",
+  left: "inset-y-0 left-0 items-end justify-start pb-24 sm:items-center sm:pb-0",
+  right: "inset-y-0 right-0 items-end justify-end pb-24 sm:items-center sm:pb-0",
+};
+
+const ENTER: Record<PopupSide, string> = {
+  bottom: "animate-[kaheel-popup-in-bottom_0.34s_ease-out]",
+  top: "animate-[kaheel-popup-in-top_0.34s_ease-out]",
+  left: "animate-[kaheel-popup-in-left_0.34s_ease-out]",
+  right: "animate-[kaheel-popup-in-right_0.34s_ease-out]",
+};
 
 export function WelcomeTakeover() {
   const { locale } = useI18n();
@@ -25,9 +44,11 @@ export function WelcomeTakeover() {
   const [allowed, setAllowed] = useState(false);
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const { data } = useLiveCampaigns("welcome_takeover");
   const campaign = allowed ? data?.[0] : undefined;
   const fallback = useMemo(() => pickPopupCopy(ar), [ar]);
+  const randomSide = useMemo(() => pickPopupSide(), []);
 
   // Read the cooldown after hydration only: localStorage is not available on SSR.
   useEffect(() => {
@@ -50,20 +71,26 @@ export function WelcomeTakeover() {
     window.setTimeout(() => {
       setOpen(false);
       setClosing(false);
-    }, 220);
+    }, 200);
   }, []);
 
+  // Escape, outside tap and the idle timeout all dismiss it. No overlay is used,
+  // so "outside" is a plain document listener and the page stays usable.
   useEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };
+    const onPointer = (event: PointerEvent) => {
+      if (!cardRef.current?.contains(event.target as Node)) close();
+    };
+    const idle = window.setTimeout(close, AUTO_DISMISS_MS);
     window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointer);
     return () => {
-      document.body.style.overflow = previous;
+      window.clearTimeout(idle);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointer);
     };
   }, [open, close]);
 
@@ -73,45 +100,50 @@ export function WelcomeTakeover() {
   const subtitle = (ar ? campaign.subtitle_ar : campaign.subtitle_en) || fallback.subtitle;
   const badge = ar ? campaign.badge_ar : campaign.badge_en;
   const cta = ar ? campaign.cta_ar : campaign.cta_en;
+  const side: PopupSide =
+    campaign.popup_side && campaign.popup_side !== "auto"
+      ? (campaign.popup_side as PopupSide)
+      : randomSide;
+  const mascot: MascotKind =
+    campaign.popup_mascot && campaign.popup_mascot !== "auto"
+      ? (campaign.popup_mascot as MascotKind)
+      : fallback.mascot;
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={title}
-      className={`fixed inset-0 z-[80] flex items-center justify-center bg-gradient-to-b from-[#10002b]/20 via-[#5a189a]/15 to-[#240046]/25 p-4 pb-10 backdrop-blur-xl motion-reduce:animate-none ${
-        closing ? "animate-fade-out" : "animate-fade-in"
-      }`}
-      onClick={close}
+      className={`pointer-events-none fixed z-[80] flex p-3 sm:p-4 ${POSITION[side]}`}
+      aria-live="polite"
     >
       <div
-        onClick={(event) => event.stopPropagation()}
-        className={`relative w-full max-w-sm overflow-hidden rounded-[28px] border border-white/50 bg-white/85 shadow-[0_30px_80px_rgb(16_0_43/0.35)] backdrop-blur-2xl motion-reduce:animate-none ${
-          closing ? "animate-scale-out" : "animate-scale-in"
+        ref={cardRef}
+        role="dialog"
+        aria-label={title}
+        className={`pointer-events-auto relative flex w-full max-w-[22rem] items-center gap-3 rounded-3xl border border-white/60 bg-white/90 p-3 pe-9 shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-none ${
+          closing ? "animate-[kaheel-popup-out_0.2s_ease-in_forwards]" : ENTER[side]
         }`}
       >
         <button
           type="button"
           onClick={close}
           aria-label={ar ? "إغلاق" : "Close"}
-          className="absolute end-3 top-3 z-20 grid size-11 place-items-center rounded-full border border-white/40 bg-[#240046]/70 text-white backdrop-blur-md transition-transform hover:scale-105 motion-reduce:transition-none"
+          className="absolute end-2 top-2 grid size-7 place-items-center rounded-full bg-[#240046]/80 text-white transition-transform hover:scale-105 motion-reduce:transition-none"
         >
-          <X className="size-5" aria-hidden />
+          <X className="size-3.5" aria-hidden />
         </button>
 
-        <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
-          <CampaignAsset campaign={campaign} eager />
-        </div>
+        <PopupMascot kind={mascot} />
 
-        <div className="px-5 pb-5 pt-4 text-center">
+        <div className="min-w-0 flex-1 text-start">
           {badge ? (
-            <span className="inline-flex rounded-full bg-[#240046] px-3 py-1 text-[10px] font-bold text-white">
+            <span className="inline-flex rounded-full bg-[#240046] px-2 py-0.5 text-[10px] font-bold text-white">
               {badge}
             </span>
           ) : null}
-          <p className="mt-2 text-lg font-black leading-tight text-[#240046]">{title}</p>
+          <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{title}</p>
           {subtitle ? (
-            <p className="mt-1 text-xs font-bold text-[#5a189a]">{subtitle}</p>
+            <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#5a189a]">
+              {subtitle}
+            </p>
           ) : null}
           <a
             href={campaign.click_url}
@@ -119,7 +151,7 @@ export function WelcomeTakeover() {
               trackCampaign(campaign.id, "click");
               close();
             }}
-            className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[#3c096c] px-6 text-xs font-bold text-white shadow-[0_10px_24px_rgb(60_9_108/0.28)]"
+            className="mt-2 inline-flex min-h-8 items-center justify-center rounded-full bg-[#3c096c] px-4 text-[11px] font-bold text-white shadow-[0_8px_18px_rgb(60_9_108/0.25)]"
           >
             {cta || (ar ? "تصفح الآن" : "Browse now")}
           </a>
@@ -128,4 +160,3 @@ export function WelcomeTakeover() {
     </div>
   );
 }
-

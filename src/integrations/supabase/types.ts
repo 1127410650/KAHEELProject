@@ -479,6 +479,8 @@ export type Database = {
           id: string
           impressions: number
           placement: string
+          popup_mascot: string
+          popup_side: string
           poster_path: string | null
           priority: number
           slug: string
@@ -507,6 +509,8 @@ export type Database = {
           id?: string
           impressions?: number
           placement?: string
+          popup_mascot?: string
+          popup_side?: string
           poster_path?: string | null
           priority?: number
           slug: string
@@ -535,6 +539,8 @@ export type Database = {
           id?: string
           impressions?: number
           placement?: string
+          popup_mascot?: string
+          popup_side?: string
           poster_path?: string | null
           priority?: number
           slug?: string

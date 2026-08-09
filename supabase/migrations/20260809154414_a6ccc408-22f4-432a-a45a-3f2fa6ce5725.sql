@@ -1,0 +1,1 @@
+UPDATE public.mkt_ad_campaigns SET popup_side='left', popup_mascot='moto' WHERE placement='welcome_takeover';
