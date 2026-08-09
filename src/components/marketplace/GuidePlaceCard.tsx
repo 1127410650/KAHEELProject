@@ -128,9 +128,22 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
         </Link>
         {source ? (
           <p className="border-t border-border/60 pt-2 text-[10px] font-normal leading-4 text-muted-foreground/80">
-            المصدر: {source}
+            المصدر:{" "}
+            {href ? (
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener nofollow"
+                className="underline decoration-dotted underline-offset-2 hover:text-market-navy"
+              >
+                {source}
+              </a>
+            ) : (
+              source
+            )}
           </p>
         ) : null}
+
       </div>
 
     </article>
