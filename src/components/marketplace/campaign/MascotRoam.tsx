@@ -92,10 +92,12 @@ export function MascotRoam() {
       hideTimer.current = window.setTimeout(() => setScene(null), pacing.roamDurationMs);
     };
 
+    // مساعدة معاينة: `?roam=now` تُظهر المشهد فورًا لمراجعة الحركة بلا انتظار.
+    const quick = window.location.search.includes("roam=now");
     first = window.setTimeout(() => {
       run();
       cycle = window.setInterval(run, pacing.roamIntervalMs);
-    }, pacing.roamFirstDelayMs);
+    }, quick ? 900 : pacing.roamFirstDelayMs);
 
     return () => {
       window.clearTimeout(first);
