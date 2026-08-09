@@ -103,28 +103,20 @@ export function MascotRoam() {
     if (document.visibilityState !== "visible") return true;
     return false;
   }, [call, pacing.enabled, pacing.roamEnabled, pathname]);
-
-  // جدولة: أول تجوّل بعد مهلة، ثم واحد كل فاصل — والمسرح يرفض ما زاد عن الحد.
+  /**
+   * الجدولة بسلوك الزائر لا بمؤقّت: الشخصية تظهر عندما **يتوقّف التمرير** ويثبت
+   * الزائر على منطقة لمدة `mascotIdleMs` (٢-٣ ثوانٍ افتراضيًا) — لحظة قراءة
+   * هادئة، لا مقاطعة. أثناء التمرير لا ظهور، والاستئناف السريع يُنهي المشهد.
+   */
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    let first = 0;
-    let cycle = 0;
-    const run = () => {
-      if (blockedNow()) return;
-      const kind: RoamScene = Math.random() < 0.5 ? "stroll" : "search";
-      // القاعدة الأولى: شخصية واحدة فقط، وبتكرار قليل، ولا تكرار للنوع نفسه.
-      if (!canShowMascot(`roam:${kind}`, limits)) {
-        const other: RoamScene = kind === "stroll" ? "search" : "stroll";
-        if (!canShowMascot(`roam:${other}`, limits)) return;
-        return start(other);
-      }
-      start(kind);
-    };
+    // بوابة «أول ٣ ثوانٍ من تحميل الصفحة»: لا ظهور قبل أن تستقرّ الصفحة.
+    const settledAt = Date.now() + pacing.pageSettleMs;
 
     const start = (kind: RoamScene) => {
-      // القاعدة الثانية: منطقة آمنة أو لا ظهور.
+      // القاعدة الثانية: منطقة آمنة أو لا ظهور. (القياس بعد السكون فقط.)
       const band = findSafeBand(SCENE_WIDTH, SCENE_HEIGHT, {
         topInset: 118,
         bottomInset: 84,
@@ -134,38 +126,55 @@ export function MascotRoam() {
       releaseRef.current = acquireStage(`roam:${kind}`);
       keyRef.current += 1;
       const pool = kind === "stroll" ? STROLL_COPY : SEARCH_COPY;
-      const line = pool[Math.floor(Math.random() * pool.length)]!;
-      setScene({ key: keyRef.current, kind, copy: ar ? line.ar : line.en, band });
+      const line = pickCopy(pool, lastCopyRef, ar);
+      setScene({ key: keyRef.current, kind, copy: line, band });
       window.clearTimeout(hideTimer.current);
       hideTimer.current = window.setTimeout(end, pacing.roamDurationMs);
     };
 
+    const run = () => {
+      if (Date.now() < settledAt) return;
+      if (blockedNow()) return;
+      const kind: RoamScene = Math.random() < 0.5 ? "stroll" : "search";
+      // القاعدة الأولى: شخصية واحدة فقط، وفاصل أدنى، ولا تكرار للنوع نفسه.
+      if (!canShowMascot(`roam:${kind}`, limits)) {
+        const other: RoamScene = kind === "stroll" ? "search" : "stroll";
+        if (!canShowMascot(`roam:${other}`, limits)) return;
+        return start(other);
+      }
+      start(kind);
+    };
+
+    const stop = watchScrollIdle({
+      idleMs: pacing.mascotIdleMs,
+      onIdle: run,
+      // استئناف التمرير بسرعة ⇒ المشهد يختفي بنعومة (لا مطاردة للزائر).
+      onScroll: (delta) => {
+        if (delta > 24) end();
+      },
+    });
+
     // مساعدة معاينة: `?roam=now` تُظهر المشهد فورًا لمراجعة الحركة بلا انتظار.
     const quick = window.location.search.includes("roam=now");
-    first = window.setTimeout(
-      () => {
-        run();
-        cycle = window.setInterval(run, pacing.roamIntervalMs);
-      },
-      quick ? 900 : pacing.roamFirstDelayMs,
-    );
+    const first = quick ? window.setTimeout(run, 900) : 0;
 
     return () => {
+      stop();
       window.clearTimeout(first);
-      window.clearInterval(cycle);
       end();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ar,
     pacing.roamEnabled,
-    pacing.roamFirstDelayMs,
-    pacing.roamIntervalMs,
+    pacing.pageSettleMs,
+    pacing.mascotIdleMs,
     pacing.roamDurationMs,
     pacing.mascotMinGapMs,
     pacing.mascotMaxPerSession,
     pacing.mascotQuietAfterCloseMs,
   ]);
+
 
   // التبويب المخفي: الحركة تتوقّف تمامًا (لا رسم ولا حسابات).
   useEffect(() => {
