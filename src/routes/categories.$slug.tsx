@@ -12,6 +12,12 @@ import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { kidsFriendFor, isKidsWorld } from "@/lib/kids-friends";
+import {
+  KidsEmptyState,
+  KidsFriendBadge,
+  KidsFriendsStrip,
+} from "@/components/marketplace/kids/KidsFriendsStrip";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/categories/$slug")({
@@ -95,6 +101,10 @@ function CategoryPage() {
       return decorateListings((data ?? []) as unknown as MktListing[], locale);
     },
   });
+
+  const parentSlug =
+    (categories.data ?? []).find((c) => c.id === category?.parent_id)?.slug ?? null;
+  const kidsWorld = isKidsWorld([category?.slug, parentSlug]);
 
   const name = (c: MktCategory) => (locale === "ar" ? c.name_ar : c.name_en || c.name_ar);
 
