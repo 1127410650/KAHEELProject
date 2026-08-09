@@ -10,7 +10,14 @@
    المنصة الرئيسيتين بلا تغيير.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-export type KidsFriendId = "birdy" | "nono" | "dabdoob" | "natnoot" | "najooma";
+export type KidsFriendId =
+  | "birdy"
+  | "nono"
+  | "dabdoob"
+  | "natnoot"
+  | "najooma"
+  | "sami"
+  | "karim";
 
 export type KidsFriendMood = "happy" | "sad" | "wink";
 
@@ -76,6 +83,41 @@ export const KIDS_FRIENDS: KidsFriendMeta[] = [
     roleAr: "الصيف والمسبح",
     roleEn: "Summer & pools",
     match: ["pool", "swim", "summer", "beach", "water", "مسبح", "مسابح", "سباحة", "صيف", "بحر"],
+  },
+  {
+    id: "sami",
+    nameAr: "سامي",
+    nameEn: "Sami",
+    roleAr: "الرياضة والألعاب الخارجية",
+    roleEn: "Sports & outdoor play",
+    match: [
+      "sport",
+      "ball",
+      "bike",
+      "outdoor",
+      "رياض",
+      "كرة",
+      "دراج",
+      "ملاعب",
+      "خارجي",
+    ],
+  },
+  {
+    id: "karim",
+    nameAr: "كريم",
+    nameEn: "Karim",
+    roleAr: "الحضانات ورياض الأطفال",
+    roleEn: "Nurseries & kindergartens",
+    match: [
+      "nursery",
+      "kindergarten",
+      "daycare",
+      "حضانة",
+      "حضانات",
+      "روضة",
+      "رياض أطفال",
+      "تمهيدي",
+    ],
   },
 ];
 
