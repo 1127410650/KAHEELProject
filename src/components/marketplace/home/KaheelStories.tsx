@@ -180,7 +180,7 @@ function StoryViewer({
       role="dialog"
       aria-modal="true"
       aria-label={ar ? story.title_ar : story.title_en}
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 backdrop-blur-sm animate-[fade-in_0.18s_ease-out]"
+      className="fixed inset-0 z-[95] flex items-center justify-center bg-black/85 backdrop-blur-sm animate-[fade-in_0.18s_ease-out]"
       style={{ transform: `translateY(${dragY}px)`, opacity: dragY > 0 ? 1 - dragY / 320 : 1 }}
       onPointerDown={(event) => {
         startRef.current = { x: event.clientX, y: event.clientY };
