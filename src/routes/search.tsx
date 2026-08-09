@@ -758,7 +758,7 @@ function GenericSearchPage() {
               onChange={(e) => setTerm(e.target.value)}
               placeholder={t("market.search.placeholder")}
               aria-label={t("market.search.title")}
-              className="h-12 border-white bg-white pe-10 shadow-[0_8px_24px_rgb(11_29_67/0.07)]"
+              className="k-surface h-12 rounded-[16px] bg-white pe-10 text-sm shadow-none"
             />
             {term !== "" && (
               <button
@@ -780,7 +780,7 @@ function GenericSearchPage() {
           <div className="mt-3 flex items-center gap-2">
             <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="shrink-0">
+                <Button variant="outline" size="sm" className="k-press h-9 shrink-0 rounded-xl border-primary/30 font-bold">
                   <SlidersHorizontal className="size-4" aria-hidden />
                   {t("market.search.filtersBtn")}
                   {activeFilterCount > 0 && (
@@ -818,7 +818,7 @@ function GenericSearchPage() {
               value={sort}
               onChange={(e) => update({ sort: e.target.value })}
               aria-label={t("market.filters.sort")}
-              className="h-9 min-w-0 shrink rounded-xl border border-input bg-white px-2 text-sm"
+              className="k-press h-9 min-w-0 shrink rounded-xl border border-primary/25 bg-white px-2 text-sm font-semibold"
             >
               <option value="newest">{t("market.sort.newest")}</option>
               <option value="oldest">{t("market.sort.oldest")}</option>
@@ -826,7 +826,7 @@ function GenericSearchPage() {
               {!businessMode && <option value="price_desc">{t("market.sort.priceDesc")}</option>}
             </select>
 
-            <div className="inline-flex shrink-0 overflow-hidden rounded-xl border border-input bg-white">
+            <div className="inline-flex shrink-0 overflow-hidden rounded-xl border border-primary/25 bg-white">
               <button
                 type="button"
                 aria-label={t("market.view.grid")}
@@ -834,8 +834,8 @@ function GenericSearchPage() {
                 onClick={() => chooseView("grid")}
                 className={
                   view === "grid"
-                    ? "bg-primary p-2 text-primary-foreground"
-                    : "p-2 text-muted-foreground"
+                    ? "k-press bg-[linear-gradient(140deg,var(--color-primary),color-mix(in_srgb,var(--color-primary)_70%,black))] p-2 text-primary-foreground"
+                    : "k-press p-2 text-muted-foreground hover:bg-primary/8"
                 }
               >
                 <LayoutGrid className="size-4" aria-hidden />
@@ -847,8 +847,8 @@ function GenericSearchPage() {
                 onClick={() => chooseView("list")}
                 className={
                   view === "list"
-                    ? "bg-primary p-2 text-primary-foreground"
-                    : "p-2 text-muted-foreground"
+                    ? "k-press bg-[linear-gradient(140deg,var(--color-primary),color-mix(in_srgb,var(--color-primary)_70%,black))] p-2 text-primary-foreground"
+                    : "k-press p-2 text-muted-foreground hover:bg-primary/8"
                 }
               >
                 <List className="size-4" aria-hidden />
