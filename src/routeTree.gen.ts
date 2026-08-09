@@ -36,6 +36,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
@@ -234,6 +235,11 @@ const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminErrandsRoute = AdminErrandsRouteImport.update({
+  id: '/errands',
+  path: '/errands',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
@@ -587,6 +593,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -677,6 +684,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -771,6 +779,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -866,6 +875,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/errands'
     | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -956,6 +966,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/errands'
     | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1049,6 +1060,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/errands'
     | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1340,6 +1352,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/errands': {
+      id: '/admin/errands'
+      path: '/errands'
+      fullPath: '/admin/errands'
+      preLoaderRoute: typeof AdminErrandsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/guide-queue': {
@@ -1800,6 +1819,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminErrandsRoute: typeof AdminErrandsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -1833,6 +1853,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminErrandsRoute: AdminErrandsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,

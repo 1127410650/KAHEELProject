@@ -124,7 +124,7 @@ function AdminErrandsPage() {
   }
 
   return (
-    <AdminShell>
+    <AdminShell title={ar ? "خدمة جيب لي" : "Errands service"}>
       <div className="grid gap-4 pb-16">
         {/* الخدمات */}
         <Card>
