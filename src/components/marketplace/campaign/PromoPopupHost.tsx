@@ -404,10 +404,7 @@ export function PromoPopupHost() {
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
   return (
-    <div
-      className="pointer-events-none fixed inset-0 z-[80]"
-      aria-live="polite"
-    >
+    <div className="pointer-events-none fixed inset-0 z-[80]" aria-live="polite">
       <div
         key={card.key}
         data-kaheel-drop-card
@@ -417,10 +414,11 @@ export function PromoPopupHost() {
           transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
           animation,
         }}
-        className={`pointer-events-none absolute flex w-[17rem] max-w-[calc(100vw-1.5rem)] flex-col ${
+        className={`pointer-events-none absolute flex w-[17rem] max-w-[calc(100vw-1.5rem)] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
           entrance ? "bottom-24 left-3" : ENTRY_POSITION[card.side]
-        } `+"flex-col".slice(0,0)+" items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl"
+        }`}
       >
+
 
         <div className="absolute end-2 top-2">{closeButtons}</div>
 
