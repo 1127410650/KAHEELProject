@@ -49,6 +49,10 @@ export function PopupPacingCard() {
           rapid_taps: values.rapidTaps,
           rapid_window_ms: values.rapidWindowMs,
           entrance_ms: values.entranceMs,
+          roam_enabled: values.roamEnabled,
+          roam_first_delay_ms: values.roamFirstDelayMs,
+          roam_interval_ms: values.roamIntervalMs,
+          roam_duration_ms: values.roamDurationMs,
           enabled: values.enabled,
         },
         ar ? "تعديل إيقاع البطاقات الترويجية" : "Promo popup pacing update",
@@ -63,7 +67,15 @@ export function PopupPacingCard() {
 
   /** حقل رقمي واحد — كل توقيتات المشاهد قابلة للضبط من هنا. */
   const field = (
-    key: "dropCooldownMs" | "dropVisibleMs" | "rapidTaps" | "rapidWindowMs" | "entranceMs",
+    key:
+      | "dropCooldownMs"
+      | "dropVisibleMs"
+      | "rapidTaps"
+      | "rapidWindowMs"
+      | "entranceMs"
+      | "roamFirstDelayMs"
+      | "roamIntervalMs"
+      | "roamDurationMs",
     labelAr: string,
     labelEn: string,
     hintAr: string,
@@ -111,6 +123,51 @@ export function PopupPacingCard() {
             "Rapid-tap window (ms)",
             "١٠٠٠ – ١٥٠٠٠",
           )}
+        </div>
+
+        <div className="space-y-2 rounded-xl border border-border p-3">
+          <p className="text-sm font-bold">
+            {ar ? "تجوّل الشخصيتين عبر الصفحات" : "Mascots roaming across pages"}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {ar
+              ? "كَحيل يتمشّى بهدوء عند حافة الشاشة السفلية مع ترحيب قصير، وكَحيلان يتجوّل «عم دوّر على واسطة» فيتوقّف ويلتفت ويفتل شاربه. الحركة على transform فقط، لا تحجب المحتوى ولا تعطّل التفاعل، وتتوقّف مع prefers-reduced-motion أو عند إخفاء التبويب."
+              : "Kaheel strolls calmly along the bottom edge with a short greeting; Kaheelan roams looking for a favour, stopping and twirling his mustache. Transform-only, never blocks content or input, and stops under prefers-reduced-motion or a hidden tab."}
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {field(
+              "roamFirstDelayMs",
+              "أول تجوّل بعد (مللي ثانية)",
+              "First roam after (ms)",
+              "٣٠٠٠ – ٦٠٠٠٠٠",
+            )}
+            {field(
+              "roamIntervalMs",
+              "الفاصل بين تجوّلين (مللي ثانية)",
+              "Gap between roams (ms)",
+              "٢٠٠٠٠ – ٣٦٠٠٠٠٠",
+            )}
+            {field(
+              "roamDurationMs",
+              "مدة المشهد (مللي ثانية)",
+              "Scene duration (ms)",
+              "٦٠٠٠ – ٤٠٠٠٠",
+            )}
+          </div>
+          <Button
+            type="button"
+            size="sm"
+            variant={values.roamEnabled ? "default" : "outline"}
+            onClick={() => setValues((prev) => ({ ...prev, roamEnabled: !prev.roamEnabled }))}
+          >
+            {values.roamEnabled
+              ? ar
+                ? "التجوّل مُفعّل"
+                : "Roaming enabled"
+              : ar
+                ? "التجوّل موقوف"
+                : "Roaming paused"}
+          </Button>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

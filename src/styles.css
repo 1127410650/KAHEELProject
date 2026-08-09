@@ -2317,3 +2317,31 @@ body:has(.market-surface) {
   0%, 100% { transform: rotate(-3deg) translateY(0); }
   50% { transform: rotate(3deg) translateY(-2px); }
 }
+
+/* ═══ تجوّل الشخصيتين عبر الصفحات — transform فقط، بلا أي تأثير على التخطيط ═══ */
+/* مشي أفقي هادئ من حافة إلى حافة. المسافة تُمرّر بمتغيّر --roam-x. */
+@keyframes mascot-roam-x {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(var(--roam-x), 0, 0); }
+}
+/* هزّة المشي: نزول/طلوع خفيف جدًا (2px) بإيقاع الخطوة. */
+@keyframes mascot-roam-step {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -2px, 0) rotate(1deg); }
+}
+/* كَحيلان «عم دوّر»: يمشي، يتوقّف، يلتفت يمينًا ويسارًا، ثم يكمل. */
+@keyframes mascot-roam-search {
+  0%, 24% { transform: translate3d(0, 0, 0) scaleX(1); }
+  30%, 44% { transform: translate3d(0, 0, 0) scaleX(-1); }
+  50%, 64% { transform: translate3d(0, 0, 0) scaleX(1); }
+  70%, 84% { transform: translate3d(0, 0, 0) scaleX(-1); }
+  90%, 100% { transform: translate3d(0, 0, 0) scaleX(1); }
+}
+/* اختفاء ناعم في آخر المشهد. */
+@keyframes mascot-roam-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-kaheel-roam] { display: none !important; }
+}

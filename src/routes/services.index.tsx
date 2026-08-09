@@ -18,6 +18,9 @@ import {
   Wrench,
 } from "lucide-react";
 
+import { PageStack, PageNoticeBar } from "@/components/marketplace/layout/PageStack";
+import { useKaheelProgressSteps } from "@/lib/mkt-progress";
+import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { Button } from "@/components/ui/button";
@@ -128,6 +131,19 @@ function ServicesMarketplacePage() {
   return (
     <MarketShell>
       <main className="pb-10">
+        {/* البنية الموحّدة: تنبيه رفيع ← بانر ← شريط تقدّم، قبل محتوى الصفحة. */}
+        <PageStack
+          search={false}
+          notice={
+            <PageNoticeBar id="services-booking">
+              {locale === "ar"
+                ? "تأكيد الموعد يوصلك بالإشعارات — فعّل الجرس"
+                : "Booking confirmations arrive in notifications"}
+            </PageNoticeBar>
+          }
+          banner={<HomeAdStrip addHref="/my/listings/new" />}
+          progress={progressSteps}
+        />
         <section className="relative overflow-hidden border-b bg-market-navy text-white">
           <div className="absolute -start-24 -top-24 size-72 rounded-full bg-cyan-400/15 blur-3xl" />
           <div className="absolute -bottom-32 end-0 size-80 rounded-full bg-violet-500/20 blur-3xl" />
