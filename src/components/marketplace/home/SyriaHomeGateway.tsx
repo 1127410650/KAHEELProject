@@ -157,8 +157,8 @@ export function SyriaHomeGateway() {
               aria-pressed={active === index}
               className={
                 active === index
-                  ? "h-1.5 w-5 rounded-full bg-market-electric-bright transition-all"
-                  : "size-1.5 rounded-full bg-market-electric-bright/35 transition-all hover:bg-market-electric-bright/70"
+                  ? "h-1 w-4 rounded-full bg-market-electric-bright transition-all"
+                  : "size-1 rounded-full bg-market-electric-bright/40 transition-all hover:bg-market-electric-bright/70"
               }
             />
           ))}
