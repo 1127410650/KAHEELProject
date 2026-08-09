@@ -101,6 +101,647 @@ export type Database = {
           },
         ]
       }
+      appt_appointment_events: {
+        Row: {
+          actor_user_id: string | null
+          appointment_id: string
+          created_at: string
+          id: string
+          metadata: Json
+          new_status: string
+          note: string | null
+          old_status: string | null
+        }
+        Insert: {
+          actor_user_id?: string | null
+          appointment_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          new_status: string
+          note?: string | null
+          old_status?: string | null
+        }
+        Update: {
+          actor_user_id?: string | null
+          appointment_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          new_status?: string
+          note?: string | null
+          old_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_appointment_events_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appt_appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appt_appointments: {
+        Row: {
+          appointment_number: string
+          cancelled_at: string | null
+          checked_in_at: string | null
+          completed_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          customer_name: string | null
+          customer_notes: string | null
+          customer_phone: string | null
+          customer_user_id: string
+          ends_at: string
+          id: string
+          idempotency_key: string
+          provider_id: string
+          provider_notes: string | null
+          service_id: string
+          source: string
+          started_at: string | null
+          starts_at: string
+          status: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_number: string
+          cancelled_at?: string | null
+          checked_in_at?: string | null
+          completed_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          customer_name?: string | null
+          customer_notes?: string | null
+          customer_phone?: string | null
+          customer_user_id: string
+          ends_at: string
+          id?: string
+          idempotency_key: string
+          provider_id: string
+          provider_notes?: string | null
+          service_id: string
+          source?: string
+          started_at?: string | null
+          starts_at: string
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_number?: string
+          cancelled_at?: string | null
+          checked_in_at?: string | null
+          completed_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          customer_name?: string | null
+          customer_notes?: string | null
+          customer_phone?: string | null
+          customer_user_id?: string
+          ends_at?: string
+          id?: string
+          idempotency_key?: string
+          provider_id?: string
+          provider_notes?: string | null
+          service_id?: string
+          source?: string
+          started_at?: string | null
+          starts_at?: string
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_appointments_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appt_appointments_service_provider_fk"
+            columns: ["provider_id", "service_id"]
+            isOneToOne: false
+            referencedRelation: "appt_services"
+            referencedColumns: ["provider_id", "id"]
+          },
+        ]
+      }
+      appt_audit_log: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: number
+          new_value: Json | null
+          old_value: Json | null
+          provider_id: string | null
+          reason: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: never
+          new_value?: Json | null
+          old_value?: Json | null
+          provider_id?: string | null
+          reason?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: never
+          new_value?: Json | null
+          old_value?: Json | null
+          provider_id?: string | null
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_audit_log_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appt_availability: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          is_active: boolean
+          provider_id: string
+          service_id: string | null
+          slot_interval_minutes: number
+          starts_at: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          is_active?: boolean
+          provider_id: string
+          service_id?: string | null
+          slot_interval_minutes?: number
+          starts_at: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          is_active?: boolean
+          provider_id?: string
+          service_id?: string | null
+          slot_interval_minutes?: number
+          starts_at?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_availability_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appt_availability_service_provider_fk"
+            columns: ["provider_id", "service_id"]
+            isOneToOne: false
+            referencedRelation: "appt_services"
+            referencedColumns: ["provider_id", "id"]
+          },
+        ]
+      }
+      appt_market_links: {
+        Row: {
+          created_at: string
+          linked_at: string | null
+          linked_by_user_id: string | null
+          market_profile_path: string | null
+          market_storefront_id: string | null
+          market_tenant_id: string | null
+          market_url: string | null
+          metadata: Json
+          provider_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          linked_at?: string | null
+          linked_by_user_id?: string | null
+          market_profile_path?: string | null
+          market_storefront_id?: string | null
+          market_tenant_id?: string | null
+          market_url?: string | null
+          metadata?: Json
+          provider_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          linked_at?: string | null
+          linked_by_user_id?: string | null
+          market_profile_path?: string | null
+          market_storefront_id?: string | null
+          market_tenant_id?: string | null
+          market_url?: string | null
+          metadata?: Json
+          provider_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_market_links_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appt_profiles: {
+        Row: {
+          avatar_path: string | null
+          created_at: string
+          display_name: string | null
+          locale: string
+          phone_e164: string | null
+          timezone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_path?: string | null
+          created_at?: string
+          display_name?: string | null
+          locale?: string
+          phone_e164?: string | null
+          timezone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_path?: string | null
+          created_at?: string
+          display_name?: string | null
+          locale?: string
+          phone_e164?: string | null
+          timezone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      appt_provider_members: {
+        Row: {
+          created_at: string
+          is_active: boolean
+          permissions: string[]
+          provider_id: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          is_active?: boolean
+          permissions?: string[]
+          provider_id: string
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          is_active?: boolean
+          permissions?: string[]
+          provider_id?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_provider_members_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appt_provider_settings: {
+        Row: {
+          average_service_minutes: number
+          cancellation_window_hours: number
+          confirmation_mode: string
+          created_at: string
+          max_advance_days: number
+          min_notice_minutes: number
+          provider_id: string
+          queue_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          average_service_minutes?: number
+          cancellation_window_hours?: number
+          confirmation_mode?: string
+          created_at?: string
+          max_advance_days?: number
+          min_notice_minutes?: number
+          provider_id: string
+          queue_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          average_service_minutes?: number
+          cancellation_window_hours?: number
+          confirmation_mode?: string
+          created_at?: string
+          max_advance_days?: number
+          min_notice_minutes?: number
+          provider_id?: string
+          queue_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_provider_settings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appt_providers: {
+        Row: {
+          accepts_bookings: boolean
+          address_text: string | null
+          bio_ar: string | null
+          bio_en: string | null
+          city: string | null
+          cover_path: string | null
+          created_at: string
+          deleted_at: string | null
+          district: string | null
+          id: string
+          latitude: number | null
+          location_accuracy_meters: number | null
+          location_confirmed_at: string | null
+          logo_path: string | null
+          longitude: number | null
+          name_ar: string
+          name_en: string | null
+          owner_user_id: string
+          provider_type: string
+          slug: string
+          status: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          accepts_bookings?: boolean
+          address_text?: string | null
+          bio_ar?: string | null
+          bio_en?: string | null
+          city?: string | null
+          cover_path?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          district?: string | null
+          id?: string
+          latitude?: number | null
+          location_accuracy_meters?: number | null
+          location_confirmed_at?: string | null
+          logo_path?: string | null
+          longitude?: number | null
+          name_ar: string
+          name_en?: string | null
+          owner_user_id: string
+          provider_type?: string
+          slug: string
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          accepts_bookings?: boolean
+          address_text?: string | null
+          bio_ar?: string | null
+          bio_en?: string | null
+          city?: string | null
+          cover_path?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          district?: string | null
+          id?: string
+          latitude?: number | null
+          location_accuracy_meters?: number | null
+          location_confirmed_at?: string | null
+          logo_path?: string | null
+          longitude?: number | null
+          name_ar?: string
+          name_en?: string | null
+          owner_user_id?: string
+          provider_type?: string
+          slug?: string
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      appt_queue_entries: {
+        Row: {
+          called_at: string | null
+          completed_at: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          customer_user_id: string
+          id: string
+          joined_at: string
+          notes: string | null
+          provider_id: string
+          queue_date: string
+          queue_number: number
+          service_id: string
+          serving_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          called_at?: string | null
+          completed_at?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          customer_user_id: string
+          id?: string
+          joined_at?: string
+          notes?: string | null
+          provider_id: string
+          queue_date: string
+          queue_number: number
+          service_id: string
+          serving_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          called_at?: string | null
+          completed_at?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          customer_user_id?: string
+          id?: string
+          joined_at?: string
+          notes?: string | null
+          provider_id?: string
+          queue_date?: string
+          queue_number?: number
+          service_id?: string
+          serving_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_queue_entries_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appt_queue_service_provider_fk"
+            columns: ["provider_id", "service_id"]
+            isOneToOne: false
+            referencedRelation: "appt_services"
+            referencedColumns: ["provider_id", "id"]
+          },
+        ]
+      }
+      appt_services: {
+        Row: {
+          booking_mode: string
+          created_at: string
+          currency_code: string
+          deleted_at: string | null
+          description_ar: string | null
+          description_en: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string | null
+          price: number
+          provider_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          booking_mode?: string
+          created_at?: string
+          currency_code?: string
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en?: string | null
+          price?: number
+          provider_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          booking_mode?: string
+          created_at?: string
+          currency_code?: string
+          deleted_at?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string | null
+          price?: number
+          provider_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_services_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appt_time_off: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          provider_id: string
+          reason: string | null
+          starts_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          provider_id: string
+          reason?: string | null
+          starts_at: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          provider_id?: string
+          reason?: string | null
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appt_time_off_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "appt_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attachments: {
         Row: {
           approved_at: string | null
@@ -2947,6 +3588,72 @@ export type Database = {
           },
         ]
       }
+      mkt_external_integrations: {
+        Row: {
+          config_public: Json
+          created_at: string
+          created_by: string
+          credentials_state: string
+          direction: string
+          display_name: string
+          id: string
+          integration_code: string
+          last_connected_at: string | null
+          last_error_code: string | null
+          secret_ref: string | null
+          status: string
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          config_public?: Json
+          created_at?: string
+          created_by?: string
+          credentials_state?: string
+          direction?: string
+          display_name: string
+          id?: string
+          integration_code: string
+          last_connected_at?: string | null
+          last_error_code?: string | null
+          secret_ref?: string | null
+          status?: string
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          config_public?: Json
+          created_at?: string
+          created_by?: string
+          credentials_state?: string
+          direction?: string
+          display_name?: string
+          id?: string
+          integration_code?: string
+          last_connected_at?: string | null
+          last_error_code?: string | null
+          secret_ref?: string | null
+          status?: string
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_external_integrations_integration_code_fkey"
+            columns: ["integration_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_integration_catalog"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "mkt_external_integrations_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_favorites: {
         Row: {
           created_at: string
@@ -3000,6 +3707,101 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_integration_catalog: {
+        Row: {
+          code: string
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          integration_kind: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+          supported_directions: string[]
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          integration_kind: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          sort_order?: number
+          supported_directions?: string[]
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          integration_kind?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+          supported_directions?: string[]
+        }
+        Relationships: []
+      }
+      mkt_integration_events: {
+        Row: {
+          attempt_count: number
+          created_at: string
+          direction: string
+          event_type: string
+          external_id: string | null
+          id: string
+          idempotency_key: string
+          integration_id: string
+          last_error_code: string | null
+          next_attempt_at: string | null
+          payload_summary: Json
+          processed_at: string | null
+          status: string
+        }
+        Insert: {
+          attempt_count?: number
+          created_at?: string
+          direction: string
+          event_type: string
+          external_id?: string | null
+          id?: string
+          idempotency_key: string
+          integration_id: string
+          last_error_code?: string | null
+          next_attempt_at?: string | null
+          payload_summary?: Json
+          processed_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempt_count?: number
+          created_at?: string
+          direction?: string
+          event_type?: string
+          external_id?: string | null
+          id?: string
+          idempotency_key?: string
+          integration_id?: string
+          last_error_code?: string | null
+          next_attempt_at?: string | null
+          payload_summary?: Json
+          processed_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_integration_events_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_external_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_job_runs: {
         Row: {
           duration_ms: number | null
@@ -3035,6 +3837,154 @@ export type Database = {
           started_at?: string
         }
         Relationships: []
+      }
+      mkt_join_application_documents: {
+        Row: {
+          application_id: string
+          created_at: string
+          document_kind: string
+          file_name: string
+          id: string
+          mime_type: string
+          owner_user_id: string
+          size_bytes: number
+          storage_path: string
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          document_kind: string
+          file_name: string
+          id?: string
+          mime_type: string
+          owner_user_id: string
+          size_bytes: number
+          storage_path: string
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          document_kind?: string
+          file_name?: string
+          id?: string
+          mime_type?: string
+          owner_user_id?: string
+          size_bytes?: number
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_join_application_documents_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_join_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_join_application_events: {
+        Row: {
+          actor_user_id: string | null
+          application_id: string
+          created_at: string
+          from_status: string | null
+          id: string
+          note: string | null
+          to_status: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          application_id: string
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          to_status: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          application_id?: string
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_join_application_events_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_join_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_join_applications: {
+        Row: {
+          applicant_user_id: string
+          application_kind: string
+          application_number: string
+          approved_at: string | null
+          created_at: string
+          decision_reason: string | null
+          id: string
+          payload: Json
+          provider_category_code: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          tenant_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          applicant_user_id?: string
+          application_kind: string
+          application_number?: string
+          approved_at?: string | null
+          created_at?: string
+          decision_reason?: string | null
+          id?: string
+          payload?: Json
+          provider_category_code?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          applicant_user_id?: string
+          application_kind?: string
+          application_number?: string
+          approved_at?: string | null
+          created_at?: string
+          decision_reason?: string | null
+          id?: string
+          payload?: Json
+          provider_category_code?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_join_applications_provider_category_code_fkey"
+            columns: ["provider_category_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_provider_categories"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "mkt_join_applications_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_listing_events: {
         Row: {
@@ -4357,6 +5307,185 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_provider_categories: {
+        Row: {
+          capabilities: string[]
+          code: string
+          created_at: string
+          default_store_type: string
+          default_theme_id: string
+          description_ar: string | null
+          description_en: string | null
+          icon: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          parent_code: string | null
+          requires_professional_license: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          capabilities?: string[]
+          code: string
+          created_at?: string
+          default_store_type?: string
+          default_theme_id?: string
+          description_ar?: string | null
+          description_en?: string | null
+          icon?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          parent_code?: string | null
+          requires_professional_license?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          capabilities?: string[]
+          code?: string
+          created_at?: string
+          default_store_type?: string
+          default_theme_id?: string
+          description_ar?: string | null
+          description_en?: string | null
+          icon?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          parent_code?: string | null
+          requires_professional_license?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_provider_categories_parent_code_fkey"
+            columns: ["parent_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_provider_categories"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      mkt_provider_profiles: {
+        Row: {
+          accepts_partner_requests: boolean
+          category_code: string
+          created_at: string
+          created_by: string
+          headline_ar: string | null
+          headline_en: string | null
+          status: string
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          accepts_partner_requests?: boolean
+          category_code?: string
+          created_at?: string
+          created_by?: string
+          headline_ar?: string | null
+          headline_en?: string | null
+          status?: string
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          accepts_partner_requests?: boolean
+          category_code?: string
+          created_at?: string
+          created_by?: string
+          headline_ar?: string | null
+          headline_en?: string | null
+          status?: string
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_provider_profiles_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_provider_categories"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "mkt_provider_profiles_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_provider_relations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          ended_at: string | null
+          id: string
+          provider_storefront_id: string
+          relation_type: string
+          request_message: string | null
+          requested_by: string
+          requester_storefront_id: string
+          responded_by: string | null
+          response_note: string | null
+          scopes: string[]
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          provider_storefront_id: string
+          relation_type: string
+          request_message?: string | null
+          requested_by?: string
+          requester_storefront_id: string
+          responded_by?: string | null
+          response_note?: string | null
+          scopes?: string[]
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          provider_storefront_id?: string
+          relation_type?: string
+          request_message?: string | null
+          requested_by?: string
+          requester_storefront_id?: string
+          responded_by?: string | null
+          response_note?: string | null
+          scopes?: string[]
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_provider_relations_provider_storefront_id_fkey"
+            columns: ["provider_storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_provider_relations_requester_storefront_id_fkey"
+            columns: ["requester_storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_quote_request_files: {
         Row: {
           created_at: string
@@ -4794,6 +5923,537 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "mkt_report_reasons"
             referencedColumns: ["code"]
+          },
+        ]
+      }
+      mkt_service_availability: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          is_active: boolean
+          professional_id: string
+          starts_at: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          is_active?: boolean
+          professional_id: string
+          starts_at: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          is_active?: boolean
+          professional_id?: string
+          starts_at?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_availability_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_professionals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_booking_status_history: {
+        Row: {
+          booking_id: string
+          changed_by_account_key: string | null
+          changed_by_user_id: string | null
+          created_at: string
+          id: string
+          new_status: string
+          note: string | null
+          old_status: string | null
+        }
+        Insert: {
+          booking_id: string
+          changed_by_account_key?: string | null
+          changed_by_user_id?: string | null
+          created_at?: string
+          id?: string
+          new_status: string
+          note?: string | null
+          old_status?: string | null
+        }
+        Update: {
+          booking_id?: string
+          changed_by_account_key?: string | null
+          changed_by_user_id?: string | null
+          created_at?: string
+          id?: string
+          new_status?: string
+          note?: string | null
+          old_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_booking_status_history_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_bookings: {
+        Row: {
+          address_text: string | null
+          booking_number: string
+          branch_id: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          completed_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          currency_code: string
+          customer_account_key: string
+          customer_name_snapshot: string | null
+          customer_notes: string | null
+          customer_phone_snapshot: string | null
+          customer_user_id: string
+          district: string | null
+          ends_at: string
+          id: string
+          idempotency_key: string
+          latitude: number | null
+          longitude: number | null
+          payment_method: string
+          payment_status: string
+          professional_id: string
+          provider_name_snapshot: string
+          provider_notes: string | null
+          provider_tenant_id: string | null
+          provider_user_id: string
+          service_item_id: string
+          service_mode: string
+          service_name_snapshot: string
+          started_at: string | null
+          starts_at: string
+          status: string
+          storefront_id: string
+          subtotal: number
+          timezone: string
+          total: number
+          updated_at: string
+          visit_fee: number
+        }
+        Insert: {
+          address_text?: string | null
+          booking_number: string
+          branch_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          completed_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          currency_code?: string
+          customer_account_key: string
+          customer_name_snapshot?: string | null
+          customer_notes?: string | null
+          customer_phone_snapshot?: string | null
+          customer_user_id?: string
+          district?: string | null
+          ends_at: string
+          id?: string
+          idempotency_key: string
+          latitude?: number | null
+          longitude?: number | null
+          payment_method?: string
+          payment_status?: string
+          professional_id: string
+          provider_name_snapshot: string
+          provider_notes?: string | null
+          provider_tenant_id?: string | null
+          provider_user_id: string
+          service_item_id: string
+          service_mode: string
+          service_name_snapshot: string
+          started_at?: string | null
+          starts_at: string
+          status?: string
+          storefront_id: string
+          subtotal: number
+          timezone: string
+          total: number
+          updated_at?: string
+          visit_fee?: number
+        }
+        Update: {
+          address_text?: string | null
+          booking_number?: string
+          branch_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          completed_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          currency_code?: string
+          customer_account_key?: string
+          customer_name_snapshot?: string | null
+          customer_notes?: string | null
+          customer_phone_snapshot?: string | null
+          customer_user_id?: string
+          district?: string | null
+          ends_at?: string
+          id?: string
+          idempotency_key?: string
+          latitude?: number | null
+          longitude?: number | null
+          payment_method?: string
+          payment_status?: string
+          professional_id?: string
+          provider_name_snapshot?: string
+          provider_notes?: string | null
+          provider_tenant_id?: string | null
+          provider_user_id?: string
+          service_item_id?: string
+          service_mode?: string
+          service_name_snapshot?: string
+          started_at?: string | null
+          starts_at?: string
+          status?: string
+          storefront_id?: string
+          subtotal?: number
+          timezone?: string
+          total?: number
+          updated_at?: string
+          visit_fee?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_bookings_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_bookings_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_bookings_provider_tenant_id_fkey"
+            columns: ["provider_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_bookings_service_item_id_fkey"
+            columns: ["service_item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_bookings_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_categories: {
+        Row: {
+          code: string
+          color: string
+          created_at: string
+          icon: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          color: string
+          created_at?: string
+          icon: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          color?: string
+          created_at?: string
+          icon?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      mkt_service_professional_items: {
+        Row: {
+          created_at: string
+          professional_id: string
+          service_item_id: string
+        }
+        Insert: {
+          created_at?: string
+          professional_id: string
+          service_item_id: string
+        }
+        Update: {
+          created_at?: string
+          professional_id?: string
+          service_item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_professional_items_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_professional_items_service_item_id_fkey"
+            columns: ["service_item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_professionals: {
+        Row: {
+          accepts_bookings: boolean
+          avatar_path: string | null
+          bio: string | null
+          created_at: string
+          deleted_at: string | null
+          display_name: string
+          id: string
+          is_active: boolean
+          is_primary: boolean
+          sort_order: number
+          storefront_id: string
+          title: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          accepts_bookings?: boolean
+          avatar_path?: string | null
+          bio?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          display_name: string
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          sort_order?: number
+          storefront_id: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          accepts_bookings?: boolean
+          avatar_path?: string | null
+          bio?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          sort_order?: number
+          storefront_id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_professionals_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_reviews: {
+        Row: {
+          booking_id: string
+          comment: string | null
+          created_at: string
+          customer_user_id: string
+          id: string
+          professional_id: string
+          rating: number
+          status: string
+          storefront_id: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          comment?: string | null
+          created_at?: string
+          customer_user_id?: string
+          id?: string
+          professional_id: string
+          rating: number
+          status?: string
+          storefront_id: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          comment?: string | null
+          created_at?: string
+          customer_user_id?: string
+          id?: string
+          professional_id?: string
+          rating?: number
+          status?: string
+          storefront_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_service_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_service_reviews_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_settings: {
+        Row: {
+          accepts_bookings: boolean
+          buffer_minutes: number
+          cancellation_window_hours: number
+          category_code: string
+          confirmation_mode: string
+          created_at: string
+          max_advance_days: number
+          min_notice_minutes: number
+          service_modes: string[]
+          slot_interval_minutes: number
+          storefront_id: string
+          timezone: string
+          updated_at: string
+          visit_fee: number
+        }
+        Insert: {
+          accepts_bookings?: boolean
+          buffer_minutes?: number
+          cancellation_window_hours?: number
+          category_code?: string
+          confirmation_mode?: string
+          created_at?: string
+          max_advance_days?: number
+          min_notice_minutes?: number
+          service_modes?: string[]
+          slot_interval_minutes?: number
+          storefront_id: string
+          timezone?: string
+          updated_at?: string
+          visit_fee?: number
+        }
+        Update: {
+          accepts_bookings?: boolean
+          buffer_minutes?: number
+          cancellation_window_hours?: number
+          category_code?: string
+          confirmation_mode?: string
+          created_at?: string
+          max_advance_days?: number
+          min_notice_minutes?: number
+          service_modes?: string[]
+          slot_interval_minutes?: number
+          storefront_id?: string
+          timezone?: string
+          updated_at?: string
+          visit_fee?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_settings_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_categories"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "mkt_service_settings_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_service_time_off: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          professional_id: string
+          reason: string | null
+          starts_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          professional_id: string
+          reason?: string | null
+          starts_at: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          professional_id?: string
+          reason?: string | null
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_service_time_off_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_service_professionals"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -5809,6 +7469,7 @@ export type Database = {
           store_type: string
           suspension_reason: string | null
           tenant_id: string | null
+          theme_id: string
           updated_at: string
           verification_status: string
           views_count: number
@@ -5854,6 +7515,7 @@ export type Database = {
           store_type?: string
           suspension_reason?: string | null
           tenant_id?: string | null
+          theme_id?: string
           updated_at?: string
           verification_status?: string
           views_count?: number
@@ -5899,6 +7561,7 @@ export type Database = {
           store_type?: string
           suspension_reason?: string | null
           tenant_id?: string | null
+          theme_id?: string
           updated_at?: string
           verification_status?: string
           views_count?: number
@@ -5933,6 +7596,246 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mkt_syria_directory_entries: {
+        Row: {
+          address: string | null
+          address_status: string | null
+          aliases: string | null
+          category: string
+          city: string | null
+          completeness_score: number
+          created_at: string
+          district: string | null
+          governorate: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          map_status: string | null
+          map_url: string | null
+          name_ar: string
+          name_en: string | null
+          neighborhood: string | null
+          notes: string | null
+          operational_status: string | null
+          ownership: string | null
+          publication_status: string
+          published_at: string | null
+          retrieved_on: string | null
+          review_note: string | null
+          review_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          search_text: string
+          sector: string
+          source_date: string | null
+          source_primary: string | null
+          source_record_id: string
+          source_secondary: string | null
+          source_type: string
+          specialties_services: string | null
+          subcategory: string | null
+          subdistrict: string | null
+          updated_at: string
+          verification_status: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          address_status?: string | null
+          aliases?: string | null
+          category: string
+          city?: string | null
+          completeness_score?: number
+          created_at?: string
+          district?: string | null
+          governorate?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          map_status?: string | null
+          map_url?: string | null
+          name_ar: string
+          name_en?: string | null
+          neighborhood?: string | null
+          notes?: string | null
+          operational_status?: string | null
+          ownership?: string | null
+          publication_status?: string
+          published_at?: string | null
+          retrieved_on?: string | null
+          review_note?: string | null
+          review_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          search_text?: string
+          sector: string
+          source_date?: string | null
+          source_primary?: string | null
+          source_record_id: string
+          source_secondary?: string | null
+          source_type: string
+          specialties_services?: string | null
+          subcategory?: string | null
+          subdistrict?: string | null
+          updated_at?: string
+          verification_status: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          address_status?: string | null
+          aliases?: string | null
+          category?: string
+          city?: string | null
+          completeness_score?: number
+          created_at?: string
+          district?: string | null
+          governorate?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          map_status?: string | null
+          map_url?: string | null
+          name_ar?: string
+          name_en?: string | null
+          neighborhood?: string | null
+          notes?: string | null
+          operational_status?: string | null
+          ownership?: string | null
+          publication_status?: string
+          published_at?: string | null
+          retrieved_on?: string | null
+          review_note?: string | null
+          review_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          search_text?: string
+          sector?: string
+          source_date?: string | null
+          source_primary?: string | null
+          source_record_id?: string
+          source_secondary?: string | null
+          source_type?: string
+          specialties_services?: string | null
+          subcategory?: string | null
+          subdistrict?: string | null
+          updated_at?: string
+          verification_status?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      mkt_syria_technical_institutes: {
+        Row: {
+          academic_year: string | null
+          affiliated_entity: string | null
+          created_at: string
+          governorate: string | null
+          id: string
+          institute_name: string
+          location: string | null
+          notes: string | null
+          search_text: string
+          source_institute_id: string
+          source_type: string | null
+          source_url: string | null
+          specialties: string | null
+          updated_at: string
+          verification_status: string | null
+        }
+        Insert: {
+          academic_year?: string | null
+          affiliated_entity?: string | null
+          created_at?: string
+          governorate?: string | null
+          id?: string
+          institute_name: string
+          location?: string | null
+          notes?: string | null
+          search_text?: string
+          source_institute_id: string
+          source_type?: string | null
+          source_url?: string | null
+          specialties?: string | null
+          updated_at?: string
+          verification_status?: string | null
+        }
+        Update: {
+          academic_year?: string | null
+          affiliated_entity?: string | null
+          created_at?: string
+          governorate?: string | null
+          id?: string
+          institute_name?: string
+          location?: string | null
+          notes?: string | null
+          search_text?: string
+          source_institute_id?: string
+          source_type?: string | null
+          source_url?: string | null
+          specialties?: string | null
+          updated_at?: string
+          verification_status?: string | null
+        }
+        Relationships: []
+      }
+      mkt_syria_university_programs: {
+        Row: {
+          academic_year: string | null
+          admission_track: string | null
+          created_at: string
+          faculty_institute: string | null
+          governorate: string | null
+          id: string
+          institution: string
+          ownership: string | null
+          program_name: string
+          search_text: string
+          source_program_id: string
+          source_type: string | null
+          source_url: string | null
+          study_location: string | null
+          updated_at: string
+          verification_status: string | null
+        }
+        Insert: {
+          academic_year?: string | null
+          admission_track?: string | null
+          created_at?: string
+          faculty_institute?: string | null
+          governorate?: string | null
+          id?: string
+          institution: string
+          ownership?: string | null
+          program_name: string
+          search_text?: string
+          source_program_id: string
+          source_type?: string | null
+          source_url?: string | null
+          study_location?: string | null
+          updated_at?: string
+          verification_status?: string | null
+        }
+        Update: {
+          academic_year?: string | null
+          admission_track?: string | null
+          created_at?: string
+          faculty_institute?: string | null
+          governorate?: string | null
+          id?: string
+          institution?: string
+          ownership?: string | null
+          program_name?: string
+          search_text?: string
+          source_program_id?: string
+          source_type?: string | null
+          source_url?: string | null
+          study_location?: string | null
+          updated_at?: string
+          verification_status?: string | null
+        }
+        Relationships: []
       }
       mkt_user_activity: {
         Row: {
@@ -6808,6 +8711,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profile_private_details: {
+        Row: {
+          ad_personalization_consent: boolean
+          birth_year: number | null
+          created_at: string
+          email_verified_at: string | null
+          gender: string | null
+          phone_verified_at: string | null
+          profile_completed_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ad_personalization_consent?: boolean
+          birth_year?: number | null
+          created_at?: string
+          email_verified_at?: string | null
+          gender?: string | null
+          phone_verified_at?: string | null
+          profile_completed_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ad_personalization_consent?: boolean
+          birth_year?: number | null
+          created_at?: string
+          email_verified_at?: string | null
+          gender?: string | null
+          phone_verified_at?: string | null
+          profile_completed_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -9738,6 +11677,140 @@ export type Database = {
         Args: { _attachment_id: string }
         Returns: undefined
       }
+      appt_appointment_action: {
+        Args: { _action: string; _appointment_id: string; _note?: string }
+        Returns: Json
+      }
+      appt_available_slots: {
+        Args: { _date: string; _provider_id: string; _service_id: string }
+        Returns: Json
+      }
+      appt_can_access_appointment: {
+        Args: { _appointment_id: string }
+        Returns: boolean
+      }
+      appt_can_manage_provider: {
+        Args: { _provider_id: string }
+        Returns: boolean
+      }
+      appt_complete_phone_profile: {
+        Args: { _display_name: string }
+        Returns: Json
+      }
+      appt_create_appointment: {
+        Args: {
+          _customer_name?: string
+          _customer_phone?: string
+          _idempotency_key?: string
+          _notes?: string
+          _provider_id: string
+          _service_id: string
+          _source?: string
+          _starts_at: string
+        }
+        Returns: Json
+      }
+      appt_create_provider: {
+        Args: {
+          _city?: string
+          _name_ar: string
+          _name_en?: string
+          _slug?: string
+          _timezone?: string
+        }
+        Returns: string
+      }
+      appt_distance_km: {
+        Args: {
+          _latitude_a: number
+          _latitude_b: number
+          _longitude_a: number
+          _longitude_b: number
+        }
+        Returns: number
+      }
+      appt_has_market_account: { Args: never; Returns: boolean }
+      appt_is_provider_owner: {
+        Args: { _provider_id: string }
+        Returns: boolean
+      }
+      appt_join_queue: {
+        Args: {
+          _customer_name?: string
+          _customer_phone?: string
+          _notes?: string
+          _provider_id: string
+          _service_id: string
+        }
+        Returns: Json
+      }
+      appt_my_context: { Args: never; Returns: Json }
+      appt_nearby_directory: {
+        Args: {
+          _latitude: number
+          _limit?: number
+          _longitude: number
+          _provider_type?: string
+          _q?: string
+          _radius_km?: number
+        }
+        Returns: Json
+      }
+      appt_provider_dashboard: {
+        Args: { _date?: string; _provider_id: string }
+        Returns: Json
+      }
+      appt_provider_location_context: {
+        Args: { _provider_id: string }
+        Returns: Json
+      }
+      appt_public_directory: {
+        Args: { _city?: string; _limit?: number; _q?: string }
+        Returns: Json
+      }
+      appt_public_provider: { Args: { _slug: string }; Returns: Json }
+      appt_queue_action: {
+        Args: { _action: string; _note?: string; _queue_entry_id: string }
+        Returns: Json
+      }
+      appt_replace_availability: {
+        Args: { _provider_id: string; _rows: Json }
+        Returns: number
+      }
+      appt_save_market_link: {
+        Args: {
+          _market_profile_path?: string
+          _market_storefront_id?: string
+          _market_tenant_id?: string
+          _market_url?: string
+          _provider_id: string
+          _status?: string
+        }
+        Returns: Json
+      }
+      appt_save_provider: {
+        Args: { _patch: Json; _provider_id: string; _settings?: Json }
+        Returns: Json
+      }
+      appt_save_provider_location: {
+        Args: {
+          _accuracy_meters?: number
+          _address_text?: string
+          _city?: string
+          _clear_location?: boolean
+          _district?: string
+          _latitude?: number
+          _longitude?: number
+          _provider_id: string
+          _provider_type: string
+        }
+        Returns: Json
+      }
+      appt_save_service: {
+        Args: { _patch?: Json; _provider_id: string; _service_id?: string }
+        Returns: string
+      }
+      appt_verified_profile: { Args: never; Returns: Json }
       attachment_restore: {
         Args: { _attachment_id: string; _reason?: string }
         Returns: undefined
@@ -9934,6 +12007,24 @@ export type Database = {
       is_staff: { Args: never; Returns: boolean }
       is_supervisor_user: { Args: never; Returns: boolean }
       is_tenant_member: { Args: { _tenant_id: string }; Returns: boolean }
+      kaheel_appointments_market_categories_v1: { Args: never; Returns: Json }
+      kaheel_appointments_market_directory_v1: {
+        Args: {
+          _category_code?: string
+          _city_id?: string
+          _limit?: number
+          _q?: string
+        }
+        Returns: Json
+      }
+      kaheel_appointments_market_my_bookings_v1: {
+        Args: { _account_key: string; _limit?: number; _status?: string }
+        Returns: Json
+      }
+      kaheel_unified_customer_bookings_v2: {
+        Args: { _account_key: string; _limit?: number; _status?: string }
+        Returns: Json
+      }
       log_audit: {
         Args: {
           _action: string
@@ -10109,6 +12200,42 @@ export type Database = {
           _reason: string
         }
         Returns: Json
+      }
+      mkt_admin_join_application_review: {
+        Args: { _action: string; _application_id: string; _reason?: string }
+        Returns: undefined
+      }
+      mkt_admin_join_applications: {
+        Args: { _kind?: string; _limit?: number; _status?: string }
+        Returns: {
+          applicant_name: string
+          applicant_user_id: string
+          application_kind: string
+          application_number: string
+          created_at: string
+          decision_reason: string
+          documents_count: number
+          id: string
+          payload: Json
+          provider_category_code: string
+          provider_category_name: string
+          reviewed_at: string
+          status: string
+          tenant_id: string
+          tenant_name: string
+        }[]
+      }
+      mkt_admin_join_documents: {
+        Args: { _application_id: string }
+        Returns: {
+          created_at: string
+          document_kind: string
+          file_name: string
+          id: string
+          mime_type: string
+          size_bytes: number
+          storage_path: string
+        }[]
       }
       mkt_admin_listing_action: {
         Args: {
@@ -10360,6 +12487,20 @@ export type Database = {
           user_id: string
         }[]
       }
+      mkt_admin_syria_directory_queue: {
+        Args: { _limit?: number; _q?: string; _status?: string }
+        Returns: Json
+      }
+      mkt_admin_syria_directory_review: {
+        Args: {
+          _action: string
+          _corrected_name_ar?: string
+          _corrected_name_en?: string
+          _entry_id: string
+          _note?: string
+        }
+        Returns: Json
+      }
       mkt_admin_transfer: {
         Args: {
           _kind: string
@@ -10573,7 +12714,6 @@ export type Database = {
         Returns: string
       }
       mkt_call_request_start: { Args: { _request_id: string }; Returns: Json }
-      mkt_call_signals_purge_expired: { Args: never; Returns: undefined }
       mkt_call_start: { Args: { _listing_id: string }; Returns: Json }
       mkt_call_stop_receiving: { Args: never; Returns: undefined }
       mkt_call_transition: {
@@ -10591,10 +12731,6 @@ export type Database = {
         Returns: boolean
       }
       mkt_can_review_identity: { Args: never; Returns: boolean }
-      mkt_can_review_identity_for: {
-        Args: { _tenant_id: string }
-        Returns: boolean
-      }
       mkt_can_view_conversation: {
         Args: { _conversation_id: string }
         Returns: boolean
@@ -10663,6 +12799,34 @@ export type Database = {
         }[]
       }
       mkt_expire_re_licenses: { Args: never; Returns: number }
+      mkt_external_integration_save: {
+        Args: {
+          _account_key: string
+          _config_public?: Json
+          _direction: string
+          _display_name: string
+          _integration_code: string
+          _integration_id: string
+        }
+        Returns: string
+      }
+      mkt_external_integrations_list: {
+        Args: { _account_key: string }
+        Returns: {
+          config_public: Json
+          created_at: string
+          credentials_state: string
+          direction: string
+          display_name: string
+          id: string
+          integration_code: string
+          last_connected_at: string
+          last_error_code: string
+          status: string
+          storefront_id: string
+          updated_at: string
+        }[]
+      }
       mkt_has_restriction: {
         Args: {
           _restrictions: string[]
@@ -10672,6 +12836,27 @@ export type Database = {
         Returns: boolean
       }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
+      mkt_integration_catalog_public: {
+        Args: never
+        Returns: {
+          code: string
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          integration_kind: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          sort_order: number
+          supported_directions: string[]
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "mkt_integration_catalog"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       mkt_is_auto_publish_op: { Args: never; Returns: boolean }
       mkt_is_business_principal: {
         Args: { _tenant_id: string }
@@ -10688,12 +12873,64 @@ export type Database = {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_join_application_document_add: {
+        Args: {
+          _application_id: string
+          _document_kind: string
+          _file_name: string
+          _mime_type: string
+          _size_bytes: number
+          _storage_path: string
+        }
+        Returns: string
+      }
+      mkt_join_application_finalize: {
+        Args: {
+          _application_id: string
+          _payload?: Json
+          _provider_category_code?: string
+        }
+        Returns: string
+      }
+      mkt_join_application_mark_incomplete: {
+        Args: { _application_id: string }
+        Returns: undefined
+      }
+      mkt_join_application_submit: {
+        Args: {
+          _application_kind: string
+          _payload?: Json
+          _provider_category_code?: string
+          _tenant_id?: string
+        }
+        Returns: string
+      }
+      mkt_join_workspace_prepare: {
+        Args: {
+          _activity?: string
+          _application_kind: string
+          _city?: string
+          _cr_number?: string
+          _email?: string
+          _legal_name?: string
+          _name_ar: string
+          _name_en?: string
+          _phone?: string
+          _provider_category_code: string
+          _unified_number?: string
+        }
+        Returns: string
+      }
       mkt_lift_expired_restrictions: { Args: never; Returns: number }
       mkt_lift_restriction: {
         Args: { _reason: string; _restriction_id: string }
         Returns: undefined
       }
       mkt_listing_archive: { Args: { _id: string }; Returns: string }
+      mkt_listing_commerce_action: {
+        Args: { _listing_id: string }
+        Returns: Json
+      }
       mkt_listing_delete: { Args: { _id: string }; Returns: string }
       mkt_listing_duplicate: { Args: { _id: string }; Returns: string }
       mkt_listing_event_log: {
@@ -10762,9 +12999,18 @@ export type Database = {
         Args: { _event_type: string; _listing_id: string; _meta?: Json }
         Returns: undefined
       }
-      mkt_log_registry_review: {
-        Args: { _tenant_id: string }
-        Returns: undefined
+      mkt_merchant_order_action: {
+        Args: {
+          _account_key: string
+          _action: string
+          _note?: string
+          _order_id: string
+        }
+        Returns: string
+      }
+      mkt_merchant_orders_list: {
+        Args: { _account_key: string; _limit?: number; _status?: string }
+        Returns: Json
       }
       mkt_merge_activities: {
         Args: { _note?: string; _source_id: string; _target_id: string }
@@ -10805,6 +13051,13 @@ export type Database = {
         Args: { _id: string; _trigger?: string }
         Returns: Json
       }
+      mkt_my_account_classifications: {
+        Args: never
+        Returns: {
+          account_key: string
+          classification: string
+        }[]
+      }
       mkt_my_accounts: {
         Args: never
         Returns: {
@@ -10821,6 +13074,26 @@ export type Database = {
           slug: string
           tenant_id: string
           verification_status: string
+        }[]
+      }
+      mkt_my_join_applications: {
+        Args: never
+        Returns: {
+          account_key: string
+          application_kind: string
+          application_number: string
+          created_at: string
+          decision_reason: string
+          documents_count: number
+          id: string
+          payload: Json
+          provider_category_code: string
+          provider_category_name_ar: string
+          provider_category_name_en: string
+          reviewed_at: string
+          status: string
+          tenant_id: string
+          tenant_name: string
         }[]
       }
       mkt_my_moderation_cases: {
@@ -10870,6 +13143,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_operational_access: { Args: { _account_key: string }; Returns: Json }
       mkt_order_item_party: {
         Args: { _order_item_id: string }
         Returns: boolean
@@ -10878,6 +13152,107 @@ export type Database = {
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
       mkt_promotion_prices: { Args: never; Returns: Json }
+      mkt_provider_categories_public: {
+        Args: never
+        Returns: {
+          capabilities: string[]
+          code: string
+          created_at: string
+          default_store_type: string
+          default_theme_id: string
+          description_ar: string | null
+          description_en: string | null
+          icon: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          parent_code: string | null
+          requires_professional_license: boolean
+          sort_order: number
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "mkt_provider_categories"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      mkt_provider_directory: {
+        Args: { _category_code?: string; _limit?: number; _q?: string }
+        Returns: {
+          accepts_partner_requests: boolean
+          capabilities: string[]
+          category_code: string
+          category_name_ar: string
+          category_name_en: string
+          city_name_ar: string
+          city_name_en: string
+          headline_ar: string
+          headline_en: string
+          logo_path: string
+          name_ar: string
+          name_en: string
+          slug: string
+          storefront_id: string
+          verification_status: string
+        }[]
+      }
+      mkt_provider_operations_overview: {
+        Args: { _account_key: string }
+        Returns: Json
+      }
+      mkt_provider_profile_context: {
+        Args: { _account_key: string }
+        Returns: Json
+      }
+      mkt_provider_profile_save: {
+        Args: {
+          _accepts_partner_requests?: boolean
+          _account_key: string
+          _category_code: string
+          _headline_ar?: string
+          _headline_en?: string
+        }
+        Returns: Json
+      }
+      mkt_provider_relation_request: {
+        Args: {
+          _account_key: string
+          _message?: string
+          _relation_type: string
+          _scopes?: string[]
+          _target_storefront_id: string
+        }
+        Returns: string
+      }
+      mkt_provider_relation_respond: {
+        Args: {
+          _account_key: string
+          _action: string
+          _note?: string
+          _relation_id: string
+        }
+        Returns: undefined
+      }
+      mkt_provider_relations_list: {
+        Args: { _account_key: string }
+        Returns: {
+          created_at: string
+          direction: string
+          id: string
+          other_category_code: string
+          other_store_name: string
+          other_store_slug: string
+          other_storefront_id: string
+          relation_type: string
+          request_message: string
+          response_note: string
+          scopes: string[]
+          status: string
+          updated_at: string
+        }[]
+      }
       mkt_public_business: {
         Args: { _slug: string }
         Returns: {
@@ -11172,6 +13547,79 @@ export type Database = {
           store_type: string
         }[]
       }
+      mkt_service_booking_action: {
+        Args: {
+          _account_key: string
+          _action: string
+          _booking_id: string
+          _note?: string
+        }
+        Returns: Json
+      }
+      mkt_service_booking_context: {
+        Args: { _service_item_id: string; _store_slug: string }
+        Returns: Json
+      }
+      mkt_service_booking_party: {
+        Args: { _booking_id: string }
+        Returns: boolean
+      }
+      mkt_service_bookings_list: {
+        Args: {
+          _account_key: string
+          _limit?: number
+          _side?: string
+          _status?: string
+        }
+        Returns: Json
+      }
+      mkt_service_categories_public: { Args: never; Returns: Json }
+      mkt_service_create_booking: {
+        Args: {
+          _account_key: string
+          _address_text?: string
+          _customer_phone?: string
+          _district?: string
+          _idempotency_key?: string
+          _latitude?: number
+          _longitude?: number
+          _notes?: string
+          _professional_id?: string
+          _service_item_id: string
+          _service_mode?: string
+          _starts_at: string
+        }
+        Returns: Json
+      }
+      mkt_service_directory: {
+        Args: {
+          _category_code?: string
+          _city_id?: string
+          _limit?: number
+          _q?: string
+        }
+        Returns: Json
+      }
+      mkt_service_provider_save: {
+        Args: { _account_key: string; _availability?: Json; _patch: Json }
+        Returns: Json
+      }
+      mkt_service_provider_setup: {
+        Args: { _account_key: string }
+        Returns: Json
+      }
+      mkt_service_review_save: {
+        Args: { _booking_id: string; _comment?: string; _rating: number }
+        Returns: string
+      }
+      mkt_service_slots: {
+        Args: {
+          _date: string
+          _professional_id?: string
+          _service_item_id: string
+        }
+        Returns: Json
+      }
       mkt_set_entity_activities: {
         Args: {
           _main_activity_id: string
@@ -11276,6 +13724,17 @@ export type Database = {
         Args: { _rows: Json; _storefront_id: string }
         Returns: undefined
       }
+      mkt_store_item_linked_listings: {
+        Args: { _storefront_id: string }
+        Returns: {
+          cover_image_url: string
+          id: string
+          slug: string
+          status: string
+          storefront_id: string
+          title: string
+        }[]
+      }
       mkt_store_item_manage: { Args: { _item_id: string }; Returns: boolean }
       mkt_store_item_visible: { Args: { _item_id: string }; Returns: boolean }
       mkt_store_linkable_listings: {
@@ -11308,6 +13767,11 @@ export type Database = {
         Returns: string
       }
       mkt_store_submit: { Args: { _storefront_id: string }; Returns: Json }
+      mkt_store_theme_public: { Args: { _slug: string }; Returns: string }
+      mkt_store_theme_save: {
+        Args: { _account_key: string; _theme_id: string }
+        Returns: string
+      }
       mkt_store_visible: { Args: { _storefront_id: string }; Returns: boolean }
       mkt_store_zones_save: {
         Args: { _rows: Json; _storefront_id: string }
@@ -11341,6 +13805,27 @@ export type Database = {
       mkt_sweep_expired_listings: { Args: never; Returns: Json }
       mkt_sweep_expired_re_licenses: { Args: never; Returns: number }
       mkt_sweep_promotion_notices: { Args: never; Returns: number }
+      mkt_syria_directory_name_requires_review: {
+        Args: { _aliases?: string; _name_ar: string; _name_en?: string }
+        Returns: boolean
+      }
+      mkt_syria_guide_facets_v1: { Args: never; Returns: Json }
+      mkt_syria_guide_search_v1: {
+        Args: {
+          _governorate?: string
+          _kind?: string
+          _limit?: number
+          _offset?: number
+          _q?: string
+          _sector?: string
+        }
+        Returns: Json
+      }
+      mkt_syria_normalize: { Args: { _value: string }; Returns: string }
+      mkt_tenant_operational_allowed: {
+        Args: { _tenant_id: string }
+        Returns: boolean
+      }
       mkt_track: { Args: { _events: Json }; Returns: number }
       mkt_user_blocked: { Args: { _restrictions: string[] }; Returns: boolean }
       mkt_user_can: { Args: { _perm: string; _uid: string }; Returns: boolean }
@@ -11624,6 +14109,47 @@ export type Database = {
           _title: string
         }
         Returns: undefined
+      }
+      profile_completion_get: {
+        Args: never
+        Returns: {
+          ad_personalization_consent: boolean
+          birth_year: number
+          email: string
+          email_verified_at: string
+          full_name: string
+          gender: string
+          is_complete: boolean
+          phone: string
+          phone_verified_at: string
+        }[]
+      }
+      profile_completion_save: {
+        Args: {
+          _ad_personalization_consent: boolean
+          _birth_year: number
+          _email: string
+          _gender: string
+          _phone: string
+        }
+        Returns: undefined
+      }
+      profile_seed_public_signup: {
+        Args: {
+          _email: string
+          _name: string
+          _phone: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      profile_sync_verification: {
+        Args: never
+        Returns: {
+          email_verified: boolean
+          is_complete: boolean
+          phone_verified: boolean
+        }[]
       }
       project_exists: { Args: { _project_id: string }; Returns: boolean }
       project_membership_end: {
