@@ -157,7 +157,7 @@ export function OffersEditor({
 
     save.mutate(
       {
-        id: draft.id,
+        ...(draft.id ? { id: draft.id } : {}),
         title,
         description: draft.description.trim() || null,
         discount_type: draft.discount_type,
@@ -168,6 +168,7 @@ export function OffersEditor({
         applies_to_all: draft.applies_to_all,
         item_ids: draftItemIds,
       },
+
       {
         onSuccess: () => {
           toast.success(draft.id ? "تم تحديث العرض." : "تم إنشاء العرض.");
