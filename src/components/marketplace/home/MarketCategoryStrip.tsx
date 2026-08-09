@@ -77,7 +77,7 @@ function StripRow({
   return (
     <div
       dir="ltr"
-      className="w-full overflow-hidden touch-pan-y select-none [mask-image:linear-gradient(to_right,transparent,black_36px,black_calc(100%-36px),transparent)]"
+      className="w-full overflow-hidden touch-pan-y select-none [mask-image:linear-gradient(to_right,transparent,black_56px,black_calc(100%-56px),transparent)]"
     >
       <div
         ref={trackRef}
