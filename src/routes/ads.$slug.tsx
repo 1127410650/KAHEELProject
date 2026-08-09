@@ -304,7 +304,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
               {t("market.ad.visitProfile")}
             </Link>
           ) : (
-            <Link to="/u/$username" params={{ username: person!.username }}>
+            <Link to="/profiles/$username" params={{ username: person!.username }}>
               {t("market.ad.visitProfile")}
             </Link>
           )}

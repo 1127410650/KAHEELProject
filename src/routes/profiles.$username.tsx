@@ -23,7 +23,7 @@ import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/u/$username")({
+export const Route = createFileRoute("/profiles/$username")({
   ssr: false,
   head: ({ params }) => {
     const title = `${params.username} — معلن فرد في گحيل`;
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/u/$username")({
         { name: "twitter:card", content: "summary" },
       ],
       links: [
-        { rel: "canonical", href: canonicalUrl(`/u/${params.username}`) },
+        { rel: "canonical", href: canonicalUrl(`/profiles/${params.username}`) },
       ],
     };
   },
@@ -193,7 +193,7 @@ function UserProfilePage() {
                 </a>
               </Button>
             )}
-            <ShareSheet title={name} url={canonicalUrl(`/u/${me.username}`)}>
+            <ShareSheet title={name} url={canonicalUrl(`/profiles/${me.username}`)}>
               <Button
                 type="button"
                 variant="outline"

@@ -26,7 +26,7 @@ import {
 
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
-export const Route = createFileRoute("/syria-guide")({
+export const Route = createFileRoute("/guides/syria")({
   ssr: false,
   head: () => ({
     meta: [
@@ -36,9 +36,9 @@ export const Route = createFileRoute("/syria-guide")({
         content: "دليل سوريا للجامعات والمشافي والجهات الحكومية والمعالم الأثرية والسياحية.",
       },
       { name: "robots", content: "index, follow" },
-      ...canonicalMeta("/syria-guide"),
+      ...canonicalMeta("/guides/syria"),
     ],
-    links: canonicalLinks("/syria-guide"),
+    links: canonicalLinks("/guides/syria"),
   }),
   component: SyriaGuidePage,
 });

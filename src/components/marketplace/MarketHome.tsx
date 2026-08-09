@@ -261,7 +261,7 @@ export function MarketHome() {
             description={t("market.homeV2.actions.service.desc" as HomeKey)}
           />
           <QuickAction
-            href="/student-tools"
+            href="/guides/students"
             icon={Sparkles}
             tone="bg-[#c77dff]/24"
             title={t("market.homeV2.actions.ai.title" as HomeKey)}

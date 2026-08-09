@@ -13,7 +13,7 @@ import { MarketShell } from "@/components/marketplace/MarketShell";
 import { createStudyQuestions, summarizeLocally } from "@/lib/syria-directory";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
-export const Route = createFileRoute("/student-tools")({
+export const Route = createFileRoute("/guides/students")({
   ssr: false,
   head: () => ({
     meta: [
@@ -23,9 +23,9 @@ export const Route = createFileRoute("/student-tools")({
         content: "أدوات مجانية للطالب السوري لتلخيص النصوص وإنشاء أسئلة مراجعة محليًا.",
       },
       { name: "robots", content: "index, follow" },
-      ...canonicalMeta("/student-tools"),
+      ...canonicalMeta("/guides/students"),
     ],
-    links: canonicalLinks("/student-tools"),
+    links: canonicalLinks("/guides/students"),
   }),
   component: StudentToolsPage,
 });

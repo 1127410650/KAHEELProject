@@ -604,7 +604,7 @@ function ProfilePage() {
               </span>
               {row?.username && (
                 <Link
-                  to="/u/$username"
+                  to="/profiles/$username"
                   params={{ username: row.username }}
                   className="inline-flex items-center gap-1 font-medium text-primary"
                 >
