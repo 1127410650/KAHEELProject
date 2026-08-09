@@ -2383,6 +2383,14 @@ body:has(.market-surface) {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(-1.5deg); }
   50% { transform: translate3d(0, -4px, 0) rotate(1.5deg); }
 }
+/* رفرفة قماش ناعمة: ميل بسيط + إزاحة رأسية، بلا أي تغيير في الأبعاد. */
+@keyframes k-season-wave {
+  0%, 100% { transform: translate3d(0, 0, 0) skewY(-2.2deg) scaleY(1); }
+  25% { transform: translate3d(0.6px, -1px, 0) skewY(1.4deg) scaleY(0.985); }
+  50% { transform: translate3d(0, 1px, 0) skewY(2.4deg) scaleY(1); }
+  75% { transform: translate3d(-0.6px, -0.5px, 0) skewY(-1.2deg) scaleY(0.99); }
+}
+
 
 .k-season-float {
   animation: k-season-float 6s ease-in-out infinite;
