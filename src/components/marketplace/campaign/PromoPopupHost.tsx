@@ -341,13 +341,18 @@ export function PromoPopupHost() {
   // ── مشهد الإطلالة: رأس وكتف فقط من الحافة، بلا بطاقة كاملة ────────────────
   if (card.mode === "peek") {
     const layout = PEEK_LAYOUT[card.peekSide];
+    /**
+     * الحركة تُكتب في `style` لا في كلاس: أسماء الحركات تُختار وقت التشغيل،
+     * وTailwind لا يولّد كلاسات من نصوص متغيّرة — فالـ inline style هو الطريق
+     * الوحيد الذي يضمن عمل كل الجهات فعلًا.
+     */
     const peekAnimation = calm
       ? leaving
-        ? "animate-[kaheel-tap-fade_0.22s_ease-in_forwards]"
-        : "animate-[kaheel-scrim-in_0.2s_ease-out]"
+        ? "kaheel-tap-fade 0.22s ease-in forwards"
+        : "kaheel-scrim-in 0.2s ease-out"
       : leaving
-        ? `animate-[${layout.animation.out}_0.26s_ease-in_forwards]`
-        : `animate-[${layout.animation.in}_0.6s_cubic-bezier(0.2,0.9,0.3,1)_both]`;
+        ? `${layout.animation.out} 0.26s ease-in forwards`
+        : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
 
     return (
       <div className={`pointer-events-none fixed inset-0 z-[80] flex ${layout.wrap}`} aria-live="polite">
@@ -356,11 +361,12 @@ export function PromoPopupHost() {
           data-kaheel-drop-card
           data-kaheel-peek={card.peekSide}
           role="status"
-          style={{ transformOrigin: layout.origin }}
-          className={`pointer-events-none flex items-end gap-1.5 ${layout.row} ${peekAnimation}`}
+          style={{ transformOrigin: layout.origin, animation: peekAnimation }}
+          className={`pointer-events-none flex items-end gap-1.5 ${layout.row}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
-          <div className="mb-2 max-w-[11rem] rounded-2xl rounded-be-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl">
+          <div className="mb-2 max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl">
+
             <div className="mb-1 flex items-start justify-between gap-2">
               <p className="line-clamp-2 text-[13px] font-black leading-tight text-[#240046]">
                 {card.title}
