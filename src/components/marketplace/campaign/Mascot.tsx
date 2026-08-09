@@ -165,6 +165,7 @@ export function Mascot({
   className,
   animated = true,
   priority = false,
+  variant,
 }: {
   name: MascotName;
   pose?: MascotPose;
@@ -172,8 +173,11 @@ export function Mascot({
   className?: string;
   animated?: boolean;
   priority?: boolean;
+  /** لتجاوز النسخة الفعّالة في المعاينة فقط. */
+  variant?: MascotVariant;
 }) {
-  const base = BASE[name];
+  const active = useMascotVariant();
+  const base = mascotAsset(name, variant ?? active);
   const spec = specFor(name, pose ?? DEFAULT_POSE[name]);
 
   return (
@@ -201,15 +205,32 @@ export function MascotDuo({
   lang = "ar",
   animated = true,
   className,
+  variant,
 }: {
   lang?: "ar" | "en";
   animated?: boolean;
   className?: string;
+  variant?: MascotVariant;
 }) {
   return (
     <div className={`flex items-end justify-center gap-1 ${className ?? "h-full"}`}>
-      <Mascot name="kaheel" pose="welcome" lang={lang} animated={animated} className="h-full w-auto" />
-      <Mascot name="kaheelan" pose="wave" lang={lang} animated={animated} className="h-full w-auto" />
+      <Mascot
+        name="kaheel"
+        pose="welcome"
+        lang={lang}
+        animated={animated}
+        variant={variant}
+        className="h-full w-auto"
+      />
+      <Mascot
+        name="kaheelan"
+        pose="wave"
+        lang={lang}
+        animated={animated}
+        variant={variant}
+        className="h-full w-auto"
+      />
     </div>
   );
 }
+
