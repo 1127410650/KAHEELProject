@@ -710,6 +710,59 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </div>
             </div>
 
+            {/* تفاصيل العقار: حدود دنيا واضحة بدل حقول تقنية. */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="real-estate-filter-rooms">{t("market.realEstate.roomsMin")}</Label>
+                <select
+                  id="real-estate-filter-rooms"
+                  value={draft.rooms ?? ""}
+                  onChange={(event) =>
+                    setDraft({ ...draft, rooms: event.target.value || undefined })
+                  }
+                  className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
+                >
+                  <option value="">{t("market.filters.all")}</option>
+                  {[1, 2, 3, 4, 5, 6].map((value) => (
+                    <option key={value} value={String(value)}>{`${value}+`}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="real-estate-filter-baths">{t("market.realEstate.bathsMin")}</Label>
+                <select
+                  id="real-estate-filter-baths"
+                  value={draft.baths ?? ""}
+                  onChange={(event) =>
+                    setDraft({ ...draft, baths: event.target.value || undefined })
+                  }
+                  className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
+                >
+                  <option value="">{t("market.filters.all")}</option>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <option key={value} value={String(value)}>{`${value}+`}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="real-estate-filter-area">{t("market.realEstate.areaMin")}</Label>
+                <Input
+                  id="real-estate-filter-area"
+                  dir="ltr"
+                  inputMode="numeric"
+                  value={draft.area ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      area: event.target.value.replace(/\D/g, "") || undefined,
+                    })
+                  }
+                />
+              </div>
+            </div>
+
+
+
             <div className="space-y-1.5">
               <Label htmlFor="real-estate-filter-sort">{t("market.filters.sort")}</Label>
               <select
