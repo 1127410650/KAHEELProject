@@ -72,8 +72,7 @@ export function KidsEmptyState({
       </p>
       <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
         <Link
-          to="/categories/$slug"
-          params={{ slug: "kids" }}
+          to="/kids"
           className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground"
         >
           كل أقسام الأطفال
