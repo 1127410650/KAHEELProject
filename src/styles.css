@@ -2091,3 +2091,96 @@ body:has(.market-surface) {
   88% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-60%); }
 }
+
+/* ===== جهات ظهور البطاقة: من كل الجهات لا من الأعلى فقط =====
+   لكل جهة دخول بـ spring خفيف (تجاوز صغير ثم استقرار) وخروج بنفس الاتجاه.
+   كلها transform + opacity فقط ⇒ على الـ compositor، صفر هزّة تخطيط. */
+@keyframes mascot-in-bottom {
+  0% { opacity: 0; transform: translateY(120%) scale(0.94); }
+  62% { opacity: 1; transform: translateY(-6%) scale(1.02); }
+  82% { transform: translateY(2%) scale(0.995); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes mascot-out-bottom {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(120%) scale(0.94); }
+}
+@keyframes mascot-in-top {
+  0% { opacity: 0; transform: translateY(-120%) scale(0.94); }
+  62% { opacity: 1; transform: translateY(6%) scale(1.02); }
+  82% { transform: translateY(-2%) scale(0.995); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes mascot-out-top {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-120%) scale(0.94); }
+}
+@keyframes mascot-in-right {
+  0% { opacity: 0; transform: translateX(120%) rotate(4deg) scale(0.94); }
+  62% { opacity: 1; transform: translateX(-6%) rotate(-1.5deg) scale(1.02); }
+  82% { transform: translateX(2%) rotate(0.5deg) scale(0.995); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1); }
+}
+@keyframes mascot-out-right {
+  0% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateX(120%) rotate(4deg) scale(0.94); }
+}
+@keyframes mascot-in-left {
+  0% { opacity: 0; transform: translateX(-120%) rotate(-4deg) scale(0.94); }
+  62% { opacity: 1; transform: translateX(6%) rotate(1.5deg) scale(1.02); }
+  82% { transform: translateX(-2%) rotate(-0.5deg) scale(0.995); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1); }
+}
+@keyframes mascot-out-left {
+  0% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateX(-120%) rotate(-4deg) scale(0.94); }
+}
+/* الزاوية السفلية: دخول قطري. */
+@keyframes mascot-in-corner {
+  0% { opacity: 0; transform: translate(90%, 90%) rotate(6deg) scale(0.9); }
+  62% { opacity: 1; transform: translate(-4%, -5%) rotate(-2deg) scale(1.03); }
+  82% { transform: translate(1.5%, 2%) rotate(0.6deg) scale(0.995); }
+  100% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+@keyframes mascot-out-corner {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(90%, 90%) rotate(6deg) scale(0.9); }
+}
+
+/* ===== «كَحيلان يطلّ برأسه»: إطلالة صغيرة من الحافة =====
+   ينزلق قليلًا للداخل، ميلة رأس خفيفة، ثم يستقر — بلا بطاقة كاملة. */
+@keyframes mascot-peek-right {
+  0% { opacity: 0; transform: translateX(100%) rotate(8deg); }
+  58% { opacity: 1; transform: translateX(-4%) rotate(-4deg); }
+  80% { transform: translateX(2%) rotate(2deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg); }
+}
+@keyframes mascot-peek-out-right {
+  0% { opacity: 1; transform: translateX(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateX(100%) rotate(8deg); }
+}
+@keyframes mascot-peek-left {
+  0% { opacity: 0; transform: translateX(-100%) rotate(-8deg); }
+  58% { opacity: 1; transform: translateX(4%) rotate(4deg); }
+  80% { transform: translateX(-2%) rotate(-2deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg); }
+}
+@keyframes mascot-peek-out-left {
+  0% { opacity: 1; transform: translateX(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateX(-100%) rotate(-8deg); }
+}
+@keyframes mascot-peek-bottom {
+  0% { opacity: 0; transform: translateY(100%); }
+  58% { opacity: 1; transform: translateY(-6%) rotate(-2deg); }
+  80% { transform: translateY(2%) rotate(1deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+@keyframes mascot-peek-out-bottom {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(100%); }
+}
+/* ميلة رأس هادئة أثناء الإطلالة — كأنه يختلس النظر. */
+@keyframes mascot-peek-tilt {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-2px); }
+}
