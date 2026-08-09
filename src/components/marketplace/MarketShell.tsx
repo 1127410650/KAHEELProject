@@ -358,7 +358,8 @@ const COPYRIGHT_FOOTER_PREFIXES = [
 ];
 const NO_FOOTER_PREFIXES = [
   "/admin",
-  "/dashboard",
+  "/my",
+  "/business",
   "/chat",
   "/more",
   "/auth",

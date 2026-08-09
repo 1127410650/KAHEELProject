@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -118,6 +119,11 @@ const AuditRoute = AuditRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessRouteRoute = BusinessRouteRouteImport.update({
+  id: '/business',
+  path: '/business',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChooseAccountRoute = ChooseAccountRouteImport.update({
@@ -311,24 +317,24 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessIndexRoute = BusinessIndexRouteImport.update({
-  id: '/business/',
-  path: '/business/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessOrdersRoute = BusinessOrdersRouteImport.update({
-  id: '/business/orders',
-  path: '/business/orders',
-  getParentRoute: () => rootRouteImport,
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessPartnersRoute = BusinessPartnersRouteImport.update({
-  id: '/business/partners',
-  path: '/business/partners',
-  getParentRoute: () => rootRouteImport,
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessProfileRoute = BusinessProfileRouteImport.update({
-  id: '/business/profile',
-  path: '/business/profile',
-  getParentRoute: () => rootRouteImport,
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
   id: '/businesses/$slug',
@@ -436,30 +442,30 @@ const AdminVerificationsIdRoute = AdminVerificationsIdRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const BusinessServicesIndexRoute = BusinessServicesIndexRouteImport.update({
-  id: '/business/services/',
-  path: '/business/services/',
-  getParentRoute: () => rootRouteImport,
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessServicesSettingsRoute =
   BusinessServicesSettingsRouteImport.update({
-    id: '/business/services/settings',
-    path: '/business/services/settings',
-    getParentRoute: () => rootRouteImport,
+    id: '/services/settings',
+    path: '/services/settings',
+    getParentRoute: () => BusinessRouteRoute,
   } as any)
 const BusinessStoreIndexRoute = BusinessStoreIndexRouteImport.update({
-  id: '/business/store/',
-  path: '/business/store/',
-  getParentRoute: () => rootRouteImport,
+  id: '/store/',
+  path: '/store/',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessStoreCatalogRoute = BusinessStoreCatalogRouteImport.update({
-  id: '/business/store/catalog',
-  path: '/business/store/catalog',
-  getParentRoute: () => rootRouteImport,
+  id: '/store/catalog',
+  path: '/store/catalog',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const BusinessStoreNewRoute = BusinessStoreNewRouteImport.update({
-  id: '/business/store/new',
-  path: '/business/store/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/store/new',
+  path: '/store/new',
+  getParentRoute: () => BusinessRouteRoute,
 } as any)
 const MyAdsIndexRoute = MyAdsIndexRouteImport.update({
   id: '/ads/',
@@ -495,6 +501,7 @@ const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/business': typeof BusinessRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRoute
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
@@ -658,6 +665,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/business': typeof BusinessRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRoute
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
@@ -742,6 +750,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/business'
     | '/dashboard'
     | '/my'
     | '/$'
@@ -904,6 +913,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/business'
     | '/dashboard'
     | '/my'
     | '/$'
@@ -987,6 +997,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  BusinessRouteRoute: typeof BusinessRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRoute
   MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
@@ -1009,21 +1020,12 @@ export interface RootRouteChildren {
   SyriaGuideRoute: typeof SyriaGuideRoute
   WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
-  BusinessOrdersRoute: typeof BusinessOrdersRoute
-  BusinessPartnersRoute: typeof BusinessPartnersRoute
-  BusinessProfileRoute: typeof BusinessProfileRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   InviteTokenRoute: typeof InviteTokenRoute
   StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
-  BusinessIndexRoute: typeof BusinessIndexRoute
-  BusinessServicesSettingsRoute: typeof BusinessServicesSettingsRoute
-  BusinessStoreCatalogRoute: typeof BusinessStoreCatalogRoute
-  BusinessStoreNewRoute: typeof BusinessStoreNewRoute
-  BusinessServicesIndexRoute: typeof BusinessServicesIndexRoute
-  BusinessStoreIndexRoute: typeof BusinessStoreIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1068,6 +1070,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business': {
+      id: '/business'
+      path: '/business'
+      fullPath: '/business'
+      preLoaderRoute: typeof BusinessRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/choose-account': {
@@ -1338,31 +1347,31 @@ declare module '@tanstack/react-router' {
     }
     '/business/': {
       id: '/business/'
-      path: '/business'
+      path: '/'
       fullPath: '/business/'
       preLoaderRoute: typeof BusinessIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/orders': {
       id: '/business/orders'
-      path: '/business/orders'
+      path: '/orders'
       fullPath: '/business/orders'
       preLoaderRoute: typeof BusinessOrdersRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/partners': {
       id: '/business/partners'
-      path: '/business/partners'
+      path: '/partners'
       fullPath: '/business/partners'
       preLoaderRoute: typeof BusinessPartnersRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/profile': {
       id: '/business/profile'
-      path: '/business/profile'
+      path: '/profile'
       fullPath: '/business/profile'
       preLoaderRoute: typeof BusinessProfileRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/businesses/$slug': {
       id: '/businesses/$slug'
@@ -1513,38 +1522,38 @@ declare module '@tanstack/react-router' {
     }
     '/business/services/': {
       id: '/business/services/'
-      path: '/business/services'
+      path: '/services'
       fullPath: '/business/services/'
       preLoaderRoute: typeof BusinessServicesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/services/settings': {
       id: '/business/services/settings'
-      path: '/business/services/settings'
+      path: '/services/settings'
       fullPath: '/business/services/settings'
       preLoaderRoute: typeof BusinessServicesSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/store/': {
       id: '/business/store/'
-      path: '/business/store'
+      path: '/store'
       fullPath: '/business/store/'
       preLoaderRoute: typeof BusinessStoreIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/store/catalog': {
       id: '/business/store/catalog'
-      path: '/business/store/catalog'
+      path: '/store/catalog'
       fullPath: '/business/store/catalog'
       preLoaderRoute: typeof BusinessStoreCatalogRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/business/store/new': {
       id: '/business/store/new'
-      path: '/business/store/new'
+      path: '/store/new'
       fullPath: '/business/store/new'
       preLoaderRoute: typeof BusinessStoreNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusinessRouteRoute
     }
     '/my/ads/': {
       id: '/my/ads/'
@@ -1653,6 +1662,34 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface BusinessRouteRouteChildren {
+  BusinessOrdersRoute: typeof BusinessOrdersRoute
+  BusinessPartnersRoute: typeof BusinessPartnersRoute
+  BusinessProfileRoute: typeof BusinessProfileRoute
+  BusinessIndexRoute: typeof BusinessIndexRoute
+  BusinessServicesSettingsRoute: typeof BusinessServicesSettingsRoute
+  BusinessStoreCatalogRoute: typeof BusinessStoreCatalogRoute
+  BusinessStoreNewRoute: typeof BusinessStoreNewRoute
+  BusinessServicesIndexRoute: typeof BusinessServicesIndexRoute
+  BusinessStoreIndexRoute: typeof BusinessStoreIndexRoute
+}
+
+const BusinessRouteRouteChildren: BusinessRouteRouteChildren = {
+  BusinessOrdersRoute: BusinessOrdersRoute,
+  BusinessPartnersRoute: BusinessPartnersRoute,
+  BusinessProfileRoute: BusinessProfileRoute,
+  BusinessIndexRoute: BusinessIndexRoute,
+  BusinessServicesSettingsRoute: BusinessServicesSettingsRoute,
+  BusinessStoreCatalogRoute: BusinessStoreCatalogRoute,
+  BusinessStoreNewRoute: BusinessStoreNewRoute,
+  BusinessServicesIndexRoute: BusinessServicesIndexRoute,
+  BusinessStoreIndexRoute: BusinessStoreIndexRoute,
+}
+
+const BusinessRouteRouteWithChildren = BusinessRouteRoute._addFileChildren(
+  BusinessRouteRouteChildren,
+)
+
 interface MyRouteRouteChildren {
   MyBookingsRoute: typeof MyBookingsRoute
   MyFavoritesRoute: typeof MyFavoritesRoute
@@ -1705,6 +1742,7 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  BusinessRouteRoute: BusinessRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRoute,
   MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
@@ -1727,21 +1765,12 @@ const rootRouteChildren: RootRouteChildren = {
   SyriaGuideRoute: SyriaGuideRoute,
   WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
-  BusinessOrdersRoute: BusinessOrdersRoute,
-  BusinessPartnersRoute: BusinessPartnersRoute,
-  BusinessProfileRoute: BusinessProfileRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   InviteTokenRoute: InviteTokenRoute,
   StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
-  BusinessIndexRoute: BusinessIndexRoute,
-  BusinessServicesSettingsRoute: BusinessServicesSettingsRoute,
-  BusinessStoreCatalogRoute: BusinessStoreCatalogRoute,
-  BusinessStoreNewRoute: BusinessStoreNewRoute,
-  BusinessServicesIndexRoute: BusinessServicesIndexRoute,
-  BusinessStoreIndexRoute: BusinessStoreIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
