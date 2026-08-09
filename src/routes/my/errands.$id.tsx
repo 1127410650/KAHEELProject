@@ -257,7 +257,7 @@ function ErrandDetailPage() {
                             <p className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
                               <span className="flex items-center gap-0.5">
                                 <Star className="h-3 w-3 text-amber-500" />
-                                {formatNumber(captain?.rating_avg ?? 0, locale)}
+                                {formatNumber(captain?.rating_avg ?? 0)}
                               </span>
                               {offer.eta_minutes != null ? (
                                 <span>

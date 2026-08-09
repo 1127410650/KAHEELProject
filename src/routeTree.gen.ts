@@ -93,6 +93,7 @@ import { Route as GuidesSyriaSlugRouteImport } from './routes/guides/syria_.$slu
 import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
 import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
+import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
@@ -521,6 +522,11 @@ const MyErrandsIndexRoute = MyErrandsIndexRouteImport.update({
   path: '/errands/',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const MyErrandsIdRoute = MyErrandsIdRouteImport.update({
+  id: '/errands/$id',
+  path: '/errands/$id',
+  getParentRoute: () => MyRouteRoute,
+} as any)
 const MyReportsIndexRoute = MyReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
@@ -628,6 +634,7 @@ export interface FileRoutesByFullPath {
   '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
+  '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
@@ -716,6 +723,7 @@ export interface FileRoutesByTo {
   '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
+  '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/business/services': typeof BusinessServicesIndexRoute
@@ -808,6 +816,7 @@ export interface FileRoutesById {
   '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria_/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
+  '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
@@ -901,6 +910,7 @@ export interface FileRouteTypes {
     | '/business/store/offers'
     | '/guides/syria/$slug'
     | '/my/ads/new'
+    | '/my/errands/$id'
     | '/my/reports/$id'
     | '/admin/reports/'
     | '/business/services/'
@@ -989,6 +999,7 @@ export interface FileRouteTypes {
     | '/business/store/offers'
     | '/guides/syria/$slug'
     | '/my/ads/new'
+    | '/my/errands/$id'
     | '/my/reports/$id'
     | '/admin/reports'
     | '/business/services'
@@ -1080,6 +1091,7 @@ export interface FileRouteTypes {
     | '/business/store/offers'
     | '/guides/syria_/$slug'
     | '/my/ads/new'
+    | '/my/errands/$id'
     | '/my/reports/$id'
     | '/admin/reports/'
     | '/business/services/'
@@ -1717,6 +1729,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyErrandsIndexRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/my/errands/$id': {
+      id: '/my/errands/$id'
+      path: '/errands/$id'
+      fullPath: '/my/errands/$id'
+      preLoaderRoute: typeof MyErrandsIdRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/reports/': {
       id: '/my/reports/'
       path: '/reports'
@@ -1866,6 +1885,7 @@ interface MyRouteRouteChildren {
   MyViolationsRoute: typeof MyViolationsRoute
   MyWalletRoute: typeof MyWalletRoute
   MyAdsNewRoute: typeof MyAdsNewRoute
+  MyErrandsIdRoute: typeof MyErrandsIdRoute
   MyReportsIdRoute: typeof MyReportsIdRoute
   MyAdsIndexRoute: typeof MyAdsIndexRoute
   MyErrandsIndexRoute: typeof MyErrandsIndexRoute
@@ -1884,6 +1904,7 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyViolationsRoute: MyViolationsRoute,
   MyWalletRoute: MyWalletRoute,
   MyAdsNewRoute: MyAdsNewRoute,
+  MyErrandsIdRoute: MyErrandsIdRoute,
   MyReportsIdRoute: MyReportsIdRoute,
   MyAdsIndexRoute: MyAdsIndexRoute,
   MyErrandsIndexRoute: MyErrandsIndexRoute,
