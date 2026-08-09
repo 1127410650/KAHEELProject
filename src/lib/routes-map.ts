@@ -178,6 +178,9 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/business/store/catalog", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
+  rule("/business/store/offers", "operational", "dashboard", {
+    allowed_identity_types: ["business"],
+  }),
   rule("/business/partners", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
