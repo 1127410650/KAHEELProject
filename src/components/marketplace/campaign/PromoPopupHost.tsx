@@ -307,21 +307,48 @@ export function PromoPopupHost() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // استئناف مشهد بدأ قبل تحميل كامل للصفحة — ثم يبقى حتى الإغلاق اليدوي.
+  // استئناف مشهد بدأ قبل تحميل كامل للصفحة — في منطقة آمنة فقط، وإلا فلا شيء.
   useEffect(() => {
     const record = readResume();
     if (!record || blocked()) return;
+    const band = safeBandFor(record.mode);
+    if (!band) return;
+    releaseRef.current = acquireStage(`card:${record.mode}`);
     keyRef.current += 1;
     openRef.current = true;
-    setCard({ key: keyRef.current, ...record });
+    setCard({ key: keyRef.current, band, ...record });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   * إعادة التحقق أثناء العرض: عدم التغطية شرط لحظي. أي تمرير أو تحميل بطاقة
+   * يجعل الموضع غير آمن ⇒ يُغلق المشهد فورًا (الاحتواء أولى من أي تأثير).
+   */
+  useEffect(() => {
+    if (!card) return;
+    const height = card.mode === "peek" ? PEEK_HEIGHT : CARD_HEIGHT;
+    const width = card.mode === "peek" ? PEEK_WIDTH : CARD_WIDTH;
+    const check = () => {
+      const left = card.band.left + Math.max(0, (card.band.width - width) / 2);
+      if (!areaStillFree({ left, top: card.band.top, width, height }, 8)) dismiss();
+    };
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    const timer = window.setInterval(check, 700);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card?.key]);
 
   useEffect(() => () => window.clearTimeout(fadeTimerRef.current), []);
 
   if (!card) return null;
 
   const calm = prefersReducedMotion();
+
 
   const closeButtons = (
     <div className="flex gap-1.5">
