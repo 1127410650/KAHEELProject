@@ -131,24 +131,24 @@ function ServicesMarketplacePage() {
         <section className="relative overflow-hidden border-b bg-market-navy text-white">
           <div className="absolute -start-24 -top-24 size-72 rounded-full bg-cyan-400/15 blur-3xl" />
           <div className="absolute -bottom-32 end-0 size-80 rounded-full bg-violet-500/20 blur-3xl" />
-          <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:py-12">
+          <div className="market-hero-band relative mx-auto w-full max-w-7xl px-4">
             <div className="max-w-2xl">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold backdrop-blur">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold backdrop-blur">
                 <ShieldCheck className="size-4 text-cyan-200" />
                 {locale === "ar"
                   ? "مواعيد واضحة ومقدمو خدمات موثوقون"
                   : "Clear appointments, trusted providers"}
               </div>
-              <h1 className="text-3xl font-black tracking-tight sm:text-5xl">
+              <h1 className="font-black tracking-tight">
                 {locale === "ar" ? "خدمتك، في الوقت الذي يناسبك" : "Your service, at your time"}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-white/75 sm:text-base">
+              <p className="mt-1.5 max-w-xl text-white/75">
                 {locale === "ar"
                   ? "اختر الخدمة والمختص والموعد، ثم تابع حالة الحجز من حسابك خطوة بخطوة."
                   : "Choose a service, professional and time, then track every booking step from your account."}
               </p>
             </div>
-            <div className="relative mt-6 max-w-2xl">
+            <div className="relative mt-3.5 max-w-2xl">
               <Search className="pointer-events-none absolute start-4 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
               <Input
                 value={query}

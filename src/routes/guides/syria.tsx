@@ -78,16 +78,16 @@ function SyriaGuidePage() {
       <main className="min-h-screen bg-[linear-gradient(180deg,#f7f5fb_0%,#ffffff_28%,#f8f7fc_100%)] pb-10">
         <section className="relative isolate overflow-hidden bg-market-navy text-white">
           <div className="absolute inset-0 bg-gradient-to-l from-market-navy-dark/95 via-market-navy/80 to-market-navy-soft/60" />
-          <div className="relative mx-auto flex min-h-[240px] w-full max-w-[1240px] flex-col justify-end px-4 pb-8 pt-10 sm:min-h-[290px] sm:px-6 lg:px-8">
+          <div className="market-hero-band relative mx-auto flex w-full max-w-[1240px] flex-col justify-end px-4 sm:px-6 lg:px-8">
             <span className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-black backdrop-blur sm:text-xs">
               <ShieldCheck className="size-4" aria-hidden />
               مصادر ظاهرة وشارات تحقق صادقة
             </span>
-            <h1 className="max-w-3xl text-3xl font-black tracking-tight sm:text-5xl">دليل سوريا</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/85 sm:text-base sm:leading-8">
+            <h1 className="max-w-3xl font-black tracking-tight">دليل سوريا</h1>
+            <p className="mt-1.5 max-w-2xl text-white/85">
               جهات حكومية ومشافٍ وجامعات وخدمات وأماكن، مع اتجاهات وطرق تواصل مباشرة.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2 text-[10px] font-bold text-white/88 sm:text-xs">
+            <div className="mt-2.5 flex flex-wrap gap-2 text-[10px] font-bold text-white/88 sm:text-xs">
               <span className="rounded-full bg-white/10 px-3 py-1.5">
                 {total.toLocaleString("en-US")} سجل
               </span>

@@ -42,12 +42,12 @@ function DemoStoreWorldPage() {
   return (
     <MarketShell>
       <main className="pb-6">
-        <section className="relative isolate min-h-[310px] overflow-hidden bg-slate-950 text-white sm:min-h-[420px]">
+        <section className="relative isolate min-h-[180px] overflow-hidden bg-slate-950 text-white sm:min-h-[220px]">
           <img src={world.image} alt="" className="absolute inset-0 size-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/48 to-black/5" aria-hidden />
           <div className={`absolute inset-0 bg-gradient-to-br ${world.gradient} opacity-32 mix-blend-color`} aria-hidden />
 
-          <div className="relative mx-auto flex min-h-[310px] w-full max-w-[1240px] flex-col justify-end px-5 pb-6 pt-6 sm:min-h-[420px] sm:px-6 sm:pb-9 lg:px-8">
+          <div className="market-hero-band relative mx-auto flex min-h-[180px] w-full max-w-[1240px] flex-col justify-end px-5 sm:min-h-[220px] sm:px-6 lg:px-8">
             <Link to="/" className="mb-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md">
               <ArrowRight className="size-3.5" aria-hidden />
               جميع العوالم
@@ -57,10 +57,10 @@ function DemoStoreWorldPage() {
               <Sparkles className="size-3.5" aria-hidden />
               {world.eyebrow}
             </span>
-            <h1 className="mt-2.5 max-w-3xl text-[28px] font-black leading-tight drop-shadow sm:text-5xl">{world.title}</h1>
-            <p className="mt-2 max-w-2xl text-xs leading-6 text-white/78 sm:text-base sm:leading-8">{world.description}</p>
+            <h1 className="mt-1.5 max-w-3xl font-black leading-tight drop-shadow">{world.title}</h1>
+            <p className="mt-1.5 max-w-2xl text-white/78">{world.description}</p>
 
-            <div className="mt-4 flex flex-wrap items-center gap-2">
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               <Link
                 to="/business/store/new"
                 search={{ theme: demoWorldThemeId(world.id) }}
