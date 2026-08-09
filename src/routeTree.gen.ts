@@ -17,7 +17,6 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
-import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
@@ -129,11 +128,6 @@ const BusinessRouteRoute = BusinessRouteRouteImport.update({
 const ChooseAccountRoute = ChooseAccountRouteImport.update({
   id: '/choose-account',
   path: '/choose-account',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRouteRoute = DashboardRouteRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoRoute = DemoRouteImport.update({
@@ -502,7 +496,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/business': typeof BusinessRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRoute
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
@@ -583,7 +576,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
@@ -666,7 +658,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/business': typeof BusinessRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRoute
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
@@ -751,7 +742,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/business'
-    | '/dashboard'
     | '/my'
     | '/$'
     | '/about'
@@ -832,7 +822,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
     | '/my'
     | '/$'
     | '/about'
@@ -914,7 +903,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/business'
-    | '/dashboard'
     | '/my'
     | '/$'
     | '/about'
@@ -998,7 +986,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   BusinessRouteRoute: typeof BusinessRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRoute
   MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
@@ -1084,13 +1071,6 @@ declare module '@tanstack/react-router' {
       path: '/choose-account'
       fullPath: '/choose-account'
       preLoaderRoute: typeof ChooseAccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -1743,7 +1723,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   BusinessRouteRoute: BusinessRouteRouteWithChildren,
-  DashboardRouteRoute: DashboardRouteRoute,
   MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
