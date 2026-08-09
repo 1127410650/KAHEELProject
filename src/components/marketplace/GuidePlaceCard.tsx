@@ -5,10 +5,14 @@ import {
   directionsHref,
   isOpenStreetMap,
   isVerified,
+  sourceHref,
+  sourceLabel,
+
   websiteHref,
   whatsappHref,
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
+
 
 /** No source imagery is rendered anywhere — rights are unverified by design. */
 export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
@@ -77,6 +81,10 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
 
 export function GuidePlaceCard({ place }: { place: GuidePlace }) {
   const location = [place.district, place.city, place.governorate].filter(Boolean).join(" · ");
+  const source = sourceLabel(place);
+  const href = sourceHref(place);
+
+
 
   return (
     <article className="flex h-full flex-col gap-3 rounded-3xl border border-border/80 bg-card p-4 shadow-[0_1px_0_rgba(16,0,43,0.04)] transition hover:border-market-navy/30 hover:shadow-lg sm:p-5">
@@ -122,7 +130,26 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
           التفاصيل
           <ExternalLink className="size-3.5" aria-hidden />
         </Link>
+        {source ? (
+          <p className="border-t border-border/60 pt-2 text-[10px] font-normal leading-4 text-muted-foreground/80">
+            المصدر:{" "}
+            {href ? (
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener nofollow"
+                className="underline decoration-dotted underline-offset-2 hover:text-market-navy"
+              >
+                {source}
+              </a>
+            ) : (
+              source
+            )}
+          </p>
+        ) : null}
+
       </div>
+
     </article>
   );
 }

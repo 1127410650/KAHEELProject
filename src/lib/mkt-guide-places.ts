@@ -54,6 +54,7 @@ export interface GuideFilters {
   sector: string;
   governorate: string;
   category: string;
+  subcategory: string;
 }
 
 export const EMPTY_GUIDE_FILTERS: GuideFilters = {
@@ -61,7 +62,9 @@ export const EMPTY_GUIDE_FILTERS: GuideFilters = {
   sector: "",
   governorate: "",
   category: "",
+  subcategory: "",
 };
+
 
 const SELECT_COLUMNS =
   "id,slug,name_ar,name_en,sector,category,subcategory,governorate,city,district,address,address_status,latitude,longitude,map_url,map_url_status,phone,phone_status,whatsapp,whatsapp_status,whatsapp_link,email,website,opening_hours,stars,source_label,source_type,source_date,verification_status,completeness,notes";
@@ -112,6 +115,8 @@ export async function fetchGuidePlaces(
   if (filters.sector) request = request.eq("sector", filters.sector);
   if (filters.governorate) request = request.eq("governorate", filters.governorate);
   if (filters.category) request = request.eq("category", filters.category);
+  if (filters.subcategory) request = request.eq("subcategory", filters.subcategory);
+
 
   const from = page * GUIDE_PAGE_SIZE;
   const { data, error, count } = await request
@@ -142,43 +147,141 @@ export async function fetchGuidePlace(slug: string): Promise<GuidePlace | null> 
   return place;
 }
 
-export interface GuideFacets {
-  sectors: string[];
-  governorates: string[];
-  categories: string[];
+/** One raw facet row: the four dimensions the filters are built from. */
+export interface GuideFacetRow {
+  sector: string | null;
+  governorate: string | null;
+  category: string | null;
+  subcategory: string | null;
 }
 
-/** Distinct filter values, read from a bounded slice to stay cheap. */
-export async function fetchGuideFacets(): Promise<GuideFacets> {
-  const { data, error } = await supabase
-    .from("mkt_guide_places")
-    .select("sector,governorate,category")
-    .eq("is_published", true)
-    .limit(10000);
+export interface GuideFacetOption {
+  value: string;
+  count: number;
+}
 
-  if (error) throw error;
+export interface GuideFacets {
+  sectors: GuideFacetOption[];
+  governorates: GuideFacetOption[];
+  categories: GuideFacetOption[];
+  subcategories: GuideFacetOption[];
+}
 
-  const sectors = new Set<string>();
-  const governorates = new Set<string>();
-  const categories = new Set<string>();
+/**
+ * Facet rows are fetched once and cached; the dependent option lists and their
+ * counts are then derived in memory so changing a filter never hits the network.
+ * The read is paginated because the Data API caps a single response at 1,000 rows,
+ * which would otherwise make the counts silently wrong.
+ */
+export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
+  const CHUNK = 1000;
+  const readChunk = async (from: number) => {
+    const { data, error, count } = await supabase
+      .from("mkt_guide_places")
+      .select("sector,governorate,category,subcategory", { count: "exact" })
+      .eq("is_published", true)
+      .order("id", { ascending: true })
+      .range(from, from + CHUNK - 1);
 
-  for (const row of (data ?? []) as Array<{
-    sector: string | null;
-    governorate: string | null;
-    category: string | null;
-  }>) {
-    if (row.sector) sectors.add(row.sector);
-    if (row.governorate) governorates.add(row.governorate);
-    if (row.category) categories.add(row.category);
+    if (error) throw error;
+    return { rows: (data ?? []) as GuideFacetRow[], count: count ?? 0 };
+  };
+
+  // First page also reports the exact total, so the rest is fetched in parallel.
+  const first = await readChunk(0);
+  const pages = Math.min(20, Math.ceil(first.count / CHUNK));
+  const rest = await Promise.all(
+    Array.from({ length: Math.max(0, pages - 1) }, (_, index) => readChunk((index + 1) * CHUNK)),
+  );
+
+  return [first.rows, ...rest.map((page) => page.rows)].flat();
+}
+
+
+
+function tally(
+  rows: GuideFacetRow[],
+  key: keyof GuideFacetRow,
+  matches: (row: GuideFacetRow) => boolean,
+): GuideFacetOption[] {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    if (!matches(row)) continue;
+    const value = row[key];
+    if (!value) continue;
+    counts.set(value, (counts.get(value) ?? 0) + 1);
   }
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, count }))
+    .sort((a, b) => a.value.localeCompare(b.value, "ar"));
+}
 
-  const sort = (values: Set<string>) => [...values].sort((a, b) => a.localeCompare(b, "ar"));
+/**
+ * Cascading facets: each list is counted against the *other* active filters, so
+ * picking a sector narrows its categories, and picking a category narrows its
+ * subcategories — while every list keeps showing its own alternatives.
+ */
+export function buildGuideFacets(rows: GuideFacetRow[], filters: GuideFilters): GuideFacets {
+  const bySector = (row: GuideFacetRow) => !filters.sector || row.sector === filters.sector;
+  const byGov = (row: GuideFacetRow) =>
+    !filters.governorate || row.governorate === filters.governorate;
+  const byCategory = (row: GuideFacetRow) =>
+    !filters.category || row.category === filters.category;
+
   return {
-    sectors: sort(sectors),
-    governorates: sort(governorates),
-    categories: sort(categories),
+    sectors: tally(rows, "sector", byGov),
+    governorates: tally(rows, "governorate", (row) => bySector(row) && byCategory(row)),
+    categories: tally(rows, "category", (row) => bySector(row) && byGov(row)),
+    subcategories: tally(
+      rows,
+      "subcategory",
+      (row) => bySector(row) && byGov(row) && byCategory(row),
+    ),
   };
 }
+
+function readableSourceName(place: GuidePlace): string | null {
+  const candidates = [place.source_type, place.source_label];
+  // Prefer a human name; a bare URL is reduced to its site (or OpenStreetMap).
+  for (const candidate of candidates) {
+    const value = (candidate ?? "").trim();
+    if (!value || /^https?:\/\//.test(value)) continue;
+    return value;
+  }
+  for (const candidate of candidates) {
+    const value = (candidate ?? "").trim();
+    if (!/^https?:\/\//.test(value)) continue;
+    if (value.includes("openstreetmap")) return "OpenStreetMap";
+    try {
+      return new URL(value).hostname.replace(/^www\./, "");
+    } catch {
+      return value;
+    }
+  }
+  return isOpenStreetMap(place) ? "OpenStreetMap" : null;
+}
+
+/** Human label for a record's source, with its date when present. */
+export function sourceLabel(place: GuidePlace): string | null {
+  const source = readableSourceName(place);
+  if (!source) return null;
+  const date = (place.source_date ?? "").trim();
+  if (!date) return source;
+  const parsed = new Date(date);
+  const shown = Number.isNaN(parsed.getTime())
+    ? date
+    : `${String(parsed.getUTCDate()).padStart(2, "0")}/${String(parsed.getUTCMonth() + 1).padStart(2, "0")}/${parsed.getUTCFullYear()}`;
+  return `${source} — ${shown}`;
+}
+
+/** The source's own page, when the record stores a usable link. */
+export function sourceHref(place: GuidePlace): string | null {
+  const value = (place.source_label ?? "").trim();
+  return /^https?:\/\//.test(value) ? value : null;
+}
+
+
+
 
 /** Directions link: the record's own map URL, else a plain place search. */
 export function directionsHref(place: GuidePlace): string | null {
