@@ -94,17 +94,14 @@ def layer(ind, name, shapes, kss, op):
 
 def head(blink=None):
     """One cartoon face for every scene: top-most shape first."""
-    eye_l = group([ell([9, 11], [-12, -4]), fill(DARK)], "eye-l",
-                  **({"s": blink} if False else {}))
     return group([
         # facial features sit above the skull
-        group([ell([28, 24], [0, 6]), trim(52, 96), stroke(DARK, 3.6)], "smile"),
-        eye_l,
-        group([ell([9, 11], [12, -4]), fill(DARK)], "eye-r"),
-        group([ell([11, 7], [-22, 7]), fill(CARD)], "blush-l"),
-        group([ell([11, 7], [22, 7]), fill(CARD)], "blush-r"),
-        group([ell([64, 32], [0, -22]), fill(PURPLE_D)], "hair"),
-        group([ell([62, 60]), fill(SKIN)], "skull"),
+        group([ell([26, 20], [0, 8]), trim(38, 62), stroke(DARK, 3.2)], "smile"),
+        group([ell([8, 10], [-11, -5]), fill(DARK)], "eye-l"),
+        group([ell([8, 10], [11, -5]), fill(DARK)], "eye-r"),
+        group([ell([10, 6], [-21, 6]), fill(CARD)], "blush-l"),
+        group([ell([10, 6], [21, 6]), fill(CARD)], "blush-r"),
+        group([ell([60, 60]), fill(SKIN)], "skull"),
     ], "head")
 
 
@@ -154,7 +151,7 @@ write("kaheel-parcel-drop", 200, 200, OP, [
                    (54, [100, 94, 0]), (86, [100, 84, 0]), (118, [100, 94, 0]),
                    (OP - 1, [100, 88, 0])]),
              r=kf([(0, 0), (46, 0), (70, -7), (100, 7), (OP - 1, 0)])), OP),
-    layer(5, "parcel", parcel(kf([(0, 0), (30, 0), (40, -106), (OP - 1, -106)])),
+    layer(5, "parcel", parcel(kf([(0, 0), (30, 0), (40, -78), (OP - 1, -78)])),
           ks(p=kf([(0, [100, -70, 0]), (16, [100, 132, 0]), (24, [100, 120, 0]),
                    (30, [100, 128, 0]), (OP - 1, [100, 128, 0])], ease=(0.2, 0.8)),
              s=kf([(0, [100, 100]), (14, [100, 100]), (18, [122, 80]),
@@ -184,7 +181,7 @@ write("kaheel-parcel-peek", 200, 200, OP2, [
                    (36, [100, 108, 0]), (74, [100, 100, 0]), (108, [100, 108, 0]),
                    (OP2 - 1, [100, 102, 0])]),
              r=kf([(0, 6), (26, 6), (52, -8), (84, 8), (OP2 - 1, 4)])), OP2),
-    layer(4, "parcel", parcel(static(-98)), ks(p=[100, 128, 0]), OP2),
+    layer(4, "parcel", parcel(static(-74)), ks(p=[100, 128, 0]), OP2),
     layer(5, "shadow", [group([ell([104, 16]), fill(DARK)], "sh")],
           ks(p=[100, 174, 0], o=static(20)), OP2),
 ])
