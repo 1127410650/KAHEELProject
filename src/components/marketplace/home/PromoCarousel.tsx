@@ -200,7 +200,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
             }}
             aria-label={ar ? slide.titleAr : slide.titleEn}
             aria-roledescription="slide"
-            className="group relative block min-h-[208px] w-full shrink-0 snap-start snap-always overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white outline-none sm:min-h-[286px] sm:rounded-[30px]"
+            className="group relative block min-h-[166px] w-full shrink-0 snap-start snap-always overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white outline-none sm:min-h-[226px] sm:rounded-[30px]"
           >
             {slide.campaign ? (
               <CampaignAsset campaign={slide.campaign} />
@@ -209,7 +209,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
                 src={slide.image}
                 alt=""
                 width={1728}
-                height={920}
+                height={736}
                 fetchPriority={slideIndex === 0 ? "high" : "low"}
                 loading={slideIndex === 0 ? "eager" : "lazy"}
                 decoding="async"
@@ -217,7 +217,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
                 aria-hidden
               />
             )}
-            <div className="relative z-10 mx-auto flex min-h-[208px] w-[62%] max-w-[520px] flex-col items-center justify-center px-2 py-5 text-center sm:min-h-[286px] sm:w-[48%] sm:px-4">
+            <div className="relative z-10 mx-auto flex min-h-[166px] w-[62%] max-w-[520px] flex-col items-center justify-center px-2 py-4 text-center sm:min-h-[226px] sm:w-[48%] sm:px-4">
               <span className="rounded-full bg-[#240046] px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
                 {ar ? slide.badgeAr : slide.badgeEn}
               </span>
