@@ -7,6 +7,7 @@
  * campaign, with the elegant fallback, or while loading. Assets mount lazily
  * through `CampaignAsset`, which also honours `prefers-reduced-motion`.
  */
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, Megaphone } from "lucide-react";
 
@@ -21,6 +22,10 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
   const ar = locale === "ar";
   const { data } = useLiveCampaigns("home_strip");
   const campaign = data?.[0];
+
+  useEffect(() => {
+    if (campaign) trackCampaign(campaign.id, "impression");
+  }, [campaign]);
 
   if (!campaign) {
     return (
@@ -53,8 +58,8 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
   return (
     <section aria-label={ar ? "مساحة إعلانية" : "Ad slot"}>
       <a
-        href={campaign.click_url ?? "#"}
-        onClick={() => void trackCampaign(campaign.id, "click")}
+        href={campaign.click_url}
+        onClick={() => trackCampaign(campaign.id, "click")}
         className={`${BOX} block bg-[#240046] outline-none ring-1 ring-[#c77dff]/25 focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
       >
         <CampaignAsset campaign={campaign} />
