@@ -324,7 +324,7 @@ export function useMyErrands(userId: string | null) {
         .order("created_at", { ascending: false })
         .limit(60);
       if (error) throw error;
-      return (data ?? []) as ErrandRequest[];
+      return (data ?? []) as unknown as ErrandRequest[];
     },
   });
 }
@@ -431,7 +431,7 @@ export async function decideErrandOffer(offerId: string, accept: boolean): Promi
 export async function cancelErrand(requestId: string, reason?: string): Promise<void> {
   const { error } = await supabase.rpc("mkt_errand_cancel", {
     _request_id: requestId,
-    _reason: reason ?? null,
+    _reason: reason ?? undefined,
   });
   if (error) throw error;
 }
@@ -444,7 +444,7 @@ export async function rateErrand(
   const { error } = await supabase.rpc("mkt_errand_rate", {
     _request_id: requestId,
     _rating: rating,
-    _comment: comment ?? null,
+    _comment: comment ?? undefined,
   });
   if (error) throw error;
 }
@@ -517,8 +517,8 @@ export function useCaptainQueue(captain: ErrandCaptain | null) {
       if (open.error) throw open.error;
       if (mine.error) throw mine.error;
       return {
-        open: (open.data ?? []) as ErrandRequest[],
-        mine: (mine.data ?? []) as ErrandRequest[],
+        open: (open.data ?? []) as unknown as ErrandRequest[],
+        mine: (mine.data ?? []) as unknown as ErrandRequest[],
       };
     },
   });
@@ -533,8 +533,8 @@ export async function placeErrandOffer(input: {
   const { error } = await supabase.rpc("mkt_errand_place_offer", {
     _request_id: input.requestId,
     _fee: input.fee,
-    _eta_minutes: input.etaMinutes ?? null,
-    _note: input.note ?? null,
+    _eta_minutes: input.etaMinutes ?? undefined,
+    _note: input.note ?? undefined,
   });
   if (error) throw error;
 }
