@@ -2797,6 +2797,65 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_guide_booking_intents: {
+        Row: {
+          channel: string
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          id: string
+          note: string | null
+          owner_claimed: boolean
+          place_id: string
+          place_name: string | null
+          place_slug: string
+          requested_at: string | null
+          requester_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          owner_claimed?: boolean
+          place_id: string
+          place_name?: string | null
+          place_slug: string
+          requested_at?: string | null
+          requester_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          owner_claimed?: boolean
+          place_id?: string
+          place_name?: string | null
+          place_slug?: string
+          requested_at?: string | null
+          requester_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_booking_intents_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_guide_outreach: {
         Row: {
           batch_id: string | null
@@ -10039,6 +10098,7 @@ export type Database = {
         Args: { _place_id: string }
         Returns: boolean
       }
+      mkt_guide_place_owner: { Args: { _place_id: string }; Returns: string }
       mkt_guide_place_rating: {
         Args: { _place_id: string }
         Returns: {
@@ -10052,6 +10112,10 @@ export type Database = {
       }
       mkt_guide_promote_place: {
         Args: { _days?: number; _place_id: string; _tenant_id?: string }
+        Returns: string
+      }
+      mkt_guide_provider_category: {
+        Args: { _category: string; _sector: string; _subcategory: string }
         Returns: string
       }
       mkt_guide_review_claim: {

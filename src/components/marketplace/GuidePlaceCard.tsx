@@ -15,6 +15,7 @@ import {
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
 import { outreachMessage, outreachWhatsappHref } from "@/lib/kaheel-intro";
+import { inviteTemplate, renderInvite, whatsappWithText } from "@/lib/mkt-guide-booking";
 import {
   isWithinCooldown,
   lastOutreach,
@@ -83,7 +84,20 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
     );
   };
 
+  /**
+   * «مشاركة الدعوة» opens WhatsApp with the admin-editable invitation text for
+   * this one entity. Nothing is sent automatically — the deep link only opens
+   * because a human pressed the button. Without a number it falls back to the
+   * share sheet / clipboard.
+   */
   const share = async () => {
+    const invite = renderInvite(await inviteTemplate(), place);
+    const link = whatsappWithText(rawWhatsapp || place.phone, invite);
+    if (link) {
+      window.open(link, "_blank", "noopener,noreferrer");
+      log("share");
+      return;
+    }
     const nav =
       typeof navigator === "undefined"
         ? null
@@ -91,10 +105,10 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
     if (!nav) return;
     try {
       if (typeof nav.share === "function") {
-        await nav.share({ title: "منصة كَحيل", text: message });
+        await nav.share({ title: "منصة كَحيل", text: invite });
       } else {
-        await nav.clipboard.writeText(message);
-        toast.success("تم نسخ نص الدعوة مع رابط المنصة وملف التعريف");
+        await nav.clipboard.writeText(invite);
+        toast.success("تم نسخ نص الدعوة مع رابط التسجيل");
       }
       log("share");
     } catch {
