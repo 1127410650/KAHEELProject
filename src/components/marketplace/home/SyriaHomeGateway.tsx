@@ -151,9 +151,10 @@ export function SyriaHomeGateway() {
                 aria-hidden
                 className={
                   active === index
-                    ? "block h-1 w-4 rounded-full bg-market-electric-bright transition-all"
-                    : "block size-1 rounded-full bg-market-electric-bright/45 transition-all"
+                    ? "block h-1 w-4 rounded-full bg-[#7b2cbf] transition-all"
+                    : "block size-1 rounded-full bg-[#7b2cbf]/40 transition-all"
                 }
+
               />
             </button>
           ))}
