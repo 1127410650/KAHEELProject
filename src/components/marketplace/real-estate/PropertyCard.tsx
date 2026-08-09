@@ -11,7 +11,7 @@
  */
 import { useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bath, BedDouble, Building2, ChevronLeft, ChevronRight, MapPin, Ruler, Sparkles } from "lucide-react";
+import { Bath, BedDouble, Building2, ChevronLeft, ChevronRight, MapPin, Ruler } from "lucide-react";
 
 import { FavoriteButton, FeaturedChip, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { useI18n } from "@/i18n";
