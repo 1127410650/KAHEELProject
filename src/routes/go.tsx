@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { resolveIdentityLanding } from "@/lib/identity-landing";
 
-type GoSearch = { next?: string };
+type GoSearch = { next?: string | undefined };
 
 /**
  * `/go` — the one entry point that answers "where do I belong?".

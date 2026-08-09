@@ -19,6 +19,7 @@ import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as GoRouteImport } from './routes/go'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
@@ -138,6 +139,11 @@ const DemoRoute = DemoRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoRoute = GoRouteImport.update({
+  id: '/go',
+  path: '/go',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -504,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/go': typeof GoRoute
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
@@ -584,6 +591,7 @@ export interface FileRoutesByTo {
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/go': typeof GoRoute
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
@@ -666,6 +674,7 @@ export interface FileRoutesById {
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/go': typeof GoRoute
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
   '/market-setup': typeof MarketSetupRoute
@@ -750,6 +759,7 @@ export interface FileRouteTypes {
     | '/choose-account'
     | '/demo'
     | '/forgot-password'
+    | '/go'
     | '/help'
     | '/join'
     | '/market-setup'
@@ -830,6 +840,7 @@ export interface FileRouteTypes {
     | '/choose-account'
     | '/demo'
     | '/forgot-password'
+    | '/go'
     | '/help'
     | '/join'
     | '/market-setup'
@@ -911,6 +922,7 @@ export interface FileRouteTypes {
     | '/choose-account'
     | '/demo'
     | '/forgot-password'
+    | '/go'
     | '/help'
     | '/join'
     | '/market-setup'
@@ -994,6 +1006,7 @@ export interface RootRouteChildren {
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  GoRoute: typeof GoRoute
   HelpRoute: typeof HelpRoute
   JoinRoute: typeof JoinRoute
   MarketSetupRoute: typeof MarketSetupRoute
@@ -1085,6 +1098,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/go': {
+      id: '/go'
+      path: '/go'
+      fullPath: '/go'
+      preLoaderRoute: typeof GoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -1731,6 +1751,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  GoRoute: GoRoute,
   HelpRoute: HelpRoute,
   JoinRoute: JoinRoute,
   MarketSetupRoute: MarketSetupRoute,
@@ -1754,3 +1775,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
