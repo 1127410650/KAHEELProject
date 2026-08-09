@@ -60,8 +60,17 @@ export interface ListingFilters {
   hasPrice?: boolean | undefined;
   /** Home "featured" row: only listings with a live promotion window. */
   featuredOnly?: boolean | undefined;
+  /**
+   * Real-estate detail minimums. They live inside the `specs` JSON, so they are
+   * applied on the fetched rows; `fetched` still reports the raw row count so
+   * infinite paging never stops early.
+   */
+  minRooms?: number | undefined;
+  minBaths?: number | undefined;
+  minArea?: number | undefined;
   page?: number | undefined;
 }
+
 
 export const PAGE_SIZE = 20;
 
@@ -149,6 +158,33 @@ export async function decorateListings(
     };
   });
 }
+
+/**
+ * Real-estate minimums (rooms / baths / area) live inside `mkt_listings.specs`,
+ * so they are applied here on the fetched rows instead of in SQL.
+ */
+function filterBySpecMinimums(
+  rows: ListingCardData[],
+  filters: ListingFilters,
+): ListingCardData[] {
+  const { minRooms, minBaths, minArea } = filters;
+  if (minRooms === undefined && minBaths === undefined && minArea === undefined) return rows;
+  const value = (specs: Record<string, unknown>, key: string): number | null => {
+    const parsed = Number(specs[key]);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+  return rows.filter((row) => {
+    const specs = (row.specs && typeof row.specs === "object" ? row.specs : {}) as Record<
+      string,
+      unknown
+    >;
+    if (minRooms !== undefined && (value(specs, "rooms") ?? -1) < minRooms) return false;
+    if (minBaths !== undefined && (value(specs, "baths") ?? -1) < minBaths) return false;
+    if (minArea !== undefined && (value(specs, "area") ?? -1) < minArea) return false;
+    return true;
+  });
+}
+
 
 async function queryListings(
   filters: ListingFilters,
@@ -239,9 +275,10 @@ async function queryListings(
   const raw = (data ?? []) as unknown as MktListing[];
   const decorated = await decorateListings(raw, locale);
   // Verification is a visual badge only: it never filters or reorders results.
-  const rows = decorated;
+  const rows = filterBySpecMinimums(decorated, filters);
   return { rows, fetched: raw.length };
 }
+
 
 export async function loadListings(
   filters: ListingFilters,

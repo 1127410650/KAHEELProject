@@ -9,7 +9,6 @@ import {
   MapPin,
   Search,
   SlidersHorizontal,
-  Sparkles,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -17,7 +16,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import realEstateHero from "@/assets/market/cat-real-estate-hero.webp";
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { FavoriteButton, type ListingCardData } from "@/components/marketplace/ListingCard";
+import { type ListingCardData } from "@/components/marketplace/ListingCard";
+import {
+  PropertyCard,
+  PropertyCardSkeleton,
+} from "@/components/marketplace/real-estate/PropertyCard";
+import { Mascot } from "@/components/marketplace/campaign/Mascot";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -27,11 +31,10 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/comp
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
-import { track } from "@/lib/analytics";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { loadCategories, loadListingsPage } from "@/lib/mkt-queries";
-import { priceLabel, relativeTime } from "@/lib/mkt";
+import { loadListingGalleries } from "@/lib/mkt-listing-galleries";
 import { useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +49,12 @@ export interface RealEstateSearchParams {
   max?: string | undefined;
   img?: string | undefined;
   sort?: string | undefined;
+  /** الحدود الدنيا لتفاصيل العقار. */
+  rooms?: string | undefined;
+  baths?: string | undefined;
+  area?: string | undefined;
 }
+
 
 interface RealEstateExperienceProps {
   params: RealEstateSearchParams;
@@ -180,6 +188,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
         min: params.min,
         max: params.max,
         img: params.img,
+        rooms: params.rooms,
+        baths: params.baths,
+        area: params.area,
         sort: normalizedSort(params.sort),
         country: preference.countryIso2,
       },
@@ -199,6 +210,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
           countryIso2: preference.countryIso2,
           minPrice: validPrice(params.min),
           maxPrice: validPrice(params.max),
+          minRooms: validPrice(params.rooms),
+          minBaths: validPrice(params.baths),
+          minArea: validPrice(params.area),
           withImageOnly: params.img === "1" ? true : undefined,
           sort: normalizedSort(params.sort),
           limit: PAGE_SIZE,
@@ -222,6 +236,16 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
     return result;
   }, [listings.data]);
 
+  // صور المعرض الداخلي لكل البطاقات الظاهرة في استعلام واحد مجمّع.
+  const galleryIds = useMemo(() => rows.map((row) => row.id), [rows]);
+  const galleries = useQuery({
+    queryKey: ["mkt", "real-estate", "galleries", galleryIds],
+    enabled: galleryIds.length > 0,
+    staleTime: 60_000,
+    queryFn: () => loadListingGalleries(galleryIds),
+  });
+  const galleryFor = (id: string) => galleries.data?.[id] ?? [];
+
   const featuredRows = useMemo(() => rows.filter(activeFeatured).slice(0, 8), [rows]);
   const selectedCity = (cities.data ?? []).find((city) => city.id === params.cityId);
   const locationLabel =
@@ -236,6 +260,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
     params.min,
     params.max,
     params.img,
+    params.rooms,
+    params.baths,
+    params.area,
     params.sort && params.sort !== "newest" ? params.sort : undefined,
   ].filter(Boolean).length;
   const addHref = addListingHref({
@@ -252,8 +279,12 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
       min: undefined,
       max: undefined,
       img: undefined,
+      rooms: undefined,
+      baths: undefined,
+      area: undefined,
       sort: undefined,
     });
+
 
   return (
     <MarketShell footer="none">
@@ -480,13 +511,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </div>
 
               {featuredRows.length > 0 && (
-                <div className="market-rail -mx-3 mt-4 flex snap-x gap-3 overflow-x-auto px-3 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+                <div className="market-rail -mx-3 mt-4 flex snap-x gap-3 overflow-x-auto px-3 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
                   {featuredRows.map((listing, index) => (
                     <div
                       key={listing.id}
-                      className="w-[78vw] max-w-[340px] shrink-0 snap-center sm:w-auto sm:max-w-none"
+                      className="w-[82vw] max-w-[380px] shrink-0 snap-center sm:w-auto sm:max-w-none"
                     >
-                      <EstateCard listing={listing} priority={index < 2} featured />
+                      <PropertyCard
+                        listing={listing}
+                        images={galleryFor(listing.id)}
+                        priority={index < 2}
+                        featured
+                      />
                     </div>
                   ))}
                 </div>
@@ -499,9 +535,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               )}
 
               {listings.isLoading ? (
-                <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <Skeleton key={index} className="aspect-[3/4] rounded-2xl" />
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <PropertyCardSkeleton key={index} />
                   ))}
                 </div>
               ) : listings.isError ? (
@@ -513,10 +549,8 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 </div>
               ) : rows.length === 0 ? (
                 <div className="mt-4 overflow-hidden rounded-3xl border border-border bg-card p-6 text-center shadow-panel sm:p-10">
-                  <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-market-silver text-market-navy">
-                    <Building2 className="size-6" aria-hidden />
-                  </span>
-                  <h2 className="mt-4 text-lg font-bold text-foreground">
+                  <Mascot name="kaheel" pose="present" size="sm" className="mx-auto h-28 w-auto" />
+                  <h2 className="mt-3 text-lg font-bold text-foreground">
                     {t("market.realEstate.emptyTitle")}
                   </h2>
                   <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
@@ -534,12 +568,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                   </div>
                 </div>
               ) : (
-                <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
                   {rows.map((listing, index) => (
-                    <EstateCard key={listing.id} listing={listing} priority={index < 4} />
+                    <PropertyCard
+                      key={listing.id}
+                      listing={listing}
+                      images={galleryFor(listing.id)}
+                      priority={index < 2}
+                    />
                   ))}
                 </div>
               )}
+
 
               {listings.hasNextPage && (
                 <div className="mt-6 flex justify-center">
@@ -670,6 +710,59 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </div>
             </div>
 
+            {/* تفاصيل العقار: حدود دنيا واضحة بدل حقول تقنية. */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="real-estate-filter-rooms">{t("market.realEstate.roomsMin")}</Label>
+                <select
+                  id="real-estate-filter-rooms"
+                  value={draft.rooms ?? ""}
+                  onChange={(event) =>
+                    setDraft({ ...draft, rooms: event.target.value || undefined })
+                  }
+                  className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
+                >
+                  <option value="">{t("market.filters.all")}</option>
+                  {[1, 2, 3, 4, 5, 6].map((value) => (
+                    <option key={value} value={String(value)}>{`${value}+`}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="real-estate-filter-baths">{t("market.realEstate.bathsMin")}</Label>
+                <select
+                  id="real-estate-filter-baths"
+                  value={draft.baths ?? ""}
+                  onChange={(event) =>
+                    setDraft({ ...draft, baths: event.target.value || undefined })
+                  }
+                  className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
+                >
+                  <option value="">{t("market.filters.all")}</option>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <option key={value} value={String(value)}>{`${value}+`}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="real-estate-filter-area">{t("market.realEstate.areaMin")}</Label>
+                <Input
+                  id="real-estate-filter-area"
+                  dir="ltr"
+                  inputMode="numeric"
+                  value={draft.area ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      area: event.target.value.replace(/\D/g, "") || undefined,
+                    })
+                  }
+                />
+              </div>
+            </div>
+
+
+
             <div className="space-y-1.5">
               <Label htmlFor="real-estate-filter-sort">{t("market.filters.sort")}</Label>
               <select
@@ -760,86 +853,5 @@ function FilterChip({
       {Icon && <Icon className="size-3.5" aria-hidden />}
       {label}
     </button>
-  );
-}
-
-function EstateCard({
-  listing,
-  priority = false,
-  featured = false,
-}: {
-  listing: ListingCardData;
-  priority?: boolean;
-  featured?: boolean;
-}) {
-  const { t, locale } = useI18n();
-  const price = priceLabel(listing, "—", locale);
-  const location = [listing.city, listing.district].filter(Boolean).join(" — ");
-  const category = listing.subcategoryLabel ?? listing.typeLabel;
-
-  return (
-    <article className="group relative overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition duration-200 hover:-translate-y-0.5 hover:shadow-raised">
-      <Link
-        to="/ads/$slug"
-        params={{ slug: listing.slug ?? listing.id }}
-        onClick={() =>
-          track({ event_type: "search_click", path: "/search", listing_id: listing.id })
-        }
-        className="block"
-      >
-        <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-          {listing.imageUrl ? (
-            <img
-              src={listing.imageUrl}
-              alt={listing.title}
-              width={640}
-              height={480}
-              loading={priority ? "eager" : "lazy"}
-              decoding="async"
-              fetchPriority={priority ? "high" : "auto"}
-              className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
-            />
-          ) : (
-            <div className="grid size-full place-items-center bg-market-silver text-market-navy-soft">
-              <Building2 className="size-9" aria-hidden />
-            </div>
-          )}
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-market-navy/75 to-transparent" />
-          {(featured || activeFeatured(listing)) && (
-            <span className="absolute bottom-2 inline-flex items-center gap-1 rounded-full bg-market-navy px-2 py-1 text-[10px] font-semibold text-market-navy-foreground start-2">
-              <Sparkles className="size-3" aria-hidden />
-              {t("market.realEstate.featuredBadge")}
-            </span>
-          )}
-          {category && (
-            <span className="absolute top-2 max-w-[60%] truncate rounded-full bg-market-navy/75 px-2 py-1 text-[10px] font-medium text-market-navy-foreground start-2">
-              {category}
-            </span>
-          )}
-        </div>
-        <div className="p-3 sm:p-4">
-          <h3 className="line-clamp-2 min-h-10 text-sm font-bold leading-5 text-foreground sm:text-base">
-            {listing.title}
-          </h3>
-          <p className="num mt-2 text-sm font-bold text-market-navy sm:text-base" dir="ltr">
-            {price}
-          </p>
-          <div className="mt-2 flex items-center justify-between gap-2 text-[10px] text-muted-foreground sm:text-xs">
-            <span className="inline-flex min-w-0 items-center gap-1">
-              <MapPin className="size-3 shrink-0" aria-hidden />
-              <span className="truncate">
-                {location || t("market.realEstate.locationFallback")}
-              </span>
-            </span>
-            <span className="shrink-0">
-              {relativeTime(listing.published_at ?? listing.created_at, locale)}
-            </span>
-          </div>
-        </div>
-      </Link>
-      <div className="absolute top-2 z-10 end-2">
-        <FavoriteButton listing={listing} />
-      </div>
-    </article>
   );
 }

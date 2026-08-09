@@ -1406,7 +1406,13 @@
         "wantedBuyHint": "Publish your needs for advertisers to see",
         "wantedRent": "Wanted to rent",
         "wantedRentHint": "Find the right space quickly"
-      }
+      },
+      "badgeWanted": "Wanted",
+      "roomsMin": "Rooms (min)",
+      "bathsMin": "Baths (min)",
+      "areaMin": "Area (sqm)",
+      "prevImage": "Previous image",
+      "nextImage": "Next image"
     },
     "sort": {
       "newest": "Newest",

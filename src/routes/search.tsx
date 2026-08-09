@@ -60,6 +60,9 @@ export interface SearchParams {
   featured?: string | undefined;
   filters?: 1 | undefined;
   sort?: string | undefined;
+  rooms?: string | undefined;
+  baths?: string | undefined;
+  area?: string | undefined;
 }
 
 const PARAM_KEYS = [
@@ -75,6 +78,9 @@ const PARAM_KEYS = [
   "featured",
   "filters",
   "sort",
+  "rooms",
+  "baths",
+  "area",
 ] as const;
 
 type DomainKey = "realestate" | "service" | "product" | "equipment_rent" | "business";
