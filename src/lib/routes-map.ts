@@ -156,6 +156,41 @@ export const ROUTE_MAP: RouteRule[] = [
     allowed_identity_types: ["business"],
   }),
 
+  // The account area used to live under one flat `/dashboard/*` branch, which
+  // said nothing about who a page belongs to and mixed personal screens with
+  // work-account operations. It is now split in two self-describing branches:
+  // `/my/*` (the person) and `/business/*` (the work account). Every old URL
+  // keeps working through a permanent server redirect (`src/server.ts`), so
+  // bookmarks, saved `next=` links and anything already shared stay valid.
+  rule("/dashboard/profile", "legacy", "bare", { legacy_redirect: "/my/profile" }),
+  rule("/dashboard/notifications", "legacy", "bare", {
+    legacy_redirect: "/my/notifications",
+  }),
+  rule("/dashboard/messages", "legacy", "bare", { legacy_redirect: "/my/messages" }),
+  rule("/dashboard/favorites", "legacy", "bare", { legacy_redirect: "/my/favorites" }),
+  rule("/dashboard/bookings", "legacy", "bare", { legacy_redirect: "/my/bookings" }),
+  rule("/dashboard/my-ads", "legacy", "bare", { legacy_redirect: "/my/ads" }),
+  rule("/dashboard/points", "legacy", "bare", { legacy_redirect: "/my/wallet" }),
+  rule("/dashboard/ads/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/dashboard/ads/$id/edit", "legacy", "bare", { legacy_redirect: "/my/ads/$id/edit" }),
+  rule("/dashboard/requests", "legacy", "bare", { legacy_redirect: "/my/quotes" }),
+  rule("/dashboard/reports", "legacy", "bare", { legacy_redirect: "/my/reports" }),
+  rule("/dashboard/reports/$id", "legacy", "bare", { legacy_redirect: "/my/reports/$id" }),
+  rule("/dashboard/violations", "legacy", "bare", { legacy_redirect: "/my/violations" }),
+  rule("/dashboard/operations", "legacy", "bare", { legacy_redirect: "/business" }),
+  rule("/dashboard/orders", "legacy", "bare", { legacy_redirect: "/business/orders" }),
+  rule("/dashboard/store", "legacy", "bare", { legacy_redirect: "/business/store" }),
+  rule("/dashboard/store/new", "legacy", "bare", { legacy_redirect: "/business/store/new" }),
+  rule("/dashboard/store/catalog", "legacy", "bare", {
+    legacy_redirect: "/business/store/catalog",
+  }),
+  rule("/dashboard/network", "legacy", "bare", { legacy_redirect: "/business/partners" }),
+  rule("/dashboard/service", "legacy", "bare", { legacy_redirect: "/business/services" }),
+  rule("/dashboard/service/settings", "legacy", "bare", {
+    legacy_redirect: "/business/services/settings",
+  }),
+  rule("/dashboard/business", "legacy", "bare", { legacy_redirect: "/business/profile" }),
+
   // ── ج. Retired internal operations console ─────────────────────────────────
   // The old internal system (`AppLayout` + `_authenticated/*`: لوحة التحكم /
   // المشرفون / المشاريع / العهد / الطلبات / الموردون / الفواتير / المنتجات /
