@@ -5,9 +5,17 @@
  * popup adds no network request, no decode cost and no layout shift. Motion is
  * pure CSS and disabled under `prefers-reduced-motion`.
  */
-export type MascotKind = "moto" | "lounge" | "wave" | "peek" | "parcel" | "boss";
+export type MascotKind = "moto" | "lounge" | "wave" | "peek" | "parcel" | "boss" | "duo";
 
-export const MASCOT_KINDS: MascotKind[] = ["moto", "lounge", "wave", "peek", "parcel", "boss"];
+export const MASCOT_KINDS: MascotKind[] = [
+  "moto",
+  "lounge",
+  "wave",
+  "peek",
+  "parcel",
+  "boss",
+  "duo",
+];
 
 const SKIN = "#f4c9a3";
 const HAIR = "#240046";
