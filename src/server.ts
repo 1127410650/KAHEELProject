@@ -58,7 +58,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
  * routes are handed to the app untouched. Every 301 target is the same for all
  * callers; the one identity-dependent destination is `/go`, which resolves the
  * caller in the browser instead of being a cacheable redirect — so `/me` and
- * `/audit` 301 to `/go` and stop there. See `routes-map.ts`.
+ * `/audit` answer an uncacheable 302 to `/go` and stop there — see `routes-map.ts`.
  *
  * Each hit is logged once to the server log so retiring an old URL later is a
  * decision based on real traffic rather than a guess. Path only — no query
