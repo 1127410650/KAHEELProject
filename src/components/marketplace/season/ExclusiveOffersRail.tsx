@@ -4,12 +4,10 @@
  * البطاقات تجلس فوق طبقة موسمية مخصّصة (موضع `exclusive`) فتُحسّ بارزة عن بقية
  * الصفحة، والنص فوق حجاب تدرّج يضمن التباين.
  *
- * صفر هزّة تخطيط: ارتفاع المساحة ثابت (`RAIL_HEIGHT`) لا يتغيّر بعدد البطاقات،
- * ونتذكّر في `localStorage` أن هناك عروضًا فعّالة، فتُحجز المساحة من أول رسم في
- * الزيارات التالية ولا يُدفع شيء عند وصول البيانات. وإذا لم تكن هناك عروض لا
- * تُحجز مساحة فارغة إطلاقًا.
+ * صفر هزّة تخطيط: ارتفاع المساحة ثابت (`RAIL_HEIGHT`) ولا يتغيّر بعدد البطاقات،
+ * والمساحة **محجوزة من أول رسم** أثناء الجلب، فوصول البيانات لا يدفع ما تحتها.
+ * لا تُرسم المساحة إلا إذا كان هناك عرض نشط فعلًا، فلا فراغ بلا سبب.
  */
-import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 
@@ -18,46 +16,17 @@ import { useExclusiveOffers } from "@/lib/mkt-seasons";
 import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
 
 const RAIL_HEIGHT = "13.25rem";
-const MEMORY_KEY = "kaheel.exclusive.present";
-
-function remembered(): boolean {
-  try {
-    return window.localStorage.getItem(MEMORY_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function remember(present: boolean) {
-  try {
-    if (present) window.localStorage.setItem(MEMORY_KEY, "1");
-    else window.localStorage.removeItem(MEMORY_KEY);
-  } catch {
-    /* التخزين المحلي قد يكون محجوبًا: الحجز تحسين فقط، لا شرط للعمل */
-  }
-}
 
 export function ExclusiveOffersRail() {
   const { locale } = useI18n();
   const ar = locale === "ar";
   const { data, isPending } = useExclusiveOffers();
   const offers = data ?? [];
-  const [reserve, setReserve] = useState(false);
 
-  // القراءة بعد الترطيب حتى لا يختلف رسم الخادم عن المتصفح.
-  useEffect(() => setReserve(remembered()), []);
+  // الحجز أثناء الجلب: نفس الارتفاع على الخادم وفي المتصفح، فلا اختلاف ترطيب.
+  if (isPending) return <div aria-hidden style={{ height: RAIL_HEIGHT }} />;
+  if (offers.length === 0) return null;
 
-  useEffect(() => {
-    if (!data) return;
-    remember(data.length > 0);
-  }, [data]);
-
-  if (offers.length === 0) {
-    if (isPending && reserve) {
-      return <div aria-hidden style={{ height: RAIL_HEIGHT }} />;
-    }
-    return null;
-  }
 
   return (
     <section
