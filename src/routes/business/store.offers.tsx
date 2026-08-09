@@ -56,11 +56,12 @@ function StoreOffersPage() {
   });
 
   return (
-    <DashboardShell
-      title="عروض المتجر"
-      description="سند كَحيل: خصومات يراها زوّار صفحة متجرك العامة."
-    >
+    <DashboardShell title="عروض المتجر">
+      <p className="text-xs text-muted-foreground">
+        سند كَحيل: خصومات يراها زوّار صفحة متجرك العامة.
+      </p>
       {store.isLoading ? (
+
         <Skeleton className="h-40 w-full rounded-2xl" />
       ) : !store.data ? (
         <Card>

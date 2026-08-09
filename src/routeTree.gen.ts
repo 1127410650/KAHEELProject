@@ -84,6 +84,7 @@ import { Route as BusinessServicesSettingsRouteImport } from './routes/business/
 import { Route as BusinessStoreIndexRouteImport } from './routes/business/store.index'
 import { Route as BusinessStoreCatalogRouteImport } from './routes/business/store.catalog'
 import { Route as BusinessStoreNewRouteImport } from './routes/business/store.new'
+import { Route as BusinessStoreOffersRouteImport } from './routes/business/store.offers'
 import { Route as GuidesSyriaSlugRouteImport } from './routes/guides/syria_.$slug'
 import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
@@ -470,6 +471,11 @@ const BusinessStoreNewRoute = BusinessStoreNewRouteImport.update({
   path: '/store/new',
   getParentRoute: () => BusinessRouteRoute,
 } as any)
+const BusinessStoreOffersRoute = BusinessStoreOffersRouteImport.update({
+  id: '/store/offers',
+  path: '/store/offers',
+  getParentRoute: () => BusinessRouteRoute,
+} as any)
 const GuidesSyriaSlugRoute = GuidesSyriaSlugRouteImport.update({
   id: '/guides/syria_/$slug',
   path: '/guides/syria/$slug',
@@ -585,6 +591,7 @@ export interface FileRoutesByFullPath {
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
+  '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/reports/$id': typeof MyReportsIdRoute
@@ -667,6 +674,7 @@ export interface FileRoutesByTo {
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
+  '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/reports/$id': typeof MyReportsIdRoute
@@ -753,6 +761,7 @@ export interface FileRoutesById {
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
+  '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria_/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/reports/$id': typeof MyReportsIdRoute
@@ -840,6 +849,7 @@ export interface FileRouteTypes {
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
+    | '/business/store/offers'
     | '/guides/syria/$slug'
     | '/my/ads/new'
     | '/my/reports/$id'
@@ -922,6 +932,7 @@ export interface FileRouteTypes {
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
+    | '/business/store/offers'
     | '/guides/syria/$slug'
     | '/my/ads/new'
     | '/my/reports/$id'
@@ -1007,6 +1018,7 @@ export interface FileRouteTypes {
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
+    | '/business/store/offers'
     | '/guides/syria_/$slug'
     | '/my/ads/new'
     | '/my/reports/$id'
@@ -1581,6 +1593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessStoreNewRouteImport
       parentRoute: typeof BusinessRouteRoute
     }
+    '/business/store/offers': {
+      id: '/business/store/offers'
+      path: '/store/offers'
+      fullPath: '/business/store/offers'
+      preLoaderRoute: typeof BusinessStoreOffersRouteImport
+      parentRoute: typeof BusinessRouteRoute
+    }
     '/guides/syria_/$slug': {
       id: '/guides/syria_/$slug'
       path: '/guides/syria/$slug'
@@ -1712,6 +1731,7 @@ interface BusinessRouteRouteChildren {
   BusinessServicesSettingsRoute: typeof BusinessServicesSettingsRoute
   BusinessStoreCatalogRoute: typeof BusinessStoreCatalogRoute
   BusinessStoreNewRoute: typeof BusinessStoreNewRoute
+  BusinessStoreOffersRoute: typeof BusinessStoreOffersRoute
   BusinessServicesIndexRoute: typeof BusinessServicesIndexRoute
   BusinessStoreIndexRoute: typeof BusinessStoreIndexRoute
 }
@@ -1724,6 +1744,7 @@ const BusinessRouteRouteChildren: BusinessRouteRouteChildren = {
   BusinessServicesSettingsRoute: BusinessServicesSettingsRoute,
   BusinessStoreCatalogRoute: BusinessStoreCatalogRoute,
   BusinessStoreNewRoute: BusinessStoreNewRoute,
+  BusinessStoreOffersRoute: BusinessStoreOffersRoute,
   BusinessServicesIndexRoute: BusinessServicesIndexRoute,
   BusinessStoreIndexRoute: BusinessStoreIndexRoute,
 }
