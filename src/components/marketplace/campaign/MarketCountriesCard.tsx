@@ -26,11 +26,18 @@ export function MarketCountriesCard() {
 
   const countries = useQuery({ queryKey: ["mkt", "admin-countries"], queryFn: loadAllCountries });
 
-  async function patch(id: string, values: Record<string, boolean>) {
+  type CountryPatch = {
+    is_market_enabled?: boolean;
+    phone_only_otp?: boolean;
+    is_default_market?: boolean;
+    is_active?: boolean;
+  };
+
+  async function patch(id: string, values: CountryPatch) {
     setBusyId(id);
     try {
       // الدولة الافتراضية واحدة فقط: نُفرغ البقية قبل التعيين.
-      if (values.is_default_market) {
+      if (values.is_default_market === true) {
         await supabase
           .from("mkt_countries")
           .update({ is_default_market: false })
