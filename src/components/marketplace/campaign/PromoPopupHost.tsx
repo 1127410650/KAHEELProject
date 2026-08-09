@@ -355,7 +355,7 @@ export function PromoPopupHost() {
 
         <PopupMascot kind={mascot} />
 
-        <div className="min-w-0 flex-1 text-start">
+        <div className={`min-w-0 ${duo ? "w-full text-center" : "flex-1 text-start"}`}>
           {badge ? (
             <span className="inline-flex rounded-full bg-[#240046] px-2 py-0.5 text-[10px] font-bold text-white">
               {badge}
@@ -363,7 +363,9 @@ export function PromoPopupHost() {
           ) : null}
           <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{title}</p>
           {subtitle ? (
-            <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#5a189a]">
+            <p
+              className={`${duo ? "line-clamp-3" : "line-clamp-2"} text-[11px] font-bold leading-snug text-[#5a189a]`}
+            >
               {subtitle}
             </p>
           ) : null}
@@ -373,12 +375,14 @@ export function PromoPopupHost() {
               if (campaign) trackCampaign(campaign.id, "click");
               close("click");
             }}
-            className="mt-2 inline-flex min-h-8 items-center justify-center rounded-full bg-[#3c096c] px-4 text-[11px] font-bold text-white shadow-[0_8px_18px_rgb(60_9_108/0.25)]"
+            className={`inline-flex min-h-8 items-center justify-center rounded-full bg-[#3c096c] px-4 text-[11px] font-bold text-white shadow-[0_8px_18px_rgb(60_9_108/0.25)] ${duo ? "mt-1.5" : "mt-2"}`}
           >
             {cta || (ar ? "تصفح الآن" : "Browse now")}
           </a>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
+
