@@ -16,14 +16,18 @@ import { guardSession } from "@/lib/auth-session";
  * those rules, and the database (RLS) is still the only authority that grants
  * anything.
  *
- * `ssr: false` because the Supabase session lives in `localStorage`: gating this
- * subtree on the server would redirect every hard refresh to `/auth`.
+ * `ssr: "data-only"` because the Supabase session lives in `localStorage`: the
+ * subtree renders on the client only (a server render would have to guess), while
+ * a plain `ssr: false` also made the client insert a Suspense boundary the server
+ * HTML never had — a hydration mismatch on every page of this area.
  */
 export const Route = createFileRoute("/my")({
   ssr: "data-only",
   beforeLoad: async ({ location }) => {
-    // The session lives in `localStorage`, so the server cannot answer this
-    // question: gating there would bounce every hard refresh to `/auth`.
+    // The Supabase session lives in `localStorage`, so the server cannot answer
+    // this question: gating there would bounce every hard refresh to `/auth`.
+    // The subtree renders on the client only (`ssr: "data-only"`), so the gate
+    // still runs before any page module loads.
     if (typeof window === "undefined") return;
     const result = await guardSession();
     if (result.status !== "authenticated") {
