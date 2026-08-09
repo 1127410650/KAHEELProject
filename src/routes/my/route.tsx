@@ -34,6 +34,5 @@ export const Route = createFileRoute("/my")({
     if (path === "/my") throw redirect({ to: "/go", replace: true });
   },
 
-  pendingComponent: () => null,
   component: () => <Outlet />,
 });
