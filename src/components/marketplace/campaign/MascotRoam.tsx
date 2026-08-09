@@ -138,7 +138,6 @@ export function MascotRoam() {
         bottomInset: 84,
         pad: 14,
       });
-      console.debug('[rd] band', JSON.stringify(band));
       if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return;
       releaseRef.current = acquireStage(`roam:${kind}`);
       keyRef.current += 1;
@@ -150,13 +149,13 @@ export function MascotRoam() {
     };
 
     const run = () => {
-      if (Date.now() < settledAt) { console.debug('[rd] settle'); return; }
-      if (blockedNow()) { console.debug('[rd] blocked', JSON.stringify({roam:pacing.roamEnabled,en:pacing.enabled,muted:popupsMuted(),sup:popupsSuppressed(),call:!!call,quiet:isQuietPath(pathname),typing:isTypingNow(),vis:document.visibilityState})); return; }
+      if (Date.now() < settledAt) return;
+      if (blockedNow()) return;
       const kind: RoamScene = Math.random() < 0.5 ? "stroll" : "search";
       // القاعدة الأولى: شخصية واحدة فقط، وفاصل أدنى، ولا تكرار للنوع نفسه.
       if (!canShowMascot(`roam:${kind}`, limits)) {
         const other: RoamScene = kind === "stroll" ? "search" : "stroll";
-        if (!canShowMascot(`roam:${other}`, limits)) { console.debug('[rd] limits', JSON.stringify(limits)); return; }
+        if (!canShowMascot(`roam:${other}`, limits)) return;
         return start(other);
       }
       start(kind);
