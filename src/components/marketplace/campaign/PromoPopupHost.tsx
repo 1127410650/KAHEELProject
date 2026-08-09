@@ -42,7 +42,7 @@ import { MascotPeek } from "@/components/marketplace/campaign/MascotPeek";
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
-  ENTRY_ALIGN,
+  ENTRY_POSITION,
   ENTRY_ANIMATION,
   ENTRY_ORIGIN,
   PEEK_LAYOUT,
@@ -355,14 +355,14 @@ export function PromoPopupHost() {
         : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
 
     return (
-      <div className={`pointer-events-none fixed inset-0 z-[80] flex ${layout.wrap}`} aria-live="polite">
+      <div className="pointer-events-none fixed inset-0 z-[80]" aria-live="polite">
         <div
           key={card.key}
           data-kaheel-drop-card
           data-kaheel-peek={card.peekSide}
           role="status"
           style={{ transformOrigin: layout.origin, animation: peekAnimation }}
-          className={`pointer-events-none flex items-end gap-1.5 ${layout.row}`}
+          className={`pointer-events-none absolute flex items-end gap-1.5 ${layout.row} ${layout.position}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
           <div className="mb-2 max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl">
@@ -405,9 +405,7 @@ export function PromoPopupHost() {
 
   return (
     <div
-      className={`pointer-events-none fixed inset-0 z-[80] flex p-4 pb-24 ${
-        entrance ? "items-end justify-start" : ENTRY_ALIGN[card.side]
-      }`}
+      className="pointer-events-none fixed inset-0 z-[80]"
       aria-live="polite"
     >
       <div
@@ -419,7 +417,9 @@ export function PromoPopupHost() {
           transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
           animation,
         }}
-        className="pointer-events-none relative flex w-full max-w-[17rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl"
+        className={`pointer-events-none absolute flex w-[17rem] max-w-[calc(100vw-1.5rem)] flex-col ${
+          entrance ? "bottom-24 left-3" : ENTRY_POSITION[card.side]
+        } `+"flex-col".slice(0,0)+" items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl"
       >
 
         <div className="absolute end-2 top-2">{closeButtons}</div>
