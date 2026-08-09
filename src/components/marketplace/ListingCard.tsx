@@ -250,7 +250,7 @@ export function ListingCard({
   const navBlocked = useRef(false);
 
   const meta = (
-    <div className="mt-auto flex h-[18px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
+    <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
 
       {listing.city && (
         <span className="inline-flex min-w-0 items-center gap-1">
@@ -331,6 +331,34 @@ export function ListingCard({
             navBlocked.current = active;
           }}
         />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The loading placeholder for `ListingCard` in grid view. Its geometry mirrors
+ * the real card box-for-box (5/4 media, one tag line, two title lines, price,
+ * meta), so swapping data in never changes a rail's height.
+ */
+export function ListingCardSkeleton() {
+  return (
+    <div className="k-surface flex flex-col overflow-hidden" aria-hidden>
+      <div className="k-skel aspect-[5/4] w-full rounded-none" />
+      <div className="flex flex-1 flex-col p-2.5 sm:p-3">
+        <span className="flex h-[18px] items-center">
+          <span className="k-skel h-3.5 w-14 rounded-full" />
+        </span>
+        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+          <span className="k-skel block h-[0.95em] w-full rounded" />
+          <span className="k-skel block h-[0.95em] w-3/5 rounded" />
+        </div>
+        <span className="mt-1 flex h-[20px] items-center">
+          <span className="k-skel h-3.5 w-16 rounded" />
+        </span>
+        <span className="mt-auto flex h-[26px] items-center pt-1.5">
+          <span className="k-skel h-3 w-24 rounded" />
+        </span>
       </div>
     </div>
   );
