@@ -299,9 +299,12 @@ const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
  * route's own guard (login / active account / permission) still runs.
  */
 export function resolveLegacyTarget(pathname: string): string | null {
-  // Pattern-aware: `/projects/17` resolves through its `/projects/$id` rule.
+  // Pattern-aware: `/projects/17` resolves through its `/projects/$id` rule, and
+  // a renamed detail URL keeps its id (`/dashboard/ads/17/edit`).
   const found = routeRuleFor(pathname);
-  return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
+  if (found?.route_type !== "legacy" || !found.legacy_redirect) return null;
+  const { path } = splitLocalePrefix(pathname.split("?")[0]!.split("#")[0]!);
+  return applyParams(found.legacy_redirect, found.path, path);
 }
 
 /**
