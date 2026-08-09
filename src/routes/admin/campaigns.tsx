@@ -297,7 +297,14 @@ function AdminCampaignsPage() {
                     </Button>
                   ))}
                 </div>
+                {/* معاينة حيّة للشخصية المختارة بنفس أصول المنصة المعتمدة. */}
+                {popupMascot !== "auto" ? (
+                  <div className="mt-2 w-fit rounded-2xl border bg-card p-2">
+                    <PopupMascot kind={popupMascot as MascotKind} lang={ar ? "ar" : "en"} />
+                  </div>
+                ) : null}
               </div>
+
               <div className="space-y-1">
                 <Label>{ar ? "العنوان (عربي)" : "Title (Arabic)"}</Label>
                 <Input value={titleAr} onChange={(event) => setTitleAr(event.target.value)} />
