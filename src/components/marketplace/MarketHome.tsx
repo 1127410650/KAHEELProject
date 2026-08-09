@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Apple,
   Baby,
   BadgeCheck,
   Building2,
@@ -17,19 +16,15 @@ import {
   House,
   IceCreamBowl,
   Laptop,
-  Milk,
   MessagesSquare,
   MoreHorizontal,
   Package,
-  Pizza,
   Plus,
   Search,
-  Sandwich,
   Shirt,
   ShoppingBasket,
   ShieldCheck,
   SlidersHorizontal,
-  Soup,
   Sparkles,
   Star,
   Utensils,
