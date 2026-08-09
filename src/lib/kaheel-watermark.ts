@@ -121,7 +121,9 @@ export function drawKaheelWatermark(
   const pad = Math.round(minSide * 0.025) + Math.round(fontSize * 0.2);
 
   ctx.save();
-  ctx.direction = "rtl";
+  // اتجاه ثابت LTR حتى يبقى ترتيب «كَحيل · KAHEEL · kaheel.market» كما هو
+  // على أي صفحة، عربية كانت أو إنجليزية.
+  ctx.direction = "ltr";
   ctx.font = `700 ${fontSize}px "Segoe UI", "Noto Sans Arabic", system-ui, sans-serif`;
   ctx.textBaseline = "alphabetic";
   ctx.globalAlpha = config.opacity / 100;
