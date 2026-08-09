@@ -62,11 +62,16 @@ export const Route = createFileRoute("/more")({
     meta: [
       { title },
       { name: "description", content: description },
+      // Account management screen: nothing here is useful in a search result,
+      // and its content changes with the caller. Kept public (a visitor may open
+      // it to sign in) but excluded from the index.
+      { name: "robots", content: "noindex, follow" },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+
   }),
   component: MorePage,
 });
