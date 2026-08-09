@@ -20,8 +20,11 @@ import { guardSession } from "@/lib/auth-session";
  * subtree on the server would redirect every hard refresh to `/auth`.
  */
 export const Route = createFileRoute("/my")({
-  ssr: false,
+  ssr: "data-only",
   beforeLoad: async ({ location }) => {
+    // The session lives in `localStorage`, so the server cannot answer this
+    // question: gating there would bounce every hard refresh to `/auth`.
+    if (typeof window === "undefined") return;
     const result = await guardSession();
     if (result.status !== "authenticated") {
       throw redirect({ to: "/auth", search: { next: location.href }, replace: true });
