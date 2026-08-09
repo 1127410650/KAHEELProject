@@ -85,7 +85,7 @@ function KidsWorldPage() {
           </div>
         ) : (
           <div className="mt-3">
-            <KidsEmptyState id="nabnab" />
+            <KidsEmptyState id="natnoot" />
           </div>
         )}
 
