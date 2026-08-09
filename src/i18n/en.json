@@ -3666,7 +3666,10 @@
           "pending": "Under review",
           "approved": "Approved",
           "rejected": "Rejected",
-          "cancelled": "Cancelled"
+          "cancelled": "Cancelled",
+          "failed": "Payment failed",
+          "expired": "Checkout expired",
+          "refunded": "Refunded"
         },
         "admin": {
           "title": "Top-up requests",
@@ -3682,6 +3685,16 @@
           "approved": "Approved and credit added",
           "rejected": "Request rejected",
           "failed": "Could not complete the review"
+        },
+        "card": {
+          "notice": "Pick a credit pack and pay on the provider’s secure page. Credit is added automatically once the payment is confirmed.",
+          "pay": "Pay by card",
+          "returned": "Payment received; credit is added once the provider confirms it (usually seconds).",
+          "cancelled": "Checkout cancelled — nothing was charged.",
+          "noPacks": "No card packs are available right now.",
+          "errPack": "That credit pack is no longer available; refresh and try again.",
+          "errNotConfigured": "Card payment is not configured yet; use Sham Cash or a bank transfer.",
+          "errFailed": "Could not start the payment; please try again."
         }
       }
     }
