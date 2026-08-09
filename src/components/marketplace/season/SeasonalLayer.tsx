@@ -149,6 +149,28 @@ export function SeasonalLayer({
 
       <div className={`absolute inset-0 ${SCRIM[season.overlay]}`} />
 
+      {/* شريط الهوية: علم يرفرف + نص بارز — أسفل الطبقة حيث لا يزاحم محتوى الهيدر. */}
+      {season.motif === "flag" || headline ? (
+        <div className="absolute inset-x-3 bottom-1.5 flex items-center gap-2 sm:bottom-2 sm:gap-3">
+          {season.motif === "flag" ? (
+            <SyrianFlag className="h-5 w-[30px] shrink-0 overflow-hidden rounded-[3px] ring-1 ring-white/45 sm:h-6 sm:w-9" />
+          ) : null}
+          {headline ? (
+            <div className="min-w-0">
+              <p className="truncate text-[12px] font-extrabold leading-tight text-white drop-shadow-[0_1px_6px_rgb(0_0_0/0.6)] sm:text-sm">
+                {headline}
+              </p>
+              {subheadline ? (
+                <p className="truncate text-[9px] leading-tight text-white/85 drop-shadow-[0_1px_4px_rgb(0_0_0/0.6)] sm:text-[11px]">
+                  {subheadline}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+
       {showMascot && mascotSrc ? (
         <img
           src={mascotSrc}
