@@ -399,26 +399,23 @@ function applyParams(target: string, rulePath: string, concretePath: string): st
 
 
 /**
- * Paths whose destination depends on who is asking (`/me`, `/audit`): a platform
- * admin, a work account and a personal account each land somewhere different.
- * They must NEVER be answered with a cacheable 301 — the browser and any proxy
- * would pin one identity's destination for everyone.
- */
-const IDENTITY_DEPENDENT_PATHS = new Set(["/me", "/audit"]);
-
-/**
  * Permanent (301) target for a retired URL, resolved on the server before the
  * app renders — so an indexed or bookmarked link keeps its search signals
  * instead of being moved by a client-side redirect the crawler never follows.
  *
- * Returns `null` when the path is current, unknown, or identity-dependent.
+ * Every legacy target here is identity-independent, which is what makes a
+ * cacheable 301 safe: the one destination that depends on who is asking is
+ * `/go`, and that page resolves the caller client-side instead of being a
+ * redirect rule. `/me` and `/audit` therefore 301 to `/go`, never past it.
+ *
+ * Returns `null` when the path is current or unknown.
  */
 export function serverRedirectFor(pathname: string): string | null {
   const { locale, path } = splitLocalePrefix(pathname.split("?")[0]!.split("#")[0]!);
   const found = routeRuleFor(path);
   if (!found || found.route_type !== "legacy" || !found.legacy_redirect) return null;
-  if (IDENTITY_DEPENDENT_PATHS.has(found.path)) return null;
   return withLocalePrefix(applyParams(found.legacy_redirect, found.path, path), locale);
+}
 }
 
 
