@@ -225,40 +225,32 @@ export function PromoPopupHost() {
   }, [blocked, show]);
 
   /**
-   * الملاحة لا تُلغي السقوط: اللمسة نفسها هي التي تفتح الوجهة، فلو صفّرنا
-   * البطاقة عند تغيّر المسار لما ظهرت الشخصية أبدًا في اللمسات التي تنقل
-   * المستخدم. لذلك نُنهي مشهد الدخول فقط، ونترك مؤقّت السقوط يكمل عمله.
+   * الملاحة لا تُغلق البطاقة: الإغلاق بزر × حصرًا، فالبطاقة التي ظهرت مع اللمسة
+   * تبقى مقروءة على الوجهة الجديدة. لا نُظهر مشهد دخول جديد ما دامت بطاقة مفتوحة.
    */
   useEffect(() => {
-    setCard((prev) => {
-      if (prev?.mode !== "entrance") return prev;
-      window.clearTimeout(hideTimerRef.current);
-      return null;
-    });
-    setLeaving(false);
     if (!isPeoplePath(pathname)) return;
     if (blocked()) return;
     // تأخير قصير حتى تستقر الصفحة، فالمشهد يدخل على محتوى جاهز لا على فراغ.
-    const timer = window.setTimeout(() => show("entrance"), 500);
+    const timer = window.setTimeout(() => {
+      if (blocked()) return;
+      show("entrance");
+    }, 500);
     return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // استئناف مشهد سقوط بدأ قبل تحميل كامل للصفحة.
+  // استئناف مشهد سقوط بدأ قبل تحميل كامل للصفحة — ثم يبقى حتى الإغلاق اليدوي.
   useEffect(() => {
     const record = readResume();
     if (!record || blocked()) return;
     keyRef.current += 1;
+    openRef.current = true;
     setCard({ key: keyRef.current, ...record });
-    window.clearTimeout(hideTimerRef.current);
-    hideTimerRef.current = window.setTimeout(
-      () => dismiss(),
-      Math.max(320, record.until - Date.now()),
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => () => window.clearTimeout(hideTimerRef.current), []);
+  useEffect(() => () => window.clearTimeout(fadeTimerRef.current), []);
 
   if (!card) return null;
 
