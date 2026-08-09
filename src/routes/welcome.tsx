@@ -315,13 +315,13 @@ function WelcomePage() {
             <Link to="/help" className="hover:text-white">
               {t("welcome.footer.help")}
             </Link>
-            <Link to="/terms" className="hover:text-white">
+            <Link to="/about" hash="terms" className="hover:text-white">
               {t("welcome.footer.terms")}
             </Link>
-            <Link to="/privacy" className="hover:text-white">
+            <Link to="/about" hash="privacy" className="hover:text-white">
               {t("welcome.footer.privacy")}
             </Link>
-            <Link to="/contact" className="hover:text-white">
+            <Link to="/help" hash="contact" className="hover:text-white">
               {t("welcome.footer.contact")}
             </Link>
           </nav>
