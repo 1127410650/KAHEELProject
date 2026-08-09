@@ -289,6 +289,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/reports/$id", "admin", "admin"),
   rule("/admin/ad-credit", "admin", "admin"),
   rule("/admin/campaigns", "admin", "admin"),
+  rule("/admin/mascots", "admin", "admin"),
   rule("/admin/stores", "admin", "admin"),
   rule("/admin/taxonomy", "admin", "admin"),
   rule("/admin/users", "admin", "admin"),

@@ -26,6 +26,7 @@ import {
   Settings,
   ShieldAlert,
   ShieldCheck,
+  Smile,
   Store,
   UserCog,
   UserRoundCheck,
@@ -121,6 +122,12 @@ const NAV: NavItem[] = [
     to: "/admin/campaigns",
     labelKey: "admin.nav.campaigns",
     icon: Clapperboard,
+    section: "market",
+  },
+  {
+    to: "/admin/mascots",
+    labelKey: "admin.nav.mascots",
+    icon: Smile,
     section: "market",
   },
   {
