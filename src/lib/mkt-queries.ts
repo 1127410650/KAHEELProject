@@ -60,8 +60,17 @@ export interface ListingFilters {
   hasPrice?: boolean | undefined;
   /** Home "featured" row: only listings with a live promotion window. */
   featuredOnly?: boolean | undefined;
+  /**
+   * Real-estate detail minimums. They live inside the `specs` JSON, so they are
+   * applied on the fetched rows; `fetched` still reports the raw row count so
+   * infinite paging never stops early.
+   */
+  minRooms?: number | undefined;
+  minBaths?: number | undefined;
+  minArea?: number | undefined;
   page?: number | undefined;
 }
+
 
 export const PAGE_SIZE = 20;
 
