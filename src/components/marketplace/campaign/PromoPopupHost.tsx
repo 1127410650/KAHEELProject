@@ -49,7 +49,7 @@ const SWIPE_PX = 60;
 
 const POSITION: Record<PopupSide, string> = {
   bottom: "inset-x-0 bottom-20 justify-center sm:bottom-6",
-  top: "inset-x-0 top-4 justify-center",
+  top: "inset-x-0 top-16 justify-center",
   left: "inset-y-0 left-0 items-end justify-start pb-24 sm:items-center sm:pb-0",
   right: "inset-y-0 right-0 items-end justify-end pb-24 sm:items-center sm:pb-0",
 };
