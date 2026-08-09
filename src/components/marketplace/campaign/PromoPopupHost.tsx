@@ -42,15 +42,21 @@ import { MascotPeek } from "@/components/marketplace/campaign/MascotPeek";
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
-  ENTRY_POSITION,
+  acquireStage,
+  areaStillFree,
+  canShowMascot,
+  findSafeBand,
+  type SafeBand,
+} from "@/lib/mascot-stage";
+import {
   ENTRY_ANIMATION,
-  ENTRY_ORIGIN,
   PEEK_LAYOUT,
   nextEntrySide,
   nextPeekSide,
   type EntrySide,
   type PeekSide,
 } from "@/lib/mascot-entry";
+
 import {
   configureMascotTiming,
   decideDrop,
