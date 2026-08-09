@@ -169,6 +169,9 @@ function StoreHubPage() {
                 </Link>
               </Button>
               <Button variant="outline" asChild>
+                <Link to="/business/store/offers">عروض المتجر</Link>
+              </Button>
+              <Button variant="outline" asChild>
                 <Link to="/business/store/new">{t("market.store.hub.editData")}</Link>
               </Button>
               {data.status === "published" ? (
