@@ -79,6 +79,14 @@ export function watermarkLabel(config: WatermarkConfig): string {
   return [config.text, config.url].filter(Boolean).join(" · ");
 }
 
+/**
+ * نفس النص لكن معزول اتجاهيًا (LRI…PDI) حتى يبقى ترتيب المقاطع
+ * «كَحيل · KAHEEL · kaheel.market» ثابتًا داخل الكانفاس مهما كان اتجاه الصفحة.
+ */
+export function watermarkDrawLabel(config: WatermarkConfig): string {
+  return `\u2066${watermarkLabel(config)}\u2069`;
+}
+
 let cached: { at: number; config: WatermarkConfig } | null = null;
 
 /** إعدادات العلامة من جدول الإعدادات، مع كاش دقيقة واحدة وسقوط آمن للافتراضي. */
@@ -115,7 +123,7 @@ export function drawKaheelWatermark(
   height: number,
   config: WatermarkConfig,
 ): void {
-  const label = watermarkLabel(config);
+  const label = watermarkDrawLabel(config);
   const minSide = Math.min(width, height);
   const fontSize = Math.max(10, Math.round((minSide * config.sizePct) / 100));
   const pad = Math.round(minSide * 0.025) + Math.round(fontSize * 0.2);
