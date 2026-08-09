@@ -9,7 +9,6 @@ import {
   MapPin,
   Search,
   SlidersHorizontal,
-  Sparkles,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -17,7 +16,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import realEstateHero from "@/assets/market/cat-real-estate-hero.webp";
 import { MarketShell } from "@/components/marketplace/MarketShell";
-import { FavoriteButton, type ListingCardData } from "@/components/marketplace/ListingCard";
+import { type ListingCardData } from "@/components/marketplace/ListingCard";
+import {
+  PropertyCard,
+  PropertyCardSkeleton,
+} from "@/components/marketplace/real-estate/PropertyCard";
+import { Mascot } from "@/components/marketplace/campaign/Mascot";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -27,11 +31,10 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/comp
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
-import { track } from "@/lib/analytics";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
 import { isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { loadCategories, loadListingsPage } from "@/lib/mkt-queries";
-import { priceLabel, relativeTime } from "@/lib/mkt";
+import { loadListingGalleries } from "@/lib/mkt-listing-galleries";
 import { useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +49,12 @@ export interface RealEstateSearchParams {
   max?: string | undefined;
   img?: string | undefined;
   sort?: string | undefined;
+  /** الحدود الدنيا لتفاصيل العقار. */
+  rooms?: string | undefined;
+  baths?: string | undefined;
+  area?: string | undefined;
 }
+
 
 interface RealEstateExperienceProps {
   params: RealEstateSearchParams;
