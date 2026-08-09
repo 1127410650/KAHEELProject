@@ -10114,6 +10114,10 @@ export type Database = {
         Args: { _days?: number; _place_id: string; _tenant_id?: string }
         Returns: string
       }
+      mkt_guide_provider_category: {
+        Args: { _category: string; _sector: string; _subcategory: string }
+        Returns: string
+      }
       mkt_guide_review_claim: {
         Args: { _approve: boolean; _claim_id: string; _reason?: string }
         Returns: undefined
