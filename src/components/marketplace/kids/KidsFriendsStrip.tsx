@@ -29,7 +29,7 @@ export function KidsFriendsStrip({ className }: { className?: string }) {
               <span className="block truncate text-xs font-bold text-foreground">
                 {friend.nameAr}
               </span>
-              <span className="block truncate text-[11px] text-muted-foreground">
+              <span className="block text-[11px] leading-tight text-muted-foreground">
                 {friend.roleAr}
               </span>
             </span>

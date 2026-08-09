@@ -54,7 +54,7 @@ export const KIDS_FRIENDS: KidsFriendMeta[] = [
     id: "nabnab",
     nameAr: "نبنوب",
     nameEn: "Nabnoob",
-    roleAr: "القرطاسية والمدارس",
+    roleAr: "القرطاسية",
     roleEn: "School & stationery",
     match: [
       "school",
@@ -72,7 +72,7 @@ export const KIDS_FRIENDS: KidsFriendMeta[] = [
     id: "najma",
     nameAr: "نجمة",
     nameEn: "Najma",
-    roleAr: "الصيف والمسابح",
+    roleAr: "الصيف والمسبح",
     roleEn: "Summer & pools",
     match: ["pool", "swim", "summer", "beach", "water", "مسبح", "مسابح", "سباحة", "صيف", "بحر"],
   },

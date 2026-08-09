@@ -31,12 +31,13 @@ function Eyes({ cx = 32, cy = 30, gap = 8, r = 5.4, mood }: {
             <circle cx={x - r * 0.22} cy={cy + 0.2} r={r * 0.16} fill="#ffffff" />
           </g>
         ))}
+        {/* حاجبان مائلان للأعلى نحو الداخل = تعبير حزين لطيف (لا غاضب) */}
         <path
-          d={`M${left - r} ${cy - r - 1.6} q ${r} -1.8 ${r * 2} 1.2`}
+          d={`M${left - r} ${cy - r - 1.2} L${left + r * 0.8} ${cy - r - 3.2}`}
           fill="none" stroke={INK} strokeWidth={1.5} strokeLinecap="round"
         />
         <path
-          d={`M${right - r} ${cy - r - 0.4} q ${r} -3 ${r * 2} -1.2`}
+          d={`M${right + r} ${cy - r - 1.2} L${right - r * 0.8} ${cy - r - 3.2}`}
           fill="none" stroke={INK} strokeWidth={1.5} strokeLinecap="round"
         />
       </g>
