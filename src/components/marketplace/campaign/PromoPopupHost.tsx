@@ -281,11 +281,23 @@ export function PromoPopupHost() {
   };
 
   return (
-    <div
-      className={`pointer-events-none fixed z-[80] flex p-3 sm:p-4 ${POSITION[side]}`}
-      aria-live="polite"
-    >
+    <>
+      {/*
+        طبقة زجاجية شفافة جدًا: ضباب خفيف وتدرج بنفسجي باهت يبقي الصفحة ظاهرة
+        وراءه بوضوح. `pointer-events-none` فالتصفح يكمل تحتها بلا حجب.
+      */}
       <div
+        aria-hidden
+        className={`pointer-events-none fixed inset-0 z-[79] bg-gradient-to-b from-[#c77dff]/10 via-[#7b2cbf]/[0.07] to-[#240046]/10 backdrop-blur-[3px] animate-[kaheel-scrim-in_0.35s_ease-out] motion-reduce:animate-none ${
+          closing ? "opacity-0 transition-opacity duration-200" : ""
+        }`}
+      />
+      <div
+        className={`pointer-events-none fixed z-[80] flex p-3 sm:p-4 ${POSITION[side]}`}
+        aria-live="polite"
+      >
+      <div
+
         ref={cardRef}
         role="dialog"
         aria-label={title}
