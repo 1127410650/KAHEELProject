@@ -7,6 +7,7 @@ import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import { OtpChannelsCard } from "@/components/marketplace/campaign/OtpChannelsCard";
+import { WatermarkCard } from "@/components/marketplace/campaign/WatermarkCard";
 import { formatDateTime } from "@/lib/format";
 import {
   adminErrorMessage,
@@ -59,7 +60,8 @@ function AdminSettingsPage() {
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   const settings = useQuery({ queryKey: ["mkt", "admin", "settings"], queryFn: loadPlatformSettings });
-  const rows = settings.data ?? [];
+  // للعلامة المائية لوحة مخصّصة أدناه، فتُستثنى من العرض الجدولي العام.
+  const rows = (settings.data ?? []).filter((row) => row.key !== "assets.watermark");
 
   async function confirm(reason: string) {
     if (!pending) return;
@@ -157,7 +159,8 @@ function AdminSettingsPage() {
         </div>
       )}
 
-      <div className="mt-4">
+      <div className="mt-4 grid gap-4">
+        <WatermarkCard />
         <OtpChannelsCard />
       </div>
 
