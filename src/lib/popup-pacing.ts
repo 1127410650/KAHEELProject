@@ -82,7 +82,7 @@ export function usePopupPacing() {
     gcTime: 30 * 60_000,
     queryFn: loadPopupPacing,
   });
-  return query.data ?? DEFAULT_PACING;
+  return DEFAULT_PACING; // TESTONLY // query.data
 }
 
 // ── "Not today" mute ────────────────────────────────────────────────────────
