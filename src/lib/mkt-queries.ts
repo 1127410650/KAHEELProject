@@ -248,9 +248,10 @@ async function queryListings(
   const raw = (data ?? []) as unknown as MktListing[];
   const decorated = await decorateListings(raw, locale);
   // Verification is a visual badge only: it never filters or reorders results.
-  const rows = decorated;
+  const rows = filterBySpecMinimums(decorated, filters);
   return { rows, fetched: raw.length };
 }
+
 
 export async function loadListings(
   filters: ListingFilters,
