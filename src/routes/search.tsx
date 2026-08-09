@@ -279,8 +279,8 @@ function GenericSearchPage() {
   const activeRoot = roots.find((r) => r.slug === (domainDef?.categorySlug ?? params.category));
   /*
    * `sub` may arrive as a real id (filter sheet) or as a slug (primary-fields
-   * rail, e.g. «عقار ديل» → `re-aqar-deal`). Both resolve to the same id, so
-   * one canonical category is queried and no duplicate field is needed.
+   * rail, e.g. `re-aqar-deal`). Both resolve to the same id, so one canonical
+   * category is queried and no duplicate field is needed.
    */
   const subId = useMemo(() => {
     const value = params.sub;
@@ -720,6 +720,18 @@ function GenericSearchPage() {
               <span className="rounded-full bg-market-gold-soft px-3 py-1 text-xs font-bold text-market-gold">
                 {t("market.homeV2.featured")}
               </span>
+            )}
+            {/* The indexed, shareable page of the selected category. Without this
+                link `/categories/<slug>` was a canonical destination no visitor
+                could reach from the interface. */}
+            {activeRoot && (
+              <Link
+                to="/categories/$slug"
+                params={{ slug: activeRoot.slug }}
+                className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-bold text-primary transition hover:bg-primary/10"
+              >
+                {t("market.search.categoryPage")}
+              </Link>
             )}
           </div>
 
