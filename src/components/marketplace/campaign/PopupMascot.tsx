@@ -74,31 +74,39 @@ export function PopupMascot({
   kind,
   lang = "ar",
   animated = true,
+  /**
+   * ارتفاع الرسم. الافتراضي مقاس البطاقات الصغيرة، و`hero` للبطاقة المنبثقة
+   * حيث الشخصية هي البطل البصري (١٦٠px على الجوال، ١٧٦px من `sm:`).
+   */
+  scale = "card",
 }: {
   kind: MascotKind;
   lang?: "ar" | "en";
   animated?: boolean;
+  scale?: "card" | "hero";
 }) {
   const persona = MASCOT_PERSONA[kind] ?? "kaheel";
+  const height = scale === "hero" ? "h-40 sm:h-44" : "h-[5.5rem] sm:h-24";
 
   if (persona === "duo") {
     return (
-      <div className="h-[5.5rem] w-full sm:h-24">
+      <div className={`${height} w-full`}>
         <MascotDuo lang={lang} animated={animated} />
       </div>
     );
   }
 
   return (
-    <div className="flex h-[5.5rem] shrink-0 items-end justify-center sm:h-24">
+    <div className={`flex ${height} shrink-0 items-end justify-center`}>
       <Mascot
         name={persona}
         pose={POSE[kind] ?? "idle"}
         lang={lang}
         animated={animated}
-        size="sm"
+        size={scale === "hero" ? "full" : "sm"}
         className="h-full w-auto"
       />
     </div>
   );
 }
+
