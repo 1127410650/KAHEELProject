@@ -1980,3 +1980,74 @@ body:has(.market-surface) {
     transform: translateY(-4px) rotate(-1.5deg);
   }
 }
+
+/* ===== حركات شخصيتَي المنصة الكرتونيتين (كَحيل / الزعيم كَحيلان) ===== */
+@keyframes kaheel-char-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+@keyframes kaheel-char-wave {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(1.5deg);
+  }
+}
+
+@keyframes kaheel-char-swagger {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(1.5deg);
+  }
+}
+
+@keyframes kaheel-char-nudge {
+  0%,
+  100% {
+    transform: scale(1) translateX(0);
+  }
+  45% {
+    transform: scale(1.04) translateX(-2px);
+  }
+}
+
+@keyframes kaheel-char-tray {
+  0%,
+  100% {
+    transform: rotate(-1.8deg) translateY(0);
+  }
+  50% {
+    transform: rotate(1.8deg) translateY(-2px);
+  }
+}
+
+@keyframes kaheel-char-ride {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+}
+
+@keyframes kaheel-char-wobble {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
