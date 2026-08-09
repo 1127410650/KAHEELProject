@@ -243,6 +243,8 @@ export function MarketHome() {
           empty={t("market.homeV2.noRestaurantOffers" as HomeKey)}
         />
 
+
+
         <Reveal>
           <BenefitsStrip />
         </Reveal>
