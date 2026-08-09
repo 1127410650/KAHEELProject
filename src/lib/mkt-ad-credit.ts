@@ -61,7 +61,7 @@ export function useAdCreditWallet(accountKey: string | null, tenantId: string | 
     staleTime: 15_000,
     queryFn: async (): Promise<AdCreditWallet> => {
       const { data, error } = await supabase.rpc("mkt_ad_credit_wallet", {
-        _tenant_id: tenantId ?? undefined,
+        ...(tenantId ? { _tenant_id: tenantId } : {}),
       });
       if (error) throw error;
       return data as unknown as AdCreditWallet;
@@ -94,7 +94,7 @@ export function useRequestAdCredit(tenantId: string | null) {
       const { data, error } = await supabase.rpc("mkt_ad_credit_request_purchase", {
         _amount: credits,
         _price_sar: priceSar,
-        _tenant_id: tenantId ?? undefined,
+        ...(tenantId ? { _tenant_id: tenantId } : {}),
       });
       if (error) throw error;
       return data as unknown as string;
@@ -121,8 +121,8 @@ export function useConsumeAdCredit(tenantId: string | null) {
       const { data, error } = await supabase.rpc("mkt_ad_credit_consume", {
         _amount: credits,
         _reference_type: referenceType,
-        _reference_id: referenceId ?? undefined,
-        _tenant_id: tenantId ?? undefined,
+        ...(referenceId ? { _reference_id: referenceId } : {}),
+        ...(tenantId ? { _tenant_id: tenantId } : {}),
       });
       if (error) throw error;
       return data as unknown as number;
@@ -216,7 +216,7 @@ export function useAdminSettleAdCredit() {
     mutationFn: async ({ entryId, paymentRef }: { entryId: string; paymentRef?: string | null }) => {
       const { data, error } = await supabase.rpc("mkt_ad_credit_admin_settle", {
         _entry_id: entryId,
-        _payment_ref: paymentRef ?? undefined,
+        ...(paymentRef ? { _payment_ref: paymentRef } : {}),
       });
       if (error) throw error;
       return data as unknown as number;
