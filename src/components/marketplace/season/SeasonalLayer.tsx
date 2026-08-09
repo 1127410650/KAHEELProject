@@ -12,8 +12,11 @@
  */
 import { useEffect, useRef, useState } from "react";
 
+import { useI18n } from "@/i18n";
 import { mascotAsset } from "@/lib/mascot-assets";
+import { SyrianFlag } from "@/components/marketplace/season/SyrianFlag";
 import { useSeason, type ResolvedSeason, type SeasonPlacement } from "@/lib/mkt-seasons";
+
 
 const SCRIM: Record<ResolvedSeason["overlay"], string> = {
   soft: "bg-[linear-gradient(180deg,rgb(36_0_70/0.35)_0%,rgb(36_0_70/0.28)_55%,rgb(36_0_70/0.52)_100%)]",
