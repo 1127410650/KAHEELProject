@@ -132,9 +132,10 @@ export function SyriaHomeGateway() {
             <h2 className="mt-0.5 text-base font-black leading-none tracking-tight sm:mt-1 sm:text-lg">
               {gateway.title}
             </h2>
-            <p className="mt-1 hidden max-w-[28rem] text-[10px] leading-4 text-white/72 sm:line-clamp-1">
+            <p className="mt-1 line-clamp-2 max-w-[28rem] text-[10px] leading-4 text-white/72 sm:line-clamp-1">
               {gateway.description}
             </p>
+
             <span className="mt-1 inline-flex items-center gap-1 text-[8px] font-black text-market-silver sm:mt-1.5 sm:text-[10px]">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
