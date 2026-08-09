@@ -117,7 +117,7 @@ const MAIN_FIELDS = [
     width: 768,
     height: 576,
     span: "col-span-2 sm:col-span-6",
-    ratio: "aspect-[16/7] sm:aspect-[16/5]",
+    ratio: "aspect-[16/7] sm:aspect-[16/6]",
   },
 ] as const;
 
@@ -404,7 +404,7 @@ function MainFieldCard({
       {/* Readability scrim: dark only at the bottom where the text sits. */}
       <span
         aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(to_top,rgb(16_0_43/0.86)_0%,rgb(36_0_70/0.55)_38%,rgb(36_0_70/0.06)_68%,transparent_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(to_top,rgb(16_0_43/0.9)_0%,rgb(36_0_70/0.6)_40%,rgb(36_0_70/0.06)_68%,transparent_100%)]"
       />
 
       {/* Small identity badge instead of a heavy white button. */}
