@@ -19,6 +19,7 @@ import { usePublicStore, type PublicStoreItem } from "@/lib/mkt-store-catalog";
 import { storeThemeAppearance } from "@/lib/store-theme";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
+import { StoreOffersStrip } from "@/components/marketplace/store/StoreOffersStrip";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
