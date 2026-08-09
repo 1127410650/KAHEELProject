@@ -6,6 +6,7 @@
  * in `mkt_platform_settings` (`popup.pacing`) alongside the legacy timing keys,
  * which stay untouched for backward compatibility.
  */
+import type React from "react";
 import { useEffect, useState } from "react";
 import { Loader2, Timer } from "lucide-react";
 import { toast } from "sonner";
@@ -20,6 +21,7 @@ import {
 } from "@/lib/popup-pacing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export function PopupPacingCard() {
   const { locale } = useI18n();
@@ -72,7 +74,7 @@ export function PopupPacingCard() {
         type="number"
         inputMode="numeric"
         value={values[key]}
-        onChange={(event) =>
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           setValues((prev) => ({ ...prev, [key]: Number(event.target.value) || 0 }))
         }
       />
