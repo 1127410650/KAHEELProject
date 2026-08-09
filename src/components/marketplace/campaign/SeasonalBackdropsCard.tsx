@@ -167,6 +167,11 @@ export function SeasonalBackdropsCard() {
       setSlug("");
       setLabelAr("");
       setLabelEn("");
+      setHeadlineAr("");
+      setHeadlineEn("");
+      setSubAr("");
+      setSubEn("");
+
       setImage(null);
       setDecor(null);
       setMascotFile(null);
