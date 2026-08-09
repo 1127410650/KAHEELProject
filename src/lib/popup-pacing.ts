@@ -35,6 +35,17 @@ export interface PopupPacing {
   /** Quiet window right after a page render. */
   pageSettleMs: number;
   enabled: boolean;
+  // ── مشاهد الشخصيتين (سقوط عند اللمس / مزحة الكبس / دخول قسم الناس) ───────
+  /** فاصل بين سقوطين عند اللمس. */
+  dropCooldownMs: number;
+  /** بقاء بطاقة السقوط على الشاشة. */
+  dropVisibleMs: number;
+  /** عدد الضغطات السريعة التي تستدعي مزحة الكبس. */
+  rapidTaps: number;
+  /** نافذة رصد الكبس السريع. */
+  rapidWindowMs: number;
+  /** مدة مشهد دخول كَحيلان إلى قسم «الناس». */
+  entranceMs: number;
 }
 
 export const DEFAULT_PACING: PopupPacing = {
@@ -44,6 +55,11 @@ export const DEFAULT_PACING: PopupPacing = {
   autoDismissMs: 7_000,
   pageSettleMs: 3_000,
   enabled: true,
+  dropCooldownMs: 18_000,
+  dropVisibleMs: 1_800,
+  rapidTaps: 6,
+  rapidWindowMs: 3_000,
+  entranceMs: 6_000,
 };
 
 /** Clamps admin input so a typo can never turn the cards into a nuisance. */
@@ -59,6 +75,11 @@ export function normalisePacing(raw: Record<string, unknown> | null | undefined)
     maxPerSession: num("max_per_session", DEFAULT_PACING.maxPerSession, 0, 12),
     autoDismissMs: num("auto_dismiss_ms", DEFAULT_PACING.autoDismissMs, 3_000, 20_000),
     pageSettleMs: num("page_settle_ms", DEFAULT_PACING.pageSettleMs, 0, 30_000),
+    dropCooldownMs: num("drop_cooldown_ms", DEFAULT_PACING.dropCooldownMs, 2_000, 300_000),
+    dropVisibleMs: num("drop_visible_ms", DEFAULT_PACING.dropVisibleMs, 1_100, 15_000),
+    rapidTaps: num("rapid_taps", DEFAULT_PACING.rapidTaps, 3, 15),
+    rapidWindowMs: num("rapid_window_ms", DEFAULT_PACING.rapidWindowMs, 1_000, 15_000),
+    entranceMs: num("entrance_ms", DEFAULT_PACING.entranceMs, 2_000, 20_000),
     enabled: raw?.["enabled"] !== false,
   };
 }
@@ -82,7 +103,14 @@ export function usePopupPacing() {
     gcTime: 30 * 60_000,
     queryFn: loadPopupPacing,
   });
-  return { ...DEFAULT_PACING, firstDelayMs: 3000, pageSettleMs: 0, autoDismissMs: 60000, minGapMs: 0 };
+  return {
+    ...DEFAULT_PACING,
+    ...(query.data ?? {}),
+    firstDelayMs: 3000,
+    pageSettleMs: 0,
+    autoDismissMs: 60000,
+    minGapMs: 0,
+  };
 }
 
 // ── "Not today" mute ────────────────────────────────────────────────────────
@@ -174,6 +202,17 @@ const QUIET_PREFIXES = [
   "/my/quotes",
   "/my/reports",
 ];
+
+/**
+ * قسم «الناس»: دليل الجهات والأشخاص والملفات العامة — المكان الذي يدخله
+ * «الزعيم كَحيلان» بمشهد التعريف. يُضاف إليه أي مسار ناس جديد من هنا فقط.
+ */
+const PEOPLE_PREFIXES = ["/guides", "/profiles"];
+
+export function isPeoplePath(pathname: string): boolean {
+  const path = pathname.toLowerCase();
+  return PEOPLE_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
+}
 
 export function isQuietPath(pathname: string): boolean {
   const path = pathname.toLowerCase();

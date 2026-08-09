@@ -1,14 +1,18 @@
 /**
- * محوّل رقيق بين مشاهد النوافذ (MascotKind) وشخصيتَي المنصة الكرتونيتين.
+ * محوّل رقيق بين مشاهد النوافذ (`MascotKind`) وشخصيتَي المنصة المعتمدتين.
  *
- * الرسوم نفسها تُدار في `KaheelCharacter` — هنا فقط إسناد كل مشهد إلى الشخصية
- * والوضعية الصحيحة، حتى يبقى مظهر «كَحيل» و«الزعيم كَحيلان» ثابتًا في كل نافذة.
+ * الرسوم والوضعيات كلها في `Mascot` — هنا فقط إسناد كل مشهد إلى الشخصية
+ * والوضعية الصحيحة، فيبقى شكل «كَحيل» و«الزعيم كَحيلان» واحدًا في كل المنصة.
+ *
+ * توزيع الأدوار ثابت ولا يتغيّر: كَحيل للترحيب والشكر والرسائل الرسمية،
+ * وكَحيلان للعروض والمزاح والتشويق.
  */
 import {
-  KaheelCharacter,
-  type CharacterPose,
-  type KaheelPersona,
-} from "@/components/marketplace/campaign/KaheelCharacter";
+  Mascot,
+  MascotDuo,
+  type MascotName,
+  type MascotPose,
+} from "@/components/marketplace/campaign/Mascot";
 
 export type MascotKind =
   | "moto"
@@ -35,8 +39,7 @@ export const MASCOT_KINDS: MascotKind[] = [
   "tray",
 ];
 
-/** أي شخصية يمثّلها كل مشهد — الإسناد ثابت ولا يتغيّر بين النوافذ. */
-export type MascotPersona = KaheelPersona;
+export type MascotPersona = MascotName | "duo";
 
 export const MASCOT_PERSONA: Record<MascotKind, MascotPersona> = {
   // كَحيل: الترحيب والطمأنة والشكر والتوجيه
@@ -50,21 +53,21 @@ export const MASCOT_PERSONA: Record<MascotKind, MascotPersona> = {
   olives: "kaheelan",
   mustache: "kaheelan",
   tray: "kaheelan",
-  // مشهد التعارف بالشخصيتين
+  // الشخصيتان معًا
   duo: "duo",
 };
 
-const POSE: Record<MascotKind, CharacterPose> = {
-  wave: "wave",
-  lounge: "welcome",
+const POSE: Record<MascotKind, MascotPose> = {
+  wave: "welcome",
+  lounge: "idle",
   peek: "thanks",
-  moto: "moto",
-  parcel: "moto",
-  boss: "boss",
-  olives: "olives",
+  moto: "wave",
+  parcel: "tray",
+  boss: "idle",
+  olives: "tray",
   mustache: "mustache",
   tray: "tray",
-  duo: "meet",
+  duo: "idle",
 };
 
 export function PopupMascot({
@@ -77,19 +80,24 @@ export function PopupMascot({
   animated?: boolean;
 }) {
   const persona = MASCOT_PERSONA[kind] ?? "kaheel";
-  const pose = POSE[kind] ?? "wave";
 
-  if (kind === "duo") {
+  if (persona === "duo") {
     return (
       <div className="h-[5.5rem] w-full sm:h-24">
-        <KaheelCharacter persona="duo" pose="meet" lang={lang} animated={animated} />
+        <MascotDuo lang={lang} animated={animated} />
       </div>
     );
   }
 
   return (
-    <div className="size-[4.5rem] shrink-0 sm:size-24">
-      <KaheelCharacter persona={persona} pose={pose} lang={lang} animated={animated} />
+    <div className="flex h-[5.5rem] shrink-0 items-end justify-center sm:h-24">
+      <Mascot
+        name={persona}
+        pose={POSE[kind] ?? "idle"}
+        lang={lang}
+        animated={animated}
+        className="h-full w-auto"
+      />
     </div>
   );
 }

@@ -10,17 +10,36 @@
  * الصفحة، والمتصفح يكمل الملاحة في نفس اللحظة.
  */
 
-/** فاصل مريح بين سقوطين، فالمزحة تبقى لطيفة ولا تصير ضجيجًا. */
-export const DROP_COOLDOWN_MS = 18_000;
-/** مدة بقاء الشخصية على الشاشة (سقوط + ارتداد + اختفاء). */
-export const DROP_VISIBLE_MS = 1_200;
+/**
+ * التوقيتات الافتراضية. كلها قابلة للضبط من لوحة الإدارة عبر
+ * `configureMascotTiming` الذي يناديه المضيف بقيم `popup_pacing`.
+ */
+export const MASCOT_TIMING = {
+  /** فاصل مريح بين سقوطين، فالمزحة تبقى لطيفة ولا تصير ضجيجًا. */
+  dropCooldownMs: 18_000,
+  /** مدة بقاء الشخصية على الشاشة: سقوط 1.05s + قراءة + اختفاء. */
+  dropVisibleMs: 1_800,
+  /** نافذة رصد الكبس السريع (٦ ضغطات خلال ٣ ثوانٍ). */
+  rapidWindowMs: 3_000,
+  /** عدد الضغطات المتتالية داخل النافذة الذي يستدعي مزحة الزعيم كَحيلان. */
+  rapidTaps: 6,
+  /** فاصل بين مزحتَي كبس، حتى لا تتحول هي نفسها لإزعاج. */
+  rapidCooldownMs: 15_000,
+  /** مدة مشهد دخول كَحيلان إلى قسم «الناس». */
+  entranceMs: 6_000,
+};
 
-/** نافذة رصد الكبس السريع. */
-export const RAPID_WINDOW_MS = 4_000;
-/** عدد الضغطات المتتالية داخل النافذة الذي يستدعي مزحة الزعيم كَحيلان. */
-export const RAPID_TAPS = 5;
-/** فاصل بين مزحتَي كبس، حتى لا تتحول هي نفسها لإزعاج. */
-export const RAPID_COOLDOWN_MS = 15_000;
+/** يضبط التوقيتات من إعدادات لوحة الإدارة (قيم غير صالحة تُتجاهل). */
+export function configureMascotTiming(partial: Partial<typeof MASCOT_TIMING>): void {
+  for (const [key, value] of Object.entries(partial)) {
+    if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+      (MASCOT_TIMING as Record<string, number>)[key] = value;
+    }
+  }
+}
+
+/** مدة حركة السقوط نفسها (squash & stretch بثلاث طبّات) — ≤ 1.05 ثانية. */
+export const DROP_ANIMATION_MS = 1_050;
 
 /** عناصر يُعتدّ بلمسها: روابط وأزرار ووجهات صريحة. */
 const TARGET_SELECTOR =
@@ -62,10 +81,10 @@ export const emptyBurst = (): TapBurst => ({ times: [], lastJokeAt: 0 });
  * النافذة متدحرجة: نُبقي الضغطات داخل `RAPID_WINDOW_MS` فقط.
  */
 export function registerTap(burst: TapBurst, now = Date.now()): boolean {
-  burst.times = burst.times.filter((time) => now - time <= RAPID_WINDOW_MS);
+  burst.times = burst.times.filter((time) => now - time <= MASCOT_TIMING.rapidWindowMs);
   burst.times.push(now);
-  if (burst.times.length < RAPID_TAPS) return false;
-  if (now - burst.lastJokeAt < RAPID_COOLDOWN_MS) return false;
+  if (burst.times.length < MASCOT_TIMING.rapidTaps) return false;
+  if (now - burst.lastJokeAt < MASCOT_TIMING.rapidCooldownMs) return false;
   burst.lastJokeAt = now;
   burst.times = [];
   return true;
@@ -92,7 +111,7 @@ export function decideDrop(now = Date.now()): { drop: boolean; rapid: boolean } 
     lastDropAt = now;
     return { drop: true, rapid: true };
   }
-  if (now - lastDropAt < DROP_COOLDOWN_MS) return { drop: false, rapid: false };
+  if (now - lastDropAt < MASCOT_TIMING.dropCooldownMs) return { drop: false, rapid: false };
   lastDropAt = now;
   return { drop: true, rapid: false };
 }
