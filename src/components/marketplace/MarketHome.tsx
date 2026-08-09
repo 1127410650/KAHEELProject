@@ -53,6 +53,7 @@ import { HomeSearchBar } from "@/components/marketplace/home/HomeSearchBar";
 import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
 
 import { Reveal } from "@/components/marketplace/home/Reveal";
+import { useStaggerIn } from "@/components/marketplace/home/useStaggerIn";
 
 import { Button } from "@/components/ui/button";
 
@@ -143,6 +144,7 @@ export function MarketHome() {
   const { t } = useI18n();
   const { session } = useSession();
   const [featuredCategory, setFeaturedCategory] = useState("");
+  const fieldsRef = useStaggerIn<HTMLDivElement>();
   const restaurants = useHomeListings({ categorySlug: "restaurants" });
   const groceries = useHomeListings({ type: "product" });
   const featured = useHomeListings({
@@ -175,11 +177,15 @@ export function MarketHome() {
             <h2 id="home-fields-title" className="sr-only">
               {t("market.homeV2.mainFields" as HomeKey)}
             </h2>
-            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-4">
-              {MAIN_FIELDS.map((field) => (
+            <div
+              ref={fieldsRef}
+              className="grid grid-cols-[repeat(auto-fit,minmax(148px,1fr))] gap-2 sm:gap-3"
+            >
+              {MAIN_FIELDS.map((field, index) => (
                 <MainFieldCard
                   key={field.key}
                   field={field}
+                  step={index}
                   liveImage={liveCategoryImages[field.key]}
                 />
               ))}
@@ -324,9 +330,11 @@ function LiveDemoEntry() {
 function MainFieldCard({
   field,
   liveImage,
+  step,
 }: {
   field: (typeof MAIN_FIELDS)[number];
   liveImage?: string | undefined;
+  step: number;
 }) {
   const { t } = useI18n();
   const Icon = field.icon;
@@ -334,34 +342,45 @@ function MainFieldCard({
   return (
     <a
       href={field.href}
-      style={{ backgroundImage: field.tone }}
-      className="group k-deep k-lift relative min-h-[172px] min-w-0 p-3 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[216px] sm:p-4 lg:min-h-[240px]"
+      data-field-card
+      style={{ backgroundImage: field.tone, "--k-step": step } as React.CSSProperties}
+      className="group k-deep k-press k-rise k-shimmer relative flex min-w-0 flex-col justify-center overflow-hidden p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:p-3"
     >
-      <div className="relative z-10">
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="text-[17px] font-black leading-[1.15] tracking-tight sm:text-[21px]">
+      {/* Fixed-ratio thumbnail with explicit dimensions: the box is reserved
+          before the image decodes, so nothing shifts. The section icon rides on
+          the corner instead of the title row, which keeps the heading readable
+          at the narrowest column. */}
+      <span className="flex min-w-0 items-center gap-2">
+        <span className="relative shrink-0">
+          <img
+            src={image}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            width={168}
+            height={168}
+            className="size-[48px] rounded-[0.8rem] object-cover shadow-[0_6px_14px_-8px_rgb(16_0_43/0.8)] transition-transform duration-300 group-hover:scale-[1.04] sm:size-[58px]"
+          />
+          <span className="k-glass k-float absolute -bottom-1 -end-1 grid size-6 place-items-center rounded-full sm:size-7">
+            <Icon className="size-3.5 sm:size-4" aria-hidden />
+          </span>
+        </span>
+
+        <span className="flex min-w-0 flex-1 flex-col">
+          <h3 className="min-w-0 truncate text-[15px] font-black leading-tight tracking-tight sm:text-base">
             {t(`market.homeV2.fields.${field.key}.title` as HomeKey)}
           </h3>
-          <span className="k-glass grid size-8 shrink-0 place-items-center rounded-full sm:size-9">
-            <Icon className="size-4 sm:size-5" aria-hidden />
-          </span>
-        </div>
-        <p className="mt-1 line-clamp-2 text-[9px] font-medium leading-4 text-white/92 min-[380px]:text-[10px] sm:text-xs sm:leading-5">
-          {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
-        </p>
-      </div>
-      <img
-        src={image}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        width={360}
-        height={220}
-        className="absolute inset-x-0 bottom-0 h-[64%] w-full object-cover transition-transform duration-500 [mask-image:linear-gradient(to_bottom,transparent,black_24%)] group-hover:scale-[1.035]"
-      />
-      <span className="absolute inset-x-2.5 bottom-2.5 z-10 inline-flex min-h-10 items-center justify-center rounded-full bg-white px-2 text-[10px] font-black text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_8px_18px_-6px_rgb(36_0_70/0.35)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:inset-x-3 sm:bottom-3 sm:px-3 sm:text-xs">
+          <p className="mt-0.5 line-clamp-2 text-[13px] font-medium leading-[1.35] text-white/92">
+            {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
+          </p>
+        </span>
+      </span>
+
+      {/* Full-width call to action: it always has room for the whole label, so
+          nothing is clipped on the narrowest column. */}
+      <span className="k-pop mt-1.5 inline-flex min-h-[26px] w-full items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-white px-2 text-[13px] font-black leading-5 text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_6px_14px_-8px_rgb(36_0_70/0.45)]">
         {t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}
-        <ChevronLeft className="ms-1 size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+        <ChevronLeft className="size-3.5 shrink-0 rtl:rotate-0 ltr:rotate-180" aria-hidden />
       </span>
     </a>
   );
