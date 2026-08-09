@@ -2441,3 +2441,25 @@ body:has(.market-surface) {
   .k-season-shimmer { display: none; }
 
 }
+
+/* زر «إنشاء إعلان»: نبضة ذهبية خفيفة جدًا كل حين — transform/opacity فقط. */
+@keyframes k-add-pulse {
+  0%, 82%, 100% { transform: scale(1); opacity: 0; }
+  88% { transform: scale(1.28); opacity: 0.5; }
+  96% { transform: scale(1.5); opacity: 0; }
+}
+.k-add-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px rgb(249 194 46 / 0.85);
+  opacity: 0;
+  animation: k-add-pulse 6s ease-out infinite;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-add-cta { transition: none !important; }
+  .k-add-cta::after { animation: none !important; display: none; }
+}

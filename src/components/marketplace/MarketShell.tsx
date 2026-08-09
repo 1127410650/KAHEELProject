@@ -8,7 +8,7 @@ import {
   MapPin,
   MessageCircle,
   MoreHorizontal,
-  Plus,
+  
   Tag,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -22,6 +22,8 @@ import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { BackdropLayer } from "@/components/marketplace/BackdropLayer";
+import { AddListingButton } from "@/components/marketplace/AddListingButton";
+
 import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
 
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
@@ -129,20 +131,24 @@ export function MarketHeader({
                   {t("market.brand")}
                 </span>
               </Link>
-              <a
-                href={
-                  session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
-                }
-                className="relative grid size-10 justify-self-end place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
-                aria-label={t("market.bottomNav.alerts")}
-              >
-                <Bell className="size-5" aria-hidden />
-                {(unreadAlerts.data ?? 0) > 0 && (
-                  <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
-                    {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
-                  </span>
-                )}
-              </a>
+              <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
+                <a
+                  href={
+                    session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
+                  }
+                  className="relative grid size-10 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                  aria-label={t("market.bottomNav.alerts")}
+                >
+                  <Bell className="size-5" aria-hidden />
+                  {(unreadAlerts.data ?? 0) > 0 && (
+                    <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
+                      {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
+                    </span>
+                  )}
+                </a>
+                <AddListingButton href={addHref} />
+              </div>
+
             </>
           ) : (
             <>
@@ -176,13 +182,8 @@ export function MarketHeader({
                 </span>
               </button>
 
-              <a
-                href={addHref}
-                aria-label={t("market.addListing")}
-                className="grid size-10 shrink-0 justify-self-end place-items-center rounded-full bg-market-gold text-[#240046] shadow-[0_8px_20px_rgb(16_0_43/0.3)] transition hover:-translate-y-0.5 hover:bg-[#f8b62d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#3c096c] sm:size-11"
-              >
-                <Plus className="size-5" aria-hidden />
-              </a>
+              <AddListingButton href={addHref} className="justify-self-end" />
+
             </>
           )}
         </div>
@@ -212,13 +213,6 @@ export function MarketHeader({
                   {label}
                 </a>
               ))}
-              <a
-                href={addHref}
-                className="ms-auto inline-flex min-h-8 shrink-0 items-center gap-1.5 rounded-full bg-market-gold px-4 text-[11px] font-black text-[#240046] shadow-sm outline-none transition hover:bg-[#f8b62d] focus-visible:ring-2 focus-visible:ring-white sm:text-xs"
-              >
-                <Plus className="size-4" aria-hidden />
-                {t("market.addListing")}
-              </a>
             </div>
           </nav>
         )}
