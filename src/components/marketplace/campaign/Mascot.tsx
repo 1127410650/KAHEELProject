@@ -29,21 +29,16 @@
  * • `loading="lazy"` إلا إذا طُلب `priority`.
  * • كل الحركات CSS ومعطّلة تحت `prefers-reduced-motion` عبر `motion-reduce`.
  */
-import { useSyncExternalStore } from "react";
-
 import {
-  activeMascotVariant,
   mascotAsset,
-  subscribeMascotVariant,
-  DEFAULT_MASCOT_VARIANT,
   type MascotName,
-  type MascotVariant,
+  type MascotSize,
 } from "@/lib/mascot-assets";
 
-export type { MascotName, MascotVariant };
+export type { MascotName, MascotSize };
 
 /** وضعيات «كَحيل» الرسمية. */
-export type KaheelPose = "welcome" | "present" | "thanks" | "idle";
+export type KaheelPose = "welcome" | "wave" | "present" | "thanks" | "idle";
 /** وضعيات «الزعيم كَحيلان» المشاكسة. */
 export type KaheelanPose =
   | "idle"
@@ -57,14 +52,6 @@ export type KaheelanPose =
 
 export type MascotPose = KaheelPose | KaheelanPose;
 
-/** النسخة الفعّالة كحالة تفاعلية — تبديلها من لوحة المعاينة يعيد الرسم فورًا. */
-export function useMascotVariant(): MascotVariant {
-  return useSyncExternalStore(
-    subscribeMascotVariant,
-    activeMascotVariant,
-    () => DEFAULT_MASCOT_VARIANT,
-  );
-}
 
 
 interface PoseSpec {
@@ -81,6 +68,10 @@ const KAHEEL_POSES: Record<KaheelPose, PoseSpec> = {
   welcome: {
     motion: "animate-[mascot-breathe_3.2s_ease-in-out_infinite]",
     alt: { ar: "كَحيل يمدّ يده مرحّبًا", en: "Kaheel extending a welcoming hand" },
+  },
+  wave: {
+    motion: "animate-[mascot-sway_2.4s_ease-in-out_infinite]",
+    alt: { ar: "كَحيل يلوّح مرحّبًا", en: "Kaheel waving hello" },
   },
   present: {
     transform: "rotate(2deg)",
@@ -103,6 +94,8 @@ const KAHEELAN_POSES: Record<KaheelanPose, PoseSpec> = {
     motion: "animate-[mascot-swagger_3s_ease-in-out_infinite]",
     alt: { ar: "الزعيم كَحيلان واقف بثقة", en: "Boss Kaheelan standing confidently" },
   },
+  // السقوط ⇒ الارتطام ⇒ الارتداد: ثلاث وضعيات من نفس الصورة المعتمدة بتحويلات
+  // ميلان + squash & stretch فقط، فلا يتغيّر شكل الشخصية أبدًا.
   fall: {
     transform: "rotate(-14deg)",
     alt: { ar: "كَحيلان يهوي من الأعلى", en: "Kaheelan falling from above" },
@@ -167,7 +160,7 @@ export function Mascot({
   className,
   animated = true,
   priority = false,
-  variant,
+  size = "full",
 }: {
   name: MascotName;
   pose?: MascotPose;
@@ -175,11 +168,10 @@ export function Mascot({
   className?: string;
   animated?: boolean;
   priority?: boolean;
-  /** لتجاوز النسخة الفعّالة في المعاينة فقط. */
-  variant?: MascotVariant | undefined;
+  /** حجم الأصل: `sm` للأماكن الصغيرة — نفس الرسم المعتمد ببايتات أقل. */
+  size?: MascotSize;
 }) {
-  const active = useMascotVariant();
-  const base = mascotAsset(name, variant ?? active);
+  const base = mascotAsset(name, size);
   const spec = specFor(name, pose ?? DEFAULT_POSE[name]);
 
   return (
@@ -207,12 +199,12 @@ export function MascotDuo({
   lang = "ar",
   animated = true,
   className,
-  variant,
+  size = "sm",
 }: {
   lang?: "ar" | "en";
   animated?: boolean;
   className?: string;
-  variant?: MascotVariant | undefined;
+  size?: MascotSize;
 }) {
   return (
     <div className={`flex items-end justify-center gap-1 ${className ?? "h-full"}`}>
@@ -221,7 +213,7 @@ export function MascotDuo({
         pose="welcome"
         lang={lang}
         animated={animated}
-        variant={variant}
+        size={size}
         className="h-full w-auto"
       />
       <Mascot
@@ -229,7 +221,7 @@ export function MascotDuo({
         pose="wave"
         lang={lang}
         animated={animated}
-        variant={variant}
+        size={size}
         className="h-full w-auto"
       />
     </div>
