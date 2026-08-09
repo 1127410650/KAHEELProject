@@ -64,28 +64,30 @@ export function MarketHeader({
         <div
           className={
             home
-              ? "mx-auto grid min-h-[68px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-5 lg:px-8"
-              : "mx-auto grid min-h-[62px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[66px] sm:px-5 lg:px-8"
+              ? "mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
+              : "mx-auto grid min-h-[54px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[58px] sm:px-5 lg:px-8"
           }
         >
           {home ? (
             <>
               <a
                 href="/search"
-                className="flex min-w-0 items-center gap-2 justify-self-start rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
-                <MapPin className="size-6 shrink-0" aria-hidden />
+                <MapPin className="size-5 shrink-0" aria-hidden />
                 <span className="min-w-0">
-                  <strong className="block truncate text-sm font-black">{locationLabel}</strong>
-                  <span className="block truncate text-[10px] text-[#e0aaff]">
+                  <strong className="block truncate text-sm font-black leading-tight">
+                    {locationLabel}
+                  </strong>
+                  <span className="block truncate text-[10px] font-semibold leading-tight text-[#f0d5ff]">
                     {t("market.homeV2.locationNow")}
                   </span>
                 </span>
               </a>
               <Link
                 to="/"
-                className="flex items-center gap-2 justify-self-center"
+                className="flex items-center gap-1.5 justify-self-center"
                 aria-label={t("market.brand")}
               >
                 <img
@@ -94,10 +96,10 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-9 shrink-0 rounded-xl bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-10"
+                  className="size-8 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-9"
                   aria-hidden
                 />
-                <span className="text-3xl font-black tracking-[-0.08em] text-white sm:text-4xl">
+                <span className="text-[26px] font-black leading-none tracking-[-0.07em] text-white sm:text-3xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -105,10 +107,10 @@ export function MarketHeader({
                 href={
                   session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                 }
-                className="relative grid size-11 justify-self-end place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                className="relative grid size-10 justify-self-end place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={t("market.bottomNav.alerts")}
               >
-                <Bell className="size-6" aria-hidden />
+                <Bell className="size-5" aria-hidden />
                 {(unreadAlerts.data ?? 0) > 0 && (
                   <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
                     {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
