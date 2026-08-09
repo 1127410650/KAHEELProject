@@ -361,7 +361,11 @@ export function PromoPopupHost() {
         : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
 
     return (
-      <div className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
+      <div
+        className="pointer-events-none fixed inset-0 z-30 overflow-hidden"
+        data-kaheel-stage="peek"
+        aria-live="polite"
+      >
         <div
           key={card.key}
           data-kaheel-drop-card
@@ -370,28 +374,35 @@ export function PromoPopupHost() {
           // dir=ltr على الصفّ فقط: ترتيب الشخصية والفقاعة فيزيائي لا منطقي،
           // فتبقى الإطلالة من نفس الحافة في العربية والإنجليزية على حد سواء.
           dir="ltr"
-          style={{ transformOrigin: layout.origin, animation: peekAnimation }}
-          className={`pointer-events-none absolute flex items-end gap-1.5 ${layout.row} ${layout.position}`}
+          style={{
+            position: "absolute",
+            left: `${card.band.left + Math.max(0, (card.band.width - PEEK_WIDTH) / 2)}px`,
+            top: `${card.band.top}px`,
+            width: `${PEEK_WIDTH}px`,
+            transformOrigin: layout.origin,
+            animation: peekAnimation,
+          }}
+          className={`pointer-events-none flex items-end gap-1.5 ${layout.row}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
           <div
             dir={ar ? "rtl" : "ltr"}
-            className="mb-2 max-w-[9.5rem] min-[360px]:max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl"
+            className="k-mascot-glass mb-2 max-w-[9.5rem] min-[360px]:max-w-[11rem] rounded-2xl rounded-ee-sm px-3 py-2 text-start"
           >
-
             <div className="mb-1 flex items-start justify-between gap-2">
-              <p className="py-0.5 text-[13px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
+              <p className="py-0.5 text-[13px] font-black leading-snug [overflow-wrap:anywhere]">
                 {card.title}
               </p>
               {closeButtons}
             </div>
-            <p className="text-[11px] font-bold leading-snug text-[#5a189a] [overflow-wrap:anywhere]">
+            <p className="k-mascot-glass-sub text-[11px] font-bold leading-snug [overflow-wrap:anywhere]">
               {card.subtitle}
             </p>
           </div>
         </div>
       </div>
     );
+
   }
 
   const entrance = card.mode === "entrance";
