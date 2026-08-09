@@ -271,3 +271,34 @@ export function rapidTapCopyAt(ar: boolean, index: number): PopupCopy {
   const size = pool.length;
   return pool[((index % size) + size) % size]!;
 }
+
+// ── دخول قسم «الناس»: كَحيلان يدخل من الجانب بحركة واثقة ويلف كوفيته ───────
+/**
+ * مشهد الدخول المعتمد لقسم الناس. النصوص بنبرة الزعامة الفكاهية، وكل واحد
+ * ينتهي ضمنًا أو صراحة بأن الفضل «بواسطتي» (نفس قاعدة كَحيلان في كل المنصة).
+ */
+const AR_ENTRANCE: PopupCopy[] = [
+  { title: "تغطّوا يا حريم… كَحيلان داخل! 😎", subtitle: "وصل الزعيم، ومن هلق كل شي بواسطتي", mascot: "boss" },
+  { title: "وصل الزعيم 🧣", subtitle: "بدّك زبّطك بواسطتي؟", mascot: "mustache" },
+  { title: "افسحوا الطريق 👑", subtitle: "كَحيلان بيزبّط كل شي… بواسطتي طبعًا", mascot: "boss" },
+  { title: "أنا وصلت 😏", subtitle: "وأي شي بدّك ياه، بواسطتي", mascot: "mustache" },
+];
+
+const EN_ENTRANCE: PopupCopy[] = [
+  { title: "Make way — Kaheelan is in! 😎", subtitle: "The boss has arrived, and from now on everything goes through me", mascot: "boss" },
+  { title: "The boss is here 🧣", subtitle: "Want me to sort it out for you? Through me, of course", mascot: "mustache" },
+  { title: "Clear the path 👑", subtitle: "Kaheelan fixes everything — through me, naturally", mascot: "boss" },
+  { title: "I've arrived 😏", subtitle: "Whatever you need, it comes through me", mascot: "mustache" },
+];
+
+/** عدد نصوص مشهد الدخول للغة الحالية. */
+export function entranceCopyCount(ar: boolean): number {
+  return (ar ? AR_ENTRANCE : EN_ENTRANCE).length;
+}
+
+/** نص مشهد الدخول عند فهرس معيّن (بالتدوير) — المضيف يمنع التكرار المتتالي. */
+export function entranceCopyAt(ar: boolean, index: number): PopupCopy {
+  const pool = ar ? AR_ENTRANCE : EN_ENTRANCE;
+  const size = pool.length;
+  return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
+}

@@ -141,7 +141,9 @@ function videoSize(file: File): Promise<{ width: number; height: number }> {
     video.onloadedmetadata = () => {
       const out = { width: video.videoWidth, height: video.videoHeight };
       URL.revokeObjectURL(url);
-      out.width && out.height ? resolve(out) : reject(new Error("NO_SIZE"));
+      if (out.width && out.height) resolve(out);
+      else reject(new Error("NO_SIZE"));
+
     };
     video.onerror = () => {
       URL.revokeObjectURL(url);

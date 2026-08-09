@@ -1981,73 +1981,91 @@ body:has(.market-surface) {
   }
 }
 
-/* ===== حركات شخصيتَي المنصة الكرتونيتين (كَحيل / الزعيم كَحيلان) ===== */
-@keyframes kaheel-char-breathe {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-2px) scale(1.02);
-  }
+/* ===== حركات شخصيتَي المنصة المعتمدتين (كَحيل / الزعيم كَحيلان) =====
+   الأصل واحد لكل شخصية، والوضعيات تُبنى بتحويلات CSS فوقه (انظر Mascot.tsx).
+   كل ما هنا حركات لطيفة على `transform` فقط ⇒ بلا إعادة تخطيط وبلا هزّة. */
+@keyframes mascot-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.02); }
+}
+@keyframes mascot-sway {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+}
+@keyframes mascot-swagger {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-2px) rotate(1.5deg); }
+}
+@keyframes mascot-present {
+  0%, 100% { transform: rotate(2deg) translateX(0); }
+  45% { transform: rotate(0.5deg) translateX(-3px) scale(1.02); }
+}
+@keyframes mascot-bow {
+  0%, 100% { transform: scale(0.98) rotate(0deg); }
+  50% { transform: scale(0.98) rotate(2.5deg) translateY(1px); }
+}
+/* فتل الشارب: رجفة صغيرة سريعة ثم سكون — لا تشتّت القراءة. */
+@keyframes mascot-twirl {
+  0%, 60%, 100% { transform: rotate(0deg) scale(1); }
+  68% { transform: rotate(-2.5deg) scale(1.03); }
+  76% { transform: rotate(2.5deg) scale(1.03); }
+  84% { transform: rotate(-1.5deg) scale(1.01); }
+}
+/* حمل الصينية: رفع وهبوط هادئ كأنه يقدّم الضيافة. */
+@keyframes mascot-lift {
+  0%, 100% { transform: rotate(-2deg) translateY(0); }
+  50% { transform: rotate(1.5deg) translateY(-3px); }
 }
 
-@keyframes kaheel-char-wave {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-1deg);
-  }
-  50% {
-    transform: translateY(-3px) rotate(1.5deg);
-  }
+/* ===== السقوط المعتمد: squash & stretch بثلاث طبّات متناقصة =====
+   يهوي مائلًا ← يرتطم فينضغط عرضًا (scaleY .78 / scaleX 1.16) ← يرتد فيستطيل
+   (scaleY 1.08 / scaleX .94) ← ثلاث طبّات متناقصة ← يستقر. المدة الكلية 1.05s،
+   ونقطة الارتكاز عند القدمين حتى ينضغط على الأرض لا في الهواء. */
+@keyframes mascot-drop {
+  0% { opacity: 0; transform: translateY(-52vh) rotate(-14deg) scale(0.9); }
+  20% { opacity: 1; }
+  /* الارتطام الأول */
+  30% { transform: translateY(0) rotate(-3deg) scaleX(1.16) scaleY(0.78); }
+  /* الارتداد الأول (استطالة) */
+  42% { transform: translateY(-17%) rotate(1.5deg) scaleX(0.94) scaleY(1.08); }
+  /* طبّة ثانية */
+  54% { transform: translateY(0) rotate(-1.5deg) scaleX(1.1) scaleY(0.86); }
+  64% { transform: translateY(-9%) rotate(1deg) scaleX(0.97) scaleY(1.04); }
+  /* طبّة ثالثة */
+  74% { transform: translateY(0) rotate(-0.5deg) scaleX(1.05) scaleY(0.94); }
+  84% { transform: translateY(-3.5%) scaleX(0.99) scaleY(1.01); }
+  92% { transform: translateY(0) scaleX(1.02) scaleY(0.98); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
 }
-
-@keyframes kaheel-char-swagger {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-1.5deg);
-  }
-  50% {
-    transform: translateY(-2px) rotate(1.5deg);
-  }
+/* اهتزاز خفيف للجسم مصاحب لكل طبّة. */
+@keyframes mascot-drop-wobble {
+  0%, 30% { transform: rotate(0deg); }
+  42% { transform: rotate(-4deg); }
+  56% { transform: rotate(3deg); }
+  70% { transform: rotate(-2deg); }
+  84% { transform: rotate(1deg); }
+  100% { transform: rotate(0deg); }
 }
-
-@keyframes kaheel-char-nudge {
-  0%,
-  100% {
-    transform: scale(1) translateX(0);
-  }
-  45% {
-    transform: scale(1.04) translateX(-2px);
-  }
+/* دخول كَحيلان إلى قسم «الناس» من الجانب بحركة واثقة + لفّة كوفية. */
+@keyframes mascot-enter-start {
+  0% { opacity: 0; transform: translateX(-120%) rotate(-6deg); }
+  60% { opacity: 1; transform: translateX(6%) rotate(2deg); }
+  80% { transform: translateX(-2%) rotate(-1deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg); }
 }
-
-@keyframes kaheel-char-tray {
-  0%,
-  100% {
-    transform: rotate(-1.8deg) translateY(0);
-  }
-  50% {
-    transform: rotate(1.8deg) translateY(-2px);
-  }
+@keyframes mascot-enter-end {
+  0% { opacity: 0; transform: translateX(120%) rotate(6deg); }
+  60% { opacity: 1; transform: translateX(-6%) rotate(-2deg); }
+  80% { transform: translateX(2%) rotate(1deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg); }
 }
-
-@keyframes kaheel-char-ride {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-1deg);
-  }
-  50% {
-    transform: translateY(-3px) rotate(1deg);
-  }
+@keyframes mascot-scarf-spin {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  30% { transform: rotate(-5deg) scale(1.03); }
+  55% { transform: rotate(5deg) scale(1.03); }
+  75% { transform: rotate(-2deg) scale(1.01); }
 }
-
-@keyframes kaheel-char-wobble {
-  0%,
-  100% {
-    transform: rotate(-4deg);
-  }
-  50% {
-    transform: rotate(4deg);
-  }
+@keyframes mascot-bubble-in {
+  0% { opacity: 0; transform: translateY(6px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
