@@ -1,0 +1,105 @@
+/**
+ * جهات ظهور البطاقات وإطلالات كَحيلان — مصدر واحد للحقيقة.
+ *
+ * القاعدة المعتمدة من صاحب المنصة: البطاقة **لا تظهر من الأعلى دائمًا**. جهة
+ * الظهور تتنوّع عشوائيًا في كل مرة بين خمس جهات، ولا تتكرّر الجهة نفسها مرتين
+ * متتاليتين. لكل جهة حركة دخول تناسب اتجاهها (spring خفيف) وحركة خروج بنفس
+ * الاتجاه عند الإغلاق — أسماء الحركات كلها معرّفة في `src/styles.css`.
+ *
+ * كل الحالة هنا على مستوى الوحدة (لا `useRef`)، لأن المضيف قد يُعاد تركيبه مع
+ * تغيّر شجرة الملاحة؛ ولو حفظنا الجهة الأخيرة داخل المكوّن لصار كل تركيب جديد
+ * يسمح بتكرار الجهة نفسها.
+ */
+
+/** جهات ظهور البطاقة الكاملة. */
+export type EntrySide = "bottom" | "top" | "right" | "left" | "corner";
+
+export const ENTRY_SIDES: EntrySide[] = ["bottom", "top", "right", "left", "corner"];
+
+/** جهات إطلالة كَحيلان برأسه: من حافة يمين أو يسار أو أسفل الشاشة. */
+export type PeekSide = "right" | "left" | "bottom";
+
+export const PEEK_SIDES: PeekSide[] = ["right", "left", "bottom"];
+
+let lastEntrySide: EntrySide | null = null;
+let lastPeekSide: PeekSide | null = null;
+
+/**
+ * اختيار عشوائي بلا تكرار متتالٍ: نختار من بين الجهات الأخرى فقط، فالنتيجة
+ * عشوائية فعلًا ومضمون ألا تساوي السابقة.
+ */
+function pickDifferent<T>(pool: T[], previous: T | null, seed: number): T {
+  const others = previous === null ? pool : pool.filter((item) => item !== previous);
+  const list = others.length ? others : pool;
+  return list[Math.floor(seed * list.length) % list.length]!;
+}
+
+/** الجهة التالية لبطاقة كاملة — عشوائية بلا تكرار متتالٍ. */
+export function nextEntrySide(seed = Math.random()): EntrySide {
+  lastEntrySide = pickDifferent(ENTRY_SIDES, lastEntrySide, seed);
+  return lastEntrySide;
+}
+
+/** جهة الإطلالة التالية — عشوائية بلا تكرار متتالٍ. */
+export function nextPeekSide(seed = Math.random()): PeekSide {
+  lastPeekSide = pickDifferent(PEEK_SIDES, lastPeekSide, seed);
+  return lastPeekSide;
+}
+
+/** لاختبارات الوحدة فقط: تصفير ذاكرة الجهة الأخيرة. */
+export function resetEntrySides(): void {
+  lastEntrySide = null;
+  lastPeekSide = null;
+}
+
+/** محاذاة غلاف البطاقة على الشاشة حسب جهة الدخول. */
+export const ENTRY_ALIGN: Record<EntrySide, string> = {
+  bottom: "items-end justify-center",
+  top: "items-start justify-center",
+  right: "items-center justify-end",
+  left: "items-center justify-start",
+  corner: "items-end justify-end",
+};
+
+/** حركة الدخول (spring خفيف) وحركة الخروج بنفس الاتجاه. */
+export const ENTRY_ANIMATION: Record<EntrySide, { in: string; out: string }> = {
+  bottom: { in: "mascot-in-bottom", out: "mascot-out-bottom" },
+  top: { in: "mascot-in-top", out: "mascot-out-top" },
+  right: { in: "mascot-in-right", out: "mascot-out-right" },
+  left: { in: "mascot-in-left", out: "mascot-out-left" },
+  corner: { in: "mascot-in-corner", out: "mascot-out-corner" },
+};
+
+/** نقطة الارتكاز المناسبة لكل جهة، فالانضغاط يحدث عند الحافة لا في الفراغ. */
+export const ENTRY_ORIGIN: Record<EntrySide, string> = {
+  bottom: "bottom center",
+  top: "top center",
+  right: "center right",
+  left: "center left",
+  corner: "bottom right",
+};
+
+/** موضع الإطلالة + حركتها لكل حافة. */
+export const PEEK_LAYOUT: Record<
+  PeekSide,
+  { wrap: string; row: string; animation: { in: string; out: string }; origin: string }
+> = {
+  right: {
+    wrap: "items-end justify-end pb-28 pe-0",
+    row: "flex-row-reverse",
+    animation: { in: "mascot-peek-right", out: "mascot-peek-out-right" },
+    origin: "bottom right",
+  },
+  left: {
+    wrap: "items-end justify-start pb-28 ps-0",
+    row: "flex-row",
+    animation: { in: "mascot-peek-left", out: "mascot-peek-out-left" },
+    origin: "bottom left",
+  },
+  bottom: {
+    wrap: "items-end justify-center pb-0",
+    row: "flex-col items-center",
+    animation: { in: "mascot-peek-bottom", out: "mascot-peek-out-bottom" },
+    origin: "bottom center",
+  },
+};
