@@ -54,6 +54,37 @@ import {
 
 type CardMode = "drop" | "rapid" | "entrance";
 
+/**
+ * بعض اللمسات تفتح الوجهة بتحميل كامل للصفحة (روابط عادية، فتح خارجي، تحديث)،
+ * وذلك يمحو حالة React قبل أن تُرى الشخصية. لذلك نُودع مشهد السقوط في
+ * `sessionStorage` ونستأنفه على الوجهة الجديدة لما بقي من عمره — فتبقى القاعدة
+ * محقّقة: تسقط الشخصية وتُفتح الوجهة في اللحظة نفسها.
+ */
+const RESUME_KEY = "kaheel.mascot.resume";
+
+interface ResumeRecord {
+  title: string;
+  subtitle: string;
+  mascot: MascotKind;
+  mode: CardMode;
+  from: "start" | "end";
+  /** طابع زمني لنهاية عمر البطاقة. */
+  until: number;
+}
+
+function readResume(): ResumeRecord | null {
+  try {
+    const raw = sessionStorage.getItem(RESUME_KEY);
+    if (!raw) return null;
+    sessionStorage.removeItem(RESUME_KEY);
+    const record = JSON.parse(raw) as ResumeRecord;
+    if (!record?.title || record.mode === "entrance") return null;
+    return record.until > Date.now() ? record : null;
+  } catch {
+    return null;
+  }
+}
+
 interface MascotCard {
   /** مفتاح يجبر إعادة تشغيل الحركة عند كل ظهور. */
   key: number;
@@ -146,11 +177,19 @@ export function PromoPopupHost() {
         ...copy,
       });
 
+      const life = mode === "entrance" ? MASCOT_TIMING.entranceMs : MASCOT_TIMING.dropVisibleMs;
+      if (mode !== "entrance") {
+        try {
+          sessionStorage.setItem(
+            RESUME_KEY,
+            JSON.stringify({ mode, from: "start", ...copy, until: Date.now() + life }),
+          );
+        } catch {
+          /* التخزين ممتلئ أو محجوب: المشهد يبقى داخل الصفحة فقط. */
+        }
+      }
       window.clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = window.setTimeout(
-        () => dismiss(),
-        mode === "entrance" ? MASCOT_TIMING.entranceMs : MASCOT_TIMING.dropVisibleMs,
-      );
+      hideTimerRef.current = window.setTimeout(() => dismiss(), life);
     },
     [ar, dismiss],
   );
@@ -188,6 +227,20 @@ export function PromoPopupHost() {
     return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  // استئناف مشهد سقوط بدأ قبل تحميل كامل للصفحة.
+  useEffect(() => {
+    const record = readResume();
+    if (!record || blocked()) return;
+    keyRef.current += 1;
+    setCard({ key: keyRef.current, ...record });
+    window.clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = window.setTimeout(
+      () => dismiss(),
+      Math.max(320, record.until - Date.now()),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => () => window.clearTimeout(hideTimerRef.current), []);
 
