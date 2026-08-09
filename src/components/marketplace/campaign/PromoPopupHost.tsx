@@ -169,10 +169,17 @@ export function PromoPopupHost() {
     return () => window.removeEventListener("pointerdown", onTap, { capture: true });
   }, [blocked, show]);
 
-  // الملاحة: تُنهي المشهد الحالي بهدوء، وتفتح مشهد الدخول في قسم «الناس».
+  /**
+   * الملاحة لا تُلغي السقوط: اللمسة نفسها هي التي تفتح الوجهة، فلو صفّرنا
+   * البطاقة عند تغيّر المسار لما ظهرت الشخصية أبدًا في اللمسات التي تنقل
+   * المستخدم. لذلك نُنهي مشهد الدخول فقط، ونترك مؤقّت السقوط يكمل عمله.
+   */
   useEffect(() => {
-    window.clearTimeout(hideTimerRef.current);
-    setCard(null);
+    setCard((prev) => {
+      if (prev?.mode !== "entrance") return prev;
+      window.clearTimeout(hideTimerRef.current);
+      return null;
+    });
     setLeaving(false);
     if (!isPeoplePath(pathname)) return;
     if (blocked()) return;
