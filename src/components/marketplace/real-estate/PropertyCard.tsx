@@ -13,7 +13,7 @@ import { useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Bath, BedDouble, Building2, ChevronLeft, ChevronRight, MapPin, Ruler, Sparkles } from "lucide-react";
 
-import { FavoriteButton, type ListingCardData } from "@/components/marketplace/ListingCard";
+import { FavoriteButton, FeaturedChip, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { useI18n } from "@/i18n";
 import { track } from "@/lib/analytics";
 import { priceLabel, relativeTime } from "@/lib/mkt";

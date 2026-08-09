@@ -247,7 +247,7 @@ function activeFeatured(listing: ListingCardData) {
  * شارة «مميز» بتدرّج ذهبي معدني ولمعة بطيئة جدًا. تراقب ظهورها بنفسها
  * فتتوقف اللمعة تمامًا خارج الشاشة، والحركة على transform/opacity فقط.
  */
-function FeaturedChip() {
+export function FeaturedChip() {
   const { t } = useI18n();
   const ref = useRef<HTMLSpanElement | null>(null);
   const [visible, setVisible] = useState(false);
