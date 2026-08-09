@@ -201,7 +201,10 @@ export function MarketHeader({
       <div
         aria-hidden
         className={
-          home ? "h-[114px]" : showCategories ? "h-[9.4rem] sm:h-[10rem]" : "h-[62px] sm:h-[66px]"
+          // The category strip is two rows now, so the pre-measurement fallback
+          // reserves the taller band and nothing jumps on first paint.
+          home ? "h-[114px]" : showCategories ? "h-[13.2rem] sm:h-[13.8rem]" : "h-[62px] sm:h-[66px]"
+
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />

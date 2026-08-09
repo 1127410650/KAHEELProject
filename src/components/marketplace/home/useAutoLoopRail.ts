@@ -18,6 +18,8 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
   const pauseUntilRef = useRef(0);
   const groupWidthRef = useRef(0);
   const visibleRef = useRef(true);
+  const positionRef = useRef(0);
+
 
   const pause = useCallback((milliseconds = 1_800) => {
     pauseUntilRef.current = performance.now() + milliseconds;
@@ -65,13 +67,36 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
         now >= pauseUntilRef.current &&
         document.visibilityState === "visible"
       ) {
-        rail.scrollLeft += direction * speed * (elapsed / 1_000);
+        // CSS scroll snapping pulls a programmatic `scrollLeft` straight back to
+        // the nearest snap point, which would freeze the drift completely. Snap
+        // is therefore suspended while the rail moves itself and restored the
+        // moment the user takes over, so their swipes still land on a card.
+        rail.style.scrollSnapType = "none";
+        // `scrollLeft` rounds to whole pixels, so a slow rail would never move
+        // if each frame's fraction were written straight back. The exact
+        // position is kept here and only whole pixels are handed to the DOM.
+        const drift = rail.scrollLeft - Math.round(positionRef.current);
+        if (Math.abs(drift) > 1) positionRef.current = rail.scrollLeft;
+        positionRef.current += direction * speed * (elapsed / 1_000);
+        rail.scrollLeft = Math.round(positionRef.current);
+      } else {
+        rail.style.scrollSnapType = "";
+        positionRef.current = rail.scrollLeft;
       }
 
+
+
       if (width > 0) {
-        if (rail.scrollLeft >= width * 2) rail.scrollLeft -= width;
-        if (rail.scrollLeft <= 0) rail.scrollLeft += width;
+        if (rail.scrollLeft >= width * 2) {
+          rail.scrollLeft -= width;
+          positionRef.current -= width;
+        }
+        if (rail.scrollLeft <= 0) {
+          rail.scrollLeft += width;
+          positionRef.current += width;
+        }
       }
+
 
       frameRef.current = window.requestAnimationFrame(tick);
     };

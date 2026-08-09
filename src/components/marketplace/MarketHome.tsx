@@ -38,8 +38,8 @@ import {
 import { useState } from "react";
 
 import carImage from "@/assets/market/cat-cars.webp";
-import heroImage from "@/assets/market/kaheel-home-hero-v2.webp";
 import propertyImage from "@/assets/market/cat-real-estate-hero.webp";
+
 import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
 import { useSession } from "@/lib/session";
@@ -49,6 +49,9 @@ import { SELECTABLE_FIELDS } from "@/lib/market-primary-navigation";
 import { LIVE_DEMO_VISIBLE } from "@/lib/live-demo";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
+import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
+import { Reveal } from "@/components/marketplace/home/Reveal";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -177,30 +180,43 @@ export function MarketHome() {
           </Link>
         </div>
 
-        <HeroBanner />
+        <PromoCarousel addHref={addHref} />
 
-        <section aria-labelledby="home-fields-title">
-          <h2 id="home-fields-title" className="sr-only">
-            {t("market.homeV2.mainFields" as HomeKey)}
-          </h2>
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-4">
-            {MAIN_FIELDS.map((field) => (
-              <MainFieldCard
-                key={field.key}
-                field={field}
-                liveImage={liveCategoryImages[field.key]}
-              />
-            ))}
-          </div>
-        </section>
+        <Reveal as="section">
+          <section aria-labelledby="home-fields-title">
+            <h2 id="home-fields-title" className="sr-only">
+              {t("market.homeV2.mainFields" as HomeKey)}
+            </h2>
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-4">
+              {MAIN_FIELDS.map((field) => (
+                <MainFieldCard
+                  key={field.key}
+                  field={field}
+                  liveImage={liveCategoryImages[field.key]}
+                />
+              ))}
+            </div>
+          </section>
+        </Reveal>
 
-        <BenefitsStrip />
+        <Reveal>
+          <BenefitsStrip />
+        </Reveal>
 
-        <SecondaryServices />
+        <Reveal>
+          <SecondaryServices />
+        </Reveal>
 
-        <SyriaHomeGateway />
+        <Reveal>
+          <SyriaHomeGateway />
+        </Reveal>
 
-        {LIVE_DEMO_VISIBLE ? <LiveDemoEntry /> : null}
+        {LIVE_DEMO_VISIBLE ? (
+          <Reveal>
+            <LiveDemoEntry />
+          </Reveal>
+        ) : null}
+
 
         <ListingRail
           title={t("market.homeV2.nearbyRestaurants" as HomeKey)}
@@ -273,41 +289,9 @@ export function MarketHome() {
   );
 }
 
-function HeroBanner() {
-  const { t } = useI18n();
-  return (
-    <a
-      href="/search?domain=product"
-      className="group relative block min-h-[208px] overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white shadow-[0_16px_40px_rgb(60_9_108/0.12)] outline-none transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[286px] sm:rounded-[30px]"
-    >
-      <img
-        src={heroImage}
-        alt=""
-        width={1728}
-        height={920}
-        fetchPriority="high"
-        decoding="async"
-        className="absolute inset-0 size-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]"
-        aria-hidden
-      />
-      <div className="relative z-10 mx-auto flex min-h-[208px] w-[58%] max-w-[520px] flex-col items-center justify-center px-2 py-5 text-center sm:min-h-[286px] sm:w-[46%] sm:px-4">
-        <span className="rounded-full bg-[#240046] px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
-          {t("market.homeV2.hero.badge" as HomeKey)}
-        </span>
-        <h1 className="mt-2 text-[20px] font-black leading-tight text-[#240046] min-[380px]:text-[23px] sm:mt-3 sm:text-4xl">
-          {t("market.homeV2.hero.title" as HomeKey)}
-        </h1>
-        <p className="mt-1 text-[10px] font-bold text-[#5a189a] min-[380px]:text-[11px] sm:text-sm">
-          {t("market.homeV2.hero.desc" as HomeKey)}
-        </p>
-        <span className="mt-3 inline-flex min-h-10 items-center rounded-full bg-[#3c096c] px-4 text-[10px] font-bold text-white shadow-[0_8px_20px_rgb(60_9_108/0.24)] sm:min-h-11 sm:px-6 sm:text-xs">
-          {t("market.homeV2.hero.cta" as HomeKey)}{" "}
-          <ChevronLeft className="ms-1 size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
-        </span>
-      </div>
-    </a>
-  );
-}
+// The single hero banner became the first slide of `PromoCarousel`.
+
+
 
 function LiveDemoEntry() {
   const { locale } = useI18n();

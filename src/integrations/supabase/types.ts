@@ -426,6 +426,103 @@ export type Database = {
           },
         ]
       }
+      mkt_ad_credit_entries: {
+        Row: {
+          actor_user_id: string | null
+          amount: number
+          balance_after: number | null
+          created_at: string
+          id: string
+          kind: string
+          note: string | null
+          payment_ref: string | null
+          price_sar: number | null
+          reference_id: string | null
+          reference_type: string | null
+          status: string
+          wallet_id: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          amount: number
+          balance_after?: number | null
+          created_at?: string
+          id?: string
+          kind: string
+          note?: string | null
+          payment_ref?: string | null
+          price_sar?: number | null
+          reference_id?: string | null
+          reference_type?: string | null
+          status?: string
+          wallet_id: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          amount?: number
+          balance_after?: number | null
+          created_at?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          payment_ref?: string | null
+          price_sar?: number | null
+          reference_id?: string | null
+          reference_type?: string | null
+          status?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_ad_credit_entries_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_credit_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_ad_credit_wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          owner_user_id: string
+          tenant_id: string | null
+          total_consumed: number
+          total_purchased: number
+          updated_at: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          owner_user_id: string
+          tenant_id?: string | null
+          total_consumed?: number
+          total_purchased?: number
+          updated_at?: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          owner_user_id?: string
+          tenant_id?: string | null
+          total_consumed?: number
+          total_purchased?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_ad_credit_wallets_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_admin_assignments: {
         Row: {
           assigned_by: string | null
@@ -5765,6 +5862,101 @@ export type Database = {
           },
         ]
       }
+      mkt_store_offer_items: {
+        Row: {
+          created_at: string
+          item_id: string
+          offer_id: string
+        }
+        Insert: {
+          created_at?: string
+          item_id: string
+          offer_id: string
+        }
+        Update: {
+          created_at?: string
+          item_id?: string
+          offer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_offer_items_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_store_offer_items_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_store_offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_store_offers: {
+        Row: {
+          applies_to_all: boolean
+          archived_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          discount_type: string
+          discount_value: number
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          starts_at: string
+          storefront_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          applies_to_all?: boolean
+          archived_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          starts_at?: string
+          storefront_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          applies_to_all?: boolean
+          archived_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          starts_at?: string
+          storefront_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_store_offers_storefront_id_fkey"
+            columns: ["storefront_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_storefronts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_store_private: {
         Row: {
           contact_phone: string | null
@@ -7442,6 +7634,52 @@ export type Database = {
           score: number
           tenant_id: string
         }[]
+      }
+      mkt_ad_credit_admin_grant: {
+        Args: {
+          _amount: number
+          _kind?: string
+          _note?: string
+          _price_sar?: number
+          _wallet_id: string
+        }
+        Returns: number
+      }
+      mkt_ad_credit_admin_settle: {
+        Args: { _entry_id: string; _payment_ref?: string }
+        Returns: number
+      }
+      mkt_ad_credit_consume: {
+        Args: {
+          _amount: number
+          _reference_id?: string
+          _reference_type?: string
+          _tenant_id?: string
+        }
+        Returns: number
+      }
+      mkt_ad_credit_request_purchase: {
+        Args: { _amount: number; _price_sar?: number; _tenant_id?: string }
+        Returns: string
+      }
+      mkt_ad_credit_wallet: {
+        Args: { _tenant_id?: string }
+        Returns: {
+          balance: number
+          created_at: string
+          id: string
+          owner_user_id: string
+          tenant_id: string | null
+          total_consumed: number
+          total_purchased: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_ad_credit_wallets"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       mkt_admin_activities: {
         Args: {
