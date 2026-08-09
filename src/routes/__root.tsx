@@ -8,7 +8,7 @@ import {
   useRouterState,
 } from "@tanstack/react-router";
 
-import { Suspense, useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { useAnalyticsInstrumentation } from "@/hooks/use-analytics";
 
@@ -195,9 +195,7 @@ function RootComponent() {
         <SessionProvider>
           <CallCenterProvider>
             {/* Required: nested routes render here. */}
-            <Suspense fallback={null}>
-              <Outlet />
-            </Suspense>
+            <Outlet />
             <CallOverlay />
             <Toaster position="top-center" />
           </CallCenterProvider>
