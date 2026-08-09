@@ -7,8 +7,8 @@
  * settings — while it is off, showing it would promise a payment the backend
  * refuses.
  */
-import { useState } from "react";
-import { Copy, Loader2, Upload, Wallet } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CreditCard, Copy, Loader2, Upload, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
@@ -17,6 +17,7 @@ import {
   TOPUP_CURRENCIES,
   useCancelAdCreditTopup,
   useMyAdCreditTopups,
+  useStartCardCheckout,
   useSubmitAdCreditTopup,
   useTopupMethods,
   type TopupCurrency,
@@ -30,6 +31,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 
 type ManualMethod = "sham_cash" | "bank_transfer";
+type ChosenMethod = ManualMethod | "card_gateway";
 
 export function AdCreditTopupCard({
   walletId,
@@ -43,8 +45,10 @@ export function AdCreditTopupCard({
   const topups = useMyAdCreditTopups(walletId);
   const submit = useSubmitAdCreditTopup(tenantId);
   const cancel = useCancelAdCreditTopup();
+  const card = useStartCardCheckout(tenantId);
 
-  const [method, setMethod] = useState<ManualMethod>("sham_cash");
+  const [method, setMethod] = useState<ChosenMethod>("sham_cash");
+  const [pack, setPack] = useState<number | null>(null);
   const [credits, setCredits] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState<TopupCurrency>("SYP");
@@ -53,8 +57,48 @@ export function AdCreditTopupCard({
   const [receipt, setReceipt] = useState<File | null>(null);
 
   const sham = methods.data?.shamCash;
+  const gateway = methods.data?.cardGateway;
+  const cardPacks = gateway?.enabled ? (gateway.packs ?? []) : [];
   const instructions = locale === "en" ? sham?.instructionsEn : sham?.instructionsAr;
   const pending = (topups.data ?? []).filter((row) => row.status === "pending");
+
+  // The provider redirects back here; the wallet is credited by the webhook, so
+  // this only tells the provider what to expect.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const outcome = params.get("checkout");
+    if (outcome !== "success" && outcome !== "cancel") return;
+    if (outcome === "success") toast.success(t("market.adCredit.topup.card.returned"));
+    else toast.info(t("market.adCredit.topup.card.cancelled"));
+    params.delete("checkout");
+    const query = params.toString();
+    window.history.replaceState(
+      {},
+      "",
+      `${window.location.pathname}${query ? `?${query}` : ""}`,
+    );
+  }, [t]);
+
+  function payByCard() {
+    const chosen = pack ?? cardPacks[0]?.credits ?? null;
+    if (!chosen) {
+      toast.error(t("market.adCredit.topup.card.noPacks"));
+      return;
+    }
+    card.mutate(chosen, {
+      onError: (error: unknown) => {
+        const code = error instanceof Error ? error.message : String(error);
+        const known: Record<string, string> = {
+          not_configured: t("market.adCredit.topup.card.errNotConfigured"),
+          gateway_disabled: t("market.adCredit.topup.card.errNotConfigured"),
+          pending_topup_exists: t("market.adCredit.topup.errPending"),
+          unknown_pack: t("market.adCredit.topup.card.errPack"),
+        };
+        const match = Object.keys(known).find((key) => code.includes(key));
+        toast.error(match ? known[match]! : t("market.adCredit.topup.card.errFailed"));
+      },
+    });
+  }
 
   function reset() {
     setCredits("");
@@ -82,7 +126,7 @@ export function AdCreditTopupCard({
 
     submit.mutate(
       {
-        method,
+        method: method as ManualMethod,
         credits: parsedCredits,
         amount: parsedAmount,
         currency,
@@ -121,7 +165,13 @@ export function AdCreditTopupCard({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {(["sham_cash", "bank_transfer"] as ManualMethod[]).map((value) => (
+          {(
+            [
+              "sham_cash",
+              "bank_transfer",
+              ...(cardPacks.length > 0 ? (["card_gateway"] as const) : []),
+            ] as ChosenMethod[]
+          ).map((value) => (
             <button
               key={value}
               type="button"
@@ -134,11 +184,6 @@ export function AdCreditTopupCard({
               {t(`market.adCredit.topup.method.${value}`)}
             </button>
           ))}
-          {methods.data?.cardGateway.enabled && (
-            <span className="self-center text-xs text-muted-foreground">
-              {t("market.adCredit.topup.method.card_gateway")}
-            </span>
-          )}
         </div>
 
         {method === "sham_cash" && (
@@ -185,6 +230,46 @@ export function AdCreditTopupCard({
         {method === "bank_transfer" && (
           <p className="text-xs text-muted-foreground">{t("market.adCredit.topup.bankNotice")}</p>
         )}
+
+        {method === "card_gateway" && (
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              {t("market.adCredit.topup.card.notice")}
+            </p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {cardPacks.map((option) => {
+                const selected = (pack ?? cardPacks[0]?.credits) === option.credits;
+                return (
+                  <button
+                    key={option.credits}
+                    type="button"
+                    onClick={() => setPack(option.credits)}
+                    aria-pressed={selected}
+                    className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm ${
+                      selected ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50"
+                    }`}
+                  >
+                    <span className="font-semibold">{formatNumber(option.credits)}</span>
+                    <span className="text-muted-foreground tabular-nums" dir="ltr">
+                      {formatNumber(option.amount)} {gateway?.currency ?? "SAR"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <Button onClick={payByCard} disabled={card.isPending} className="h-10">
+              {card.isPending ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <CreditCard className="size-4" aria-hidden />
+              )}
+              {t("market.adCredit.topup.card.pay")}
+            </Button>
+          </div>
+        )}
+
+        {method !== "card_gateway" && (
+          <>
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
@@ -267,6 +352,8 @@ export function AdCreditTopupCard({
           )}
           {t("market.adCredit.topup.submit")}
         </Button>
+          </>
+        )}
 
         {pending.length > 0 && (
           <p className="text-xs text-amber-700 dark:text-amber-400">
