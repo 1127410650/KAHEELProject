@@ -21,7 +21,7 @@ import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
-import { useActiveAccount } from "@/lib/mkt-account";
+import { useActiveAccount, type MktAccount } from "@/lib/mkt-account";
 import { useSignOut } from "@/lib/auth-signout";
 import { isPlatformAdmin } from "@/lib/mkt-admin";
 import { hasUnsavedChanges } from "@/lib/unsaved-changes";
@@ -40,6 +40,18 @@ import {
 const title = "المزيد — گحيل";
 const description =
   "إعدادات حسابك في سوق «گحيل»، التبديل بين الحسابات، اللغة، السياسات، والتواصل مع إدارة المنصة.";
+
+function AccountTypeIcon({ account, className }: { account: MktAccount; className: string }) {
+  const Icon =
+    account.classification === "system_admin"
+      ? Shield
+      : account.classification === "service_provider"
+        ? Building2
+        : account.classification === "store"
+          ? Store
+          : User;
+  return <Icon className={className} aria-hidden />;
+}
 
 export const Route = createFileRoute("/more")({
   ssr: false,
@@ -188,11 +200,7 @@ function MorePage() {
                   />
                 ) : (
                   <span className="grid size-11 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground">
-                    {active.kind === "business" ? (
-                      <Store className="size-5" aria-hidden />
-                    ) : (
-                      <User className="size-5" aria-hidden />
-                    )}
+                    <AccountTypeIcon account={active} className="size-5" />
                   </span>
                 )}
                 <span className="min-w-0 flex-1">
@@ -200,7 +208,7 @@ function MorePage() {
                     {active.name || t("market.account.fallbackName")}
                   </span>
                   <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
-                    <span>{t(`market.entry.kind.${active.kind}`)}</span>
+                    <span>{t(`market.entry.classification.${active.classification}`)}</span>
                     {active.city ? <span>· {active.city}</span> : null}
                     {active.verification_status === "approved" ? (
                       <VerifiedBadge status={active.verification_status} size="xs" />
@@ -211,7 +219,7 @@ function MorePage() {
               <ProfileCompletionPanel />
             </section>
 
-            {active.kind === "individual" ? (
+            {active.classification === "customer" ? (
               <JoinSection
                 locale={locale}
                 rowClass={rowClass}
@@ -229,15 +237,14 @@ function MorePage() {
                   onClick={() => void switchAccount(item.account_key)}
                   className={`${rowClass} w-full text-start disabled:opacity-60`}
                 >
-                  {item.kind === "business" ? (
-                    <Store className="size-5 shrink-0 text-muted-foreground" aria-hidden />
-                  ) : (
-                    <User className="size-5 shrink-0 text-muted-foreground" aria-hidden />
-                  )}
+                  <AccountTypeIcon
+                    account={item}
+                    className="size-5 shrink-0 text-muted-foreground"
+                  />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-medium">{item.name}</span>
                     <span className="block text-[11px] text-muted-foreground">
-                      {t(`market.entry.kind.${item.kind}`)}
+                      {t(`market.entry.classification.${item.classification}`)}
                     </span>
                   </span>
                   {item.account_key === active.account_key ? (
@@ -369,8 +376,8 @@ const JOIN_OPTIONS: Array<{
   {
     kind: "seller",
     icon: Store,
-    titleAr: "انضم كبائع",
-    titleEn: "Join as a seller",
+    titleAr: "افتح حساب متجر",
+    titleEn: "Open a store account",
     hintAr: "مطاعم، مقاهٍ، نوادٍ، مستشفيات، جامعات وكل نشاط يبيع.",
     hintEn: "Restaurants, cafés, clubs, hospitals, universities and every seller.",
   },
@@ -419,8 +426,7 @@ function JoinSection({
     <Section title={locale === "ar" ? "انضم إلى گحيل" : "Join Gohail"}>
       {JOIN_OPTIONS.map((option) => {
         const application = latest.get(option.kind);
-        const resumable =
-          application?.status === "pending" || application?.status === "needs_more";
+        const resumable = application?.status === "pending" || application?.status === "needs_more";
         const businessKind = option.kind === "seller" || option.kind === "service_provider";
         const locked =
           application?.status === "in_review" ||

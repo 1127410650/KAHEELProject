@@ -65,8 +65,8 @@ const COPY: Record<
   { ar: string; en: string; hintAr: string; hintEn: string; icon: typeof Store }
 > = {
   seller: {
-    ar: "انضم كبائع",
-    en: "Join as a seller",
+    ar: "افتح حساب متجر",
+    en: "Open a store account",
     hintAr: "مطاعم، مقاهٍ، نوادٍ، مستشفيات، جامعات، مصانع، موردون وكل نشاط يبيع.",
     hintEn: "Restaurants, cafés, clubs, hospitals, universities, factories and every seller.",
     icon: Store,

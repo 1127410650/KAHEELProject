@@ -19,12 +19,13 @@ const dictionaries: Record<Locale, Record<string, unknown>> = { ar, en };
 // database names, RLS policies, or internal tenant semantics.
 const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
   ar: {
-    "signup.publicSubtitle": "أنشئ حسابًا لاستخدام السوق.",
-    "signup.individualNote": "يمكنك التقديم للانضمام كبائع أو مقدم خدمة من داخل حسابك.",
+    "signup.publicSubtitle": "أنشئ حساب عميل عادي لاستخدام السوق.",
+    "signup.individualNote":
+      "يمكنك بعد الدخول فتح حساب متجر أو التقديم كمقدم خدمة. حساب مدير النظام داخلي فقط.",
     "market.entry.kind.business": "متجر",
     "market.entry.businessSection": "متاجري",
     "market.entry.noBusinesses": "لا يوجد متجر حتى الآن.",
-    "market.entry.newBusiness": "انضم كبائع",
+    "market.entry.newBusiness": "فتح حساب متجر",
     "market.entry.newBusinessHint": "قدّم طلب الانضمام ويُفعّل حساب العمل بعد المراجعة والقبول.",
     "market.business.new": "إنشاء متجر",
     "market.business.profile": "ملف المتجر",
@@ -63,13 +64,13 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "admin.actionNeededHint": "العناصر التي تحتاج مراجعة أو قرارًا من فريق الإدارة.",
   },
   en: {
-    "signup.publicSubtitle": "Create an account to use the marketplace.",
+    "signup.publicSubtitle": "Create a regular customer account to use the marketplace.",
     "signup.individualNote":
-      "You can apply to join as a seller or service provider from your account.",
+      "After signing in, you can open a store account or apply as a service provider. System administrator accounts are internal only.",
     "market.entry.kind.business": "Store",
     "market.entry.businessSection": "My stores",
     "market.entry.noBusinesses": "No store has been created yet.",
-    "market.entry.newBusiness": "Join as a seller",
+    "market.entry.newBusiness": "Open a store account",
     "market.entry.newBusinessHint":
       "Apply to join; the work account activates after review and approval.",
     "market.business.new": "Create a store",

@@ -108,7 +108,7 @@ function AuthPage() {
       className="market-surface flex min-h-screen flex-col bg-background lg:grid lg:grid-cols-2"
     >
       {/* Desktop-only brand panel: the platform name and nothing else. */}
-      <div className="relative hidden flex-col items-center justify-center gap-4 overflow-hidden bg-[radial-gradient(circle_at_20%_18%,rgb(84_160_255/0.3),transparent_25%),radial-gradient(circle_at_82%_78%,rgb(245_158_11/0.16),transparent_26%),linear-gradient(135deg,#07152f_0%,#0b1d43_48%,#0b5cc5_145%)] p-12 lg:flex">
+      <div className="relative hidden flex-col items-center justify-center gap-4 overflow-hidden bg-[radial-gradient(circle_at_20%_18%,rgb(224_170_255/0.3),transparent_25%),radial-gradient(circle_at_82%_78%,rgb(245_158_11/0.14),transparent_26%),linear-gradient(135deg,#10002b_0%,#3c096c_52%,#7b2cbf_145%)] p-12 lg:flex">
         <img
           src={kaheelLogo}
           alt=""

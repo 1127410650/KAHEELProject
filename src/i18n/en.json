@@ -1100,8 +1100,8 @@
     "inviteOnlySubtitle": "Complete your details to accept the invitation. The email is locked to the invited address.",
     "inviteOnlyNoteAuth": "Accounts are created by administrator invitation only.",
     "publicTitle": "Create account",
-    "publicSubtitle": "Create an individual account to use the marketplace. You can add a store later from your account.",
-    "individualNote": "Your account starts as an individual account. You can apply to join as a seller or service provider from inside the account.",
+    "publicSubtitle": "Create a regular customer account. You can open a store account or apply as a service provider later.",
+    "individualNote": "Your account starts as a regular customer. After signing in, you can open a store account or apply as a service provider. System administrator accounts are internal and cannot be selected during registration.",
     "emailHint": "You will use this email to sign in.",
     "created": "Your account is ready",
     "createdBody": "You can start using the marketplace. If this email was already registered, sign in instead.",
@@ -2308,7 +2308,7 @@
         "contact": "Contact the platform team",
         "support": "Help & contact",
         "policies": "About & policies",
-        "joinSeller": "Join as a seller",
+        "joinSeller": "Open a store account",
         "signOut": "Sign out"
       },
       "app": "App",
@@ -2601,6 +2601,12 @@
       "kind": {
         "individual": "Personal account",
         "business": "Store"
+      },
+      "classification": {
+        "customer": "Regular customer",
+        "service_provider": "Service provider",
+        "store": "Store",
+        "system_admin": "System administrator"
       },
       "otherAccount": "This ad belongs to “{name}”, not the active account.",
       "switchTo": "Enter as {name}",
@@ -3059,11 +3065,11 @@
       "noFeatured": "There are no active featured listings in this category right now.",
       "quickActions": "Quick actions",
       "hero": {
-        "badge": "Up to 50% off",
+        "badge": "One market for every need",
         "fast": "Fast",
-        "title": "Great offers",
-        "desc": "Fast delivery for less",
-        "cta": "Shop now"
+        "title": "Everything you need, all on Gohail",
+        "desc": "Restaurants, groceries, property, cars and services in one experience",
+        "cta": "Start browsing"
       },
       "fields": {
         "restaurants": {

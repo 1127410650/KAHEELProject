@@ -53,7 +53,7 @@ const TONES: Record<
 > = {
   blue: {
     rail: "bg-blue-600 text-white shadow-blue-900/20",
-    hero: "from-[#071d46] via-[#0b5cc5] to-[#39a4ff]",
+    hero: "from-[#10002b] via-[#3c096c] to-[#9d4edd]",
     soft: "bg-blue-50 text-blue-700",
     text: "text-blue-700",
     ring: "ring-blue-200",
@@ -208,7 +208,7 @@ export function LiveDemoEnvironment() {
         <section id="demo-workspace" aria-labelledby="demo-roles-title" className="scroll-mt-24">
           <div className="mb-3 flex items-end justify-between gap-3">
             <div>
-              <p className="text-[10px] font-black text-[#0b5cc5] sm:text-xs">
+              <p className="text-[10px] font-black text-[#7b2cbf] sm:text-xs">
                 {text(locale, "تبديل الهوية التجريبية", "Demo identity switcher")}
               </p>
               <h2 id="demo-roles-title" className="mt-1 text-xl font-black sm:text-2xl">
@@ -447,7 +447,7 @@ export function LiveDemoEnvironment() {
         <section className="grid gap-4 lg:grid-cols-[1fr_0.8fr]">
           <div className="rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
             <div className="flex items-center gap-2">
-              <Link2 className="size-5 text-[#0b5cc5]" aria-hidden />
+              <Link2 className="size-5 text-[#7b2cbf]" aria-hidden />
               <h2 className="text-lg font-black">
                 {text(locale, "التكاملات الخارجية", "External integrations")}
               </h2>
@@ -465,7 +465,7 @@ export function LiveDemoEnvironment() {
                   key={integration.nameAr}
                   className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200"
                 >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#e8f2ff] text-[#0b5cc5]">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#e0aaff]/42 text-[#7b2cbf]">
                     <ExternalLink className="size-4" aria-hidden />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -549,7 +549,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
   return (
     <section className="rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
       <div className="flex items-center gap-2">
-        <CalendarCheck2 className="size-5 text-[#0b5cc5]" aria-hidden />
+        <CalendarCheck2 className="size-5 text-[#7b2cbf]" aria-hidden />
         <h2 className="text-lg font-black">
           {text(locale, "رحلة مترابطة في النظام", "A connected platform journey")}
         </h2>
@@ -565,7 +565,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
         {steps.map((step, index) => (
           <div key={step.ar} className="relative rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
             <div className="flex items-center justify-between">
-              <span className="grid size-10 place-items-center rounded-xl bg-[#e8f2ff] text-[#0b5cc5]">
+              <span className="grid size-10 place-items-center rounded-xl bg-[#e0aaff]/42 text-[#7b2cbf]">
                 <step.icon className="size-5" aria-hidden />
               </span>
               <span className="num text-[10px] font-black text-slate-300">0{index + 1}</span>

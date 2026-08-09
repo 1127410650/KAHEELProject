@@ -19,9 +19,14 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 
+export type MktAccountClassification = "customer" | "service_provider" | "store" | "system_admin";
+
 export interface MktAccount {
   account_key: string;
+  /** Stable authorization boundary used by RLS, filters and route guards. */
   kind: "individual" | "business";
+  /** Server-derived experience label; never accepted from the browser. */
+  classification: MktAccountClassification;
   /** Null for the personal account; the business entity otherwise. */
   tenant_id: string | null;
   membership_id: string | null;
@@ -36,7 +41,6 @@ export interface MktAccount {
   city?: string | null;
   /** Short activity label for businesses; null for the personal account. */
   activity?: string | null;
-
 }
 
 const REMEMBER_KEY = "tahqaq.mkt.account";
@@ -60,12 +64,45 @@ function remember(key: string | null) {
   }
 }
 
-function normalize(rows: unknown): MktAccount[] {
-  return ((rows ?? []) as MktAccount[]).map((row) => ({
+function isClassification(value: unknown): value is MktAccountClassification {
+  return ["customer", "service_provider", "store", "system_admin"].includes(
+    value as MktAccountClassification,
+  );
+}
+
+function normalize(rows: unknown, classifications: unknown = []): MktAccount[] {
+  const classificationMap = new Map(
+    ((classifications ?? []) as Array<{ account_key?: unknown; classification?: unknown }>)
+      .filter(
+        (row): row is { account_key: string; classification: MktAccountClassification } =>
+          typeof row.account_key === "string" && isClassification(row.classification),
+      )
+      .map((row) => [row.account_key, row.classification]),
+  );
+
+  return ((rows ?? []) as Omit<MktAccount, "classification">[]).map((row) => ({
     ...row,
     name: row.name ?? "",
     permissions: row.permissions ?? [],
+    classification:
+      classificationMap.get(row.account_key) ?? (row.kind === "business" ? "store" : "customer"),
   }));
+}
+
+type UntypedRpcResult = PromiseLike<{
+  data: unknown;
+  error: { message?: string } | null;
+}>;
+
+const untypedSupabase = supabase as unknown as {
+  rpc: (name: string, params?: Record<string, unknown>) => UntypedRpcResult;
+};
+
+async function loadAccountClassifications(): Promise<unknown> {
+  const { data, error } = await untypedSupabase.rpc("mkt_my_account_classifications");
+  // Additive compatibility: authorization remains correct if an older runtime
+  // briefly serves the client before PostgREST reloads the new RPC.
+  return error ? [] : data;
 }
 
 /** Every account the signed-in user may enter, straight from the database. */
@@ -79,20 +116,26 @@ export function useMyAccounts() {
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
     refetchOnReconnect: true,
     queryFn: async (): Promise<MktAccount[]> => {
-      const { data, error } = await supabase.rpc("mkt_my_accounts");
+      const [accounts, classifications] = await Promise.all([
+        supabase.rpc("mkt_my_accounts"),
+        loadAccountClassifications(),
+      ]);
+      const { data, error } = accounts;
       if (error) throw error;
-      return normalize(data);
+      return normalize(data, classifications);
     },
   });
 }
 
 /** Re-checks a single account key server-side; null means "not allowed". */
 export async function verifyAccount(accountKey: string): Promise<MktAccount | null> {
-  const { data, error } = await supabase.rpc("mkt_account_context", {
-    _account_key: accountKey,
-  });
+  const [context, classifications] = await Promise.all([
+    supabase.rpc("mkt_account_context", { _account_key: accountKey }),
+    loadAccountClassifications(),
+  ]);
+  const { data, error } = context;
   if (error) return null;
-  return normalize(data)[0] ?? null;
+  return normalize(data, classifications)[0] ?? null;
 }
 
 export interface ActiveAccountState {
@@ -153,7 +196,6 @@ export function useActiveAccount(): ActiveAccountState {
     [queryClient],
   );
 
-
   const clear = useCallback(() => {
     remember(null);
     setKey(null);
@@ -170,7 +212,6 @@ export function useActiveAccount(): ActiveAccountState {
     void select(fallback.account_key);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, accounts.isLoading, accounts.isError, key, list.length]);
-
 
   const unavailable = accounts.isError;
   const revoked =
@@ -240,9 +281,16 @@ export function useRequireAccount(revokedMessage?: string): ActiveAccountState {
       replace: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionLoading, session, state.loading, state.account, state.revoked, state.unavailable, state.accounts.length, pathname]);
-
-
+  }, [
+    sessionLoading,
+    session,
+    state.loading,
+    state.account,
+    state.revoked,
+    state.unavailable,
+    state.accounts.length,
+    pathname,
+  ]);
 
   return state;
 }

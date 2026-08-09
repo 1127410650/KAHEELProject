@@ -207,8 +207,8 @@ function ListingRail({
                 decoding="async"
                 className="size-full object-cover transition duration-700 group-hover/listing:scale-[1.06]"
               />
-              <span className="absolute inset-0 bg-gradient-to-t from-[#031329]/66 via-transparent to-transparent" />
-              <span className="absolute start-2 top-2 rounded-full border border-white/20 bg-[#031329]/82 px-2 py-1 text-[7px] font-black text-white backdrop-blur sm:text-[8px]">
+              <span className="absolute inset-0 bg-gradient-to-t from-[#240046]/66 via-transparent to-transparent" />
+              <span className="absolute start-2 top-2 rounded-full border border-white/20 bg-[#240046]/82 px-2 py-1 text-[7px] font-black text-white backdrop-blur sm:text-[8px]">
                 {language === "ar" ? "تجريبي" : "Demo"}
               </span>
               <span className="absolute bottom-2 start-2 max-w-[80%] truncate rounded-full bg-white/92 px-2 py-1 text-[7px] font-black text-market-navy sm:text-[8px]">

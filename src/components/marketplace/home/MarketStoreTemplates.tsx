@@ -28,7 +28,7 @@ export function MarketStoreTemplates() {
           search={{ kind: "seller" }}
           className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full border border-border bg-card px-3 text-[10px] font-bold text-foreground shadow-sm hover:bg-muted sm:text-xs"
         >
-          انضم كبائع
+          افتح حساب متجر
           <ArrowLeft className="size-3.5" aria-hidden />
         </Link>
       </div>
