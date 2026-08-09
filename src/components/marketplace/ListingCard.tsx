@@ -250,7 +250,8 @@ export function ListingCard({
   const navBlocked = useRef(false);
 
   const meta = (
-    <div className="mt-auto flex flex-wrap items-center gap-x-2.5 gap-y-1 pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
+    <div className="mt-auto flex h-[18px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
+
       {listing.city && (
         <span className="inline-flex min-w-0 items-center gap-1">
           <MapPin className="size-3 shrink-0" aria-hidden />
