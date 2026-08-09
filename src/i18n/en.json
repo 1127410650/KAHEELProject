@@ -2649,6 +2649,7 @@
       "clearFilters": "Clear filters",
       "addListingHint": "Nothing matched your search — you can post your own listing.",
       "businessesCount": "stores",
+      "categoryPage": "Full category page",
       "loadingMore": "Loading more…"
     },
     "license": {
@@ -3334,7 +3335,6 @@
       "realestate": "Real Estate",
       "cars": "Cars",
       "devices": "Devices",
-      "aqardeal": "Aqar Deal",
       "restaurants": "Restaurants",
       "furniture": "Furniture",
       "services": "Services",
