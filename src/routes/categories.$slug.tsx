@@ -8,7 +8,7 @@ import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { LISTING_COLUMNS, type MktCategory, type MktListing } from "@/lib/mkt";
 import { decorateListings, loadCategories } from "@/lib/mkt-queries";
-import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,7 +16,7 @@ import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/categories/$slug")({
   ssr: false,
-  // Legacy «عقار ديل» links land on the canonical «عقارات» page with their
+  // Legacy alias slugs land on the canonical «عقارات» page with their
   // city / filters / sort / page / hash intact. `canonicalCategorySlug` is a
   // fixed point for canonical slugs, so this can never loop.
   beforeLoad: ({ params, location }) => {
@@ -33,9 +33,9 @@ export const Route = createFileRoute("/categories/$slug")({
 
 
   head: ({ params }) => {
-    const title = `تصنيف ${params.slug} — گحيل`;
+    const title = `تصنيف ${params.slug} — كَحيل`;
     const description =
-      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل گحيل للمقاولات والتوريد.";
+      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل كَحيل للمقاولات والتوريد.";
     return {
       meta: [
         { title },
@@ -60,7 +60,9 @@ function CategoryPage() {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const category = (categories.data ?? []).find((c) => c.slug === slug) ?? null;
-  const children = (categories.data ?? []).filter((c) => c.parent_id === category?.id);
+  const children = (categories.data ?? []).filter(
+    (c) => c.parent_id === category?.id && !isRetiredSubcategory(c.slug),
+  );
 
   const { preference } = useMarketPreference();
   const listings = useQuery({

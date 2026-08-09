@@ -29,6 +29,7 @@ import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
 import { track } from "@/lib/analytics";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import { isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { loadCategories, loadListingsPage } from "@/lib/mkt-queries";
 import { priceLabel, relativeTime } from "@/lib/mkt";
 import { useSession } from "@/lib/session";
@@ -151,7 +152,12 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
   const subcategories = useMemo(
     () =>
       (categories.data ?? []).filter(
-        (category) => !!category.parent_id && category.parent_id === root?.id,
+        (category) =>
+          !!category.parent_id &&
+          category.parent_id === root?.id &&
+          // The retired duplicate label is no longer offered as a choice; the
+          // row itself is untouched.
+          !isRetiredSubcategory(category.slug),
       ),
     [categories.data, root?.id],
   );
@@ -408,7 +414,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                     <Skeleton key={index} className="h-10 w-24 shrink-0 rounded-full" />
                   ))}
               </div>
+              {/* The indexed, shareable page of the category. Without this link
+                  `/categories/real-estate` was a canonical destination no
+                  visitor could reach from the interface. */}
+              <Link
+                to="/categories/$slug"
+                params={{ slug: "real-estate" }}
+                className="mt-3 inline-block text-xs font-bold text-primary underline-offset-4 hover:underline"
+              >
+                {t("market.search.categoryPage")}
+              </Link>
             </div>
+
 
             <div className="real-estate-deferred mt-7">
               <SectionHeading

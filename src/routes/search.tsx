@@ -16,7 +16,7 @@ import {
   loadListingTypes,
   loadListingsPage,
 } from "@/lib/mkt-queries";
-import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
 import { track } from "@/lib/analytics";
 
@@ -97,7 +97,7 @@ const RealEstateExperience = lazy(() =>
   })),
 );
 
-const title = "البحث في السوق — گحيل";
+const title = "البحث في السوق — كَحيل";
 const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
 
@@ -114,7 +114,7 @@ export const Route = createFileRoute("/search")({
     }
     if (search["filters"] === "1" || search["filters"] === 1 || search["filters"] === true)
       out.filters = 1;
-    // Legacy «عقار ديل» links carry an alias slug; resolve it onto the single
+    // Legacy links may carry an alias slug; resolve it onto the single
     // canonical «عقارات» category so no duplicate field ever appears.
     if (out.category) out.category = canonicalCategorySlug(out.category);
     if (out.featured !== "1") delete out.featured;
@@ -279,8 +279,8 @@ function GenericSearchPage() {
   const activeRoot = roots.find((r) => r.slug === (domainDef?.categorySlug ?? params.category));
   /*
    * `sub` may arrive as a real id (filter sheet) or as a slug (primary-fields
-   * rail, e.g. «عقار ديل» → `re-aqar-deal`). Both resolve to the same id, so
-   * one canonical category is queried and no duplicate field is needed.
+   * rail, e.g. `re-aqar-deal`). Both resolve to the same id, so one canonical
+   * category is queried and no duplicate field is needed.
    */
   const subId = useMemo(() => {
     const value = params.sub;
@@ -291,7 +291,11 @@ function GenericSearchPage() {
   }, [params.sub, categories.data]);
 
   const subs = useMemo(
-    () => (categories.data ?? []).filter((c) => c.parent_id && c.parent_id === activeRoot?.id),
+    () =>
+      (categories.data ?? []).filter(
+        (c) =>
+          c.parent_id && c.parent_id === activeRoot?.id && !isRetiredSubcategory(c.slug),
+      ),
     [categories.data, activeRoot?.id],
   );
   // Offer types are derived from the chosen category path, so no impossible
@@ -720,6 +724,18 @@ function GenericSearchPage() {
               <span className="rounded-full bg-market-gold-soft px-3 py-1 text-xs font-bold text-market-gold">
                 {t("market.homeV2.featured")}
               </span>
+            )}
+            {/* The indexed, shareable page of the selected category. Without this
+                link `/categories/<slug>` was a canonical destination no visitor
+                could reach from the interface. */}
+            {activeRoot && (
+              <Link
+                to="/categories/$slug"
+                params={{ slug: activeRoot.slug }}
+                className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-bold text-primary transition hover:bg-primary/10"
+              >
+                {t("market.search.categoryPage")}
+              </Link>
             )}
           </div>
 

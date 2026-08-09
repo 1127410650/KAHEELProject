@@ -2649,6 +2649,7 @@
       "clearFilters": "مسح الفلاتر",
       "addListingHint": "لم نجد ما يطابق بحثك، يمكنك نشر إعلانك.",
       "businessesCount": "متجر",
+      "categoryPage": "صفحة التصنيف الكاملة",
       "loadingMore": "جارٍ تحميل المزيد…"
     },
     "license": {
@@ -3334,7 +3335,6 @@
       "realestate": "عقارات",
       "cars": "سيارات",
       "devices": "أجهزة",
-      "aqardeal": "عقار ديل",
       "restaurants": "مطاعم",
       "furniture": "أثاث",
       "services": "خدمات",

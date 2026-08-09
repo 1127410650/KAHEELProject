@@ -37,9 +37,9 @@ import {
   type JoinApplicationStatus,
 } from "@/lib/mkt-provider-onboarding";
 
-const title = "المزيد — گحيل";
+const title = "المزيد — كَحيل";
 const description =
-  "إعدادات حسابك في سوق «گحيل»، التبديل بين الحسابات، اللغة، السياسات، والتواصل مع إدارة المنصة.";
+  "إعدادات حسابك في سوق «كَحيل»، التبديل بين الحسابات، اللغة، السياسات، والتواصل مع إدارة المنصة.";
 
 function AccountTypeIcon({ account, className }: { account: MktAccount; className: string }) {
   const Icon =
@@ -428,7 +428,7 @@ function JoinSection({
   );
 
   return (
-    <Section title={locale === "ar" ? "انضم إلى گحيل" : "Join Gohail"}>
+    <Section title={locale === "ar" ? "انضم إلى كَحيل" : "Join Gohail"}>
       {JOIN_OPTIONS.map((option) => {
         const application = latest.get(option.kind);
         const resumable = application?.status === "pending" || application?.status === "needs_more";
