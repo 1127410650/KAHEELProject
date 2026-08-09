@@ -272,8 +272,12 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     };
   }, [call?.status]);
 
-  const placeCall = useCallback(
-    async (listingId: string) => {
+  /**
+   * Shared call setup. A call is either addressed to an ad (the visitor rings
+   * the advertiser) or to an existing conversation (either side rings the other).
+   */
+  const begin = useCallback(
+    async (target: { listingId: string } | { conversationId: string }) => {
       if (!userId) {
         toast.error(t("market.call.error.auth_required"));
         return;
@@ -284,12 +288,18 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       }
       setStarting(true);
       try {
-        const eligible = await callEligibility(listingId);
+        const eligible =
+          "listingId" in target
+            ? await callEligibility(target.listingId)
+            : await conversationCallEligibility(target.conversationId);
         if (!eligible.ok) {
           toast.error(t(`market.call.error.${eligible.reason ?? "generic"}`));
           return;
         }
-        const started = await startCall(listingId);
+        const started =
+          "listingId" in target
+            ? await startCall(target.listingId)
+            : await startConversationCall(target.conversationId);
         const peer = await loadCallPeer(started.call_id);
         setCall({
           id: started.call_id,
@@ -333,6 +343,17 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     },
     [attachSession, finish, t, teardown, userId],
   );
+
+  const placeCall = useCallback(
+    (listingId: string) => begin({ listingId }),
+    [begin],
+  );
+
+  const placeConversationCall = useCallback(
+    (conversationId: string) => begin({ conversationId }),
+    [begin],
+  );
+
 
   /**
    * Answers a specific call id. Direct mode calls this without a tap when the
