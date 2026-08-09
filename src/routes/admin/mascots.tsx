@@ -73,8 +73,8 @@ const DEMOS: { id: Demo; ar: string; en: string; ms: number }[] = [
 ];
 
 function MascotsPreviewPage() {
-  const { lang } = useI18n();
-  const ar = lang === "ar";
+  const { locale } = useI18n();
+  const ar = locale === "ar";
   const [variant, setVariant] = useState<MascotVariant>(() => activeMascotVariant());
   const [demo, setDemo] = useState<{ id: Demo; run: number } | null>(null);
 
@@ -200,8 +200,8 @@ function MascotsPreviewPage() {
             </div>
             <p className="text-[11px] text-muted-foreground">
               {ar
-                ? `الساقط دائمًا الزعيم كَحيلان — مدة السقوط ${DROP_ANIMATION_MS}ms، فاصل بين السقطات ${MASCOT_TIMING.tapCooldownMs}ms.`
-                : `The falling one is always Boss Kaheelan — drop ${DROP_ANIMATION_MS}ms, cooldown ${MASCOT_TIMING.tapCooldownMs}ms.`}
+                ? `الساقط دائمًا الزعيم كَحيلان — مدة السقوط ${DROP_ANIMATION_MS}ms، فاصل بين السقطات ${MASCOT_TIMING.dropCooldownMs}ms.`
+                : `The falling one is always Boss Kaheelan — drop ${DROP_ANIMATION_MS}ms, cooldown ${MASCOT_TIMING.dropCooldownMs}ms.`}
             </p>
           </CardContent>
         </Card>
@@ -229,7 +229,7 @@ function MascotsPreviewPage() {
                   className="flex flex-col items-center gap-2 rounded-lg border bg-muted/30 p-2"
                 >
                   <div className="flex h-28 items-end justify-center">
-                    <PopupMascot kind={kind} lang={ar ? "ar" : "en"} className="h-28 w-auto" />
+                    <PopupMascot kind={kind} lang={ar ? "ar" : "en"} />
                   </div>
                   <span className="text-[11px] text-muted-foreground">
                     {kind} · {MASCOT_PERSONA[kind]}
