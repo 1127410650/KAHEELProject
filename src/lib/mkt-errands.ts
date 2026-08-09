@@ -431,7 +431,7 @@ export async function decideErrandOffer(offerId: string, accept: boolean): Promi
 export async function cancelErrand(requestId: string, reason?: string): Promise<void> {
   const { error } = await supabase.rpc("mkt_errand_cancel", {
     _request_id: requestId,
-    _reason: reason ?? undefined,
+    ...(reason ? { _reason: reason } : {}),
   });
   if (error) throw error;
 }
@@ -444,7 +444,7 @@ export async function rateErrand(
   const { error } = await supabase.rpc("mkt_errand_rate", {
     _request_id: requestId,
     _rating: rating,
-    _comment: comment ?? undefined,
+    ...(comment ? { _comment: comment } : {}),
   });
   if (error) throw error;
 }
@@ -533,8 +533,8 @@ export async function placeErrandOffer(input: {
   const { error } = await supabase.rpc("mkt_errand_place_offer", {
     _request_id: input.requestId,
     _fee: input.fee,
-    _eta_minutes: input.etaMinutes ?? undefined,
-    _note: input.note ?? undefined,
+    ...(input.etaMinutes != null ? { _eta_minutes: input.etaMinutes } : {}),
+    ...(input.note ? { _note: input.note } : {}),
   });
   if (error) throw error;
 }
