@@ -37,7 +37,7 @@ export function MarketCategoryStrip() {
   const activeFrame =
     "border-white bg-[linear-gradient(145deg,#9d4edd,#5a189a)] shadow-[0_8px_22px_rgb(60_9_108/0.4),inset_0_1px_0_rgb(255_255_255/0.3)]";
   const labelClass =
-    "line-clamp-2 h-[22px] w-full text-[9px] font-black leading-[1.2] text-market-navy-foreground/95 sm:text-[10px] lg:text-[11px]";
+    "line-clamp-2 h-[24px] w-full overflow-hidden text-[9px] font-black leading-[1.2] text-market-navy-foreground/95 sm:h-[26px] sm:text-[10px]";
 
   const renderTile = (field: (typeof PRIMARY_FIELDS)[number], groupIndex: number) => {
     const label = t(`market.fields.${field.id}`);
