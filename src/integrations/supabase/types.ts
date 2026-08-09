@@ -2405,6 +2405,272 @@ export type Database = {
           },
         ]
       }
+      mkt_guide_place_claims: {
+        Row: {
+          contact: string | null
+          created_at: string
+          evidence: string | null
+          id: string
+          place_id: string
+          reject_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact?: string | null
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          place_id: string
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact?: string | null
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          place_id?: string
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_place_claims_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_guide_place_photos: {
+        Row: {
+          bytes: number | null
+          caption: string | null
+          created_at: string
+          height: number | null
+          id: string
+          kind: string
+          mime: string | null
+          place_id: string
+          reject_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sort_order: number
+          status: string
+          storage_path: string
+          updated_at: string
+          uploaded_by: string
+          width: number | null
+        }
+        Insert: {
+          bytes?: number | null
+          caption?: string | null
+          created_at?: string
+          height?: number | null
+          id?: string
+          kind?: string
+          mime?: string | null
+          place_id: string
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sort_order?: number
+          status?: string
+          storage_path: string
+          updated_at?: string
+          uploaded_by: string
+          width?: number | null
+        }
+        Update: {
+          bytes?: number | null
+          caption?: string | null
+          created_at?: string
+          height?: number | null
+          id?: string
+          kind?: string
+          mime?: string | null
+          place_id?: string
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sort_order?: number
+          status?: string
+          storage_path?: string
+          updated_at?: string
+          uploaded_by?: string
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_place_photos_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_guide_place_promo_events: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          place_id: string
+          promotion_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          place_id: string
+          promotion_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          place_id?: string
+          promotion_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_place_promo_events_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_guide_place_promo_events_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_place_promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_guide_place_promotions: {
+        Row: {
+          clicks: number
+          created_at: string
+          credits_spent: number
+          days: number
+          ends_at: string
+          id: string
+          impressions: number
+          owner_user_id: string
+          place_id: string
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          clicks?: number
+          created_at?: string
+          credits_spent?: number
+          days?: number
+          ends_at: string
+          id?: string
+          impressions?: number
+          owner_user_id: string
+          place_id: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          clicks?: number
+          created_at?: string
+          credits_spent?: number
+          days?: number
+          ends_at?: string
+          id?: string
+          impressions?: number
+          owner_user_id?: string
+          place_id?: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_place_promotions_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_guide_place_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          place_id: string
+          rating: number
+          reject_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          place_id: string
+          rating: number
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          place_id?: string
+          rating?: number
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_place_reviews_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_guide_places: {
         Row: {
           address: string | null
@@ -9030,6 +9296,53 @@ export type Database = {
           storefront_id: string
           updated_at: string
         }[]
+      }
+      mkt_guide_featured_places: {
+        Args: { _limit?: number }
+        Returns: {
+          category: string
+          city: string
+          governorate: string
+          name_ar: string
+          name_en: string
+          place_id: string
+          promotion_id: string
+          rating: number
+          rating_total: number
+          sector: string
+          slug: string
+        }[]
+      }
+      mkt_guide_place_is_owner: {
+        Args: { _place_id: string }
+        Returns: boolean
+      }
+      mkt_guide_place_rating: {
+        Args: { _place_id: string }
+        Returns: {
+          average: number
+          total: number
+        }[]
+      }
+      mkt_guide_promo_track: {
+        Args: { _kind: string; _promotion_id: string }
+        Returns: undefined
+      }
+      mkt_guide_promote_place: {
+        Args: { _days?: number; _place_id: string; _tenant_id?: string }
+        Returns: string
+      }
+      mkt_guide_review_claim: {
+        Args: { _approve: boolean; _claim_id: string; _reason?: string }
+        Returns: undefined
+      }
+      mkt_guide_review_photo: {
+        Args: { _approve: boolean; _photo_id: string; _reason?: string }
+        Returns: undefined
+      }
+      mkt_guide_review_review: {
+        Args: { _approve: boolean; _reason?: string; _review_id: string }
+        Returns: undefined
       }
       mkt_has_restriction: {
         Args: {

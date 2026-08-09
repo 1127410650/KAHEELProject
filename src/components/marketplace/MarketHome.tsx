@@ -49,7 +49,9 @@ import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/Listi
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
 import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
+import { FeaturedGuideStrip } from "@/components/marketplace/home/FeaturedGuideStrip";
 import { HomeSearchBar } from "@/components/marketplace/home/HomeSearchBar";
+
 import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
 
 import { Reveal } from "@/components/marketplace/home/Reveal";
@@ -167,7 +169,10 @@ export function MarketHome() {
           detailedLabel={t("market.homeV2.detailedSearch" as HomeKey)}
         />
 
+        <FeaturedGuideStrip />
+
         <PromoCarousel addHref={addHref} />
+
 
         <KaheelStories />
 
