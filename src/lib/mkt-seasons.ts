@@ -121,6 +121,8 @@ export const MOTIF_LABEL: Record<SeasonMotif, [string, string]> = {
   lanterns: ["فوانيس", "Lanterns"],
   sparks: ["بريق", "Sparks"],
   confetti: ["احتفال", "Confetti"],
+  flag: ["علم سوريا يرفرف", "Waving Syrian flag"],
+
 };
 
 export const OVERLAY_LABEL: Record<SeasonOverlay, [string, string]> = {
