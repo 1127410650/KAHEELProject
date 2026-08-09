@@ -1870,6 +1870,24 @@ body:has(.market-surface) {
   55% { transform: translateY(-2px) scaleY(1.02) rotate(2deg); }
   100% { transform: translateY(0) rotate(0deg); }
 }
+/* «الزعيم كَحيلان»: يدخل من الجانب، يلف طرف الشماغ، ثم يشير بخفة. */
+@keyframes kaheel-mascot-boss-enter {
+  0% { transform: translateX(-14px) rotate(-4deg); }
+  40% { transform: translateX(1px) rotate(1deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+@keyframes kaheel-mascot-boss-scarf {
+  0%, 12% { transform: rotate(0deg) translateY(0); }
+  30% { transform: rotate(-26deg) translateY(-4px); }
+  48% { transform: rotate(16deg) translateY(-1px); }
+  62%, 100% { transform: rotate(0deg) translateY(0); }
+}
+@keyframes kaheel-mascot-boss-point {
+  0%, 55% { transform: translateX(0) rotate(0deg); }
+  70% { transform: translateX(3px) rotate(-10deg); }
+  85% { transform: translateX(1px) rotate(-4deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
 @keyframes kaheel-popup-in-bottom {
   from { opacity: 0; transform: translateY(28px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
