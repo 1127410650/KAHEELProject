@@ -16,8 +16,8 @@ export const Route = createFileRoute("/my/wallet")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "نقاطي — گحيل" },
-      { name: "description", content: "رصيد نقاطك وسجل عمليات الترويج في گحيل." },
+      { title: "نقاطي — كَحيل" },
+      { name: "description", content: "رصيد نقاطك وسجل عمليات الترويج في كَحيل." },
       { property: "og:type", content: "website" },
       { name: "robots", content: "noindex" },
     ],

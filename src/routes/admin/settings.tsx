@@ -29,7 +29,7 @@ export const Route = createFileRoute("/admin/settings")({
         content: "إعدادات تشغيل السوق: مدة الإعلان، حدود الرفع، ومراجعة الإعلانات قبل النشر — لمدير النظام فقط.",
       },
       { property: "og:title", content: "إعدادات المنصة — إدارة المنصة" },
-      { property: "og:description", content: "إعدادات تشغيل منصة گحيل." },
+      { property: "og:description", content: "إعدادات تشغيل منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

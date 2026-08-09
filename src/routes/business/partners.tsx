@@ -49,7 +49,7 @@ export const Route = createFileRoute("/business/partners")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "حساب المتجر وشبكة مقدمي الخدمة — گحيل" },
+      { title: "حساب المتجر وشبكة مقدمي الخدمة — كَحيل" },
       {
         name: "description",
         content: "حدد فئة المتجر واربطه بمقدمي الخدمات والتكاملات الخارجية.",
@@ -581,7 +581,7 @@ function ProviderNetworkPage() {
               </CardTitle>
               <p className="text-sm leading-6 text-muted-foreground">
                 {locale === "ar"
-                  ? "يحفظ گحيل تعريف الموصل فقط. المفاتيح وكلمات المرور لا تُكتب هنا وتُربط لاحقًا بخزنة أسرار من الخادم."
+                  ? "يحفظ كَحيل تعريف الموصل فقط. المفاتيح وكلمات المرور لا تُكتب هنا وتُربط لاحقًا بخزنة أسرار من الخادم."
                   : "Gohail stores connector metadata only. Keys and passwords are attached later through a server-side secret vault."}
               </p>
             </CardHeader>

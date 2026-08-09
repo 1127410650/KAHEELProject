@@ -4,9 +4,9 @@ import { MarketShell } from "@/components/marketplace/MarketShell";
 import { MarketHome } from "@/components/marketplace/MarketHome";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
-const title = "گحيل — سوق العقارات والسيارات والأجهزة والخدمات";
+const title = "كَحيل — سوق العقارات والسيارات والأجهزة والخدمات";
 const description =
-  "گحيل: سوق إلكتروني للعقارات والسيارات والأجهزة والخدمات والمعدات والموردين. تصفّح الإعلانات وتواصل مع المعلن مباشرة.";
+  "كَحيل: سوق إلكتروني للعقارات والسيارات والأجهزة والخدمات والمعدات والموردين. تصفّح الإعلانات وتواصل مع المعلن مباشرة.";
 
 export const Route = createFileRoute("/")({
   ssr: "data-only",

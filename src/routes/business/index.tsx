@@ -24,7 +24,7 @@ export const Route = createFileRoute("/business/")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "مركز التشغيل — گحيل" },
+      { title: "مركز التشغيل — كَحيل" },
       {
         name: "description",
         content: "إدارة الطلبات والمواعيد والكتالوج والتسويق والترويج من حساب العمل المعتمد.",
@@ -62,7 +62,7 @@ function ProviderOperationsPage() {
             </h2>
             <p className="text-sm leading-7 text-muted-foreground">
               {locale === "ar"
-                ? "لا يكفي إنشاء بيانات المتجر. تراجع إدارة گحيل الطلب أولًا، ثم يُفعّل حساب العمل وصلاحياته تلقائيًا."
+                ? "لا يكفي إنشاء بيانات المتجر. تراجع إدارة كَحيل الطلب أولًا، ثم يُفعّل حساب العمل وصلاحياته تلقائيًا."
                 : "Creating store details does not grant access. Gohail reviews the application first, then activates the work account and its permissions."}
             </p>
             <Button asChild>

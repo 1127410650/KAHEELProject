@@ -28,9 +28,9 @@ import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 export const Route = createFileRoute("/stores/$slug")({
   ssr: "data-only",
   head: ({ params }) => {
-    const title = `متجر ${params.slug} — سوق گحيل`;
+    const title = `متجر ${params.slug} — سوق كَحيل`;
     const description =
-      "صفحة المتجر: الأقسام والمنتجات والأسعار وأوقات العمل والموقع وطرق التواصل داخل سوق گحيل.";
+      "صفحة المتجر: الأقسام والمنتجات والأسعار وأوقات العمل والموقع وطرق التواصل داخل سوق كَحيل.";
     return {
       meta: [
         { title },
@@ -155,7 +155,7 @@ function PublicStorePage() {
             />
             <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md">
               <Sparkles className="size-3.5" aria-hidden />
-              هوية متجر گحيل
+              هوية متجر كَحيل
             </span>
           </div>
 

@@ -33,14 +33,14 @@ export const Route = createFileRoute("/admin/users_/$id")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "ملف المستخدم — إدارة منصة گحيل" },
+      { title: "ملف المستخدم — إدارة منصة كَحيل" },
       {
         name: "description",
         content:
           "ملف إداري للمستخدم: بياناته وإعلاناته وعضوياته وبلاغاته وقيوده وسجل الإجراءات عليه، داخل لوحة الإدارة.",
       },
-      { property: "og:title", content: "ملف المستخدم — إدارة منصة گحيل" },
-      { property: "og:description", content: "ملف إداري تفصيلي للمستخدم في منصة گحيل." },
+      { property: "og:title", content: "ملف المستخدم — إدارة منصة كَحيل" },
+      { property: "og:description", content: "ملف إداري تفصيلي للمستخدم في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

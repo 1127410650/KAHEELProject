@@ -22,12 +22,12 @@ export const Route = createFileRoute("/register")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "إنشاء حساب سوري — گحيل | Create account — Gohail" },
+      { title: "إنشاء حساب سوري — كَحيل | Create account — Gohail" },
       {
         name: "description",
-        content: "أنشئ حسابًا فرديًا في نسخة گحيل السورية باستخدام اسمك ورقم جوالك السوري.",
+        content: "أنشئ حسابًا فرديًا في نسخة كَحيل السورية باستخدام اسمك ورقم جوالك السوري.",
       },
-      { property: "og:title", content: "إنشاء حساب سوري — گحيل" },
+      { property: "og:title", content: "إنشاء حساب سوري — كَحيل" },
       {
         property: "og:description",
         content: "Create a regular customer account in Gohail's Syria marketplace.",

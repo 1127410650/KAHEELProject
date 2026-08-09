@@ -49,10 +49,10 @@ export const Route = createFileRoute("/join")({
   }),
   head: () => ({
     meta: [
-      { title: "انضم إلى گحيل" },
+      { title: "انضم إلى كَحيل" },
       {
         name: "description",
-        content: "طلبات الانضمام كبائع أو مقدم خدمة أو مندوب توصيل أو عضو فريق في گحيل.",
+        content: "طلبات الانضمام كبائع أو مقدم خدمة أو مندوب توصيل أو عضو فريق في كَحيل.",
       },
       { name: "robots", content: "noindex" },
     ],

@@ -20,12 +20,12 @@ export const Route = createFileRoute("/business/store/catalog")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "أقسام المتجر ومنتجاته — سوق گحيل" },
+      { title: "أقسام المتجر ومنتجاته — سوق كَحيل" },
       {
         name: "description",
         content: "حرّر منيو المطعم أو منتجات المتجر: الأقسام، الأصناف، الأسعار، الصور والخيارات.",
       },
-      { property: "og:title", content: "أقسام المتجر ومنتجاته — سوق گحيل" },
+      { property: "og:title", content: "أقسام المتجر ومنتجاته — سوق كَحيل" },
       { property: "og:description", content: "تحرير المنيو والمنتجات والخيارات." },
       { name: "robots", content: "noindex" },
     ],

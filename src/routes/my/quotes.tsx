@@ -11,12 +11,12 @@ export const Route = createFileRoute("/my/quotes")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "طلبات عروض السعر — گحيل" },
+      { title: "طلبات عروض السعر — كَحيل" },
       {
         name: "description",
-        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في گحيل.",
+        content: "متابعة طلبات عروض السعر التي أرسلتها أو استلمتها في كَحيل.",
       },
-      { property: "og:title", content: "طلبات عروض السعر — گحيل" },
+      { property: "og:title", content: "طلبات عروض السعر — كَحيل" },
       { property: "og:description", content: "إدارة طلبات عروض السعر." },
       { name: "robots", content: "noindex" },
     ],

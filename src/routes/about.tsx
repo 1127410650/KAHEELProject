@@ -5,9 +5,9 @@ import { MarketStaticSection } from "@/components/marketplace/MarketStaticPage";
 import { useI18n } from "@/i18n";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
-const title = "عن المنصة — گحيل";
+const title = "عن المنصة — كَحيل";
 const description =
-  "تعرّف على «گحيل»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
+  "تعرّف على «كَحيل»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
 
 export const Route = createFileRoute("/about")({
   ssr: "data-only",
@@ -38,7 +38,7 @@ function PoliciesPage() {
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
             {locale === "ar"
-              ? "عن گحيل، وشروط الاستخدام، وسياسة الخصوصية في صفحة واحدة."
+              ? "عن كَحيل، وشروط الاستخدام، وسياسة الخصوصية في صفحة واحدة."
               : "About Gohail, terms of use and privacy in one place."}
           </p>
         </header>

@@ -5,8 +5,8 @@ import { MarketStaticSection } from "@/components/marketplace/MarketStaticPage";
 import { useI18n } from "@/i18n";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
-const title = "المساعدة — گحيل";
-const description = "كيف تنشر إعلانًا في «گحيل»، وكيف تتواصل مع المعلنين، ومدة الإعلان وتجديده.";
+const title = "المساعدة — كَحيل";
+const description = "كيف تنشر إعلانًا في «كَحيل»، وكيف تتواصل مع المعلنين، ومدة الإعلان وتجديده.";
 
 export const Route = createFileRoute("/help")({
   ssr: "data-only",
@@ -37,7 +37,7 @@ function SupportPage() {
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
             {locale === "ar"
-              ? "إجابات الاستخدام وطريقة التواصل مع إدارة گحيل في مكان واحد."
+              ? "إجابات الاستخدام وطريقة التواصل مع إدارة كَحيل في مكان واحد."
               : "Usage help and ways to contact Gohail in one place."}
           </p>
         </header>

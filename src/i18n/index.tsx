@@ -44,7 +44,7 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "market.store.openStore": "فتح المتجر",
 
     "admin.console": "إدارة المنصة",
-    "admin.consoleSubtitle": "مركز تشغيل گحيل",
+    "admin.consoleSubtitle": "مركز تشغيل كَحيل",
     "admin.pageEyebrow": "لوحة الإدارة",
     "admin.nav.businesses": "المتاجر",
     "admin.stats.businesses": "المتاجر",

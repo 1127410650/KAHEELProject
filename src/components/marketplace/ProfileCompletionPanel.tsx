@@ -521,7 +521,7 @@ export function ProfileCompletionPanel() {
             />
             <span>
               {ar
-                ? "أوافق على استخدام الجنس والفئة العمرية لتخصيص الإعلانات والعروض داخل گحيل. يمكنني إلغاء الموافقة لاحقًا."
+                ? "أوافق على استخدام الجنس والفئة العمرية لتخصيص الإعلانات والعروض داخل كَحيل. يمكنني إلغاء الموافقة لاحقًا."
                 : "I agree to use gender and age group to personalize ads and promotions in Gohail. I can withdraw consent later."}
             </span>
           </label>

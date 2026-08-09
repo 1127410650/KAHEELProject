@@ -26,7 +26,7 @@ export const Route = createFileRoute("/business/orders")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "إدارة الطلبات — گحيل" },
+      { title: "إدارة الطلبات — كَحيل" },
       { name: "description", content: "قبول وتجهيز وتسليم طلبات المتجر المعتمد." },
       { name: "robots", content: "noindex" },
     ],
