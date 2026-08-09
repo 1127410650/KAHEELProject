@@ -7,15 +7,14 @@ import { guardSession } from "@/lib/auth-session";
  * `/admin/*` URL now require a session before the page module renders; the
  * platform-admin / staff-permission check itself stays server-backed inside
  * `AdminShell` (`isPlatformAdmin`), which never reveals data to a non-admin.
+ *
+ * `ssr: false` (never `"data-only"`): the session lives in `localStorage`, so a
+ * server-side guard has nothing to read, and with `"data-only"` the guard is not
+ * re-run in the browser — a signed-out visitor then reaches the page module.
  */
 export const Route = createFileRoute("/admin")({
-  ssr: "data-only",
+  ssr: false,
   beforeLoad: async ({ location }) => {
-    // The Supabase session lives in `localStorage`, so the server cannot answer
-    // this question: gating there would bounce every hard refresh to `/auth`.
-    // The subtree renders on the client only (`ssr: "data-only"`), so the gate
-    // still runs before any page module loads.
-    if (typeof window === "undefined") return;
     const result = await guardSession();
     if (result.status !== "authenticated") {
       throw redirect({ to: "/auth", search: { next: location.href }, replace: true });
