@@ -17,7 +17,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as DemoRouteImport } from './routes/demo'
-import { Route as DevCallPreviewRouteImport } from './routes/dev-call-preview'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoRouteImport } from './routes/go'
 import { Route as HelpRouteImport } from './routes/help'
@@ -134,11 +133,6 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DevCallPreviewRoute = DevCallPreviewRouteImport.update({
-  id: '/dev-call-preview',
-  path: '/dev-call-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -540,7 +534,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
-  '/dev-call-preview': typeof DevCallPreviewRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
@@ -626,7 +619,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
-  '/dev-call-preview': typeof DevCallPreviewRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
@@ -714,7 +706,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
-  '/dev-call-preview': typeof DevCallPreviewRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
@@ -804,7 +795,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
-    | '/dev-call-preview'
     | '/forgot-password'
     | '/go'
     | '/help'
@@ -890,7 +880,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
-    | '/dev-call-preview'
     | '/forgot-password'
     | '/go'
     | '/help'
@@ -977,7 +966,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
-    | '/dev-call-preview'
     | '/forgot-password'
     | '/go'
     | '/help'
@@ -1066,7 +1054,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
-  DevCallPreviewRoute: typeof DevCallPreviewRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoRoute: typeof GoRoute
   HelpRoute: typeof HelpRoute
@@ -1147,13 +1134,6 @@ declare module '@tanstack/react-router' {
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof DemoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dev-call-preview': {
-      id: '/dev-call-preview'
-      path: '/dev-call-preview'
-      fullPath: '/dev-call-preview'
-      preLoaderRoute: typeof DevCallPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -1855,7 +1835,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
-  DevCallPreviewRoute: DevCallPreviewRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GoRoute: GoRoute,
   HelpRoute: HelpRoute,
