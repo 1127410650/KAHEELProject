@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, type ReactElement } from "react";
 
 import { cn } from "@/lib/utils";
 import { kidsFriendMeta, type KidsFriendId, type KidsFriendMood } from "@/lib/kids-friends";
@@ -197,7 +197,7 @@ function Starfish({ mood }: { mood: KidsFriendMood }) {
   );
 }
 
-const RENDERERS: Record<KidsFriendId, (p: { mood: KidsFriendMood }) => JSX.Element> = {
+const RENDERERS: Record<KidsFriendId, (p: { mood: KidsFriendMood }) => ReactElement> = {
   birdy: Birdy,
   mishmisha: Kitty,
   dabdoob: Bear,
@@ -213,7 +213,7 @@ export interface KidsFriendProps {
   className?: string;
   /** حركة لطيفة دائمة: قفزة / تلويح */
   motion?: "none" | "hop" | "sway";
-  title?: string;
+  title?: string | undefined;
 }
 
 /** رسم شخصية واحدة. */
@@ -260,7 +260,7 @@ export function KidsFriendTap({
   id: KidsFriendId;
   size?: number;
   className?: string;
-  title?: string;
+  title?: string | undefined;
 }) {
   const [playing, setPlaying] = useState(false);
   const play = useCallback(() => {
