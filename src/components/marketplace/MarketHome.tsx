@@ -374,32 +374,33 @@ function LiveDemoEntry() {
   return (
     <Link
       to="/demo"
-      className="group relative flex min-h-[112px] overflow-hidden rounded-[24px] bg-[linear-gradient(110deg,#10002b,#3c096c_62%,#7b2cbf)] px-4 py-4 text-white shadow-[0_14px_34px_rgb(36_0_70/0.2)] outline-none ring-1 ring-white/60 transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#c77dff] sm:min-h-[124px] sm:px-6"
+      className="k-surface k-lift group relative flex min-h-[112px] overflow-hidden px-4 py-4 text-[#240046] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[124px] sm:px-6"
     >
-      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#c77dff]/38 blur-3xl" />
-      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-[#e0aaff]/18 blur-3xl" />
+      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#c77dff]/20 blur-3xl" />
+      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-[#e0aaff]/22 blur-3xl" />
       <div className="relative flex w-full items-center gap-3 sm:gap-5">
         <DemoParcelScene scene={copy.scene} />
         <span className="min-w-0 flex-1">
-          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#e0aaff] sm:text-[10px]">
+          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#7b2cbf] sm:text-[10px]">
             <span className="size-1.5 rounded-full bg-[#f59e0b] motion-safe:animate-pulse" />
             {locale === "ar" ? "بيئة تجريبية حيّة" : "Live demo environment"}
           </span>
           <strong className="mt-1 block text-base font-black sm:text-xl">
             {ar ? copy.titleAr : copy.titleEn}
           </strong>
-          <span className="mt-0.5 block text-[10px] font-bold text-[#e0aaff] sm:text-sm">
+          <span className="mt-0.5 block text-[10px] font-bold text-[#5a189a] sm:text-sm">
             {ar ? copy.subtitleAr : copy.subtitleEn}
           </span>
-          <span className="mt-1 block line-clamp-1 text-[9px] text-white/62 sm:text-xs">
+          <span className="mt-1 block line-clamp-1 text-[9px] text-[#5a189a]/80 sm:text-xs">
             {ar
               ? "جرّب كل أنواع الحسابات: عميل، متجر، عيادة، حلاق، محطة، ناقل، وإدارة المنصة"
               : "Try every account type: customer, store, clinic, barber, station, carrier, operations"}
           </span>
         </span>
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#3c096c] shadow-lg transition group-hover:-translate-x-1 rtl:group-hover:translate-x-1">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] text-white shadow-lg transition group-hover:-translate-x-1 rtl:group-hover:translate-x-1">
           <ChevronLeft className="size-5 rtl:rotate-0 ltr:rotate-180" aria-hidden />
         </span>
+
       </div>
     </Link>
   );
