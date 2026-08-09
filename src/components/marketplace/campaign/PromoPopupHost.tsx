@@ -297,17 +297,17 @@ export function PromoPopupHost() {
             type="button"
             onClick={() => dismiss(true)}
             aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
+            className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
           >
-            <EyeOff className="size-3" aria-hidden />
+            <EyeOff className="size-4" aria-hidden />
           </button>
           <button
             type="button"
             onClick={() => dismiss()}
             aria-label={ar ? "إغلاق" : "Close"}
-            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
+            className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046] text-white shadow-md"
           >
-            <X className="size-3" aria-hidden />
+            <X className="size-5" aria-hidden />
           </button>
         </div>
 
