@@ -105,7 +105,19 @@ export function useTopupMethods(enabled = true) {
         cardGateway: {
           enabled: card["enabled"] === true,
           provider: String(card["provider"] ?? "stripe"),
+          currency: (TOPUP_CURRENCIES.includes(String(card["currency"]) as TopupCurrency)
+            ? String(card["currency"])
+            : "SAR") as TopupCurrency,
+          packs: Array.isArray(card["packs"])
+            ? (card["packs"] as Record<string, unknown>[])
+                .map((pack) => ({
+                  credits: Number(pack["credits"]),
+                  amount: Number(pack["amount"]),
+                }))
+                .filter((pack) => Number.isInteger(pack.credits) && pack.credits > 0)
+            : [],
         },
+
       };
     },
   });
