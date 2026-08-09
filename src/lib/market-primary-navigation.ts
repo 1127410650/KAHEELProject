@@ -7,8 +7,8 @@
  * category filters — so the labels, the ids and the order can never diverge.
  * Never redeclare this list inside a component.
  *
- * Order is the approved one, 1 → 20, and must not change:
- * الرئيسية · عقارات · سيارات · أجهزة · عقار ديل · مطاعم · أثاث · خدمات ·
+ * Order is the approved one, and must not change:
+ * الرئيسية · عقارات · سيارات · أجهزة · مطاعم · أثاث · خدمات ·
  * أزياء · وظائف · تدريب · مدارس وجامعات · مناسبات · برمجة · الحدائق ·
  * الفنون · مفقودات · مشاريع واستثمارات · الرحلات والسياحة · المزيد
  *
@@ -16,10 +16,11 @@
  * (slug `schools-universities`) with its own subcategories; «تدريب» stays a
  * separate, untouched field.
  *
- * «عقار ديل» is NOT a second top-level category: it is a visible entry that
- * opens the single canonical «عقارات» category filtered on its real
- * `re-aqar-deal` subcategory. The database trigger `mkt_categories_no_duplicate`
- * refuses any new top-level record that would duplicate it.
+ * Real estate has exactly ONE entry: «عقارات». The old duplicate label that
+ * pointed at the same canonical category through its `re-aqar-deal`
+ * subcategory is gone from the interface; its search terms live on as aliases
+ * of «عقارات», and its old links keep resolving through
+ * `mkt-category-alias.ts`, so no shared or indexed URL breaks.
  *
  * This module is not imported by the admin console or the internal system.
  */
@@ -34,7 +35,7 @@ export interface PrimaryField {
   kind: PrimaryFieldKind;
   /** Canonical root category slug in `mkt_categories` (fields only). */
   categorySlug?: string;
-  /** Real subcategory slug used by alias entries such as «عقار ديل». */
+  /** Real subcategory slug, when a field opens one branch of its category. */
   subcategorySlug?: string;
   /** Extra search terms (ar/en/aliases) matched by the picker search. */
   aliases?: string[];
@@ -43,7 +44,12 @@ export interface PrimaryField {
 /** The approved list, in the approved order. */
 export const PRIMARY_FIELDS: PrimaryField[] = [
   { id: "home", kind: "home" },
-  { id: "realestate", kind: "field", categorySlug: "real-estate", aliases: ["عقار", "property"] },
+  {
+    id: "realestate",
+    kind: "field",
+    categorySlug: "real-estate",
+    aliases: ["عقار", "property", "aqar", "real estate deal"],
+  },
   { id: "cars", kind: "field", categorySlug: "cars", aliases: ["سيارة", "مركبات", "vehicles"] },
   {
     id: "devices",
@@ -51,13 +57,7 @@ export const PRIMARY_FIELDS: PrimaryField[] = [
     categorySlug: "devices",
     aliases: ["إلكترونيات", "جهاز", "electronics"],
   },
-  {
-    id: "aqardeal",
-    kind: "field",
-    categorySlug: "real-estate",
-    subcategorySlug: "re-aqar-deal",
-    aliases: ["عقار ديل", "aqar deal", "real estate deal"],
-  },
+
   { id: "restaurants", kind: "field", categorySlug: "restaurants", aliases: ["مطعم", "كافيه"] },
   { id: "furniture", kind: "field", categorySlug: "furniture", aliases: ["مفروشات"] },
   { id: "services", kind: "field", categorySlug: "services", aliases: ["خدمة", "مقاولات"] },
