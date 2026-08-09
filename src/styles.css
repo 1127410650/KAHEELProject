@@ -1789,24 +1789,29 @@ body:has(.market-surface) {
   border-radius: 1rem;
   background: color-mix(in srgb, #e0aaff 26%, white);
 
+  /* The sweep animates `background-position` only: no transform, no paint
+     containment surprises, and nothing a layout-shift observer can attribute
+     to a moving box. */
   &::after {
     position: absolute;
     inset: 0;
     content: "";
-    background: linear-gradient(
+    background-image: linear-gradient(
       100deg,
-      transparent 12%,
-      rgb(255 255 255 / 0.72) 48%,
-      transparent 84%
+      transparent 20%,
+      rgb(255 255 255 / 0.72) 50%,
+      transparent 80%
     );
-    transform: translateX(-100%);
-    animation: k-sweep 1.5s var(--k-ease, ease) infinite;
+    background-repeat: no-repeat;
+    background-size: 220% 100%;
+    background-position: 220% 0;
+    animation: k-sweep 1.6s var(--k-ease, ease) infinite;
   }
 }
 
 @keyframes k-sweep {
   to {
-    transform: translateX(100%);
+    background-position: -120% 0;
   }
 }
 
