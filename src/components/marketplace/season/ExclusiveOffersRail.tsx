@@ -63,7 +63,7 @@ export function ExclusiveOffersRail() {
               <Link
                 key={offer.id}
                 to={offer.click_url}
-                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-[#c77dff]/30 bg-[#3c096c] p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
               >
                 {offer.imageUrl ? (
                   <img
