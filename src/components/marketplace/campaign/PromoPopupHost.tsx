@@ -8,7 +8,14 @@
  *     بالتوازي: البطاقة لا تعترض الضغطة ولا تؤخّرها أبدًا.
  *  ٢) **مزحة الكبس المتكرر**: ٦ ضغطات خلال ٣ ثوانٍ ⇒ كَحيلان بمزحة «يكفي تكبس!».
  *  ٣) **دخول قسم الناس**: عند فتح القسم يدخل كَحيلان من الجانب بحركة واثقة
- *     ويلف كوفيته، مع فقاعة كلام مرحة تختفي وحدها بعد ٦ ثوانٍ.
+ *     ويلف كوفيته، مع فقاعة كلام مرحة.
+ *
+ * ## الإغلاق اليدوي حصرًا
+ *  • **لا مؤقّت اختفاء إطلاقًا**: البطاقة تبقى ظاهرة حتى يضغط المستخدم زر × .
+ *  • لا تُغلق بالضغط خارجها ولا بالتمرير ولا بالملاحة ولا بأي تفاعل آخر.
+ *  • زر × كبير (36px) وموضعه ثابت أعلى البطاقة، وبجانبه «عدم الإظهار» (٢٤ ساعة).
+ *  • بطاقة واحدة فقط: لا تظهر بطاقة جديدة ما دامت واحدة مفتوحة (`openRef`).
+ *  • البطاقة مرساة أسفل الشاشة فوق الشريط السفلي فلا تحجب المحتوى.
  *
  * ضمانات التصميم:
  *  • `position: fixed` + `pointer-events-none` على الغلاف ⇒ صفر هزّة تخطيط
@@ -16,7 +23,6 @@
  *  • الاستماع في مرحلة الالتقاط بلا `preventDefault` ⇒ الملاحة تكمل طبيعية.
  *  • احترام `prefers-reduced-motion`: ظهور واختفاء ناعم بلا سقوط أو ارتداد،
  *    والفتح يبقى فوريًا كما هو.
- *  • كل التوقيتات من `popup_pacing` في لوحة الإدارة عبر `configureMascotTiming`.
  *  • بوابات الأدب من `@/lib/popup-pacing`: لا شيء أثناء الكتابة أو مكالمة أو
  *    في المسارات الهادئة، ولا شيء بعد «عدم الإظهار اليوم».
  */
@@ -61,6 +67,12 @@ type CardMode = "drop" | "rapid" | "entrance";
  * محقّقة: تسقط الشخصية وتُفتح الوجهة في اللحظة نفسها.
  */
 const RESUME_KEY = "kaheel.mascot.resume";
+
+/**
+ * نافذة الاستئناف: تخصّ الانتقال الجاري فقط (٨ ثوانٍ). ليست عمرًا للبطاقة —
+ * البطاقة بعد ظهورها تبقى حتى يضغط المستخدم ×.
+ */
+const RESUME_WINDOW_MS = 8_000;
 
 interface ResumeRecord {
   title: string;
@@ -110,7 +122,10 @@ export function PromoPopupHost() {
   const lastRapidRef = useRef(-1);
   const lastEntranceRef = useRef(-1);
   const keyRef = useRef(0);
-  const hideTimerRef = useRef(0);
+  /** مؤقّت حركة الخروج فقط — لا يوجد مؤقّت اختفاء تلقائي. */
+  const fadeTimerRef = useRef(0);
+  /** بطاقة مفتوحة الآن؟ لمنع ظهور بطاقة ثانية فوقها. */
+  const openRef = useRef(false);
 
   // التوقيتات كلها من لوحة الإدارة — تُطبَّق أول ما تصل الإعدادات.
   useEffect(() => {
@@ -132,6 +147,8 @@ export function PromoPopupHost() {
   /** بوابات الأدب: أي واحدة منها تمنع المزحة بلا أن تمنع الوجهة. */
   const blocked = useCallback((): boolean => {
     if (!pacing.enabled) return true;
+    // بطاقة واحدة فقط في الشاشة: ما دامت مفتوحة لا تظهر بطاقة جديدة.
+    if (openRef.current) return true;
     if (popupsMuted() || popupsSuppressed()) return true;
     if (call) return true;
     if (isQuietPath(pathname)) return true;
@@ -140,11 +157,21 @@ export function PromoPopupHost() {
     return false;
   }, [call, pacing.enabled, pathname]);
 
+  /**
+   * الإغلاق اليدوي حصرًا — لا مؤقّت اختفاء في المنصة إطلاقًا. المؤقّت الوحيد هنا
+   * هو زمن حركة الخروج الناعمة (220ms) بعد ضغط المستخدم على الزر.
+   */
   const dismiss = useCallback((mute?: boolean) => {
-    window.clearTimeout(hideTimerRef.current);
+    window.clearTimeout(fadeTimerRef.current);
     if (mute) mutePopups(24);
+    openRef.current = false;
+    try {
+      sessionStorage.removeItem(RESUME_KEY);
+    } catch {
+      /* التخزين محجوب: لا شيء لنحذفه. */
+    }
     setLeaving(true);
-    hideTimerRef.current = window.setTimeout(() => {
+    fadeTimerRef.current = window.setTimeout(() => {
       setCard(null);
       setLeaving(false);
     }, 220);
@@ -169,6 +196,8 @@ export function PromoPopupHost() {
       } else {
         copy = bossCopyAt(ar, rotate(bossCopyCount(ar), lastCopyRef));
       }
+      window.clearTimeout(fadeTimerRef.current);
+      openRef.current = true;
       setLeaving(false);
       setCard({
         key: keyRef.current,
@@ -177,21 +206,20 @@ export function PromoPopupHost() {
         ...copy,
       });
 
-      const life = mode === "entrance" ? MASCOT_TIMING.entranceMs : MASCOT_TIMING.dropVisibleMs;
       if (mode !== "entrance") {
         try {
+          // نافذة استئناف قصيرة: تخصّ الانتقال الحالي فقط ولا تُعيد بطاقة قديمة
+          // بعد ذلك. البطاقة نفسها بعد ظهورها تبقى حتى الإغلاق اليدوي.
           sessionStorage.setItem(
             RESUME_KEY,
-            JSON.stringify({ mode, from: "start", ...copy, until: Date.now() + life }),
+            JSON.stringify({ mode, from: "start", ...copy, until: Date.now() + RESUME_WINDOW_MS }),
           );
         } catch {
           /* التخزين ممتلئ أو محجوب: المشهد يبقى داخل الصفحة فقط. */
         }
       }
-      window.clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = window.setTimeout(() => dismiss(), life);
     },
-    [ar, dismiss],
+    [ar],
   );
 
   // الاستماع في مرحلة الالتقاط: نقرأ الحدث فقط، ثم نترك المتصفح يكمل عمله.
@@ -209,40 +237,32 @@ export function PromoPopupHost() {
   }, [blocked, show]);
 
   /**
-   * الملاحة لا تُلغي السقوط: اللمسة نفسها هي التي تفتح الوجهة، فلو صفّرنا
-   * البطاقة عند تغيّر المسار لما ظهرت الشخصية أبدًا في اللمسات التي تنقل
-   * المستخدم. لذلك نُنهي مشهد الدخول فقط، ونترك مؤقّت السقوط يكمل عمله.
+   * الملاحة لا تُغلق البطاقة: الإغلاق بزر × حصرًا، فالبطاقة التي ظهرت مع اللمسة
+   * تبقى مقروءة على الوجهة الجديدة. لا نُظهر مشهد دخول جديد ما دامت بطاقة مفتوحة.
    */
   useEffect(() => {
-    setCard((prev) => {
-      if (prev?.mode !== "entrance") return prev;
-      window.clearTimeout(hideTimerRef.current);
-      return null;
-    });
-    setLeaving(false);
     if (!isPeoplePath(pathname)) return;
     if (blocked()) return;
     // تأخير قصير حتى تستقر الصفحة، فالمشهد يدخل على محتوى جاهز لا على فراغ.
-    const timer = window.setTimeout(() => show("entrance"), 500);
+    const timer = window.setTimeout(() => {
+      if (blocked()) return;
+      show("entrance");
+    }, 500);
     return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // استئناف مشهد سقوط بدأ قبل تحميل كامل للصفحة.
+  // استئناف مشهد سقوط بدأ قبل تحميل كامل للصفحة — ثم يبقى حتى الإغلاق اليدوي.
   useEffect(() => {
     const record = readResume();
     if (!record || blocked()) return;
     keyRef.current += 1;
+    openRef.current = true;
     setCard({ key: keyRef.current, ...record });
-    window.clearTimeout(hideTimerRef.current);
-    hideTimerRef.current = window.setTimeout(
-      () => dismiss(),
-      Math.max(320, record.until - Date.now()),
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => () => window.clearTimeout(hideTimerRef.current), []);
+  useEffect(() => () => window.clearTimeout(fadeTimerRef.current), []);
 
   if (!card) return null;
 
@@ -266,8 +286,8 @@ export function PromoPopupHost() {
 
   return (
     <div
-      className={`pointer-events-none fixed inset-0 z-[80] flex p-4 ${
-        entrance ? "items-end justify-start pb-24" : "items-center justify-center"
+      className={`pointer-events-none fixed inset-0 z-[80] flex items-end p-4 pb-24 ${
+        entrance ? "justify-start" : "justify-center"
       }`}
       aria-live="polite"
     >
@@ -276,24 +296,24 @@ export function PromoPopupHost() {
         data-kaheel-drop-card
         role="status"
         style={{ transformOrigin: "bottom center" }}
-        className={`pointer-events-none relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
+        className={`pointer-events-none relative flex w-full max-w-[17rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
       >
-        <div className="absolute end-2 top-2 flex gap-1">
+        <div className="absolute end-2 top-2 flex gap-1.5">
           <button
             type="button"
             onClick={() => dismiss(true)}
             aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
+            className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046]/10 text-[#3c096c]"
           >
-            <EyeOff className="size-3" aria-hidden />
+            <EyeOff className="size-4" aria-hidden />
           </button>
           <button
             type="button"
             onClick={() => dismiss()}
             aria-label={ar ? "إغلاق" : "Close"}
-            className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#240046]/80 text-white"
+            className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-[#240046] text-white shadow-md"
           >
-            <X className="size-3" aria-hidden />
+            <X className="size-5" aria-hidden />
           </button>
         </div>
 

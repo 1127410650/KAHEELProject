@@ -93,8 +93,8 @@ export function PopupPacingCard() {
         </div>
         <p className="text-xs text-muted-foreground">
           {ar
-            ? "الشخصية لا تظهر من تلقاء نفسها: يسقط «الزعيم كَحيلان» لمنتصف الشاشة عند لمس الزائر لرابط أو زر، ثم يختفي بهدوء بلا تعطيل الوجهة. ولا تظهر أثناء الكتابة أو المحادثة أو المكالمة أو الدفع. وفي قسم «الناس» يدخل من الجانب بمشهد تعريف قصير."
-            : "The mascot never self-appears: Boss Kaheelan drops to the centre when the visitor taps a link or button, then fades out without ever blocking the destination. Never during typing, chat, a call or checkout. In the People section he enters from the side with a short intro scene."}
+            ? "الشخصية لا تظهر من تلقاء نفسها: يسقط «الزعيم كَحيلان» عند لمس الزائر لرابط أو زر، وتبقى البطاقة ظاهرة حتى يضغط الزائر زر الإغلاق (×) — لا اختفاء تلقائي. ولا تحجب المحتوى ولا تعطّل التمرير، ولا تظهر أثناء الكتابة أو المحادثة أو المكالمة أو الدفع، ولا تظهر بطاقة ثانية ما دامت واحدة مفتوحة."
+            : "The mascot never self-appears: Boss Kaheelan drops in when the visitor taps a link or button, and the card stays until the visitor presses close (×) — no auto-dismiss. It never blocks content or scrolling, never shows during typing, chat, a call or checkout, and never stacks a second card."}
         </p>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -104,24 +104,12 @@ export function PopupPacingCard() {
             "Gap between drops (ms)",
             "٢٠٠٠ – ٣٠٠٠٠٠",
           )}
-          {field(
-            "dropVisibleMs",
-            "بقاء بطاقة السقوط (مللي ثانية)",
-            "Drop card lifetime (ms)",
-            "١١٠٠ – ١٥٠٠٠ (حركة السقوط نفسها ١٠٥٠)",
-          )}
           {field("rapidTaps", "ضغطات مزحة الكبس", "Rapid-tap joke threshold", "٣ – ١٥ ضغطة")}
           {field(
             "rapidWindowMs",
             "نافذة الكبس (مللي ثانية)",
             "Rapid-tap window (ms)",
             "١٠٠٠ – ١٥٠٠٠",
-          )}
-          {field(
-            "entranceMs",
-            "مشهد دخول قسم الناس (مللي ثانية)",
-            "People entrance scene (ms)",
-            "٢٠٠٠ – ٢٠٠٠٠",
           )}
         </div>
 
