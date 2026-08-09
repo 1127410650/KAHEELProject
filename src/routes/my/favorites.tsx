@@ -10,7 +10,7 @@ import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 
 export const Route = createFileRoute("/my/favorites")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "المفضلة — گحيل" },

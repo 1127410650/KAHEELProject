@@ -38,7 +38,7 @@ import {
 import { useMyStorefront } from "@/lib/mkt-store";
 
 export const Route = createFileRoute("/business/services/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "مركز مقدم الخدمة — گحيل" },

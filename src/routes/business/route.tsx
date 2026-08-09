@@ -13,7 +13,10 @@ import { guardSession } from "@/lib/auth-session";
  * database (RLS) grants anything.
  *
  * `ssr: false` because the Supabase session lives in `localStorage`: gating this
- * subtree on the server would redirect every hard refresh to `/auth`.
+ * subtree on the server would redirect every hard refresh to `/auth`. It must stay
+ * `false` and not `"data-only"`: with `"data-only"` the guard runs on the server
+ * (where there is no session to see) and is NOT re-run in the browser, so a
+ * signed-out visitor reaches the page module — verified in the browser.
  */
 export const Route = createFileRoute("/business")({
   ssr: false,

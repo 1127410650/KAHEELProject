@@ -14,7 +14,7 @@ import { createStudyQuestions, summarizeLocally } from "@/lib/syria-directory";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/guides/students")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "دليل الطالب — گحيل" },

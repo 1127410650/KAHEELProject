@@ -8,7 +8,7 @@ import { useActiveAccount } from "@/lib/mkt-account";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 
 export const Route = createFileRoute("/my/quotes")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "طلبات عروض السعر — گحيل" },

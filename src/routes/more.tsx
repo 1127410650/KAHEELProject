@@ -54,7 +54,7 @@ function AccountTypeIcon({ account, className }: { account: MktAccount; classNam
 }
 
 export const Route = createFileRoute("/more")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): { section?: "accounts" } =>
     search["section"] === "accounts" ? { section: "accounts" } : {},
 

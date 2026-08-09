@@ -17,7 +17,7 @@ const title = "الدول والمدن — إدارة گحيل";
 const description = "إدارة الدول والمدن المتاحة في السوق ومراجعة المدن المقترحة من المستخدمين.";
 
 export const Route = createFileRoute("/admin/locations")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title },

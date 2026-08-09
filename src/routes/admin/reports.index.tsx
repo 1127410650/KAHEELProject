@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/admin/reports/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "صندوق البلاغات — إدارة گحيل" },

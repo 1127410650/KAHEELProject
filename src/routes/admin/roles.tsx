@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/admin/roles")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "الأدوار والصلاحيات — إدارة المنصة" },

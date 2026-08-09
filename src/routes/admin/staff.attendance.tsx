@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/admin/staff/attendance")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "الحضور والمناوبات — إدارة المنصة" },

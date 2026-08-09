@@ -17,7 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/admin/stores")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "المتاجر — لوحة مدير النظام" },

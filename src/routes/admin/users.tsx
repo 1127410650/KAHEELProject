@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/admin/users")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>) => ({
     restricted:
       search["restricted"] === true || search["restricted"] === "true" ? true : undefined,

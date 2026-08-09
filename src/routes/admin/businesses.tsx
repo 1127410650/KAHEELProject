@@ -39,7 +39,7 @@ function isInteractive(target: EventTarget | null): boolean {
 }
 
 export const Route = createFileRoute("/admin/businesses")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "إدارة المتاجر — إدارة المنصة" },

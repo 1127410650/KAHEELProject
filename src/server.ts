@@ -58,7 +58,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
  * routes are handed to the app untouched. Every 301 target is the same for all
  * callers; the one identity-dependent destination is `/go`, which resolves the
  * caller in the browser instead of being a cacheable redirect — so `/me` and
- * `/audit` 301 to `/go` and stop there. See `routes-map.ts`.
+ * `/audit` answer an uncacheable 302 to `/go` and stop there — see `routes-map.ts`.
  *
  * Each hit is logged once to the server log so retiring an old URL later is a
  * decision based on real traffic rather than a guess. Path only — no query
@@ -92,11 +92,24 @@ function permanentRedirect(request: Request): Response | null {
   const location = `${targetPath}${targetPath.includes("?") ? "" : url.search}${targetHash ? `#${targetHash}` : ""}`;
   // Only a mapped rule is worth counting; a trailing-slash tidy-up is noise.
   if (target) console.info(`[legacy-route] ${path} -> ${targetPath}`);
+
+  // `/go` is the identity resolver: the screen a caller ends up on depends on who
+  // they are. Sending a cacheable 301 there would let a browser, a CDN or a
+  // shared proxy remember the hop permanently for URLs whose meaning is personal
+  // (`/me`, `/audit`), so those answer a temporary, uncacheable redirect instead.
+  // Every other target is the same for all callers and stays a cacheable 301.
+  const identityDependent = targetPath === "/go" || targetPath.startsWith("/go?");
   return new Response(null, {
-    status: 301,
-    headers: { location, "cache-control": "public, max-age=3600" },
+    status: identityDependent ? 302 : 301,
+    headers: {
+      location,
+      "cache-control": identityDependent
+        ? "no-store, no-cache, must-revalidate"
+        : "public, max-age=3600",
+    },
   });
 }
+
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {

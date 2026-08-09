@@ -72,7 +72,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/my/ads/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "إعلاناتي — گحيل" },

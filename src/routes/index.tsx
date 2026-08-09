@@ -9,7 +9,7 @@ const description =
   "گحيل: سوق إلكتروني للعقارات والسيارات والأجهزة والخدمات والمعدات والموردين. تصفّح الإعلانات وتواصل مع المعلن مباشرة.";
 
 export const Route = createFileRoute("/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title },

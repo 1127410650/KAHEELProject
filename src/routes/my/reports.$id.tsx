@@ -12,7 +12,7 @@ import { ReportThread } from "@/components/marketplace/ReportThread";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/my/reports/$id")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "تفاصيل البلاغ — گحيل" },

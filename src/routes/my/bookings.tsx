@@ -23,7 +23,7 @@ import {
 } from "@/lib/mkt-services";
 
 export const Route = createFileRoute("/my/bookings")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "حجوزاتي — گحيل" },

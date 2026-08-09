@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button";
 const searchSchema = z.object({ tab: z.string().optional() });
 
 export const Route = createFileRoute("/admin/verifications_/$id")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: searchSchema,
   head: () => ({
     meta: [

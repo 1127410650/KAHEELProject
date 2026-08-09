@@ -104,7 +104,7 @@ const description =
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/search")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): SearchParams => {
     const out: SearchParams = {};
     for (const key of PARAM_KEYS) {

@@ -46,7 +46,7 @@ import {
 } from "@/lib/mkt-provider-network";
 
 export const Route = createFileRoute("/business/partners")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "حساب المتجر وشبكة مقدمي الخدمة — گحيل" },
