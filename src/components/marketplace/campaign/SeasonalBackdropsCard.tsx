@@ -152,7 +152,12 @@ export function SeasonalBackdropsCard() {
           accent,
           mascot,
           mascot_path: mascot === "custom" ? mascotFile?.path ?? null : null,
+          headline_ar: headlineAr.trim(),
+          headline_en: headlineEn.trim(),
+          subheadline_ar: subAr.trim(),
+          subheadline_en: subEn.trim(),
           priority: Number(priority) || 0,
+
           status: "draft",
           ...(startsAt ? { starts_at: new Date(startsAt).toISOString() } : {}),
           ends_at: endsAt ? new Date(endsAt).toISOString() : null,
