@@ -90,6 +90,8 @@ function permanentRedirect(request: Request): Response | null {
 
   const [targetPath = resolved, targetHash = ""] = resolved.split("#");
   const location = `${targetPath}${targetPath.includes("?") ? "" : url.search}${targetHash ? `#${targetHash}` : ""}`;
+  // Only a mapped rule is worth counting; a trailing-slash tidy-up is noise.
+  if (target) console.info(`[legacy-route] ${path} -> ${targetPath}`);
   return new Response(null, {
     status: 301,
     headers: { location, "cache-control": "public, max-age=3600" },
