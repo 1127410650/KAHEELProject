@@ -4,13 +4,15 @@
  *
  * The balance is never written from the browser: `mkt_ad_credit_*` definer
  * functions own every movement and write the matching ledger entry, so a client
- * can only read its own wallet and ask for a purchase.
+ * can only read its own wallet, request a purchase, or spend what it already
+ * has.
  *
- * No payment provider is connected at this stage, and no self-service purchase
- * path exists: a provider cannot top itself up. Credit is added manually by a
- * platform admin (`mkt_ad_credit_admin_grant`), which also writes the ledger
- * entry. `mkt_ad_credit_request_purchase` is revoked from clients in the
- * database until a payment provider is actually available.
+ * No payment provider is connected yet, and that shows in one place only: a
+ * purchase request lands as a `pending` entry and adds nothing to the balance
+ * until a platform admin settles it (`mkt_ad_credit_admin_settle`) with a
+ * payment reference. Wiring a real gateway later means settling that same
+ * pending entry from a verified webhook — the wallet, the ledger and the
+ * consumption path do not change.
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -77,6 +79,60 @@ export function useAdCreditEntries(walletId: string | null) {
         .limit(200);
       if (error) throw error;
       return (data ?? []) as AdCreditEntry[];
+    },
+  });
+}
+
+/**
+ * Sale price of credit, in SAR. Kept here (not in the database) because it is
+ * a presentational price list the platform changes freely; the authoritative
+ * amount of a purchase is the `price_sar` recorded on the ledger entry.
+ */
+export interface AdCreditPack {
+  credits: number;
+  priceSar: number;
+}
+
+export const AD_CREDIT_PACKS: readonly AdCreditPack[] = [
+  { credits: 100, priceSar: 100 },
+  { credits: 500, priceSar: 450 },
+  { credits: 1000, priceSar: 850 },
+  { credits: 5000, priceSar: 4000 },
+];
+
+/**
+ * Records a purchase request. Returns the pending entry id; the balance stays
+ * untouched until an admin settles it.
+ */
+export function useRequestAdCredit(tenantId: string | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ credits, priceSar }: { credits: number; priceSar?: number | null }) => {
+      const { data, error } = await supabase.rpc("mkt_ad_credit_request_purchase", {
+        _amount: credits,
+        ...(priceSar != null ? { _price_sar: priceSar } : {}),
+        ...(tenantId ? { _tenant_id: tenantId } : {}),
+      });
+      if (error) throw error;
+      return data as unknown as string;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["mkt", "ad-credit-entries"] });
+    },
+  });
+}
+
+/** Withdraws the caller's own still-unpaid purchase request. */
+export function useCancelAdCreditRequest() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (entryId: string) => {
+      const { error } = await supabase.rpc("mkt_ad_credit_cancel_request", { _entry_id: entryId });
+      if (error) throw error;
+      return true;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["mkt", "ad-credit-entries"] });
     },
   });
 }

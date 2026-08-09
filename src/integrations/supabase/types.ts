@@ -7649,6 +7649,10 @@ export type Database = {
         Args: { _entry_id: string; _payment_ref?: string }
         Returns: number
       }
+      mkt_ad_credit_cancel_request: {
+        Args: { _entry_id: string }
+        Returns: boolean
+      }
       mkt_ad_credit_consume: {
         Args: {
           _amount: number

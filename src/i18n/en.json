@@ -3582,6 +3582,56 @@
         "adsTitle": "Ads from this store",
         "minutes": "min"
       }
+    },
+    "adCredit": {
+      "title": "Ad credit",
+      "balance": "Remaining balance",
+      "purchased": "Total added",
+      "consumed": "Total spent",
+      "buyTitle": "Buy credit",
+      "buyAction": "Request credit purchase",
+      "manualNotice": "Your request is recorded now; the credit is added once Kaheel confirms the payment. No payment gateway is connected yet.",
+      "requested": "Purchase request recorded",
+      "requestFailed": "Could not record the purchase request",
+      "pendingTitle": "Requests awaiting payment confirmation",
+      "cancel": "Cancel request",
+      "cancelled": "Request cancelled",
+      "cancelFailed": "Could not cancel the request",
+      "ledger": "Movement log",
+      "ledgerEmpty": "No movements yet.",
+      "kind": {
+        "purchase": "Credit purchase",
+        "admin_grant": "Added by admin",
+        "consume": "Spent on promotion",
+        "adjustment": "Correction",
+        "refund": "Refund"
+      },
+      "status": {
+        "pending": "Awaiting payment",
+        "settled": "Settled",
+        "cancelled": "Cancelled"
+      },
+      "admin": {
+        "title": "Ad credit",
+        "pending": "Purchase requests awaiting confirmation",
+        "noPending": "No pending requests.",
+        "paymentRef": "Payment reference",
+        "settle": "Confirm payment",
+        "settled": "Payment confirmed and credit added",
+        "settleFailed": "Could not confirm the payment",
+        "grantTitle": "Add or correct credit",
+        "walletId": "Wallet ID",
+        "amount": "Units",
+        "note": "Note",
+        "grant": "Add credit",
+        "adjust": "Correct",
+        "granted": "Movement recorded",
+        "grantFailed": "Could not record the movement",
+        "invalid": "Enter a wallet ID and a non-zero whole number",
+        "grantHint": "A negative value lowers the balance; every movement is logged with the acting admin.",
+        "wallets": "Wallets",
+        "allEntries": "All movements"
+      }
     }
   },
   "routeError": {
@@ -3629,7 +3679,8 @@
       "attendance": "Attendance & shifts",
       "contentRules": "Content rules",
       "analytics": "Analytics",
-      "stores": "Storefronts & products"
+      "stores": "Storefronts & products",
+      "adCredit": "Ad credit"
     },
     "alerts": {
       "title": "Alerts",

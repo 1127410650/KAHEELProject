@@ -29,6 +29,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAdCreditRouteImport } from './routes/admin/ad-credit'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
@@ -57,6 +58,7 @@ import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$wor
 import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
 import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
 import { Route as MyMessagesRouteImport } from './routes/my/messages'
@@ -187,6 +189,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAdCreditRoute = AdminAdCreditRouteImport.update({
+  id: '/ad-credit',
+  path: '/ad-credit',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
@@ -328,6 +335,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MyAdCreditRoute = MyAdCreditRouteImport.update({
+  id: '/ad-credit',
+  path: '/ad-credit',
+  getParentRoute: () => MyRouteRoute,
 } as any)
 const MyBookingsRoute = MyBookingsRouteImport.update({
   id: '/bookings',
@@ -506,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
+  '/admin/ad-credit': typeof AdminAdCreditRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -533,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
@@ -584,6 +598,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
+  '/admin/ad-credit': typeof AdminAdCreditRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -611,6 +626,7 @@ export interface FileRoutesByTo {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
@@ -666,6 +682,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
+  '/admin/ad-credit': typeof AdminAdCreditRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -693,6 +710,7 @@ export interface FileRoutesById {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
@@ -749,6 +767,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/services'
+    | '/admin/ad-credit'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -776,6 +795,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/my/ad-credit'
     | '/my/bookings'
     | '/my/favorites'
     | '/my/messages'
@@ -827,6 +847,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/search'
+    | '/admin/ad-credit'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -854,6 +875,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/my/ad-credit'
     | '/my/bookings'
     | '/my/favorites'
     | '/my/messages'
@@ -908,6 +930,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/services'
+    | '/admin/ad-credit'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -935,6 +958,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/my/ad-credit'
     | '/my/bookings'
     | '/my/favorites'
     | '/my/messages'
@@ -1144,6 +1168,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/ad-credit': {
+      id: '/admin/ad-credit'
+      path: '/ad-credit'
+      fullPath: '/admin/ad-credit'
+      preLoaderRoute: typeof AdminAdCreditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/applications': {
       id: '/admin/applications'
       path: '/applications'
@@ -1339,6 +1370,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/my/ad-credit': {
+      id: '/my/ad-credit'
+      path: '/ad-credit'
+      fullPath: '/my/ad-credit'
+      preLoaderRoute: typeof MyAdCreditRouteImport
+      parentRoute: typeof MyRouteRoute
     }
     '/my/bookings': {
       id: '/my/bookings'
@@ -1561,6 +1599,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteRouteChildren {
+  AdminAdCreditRoute: typeof AdminAdCreditRoute
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
@@ -1590,6 +1629,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAdCreditRoute: AdminAdCreditRoute,
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
@@ -1651,6 +1691,7 @@ const BusinessRouteRouteWithChildren = BusinessRouteRoute._addFileChildren(
 )
 
 interface MyRouteRouteChildren {
+  MyAdCreditRoute: typeof MyAdCreditRoute
   MyBookingsRoute: typeof MyBookingsRoute
   MyFavoritesRoute: typeof MyFavoritesRoute
   MyMessagesRoute: typeof MyMessagesRoute
@@ -1667,6 +1708,7 @@ interface MyRouteRouteChildren {
 }
 
 const MyRouteRouteChildren: MyRouteRouteChildren = {
+  MyAdCreditRoute: MyAdCreditRoute,
   MyBookingsRoute: MyBookingsRoute,
   MyFavoritesRoute: MyFavoritesRoute,
   MyMessagesRoute: MyMessagesRoute,
@@ -1733,13 +1775,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
