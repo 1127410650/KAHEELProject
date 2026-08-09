@@ -46,3 +46,19 @@ export function canonicalCategorySlug(slug: string): string {
 export function isLegacyCategorySlug(slug: string): boolean {
   return canonicalCategorySlug(slug) !== slug;
 }
+
+/**
+ * Subcategory slugs whose label is retired from the interface.
+ *
+ * The record stays in `mkt_categories` — no row is renamed or deleted, and any
+ * listing already saved under it keeps working — but the label is no longer
+ * offered anywhere: real estate is presented under the single base name
+ * «عقارات».
+ */
+const RETIRED_SUBCATEGORY_SLUGS = new Set(["re-aqar-deal"]);
+
+/** True when a subcategory must not be shown as a choice in the interface. */
+export function isRetiredSubcategory(slug: string | null | undefined): boolean {
+  return !!slug && RETIRED_SUBCATEGORY_SLUGS.has(slug);
+}
+
