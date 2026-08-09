@@ -1784,6 +1784,116 @@ body:has(.market-surface) {
   }
 }
 
+/* Staggered entrance: the observer adds `is-in`, and each card carries its own
+   `--k-step`, so the whole grid animates on transform/opacity only. */
+@utility k-rise {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  will-change: transform, opacity;
+
+  &.is-in {
+    animation: k-rise-in 420ms var(--k-ease, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+    animation-delay: calc(var(--k-step, 0) * 60ms);
+  }
+}
+
+@keyframes k-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Very slow float for section icons. Paused unless the card is on screen. */
+@utility k-float {
+  .is-in & ,
+  &.is-in {
+    animation: k-float-soft 3.6s ease-in-out infinite;
+    animation-delay: calc(var(--k-step, 0) * 180ms);
+  }
+}
+
+@keyframes k-float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
+}
+
+/* One-shot pulse for badges and prices as they arrive. */
+@utility k-pop {
+  .is-in & ,
+  &.is-in {
+    animation: k-pop-once 620ms var(--k-ease, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+    animation-delay: calc(var(--k-step, 0) * 60ms + 180ms);
+  }
+}
+
+@keyframes k-pop-once {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  62% {
+    opacity: 1;
+    transform: scale(1.045);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Rare shimmer across featured cards: a transform-only sweep of one overlay. */
+@utility k-shimmer {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    inset: -20% -40%;
+    z-index: 20;
+    content: "";
+    pointer-events: none;
+    background: linear-gradient(
+      104deg,
+      transparent 42%,
+      rgb(255 255 255 / 0.3) 50%,
+      transparent 58%
+    );
+    opacity: 0;
+    transform: translate3d(-60%, 0, 0);
+  }
+
+  &.is-in::after {
+    animation: k-shimmer-pass 7.5s var(--k-ease, ease) calc(var(--k-step, 0) * 900ms) infinite;
+  }
+}
+
+@keyframes k-shimmer-pass {
+  0% {
+    opacity: 0;
+    transform: translate3d(-60%, 0, 0);
+  }
+  6% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 0;
+    transform: translate3d(60%, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(60%, 0, 0);
+  }
+}
+
 /* ── loading placeholders ─────────────────────────────────────────────── */
 
 /* A skeleton that occupies exactly the final box: callers set the geometry,
@@ -1844,6 +1954,29 @@ body:has(.market-surface) {
   .k-skel::after {
     animation: none;
     opacity: 0.5;
+  }
+
+  /* No automatic motion, but the boxes stay visible and taps keep responding. */
+  .k-rise,
+  .k-rise.is-in,
+  .k-float.is-in,
+  .k-pop.is-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .is-in .k-float,
+  .is-in .k-pop {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .k-shimmer::after,
+  .k-shimmer.is-in::after {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
 
