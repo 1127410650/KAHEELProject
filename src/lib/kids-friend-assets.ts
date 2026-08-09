@@ -3,7 +3,7 @@
  * سجل أصول «أصدقاء كَحيل الصغار» — الشكل المعتمد لشخصيات قسم الأطفال.
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * ست شخصيات ثلاثية الأبعاد (3D render) بأسلوب واحد: إضاءة استوديو دافئة،
+ * سبع شخصيات ثلاثية الأبعاد (3D render) بأسلوب واحد: إضاءة استوديو دافئة،
  * خطوط مستديرة ناعمة، عيون كبيرة لامعة، خدود وردية، ولمسة بنفسجية من هوية
  * كَحيل في تفصيلة صغيرة لكل شخصية (وشاح، فيونكة، حزام حقيبة، شارة).
  *
@@ -22,6 +22,10 @@ import birdySm from "@/assets/characters/kids-birdy-sm.webp";
 import birdySadFull from "@/assets/characters/kids-birdy-sad.webp";
 import birdySadSm from "@/assets/characters/kids-birdy-sad-sm.webp";
 import nonoFull from "@/assets/characters/kids-nono.webp";
+import samiFull from "@/assets/characters/kids-sami.webp";
+import samiSm from "@/assets/characters/kids-sami-sm.webp";
+import karimFull from "@/assets/characters/kids-karim.webp";
+import karimSm from "@/assets/characters/kids-karim-sm.webp";
 import nonoSm from "@/assets/characters/kids-nono-sm.webp";
 import dabdoobFull from "@/assets/characters/kids-dabdoob.webp";
 import dabdoobSm from "@/assets/characters/kids-dabdoob-sm.webp";
@@ -46,11 +50,11 @@ export interface KidsFriendArt {
 
 export const KIDS_FRIEND_ART: Record<KidsFriendId, KidsFriendArt> = {
   birdy: {
-    full: { src: birdyFull, width: 370, height: 640 },
+    full: { src: birdyFull, width: 639, height: 640 },
     sm: { src: birdySm, width: 127, height: 220 },
   },
   nono: {
-    full: { src: nonoFull, width: 492, height: 640 },
+    full: { src: nonoFull, width: 440, height: 440 },
     sm: { src: nonoSm, width: 169, height: 220 },
   },
   dabdoob: {
@@ -65,6 +69,14 @@ export const KIDS_FRIEND_ART: Record<KidsFriendId, KidsFriendArt> = {
     full: { src: najoomaFull, width: 682, height: 640 },
     sm: { src: najoomaSm, width: 234, height: 220 },
   },
+  sami: {
+    full: { src: samiFull, width: 591, height: 640 },
+    sm: { src: samiSm, width: 203, height: 220 },
+  },
+  karim: {
+    full: { src: karimFull, width: 431, height: 640 },
+    sm: { src: karimSm, width: 148, height: 220 },
+  },
 };
 
 /**
@@ -72,8 +84,8 @@ export const KIDS_FRIEND_ART: Record<KidsFriendId, KidsFriendArt> = {
  * تُستخدم عند «لا توجد نتائج» لأي قسم داخل عالم الأطفال.
  */
 export const KIDS_FRIEND_SAD: KidsFriendArt = {
-  full: { src: birdySadFull, width: 355, height: 640 },
-  sm: { src: birdySadSm, width: 122, height: 220 },
+  full: { src: birdySadFull, width: 408, height: 640 },
+  sm: { src: birdySadSm, width: 140, height: 220 },
 };
 
 /** الأصل المناسب للقياس المطلوب: `sm` للأيقونات، `full` للأحجام الكبيرة. */
