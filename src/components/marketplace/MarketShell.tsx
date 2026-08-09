@@ -364,7 +364,7 @@ const NO_FOOTER_PREFIXES = [
   "/more",
   "/auth",
   "/register",
-  "/welcome",
+  "/go",
 ];
 
 export function footerVariantForPath(pathname: string): FooterVariant {

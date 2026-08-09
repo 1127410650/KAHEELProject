@@ -149,7 +149,7 @@ export function AccountMenu() {
     try {
       const ok = await select(accountKey);
       if (!ok) toast.error(t("market.entry.switchFailed"));
-      else void navigate({ to: "/me" });
+      else void navigate({ to: "/go" });
     } finally {
       setSwitching(null);
     }
