@@ -47,6 +47,8 @@ export interface ActiveCall {
   /** Set when the call ended for a reason the user should see. */
   errorKey: string | null;
   muted: boolean;
+  /** Loudspeaker routing when the browser exposes output selection. */
+  speaker: boolean;
   /** Seconds since the call was accepted; 0 until then. */
   seconds: number;
   /**
@@ -70,6 +72,10 @@ interface CallCenterValue {
   decline: () => Promise<void>;
   hangUp: () => Promise<void>;
   toggleMute: () => void;
+  toggleSpeaker: () => void;
+  /** True while the full-screen call view is collapsed into the top bar. */
+  minimized: boolean;
+  setMinimized: (value: boolean) => void;
   dismiss: () => void;
   /** Stops receiving calls right away and ends whatever is live. */
   stopReceiving: () => Promise<void>;
@@ -78,7 +84,8 @@ interface CallCenterValue {
 }
 
 
-const CallCenterContext = createContext<CallCenterValue | null>(null);
+/** Exported so isolated previews/tests can supply a call state. */
+export const CallCenterContext = createContext<CallCenterValue | null>(null);
 
 const TERMINAL: CallStatus[] = ["declined", "no_answer", "busy", "failed", "ended", "cancelled"];
 
@@ -111,6 +118,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
 
   const [call, setCall] = useState<ActiveCall | null>(null);
   const [starting, setStarting] = useState(false);
+  const [minimized, setMinimized] = useState(false);
 
   const sessionRef = useRef<CallSession | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -211,6 +219,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
               peerUserId: null,
               errorKey: null,
               muted: false,
+              speaker: false,
               seconds: 0,
               needsAudioGesture: false,
             });
@@ -263,6 +272,11 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       void supabase.removeChannel(channel);
     };
   }, [call?.id, call?.status, clearTimers, finish]);
+
+  /* ----------- a new call always opens the full-screen view ------------- */
+  useEffect(() => {
+    if (call?.id) setMinimized(false);
+  }, [call?.id]);
 
   /* --------------------------- duration ticker -------------------------- */
   useEffect(() => {
@@ -317,6 +331,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
           peerUserId: null,
           errorKey: null,
           muted: false,
+          speaker: false,
           seconds: 0,
           needsAudioGesture: false,
         });
@@ -442,6 +457,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
           peerUserId: null,
           errorKey: null,
           muted: false,
+          speaker: false,
           seconds: 0,
           needsAudioGesture: false,
         });
@@ -506,6 +522,26 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     await finish(next, null, true);
   }, [call, clearTimers, finish]);
 
+  /**
+   * Loudspeaker toggle. Chrome/Android expose `setSinkId`; where it is missing
+   * we still track the state so the button is not dead, and the OS keeps its
+   * own routing.
+   */
+  const toggleSpeaker = useCallback(() => {
+    setCall((prev) => {
+      if (!prev) return prev;
+      const speaker = !prev.speaker;
+      const element = audioRef.current as (HTMLAudioElement & {
+        setSinkId?: (id: string) => Promise<void>;
+      }) | null;
+      if (element?.setSinkId) {
+        void element.setSinkId(speaker ? "speaker" : "default").catch(() => undefined);
+      }
+      if (element) element.volume = 1;
+      return { ...prev, speaker };
+    });
+  }, []);
+
   const toggleMute = useCallback(() => {
     setCall((prev) => {
       if (!prev) return prev;
@@ -556,6 +592,9 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       decline,
       hangUp,
       toggleMute,
+      toggleSpeaker,
+      minimized,
+      setMinimized,
       dismiss,
       stopReceiving,
       starting,
@@ -563,6 +602,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     [
       accept,
       call,
+      minimized,
       decline,
       dismiss,
       hangUp,
@@ -573,6 +613,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       starting,
       stopReceiving,
       toggleMute,
+      toggleSpeaker,
     ],
   );
 
@@ -600,6 +641,9 @@ export function useCallCenter(): CallCenterValue {
     decline: async () => undefined,
     hangUp: async () => undefined,
     toggleMute: () => undefined,
+    toggleSpeaker: () => undefined,
+    minimized: false,
+    setMinimized: () => undefined,
     dismiss: () => undefined,
     starting: false,
   };

@@ -3024,7 +3024,9 @@
       "requestPending": "Call request awaiting reply",
       "callBack": "Call now",
       "startAudio": "Start audio",
-      "stopReceiving": "Stop receiving calls"
+      "stopReceiving": "Stop receiving calls",
+      "minimize": "Minimize",
+      "returnToCall": "Back to call"
     },
     "moderation": {
       "owner": {

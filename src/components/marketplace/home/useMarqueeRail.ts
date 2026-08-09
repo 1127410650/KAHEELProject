@@ -23,6 +23,10 @@ export function useMarqueeRail<T extends HTMLElement = HTMLDivElement>(
   const draggingRef = useRef(false);
   const lastXRef = useRef(0);
   const pauseUntilRef = useRef(0);
+  /** Flick physics: last drag speed, then a damped spring that rebounds. */
+  const dragVelocityRef = useRef(0);
+  const lastMoveAtRef = useRef(0);
+  const springRef = useRef<{ target: number; velocity: number } | null>(null);
   const visibleRef = useRef(true);
 
   const pause = useCallback((milliseconds = 1_600) => {
@@ -39,16 +43,35 @@ export function useMarqueeRail<T extends HTMLElement = HTMLDivElement>(
     if (!holdingRef.current) return;
     const delta = event.clientX - lastXRef.current;
     if (Math.abs(delta) < 0.5) return;
+    const now = performance.now();
+    const elapsed = Math.max(now - (lastMoveAtRef.current || now), 8);
+    lastMoveAtRef.current = now;
     lastXRef.current = event.clientX;
     draggingRef.current = true;
+    springRef.current = null;
     offsetRef.current -= delta;
+    // Smoothed pointer speed in px/s, used to project the flick on release.
+    const instant = (-delta / elapsed) * 1_000;
+    dragVelocityRef.current = dragVelocityRef.current * 0.7 + instant * 0.3;
   }, []);
 
   const release = useCallback(() => {
     if (!holdingRef.current) return;
+    const flicked = draggingRef.current;
     holdingRef.current = false;
     draggingRef.current = false;
-    pause();
+    const velocity = dragVelocityRef.current;
+    dragVelocityRef.current = 0;
+    lastMoveAtRef.current = 0;
+    if (flicked && Math.abs(velocity) > 40) {
+      // Project where the flick "wants" to land, then let a slightly
+      // under-damped spring carry the rail there: it overshoots a little and
+      // springs back, which is what makes the rail feel physical.
+      springRef.current = { target: offsetRef.current + velocity * 0.22, velocity };
+      pause(2_600);
+    } else {
+      pause();
+    }
   }, [pause]);
 
   useEffect(() => {
@@ -66,8 +89,26 @@ export function useMarqueeRail<T extends HTMLElement = HTMLDivElement>(
       // The track holds two copies, so one loop is exactly half its width.
       const loop = track.scrollWidth / 2;
 
+      const spring = springRef.current;
+      if (loop > 0 && spring && !holdingRef.current) {
+        const seconds = Math.min(elapsed, 32) / 1_000;
+        // Under-damped: stiffness beats damping, so the tail visibly rebounds.
+        const acceleration =
+          -140 * (offsetRef.current - spring.target) - 16 * spring.velocity;
+        spring.velocity += acceleration * seconds;
+        offsetRef.current += spring.velocity * seconds;
+        if (
+          Math.abs(spring.velocity) < 6 &&
+          Math.abs(offsetRef.current - spring.target) < 0.6
+        ) {
+          springRef.current = null;
+          pauseUntilRef.current = Math.min(pauseUntilRef.current, now + 240);
+        }
+      }
+
       if (loop > 0) {
         const running =
+          !springRef.current &&
           !holdingRef.current &&
           !reducedMotion.matches &&
           visibleRef.current &&
