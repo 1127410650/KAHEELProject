@@ -1,6 +1,16 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Home, MapPin, MessageCircle, MoreHorizontal, Plus, Search } from "lucide-react";
+import {
+  Bell,
+  ClipboardList,
+  Home,
+  LogIn,
+  MapPin,
+  MessageCircle,
+  MoreHorizontal,
+  Plus,
+  Tag,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { addListingHref } from "@/lib/add-listing";
@@ -452,7 +462,7 @@ export function MarketShell({
       dir={dir}
       className={
         bottomNav
-          ? "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip pb-[calc(4.25rem+env(safe-area-inset-bottom))] lg:pb-0"
+          ? "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip pb-[calc(3.25rem+env(safe-area-inset-bottom))] lg:pb-0"
           : "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip"
       }
     >
