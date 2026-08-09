@@ -363,6 +363,14 @@ export function ListingCard({
         </div>
       </Link>
 
+      {featured && (
+        <div className="pointer-events-none absolute top-2 z-10 start-2">
+          <FeaturedChip />
+        </div>
+      )}
+
+
+
 
       <div
         className={
