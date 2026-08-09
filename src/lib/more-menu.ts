@@ -11,7 +11,9 @@ import {
   CalendarCheck2,
   CalendarClock,
   Coins,
+  FileText,
   Flag,
+
   Gauge,
   Heart,
   LayoutList,
@@ -60,6 +62,10 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
     kinds: ["individual"],
   },
   { key: "my-ads", to: "/my/ads", labelKey: "market.dash.myAds", icon: LayoutList },
+  // Quote requests had a route and a 301 from the old `/dashboard/requests`, but
+  // no entry here — so the only screen for them was unreachable from the UI.
+  { key: "quotes", to: "/my/quotes", labelKey: "market.dash.requests", icon: FileText },
+
   { key: "points", to: "/my/wallet", labelKey: "market.points.title", icon: Coins },
   { key: "favorites", to: "/my/favorites", labelKey: "market.dash.favorites", icon: Heart },
   { key: "reports", to: "/my/reports", labelKey: "market.dash.reports", icon: Flag },
