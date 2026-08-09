@@ -1,4 +1,5 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Coins,
+  Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import {
@@ -107,6 +108,12 @@ const NAV: NavItem[] = [
     to: "/admin/stores",
     labelKey: "admin.nav.stores",
     icon: Store,
+    section: "market",
+  },
+  {
+    to: "/admin/ad-credit",
+    labelKey: "admin.nav.adCredit",
+    icon: Coins,
     section: "market",
   },
   {

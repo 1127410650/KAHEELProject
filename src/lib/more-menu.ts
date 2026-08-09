@@ -67,6 +67,7 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
   { key: "quotes", to: "/my/quotes", labelKey: "market.dash.requests", icon: FileText },
 
   { key: "points", to: "/my/wallet", labelKey: "market.points.title", icon: Coins },
+  { key: "adCredit", to: "/my/ad-credit", labelKey: "market.adCredit.title", icon: Megaphone },
   { key: "favorites", to: "/my/favorites", labelKey: "market.dash.favorites", icon: Heart },
   { key: "reports", to: "/my/reports", labelKey: "market.dash.reports", icon: Flag },
   {
