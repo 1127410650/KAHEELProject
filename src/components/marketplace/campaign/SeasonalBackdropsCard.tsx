@@ -491,7 +491,18 @@ export function SeasonalBackdropsCard() {
                   <Trash2 className="size-4" aria-hidden />
                 </Button>
               </div>
+              <SeasonTextEditor
+                row={row}
+                ar={ar}
+                onSave={(values) =>
+                  save.mutateAsync({ id: row.id, values }).then(
+                    () => toast.success(ar ? "حُفظ النص" : "Text saved"),
+                    () => toast.error(ar ? "تعذّر التحديث" : "Update failed"),
+                  )
+                }
+              />
             </div>
+
           ))}
           {!isLoading && rows.length === 0 ? (
             <p className="flex items-center gap-2 text-xs text-muted-foreground">
