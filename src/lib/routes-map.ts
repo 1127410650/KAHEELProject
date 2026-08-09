@@ -385,7 +385,7 @@ export function serverRedirectFor(pathname: string): string | null {
   const found = routeRuleFor(path);
   if (!found || found.route_type !== "legacy" || !found.legacy_redirect) return null;
   if (IDENTITY_DEPENDENT_PATHS.has(found.path)) return null;
-  return withLocalePrefix(found.legacy_redirect, locale);
+  return withLocalePrefix(applyParams(found.legacy_redirect, found.path, path), locale);
 }
 
 
@@ -409,7 +409,7 @@ export function canonicalHref(href: string): string | null {
   ];
   const found = routeRuleFor(pathname);
   if (!found?.legacy_redirect) return null;
-  return `${found.legacy_redirect}${rest}`;
+  return `${applyParams(found.legacy_redirect, found.path, pathname)}${rest}`;
 }
 
 /**
