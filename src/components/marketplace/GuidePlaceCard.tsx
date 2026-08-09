@@ -80,6 +80,8 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
 export function GuidePlaceCard({ place }: { place: GuidePlace }) {
   const location = [place.district, place.city, place.governorate].filter(Boolean).join(" · ");
   const source = sourceLabel(place);
+  const href = sourceHref(place);
+
 
 
   return (
