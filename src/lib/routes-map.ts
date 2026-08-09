@@ -316,10 +316,9 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/sign-up", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
   rule("/home", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/market", "legacy", "market", { legacy_redirect: "/", is_public: true }),
-  // The old personal dashboard. `src/routes/me.tsx` still owns the path so the
-  // destination can depend on who is asking (admin console / business dashboard /
-  // personal dashboard); this entry records the canonical fallback.
-  rule("/me", "legacy", "bare", { legacy_redirect: "/my/profile" }),
+  // The old personal dashboard. Its own route file is gone: `/go` is now the one
+  // place that decides where a caller belongs, so this is a plain 301.
+  rule("/me", "legacy", "bare", { legacy_redirect: "/go" }),
 ];
 
 const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
