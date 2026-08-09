@@ -1350,7 +1350,8 @@
       "business": "Stores",
       "account": "Account",
       "rights": "All rights reserved — Kaheel",
-      "legal": "Policies"
+      "legal": "Policies",
+      "copyright": "Visual asset copyright"
     },
     "filters": {
       "all": "All",
@@ -3965,7 +3966,8 @@
         "media": "Images & media",
         "moderation": "Moderation",
         "accounts": "Accounts",
-        "general": "General"
+        "general": "General",
+        "assets": "Visual assets"
       }
     },
     "detail": {
@@ -4503,6 +4505,17 @@
       "successRate": "Success rate",
       "cost": "Estimated cost",
       "recent": "Recent sends"
+    },
+    "watermark": {
+      "title": "Watermark & asset copyright",
+      "hint": "Applied automatically to every platform-produced asset: mascots, banners, seasonal backdrops and stories. Never applied to user or store uploads.",
+      "enabled": "Enable watermark",
+      "position": "Position",
+      "opacity": "Opacity",
+      "size": "Size",
+      "text": "Copyright text",
+      "url": "URL",
+      "preview": "Live preview"
     }
   }
 }

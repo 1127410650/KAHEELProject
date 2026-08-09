@@ -14,6 +14,7 @@
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { applyKaheelWatermark } from "@/lib/kaheel-watermark";
 import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
 
@@ -157,11 +158,18 @@ export function campaignAssetPath(kind: CampaignAssetKind): string {
   return `public/campaigns/${crypto.randomUUID()}.${extensionFor(kind)}`;
 }
 
-/** Upload one campaign object. Only platform admins pass the storage policy. */
+/**
+ * Upload one campaign object. Only platform admins pass the storage policy.
+ *
+ * Every campaign/backdrop/seasonal asset is produced by the platform itself, so
+ * this is the single choke point where `applyKaheelWatermark` stamps the Kaheel
+ * mark and copyright metadata — no call site can forget it.
+ */
 export async function uploadCampaignAsset(path: string, blob: Blob): Promise<void> {
+  const marked = await applyKaheelWatermark(blob);
   const { error } = await supabase.storage
     .from(MKT_BUCKET)
-    .upload(path, blob, { cacheControl: "3600", upsert: false });
+    .upload(path, marked, { cacheControl: "3600", upsert: false });
   if (error) throw error;
 }
 

@@ -64,6 +64,7 @@ import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$wor
 import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as LegalCopyrightRouteImport } from './routes/legal/copyright'
 import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
 import { Route as MyCaptainRouteImport } from './routes/my/captain'
@@ -380,6 +381,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalCopyrightRoute = LegalCopyrightRouteImport.update({
+  id: '/legal/copyright',
+  path: '/legal/copyright',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyAdCreditRoute = MyAdCreditRouteImport.update({
   id: '/ad-credit',
   path: '/ad-credit',
@@ -639,6 +645,7 @@ export interface FileRoutesByFullPath {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/legal/copyright': typeof LegalCopyrightRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/captain': typeof MyCaptainRoute
@@ -733,6 +740,7 @@ export interface FileRoutesByTo {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/legal/copyright': typeof LegalCopyrightRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/captain': typeof MyCaptainRoute
@@ -831,6 +839,7 @@ export interface FileRoutesById {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/legal/copyright': typeof LegalCopyrightRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/captain': typeof MyCaptainRoute
@@ -930,6 +939,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/legal/copyright'
     | '/my/ad-credit'
     | '/my/bookings'
     | '/my/captain'
@@ -1024,6 +1034,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/legal/copyright'
     | '/my/ad-credit'
     | '/my/bookings'
     | '/my/captain'
@@ -1121,6 +1132,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/legal/copyright'
     | '/my/ad-credit'
     | '/my/bookings'
     | '/my/captain'
@@ -1194,6 +1206,7 @@ export interface RootRouteChildren {
   GuidesStudentsRoute: typeof GuidesStudentsRoute
   GuidesSyriaRoute: typeof GuidesSyriaRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  LegalCopyrightRoute: typeof LegalCopyrightRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1587,6 +1600,13 @@ declare module '@tanstack/react-router' {
       path: '/invite/$token'
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/copyright': {
+      id: '/legal/copyright'
+      path: '/legal/copyright'
+      fullPath: '/legal/copyright'
+      preLoaderRoute: typeof LegalCopyrightRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my/ad-credit': {
@@ -2062,6 +2082,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesStudentsRoute: GuidesStudentsRoute,
   GuidesSyriaRoute: GuidesSyriaRoute,
   InviteTokenRoute: InviteTokenRoute,
+  LegalCopyrightRoute: LegalCopyrightRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,

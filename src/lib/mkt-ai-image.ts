@@ -9,6 +9,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import { applyKaheelWatermark } from "@/lib/kaheel-watermark";
 import { CAMPAIGN_LIMITS, campaignAssetPath, uploadCampaignAsset } from "@/lib/mkt-campaigns";
 import type { AiImageSizeKey } from "@/lib/mkt-ai-image.functions";
 
@@ -82,6 +83,8 @@ export async function toCampaignWebp(b64: string, mime: string): Promise<Generat
     if (blob && blob.size <= CAMPAIGN_LIMITS.webp) break;
   }
   if (!blob) throw new Error("ENCODE_FAILED");
+  // كل صورة يولّدها الاستوديو ملك المنصة → تحمل العلامة والحقوق قبل المعاينة.
+  blob = await applyKaheelWatermark(blob);
   if (blob.size > CAMPAIGN_LIMITS.webp) throw new Error("TOO_LARGE");
 
   return {

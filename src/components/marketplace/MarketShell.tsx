@@ -392,9 +392,15 @@ export function MarketCompactFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
-      <p className="mx-auto w-full max-w-[1240px] px-4 py-4 text-center text-xs text-muted-foreground lg:px-6">
-        {t("market.footer.rights")}
-      </p>
+      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-4 text-xs text-muted-foreground lg:px-6">
+        <p>{t("market.footer.rights")}</p>
+        <Link
+          to="/legal/copyright"
+          className="min-h-11 content-center underline decoration-dotted underline-offset-4 hover:text-foreground"
+        >
+          {t("market.footer.copyright")}
+        </Link>
+      </div>
     </footer>
   );
 }
@@ -408,6 +414,7 @@ const COPYRIGHT_FOOTER_PATHS = [
   "/guides/students",
   "/about",
   "/help",
+  "/legal/copyright",
 ];
 const COPYRIGHT_FOOTER_PREFIXES = [
   "/ads/",
