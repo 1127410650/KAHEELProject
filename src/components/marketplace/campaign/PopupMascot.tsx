@@ -5,9 +5,9 @@
  * popup adds no network request, no decode cost and no layout shift. Motion is
  * pure CSS and disabled under `prefers-reduced-motion`.
  */
-export type MascotKind = "moto" | "lounge" | "wave" | "peek";
+export type MascotKind = "moto" | "lounge" | "wave" | "peek" | "parcel";
 
-export const MASCOT_KINDS: MascotKind[] = ["moto", "lounge", "wave", "peek"];
+export const MASCOT_KINDS: MascotKind[] = ["moto", "lounge", "wave", "peek", "parcel"];
 
 const SKIN = "#f4c9a3";
 const HAIR = "#240046";
@@ -100,11 +100,30 @@ function Peek() {
   );
 }
 
+/** Character popping out of a parcel that just landed. */
+function Parcel() {
+  return (
+    <Frame className="animate-[kaheel-mascot-drop_2.4s_ease-in-out_infinite] motion-reduce:animate-none">
+      <ellipse cx="48" cy="86" rx="30" ry="5" fill={HAIR} opacity="0.2" />
+      <circle cx="48" cy="40" r="14" fill={SKIN} />
+      <path d="M34 38a14 14 0 0 1 28 0z" fill={HAIR} />
+      <circle cx="43" cy="40" r="2.8" fill={HAIR} />
+      <circle cx="54" cy="40" r="2.8" fill={HAIR} />
+      <path d="M43 47c3 2.5 7 2.5 10 0" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      <path d="M62 54l12-12" stroke={ACCENT} strokeWidth="7" strokeLinecap="round" />
+      <rect x="22" y="52" width="52" height="32" rx="7" fill={BODY} />
+      <rect x="43" y="52" width="10" height="32" fill={ACCENT} opacity="0.7" />
+      <path d="M20 50h34l-6 -12H24z" fill={ACCENT} opacity="0.9" />
+    </Frame>
+  );
+}
+
 const MAP: Record<MascotKind, () => React.ReactElement> = {
   moto: Moto,
   lounge: Lounge,
   wave: Wave,
   peek: Peek,
+  parcel: Parcel,
 };
 
 export function PopupMascot({ kind }: { kind: MascotKind }) {
