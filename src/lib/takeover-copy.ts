@@ -246,9 +246,12 @@ export function rapidTapCopyCount(ar: boolean): number {
   return (ar ? AR_RAPID : EN_RAPID).length;
 }
 
-/** نص مزحة الكبس عند فهرس معيّن (بالتدوير) — يستخدمه المضيف لمنع التكرار المتتالي. */
+/**
+ * نص مزحة الكبس عند فهرس معيّن (بالتدوير) — يستخدمه المضيف لمنع التكرار المتتالي.
+ * هنا لا نضيف لاحقة «بواسطتي»: المزحة عن كثرة الكبس لا عن عرض.
+ */
 export function rapidTapCopyAt(ar: boolean, index: number): PopupCopy {
   const pool = ar ? AR_RAPID : EN_RAPID;
   const size = pool.length;
-  return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
+  return pool[((index % size) + size) % size]!;
 }
