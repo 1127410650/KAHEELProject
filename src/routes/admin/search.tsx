@@ -24,7 +24,7 @@ const GROUP_LABEL: Record<SearchGroupType, string> = {
  * admin file inside the console — never to a public marketplace page.
  */
 export const Route = createFileRoute("/admin/search")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>) => ({
     q: typeof search["q"] === "string" ? search["q"] : "",
   }),

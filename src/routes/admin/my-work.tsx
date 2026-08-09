@@ -43,7 +43,7 @@ import {
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/admin/my-work")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "أعمالي — إدارة المنصة" },

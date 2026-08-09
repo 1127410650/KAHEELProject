@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/admin/listings")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>) => ({
     status: typeof search["status"] === "string" ? (search["status"] as string) : undefined,
   }),

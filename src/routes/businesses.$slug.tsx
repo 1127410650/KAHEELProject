@@ -38,7 +38,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/businesses/$slug")({
-  ssr: false,
+  ssr: "data-only",
   head: ({ params }) => {
     const title = `${params.slug} — متجر في گحيل`;
     const description =

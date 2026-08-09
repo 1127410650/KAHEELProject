@@ -10,7 +10,7 @@ import { formatDate } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/invite/$token")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "دعوة للانضمام — گحيل | Invitation — Gohail" },

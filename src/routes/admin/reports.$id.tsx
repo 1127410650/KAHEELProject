@@ -59,7 +59,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 
 export const Route = createFileRoute("/admin/reports/$id")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "بطاقة البلاغ — إدارة گحيل" },

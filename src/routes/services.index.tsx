@@ -34,7 +34,7 @@ import {
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/services/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "حجز الخدمات والمواعيد — گحيل" },

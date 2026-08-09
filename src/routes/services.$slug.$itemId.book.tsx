@@ -38,7 +38,7 @@ import {
 import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/services/$slug/$itemId/book")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "اختيار موعد الخدمة — گحيل" },

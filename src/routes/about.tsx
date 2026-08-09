@@ -10,7 +10,7 @@ const description =
   "تعرّف على «گحيل»: سوق إلكتروني للخدمات والمقاولات والموردين والمعدات والعقارات.";
 
 export const Route = createFileRoute("/about")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title },

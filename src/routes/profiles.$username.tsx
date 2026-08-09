@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/profiles/$username")({
-  ssr: false,
+  ssr: "data-only",
   head: ({ params }) => {
     const title = `${params.username} — معلن فرد في گحيل`;
     const description =

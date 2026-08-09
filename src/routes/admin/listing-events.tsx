@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/admin/listing-events")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "سجل عمليات الإعلانات — إدارة گحيل" },

@@ -42,7 +42,7 @@ interface AdSearch {
 }
 
 export const Route = createFileRoute("/ads/$slug")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): AdSearch =>
     typeof search["action"] === "string" ? { action: search["action"] } : {},
   head: ({ params }) => {

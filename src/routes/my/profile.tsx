@@ -38,7 +38,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/my/profile")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "حسابي الشخصي — گحيل" },

@@ -10,7 +10,7 @@ import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/forgot-password")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [{ title: "استعادة كلمة المرور — گحيل" }, { name: "robots", content: "noindex" }],
   }),

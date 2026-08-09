@@ -28,7 +28,7 @@ interface StoreNewSearch {
 }
 
 export const Route = createFileRoute("/business/store/new")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): StoreNewSearch => {
     const theme = search["theme"];
     return isStoreThemeId(theme) ? { theme } : {};

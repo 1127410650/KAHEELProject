@@ -23,7 +23,7 @@ import {
 } from "@/lib/mkt-services";
 
 export const Route = createFileRoute("/business/services/settings")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [{ title: "إعدادات مقدم الخدمة — گحيل" }, { name: "robots", content: "noindex" }],
   }),

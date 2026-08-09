@@ -52,7 +52,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/admin/listing-reports")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>) => ({
     status: typeof search["status"] === "string" ? (search["status"] as string) : undefined,
   }),

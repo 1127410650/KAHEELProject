@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/my/wallet")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "نقاطي — گحيل" },

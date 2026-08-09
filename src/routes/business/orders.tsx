@@ -23,7 +23,7 @@ import {
 type Filter = "all" | "submitted" | "active" | "completed";
 
 export const Route = createFileRoute("/business/orders")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "إدارة الطلبات — گحيل" },

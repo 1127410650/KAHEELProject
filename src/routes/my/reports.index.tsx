@@ -11,7 +11,7 @@ import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/my/reports/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "بلاغاتي — گحيل" },

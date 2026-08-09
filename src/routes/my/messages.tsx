@@ -50,7 +50,7 @@ interface MessagesSearch {
 }
 
 export const Route = createFileRoute("/my/messages")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): MessagesSearch =>
     typeof search["c"] === "string" ? { c: search["c"] } : {},
   head: () => ({

@@ -6,7 +6,7 @@ import { DEMO_STORE_WORLDS, getDemoStoreWorld } from "@/lib/demo-store-worlds";
 import { demoWorldThemeId } from "@/lib/store-theme";
 
 export const Route = createFileRoute("/demo-stores/$worldId")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "عوالم المتاجر التجريبية — گحيل" },

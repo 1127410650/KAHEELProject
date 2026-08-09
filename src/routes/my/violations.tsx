@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/my/violations")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "مخالفاتي — گحيل" },

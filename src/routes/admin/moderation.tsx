@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/admin/moderation")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "قواعد فحص المحتوى — إدارة المنصة" },

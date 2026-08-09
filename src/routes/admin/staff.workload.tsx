@@ -60,7 +60,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/admin/staff/workload")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "توزيع الأعمال والموظفون — إدارة المنصة" },

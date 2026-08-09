@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/my/notifications")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "تنبيهات السوق — گحيل" },

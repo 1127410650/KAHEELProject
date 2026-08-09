@@ -39,7 +39,7 @@ import {
 } from "@/lib/mkt-analytics";
 
 export const Route = createFileRoute("/admin/dashboard")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "منصة التحليلات والتشغيل — گحيل" },

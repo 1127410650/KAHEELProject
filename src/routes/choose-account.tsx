@@ -17,7 +17,7 @@ interface ChooseSearch {
  * requested page.
  */
 export const Route = createFileRoute("/choose-account")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): ChooseSearch => {
     const raw = search["next"];
     return typeof raw === "string" && isSafeInternalPath(raw) ? { next: raw } : {};

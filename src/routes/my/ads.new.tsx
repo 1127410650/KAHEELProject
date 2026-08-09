@@ -11,7 +11,7 @@ import { ListingForm } from "@/components/marketplace/ListingForm";
 import { SmartListingPriceController } from "@/components/marketplace/SmartListingPriceController";
 
 export const Route = createFileRoute("/my/ads/new")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>) => {
     const raw = typeof search["field"] === "string" ? search["field"].toLowerCase() : "";
     return { field: /^[a-z0-9-]{2,64}$/.test(raw) ? raw : undefined };

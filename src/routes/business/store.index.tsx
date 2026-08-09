@@ -30,7 +30,7 @@ import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/business/store/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "متجري — سوق گحيل" },

@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { passwordPolicyError } from "@/lib/password-policy";
 
 export const Route = createFileRoute("/reset-password")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [{ title: "تعيين كلمة مرور جديدة — گحيل" }, { name: "robots", content: "noindex" }],
   }),

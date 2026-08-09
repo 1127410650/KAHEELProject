@@ -9,7 +9,7 @@ const title = "المساعدة — گحيل";
 const description = "كيف تنشر إعلانًا في «گحيل»، وكيف تتواصل مع المعلنين، ومدة الإعلان وتجديده.";
 
 export const Route = createFileRoute("/help")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title },

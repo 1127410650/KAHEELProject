@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const Route = createFileRoute("/register")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "إنشاء حساب سوري — گحيل | Create account — Gohail" },

@@ -21,7 +21,7 @@ import { useActiveAccount } from "@/lib/mkt-account";
 import { useOperationsOverview } from "@/lib/mkt-provider-onboarding";
 
 export const Route = createFileRoute("/business/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "مركز التشغيل — گحيل" },

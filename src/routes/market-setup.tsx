@@ -26,7 +26,7 @@ const title = "إعداد حسابك في سوريا — سوق گحيل";
 const description = "خطوة واحدة قصيرة: رقم الجوال السوري والاسم الظاهر، ثم متابعة إلى السوق.";
 
 export const Route = createFileRoute("/market-setup")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title },

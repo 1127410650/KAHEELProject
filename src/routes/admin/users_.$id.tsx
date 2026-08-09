@@ -29,7 +29,7 @@ import {
 const searchSchema = z.object({ tab: z.string().optional() });
 
 export const Route = createFileRoute("/admin/users_/$id")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: searchSchema,
   head: () => ({
     meta: [

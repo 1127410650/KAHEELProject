@@ -26,7 +26,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/stores/$slug")({
-  ssr: false,
+  ssr: "data-only",
   head: ({ params }) => {
     const title = `متجر ${params.slug} — سوق گحيل`;
     const description =

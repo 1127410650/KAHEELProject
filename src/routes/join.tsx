@@ -41,7 +41,7 @@ const KINDS: JoinApplicationKind[] = [
 ];
 
 export const Route = createFileRoute("/join")({
-  ssr: false,
+  ssr: "data-only",
   validateSearch: (search: Record<string, unknown>): JoinSearch => ({
     kind: KINDS.includes(search["kind"] as JoinApplicationKind)
       ? (search["kind"] as JoinApplicationKind)

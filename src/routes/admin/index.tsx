@@ -23,7 +23,7 @@ import { loadAdminOverview } from "@/lib/mkt-platform";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/admin/")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "إدارة المنصة — گحيل" },

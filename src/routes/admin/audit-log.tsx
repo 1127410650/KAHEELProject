@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/admin/audit-log")({
-  ssr: false,
+  ssr: "data-only",
   head: () => ({
     meta: [
       { title: "سجل التدقيق — إدارة المنصة" },
