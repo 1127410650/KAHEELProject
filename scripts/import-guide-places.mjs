@@ -31,50 +31,68 @@ if (!url || !serviceKey) {
   process.exit(1);
 }
 
-/** Arabic header → column. Unknown headers are ignored. */
+/** Arabic header → column, matching the «الجهات» sheet exactly. */
 const HEADER_MAP = {
   "معرّف السجل": "source_ref",
-  "معرف السجل": "source_ref",
-  "الاسم بالعربية": "name_ar",
+  "الاسم الصحيح بالعربية": "name_ar",
   "الاسم بالإنجليزية": "name_en",
+  "أسماء بديلة": "alt_names",
   القطاع: "sector",
   التصنيف: "category",
   "التصنيف الفرعي": "subcategory",
+  الملكية: "ownership",
   المحافظة: "governorate",
-  المدينة: "city",
+  "المدينة/البلدة": "city",
+  المنطقة: "region",
+  الناحية: "subdistrict",
   الحي: "district",
   العنوان: "address",
   "حالة العنوان": "address_status",
   "خط العرض": "latitude",
   "خط الطول": "longitude",
-  الإحداثيات: "coords",
   "رابط الخريطة": "map_url",
-  "حالة رابط الخريطة": "map_url_status",
-  الهاتف: "phone",
+  "حالة الخريطة": "map_url_status",
+  "الهاتف الموحّد": "phone",
   "حالة الهاتف": "phone_status",
-  واتساب: "whatsapp",
+  "واتساب موحّد": "whatsapp",
   "حالة واتساب": "whatsapp_status",
-  "رابط واتساب": "whatsapp_link",
   "رابط واتساب برسالة كحيل": "whatsapp_link",
   البريد: "email",
-  "البريد الإلكتروني": "email",
   "الموقع الإلكتروني": "website",
-  "أوقات الدوام": "opening_hours",
+  "الاختصاصات/الخدمات": "services",
+  "الحالة التشغيلية": "operational_status",
   النجوم: "stars",
-  المصدر: "source_label",
+  "المصدر الأساسي": "source_label",
+  "مصدر إضافي": "source_extra",
   "نوع المصدر": "source_type",
   "تاريخ المصدر": "source_date",
-  "حالة التحقق": "verification_status",
+  "تاريخ الاسترجاع": "retrieved_at",
+  "حالة التحقق": "verification_note",
   "درجة الاكتمال": "completeness",
   ملاحظات: "notes",
 };
 
+/**
+ * Verification is a claim, so it is granted only when the sheet says the record
+ * was actually confirmed — never inferred from an official-looking source.
+ */
+function verificationStatus(note) {
+  const text = (note ?? "").trim();
+  if (!text) return "unverified";
+  if (/غير\s*(مؤكد|متحقق)|يحتاج|بحاجة|مرشح|أولي/.test(text)) return "unverified";
+  if (/متحقق|مؤكد|مُثبت|تم التحقق/.test(text)) return "verified";
+  return "unverified";
+}
+
 const NUMERIC = new Set(["latitude", "longitude", "stars", "completeness"]);
+
+const PLACEHOLDERS = new Set(["غير متوفر", "غير معروف", "لا يوجد", "-", "—", "#N/A"]);
 
 function clean(value) {
   if (value === null || value === undefined) return null;
   const text = String(value).trim();
-  return text.length > 0 ? text : null;
+  if (text.length === 0 || PLACEHOLDERS.has(text)) return null;
+  return text;
 }
 
 function slugify(name, ref, index) {
@@ -128,7 +146,7 @@ raw.forEach((source, index) => {
   }
 
   if (!row.name_ar) return;
-  if (!row.verification_status) row.verification_status = "unverified";
+  row.verification_status = verificationStatus(row.verification_note);
   row.slug = slugify(row.name_ar, row.source_ref, index);
   rows.push(row);
 });

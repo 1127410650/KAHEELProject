@@ -115,7 +115,8 @@ export async function fetchGuidePlaces(
 
   const from = page * GUIDE_PAGE_SIZE;
   const { data, error, count } = await request
-    .order("verification_status", { ascending: true })
+    // Richer, source-backed records first; ties fall back to the Arabic name.
+    .order("completeness", { ascending: false, nullsFirst: false })
     .order("name_ar", { ascending: true })
     .range(from, from + GUIDE_PAGE_SIZE - 1);
 
