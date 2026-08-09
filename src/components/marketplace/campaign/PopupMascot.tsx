@@ -58,7 +58,7 @@ export const MASCOT_PERSONA: Record<MascotKind, MascotPersona> = {
 };
 
 const POSE: Record<MascotKind, MascotPose> = {
-  wave: "welcome",
+  wave: "wave",
   lounge: "idle",
   peek: "thanks",
   moto: "wave",
@@ -96,6 +96,7 @@ export function PopupMascot({
         pose={POSE[kind] ?? "idle"}
         lang={lang}
         animated={animated}
+        size="sm"
         className="h-full w-auto"
       />
     </div>

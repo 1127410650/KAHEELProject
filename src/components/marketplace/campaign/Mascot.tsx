@@ -38,7 +38,7 @@ import {
 export type { MascotName, MascotSize };
 
 /** وضعيات «كَحيل» الرسمية. */
-export type KaheelPose = "welcome" | "present" | "thanks" | "idle";
+export type KaheelPose = "welcome" | "wave" | "present" | "thanks" | "idle";
 /** وضعيات «الزعيم كَحيلان» المشاكسة. */
 export type KaheelanPose =
   | "idle"
@@ -69,6 +69,10 @@ const KAHEEL_POSES: Record<KaheelPose, PoseSpec> = {
     motion: "animate-[mascot-breathe_3.2s_ease-in-out_infinite]",
     alt: { ar: "كَحيل يمدّ يده مرحّبًا", en: "Kaheel extending a welcoming hand" },
   },
+  wave: {
+    motion: "animate-[mascot-sway_2.4s_ease-in-out_infinite]",
+    alt: { ar: "كَحيل يلوّح مرحّبًا", en: "Kaheel waving hello" },
+  },
   present: {
     transform: "rotate(2deg)",
     motion: "animate-[mascot-present_2.8s_ease-in-out_infinite]",
@@ -90,6 +94,8 @@ const KAHEELAN_POSES: Record<KaheelanPose, PoseSpec> = {
     motion: "animate-[mascot-swagger_3s_ease-in-out_infinite]",
     alt: { ar: "الزعيم كَحيلان واقف بثقة", en: "Boss Kaheelan standing confidently" },
   },
+  // السقوط ⇒ الارتطام ⇒ الارتداد: ثلاث وضعيات من نفس الصورة المعتمدة بتحويلات
+  // ميلان + squash & stretch فقط، فلا يتغيّر شكل الشخصية أبدًا.
   fall: {
     transform: "rotate(-14deg)",
     alt: { ar: "كَحيلان يهوي من الأعلى", en: "Kaheelan falling from above" },
