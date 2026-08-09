@@ -122,6 +122,22 @@ const EN_POOL: PopupCopy[] = [
   { title: "Don't say we didn't tell you! 🙈", subtitle: "Now you know — the call is yours", mascot: "peek" },
   { title: "The offer is waiting 🎁", subtitle: "Wait too long and someone else takes it", mascot: "parcel" },
   { title: "Kaheel loves you 💜", subtitle: "That's why we brought you the best offers", mascot: "lounge" },
+  // The pair introducing themselves
+  {
+    title: "Meet us! 👋",
+    subtitle: "I'm Kaheelan… and this is my cousin Kaheel. Together we bring you the best offers 😎",
+    mascot: "duo",
+  },
+  {
+    title: "Time we got introduced 🧣",
+    subtitle: "I'm Chief Kaheelan, and this is Kaheel — from here on, the offers are on us",
+    mascot: "duo",
+  },
+  {
+    title: "You're very welcome 💜",
+    subtitle: "Kaheel and Kaheelan at your service — we never cut corners",
+    mascot: "duo",
+  },
 ];
 
 /** Picks a stable random line for the current mount. */
