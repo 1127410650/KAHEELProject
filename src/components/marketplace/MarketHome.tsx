@@ -38,8 +38,8 @@ import {
 import { useState } from "react";
 
 import carImage from "@/assets/market/cat-cars.webp";
-import heroImage from "@/assets/market/kaheel-home-hero-v2.webp";
 import propertyImage from "@/assets/market/cat-real-estate-hero.webp";
+
 import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
 import { useSession } from "@/lib/session";
