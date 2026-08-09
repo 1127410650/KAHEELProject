@@ -295,7 +295,7 @@ export function SeasonalBackdropsCard() {
               id="season-headline-ar"
               value={headlineAr}
               onChange={(event) => setHeadlineAr(event.target.value)}
-              placeholder="جيناكم سوريا 🇸🇾"
+              placeholder="جيناكم سوريا"
             />
           </div>
           <div className="space-y-1">
@@ -306,7 +306,7 @@ export function SeasonalBackdropsCard() {
               id="season-headline-en"
               value={headlineEn}
               onChange={(event) => setHeadlineEn(event.target.value)}
-              placeholder="Hello Syria 🇸🇾"
+              placeholder="Hello Syria"
             />
           </div>
           <div className="space-y-1">
