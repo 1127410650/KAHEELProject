@@ -564,25 +564,30 @@ function SectionHeading({
 }
 
 function ListingRail({
+  id,
   title,
   icon,
   href,
   query,
   empty,
+  ctaHref,
 }: {
+  id: string;
   title: string;
   icon: typeof Flame;
   href: string;
   query: ReturnType<typeof useHomeListings>;
   empty: string;
+  ctaHref: string;
 }) {
   const { t } = useI18n();
   return (
-    <section>
-      <SectionHeading id="nearby-restaurants" icon={icon} title={title} href={href} />
+    <section aria-labelledby={id}>
+      <SectionHeading id={id} icon={icon} title={title} href={href} />
       <QueryRail
         query={query}
         empty={empty}
+        ctaHref={ctaHref}
         retryLabel={t("market.retry")}
         errorLabel={t("market.loadError")}
       />
@@ -593,14 +598,18 @@ function ListingRail({
 function QueryRail({
   query,
   empty,
+  ctaHref,
   retryLabel,
   errorLabel,
 }: {
   query: ReturnType<typeof useHomeListings>;
   empty: string;
+  /** Where the empty state's action goes — always a real, working destination. */
+  ctaHref: string;
   retryLabel: string;
   errorLabel: string;
 }) {
+  const { locale } = useI18n();
   if (query.isPending)
     return (
       <div className="mt-3 flex gap-3 overflow-hidden">
@@ -620,11 +629,23 @@ function QueryRail({
         </Button>
       </div>
     );
+  // No data is not a dead zone: the section explains itself and offers the one
+  // action that fills it — posting the first listing.
   if (!query.data?.length)
     return (
-      <p className="k-surface mt-3 px-4 py-5 text-center text-sm text-[#5a189a]">
-        {empty}
-      </p>
+      <div className="k-surface mt-3 flex flex-col items-center gap-3 px-4 py-6 text-center">
+        <span className="grid size-11 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c]">
+          <Sparkles className="size-5" aria-hidden />
+        </span>
+        <p className="text-sm font-bold text-[#5a189a]">{empty}</p>
+        <a
+          href={ctaHref}
+          className="k-press inline-flex min-h-11 items-center gap-1.5 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white"
+        >
+          <Plus className="size-4" aria-hidden />
+          {locale === "ar" ? "كن أول من يضيف عرضًا" : "Be the first to post"}
+        </a>
+      </div>
     );
   return (
     <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
@@ -643,28 +664,29 @@ function QueryRail({
 function QuickAction({
   href,
   icon: Icon,
-  tone,
   title,
   description,
 }: {
   href: string;
   icon: typeof Plus;
-  tone: string;
   title: string;
   description: string;
 }) {
   return (
     <a
       href={href}
-      className={`k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 ${tone} outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
+      className="k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
     >
-      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
+      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
         <Icon className="size-6" aria-hidden />
       </span>
-      <span>
+      <span className="min-w-0">
         <strong className="block text-sm font-black tracking-tight text-[#240046]">{title}</strong>
-        <span className="text-[11px] text-[#5a189a]">{description}</span>
+        <span className="block text-[11px] text-[#5a189a]">{description}</span>
       </span>
     </a>
+  );
+}
+
   );
 }
