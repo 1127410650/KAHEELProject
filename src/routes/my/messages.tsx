@@ -22,14 +22,21 @@ import {
   fetchContext,
   fetchConversations,
   fetchMessages,
+  markDelivered,
   markRead,
+  peerTyping,
+  pingTyping,
   requestBank,
+  sendMessage,
   setBlocked,
   setConversationState,
+  subscribeInbox,
+  subscribeThread,
+  type ChatMessage,
   type ConversationRow,
 } from "@/lib/mkt-chat";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
-import { ChatBubble } from "@/components/marketplace/chat/ChatBubble";
+import { ChatThread } from "@/components/marketplace/chat/ChatThread";
 import { ChatComposer } from "@/components/marketplace/chat/ChatComposer";
 import { ChatListingCard } from "@/components/marketplace/chat/ChatListingCard";
 import { BankPickerDialog } from "@/components/marketplace/chat/BankPickerDialog";
@@ -38,6 +45,7 @@ import { CallButton } from "@/components/marketplace/CallButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -92,7 +100,10 @@ function MessagesPage() {
   const [bankOpen, setBankOpen] = useState(false);
   const [bankRequestId, setBankRequestId] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(false);
-  const scroller = useRef<HTMLUListElement | null>(null);
+  /** Optimistic text bubbles, kept until the server copy shows up. */
+  const [outbox, setOutbox] = useState<ChatMessage[]>([]);
+  const [typing, setTyping] = useState(false);
+
 
   useEffect(() => {
     if (c) setSelected(c);
@@ -140,27 +151,105 @@ function MessagesPage() {
   const messages = useQuery({
     queryKey: ["mkt", "messages", selected],
     enabled: !!selected,
-    refetchInterval: 15000,
     queryFn: () => fetchMessages(selected!),
   });
 
-  // Opening a thread clears its unread badge for this viewer only.
+  // Live thread: Postgres replication is filtered by the same RLS as the reads,
+  // so only the two parties ever receive these events.
+  useEffect(() => {
+    if (!selected) return;
+    return subscribeThread(selected, {
+      onMessage: () => {
+        void messages.refetch();
+        void conversations.refetch();
+      },
+      onTyping: () => {
+        void peerTyping(selected).then(setTyping);
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
+
+  // Live rail badge for threads that are not open.
+  useEffect(() => {
+    if (!session) return;
+    return subscribeInbox(() => void conversations.refetch());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
+  // The typing bubble expires on its own if the peer stops.
+  useEffect(() => {
+    if (!typing) return;
+    const id = window.setTimeout(() => setTyping(false), 6000);
+    return () => window.clearTimeout(id);
+  }, [typing]);
+
+  // Switching threads drops any leftover optimistic bubbles and typing state.
+  useEffect(() => {
+    setOutbox([]);
+    setTyping(false);
+  }, [selected]);
+
+  // Opening a thread marks the peer's messages delivered, then read (viewer only).
   useEffect(() => {
     if (!selected || !messages.data) return;
+    void markDelivered(selected);
     void markRead(selected).then(() => conversations.refetch());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, messages.data?.length]);
 
-  useEffect(() => {
-    const el = scroller.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages.data]);
+  // Server rows win: an optimistic bubble disappears once its text comes back.
+  const thread = useMemo<ChatMessage[]>(() => {
+    const server = messages.data ?? [];
+    const settled = new Set(server.filter((m) => m.mine).map((m) => `${m.kind}:${m.body}`));
+    return [...server, ...outbox.filter((m) => !settled.has(`${m.kind}:${m.body}`))];
+  }, [messages.data, outbox]);
+
+  function sendOptimisticText(text: string, retryId?: string) {
+    if (!selected) return;
+    const id = retryId ?? `pending-${crypto.randomUUID()}`;
+    const conversationId = selected;
+    setOutbox((prev) => {
+      const bubble: ChatMessage = {
+        id,
+        sender_user_id: session?.user.id ?? null,
+        kind: "text",
+        body: text,
+        payload: {},
+        reply_to_id: null,
+        created_at: new Date().toISOString(),
+        delivered_at: null,
+        read_at: null,
+        deleted_at: null,
+        mine: true,
+        pending: true,
+      };
+      return retryId ? prev.map((m) => (m.id === retryId ? bubble : m)) : [...prev, bubble];
+    });
+    void sendMessage(conversationId, "text", text)
+      .then(() => {
+        void messages.refetch();
+        void conversations.refetch();
+      })
+      .catch((error) => {
+        toast.error(t(chatErrorKey(error)));
+        setOutbox((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, pending: false, failed: true } : m)),
+        );
+      });
+  }
+
+  function retry(message: ChatMessage) {
+    sendOptimisticText(message.body, message.id);
+  }
 
   function refresh() {
     void messages.refetch();
     void context.refetch();
     void conversations.refetch();
   }
+
+
 
   async function toggleMute() {
     if (!selected || !context.data) return;
@@ -350,25 +439,18 @@ function MessagesPage() {
                 <ChatListingCard context={ctx} />
               </div>
 
-              <ul
-                ref={scroller}
-                className="mt-3 flex max-h-[52vh] min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-xl border border-border bg-card p-3 lg:max-h-none"
-              >
-                {(messages.data ?? []).map((m) => (
-                  <ChatBubble
-                    key={m.id}
-                    message={m}
-                    onChanged={refresh}
-                    onShareBank={(requestId) => {
-                      setBankRequestId(requestId);
-                      setBankOpen(true);
-                    }}
-                  />
-                ))}
-                {!messages.isLoading && (messages.data ?? []).length === 0 && (
-                  <p className="text-sm text-muted-foreground">{t("market.chat.empty")}</p>
-                )}
-              </ul>
+              <ChatThread
+                conversationId={selected}
+                messages={thread}
+                loading={messages.isLoading}
+                peerTyping={typing}
+                onChanged={refresh}
+                onRetry={retry}
+                onShareBank={(requestId) => {
+                  setBankRequestId(requestId);
+                  setBankOpen(true);
+                }}
+              />
 
               <div className="sticky bottom-0 z-10 mt-3 bg-background/95 pb-[env(safe-area-inset-bottom)] pt-2 backdrop-blur supports-[backdrop-filter]:bg-background/80 lg:static lg:bg-transparent lg:pb-0 lg:backdrop-blur-none">
                 {ctx.blocked ? (
@@ -380,6 +462,8 @@ function MessagesPage() {
                     conversationId={selected}
                     initialDraft={c && selected === c ? draft : undefined}
                     onSent={refresh}
+                    onTyping={() => void pingTyping(selected)}
+                    onTextSend={(text) => sendOptimisticText(text)}
                     onBankShare={() => {
                       setBankRequestId(null);
                       setBankOpen(true);
@@ -388,6 +472,7 @@ function MessagesPage() {
                   />
                 )}
               </div>
+
             </>
           ) : (
             <div className="hidden place-items-center rounded-xl border border-dashed border-border p-10 text-center text-sm text-muted-foreground lg:grid lg:h-full">

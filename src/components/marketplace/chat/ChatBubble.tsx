@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
+  AlertCircle,
   BadgeCheck,
+  Check,
+  CheckCheck,
+  Clock,
   Copy,
   FileText,
   Landmark,
@@ -14,7 +18,7 @@ import {
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
-import { formatDateTime } from "@/lib/format";
+import { formatTime } from "@/lib/format";
 import {
   chatErrorKey,
   deleteMessage,
@@ -29,6 +33,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+/** Sent / delivered / read ticks, shown on the viewer's own bubbles only. */
+function Receipt({ message }: { message: ChatMessage }) {
+  const { t } = useI18n();
+  if (message.failed) {
+    return (
+      <span className="flex items-center gap-1 text-destructive">
+        <AlertCircle className="size-3.5" aria-hidden />
+        {t("market.chat.receipt.failed")}
+      </span>
+    );
+  }
+  if (message.pending) {
+    return <Clock className="size-3.5" aria-label={t("market.chat.receipt.sending")} />;
+  }
+  if (message.read_at) {
+    return (
+      <CheckCheck className="size-3.5 text-primary" aria-label={t("market.chat.receipt.read")} />
+    );
+  }
+  if (message.delivered_at) {
+    return <CheckCheck className="size-3.5" aria-label={t("market.chat.receipt.delivered")} />;
+  }
+  return <Check className="size-3.5" aria-label={t("market.chat.receipt.sent")} />;
+}
+
 
 /** Private attachments resolve to a short-lived signed link, never a public URL. */
 function useSignedUrl(path: string | undefined) {
@@ -258,12 +288,14 @@ interface Props {
   message: ChatMessage;
   onShareBank: (requestMessageId: string) => void;
   onChanged: () => void;
+  onRetry?: (message: ChatMessage) => void;
 }
 
-export function ChatBubble({ message, onShareBank, onChanged }: Props) {
+export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) {
   const { t } = useI18n();
   const mine = message.mine;
   const card = message.kind === "bank_share" || message.kind === "bank_request";
+  const optimistic = Boolean(message.pending || message.failed);
 
   async function remove(scope: "me" | "all") {
     try {
@@ -277,9 +309,10 @@ export function ChatBubble({ message, onShareBank, onChanged }: Props) {
   return (
     <li className={mine ? "flex flex-col items-end" : "flex flex-col items-start"}>
       <div className="flex max-w-[85%] items-start gap-1">
-        {mine && !message.deleted_at && (
+        {mine && !message.deleted_at && !optimistic && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
+
               <button
                 type="button"
                 aria-label={t("market.chat.messageActions")}
@@ -302,13 +335,17 @@ export function ChatBubble({ message, onShareBank, onChanged }: Props) {
         )}
 
         <div
-          className={
+          className={[
             card
               ? "w-full"
               : mine
-                ? "rounded-2xl rounded-ee-sm bg-primary px-3 py-2 text-sm text-primary-foreground"
-                : "rounded-2xl rounded-ss-sm bg-secondary px-3 py-2 text-sm text-secondary-foreground"
-          }
+                ? "rounded-2xl rounded-ee-sm bg-primary px-3 py-2 text-sm text-primary-foreground shadow-sm"
+                : "rounded-2xl rounded-ss-sm bg-secondary px-3 py-2 text-sm text-secondary-foreground shadow-sm",
+            message.pending ? "opacity-70" : "",
+            message.failed ? "ring-1 ring-destructive" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
         >
           {message.deleted_at ? (
             <span className="text-xs italic opacity-80">{t("market.chat.deleted")}</span>
@@ -327,9 +364,22 @@ export function ChatBubble({ message, onShareBank, onChanged }: Props) {
           )}
         </div>
       </div>
-      <time className="mt-1 text-[11px] text-muted-foreground" dateTime={message.created_at}>
-        {formatDateTime(message.created_at)}
-      </time>
+      <span className="mt-1 flex items-center gap-1 px-1 text-[11px] text-muted-foreground">
+        <time dateTime={message.created_at} dir="ltr" className="tabular-nums">
+          {formatTime(message.created_at)}
+        </time>
+        {mine && !message.deleted_at ? <Receipt message={message} /> : null}
+        {message.failed && onRetry ? (
+          <button
+            type="button"
+            onClick={() => onRetry(message)}
+            className="font-medium text-primary underline-offset-2 hover:underline"
+          >
+            {t("market.chat.receipt.retry")}
+          </button>
+        ) : null}
+      </span>
     </li>
+
   );
 }

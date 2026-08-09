@@ -21,9 +21,14 @@ export interface ChatMessage {
   payload: Record<string, unknown>;
   reply_to_id: string | null;
   created_at: string;
+  delivered_at: string | null;
   read_at: string | null;
   deleted_at: string | null;
   mine: boolean;
+  /** Client-only: optimistic bubble waiting for the server ack. */
+  pending?: boolean;
+  /** Client-only: optimistic bubble whose send failed and can be retried. */
+  failed?: boolean;
 }
 
 export interface ChatContext {
@@ -279,3 +284,59 @@ export async function fetchConversations(): Promise<ConversationRow[]> {
 export async function markRead(conversationId: string): Promise<void> {
   await supabase.rpc("mkt_conversation_mark_read", { _conversation_id: conversationId });
 }
+
+/** Stamps the peer's messages as delivered to this viewer (thread opened). */
+export async function markDelivered(conversationId: string): Promise<void> {
+  await supabase.rpc("mkt_conversation_mark_delivered", { _conversation_id: conversationId });
+}
+
+/** Publishes "typing…" for a few seconds; the row is only readable by the peer. */
+export async function pingTyping(conversationId: string): Promise<void> {
+  await supabase.rpc("mkt_typing_ping", { _conversation_id: conversationId, _seconds: 6 });
+}
+
+export async function peerTyping(conversationId: string): Promise<boolean> {
+  const res = await supabase.rpc("mkt_typing_peer", { _conversation_id: conversationId });
+  return res.data === true;
+}
+
+/**
+ * Live thread updates. Postgres row-level security also filters replication,
+ * so a user who is not a party never receives these events at all.
+ */
+export function subscribeThread(
+  conversationId: string,
+  handlers: { onMessage: () => void; onTyping: () => void },
+): () => void {
+  const filter = `conversation_id=eq.${conversationId}`;
+  const channel = supabase
+    .channel(`mkt-thread-${conversationId}`)
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "mkt_messages", filter },
+      () => handlers.onMessage(),
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "mkt_typing", filter },
+      () => handlers.onTyping(),
+    )
+    .subscribe();
+  return () => {
+    void supabase.removeChannel(channel);
+  };
+}
+
+/** Live refresh for the conversations rail (any message the viewer can read). */
+export function subscribeInbox(onChange: () => void): () => void {
+  const channel = supabase
+    .channel("mkt-inbox")
+    .on("postgres_changes", { event: "*", schema: "public", table: "mkt_messages" }, () =>
+      onChange(),
+    )
+    .subscribe();
+  return () => {
+    void supabase.removeChannel(channel);
+  };
+}
+
