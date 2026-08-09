@@ -146,6 +146,10 @@ function AdCreditPage() {
           </CardContent>
         </Card>
 
+        <AdCreditTopupCard walletId={wallet.data?.id ?? null} tenantId={tenantId} />
+
+
+
         {pending.length > 0 && (
           <Card>
             <CardContent className="space-y-2 p-4">
