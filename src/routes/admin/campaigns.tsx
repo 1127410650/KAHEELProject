@@ -63,7 +63,7 @@ const SIDE_LABEL: Record<(typeof SIDES)[number], [string, string]> = {
   left: ["من اليسار", "Left"],
   right: ["من اليمين", "Right"],
 };
-const MASCOTS = ["auto", "moto", "lounge", "wave", "peek", "parcel", "boss", "duo"] as const;
+const MASCOTS = ["auto", "moto", "lounge", "wave", "peek", "parcel", "boss", "duo", "olives", "mustache", "tray"] as const;
 const MASCOT_LABEL: Record<(typeof MASCOTS)[number], [string, string]> = {
   auto: ["حسب النص", "Match copy"],
   moto: ["كَحيلان على الدبّاب", "Kaheelan on a scooter"],
@@ -73,6 +73,9 @@ const MASCOT_LABEL: Record<(typeof MASCOTS)[number], [string, string]> = {
   parcel: ["كَحيلان بالطرد", "Kaheelan in a parcel"],
   boss: ["الزعيم كَحيلان", "Chief Kaheelan"],
   duo: ["كَحيل وكَحيلان (تعارف)", "Kaheel & Kaheelan (intro)"],
+  olives: ["كَحيلان بطبق الزيتون", "Kaheelan with a plate of olives"],
+  mustache: ["كَحيلان يفتل شواربه", "Kaheelan twirling his mustache"],
+  tray: ["كَحيلان بصينية حلاوة الجبن", "Kaheelan with a halawet el-jibn tray"],
 };
 
 
