@@ -1,0 +1,233 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronLeft } from "lucide-react";
+
+import { useI18n } from "@/i18n";
+import heroImage from "@/assets/market/kaheel-home-hero-v2.webp";
+import propertyImage from "@/assets/market/cat-real-estate-hero.webp";
+import carImage from "@/assets/market/cat-cars.webp";
+import servicesImage from "@/assets/market/cat-home-services.webp";
+
+type Slide = {
+  id: string;
+  image: string;
+  href: string;
+  badgeAr: string;
+  badgeEn: string;
+  titleAr: string;
+  titleEn: string;
+  descAr: string;
+  descEn: string;
+};
+
+const AUTOPLAY_MS = 5_200;
+
+/**
+ * The promotional banner rail. Native scroll-snap does the moving, so touch
+ * dragging is the browser's own smooth gesture and autoplay is only a timed
+ * `scrollTo`. Any user interaction (touch, wheel, keyboard, hover) pauses it,
+ * and it never runs while off-screen, in a hidden tab, or under
+ * `prefers-reduced-motion`.
+ */
+export function PromoCarousel({ addHref }: { addHref: string }) {
+  const { locale, t } = useI18n();
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const [index, setIndex] = useState(0);
+  const holdingRef = useRef(false);
+  const visibleRef = useRef(true);
+  const ar = locale === "ar";
+
+  const slides: Slide[] = [
+    {
+      id: "hero",
+      image: heroImage,
+      href: "/search?domain=product",
+      badgeAr: t("market.homeV2.hero.badge"),
+      badgeEn: t("market.homeV2.hero.badge"),
+      titleAr: t("market.homeV2.hero.title"),
+      titleEn: t("market.homeV2.hero.title"),
+      descAr: t("market.homeV2.hero.desc"),
+      descEn: t("market.homeV2.hero.desc"),
+    },
+    {
+      id: "real-estate",
+      image: propertyImage,
+      href: "/search?category=real-estate",
+      badgeAr: "عقارات",
+      badgeEn: "Real estate",
+      titleAr: "ابحث عن بيتك القادم",
+      titleEn: "Find your next home",
+      descAr: "شقق وفلل وأراضٍ من ملّاك ومكاتب موثوقة",
+      descEn: "Apartments, villas and land from trusted offices",
+    },
+    {
+      id: "cars",
+      image: carImage,
+      href: "/search?category=cars",
+      badgeAr: "سيارات",
+      badgeEn: "Cars",
+      titleAr: "سيارات بأسعار السوق",
+      titleEn: "Cars at market prices",
+      descAr: "قارن العروض وتواصل مع البائع مباشرة",
+      descEn: "Compare offers and reach the seller directly",
+    },
+    {
+      id: "add",
+      image: servicesImage,
+      href: addHref,
+      badgeAr: "مجانًا",
+      badgeEn: "Free",
+      titleAr: "أضف إعلانك في دقيقة",
+      titleEn: "Post your ad in a minute",
+      descAr: "اعرض منتجك أو خدمتك على عملاء كَحيل",
+      descEn: "Show your product or service to Kaheel customers",
+    },
+  ];
+
+  const goTo = useCallback((next: number, smooth = true) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const slide = rail.children[next] as HTMLElement | undefined;
+    if (!slide) return;
+    rail.scrollTo({ left: slide.offsetLeft, behavior: smooth ? "smooth" : "auto" });
+  }, []);
+
+  // Keep the dots in sync with wherever the user dragged the rail.
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const width = rail.clientWidth || 1;
+        setIndex(Math.max(0, Math.min(slides.length - 1, Math.round(rail.scrollLeft / width))));
+      });
+    };
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      rail.removeEventListener("scroll", onScroll);
+    };
+  }, [slides.length]);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry?.isIntersecting ?? true;
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(rail);
+
+    const timer = window.setInterval(() => {
+      if (reduced.matches) return;
+      if (holdingRef.current) return;
+      if (!visibleRef.current) return;
+      if (document.visibilityState !== "visible") return;
+      const width = rail.clientWidth || 1;
+      const current = Math.round(rail.scrollLeft / width);
+      const next = (current + 1) % slides.length;
+      const target = rail.children[next] as HTMLElement | undefined;
+      if (target) rail.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
+    }, AUTOPLAY_MS);
+
+    return () => {
+      window.clearInterval(timer);
+      observer.disconnect();
+    };
+  }, [slides.length]);
+
+  const hold = () => {
+    holdingRef.current = true;
+  };
+  const release = () => {
+    holdingRef.current = false;
+  };
+
+  return (
+    <section
+      aria-roledescription="carousel"
+      aria-label={ar ? "عروض كَحيل" : "Kaheel offers"}
+      className="relative"
+      onPointerDown={hold}
+      onPointerUp={release}
+      onPointerCancel={release}
+      onMouseEnter={hold}
+      onMouseLeave={release}
+      onFocus={hold}
+      onBlur={release}
+      onWheel={hold}
+    >
+      <div
+        ref={railRef}
+        className="market-promo-rail flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-[24px] sm:rounded-[30px]"
+      >
+        {slides.map((slide, slideIndex) => (
+          <a
+            key={slide.id}
+            href={slide.href}
+            aria-label={ar ? slide.titleAr : slide.titleEn}
+            aria-roledescription="slide"
+            className="group relative block min-h-[208px] w-full shrink-0 snap-start snap-always overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white outline-none sm:min-h-[286px] sm:rounded-[30px]"
+          >
+            <img
+              src={slide.image}
+              alt=""
+              width={1728}
+              height={920}
+              fetchPriority={slideIndex === 0 ? "high" : "low"}
+              loading={slideIndex === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className="absolute inset-0 size-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]"
+              aria-hidden
+            />
+            <div className="relative z-10 mx-auto flex min-h-[208px] w-[62%] max-w-[520px] flex-col items-center justify-center px-2 py-5 text-center sm:min-h-[286px] sm:w-[48%] sm:px-4">
+              <span className="rounded-full bg-[#240046] px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
+                {ar ? slide.badgeAr : slide.badgeEn}
+              </span>
+              {slideIndex === 0 ? (
+                <h1 className="mt-2 text-[20px] font-black leading-tight text-[#240046] min-[380px]:text-[23px] sm:mt-3 sm:text-4xl">
+                  {ar ? slide.titleAr : slide.titleEn}
+                </h1>
+              ) : (
+                <p className="mt-2 text-[20px] font-black leading-tight text-[#240046] min-[380px]:text-[23px] sm:mt-3 sm:text-4xl">
+                  {ar ? slide.titleAr : slide.titleEn}
+                </p>
+              )}
+              <p className="mt-1 text-[10px] font-bold text-[#5a189a] min-[380px]:text-[11px] sm:text-sm">
+                {ar ? slide.descAr : slide.descEn}
+              </p>
+              <span className="mt-3 inline-flex min-h-10 items-center rounded-full bg-[#3c096c] px-4 text-[10px] font-bold text-white shadow-[0_8px_20px_rgb(60_9_108/0.24)] sm:min-h-11 sm:px-6 sm:text-xs">
+                {t("market.homeV2.hero.cta")}
+                <ChevronLeft className="ms-1 size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div className="mt-2 flex items-center justify-center gap-1.5">
+        {slides.map((slide, dotIndex) => (
+          <button
+            key={slide.id}
+            type="button"
+            onClick={() => goTo(dotIndex)}
+            aria-label={
+              ar ? `الانتقال إلى العرض ${dotIndex + 1}` : `Go to offer ${dotIndex + 1}`
+            }
+            aria-current={dotIndex === index ? "true" : undefined}
+            className={
+              dotIndex === index
+                ? "h-1.5 w-6 rounded-full bg-[#3c096c] transition-all duration-300"
+                : "h-1.5 w-1.5 rounded-full bg-[#c77dff]/55 transition-all duration-300 hover:bg-[#7b2cbf]"
+            }
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
