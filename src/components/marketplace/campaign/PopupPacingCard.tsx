@@ -56,6 +56,7 @@ export function PopupPacingCard() {
           mascot_min_gap_ms: values.mascotMinGapMs,
           mascot_max_per_session: values.mascotMaxPerSession,
           mascot_quiet_after_close_ms: values.mascotQuietAfterCloseMs,
+          mascot_idle_ms: values.mascotIdleMs,
           enabled: values.enabled,
 
         },
@@ -82,7 +83,8 @@ export function PopupPacingCard() {
       | "roamDurationMs"
       | "mascotMinGapMs"
       | "mascotMaxPerSession"
-      | "mascotQuietAfterCloseMs",
+      | "mascotQuietAfterCloseMs"
+      | "mascotIdleMs",
     labelAr: string,
     labelEn: string,
     hintAr: string,
@@ -123,27 +125,33 @@ export function PopupPacingCard() {
           </p>
           <p className="text-xs text-muted-foreground">
             {ar
-              ? "شخصية واحدة فقط على الشاشة في أي لحظة، ولا تظهر الشخصية نفسها مرتين متتاليتين، والفاصل يُحسب بزمن التصفح النشط فقط. وإن لم تتوفر مساحة فارغة آمنة على الشاشة فلا تظهر الشخصية إطلاقًا."
-              : "Only one mascot on screen at any moment, never the same one twice in a row, and the gap counts active browsing time only. With no safe empty space on screen, nothing appears at all."}
+              ? "الظهور مرتبط بسلوك الزائر: عندما يتوقّف عن التمرير ويثبت على منطقة للمدة المحددة أدناه، تظهر الشخصية — وأثناء التمرير لا تظهر، والاستئناف السريع يُخفيها. تبقى القواعد الصارمة: شخصية واحدة فقط على الشاشة، ولا تتكرّر نفس الشخصية ولا نفس الرسالة مرتين متتاليتين، ولا ظهور إلا في مساحة فارغة آمنة."
+              : "Appearances follow behaviour: when the visitor stops scrolling and dwells for the duration below, a mascot appears — never while scrolling, and a fast resume hides it. The hard rules stay: one mascot on screen, never the same mascot or line twice in a row, and only inside safe empty space."}
           </p>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {field(
+              "mascotIdleMs",
+              "سكون التمرير قبل الظهور (مللي ثانية)",
+              "Scroll dwell before appearing (ms)",
+              "١٠٠٠ – ١٠٠٠٠ (٢٥٠٠ مستحسن)",
+            )}
             {field(
               "mascotMinGapMs",
               "الفاصل بين ظهورين (مللي ثانية)",
               "Gap between appearances (ms)",
-              "١٢٠٠٠٠ – ٣٦٠٠٠٠٠ (٤-٦ دقائق مستحسن)",
+              "٢٠٠٠٠ – ٣٦٠٠٠٠٠ (٥٠٠٠٠ ≈ ٥٠ ثانية مستحسن)",
             )}
             {field(
               "mascotMaxPerSession",
               "أقصى ظهورات في الجلسة",
               "Max appearances per session",
-              "٠ – ٦ (٣ مستحسن)",
+              "٠ – ٨ (٦ مستحسن)",
             )}
             {field(
               "mascotQuietAfterCloseMs",
               "صمت بعد الإغلاق (مللي ثانية)",
               "Quiet after close (ms)",
-              "٣٠٠٠٠ – ١٨٠٠٠٠٠ (دقيقتان مستحسن)",
+              "١٥٠٠٠ – ١٨٠٠٠٠٠ (٤٥٠٠٠ مستحسن)",
             )}
           </div>
         </div>
