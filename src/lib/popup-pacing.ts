@@ -38,11 +38,11 @@ export interface PopupPacing {
 }
 
 export const DEFAULT_PACING: PopupPacing = {
-  firstDelayMs: 45_000,
+  firstDelayMs: 5_000,
   intervalMs: 210_000,
   maxPerSession: 5,
-  autoDismissMs: 7_000,
-  pageSettleMs: 3_000,
+  autoDismissMs: 20_000,
+  pageSettleMs: 0,
   enabled: true,
 };
 

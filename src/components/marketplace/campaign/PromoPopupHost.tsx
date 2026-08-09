@@ -247,7 +247,7 @@ export function PromoPopupHost() {
 
   if (!plan) return null;
 
-  const fallback = popupCopyAt(ar, plan.copyIndex);
+  const fallback = popupCopyAt(ar, popupCopyCount(ar) - 3);
   const title = (ar ? campaign?.title_ar : campaign?.title_en) || fallback.title;
   const subtitle = (ar ? campaign?.subtitle_ar : campaign?.subtitle_en) || fallback.subtitle;
   const badge = ar ? campaign?.badge_ar : campaign?.badge_en;
@@ -260,7 +260,7 @@ export function PromoPopupHost() {
   const mascot: MascotKind =
     campaign?.popup_mascot && campaign.popup_mascot !== "auto"
       ? (campaign.popup_mascot as MascotKind)
-      : plan.mascot;
+      : ("duo" as MascotKind);
   const vertical = side === "top" || side === "bottom";
   /** مشهد التعارف: بطاقة مضغوطة عمودية تملؤها الشخصيتان. */
   const duo = mascot === "duo";
