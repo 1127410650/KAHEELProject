@@ -1,15 +1,16 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    أصدقاء كَحيل الصغار — شخصيات كرتونية **أصلية** خاصة بقسم الأطفال.
 
-   قانونيًا: كل الأشكال مرسومة من الصفر هنا (SVG متجهي داخل الكود) بأسلوب
-   كرتون كلاسيكي عام: عيون كبيرة مستديرة، خطوط ناعمة، ألوان زاهية مع لمسة
+   قانونيًا: كل الشخصيات أصلية 100% ومولّدة خصيصًا لهذا المشروع بأسلوب 3D
+   ناعم موحّد: عيون كبيرة مستديرة لامعة، خطوط ناعمة، خدود وردية، ولمسة
    بنفسجية من هوية كَحيل. لا محاكاة لأي شخصية مملوكة لأي شركة.
+   أصول الصور في `src/lib/kids-friend-assets.ts`.
 
    هذه شخصيات مساعدة لقسم الأطفال فقط — كَحيل وكَحيلان يبقيان شخصيتَي
    المنصة الرئيسيتين بلا تغيير.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-export type KidsFriendId = "birdy" | "mishmisha" | "dabdoob" | "nabnab" | "najma";
+export type KidsFriendId = "birdy" | "nono" | "dabdoob" | "natnoot" | "najooma";
 
 export type KidsFriendMood = "happy" | "sad" | "wink";
 
@@ -28,16 +29,16 @@ export interface KidsFriendMeta {
 export const KIDS_FRIENDS: KidsFriendMeta[] = [
   {
     id: "birdy",
-    nameAr: "زقزوق",
-    nameEn: "Zaqzooq",
+    nameAr: "زقزق",
+    nameEn: "Zaqzaq",
     roleAr: "الألعاب",
     roleEn: "Toys",
     match: ["toy", "toys", "game", "games", "play", "لعب", "ألعاب", "العاب"],
   },
   {
-    id: "mishmisha",
-    nameAr: "مشمشة",
-    nameEn: "Mishmisha",
+    id: "nono",
+    nameAr: "نونو",
+    nameEn: "Nono",
     roleAr: "ملابس الأطفال",
     roleEn: "Kids clothing",
     match: ["cloth", "fashion", "wear", "shoe", "ملابس", "أحذية", "احذية", "لبس"],
@@ -51,9 +52,9 @@ export const KIDS_FRIENDS: KidsFriendMeta[] = [
     match: ["baby", "babies", "infant", "newborn", "رضع", "رضّع", "مواليد", "حفاض", "حليب"],
   },
   {
-    id: "nabnab",
-    nameAr: "نبنوب",
-    nameEn: "Nabnoob",
+    id: "natnoot",
+    nameAr: "نطنوط",
+    nameEn: "Natnoot",
     roleAr: "القرطاسية",
     roleEn: "School & stationery",
     match: [
@@ -69,9 +70,9 @@ export const KIDS_FRIENDS: KidsFriendMeta[] = [
     ],
   },
   {
-    id: "najma",
-    nameAr: "نجمة",
-    nameEn: "Najma",
+    id: "najooma",
+    nameAr: "نجومة",
+    nameEn: "Najooma",
     roleAr: "الصيف والمسبح",
     roleEn: "Summer & pools",
     match: ["pool", "swim", "summer", "beach", "water", "مسبح", "مسابح", "سباحة", "صيف", "بحر"],
