@@ -43,6 +43,8 @@ import {
 
 interface Props {
   conversationId: string;
+  /** Pre-filled draft (e.g. the greeting produced by "Contact" on an ad). */
+  initialDraft?: string | undefined;
   disabled?: boolean;
   onSent: () => void;
   onBankShare: () => void;
@@ -61,13 +63,14 @@ interface Pending {
 
 export function ChatComposer({
   conversationId,
+  initialDraft,
   disabled = false,
   onSent,
   onBankShare,
   onBankRequest,
 }: Props) {
   const { t } = useI18n();
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState(initialDraft ?? "");
   const [busy, setBusy] = useState(false);
   const [sheet, setSheet] = useState<Sheet>(null);
   const [pending, setPending] = useState<Pending | null>(null);
@@ -103,6 +106,16 @@ export function ChatComposer({
       setBusy(false);
     }
   }
+
+  // A draft handed in from outside replaces the (empty) box once per thread.
+  const draftFor = useRef<string | null>(null);
+  useEffect(() => {
+    if (!initialDraft) return;
+    const key = `${conversationId}:${initialDraft}`;
+    if (draftFor.current === key) return;
+    draftFor.current = key;
+    setBody(initialDraft);
+  }, [conversationId, initialDraft]);
 
   function sendText() {
     const text = body.trim();

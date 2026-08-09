@@ -21,19 +21,17 @@ import { QrCodeButton } from "@/components/marketplace/QrCodeButton";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
 import { track } from "@/lib/analytics";
 import { CallButton } from "@/components/marketplace/CallButton";
-import { chatErrorKey, openConversation, sendMessage } from "@/lib/mkt-chat";
+import { chatErrorKey, openConversation } from "@/lib/mkt-chat";
 import { useListingCommerceAction } from "@/lib/mkt-provider-network";
 
 import { canonicalUrl } from "@/lib/share-links";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
+/** Friendly, editable opener that names the ad and its reference number. */
+function greeting(listing: MktListing, t: (key: string, vars?: Record<string, string>) => string) {
+  const ref = listing.ref_no ? String(listing.ref_no) : listing.id.slice(0, 8);
+  return t("market.actions.greeting", { title: listing.title, ref });
+}
 
 interface Props {
   listing: MktListing;
@@ -93,7 +91,7 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
   useEffect(() => {
     if (!session || !pendingAction) return;
     if (pendingAction === "quote" || pendingAction === "contact") {
-      setDialog("contact");
+      void goToChat();
     } else if (pendingAction === "report") {
       setDialog("report");
     } else if (pendingAction === "save") {
@@ -131,15 +129,20 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
     toast.success(t("market.actions.savedToFavorites"));
   }
 
-  async function startConversation(body: string) {
+  /**
+   * "Contact" goes straight to the thread with the advertiser: one thread per
+   * visitor and ad, so a previous conversation about this ad is reopened instead
+   * of a new one being created. The greeting travels as an editable draft — no
+   * message is sent until the visitor presses send in the chat composer.
+   */
+  async function goToChat() {
     setBusy(true);
     try {
-      // One thread per visitor and ad; the server enforces blocks and limits.
       const conversationId = await openConversation(listing.id);
-      await sendMessage(conversationId, "text", body);
-      toast.success(t("market.actions.messageSent"));
-      setDialog(null);
-      void navigate({ to: "/my/messages", search: { c: conversationId } });
+      void navigate({
+        to: "/my/messages",
+        search: { c: conversationId, draft: greeting(listing, t) },
+      });
     } catch (error) {
       toast.error(t(chatErrorKey(error)));
     } finally {
@@ -262,8 +265,9 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
           variant={commerceButton ? "outline" : "default"}
           onClick={() => {
             track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
-            if (gate("contact")) setDialog("contact");
+            if (gate("contact")) void goToChat();
           }}
+          disabled={busy}
         >
           <MessageSquare className="size-4" aria-hidden />
           {t("market.actions.contact")}
@@ -271,33 +275,6 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
         {/* Free in-platform voice call; hides itself when not available. */}
         {!isOwner && <CallButton listingId={listing.id} className="h-11 sm:col-span-2 sm:h-10" />}
       </div>
-
-      <Dialog open={dialog === "contact"} onOpenChange={(o) => !o && setDialog(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t("market.actions.contact")}</DialogTitle>
-            <DialogDescription>{listing.title}</DialogDescription>
-          </DialogHeader>
-          <form
-            className="space-y-3"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const body = String(new FormData(e.currentTarget).get("body") ?? "").trim();
-              if (body) void startConversation(body);
-            }}
-          >
-            <Textarea
-              name="body"
-              rows={4}
-              required
-              placeholder={t("market.actions.messagePlaceholder")}
-            />
-            <Button type="submit" className="w-full" disabled={busy}>
-              {t("market.actions.sendMessage")}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
 
       <ReportDialog
         listingId={listing.id}

@@ -47,12 +47,18 @@ import {
 
 interface MessagesSearch {
   c?: string | undefined;
+  /** Greeting pre-filled by "Contact" on an ad; editable before sending. */
+  draft?: string | undefined;
 }
 
 export const Route = createFileRoute("/my/messages")({
   ssr: "data-only",
-  validateSearch: (search: Record<string, unknown>): MessagesSearch =>
-    typeof search["c"] === "string" ? { c: search["c"] } : {},
+  validateSearch: (search: Record<string, unknown>): MessagesSearch => {
+    const out: MessagesSearch = {};
+    if (typeof search["c"] === "string") out.c = search["c"];
+    if (typeof search["draft"] === "string") out.draft = search["draft"].slice(0, 500);
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "المحادثات — كَحيل" },
@@ -77,7 +83,7 @@ function previewOf(row: ConversationRow, t: (key: string) => string): string {
 
 function MessagesPage() {
   const { t } = useI18n();
-  const { c } = Route.useSearch();
+  const { c, draft } = Route.useSearch();
   const navigate = useNavigate();
   const { session } = useSession();
   const { account } = useActiveAccount();
@@ -307,9 +313,8 @@ function MessagesPage() {
                   {t("market.chat.back")}
                 </Button>
                 <p className="min-w-0 flex-1 truncate text-sm font-semibold">{ctx.peer_name}</p>
-                {ctx.listing_id && !ctx.is_seller_side && (
-                  <CallButton listingId={ctx.listing_id} className="h-9" />
-                )}
+                {/* Free in-platform voice call, available to both sides. */}
+                <CallButton conversationId={selected} className="h-9" />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" aria-label={t("market.chat.more")}>
@@ -373,6 +378,7 @@ function MessagesPage() {
                 ) : (
                   <ChatComposer
                     conversationId={selected}
+                    initialDraft={c && selected === c ? draft : undefined}
                     onSent={refresh}
                     onBankShare={() => {
                       setBankRequestId(null);
