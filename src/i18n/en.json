@@ -1983,9 +1983,6 @@
         "note": "What you reported",
         "files": "Attachments",
         "noFiles": "No attachments.",
-        "channelAuto": "Delivery: {channel} — chosen automatically from your country code.",
-        "syriaSmsOnly": "Syrian numbers receive the code by SMS only; WhatsApp is not supported in Syria.",
-        "cooldown": "Wait {seconds} seconds before resending.",
         "channel": "Messages with the review team",
         "channelHint": "This thread is only between you and the review team.",
         "replyPlaceholder": "Write your reply or add more information…",
@@ -3776,7 +3773,10 @@
       "tooMany": "Too many attempts. Send a new code.",
       "failed": "Sign-in failed. Try again.",
       "passwordTab": "Password",
-      "codeTab": "Code"
+      "codeTab": "Code",
+      "channelAuto": "Delivery: {channel} — chosen automatically from your country code.",
+      "syriaSmsOnly": "Syrian numbers receive the code by SMS only; WhatsApp is not supported in Syria.",
+      "cooldown": "Wait {seconds} seconds before resending."
     }
   },
   "routeError": {
