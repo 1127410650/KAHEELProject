@@ -203,7 +203,6 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
               peerAvatar: peer?.peer_avatar ?? null,
               listingTitle: peer?.listing_title ?? null,
               listingId: peer?.listing_id ?? null,
-          listingId: peer?.listing_id ?? null,
               conversationId: peer?.conversation_id ?? null,
               peerUserId: null,
               errorKey: null,
