@@ -89,6 +89,9 @@ export function SeasonalLayer({
     season.mascot === "kaheel" || season.mascot === "kaheelan"
       ? mascotAsset(season.mascot, "sm")
       : null;
+  const headline = (ar ? season.headline_ar : season.headline_en).trim();
+  const subheadline = (ar ? season.subheadline_ar : season.subheadline_en).trim();
+
 
   return (
     <div
