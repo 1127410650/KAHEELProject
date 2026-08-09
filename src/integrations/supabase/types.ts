@@ -4139,6 +4139,51 @@ export type Database = {
           },
         ]
       }
+      mkt_login_otps: {
+        Row: {
+          attempts: number
+          channel: string
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          delivered: boolean
+          expires_at: string
+          id: string
+          max_attempts: number
+          phone: string
+          provider: string | null
+          request_key: string | null
+        }
+        Insert: {
+          attempts?: number
+          channel?: string
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          delivered?: boolean
+          expires_at: string
+          id?: string
+          max_attempts?: number
+          phone: string
+          provider?: string | null
+          request_key?: string | null
+        }
+        Update: {
+          attempts?: number
+          channel?: string
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          delivered?: boolean
+          expires_at?: string
+          id?: string
+          max_attempts?: number
+          phone?: string
+          provider?: string | null
+          request_key?: string | null
+        }
+        Relationships: []
+      }
       mkt_message_hides: {
         Row: {
           created_at: string
@@ -10452,6 +10497,7 @@ export type Database = {
         }[]
       }
       mkt_public_phone: { Args: { _user_id: string }; Returns: string }
+      mkt_purge_login_otps: { Args: never; Returns: undefined }
       mkt_qa_cleanup: { Args: { _batch_id: string }; Returns: Json }
       mkt_queue_perm: { Args: { _kind: string }; Returns: string }
       mkt_re_license_active: {
