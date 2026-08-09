@@ -176,7 +176,7 @@ function RealEstateFallback() {
   return (
     <MarketShell footer="none">
       <div className="real-estate-experience bg-background">
-        <Skeleton className="h-[350px] w-full rounded-none sm:h-[430px]" />
+        <Skeleton className="h-[240px] w-full rounded-none sm:h-[280px]" />
         <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-3 py-6 sm:grid-cols-4 sm:px-5 lg:px-8">
           {Array.from({ length: 8 }).map((_, index) => (
             <Skeleton key={index} className="aspect-[3/4] rounded-2xl" />
