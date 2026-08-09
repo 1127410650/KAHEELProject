@@ -355,7 +355,7 @@ export function PromoPopupHost() {
         : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
 
     return (
-      <div className="pointer-events-none fixed inset-0 z-[80]" aria-live="polite">
+      <div className="pointer-events-none fixed z-30 top-[calc(3.6rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
         <div
           key={card.key}
           data-kaheel-drop-card
@@ -370,16 +370,16 @@ export function PromoPopupHost() {
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
           <div
             dir={ar ? "rtl" : "ltr"}
-            className="mb-2 max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl"
+            className="mb-2 max-w-[9.5rem] min-[360px]:max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl"
           >
 
             <div className="mb-1 flex items-start justify-between gap-2">
-              <p className="line-clamp-2 text-[13px] font-black leading-tight text-[#240046]">
+              <p className="text-[13px] font-black leading-tight text-[#240046] [overflow-wrap:anywhere]">
                 {card.title}
               </p>
               {closeButtons}
             </div>
-            <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#5a189a]">
+            <p className="text-[11px] font-bold leading-snug text-[#5a189a] [overflow-wrap:anywhere]">
               {card.subtitle}
             </p>
           </div>
@@ -410,7 +410,7 @@ export function PromoPopupHost() {
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[80]" aria-live="polite">
+    <div className="pointer-events-none fixed z-30 top-[calc(3.6rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
       <div
         key={card.key}
         data-kaheel-drop-card
@@ -420,21 +420,21 @@ export function PromoPopupHost() {
           transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
           animation,
         }}
-        className={`pointer-events-none absolute flex w-[15.5rem] max-w-[calc(100vw-1.5rem)] flex-col items-center gap-1.5 rounded-3xl border border-white/60 bg-white/95 px-3.5 pb-4 pt-14 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
-          entrance ? "bottom-24 left-3" : ENTRY_POSITION[card.side]
+        className={`pointer-events-none absolute flex max-h-full w-[15.5rem] max-w-full flex-col items-center gap-1.5 overflow-hidden rounded-3xl border border-white/60 bg-white/95 px-3.5 pb-4 pt-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
+          entrance ? "bottom-0 left-0" : ENTRY_POSITION[card.side]
         }`}
       >
         <div className="absolute end-2 top-2 z-10">{closeButtons}</div>
 
-        {/* الشخصية هي البطل البصري: كبيرة وتطلّ خارج حافة البطاقة من الأعلى. */}
-        <div className={`-mt-[4.75rem] ${bodyMotion}`}>
+        {/* الاحتواء أولوية: الشخصية كبيرة لكنها **داخل** حدود البطاقة وتُقصّ عندها. */}
+        <div className={`mt-1 shrink ${bodyMotion}`}>
           <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
         </div>
 
-        <p className="w-full truncate text-[17px] font-black leading-tight text-[#240046]">
+        <p className="w-full text-[17px] font-black leading-tight text-[#240046] [overflow-wrap:anywhere]">
           {card.title}
         </p>
-        <p className="line-clamp-3 text-[13.5px] font-semibold leading-relaxed text-[#3c096c]">
+        <p className="w-full text-[13.5px] font-semibold leading-relaxed text-[#3c096c] [overflow-wrap:anywhere]">
           {card.subtitle}
         </p>
       </div>
