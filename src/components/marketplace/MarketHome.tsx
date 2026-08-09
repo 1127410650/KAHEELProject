@@ -47,13 +47,12 @@ import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadListings, type ListingFilters } from "@/lib/mkt-queries";
 import { SELECTABLE_FIELDS } from "@/lib/market-primary-navigation";
 import { LIVE_DEMO_VISIBLE } from "@/lib/live-demo";
-import { ListingCard } from "@/components/marketplace/ListingCard";
+import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/ListingCard";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
 import { Reveal } from "@/components/marketplace/home/Reveal";
 
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 
 type HomeKey = `market.homeV2.${string}`;
 
@@ -159,7 +158,7 @@ export function MarketHome() {
   return (
     <div className="bg-white pb-5 text-[#240046]">
       <div className="mx-auto w-full max-w-[1240px] space-y-4 px-3 pb-3 pt-3 sm:space-y-6 sm:px-5 lg:px-8">
-        <div className="flex min-h-[56px] overflow-hidden rounded-[18px] border border-[#c77dff]/35 bg-white shadow-[0_10px_30px_rgb(60_9_108/0.09)] transition-shadow hover:shadow-[0_12px_34px_rgb(60_9_108/0.13)] focus-within:ring-2 focus-within:ring-[#7b2cbf] sm:min-h-[60px] sm:rounded-[21px]">
+        <div className="k-surface flex min-h-[56px] overflow-hidden rounded-[20px] focus-within:border-[#9d4edd]/60 focus-within:ring-2 focus-within:ring-[#7b2cbf]/30 sm:min-h-[60px]">
           <Link
             to="/search"
             search={{}}
@@ -173,7 +172,7 @@ export function MarketHome() {
             to="/search"
             search={{ filters: 1 }}
             aria-label={t("market.homeV2.detailedSearch" as HomeKey)}
-            className="group m-1.5 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[14px] bg-[#e0aaff]/42 px-3 text-[11px] font-black text-[#3c096c] outline-none transition hover:bg-[#e0aaff]/65 focus-visible:ring-2 focus-visible:ring-[#7b2cbf] min-[380px]:px-4 min-[380px]:text-xs"
+            className="k-press group m-1.5 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[15px] bg-[linear-gradient(140deg,#7b2cbf,#5a189a)] px-3 text-[11px] font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] min-[380px]:px-4 min-[380px]:text-xs"
           >
             <SlidersHorizontal className="size-4" aria-hidden />
             <span>{t("market.homeV2.detailedSearch" as HomeKey)}</span>
@@ -242,8 +241,8 @@ export function MarketHome() {
                 aria-pressed={featuredCategory === slug}
                 className={
                   featuredCategory === slug
-                    ? "min-h-11 shrink-0 rounded-full bg-[#3c096c] px-5 text-xs font-bold text-white"
-                    : "min-h-11 shrink-0 rounded-full bg-[#e0aaff]/28 px-5 text-xs font-bold text-[#5a189a] hover:bg-[#e0aaff]/48"
+                    ? "k-press min-h-11 shrink-0 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white shadow-[0_8px_18px_-8px_rgb(60_9_108/0.7)]"
+                    : "k-press min-h-11 shrink-0 rounded-full border border-[#c77dff]/35 bg-white px-5 text-xs font-bold text-[#5a189a] hover:border-[#9d4edd]/50 hover:bg-[#e0aaff]/22"
                 }
               >
                 {t(`market.homeV2.filters.${key}` as HomeKey)}
@@ -343,14 +342,14 @@ function MainFieldCard({
   return (
     <a
       href={field.href}
-      className={`group relative min-h-[208px] min-w-0 overflow-hidden rounded-[22px] bg-gradient-to-b ${field.tone} p-3 text-white shadow-[0_12px_28px_rgb(60_9_108/0.15)] outline-none ring-1 ring-white/70 transition-transform hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[260px] sm:rounded-[26px] sm:p-4 lg:min-h-[292px]`}
+      className={`group k-deep k-lift relative min-h-[208px] min-w-0 bg-gradient-to-b ${field.tone} p-3 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[260px] sm:p-4 lg:min-h-[292px]`}
     >
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-[17px] font-black leading-tight sm:text-[21px]">
+          <h3 className="text-[17px] font-black leading-[1.15] tracking-tight sm:text-[21px]">
             {t(`market.homeV2.fields.${field.key}.title` as HomeKey)}
           </h3>
-          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/16 backdrop-blur-sm sm:size-9">
+          <span className="k-glass grid size-8 shrink-0 place-items-center rounded-full sm:size-9">
             <Icon className="size-4 sm:size-5" aria-hidden />
           </span>
         </div>
@@ -371,7 +370,7 @@ function MainFieldCard({
       ) : (
         <CategoryArtwork category={field.key} />
       )}
-      <span className="absolute inset-x-2.5 bottom-2.5 z-10 inline-flex min-h-10 items-center justify-center rounded-full bg-white px-2 text-[10px] font-black text-[#3c096c] shadow-[0_6px_14px_rgb(36_0_70/0.16)] sm:inset-x-3 sm:bottom-3 sm:px-3 sm:text-xs">
+      <span className="absolute inset-x-2.5 bottom-2.5 z-10 inline-flex min-h-10 items-center justify-center rounded-full bg-white px-2 text-[10px] font-black text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_8px_18px_-6px_rgb(36_0_70/0.35)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:inset-x-3 sm:bottom-3 sm:px-3 sm:text-xs">
         {t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}
         <ChevronLeft className="ms-1 size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
       </span>
@@ -424,7 +423,7 @@ function BenefitsStrip() {
   return (
     <section
       aria-label={locale === "ar" ? "مزايا كَحيل" : "Kaheel benefits"}
-      className="grid grid-cols-2 overflow-hidden rounded-[20px] border border-[#c77dff]/35 bg-white shadow-[0_9px_26px_rgb(60_9_108/0.07)] sm:grid-cols-4 sm:rounded-[24px]"
+      className="k-surface grid grid-cols-2 overflow-hidden sm:grid-cols-4"
     >
       {benefits.map(([Icon, ar, en], index) => (
         <div
@@ -433,7 +432,7 @@ function BenefitsStrip() {
             index % 2 ? "border-s border-[#c77dff]/25" : ""
           } ${index >= 2 ? "border-t border-[#c77dff]/25 sm:border-t-0" : ""}`}
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[#e0aaff]/38 text-[#3c096c]">
+          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_4px_10px_-4px_rgb(60_9_108/0.35)]">
             <Icon className="size-5" aria-hidden />
           </span>
           <strong className="text-[11px] font-black text-[#240046] sm:text-xs">
@@ -451,10 +450,10 @@ function SecondaryServices() {
     <section aria-label={t("market.homeV2.secondaryServices" as HomeKey)} className="py-1">
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
-          <p className="text-[9px] font-black text-[#7b2cbf] sm:text-[10px]">
+          <p className="k-eyebrow">
             {locale === "ar" ? "قصص كَحيل" : "Kaheel stories"}
           </p>
-          <h2 className="text-lg font-black text-[#240046] sm:text-xl">
+          <h2 className="k-h2">
             {t("market.homeV2.secondaryServices" as HomeKey)}
           </h2>
         </div>
@@ -470,10 +469,10 @@ function SecondaryServices() {
           <a
             key={key}
             href={key === "more" ? "/more" : `/search?category=${slug}`}
-            className="group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[9px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto sm:text-[10px]"
+            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[9px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto sm:text-[10px]"
           >
             <span
-              className={`grid size-14 place-items-center rounded-full border-2 border-white ${tone} shadow-[0_0_0_2px_rgb(199_125_255/0.38),0_7px_18px_rgb(60_9_108/0.09)] transition-transform group-hover:-translate-y-0.5 sm:size-16`}
+              className={`grid size-14 place-items-center rounded-full border-2 border-white ${tone} shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16`}
             >
               <Icon className="size-5 sm:size-6" aria-hidden />
             </span>
@@ -501,13 +500,15 @@ function SectionHeading({
   const { t } = useI18n();
   return (
     <div className="flex items-center justify-between gap-3">
-      <h2 id={id} className="flex items-center gap-2 text-xl font-black tracking-tight sm:text-2xl">
-        <Icon className="size-5 text-[#f59e0b] sm:size-6" aria-hidden />
-        <span>{title}</span>
+      <h2 id={id} className="k-h2 flex min-w-0 items-center gap-2">
+        <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-[linear-gradient(145deg,#f3e3ff,#e0aaff)] text-[#5a189a] shadow-[inset_0_1px_0_#fff,0_5px_12px_-6px_rgb(60_9_108/0.45)] sm:size-9">
+          <Icon className="size-4 sm:size-5" aria-hidden />
+        </span>
+        <span className="truncate">{title}</span>
       </h2>
       <a
         href={href}
-        className="inline-flex min-h-11 shrink-0 items-center text-xs font-bold text-[#7b2cbf] hover:underline"
+        className="k-press inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-xs font-black text-[#7b2cbf] hover:bg-[#e0aaff]/28"
       >
         {t("common.viewAll")}
         <ChevronLeft className="ms-1 size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
@@ -558,13 +559,15 @@ function QueryRail({
     return (
       <div className="mt-3 flex gap-3 overflow-hidden">
         {[0, 1, 2].map((i) => (
-          <Skeleton key={i} className="h-60 min-w-[46%] rounded-[22px] sm:min-w-[30%]" />
+          <div key={i} className="w-[46%] min-w-[160px] max-w-[230px] shrink-0 sm:w-[30%]">
+            <ListingCardSkeleton />
+          </div>
         ))}
       </div>
     );
   if (query.isError)
     return (
-      <div className="mt-3 rounded-[22px] border border-[#c77dff]/28 bg-white p-5 text-center text-sm text-[#5a189a]">
+      <div className="k-surface mt-3 p-5 text-center text-sm text-[#5a189a]">
         <p>{errorLabel}</p>
         <Button variant="outline" size="sm" className="mt-3" onClick={() => void query.refetch()}>
           {retryLabel}
@@ -573,7 +576,7 @@ function QueryRail({
     );
   if (!query.data?.length)
     return (
-      <p className="mt-3 rounded-[22px] border border-[#c77dff]/28 bg-white px-4 py-5 text-center text-sm text-[#5a189a]">
+      <p className="k-surface mt-3 px-4 py-5 text-center text-sm text-[#5a189a]">
         {empty}
       </p>
     );
@@ -607,13 +610,13 @@ function QuickAction({
   return (
     <a
       href={href}
-      className={`flex min-h-[76px] items-center gap-3 rounded-[22px] px-4 ${tone} outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
+      className={`k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 ${tone} outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
     >
-      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white/85 text-[#3c096c]">
+      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
         <Icon className="size-6" aria-hidden />
       </span>
       <span>
-        <strong className="block text-sm font-black text-[#240046]">{title}</strong>
+        <strong className="block text-sm font-black tracking-tight text-[#240046]">{title}</strong>
         <span className="text-[11px] text-[#5a189a]">{description}</span>
       </span>
     </a>
