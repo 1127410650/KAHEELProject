@@ -12,7 +12,17 @@
  * رسوم متجهية داخلية: لا طلب شبكة، لا هزّة تخطيط، والحركة CSS فقط ومعطّلة تحت
  * `prefers-reduced-motion`.
  */
-export type MascotKind = "moto" | "lounge" | "wave" | "peek" | "parcel" | "boss" | "duo";
+export type MascotKind =
+  | "moto"
+  | "lounge"
+  | "wave"
+  | "peek"
+  | "parcel"
+  | "boss"
+  | "duo"
+  | "olives"
+  | "mustache"
+  | "tray";
 
 export const MASCOT_KINDS: MascotKind[] = [
   "moto",
@@ -22,6 +32,9 @@ export const MASCOT_KINDS: MascotKind[] = [
   "parcel",
   "boss",
   "duo",
+  "olives",
+  "mustache",
+  "tray",
 ];
 
 /** أي شخصية يمثّلها كل مشهد — الإسناد ثابت ولا يتغيّر بين النوافذ. */
@@ -36,6 +49,9 @@ export const MASCOT_PERSONA: Record<MascotKind, MascotPersona> = {
   moto: "kaheelan",
   parcel: "kaheelan",
   boss: "kaheelan",
+  olives: "kaheelan",
+  mustache: "kaheelan",
+  tray: "kaheelan",
   // مشهد التعارف بالشخصيتين
   duo: "duo",
 };
@@ -84,11 +100,14 @@ function KaheelanHead({
   y,
   r,
   scarf = true,
+  twirl = false,
 }: {
   x: number;
   y: number;
   r: number;
   scarf?: boolean;
+  /** يبرز الشارب وقت مشهد فتل الشوارب. */
+  twirl?: boolean;
 }) {
   return (
     <g transform={headTransform(x, y, r)}>
@@ -114,10 +133,28 @@ function KaheelanHead({
       <path d="M-8-7l7 3M8-7l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
       <circle cx="-5" cy="1" r="2.6" fill={HAIR} />
       <circle cx="6" cy="1" r="2.6" fill={HAIR} />
-      <path d="M-6 8c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      <path d="M-4.5 10.4c3.2 2 7.5 1.2 9.5-1.8" stroke={HAIR} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      {/* شارب معقوف — علامة ثابتة لكَحيلان في كل المشاهد */}
+      <g
+        className={
+          twirl
+            ? "origin-[0px_6px] animate-[kaheel-mascot-mustache_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
+            : undefined
+        }
+        style={twirl ? { transformBox: "view-box" } : undefined}
+      >
+        <path
+          d="M0 6.2C-2.4 4.8-5.8 4.9-7.9 6.4-9 7.2-8.5 5.4-7.1 4.9M0 6.2C2.4 4.8 5.8 4.9 7.9 6.4 9 7.2 8.5 5.4 7.1 4.9"
+          stroke={HAIR}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          fill="none"
+        />
+      </g>
     </g>
   );
 }
+
 
 function Frame({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
@@ -207,6 +244,76 @@ function Parcel() {
   );
 }
 
+
+const OLIVE = "#4e7a2f";
+const OLIVE_DARK = "#35551f";
+const PLATE = "#efe6f7";
+const SWEET = "#f3d9a4";
+const SWEET_TOP = "#f7c9d9";
+
+/** كَحيلان يقدّم طبق زيتون إدلبي بيده. */
+function Olives() {
+  return (
+    <Frame>
+      <path d="M28 92V66a20 20 0 0 1 40 0v26z" fill={BODY} />
+      <KaheelanHead x={48} y={42} r={12.5} scarf />
+      <g
+        className="origin-[30px_70px] animate-[kaheel-mascot-offer_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <path d="M32 72l-12-4" stroke={BODY_DARK} strokeWidth="8" strokeLinecap="round" />
+        <ellipse cx="17" cy="66" rx="15" ry="5" fill={PLATE} />
+        <ellipse cx="17" cy="64.5" rx="15" ry="4.4" fill={CLOTH} />
+        <ellipse cx="11" cy="63" rx="3.4" ry="2.6" fill={OLIVE} />
+        <ellipse cx="18" cy="62" rx="3.4" ry="2.6" fill={OLIVE_DARK} />
+        <ellipse cx="24" cy="63.4" rx="3.2" ry="2.5" fill={OLIVE} />
+        <ellipse cx="15" cy="60" rx="3" ry="2.3" fill={OLIVE_DARK} />
+      </g>
+    </Frame>
+  );
+}
+
+/** كَحيلان يفتل شواربه بفخر. */
+function Mustache() {
+  return (
+    <Frame className="animate-[kaheel-mascot-breathe_2.8s_ease-in-out_infinite] motion-reduce:animate-none">
+      <path d="M28 92V66a20 20 0 0 1 40 0v26z" fill={BODY} />
+      <KaheelanHead x={48} y={42} r={13} scarf twirl />
+      <g
+        className="origin-[64px_68px] animate-[kaheel-mascot-twirl_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <path d="M64 70l1-14" stroke={BODY_DARK} strokeWidth="7.5" strokeLinecap="round" />
+        <circle cx="65" cy="52" r="5.5" fill={SKIN} />
+        <path d="M62 49l-3-2" stroke={SKIN} strokeWidth="3.4" strokeLinecap="round" />
+      </g>
+    </Frame>
+  );
+}
+
+/** كَحيلان شايل صينية حلاوة الجبن بيديه. */
+function Tray() {
+  return (
+    <Frame>
+      <path d="M28 92V68a20 20 0 0 1 40 0v24z" fill={BODY} />
+      <KaheelanHead x={48} y={40} r={12} scarf twirl />
+      <path d="M32 70l-6 6M64 70l6 6" stroke={BODY_DARK} strokeWidth="7.5" strokeLinecap="round" />
+      <g
+        className="origin-[48px_80px] animate-[kaheel-mascot-tray_3s_ease-in-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <rect x="16" y="70" width="64" height="5" rx="2.5" fill={SWEET} />
+        <rect x="20" y="63" width="56" height="8" rx="3" fill={SWEET_TOP} />
+        <rect x="20" y="66" width="56" height="5" rx="2" fill={SWEET} opacity="0.85" />
+        <circle cx="32" cy="64" r="2.2" fill={ACCENT} opacity="0.8" />
+        <circle cx="48" cy="63" r="2.2" fill={ACCENT} opacity="0.8" />
+        <circle cx="64" cy="64" r="2.2" fill={ACCENT} opacity="0.8" />
+        <rect x="14" y="74" width="68" height="4" rx="2" fill={PLATE} />
+      </g>
+    </Frame>
+  );
+}
+
 /** كَحيلان بكامل زعامته: يلف الشماغ ثم يشير بإصبعه مازحًا. */
 function Boss() {
   return (
@@ -280,6 +387,9 @@ const MAP: Record<MascotKind, () => React.ReactElement> = {
   peek: Peek,
   parcel: Parcel,
   boss: Boss,
+  olives: Olives,
+  mustache: Mustache,
+  tray: Tray,
   duo: Wave,
 };
 

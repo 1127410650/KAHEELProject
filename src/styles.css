@@ -1888,6 +1888,28 @@ body:has(.market-surface) {
   85% { transform: translateX(1px) rotate(-4deg); }
   100% { transform: translateX(0) rotate(0deg); }
 }
+/* كَحيلان يقدّم طبق الزيتون: يرفع الطبق ويهزّه بلطف. */
+@keyframes kaheel-mascot-offer {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-3px) rotate(3deg); }
+}
+/* كَحيلان يفتل شواربه بفخر: اليد تدور عند الشارب. */
+@keyframes kaheel-mascot-twirl {
+  0%, 20% { transform: rotate(0deg) translateX(0); }
+  45% { transform: rotate(-16deg) translateX(-2px); }
+  70% { transform: rotate(14deg) translateX(1px); }
+  100% { transform: rotate(0deg) translateX(0); }
+}
+/* الشارب ينتفخ قليلًا وقت الفتلة. */
+@keyframes kaheel-mascot-mustache {
+  0%, 25%, 100% { transform: scale(1); }
+  55% { transform: scale(1.18, 1.1); }
+}
+/* صينية حلاوة الجبن: تتمايل بتوازن. */
+@keyframes kaheel-mascot-tray {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-2px); }
+}
 /* مشهد التعارف: كَحيل يقفز خفيفًا بينما يقدّمه الزعيم كَحيلان. */
 @keyframes kaheel-mascot-duo-hop {
   0%, 100% { transform: translateY(0) rotate(0deg); }

@@ -71,6 +71,17 @@ const AR_POOL: PopupCopy[] = [
   { title: "دقيقة بس وبتكفّي ⏱️", subtitle: "شوف العروض وبعدين إنت وشطارتك", mascot: "moto" },
   { title: "شو رأيك تشوف العروض قبل ما تطير؟ 🎁", subtitle: "عروض اليوم مختارة بعناية إلك", mascot: "moto" },
 
+  // ── كَحيلان بالأكلات الشامية: زيتون إدلبي بأربع لهجات ────────────────────
+  { title: "جبتلك زيتون من إدلب 🫒", subtitle: "وهاد العرض كمان بواسطتي… تفضّل ولا تحرجني", mascot: "olives" },
+  { title: "زيتون حلبي بالفليفلة 🌶️🫒", subtitle: "وهالعرض مدقوق دق حلبي… بواسطتي طبعًا", mascot: "olives" },
+  { title: "زيتون ساحلي بزيت الزيتون 🫒", subtitle: "طازة من الجبل، متل هالعرض اللي جبتو بواسطتي", mascot: "olives" },
+  { title: "زيتون شامي مرصّص 🫒", subtitle: "وهالعرض من عندي أنا، ولا تنسى الفضل", mascot: "olives" },
+  // ── كَحيلان وحلاوة الجبن: شايل الصينية ويفتل شواربه ──────────────────────
+  { title: "حلاوة الجبن! 🍮", subtitle: "لا من حماة ولا من حمص… حلاوة الجبن كَحيل وبس 😎", mascot: "tray" },
+  { title: "شايلها بإيديّ مشانك 🍮", subtitle: "وهالعرض كمان بواسطتي، ما تنسى", mascot: "tray" },
+  { title: "شفت الصينية؟ 🧔", subtitle: "متل ما جبت الحلاوة، جبتلك العروض… بواسطتي", mascot: "mustache" },
+  { title: "حلاوة جبن كَحيلية أصلية 🍮", subtitle: "واللي بينكر الفضل، ما بيذوق 😄", mascot: "tray" },
+
   // ── مشهد التعارف: كَحيلان يقدّم نفسه ثم يقدّم كَحيل ──────────────────────
   {
     title: "أنا الزعيم كَحيلان… زعيم الحارة 🧣",
@@ -141,6 +152,17 @@ const EN_POOL: PopupCopy[] = [
   { title: "One minute is plenty ⏱️", subtitle: "See the offers, then you're on your way", mascot: "moto" },
   { title: "Fancy a look before you fly off? 🎁", subtitle: "Today's offers, hand-picked for you", mascot: "moto" },
 
+  // ── Kaheelan and Levantine food: Idlib olives in four local accents ─────
+  { title: "Brought you olives from Idlib 🫒", subtitle: "And this offer came through me too — go on, don't embarrass me", mascot: "olives" },
+  { title: "Aleppo olives with chili 🌶️🫒", subtitle: "This offer is pounded Aleppo-style… through me, naturally", mascot: "olives" },
+  { title: "Coastal olives in olive oil 🫒", subtitle: "Fresh off the mountain, like this offer I brought through me", mascot: "olives" },
+  { title: "Damascene cracked olives 🫒", subtitle: "And this offer is from me — don't forget who to thank", mascot: "olives" },
+  // ── Kaheelan with halawet el-jibn: tray in hand, mustache twirled ────────
+  { title: "Halawet el-jibn! 🍮", subtitle: "Not from Hama, not from Homs… it's pure Kaheel 😎", mascot: "tray" },
+  { title: "Carrying it in my own hands 🍮", subtitle: "And this offer came through me too — don't forget", mascot: "tray" },
+  { title: "See the tray? 🧔", subtitle: "Just like the sweets, I brought you the offers… through me", mascot: "mustache" },
+  { title: "Original Kaheelan halawet el-jibn 🍮", subtitle: "Deny who brought it, and you don't get a taste 😄", mascot: "tray" },
+
   // ── Intro scene: Kaheelan introduces himself, then Kaheel ───────────────
   {
     title: "I'm Chief Kaheelan… chief of the block 🧣",
@@ -159,9 +181,26 @@ const EN_POOL: PopupCopy[] = [
   },
 ];
 
+/**
+ * قاعدة كَحيلان الثابتة: كل عرض جاء «بواسطتي». إذا كان السطر لا يذكرها،
+ * نضيف لمسة قصيرة تحفظ نبرة الزعامة الفكاهية بلا إساءة.
+ */
+const KAHEELAN_SCENES: MascotKind[] = ["boss", "parcel", "moto", "olives", "mustache", "tray"];
+const CREDIT_RE = /بواسطتي|من عندي أنا|بأمري|through me|by my order|from me —/;
+
+function withKaheelanCredit(copy: PopupCopy, ar: boolean): PopupCopy {
+  if (!KAHEELAN_SCENES.includes(copy.mascot) || CREDIT_RE.test(copy.subtitle)) return copy;
+  return {
+    ...copy,
+    subtitle: ar
+      ? `${copy.subtitle} — وهالعرض بواسطتي 😎`
+      : `${copy.subtitle} — and this offer came through me 😎`,
+  };
+}
+
 export function pickPopupCopy(ar: boolean, seed = Math.random()): PopupCopy {
   const pool = ar ? AR_POOL : EN_POOL;
-  return pool[Math.floor(seed * pool.length) % pool.length]!;
+  return withKaheelanCredit(pool[Math.floor(seed * pool.length) % pool.length]!, ar);
 }
 
 // ── Entry side ─────────────────────────────────────────────────────────────
@@ -182,5 +221,5 @@ export function popupCopyCount(ar: boolean): number {
 export function popupCopyAt(ar: boolean, index: number): PopupCopy {
   const pool = ar ? AR_POOL : EN_POOL;
   const size = pool.length;
-  return pool[((index % size) + size) % size]!;
+  return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
 }
