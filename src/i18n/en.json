@@ -1448,7 +1448,8 @@
       "removedFromFavorites": "Removed from favorites",
       "ownListing": "This is your own listing",
       "failed": "Could not complete the action",
-      "remove": "Remove"
+      "remove": "Remove",
+      "greeting": "Hi 👋 About your ad “{title}” (ref #{ref}) — is it still available?"
     },
     "quote": {
       "title": "Request title",
