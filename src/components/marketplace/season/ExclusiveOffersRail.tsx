@@ -32,25 +32,26 @@ export function ExclusiveOffersRail() {
     <section
       aria-labelledby="exclusive-offers-title"
       style={{ height: RAIL_HEIGHT }}
-      className="relative isolate overflow-hidden rounded-3xl bg-[linear-gradient(130deg,#240046,#5a189a)] p-4 text-white shadow-[0_18px_40px_-24px_rgb(36_0_70/0.75)]"
+      /* بطاقة موحّدة كبقية الأقسام؛ التنوّع اللوني يأتي من صور العروض نفسها. */
+      className="k-surface relative isolate overflow-hidden p-4 text-[#240046]"
     >
       <SeasonalLayer placement="exclusive" showMascot={false} />
 
-
       <div className="relative z-10">
         <header className="flex items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-white/15">
+          <span className="grid size-9 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c]">
             <Sparkles className="size-5" aria-hidden />
           </span>
           <div className="min-w-0">
-            <h2 id="exclusive-offers-title" className="text-sm font-black">
+            <h2 id="exclusive-offers-title" className="k-h2">
               {ar ? "عروض حصرية" : "Exclusive offers"}
             </h2>
-            <p className="text-[11px] text-white/75">
+            <p className="text-[11px] text-[#5a189a]">
               {ar ? "مختارة بعناية من كَحيل" : "Hand-picked by Kaheel"}
             </p>
           </div>
         </header>
+
 
         <div className="-mx-1 mt-3 flex gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {offers.map((offer) => {
@@ -62,7 +63,7 @@ export function ExclusiveOffersRail() {
               <Link
                 key={offer.id}
                 to={offer.click_url}
-                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-[#c77dff]/30 bg-[#3c096c] p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
               >
                 {offer.imageUrl ? (
                   <img

@@ -121,20 +121,48 @@ const MAIN_FIELDS = [
   },
 ] as const;
 
+/**
+ * Secondary service tiles.
+ *
+ * Every tile carries the exact destination it promises: the category root plus a
+ * search term when the tile is narrower than its category (a pharmacy is not
+ * «all services»). No tile points at a page that cannot answer its own label.
+ */
 const SERVICES = [
-  ["homeServices", "services", House, "bg-[#e0aaff]/38 text-[#3c096c]"],
-  ["electronics", "devices", Laptop, "bg-[#c77dff]/30 text-[#5a189a]"],
-  ["gifts", "events", Gift, "bg-[#e0aaff]/46 text-[#7b2cbf]"],
-  ["sweets", "restaurants", IceCreamBowl, "bg-[#c77dff]/34 text-[#3c096c]"],
-  ["cafes", "restaurants", Coffee, "bg-[#e0aaff]/34 text-[#5a189a]"],
-  ["pharmacies", "services", HeartPulse, "bg-[#9d4edd]/18 text-[#3c096c]"],
-  ["more", "", MoreHorizontal, "bg-[#e0aaff]/32 text-[#240046]"],
-  ["kids", "fashion", Baby, "bg-[#c77dff]/24 text-[#7b2cbf]"],
-  ["beauty", "services", Flower2, "bg-[#e0aaff]/52 text-[#5a189a]"],
-  ["sports", "services", Dumbbell, "bg-[#9d4edd]/16 text-[#3c096c]"],
-  ["fashion", "fashion", Shirt, "bg-[#c77dff]/28 text-[#7b2cbf]"],
-  ["moving", "furniture", Package, "bg-[#e0aaff]/38 text-[#5a189a]"],
+  { key: "homeServices", href: "/search?category=services", icon: House },
+  { key: "electronics", href: "/search?category=devices", icon: Laptop },
+  { key: "gifts", href: "/search?category=events&q=%D9%87%D8%AF%D8%A7%D9%8A%D8%A7", icon: Gift },
+  {
+    key: "sweets",
+    href: "/search?category=restaurants&q=%D8%AD%D9%84%D9%88%D9%8A%D8%A7%D8%AA",
+    icon: IceCreamBowl,
+  },
+  {
+    key: "cafes",
+    href: "/search?category=restaurants&q=%D9%83%D8%A7%D9%81%D9%8A%D9%87",
+    icon: Coffee,
+  },
+  {
+    key: "pharmacies",
+    href: "/search?category=services&q=%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9",
+    icon: HeartPulse,
+  },
+  { key: "more", href: "/more", icon: MoreHorizontal },
+  { key: "kids", href: "/search?category=fashion&q=%D8%A3%D8%B7%D9%81%D8%A7%D9%84", icon: Baby },
+  {
+    key: "beauty",
+    href: "/search?category=services&q=%D8%AA%D8%AC%D9%85%D9%8A%D9%84",
+    icon: Flower2,
+  },
+  {
+    key: "sports",
+    href: "/search?category=services&q=%D8%B1%D9%8A%D8%A7%D8%B6%D8%A9",
+    icon: Dumbbell,
+  },
+  { key: "fashion", href: "/search?category=fashion", icon: Shirt },
+  { key: "moving", href: "/search?category=furniture&q=%D9%86%D9%82%D9%84", icon: Package },
 ] as const;
+
 
 const FEATURE_FILTERS = [
   ["all", ""],
@@ -187,19 +215,19 @@ export function MarketHome() {
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-white pb-5 text-[#240046]">
-      <div className="mx-auto w-full max-w-[1240px] space-y-6 px-3 pb-3 pt-3 sm:space-y-9 sm:px-5 lg:px-8">
+      {/* One rhythm for the whole page: the same vertical gap between every
+          section, so no block reads as louder than its neighbours. */}
+      <div className="mx-auto w-full max-w-[1240px] space-y-7 px-3 pb-3 pt-3 sm:space-y-10 sm:px-5 lg:px-8">
         <HomeSearchBar
           label={t("market.homeV2.searchPlaceholder" as HomeKey)}
           detailedLabel={t("market.homeV2.detailedSearch" as HomeKey)}
         />
-
 
         <KaheelStories />
 
         <PromoCarousel addHref={addHref} />
 
         <Reveal as="section">
-
           <section
             aria-labelledby="home-fields-title"
             className="relative isolate overflow-hidden rounded-3xl"
@@ -223,64 +251,68 @@ export function MarketHome() {
               ))}
             </div>
           </section>
-
         </Reveal>
 
-        <HomeAdStrip addHref={addHref} />
+        <Reveal>
+          <HomeAdStrip addHref={addHref} />
+        </Reveal>
 
         <Reveal>
           <ExclusiveOffersRail />
         </Reveal>
 
-
-
-        <ListingRail
-          title={t("market.homeV2.nearbyRestaurants" as HomeKey)}
-          icon={Flame}
-          href="/search?category=restaurants"
-          query={restaurants}
-          empty={t("market.homeV2.noRestaurantOffers" as HomeKey)}
-        />
-
-        <section aria-labelledby="featured-title">
-          <SectionHeading
-            id="featured-title"
-            icon={Star}
-            tone="gold"
-            title={t("market.homeV2.featured" as HomeKey)}
-            href="/search?featured=1"
+        <Reveal>
+          <ListingRail
+            id="nearby-restaurants"
+            title={t("market.homeV2.nearbyRestaurants" as HomeKey)}
+            icon={Flame}
+            href="/search?category=restaurants"
+            query={restaurants}
+            empty={t("market.homeV2.noRestaurantOffers" as HomeKey)}
+            ctaHref={addHref}
           />
+        </Reveal>
 
-          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
-            {FEATURE_FILTERS.map(([key, slug]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setFeaturedCategory(slug)}
-                aria-pressed={featuredCategory === slug}
-                className={
-                  featuredCategory === slug
-                    ? "k-press min-h-11 shrink-0 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white shadow-[0_8px_18px_-8px_rgb(60_9_108/0.7)]"
-                    : "k-press min-h-11 shrink-0 rounded-full border border-[#c77dff]/35 bg-white px-5 text-xs font-bold text-[#5a189a] hover:border-[#9d4edd]/50 hover:bg-[#e0aaff]/22"
-                }
-              >
-                {t(`market.homeV2.filters.${key}` as HomeKey)}
-              </button>
-            ))}
-          </div>
-          <QueryRail
-            query={featured}
-            empty={t("market.homeV2.noFeatured" as HomeKey)}
-            retryLabel={t("market.retry")}
-            errorLabel={t("market.loadError")}
-          />
-        </section>
+        <Reveal as="section">
+          <section aria-labelledby="featured-title">
+            <SectionHeading
+              id="featured-title"
+              icon={Star}
+              tone="gold"
+              title={t("market.homeV2.featured" as HomeKey)}
+              href="/search?featured=1"
+            />
 
-        <FeaturedGuideStrip />
+            <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
+              {FEATURE_FILTERS.map(([key, slug]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setFeaturedCategory(slug)}
+                  aria-pressed={featuredCategory === slug}
+                  className={
+                    featuredCategory === slug
+                      ? "k-press min-h-11 shrink-0 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white shadow-[0_8px_18px_-8px_rgb(60_9_108/0.7)]"
+                      : "k-press min-h-11 shrink-0 rounded-full border border-[#c77dff]/35 bg-white px-5 text-xs font-bold text-[#5a189a] hover:border-[#9d4edd]/50 hover:bg-[#e0aaff]/22"
+                  }
+                >
+                  {t(`market.homeV2.filters.${key}` as HomeKey)}
+                </button>
+              ))}
+            </div>
+            <QueryRail
+              query={featured}
+              empty={t("market.homeV2.noFeatured" as HomeKey)}
+              ctaHref={addHref}
+              retryLabel={t("market.retry")}
+              errorLabel={t("market.loadError")}
+            />
+          </section>
+        </Reveal>
 
-
-
-
+        <Reveal>
+          <FeaturedGuideStrip />
+        </Reveal>
 
         <Reveal>
           <BenefitsStrip />
@@ -300,34 +332,34 @@ export function MarketHome() {
           </Reveal>
         ) : null}
 
-        <section
-          aria-label={t("market.homeV2.quickActions" as HomeKey)}
-          className="grid gap-2 sm:grid-cols-3"
-        >
-          <QuickAction
-            href={addHref}
-            icon={Plus}
-            tone="bg-[#fff4de]"
-            title={t("market.homeV2.actions.add.title" as HomeKey)}
-            description={t("market.homeV2.actions.add.desc" as HomeKey)}
-          />
-          <QuickAction
-            href="/services"
-            icon={Wrench}
-            tone="bg-[#e0aaff]/28"
-            title={t("market.homeV2.actions.service.title" as HomeKey)}
-            description={t("market.homeV2.actions.service.desc" as HomeKey)}
-          />
-          <QuickAction
-            href="/guides/students"
-            icon={Sparkles}
-            tone="bg-[#c77dff]/24"
-            title={t("market.homeV2.actions.ai.title" as HomeKey)}
-            description={t("market.homeV2.actions.ai.desc" as HomeKey)}
-          />
-        </section>
+        <Reveal as="section">
+          <section
+            aria-label={t("market.homeV2.quickActions" as HomeKey)}
+            className="grid gap-2 sm:grid-cols-3"
+          >
+            <QuickAction
+              href={addHref}
+              icon={Plus}
+              title={t("market.homeV2.actions.add.title" as HomeKey)}
+              description={t("market.homeV2.actions.add.desc" as HomeKey)}
+            />
+            <QuickAction
+              href="/services"
+              icon={Wrench}
+              title={t("market.homeV2.actions.service.title" as HomeKey)}
+              description={t("market.homeV2.actions.service.desc" as HomeKey)}
+            />
+            <QuickAction
+              href="/guides/students"
+              icon={Sparkles}
+              title={t("market.homeV2.actions.ai.title" as HomeKey)}
+              description={t("market.homeV2.actions.ai.desc" as HomeKey)}
+            />
+          </section>
+        </Reveal>
       </div>
     </div>
+
   );
 }
 
@@ -342,32 +374,33 @@ function LiveDemoEntry() {
   return (
     <Link
       to="/demo"
-      className="group relative flex min-h-[112px] overflow-hidden rounded-[24px] bg-[linear-gradient(110deg,#10002b,#3c096c_62%,#7b2cbf)] px-4 py-4 text-white shadow-[0_14px_34px_rgb(36_0_70/0.2)] outline-none ring-1 ring-white/60 transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#c77dff] sm:min-h-[124px] sm:px-6"
+      className="k-surface k-lift group relative flex min-h-[112px] overflow-hidden px-4 py-4 text-[#240046] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[124px] sm:px-6"
     >
-      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#c77dff]/38 blur-3xl" />
-      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-[#e0aaff]/18 blur-3xl" />
+      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#c77dff]/20 blur-3xl" />
+      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-[#e0aaff]/22 blur-3xl" />
       <div className="relative flex w-full items-center gap-3 sm:gap-5">
         <DemoParcelScene scene={copy.scene} />
         <span className="min-w-0 flex-1">
-          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#e0aaff] sm:text-[10px]">
+          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#7b2cbf] sm:text-[10px]">
             <span className="size-1.5 rounded-full bg-[#f59e0b] motion-safe:animate-pulse" />
             {locale === "ar" ? "بيئة تجريبية حيّة" : "Live demo environment"}
           </span>
           <strong className="mt-1 block text-base font-black sm:text-xl">
             {ar ? copy.titleAr : copy.titleEn}
           </strong>
-          <span className="mt-0.5 block text-[10px] font-bold text-[#e0aaff] sm:text-sm">
+          <span className="mt-0.5 block text-[10px] font-bold text-[#5a189a] sm:text-sm">
             {ar ? copy.subtitleAr : copy.subtitleEn}
           </span>
-          <span className="mt-1 block line-clamp-1 text-[9px] text-white/62 sm:text-xs">
+          <span className="mt-1 block line-clamp-1 text-[9px] text-[#5a189a]/80 sm:text-xs">
             {ar
               ? "جرّب كل أنواع الحسابات: عميل، متجر، عيادة، حلاق، محطة، ناقل، وإدارة المنصة"
               : "Try every account type: customer, store, clinic, barber, station, carrier, operations"}
           </span>
         </span>
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#3c096c] shadow-lg transition group-hover:-translate-x-1 rtl:group-hover:translate-x-1">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] text-white shadow-lg transition group-hover:-translate-x-1 rtl:group-hover:translate-x-1">
           <ChevronLeft className="size-5 rtl:rotate-0 ltr:rotate-180" aria-hidden />
         </span>
+
       </div>
     </Link>
   );
@@ -464,38 +497,27 @@ function BenefitsStrip() {
 }
 
 function SecondaryServices() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   return (
-    <section aria-label={t("market.homeV2.secondaryServices" as HomeKey)} className="py-1">
-      <div className="mb-3 flex items-end justify-between gap-3">
-        <div>
-          <p className="k-eyebrow">
-            {locale === "ar" ? "قصص كَحيل" : "Kaheel stories"}
-          </p>
-          <h2 className="k-h2">
-            {t("market.homeV2.secondaryServices" as HomeKey)}
-          </h2>
-        </div>
-        <a
-          href="/more"
-          className="text-[11px] font-black text-[#7b2cbf] hover:underline sm:text-xs"
-        >
-          {t("common.viewAll")}
-        </a>
-      </div>
-      <div className="-mx-3 flex gap-2.5 overflow-x-auto px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-12 sm:gap-2 sm:px-0">
-        {SERVICES.map(([key, slug, Icon, tone]) => (
+    <section aria-labelledby="secondary-services-title">
+      <SectionHeading
+        id="secondary-services-title"
+        icon={SlidersHorizontal}
+        title={t("market.homeV2.secondaryServices" as HomeKey)}
+        href="/more"
+      />
+      <div className="-mx-3 mt-3 flex gap-2.5 overflow-x-auto px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-12 sm:gap-2 sm:px-0">
+        {SERVICES.map(({ key, href, icon: Icon }) => (
           <a
             key={key}
-            href={key === "more" ? "/more" : `/search?category=${slug}`}
-            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[9px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto sm:text-[10px]"
+            href={href}
+            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[10px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto"
           >
-            <span
-              className={`grid size-14 place-items-center rounded-full border-2 border-white ${tone} shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16`}
-            >
+            {/* One shared chip for every tile: the labels differentiate them, not 12 tints. */}
+            <span className="grid size-14 place-items-center rounded-full border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16">
               <Icon className="size-5 sm:size-6" aria-hidden />
             </span>
-            <span className="line-clamp-2 leading-4">
+            <span className="flex min-h-8 items-start justify-center leading-4">
               {t(`market.homeV2.services.${key}` as HomeKey)}
             </span>
           </a>
@@ -504,6 +526,7 @@ function SecondaryServices() {
     </section>
   );
 }
+
 
 function SectionHeading({
   id,
@@ -546,25 +569,30 @@ function SectionHeading({
 }
 
 function ListingRail({
+  id,
   title,
   icon,
   href,
   query,
   empty,
+  ctaHref,
 }: {
+  id: string;
   title: string;
   icon: typeof Flame;
   href: string;
   query: ReturnType<typeof useHomeListings>;
   empty: string;
+  ctaHref: string;
 }) {
   const { t } = useI18n();
   return (
-    <section>
-      <SectionHeading id="nearby-restaurants" icon={icon} title={title} href={href} />
+    <section aria-labelledby={id}>
+      <SectionHeading id={id} icon={icon} title={title} href={href} />
       <QueryRail
         query={query}
         empty={empty}
+        ctaHref={ctaHref}
         retryLabel={t("market.retry")}
         errorLabel={t("market.loadError")}
       />
@@ -575,14 +603,18 @@ function ListingRail({
 function QueryRail({
   query,
   empty,
+  ctaHref,
   retryLabel,
   errorLabel,
 }: {
   query: ReturnType<typeof useHomeListings>;
   empty: string;
+  /** Where the empty state's action goes — always a real, working destination. */
+  ctaHref: string;
   retryLabel: string;
   errorLabel: string;
 }) {
+  const { locale } = useI18n();
   if (query.isPending)
     return (
       <div className="mt-3 flex gap-3 overflow-hidden">
@@ -602,11 +634,23 @@ function QueryRail({
         </Button>
       </div>
     );
+  // No data is not a dead zone: the section explains itself and offers the one
+  // action that fills it — posting the first listing.
   if (!query.data?.length)
     return (
-      <p className="k-surface mt-3 px-4 py-5 text-center text-sm text-[#5a189a]">
-        {empty}
-      </p>
+      <div className="k-surface mt-3 flex flex-col items-center gap-3 px-4 py-6 text-center">
+        <span className="grid size-11 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c]">
+          <Sparkles className="size-5" aria-hidden />
+        </span>
+        <p className="text-sm font-bold text-[#5a189a]">{empty}</p>
+        <a
+          href={ctaHref}
+          className="k-press inline-flex min-h-11 items-center gap-1.5 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white"
+        >
+          <Plus className="size-4" aria-hidden />
+          {locale === "ar" ? "كن أول من يضيف عرضًا" : "Be the first to post"}
+        </a>
+      </div>
     );
   return (
     <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
@@ -625,27 +669,25 @@ function QueryRail({
 function QuickAction({
   href,
   icon: Icon,
-  tone,
   title,
   description,
 }: {
   href: string;
   icon: typeof Plus;
-  tone: string;
   title: string;
   description: string;
 }) {
   return (
     <a
       href={href}
-      className={`k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 ${tone} outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
+      className="k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
     >
-      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
+      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
         <Icon className="size-6" aria-hidden />
       </span>
-      <span>
+      <span className="min-w-0">
         <strong className="block text-sm font-black tracking-tight text-[#240046]">{title}</strong>
-        <span className="text-[11px] text-[#5a189a]">{description}</span>
+        <span className="block text-[11px] text-[#5a189a]">{description}</span>
       </span>
     </a>
   );

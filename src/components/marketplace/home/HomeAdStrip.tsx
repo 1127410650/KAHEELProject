@@ -30,24 +30,25 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
   if (!campaign) {
     return (
       <section aria-label={ar ? "مساحة إعلانية" : "Ad slot"}>
+        {/* نفس بطاقة الصفحة الموحّدة، بلا كتلة بنفسجية مصمتة. */}
         <Link
           to={addHref}
-          className={`${BOX} group flex items-center gap-3 bg-[linear-gradient(120deg,#10002b,#3c096c_58%,#7b2cbf)] px-3.5 text-white outline-none ring-1 ring-white/10 focus-visible:ring-2 focus-visible:ring-[#c77dff] sm:px-5`}
+          className={`${BOX} k-surface k-lift group flex items-center gap-3 px-3.5 text-[#240046] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:px-5`}
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/10 sm:size-11">
-            <Megaphone className="size-4 text-[#e0aaff] sm:size-5" aria-hidden />
+          <span className="grid size-9 shrink-0 place-items-center rounded-2xl border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] sm:size-11">
+            <Megaphone className="size-4 sm:size-5" aria-hidden />
           </span>
           <span className="min-w-0 flex-1">
             <strong className="block truncate text-xs font-black sm:text-base">
               {ar ? "مساحتك الإعلانية على كَحيل" : "Your ad space on Kaheel"}
             </strong>
-            <span className="mt-0.5 block truncate text-[9px] text-white/65 sm:text-xs">
+            <span className="mt-0.5 block truncate text-[9px] text-[#5a189a] sm:text-xs">
               {ar
                 ? "أوصل عرضك لجمهور السوق في المكان الأبرز"
                 : "Put your offer in front of the whole marketplace"}
             </span>
           </span>
-          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-[#3c096c] shadow-md transition group-hover:-translate-x-1 sm:size-9 rtl:group-hover:translate-x-1">
+          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] text-white shadow-md transition group-hover:-translate-x-1 sm:size-9 rtl:group-hover:translate-x-1">
             <ChevronLeft className="size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
           </span>
         </Link>
@@ -60,8 +61,9 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
       <a
         href={campaign.click_url}
         onClick={() => trackCampaign(campaign.id, "click")}
-        className={`${BOX} block bg-[#240046] outline-none ring-1 ring-[#c77dff]/25 focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
+        className={`${BOX} k-surface block outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
       >
+
         <CampaignAsset campaign={campaign} />
         <span className="absolute bottom-1.5 end-2 z-10 rounded-full bg-black/45 px-2 py-0.5 text-[8px] font-black text-white/90 sm:text-[9px]">
           {ar ? "إعلان" : "Ad"}
