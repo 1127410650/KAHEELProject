@@ -409,8 +409,17 @@ export function PromoPopupHost() {
         ? "animate-[mascot-scarf-spin_1.1s_ease-in-out_0.5s_1] motion-reduce:animate-none"
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
+  /**
+   * لا بطاقة بيضاء ولا إطار ولا ظل: الشخصية بخلفية شفافة فوق المحتوى مباشرة،
+   * والنص تحتها على لوح زجاجي خفيف جدًا خلف النص وحده لضمان القراءة، وزر × صغير
+   * ملاصق للشخصية. الحاوية تمرّر الضغطات (`pointer-events-none`) والعناصر
+   * التفاعلية وحدها تستقبلها.
+   */
   return (
-    <div className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
+    <div
+      className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+      aria-live="polite"
+    >
       <div
         key={card.key}
         data-kaheel-drop-card
@@ -420,25 +429,47 @@ export function PromoPopupHost() {
           transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
           animation,
         }}
-        className={`pointer-events-none absolute flex max-h-full w-[15.5rem] max-w-full flex-col items-center gap-1.5 overflow-hidden rounded-3xl border border-white/60 bg-white/95 px-3.5 pb-4 pt-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
+        className={`pointer-events-none absolute flex max-h-full w-[14rem] max-w-full flex-col items-center gap-1 text-center ${
           entrance ? "bottom-0 left-0" : ENTRY_POSITION[card.side]
         }`}
       >
-        <div className="absolute end-2 top-2 z-10">{closeButtons}</div>
+        {/* الشخصية وحدها — خلفية شفافة تمامًا، وزر × صغير ملاصق لها. */}
+        <div className="relative flex min-h-0 w-full shrink justify-center">
+          <div className={`min-h-0 max-w-full overflow-hidden ${bodyMotion}`}>
+            <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
+          </div>
+          <div className="absolute -top-1 end-0 flex flex-col gap-1">
 
-        {/* الاحتواء أولوية: الشخصية كبيرة لكنها **داخل** حدود البطاقة وتُقصّ عندها. */}
-        <div className={`mt-1 min-h-0 shrink ${bodyMotion}`}>
-          <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
+            <button
+              type="button"
+              onClick={() => dismiss()}
+              aria-label={ar ? "إغلاق" : "Close"}
+              className="pointer-events-auto grid size-7 place-items-center rounded-full bg-[#240046]/90 text-white shadow-[0_4px_12px_rgb(16_0_43/0.3)] backdrop-blur-sm"
+            >
+              <X className="size-4" aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={() => dismiss(true)}
+              aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
+              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-white/80 text-[#3c096c] shadow-[0_3px_10px_rgb(16_0_43/0.18)] backdrop-blur-sm"
+            >
+              <EyeOff className="size-3" aria-hidden />
+            </button>
+          </div>
         </div>
 
-        <p className="w-full shrink-0 py-0.5 text-[17px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
-          {card.title}
-        </p>
-        <p className="w-full shrink-0 text-[13.5px] font-semibold leading-relaxed text-[#3c096c] [overflow-wrap:anywhere]">
-          {card.subtitle}
-        </p>
+        {/* النص تحتها: لوح زجاجي خفيف جدًا خلف النص وحده — لا بطاقة. */}
+        <div className="pointer-events-auto w-full shrink-0 rounded-2xl bg-white/94 px-2.5 py-1.5 ring-1 ring-white/70 shadow-[0_4px_14px_rgb(16_0_43/0.16)] backdrop-blur-md">
+          <p className="py-0.5 text-[16px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
+            {card.title}
+          </p>
+          <p className="text-[13px] font-semibold leading-snug text-[#3c096c] [overflow-wrap:anywhere]">
+            {card.subtitle}
+          </p>
+        </div>
       </div>
-
     </div>
   );
 }
+
