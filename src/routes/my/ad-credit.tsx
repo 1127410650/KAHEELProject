@@ -23,6 +23,7 @@ import {
   useRequestAdCredit,
   type AdCreditEntry,
 } from "@/lib/mkt-ad-credit";
+import { AdCreditTopupCard } from "@/components/marketplace/AdCreditTopupCard";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
