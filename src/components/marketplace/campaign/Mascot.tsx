@@ -174,7 +174,7 @@ export function Mascot({
   animated?: boolean;
   priority?: boolean;
   /** لتجاوز النسخة الفعّالة في المعاينة فقط. */
-  variant?: MascotVariant;
+  variant?: MascotVariant | undefined;
 }) {
   const active = useMascotVariant();
   const base = mascotAsset(name, variant ?? active);
@@ -210,7 +210,7 @@ export function MascotDuo({
   lang?: "ar" | "en";
   animated?: boolean;
   className?: string;
-  variant?: MascotVariant;
+  variant?: MascotVariant | undefined;
 }) {
   return (
     <div className={`flex items-end justify-center gap-1 ${className ?? "h-full"}`}>
