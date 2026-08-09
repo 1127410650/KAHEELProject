@@ -113,19 +113,27 @@ function CategoryPage() {
         ) : (
           <>
             <h1 className="text-xl font-bold text-foreground sm:text-2xl">{name(category)}</h1>
+            {kidsWorld && <KidsFriendsStrip className="mt-4" />}
             {children.length > 0 && (
               <>
                 <h2 className="mt-5 text-sm font-bold text-foreground">
                   {t("market.category.subcategories")}
                 </h2>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {children.map((c) => (
+                  {children.map((c, i) => (
                     <Link
                       key={c.id}
                       to="/categories/$slug"
                       params={{ slug: c.slug }}
-                      className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                      className={
+                        kidsWorld
+                          ? "k-press inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-xs font-bold text-foreground hover:bg-accent"
+                          : "rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                      }
                     >
+                      {kidsWorld && (
+                        <KidsFriendBadge id={kidsFriendFor({ slug: c.slug, name: name(c) }, i)} />
+                      )}
                       {name(c)}
                     </Link>
                   ))}
@@ -140,20 +148,33 @@ function CategoryPage() {
                   ))
                 : (listings.data ?? []).map((l) => <ListingCard key={l.id} listing={l} />)}
             </div>
-            {!listings.isLoading && (listings.data ?? []).length === 0 && (
-              <div className="py-16 text-center">
-                <p className="text-sm text-muted-foreground">{t("market.noResults")}</p>
-                <a
-                  href={addListingHref({
-                    authenticated: !!session,
-                    fieldSlug: category.parent_id ? null : category.slug,
-                  })}
-                  className="mt-3 inline-block text-sm font-medium text-primary"
-                >
-                  {t("market.addListing")}
-                </a>
-              </div>
-            )}
+            {!listings.isLoading &&
+              (listings.data ?? []).length === 0 &&
+              (kidsWorld ? (
+                <div className="mt-6">
+                  <KidsEmptyState
+                    id={kidsFriendFor({ slug: category.slug, name: name(category) })}
+                    actionHref={addListingHref({
+                      authenticated: !!session,
+                      fieldSlug: category.parent_id ? null : category.slug,
+                    })}
+                    actionLabel={t("market.addListing")}
+                  />
+                </div>
+              ) : (
+                <div className="py-16 text-center">
+                  <p className="text-sm text-muted-foreground">{t("market.noResults")}</p>
+                  <a
+                    href={addListingHref({
+                      authenticated: !!session,
+                      fieldSlug: category.parent_id ? null : category.slug,
+                    })}
+                    className="mt-3 inline-block text-sm font-medium text-primary"
+                  >
+                    {t("market.addListing")}
+                  </a>
+                </div>
+              ))}
           </>
         )}
       </div>
