@@ -13,8 +13,9 @@
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
 
 /** نسبة القصّ: الرأس والكتف ≈ الثلث الأعلى من الأصل الكامل. */
-const CROP_HEIGHT = "h-[7rem]";
-const IMAGE_HEIGHT = "h-[24rem]";
+/** نافذة القصّ: ارتفاع الرأس والكتف فقط من أصل كامل بطول 34rem (≈ 23%). */
+const CROP_HEIGHT = "h-[7.5rem]";
+const IMAGE_HEIGHT = "h-[34rem]";
 
 export function MascotPeek({
   lang = "ar",
@@ -25,7 +26,7 @@ export function MascotPeek({
 }) {
   return (
     <div
-      className={`pointer-events-none relative ${CROP_HEIGHT} w-[7.5rem] shrink-0 overflow-hidden`}
+      className={`pointer-events-none relative ${CROP_HEIGHT} w-[9rem] shrink-0 overflow-hidden`}
       aria-hidden
     >
       <div
