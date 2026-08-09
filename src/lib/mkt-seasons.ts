@@ -22,7 +22,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { signCampaignPaths } from "@/lib/mkt-campaigns";
 
 export type SeasonPlacement = "header" | "stores" | "exclusive" | "section";
-export type SeasonMotif = "none" | "stars" | "school" | "lanterns" | "sparks" | "confetti";
+export type SeasonMotif =
+  | "none"
+  | "stars"
+  | "school"
+  | "lanterns"
+  | "sparks"
+  | "confetti"
+  | "flag";
+
 export type SeasonOverlay = "soft" | "medium" | "strong";
 export type SeasonMascot = "none" | "kaheel" | "kaheelan" | "custom";
 export type SeasonStatus = "draft" | "active" | "paused" | "ended";
@@ -49,11 +57,16 @@ export interface SeasonalBackdrop {
   mascot: SeasonMascot;
   mascot_url: string | null;
   mascot_path: string | null;
+  headline_ar: string;
+  headline_en: string;
+  subheadline_ar: string;
+  subheadline_en: string;
   priority: number;
   status: SeasonStatus;
   starts_at: string;
   ends_at: string | null;
 }
+
 
 export interface ResolvedSeason extends SeasonalBackdrop {
   imageUrl: string | null;
@@ -87,7 +100,7 @@ export interface ResolvedOffer extends ExclusiveOffer {
 }
 
 const SEASON_COLUMNS =
-  "id, slug, label_ar, label_en, placement, section_key, image_url, image_path, image_width, image_height, decor_url, decor_path, motif, overlay, accent, mascot, mascot_url, mascot_path, priority, status, starts_at, ends_at";
+  "id, slug, label_ar, label_en, placement, section_key, image_url, image_path, image_width, image_height, decor_url, decor_path, motif, overlay, accent, mascot, mascot_url, mascot_path, headline_ar, headline_en, subheadline_ar, subheadline_en, priority, status, starts_at, ends_at";
 
 const OFFER_COLUMNS =
   "id, slug, title_ar, title_en, subtitle_ar, subtitle_en, badge_ar, badge_en, cta_ar, cta_en, click_url, image_url, image_path, backdrop_id, priority, status, starts_at, ends_at";
@@ -108,6 +121,8 @@ export const MOTIF_LABEL: Record<SeasonMotif, [string, string]> = {
   lanterns: ["فوانيس", "Lanterns"],
   sparks: ["بريق", "Sparks"],
   confetti: ["احتفال", "Confetti"],
+  flag: ["علم سوريا يرفرف", "Waving Syrian flag"],
+
 };
 
 export const OVERLAY_LABEL: Record<SeasonOverlay, [string, string]> = {

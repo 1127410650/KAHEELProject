@@ -29,6 +29,7 @@ import {
   SEASON_STATUS_LABEL,
   seasonLabel,
   useAdminSeasons,
+  type SeasonalBackdrop,
   type SeasonMascot,
   type SeasonMotif,
   type SeasonOverlay,
@@ -40,7 +41,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const MOTIFS: SeasonMotif[] = ["none", "stars", "school", "lanterns", "sparks", "confetti"];
+const MOTIFS: SeasonMotif[] = [
+  "none",
+  "stars",
+  "school",
+  "lanterns",
+  "sparks",
+  "confetti",
+  "flag",
+];
 const OVERLAYS: SeasonOverlay[] = ["soft", "medium", "strong"];
 const MASCOTS: SeasonMascot[] = ["none", "kaheel", "kaheelan", "custom"];
 const STATUSES: SeasonStatus[] = ["draft", "active", "paused", "ended"];
@@ -77,6 +86,11 @@ export function SeasonalBackdropsCard() {
   const [priority, setPriority] = useState("0");
   const [startsAt, setStartsAt] = useState("");
   const [endsAt, setEndsAt] = useState("");
+  const [headlineAr, setHeadlineAr] = useState("");
+  const [headlineEn, setHeadlineEn] = useState("");
+  const [subAr, setSubAr] = useState("");
+  const [subEn, setSubEn] = useState("");
+
   const [image, setImage] = useState<Upload | null>(null);
   const [decor, setDecor] = useState<Upload | null>(null);
   const [mascotFile, setMascotFile] = useState<Upload | null>(null);
@@ -147,7 +161,12 @@ export function SeasonalBackdropsCard() {
           accent,
           mascot,
           mascot_path: mascot === "custom" ? mascotFile?.path ?? null : null,
+          headline_ar: headlineAr.trim(),
+          headline_en: headlineEn.trim(),
+          subheadline_ar: subAr.trim(),
+          subheadline_en: subEn.trim(),
           priority: Number(priority) || 0,
+
           status: "draft",
           ...(startsAt ? { starts_at: new Date(startsAt).toISOString() } : {}),
           ends_at: endsAt ? new Date(endsAt).toISOString() : null,
@@ -157,6 +176,11 @@ export function SeasonalBackdropsCard() {
       setSlug("");
       setLabelAr("");
       setLabelEn("");
+      setHeadlineAr("");
+      setHeadlineEn("");
+      setSubAr("");
+      setSubEn("");
+
       setImage(null);
       setDecor(null);
       setMascotFile(null);
@@ -263,6 +287,48 @@ export function SeasonalBackdropsCard() {
               onChange={(event) => setEndsAt(event.target.value)}
             />
           </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-headline-ar">
+              {ar ? "النص البارز (عربي)" : "Headline (Arabic)"}
+            </Label>
+            <Input
+              id="season-headline-ar"
+              value={headlineAr}
+              onChange={(event) => setHeadlineAr(event.target.value)}
+              placeholder="جيناكم سوريا"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-headline-en">
+              {ar ? "النص البارز (إنجليزي)" : "Headline (English)"}
+            </Label>
+            <Input
+              id="season-headline-en"
+              value={headlineEn}
+              onChange={(event) => setHeadlineEn(event.target.value)}
+              placeholder="Hello Syria"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-sub-ar">{ar ? "السطر الفرعي (عربي)" : "Subtitle (Arabic)"}</Label>
+            <Input
+              id="season-sub-ar"
+              value={subAr}
+              onChange={(event) => setSubAr(event.target.value)}
+              placeholder="سوقك الأول… من أرضك ولأهلك"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-sub-en">
+              {ar ? "السطر الفرعي (إنجليزي)" : "Subtitle (English)"}
+            </Label>
+            <Input
+              id="season-sub-en"
+              value={subEn}
+              onChange={(event) => setSubEn(event.target.value)}
+            />
+          </div>
+
         </div>
 
         <div className="space-y-2">
@@ -434,7 +500,18 @@ export function SeasonalBackdropsCard() {
                   <Trash2 className="size-4" aria-hidden />
                 </Button>
               </div>
+              <SeasonTextEditor
+                row={row}
+                ar={ar}
+                onSave={(values) =>
+                  save.mutateAsync({ id: row.id, values }).then(
+                    () => toast.success(ar ? "حُفظ النص" : "Text saved"),
+                    () => toast.error(ar ? "تعذّر التحديث" : "Update failed"),
+                  )
+                }
+              />
             </div>
+
           ))}
           {!isLoading && rows.length === 0 ? (
             <p className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -475,6 +552,78 @@ function FilePick({
         onChange={(event) => onPick(event.target.files?.[0] ?? null)}
       />
       {done ? <p className="text-[11px] text-emerald-600">✓</p> : null}
+    </div>
+  );
+}
+
+/** تحرير نصوص الموسم (النص البارز والسطر الفرعي) بعد إنشائه. */
+function SeasonTextEditor({
+  row,
+  ar,
+  onSave,
+}: {
+  row: SeasonalBackdrop;
+  ar: boolean;
+  onSave: (values: Partial<SeasonalBackdrop>) => Promise<unknown>;
+}) {
+  const [headlineAr, setHeadlineAr] = useState(row.headline_ar ?? "");
+  const [headlineEn, setHeadlineEn] = useState(row.headline_en ?? "");
+  const [subAr, setSubAr] = useState(row.subheadline_ar ?? "");
+  const [subEn, setSubEn] = useState(row.subheadline_en ?? "");
+  const [saving, setSaving] = useState(false);
+
+  const dirty =
+    headlineAr !== (row.headline_ar ?? "") ||
+    headlineEn !== (row.headline_en ?? "") ||
+    subAr !== (row.subheadline_ar ?? "") ||
+    subEn !== (row.subheadline_en ?? "");
+
+  return (
+    <div className="w-full space-y-2 border-t border-border/60 pt-2">
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Input
+          value={headlineAr}
+          onChange={(event) => setHeadlineAr(event.target.value)}
+          placeholder={ar ? "النص البارز (عربي)" : "Headline (Arabic)"}
+          aria-label={ar ? "النص البارز (عربي)" : "Headline (Arabic)"}
+        />
+        <Input
+          value={headlineEn}
+          onChange={(event) => setHeadlineEn(event.target.value)}
+          placeholder={ar ? "النص البارز (إنجليزي)" : "Headline (English)"}
+          aria-label={ar ? "النص البارز (إنجليزي)" : "Headline (English)"}
+        />
+        <Input
+          value={subAr}
+          onChange={(event) => setSubAr(event.target.value)}
+          placeholder={ar ? "السطر الفرعي (عربي)" : "Subtitle (Arabic)"}
+          aria-label={ar ? "السطر الفرعي (عربي)" : "Subtitle (Arabic)"}
+        />
+        <Input
+          value={subEn}
+          onChange={(event) => setSubEn(event.target.value)}
+          placeholder={ar ? "السطر الفرعي (إنجليزي)" : "Subtitle (English)"}
+          aria-label={ar ? "السطر الفرعي (إنجليزي)" : "Subtitle (English)"}
+        />
+      </div>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        disabled={!dirty || saving}
+        onClick={() => {
+          setSaving(true);
+          void onSave({
+            headline_ar: headlineAr.trim(),
+            headline_en: headlineEn.trim(),
+            subheadline_ar: subAr.trim(),
+            subheadline_en: subEn.trim(),
+          }).finally(() => setSaving(false));
+        }}
+      >
+        {saving ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+        {ar ? "حفظ النص" : "Save text"}
+      </Button>
     </div>
   );
 }

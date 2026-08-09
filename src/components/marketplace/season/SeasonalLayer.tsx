@@ -12,8 +12,11 @@
  */
 import { useEffect, useRef, useState } from "react";
 
+import { useI18n } from "@/i18n";
 import { mascotAsset } from "@/lib/mascot-assets";
+import { SyrianFlag } from "@/components/marketplace/season/SyrianFlag";
 import { useSeason, type ResolvedSeason, type SeasonPlacement } from "@/lib/mkt-seasons";
+
 
 const SCRIM: Record<ResolvedSeason["overlay"], string> = {
   soft: "bg-[linear-gradient(180deg,rgb(36_0_70/0.35)_0%,rgb(36_0_70/0.28)_55%,rgb(36_0_70/0.52)_100%)]",
@@ -50,6 +53,9 @@ export function SeasonalLayer({
   className,
 }: SeasonalLayerProps) {
   const season = useSeason(placement, sectionKey);
+  const { locale } = useI18n();
+  const ar = locale === "ar";
+
   const hostRef = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -83,6 +89,9 @@ export function SeasonalLayer({
     season.mascot === "kaheel" || season.mascot === "kaheelan"
       ? mascotAsset(season.mascot, "sm")
       : null;
+  const headline = (ar ? season.headline_ar : season.headline_en).trim();
+  const subheadline = (ar ? season.subheadline_ar : season.subheadline_en).trim();
+
 
   return (
     <div
@@ -139,6 +148,28 @@ export function SeasonalLayer({
       )}
 
       <div className={`absolute inset-0 ${SCRIM[season.overlay]}`} />
+
+      {/* شريط الهوية: علم يرفرف + نص بارز — أسفل الطبقة حيث لا يزاحم محتوى الهيدر. */}
+      {season.motif === "flag" || headline ? (
+        <div className="absolute inset-x-3 bottom-1.5 flex items-center gap-2 sm:bottom-2 sm:gap-3">
+          {season.motif === "flag" ? (
+            <SyrianFlag className="h-5 w-[30px] shrink-0 overflow-hidden rounded-[3px] ring-1 ring-white/45 sm:h-6 sm:w-9" />
+          ) : null}
+          {headline ? (
+            <div className="min-w-0">
+              <p className="truncate text-[12px] font-extrabold leading-tight text-white drop-shadow-[0_1px_6px_rgb(0_0_0/0.6)] sm:text-sm">
+                {headline}
+              </p>
+              {subheadline ? (
+                <p className="truncate text-[9px] leading-tight text-white/85 drop-shadow-[0_1px_4px_rgb(0_0_0/0.6)] sm:text-[11px]">
+                  {subheadline}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
 
       {showMascot && mascotSrc ? (
         <img
