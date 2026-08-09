@@ -66,14 +66,15 @@ const SIDE_LABEL: Record<(typeof SIDES)[number], [string, string]> = {
 const MASCOTS = ["auto", "moto", "lounge", "wave", "peek", "parcel", "boss", "duo"] as const;
 const MASCOT_LABEL: Record<(typeof MASCOTS)[number], [string, string]> = {
   auto: ["حسب النص", "Match copy"],
-  moto: ["على الدبّاب", "Scooter"],
-  lounge: ["مرتاح", "Lounging"],
-  wave: ["يلوّح", "Waving"],
-  peek: ["يطل بفضول", "Peeking"],
-  parcel: ["طرد ساقط", "Parcel drop"],
+  moto: ["كَحيلان على الدبّاب", "Kaheelan on a scooter"],
+  lounge: ["كَحيل مرتاح", "Kaheel lounging"],
+  wave: ["كَحيل يرحّب", "Kaheel waving"],
+  peek: ["كَحيل يطلّ بلطف", "Kaheel peeking"],
+  parcel: ["كَحيلان بالطرد", "Kaheelan in a parcel"],
   boss: ["الزعيم كَحيلان", "Chief Kaheelan"],
   duo: ["كَحيل وكَحيلان (تعارف)", "Kaheel & Kaheelan (intro)"],
 };
+
 
 function AdminCampaignsPage() {
   const { locale } = useI18n();

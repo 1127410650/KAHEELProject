@@ -1,9 +1,16 @@
 /**
- * Popup mascots — four tiny inline SVG characters used by the compact ad card.
+ * شخصيتا المنصة — مرجع ثابت واحد لكل النوافذ والرسوم.
  *
- * Inline vectors on purpose: each scene is a few hundred bytes of markup, so the
- * popup adds no network request, no decode cost and no layout shift. Motion is
- * pure CSS and disabled under `prefers-reduced-motion`.
+ * • «كَحيل» (persona: kaheel) — الوجه الرسمي للمنصة: مؤدّب، هادئ، مرتّب.
+ *   شعر مرتب، حواجب مستوية هادئة، عينان مستديرتان ودودتان، ابتسامة لطيفة.
+ * • «الزعيم كَحيلان» (persona: kaheelan) — ابن خالته وزعيم الحارة: شماغ وغترة،
+ *   حاجب مرفوع وابتسامة خبيثة، شماغ ملفوف حول الرقبة. مزحة دائمًا، بلا إساءة.
+ *
+ * الرأس والشماغ مرسومان مرة واحدة في `KaheelHead` / `KaheelanHead` ويُعاد
+ * استخدامهما في كل المشاهد، فيبقى مظهر كل شخصية متطابقًا من نافذة لأخرى.
+ *
+ * رسوم متجهية داخلية: لا طلب شبكة، لا هزّة تخطيط، والحركة CSS فقط ومعطّلة تحت
+ * `prefers-reduced-motion`.
  */
 export type MascotKind = "moto" | "lounge" | "wave" | "peek" | "parcel" | "boss" | "duo";
 
@@ -17,6 +24,22 @@ export const MASCOT_KINDS: MascotKind[] = [
   "duo",
 ];
 
+/** أي شخصية يمثّلها كل مشهد — الإسناد ثابت ولا يتغيّر بين النوافذ. */
+export type MascotPersona = "kaheel" | "kaheelan" | "duo";
+
+export const MASCOT_PERSONA: Record<MascotKind, MascotPersona> = {
+  // كَحيل: الترحيب والطمأنة والشكر والتوجيه
+  wave: "kaheel",
+  lounge: "kaheel",
+  peek: "kaheel",
+  // كَحيلان: العروض والتشويق والمزاح
+  moto: "kaheelan",
+  parcel: "kaheelan",
+  boss: "kaheelan",
+  // مشهد التعارف بالشخصيتين
+  duo: "duo",
+};
+
 const SKIN = "#f4c9a3";
 const HAIR = "#240046";
 const BODY = "#7b2cbf";
@@ -24,6 +47,77 @@ const BODY_DARK = "#5a189a";
 const ACCENT = "#c77dff";
 const CLOTH = "#f7f2fb";
 const CLOTH_DARK = "#d8c7ea";
+
+/** رأس مرسوم في فضاء نصف قطره 13 حول الأصل، ويُقاس لأي مشهد. */
+const HEAD_R = 13;
+
+function headTransform(x: number, y: number, r: number) {
+  return `translate(${x} ${y}) scale(${(r / HEAD_R).toFixed(3)})`;
+}
+
+/** «كَحيل»: ملامح مؤدبة هادئة — نفس الرسم في كل مشهد. */
+function KaheelHead({ x, y, r }: { x: number; y: number; r: number }) {
+  return (
+    <g transform={headTransform(x, y, r)}>
+      <circle cx="0" cy="0" r="13" fill={SKIN} />
+      {/* شعر مرتّب */}
+      <path d="M-13-1a13 13 0 0 1 26 0z" fill={HAIR} />
+      <path d="M-4-11c4 3 9 4 13 3" stroke={BODY_DARK} strokeWidth="1.6" strokeLinecap="round" fill="none" />
+      {/* حواجب مستوية هادئة */}
+      <path d="M-8.5-5h5M3.5-5h5" stroke={HAIR} strokeWidth="1.9" strokeLinecap="round" />
+      <circle cx="-5" cy="1.5" r="2.5" fill={HAIR} />
+      <circle cx="5" cy="1.5" r="2.5" fill={HAIR} />
+      {/* ابتسامة لطيفة */}
+      <path d="M-5 7q5 4 10 0" stroke={HAIR} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      <circle cx="-9" cy="4.5" r="1.8" fill={ACCENT} opacity="0.45" />
+      <circle cx="9" cy="4.5" r="1.8" fill={ACCENT} opacity="0.45" />
+    </g>
+  );
+}
+
+/**
+ * «الزعيم كَحيلان»: غترة وشماغ، حاجب مرفوع وابتسامة خبيثة — مزح لا عدوانية.
+ * `scarf` تضيف لفّة الشماغ حول الرقبة مع حركة الطرف الواثقة.
+ */
+function KaheelanHead({
+  x,
+  y,
+  r,
+  scarf = true,
+}: {
+  x: number;
+  y: number;
+  r: number;
+  scarf?: boolean;
+}) {
+  return (
+    <g transform={headTransform(x, y, r)}>
+      {scarf ? (
+        <>
+          <path d="M-18 18c8 6 28 6 36 0l3 8c-10 7-32 7-42 0z" fill={CLOTH} />
+          <g
+            className="origin-[14px_20px] animate-[kaheel-mascot-boss-scarf_2.8s_ease-in-out_infinite] motion-reduce:animate-none"
+            style={{ transformBox: "view-box" }}
+          >
+            <path d="M12 20c9 1 16 6 20 14l-8 3c-4-7-9-10-14-11z" fill={CLOTH_DARK} />
+          </g>
+        </>
+      ) : null}
+      {/* أطراف الغترة على الجانبين — ملاصقة للرأس */}
+      <path d="M-14-2c0 12 4 20 8 24-7-3-11-12-11-24z" fill={CLOTH_DARK} />
+      <path d="M14-2c0 12-4 20-8 24 7-3 11-12 11-24z" fill={CLOTH_DARK} />
+      <circle cx="0" cy="0" r="13" fill={SKIN} />
+      {/* الغترة على الرأس */}
+      <path d="M-14.5-2a14.5 14.5 0 0 1 29 0v3c-4-4.5-9-6.5-14.5-6.5s-10.5 2-14.5 6.5z" fill={CLOTH} />
+      <path d="M-15-2h30" stroke={CLOTH_DARK} strokeWidth="2.6" strokeLinecap="round" />
+      {/* حاجب مرفوع وابتسامة خبيثة */}
+      <path d="M-8-7l7 3M8-7l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
+      <circle cx="-5" cy="1" r="2.6" fill={HAIR} />
+      <circle cx="6" cy="1" r="2.6" fill={HAIR} />
+      <path d="M-6 8c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+    </g>
+  );
+}
 
 function Frame({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
@@ -39,7 +133,7 @@ function Frame({ children, className }: { children: React.ReactNode; className?:
   );
 }
 
-/** Rider leaning forward on a scooter, with speed lines behind him. */
+/** كَحيلان يلحق بالعرض على الدبّاب. */
 function Moto() {
   return (
     <Frame className="animate-[kaheel-mascot-ride_1.4s_ease-in-out_infinite] motion-reduce:animate-none">
@@ -53,13 +147,12 @@ function Moto() {
       <path d="M34 68h40l-6-14H44z" fill={BODY} />
       <path d="M70 54l10-10" stroke={BODY_DARK} strokeWidth="5" strokeLinecap="round" />
       <path d="M46 52c2-12 8-18 16-18l8 4-6 8-8 2-4 6z" fill={BODY_DARK} />
-      <circle cx="64" cy="28" r="10" fill={SKIN} />
-      <path d="M54 26a10 10 0 0 1 20 0z" fill={HAIR} />
+      <KaheelanHead x={66} y={26} r={9} scarf={false} />
     </Frame>
   );
 }
 
-/** Relaxed character lying back with one leg crossed over the other. */
+/** كَحيل مرتاح ومطمئن. */
 function Lounge() {
   return (
     <Frame className="animate-[kaheel-mascot-breathe_2.6s_ease-in-out_infinite] motion-reduce:animate-none">
@@ -67,23 +160,17 @@ function Lounge() {
       <path d="M22 60c8-8 20-10 30-8l22 4-2 10H24z" fill={BODY} />
       <path d="M52 54l16-10 4 6-14 10z" fill={BODY} />
       <path d="M60 46l14-12 5 5-13 13z" fill={BODY_DARK} />
-      <circle cx="30" cy="46" r="11" fill={SKIN} />
-      <path d="M19 44a11 11 0 0 1 22 0z" fill={HAIR} />
-      <path d="M25 47h2M33 47h2" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M27 52c2 2 5 2 7 0" stroke={HAIR} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      <KaheelHead x={30} y={46} r={12} />
     </Frame>
   );
 }
 
-/** Character waving goodbye. */
+/** كَحيل يرحّب ويلوّح. */
 function Wave() {
   return (
     <Frame>
       <path d="M30 88V60a18 18 0 0 1 36 0v28z" fill={BODY} />
-      <circle cx="48" cy="34" r="14" fill={SKIN} />
-      <path d="M34 32a14 14 0 0 1 28 0z" fill={HAIR} />
-      <path d="M42 34h2.5M53 34h2.5" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" />
-      <path d="M43 40c3 3 7 3 10 0" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      <KaheelHead x={48} y={34} r={14} />
       <g
         className="origin-[68px_58px] animate-[kaheel-mascot-wave_1s_ease-in-out_infinite] motion-reduce:animate-none"
         style={{ transformBox: "view-box" }}
@@ -95,31 +182,23 @@ function Wave() {
   );
 }
 
-/** Curious character peeking in from the edge. */
+/** كَحيل يطلّ بلطف ليذكّر بشيء. */
 function Peek() {
   return (
     <Frame className="animate-[kaheel-mascot-peek_2.2s_ease-in-out_infinite] motion-reduce:animate-none">
       <path d="M6 96V62a20 20 0 0 1 40 0v34z" fill={BODY} />
-      <circle cx="30" cy="38" r="15" fill={SKIN} />
-      <path d="M15 36a15 15 0 0 1 30 0z" fill={HAIR} />
-      <circle cx="28" cy="38" r="3" fill={HAIR} />
-      <circle cx="40" cy="38" r="3" fill={HAIR} />
-      <path d="M28 47c4 2 8 2 12-1" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      <KaheelHead x={30} y={38} r={15} />
       <rect x="56" y="4" width="36" height="88" rx="10" fill={BODY_DARK} opacity="0.35" />
     </Frame>
   );
 }
 
-/** Character popping out of a parcel that just landed. */
+/** كَحيلان يوصل العرض بنفسه داخل طرد. */
 function Parcel() {
   return (
     <Frame className="animate-[kaheel-mascot-drop_2.4s_ease-in-out_infinite] motion-reduce:animate-none">
       <ellipse cx="48" cy="86" rx="30" ry="5" fill={HAIR} opacity="0.2" />
-      <circle cx="48" cy="40" r="14" fill={SKIN} />
-      <path d="M34 38a14 14 0 0 1 28 0z" fill={HAIR} />
-      <circle cx="43" cy="40" r="2.8" fill={HAIR} />
-      <circle cx="54" cy="40" r="2.8" fill={HAIR} />
-      <path d="M43 47c3 2.5 7 2.5 10 0" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      <KaheelanHead x={48} y={30} r={10} scarf={false} />
       <path d="M62 54l12-12" stroke={ACCENT} strokeWidth="7" strokeLinecap="round" />
       <rect x="22" y="52" width="52" height="32" rx="7" fill={BODY} />
       <rect x="43" y="52" width="10" height="32" fill={ACCENT} opacity="0.7" />
@@ -128,35 +207,12 @@ function Parcel() {
   );
 }
 
-/**
- * «الزعيم كَحيلان» — a cheerful chief in a shemagh who flicks the scarf tail over
- * his shoulder, then points a playful finger. Raised brows and a sly grin: mock
- * bossiness, never real anger.
- */
+/** كَحيلان بكامل زعامته: يلف الشماغ ثم يشير بإصبعه مازحًا. */
 function Boss() {
   return (
     <Frame className="animate-[kaheel-mascot-boss-enter_2.8s_ease-out_infinite] motion-reduce:animate-none">
       <path d="M28 92V64a20 20 0 0 1 40 0v28z" fill={BODY} />
-      {/* الشماغ الملفوف حول الرقبة */}
-      <path d="M30 62c8 6 28 6 36 0l3 8c-10 7-32 7-42 0z" fill={CLOTH} />
-      <g
-        className="origin-[62px_66px] animate-[kaheel-mascot-boss-scarf_2.8s_ease-in-out_infinite] motion-reduce:animate-none"
-        style={{ transformBox: "view-box" }}
-      >
-        <path d="M60 64c9 1 16 6 20 14l-8 3c-4-7-9-10-14-11z" fill={CLOTH_DARK} />
-      </g>
-      {/* الغترة على الرأس */}
-      <path d="M28 40a20 20 0 0 1 40 0v6c-4-6-10-9-20-9s-16 3-20 9z" fill={CLOTH} />
-      <path d="M27 40c0 16 6 26 10 30-8-4-13-15-13-30z" fill={CLOTH_DARK} />
-      <path d="M69 40c0 15-5 26-13 30 4-4 10-14 10-30z" fill={CLOTH_DARK} />
-      <path d="M26 40h44" stroke={CLOTH_DARK} strokeWidth="3" strokeLinecap="round" />
-      <circle cx="48" cy="42" r="13" fill={SKIN} />
-      {/* حواجب مرفوعة وابتسامة خبيثة */}
-      <path d="M40 35l7 3M56 35l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
-      <circle cx="43" cy="43" r="2.6" fill={HAIR} />
-      <circle cx="54" cy="43" r="2.6" fill={HAIR} />
-      <path d="M42 50c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
-      {/* الإصبع المشير */}
+      <KaheelanHead x={48} y={42} r={13} scarf />
       <g
         className="origin-[30px_68px] animate-[kaheel-mascot-boss-point_2.8s_ease-in-out_infinite] motion-reduce:animate-none"
         style={{ transformBox: "view-box" }}
@@ -170,18 +226,12 @@ function Boss() {
 }
 
 /**
- * مشهد التعارف: «الزعيم كَحيلان» يلف طرف شماغه ويشير إلى «كَحيل» وهو يلوّح.
- *
- * رسم متجهي داخلي بعرض 2:1 يملأ أعلى البطاقة، فلا طلب شبكة ولا هزّة تخطيط.
+ * مشهد التعارف: «الزعيم كَحيلان» يقدّم نفسه ويشير إلى «كَحيل» وهو يلوّح بأدب.
+ * نفس الرأسين المستخدمين في بقية المشاهد، فالمظهر متطابق.
  */
 export function PopupDuoScene() {
   return (
-    <svg
-      viewBox="0 0 168 92"
-      role="presentation"
-      aria-hidden="true"
-      className="size-full"
-    >
+    <svg viewBox="0 0 168 92" role="presentation" aria-hidden="true" className="size-full">
       <ellipse cx="84" cy="86" rx="72" ry="6" fill={ACCENT} opacity="0.18" />
       <circle cx="118" cy="44" r="40" fill={ACCENT} opacity="0.14" />
 
@@ -191,22 +241,7 @@ export function PopupDuoScene() {
         style={{ transformBox: "view-box" }}
       >
         <path d="M18 88V64a19 19 0 0 1 38 0v24z" fill={BODY} />
-        <path d="M20 62c8 6 26 6 34 0l3 8c-10 7-30 7-40 0z" fill={CLOTH} />
-        <g
-          className="origin-[50px_66px] animate-[kaheel-mascot-boss-scarf_3s_ease-in-out_infinite] motion-reduce:animate-none"
-          style={{ transformBox: "view-box" }}
-        >
-          <path d="M48 64c9 1 16 6 20 14l-8 3c-4-7-9-10-14-11z" fill={CLOTH_DARK} />
-        </g>
-        <path d="M18 40a19 19 0 0 1 38 0v6c-4-6-10-9-19-9s-15 3-19 9z" fill={CLOTH} />
-        <path d="M17 40c0 16 6 26 10 30-8-4-13-15-13-30z" fill={CLOTH_DARK} />
-        <path d="M57 40c0 15-5 26-13 30 4-4 10-14 10-30z" fill={CLOTH_DARK} />
-        <path d="M16 40h42" stroke={CLOTH_DARK} strokeWidth="3" strokeLinecap="round" />
-        <circle cx="37" cy="43" r="12.5" fill={SKIN} />
-        <path d="M30 36l6 3M45 36l-6 3" stroke={HAIR} strokeWidth="2.3" strokeLinecap="round" />
-        <circle cx="33" cy="44" r="2.5" fill={HAIR} />
-        <circle cx="43" cy="44" r="2.5" fill={HAIR} />
-        <path d="M32 51c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.3" strokeLinecap="round" fill="none" />
+        <KaheelanHead x={37} y={43} r={12.5} scarf />
         {/* الإصبع يقدّم كَحيل للناس */}
         <g
           className="origin-[54px_66px] animate-[kaheel-mascot-boss-point_3s_ease-in-out_infinite] motion-reduce:animate-none"
@@ -218,18 +253,14 @@ export function PopupDuoScene() {
         </g>
       </g>
 
-      {/* كَحيل يلوّح */}
+      {/* كَحيل يلوّح بأدب */}
       <g
         className="animate-[kaheel-mascot-duo-hop_2.4s_ease-in-out_infinite] motion-reduce:animate-none"
         style={{ transformBox: "view-box" }}
       >
         <path d="M100 88V66a17 17 0 0 1 34 0v22z" fill={BODY} />
         <path d="M100 70h34" stroke={BODY_DARK} strokeWidth="3" strokeLinecap="round" />
-        <circle cx="117" cy="46" r="13" fill={SKIN} />
-        <path d="M104 44a13 13 0 0 1 26 0z" fill={HAIR} />
-        <circle cx="112" cy="47" r="2.6" fill={HAIR} />
-        <circle cx="123" cy="47" r="2.6" fill={HAIR} />
-        <path d="M112 53c3 3 8 3 11 0" stroke={HAIR} strokeWidth="2.3" strokeLinecap="round" fill="none" />
+        <KaheelHead x={117} y={46} r={13} />
         <g
           className="origin-[136px_68px] animate-[kaheel-mascot-wave_1.1s_ease-in-out_infinite] motion-reduce:animate-none"
           style={{ transformBox: "view-box" }}

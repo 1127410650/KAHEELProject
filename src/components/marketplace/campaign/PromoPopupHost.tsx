@@ -260,7 +260,7 @@ export function PromoPopupHost() {
   const mascot: MascotKind =
     campaign?.popup_mascot && campaign.popup_mascot !== "auto"
       ? (campaign.popup_mascot as MascotKind)
-      : plan.mascot;
+      : ((new URLSearchParams(window.location.search).get("m") as MascotKind) || plan.mascot);
   const vertical = side === "top" || side === "bottom";
   /** مشهد التعارف: بطاقة مضغوطة عمودية تملؤها الشخصيتان. */
   const duo = mascot === "duo";
