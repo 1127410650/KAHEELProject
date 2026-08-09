@@ -81,6 +81,15 @@ const EN_POOL: PopupCopy[] = [
   { title: "Alright… take care 👋", subtitle: "Just don't say we never mentioned an offer", mascot: "wave" },
   { title: "Close it, close it… no hard feelings 😌", subtitle: "Only don't say nobody told you tomorrow", mascot: "wave" },
   { title: "Back already? Knew you would 😄", subtitle: "The offer is still here, nobody took it", mascot: "wave" },
+  // "Chief Kaheelan — Kaheel's cousin": mock bossiness, all in good fun
+  { title: "Do you know who you're talking to? 😤", subtitle: "I'm Chief Kaheelan… and this offer is yours by my order", mascot: "boss" },
+  { title: "He flicked the shemagh and said… 🧣", subtitle: "This offer only goes to someone smart like you", mascot: "boss" },
+  { title: "I'm Kaheel's own cousin! 😎", subtitle: "So the offer comes from family — take it, don't embarrass me", mascot: "boss" },
+  { title: "What? Closing it on my face? 😠", subtitle: "Fine, close it… right after you see the offer", mascot: "boss" },
+  { title: "Around here, I'm the chief 🫵", subtitle: "And the offer is my order — no discussion", mascot: "boss" },
+  { title: "Don't make me get cross 😤", subtitle: "Just take a nice look at the offer 😄", mascot: "boss" },
+  { title: "The chief has spoken 🧣", subtitle: "This offer is yours, nobody else can take it", mascot: "boss" },
+  { title: "I don't take no for an answer 😏", subtitle: "But from you… fine. Just see the offer", mascot: "boss" },
   // Earlier general lines — kept as they were
   { title: "Everything you need is right here 👋", subtitle: "Browse nearby offers in one tap", mascot: "wave" },
   { title: "Care to see today's offers first? 🎁", subtitle: "Hand-picked deals, just for you", mascot: "moto" },
