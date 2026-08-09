@@ -24,6 +24,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
+import { createAdCreditCheckout } from "@/lib/mkt-ad-credit-gateway.functions";
 import { isRealDocument } from "@/lib/mkt-business";
 
 export type TopupMethod = "sham_cash" | "bank_transfer" | "card_gateway";
@@ -276,4 +277,29 @@ export async function receiptSignedUrl(path: string): Promise<string | null> {
   const { data, error } = await supabase.storage.from(MKT_BUCKET).createSignedUrl(path, 120);
   if (error) return null;
   return data?.signedUrl ?? null;
+}
+
+/* ── card gateway ─────────────────────────────────────────────────────────── */
+
+/**
+ * Opens a hosted card checkout for a published pack.
+ *
+ * The caller sends only the pack size: the amount is resolved server-side, and
+ * the wallet is credited by the verified webhook — never by returning here.
+ */
+export function useStartCardCheckout(tenantId: string | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (credits: number) => {
+      const result = await createAdCreditCheckout({
+        data: { credits, tenantId: tenantId ?? null },
+      });
+      if (!result.ok || !result.url) throw new Error(result.reason ?? "provider_error");
+      return result.url;
+    },
+    onSuccess: (url) => {
+      void queryClient.invalidateQueries({ queryKey: ["mkt", "ad-credit-topups"] });
+      window.location.assign(url);
+    },
+  });
 }
