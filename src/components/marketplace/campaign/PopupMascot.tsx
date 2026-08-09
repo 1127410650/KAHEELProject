@@ -118,12 +118,54 @@ function Parcel() {
   );
 }
 
+/**
+ * «الزعيم كَحيلان» — a cheerful chief in a shemagh who flicks the scarf tail over
+ * his shoulder, then points a playful finger. Raised brows and a sly grin: mock
+ * bossiness, never real anger.
+ */
+function Boss() {
+  return (
+    <Frame className="animate-[kaheel-mascot-boss-enter_2.8s_ease-out_infinite] motion-reduce:animate-none">
+      <path d="M28 92V64a20 20 0 0 1 40 0v28z" fill={BODY} />
+      {/* الشماغ الملفوف حول الرقبة */}
+      <path d="M30 62c8 6 28 6 36 0l3 8c-10 7-32 7-42 0z" fill={CLOTH} />
+      <g
+        className="origin-[62px_66px] animate-[kaheel-mascot-boss-scarf_2.8s_ease-in-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <path d="M60 64c9 1 16 6 20 14l-8 3c-4-7-9-10-14-11z" fill={CLOTH_DARK} />
+      </g>
+      {/* الغترة على الرأس */}
+      <path d="M28 40a20 20 0 0 1 40 0v6c-4-6-10-9-20-9s-16 3-20 9z" fill={CLOTH} />
+      <path d="M27 40c0 16 6 26 10 30-8-4-13-15-13-30z" fill={CLOTH_DARK} />
+      <path d="M69 40c0 15-5 26-13 30 4-4 10-14 10-30z" fill={CLOTH_DARK} />
+      <path d="M26 40h44" stroke={CLOTH_DARK} strokeWidth="3" strokeLinecap="round" />
+      <circle cx="48" cy="42" r="13" fill={SKIN} />
+      {/* حواجب مرفوعة وابتسامة خبيثة */}
+      <path d="M40 35l7 3M56 35l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
+      <circle cx="43" cy="43" r="2.6" fill={HAIR} />
+      <circle cx="54" cy="43" r="2.6" fill={HAIR} />
+      <path d="M42 50c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      {/* الإصبع المشير */}
+      <g
+        className="origin-[30px_68px] animate-[kaheel-mascot-boss-point_2.8s_ease-in-out_infinite] motion-reduce:animate-none"
+        style={{ transformBox: "view-box" }}
+      >
+        <path d="M32 70l-14-6" stroke={BODY_DARK} strokeWidth="8" strokeLinecap="round" />
+        <circle cx="16" cy="63" r="6" fill={SKIN} />
+        <path d="M11 61l-6-3" stroke={SKIN} strokeWidth="4" strokeLinecap="round" />
+      </g>
+    </Frame>
+  );
+}
+
 const MAP: Record<MascotKind, () => React.ReactElement> = {
   moto: Moto,
   lounge: Lounge,
   wave: Wave,
   peek: Peek,
   parcel: Parcel,
+  boss: Boss,
 };
 
 export function PopupMascot({ kind }: { kind: MascotKind }) {
