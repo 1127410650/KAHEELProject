@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 
 import { useI18n } from "@/i18n";
+import { CampaignAsset } from "@/components/marketplace/campaign/CampaignAsset";
+import { trackCampaign, useLiveCampaigns, type LiveCampaign } from "@/lib/mkt-campaigns";
 import heroImage from "@/assets/market/kaheel-home-hero-v2.webp";
 import propertyImage from "@/assets/market/cat-real-estate-hero.webp";
 import carImage from "@/assets/market/cat-cars.webp";
@@ -17,9 +19,12 @@ type Slide = {
   titleEn: string;
   descAr: string;
   descEn: string;
+  /** Set when the slide is a paid animated campaign instead of an editorial one. */
+  campaign?: LiveCampaign;
 };
 
 const AUTOPLAY_MS = 5_200;
+
 
 /**
  * The promotional banner rail. Native scroll-snap does the moving, so touch
@@ -35,6 +40,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
   const holdingRef = useRef(false);
   const visibleRef = useRef(true);
   const ar = locale === "ar";
+  const { data: campaigns } = useLiveCampaigns("home_banner");
 
   const slides: Slide[] = [
     {
@@ -81,6 +87,19 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
       descAr: "اعرض منتجك أو خدمتك على عملاء كَحيل",
       descEn: "Show your product or service to Kaheel customers",
     },
+    // Paid animated campaigns ride the same rail, after the editorial slides.
+    ...(campaigns ?? []).map((campaign) => ({
+      id: `campaign-${campaign.id}`,
+      image: heroImage,
+      href: campaign.click_url,
+      badgeAr: campaign.badge_ar,
+      badgeEn: campaign.badge_en,
+      titleAr: campaign.title_ar,
+      titleEn: campaign.title_en,
+      descAr: campaign.subtitle_ar,
+      descEn: campaign.subtitle_en,
+      campaign,
+    })),
   ];
 
   const goTo = useCallback((next: number, smooth = true) => {
@@ -109,6 +128,12 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
       rail.removeEventListener("scroll", onScroll);
     };
   }, [slides.length]);
+
+  // A campaign counts as seen once it is the slide on screen.
+  const activeCampaignId = slides[index]?.campaign?.id ?? null;
+  useEffect(() => {
+    if (activeCampaignId) trackCampaign(activeCampaignId, "impression");
+  }, [activeCampaignId]);
 
   useEffect(() => {
     const rail = railRef.current;
@@ -170,21 +195,28 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
           <a
             key={slide.id}
             href={slide.href}
+            onClick={() => {
+              if (slide.campaign) trackCampaign(slide.campaign.id, "click");
+            }}
             aria-label={ar ? slide.titleAr : slide.titleEn}
             aria-roledescription="slide"
             className="group relative block min-h-[208px] w-full shrink-0 snap-start snap-always overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white outline-none sm:min-h-[286px] sm:rounded-[30px]"
           >
-            <img
-              src={slide.image}
-              alt=""
-              width={1728}
-              height={920}
-              fetchPriority={slideIndex === 0 ? "high" : "low"}
-              loading={slideIndex === 0 ? "eager" : "lazy"}
-              decoding="async"
-              className="absolute inset-0 size-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]"
-              aria-hidden
-            />
+            {slide.campaign ? (
+              <CampaignAsset campaign={slide.campaign} />
+            ) : (
+              <img
+                src={slide.image}
+                alt=""
+                width={1728}
+                height={920}
+                fetchPriority={slideIndex === 0 ? "high" : "low"}
+                loading={slideIndex === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className="absolute inset-0 size-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]"
+                aria-hidden
+              />
+            )}
             <div className="relative z-10 mx-auto flex min-h-[208px] w-[62%] max-w-[520px] flex-col items-center justify-center px-2 py-5 text-center sm:min-h-[286px] sm:w-[48%] sm:px-4">
               <span className="rounded-full bg-[#240046] px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
                 {ar ? slide.badgeAr : slide.badgeEn}
