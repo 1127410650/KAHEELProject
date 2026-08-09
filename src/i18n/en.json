@@ -2967,6 +2967,13 @@
       "blocked": "Caller blocked",
       "report": "Report",
       "backToChat": "Back to chat",
+      "fallback": {
+        "title": "The direct call could not connect on this network.",
+        "whatsapp": "Continue on WhatsApp",
+        "phone": "Call the number",
+        "chat": "Continue in chat",
+        "noPhone": "The advertiser has not published a phone number, so chat is the way to reach them."
+      },
       "noPhoneHint": "Phone numbers are never shown in in-platform calls.",
       "status": {
         "requesting": "Calling",
