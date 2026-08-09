@@ -60,16 +60,21 @@ export function PageNoticeBar({
 }) {
   const { locale } = useI18n();
   const ar = locale === "ar";
-  const [open, setOpen] = useState(false);
+  /**
+   * يبدأ ظاهرًا على الخادم وفي أول رسم، ويُخفى بعد الترطيب فقط إذا كان الزائر قد
+   * أغلقه سابقًا. الاتجاه مقصود: الظهور المتأخّر يدفع المحتوى (هزّة تخطيط)، أما
+   * الإخفاء فلا يدفع شيئًا لأعلى إلا للزائر الذي أغلقه أصلًا ومرة واحدة.
+   */
+  const [open, setOpen] = useState(true);
 
-  // القراءة بعد الترطيب حصرًا: قراءة localStorage في التهيئة تُنتج عدم تطابق.
   useEffect(() => {
     try {
-      setOpen(window.localStorage.getItem(NOTICE_KEY(id)) !== "off");
+      if (window.localStorage.getItem(NOTICE_KEY(id)) === "off") setOpen(false);
     } catch {
-      setOpen(true);
+      /* الوضع الخاص: يبقى ظاهرًا */
     }
   }, [id]);
+
 
   if (!open) return null;
 
