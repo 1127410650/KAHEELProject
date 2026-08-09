@@ -54,6 +54,7 @@ export interface GuideFilters {
   sector: string;
   governorate: string;
   category: string;
+  subcategory: string;
 }
 
 export const EMPTY_GUIDE_FILTERS: GuideFilters = {
@@ -61,7 +62,9 @@ export const EMPTY_GUIDE_FILTERS: GuideFilters = {
   sector: "",
   governorate: "",
   category: "",
+  subcategory: "",
 };
+
 
 const SELECT_COLUMNS =
   "id,slug,name_ar,name_en,sector,category,subcategory,governorate,city,district,address,address_status,latitude,longitude,map_url,map_url_status,phone,phone_status,whatsapp,whatsapp_status,whatsapp_link,email,website,opening_hours,stars,source_label,source_type,source_date,verification_status,completeness,notes";
