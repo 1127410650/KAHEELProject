@@ -51,8 +51,10 @@ const FIELD_ICONS: Record<string, LucideIcon> = {
 };
 
 /**
- * A continuous row of compact category circles. Three identical groups make
- * the loop seamless while the native rail stays swipeable on touch screens.
+ * Two stacked rows of compact category circles that scroll horizontally as one
+ * rail. Three identical groups make the loop seamless — each group is its own
+ * two-row grid so `scrollWidth / 3` stays exact — while the native rail keeps
+ * snapping smoothly under touch.
  */
 export function MarketCategoryStrip() {
   const { t, locale, dir } = useI18n();
@@ -75,7 +77,83 @@ export function MarketCategoryStrip() {
     "border-white/80 bg-white/[0.97] text-market-navy shadow-[0_7px_18px_rgb(36_0_70/0.24),inset_0_1px_0_rgb(255_255_255/0.95)] hover:-translate-y-1 hover:border-white hover:bg-white";
   const active =
     "border-white/90 bg-[linear-gradient(145deg,#9d4edd,#5a189a)] text-white shadow-[0_8px_22px_rgb(60_9_108/0.34),inset_0_1px_0_rgb(255_255_255/0.28)]";
-  const loopingFields = Array.from({ length: 3 }, () => PRIMARY_FIELDS).flat();
+
+  const renderChip = (
+    field: (typeof PRIMARY_FIELDS)[number],
+    groupIndex: number,
+  ) => {
+    const label = t(`market.fields.${field.id}`);
+    const key = `${field.id}-${groupIndex}`;
+    const Icon = FIELD_ICONS[field.id] ?? Sparkles;
+    // Only the middle group is real content; the copies exist for the loop.
+    const accessibilityProps =
+      groupIndex === 1 ? {} : ({ "aria-hidden": true, tabIndex: -1 } as const);
+
+    const body = (
+      <>
+        <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
+        <span className="line-clamp-2 max-w-full" dir={dir}>
+          {label}
+        </span>
+      </>
+    );
+
+    if (field.kind === "home") {
+      return (
+        <Link key={key} to="/" className={`${chipClass} ${idle}`} lang={locale} {...accessibilityProps}>
+          {body}
+        </Link>
+      );
+    }
+
+    if (field.kind === "more") {
+      return (
+        <Link
+          key={key}
+          to="/more"
+          className={`${chipClass} ${idle}`}
+          lang={locale}
+          {...accessibilityProps}
+        >
+          {body}
+        </Link>
+      );
+    }
+
+    // Services have a real booking marketplace, not only classified ads.
+    // The taxonomy id stays unchanged, while its primary destination is
+    // the canonical service directory.
+    if (field.id === "services") {
+      const on = pathname === "/services" || pathname.startsWith("/services/");
+      return (
+        <Link
+          key={key}
+          to="/services"
+          aria-current={on ? "page" : undefined}
+          className={`${chipClass} ${on ? active : idle}`}
+          lang={locale}
+          {...accessibilityProps}
+        >
+          {body}
+        </Link>
+      );
+    }
+
+    const on = isFieldActive(field, current);
+    return (
+      <Link
+        key={key}
+        to="/search"
+        search={{ ...kept, ...fieldSearchParams(field) }}
+        aria-current={on ? "page" : undefined}
+        className={`${chipClass} ${on ? active : idle}`}
+        lang={locale}
+        {...accessibilityProps}
+      >
+        {body}
+      </Link>
+    );
+  };
 
   return (
     <div className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_18%_-45%,rgb(224_170_255/0.42),transparent_39%),linear-gradient(105deg,#10002b_0%,#3c096c_52%,#7b2cbf_135%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.08)]">
@@ -102,93 +180,19 @@ export function MarketCategoryStrip() {
           dir="ltr"
           aria-label={t("market.home.strip.label")}
           {...interactionProps}
-          className="market-category-rail flex w-full snap-x snap-proximity items-center gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-2 py-1 touch-pan-x select-none sm:gap-2.5 sm:px-3 lg:px-5"
+          className="market-category-rail flex w-full snap-x snap-proximity items-start gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-2 py-1 touch-pan-x select-none sm:gap-2.5 sm:px-3 lg:px-5"
         >
-          {loopingFields.map((field, index) => {
-            const label = t(`market.fields.${field.id}`);
-            const key = `${field.id}-${index}`;
-            const Icon = FIELD_ICONS[field.id] ?? Sparkles;
-            const duplicate = Math.floor(index / PRIMARY_FIELDS.length) !== 1;
-            const accessibilityProps = duplicate
-              ? ({ "aria-hidden": true, tabIndex: -1 } as const)
-              : {};
-
-            if (field.kind === "home") {
-              return (
-                <Link
-                  key={key}
-                  to="/"
-                  className={`${chipClass} ${idle}`}
-                  lang={locale}
-                  {...accessibilityProps}
-                >
-                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
-                  <span className="line-clamp-2 max-w-full" dir={dir}>
-                    {label}
-                  </span>
-                </Link>
-              );
-            }
-
-            if (field.kind === "more") {
-              return (
-                <Link
-                  key={key}
-                  to="/more"
-                  className={`${chipClass} ${idle}`}
-                  lang={locale}
-                  {...accessibilityProps}
-                >
-                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
-                  <span className="line-clamp-2 max-w-full" dir={dir}>
-                    {label}
-                  </span>
-                </Link>
-              );
-            }
-
-            // Services have a real booking marketplace, not only classified ads.
-            // The taxonomy id stays unchanged, while its primary destination is
-            // the canonical service directory.
-            if (field.id === "services") {
-              const on = pathname === "/services" || pathname.startsWith("/services/");
-              return (
-                <Link
-                  key={key}
-                  to="/services"
-                  aria-current={on ? "page" : undefined}
-                  className={`${chipClass} ${on ? active : idle}`}
-                  lang={locale}
-                  {...accessibilityProps}
-                >
-                  <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
-                  <span className="line-clamp-2 max-w-full" dir={dir}>
-                    {label}
-                  </span>
-                </Link>
-              );
-            }
-
-            const on = isFieldActive(field, current);
-            return (
-              <Link
-                key={key}
-                to="/search"
-                search={{ ...kept, ...fieldSearchParams(field) }}
-                aria-current={on ? "page" : undefined}
-                className={`${chipClass} ${on ? active : idle}`}
-                lang={locale}
-                {...accessibilityProps}
-              >
-                <Icon className="relative z-[1] size-3.5 shrink-0 sm:size-4" aria-hidden />
-                <span className="line-clamp-2 max-w-full" dir={dir}>
-                  {label}
-                </span>
-              </Link>
-            );
-          })}
+          {[0, 1, 2].map((groupIndex) => (
+            <div
+              key={groupIndex}
+              className="grid shrink-0 grid-flow-col grid-rows-2 gap-2 sm:gap-2.5"
+            >
+              {PRIMARY_FIELDS.map((field) => renderChip(field, groupIndex))}
+            </div>
+          ))}
         </nav>
       </div>
     </div>
   );
 }
+
