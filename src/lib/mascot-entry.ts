@@ -53,12 +53,18 @@ export function resetEntrySides(): void {
 }
 
 /** محاذاة غلاف البطاقة على الشاشة حسب جهة الدخول. */
-export const ENTRY_ALIGN: Record<EntrySide, string> = {
-  bottom: "items-end justify-center",
-  top: "items-start justify-center",
-  right: "items-center justify-end",
-  left: "items-center justify-start",
-  corner: "items-end justify-end",
+/**
+ * موضع البطاقة على الشاشة لكل جهة — بإحداثيات **فيزيائية** (`left`/`right`)
+ * لا منطقية (`start`/`end`). المنصة عربية RTL، فلو استعملنا `justify-end`
+ * لظهرت «جهة اليمين» على يسار الشاشة. التمركز يتم بـ `mx-auto` لا بـ
+ * `-translate-x-1/2`، لأن `transform` محجوز لحركة الدخول والخروج.
+ */
+export const ENTRY_POSITION: Record<EntrySide, string> = {
+  bottom: "bottom-24 left-0 right-0 mx-auto",
+  top: "top-4 left-0 right-0 mx-auto",
+  right: "right-3 inset-y-0 my-auto h-fit",
+  left: "left-3 inset-y-0 my-auto h-fit",
+  corner: "bottom-24 right-3",
 };
 
 /** حركة الدخول (spring خفيف) وحركة الخروج بنفس الاتجاه. */
@@ -79,27 +85,31 @@ export const ENTRY_ORIGIN: Record<EntrySide, string> = {
   corner: "bottom right",
 };
 
-/** موضع الإطلالة + حركتها لكل حافة. */
+/**
+ * موضع الإطلالة وحركتها لكل حافة — أيضًا بإحداثيات فيزيائية. الإطلالة ترتفع
+ * فوق الشريط السفلي (`bottom-*`) فلا تحجب أزرار الملاحة.
+ */
 export const PEEK_LAYOUT: Record<
   PeekSide,
-  { wrap: string; row: string; animation: { in: string; out: string }; origin: string }
+  { position: string; row: string; animation: { in: string; out: string }; origin: string }
 > = {
   right: {
-    wrap: "items-end justify-end pb-28 pe-0",
+    position: "bottom-24 right-0",
     row: "flex-row-reverse",
     animation: { in: "mascot-peek-right", out: "mascot-peek-out-right" },
     origin: "bottom right",
   },
   left: {
-    wrap: "items-end justify-start pb-28 ps-0",
+    position: "bottom-24 left-0",
     row: "flex-row",
     animation: { in: "mascot-peek-left", out: "mascot-peek-out-left" },
     origin: "bottom left",
   },
   bottom: {
-    wrap: "items-end justify-center pb-0",
-    row: "flex-col items-center",
+    position: "bottom-16 left-0 right-0 mx-auto w-fit",
+    row: "flex-row",
     animation: { in: "mascot-peek-bottom", out: "mascot-peek-out-bottom" },
     origin: "bottom center",
   },
 };
+
