@@ -240,23 +240,31 @@ export function buildGuideFacets(rows: GuideFacetRow[], filters: GuideFilters): 
   };
 }
 
+function readableSourceName(place: GuidePlace): string | null {
+  const candidates = [place.source_type, place.source_label];
+  // Prefer a human name; a bare URL is reduced to its site (or OpenStreetMap).
+  for (const candidate of candidates) {
+    const value = (candidate ?? "").trim();
+    if (!value || /^https?:\/\//.test(value)) continue;
+    return value;
+  }
+  for (const candidate of candidates) {
+    const value = (candidate ?? "").trim();
+    if (!/^https?:\/\//.test(value)) continue;
+    if (value.includes("openstreetmap")) return "OpenStreetMap";
+    try {
+      return new URL(value).hostname.replace(/^www\./, "");
+    } catch {
+      return value;
+    }
+  }
+  return isOpenStreetMap(place) ? "OpenStreetMap" : null;
+}
+
 /** Human label for a record's source, with its date when present. */
 export function sourceLabel(place: GuidePlace): string | null {
-  const name = (place.source_label ?? "").trim() || (isOpenStreetMap(place) ? "OpenStreetMap" : "");
-  const raw = name || (place.source_type ?? "").trim();
-  if (!raw) return null;
-  // Some records store a bare URL as the source; show a readable name instead.
-  const source = /^https?:\/\//.test(raw)
-    ? raw.includes("openstreetmap")
-      ? "OpenStreetMap"
-      : (() => {
-          try {
-            return new URL(raw).hostname.replace(/^www\./, "");
-          } catch {
-            return raw;
-          }
-        })()
-    : raw;
+  const source = readableSourceName(place);
+  if (!source) return null;
   const date = (place.source_date ?? "").trim();
   if (!date) return source;
   const parsed = new Date(date);
@@ -265,6 +273,13 @@ export function sourceLabel(place: GuidePlace): string | null {
     : `${String(parsed.getUTCDate()).padStart(2, "0")}/${String(parsed.getUTCMonth() + 1).padStart(2, "0")}/${parsed.getUTCFullYear()}`;
   return `${source} — ${shown}`;
 }
+
+/** The source's own page, when the record stores a usable link. */
+export function sourceHref(place: GuidePlace): string | null {
+  const value = (place.source_label ?? "").trim();
+  return /^https?:\/\//.test(value) ? value : null;
+}
+
 
 
 
