@@ -97,7 +97,7 @@ const RealEstateExperience = lazy(() =>
   })),
 );
 
-const title = "البحث في السوق — گحيل";
+const title = "البحث في السوق — كَحيل";
 const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
 
@@ -114,7 +114,7 @@ export const Route = createFileRoute("/search")({
     }
     if (search["filters"] === "1" || search["filters"] === 1 || search["filters"] === true)
       out.filters = 1;
-    // Legacy «عقار ديل» links carry an alias slug; resolve it onto the single
+    // Legacy links may carry an alias slug; resolve it onto the single
     // canonical «عقارات» category so no duplicate field ever appears.
     if (out.category) out.category = canonicalCategorySlug(out.category);
     if (out.featured !== "1") delete out.featured;

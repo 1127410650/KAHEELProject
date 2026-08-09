@@ -16,7 +16,7 @@ import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
 
 export const Route = createFileRoute("/categories/$slug")({
   ssr: false,
-  // Legacy «عقار ديل» links land on the canonical «عقارات» page with their
+  // Legacy alias slugs land on the canonical «عقارات» page with their
   // city / filters / sort / page / hash intact. `canonicalCategorySlug` is a
   // fixed point for canonical slugs, so this can never loop.
   beforeLoad: ({ params, location }) => {
@@ -33,9 +33,9 @@ export const Route = createFileRoute("/categories/$slug")({
 
 
   head: ({ params }) => {
-    const title = `تصنيف ${params.slug} — گحيل`;
+    const title = `تصنيف ${params.slug} — كَحيل`;
     const description =
-      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل گحيل للمقاولات والتوريد.";
+      "تصفّح إعلانات الخدمات والمنتجات والمعدات في هذا التصنيف داخل كَحيل للمقاولات والتوريد.";
     return {
       meta: [
         { title },
