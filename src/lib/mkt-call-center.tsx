@@ -60,6 +60,8 @@ interface CallCenterValue {
   call: ActiveCall | null;
   /** Places a call for an ad; resolves once ringing starts or fails. */
   placeCall: (listingId: string) => Promise<void>;
+  /** Rings the other side of an existing conversation (works for both parties). */
+  placeConversationCall: (conversationId: string) => Promise<void>;
   /** Advertiser is in "request" mode: leave a call request instead of ringing. */
   requestCall: (listingId: string) => Promise<boolean>;
   /** Advertiser answers an open request by calling the requester back. */
