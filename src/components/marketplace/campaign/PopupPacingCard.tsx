@@ -79,10 +79,14 @@ export function PopupPacingCard() {
       | "entranceMs"
       | "roamFirstDelayMs"
       | "roamIntervalMs"
-      | "roamDurationMs",
+      | "roamDurationMs"
+      | "mascotMinGapMs"
+      | "mascotMaxPerSession"
+      | "mascotQuietAfterCloseMs",
     labelAr: string,
     labelEn: string,
     hintAr: string,
+
   ) => (
     <label key={key} className="space-y-1 text-xs">
       <span className="font-bold">{ar ? labelAr : labelEn}</span>
