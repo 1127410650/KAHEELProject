@@ -3,6 +3,7 @@
 import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
+import { DEFAULT_DIAL, normalizePhone } from "@/lib/phone-normalize";
 
 /** Syria-mode normalisation: keep digits and store local mobile numbers as +9639XXXXXXXX. */
 export function normalizeMobile(raw: string): string {
@@ -41,9 +42,9 @@ export async function registerAccountImpl(
 
   const fullName = (input.full_name ?? "").trim();
   const password = input.password ?? "";
-  const phone = normalizeMobile(input.phone ?? "");
+  const phone = normalizePhone(DEFAULT_DIAL, input.phone ?? "") ?? "";
   if (fullName.length < 3) return { ok: false, error: "INVALID" };
-  if (!/^\+9639[0-9]{8}$/.test(phone)) return { ok: false, error: "INVALID" };
+  if (!/^\+[1-9][0-9]{7,14}$/.test(phone)) return { ok: false, error: "INVALID" };
   if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

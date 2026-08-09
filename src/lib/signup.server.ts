@@ -11,7 +11,7 @@
 import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
-import { normalizeMobile } from "@/lib/register.server";
+import { normalizePhone, DEFAULT_DIAL } from "@/lib/phone-normalize";
 
 export interface PublicSignupInput {
   full_name: string;
@@ -25,8 +25,12 @@ export type PublicSignupResult =
   | { ok: false; error: "RATE_LIMITED" | "INVALID" | "WEAK_PASSWORD" };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
-/** Syria-only public version: mobile numbers are stored as +9639XXXXXXXX. */
-const SYRIAN_MOBILE_RE = /^\+9639[0-9]{8}$/;
+/**
+ * Any international number is accepted: listings are Syria-only, accounts are
+ * not. The browser and this function share `normalizePhone`, so a leading zero
+ * or a missing one never produces an error.
+ */
+const E164_RE = /^\+[1-9][0-9]{7,14}$/;
 
 interface ServiceRpcClient {
   rpc(
@@ -41,11 +45,11 @@ export async function publicSignupImpl(
 ): Promise<PublicSignupResult> {
   const fullName = (input.full_name ?? "").trim();
   const contactEmail = (input.email ?? "").trim().toLowerCase();
-  const phone = normalizeMobile(input.phone ?? "");
+  const phone = normalizePhone(DEFAULT_DIAL, input.phone ?? "") ?? "";
   const password = input.password ?? "";
 
   if (fullName.length < 2 || fullName.length > 80) return { ok: false, error: "INVALID" };
-  if (!SYRIAN_MOBILE_RE.test(phone)) return { ok: false, error: "INVALID" };
+  if (!E164_RE.test(phone)) return { ok: false, error: "INVALID" };
   if (contactEmail && (!EMAIL_RE.test(contactEmail) || contactEmail.length > 200)) {
     return { ok: false, error: "INVALID" };
   }
