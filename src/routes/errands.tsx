@@ -11,7 +11,7 @@
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { Camera, Loader2, PackageSearch, Send, Trash2, X } from "lucide-react";
+import { Camera, Loader2, PackageSearch, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
@@ -367,6 +367,3 @@ function ErrandsPage() {
     </MarketShell>
   );
 }
-
-/** يُستخدم في الاختبارات فقط للتأكد أن الأيقونة مستوردة عند الحاجة. */
-export const ERRAND_CLOSE_ICON = X;
