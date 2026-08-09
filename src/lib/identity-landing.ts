@@ -34,9 +34,9 @@ export async function resolveIdentityLanding(): Promise<LandingTarget | null> {
 
   if (isAdmin) return { href: "/admin", isAdmin: true };
 
-  // No account chosen yet → the picker, carrying the personal dashboard as the
+  // No account chosen yet → the picker, carrying the personal profile as the
   // destination so the user never lands back on a retired screen.
-  let href = "/choose-account?next=%2Fdashboard%2Fprofile";
+  let href = "/choose-account?next=%2Fmy%2Fprofile";
   const key = rememberedAccountKey();
   const account = key ? await verifyAccount(key) : null;
   if (account) {
