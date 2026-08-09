@@ -44,6 +44,7 @@ import { useMarketPreference } from "@/lib/mkt-geo";
 import { loadListings, type ListingFilters } from "@/lib/mkt-queries";
 import { SELECTABLE_FIELDS } from "@/lib/market-primary-navigation";
 import { LIVE_DEMO_VISIBLE } from "@/lib/live-demo";
+import { DemoParcelScene, useDemoSceneCopy } from "@/components/marketplace/home/DemoParcelScene";
 import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/ListingCard";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
@@ -294,6 +295,8 @@ export function MarketHome() {
 
 function LiveDemoEntry() {
   const { locale } = useI18n();
+  const ar = locale === "ar";
+  const copy = useDemoSceneCopy();
   return (
     <Link
       to="/demo"
@@ -302,23 +305,22 @@ function LiveDemoEntry() {
       <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#c77dff]/38 blur-3xl" />
       <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-[#e0aaff]/18 blur-3xl" />
       <div className="relative flex w-full items-center gap-3 sm:gap-5">
-        <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/10 sm:size-14">
-          <Sparkles className="size-6 text-[#e0aaff]" aria-hidden />
-        </span>
+        <DemoParcelScene scene={copy.scene} />
         <span className="min-w-0 flex-1">
           <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#e0aaff] sm:text-[10px]">
             <span className="size-1.5 rounded-full bg-[#f59e0b] motion-safe:animate-pulse" />
             {locale === "ar" ? "بيئة تجريبية حيّة" : "Live demo environment"}
           </span>
           <strong className="mt-1 block text-base font-black sm:text-xl">
-            {locale === "ar"
-              ? "جرّب كل أنواع الحسابات قبل الإطلاق"
-              : "Explore every account type before launch"}
+            {ar ? copy.titleAr : copy.titleEn}
           </strong>
+          <span className="mt-0.5 block text-[10px] font-bold text-[#e0aaff] sm:text-sm">
+            {ar ? copy.subtitleAr : copy.subtitleEn}
+          </span>
           <span className="mt-1 block line-clamp-1 text-[9px] text-white/62 sm:text-xs">
-            {locale === "ar"
-              ? "عميل، متجر، عيادة، حلاق، محطة، ناقل، وإدارة المنصة"
-              : "Customer, store, clinic, barber, station, carrier, and platform operations"}
+            {ar
+              ? "جرّب كل أنواع الحسابات: عميل، متجر، عيادة، حلاق، محطة، ناقل، وإدارة المنصة"
+              : "Try every account type: customer, store, clinic, barber, station, carrier, operations"}
           </span>
         </span>
         <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#3c096c] shadow-lg transition group-hover:-translate-x-1 rtl:group-hover:translate-x-1">

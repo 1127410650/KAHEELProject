@@ -200,7 +200,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
             }}
             aria-label={ar ? slide.titleAr : slide.titleEn}
             aria-roledescription="slide"
-            className="group relative block min-h-[208px] w-full shrink-0 snap-start snap-always overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white outline-none sm:min-h-[286px] sm:rounded-[30px]"
+            className="group relative block min-h-[166px] w-full shrink-0 snap-start snap-always overflow-hidden rounded-[24px] border border-[#c77dff]/35 bg-white outline-none sm:min-h-[226px] sm:rounded-[30px]"
           >
             {slide.campaign ? (
               <CampaignAsset campaign={slide.campaign} />
@@ -217,23 +217,23 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
                 aria-hidden
               />
             )}
-            <div className="relative z-10 mx-auto flex min-h-[208px] w-[62%] max-w-[520px] flex-col items-center justify-center px-2 py-5 text-center sm:min-h-[286px] sm:w-[48%] sm:px-4">
+            <div className="relative z-10 mx-auto flex min-h-[166px] w-[74%] max-w-[520px] flex-col items-center justify-center px-2 py-3 text-center sm:min-h-[226px] sm:w-[48%] sm:px-4">
               <span className="rounded-full bg-[#240046] px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
                 {ar ? slide.badgeAr : slide.badgeEn}
               </span>
               {slideIndex === 0 ? (
-                <h1 className="mt-2 text-[20px] font-black leading-tight text-[#240046] min-[380px]:text-[23px] sm:mt-3 sm:text-4xl">
+                <h1 className="mt-1.5 line-clamp-2 text-[17px] font-black leading-tight text-[#240046] min-[380px]:text-[20px] sm:mt-2 sm:text-[32px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </h1>
               ) : (
-                <p className="mt-2 text-[20px] font-black leading-tight text-[#240046] min-[380px]:text-[23px] sm:mt-3 sm:text-4xl">
+                <p className="mt-1.5 line-clamp-2 text-[17px] font-black leading-tight text-[#240046] min-[380px]:text-[20px] sm:mt-2 sm:text-[32px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </p>
               )}
-              <p className="mt-1 text-[10px] font-bold text-[#5a189a] min-[380px]:text-[11px] sm:text-sm">
+              <p className="mt-1 line-clamp-2 text-[9px] font-bold text-[#5a189a] min-[380px]:text-[10px] sm:text-[13px]">
                 {ar ? slide.descAr : slide.descEn}
               </p>
-              <span className="mt-3 inline-flex min-h-10 items-center rounded-full bg-[#3c096c] px-4 text-[10px] font-bold text-white shadow-[0_8px_20px_rgb(60_9_108/0.24)] sm:min-h-11 sm:px-6 sm:text-xs">
+              <span className="mt-2 inline-flex min-h-9 items-center rounded-full bg-[#3c096c] px-4 text-[10px] font-bold text-white shadow-[0_8px_20px_rgb(60_9_108/0.24)] sm:mt-3 sm:min-h-11 sm:px-6 sm:text-xs">
                 {t("market.homeV2.hero.cta")}
                 <ChevronLeft className="ms-1 size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
               </span>
