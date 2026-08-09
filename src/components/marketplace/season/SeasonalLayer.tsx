@@ -53,6 +53,9 @@ export function SeasonalLayer({
   className,
 }: SeasonalLayerProps) {
   const season = useSeason(placement, sectionKey);
+  const { locale } = useI18n();
+  const ar = locale === "ar";
+
   const hostRef = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
