@@ -206,7 +206,7 @@ export function MarketHeader({
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
           home
-            ? "h-[95px]"
+            ? "h-[96px] sm:h-[100px]"
             : showCategories
               ? "h-[12.6rem] sm:h-[13.2rem]"
               : "h-[54px] sm:h-[58px]"
