@@ -131,6 +131,31 @@ export async function createCallRequest(listingId: string): Promise<string> {
   return data as unknown as string;
 }
 
+/**
+ * Conversation scoped eligibility, so either side of an open thread can call
+ * the other: the buyer calls the advertiser and the advertiser calls back.
+ */
+export async function conversationCallEligibility(
+  conversationId: string,
+): Promise<CallEligibility> {
+  const { data, error } = await supabase.rpc("mkt_call_can_call_conv", {
+    _conversation_id: conversationId,
+  });
+  if (error) return { ok: false, reason: "error" };
+  return (data as unknown as CallEligibility) ?? { ok: false, reason: "error" };
+}
+
+export async function startConversationCall(
+  conversationId: string,
+): Promise<{ call_id: string; conversation_id: string }> {
+  const { data, error } = await supabase.rpc("mkt_call_start_conv", {
+    _conversation_id: conversationId,
+  });
+  if (error) throw error;
+  return data as unknown as { call_id: string; conversation_id: string };
+}
+
+
 export async function listCallRequests(): Promise<CallRequestRow[]> {
   const { data } = await supabase
     .from("mkt_call_requests")
