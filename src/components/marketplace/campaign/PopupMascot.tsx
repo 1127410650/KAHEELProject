@@ -84,11 +84,14 @@ function KaheelanHead({
   y,
   r,
   scarf = true,
+  twirl = false,
 }: {
   x: number;
   y: number;
   r: number;
   scarf?: boolean;
+  /** يبرز الشارب وقت مشهد فتل الشوارب. */
+  twirl?: boolean;
 }) {
   return (
     <g transform={headTransform(x, y, r)}>
@@ -114,10 +117,28 @@ function KaheelanHead({
       <path d="M-8-7l7 3M8-7l-7 3" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
       <circle cx="-5" cy="1" r="2.6" fill={HAIR} />
       <circle cx="6" cy="1" r="2.6" fill={HAIR} />
-      <path d="M-6 8c4 3 9 2 11-2" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      <path d="M-6 9.5c4 2.5 9 1.5 11-2" stroke={HAIR} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      {/* شارب معقوف — علامة ثابتة لكَحيلان في كل المشاهد */}
+      <g
+        className={
+          twirl
+            ? "origin-[0px_5px] animate-[kaheel-mascot-mustache_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
+            : undefined
+        }
+        style={twirl ? { transformBox: "view-box" } : undefined}
+      >
+        <path
+          d="M0 5.5C-2 3.6-6 3.4-8.4 5.2-9.6 6.1-9 7.6-7.6 7.2-6 6.7-4 6-2.6 6.6M0 5.5C2 3.6 6 3.4 8.4 5.2 9.6 6.1 9 7.6 7.6 7.2 6 6.7 4 6 2.6 6.6"
+          stroke={HAIR}
+          strokeWidth="1.9"
+          strokeLinecap="round"
+          fill="none"
+        />
+      </g>
     </g>
   );
 }
+
 
 function Frame({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
