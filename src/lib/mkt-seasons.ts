@@ -57,11 +57,16 @@ export interface SeasonalBackdrop {
   mascot: SeasonMascot;
   mascot_url: string | null;
   mascot_path: string | null;
+  headline_ar: string;
+  headline_en: string;
+  subheadline_ar: string;
+  subheadline_en: string;
   priority: number;
   status: SeasonStatus;
   starts_at: string;
   ends_at: string | null;
 }
+
 
 export interface ResolvedSeason extends SeasonalBackdrop {
   imageUrl: string | null;
