@@ -39,7 +39,7 @@ function PoliciesPage() {
           <p className="mt-1 text-xs text-muted-foreground">
             {locale === "ar"
               ? "عن كَحيل، وشروط الاستخدام، وسياسة الخصوصية في صفحة واحدة."
-              : "About Gohail, terms of use and privacy in one place."}
+              : "About Kaheel, terms of use and privacy in one place."}
           </p>
         </header>
         <MarketStaticSection pageKey="about" />

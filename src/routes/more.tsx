@@ -428,7 +428,7 @@ function JoinSection({
   );
 
   return (
-    <Section title={locale === "ar" ? "انضم إلى كَحيل" : "Join Gohail"}>
+    <Section title={locale === "ar" ? "انضم إلى كَحيل" : "Join Kaheel"}>
       {JOIN_OPTIONS.map((option) => {
         const application = latest.get(option.kind);
         const resumable = application?.status === "pending" || application?.status === "needs_more";

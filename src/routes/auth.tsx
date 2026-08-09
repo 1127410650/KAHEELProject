@@ -19,13 +19,13 @@ export const Route = createFileRoute("/auth")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — كَحيل | Sign in — Gohail" },
+      { title: "تسجيل الدخول — كَحيل | Sign in — Kaheel" },
       {
         name: "description",
         content: "تسجيل دخول المستخدمين المصرح لهم في منصة كَحيل لإدارة المشاريع وعهد المشرفين.",
       },
       { property: "og:title", content: "تسجيل الدخول — كَحيل" },
-      { property: "og:description", content: "Sign in to Gohail — internal management system." },
+      { property: "og:description", content: "Sign in to Kaheel — internal management system." },
     ],
   }),
   component: AuthPage,

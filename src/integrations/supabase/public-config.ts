@@ -1,5 +1,5 @@
 /**
- * Browser-safe configuration for the one canonical Gohail Supabase project.
+ * Browser-safe configuration for the one canonical Kaheel Supabase project.
  *
  * Lovable's embedded preview can expose server variables without mirroring the
  * matching `VITE_*` values into the browser bundle. A missing browser value

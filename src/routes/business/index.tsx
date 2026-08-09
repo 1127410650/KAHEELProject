@@ -63,7 +63,7 @@ function ProviderOperationsPage() {
             <p className="text-sm leading-7 text-muted-foreground">
               {locale === "ar"
                 ? "لا يكفي إنشاء بيانات المتجر. تراجع إدارة كَحيل الطلب أولًا، ثم يُفعّل حساب العمل وصلاحياته تلقائيًا."
-                : "Creating store details does not grant access. Gohail reviews the application first, then activates the work account and its permissions."}
+                : "Creating store details does not grant access. Kaheel reviews the application first, then activates the work account and its permissions."}
             </p>
             <Button asChild>
               <Link to="/more">

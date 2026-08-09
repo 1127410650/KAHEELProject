@@ -582,7 +582,7 @@ function ProviderNetworkPage() {
               <p className="text-sm leading-6 text-muted-foreground">
                 {locale === "ar"
                   ? "يحفظ كَحيل تعريف الموصل فقط. المفاتيح وكلمات المرور لا تُكتب هنا وتُربط لاحقًا بخزنة أسرار من الخادم."
-                  : "Gohail stores connector metadata only. Keys and passwords are attached later through a server-side secret vault."}
+                  : "Kaheel stores connector metadata only. Keys and passwords are attached later through a server-side secret vault."}
               </p>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">

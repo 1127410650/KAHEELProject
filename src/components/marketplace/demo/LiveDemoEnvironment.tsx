@@ -139,7 +139,7 @@ export function LiveDemoEnvironment() {
         {text(
           locale,
           "بيئة تجريبية حيّة على كَحيل — البيانات للعرض، ولا تُنفَّذ منها دفعات أو طلبات حقيقية",
-          "Live Gohail demo — display data only; no real payments or orders are created",
+          "Live Kaheel demo — display data only; no real payments or orders are created",
         )}
       </div>
 
@@ -154,7 +154,7 @@ export function LiveDemoEnvironment() {
                 {text(locale, "عرض كامل قبل الإطلاق النهائي", "Full preview before final launch")}
               </div>
               <h1 className="mt-4 max-w-3xl text-3xl font-black leading-[1.2] tracking-tight sm:text-4xl lg:text-5xl">
-                {text(locale, "جرّب منظومة كَحيل كاملة", "Explore the complete Gohail ecosystem")}
+                {text(locale, "جرّب منظومة كَحيل كاملة", "Explore the complete Kaheel ecosystem")}
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-white/70 sm:text-base sm:leading-8">
                 {text(

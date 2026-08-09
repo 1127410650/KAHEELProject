@@ -22,7 +22,7 @@ export const Route = createFileRoute("/register")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "إنشاء حساب سوري — كَحيل | Create account — Gohail" },
+      { title: "إنشاء حساب سوري — كَحيل | Create account — Kaheel" },
       {
         name: "description",
         content: "أنشئ حسابًا فرديًا في نسخة كَحيل السورية باستخدام اسمك ورقم جوالك السوري.",
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/register")({
       { property: "og:title", content: "إنشاء حساب سوري — كَحيل" },
       {
         property: "og:description",
-        content: "Create a regular customer account in Gohail's Syria marketplace.",
+        content: "Create a regular customer account in Kaheel's Syria marketplace.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

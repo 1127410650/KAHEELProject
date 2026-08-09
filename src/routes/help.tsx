@@ -38,7 +38,7 @@ function SupportPage() {
           <p className="mt-1 text-xs text-muted-foreground">
             {locale === "ar"
               ? "إجابات الاستخدام وطريقة التواصل مع إدارة كَحيل في مكان واحد."
-              : "Usage help and ways to contact Gohail in one place."}
+              : "Usage help and ways to contact Kaheel in one place."}
           </p>
         </header>
         <MarketStaticSection pageKey="help" />
