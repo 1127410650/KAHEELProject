@@ -41,8 +41,8 @@ import {
   usePopupPacing,
 } from "@/lib/popup-pacing";
 import {
-  popupCopyAt,
-  popupCopyCount,
+  bossCopyAt,
+  bossCopyCount,
   rapidTapCopyAt,
   rapidTapCopyCount,
 } from "@/lib/takeover-copy";
@@ -106,14 +106,14 @@ export function PromoPopupHost() {
         lastRapidRef.current = index;
         copy = rapidTapCopyAt(ar, index);
       } else {
-        const size = popupCopyCount(ar);
+        const size = bossCopyCount(ar);
         let index = Math.floor(Math.random() * size);
         if (size > 1 && index === lastCopyRef.current) index = (index + 1) % size;
         lastCopyRef.current = index;
-        copy = popupCopyAt(ar, index);
+        copy = bossCopyAt(ar, index);
       }
       setLeaving(false);
-      setCard({ key: keyRef.current, rapid, ...copy });
+      setCard({ key: keyRef.current, rapid, ...copy, mascot: "boss" });
 
       window.clearTimeout(hideTimerRef.current);
       hideTimerRef.current = window.setTimeout(() => dismiss(), DROP_VISIBLE_MS);
@@ -158,7 +158,7 @@ export function PromoPopupHost() {
     ? "animate-[kaheel-tap-fade_0.22s_ease-in_forwards]"
     : calm
       ? "animate-[kaheel-scrim-in_0.2s_ease-out]"
-      : "animate-[kaheel-tap-drop_0.95s_cubic-bezier(0.34,1.56,0.64,1)_both]";
+      : "animate-[kaheel-tap-drop_0.78s_cubic-bezier(0.22,0.9,0.3,1)_both]";
 
   return (
     <div
@@ -190,7 +190,15 @@ export function PromoPopupHost() {
           </button>
         </div>
 
-        <PopupMascot kind={card.mascot} />
+        <div
+          className={
+            calm || leaving
+              ? ""
+              : "animate-[kaheel-tap-wobble_0.78s_ease-out_both] motion-reduce:animate-none"
+          }
+        >
+          <PopupMascot kind={card.mascot} />
+        </div>
 
         <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{card.title}</p>
         <p className="line-clamp-3 text-[11px] font-bold leading-snug text-[#5a189a]">

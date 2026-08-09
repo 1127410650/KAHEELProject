@@ -13,7 +13,7 @@
 /** فاصل مريح بين سقوطين، فالمزحة تبقى لطيفة ولا تصير ضجيجًا. */
 export const DROP_COOLDOWN_MS = 18_000;
 /** مدة بقاء الشخصية على الشاشة (سقوط + ارتداد + اختفاء). */
-export const DROP_VISIBLE_MS = 1_800;
+export const DROP_VISIBLE_MS = 1_200;
 
 /** نافذة رصد الكبس السريع. */
 export const RAPID_WINDOW_MS = 4_000;
