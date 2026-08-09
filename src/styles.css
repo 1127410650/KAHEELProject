@@ -13,8 +13,8 @@
  */
 
 @theme inline {
-  --font-sans: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
-  --font-display: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans Arabic", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif;
+  --font-display: "IBM Plex Sans Arabic", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif;
   --font-numeric: ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
