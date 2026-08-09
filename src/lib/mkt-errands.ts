@@ -105,7 +105,7 @@ export interface ErrandCaptain {
   id: string;
   user_id: string;
   display_name: string;
-  phone: string | null;
+  /** لا يُقرأ من الجدول (محجوب على مستوى العمود) — يظهر عبر `mkt_errand_contact` فقط. */
   vehicle: string | null;
   status: "pending" | "approved" | "suspended";
   is_online: boolean;
@@ -133,7 +133,7 @@ const REQUEST_COLUMNS =
 const OFFER_COLUMNS = "id, request_id, captain_id, fee, eta_minutes, note, status, created_at";
 
 const CAPTAIN_COLUMNS =
-  "id, user_id, display_name, phone, vehicle, status, is_online, rating_avg, rating_count, jobs_done";
+  "id, user_id, display_name, vehicle, status, is_online, rating_avg, rating_count, jobs_done";
 
 /* ── نصوص الحالات ─────────────────────────────────────────────────────────── */
 
