@@ -316,3 +316,39 @@ export function entranceCopyAt(ar: boolean, index: number): PopupCopy {
   const size = pool.length;
   return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
 }
+
+// ── ترحيبات كَحيل القصيرة جدًا للمساحات الضيقة ───────────────────────────────
+/**
+ * سطر واحد ≤ 35 حرفًا بنبرة كَحيل المرحّبة (ودّية أنيقة بلا مشاكسة)، مخصّص
+ * للأماكن الصغيرة: الشريط المتناوب في البحث، فقاعات الترحيب القصيرة، وبطاقات
+ * الستوري المصغّرة. نفس هذه السطور موجودة في `AR_POOL`/`EN_POOL` كنصوص
+ * مشهد `wave`، فيقدر المشرف يستبدلها بنص حملته من لوحة الإدارة.
+ */
+export type ShortGreeting = { ar: string; en: string };
+
+export const SHORT_GREETINGS: ShortGreeting[] = [
+  { ar: "يا هلا يا أبو عيون كَحيلة 😍", en: "Hey there, bright eyes 😍" },
+  { ar: "أهلين… عيونك كَحيلة والعروض أحلى ✨", en: "Lovely eyes, lovelier offers ✨" },
+  { ar: "يا مرحبا بأبو العيون الكَحيلة 💜", en: "Welcome, you with the kohl eyes 💜" },
+  { ar: "نوّرت… يا صاحب العيون الكَحيلة 🌟", en: "You brightened the place 🌟" },
+  { ar: "هلا والله… كَحيل بعيونك 😊", en: "Kaheel salutes those eyes 😊" },
+];
+
+/** نص الترحيب القصير عند فهرس معيّن (بالتدوير). */
+export function shortGreetingAt(ar: boolean, index: number): string {
+  const size = SHORT_GREETINGS.length;
+  const item = SHORT_GREETINGS[((index % size) + size) % size]!;
+  return ar ? item.ar : item.en;
+}
+
+/**
+ * فهرس ترحيب عشوائي مع ضمان عدم التكرار المتتالي: نختار من بين البقية فقط،
+ * فلا يظهر نفس السطر مرتين وراء بعض.
+ */
+export function nextShortGreetingIndex(previous = -1, seed = Math.random()): number {
+  const size = SHORT_GREETINGS.length;
+  if (size < 2) return 0;
+  if (previous < 0) return Math.floor(seed * size) % size;
+  const offset = 1 + (Math.floor(seed * (size - 1)) % (size - 1));
+  return (previous + offset) % size;
+}
