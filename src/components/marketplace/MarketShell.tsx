@@ -162,7 +162,7 @@ export function MarketHeader({
             aria-label={t("market.nav.menu")}
             className="border-t border-white/12 bg-[#240046]/92"
           >
-            <div className="mx-auto flex min-h-[46px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+            <div className="mx-auto flex min-h-[40px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
               {[
                 [t("market.bottomNav.home"), "/"],
                 [t("market.homeV2.fields.restaurants.title"), "/search?category=restaurants"],
@@ -176,8 +176,8 @@ export function MarketHeader({
                   href={href}
                   className={
                     index === 0
-                      ? "inline-flex min-h-9 shrink-0 items-center rounded-full bg-white px-4 text-[11px] font-black text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
-                      : "inline-flex min-h-9 shrink-0 items-center rounded-full px-3.5 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
+                      ? "inline-flex min-h-8 shrink-0 items-center rounded-full bg-white px-4 text-[11px] font-black text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
+                      : "inline-flex min-h-8 shrink-0 items-center rounded-full px-3.5 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
                   }
                 >
                   {label}
@@ -185,7 +185,7 @@ export function MarketHeader({
               ))}
               <a
                 href={addHref}
-                className="ms-auto inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-market-gold px-4 text-[11px] font-black text-[#240046] shadow-sm outline-none transition hover:bg-[#f8b62d] focus-visible:ring-2 focus-visible:ring-white sm:text-xs"
+                className="ms-auto inline-flex min-h-8 shrink-0 items-center gap-1.5 rounded-full bg-market-gold px-4 text-[11px] font-black text-[#240046] shadow-sm outline-none transition hover:bg-[#f8b62d] focus-visible:ring-2 focus-visible:ring-white sm:text-xs"
               >
                 <Plus className="size-4" aria-hidden />
                 {t("market.addListing")}
@@ -205,7 +205,11 @@ export function MarketHeader({
         className={
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
-          home ? "h-[114px]" : showCategories ? "h-[13.2rem] sm:h-[13.8rem]" : "h-[62px] sm:h-[66px]"
+          home
+            ? "h-[95px]"
+            : showCategories
+              ? "h-[12.6rem] sm:h-[13.2rem]"
+              : "h-[54px] sm:h-[58px]"
 
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
