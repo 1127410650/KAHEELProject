@@ -193,7 +193,6 @@ export function MarketHome() {
           detailedLabel={t("market.homeV2.detailedSearch" as HomeKey)}
         />
 
-        <FeaturedGuideStrip />
 
         <KaheelStories />
 
