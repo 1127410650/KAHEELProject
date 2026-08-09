@@ -13,10 +13,8 @@ const configuredOrigin = String(import.meta.env["VITE_SITE_ORIGIN"] ?? "").trim(
  * used here so copied links from local, Lovable or Vercel previews never leak a
  * temporary host.
  */
-export const SITE_ORIGIN = (configuredOrigin || "https://check-your-name-ai.vercel.app").replace(
-  /\/+$/,
-  "",
-);
+export const SITE_ORIGIN = (configuredOrigin || "https://kaheel.market").replace(/\/+$/, "");
+
 
 /** Canonical absolute URL for an internal path (query/hash stripped). */
 export function canonicalUrl(path: string): string {
