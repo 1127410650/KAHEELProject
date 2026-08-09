@@ -52,9 +52,12 @@ export const MASCOT_ASSETS: Record<MascotVariant, Record<MascotName, MascotAsset
   final: {
     kaheel: {
       src: kaheelFinal,
-      width: 288,
+      width: 325,
       height: 900,
-      note: { ar: "رسم ثلاثي الأبعاد", en: "3D render" },
+      note: {
+        ar: "النسخة المعتمدة: طاقية سوداء، عيون كَحيلة واسعة، صدرية عنابية مطرّزة",
+        en: "Approved version: black cap, wide kohl eyes, gold-embroidered maroon vest",
+      },
     },
     kaheelan: {
       src: kaheelanFinal,
