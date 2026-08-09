@@ -29,6 +29,7 @@ import {
   type SafeBand,
 } from "@/lib/mascot-stage";
 import { useCallCenter } from "@/lib/mkt-call-center";
+import { watchScrollIdle } from "@/lib/scroll-idle";
 import {
   isQuietPath,
   isTypingNow,
@@ -59,6 +60,20 @@ const SCENE_HEIGHT = 124;
 /** أدنى عرض شريط آمن يستحق مشهد مشي (مساحة تنقّل معقولة). */
 const MIN_TRAVEL = 56;
 
+/** اختيار جملة لا تتكرّر مباشرة بعد سابقتها. */
+function pickCopy(
+  pool: { ar: string; en: string }[],
+  last: { current: string },
+  ar: boolean,
+): string {
+  const options = pool.filter((line) => (ar ? line.ar : line.en) !== last.current);
+  const list = options.length > 0 ? options : pool;
+  const picked = list[Math.floor(Math.random() * list.length)]!;
+  const text = ar ? picked.ar : picked.en;
+  last.current = text;
+  return text;
+}
+
 interface Scene {
   key: number;
   kind: RoamScene;
@@ -77,6 +92,7 @@ export function MascotRoam() {
   const [paused, setPaused] = useState(false);
   const keyRef = useRef(0);
   const hideTimer = useRef(0);
+  const lastCopyRef = useRef("");
   const releaseRef = useRef<((closed?: boolean) => void) | null>(null);
 
   const limits = {
