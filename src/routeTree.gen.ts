@@ -13,11 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
-import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
-import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -26,14 +24,12 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as MoreRouteImport } from './routes/more'
-import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as StudentToolsRouteImport } from './routes/student-tools'
 import { Route as SyriaGuideRouteImport } from './routes/syria-guide'
-import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
@@ -56,7 +52,6 @@ import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdminWorkforceRouteImport } from './routes/admin/workforce'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
-import { Route as BusinessNewRouteImport } from './routes/business.new'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DashboardBookingsRouteImport } from './routes/dashboard/bookings'
@@ -114,11 +109,6 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppointmentsRoute = AppointmentsRouteImport.update({
-  id: '/appointments',
-  path: '/appointments',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuditRoute = AuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -132,11 +122,6 @@ const AuthRoute = AuthRouteImport.update({
 const ChooseAccountRoute = ChooseAccountRouteImport.update({
   id: '/choose-account',
   path: '/choose-account',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -179,11 +164,6 @@ const MoreRoute = MoreRouteImport.update({
   path: '/more',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -212,11 +192,6 @@ const StudentToolsRoute = StudentToolsRouteImport.update({
 const SyriaGuideRoute = SyriaGuideRouteImport.update({
   id: '/syria-guide',
   path: '/syria-guide',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WelcomeRoute = WelcomeRouteImport.update({
@@ -327,11 +302,6 @@ const AdminWorkforceRoute = AdminWorkforceRouteImport.update({
 const AdsSlugRoute = AdsSlugRouteImport.update({
   id: '/ads/$slug',
   path: '/ads/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BusinessNewRoute = BusinessNewRouteImport.update({
-  id: '/business/new',
-  path: '/business/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
@@ -522,11 +492,9 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/appointments': typeof AppointmentsRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
-  '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
@@ -534,14 +502,12 @@ export interface FileRoutesByFullPath {
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
-  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
-  '/terms': typeof TermsRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -563,7 +529,6 @@ export interface FileRoutesByFullPath {
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
-  '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/bookings': typeof DashboardBookingsRoute
@@ -607,11 +572,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/appointments': typeof AppointmentsRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
-  '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
@@ -619,13 +582,11 @@ export interface FileRoutesByTo {
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
-  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
-  '/terms': typeof TermsRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -647,7 +608,6 @@ export interface FileRoutesByTo {
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
-  '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/bookings': typeof DashboardBookingsRoute
@@ -693,11 +653,9 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/appointments': typeof AppointmentsRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
-  '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
@@ -705,14 +663,12 @@ export interface FileRoutesById {
   '/market-setup': typeof MarketSetupRoute
   '/me': typeof MeRoute
   '/more': typeof MoreRoute
-  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/student-tools': typeof StudentToolsRoute
   '/syria-guide': typeof SyriaGuideRoute
-  '/terms': typeof TermsRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -734,7 +690,6 @@ export interface FileRoutesById {
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
-  '/business/new': typeof BusinessNewRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/dashboard/bookings': typeof DashboardBookingsRoute
@@ -781,11 +736,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/$'
     | '/about'
-    | '/appointments'
     | '/audit'
     | '/auth'
     | '/choose-account'
-    | '/contact'
     | '/demo'
     | '/forgot-password'
     | '/help'
@@ -793,14 +746,12 @@ export interface FileRouteTypes {
     | '/market-setup'
     | '/me'
     | '/more'
-    | '/privacy'
     | '/register'
     | '/reset-password'
     | '/search'
     | '/services'
     | '/student-tools'
     | '/syria-guide'
-    | '/terms'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -822,7 +773,6 @@ export interface FileRouteTypes {
     | '/admin/verifications'
     | '/admin/workforce'
     | '/ads/$slug'
-    | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/bookings'
@@ -866,11 +816,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/$'
     | '/about'
-    | '/appointments'
     | '/audit'
     | '/auth'
     | '/choose-account'
-    | '/contact'
     | '/demo'
     | '/forgot-password'
     | '/help'
@@ -878,13 +826,11 @@ export interface FileRouteTypes {
     | '/market-setup'
     | '/me'
     | '/more'
-    | '/privacy'
     | '/register'
     | '/reset-password'
     | '/search'
     | '/student-tools'
     | '/syria-guide'
-    | '/terms'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -906,7 +852,6 @@ export interface FileRouteTypes {
     | '/admin/verifications'
     | '/admin/workforce'
     | '/ads/$slug'
-    | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/bookings'
@@ -951,11 +896,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/$'
     | '/about'
-    | '/appointments'
     | '/audit'
     | '/auth'
     | '/choose-account'
-    | '/contact'
     | '/demo'
     | '/forgot-password'
     | '/help'
@@ -963,14 +906,12 @@ export interface FileRouteTypes {
     | '/market-setup'
     | '/me'
     | '/more'
-    | '/privacy'
     | '/register'
     | '/reset-password'
     | '/search'
     | '/services'
     | '/student-tools'
     | '/syria-guide'
-    | '/terms'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -992,7 +933,6 @@ export interface FileRouteTypes {
     | '/admin/verifications'
     | '/admin/workforce'
     | '/ads/$slug'
-    | '/business/new'
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/dashboard/bookings'
@@ -1038,11 +978,9 @@ export interface RootRouteChildren {
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
-  AppointmentsRoute: typeof AppointmentsRoute
   AuditRoute: typeof AuditRoute
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
-  ContactRoute: typeof ContactRoute
   DemoRoute: typeof DemoRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
@@ -1050,17 +988,14 @@ export interface RootRouteChildren {
   MarketSetupRoute: typeof MarketSetupRoute
   MeRoute: typeof MeRoute
   MoreRoute: typeof MoreRoute
-  PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SearchRoute: typeof SearchRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   StudentToolsRoute: typeof StudentToolsRoute
   SyriaGuideRoute: typeof SyriaGuideRoute
-  TermsRoute: typeof TermsRoute
   WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
-  BusinessNewRoute: typeof BusinessNewRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
@@ -1099,13 +1034,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/appointments': {
-      id: '/appointments'
-      path: '/appointments'
-      fullPath: '/appointments'
-      preLoaderRoute: typeof AppointmentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/audit': {
       id: '/audit'
       path: '/audit'
@@ -1125,13 +1053,6 @@ declare module '@tanstack/react-router' {
       path: '/choose-account'
       fullPath: '/choose-account'
       preLoaderRoute: typeof ChooseAccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -1190,13 +1111,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -1237,13 +1151,6 @@ declare module '@tanstack/react-router' {
       path: '/syria-guide'
       fullPath: '/syria-guide'
       preLoaderRoute: typeof SyriaGuideRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/welcome': {
@@ -1398,13 +1305,6 @@ declare module '@tanstack/react-router' {
       path: '/ads/$slug'
       fullPath: '/ads/$slug'
       preLoaderRoute: typeof AdsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/business/new': {
-      id: '/business/new'
-      path: '/business/new'
-      fullPath: '/business/new'
-      preLoaderRoute: typeof BusinessNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/businesses/$slug': {
@@ -1807,11 +1707,9 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
-  AppointmentsRoute: AppointmentsRoute,
   AuditRoute: AuditRoute,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
-  ContactRoute: ContactRoute,
   DemoRoute: DemoRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,
@@ -1819,17 +1717,14 @@ const rootRouteChildren: RootRouteChildren = {
   MarketSetupRoute: MarketSetupRoute,
   MeRoute: MeRoute,
   MoreRoute: MoreRoute,
-  PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SearchRoute: SearchRoute,
   ServicesRoute: ServicesRouteWithChildren,
   StudentToolsRoute: StudentToolsRoute,
   SyriaGuideRoute: SyriaGuideRoute,
-  TermsRoute: TermsRoute,
   WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
-  BusinessNewRoute: BusinessNewRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
@@ -1840,3 +1735,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
