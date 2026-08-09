@@ -11,6 +11,11 @@ import { decorateListings, loadCategories } from "@/lib/mkt-queries";
 import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
+import {
+  PropertyCard,
+  PropertyCardSkeleton,
+} from "@/components/marketplace/real-estate/PropertyCard";
+import { loadListingGalleries } from "@/lib/mkt-listing-galleries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { kidsFriendFor, isKidsWorld } from "@/lib/kids-friends";
 import {
@@ -116,6 +121,16 @@ function CategoryPage() {
 
   const name = (c: MktCategory) => (locale === "ar" ? c.name_ar : c.name_en || c.name_ar);
 
+  // قسم العقار له بطاقته الكبيرة الخاصة بمعرض صور داخلي.
+  const realEstateWorld = category?.slug === "real-estate" || parentSlug === "real-estate";
+  const galleryIds = (listings.data ?? []).map((l) => l.id);
+  const galleries = useQuery({
+    queryKey: ["mkt", "category-galleries", galleryIds],
+    enabled: realEstateWorld && galleryIds.length > 0,
+    staleTime: 60_000,
+    queryFn: () => loadListingGalleries(galleryIds),
+  });
+
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-4 py-6">
@@ -159,12 +174,33 @@ function CategoryPage() {
               </>
             )}
 
-            <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <div
+              className={
+                realEstateWorld
+                  ? "mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
+                  : "mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4"
+              }
+            >
               {listings.isLoading
-                ? Array.from({ length: 8 }).map((_, i) => (
-                    <Skeleton key={i} className="h-56 rounded-xl" />
-                  ))
-                : (listings.data ?? []).map((l) => <ListingCard key={l.id} listing={l} />)}
+                ? Array.from({ length: 8 }).map((_, i) =>
+                    realEstateWorld ? (
+                      <PropertyCardSkeleton key={i} />
+                    ) : (
+                      <Skeleton key={i} className="h-56 rounded-xl" />
+                    ),
+                  )
+                : (listings.data ?? []).map((l, i) =>
+                    realEstateWorld ? (
+                      <PropertyCard
+                        key={l.id}
+                        listing={l}
+                        images={galleries.data?.[l.id] ?? []}
+                        priority={i < 2}
+                      />
+                    ) : (
+                      <ListingCard key={l.id} listing={l} />
+                    ),
+                  )}
             </div>
             {!listings.isLoading &&
               (listings.data ?? []).length === 0 &&
