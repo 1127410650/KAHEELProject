@@ -777,7 +777,7 @@ function GenericSearchPage() {
             )}
           </form>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className="mt-3 flex items-center gap-2">
             <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm" className="shrink-0">
@@ -855,17 +855,7 @@ function GenericSearchPage() {
               </button>
             </div>
 
-            {/* Always in flow, only its text fades in: the toolbar keeps the
-                exact same height before and after the count resolves. */}
-            <p
-              className={`ms-auto text-xs font-semibold text-muted-foreground transition-opacity duration-200 ${
-                active.isLoading ? "opacity-0" : "opacity-100"
-              }`}
-              aria-live="polite"
-            >
-              {count}{" "}
-              {businessMode ? t("market.search.businessesCount") : t("market.resultsCount")}
-            </p>
+
           </div>
         </section>
 
