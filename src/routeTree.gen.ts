@@ -22,6 +22,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoRouteImport } from './routes/go'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as JoinRouteImport } from './routes/join'
+import { Route as KidsRouteImport } from './routes/kids'
 import { Route as MarketSetupRouteImport } from './routes/market-setup'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as MyRouteRouteImport } from './routes/my/route'
@@ -167,6 +168,11 @@ const HelpRoute = HelpRouteImport.update({
 const JoinRoute = JoinRouteImport.update({
   id: '/join',
   path: '/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KidsRoute = KidsRouteImport.update({
+  id: '/kids',
+  path: '/kids',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketSetupRoute = MarketSetupRouteImport.update({
@@ -594,6 +600,7 @@ export interface FileRoutesByFullPath {
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
+  '/kids': typeof KidsRoute
   '/market-setup': typeof MarketSetupRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
@@ -688,6 +695,7 @@ export interface FileRoutesByTo {
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
+  '/kids': typeof KidsRoute
   '/market-setup': typeof MarketSetupRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
@@ -784,6 +792,7 @@ export interface FileRoutesById {
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
   '/join': typeof JoinRoute
+  '/kids': typeof KidsRoute
   '/market-setup': typeof MarketSetupRoute
   '/more': typeof MoreRoute
   '/register': typeof RegisterRoute
@@ -882,6 +891,7 @@ export interface FileRouteTypes {
     | '/go'
     | '/help'
     | '/join'
+    | '/kids'
     | '/market-setup'
     | '/more'
     | '/register'
@@ -976,6 +986,7 @@ export interface FileRouteTypes {
     | '/go'
     | '/help'
     | '/join'
+    | '/kids'
     | '/market-setup'
     | '/more'
     | '/register'
@@ -1071,6 +1082,7 @@ export interface FileRouteTypes {
     | '/go'
     | '/help'
     | '/join'
+    | '/kids'
     | '/market-setup'
     | '/more'
     | '/register'
@@ -1168,6 +1180,7 @@ export interface RootRouteChildren {
   GoRoute: typeof GoRoute
   HelpRoute: typeof HelpRoute
   JoinRoute: typeof JoinRoute
+  KidsRoute: typeof KidsRoute
   MarketSetupRoute: typeof MarketSetupRoute
   MoreRoute: typeof MoreRoute
   RegisterRoute: typeof RegisterRoute
@@ -1280,6 +1293,13 @@ declare module '@tanstack/react-router' {
       path: '/join'
       fullPath: '/join'
       preLoaderRoute: typeof JoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kids': {
+      id: '/kids'
+      path: '/kids'
+      fullPath: '/kids'
+      preLoaderRoute: typeof KidsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/market-setup': {
@@ -2028,6 +2048,7 @@ const rootRouteChildren: RootRouteChildren = {
   GoRoute: GoRoute,
   HelpRoute: HelpRoute,
   JoinRoute: JoinRoute,
+  KidsRoute: KidsRoute,
   MarketSetupRoute: MarketSetupRoute,
   MoreRoute: MoreRoute,
   RegisterRoute: RegisterRoute,
