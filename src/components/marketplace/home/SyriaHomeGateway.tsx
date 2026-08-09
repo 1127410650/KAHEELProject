@@ -58,7 +58,7 @@ export function SyriaHomeGateway() {
       aria-label="دليل سوريا ودليل الطالب"
       aria-roledescription="إعلان متناوب"
       role="region"
-      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 pb-1 pt-1.5 sm:px-5 sm:pt-2 lg:px-8"
+      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 py-2 sm:px-5 lg:px-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -66,7 +66,8 @@ export function SyriaHomeGateway() {
         if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
       }}
     >
-      <div className="relative min-h-[84px] overflow-hidden rounded-[1rem] border border-market-silver-line bg-market-panel shadow-[0_7px_20px_rgb(0_0_0/0.14)] sm:min-h-[104px] sm:max-w-[600px] sm:rounded-[1.3rem]">
+      <div className="relative w-full overflow-hidden rounded-[24px] border border-market-silver-line bg-market-panel shadow-[0_7px_20px_rgb(0_0_0/0.14)]">
+
         <div
           className={
             isSyria
@@ -94,9 +95,10 @@ export function SyriaHomeGateway() {
           to={gateway.to}
           className={
             reducedMotion
-              ? "group relative z-10 flex min-h-[84px] items-center gap-2 px-2.5 py-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[104px] sm:gap-2.5 sm:px-3.5 sm:py-2.5"
-              : "kahli-guide-slide group relative z-10 flex min-h-[84px] items-center gap-2 px-2.5 py-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:min-h-[104px] sm:gap-2.5 sm:px-3.5 sm:py-2.5"
+              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:gap-4 sm:px-5 sm:py-4"
+              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:gap-4 sm:px-5 sm:py-4"
           }
+
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
           <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border border-white/18 bg-white/12 shadow-[0_6px_18px_rgb(0_0_0/0.14)] backdrop-blur-sm sm:size-[58px] sm:rounded-[1rem]">
@@ -130,9 +132,10 @@ export function SyriaHomeGateway() {
             <h2 className="mt-0.5 text-base font-black leading-none tracking-tight sm:mt-1 sm:text-lg">
               {gateway.title}
             </h2>
-            <p className="mt-1 hidden max-w-[28rem] text-[10px] leading-4 text-white/72 sm:line-clamp-1">
+            <p className="mt-1 line-clamp-2 max-w-[28rem] text-[10px] leading-4 text-white/72 sm:line-clamp-1">
               {gateway.description}
             </p>
+
             <span className="mt-1 inline-flex items-center gap-1 text-[8px] font-black text-market-silver sm:mt-1.5 sm:text-[10px]">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
@@ -140,8 +143,10 @@ export function SyriaHomeGateway() {
           </div>
         </Link>
 
+        {/* مؤشر الدليل: هدف لمس مريح 40px مع نقطة صغيرة مرئية، وطبقة مطلقة
+            في الأسفل فلا يمتد الزر كشريط عمودي ولا يزيد ارتفاع البطاقة. */}
         <div
-          className="absolute inset-y-0 end-2 z-20 flex flex-col items-center justify-center gap-1 sm:end-2.5"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-center"
           aria-label="اختر الدليل"
           role="group"
         >
@@ -152,14 +157,21 @@ export function SyriaHomeGateway() {
               onClick={() => setActive(index)}
               aria-label={`عرض ${item.title}`}
               aria-pressed={active === index}
-              className={
-                active === index
-                  ? "h-4 w-1 rounded-full bg-market-electric-bright transition-all"
-                  : "size-1.5 rounded-full bg-market-electric-bright/30 transition-all hover:bg-market-electric-bright/65"
-              }
-            />
+              className="pointer-events-auto grid h-8 w-6 place-items-center"
+            >
+              <span
+                aria-hidden
+                className={
+                  active === index
+                    ? "block h-1 w-4 rounded-full bg-market-electric-bright transition-all"
+                    : "block size-1 rounded-full bg-market-electric-bright/45 transition-all"
+                }
+              />
+            </button>
           ))}
         </div>
+
+
       </div>
 
       <style>{`
