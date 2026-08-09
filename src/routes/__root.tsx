@@ -31,9 +31,15 @@ import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
  * keep the internal identity untouched, so the scope is decided from the path.
  */
 function useShellScope() {
-  const pathname = typeof window === "undefined" ? "" : window.location.pathname;
+  // The path must come from the router, not `window`: reading `window` here is a
+  // server/client branch inside render, so SSR emitted `market-surface` for an
+  // `/admin/*` URL (empty pathname never starts with `/admin`) while hydration
+  // computed `""` — a real `className` hydration mismatch on the admin 404 and
+  // error screens. `useRouterState` returns the same pathname on both sides.
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
   return pathname.startsWith("/admin") ? "" : "market-surface";
 }
+
 
 function NotFoundComponent() {
   return (
