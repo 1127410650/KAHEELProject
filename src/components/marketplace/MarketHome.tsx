@@ -275,6 +275,10 @@ export function MarketHome() {
           />
         </section>
 
+        <FeaturedGuideStrip />
+
+
+
 
 
         <Reveal>
