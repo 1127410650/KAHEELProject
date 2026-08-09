@@ -223,3 +223,32 @@ export function popupCopyAt(ar: boolean, index: number): PopupCopy {
   const size = pool.length;
   return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
 }
+
+// ── مزحة الكبس المتكرر: الزعيم كَحيلان يتدخّل بمزح لطيف ───────────────────
+const AR_RAPID: PopupCopy[] = [
+  { title: "يكفي تكبس! كسرت الشاشة 😂", subtitle: "شوي شوي عليها، الله يخليك", mascot: "boss" },
+  { title: "لك شو هالكبس؟ 😅", subtitle: "الشاشة بتوجعها، ارحمها", mascot: "boss" },
+  { title: "بعد كل هالكبس؟ 🤣", subtitle: "طيب خلص، شو بدك؟ أنا موجود", mascot: "mustache" },
+  { title: "إيدك سريعة أكتر مني 😄", subtitle: "خفّف كبس، ما حدا عم يزاحمك", mascot: "boss" },
+  { title: "لك عالراحة يا كابتن 🧣", subtitle: "الشاشة ما رح تهرب، وأنا كمان", mascot: "mustache" },
+];
+
+const EN_RAPID: PopupCopy[] = [
+  { title: "Enough tapping! You broke the screen 😂", subtitle: "Go easy on it, please", mascot: "boss" },
+  { title: "What's with all the tapping? 😅", subtitle: "The screen has feelings — spare it", mascot: "boss" },
+  { title: "After all that tapping? 🤣", subtitle: "Fine, fine — what do you need? I'm right here", mascot: "mustache" },
+  { title: "Your finger is faster than me 😄", subtitle: "Ease up, nobody is racing you", mascot: "boss" },
+  { title: "Take it easy, captain 🧣", subtitle: "The screen isn't running away, and neither am I", mascot: "mustache" },
+];
+
+/** عدد نصوص مزحة الكبس للغة الحالية. */
+export function rapidTapCopyCount(ar: boolean): number {
+  return (ar ? AR_RAPID : EN_RAPID).length;
+}
+
+/** نص مزحة الكبس عند فهرس معيّن (بالتدوير) — يستخدمه المضيف لمنع التكرار المتتالي. */
+export function rapidTapCopyAt(ar: boolean, index: number): PopupCopy {
+  const pool = ar ? AR_RAPID : EN_RAPID;
+  const size = pool.length;
+  return withKaheelanCredit(pool[((index % size) + size) % size]!, ar);
+}
