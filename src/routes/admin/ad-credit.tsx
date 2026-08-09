@@ -21,6 +21,7 @@ import {
   useAllAdCreditWallets,
   type AdCreditKind,
 } from "@/lib/mkt-ad-credit";
+import { AdCreditTopupQueue } from "@/components/marketplace/AdCreditTopupQueue";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -84,6 +85,8 @@ function AdminAdCreditPage() {
   return (
     <AdminShell title={t("market.adCredit.admin.title")}>
       <div className="space-y-4">
+        <AdCreditTopupQueue />
+
         <Card>
           <CardContent className="space-y-3 p-4">
             <h2 className="text-sm font-semibold">{t("market.adCredit.admin.pending")}</h2>

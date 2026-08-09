@@ -88,6 +88,7 @@ import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
+import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
 import { Route as MyAdsIdEditRouteImport } from './routes/my/ads.$id.edit'
 import { Route as ServicesSlugItemIdBookRouteImport } from './routes/services.$slug.$itemId.book'
 
@@ -487,6 +488,12 @@ const MyReportsIdRoute = MyReportsIdRouteImport.update({
   path: '/reports/$id',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const ApiPublicAdCreditGatewayWebhookRoute =
+  ApiPublicAdCreditGatewayWebhookRouteImport.update({
+    id: '/api/public/ad-credit/gateway-webhook',
+    path: '/api/public/ad-credit/gateway-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MyAdsIdEditRoute = MyAdsIdEditRouteImport.update({
   id: '/ads/$id/edit',
   path: '/ads/$id/edit',
@@ -578,6 +585,7 @@ export interface FileRoutesByFullPath {
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
+  '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
@@ -658,6 +666,7 @@ export interface FileRoutesByTo {
   '/business/store': typeof BusinessStoreIndexRoute
   '/my/ads': typeof MyAdsIndexRoute
   '/my/reports': typeof MyReportsIndexRoute
+  '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
@@ -742,6 +751,7 @@ export interface FileRoutesById {
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
+  '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
@@ -827,6 +837,7 @@ export interface FileRouteTypes {
     | '/business/store/'
     | '/my/ads/'
     | '/my/reports/'
+    | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   fileRoutesByTo: FileRoutesByTo
@@ -907,6 +918,7 @@ export interface FileRouteTypes {
     | '/business/store'
     | '/my/ads'
     | '/my/reports'
+    | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   id:
@@ -990,6 +1002,7 @@ export interface FileRouteTypes {
     | '/business/store/'
     | '/my/ads/'
     | '/my/reports/'
+    | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   fileRoutesById: FileRoutesById
@@ -1024,6 +1037,7 @@ export interface RootRouteChildren {
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
+  ApiPublicAdCreditGatewayWebhookRoute: typeof ApiPublicAdCreditGatewayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1581,6 +1595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyReportsIdRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/api/public/ad-credit/gateway-webhook': {
+      id: '/api/public/ad-credit/gateway-webhook'
+      path: '/api/public/ad-credit/gateway-webhook'
+      fullPath: '/api/public/ad-credit/gateway-webhook'
+      preLoaderRoute: typeof ApiPublicAdCreditGatewayWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my/ads/$id/edit': {
       id: '/my/ads/$id/edit'
       path: '/ads/$id/edit'
@@ -1771,6 +1792,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
+  ApiPublicAdCreditGatewayWebhookRoute: ApiPublicAdCreditGatewayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

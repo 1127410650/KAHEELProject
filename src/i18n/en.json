@@ -3631,6 +3631,58 @@
         "grantHint": "A negative value lowers the balance; every movement is logged with the acting admin.",
         "wallets": "Wallets",
         "allEntries": "All movements"
+      },
+      "topup": {
+        "title": "Top up credit",
+        "submit": "Send top-up request",
+        "sent": "Top-up request sent for review",
+        "credits": "Credits requested",
+        "amount": "Amount transferred",
+        "currency": "Currency",
+        "transferRef": "Transfer reference",
+        "receipt": "Receipt image",
+        "note": "Note for the reviewer",
+        "platformWallet": "Kaheel receiving wallet",
+        "copy": "Copy",
+        "copied": "Wallet number copied",
+        "walletMissing": "No receiving wallet is configured yet; contact support before transferring.",
+        "bankNotice": "Transfer to the Kaheel bank account, then attach the receipt and reference here.",
+        "reviewNotice": "Transfer first, then send the request. Credit is added once the receipt and reference are matched.",
+        "myRequests": "Top-up requests",
+        "hasPending": "You already have a request under review; wait for it or cancel it before sending another.",
+        "errCredits": "Enter a whole number of credits above zero",
+        "errAmount": "Enter the amount transferred",
+        "errRef": "Enter the transfer reference",
+        "errPending": "You already have a top-up request under review",
+        "errReceiptSize": "Receipt is larger than the 5 MB limit",
+        "errReceiptType": "Unsupported receipt format; attach an image or PDF",
+        "errFailed": "Could not send the top-up request",
+        "method": {
+          "sham_cash": "Sham Cash",
+          "bank_transfer": "Bank transfer",
+          "card_gateway": "Card payment"
+        },
+        "status": {
+          "pending": "Under review",
+          "approved": "Approved",
+          "rejected": "Rejected",
+          "cancelled": "Cancelled"
+        },
+        "admin": {
+          "title": "Top-up requests",
+          "all": "All",
+          "empty": "No requests in this state.",
+          "receipt": "Receipt",
+          "receiptFailed": "Could not open the receipt",
+          "creditsOverride": "Adjust credits",
+          "approve": "Approve and add credit",
+          "reject": "Reject",
+          "reason": "Rejection reason",
+          "needReason": "Write a rejection reason so the requester can see it",
+          "approved": "Approved and credit added",
+          "rejected": "Request rejected",
+          "failed": "Could not complete the review"
+        }
       }
     }
   },
