@@ -128,6 +128,25 @@ function readResume(): ResumeRecord | null {
   }
 }
 
+/** مقاسات المشاهد — تُقاس بها المنطقة الآمنة قبل أي ظهور. */
+const CARD_WIDTH = 224;
+const CARD_HEIGHT = 208;
+const PEEK_WIDTH = 296;
+const PEEK_HEIGHT = 152;
+
+/**
+ * منطقة آمنة للمشهد أو `null`. النطاق يبتعد عن الهيدر أعلى وعن شريط التنقل
+ * أسفل، والهامش من كل عنصر محتوى ١٤px — إن لم توجد مساحة فلا ظهور إطلاقًا.
+ */
+function safeBandFor(mode: CardMode): SafeBand | null {
+  const peek = mode === "peek";
+  return findSafeBand(peek ? PEEK_WIDTH : CARD_WIDTH, peek ? PEEK_HEIGHT : CARD_HEIGHT, {
+    topInset: 118,
+    bottomInset: 84,
+    pad: 14,
+  });
+}
+
 interface MascotCard {
   /** مفتاح يجبر إعادة تشغيل الحركة عند كل ظهور. */
   key: number;
@@ -137,10 +156,12 @@ interface MascotCard {
   mode: CardMode;
   /** جهة الدخول لمشهد قسم الناس. */
   from: "start" | "end";
-  /** جهة ظهور البطاقة الكاملة — تتنوّع في كل مرة. */
+  /** جهة ظهور البطاقة الكاملة — تُستخدم لحركة الدخول والخروج. */
   side: EntrySide;
   /** حافة الإطلالة لمشهد «يطلّ برأسه». */
   peekSide: PeekSide;
+  /** الموضع الآمن المقاس لحظة الظهور. */
+  band: SafeBand;
 }
 
 export function PromoPopupHost() {
@@ -162,6 +183,16 @@ export function PromoPopupHost() {
   const fadeTimerRef = useRef(0);
   /** مشهد مفتوح الآن؟ لمنع ظهور ثانٍ فوقه. */
   const openRef = useRef(false);
+  /** الإفراج عن «مسرح الشخصيات» — شخصية واحدة فقط في كل لحظة. */
+  const releaseRef = useRef<((closed?: boolean) => void) | null>(null);
+
+  /** حدود التكرار المعتمدة من لوحة الإدارة. */
+  const limits = {
+    minGapMs: pacing.mascotMinGapMs,
+    maxPerSession: pacing.mascotMaxPerSession,
+    quietAfterCloseMs: pacing.mascotQuietAfterCloseMs,
+  };
+
 
   // التوقيتات كلها من لوحة الإدارة — تُطبَّق أول ما تصل الإعدادات.
   useEffect(() => {
