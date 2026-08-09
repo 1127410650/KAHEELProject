@@ -240,9 +240,10 @@ function FilterSelect({
 }: {
   label: string;
   value: string;
-  options: string[];
+  options: GuideFacetOption[];
   onChange: (value: string) => void;
 }) {
+  const total = options.reduce((sum, option) => sum + option.count, 0);
   return (
     <label className="block">
       <span className="sr-only">{label}</span>
@@ -251,12 +252,15 @@ function FilterSelect({
         onChange={(event) => onChange(event.target.value)}
         className="h-10 w-full rounded-2xl border border-input bg-background px-3 text-[12px] font-bold outline-none transition focus:border-market-navy focus:ring-2 focus:ring-market-navy/15"
       >
-        <option value="">{label}: الكل</option>
+        <option value="">
+          {label}: الكل{total > 0 ? ` (${total.toLocaleString("en-US")})` : ""}
+        </option>
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+          <option key={option.value} value={option.value}>
+            {option.value} ({option.count.toLocaleString("en-US")})
           </option>
         ))}
+
       </select>
     </label>
   );
