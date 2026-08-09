@@ -19,6 +19,7 @@ import { SessionProvider } from "@/lib/session";
 import { canonicalUrl } from "@/lib/share-links";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
+import { PromoPopupHost } from "@/components/marketplace/campaign/PromoPopupHost";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
 
@@ -197,6 +198,7 @@ function RootComponent() {
             {/* Required: nested routes render here. */}
             <Outlet />
             <CallOverlay />
+            <PromoPopupHost />
             <Toaster position="top-center" />
           </CallCenterProvider>
         </SessionProvider>

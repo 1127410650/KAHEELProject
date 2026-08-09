@@ -48,7 +48,6 @@ import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/Listi
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
 import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
-import { WelcomeTakeover } from "@/components/marketplace/home/WelcomeTakeover";
 import { Reveal } from "@/components/marketplace/home/Reveal";
 
 import { Button } from "@/components/ui/button";
@@ -179,7 +178,6 @@ export function MarketHome() {
         </div>
 
         <PromoCarousel addHref={addHref} />
-        <WelcomeTakeover />
 
         <Reveal as="section">
           <section aria-labelledby="home-fields-title">

@@ -130,9 +130,13 @@ export function PromoPopupHost() {
     const stamp = () => {
       lastActivityRef.current = Date.now();
     };
-    const events: (keyof WindowEventMap)[] = ["pointerdown", "scroll", "keydown", "visibilitychange"];
+    const events: (keyof WindowEventMap)[] = ["pointerdown", "scroll", "keydown"];
     events.forEach((event) => window.addEventListener(event, stamp, { passive: true }));
-    return () => events.forEach((event) => window.removeEventListener(event, stamp));
+    document.addEventListener("visibilitychange", stamp, { passive: true });
+    return () => {
+      events.forEach((event) => window.removeEventListener(event, stamp));
+      document.removeEventListener("visibilitychange", stamp);
+    };
   }, []);
 
   const blocked = useCallback((): boolean => {
