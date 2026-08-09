@@ -39,6 +39,8 @@ import { useState } from "react";
 
 import carImage from "@/assets/market/cat-cars.webp";
 import propertyImage from "@/assets/market/cat-real-estate-hero.webp";
+import restaurantsImage from "@/assets/market/cat-restaurants-hero.jpg";
+import groceriesImage from "@/assets/market/cat-groceries-hero.jpg";
 
 import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
@@ -50,6 +52,7 @@ import { LIVE_DEMO_VISIBLE } from "@/lib/live-demo";
 import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/ListingCard";
 import { SyriaHomeGateway } from "@/components/marketplace/home/SyriaHomeGateway";
 import { PromoCarousel } from "@/components/marketplace/home/PromoCarousel";
+import { HomeAdStrip } from "@/components/marketplace/home/HomeAdStrip";
 import { WelcomeTakeover } from "@/components/marketplace/home/WelcomeTakeover";
 import { Reveal } from "@/components/marketplace/home/Reveal";
 
@@ -68,14 +71,14 @@ const MAIN_FIELDS = [
     key: "restaurants",
     href: `/search?category=${primaryCategory("restaurants")}`,
     icon: Utensils,
-    image: null,
+    image: restaurantsImage,
     tone: "linear-gradient(168deg,#7b2cbf 0%,#5a189a 52%,#240046 100%)",
   },
   {
     key: "groceries",
     href: "/search?domain=product",
     icon: ShoppingBasket,
-    image: null,
+    image: groceriesImage,
     tone: "linear-gradient(168deg,#9d4edd 0%,#7b2cbf 50%,#3c096c 100%)",
   },
   {
@@ -199,6 +202,8 @@ export function MarketHome() {
             </div>
           </section>
         </Reveal>
+
+        <HomeAdStrip addHref={addHref} />
 
         <Reveal>
           <BenefitsStrip />
@@ -345,7 +350,7 @@ function MainFieldCard({
     <a
       href={field.href}
       style={{ backgroundImage: field.tone }}
-      className="group k-deep k-lift relative min-h-[208px] min-w-0 p-3 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[260px] sm:p-4 lg:min-h-[292px]"
+      className="group k-deep k-lift relative min-h-[172px] min-w-0 p-3 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[216px] sm:p-4 lg:min-h-[240px]"
     >
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
@@ -360,58 +365,20 @@ function MainFieldCard({
           {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
         </p>
       </div>
-      {image ? (
-        <img
-          src={image}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          width={360}
-          height={220}
-          className="absolute inset-x-0 bottom-0 h-[64%] w-full object-cover transition-transform duration-500 [mask-image:linear-gradient(to_bottom,transparent,black_24%)] group-hover:scale-[1.035]"
-        />
-      ) : (
-        <CategoryArtwork category={field.key} />
-      )}
+      <img
+        src={image}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        width={360}
+        height={220}
+        className="absolute inset-x-0 bottom-0 h-[64%] w-full object-cover transition-transform duration-500 [mask-image:linear-gradient(to_bottom,transparent,black_24%)] group-hover:scale-[1.035]"
+      />
       <span className="absolute inset-x-2.5 bottom-2.5 z-10 inline-flex min-h-10 items-center justify-center rounded-full bg-white px-2 text-[10px] font-black text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_8px_18px_-6px_rgb(36_0_70/0.35)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:inset-x-3 sm:bottom-3 sm:px-3 sm:text-xs">
         {t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}
         <ChevronLeft className="ms-1 size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
       </span>
     </a>
-  );
-}
-
-function CategoryArtwork({ category }: { category: (typeof MAIN_FIELDS)[number]["key"] }) {
-  if (category === "restaurants")
-    return (
-      <div
-        className="absolute inset-x-3 bottom-12 top-[82px] overflow-hidden rounded-[22px] bg-[radial-gradient(circle_at_50%_42%,#ffffff_0%,#e0aaff_52%,#7b2cbf_53%,#3c096c_100%)] sm:top-[88px] sm:rounded-[25px]"
-        aria-hidden
-      >
-        <span className="absolute start-3 top-4 grid size-14 -rotate-6 place-items-center rounded-2xl bg-white text-[#ef5a2f] shadow-lg">
-          <Pizza className="size-9" strokeWidth={1.7} />
-        </span>
-        <span className="absolute end-3 top-7 grid size-16 rotate-6 place-items-center rounded-full bg-[#fff7e7] text-[#b85c25] shadow-lg">
-          <Soup className="size-10" strokeWidth={1.7} />
-        </span>
-        <span className="absolute bottom-3 start-1/2 grid size-16 -translate-x-1/2 place-items-center rounded-2xl bg-[#ffe7a8] text-[#a6431f] shadow-lg">
-          <Sandwich className="size-10" strokeWidth={1.7} />
-        </span>
-      </div>
-    );
-  return (
-    <div
-      className="absolute inset-x-3 bottom-12 top-[82px] overflow-hidden rounded-[22px] bg-[radial-gradient(circle_at_45%_40%,#ffffff_0%,#e0aaff_48%,#9d4edd_49%,#5a189a_100%)] sm:top-[88px] sm:rounded-[25px]"
-      aria-hidden
-    >
-      <ShoppingBasket
-        className="absolute bottom-5 start-1/2 size-24 -translate-x-1/2 text-white drop-shadow-lg"
-        strokeWidth={1.45}
-      />
-      <Apple className="absolute start-5 top-4 size-11 -rotate-12 text-[#e74c3c] drop-shadow" />
-      <Milk className="absolute end-5 top-3 size-12 rotate-6 text-[#2176c9] drop-shadow" />
-      <Package className="absolute bottom-5 end-3 size-10 rotate-6 text-[#f4bc48] drop-shadow" />
-    </div>
   );
 }
 
