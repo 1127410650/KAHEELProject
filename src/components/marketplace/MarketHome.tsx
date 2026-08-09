@@ -86,7 +86,7 @@ const MAIN_FIELDS = [
     image: restaurantsImage,
     width: 900,
     height: 675,
-    span: "col-span-2 sm:col-span-3 sm:row-span-2",
+    span: "col-span-full min-[400px]:col-span-2 sm:col-span-3 sm:row-span-2",
     ratio: "aspect-[16/11] sm:aspect-[4/5]",
   },
   {
@@ -96,8 +96,8 @@ const MAIN_FIELDS = [
     image: groceriesImage,
     width: 900,
     height: 675,
-    span: "col-span-1 sm:col-span-3",
-    ratio: "aspect-[3/4] sm:aspect-[16/9]",
+    span: "col-span-full min-[400px]:col-span-1 sm:col-span-3",
+    ratio: "aspect-[16/9] min-[400px]:aspect-[3/4] sm:aspect-[16/9]",
   },
   {
     key: "realEstate",
@@ -106,8 +106,8 @@ const MAIN_FIELDS = [
     image: propertyImage,
     width: 768,
     height: 576,
-    span: "col-span-1 sm:col-span-3",
-    ratio: "aspect-[3/4] sm:aspect-[16/9]",
+    span: "col-span-full min-[400px]:col-span-1 sm:col-span-3",
+    ratio: "aspect-[16/9] min-[400px]:aspect-[3/4] sm:aspect-[16/9]",
   },
   {
     key: "cars",
@@ -116,7 +116,7 @@ const MAIN_FIELDS = [
     image: carImage,
     width: 768,
     height: 576,
-    span: "col-span-2 sm:col-span-6",
+    span: "col-span-full sm:col-span-6",
     ratio: "aspect-[16/7] sm:aspect-[16/6]",
   },
 ] as const;
@@ -211,7 +211,7 @@ export function MarketHome() {
             <div
               ref={fieldsRef}
               data-field-grid
-              className="relative z-10 grid grid-cols-2 gap-2.5 sm:grid-cols-6 sm:gap-3"
+              className="relative z-10 grid grid-cols-1 gap-2.5 min-[400px]:grid-cols-2 sm:grid-cols-6 sm:gap-3"
             >
               {MAIN_FIELDS.map((field, index) => (
                 <MainFieldCard
@@ -412,12 +412,12 @@ function MainFieldCard({
         <Icon className="size-4 sm:size-[18px]" aria-hidden />
       </span>
 
-      <span className="relative z-10 mt-auto flex w-full min-w-0 items-end gap-2 p-3 text-white sm:p-4">
+      <span className="relative z-10 mt-auto flex w-full min-w-0 items-end gap-1.5 p-2.5 text-white min-[400px]:gap-2 min-[400px]:p-3 sm:p-4">
         <span className="min-w-0 flex-1">
-          <h3 className="truncate text-[17px] font-black leading-tight tracking-tight drop-shadow-[0_2px_8px_rgb(16_0_43/0.75)] sm:text-xl">
+          <h3 className="text-[clamp(15px,4.6vw,20px)] font-black leading-tight tracking-tight break-words drop-shadow-[0_2px_8px_rgb(16_0_43/0.75)]">
             {t(`market.homeV2.fields.${field.key}.title` as HomeKey)}
           </h3>
-          <p className="mt-0.5 truncate text-[12.5px] font-semibold leading-snug text-white/88 sm:text-sm">
+          <p className="mt-0.5 line-clamp-2 text-[clamp(11px,3.2vw,14px)] font-semibold leading-snug text-white/88 break-words">
             {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
           </p>
         </span>
