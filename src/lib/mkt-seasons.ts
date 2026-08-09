@@ -22,7 +22,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { signCampaignPaths } from "@/lib/mkt-campaigns";
 
 export type SeasonPlacement = "header" | "stores" | "exclusive" | "section";
-export type SeasonMotif = "none" | "stars" | "school" | "lanterns" | "sparks" | "confetti";
+export type SeasonMotif =
+  | "none"
+  | "stars"
+  | "school"
+  | "lanterns"
+  | "sparks"
+  | "confetti"
+  | "flag";
+
 export type SeasonOverlay = "soft" | "medium" | "strong";
 export type SeasonMascot = "none" | "kaheel" | "kaheelan" | "custom";
 export type SeasonStatus = "draft" | "active" | "paused" | "ended";
