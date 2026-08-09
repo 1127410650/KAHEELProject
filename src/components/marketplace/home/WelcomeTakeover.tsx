@@ -6,7 +6,7 @@
  * campaign exists, so it can never shift the first paint. Closing it, opening
  * its offer, Escape and a backdrop tap all mark it as seen.
  */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 
 import { CampaignAsset } from "@/components/marketplace/campaign/CampaignAsset";
@@ -17,14 +17,17 @@ import {
   trackCampaign,
   useLiveCampaigns,
 } from "@/lib/mkt-campaigns";
+import { pickPopupCopy } from "@/lib/takeover-copy";
 
 export function WelcomeTakeover() {
   const { locale } = useI18n();
   const ar = locale === "ar";
   const [allowed, setAllowed] = useState(false);
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const { data } = useLiveCampaigns("welcome_takeover");
   const campaign = allowed ? data?.[0] : undefined;
+  const fallback = useMemo(() => pickPopupCopy(ar), [ar]);
 
   // Read the cooldown after hydration only: localStorage is not available on SSR.
   useEffect(() => {
@@ -41,24 +44,33 @@ export function WelcomeTakeover() {
     return () => window.clearTimeout(timer);
   }, [campaign]);
 
+  // Play the exit animation, then unmount.
+  const close = useCallback(() => {
+    setClosing(true);
+    window.setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 220);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = previous;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, close]);
 
   if (!open || !campaign) return null;
 
-  const title = ar ? campaign.title_ar : campaign.title_en;
-  const subtitle = ar ? campaign.subtitle_ar : campaign.subtitle_en;
+  const title = (ar ? campaign.title_ar : campaign.title_en) || fallback.title;
+  const subtitle = (ar ? campaign.subtitle_ar : campaign.subtitle_en) || fallback.subtitle;
   const badge = ar ? campaign.badge_ar : campaign.badge_en;
   const cta = ar ? campaign.cta_ar : campaign.cta_en;
 
@@ -67,20 +79,24 @@ export function WelcomeTakeover() {
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-[#10002b]/80 p-4 backdrop-blur-sm animate-fade-in motion-reduce:animate-none"
-      onClick={() => setOpen(false)}
+      className={`fixed inset-0 z-[80] flex items-center justify-center bg-gradient-to-b from-[#10002b]/20 via-[#5a189a]/15 to-[#240046]/25 p-4 pb-10 backdrop-blur-xl motion-reduce:animate-none ${
+        closing ? "animate-fade-out" : "animate-fade-in"
+      }`}
+      onClick={close}
     >
       <div
         onClick={(event) => event.stopPropagation()}
-        className="relative w-full max-w-sm overflow-hidden rounded-[28px] border border-[#c77dff]/40 bg-white shadow-[0_30px_80px_rgb(16_0_43/0.45)] animate-scale-in motion-reduce:animate-none"
+        className={`relative w-full max-w-sm overflow-hidden rounded-[28px] border border-white/50 bg-white/85 shadow-[0_30px_80px_rgb(16_0_43/0.35)] backdrop-blur-2xl motion-reduce:animate-none ${
+          closing ? "animate-scale-out" : "animate-scale-in"
+        }`}
       >
         <button
           type="button"
-          onClick={() => setOpen(false)}
+          onClick={close}
           aria-label={ar ? "إغلاق" : "Close"}
-          className="absolute end-3 top-3 z-20 grid size-9 place-items-center rounded-full bg-[#240046]/85 text-white"
+          className="absolute end-3 top-3 z-20 grid size-11 place-items-center rounded-full border border-white/40 bg-[#240046]/70 text-white backdrop-blur-md transition-transform hover:scale-105 motion-reduce:transition-none"
         >
-          <X className="size-4" aria-hidden />
+          <X className="size-5" aria-hidden />
         </button>
 
         <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
@@ -101,7 +117,7 @@ export function WelcomeTakeover() {
             href={campaign.click_url}
             onClick={() => {
               trackCampaign(campaign.id, "click");
-              setOpen(false);
+              close();
             }}
             className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[#3c096c] px-6 text-xs font-bold text-white shadow-[0_10px_24px_rgb(60_9_108/0.28)]"
           >
@@ -112,3 +128,4 @@ export function WelcomeTakeover() {
     </div>
   );
 }
+
