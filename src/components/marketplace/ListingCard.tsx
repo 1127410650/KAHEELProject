@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -10,8 +10,10 @@ import {
   MapPin,
   MoreHorizontal,
   Share2,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+
 
 import { supabase } from "@/integrations/supabase/client";
 import { track } from "@/lib/analytics";
@@ -234,6 +236,47 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
   );
 }
 
+/** إعلان مميز فعليًا: العلم مرفوع ولم تنتهِ مدة التمييز. */
+function activeFeatured(listing: ListingCardData) {
+  if (!listing.is_featured) return false;
+  if (!listing.featured_until) return true;
+  return new Date(listing.featured_until).getTime() > Date.now();
+}
+
+/**
+ * شارة «مميز» بتدرّج ذهبي معدني ولمعة بطيئة جدًا. تراقب ظهورها بنفسها
+ * فتتوقف اللمعة تمامًا خارج الشاشة، والحركة على transform/opacity فقط.
+ */
+export function FeaturedChip() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => setVisible(entries.some((entry) => entry.isIntersecting)),
+      { rootMargin: "0px", threshold: 0.2 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <span
+      ref={ref}
+      className={`k-gold-chip pointer-events-none inline-flex items-center gap-1 rounded-full px-2 py-[3px] text-[9px] font-black leading-none sm:text-[10px] ${
+        visible ? "is-in" : ""
+      }`}
+    >
+      <Sparkles className="size-3 shrink-0" aria-hidden />
+      <span>{t("market.realEstate.featuredBadge")}</span>
+    </span>
+  );
+}
+
+
 export function ListingCard({
   listing,
   view = "grid",
@@ -248,6 +291,8 @@ export function ListingCard({
   const horizontal = view === "list" || view === "row";
   const tag = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel;
   const navBlocked = useRef(false);
+  const featured = activeFeatured(listing);
+
 
   const meta = (
     <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
@@ -280,11 +325,13 @@ export function ListingCard({
             track({ event_type: "search_click", path: "/search", listing_id: listing.id });
           }
         }}
-        className={
+        className={[
           horizontal
             ? "group k-surface k-lift relative flex gap-3 p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-            : "group k-surface k-lift relative flex flex-col overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-        }
+            : "group k-surface k-lift relative flex flex-col overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
+          featured ? "k-featured" : "",
+        ].join(" ")}
+
       >
         <Media listing={listing} horizontal={horizontal} />
 
@@ -315,6 +362,14 @@ export function ListingCard({
           {meta}
         </div>
       </Link>
+
+      {featured && (
+        <div className="pointer-events-none absolute top-2 z-10 start-2">
+          <FeaturedChip />
+        </div>
+      )}
+
+
 
 
       <div

@@ -11,9 +11,9 @@
  */
 import { useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bath, BedDouble, Building2, ChevronLeft, ChevronRight, MapPin, Ruler, Sparkles } from "lucide-react";
+import { Bath, BedDouble, Building2, ChevronLeft, ChevronRight, MapPin, Ruler } from "lucide-react";
 
-import { FavoriteButton, type ListingCardData } from "@/components/marketplace/ListingCard";
+import { FavoriteButton, FeaturedChip, type ListingCardData } from "@/components/marketplace/ListingCard";
 import { useI18n } from "@/i18n";
 import { track } from "@/lib/analytics";
 import { priceLabel, relativeTime } from "@/lib/mkt";
@@ -130,7 +130,12 @@ export function PropertyCard({
   };
 
   return (
-    <article className="group k-surface relative flex flex-col overflow-hidden rounded-3xl transition duration-200 hover:-translate-y-0.5 hover:shadow-raised">
+    <article
+      className={`group k-surface relative flex flex-col overflow-hidden rounded-3xl transition duration-200 hover:-translate-y-0.5 hover:shadow-raised ${
+        featured || activePromotion(listing) ? "k-featured" : ""
+      }`}
+    >
+
       <div
         className="relative aspect-[4/3] w-full overflow-hidden bg-muted"
         onTouchStart={(event) => {
@@ -183,12 +188,8 @@ export function PropertyCard({
               {deal}
             </span>
           )}
-          {(featured || activePromotion(listing)) && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-[10px] font-bold text-primary shadow-sm backdrop-blur">
-              <Sparkles className="size-3" aria-hidden />
-              {t("market.realEstate.featuredBadge")}
-            </span>
-          )}
+          {(featured || activePromotion(listing)) && <FeaturedChip />}
+
         </div>
 
         <div className="absolute top-2.5 z-10 end-2.5">
