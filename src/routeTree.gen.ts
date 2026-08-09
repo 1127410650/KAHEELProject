@@ -64,7 +64,6 @@ import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
-import { Route as MyErrandsRouteImport } from './routes/my/errands'
 import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
 import { Route as MyMessagesRouteImport } from './routes/my/messages'
 import { Route as MyNotificationsRouteImport } from './routes/my/notifications'
@@ -93,6 +92,7 @@ import { Route as BusinessStoreOffersRouteImport } from './routes/business/store
 import { Route as GuidesSyriaSlugRouteImport } from './routes/guides/syria_.$slug'
 import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
+import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
@@ -374,11 +374,6 @@ const MyBookingsRoute = MyBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => MyRouteRoute,
 } as any)
-const MyErrandsRoute = MyErrandsRouteImport.update({
-  id: '/errands',
-  path: '/errands',
-  getParentRoute: () => MyRouteRoute,
-} as any)
 const MyFavoritesRoute = MyFavoritesRouteImport.update({
   id: '/favorites',
   path: '/favorites',
@@ -521,6 +516,11 @@ const MyAdsNewRoute = MyAdsNewRouteImport.update({
   path: '/ads/new',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const MyErrandsIndexRoute = MyErrandsIndexRouteImport.update({
+  id: '/errands/',
+  path: '/errands/',
+  getParentRoute: () => MyRouteRoute,
+} as any)
 const MyReportsIndexRoute = MyReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
@@ -602,7 +602,6 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
-  '/my/errands': typeof MyErrandsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
@@ -634,6 +633,7 @@ export interface FileRoutesByFullPath {
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
+  '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -690,7 +690,6 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
-  '/my/errands': typeof MyErrandsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
@@ -722,6 +721,7 @@ export interface FileRoutesByTo {
   '/business/services': typeof BusinessServicesIndexRoute
   '/business/store': typeof BusinessStoreIndexRoute
   '/my/ads': typeof MyAdsIndexRoute
+  '/my/errands': typeof MyErrandsIndexRoute
   '/my/reports': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -782,7 +782,6 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
-  '/my/errands': typeof MyErrandsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
@@ -814,6 +813,7 @@ export interface FileRoutesById {
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
+  '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -875,7 +875,6 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/ad-credit'
     | '/my/bookings'
-    | '/my/errands'
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
@@ -907,6 +906,7 @@ export interface FileRouteTypes {
     | '/business/services/'
     | '/business/store/'
     | '/my/ads/'
+    | '/my/errands/'
     | '/my/reports/'
     | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
@@ -963,7 +963,6 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/ad-credit'
     | '/my/bookings'
-    | '/my/errands'
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
@@ -995,6 +994,7 @@ export interface FileRouteTypes {
     | '/business/services'
     | '/business/store'
     | '/my/ads'
+    | '/my/errands'
     | '/my/reports'
     | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
@@ -1054,7 +1054,6 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/ad-credit'
     | '/my/bookings'
-    | '/my/errands'
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
@@ -1086,6 +1085,7 @@ export interface FileRouteTypes {
     | '/business/services/'
     | '/business/store/'
     | '/my/ads/'
+    | '/my/errands/'
     | '/my/reports/'
     | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
@@ -1514,13 +1514,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyBookingsRouteImport
       parentRoute: typeof MyRouteRoute
     }
-    '/my/errands': {
-      id: '/my/errands'
-      path: '/errands'
-      fullPath: '/my/errands'
-      preLoaderRoute: typeof MyErrandsRouteImport
-      parentRoute: typeof MyRouteRoute
-    }
     '/my/favorites': {
       id: '/my/favorites'
       path: '/favorites'
@@ -1717,6 +1710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyAdsNewRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/my/errands/': {
+      id: '/my/errands/'
+      path: '/errands'
+      fullPath: '/my/errands/'
+      preLoaderRoute: typeof MyErrandsIndexRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/reports/': {
       id: '/my/reports/'
       path: '/reports'
@@ -1858,7 +1858,6 @@ const BusinessRouteRouteWithChildren = BusinessRouteRoute._addFileChildren(
 interface MyRouteRouteChildren {
   MyAdCreditRoute: typeof MyAdCreditRoute
   MyBookingsRoute: typeof MyBookingsRoute
-  MyErrandsRoute: typeof MyErrandsRoute
   MyFavoritesRoute: typeof MyFavoritesRoute
   MyMessagesRoute: typeof MyMessagesRoute
   MyNotificationsRoute: typeof MyNotificationsRoute
@@ -1869,6 +1868,7 @@ interface MyRouteRouteChildren {
   MyAdsNewRoute: typeof MyAdsNewRoute
   MyReportsIdRoute: typeof MyReportsIdRoute
   MyAdsIndexRoute: typeof MyAdsIndexRoute
+  MyErrandsIndexRoute: typeof MyErrandsIndexRoute
   MyReportsIndexRoute: typeof MyReportsIndexRoute
   MyAdsIdEditRoute: typeof MyAdsIdEditRoute
 }
@@ -1876,7 +1876,6 @@ interface MyRouteRouteChildren {
 const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyAdCreditRoute: MyAdCreditRoute,
   MyBookingsRoute: MyBookingsRoute,
-  MyErrandsRoute: MyErrandsRoute,
   MyFavoritesRoute: MyFavoritesRoute,
   MyMessagesRoute: MyMessagesRoute,
   MyNotificationsRoute: MyNotificationsRoute,
@@ -1887,6 +1886,7 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyAdsNewRoute: MyAdsNewRoute,
   MyReportsIdRoute: MyReportsIdRoute,
   MyAdsIndexRoute: MyAdsIndexRoute,
+  MyErrandsIndexRoute: MyErrandsIndexRoute,
   MyReportsIndexRoute: MyReportsIndexRoute,
   MyAdsIdEditRoute: MyAdsIdEditRoute,
 }
