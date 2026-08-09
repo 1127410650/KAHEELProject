@@ -53,7 +53,11 @@ export function PopupPacingCard() {
           roam_first_delay_ms: values.roamFirstDelayMs,
           roam_interval_ms: values.roamIntervalMs,
           roam_duration_ms: values.roamDurationMs,
+          mascot_min_gap_ms: values.mascotMinGapMs,
+          mascot_max_per_session: values.mascotMaxPerSession,
+          mascot_quiet_after_close_ms: values.mascotQuietAfterCloseMs,
           enabled: values.enabled,
+
         },
         ar ? "تعديل إيقاع البطاقات الترويجية" : "Promo popup pacing update",
       );
@@ -75,10 +79,14 @@ export function PopupPacingCard() {
       | "entranceMs"
       | "roamFirstDelayMs"
       | "roamIntervalMs"
-      | "roamDurationMs",
+      | "roamDurationMs"
+      | "mascotMinGapMs"
+      | "mascotMaxPerSession"
+      | "mascotQuietAfterCloseMs",
     labelAr: string,
     labelEn: string,
     hintAr: string,
+
   ) => (
     <label key={key} className="space-y-1 text-xs">
       <span className="font-bold">{ar ? labelAr : labelEn}</span>
@@ -108,6 +116,39 @@ export function PopupPacingCard() {
             ? "الشخصية لا تظهر من تلقاء نفسها: يسقط «الزعيم كَحيلان» عند لمس الزائر لرابط أو زر، وتبقى البطاقة ظاهرة حتى يضغط الزائر زر الإغلاق (×) — لا اختفاء تلقائي. ولا تحجب المحتوى ولا تعطّل التمرير، ولا تظهر أثناء الكتابة أو المحادثة أو المكالمة أو الدفع، ولا تظهر بطاقة ثانية ما دامت واحدة مفتوحة."
             : "The mascot never self-appears: Boss Kaheelan drops in when the visitor taps a link or button, and the card stays until the visitor presses close (×) — no auto-dismiss. It never blocks content or scrolling, never shows during typing, chat, a call or checkout, and never stacks a second card."}
         </p>
+
+        <div className="space-y-2 rounded-xl border border-border p-3">
+          <p className="text-sm font-bold">
+            {ar ? "حدود الظهور — شخصية واحدة وتكرار قليل" : "Appearance limits — one mascot, rarely"}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {ar
+              ? "شخصية واحدة فقط على الشاشة في أي لحظة، ولا تظهر الشخصية نفسها مرتين متتاليتين، والفاصل يُحسب بزمن التصفح النشط فقط. وإن لم تتوفر مساحة فارغة آمنة على الشاشة فلا تظهر الشخصية إطلاقًا."
+              : "Only one mascot on screen at any moment, never the same one twice in a row, and the gap counts active browsing time only. With no safe empty space on screen, nothing appears at all."}
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {field(
+              "mascotMinGapMs",
+              "الفاصل بين ظهورين (مللي ثانية)",
+              "Gap between appearances (ms)",
+              "١٢٠٠٠٠ – ٣٦٠٠٠٠٠ (٤-٦ دقائق مستحسن)",
+            )}
+            {field(
+              "mascotMaxPerSession",
+              "أقصى ظهورات في الجلسة",
+              "Max appearances per session",
+              "٠ – ٦ (٣ مستحسن)",
+            )}
+            {field(
+              "mascotQuietAfterCloseMs",
+              "صمت بعد الإغلاق (مللي ثانية)",
+              "Quiet after close (ms)",
+              "٣٠٠٠٠ – ١٨٠٠٠٠٠ (دقيقتان مستحسن)",
+            )}
+          </div>
+        </div>
+
+
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {field(

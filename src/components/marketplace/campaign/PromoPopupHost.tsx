@@ -42,15 +42,21 @@ import { MascotPeek } from "@/components/marketplace/campaign/MascotPeek";
 import { PopupMascot, type MascotKind } from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import {
-  ENTRY_POSITION,
+  acquireStage,
+  areaStillFree,
+  canShowMascot,
+  findSafeBand,
+  type SafeBand,
+} from "@/lib/mascot-stage";
+import {
   ENTRY_ANIMATION,
-  ENTRY_ORIGIN,
   PEEK_LAYOUT,
   nextEntrySide,
   nextPeekSide,
   type EntrySide,
   type PeekSide,
 } from "@/lib/mascot-entry";
+
 import {
   configureMascotTiming,
   decideDrop,
@@ -122,6 +128,25 @@ function readResume(): ResumeRecord | null {
   }
 }
 
+/** مقاسات المشاهد — تُقاس بها المنطقة الآمنة قبل أي ظهور. */
+const CARD_WIDTH = 224;
+const CARD_HEIGHT = 208;
+const PEEK_WIDTH = 296;
+const PEEK_HEIGHT = 152;
+
+/**
+ * منطقة آمنة للمشهد أو `null`. النطاق يبتعد عن الهيدر أعلى وعن شريط التنقل
+ * أسفل، والهامش من كل عنصر محتوى ١٤px — إن لم توجد مساحة فلا ظهور إطلاقًا.
+ */
+function safeBandFor(mode: CardMode): SafeBand | null {
+  const peek = mode === "peek";
+  return findSafeBand(peek ? PEEK_WIDTH : CARD_WIDTH, peek ? PEEK_HEIGHT : CARD_HEIGHT, {
+    topInset: 118,
+    bottomInset: 84,
+    pad: 14,
+  });
+}
+
 interface MascotCard {
   /** مفتاح يجبر إعادة تشغيل الحركة عند كل ظهور. */
   key: number;
@@ -131,10 +156,12 @@ interface MascotCard {
   mode: CardMode;
   /** جهة الدخول لمشهد قسم الناس. */
   from: "start" | "end";
-  /** جهة ظهور البطاقة الكاملة — تتنوّع في كل مرة. */
+  /** جهة ظهور البطاقة الكاملة — تُستخدم لحركة الدخول والخروج. */
   side: EntrySide;
   /** حافة الإطلالة لمشهد «يطلّ برأسه». */
   peekSide: PeekSide;
+  /** الموضع الآمن المقاس لحظة الظهور. */
+  band: SafeBand;
 }
 
 export function PromoPopupHost() {
@@ -156,6 +183,16 @@ export function PromoPopupHost() {
   const fadeTimerRef = useRef(0);
   /** مشهد مفتوح الآن؟ لمنع ظهور ثانٍ فوقه. */
   const openRef = useRef(false);
+  /** الإفراج عن «مسرح الشخصيات» — شخصية واحدة فقط في كل لحظة. */
+  const releaseRef = useRef<((closed?: boolean) => void) | null>(null);
+
+  /** حدود التكرار المعتمدة من لوحة الإدارة. */
+  const limits = {
+    minGapMs: pacing.mascotMinGapMs,
+    maxPerSession: pacing.mascotMaxPerSession,
+    quietAfterCloseMs: pacing.mascotQuietAfterCloseMs,
+  };
+
 
   // التوقيتات كلها من لوحة الإدارة — تُطبَّق أول ما تصل الإعدادات.
   useEffect(() => {
@@ -195,6 +232,9 @@ export function PromoPopupHost() {
     window.clearTimeout(fadeTimerRef.current);
     if (mute) mutePopups(24);
     openRef.current = false;
+    // الإفراج عن المسرح مع بدء فترة الصمت الإجبارية بعد الإغلاق.
+    releaseRef.current?.(true);
+    releaseRef.current = null;
     try {
       sessionStorage.removeItem(RESUME_KEY);
     } catch {
@@ -207,6 +247,7 @@ export function PromoPopupHost() {
     }, 260);
   }, []);
 
+
   /** فهرس جديد بلا تكرار متتالٍ. */
   const rotate = (size: number, last: React.MutableRefObject<number>): number => {
     let index = Math.floor(Math.random() * size);
@@ -217,6 +258,11 @@ export function PromoPopupHost() {
 
   const show = useCallback(
     (mode: CardMode) => {
+      // قاعدة «شخصية واحدة وبتكرار قليل»: المسرح يقرّر، لا المشهد.
+      if (!canShowMascot(`card:${mode}`, limits)) return;
+      // قاعدة «لا تغطية»: مساحة آمنة أو لا ظهور.
+      const band = safeBandFor(mode);
+      if (!band) return;
       keyRef.current += 1;
       let copy;
       if (mode === "rapid") {
@@ -230,6 +276,7 @@ export function PromoPopupHost() {
       }
       window.clearTimeout(fadeTimerRef.current);
       openRef.current = true;
+      releaseRef.current = acquireStage(`card:${mode}`);
       setLeaving(false);
       // جهة جديدة في كل ظهور، ولا تتكرّر الجهة السابقة.
       const side = nextEntrySide();
@@ -240,8 +287,10 @@ export function PromoPopupHost() {
         from: Math.random() < 0.5 ? "start" : "end",
         side,
         peekSide,
+        band,
         ...copy,
       });
+
 
       if (mode !== "entrance") {
         try {
@@ -263,7 +312,9 @@ export function PromoPopupHost() {
         }
       }
     },
-    [ar],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [ar, pacing.mascotMinGapMs, pacing.mascotMaxPerSession, pacing.mascotQuietAfterCloseMs],
+
   );
 
   // الاستماع في مرحلة الالتقاط: نقرأ الحدث فقط، ثم نترك المتصفح يكمل عمله.
@@ -301,21 +352,48 @@ export function PromoPopupHost() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // استئناف مشهد بدأ قبل تحميل كامل للصفحة — ثم يبقى حتى الإغلاق اليدوي.
+  // استئناف مشهد بدأ قبل تحميل كامل للصفحة — في منطقة آمنة فقط، وإلا فلا شيء.
   useEffect(() => {
     const record = readResume();
     if (!record || blocked()) return;
+    const band = safeBandFor(record.mode);
+    if (!band) return;
+    releaseRef.current = acquireStage(`card:${record.mode}`);
     keyRef.current += 1;
     openRef.current = true;
-    setCard({ key: keyRef.current, ...record });
+    setCard({ key: keyRef.current, band, ...record });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   * إعادة التحقق أثناء العرض: عدم التغطية شرط لحظي. أي تمرير أو تحميل بطاقة
+   * يجعل الموضع غير آمن ⇒ يُغلق المشهد فورًا (الاحتواء أولى من أي تأثير).
+   */
+  useEffect(() => {
+    if (!card) return;
+    const height = card.mode === "peek" ? PEEK_HEIGHT : CARD_HEIGHT;
+    const width = card.mode === "peek" ? PEEK_WIDTH : CARD_WIDTH;
+    const check = () => {
+      const left = card.band.left + Math.max(0, (card.band.width - width) / 2);
+      if (!areaStillFree({ left, top: card.band.top, width, height }, 8)) dismiss();
+    };
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    const timer = window.setInterval(check, 700);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card?.key]);
 
   useEffect(() => () => window.clearTimeout(fadeTimerRef.current), []);
 
   if (!card) return null;
 
   const calm = prefersReducedMotion();
+
 
   const closeButtons = (
     <div className="flex gap-1.5">
@@ -355,7 +433,11 @@ export function PromoPopupHost() {
         : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
 
     return (
-      <div className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
+      <div
+        className="pointer-events-none fixed inset-0 z-30 overflow-hidden"
+        data-kaheel-stage="peek"
+        aria-live="polite"
+      >
         <div
           key={card.key}
           data-kaheel-drop-card
@@ -364,28 +446,35 @@ export function PromoPopupHost() {
           // dir=ltr على الصفّ فقط: ترتيب الشخصية والفقاعة فيزيائي لا منطقي،
           // فتبقى الإطلالة من نفس الحافة في العربية والإنجليزية على حد سواء.
           dir="ltr"
-          style={{ transformOrigin: layout.origin, animation: peekAnimation }}
-          className={`pointer-events-none absolute flex items-end gap-1.5 ${layout.row} ${layout.position}`}
+          style={{
+            position: "absolute",
+            left: `${card.band.left + Math.max(0, (card.band.width - PEEK_WIDTH) / 2)}px`,
+            top: `${card.band.top}px`,
+            width: `${PEEK_WIDTH}px`,
+            transformOrigin: layout.origin,
+            animation: peekAnimation,
+          }}
+          className={`pointer-events-none flex items-end gap-1.5 ${layout.row}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
           <div
             dir={ar ? "rtl" : "ltr"}
-            className="mb-2 max-w-[9.5rem] min-[360px]:max-w-[11rem] rounded-2xl rounded-ee-sm border border-white/60 bg-white/92 px-3 py-2 text-start shadow-[0_12px_30px_rgb(16_0_43/0.2)] backdrop-blur-xl"
+            className="k-mascot-glass mb-2 max-w-[9.5rem] min-[360px]:max-w-[11rem] rounded-2xl rounded-ee-sm px-3 py-2 text-start"
           >
-
             <div className="mb-1 flex items-start justify-between gap-2">
-              <p className="py-0.5 text-[13px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
+              <p className="py-0.5 text-[13px] font-black leading-snug [overflow-wrap:anywhere]">
                 {card.title}
               </p>
               {closeButtons}
             </div>
-            <p className="text-[11px] font-bold leading-snug text-[#5a189a] [overflow-wrap:anywhere]">
+            <p className="k-mascot-glass-sub text-[11px] font-bold leading-snug [overflow-wrap:anywhere]">
               {card.subtitle}
             </p>
           </div>
         </div>
       </div>
     );
+
   }
 
   const entrance = card.mode === "entrance";
@@ -410,14 +499,15 @@ export function PromoPopupHost() {
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
   /**
-   * لا بطاقة بيضاء ولا إطار ولا ظل: الشخصية بخلفية شفافة فوق المحتوى مباشرة،
-   * والنص تحتها على لوح زجاجي خفيف جدًا خلف النص وحده لضمان القراءة، وزر × صغير
-   * ملاصق للشخصية. الحاوية تمرّر الضغطات (`pointer-events-none`) والعناصر
-   * التفاعلية وحدها تستقبلها.
+   * لا بطاقة بيضاء ولا إطار: الشخصية بخلفية شفافة، والنص على لوح زجاجي بنفسجي
+   * شفاف (`k-mascot-glass`) بنص داكن ⇒ مقروء فوق أي خلفية. الموضع من المنطقة
+   * الآمنة المقاسة وقت الظهور فقط، فلا تغطي بطاقة ولا نصًا ولا زرًا. الحاوية
+   * `pointer-events-none` وأزرارها وحدها `auto`.
    */
   return (
     <div
-      className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+      className="pointer-events-none fixed inset-0 z-30 overflow-hidden"
+      data-kaheel-stage="card"
       aria-live="polite"
     >
       <div
@@ -426,20 +516,21 @@ export function PromoPopupHost() {
         data-kaheel-side={card.side}
         role="status"
         style={{
-          transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
+          position: "absolute",
+          left: `${card.band.left + Math.max(0, (card.band.width - CARD_WIDTH) / 2)}px`,
+          top: `${card.band.top}px`,
+          width: `${CARD_WIDTH}px`,
+          transformOrigin: "bottom center",
           animation,
         }}
-        className={`pointer-events-none absolute flex max-h-full w-[14rem] max-w-full flex-col items-center gap-1 text-center ${
-          entrance ? "bottom-0 left-0" : ENTRY_POSITION[card.side]
-        }`}
+        className="pointer-events-none flex max-w-full flex-col items-center gap-1 text-center"
       >
-        {/* الشخصية وحدها — خلفية شفافة تمامًا، وزر × صغير ملاصق لها. */}
+        {/* الشخصية وحدها — خلفية شفافة تمامًا، وزر × صغير أنيق ملاصق لها. */}
         <div className="relative flex min-h-0 w-full shrink justify-center">
           <div className={`min-h-0 max-w-full overflow-hidden ${bodyMotion}`}>
             <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
           </div>
           <div className="absolute -top-1 end-0 flex flex-col gap-1">
-
             <button
               type="button"
               onClick={() => dismiss()}
@@ -452,24 +543,25 @@ export function PromoPopupHost() {
               type="button"
               onClick={() => dismiss(true)}
               aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-white/80 text-[#3c096c] shadow-[0_3px_10px_rgb(16_0_43/0.18)] backdrop-blur-sm"
+              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#3c096c]/85 text-white shadow-[0_3px_10px_rgb(16_0_43/0.18)] backdrop-blur-sm"
             >
               <EyeOff className="size-3" aria-hidden />
             </button>
           </div>
         </div>
 
-        {/* النص تحتها: لوح زجاجي خفيف جدًا خلف النص وحده — لا بطاقة. */}
-        <div className="pointer-events-auto w-full shrink-0 rounded-2xl bg-white/94 px-2.5 py-1.5 ring-1 ring-white/70 shadow-[0_4px_14px_rgb(16_0_43/0.16)] backdrop-blur-md">
-          <p className="py-0.5 text-[16px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
+        {/* النص تحتها: زجاج بنفسجي شفاف متناسق مع الخلفية — لا أبيض صريح. */}
+        <div className="k-mascot-glass pointer-events-auto w-full shrink-0 rounded-2xl px-2.5 py-1.5">
+          <p className="py-0.5 text-[15px] font-black leading-snug [overflow-wrap:anywhere]">
             {card.title}
           </p>
-          <p className="text-[13px] font-semibold leading-snug text-[#3c096c] [overflow-wrap:anywhere]">
+          <p className="k-mascot-glass-sub text-[12px] font-semibold leading-snug [overflow-wrap:anywhere]">
             {card.subtitle}
           </p>
         </div>
       </div>
     </div>
   );
+
 }
 

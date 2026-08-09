@@ -2371,6 +2371,26 @@ body:has(.market-surface) {
   [data-kaheel-roam] { display: none !important; }
 }
 
+/* ═══ فقاعة كلام الشخصية — زجاج بنفسجي شفاف، لا بطاقة بيضاء ═══
+   لا مستطيل أبيض صريح: طبقة بنفسجية فاتحة شفافة مع blur خفيف تتناسق مع خلفية
+   الصفحة، ونص داكن جدًا فوقها ⇒ التباين يبقى مرتفعًا (> 10:1) فوق أي خلفية،
+   فاتحة كانت أو داكنة، لأن الطبقة نفسها تُفتّح ما تحتها قبل رسم النص. */
+.k-mascot-glass {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, #e9dcff 78%, transparent),
+    color-mix(in oklab, #d6c2ff 72%, transparent)
+  );
+  border: 1px solid color-mix(in oklab, #ffffff 55%, transparent);
+  color: #1b0033;
+  box-shadow: 0 8px 22px rgb(16 0 43 / 0.16);
+  backdrop-filter: blur(10px) saturate(135%);
+}
+.k-mascot-glass-sub {
+  color: #35085e;
+}
+
+
 /* ═══ الطبقة الموسمية المزخرفة — حركة محسوسة لا مزعجة ═══
    كل الحركات على transform/opacity فقط، ومعلّقة (paused) حتى تدخل الطبقة
    الشاشة: `.k-season-run` يُضاف بواسطة IntersectionObserver، فالطبقة الخارجة
