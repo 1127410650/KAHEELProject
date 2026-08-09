@@ -457,7 +457,7 @@ export function PromoPopupHost() {
         </div>
 
         {/* النص تحتها: لوح زجاجي خفيف جدًا خلف النص وحده — لا بطاقة. */}
-        <div className="pointer-events-auto w-full shrink-0 rounded-2xl bg-white/72 px-2.5 py-1.5 backdrop-blur-md">
+        <div className="pointer-events-auto w-full shrink-0 rounded-2xl bg-white/85 px-2.5 py-1.5 shadow-[0_2px_10px_rgb(16_0_43/0.12)] backdrop-blur-md">
           <p className="py-0.5 text-[16px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
             {card.title}
           </p>

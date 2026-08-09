@@ -105,7 +105,7 @@ export function PopupMascot({
         lang={lang}
         animated={animated}
         size={scale === "hero" ? "full" : "sm"}
-        className="h-full w-auto"
+        className="h-full w-auto max-w-full"
       />
     </div>
   );
