@@ -67,6 +67,11 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
         now >= pauseUntilRef.current &&
         document.visibilityState === "visible"
       ) {
+        // CSS scroll snapping pulls a programmatic `scrollLeft` straight back to
+        // the nearest snap point, which would freeze the drift completely. Snap
+        // is therefore suspended while the rail moves itself and restored the
+        // moment the user takes over, so their swipes still land on a card.
+        rail.style.scrollSnapType = "none";
         // `scrollLeft` rounds to whole pixels, so a slow rail would never move
         // if each frame's fraction were written straight back. The exact
         // position is kept here and only whole pixels are handed to the DOM.
@@ -75,8 +80,11 @@ export function useAutoLoopRail<T extends HTMLElement = HTMLDivElement>(
         positionRef.current += direction * speed * (elapsed / 1_000);
         rail.scrollLeft = Math.round(positionRef.current);
       } else {
+        rail.style.scrollSnapType = "";
         positionRef.current = rail.scrollLeft;
       }
+
+
 
       if (width > 0) {
         if (rail.scrollLeft >= width * 2) {
