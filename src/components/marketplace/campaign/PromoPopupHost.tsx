@@ -316,9 +316,11 @@ export function PromoPopupHost() {
               }
             : undefined
         }
-        className={`pointer-events-auto relative flex w-full max-w-[22rem] touch-pan-y items-center gap-3 rounded-3xl border border-white/60 bg-white/90 p-3 pe-9 shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none ${
-          closing ? "animate-[kaheel-popup-out_0.2s_ease-in_forwards]" : ENTER[side]
-        }`}
+        className={`pointer-events-auto relative flex w-full touch-pan-y rounded-3xl border border-white/60 bg-white/90 shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none ${
+          duo
+            ? "max-w-[16.5rem] flex-col items-center gap-1 p-2.5 pb-3"
+            : "max-w-[22rem] items-center gap-3 p-3 pe-9"
+        } ${closing ? "animate-[kaheel-popup-out_0.2s_ease-in_forwards]" : ENTER[side]}`}
       >
         <div className="absolute end-2 top-2 flex flex-col items-center gap-1">
           <button
