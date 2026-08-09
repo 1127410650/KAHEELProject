@@ -28,6 +28,7 @@ import {
   type CampaignStatus,
 } from "@/lib/mkt-campaigns";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { PopupPacingCard } from "@/components/marketplace/campaign/PopupPacingCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -187,6 +188,8 @@ function AdminCampaignsPage() {
             </p>
           </div>
         </header>
+
+        <PopupPacingCard />
 
         <Card>
           <CardContent className="space-y-4 p-4">

@@ -70,3 +70,15 @@ export const POPUP_SIDES: PopupSide[] = ["bottom", "top", "left", "right"];
 export function pickPopupSide(seed = Math.random()): PopupSide {
   return POPUP_SIDES[Math.floor(seed * POPUP_SIDES.length) % POPUP_SIDES.length]!;
 }
+
+/** Pool size for the current locale — used by the rotation to avoid repeats. */
+export function popupCopyCount(ar: boolean): number {
+  return (ar ? AR_POOL : EN_POOL).length;
+}
+
+/** Copy at a given index (wrapped), so the pacer can rotate deterministically. */
+export function popupCopyAt(ar: boolean, index: number): PopupCopy {
+  const pool = ar ? AR_POOL : EN_POOL;
+  const size = pool.length;
+  return pool[((index % size) + size) % size]!;
+}

@@ -237,29 +237,6 @@ export function trackCampaign(campaignId: string, kind: "impression" | "click"):
     .then(() => undefined);
 }
 
-// ── Welcome takeover frequency ──────────────────────────────────────────────
-const TAKEOVER_KEY = "kaheel.takeover.lastSeen";
-const TAKEOVER_COOLDOWN_MS = 24 * 60 * 60 * 1000;
-
-export function takeoverAllowed(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    const raw = window.localStorage.getItem(TAKEOVER_KEY);
-    if (!raw) return true;
-    return Date.now() - Number(raw) > TAKEOVER_COOLDOWN_MS;
-  } catch {
-    return false;
-  }
-}
-
-export function markTakeoverSeen(): void {
-  try {
-    window.localStorage.setItem(TAKEOVER_KEY, String(Date.now()));
-  } catch {
-    /* private mode: the takeover simply shows again next visit */
-  }
-}
-
 // ── Admin ──────────────────────────────────────────────────────────────────
 export function useAdminCampaigns(enabled: boolean) {
   return useQuery({
