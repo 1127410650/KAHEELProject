@@ -4740,6 +4740,117 @@ export type Database = {
           },
         ]
       }
+      mkt_otp_channels: {
+        Row: {
+          channel: string
+          cost_per_message: number
+          created_at: string
+          currency_code: string
+          dial_codes: string[]
+          id: string
+          is_enabled: boolean
+          is_fallback: boolean
+          label_ar: string
+          label_en: string
+          notes: string | null
+          priority: number
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          channel: string
+          cost_per_message?: number
+          created_at?: string
+          currency_code?: string
+          dial_codes?: string[]
+          id?: string
+          is_enabled?: boolean
+          is_fallback?: boolean
+          label_ar: string
+          label_en: string
+          notes?: string | null
+          priority?: number
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          cost_per_message?: number
+          created_at?: string
+          currency_code?: string
+          dial_codes?: string[]
+          id?: string
+          is_enabled?: boolean
+          is_fallback?: boolean
+          label_ar?: string
+          label_en?: string
+          notes?: string | null
+          priority?: number
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_otp_sends: {
+        Row: {
+          attempt: number
+          channel: string
+          cost_amount: number
+          country_iso2: string | null
+          created_at: string
+          currency_code: string
+          dial_code: string | null
+          error_code: string | null
+          error_detail: string | null
+          id: string
+          idempotency_key: string | null
+          phone_hash: string
+          phone_masked: string
+          provider: string
+          provider_message_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempt?: number
+          channel: string
+          cost_amount?: number
+          country_iso2?: string | null
+          created_at?: string
+          currency_code?: string
+          dial_code?: string | null
+          error_code?: string | null
+          error_detail?: string | null
+          id?: string
+          idempotency_key?: string | null
+          phone_hash: string
+          phone_masked: string
+          provider: string
+          provider_message_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempt?: number
+          channel?: string
+          cost_amount?: number
+          country_iso2?: string | null
+          created_at?: string
+          currency_code?: string
+          dial_code?: string | null
+          error_code?: string | null
+          error_detail?: string | null
+          id?: string
+          idempotency_key?: string | null
+          phone_hash?: string
+          phone_masked?: string
+          provider?: string
+          provider_message_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_platform_admins: {
         Row: {
           created_at: string
