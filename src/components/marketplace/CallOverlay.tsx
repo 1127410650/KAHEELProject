@@ -143,6 +143,40 @@ export function CallOverlay() {
           )}
         </div>
 
+        {relayFailed && (
+          <div className="mt-3 rounded-xl border border-border bg-muted/40 p-3">
+            <p className="text-xs text-foreground">{t("market.call.fallback.title")}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {whatsappHref && (
+                <Button asChild size="sm" variant="outline" className="h-9">
+                  <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="size-4" aria-hidden />
+                    {t("market.call.fallback.whatsapp")}
+                  </a>
+                </Button>
+              )}
+              {phone && (
+                <Button asChild size="sm" variant="outline" className="h-9">
+                  <a href={`tel:${phone}`} dir="ltr">
+                    <Phone className="size-4" aria-hidden />
+                    {t("market.call.fallback.phone")}
+                  </a>
+                </Button>
+              )}
+              <Button asChild size="sm" variant="outline" className="h-9">
+                <Link to="/my/messages" onClick={dismiss}>
+                  {t("market.call.fallback.chat")}
+                </Link>
+              </Button>
+            </div>
+            {!phone && (
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                {t("market.call.fallback.noPhone")}
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Available in every state: stop new calls and end the current one. */}
         <button
           type="button"
