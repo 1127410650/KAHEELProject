@@ -58,7 +58,7 @@ export function SyriaHomeGateway() {
       aria-label="دليل سوريا ودليل الطالب"
       aria-roledescription="إعلان متناوب"
       role="region"
-      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 pb-1 pt-1.5 sm:px-5 sm:pt-2 lg:px-8"
+      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 py-2 sm:px-5 lg:px-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -66,7 +66,8 @@ export function SyriaHomeGateway() {
         if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
       }}
     >
-      <div className="relative min-h-[84px] overflow-hidden rounded-[1rem] border border-market-silver-line bg-market-panel shadow-[0_7px_20px_rgb(0_0_0/0.14)] sm:min-h-[104px] sm:max-w-[600px] sm:rounded-[1.3rem]">
+      <div className="relative w-full overflow-hidden rounded-[24px] border border-market-silver-line bg-market-panel shadow-[0_7px_20px_rgb(0_0_0/0.14)]">
+
         <div
           className={
             isSyria
