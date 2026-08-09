@@ -272,7 +272,7 @@ function MyOrdersPage() {
                 </p>
                 {row.total !== null && row.total > 0 && (
                   <p className="num mt-1 text-sm font-semibold text-foreground">
-                    {formatMoney(row.total)}
+                    {formatMoney(row.total, locale)}
                   </p>
                 )}
               </div>
