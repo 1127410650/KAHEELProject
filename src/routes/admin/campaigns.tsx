@@ -34,6 +34,7 @@ import {
 import type { UploadedAiAsset } from "@/lib/mkt-ai-image";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { AiImageStudio } from "@/components/marketplace/campaign/AiImageStudio";
+import { BackdropLibraryCard } from "@/components/marketplace/campaign/BackdropLibraryCard";
 import { PopupPacingCard } from "@/components/marketplace/campaign/PopupPacingCard";
 import { StoriesManager } from "@/components/marketplace/campaign/StoriesManager";
 import { Badge } from "@/components/ui/badge";
@@ -232,6 +233,8 @@ function AdminCampaignsPage() {
             </p>
           </div>
         </header>
+
+        <BackdropLibraryCard />
 
         <PopupPacingCard />
 

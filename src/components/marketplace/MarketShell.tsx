@@ -11,6 +11,7 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
+import { BackdropLayer } from "@/components/marketplace/BackdropLayer";
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
 import kaheelLogo from "@/assets/kaheel-logo.png";
@@ -425,8 +426,10 @@ export function MarketShell({
           : "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip"
       }
     >
+      <BackdropLayer />
       <MarketHeader showCategories={showCategories} home={home} />
       <main className="flex-1">{children}</main>
+
       {variant === "compact" && <MarketCompactFooter />}
       {bottomNav && <MarketBottomNav />}
     </div>
