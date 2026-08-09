@@ -236,6 +236,47 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
   );
 }
 
+/** إعلان مميز فعليًا: العلم مرفوع ولم تنتهِ مدة التمييز. */
+function activeFeatured(listing: ListingCardData) {
+  if (!listing.is_featured) return false;
+  if (!listing.featured_until) return true;
+  return new Date(listing.featured_until).getTime() > Date.now();
+}
+
+/**
+ * شارة «مميز» بتدرّج ذهبي معدني ولمعة بطيئة جدًا. تراقب ظهورها بنفسها
+ * فتتوقف اللمعة تمامًا خارج الشاشة، والحركة على transform/opacity فقط.
+ */
+function FeaturedChip() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => setVisible(entries.some((entry) => entry.isIntersecting)),
+      { rootMargin: "0px", threshold: 0.2 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <span
+      ref={ref}
+      className={`k-gold-chip pointer-events-none inline-flex items-center gap-1 rounded-full px-2 py-[3px] text-[9px] font-black leading-none sm:text-[10px] ${
+        visible ? "is-in" : ""
+      }`}
+    >
+      <Sparkles className="size-3 shrink-0" aria-hidden />
+      <span>{t("market.realEstate.featuredBadge")}</span>
+    </span>
+  );
+}
+
+
 export function ListingCard({
   listing,
   view = "grid",
