@@ -2,7 +2,7 @@
  * Easy sign-in panel: one mobile number, one code.
  *
  * Two paths, decided ONLY by the dial code:
- * - `+963` (Syria): phone-only. The code travels over WhatsApp or SMS through
+ * - أي دولة عليها `phone_only_otp` في إعداد الدول (سوريا الآن، لبنان لاحقًا): phone-only. The code travels over WhatsApp or SMS through
  *   `requestPhoneOtp` / `verifyPhoneOtp`. Those need provider secrets; when they
  *   are missing the server answers `PROVIDER_UNCONFIGURED` and this panel says
  *   so plainly instead of pretending a code was sent.
@@ -23,8 +23,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { enablePersistentSession } from "@/lib/auth-storage";
 import { otpProviderStatus, requestPhoneOtp, verifyPhoneOtp } from "@/lib/otp.functions";
 import { DEFAULT_DIAL, DIAL_CODES, isAcceptablePhone, normalizePhone } from "@/lib/phone-normalize";
+import { usePhoneOnlyDials } from "@/lib/mkt-markets";
 
-const SYRIA_DIAL = "963";
+/**
+ * لا يوجد مفتاح دولة مكتوب في المنطق: قائمة «الدخول برقم الجوال فقط» تُقرأ من
+ * إعداد الدول المفعّلة (`phone_only_otp`). عند تفعيل لبنان يصير +961 مثل +963
+ * تمامًا بلا أي تعديل هنا. القيمة الاحتياطية للحظة الأولى فقط.
+ */
+const FALLBACK_PHONE_ONLY_DIALS = [DEFAULT_DIAL];
 
 export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   const { t } = useI18n();
@@ -44,7 +50,8 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
 
   // The panel reacts to the dial code immediately: Syrian numbers never see the
   // email field, foreign numbers always do.
-  const isSyrian = dial === SYRIA_DIAL;
+  const phoneOnlyDials = usePhoneOnlyDials();
+  const isPhoneOnly = (phoneOnlyDials.data ?? FALLBACK_PHONE_ONLY_DIALS).includes(dial);
   const e164 = useMemo(() => normalizePhone(dial, phone), [dial, phone]);
   const phoneReady = isAcceptablePhone(dial, phone);
   const emailReady = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
@@ -57,7 +64,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   }, [readProviders]);
 
   async function send() {
-    if (isSyrian || !emailReady) {
+    if (isPhoneOnly || !emailReady) {
       if (!phoneReady || !e164) {
         toast.error(t("market.easyAuth.invalidPhone"));
         return;
@@ -66,7 +73,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
     setBusy(true);
     try {
       enablePersistentSession();
-      if (isSyrian) {
+      if (isPhoneOnly) {
         const result = await requestOtp({ data: { phone: e164!, channel } });
         if (!result.ok) {
           toast.error(
@@ -117,7 +124,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
     setBusy(true);
     try {
       enablePersistentSession();
-      if (isSyrian) {
+      if (isPhoneOnly) {
         const result = await verifyOtp({
           data: { phone: e164!, code: digits, full_name: fullName.trim() },
         });
@@ -198,7 +205,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             </div>
           </div>
 
-          {!isSyrian && (
+          {!isPhoneOnly && (
             <div className="space-y-2">
               <Label htmlFor="easy-email">{t("market.easyAuth.email")}</Label>
               <Input
@@ -225,7 +232,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             />
           </div>
 
-          {isSyrian && (
+          {isPhoneOnly && (
             <div className="space-y-2">
               <span className="text-sm font-semibold text-foreground">
                 {t("market.easyAuth.channel")}
@@ -265,7 +272,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             type="button"
             className="h-12 w-full"
             onClick={send}
-            disabled={busy || (isSyrian && (!phoneReady || providersOff)) || (!isSyrian && !emailReady)}
+            disabled={busy || (isPhoneOnly && (!phoneReady || providersOff)) || (!isPhoneOnly && !emailReady)}
           >
             {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {busy ? t("market.easyAuth.sending") : t("market.easyAuth.send")}

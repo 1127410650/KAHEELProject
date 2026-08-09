@@ -7,6 +7,13 @@ import {
 } from "libphonenumber-js";
 
 import { supabase } from "@/integrations/supabase/client";
+import {
+  FALLBACK_MARKET_ISO2,
+  defaultMarketIso2,
+  isEnabledMarket,
+  loadDefaultMarket,
+  loadEnabledMarkets,
+} from "@/lib/mkt-markets";
 
 export interface MktCountry {
   id: string;
@@ -31,10 +38,10 @@ export const COUNTRY_COLUMNS =
 export const CITY_COLUMNS = "id, country_id, name_ar, name_en, sort_order";
 
 /**
- * Temporary public-market mode. Other country rows and their data stay intact;
- * public surfaces only read and write the Syrian market until this flag changes.
+ * نطاق السوق لا يُكتب في الكود: يُقرأ من `mkt_countries` عبر `mkt-markets`.
+ * `FALLBACK_MARKET_ISO2` تُستخدم فقط قبل وصول الإعدادات أو عند انقطاع الشبكة.
  */
-export const ACTIVE_MARKET_ISO2 = "SY" as const;
+export { FALLBACK_MARKET_ISO2 } from "@/lib/mkt-markets";
 
 const countryIdRequests = new Map<string, Promise<string | null>>();
 const COUNTRY_LOOKUP_RETRY_DELAY_MS = 15_000;
@@ -52,7 +59,7 @@ export function loadCountryIdByIso2(iso2: string, activeOnly = false): Promise<s
 
   const request: Promise<string | null> = (async () => {
     let query = supabase.from("mkt_countries").select("id").eq("iso2", normalized);
-    if (activeOnly) query = query.eq("is_active", true);
+    if (activeOnly) query = query.eq("is_active", true).eq("is_market_enabled", true);
 
     const { data, error } = await query.maybeSingle();
     if (error) throw error;
@@ -71,20 +78,29 @@ export function loadCountryIdByIso2(iso2: string, activeOnly = false): Promise<s
   return request;
 }
 
+/** الدول المتاحة للجمهور = الدول المفعّلة للسوق من لوحة الإدارة. */
 export async function loadCountries(): Promise<MktCountry[]> {
+  const markets = await loadEnabledMarkets().catch(() => []);
+  return markets as unknown as MktCountry[];
+}
+
+/** كل الدول (بما فيها المعطّلة) — للوحة الإدارة فقط. */
+export async function loadAllCountries(): Promise<
+  (MktCountry & { is_active: boolean; is_market_enabled: boolean; phone_only_otp: boolean; is_default_market: boolean })[]
+> {
   const { data } = await supabase
     .from("mkt_countries")
-    .select(COUNTRY_COLUMNS)
-    .eq("is_active", true)
-    .eq("iso2", ACTIVE_MARKET_ISO2)
+    .select(
+      "id, iso2, name_ar, name_en, calling_code, currency_code, sort_order, is_active, is_market_enabled, phone_only_otp, is_default_market",
+    )
     .order("sort_order");
-  return (data ?? []) as MktCountry[];
+  return (data ?? []) as never;
 }
 
 export async function loadCities(countryId?: string | null): Promise<MktCity[]> {
   let activeCountryId = countryId ?? null;
   if (!activeCountryId) {
-    activeCountryId = await loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true);
+    activeCountryId = await loadCountryIdByIso2(await defaultMarketIso2(), true);
   }
   if (!activeCountryId) return [];
 
@@ -96,6 +112,7 @@ export async function loadCities(countryId?: string | null): Promise<MktCity[]> 
     .order("sort_order");
   return (data ?? []) as MktCity[];
 }
+
 
 export function geoName(
   row: { name_ar: string; name_en: string } | undefined,
@@ -127,14 +144,17 @@ export async function loadGeoLabel(
   return parts.length > 0 ? parts.join(" — ") : null;
 }
 
-/** A visitor's browsing market: Syria, and optionally a Syrian city. */
+/** تفضيل الزائر: دولة من الدول المفعّلة، ومدينة/محافظة داخلها اختياريًا. */
 export interface MarketPreference {
   countryIso2: string;
   cityId: string | null;
 }
 
 const STORAGE_KEY = "tahqaq.mkt.market";
-const DEFAULT_PREFERENCE: MarketPreference = { countryIso2: ACTIVE_MARKET_ISO2, cityId: null };
+const DEFAULT_PREFERENCE: MarketPreference = {
+  countryIso2: FALLBACK_MARKET_ISO2,
+  cityId: null,
+};
 
 function readStored(): MarketPreference {
   if (typeof window === "undefined") return DEFAULT_PREFERENCE;
@@ -142,21 +162,29 @@ function readStored(): MarketPreference {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_PREFERENCE;
     const parsed = JSON.parse(raw) as Partial<MarketPreference>;
-    const storedWasSyria = parsed.countryIso2 === ACTIVE_MARKET_ISO2;
     return {
-      countryIso2: ACTIVE_MARKET_ISO2,
-      cityId: storedWasSyria && typeof parsed.cityId === "string" ? parsed.cityId : null,
+      countryIso2:
+        typeof parsed.countryIso2 === "string" && parsed.countryIso2
+          ? parsed.countryIso2.toUpperCase()
+          : FALLBACK_MARKET_ISO2,
+      cityId: typeof parsed.cityId === "string" ? parsed.cityId : null,
     };
   } catch {
     return DEFAULT_PREFERENCE;
   }
 }
 
+/** يقبل الدولة المخزّنة فقط إذا كانت لا تزال مفعّلة، وإلا يرجع للافتراضية. */
+async function resolveIso2(candidate: string | null | undefined): Promise<string> {
+  if (candidate && (await isEnabledMarket(candidate))) return candidate.toUpperCase();
+  return defaultMarketIso2();
+}
+
 const listeners = new Set<(value: MarketPreference) => void>();
 
 /**
- * The public version is temporarily Syria-only. Old Saudi or other-country
- * preferences are ignored, not deleted, and cannot leak back into public queries.
+ * الدولة تُقرأ من إعداد «الدول المفعّلة». أي تفضيل قديم لدولة صارت معطّلة
+ * يُتجاهل (ولا يُحذف) ولا يمكن أن يتسرّب إلى الاستعلامات العامة.
  */
 export function useMarketPreference() {
   const [preference, setPreference] = useState<MarketPreference>(DEFAULT_PREFERENCE);
@@ -168,16 +196,19 @@ export function useMarketPreference() {
     listeners.add(listener);
 
     void (async () => {
+      const iso2 = await resolveIso2(stored.countryIso2);
       const { data: auth } = await supabase.auth.getSession();
-      if (!auth.session) return;
 
-      const [countryId, { data: row }] = await Promise.all([
-        loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true),
-        supabase
-          .from("mkt_user_market_preferences")
-          .select("browsing_city_id")
-          .eq("user_id", auth.session.user.id)
-          .maybeSingle(),
+      const [countryId, row] = await Promise.all([
+        loadCountryIdByIso2(iso2, true),
+        auth.session
+          ? supabase
+              .from("mkt_user_market_preferences")
+              .select("browsing_city_id")
+              .eq("user_id", auth.session.user.id)
+              .maybeSingle()
+              .then((result) => result.data)
+          : Promise.resolve(null),
       ]);
 
       const candidateCityId = row?.browsing_city_id ?? stored.cityId;
@@ -193,10 +224,7 @@ export function useMarketPreference() {
         cityId = city?.id ?? null;
       }
 
-      const next: MarketPreference = {
-        countryIso2: ACTIVE_MARKET_ISO2,
-        cityId,
-      };
+      const next: MarketPreference = { countryIso2: iso2, cityId };
       if (typeof window !== "undefined") {
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       }
@@ -209,7 +237,8 @@ export function useMarketPreference() {
   }, []);
 
   const update = useCallback(async (requested: MarketPreference) => {
-    const countryId = await loadCountryIdByIso2(ACTIVE_MARKET_ISO2, true);
+    const iso2 = await resolveIso2(requested.countryIso2);
+    const countryId = await loadCountryIdByIso2(iso2, true);
 
     let cityId: string | null = null;
     if (requested.cityId && countryId) {
@@ -223,10 +252,7 @@ export function useMarketPreference() {
       cityId = city?.id ?? null;
     }
 
-    const next: MarketPreference = {
-      countryIso2: ACTIVE_MARKET_ISO2,
-      cityId,
-    };
+    const next: MarketPreference = { countryIso2: iso2, cityId };
     if (typeof window !== "undefined") {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     }
@@ -245,19 +271,22 @@ export function useMarketPreference() {
   return { preference, setPreference: update };
 }
 
-/** Syria is the only selectable account country while this version is active. */
+/** دولة الحساب = الدولة الافتراضية المفعّلة (أو أول دولة مفعّلة). */
 export async function loadAccountCountry(): Promise<MktCountry | null> {
+  const market = await loadDefaultMarket().catch(() => null);
+  if (market) return market as unknown as MktCountry;
   const countries = await loadCountries();
-  return countries.find((country) => country.iso2 === ACTIVE_MARKET_ISO2) ?? countries[0] ?? null;
+  return countries[0] ?? null;
 }
 
 export function useAccountCountry() {
   return useQuery({
-    queryKey: ["mkt", "account-country", ACTIVE_MARKET_ISO2],
+    queryKey: ["mkt", "account-country"],
     queryFn: loadAccountCountry,
     staleTime: 5 * 60 * 1000,
   });
 }
+
 
 /**
  * Normalise a national number typed by a user into E.164 for the chosen country.

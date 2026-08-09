@@ -9,6 +9,7 @@
  *    preliminary information instead.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { defaultMarketIso2 } from "@/lib/mkt-markets";
 
 export const GUIDE_PAGE_SIZE = 24;
 
@@ -17,6 +18,7 @@ const FORBIDDEN_TERMS = ["الأسد", "الاسد", "assad"];
 
 export interface GuidePlace {
   id: string;
+  country_iso2?: string;
   slug: string;
   name_ar: string;
   name_en: string | null;
@@ -67,7 +69,7 @@ export const EMPTY_GUIDE_FILTERS: GuideFilters = {
 
 
 const SELECT_COLUMNS =
-  "id,slug,name_ar,name_en,sector,category,subcategory,governorate,city,district,address,address_status,latitude,longitude,map_url,map_url_status,phone,phone_status,whatsapp,whatsapp_status,whatsapp_link,email,website,opening_hours,stars,source_label,source_type,source_date,verification_status,completeness,notes";
+  "id,country_iso2,slug,name_ar,name_en,sector,category,subcategory,governorate,city,district,address,address_status,latitude,longitude,map_url,map_url_status,phone,phone_status,whatsapp,whatsapp_status,whatsapp_link,email,website,opening_hours,stars,source_label,source_type,source_date,verification_status,completeness,notes";
 
 /** True when the record must never be displayed. */
 export function isForbiddenPlace(place: Partial<GuidePlace>): boolean {
@@ -101,10 +103,12 @@ export async function fetchGuidePlaces(
   filters: GuideFilters,
   page: number,
 ): Promise<GuidePlacesPage> {
+  // نطاق الدولة من إعداد «الدول المفعّلة»، لا من قيمة ثابتة في الكود.
   let request = supabase
     .from("mkt_guide_places")
     .select(SELECT_COLUMNS, { count: "exact" })
-    .eq("is_published", true);
+    .eq("is_published", true)
+    .eq("country_iso2", await defaultMarketIso2());
 
   const term = safePattern(filters.query);
   if (term.length > 0) {
@@ -175,11 +179,13 @@ export interface GuideFacets {
  */
 export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
   const CHUNK = 1000;
+  const iso2 = await defaultMarketIso2();
   const readChunk = async (from: number) => {
     const { data, error, count } = await supabase
       .from("mkt_guide_places")
       .select("sector,governorate,category,subcategory", { count: "exact" })
       .eq("is_published", true)
+      .eq("country_iso2", iso2)
       .order("id", { ascending: true })
       .range(from, from + CHUNK - 1);
 
@@ -289,7 +295,7 @@ export function directionsHref(place: GuidePlace): string | null {
   if (place.latitude !== null && place.longitude !== null) {
     return `https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}`;
   }
-  const query = [place.name_ar, place.district, place.city, place.governorate, "سوريا"]
+  const query = [place.name_ar, place.district, place.city, place.governorate, place.country_iso2 === "LB" ? "لبنان" : "سوريا"]
     .filter(Boolean)
     .join(" ");
   return query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}` : null;

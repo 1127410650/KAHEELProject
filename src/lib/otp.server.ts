@@ -18,6 +18,7 @@ import { createHash, randomInt, timingSafeEqual } from "crypto";
 import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
+import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
 
 /** Code lifetime and attempt budget. */
 export const OTP_TTL_MINUTES = 5;
@@ -246,7 +247,7 @@ export async function verifyOtpImpl(
       user_metadata: {
         full_name: (fullName ?? "").trim() || phone,
         phone,
-        market_country_iso2: "SY",
+        market_country_iso2: await resolveMarketIso2ByPhone(phone),
       },
     });
     if (signUp.error || !signUp.data.user) return { ok: false, error: "SIGN_IN_FAILED" };

@@ -12,7 +12,8 @@ import {
   type MktUserProfile,
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
-import { ACTIVE_MARKET_ISO2, loadCountryIdByIso2 } from "@/lib/mkt-geo";
+import { loadCountryIdByIso2 } from "@/lib/mkt-geo";
+import { isEnabledMarket } from "@/lib/mkt-markets";
 
 
 
@@ -168,7 +169,7 @@ async function queryListings(
   if (filters.countryIso2) {
     const resolvedCountryId = await loadCountryIdByIso2(
       filters.countryIso2,
-      filters.countryIso2.toUpperCase() === ACTIVE_MARKET_ISO2,
+      await isEnabledMarket(filters.countryIso2),
     );
     if (!resolvedCountryId) return { rows: [], fetched: 0 };
     countryId = resolvedCountryId;
@@ -303,7 +304,7 @@ export async function loadBusinessesPage(
   if (filters.countryIso2) {
     const resolvedCountryId = await loadCountryIdByIso2(
       filters.countryIso2,
-      filters.countryIso2.toUpperCase() === ACTIVE_MARKET_ISO2,
+      await isEnabledMarket(filters.countryIso2),
     );
     if (!resolvedCountryId) return { rows: [], logos: {}, fetched: 0 };
     countryId = resolvedCountryId;

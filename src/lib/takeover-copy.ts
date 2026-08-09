@@ -55,7 +55,7 @@ const AR_POOL: PopupCopy[] = [
   { title: "سكّر، سكّر… ما في زعل 😌", subtitle: "بس بكرا لا تقول ما حدا خبّرني", mascot: "boss" },
   { title: "راجع؟ عرفت إنك بترجع 😄", subtitle: "العرض لسا هون، ما راح لحدا", mascot: "boss" },
   { title: "لا تقلي ما شفت! 🙈", subtitle: "خلص صار عندك علم… والقرار إلك", mascot: "boss" },
-  { title: "صراحة؟ العرض هيدا حلو 🔥", subtitle: "وإذا ما عجبك، سكّر ونحنا مو زعلانين", mascot: "boss" },
+  { title: "صراحة؟ العرض هاد حلو 🔥", subtitle: "وإذا ما عجبك، سكّر ونحنا مو زعلانين", mascot: "boss" },
   // كَحيلان يوصل العرض بنفسه — مشهد الطرد
   { title: "أوف… وصلتك بخير! 📦", subtitle: "امسك العرض يا كابتن، في ناس رح تسرقه منك 😄", mascot: "parcel" },
   { title: "طلعت من الصندوق مشانك بس! 🙋‍♂️", subtitle: "وإذا ما مسكت العرض، بس بس… بس بس", mascot: "parcel" },
@@ -292,7 +292,7 @@ export function rapidTapCopyAt(ar: boolean, index: number): PopupCopy {
  * ينتهي ضمنًا أو صراحة بأن الفضل «بواسطتي» (نفس قاعدة كَحيلان في كل المنصة).
  */
 const AR_ENTRANCE: PopupCopy[] = [
-  { title: "تغطّوا يا حريم… كَحيلان داخل! 😎", subtitle: "وصل الزعيم، ومن هلق كل شي بواسطتي", mascot: "boss" },
+  { title: "تغطّوا يا حريم… كَحيلان داخل! 😎", subtitle: "وصل الزعيم، ومن هلأ كل شي بواسطتي", mascot: "boss" },
   { title: "وصل الزعيم 🧣", subtitle: "بدّك زبّطك بواسطتي؟", mascot: "mustache" },
   { title: "افسحوا الطريق 👑", subtitle: "كَحيلان بيزبّط كل شي… بواسطتي طبعًا", mascot: "boss" },
   { title: "أنا وصلت 😏", subtitle: "وأي شي بدّك ياه، بواسطتي", mascot: "mustache" },

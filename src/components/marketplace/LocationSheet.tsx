@@ -76,7 +76,8 @@ export function LocationSheet({
   }
 
   async function chooseCity(cityId: string) {
-    await setPreference({ countryIso2: "SY", cityId });
+    // الدولة من التفضيل/الإعداد، لا قيمة ثابتة.
+    await setPreference({ countryIso2: preference.countryIso2, cityId });
     await queryClient.invalidateQueries({ queryKey: ["mkt"] });
     toast.success(ar ? "تم تحديث منطقتك." : "Your area was updated.");
   }

@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import {
-  ACTIVE_MARKET_ISO2,
   loadCountries,
   loadMyContact,
   nationalPart,
@@ -16,6 +15,7 @@ import {
   toE164,
   type PhoneVisibility,
 } from "@/lib/mkt-geo";
+import { useAccountCountry } from "@/lib/mkt-geo";
 import { PhoneField, PhoneVisibilityField } from "@/components/marketplace/PhoneFields";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
@@ -54,7 +54,8 @@ function MarketSetupPage() {
   const [phoneInvalid, setPhoneInvalid] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const countries = useQuery({ queryKey: ["mkt", "countries", ACTIVE_MARKET_ISO2], queryFn: loadCountries });
+  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  const accountCountry = useAccountCountry();
 
   const existing = useQuery({
     queryKey: ["mkt", "setup-existing", session?.user.id],
@@ -71,9 +72,11 @@ function MarketSetupPage() {
   });
 
   useEffect(() => {
-    const syria = (countries.data ?? []).find((country) => country.iso2 === ACTIVE_MARKET_ISO2);
-    setCountryId(syria?.id ?? null);
-  }, [countries.data]);
+    // الدولة تُقرأ من إعداد «الدول المفعّلة»، لا من قيمة ثابتة في الكود.
+    const active =
+      accountCountry.data ?? (countries.data ?? [])[0] ?? null;
+    setCountryId(active?.id ?? null);
+  }, [countries.data, accountCountry.data]);
 
   useEffect(() => {
     const row = existing.data;
@@ -90,7 +93,9 @@ function MarketSetupPage() {
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!session || !countryId) return;
-    const e164 = toE164(ACTIVE_MARKET_ISO2, phone);
+    const activeIso2 =
+      accountCountry.data?.iso2 ?? (countries.data ?? [])[0]?.iso2 ?? "SY";
+    const e164 = toE164(activeIso2, phone);
     if (!e164) {
       setPhoneInvalid(true);
       return;

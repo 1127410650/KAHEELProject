@@ -6,7 +6,8 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
-import { geoName, loadCountries } from "@/lib/mkt-geo";
+import { geoName, loadAllCountries } from "@/lib/mkt-geo";
+import { MarketCountriesCard } from "@/components/marketplace/campaign/MarketCountriesCard";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,7 +43,8 @@ function AdminGeoPage() {
   const [nameEn, setNameEn] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const countries = useQuery({ queryKey: ["mkt", "countries"], queryFn: loadCountries });
+  // الإدارة تحتاج كل الدول (بما فيها المعطّلة الجاهزة للتفعيل).
+  const countries = useQuery({ queryKey: ["mkt", "admin-countries"], queryFn: loadAllCountries });
 
   // Admin view: inactive cities must stay visible so they can be re-enabled.
   const cities = useQuery({
@@ -133,6 +135,8 @@ function AdminGeoPage() {
   return (
     <AdminShell title={t("market.admin.geo")}>
       <div className="space-y-5">
+        <MarketCountriesCard />
+
         <section className="rounded-xl border border-border bg-card p-3">
           <Label htmlFor="admin-country">{t("market.geo.country")}</Label>
           <select

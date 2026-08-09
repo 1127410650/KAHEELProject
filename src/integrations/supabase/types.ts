@@ -2121,9 +2121,12 @@ export type Database = {
           currency_code: string
           id: string
           is_active: boolean
+          is_default_market: boolean
+          is_market_enabled: boolean
           iso2: string
           name_ar: string
           name_en: string
+          phone_only_otp: boolean
           sort_order: number
         }
         Insert: {
@@ -2132,9 +2135,12 @@ export type Database = {
           currency_code: string
           id?: string
           is_active?: boolean
+          is_default_market?: boolean
+          is_market_enabled?: boolean
           iso2: string
           name_ar: string
           name_en: string
+          phone_only_otp?: boolean
           sort_order?: number
         }
         Update: {
@@ -2143,9 +2149,12 @@ export type Database = {
           currency_code?: string
           id?: string
           is_active?: boolean
+          is_default_market?: boolean
+          is_market_enabled?: boolean
           iso2?: string
           name_ar?: string
           name_en?: string
+          phone_only_otp?: boolean
           sort_order?: number
         }
         Relationships: []
@@ -3103,6 +3112,7 @@ export type Database = {
           category: string | null
           city: string | null
           completeness: number | null
+          country_iso2: string
           created_at: string
           district: string | null
           email: string | null
@@ -3149,6 +3159,7 @@ export type Database = {
           category?: string | null
           city?: string | null
           completeness?: number | null
+          country_iso2?: string
           created_at?: string
           district?: string | null
           email?: string | null
@@ -3195,6 +3206,7 @@ export type Database = {
           category?: string | null
           city?: string | null
           completeness?: number | null
+          country_iso2?: string
           created_at?: string
           district?: string | null
           email?: string | null
