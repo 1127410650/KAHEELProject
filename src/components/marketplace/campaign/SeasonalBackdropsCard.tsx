@@ -278,6 +278,48 @@ export function SeasonalBackdropsCard() {
               onChange={(event) => setEndsAt(event.target.value)}
             />
           </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-headline-ar">
+              {ar ? "النص البارز (عربي)" : "Headline (Arabic)"}
+            </Label>
+            <Input
+              id="season-headline-ar"
+              value={headlineAr}
+              onChange={(event) => setHeadlineAr(event.target.value)}
+              placeholder="جيناكم سوريا 🇸🇾"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-headline-en">
+              {ar ? "النص البارز (إنجليزي)" : "Headline (English)"}
+            </Label>
+            <Input
+              id="season-headline-en"
+              value={headlineEn}
+              onChange={(event) => setHeadlineEn(event.target.value)}
+              placeholder="Hello Syria 🇸🇾"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-sub-ar">{ar ? "السطر الفرعي (عربي)" : "Subtitle (Arabic)"}</Label>
+            <Input
+              id="season-sub-ar"
+              value={subAr}
+              onChange={(event) => setSubAr(event.target.value)}
+              placeholder="سوقك الأول… من أرضك ولأهلك"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="season-sub-en">
+              {ar ? "السطر الفرعي (إنجليزي)" : "Subtitle (English)"}
+            </Label>
+            <Input
+              id="season-sub-en"
+              value={subEn}
+              onChange={(event) => setSubEn(event.target.value)}
+            />
+          </div>
+
         </div>
 
         <div className="space-y-2">
