@@ -3770,7 +3770,8 @@
       "guideQueue": "Guide queue",
       "adCredit": "Ad credit",
       "campaigns": "Animated campaigns",
-      "mascots": "Mascot preview"
+      "mascots": "Mascot preview",
+      "errands": "Errands service"
     },
     "alerts": {
       "title": "Alerts",

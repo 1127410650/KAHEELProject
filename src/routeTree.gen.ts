@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
 import { Route as DemoRouteImport } from './routes/demo'
+import { Route as ErrandsRouteImport } from './routes/errands'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoRouteImport } from './routes/go'
 import { Route as HelpRouteImport } from './routes/help'
@@ -35,6 +36,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
@@ -63,6 +65,7 @@ import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
+import { Route as MyCaptainRouteImport } from './routes/my/captain'
 import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
 import { Route as MyMessagesRouteImport } from './routes/my/messages'
 import { Route as MyNotificationsRouteImport } from './routes/my/notifications'
@@ -91,6 +94,8 @@ import { Route as BusinessStoreOffersRouteImport } from './routes/business/store
 import { Route as GuidesSyriaSlugRouteImport } from './routes/guides/syria_.$slug'
 import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
+import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
+import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
@@ -135,6 +140,11 @@ const ChooseAccountRoute = ChooseAccountRouteImport.update({
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrandsRoute = ErrandsRouteImport.update({
+  id: '/errands',
+  path: '/errands',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -225,6 +235,11 @@ const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminErrandsRoute = AdminErrandsRouteImport.update({
+  id: '/errands',
+  path: '/errands',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
@@ -365,6 +380,11 @@ const MyAdCreditRoute = MyAdCreditRouteImport.update({
 const MyBookingsRoute = MyBookingsRouteImport.update({
   id: '/bookings',
   path: '/bookings',
+  getParentRoute: () => MyRouteRoute,
+} as any)
+const MyCaptainRoute = MyCaptainRouteImport.update({
+  id: '/captain',
+  path: '/captain',
   getParentRoute: () => MyRouteRoute,
 } as any)
 const MyFavoritesRoute = MyFavoritesRouteImport.update({
@@ -509,6 +529,16 @@ const MyAdsNewRoute = MyAdsNewRouteImport.update({
   path: '/ads/new',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const MyErrandsIndexRoute = MyErrandsIndexRouteImport.update({
+  id: '/errands/',
+  path: '/errands/',
+  getParentRoute: () => MyRouteRoute,
+} as any)
+const MyErrandsIdRoute = MyErrandsIdRouteImport.update({
+  id: '/errands/$id',
+  path: '/errands/$id',
+  getParentRoute: () => MyRouteRoute,
+} as any)
 const MyReportsIndexRoute = MyReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
@@ -546,6 +576,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
+  '/errands': typeof ErrandsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
@@ -562,6 +593,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -589,6 +621,7 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
+  '/my/captain': typeof MyCaptainRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
@@ -615,11 +648,13 @@ export interface FileRoutesByFullPath {
   '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
+  '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
+  '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -633,6 +668,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
+  '/errands': typeof ErrandsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
@@ -648,6 +684,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -675,6 +712,7 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
+  '/my/captain': typeof MyCaptainRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
@@ -701,11 +739,13 @@ export interface FileRoutesByTo {
   '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
+  '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/business/services': typeof BusinessServicesIndexRoute
   '/business/store': typeof BusinessStoreIndexRoute
   '/my/ads': typeof MyAdsIndexRoute
+  '/my/errands': typeof MyErrandsIndexRoute
   '/my/reports': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -722,6 +762,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
+  '/errands': typeof ErrandsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/go': typeof GoRoute
   '/help': typeof HelpRoute
@@ -738,6 +779,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -765,6 +807,7 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
+  '/my/captain': typeof MyCaptainRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
@@ -791,11 +834,13 @@ export interface FileRoutesById {
   '/business/store/offers': typeof BusinessStoreOffersRoute
   '/guides/syria_/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
+  '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
+  '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -813,6 +858,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
+    | '/errands'
     | '/forgot-password'
     | '/go'
     | '/help'
@@ -829,6 +875,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/errands'
     | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -856,6 +903,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/ad-credit'
     | '/my/bookings'
+    | '/my/captain'
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
@@ -882,11 +930,13 @@ export interface FileRouteTypes {
     | '/business/store/offers'
     | '/guides/syria/$slug'
     | '/my/ads/new'
+    | '/my/errands/$id'
     | '/my/reports/$id'
     | '/admin/reports/'
     | '/business/services/'
     | '/business/store/'
     | '/my/ads/'
+    | '/my/errands/'
     | '/my/reports/'
     | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
@@ -900,6 +950,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
+    | '/errands'
     | '/forgot-password'
     | '/go'
     | '/help'
@@ -915,6 +966,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/errands'
     | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -942,6 +994,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/ad-credit'
     | '/my/bookings'
+    | '/my/captain'
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
@@ -968,11 +1021,13 @@ export interface FileRouteTypes {
     | '/business/store/offers'
     | '/guides/syria/$slug'
     | '/my/ads/new'
+    | '/my/errands/$id'
     | '/my/reports/$id'
     | '/admin/reports'
     | '/business/services'
     | '/business/store'
     | '/my/ads'
+    | '/my/errands'
     | '/my/reports'
     | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
@@ -988,6 +1043,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/choose-account'
     | '/demo'
+    | '/errands'
     | '/forgot-password'
     | '/go'
     | '/help'
@@ -1004,6 +1060,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/errands'
     | '/admin/guide-queue'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1031,6 +1088,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/ad-credit'
     | '/my/bookings'
+    | '/my/captain'
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
@@ -1057,11 +1115,13 @@ export interface FileRouteTypes {
     | '/business/store/offers'
     | '/guides/syria_/$slug'
     | '/my/ads/new'
+    | '/my/errands/$id'
     | '/my/reports/$id'
     | '/admin/reports/'
     | '/business/services/'
     | '/business/store/'
     | '/my/ads/'
+    | '/my/errands/'
     | '/my/reports/'
     | '/api/public/ad-credit/gateway-webhook'
     | '/my/ads/$id/edit'
@@ -1078,6 +1138,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
+  ErrandsRoute: typeof ErrandsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoRoute: typeof GoRoute
   HelpRoute: typeof HelpRoute
@@ -1158,6 +1219,13 @@ declare module '@tanstack/react-router' {
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/errands': {
+      id: '/errands'
+      path: '/errands'
+      fullPath: '/errands'
+      preLoaderRoute: typeof ErrandsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -1284,6 +1352,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/errands': {
+      id: '/admin/errands'
+      path: '/errands'
+      fullPath: '/admin/errands'
+      preLoaderRoute: typeof AdminErrandsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/guide-queue': {
@@ -1482,6 +1557,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyBookingsRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/my/captain': {
+      id: '/my/captain'
+      path: '/captain'
+      fullPath: '/my/captain'
+      preLoaderRoute: typeof MyCaptainRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/favorites': {
       id: '/my/favorites'
       path: '/favorites'
@@ -1678,6 +1760,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyAdsNewRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/my/errands/': {
+      id: '/my/errands/'
+      path: '/errands'
+      fullPath: '/my/errands/'
+      preLoaderRoute: typeof MyErrandsIndexRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
+    '/my/errands/$id': {
+      id: '/my/errands/$id'
+      path: '/errands/$id'
+      fullPath: '/my/errands/$id'
+      preLoaderRoute: typeof MyErrandsIdRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/reports/': {
       id: '/my/reports/'
       path: '/reports'
@@ -1723,6 +1819,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminErrandsRoute: typeof AdminErrandsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -1756,6 +1853,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminErrandsRoute: AdminErrandsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
@@ -1819,6 +1917,7 @@ const BusinessRouteRouteWithChildren = BusinessRouteRoute._addFileChildren(
 interface MyRouteRouteChildren {
   MyAdCreditRoute: typeof MyAdCreditRoute
   MyBookingsRoute: typeof MyBookingsRoute
+  MyCaptainRoute: typeof MyCaptainRoute
   MyFavoritesRoute: typeof MyFavoritesRoute
   MyMessagesRoute: typeof MyMessagesRoute
   MyNotificationsRoute: typeof MyNotificationsRoute
@@ -1827,8 +1926,10 @@ interface MyRouteRouteChildren {
   MyViolationsRoute: typeof MyViolationsRoute
   MyWalletRoute: typeof MyWalletRoute
   MyAdsNewRoute: typeof MyAdsNewRoute
+  MyErrandsIdRoute: typeof MyErrandsIdRoute
   MyReportsIdRoute: typeof MyReportsIdRoute
   MyAdsIndexRoute: typeof MyAdsIndexRoute
+  MyErrandsIndexRoute: typeof MyErrandsIndexRoute
   MyReportsIndexRoute: typeof MyReportsIndexRoute
   MyAdsIdEditRoute: typeof MyAdsIdEditRoute
 }
@@ -1836,6 +1937,7 @@ interface MyRouteRouteChildren {
 const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyAdCreditRoute: MyAdCreditRoute,
   MyBookingsRoute: MyBookingsRoute,
+  MyCaptainRoute: MyCaptainRoute,
   MyFavoritesRoute: MyFavoritesRoute,
   MyMessagesRoute: MyMessagesRoute,
   MyNotificationsRoute: MyNotificationsRoute,
@@ -1844,8 +1946,10 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyViolationsRoute: MyViolationsRoute,
   MyWalletRoute: MyWalletRoute,
   MyAdsNewRoute: MyAdsNewRoute,
+  MyErrandsIdRoute: MyErrandsIdRoute,
   MyReportsIdRoute: MyReportsIdRoute,
   MyAdsIndexRoute: MyAdsIndexRoute,
+  MyErrandsIndexRoute: MyErrandsIndexRoute,
   MyReportsIndexRoute: MyReportsIndexRoute,
   MyAdsIdEditRoute: MyAdsIdEditRoute,
 }
@@ -1877,6 +1981,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
+  ErrandsRoute: ErrandsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GoRoute: GoRoute,
   HelpRoute: HelpRoute,
