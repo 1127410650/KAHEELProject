@@ -53,7 +53,11 @@ export function PopupPacingCard() {
           roam_first_delay_ms: values.roamFirstDelayMs,
           roam_interval_ms: values.roamIntervalMs,
           roam_duration_ms: values.roamDurationMs,
+          mascot_min_gap_ms: values.mascotMinGapMs,
+          mascot_max_per_session: values.mascotMaxPerSession,
+          mascot_quiet_after_close_ms: values.mascotQuietAfterCloseMs,
           enabled: values.enabled,
+
         },
         ar ? "تعديل إيقاع البطاقات الترويجية" : "Promo popup pacing update",
       );
