@@ -42,6 +42,11 @@ export function PopupPacingCard() {
           max_per_session: values.maxPerSession,
           auto_dismiss_ms: values.autoDismissMs,
           page_settle_ms: values.pageSettleMs,
+          drop_cooldown_ms: values.dropCooldownMs,
+          drop_visible_ms: values.dropVisibleMs,
+          rapid_taps: values.rapidTaps,
+          rapid_window_ms: values.rapidWindowMs,
+          entrance_ms: values.entranceMs,
           enabled: values.enabled,
         },
         ar ? "تعديل إيقاع البطاقات الترويجية" : "Promo popup pacing update",
@@ -54,6 +59,27 @@ export function PopupPacingCard() {
     }
   }
 
+  /** حقل رقمي واحد — كل توقيتات المشاهد قابلة للضبط من هنا. */
+  const field = (
+    key: "dropCooldownMs" | "dropVisibleMs" | "rapidTaps" | "rapidWindowMs" | "entranceMs",
+    labelAr: string,
+    labelEn: string,
+    hintAr: string,
+  ) => (
+    <label key={key} className="space-y-1 text-xs">
+      <span className="font-bold">{ar ? labelAr : labelEn}</span>
+      <Input
+        type="number"
+        inputMode="numeric"
+        value={values[key]}
+        onChange={(event) =>
+          setValues((prev) => ({ ...prev, [key]: Number(event.target.value) || 0 }))
+        }
+      />
+      <span className="block text-[11px] text-muted-foreground">{hintAr}</span>
+    </label>
+  );
+
   return (
     <Card>
       <CardContent className="space-y-4 p-4">
@@ -65,9 +91,37 @@ export function PopupPacingCard() {
         </div>
         <p className="text-xs text-muted-foreground">
           {ar
-            ? "الشخصية لا تظهر من تلقاء نفسها: تسقط لمنتصف الشاشة عند لمس الزائر لرابط أو زر، ثم تختفي بهدوء بلا تعطيل الوجهة. ولا تظهر أثناء الكتابة أو المحادثة أو المكالمة أو الدفع."
-            : "The mascot never self-appears: it drops to the centre when the visitor taps a link or button, then fades out without ever blocking the destination. Never during typing, chat, a call or checkout."}
+            ? "الشخصية لا تظهر من تلقاء نفسها: يسقط «الزعيم كَحيلان» لمنتصف الشاشة عند لمس الزائر لرابط أو زر، ثم يختفي بهدوء بلا تعطيل الوجهة. ولا تظهر أثناء الكتابة أو المحادثة أو المكالمة أو الدفع. وفي قسم «الناس» يدخل من الجانب بمشهد تعريف قصير."
+            : "The mascot never self-appears: Boss Kaheelan drops to the centre when the visitor taps a link or button, then fades out without ever blocking the destination. Never during typing, chat, a call or checkout. In the People section he enters from the side with a short intro scene."}
         </p>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {field(
+            "dropCooldownMs",
+            "فاصل بين سقوطين (مللي ثانية)",
+            "Gap between drops (ms)",
+            "٢٠٠٠ – ٣٠٠٠٠٠",
+          )}
+          {field(
+            "dropVisibleMs",
+            "بقاء بطاقة السقوط (مللي ثانية)",
+            "Drop card lifetime (ms)",
+            "١١٠٠ – ١٥٠٠٠ (حركة السقوط نفسها ١٠٥٠)",
+          )}
+          {field("rapidTaps", "ضغطات مزحة الكبس", "Rapid-tap joke threshold", "٣ – ١٥ ضغطة")}
+          {field(
+            "rapidWindowMs",
+            "نافذة الكبس (مللي ثانية)",
+            "Rapid-tap window (ms)",
+            "١٠٠٠ – ١٥٠٠٠",
+          )}
+          {field(
+            "entranceMs",
+            "مشهد دخول قسم الناس (مللي ثانية)",
+            "People entrance scene (ms)",
+            "٢٠٠٠ – ٢٠٠٠٠",
+          )}
+        </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <Button
@@ -93,3 +147,4 @@ export function PopupPacingCard() {
     </Card>
   );
 }
+
