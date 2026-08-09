@@ -665,6 +665,22 @@ body:has(.market-surface) .shadow-raised {
     linear-gradient(180deg, #ffffff 0%, var(--background) 38%, #ffffff 100%);
 }
 
+/* خلفية اليوم: الطبقة تجلس خلف كل شيء، فيصبح سطح المحتوى شفافًا حتى تُرى.
+ * البطاقات والرؤوس تبقى بخلفياتها كما هي، فالنصوص لا تفقد تباينها. */
+.market-shell.k-has-backdrop {
+  background-color: transparent;
+}
+
+.market-shell.k-has-backdrop > main {
+  background: transparent;
+}
+
+/* أسطح الصفحات البيضاء تُرفع فقط حين توجد خلفية، فتبقى البطاقات مقروءة. */
+.market-shell.k-has-backdrop .k-page-surface {
+  background-color: transparent;
+}
+
+
 .market-surface ::selection {
   background: rgb(199 125 255 / 0.32);
   color: #240046;

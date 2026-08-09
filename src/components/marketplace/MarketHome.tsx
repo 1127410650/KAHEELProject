@@ -162,7 +162,8 @@ export function MarketHome() {
   };
 
   return (
-    <div className="bg-white pb-5 text-[#240046]">
+    /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
+    <div className="k-page-surface bg-white pb-5 text-[#240046]">
       <div className="mx-auto w-full max-w-[1240px] space-y-4 px-3 pb-3 pt-3 sm:space-y-6 sm:px-5 lg:px-8">
         <HomeSearchBar
           label={t("market.homeV2.searchPlaceholder" as HomeKey)}
