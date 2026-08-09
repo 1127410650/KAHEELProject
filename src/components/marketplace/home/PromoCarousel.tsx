@@ -217,16 +217,16 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
                 aria-hidden
               />
             )}
-            <div className="relative z-10 mx-auto flex min-h-[166px] w-[62%] max-w-[520px] flex-col items-center justify-center px-2 py-3 text-center sm:min-h-[226px] sm:w-[48%] sm:px-4">
+            <div className="relative z-10 mx-auto flex min-h-[166px] w-[74%] max-w-[520px] flex-col items-center justify-center px-2 py-3 text-center sm:min-h-[226px] sm:w-[48%] sm:px-4">
               <span className="rounded-full bg-[#240046] px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
                 {ar ? slide.badgeAr : slide.badgeEn}
               </span>
               {slideIndex === 0 ? (
-                <h1 className="mt-1.5 text-[17px] font-black leading-tight text-[#240046] min-[380px]:text-[20px] sm:mt-2 sm:text-[32px]">
+                <h1 className="mt-1.5 line-clamp-2 text-[17px] font-black leading-tight text-[#240046] min-[380px]:text-[20px] sm:mt-2 sm:text-[32px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </h1>
               ) : (
-                <p className="mt-1.5 text-[17px] font-black leading-tight text-[#240046] min-[380px]:text-[20px] sm:mt-2 sm:text-[32px]">
+                <p className="mt-1.5 line-clamp-2 text-[17px] font-black leading-tight text-[#240046] min-[380px]:text-[20px] sm:mt-2 sm:text-[32px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </p>
               )}
