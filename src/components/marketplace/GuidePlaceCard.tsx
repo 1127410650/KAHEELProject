@@ -5,10 +5,12 @@ import {
   directionsHref,
   isOpenStreetMap,
   isVerified,
+  sourceLabel,
   websiteHref,
   whatsappHref,
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
+
 
 /** No source imagery is rendered anywhere — rights are unverified by design. */
 export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
