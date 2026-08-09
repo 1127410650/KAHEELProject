@@ -59,19 +59,30 @@ function SyriaGuidePage() {
 
   useEffect(() => {
     setPage(0);
-  }, [debouncedQuery, filters.sector, filters.governorate, filters.category]);
+  }, [
+    debouncedQuery,
+    filters.sector,
+    filters.governorate,
+    filters.category,
+    filters.subcategory,
+  ]);
 
-  const facets = useQuery({
-    queryKey: ["guide-facets"],
-    queryFn: fetchGuideFacets,
+  const facetRows = useQuery({
+    queryKey: ["guide-facet-rows"],
+    queryFn: fetchGuideFacetRows,
     staleTime: Infinity,
     gcTime: Infinity,
   });
+  const facets = useMemo(
+    () => buildGuideFacets(facetRows.data ?? [], filters),
+    [facetRows.data, filters],
+  );
   const places = useQuery({
     queryKey: ["guide-places", effective, page],
     queryFn: () => fetchGuidePlaces(effective, page),
     placeholderData: keepPreviousData,
   });
+
 
   const total = places.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / GUIDE_PAGE_SIZE));
