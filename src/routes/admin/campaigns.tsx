@@ -52,7 +52,7 @@ export const Route = createFileRoute("/admin/campaigns")({
   component: AdminCampaignsPage,
 });
 
-const PLACEMENTS: CampaignPlacement[] = ["home_banner", "welcome_takeover"];
+const PLACEMENTS: CampaignPlacement[] = ["home_banner", "home_strip", "welcome_takeover"];
 const STATUSES: CampaignStatus[] = ["draft", "active", "paused", "ended"];
 
 function AdminCampaignsPage() {
@@ -191,9 +191,13 @@ function AdminCampaignsPage() {
                         ? ar
                           ? "بانر الرئيسية"
                           : "Home banner"
-                        : ar
-                          ? "نافذة ترحيب"
-                          : "Welcome takeover"}
+                        : item === "home_strip"
+                          ? ar
+                            ? "شريط الرئيسية"
+                            : "Home strip"
+                          : ar
+                            ? "نافذة ترحيب"
+                            : "Welcome takeover"}
                     </Button>
                   ))}
                 </div>
