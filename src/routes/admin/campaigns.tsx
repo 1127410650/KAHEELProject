@@ -12,6 +12,10 @@ import { useMemo, useState } from "react";
 import { Clapperboard, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import {
+  PopupMascot,
+  type MascotKind,
+} from "@/components/marketplace/campaign/PopupMascot";
 import { useI18n } from "@/i18n";
 import { formatDateTime, formatNumber } from "@/lib/format";
 import {
