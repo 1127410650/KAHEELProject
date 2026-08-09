@@ -16,7 +16,7 @@ import { useSession } from "@/lib/session";
 import { formatDateTime, formatMoney } from "@/lib/format";
 import { errandStatusLabel, useMyErrands } from "@/lib/mkt-errands";
 
-export const Route = createFileRoute("/my/errands")({
+export const Route = createFileRoute("/my/errands/")({
   ssr: "data-only",
   head: () => ({
     meta: [
@@ -41,7 +41,7 @@ function MyErrandsPage() {
   const errands = useMyErrands(session?.user.id ?? null);
 
   return (
-    <DashboardShell>
+    <DashboardShell title={ar ? "طلبات جيب لي" : "My errands"}>
       <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
         <div className="mb-3 flex items-center justify-between gap-2">
           <h1 className="text-base font-black text-foreground">
@@ -90,7 +90,7 @@ function MyErrandsPage() {
                   </Badge>
                 </div>
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-                  <span>{formatDateTime(errand.created_at, locale)}</span>
+                  <span>{formatDateTime(errand.created_at)}</span>
                   <span>
                     {ar ? "العروض" : "Offers"}: {errand.offers_count}
                   </span>
