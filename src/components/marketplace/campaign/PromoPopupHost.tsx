@@ -62,6 +62,12 @@ type CardMode = "drop" | "rapid" | "entrance";
  */
 const RESUME_KEY = "kaheel.mascot.resume";
 
+/**
+ * نافذة الاستئناف: تخصّ الانتقال الجاري فقط (٨ ثوانٍ). ليست عمرًا للبطاقة —
+ * البطاقة بعد ظهورها تبقى حتى يضغط المستخدم ×.
+ */
+const RESUME_WINDOW_MS = 8_000;
+
 interface ResumeRecord {
   title: string;
   subtitle: string;
