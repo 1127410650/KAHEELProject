@@ -175,24 +175,28 @@ export interface GuideFacets {
  */
 export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
   const CHUNK = 1000;
-  const rows: GuideFacetRow[] = [];
-
-  for (let from = 0; from < 20000; from += CHUNK) {
-    const { data, error } = await supabase
+  const readChunk = async (from: number) => {
+    const { data, error, count } = await supabase
       .from("mkt_guide_places")
-      .select("sector,governorate,category,subcategory")
+      .select("sector,governorate,category,subcategory", { count: "exact" })
       .eq("is_published", true)
       .order("id", { ascending: true })
       .range(from, from + CHUNK - 1);
 
     if (error) throw error;
-    const chunk = (data ?? []) as GuideFacetRow[];
-    rows.push(...chunk);
-    if (chunk.length < CHUNK) break;
-  }
+    return { rows: (data ?? []) as GuideFacetRow[], count: count ?? 0 };
+  };
 
-  return rows;
+  // First page also reports the exact total, so the rest is fetched in parallel.
+  const first = await readChunk(0);
+  const pages = Math.min(20, Math.ceil(first.count / CHUNK));
+  const rest = await Promise.all(
+    Array.from({ length: Math.max(0, pages - 1) }, (_, index) => readChunk((index + 1) * CHUNK)),
+  );
+
+  return [first.rows, ...rest.map((page) => page.rows)].flat();
 }
+
 
 
 function tally(
