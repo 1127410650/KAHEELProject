@@ -186,6 +186,13 @@ const EN_POOL: PopupCopy[] = [
     subtitle: "I'm Chief Kaheelan, and this is Kaheel… from here on, the offers are on us",
     mascot: "duo",
   },
+
+  // ── Kaheel: very short one-line greetings (≤ 35 chars) for tight spots ───
+  { title: "Hey there, bright eyes 😍", subtitle: "You lit up Kaheel", mascot: "wave" },
+  { title: "Hello… lovely eyes, lovelier offers ✨", subtitle: "Go on, browse", mascot: "wave" },
+  { title: "Welcome, you with the kohl eyes 💜", subtitle: "Glad you're here", mascot: "wave" },
+  { title: "You brightened the place 🌟", subtitle: "At your service", mascot: "wave" },
+  { title: "Hey! Kaheel salutes those eyes 😊", subtitle: "Take your time", mascot: "wave" },
 ];
 
 /**
