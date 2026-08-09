@@ -77,6 +77,8 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
 
 export function GuidePlaceCard({ place }: { place: GuidePlace }) {
   const location = [place.district, place.city, place.governorate].filter(Boolean).join(" · ");
+  const source = sourceLabel(place);
+
 
   return (
     <article className="flex h-full flex-col gap-3 rounded-3xl border border-border/80 bg-card p-4 shadow-[0_1px_0_rgba(16,0,43,0.04)] transition hover:border-market-navy/30 hover:shadow-lg sm:p-5">
