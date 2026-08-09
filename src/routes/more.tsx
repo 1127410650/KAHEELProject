@@ -147,7 +147,7 @@ function MorePage() {
       setSwitching(approvedBusiness.account_key);
       await queryClient.invalidateQueries({ queryKey: ["mkt", "my-accounts"] });
       const ok = await select(approvedBusiness.account_key);
-      if (ok) void navigate({ to: "/dashboard/operations", replace: true });
+      if (ok) void navigate({ to: "/business", replace: true });
       else promotedApplicationRef.current = null;
       setSwitching(null);
     };

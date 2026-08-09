@@ -144,7 +144,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
             </p>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
               <Button asChild size="sm">
-                <Link to="/dashboard/reports">{t("market.reports.viewReports")}</Link>
+                <Link to="/my/reports">{t("market.reports.viewReports")}</Link>
               </Button>
               <Button
                 size="sm"

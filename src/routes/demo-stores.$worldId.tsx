@@ -62,7 +62,7 @@ function DemoStoreWorldPage() {
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <Link
-                to="/dashboard/store/new"
+                to="/business/store/new"
                 search={{ theme: demoWorldThemeId(world.id) }}
                 className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white px-4 text-[11px] font-black text-slate-950 shadow-lg sm:min-h-11 sm:px-5 sm:text-sm"
               >

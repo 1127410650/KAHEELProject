@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const GATEWAYS = [
   {
     key: "syria",
-    to: "/syria-guide",
+    to: "/guides/syria",
     eyebrow: "دليلك داخل سوريا",
     title: "دليل سوريا",
     description: "جامعات ومشافٍ وجهات حكومية ومعالم مهمة في مكان واحد.",
@@ -13,7 +13,7 @@ const GATEWAYS = [
   },
   {
     key: "student",
-    to: "/student-tools",
+    to: "/guides/students",
     eyebrow: "رفيق الطالب السوري",
     title: "دليل الطالب",
     description: "لخّص دروسك وأنشئ أسئلة مراجعة مجانًا وبخطوات بسيطة.",

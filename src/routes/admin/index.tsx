@@ -314,7 +314,7 @@ function AdminHomePage() {
                 label={t("admin.stats.suggestions")}
                 value={data.activity_suggestions}
                 icon={ListChecks}
-                to="/admin/activities"
+                to="/admin/taxonomy"
                 search={{ tab: "suggestions" }}
                 tone="blue"
               />
@@ -393,7 +393,7 @@ function AdminHomePage() {
                 search={{ status: "pending" }}
               />
               <ActionRow
-                to="/admin/activities"
+                to="/admin/taxonomy"
                 label={t("admin.alerts.activitySuggestions")}
                 count={data.activity_suggestions}
                 icon={ListChecks}

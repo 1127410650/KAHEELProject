@@ -173,7 +173,7 @@ function BusinessPage() {
           return;
         }
       }
-      await navigate({ to: "/dashboard/business" });
+      await navigate({ to: "/business/profile" });
     } finally {
       setOpeningDashboard(false);
     }

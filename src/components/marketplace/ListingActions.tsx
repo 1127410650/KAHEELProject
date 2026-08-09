@@ -139,7 +139,7 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
       await sendMessage(conversationId, "text", body);
       toast.success(t("market.actions.messageSent"));
       setDialog(null);
-      void navigate({ to: "/dashboard/messages", search: { c: conversationId } });
+      void navigate({ to: "/my/messages", search: { c: conversationId } });
     } catch (error) {
       toast.error(t(chatErrorKey(error)));
     } finally {

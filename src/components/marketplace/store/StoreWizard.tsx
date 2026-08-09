@@ -366,7 +366,7 @@ export function StoreWizard() {
     await queryClient.invalidateQueries({ queryKey: ["mkt", "my-storefront"] });
     await queryClient.invalidateQueries({ queryKey: ["mkt", "store-draft"] });
     toast.success(t("market.store.submitted"));
-    void navigate({ to: "/dashboard/store" });
+    void navigate({ to: "/business/store" });
   };
 
   const pickImage = async (kind: "logo" | "cover", file: File | null) => {

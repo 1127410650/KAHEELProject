@@ -76,15 +76,29 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/search", "public", "market"),
   rule("/categories/$slug", "public", "market"),
   rule("/ads/$slug", "public", "market"),
-  rule("/u/$username", "public", "market"),
+  rule("/profiles/$username", "public", "market"),
   rule("/businesses/$slug", "public", "market"),
   rule("/stores/$slug", "public", "market"),
   rule("/services", "public", "market"),
   rule("/services/$slug/$itemId/book", "public", "market"),
   rule("/demo", "public", "market"),
   rule("/demo-stores/$worldId", "public", "market"),
-  rule("/syria-guide", "public", "market"),
-  rule("/student-tools", "public", "market"),
+  rule("/guides/syria", "public", "market"),
+  rule("/guides/students", "public", "market"),
+  // Renamed public pages. `/u/x` said nothing about what it shows, and the two
+  // guides sat at the root as if they were sections of the platform. They now
+  // live under self-describing prefixes; the old URLs are indexed, so they keep
+  // working through a permanent redirect that carries the username along.
+  rule("/u/$username", "legacy", "bare", {
+    legacy_redirect: "/profiles/$username",
+    is_public: true,
+  }),
+  rule("/syria-guide", "legacy", "bare", { legacy_redirect: "/guides/syria", is_public: true }),
+  rule("/student-tools", "legacy", "bare", {
+    legacy_redirect: "/guides/students",
+    is_public: true,
+  }),
+
   rule("/auth", "public", "bare"),
   rule("/register", "public", "bare"),
   rule("/forgot-password", "public", "bare"),
@@ -115,46 +129,81 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/privacy", "legacy", "market", { legacy_redirect: "/about#privacy", is_public: true }),
   rule("/contact", "legacy", "market", { legacy_redirect: "/help#contact", is_public: true }),
 
-  rule("/dashboard/profile", "account", "dashboard"),
-  rule("/dashboard/notifications", "account", "dashboard"),
-  rule("/dashboard/messages", "account", "dashboard"),
-  rule("/dashboard/favorites", "account", "dashboard"),
-  rule("/dashboard/bookings", "account", "dashboard"),
-  rule("/dashboard/my-ads", "account", "dashboard"),
-  rule("/dashboard/points", "account", "dashboard"),
-  rule("/dashboard/ads/new", "account", "dashboard"),
-  rule("/dashboard/ads/$id/edit", "account", "dashboard"),
-  rule("/dashboard/requests", "account", "dashboard"),
-  rule("/dashboard/reports", "account", "dashboard"),
-  rule("/dashboard/reports/$id", "account", "dashboard"),
-  rule("/dashboard/violations", "account", "dashboard"),
-  rule("/dashboard/operations", "operational", "dashboard", {
+  rule("/my/profile", "account", "dashboard"),
+  rule("/my/notifications", "account", "dashboard"),
+  rule("/my/messages", "account", "dashboard"),
+  rule("/my/favorites", "account", "dashboard"),
+  rule("/my/bookings", "account", "dashboard"),
+  rule("/my/ads", "account", "dashboard"),
+  rule("/my/wallet", "account", "dashboard"),
+  rule("/my/ads/new", "account", "dashboard"),
+  rule("/my/ads/$id/edit", "account", "dashboard"),
+  rule("/my/quotes", "account", "dashboard"),
+  rule("/my/reports", "account", "dashboard"),
+  rule("/my/reports/$id", "account", "dashboard"),
+  rule("/my/violations", "account", "dashboard"),
+  rule("/business", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/orders", "operational", "dashboard", {
+  rule("/business/orders", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/store", "operational", "dashboard", {
+  rule("/business/store", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/store/new", "operational", "dashboard", {
+  rule("/business/store/new", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/store/catalog", "operational", "dashboard", {
+  rule("/business/store/catalog", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/network", "operational", "dashboard", {
+  rule("/business/partners", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/service", "operational", "dashboard", {
+  rule("/business/services", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/service/settings", "operational", "dashboard", {
+  rule("/business/services/settings", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/business", "account", "dashboard", {
+  rule("/business/profile", "account", "dashboard", {
     allowed_identity_types: ["business"],
   }),
+
+  // The account area used to live under one flat `/dashboard/*` branch, which
+  // said nothing about who a page belongs to and mixed personal screens with
+  // work-account operations. It is now split in two self-describing branches:
+  // `/my/*` (the person) and `/business/*` (the work account). Every old URL
+  // keeps working through a permanent server redirect (`src/server.ts`), so
+  // bookmarks, saved `next=` links and anything already shared stay valid.
+  rule("/dashboard/profile", "legacy", "bare", { legacy_redirect: "/my/profile" }),
+  rule("/dashboard/notifications", "legacy", "bare", {
+    legacy_redirect: "/my/notifications",
+  }),
+  rule("/dashboard/messages", "legacy", "bare", { legacy_redirect: "/my/messages" }),
+  rule("/dashboard/favorites", "legacy", "bare", { legacy_redirect: "/my/favorites" }),
+  rule("/dashboard/bookings", "legacy", "bare", { legacy_redirect: "/my/bookings" }),
+  rule("/dashboard/my-ads", "legacy", "bare", { legacy_redirect: "/my/ads" }),
+  rule("/dashboard/points", "legacy", "bare", { legacy_redirect: "/my/wallet" }),
+  rule("/dashboard/ads/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/dashboard/ads/$id/edit", "legacy", "bare", { legacy_redirect: "/my/ads/$id/edit" }),
+  rule("/dashboard/requests", "legacy", "bare", { legacy_redirect: "/my/quotes" }),
+  rule("/dashboard/reports", "legacy", "bare", { legacy_redirect: "/my/reports" }),
+  rule("/dashboard/reports/$id", "legacy", "bare", { legacy_redirect: "/my/reports/$id" }),
+  rule("/dashboard/violations", "legacy", "bare", { legacy_redirect: "/my/violations" }),
+  rule("/dashboard/operations", "legacy", "bare", { legacy_redirect: "/business" }),
+  rule("/dashboard/orders", "legacy", "bare", { legacy_redirect: "/business/orders" }),
+  rule("/dashboard/store", "legacy", "bare", { legacy_redirect: "/business/store" }),
+  rule("/dashboard/store/new", "legacy", "bare", { legacy_redirect: "/business/store/new" }),
+  rule("/dashboard/store/catalog", "legacy", "bare", {
+    legacy_redirect: "/business/store/catalog",
+  }),
+  rule("/dashboard/network", "legacy", "bare", { legacy_redirect: "/business/partners" }),
+  rule("/dashboard/service", "legacy", "bare", { legacy_redirect: "/business/services" }),
+  rule("/dashboard/service/settings", "legacy", "bare", {
+    legacy_redirect: "/business/services/settings",
+  }),
+  rule("/dashboard/business", "legacy", "bare", { legacy_redirect: "/business/profile" }),
 
   // ── ج. Retired internal operations console ─────────────────────────────────
   // The old internal system (`AppLayout` + `_authenticated/*`: لوحة التحكم /
@@ -164,16 +213,16 @@ export const ROUTE_MAP: RouteRule[] = [
   // sidebar and shell are deleted. Old bookmarks resolve here through the central
   // splat handler, so nothing 404s and no old shell can be reopened.
   // Retired / guessed "add a listing" paths — the only real one is
-  // `/dashboard/ads/new` (see `src/lib/add-listing.ts`).
-  rule("/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/new-listing", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/dashboard/new-listing", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/dashboard/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/market/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
+  // `/my/ads/new` (see `src/lib/add-listing.ts`).
+  rule("/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/new-listing", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/dashboard/new-listing", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/dashboard/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/market/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
   rule("/select-account", "legacy", "bare", { legacy_redirect: "/choose-account" }),
-  rule("/settings", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
+  rule("/settings", "legacy", "bare", { legacy_redirect: "/my/profile" }),
   rule("/onboarding", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/notifications", "legacy", "bare", { legacy_redirect: "/dashboard/notifications" }),
+  rule("/notifications", "legacy", "bare", { legacy_redirect: "/my/notifications" }),
   rule("/portal", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/dashboard", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/projects", "legacy", "bare", { legacy_redirect: "/me" }),
@@ -210,12 +259,12 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/listing-events", "admin", "admin"),
   rule("/admin/listing-reports", "admin", "admin"),
   rule("/admin/verifications", "admin", "admin"),
-  rule("/admin/join-applications", "admin", "admin"),
-  rule("/admin/geo", "admin", "admin"),
+  rule("/admin/applications", "admin", "admin"),
+  rule("/admin/locations", "admin", "admin"),
   rule("/admin/reports", "admin", "admin"),
   rule("/admin/reports/$id", "admin", "admin"),
   rule("/admin/stores", "admin", "admin"),
-  rule("/admin/activities", "admin", "admin"),
+  rule("/admin/taxonomy", "admin", "admin"),
   rule("/admin/users", "admin", "admin"),
   rule("/admin/businesses", "admin", "admin"),
   rule("/admin/roles", "admin", "admin"),
@@ -227,15 +276,25 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/dashboard", "admin", "admin"),
   rule("/admin/my-work", "admin", "admin"),
   rule("/admin/search", "admin", "admin"),
-  rule("/admin/content-rules", "admin", "admin"),
-  rule("/admin/attendance", "admin", "admin"),
-  rule("/admin/workforce", "admin", "admin"),
+  rule("/admin/moderation", "admin", "admin"),
+  rule("/admin/staff/attendance", "admin", "admin"),
+  rule("/admin/staff/workload", "admin", "admin"),
   // Detail screens. The route files use the `_` escape (`listings_.$id.tsx`) so
   // they do not nest under the list page; the URL they serve is the plain one.
   rule("/admin/listings/$id", "admin", "admin"),
   rule("/admin/businesses/$id", "admin", "admin"),
   rule("/admin/users/$id", "admin", "admin"),
   rule("/admin/verifications/$id", "admin", "admin"),
+
+  // Renamed console screens. The old names described the table behind the page
+  // ("activities", "geo") or an action ("join-applications"); the new ones say
+  // what the reviewer manages. Redirects keep saved links and open tabs working.
+  rule("/admin/activities", "legacy", "bare", { legacy_redirect: "/admin/taxonomy" }),
+  rule("/admin/geo", "legacy", "bare", { legacy_redirect: "/admin/locations" }),
+  rule("/admin/content-rules", "legacy", "bare", { legacy_redirect: "/admin/moderation" }),
+  rule("/admin/join-applications", "legacy", "bare", { legacy_redirect: "/admin/applications" }),
+  rule("/admin/attendance", "legacy", "bare", { legacy_redirect: "/admin/staff/attendance" }),
+  rule("/admin/workforce", "legacy", "bare", { legacy_redirect: "/admin/staff/workload" }),
 
 
   // ── هـ. Legacy / duplicated ────────────────────────────────────────────────
@@ -253,7 +312,7 @@ export const ROUTE_MAP: RouteRule[] = [
   // The old personal dashboard. `src/routes/me.tsx` still owns the path so the
   // destination can depend on who is asking (admin console / business dashboard /
   // personal dashboard); this entry records the canonical fallback.
-  rule("/me", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
+  rule("/me", "legacy", "bare", { legacy_redirect: "/my/profile" }),
 ];
 
 const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
@@ -264,9 +323,12 @@ const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));
  * route's own guard (login / active account / permission) still runs.
  */
 export function resolveLegacyTarget(pathname: string): string | null {
-  // Pattern-aware: `/projects/17` resolves through its `/projects/$id` rule.
+  // Pattern-aware: `/projects/17` resolves through its `/projects/$id` rule, and
+  // a renamed detail URL keeps its id (`/dashboard/ads/17/edit`).
   const found = routeRuleFor(pathname);
-  return found?.route_type === "legacy" ? (found.legacy_redirect ?? null) : null;
+  if (found?.route_type !== "legacy" || !found.legacy_redirect) return null;
+  const { path } = splitLocalePrefix(pathname.split("?")[0]!.split("#")[0]!);
+  return applyParams(found.legacy_redirect, found.path, path);
 }
 
 /**
@@ -309,6 +371,28 @@ export function normalizePath(pathname: string): string {
 }
 
 /**
+ * Carries the dynamic segments of a concrete path into a redirect target, so a
+ * renamed detail URL keeps its id: `/dashboard/ads/17/edit` with the rule
+ * `/dashboard/ads/$id/edit → /my/ads/$id/edit` resolves to `/my/ads/17/edit`.
+ *
+ * Without this the literal `$id` would be served as a path segment.
+ */
+function applyParams(target: string, rulePath: string, concretePath: string): string {
+  if (!target.includes("$")) return target;
+  const ruleParts = rulePath.split("/");
+  const actualParts = concretePath.replace(/\/+$/, "").split("/");
+  const params = new Map<string, string>();
+  ruleParts.forEach((part, i) => {
+    if (part.startsWith("$") && actualParts[i]) params.set(part, actualParts[i]!);
+  });
+  return target
+    .split("/")
+    .map((part) => (part.startsWith("$") ? (params.get(part) ?? part) : part))
+    .join("/");
+}
+
+
+/**
  * Paths whose destination depends on who is asking (`/me`, `/audit`): a platform
  * admin, a work account and a personal account each land somewhere different.
  * They must NEVER be answered with a cacheable 301 — the browser and any proxy
@@ -328,7 +412,7 @@ export function serverRedirectFor(pathname: string): string | null {
   const found = routeRuleFor(path);
   if (!found || found.route_type !== "legacy" || !found.legacy_redirect) return null;
   if (IDENTITY_DEPENDENT_PATHS.has(found.path)) return null;
-  return withLocalePrefix(found.legacy_redirect, locale);
+  return withLocalePrefix(applyParams(found.legacy_redirect, found.path, path), locale);
 }
 
 
@@ -352,7 +436,7 @@ export function canonicalHref(href: string): string | null {
   ];
   const found = routeRuleFor(pathname);
   if (!found?.legacy_redirect) return null;
-  return `${found.legacy_redirect}${rest}`;
+  return `${applyParams(found.legacy_redirect, found.path, pathname)}${rest}`;
 }
 
 /**
