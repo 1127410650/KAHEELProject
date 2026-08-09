@@ -28,7 +28,7 @@ import { usePlatformIdentity } from "@/lib/mkt-platform";
 export const Route = createFileRoute("/admin/applications")({
   ssr: "data-only",
   head: () => ({
-    meta: [{ title: "طلبات الانضمام — إدارة گحيل" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "طلبات الانضمام — إدارة كَحيل" }, { name: "robots", content: "noindex" }],
   }),
   component: JoinApplicationsAdminPage,
 });

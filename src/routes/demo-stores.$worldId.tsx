@@ -9,7 +9,7 @@ export const Route = createFileRoute("/demo-stores/$worldId")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "عوالم المتاجر التجريبية — گحيل" },
+      { title: "عوالم المتاجر التجريبية — كَحيل" },
       { name: "description", content: "استكشف متاجر تجريبية متعددة بتصاميم وصور حقيقية حسب النشاط." },
       { name: "robots", content: "noindex" },
     ],

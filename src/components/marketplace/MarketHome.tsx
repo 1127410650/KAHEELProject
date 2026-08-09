@@ -439,7 +439,7 @@ function BenefitsStrip() {
   ] as const;
   return (
     <section
-      aria-label={locale === "ar" ? "مزايا گحيل" : "Gohail benefits"}
+      aria-label={locale === "ar" ? "مزايا كَحيل" : "Kaheel benefits"}
       className="grid grid-cols-2 overflow-hidden rounded-[20px] border border-[#c77dff]/35 bg-white shadow-[0_9px_26px_rgb(60_9_108/0.07)] sm:grid-cols-4 sm:rounded-[24px]"
     >
       {benefits.map(([Icon, ar, en], index) => (
@@ -468,7 +468,7 @@ function SecondaryServices() {
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
           <p className="text-[9px] font-black text-[#7b2cbf] sm:text-[10px]">
-            {locale === "ar" ? "قصص گحيل" : "Gohail stories"}
+            {locale === "ar" ? "قصص كَحيل" : "Kaheel stories"}
           </p>
           <h2 className="text-lg font-black text-[#240046] sm:text-xl">
             {t("market.homeV2.secondaryServices" as HomeKey)}

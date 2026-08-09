@@ -26,7 +26,7 @@ export const Route = createFileRoute("/my/bookings")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "حجوزاتي — گحيل" },
+      { title: "حجوزاتي — كَحيل" },
       { name: "description", content: "متابعة مواعيد الخدمات وحالاتها." },
       { name: "robots", content: "noindex" },
     ],

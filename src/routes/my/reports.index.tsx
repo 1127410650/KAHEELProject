@@ -14,12 +14,12 @@ export const Route = createFileRoute("/my/reports/")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "بلاغاتي — گحيل" },
+      { title: "بلاغاتي — كَحيل" },
       {
         name: "description",
-        content: "متابعة البلاغات التي قدّمتها عن الإعلانات في گحيل وحالة معالجتها.",
+        content: "متابعة البلاغات التي قدّمتها عن الإعلانات في كَحيل وحالة معالجتها.",
       },
-      { property: "og:title", content: "بلاغاتي — گحيل" },
+      { property: "og:title", content: "بلاغاتي — كَحيل" },
       { property: "og:description", content: "حالة البلاغات المقدَّمة ونتيجة المراجعة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

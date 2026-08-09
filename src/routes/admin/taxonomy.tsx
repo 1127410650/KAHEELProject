@@ -36,13 +36,13 @@ export const Route = createFileRoute("/admin/taxonomy")({
   }),
   head: () => ({
     meta: [
-      { title: "إدارة الأنشطة — گحيل" },
+      { title: "إدارة الأنشطة — كَحيل" },
       {
         name: "description",
         content: "إدارة قاعدة الأنشطة المرجعية: القطاعات، الأنشطة، الدمج، ومراجعة الاقتراحات.",
       },
-      { property: "og:title", content: "إدارة الأنشطة — گحيل" },
-      { property: "og:description", content: "قاعدة الأنشطة المرجعية في گحيل." },
+      { property: "og:title", content: "إدارة الأنشطة — كَحيل" },
+      { property: "og:description", content: "قاعدة الأنشطة المرجعية في كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

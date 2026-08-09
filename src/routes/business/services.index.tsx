@@ -41,7 +41,7 @@ export const Route = createFileRoute("/business/services/")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "مركز مقدم الخدمة — گحيل" },
+      { title: "مركز مقدم الخدمة — كَحيل" },
       { name: "description", content: "إدارة طلبات الحجز ومواعيد مقدم الخدمة." },
       { name: "robots", content: "noindex" },
     ],

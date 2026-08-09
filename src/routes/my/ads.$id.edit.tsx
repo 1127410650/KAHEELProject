@@ -20,10 +20,10 @@ export const Route = createFileRoute("/my/ads/$id/edit")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "تعديل الإعلان — گحيل" },
+      { title: "تعديل الإعلان — كَحيل" },
       { name: "description", content: "عدّل بيانات إعلانك وصوره وسعره ثم أعد إرساله للمراجعة." },
-      { property: "og:title", content: "تعديل الإعلان — گحيل" },
-      { property: "og:description", content: "تحديث تفاصيل الإعلان في گحيل." },
+      { property: "og:title", content: "تعديل الإعلان — كَحيل" },
+      { property: "og:description", content: "تحديث تفاصيل الإعلان في كَحيل." },
       { name: "robots", content: "noindex" },
     ],
   }),

@@ -26,14 +26,14 @@ export const Route = createFileRoute("/admin/")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "إدارة المنصة — گحيل" },
+      { title: "إدارة المنصة — كَحيل" },
       {
         name: "description",
         content:
           "لوحة مدير النظام: نظرة سريعة على المستخدمين والمتاجر والإعلانات والبلاغات وطلبات التوثيق.",
       },
-      { property: "og:title", content: "إدارة المنصة — گحيل" },
-      { property: "og:description", content: "لوحة مدير النظام في منصة گحيل." },
+      { property: "og:title", content: "إدارة المنصة — كَحيل" },
+      { property: "og:description", content: "لوحة مدير النظام في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

@@ -48,13 +48,13 @@ export const Route = createFileRoute("/admin/listings")({
   }),
   head: () => ({
     meta: [
-      { title: "مراجعة الإعلانات — إدارة گحيل" },
+      { title: "مراجعة الإعلانات — إدارة كَحيل" },
       {
         name: "description",
         content: "مراجعة إعلانات السوق: اعتماد، رفض بسبب، إيقاف، أو إعادة الإعلان لصاحبه للتعديل.",
       },
-      { property: "og:title", content: "مراجعة الإعلانات — إدارة گحيل" },
-      { property: "og:description", content: "لوحة مراجعة إعلانات گحيل." },
+      { property: "og:title", content: "مراجعة الإعلانات — إدارة كَحيل" },
+      { property: "og:description", content: "لوحة مراجعة إعلانات كَحيل." },
       { name: "robots", content: "noindex" },
     ],
   }),

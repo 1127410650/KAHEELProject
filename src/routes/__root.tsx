@@ -27,7 +27,7 @@ import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
  * `RootComponent`, so they sit outside its provider tree. Each therefore has to
  * mount its own `I18nProvider`, otherwise `useI18n` runs with no provider.
  *
- * Colour identity: every public/marketplace route wears the "گحيل" (navy)
+ * Colour identity: every public/marketplace route wears the "كَحيل" (navy)
  * palette, so these standalone screens carry `market-surface` too — otherwise
  * `bg-primary` falls back to the internal system's petrol colour. Admin URLs
  * keep the internal identity untouched, so the scope is decided from the path.
@@ -133,30 +133,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "گحيل — Gohail" },
+      { title: "كَحيل — Kaheel" },
       {
         name: "description",
-        content: "منصة گحيل للسوق والخدمات والحجوزات — Gohail marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
       },
-      { property: "og:title", content: "گحيل — Gohail" },
+      { property: "og:title", content: "كَحيل — Kaheel" },
       {
         property: "og:description",
-        content: "منصة گحيل للسوق والخدمات والحجوزات — Gohail marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
-      { name: "twitter:title", content: "گحيل — Gohail" },
+      { name: "twitter:title", content: "كَحيل — Kaheel" },
       {
         name: "twitter:description",
-        content: "منصة گحيل للسوق والخدمات والحجوزات — Gohail marketplace",
+        content: "منصة كَحيل للسوق والخدمات والحجوزات — Kaheel marketplace",
       },
       { property: "og:image", content: canonicalUrl("/og-gohail.png") },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "گحيل — Gohail" },
+      { property: "og:image:alt", content: "كَحيل — Kaheel" },
       { name: "twitter:image", content: canonicalUrl("/og-gohail.png") },
-      { name: "twitter:image:alt", content: "گحيل — Gohail" },
+      { name: "twitter:image:alt", content: "كَحيل — Kaheel" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

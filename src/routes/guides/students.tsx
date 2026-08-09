@@ -17,7 +17,7 @@ export const Route = createFileRoute("/guides/students")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "دليل الطالب — گحيل" },
+      { title: "دليل الطالب — كَحيل" },
       {
         name: "description",
         content: "أدوات مجانية للطالب السوري لتلخيص النصوص وإنشاء أسئلة مراجعة محليًا.",

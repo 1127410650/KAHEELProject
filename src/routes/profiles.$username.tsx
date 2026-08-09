@@ -26,9 +26,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/profiles/$username")({
   ssr: "data-only",
   head: ({ params }) => {
-    const title = `${params.username} — معلن فرد في گحيل`;
+    const title = `${params.username} — معلن فرد في كَحيل`;
     const description =
-      "الملف العام للمعلن الفرد في گحيل: النبذة، المدينة، تاريخ الانضمام، وإعلاناته المنشورة.";
+      "الملف العام للمعلن الفرد في كَحيل: النبذة، المدينة، تاريخ الانضمام، وإعلاناته المنشورة.";
     return {
       meta: [
         { title },

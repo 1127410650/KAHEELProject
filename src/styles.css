@@ -8,7 +8,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Gohail design system — deep petrol + warm brass.
+ * Kaheel design system — deep petrol + warm brass.
  * All colors are oklch semantic tokens. Never hardcode colors in components.
  */
 
@@ -540,7 +540,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("گحيل") — amethyst + crisp white.
+ * Public marketplace surface ("كَحيل") — amethyst + crisp white.
  *
  * These tokens exist ONLY for the public marketplace chrome (header, bottom
  * nav, footer, home banner). They are additive: no existing token is changed,
@@ -570,7 +570,7 @@ body {
 }
 
 /*
- * `.market-surface` re-points the semantic tokens to the "گحيل" palette for the
+ * `.market-surface` re-points the semantic tokens to the "كَحيل" palette for the
  * whole public marketplace tree (shell, dashboard pages, auth/registration and
  * the static pages). Because every marketplace component already styles itself
  * with semantic classes (`bg-primary`, `text-muted-foreground`, `border-border`
@@ -655,7 +655,7 @@ body:has(.market-surface) .shadow-raised {
     0 18px 42px -24px rgb(36 0 70 / 0.32) !important;
 }
 
-/* One contemporary visual language for every Gohail marketplace/account page.
+/* One contemporary visual language for every Kaheel marketplace/account page.
  * Admin pages never carry `.market-surface`, so their established console
  * layout and status palette remain isolated. */
 .market-shell > main {
@@ -784,7 +784,7 @@ body:has(.market-surface) .shadow-raised {
   border-color: var(--border);
 }
 
-/* ───────────────────────────── Gohail home marketplace motion ────────────────
+/* ───────────────────────────── Kaheel home marketplace motion ────────────────
  * Only transform and opacity animate. The home hero therefore keeps the visual
  * energy of the supplied reference without shipping a looping video or adding
  * JavaScript work to scrolling and input. */
@@ -1132,7 +1132,7 @@ body:has(.market-surface) .shadow-raised {
   }
 }
 
-/* ───────────────────────────── Gohail electric-space opening ────────────────
+/* ───────────────────────────── Kaheel electric-space opening ────────────────
  * Original code-native artwork. The electric cobalt, near-black panels and
  * restrained glow match the requested visual direction without copying the
  * reference site's imagery or shipping a hero video. */
