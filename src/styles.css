@@ -738,6 +738,48 @@ body:has(.market-surface) .shadow-raised {
   box-shadow: var(--shadow-panel);
 }
 
+/* ───────────────────────── Compact page hero band ─────────────────────────
+ * One shared size for every large purple section header (guides, services,
+ * demo worlds). Keeps the amethyst identity and the same content, but the
+ * band no longer eats the first screen: results start right under it.
+ * Applied on the inner container of the hero section.
+ */
+.market-hero-band {
+  min-height: 0 !important;
+  padding-block: 0.85rem 0.95rem;
+}
+
+.market-hero-band :where(h1) {
+  font-size: 1.3rem;
+  line-height: 1.85rem;
+}
+
+.market-hero-band :where(p) {
+  font-size: 0.8125rem;
+  line-height: 1.45rem;
+}
+
+.market-hero-band > :where(span, div):first-child {
+  margin-bottom: 0.45rem;
+}
+
+@media (min-width: 640px) {
+  .market-hero-band {
+    padding-block: 1.05rem 1.15rem;
+  }
+
+  .market-hero-band :where(h1) {
+    font-size: 1.7rem;
+    line-height: 2.25rem;
+  }
+
+  .market-hero-band :where(p) {
+    font-size: 0.875rem;
+    line-height: 1.6rem;
+  }
+}
+
+
 @media (max-width: 639px) {
   .market-page-intro {
     border-radius: 1.1rem;
