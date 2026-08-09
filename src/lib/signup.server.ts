@@ -12,6 +12,7 @@ import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
 import { normalizePhone, DEFAULT_DIAL } from "@/lib/phone-normalize";
+import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
 
 export interface PublicSignupInput {
   full_name: string;
@@ -95,7 +96,7 @@ export async function publicSignupImpl(
       phone,
       contact_email: contactEmail || null,
       signup_identifier: "phone",
-      market_country_iso2: "SY",
+      market_country_iso2: await resolveMarketIso2ByPhone(phone),
     },
   });
 

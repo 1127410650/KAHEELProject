@@ -4,6 +4,7 @@ import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
 import { DEFAULT_DIAL, normalizePhone } from "@/lib/phone-normalize";
+import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
 
 /**
  * Kept as the single stored form for phones: sign-in and sign-up must agree on
@@ -103,7 +104,7 @@ export async function registerAccountImpl(
       full_name: fullName,
       phone,
       national_id: (input.national_id ?? "").trim() || null,
-      market_country_iso2: "SY",
+      market_country_iso2: await resolveMarketIso2ByPhone(phone),
     },
   });
 
