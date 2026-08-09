@@ -29,8 +29,6 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as StudentToolsRouteImport } from './routes/student-tools'
-import { Route as SyriaGuideRouteImport } from './routes/syria-guide'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
@@ -60,6 +58,8 @@ import { Route as BusinessProfileRouteImport } from './routes/business/profile'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
+import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
+import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
 import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
@@ -69,9 +69,9 @@ import { Route as MyProfileRouteImport } from './routes/my/profile'
 import { Route as MyQuotesRouteImport } from './routes/my/quotes'
 import { Route as MyViolationsRouteImport } from './routes/my/violations'
 import { Route as MyWalletRouteImport } from './routes/my/wallet'
+import { Route as ProfilesUsernameRouteImport } from './routes/profiles.$username'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
-import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
@@ -188,16 +188,6 @@ const SearchRoute = SearchRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StudentToolsRoute = StudentToolsRouteImport.update({
-  id: '/student-tools',
-  path: '/student-tools',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SyriaGuideRoute = SyriaGuideRouteImport.update({
-  id: '/syria-guide',
-  path: '/syria-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WelcomeRoute = WelcomeRouteImport.update({
@@ -345,6 +335,16 @@ const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
   path: '/demo-stores/$worldId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesStudentsRoute = GuidesStudentsRouteImport.update({
+  id: '/guides/students',
+  path: '/guides/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSyriaRoute = GuidesSyriaRouteImport.update({
+  id: '/guides/syria',
+  path: '/guides/syria',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -390,6 +390,11 @@ const MyWalletRoute = MyWalletRouteImport.update({
   path: '/wallet',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const ProfilesUsernameRoute = ProfilesUsernameRouteImport.update({
+  id: '/profiles/$username',
+  path: '/profiles/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesIndexRoute = ServicesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -398,11 +403,6 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
 const StoresSlugRoute = StoresSlugRouteImport.update({
   id: '/stores/$slug',
   path: '/stores/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UUsernameRoute = UUsernameRouteImport.update({
-  id: '/u/$username',
-  path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
@@ -513,8 +513,6 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
-  '/student-tools': typeof StudentToolsRoute
-  '/syria-guide': typeof SyriaGuideRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -542,6 +540,8 @@ export interface FileRoutesByFullPath {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/students': typeof GuidesStudentsRoute
+  '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
@@ -551,8 +551,8 @@ export interface FileRoutesByFullPath {
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
+  '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
-  '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -592,8 +592,6 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
-  '/student-tools': typeof StudentToolsRoute
-  '/syria-guide': typeof SyriaGuideRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -621,6 +619,8 @@ export interface FileRoutesByTo {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/students': typeof GuidesStudentsRoute
+  '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
@@ -630,8 +630,8 @@ export interface FileRoutesByTo {
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
+  '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
-  '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
   '/business': typeof BusinessIndexRoute
   '/services': typeof ServicesIndexRoute
@@ -675,8 +675,6 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
-  '/student-tools': typeof StudentToolsRoute
-  '/syria-guide': typeof SyriaGuideRoute
   '/welcome': typeof WelcomeRoute
   '/admin/activities': typeof AdminActivitiesRoute
   '/admin/attendance': typeof AdminAttendanceRoute
@@ -704,6 +702,8 @@ export interface FileRoutesById {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/students': typeof GuidesStudentsRoute
+  '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
@@ -713,8 +713,8 @@ export interface FileRoutesById {
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
+  '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
-  '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -759,8 +759,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/services'
-    | '/student-tools'
-    | '/syria-guide'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -788,6 +786,8 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/students'
+    | '/guides/syria'
     | '/invite/$token'
     | '/my/bookings'
     | '/my/favorites'
@@ -797,8 +797,8 @@ export interface FileRouteTypes {
     | '/my/quotes'
     | '/my/violations'
     | '/my/wallet'
+    | '/profiles/$username'
     | '/stores/$slug'
-    | '/u/$username'
     | '/admin/'
     | '/business/'
     | '/services/'
@@ -838,8 +838,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/search'
-    | '/student-tools'
-    | '/syria-guide'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -867,6 +865,8 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/students'
+    | '/guides/syria'
     | '/invite/$token'
     | '/my/bookings'
     | '/my/favorites'
@@ -876,8 +876,8 @@ export interface FileRouteTypes {
     | '/my/quotes'
     | '/my/violations'
     | '/my/wallet'
+    | '/profiles/$username'
     | '/stores/$slug'
-    | '/u/$username'
     | '/admin'
     | '/business'
     | '/services'
@@ -920,8 +920,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/services'
-    | '/student-tools'
-    | '/syria-guide'
     | '/welcome'
     | '/admin/activities'
     | '/admin/attendance'
@@ -949,6 +947,8 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/students'
+    | '/guides/syria'
     | '/invite/$token'
     | '/my/bookings'
     | '/my/favorites'
@@ -958,8 +958,8 @@ export interface FileRouteTypes {
     | '/my/quotes'
     | '/my/violations'
     | '/my/wallet'
+    | '/profiles/$username'
     | '/stores/$slug'
-    | '/u/$username'
     | '/admin/'
     | '/business/'
     | '/services/'
@@ -1003,16 +1003,16 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SearchRoute: typeof SearchRoute
   ServicesRoute: typeof ServicesRouteWithChildren
-  StudentToolsRoute: typeof StudentToolsRoute
-  SyriaGuideRoute: typeof SyriaGuideRoute
   WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
+  GuidesStudentsRoute: typeof GuidesStudentsRoute
+  GuidesSyriaRoute: typeof GuidesSyriaRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
-  UUsernameRoute: typeof UUsernameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1155,20 +1155,6 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/student-tools': {
-      id: '/student-tools'
-      path: '/student-tools'
-      fullPath: '/student-tools'
-      preLoaderRoute: typeof StudentToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/syria-guide': {
-      id: '/syria-guide'
-      path: '/syria-guide'
-      fullPath: '/syria-guide'
-      preLoaderRoute: typeof SyriaGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/welcome': {
@@ -1374,6 +1360,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStoresWorldIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/students': {
+      id: '/guides/students'
+      path: '/guides/students'
+      fullPath: '/guides/students'
+      preLoaderRoute: typeof GuidesStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/syria': {
+      id: '/guides/syria'
+      path: '/guides/syria'
+      fullPath: '/guides/syria'
+      preLoaderRoute: typeof GuidesSyriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -1437,6 +1437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyWalletRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/profiles/$username': {
+      id: '/profiles/$username'
+      path: '/profiles/$username'
+      fullPath: '/profiles/$username'
+      preLoaderRoute: typeof ProfilesUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/': {
       id: '/services/'
       path: '/'
@@ -1449,13 +1456,6 @@ declare module '@tanstack/react-router' {
       path: '/stores/$slug'
       fullPath: '/stores/$slug'
       preLoaderRoute: typeof StoresSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/u/$username': {
-      id: '/u/$username'
-      path: '/u/$username'
-      fullPath: '/u/$username'
-      preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/businesses_/$id': {
@@ -1740,16 +1740,16 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SearchRoute: SearchRoute,
   ServicesRoute: ServicesRouteWithChildren,
-  StudentToolsRoute: StudentToolsRoute,
-  SyriaGuideRoute: SyriaGuideRoute,
   WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
+  GuidesStudentsRoute: GuidesStudentsRoute,
+  GuidesSyriaRoute: GuidesSyriaRoute,
   InviteTokenRoute: InviteTokenRoute,
+  ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
-  UUsernameRoute: UUsernameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
