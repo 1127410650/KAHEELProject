@@ -720,6 +720,8 @@ function GenericSearchPage() {
     </div>
   );
 
+  const progressSteps = useKaheelProgressSteps();
+
   return (
     <MarketShell>
       {/* الطبقات ٣–٧ من البنية الموحّدة، بنفس الترتيب في كل صفحات المنصة. */}

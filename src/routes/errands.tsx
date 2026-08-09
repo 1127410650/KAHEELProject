@@ -145,6 +145,8 @@ function ErrandsPage() {
     }
   }
 
+  const progressSteps = useKaheelProgressSteps();
+
   return (
     <MarketShell>
       <PageStack

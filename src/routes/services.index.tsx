@@ -128,6 +128,8 @@ function ServicesMarketplacePage() {
     return selected ? (locale === "ar" ? selected.name_ar : selected.name_en) : null;
   }, [categories.data, category, locale]);
 
+  const progressSteps = useKaheelProgressSteps();
+
   return (
     <MarketShell>
       <main className="pb-10">
