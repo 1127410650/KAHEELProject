@@ -312,7 +312,9 @@ export function PromoPopupHost() {
         }
       }
     },
-    [ar],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [ar, pacing.mascotMinGapMs, pacing.mascotMaxPerSession, pacing.mascotQuietAfterCloseMs],
+
   );
 
   // الاستماع في مرحلة الالتقاط: نقرأ الحدث فقط، ثم نترك المتصفح يكمل عمله.
