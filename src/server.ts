@@ -52,11 +52,17 @@ function isH3SwallowedErrorBody(body: string): boolean {
  * A client-side `beforeLoad` redirect is invisible to a crawler (it sees an
  * empty shell) and passes no search signal. Answering with a real 301 keeps
  * every indexed or bookmarked link working AND transfers its ranking to the
- * canonical URL, which is what makes the coming route renames safe.
+ * canonical URL, which is what made the route renames safe.
  *
  * Only document navigations are considered: assets, server functions and API
- * routes are handed to the app untouched, and identity-dependent paths
- * (`/me`, `/audit`) are deliberately never 301'd — see `routes-map.ts`.
+ * routes are handed to the app untouched. Every 301 target is the same for all
+ * callers; the one identity-dependent destination is `/go`, which resolves the
+ * caller in the browser instead of being a cacheable redirect — so `/me` and
+ * `/audit` 301 to `/go` and stop there. See `routes-map.ts`.
+ *
+ * Each hit is logged once to the server log so retiring an old URL later is a
+ * decision based on real traffic rather than a guess. Path only — no query
+ * string, no referrer, no IP, nothing that identifies a visitor.
  */
 function permanentRedirect(request: Request): Response | null {
   if (request.method !== "GET" && request.method !== "HEAD") return null;
@@ -84,6 +90,8 @@ function permanentRedirect(request: Request): Response | null {
 
   const [targetPath = resolved, targetHash = ""] = resolved.split("#");
   const location = `${targetPath}${targetPath.includes("?") ? "" : url.search}${targetHash ? `#${targetHash}` : ""}`;
+  // Only a mapped rule is worth counting; a trailing-slash tidy-up is noise.
+  if (target) console.info(`[legacy-route] ${path} -> ${targetPath}`);
   return new Response(null, {
     status: 301,
     headers: { location, "cache-control": "public, max-age=3600" },
