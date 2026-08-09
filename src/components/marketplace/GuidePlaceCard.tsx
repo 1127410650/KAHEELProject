@@ -53,41 +53,100 @@ export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
 export function GuidePlaceActions({ place }: { place: GuidePlace }) {
   const directions = directionsHref(place);
   const site = websiteHref(place);
-  const whatsapp = whatsappHref(place);
   const phone = (place.phone ?? "").replace(/[^\d+]/g, "");
+
+  /**
+   * The invitation text is built here, so the WhatsApp button and the share
+   * button can never open a message without the platform link and the intro
+   * PDF link — both are appended by `outreachMessage` itself.
+   */
+  const message = outreachMessage({ name: place.name_ar, city: place.city });
+  const rawWhatsapp = place.whatsapp_link || place.whatsapp || null;
+  const whatsapp = outreachWhatsappHref(rawWhatsapp, message) ?? whatsappHref(place);
+
+  const [previous, setPrevious] = useState<OutreachRecord | null>(null);
+  useEffect(() => {
+    let alive = true;
+    void lastOutreach(place.slug).then((row) => {
+      if (alive) setPrevious(row);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [place.slug]);
+
+  const contacted = isWithinCooldown(previous);
+
+  const log = (channel: "whatsapp" | "share") => {
+    void recordOutreach({ placeId: place.id, placeSlug: place.slug, channel }).then(() =>
+      setPrevious({ channel, created_at: new Date().toISOString() }),
+    );
+  };
+
+  const share = async () => {
+    try {
+      if (typeof navigator !== "undefined" && "share" in navigator) {
+        await navigator.share({ title: "منصة كَحيل", text: message });
+      } else {
+        await navigator.clipboard.writeText(message);
+        toast.success("تم نسخ نص الدعوة مع رابط المنصة وملف التعريف");
+      }
+      log("share");
+    } catch {
+      /* the visitor dismissed the share sheet — nothing to record */
+    }
+  };
 
   const base =
     "inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-black transition hover:border-market-navy/40 hover:text-market-navy";
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {directions ? (
-        <a className={base} href={directions} target="_blank" rel="noreferrer noopener">
-          <MapPin className="size-3.5" aria-hidden />
-          الاتجاهات
-        </a>
-      ) : null}
-      {site ? (
-        <a className={base} href={site} target="_blank" rel="noreferrer noopener">
-          <Globe className="size-3.5" aria-hidden />
-          الموقع الإلكتروني
-        </a>
-      ) : null}
-      {whatsapp ? (
-        <a className={base} href={whatsapp} target="_blank" rel="noreferrer noopener">
-          <MessageCircle className="size-3.5" aria-hidden />
-          واتساب
-        </a>
-      ) : null}
-      {phone.length >= 6 ? (
-        <a className={base} href={`tel:${phone}`}>
-          <Phone className="size-3.5" aria-hidden />
-          اتصال
-        </a>
+    <div className="space-y-1.5">
+      <div className="flex flex-wrap gap-2">
+        {directions ? (
+          <a className={base} href={directions} target="_blank" rel="noreferrer noopener">
+            <MapPin className="size-3.5" aria-hidden />
+            الاتجاهات
+          </a>
+        ) : null}
+        {site ? (
+          <a className={base} href={site} target="_blank" rel="noreferrer noopener">
+            <Globe className="size-3.5" aria-hidden />
+            الموقع الإلكتروني
+          </a>
+        ) : null}
+        {whatsapp ? (
+          <a
+            className={base}
+            href={whatsapp}
+            target="_blank"
+            rel="noreferrer noopener"
+            onClick={() => log("whatsapp")}
+          >
+            <MessageCircle className="size-3.5" aria-hidden />
+            واتساب
+          </a>
+        ) : null}
+        {phone.length >= 6 ? (
+          <a className={base} href={`tel:${phone}`}>
+            <Phone className="size-3.5" aria-hidden />
+            اتصال
+          </a>
+        ) : null}
+        <button type="button" className={base} onClick={() => void share()}>
+          <Share2 className="size-3.5" aria-hidden />
+          مشاركة الدعوة
+        </button>
+      </div>
+      {contacted ? (
+        <p className="text-[10px] font-bold text-amber-700">
+          تم التواصل مع هذه الجهة سابقًا — يُفضّل عدم تكرار المراسلة.
+        </p>
       ) : null}
     </div>
   );
 }
+
 
 export function GuidePlaceCard({ place }: { place: GuidePlace }) {
   const location = [place.district, place.city, place.governorate].filter(Boolean).join(" · ");
