@@ -15,6 +15,7 @@ import {
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
 import { outreachMessage, outreachWhatsappHref } from "@/lib/kaheel-intro";
+import { inviteTemplate, renderInvite, whatsappWithText } from "@/lib/mkt-guide-booking";
 import {
   isWithinCooldown,
   lastOutreach,
