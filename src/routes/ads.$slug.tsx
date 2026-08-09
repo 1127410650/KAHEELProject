@@ -28,6 +28,7 @@ import { loadPublicLicense } from "@/lib/mkt-license";
 
 import { track } from "@/lib/analytics";
 import { MarketShell } from "@/components/marketplace/MarketShell";
+import { PropertySpecsBar } from "@/components/marketplace/real-estate/PropertyCard";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { ListingGallery } from "@/components/marketplace/ListingGallery";
 import { ListingActions } from "@/components/marketplace/ListingActions";
@@ -546,6 +547,11 @@ function AdPage() {
           <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
             {priceLabel(listing, "—", locale)}
           </p>
+
+          {/* شريط المواصفات السريعة (غرف · حمامات · مساحة) — يظهر فقط عند وجود قيم. */}
+          <div className="mt-2">
+            <PropertySpecsBar listing={listing as never} size="lg" />
+          </div>
 
           {categoryPath && (
             <p className="mt-2 break-words text-xs text-muted-foreground">{categoryPath}</p>
