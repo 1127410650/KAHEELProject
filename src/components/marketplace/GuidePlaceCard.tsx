@@ -126,7 +126,13 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
           التفاصيل
           <ExternalLink className="size-3.5" aria-hidden />
         </Link>
+        {source ? (
+          <p className="border-t border-border/60 pt-2 text-[10px] font-normal leading-4 text-muted-foreground/80">
+            المصدر: {source}
+          </p>
+        ) : null}
       </div>
+
     </article>
   );
 }
