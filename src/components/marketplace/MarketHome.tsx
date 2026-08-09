@@ -492,38 +492,27 @@ function BenefitsStrip() {
 }
 
 function SecondaryServices() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   return (
-    <section aria-label={t("market.homeV2.secondaryServices" as HomeKey)} className="py-1">
-      <div className="mb-3 flex items-end justify-between gap-3">
-        <div>
-          <p className="k-eyebrow">
-            {locale === "ar" ? "قصص كَحيل" : "Kaheel stories"}
-          </p>
-          <h2 className="k-h2">
-            {t("market.homeV2.secondaryServices" as HomeKey)}
-          </h2>
-        </div>
-        <a
-          href="/more"
-          className="text-[11px] font-black text-[#7b2cbf] hover:underline sm:text-xs"
-        >
-          {t("common.viewAll")}
-        </a>
-      </div>
-      <div className="-mx-3 flex gap-2.5 overflow-x-auto px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-12 sm:gap-2 sm:px-0">
-        {SERVICES.map(([key, slug, Icon, tone]) => (
+    <section aria-labelledby="secondary-services-title">
+      <SectionHeading
+        id="secondary-services-title"
+        icon={SlidersHorizontal}
+        title={t("market.homeV2.secondaryServices" as HomeKey)}
+        href="/more"
+      />
+      <div className="-mx-3 mt-3 flex gap-2.5 overflow-x-auto px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-12 sm:gap-2 sm:px-0">
+        {SERVICES.map(({ key, href, icon: Icon }) => (
           <a
             key={key}
-            href={key === "more" ? "/more" : `/search?category=${slug}`}
-            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[9px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto sm:text-[10px]"
+            href={href}
+            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[10px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto"
           >
-            <span
-              className={`grid size-14 place-items-center rounded-full border-2 border-white ${tone} shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16`}
-            >
+            {/* One shared chip for every tile: the labels differentiate them, not 12 tints. */}
+            <span className="grid size-14 place-items-center rounded-full border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16">
               <Icon className="size-5 sm:size-6" aria-hidden />
             </span>
-            <span className="line-clamp-2 leading-4">
+            <span className="flex min-h-8 items-start justify-center leading-4">
               {t(`market.homeV2.services.${key}` as HomeKey)}
             </span>
           </a>
@@ -532,6 +521,7 @@ function SecondaryServices() {
     </section>
   );
 }
+
 
 function SectionHeading({
   id,
