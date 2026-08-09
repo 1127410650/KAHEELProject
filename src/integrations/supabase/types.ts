@@ -7067,6 +7067,69 @@ export type Database = {
           },
         ]
       }
+      mkt_user_addresses: {
+        Row: {
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          details: string | null
+          district: string | null
+          id: string
+          is_default: boolean
+          label: string
+          lat: number | null
+          lng: number | null
+          source: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          details?: string | null
+          district?: string | null
+          id?: string
+          is_default?: boolean
+          label: string
+          lat?: number | null
+          lng?: number | null
+          source?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          details?: string | null
+          district?: string | null
+          id?: string
+          is_default?: boolean
+          label?: string
+          lat?: number | null
+          lng?: number | null
+          source?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_user_addresses_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_user_addresses_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_user_contacts: {
         Row: {
           country_id: string | null
