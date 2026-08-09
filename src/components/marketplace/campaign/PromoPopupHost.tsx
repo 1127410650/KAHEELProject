@@ -258,6 +258,11 @@ export function PromoPopupHost() {
 
   const show = useCallback(
     (mode: CardMode) => {
+      // قاعدة «شخصية واحدة وبتكرار قليل»: المسرح يقرّر، لا المشهد.
+      if (!canShowMascot(`card:${mode}`, limits)) return;
+      // قاعدة «لا تغطية»: مساحة آمنة أو لا ظهور.
+      const band = safeBandFor(mode);
+      if (!band) return;
       keyRef.current += 1;
       let copy;
       if (mode === "rapid") {
@@ -271,6 +276,7 @@ export function PromoPopupHost() {
       }
       window.clearTimeout(fadeTimerRef.current);
       openRef.current = true;
+      releaseRef.current = acquireStage(`card:${mode}`);
       setLeaving(false);
       // جهة جديدة في كل ظهور، ولا تتكرّر الجهة السابقة.
       const side = nextEntrySide();
@@ -281,8 +287,10 @@ export function PromoPopupHost() {
         from: Math.random() < 0.5 ? "start" : "end",
         side,
         peekSide,
+        band,
         ...copy,
       });
+
 
       if (mode !== "entrance") {
         try {
