@@ -182,7 +182,7 @@ export function SeasonalLayer({
           /* شخصية كاملة **واقفة على الخط السفلي للهيدر**: `bottom-0` مع ارتفاع
              أصغر من ارتفاع الطبقة ⇒ لا قطع عند الساق ولا عند الكاحل. وتُخفى تحت
              lg لأن الهيدر الضيق لا يترك فراغًا بلا تغطية الشعار أو الجرس. */
-          className="k-season-peek absolute bottom-0 hidden h-[86%] max-h-none w-auto object-contain opacity-95 ltr:right-[13.5rem] rtl:left-[13.5rem] lg:block"
+          className="k-season-peek absolute bottom-[41px] hidden h-[58px] max-h-none w-auto object-contain opacity-95 ltr:left-[27%] rtl:right-[27%] lg:block"
         />
       ) : null}
     </div>
