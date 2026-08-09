@@ -399,14 +399,16 @@ function applyParams(target: string, rulePath: string, concretePath: string): st
 
 
 /**
- * Permanent (301) target for a retired URL, resolved on the server before the
+ * Redirect target for a retired URL, resolved on the server before the
  * app renders — so an indexed or bookmarked link keeps its search signals
  * instead of being moved by a client-side redirect the crawler never follows.
  *
  * Every legacy target here is identity-independent, which is what makes a
  * cacheable 301 safe: the one destination that depends on who is asking is
  * `/go`, and that page resolves the caller client-side instead of being a
- * redirect rule. `/me` and `/audit` therefore 301 to `/go`, never past it.
+ * redirect rule. `/me` and `/audit` therefore point at `/go` and stop there, and
+ * `src/server.ts` answers those two with an uncacheable 302 rather than a 301 so
+ * no browser or proxy can remember a personal destination.
  *
  * Returns `null` when the path is current or unknown.
  */
