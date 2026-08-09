@@ -155,6 +155,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/my/messages", "account", "dashboard"),
   rule("/my/favorites", "account", "dashboard"),
   rule("/my/bookings", "account", "dashboard"),
+  rule("/my/orders", "account", "dashboard"),
   rule("/my/ads", "account", "dashboard"),
   rule("/my/wallet", "account", "dashboard"),
   rule("/my/ad-credit", "account", "dashboard"),

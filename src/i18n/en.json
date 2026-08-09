@@ -2266,7 +2266,7 @@
     "bottomNav": {
       "home": "Home",
       "market": "Market",
-      "orders": "Orders",
+      "orders": "My orders",
       "favorites": "Favorites",
       "account": "Account",
       "search": "Search",
@@ -2274,7 +2274,9 @@
       "add": "Post",
       "alerts": "Alerts",
       "more": "More",
-      "messages": "Messages"
+      "messages": "Messages",
+      "offers": "Offers",
+      "signIn": "Sign in"
     },
     "more": {
       "title": "More",
@@ -3719,6 +3721,59 @@
           "errFailed": "Could not start the payment; please try again."
         }
       }
+    },
+    "myOrders": {
+      "title": "My orders",
+      "subtitle": "Purchases, errand requests and service bookings in one place.",
+      "all": "All",
+      "purchases": "Purchases",
+      "errands": "Errands",
+      "bookings": "Bookings",
+      "empty": "No orders yet.",
+      "emptyHint": "Start from the home page and pick what you need.",
+      "statusFilter": "Status",
+      "statusAll": "All statuses",
+      "open": "Active",
+      "done": "Closed",
+      "kind": {
+        "purchase": "Purchase",
+        "errand": "Errand",
+        "booking": "Booking"
+      },
+      "openDetails": "Details"
+    },
+    "easyAuth": {
+      "title": "Easy sign-in",
+      "subtitle": "Enter your mobile number and we send you a code.",
+      "dial": "Country code",
+      "phone": "Mobile number",
+      "email": "Email",
+      "emailRequired": "Email is required for numbers outside Syria and is used for password recovery and notifications.",
+      "channel": "Delivery",
+      "whatsapp": "WhatsApp",
+      "sms": "SMS",
+      "emailChannel": "Email",
+      "send": "Send code",
+      "sending": "Sending…",
+      "code": "Verification code",
+      "codeHint": "6 digits, valid for {minutes} minutes.",
+      "verify": "Verify and sign in",
+      "verifying": "Verifying…",
+      "resend": "Resend",
+      "change": "Change number",
+      "name": "Name (optional)",
+      "sent": "Code sent to {target}.",
+      "emailSent": "Code sent to your email.",
+      "disabled": "WhatsApp/SMS code delivery is not enabled yet because provider keys are missing. Use password or email sign-in.",
+      "invalidPhone": "Invalid number.",
+      "invalidEmail": "Invalid email.",
+      "rateLimited": "Too many attempts. Please wait and try again.",
+      "invalidCode": "Wrong code.",
+      "expired": "Code expired. Send a new one.",
+      "tooMany": "Too many attempts. Send a new code.",
+      "failed": "Sign-in failed. Try again.",
+      "passwordTab": "Password",
+      "codeTab": "Code"
     }
   },
   "routeError": {

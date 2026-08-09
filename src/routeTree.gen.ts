@@ -69,6 +69,7 @@ import { Route as MyCaptainRouteImport } from './routes/my/captain'
 import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
 import { Route as MyMessagesRouteImport } from './routes/my/messages'
 import { Route as MyNotificationsRouteImport } from './routes/my/notifications'
+import { Route as MyOrdersRouteImport } from './routes/my/orders'
 import { Route as MyProfileRouteImport } from './routes/my/profile'
 import { Route as MyQuotesRouteImport } from './routes/my/quotes'
 import { Route as MyViolationsRouteImport } from './routes/my/violations'
@@ -402,6 +403,11 @@ const MyNotificationsRoute = MyNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const MyOrdersRoute = MyOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => MyRouteRoute,
+} as any)
 const MyProfileRoute = MyProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -625,6 +631,7 @@ export interface FileRoutesByFullPath {
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
+  '/my/orders': typeof MyOrdersRoute
   '/my/profile': typeof MyProfileRoute
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
@@ -716,6 +723,7 @@ export interface FileRoutesByTo {
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
+  '/my/orders': typeof MyOrdersRoute
   '/my/profile': typeof MyProfileRoute
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
@@ -811,6 +819,7 @@ export interface FileRoutesById {
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
   '/my/notifications': typeof MyNotificationsRoute
+  '/my/orders': typeof MyOrdersRoute
   '/my/profile': typeof MyProfileRoute
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
@@ -907,6 +916,7 @@ export interface FileRouteTypes {
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
+    | '/my/orders'
     | '/my/profile'
     | '/my/quotes'
     | '/my/violations'
@@ -998,6 +1008,7 @@ export interface FileRouteTypes {
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
+    | '/my/orders'
     | '/my/profile'
     | '/my/quotes'
     | '/my/violations'
@@ -1092,6 +1103,7 @@ export interface FileRouteTypes {
     | '/my/favorites'
     | '/my/messages'
     | '/my/notifications'
+    | '/my/orders'
     | '/my/profile'
     | '/my/quotes'
     | '/my/violations'
@@ -1585,6 +1597,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyNotificationsRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/my/orders': {
+      id: '/my/orders'
+      path: '/orders'
+      fullPath: '/my/orders'
+      preLoaderRoute: typeof MyOrdersRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/profile': {
       id: '/my/profile'
       path: '/profile'
@@ -1921,6 +1940,7 @@ interface MyRouteRouteChildren {
   MyFavoritesRoute: typeof MyFavoritesRoute
   MyMessagesRoute: typeof MyMessagesRoute
   MyNotificationsRoute: typeof MyNotificationsRoute
+  MyOrdersRoute: typeof MyOrdersRoute
   MyProfileRoute: typeof MyProfileRoute
   MyQuotesRoute: typeof MyQuotesRoute
   MyViolationsRoute: typeof MyViolationsRoute
@@ -1941,6 +1961,7 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyFavoritesRoute: MyFavoritesRoute,
   MyMessagesRoute: MyMessagesRoute,
   MyNotificationsRoute: MyNotificationsRoute,
+  MyOrdersRoute: MyOrdersRoute,
   MyProfileRoute: MyProfileRoute,
   MyQuotesRoute: MyQuotesRoute,
   MyViolationsRoute: MyViolationsRoute,
