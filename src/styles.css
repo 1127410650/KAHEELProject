@@ -1884,3 +1884,16 @@ body:has(.market-surface) {
   from { opacity: 1; transform: translateY(0) scale(1); }
   to { opacity: 0; transform: translateY(10px) scale(0.96); }
 }
+
+/* Live-demo parcel scene: a slow idle float so the card reads as alive even
+   before the Lottie skit loads. Disabled under prefers-reduced-motion via the
+   `motion-safe:` prefix on the element. */
+@keyframes kaheel-demo-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-1.5deg);
+  }
+}

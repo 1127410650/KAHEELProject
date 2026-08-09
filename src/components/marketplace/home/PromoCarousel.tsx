@@ -209,7 +209,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
                 src={slide.image}
                 alt=""
                 width={1728}
-                height={736}
+                height={920}
                 fetchPriority={slideIndex === 0 ? "high" : "low"}
                 loading={slideIndex === 0 ? "eager" : "lazy"}
                 decoding="async"
