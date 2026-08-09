@@ -27,8 +27,16 @@ import { MKT_BUCKET } from "@/lib/mkt";
 import { isRealDocument } from "@/lib/mkt-business";
 
 export type TopupMethod = "sham_cash" | "bank_transfer" | "card_gateway";
-export type TopupStatus = "pending" | "approved" | "rejected" | "cancelled";
+export type TopupStatus =
+  | "pending"
+  | "approved"
+  | "rejected"
+  | "cancelled"
+  | "failed"
+  | "expired"
+  | "refunded";
 export type TopupCurrency = "SYP" | "SAR" | "USD" | "TRY";
+
 
 export const TOPUP_CURRENCIES: readonly TopupCurrency[] = ["SYP", "SAR", "USD", "TRY"];
 
