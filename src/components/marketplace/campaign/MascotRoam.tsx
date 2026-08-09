@@ -170,9 +170,10 @@ export function MascotRoam() {
       },
     });
 
-    // مساعدة معاينة: `?roam=now` تُظهر المشهد فورًا لمراجعة الحركة بلا انتظار.
+    // صفحة قصيرة لا تُمرَّر: السكون هنا هو الحالة الأصلية، فيُفحص مرة واحدة بعد
+    // استقرار الصفحة + مدة السكون نفسها.
     const quick = window.location.search.includes("roam=now");
-    const first = quick ? window.setTimeout(run, 900) : 0;
+    const first = window.setTimeout(run, quick ? 900 : pacing.pageSettleMs + pacing.mascotIdleMs);
 
     return () => {
       stop();
