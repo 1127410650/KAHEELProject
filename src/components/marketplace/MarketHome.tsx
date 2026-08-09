@@ -179,7 +179,7 @@ export function MarketHome() {
             </h2>
             <div
               ref={fieldsRef}
-              className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 sm:gap-3"
+              className="grid grid-cols-[repeat(auto-fit,minmax(148px,1fr))] gap-2 sm:gap-3"
             >
               {MAIN_FIELDS.map((field, index) => (
                 <MainFieldCard
@@ -347,32 +347,34 @@ function MainFieldCard({
       className="group k-deep k-press k-rise k-shimmer relative flex min-h-[92px] min-w-0 items-center gap-2 overflow-hidden p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[104px] sm:gap-2.5 sm:p-3"
     >
       {/* Fixed-ratio thumbnail with explicit dimensions: the box is reserved
-          before the image decodes, so nothing shifts. */}
-      <img
-        src={image}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        width={168}
-        height={168}
-        className="size-[54px] shrink-0 rounded-[0.85rem] object-cover shadow-[0_6px_14px_-8px_rgb(16_0_43/0.8)] transition-transform duration-300 group-hover:scale-[1.04] sm:size-[64px]"
-      />
+          before the image decodes, so nothing shifts. The section icon rides on
+          the corner instead of the title row, which keeps the heading readable
+          at the narrowest column. */}
+      <span className="relative shrink-0">
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width={168}
+          height={168}
+          className="size-[52px] rounded-[0.85rem] object-cover shadow-[0_6px_14px_-8px_rgb(16_0_43/0.8)] transition-transform duration-300 group-hover:scale-[1.04] sm:size-[62px]"
+        />
+        <span className="k-glass k-float absolute -bottom-1 -end-1 grid size-6 place-items-center rounded-full sm:size-7">
+          <Icon className="size-3.5 sm:size-4" aria-hidden />
+        </span>
+      </span>
 
       <span className="relative z-10 flex min-w-0 flex-1 flex-col">
-        <span className="flex min-w-0 items-center gap-1.5">
-          <span className="k-glass k-float grid size-6 shrink-0 place-items-center rounded-full sm:size-7">
-            <Icon className="size-3.5 sm:size-4" aria-hidden />
-          </span>
-          <h3 className="min-w-0 truncate text-[15px] font-black leading-tight tracking-tight sm:text-base">
-            {t(`market.homeV2.fields.${field.key}.title` as HomeKey)}
-          </h3>
-        </span>
+        <h3 className="min-w-0 truncate text-[15px] font-black leading-tight tracking-tight sm:text-base">
+          {t(`market.homeV2.fields.${field.key}.title` as HomeKey)}
+        </h3>
         <p className="mt-0.5 line-clamp-2 text-[13px] font-medium leading-[1.35] text-white/92">
           {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
         </p>
-        <span className="k-pop mt-1 inline-flex w-fit items-center rounded-full bg-white px-2 py-0.5 text-[13px] font-black leading-5 text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_6px_14px_-8px_rgb(36_0_70/0.45)]">
-          {t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}
-          <ChevronLeft className="ms-0.5 size-3.5 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+        <span className="k-pop mt-1 inline-flex w-fit max-w-full items-center rounded-full bg-white px-2 py-0.5 text-[13px] font-black leading-5 text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_6px_14px_-8px_rgb(36_0_70/0.45)]">
+          <span className="truncate">{t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}</span>
+          <ChevronLeft className="ms-0.5 size-3.5 shrink-0 rtl:rotate-0 ltr:rotate-180" aria-hidden />
         </span>
       </span>
     </a>
