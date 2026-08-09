@@ -549,6 +549,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
     () => ({
       call,
       placeCall,
+      placeConversationCall,
       requestCall,
       startFromRequest,
       accept,
@@ -566,6 +567,7 @@ export function CallCenterProvider({ children }: { children: ReactNode }) {
       dismiss,
       hangUp,
       placeCall,
+      placeConversationCall,
       requestCall,
       startFromRequest,
       starting,
@@ -590,6 +592,7 @@ export function useCallCenter(): CallCenterValue {
   return {
     call: null,
     placeCall: async () => undefined,
+    placeConversationCall: async () => undefined,
     requestCall: async () => false,
     startFromRequest: async () => undefined,
     stopReceiving: async () => undefined,
