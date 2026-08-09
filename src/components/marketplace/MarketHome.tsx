@@ -86,7 +86,7 @@ const MAIN_FIELDS = [
     image: restaurantsImage,
     width: 900,
     height: 675,
-    span: "col-span-2 row-span-2 sm:col-span-4 sm:row-span-2",
+    span: "col-span-2 sm:col-span-3 sm:row-span-2",
     ratio: "aspect-[16/11] sm:aspect-[4/5]",
   },
   {
@@ -96,8 +96,8 @@ const MAIN_FIELDS = [
     image: groceriesImage,
     width: 900,
     height: 675,
-    span: "col-span-1 sm:col-span-2",
-    ratio: "aspect-[3/4] sm:aspect-[4/3]",
+    span: "col-span-1 sm:col-span-3",
+    ratio: "aspect-[3/4] sm:aspect-[16/9]",
   },
   {
     key: "realEstate",
@@ -106,8 +106,8 @@ const MAIN_FIELDS = [
     image: propertyImage,
     width: 768,
     height: 576,
-    span: "col-span-1 sm:col-span-2",
-    ratio: "aspect-[3/4] sm:aspect-[4/3]",
+    span: "col-span-1 sm:col-span-3",
+    ratio: "aspect-[3/4] sm:aspect-[16/9]",
   },
   {
     key: "cars",
@@ -116,8 +116,8 @@ const MAIN_FIELDS = [
     image: carImage,
     width: 768,
     height: 576,
-    span: "col-span-2 sm:col-span-4",
-    ratio: "aspect-[16/7] sm:aspect-[16/6]",
+    span: "col-span-2 sm:col-span-6",
+    ratio: "aspect-[16/7] sm:aspect-[16/5]",
   },
 ] as const;
 
