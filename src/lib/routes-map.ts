@@ -286,6 +286,16 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/users/$id", "admin", "admin"),
   rule("/admin/verifications/$id", "admin", "admin"),
 
+  // Renamed console screens. The old names described the table behind the page
+  // ("activities", "geo") or an action ("join-applications"); the new ones say
+  // what the reviewer manages. Redirects keep saved links and open tabs working.
+  rule("/admin/activities", "legacy", "bare", { legacy_redirect: "/admin/taxonomy" }),
+  rule("/admin/geo", "legacy", "bare", { legacy_redirect: "/admin/locations" }),
+  rule("/admin/content-rules", "legacy", "bare", { legacy_redirect: "/admin/moderation" }),
+  rule("/admin/join-applications", "legacy", "bare", { legacy_redirect: "/admin/applications" }),
+  rule("/admin/attendance", "legacy", "bare", { legacy_redirect: "/admin/staff/attendance" }),
+  rule("/admin/workforce", "legacy", "bare", { legacy_redirect: "/admin/staff/workload" }),
+
 
   // ── هـ. Legacy / duplicated ────────────────────────────────────────────────
   // These paths no longer have a route file of their own: the central splat
