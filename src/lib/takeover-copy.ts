@@ -98,6 +98,13 @@ const AR_POOL: PopupCopy[] = [
     subtitle: "أنا الزعيم كَحيلان، وهاد كَحيل… ومن هون وطالع العروض علينا",
     mascot: "duo",
   },
+
+  // ── كَحيل: ترحيبات قصيرة جدًا (سطر واحد ≤ 35 حرفًا) للمساحات الصغيرة ─────
+  { title: "يا هلا يا أبو عيون كَحيلة 😍", subtitle: "نورت كَحيل", mascot: "wave" },
+  { title: "أهلين… عيونك كَحيلة والعروض أحلى ✨", subtitle: "تفضّل تصفّح", mascot: "wave" },
+  { title: "يا مرحبا بأبو العيون الكَحيلة 💜", subtitle: "أهلًا فيك", mascot: "wave" },
+  { title: "نوّرت… يا صاحب العيون الكَحيلة 🌟", subtitle: "بالخدمة دائمًا", mascot: "wave" },
+  { title: "هلا والله… كَحيل بعيونك 😊", subtitle: "خد وقتك", mascot: "wave" },
 ];
 
 const EN_POOL: PopupCopy[] = [
