@@ -355,7 +355,7 @@ export function PromoPopupHost() {
         : `${layout.animation.in} 0.6s cubic-bezier(0.2,0.9,0.3,1) both`;
 
     return (
-      <div className="pointer-events-none fixed z-30 top-[calc(3.6rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
+      <div className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
         <div
           key={card.key}
           data-kaheel-drop-card
@@ -410,7 +410,7 @@ export function PromoPopupHost() {
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
   return (
-    <div className="pointer-events-none fixed z-30 top-[calc(3.6rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
+    <div className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]" aria-live="polite">
       <div
         key={card.key}
         data-kaheel-drop-card
@@ -427,14 +427,14 @@ export function PromoPopupHost() {
         <div className="absolute end-2 top-2 z-10">{closeButtons}</div>
 
         {/* الاحتواء أولوية: الشخصية كبيرة لكنها **داخل** حدود البطاقة وتُقصّ عندها. */}
-        <div className={`mt-1 shrink ${bodyMotion}`}>
+        <div className={`mt-1 min-h-0 shrink ${bodyMotion}`}>
           <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
         </div>
 
-        <p className="w-full text-[17px] font-black leading-tight text-[#240046] [overflow-wrap:anywhere]">
+        <p className="w-full shrink-0 text-[17px] font-black leading-tight text-[#240046] [overflow-wrap:anywhere]">
           {card.title}
         </p>
-        <p className="w-full text-[13.5px] font-semibold leading-relaxed text-[#3c096c] [overflow-wrap:anywhere]">
+        <p className="w-full shrink-0 text-[13.5px] font-semibold leading-relaxed text-[#3c096c] [overflow-wrap:anywhere]">
           {card.subtitle}
         </p>
       </div>
