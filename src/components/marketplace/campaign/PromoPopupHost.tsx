@@ -280,8 +280,8 @@ export function PromoPopupHost() {
 
   return (
     <div
-      className={`pointer-events-none fixed inset-0 z-[80] flex p-4 ${
-        entrance ? "items-end justify-start pb-24" : "items-center justify-center"
+      className={`pointer-events-none fixed inset-0 z-[80] flex items-end p-4 pb-24 ${
+        entrance ? "justify-start" : "justify-center"
       }`}
       aria-live="polite"
     >
@@ -290,9 +290,9 @@ export function PromoPopupHost() {
         data-kaheel-drop-card
         role="status"
         style={{ transformOrigin: "bottom center" }}
-        className={`pointer-events-none relative flex w-full max-w-[15.5rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/90 p-2.5 pb-3 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
+        className={`pointer-events-none relative flex w-full max-w-[17rem] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl motion-reduce:animate-[kaheel-scrim-in_0.2s_ease-out] ${animation}`}
       >
-        <div className="absolute end-2 top-2 flex gap-1">
+        <div className="absolute end-2 top-2 flex gap-1.5">
           <button
             type="button"
             onClick={() => dismiss(true)}
