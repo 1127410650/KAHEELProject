@@ -57,6 +57,7 @@ import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$wor
 import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
 import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
 import { Route as MyMessagesRouteImport } from './routes/my/messages'
@@ -329,6 +330,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MyAdCreditRoute = MyAdCreditRouteImport.update({
+  id: '/ad-credit',
+  path: '/ad-credit',
+  getParentRoute: () => MyRouteRoute,
+} as any)
 const MyBookingsRoute = MyBookingsRouteImport.update({
   id: '/bookings',
   path: '/bookings',
@@ -533,6 +539,7 @@ export interface FileRoutesByFullPath {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
@@ -611,6 +618,7 @@ export interface FileRoutesByTo {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
@@ -693,6 +701,7 @@ export interface FileRoutesById {
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/favorites': typeof MyFavoritesRoute
   '/my/messages': typeof MyMessagesRoute
@@ -776,6 +785,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/my/ad-credit'
     | '/my/bookings'
     | '/my/favorites'
     | '/my/messages'
@@ -854,6 +864,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/my/ad-credit'
     | '/my/bookings'
     | '/my/favorites'
     | '/my/messages'
@@ -935,6 +946,7 @@ export interface FileRouteTypes {
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
+    | '/my/ad-credit'
     | '/my/bookings'
     | '/my/favorites'
     | '/my/messages'
@@ -1340,6 +1352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/my/ad-credit': {
+      id: '/my/ad-credit'
+      path: '/ad-credit'
+      fullPath: '/my/ad-credit'
+      preLoaderRoute: typeof MyAdCreditRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/bookings': {
       id: '/my/bookings'
       path: '/bookings'
@@ -1651,6 +1670,7 @@ const BusinessRouteRouteWithChildren = BusinessRouteRoute._addFileChildren(
 )
 
 interface MyRouteRouteChildren {
+  MyAdCreditRoute: typeof MyAdCreditRoute
   MyBookingsRoute: typeof MyBookingsRoute
   MyFavoritesRoute: typeof MyFavoritesRoute
   MyMessagesRoute: typeof MyMessagesRoute
@@ -1667,6 +1687,7 @@ interface MyRouteRouteChildren {
 }
 
 const MyRouteRouteChildren: MyRouteRouteChildren = {
+  MyAdCreditRoute: MyAdCreditRoute,
   MyBookingsRoute: MyBookingsRoute,
   MyFavoritesRoute: MyFavoritesRoute,
   MyMessagesRoute: MyMessagesRoute,
@@ -1733,13 +1754,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
