@@ -508,21 +508,30 @@ function SectionHeading({
   icon: Icon,
   title,
   href,
+  tone = "purple",
 }: {
   id: string;
   icon: typeof Flame;
   title: string;
   href: string;
+  tone?: "purple" | "gold";
 }) {
   const { t } = useI18n();
   return (
     <div className="flex items-center justify-between gap-3">
       <h2 id={id} className="k-h2 flex min-w-0 items-center gap-2">
-        <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-[linear-gradient(145deg,#f3e3ff,#e0aaff)] text-[#5a189a] shadow-[inset_0_1px_0_#fff,0_5px_12px_-6px_rgb(60_9_108/0.45)] sm:size-9">
+        <span
+          className={
+            tone === "gold"
+              ? "k-gold-chip grid size-8 shrink-0 place-items-center rounded-xl sm:size-9"
+              : "grid size-8 shrink-0 place-items-center rounded-xl bg-[linear-gradient(145deg,#f3e3ff,#e0aaff)] text-[#5a189a] shadow-[inset_0_1px_0_#fff,0_5px_12px_-6px_rgb(60_9_108/0.45)] sm:size-9"
+          }
+        >
           <Icon className="size-4 sm:size-5" aria-hidden />
         </span>
         <span className="text-balance break-words">{title}</span>
       </h2>
+
       <a
         href={href}
         className="k-press inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-xs font-black text-[#7b2cbf] hover:bg-[#e0aaff]/28"
