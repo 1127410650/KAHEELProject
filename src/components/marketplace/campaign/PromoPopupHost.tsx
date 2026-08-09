@@ -110,7 +110,10 @@ export function PromoPopupHost() {
   const lastRapidRef = useRef(-1);
   const lastEntranceRef = useRef(-1);
   const keyRef = useRef(0);
-  const hideTimerRef = useRef(0);
+  /** مؤقّت حركة الخروج فقط — لا يوجد مؤقّت اختفاء تلقائي. */
+  const fadeTimerRef = useRef(0);
+  /** بطاقة مفتوحة الآن؟ لمنع ظهور بطاقة ثانية فوقها. */
+  const openRef = useRef(false);
 
   // التوقيتات كلها من لوحة الإدارة — تُطبَّق أول ما تصل الإعدادات.
   useEffect(() => {
