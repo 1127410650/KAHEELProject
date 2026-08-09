@@ -38,11 +38,11 @@ export interface PopupPacing {
 }
 
 export const DEFAULT_PACING: PopupPacing = {
-  firstDelayMs: 5_000,
+  firstDelayMs: 45_000,
   intervalMs: 210_000,
   maxPerSession: 5,
-  autoDismissMs: 20_000,
-  pageSettleMs: 0,
+  autoDismissMs: 7_000,
+  pageSettleMs: 3_000,
   enabled: true,
 };
 
@@ -82,7 +82,7 @@ export function usePopupPacing() {
     gcTime: 30 * 60_000,
     queryFn: loadPopupPacing,
   });
-  return DEFAULT_PACING; // TESTONLY // query.data
+  return query.data ?? DEFAULT_PACING;
 }
 
 // ── "Not today" mute ────────────────────────────────────────────────────────
