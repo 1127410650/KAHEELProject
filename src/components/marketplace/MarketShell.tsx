@@ -414,6 +414,7 @@ const COPYRIGHT_FOOTER_PATHS = [
   "/guides/students",
   "/about",
   "/help",
+  "/legal/copyright",
 ];
 const COPYRIGHT_FOOTER_PREFIXES = [
   "/ads/",
