@@ -215,19 +215,19 @@ export function MarketHome() {
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-white pb-5 text-[#240046]">
-      <div className="mx-auto w-full max-w-[1240px] space-y-6 px-3 pb-3 pt-3 sm:space-y-9 sm:px-5 lg:px-8">
+      {/* One rhythm for the whole page: the same vertical gap between every
+          section, so no block reads as louder than its neighbours. */}
+      <div className="mx-auto w-full max-w-[1240px] space-y-7 px-3 pb-3 pt-3 sm:space-y-10 sm:px-5 lg:px-8">
         <HomeSearchBar
           label={t("market.homeV2.searchPlaceholder" as HomeKey)}
           detailedLabel={t("market.homeV2.detailedSearch" as HomeKey)}
         />
-
 
         <KaheelStories />
 
         <PromoCarousel addHref={addHref} />
 
         <Reveal as="section">
-
           <section
             aria-labelledby="home-fields-title"
             className="relative isolate overflow-hidden rounded-3xl"
@@ -251,64 +251,68 @@ export function MarketHome() {
               ))}
             </div>
           </section>
-
         </Reveal>
 
-        <HomeAdStrip addHref={addHref} />
+        <Reveal>
+          <HomeAdStrip addHref={addHref} />
+        </Reveal>
 
         <Reveal>
           <ExclusiveOffersRail />
         </Reveal>
 
-
-
-        <ListingRail
-          title={t("market.homeV2.nearbyRestaurants" as HomeKey)}
-          icon={Flame}
-          href="/search?category=restaurants"
-          query={restaurants}
-          empty={t("market.homeV2.noRestaurantOffers" as HomeKey)}
-        />
-
-        <section aria-labelledby="featured-title">
-          <SectionHeading
-            id="featured-title"
-            icon={Star}
-            tone="gold"
-            title={t("market.homeV2.featured" as HomeKey)}
-            href="/search?featured=1"
+        <Reveal>
+          <ListingRail
+            id="nearby-restaurants"
+            title={t("market.homeV2.nearbyRestaurants" as HomeKey)}
+            icon={Flame}
+            href="/search?category=restaurants"
+            query={restaurants}
+            empty={t("market.homeV2.noRestaurantOffers" as HomeKey)}
+            ctaHref={addHref}
           />
+        </Reveal>
 
-          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
-            {FEATURE_FILTERS.map(([key, slug]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setFeaturedCategory(slug)}
-                aria-pressed={featuredCategory === slug}
-                className={
-                  featuredCategory === slug
-                    ? "k-press min-h-11 shrink-0 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white shadow-[0_8px_18px_-8px_rgb(60_9_108/0.7)]"
-                    : "k-press min-h-11 shrink-0 rounded-full border border-[#c77dff]/35 bg-white px-5 text-xs font-bold text-[#5a189a] hover:border-[#9d4edd]/50 hover:bg-[#e0aaff]/22"
-                }
-              >
-                {t(`market.homeV2.filters.${key}` as HomeKey)}
-              </button>
-            ))}
-          </div>
-          <QueryRail
-            query={featured}
-            empty={t("market.homeV2.noFeatured" as HomeKey)}
-            retryLabel={t("market.retry")}
-            errorLabel={t("market.loadError")}
-          />
-        </section>
+        <Reveal as="section">
+          <section aria-labelledby="featured-title">
+            <SectionHeading
+              id="featured-title"
+              icon={Star}
+              tone="gold"
+              title={t("market.homeV2.featured" as HomeKey)}
+              href="/search?featured=1"
+            />
 
-        <FeaturedGuideStrip />
+            <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
+              {FEATURE_FILTERS.map(([key, slug]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setFeaturedCategory(slug)}
+                  aria-pressed={featuredCategory === slug}
+                  className={
+                    featuredCategory === slug
+                      ? "k-press min-h-11 shrink-0 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white shadow-[0_8px_18px_-8px_rgb(60_9_108/0.7)]"
+                      : "k-press min-h-11 shrink-0 rounded-full border border-[#c77dff]/35 bg-white px-5 text-xs font-bold text-[#5a189a] hover:border-[#9d4edd]/50 hover:bg-[#e0aaff]/22"
+                  }
+                >
+                  {t(`market.homeV2.filters.${key}` as HomeKey)}
+                </button>
+              ))}
+            </div>
+            <QueryRail
+              query={featured}
+              empty={t("market.homeV2.noFeatured" as HomeKey)}
+              ctaHref={addHref}
+              retryLabel={t("market.retry")}
+              errorLabel={t("market.loadError")}
+            />
+          </section>
+        </Reveal>
 
-
-
-
+        <Reveal>
+          <FeaturedGuideStrip />
+        </Reveal>
 
         <Reveal>
           <BenefitsStrip />
@@ -328,32 +332,33 @@ export function MarketHome() {
           </Reveal>
         ) : null}
 
-        <section
-          aria-label={t("market.homeV2.quickActions" as HomeKey)}
-          className="grid gap-2 sm:grid-cols-3"
-        >
-          <QuickAction
-            href={addHref}
-            icon={Plus}
-            tone="bg-[#fff4de]"
-            title={t("market.homeV2.actions.add.title" as HomeKey)}
-            description={t("market.homeV2.actions.add.desc" as HomeKey)}
-          />
-          <QuickAction
-            href="/services"
-            icon={Wrench}
-            tone="bg-[#e0aaff]/28"
-            title={t("market.homeV2.actions.service.title" as HomeKey)}
-            description={t("market.homeV2.actions.service.desc" as HomeKey)}
-          />
-          <QuickAction
-            href="/guides/students"
-            icon={Sparkles}
-            tone="bg-[#c77dff]/24"
-            title={t("market.homeV2.actions.ai.title" as HomeKey)}
-            description={t("market.homeV2.actions.ai.desc" as HomeKey)}
-          />
-        </section>
+        <Reveal as="section">
+          <section
+            aria-label={t("market.homeV2.quickActions" as HomeKey)}
+            className="grid gap-2 sm:grid-cols-3"
+          >
+            <QuickAction
+              href={addHref}
+              icon={Plus}
+              title={t("market.homeV2.actions.add.title" as HomeKey)}
+              description={t("market.homeV2.actions.add.desc" as HomeKey)}
+            />
+            <QuickAction
+              href="/services"
+              icon={Wrench}
+              title={t("market.homeV2.actions.service.title" as HomeKey)}
+              description={t("market.homeV2.actions.service.desc" as HomeKey)}
+            />
+            <QuickAction
+              href="/guides/students"
+              icon={Sparkles}
+              title={t("market.homeV2.actions.ai.title" as HomeKey)}
+              description={t("market.homeV2.actions.ai.desc" as HomeKey)}
+            />
+          </section>
+        </Reveal>
+      </div>
+
       </div>
     </div>
   );
