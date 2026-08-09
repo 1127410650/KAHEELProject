@@ -58,7 +58,8 @@ export function SyriaHomeGateway() {
       aria-label="دليل سوريا ودليل الطالب"
       aria-roledescription="إعلان متناوب"
       role="region"
-      className="mx-auto w-full max-w-[1240px] scroll-mt-32 px-3 py-2 sm:px-5 lg:px-8"
+      /* بلا حاوية/حشوة خاصة: الصفحة الرئيسية تتولى العرض والإيقاع. */
+      className="w-full scroll-mt-32"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -66,27 +67,14 @@ export function SyriaHomeGateway() {
         if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
       }}
     >
-      <div className="relative w-full overflow-hidden rounded-[24px] border border-market-silver-line bg-market-panel shadow-[0_7px_20px_rgb(0_0_0/0.14)]">
-
-        <div
-          className={
-            isSyria
-              ? "absolute inset-0 bg-[linear-gradient(118deg,#10002b_0%,#3c096c_72%,#7b2cbf_165%)]"
-              : "absolute inset-0 bg-[linear-gradient(118deg,#10002b_0%,#240046_72%,#9d4edd_165%)]"
-          }
-          aria-hidden
-        />
-
+      {/* نفس نظام البطاقات الموحّد (k-surface) كبقية أقسام الرئيسية. */}
+      <div className="k-surface relative w-full overflow-hidden">
         <span
-          className={
-            isSyria
-              ? "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric/12 blur-3xl"
-              : "absolute -end-10 -top-20 size-52 rounded-full bg-market-electric-bright/11 blur-3xl"
-          }
+          className="absolute -end-10 -top-20 size-52 rounded-full bg-[#c77dff]/22 blur-3xl"
           aria-hidden
         />
         <span
-          className="absolute -bottom-16 start-14 size-40 rounded-full bg-market-electric/5 blur-3xl"
+          className="absolute -bottom-16 start-14 size-40 rounded-full bg-[#e0aaff]/25 blur-3xl"
           aria-hidden
         />
 
@@ -95,13 +83,12 @@ export function SyriaHomeGateway() {
           to={gateway.to}
           className={
             reducedMotion
-              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:gap-4 sm:px-5 sm:py-4"
-              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white sm:gap-4 sm:px-5 sm:py-4"
+              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-[#240046] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7b2cbf] sm:gap-4 sm:px-5 sm:py-4"
+              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-[#240046] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7b2cbf] sm:gap-4 sm:px-5 sm:py-4"
           }
-
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
-          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border border-white/18 bg-white/12 shadow-[0_6px_18px_rgb(0_0_0/0.14)] backdrop-blur-sm sm:size-[58px] sm:rounded-[1rem]">
+          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)] sm:size-[58px] sm:rounded-[1rem]">
             {isSyria ? (
               <>
                 <img
@@ -109,39 +96,40 @@ export function SyriaHomeGateway() {
                   alt=""
                   width={176}
                   height={176}
-                  className="absolute inset-0 size-full object-cover opacity-55"
+                  className="absolute inset-0 size-full object-cover opacity-45"
                 />
-                <MapPinned className="relative size-5.5 drop-shadow sm:size-7" aria-hidden />
+                <MapPinned className="relative size-5.5 sm:size-7" aria-hidden />
               </>
             ) : (
               <>
                 <BookOpen
-                  className="absolute -bottom-1 -start-1 size-7 rotate-[-10deg] text-white/13 sm:size-9"
+                  className="absolute -bottom-1 -start-1 size-7 rotate-[-10deg] text-[#7b2cbf]/20 sm:size-9"
                   aria-hidden
                 />
-                <GraduationCap className="relative size-5.5 drop-shadow sm:size-7" aria-hidden />
+                <GraduationCap className="relative size-5.5 sm:size-7" aria-hidden />
               </>
             )}
           </span>
 
           <div className="min-w-0 flex-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/14 bg-white/10 px-1.5 py-0.5 text-[7px] font-black text-market-silver backdrop-blur-sm sm:text-[8px]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#c77dff]/35 bg-[#e0aaff]/25 px-1.5 py-0.5 text-[8px] font-black text-[#5a189a]">
               <Sparkles className="size-2.5 sm:size-3" aria-hidden />
               {gateway.eyebrow}
             </span>
             <h2 className="mt-0.5 text-base font-black leading-none tracking-tight sm:mt-1 sm:text-lg">
               {gateway.title}
             </h2>
-            <p className="mt-1 line-clamp-2 max-w-[28rem] text-[10px] leading-4 text-white/72 sm:line-clamp-1">
+            <p className="mt-1 line-clamp-2 max-w-[28rem] text-[10px] leading-4 text-[#5a189a] sm:line-clamp-1">
               {gateway.description}
             </p>
 
-            <span className="mt-1 inline-flex items-center gap-1 text-[8px] font-black text-market-silver sm:mt-1.5 sm:text-[10px]">
+            <span className="mt-1 inline-flex items-center gap-1 text-[9px] font-black text-[#7b2cbf] sm:mt-1.5 sm:text-[10px]">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
             </span>
           </div>
         </Link>
+
 
         {/* مؤشر الدليل: هدف لمس مريح 40px مع نقطة صغيرة مرئية، وطبقة مطلقة
             في الأسفل فلا يمتد الزر كشريط عمودي ولا يزيد ارتفاع البطاقة. */}
