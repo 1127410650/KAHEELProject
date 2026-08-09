@@ -9,7 +9,7 @@ import { createClient } from "@supabase/supabase-js";
  * key and the bucket path behind one immutable link that can be pasted into a
  * WhatsApp message: /api/public/kaheel-intro.pdf
  */
-export const Route = createFileRoute("/api/public/kaheel-intro[.]pdf")({
+export const Route = createFileRoute("/api/public/kaheel-intro.pdf")({
   server: {
     handlers: {
       GET: async () => {

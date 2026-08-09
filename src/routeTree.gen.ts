@@ -78,6 +78,7 @@ import { Route as AdminStaffAttendanceRouteImport } from './routes/admin/staff.a
 import { Route as AdminStaffWorkloadRouteImport } from './routes/admin/staff.workload'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
+import { Route as ApiPublicKaheelIntroDotpdfRouteImport } from './routes/api/public/kaheel-intro[.]pdf'
 import { Route as BusinessServicesIndexRouteImport } from './routes/business/services.index'
 import { Route as BusinessServicesSettingsRouteImport } from './routes/business/services.settings'
 import { Route as BusinessStoreIndexRouteImport } from './routes/business/store.index'
@@ -437,6 +438,12 @@ const AdminVerificationsIdRoute = AdminVerificationsIdRouteImport.update({
   path: '/verifications/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const ApiPublicKaheelIntroDotpdfRoute =
+  ApiPublicKaheelIntroDotpdfRouteImport.update({
+    id: '/api/public/kaheel-intro.pdf',
+    path: '/api/public/kaheel-intro.pdf',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BusinessServicesIndexRoute = BusinessServicesIndexRouteImport.update({
   id: '/services/',
   path: '/services/',
@@ -574,6 +581,7 @@ export interface FileRoutesByFullPath {
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
+  '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
@@ -655,6 +663,7 @@ export interface FileRoutesByTo {
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
+  '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
@@ -740,6 +749,7 @@ export interface FileRoutesById {
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
+  '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
@@ -826,6 +836,7 @@ export interface FileRouteTypes {
     | '/admin/staff/workload'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
+    | '/api/public/kaheel-intro.pdf'
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
@@ -907,6 +918,7 @@ export interface FileRouteTypes {
     | '/admin/staff/workload'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
+    | '/api/public/kaheel-intro.pdf'
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
@@ -991,6 +1003,7 @@ export interface FileRouteTypes {
     | '/admin/staff/workload'
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
+    | '/api/public/kaheel-intro.pdf'
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
@@ -1036,6 +1049,7 @@ export interface RootRouteChildren {
   InviteTokenRoute: typeof InviteTokenRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
+  ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
   GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
   ApiPublicAdCreditGatewayWebhookRoute: typeof ApiPublicAdCreditGatewayWebhookRoute
 }
@@ -1525,6 +1539,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVerificationsIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/api/public/kaheel-intro.pdf': {
+      id: '/api/public/kaheel-intro.pdf'
+      path: '/api/public/kaheel-intro.pdf'
+      fullPath: '/api/public/kaheel-intro.pdf'
+      preLoaderRoute: typeof ApiPublicKaheelIntroDotpdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/business/services/': {
       id: '/business/services/'
       path: '/services'
@@ -1791,19 +1812,10 @@ const rootRouteChildren: RootRouteChildren = {
   InviteTokenRoute: InviteTokenRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
+  ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,
   GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
   ApiPublicAdCreditGatewayWebhookRoute: ApiPublicAdCreditGatewayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

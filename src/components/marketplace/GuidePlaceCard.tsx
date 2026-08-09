@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { ExternalLink, Globe, MapPin, MessageCircle, Phone, ShieldCheck, Info, Clock } from "lucide-react";
+import { ExternalLink, Globe, MapPin, MessageCircle, Phone, ShieldCheck, Info, Clock, Share2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import {
   directionsHref,
@@ -12,6 +14,14 @@ import {
   whatsappHref,
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
+import { outreachMessage, outreachWhatsappHref } from "@/lib/kaheel-intro";
+import {
+  isWithinCooldown,
+  lastOutreach,
+  recordOutreach,
+  type OutreachRecord,
+} from "@/lib/mkt-guide-outreach";
+
 
 
 /** No source imagery is rendered anywhere — rights are unverified by design. */
