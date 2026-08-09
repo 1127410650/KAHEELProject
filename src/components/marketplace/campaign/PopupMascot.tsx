@@ -280,11 +280,12 @@ function Mustache() {
       <path d="M28 92V66a20 20 0 0 1 40 0v26z" fill={BODY} />
       <KaheelanHead x={48} y={42} r={13} scarf twirl />
       <g
-        className="origin-[60px_66px] animate-[kaheel-mascot-twirl_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
+        className="origin-[64px_68px] animate-[kaheel-mascot-twirl_2.6s_ease-in-out_infinite] motion-reduce:animate-none"
         style={{ transformBox: "view-box" }}
       >
-        <path d="M62 70l-4-14" stroke={BODY_DARK} strokeWidth="7.5" strokeLinecap="round" />
-        <circle cx="57" cy="50" r="5.5" fill={SKIN} />
+        <path d="M64 70l1-14" stroke={BODY_DARK} strokeWidth="7.5" strokeLinecap="round" />
+        <circle cx="65" cy="52" r="5.5" fill={SKIN} />
+        <path d="M62 49l-3-2" stroke={SKIN} strokeWidth="3.4" strokeLinecap="round" />
       </g>
     </Frame>
   );
