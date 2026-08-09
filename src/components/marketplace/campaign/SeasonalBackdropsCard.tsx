@@ -29,6 +29,7 @@ import {
   SEASON_STATUS_LABEL,
   seasonLabel,
   useAdminSeasons,
+  type SeasonalBackdrop,
   type SeasonMascot,
   type SeasonMotif,
   type SeasonOverlay,
@@ -40,7 +41,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const MOTIFS: SeasonMotif[] = ["none", "stars", "school", "lanterns", "sparks", "confetti"];
+const MOTIFS: SeasonMotif[] = [
+  "none",
+  "stars",
+  "school",
+  "lanterns",
+  "sparks",
+  "confetti",
+  "flag",
+];
 const OVERLAYS: SeasonOverlay[] = ["soft", "medium", "strong"];
 const MASCOTS: SeasonMascot[] = ["none", "kaheel", "kaheelan", "custom"];
 const STATUSES: SeasonStatus[] = ["draft", "active", "paused", "ended"];
@@ -543,6 +552,78 @@ function FilePick({
         onChange={(event) => onPick(event.target.files?.[0] ?? null)}
       />
       {done ? <p className="text-[11px] text-emerald-600">✓</p> : null}
+    </div>
+  );
+}
+
+/** تحرير نصوص الموسم (النص البارز والسطر الفرعي) بعد إنشائه. */
+function SeasonTextEditor({
+  row,
+  ar,
+  onSave,
+}: {
+  row: SeasonalBackdrop;
+  ar: boolean;
+  onSave: (values: Partial<SeasonalBackdrop>) => Promise<unknown>;
+}) {
+  const [headlineAr, setHeadlineAr] = useState(row.headline_ar ?? "");
+  const [headlineEn, setHeadlineEn] = useState(row.headline_en ?? "");
+  const [subAr, setSubAr] = useState(row.subheadline_ar ?? "");
+  const [subEn, setSubEn] = useState(row.subheadline_en ?? "");
+  const [saving, setSaving] = useState(false);
+
+  const dirty =
+    headlineAr !== (row.headline_ar ?? "") ||
+    headlineEn !== (row.headline_en ?? "") ||
+    subAr !== (row.subheadline_ar ?? "") ||
+    subEn !== (row.subheadline_en ?? "");
+
+  return (
+    <div className="w-full space-y-2 border-t border-border/60 pt-2">
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Input
+          value={headlineAr}
+          onChange={(event) => setHeadlineAr(event.target.value)}
+          placeholder={ar ? "النص البارز (عربي)" : "Headline (Arabic)"}
+          aria-label={ar ? "النص البارز (عربي)" : "Headline (Arabic)"}
+        />
+        <Input
+          value={headlineEn}
+          onChange={(event) => setHeadlineEn(event.target.value)}
+          placeholder={ar ? "النص البارز (إنجليزي)" : "Headline (English)"}
+          aria-label={ar ? "النص البارز (إنجليزي)" : "Headline (English)"}
+        />
+        <Input
+          value={subAr}
+          onChange={(event) => setSubAr(event.target.value)}
+          placeholder={ar ? "السطر الفرعي (عربي)" : "Subtitle (Arabic)"}
+          aria-label={ar ? "السطر الفرعي (عربي)" : "Subtitle (Arabic)"}
+        />
+        <Input
+          value={subEn}
+          onChange={(event) => setSubEn(event.target.value)}
+          placeholder={ar ? "السطر الفرعي (إنجليزي)" : "Subtitle (English)"}
+          aria-label={ar ? "السطر الفرعي (إنجليزي)" : "Subtitle (English)"}
+        />
+      </div>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        disabled={!dirty || saving}
+        onClick={() => {
+          setSaving(true);
+          void onSave({
+            headline_ar: headlineAr.trim(),
+            headline_en: headlineEn.trim(),
+            subheadline_ar: subAr.trim(),
+            subheadline_en: subEn.trim(),
+          }).finally(() => setSaving(false));
+        }}
+      >
+        {saving ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+        {ar ? "حفظ النص" : "Save text"}
+      </Button>
     </div>
   );
 }
