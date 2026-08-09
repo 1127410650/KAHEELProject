@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/store/catalog")({
+export const Route = createFileRoute("/business/store/catalog")({
   ssr: false,
   head: () => ({
     meta: [
@@ -76,7 +76,7 @@ function StoreCatalogPage() {
           <CardContent className="space-y-3 pt-5 text-sm">
             <p className="font-medium">{t("market.store.emptyTitle")}</p>
             <Button asChild>
-              <Link to="/dashboard/store/new">{t("market.store.createTitle")}</Link>
+              <Link to="/business/store/new">{t("market.store.createTitle")}</Link>
             </Button>
           </CardContent>
         </Card>

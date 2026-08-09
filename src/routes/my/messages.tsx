@@ -49,7 +49,7 @@ interface MessagesSearch {
   c?: string | undefined;
 }
 
-export const Route = createFileRoute("/dashboard/messages")({
+export const Route = createFileRoute("/my/messages")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): MessagesSearch =>
     typeof search["c"] === "string" ? { c: search["c"] } : {},
@@ -95,7 +95,7 @@ function MessagesPage() {
   // The open thread lives in the URL so a refresh (or a shared link) reopens it.
   function open(id: string | null) {
     setSelected(id);
-    void navigate({ to: "/dashboard/messages", search: id ? { c: id } : {}, replace: true });
+    void navigate({ to: "/my/messages", search: id ? { c: id } : {}, replace: true });
   }
 
   const conversations = useQuery({

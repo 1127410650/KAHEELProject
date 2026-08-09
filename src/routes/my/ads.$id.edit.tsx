@@ -16,7 +16,7 @@ import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingForm } from "@/components/marketplace/ListingForm";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/ads/$id/edit")({
+export const Route = createFileRoute("/my/ads/$id/edit")({
   ssr: false,
   head: () => ({
     meta: [

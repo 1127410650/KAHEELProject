@@ -115,44 +115,44 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/privacy", "legacy", "market", { legacy_redirect: "/about#privacy", is_public: true }),
   rule("/contact", "legacy", "market", { legacy_redirect: "/help#contact", is_public: true }),
 
-  rule("/dashboard/profile", "account", "dashboard"),
-  rule("/dashboard/notifications", "account", "dashboard"),
-  rule("/dashboard/messages", "account", "dashboard"),
-  rule("/dashboard/favorites", "account", "dashboard"),
-  rule("/dashboard/bookings", "account", "dashboard"),
-  rule("/dashboard/my-ads", "account", "dashboard"),
-  rule("/dashboard/points", "account", "dashboard"),
-  rule("/dashboard/ads/new", "account", "dashboard"),
-  rule("/dashboard/ads/$id/edit", "account", "dashboard"),
-  rule("/dashboard/requests", "account", "dashboard"),
-  rule("/dashboard/reports", "account", "dashboard"),
-  rule("/dashboard/reports/$id", "account", "dashboard"),
-  rule("/dashboard/violations", "account", "dashboard"),
-  rule("/dashboard/operations", "operational", "dashboard", {
+  rule("/my/profile", "account", "dashboard"),
+  rule("/my/notifications", "account", "dashboard"),
+  rule("/my/messages", "account", "dashboard"),
+  rule("/my/favorites", "account", "dashboard"),
+  rule("/my/bookings", "account", "dashboard"),
+  rule("/my/ads", "account", "dashboard"),
+  rule("/my/wallet", "account", "dashboard"),
+  rule("/my/ads/new", "account", "dashboard"),
+  rule("/my/ads/$id/edit", "account", "dashboard"),
+  rule("/my/quotes", "account", "dashboard"),
+  rule("/my/reports", "account", "dashboard"),
+  rule("/my/reports/$id", "account", "dashboard"),
+  rule("/my/violations", "account", "dashboard"),
+  rule("/business", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/orders", "operational", "dashboard", {
+  rule("/business/orders", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/store", "operational", "dashboard", {
+  rule("/business/store", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/store/new", "operational", "dashboard", {
+  rule("/business/store/new", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/store/catalog", "operational", "dashboard", {
+  rule("/business/store/catalog", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/network", "operational", "dashboard", {
+  rule("/business/partners", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/service", "operational", "dashboard", {
+  rule("/business/services", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/service/settings", "operational", "dashboard", {
+  rule("/business/services/settings", "operational", "dashboard", {
     allowed_identity_types: ["business"],
   }),
-  rule("/dashboard/business", "account", "dashboard", {
+  rule("/business/profile", "account", "dashboard", {
     allowed_identity_types: ["business"],
   }),
 
@@ -164,16 +164,16 @@ export const ROUTE_MAP: RouteRule[] = [
   // sidebar and shell are deleted. Old bookmarks resolve here through the central
   // splat handler, so nothing 404s and no old shell can be reopened.
   // Retired / guessed "add a listing" paths — the only real one is
-  // `/dashboard/ads/new` (see `src/lib/add-listing.ts`).
-  rule("/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/new-listing", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/dashboard/new-listing", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/dashboard/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
-  rule("/market/listings/new", "legacy", "bare", { legacy_redirect: "/dashboard/ads/new" }),
+  // `/my/ads/new` (see `src/lib/add-listing.ts`).
+  rule("/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/new-listing", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/dashboard/new-listing", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/dashboard/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
+  rule("/market/listings/new", "legacy", "bare", { legacy_redirect: "/my/ads/new" }),
   rule("/select-account", "legacy", "bare", { legacy_redirect: "/choose-account" }),
-  rule("/settings", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
+  rule("/settings", "legacy", "bare", { legacy_redirect: "/my/profile" }),
   rule("/onboarding", "legacy", "bare", { legacy_redirect: "/me" }),
-  rule("/notifications", "legacy", "bare", { legacy_redirect: "/dashboard/notifications" }),
+  rule("/notifications", "legacy", "bare", { legacy_redirect: "/my/notifications" }),
   rule("/portal", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/dashboard", "legacy", "bare", { legacy_redirect: "/me" }),
   rule("/projects", "legacy", "bare", { legacy_redirect: "/me" }),
@@ -253,7 +253,7 @@ export const ROUTE_MAP: RouteRule[] = [
   // The old personal dashboard. `src/routes/me.tsx` still owns the path so the
   // destination can depend on who is asking (admin console / business dashboard /
   // personal dashboard); this entry records the canonical fallback.
-  rule("/me", "legacy", "bare", { legacy_redirect: "/dashboard/profile" }),
+  rule("/me", "legacy", "bare", { legacy_redirect: "/my/profile" }),
 ];
 
 const BY_PATH = new Map(ROUTE_MAP.map((r) => [r.path, r]));

@@ -571,7 +571,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
       clearDraft(scope);
       setDirty(false);
       toast.success(publish ? t("market.dash.submitted") : t("market.dash.savedDraft"));
-      void navigate({ to: "/dashboard/my-ads" });
+      void navigate({ to: "/my/ads" });
     } catch (error) {
       // Nothing is thrown away on failure: the draft (and its photos) stay put
       // so the advertiser can simply press the button again.

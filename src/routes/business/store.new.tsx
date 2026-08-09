@@ -27,7 +27,7 @@ interface StoreNewSearch {
   theme?: StoreThemeId | undefined;
 }
 
-export const Route = createFileRoute("/dashboard/store/new")({
+export const Route = createFileRoute("/business/store/new")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): StoreNewSearch => {
     const theme = search["theme"];

@@ -10,7 +10,7 @@ import { loadMyReports, simpleStage, type MktReportPublic } from "@/lib/mkt-repo
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/reports/")({
+export const Route = createFileRoute("/my/reports/")({
   ssr: false,
   head: () => ({
     meta: [
@@ -95,7 +95,7 @@ function MyReportsPage() {
                 <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{report.note}</p>
               )}
               <Link
-                to="/dashboard/reports/$id"
+                to="/my/reports/$id"
                 params={{ id: report.id }}
                 className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
               >

@@ -37,7 +37,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/profile")({
+export const Route = createFileRoute("/my/profile")({
   ssr: false,
   head: () => ({
     meta: [

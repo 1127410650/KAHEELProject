@@ -9,7 +9,7 @@ import { decorateListings } from "@/lib/mkt-queries";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 
-export const Route = createFileRoute("/dashboard/favorites")({
+export const Route = createFileRoute("/my/favorites")({
   ssr: false,
   head: () => ({
     meta: [

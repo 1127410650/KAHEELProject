@@ -54,18 +54,18 @@ export interface MoreLinkDef {
 export const ACTIVITY_LINKS: MoreLinkDef[] = [
   {
     key: "bookings",
-    to: "/dashboard/bookings",
+    to: "/my/bookings",
     labelKey: "market.services.myBookings",
     icon: CalendarCheck2,
     kinds: ["individual"],
   },
-  { key: "my-ads", to: "/dashboard/my-ads", labelKey: "market.dash.myAds", icon: LayoutList },
-  { key: "points", to: "/dashboard/points", labelKey: "market.points.title", icon: Coins },
-  { key: "favorites", to: "/dashboard/favorites", labelKey: "market.dash.favorites", icon: Heart },
-  { key: "reports", to: "/dashboard/reports", labelKey: "market.dash.reports", icon: Flag },
+  { key: "my-ads", to: "/my/ads", labelKey: "market.dash.myAds", icon: LayoutList },
+  { key: "points", to: "/my/wallet", labelKey: "market.points.title", icon: Coins },
+  { key: "favorites", to: "/my/favorites", labelKey: "market.dash.favorites", icon: Heart },
+  { key: "reports", to: "/my/reports", labelKey: "market.dash.reports", icon: Flag },
   {
     key: "violations",
-    to: "/dashboard/violations",
+    to: "/my/violations",
     labelKey: "market.dash.violations",
     icon: ShieldAlert,
   },
@@ -75,7 +75,7 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
 export const MANAGE_LINKS: MoreLinkDef[] = [
   {
     key: "operations",
-    to: "/dashboard/operations",
+    to: "/business",
     labelKey: "market.operations.title",
     icon: Gauge,
     kinds: ["business"],
@@ -83,7 +83,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "orders",
-    to: "/dashboard/orders",
+    to: "/business/orders",
     labelKey: "market.operations.orders",
     icon: PackageCheck,
     kinds: ["business"],
@@ -92,7 +92,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "store",
-    to: "/dashboard/store",
+    to: "/business/store",
     labelKey: "market.store.hubTitle",
     icon: Store,
     kinds: ["business"],
@@ -101,7 +101,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "provider-network",
-    to: "/dashboard/network",
+    to: "/business/partners",
     labelKey: "market.account.providerNetwork",
     icon: Network,
     kinds: ["business"],
@@ -110,7 +110,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "service-provider",
-    to: "/dashboard/service",
+    to: "/business/services",
     labelKey: "market.services.providerCenter",
     icon: CalendarClock,
     kinds: ["business"],
@@ -119,7 +119,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "business",
-    to: "/dashboard/business",
+    to: "/business/profile",
     labelKey: "market.identity.manageBusiness",
     icon: Store,
     kinds: ["business"],
@@ -133,7 +133,7 @@ export const MANAGE_LINKS: MoreLinkDef[] = [
   },
   {
     key: "profile",
-    to: "/dashboard/profile",
+    to: "/my/profile",
     labelKey: "market.identity.managePersonal",
     icon: User,
     kinds: ["individual"],

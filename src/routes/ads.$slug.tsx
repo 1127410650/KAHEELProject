@@ -348,7 +348,7 @@ function OwnerTools({ listing, onDone }: { listing: MktListing; onDone: () => vo
       <p className="mt-1 text-xs text-muted-foreground">{t("market.ad.yourAd")}</p>
       <div className="mt-3 grid gap-2">
         <Button asChild size="sm" variant="secondary">
-          <Link to="/dashboard/ads/$id/edit" params={{ id: listing.id }}>
+          <Link to="/my/ads/$id/edit" params={{ id: listing.id }}>
             {t("market.ad.edit")}
           </Link>
         </Button>
@@ -370,13 +370,13 @@ function OwnerTools({ listing, onDone }: { listing: MktListing; onDone: () => vo
             void update(
               { deleted_at: new Date().toISOString(), status: "archived" },
               t("market.ad.deletedOk"),
-            ).then(() => navigate({ to: "/dashboard/my-ads" }))
+            ).then(() => navigate({ to: "/my/ads" }))
           }
         >
           {t("market.ad.softDelete")}
         </Button>
         <Button asChild size="sm" variant="ghost">
-          <Link to="/dashboard/my-ads">{t("market.ad.statusPreview")}</Link>
+          <Link to="/my/ads">{t("market.ad.statusPreview")}</Link>
         </Button>
       </div>
     </section>

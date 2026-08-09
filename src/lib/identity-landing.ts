@@ -44,9 +44,9 @@ export async function resolveIdentityLanding(): Promise<LandingTarget | null> {
       _account_key: account.account_key,
     });
     if (storefronts?.[0]) {
-      href = "/dashboard/operations";
+      href = "/business";
     } else {
-      href = account.kind === "business" ? "/dashboard/business" : "/dashboard/profile";
+      href = account.kind === "business" ? "/business/profile" : "/my/profile";
     }
   }
 

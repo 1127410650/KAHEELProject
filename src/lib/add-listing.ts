@@ -4,7 +4,7 @@
  * Every «أضف» / «أضف إعلانًا» / «نشر إعلان» button — header, mobile bottom
  * bar, home, search empty state, «إعلاناتي», landing page and the form's own
  * sign-in prompt — must build its href through here. Never hardcode the path
- * in a component: the real route is `/dashboard/ads/new` and legacy guesses
+ * in a component: the real route is `/my/ads/new` and legacy guesses
  * (`/listings/new`, `/new-listing`, `/dashboard/listings/new`) render the 404
  * page.
  *
@@ -16,7 +16,7 @@
 import { safeInternalPath } from "@/lib/mkt";
 
 /** The real, and only, listing-creation route in this project. */
-export const ADD_LISTING_PATH = "/dashboard/ads/new" as const;
+export const ADD_LISTING_PATH = "/my/ads/new" as const;
 
 export interface AddListingOptions {
   /** Truthy when a session exists; visitors get the sign-in detour. */

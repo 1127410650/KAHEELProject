@@ -224,7 +224,7 @@ function PublicStorePage() {
               ) : null}
               {store.chat_enabled ? (
                 <Button asChild variant="outline" size="sm">
-                  <Link to="/dashboard/messages">
+                  <Link to="/my/messages">
                     <MessageCircle className="me-1 h-4 w-4" />
                     {t("market.store.publicPage.chat")}
                   </Link>

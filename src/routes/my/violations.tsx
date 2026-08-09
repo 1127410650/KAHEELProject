@@ -29,7 +29,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/dashboard/violations")({
+export const Route = createFileRoute("/my/violations")({
   ssr: false,
   head: () => ({
     meta: [

@@ -29,7 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/store/")({
+export const Route = createFileRoute("/business/store/")({
   ssr: false,
   head: () => ({
     meta: [
@@ -95,7 +95,7 @@ function StoreHubPage() {
             <p className="font-medium">{t("market.store.emptyTitle")}</p>
             <p className="text-muted-foreground">{t("market.store.emptyHint")}</p>
             <Button asChild>
-              <Link to="/dashboard/store/new">{t("market.store.createTitle")}</Link>
+              <Link to="/business/store/new">{t("market.store.createTitle")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -159,7 +159,7 @@ function StoreHubPage() {
 
             <div className="flex flex-wrap gap-2">
               <Button asChild>
-                <Link to="/dashboard/store/catalog">
+                <Link to="/business/store/catalog">
                   <UtensilsCrossed className="me-1 h-4 w-4" />
                   {data.store_type === "restaurant"
                     ? t("market.store.hub.manageMenu")
@@ -169,7 +169,7 @@ function StoreHubPage() {
                 </Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link to="/dashboard/store/new">{t("market.store.hub.editData")}</Link>
+                <Link to="/business/store/new">{t("market.store.hub.editData")}</Link>
               </Button>
               {data.status === "published" ? (
                 <Button variant="outline" asChild>
@@ -196,7 +196,7 @@ function StoreHubPage() {
                 </p>
               </div>
               <Button variant="secondary" asChild>
-                <Link to="/dashboard/service">{t("market.services.openProviderCenter")}</Link>
+                <Link to="/business/services">{t("market.services.openProviderCenter")}</Link>
               </Button>
             </CardContent>
           </Card>

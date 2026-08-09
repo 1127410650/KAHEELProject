@@ -10,7 +10,7 @@ import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ListingForm } from "@/components/marketplace/ListingForm";
 import { SmartListingPriceController } from "@/components/marketplace/SmartListingPriceController";
 
-export const Route = createFileRoute("/dashboard/ads/new")({
+export const Route = createFileRoute("/my/ads/new")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>) => {
     const raw = typeof search["field"] === "string" ? search["field"].toLowerCase() : "";

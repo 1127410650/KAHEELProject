@@ -71,7 +71,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-export const Route = createFileRoute("/dashboard/my-ads")({
+export const Route = createFileRoute("/my/ads/")({
   ssr: false,
   head: () => ({
     meta: [
@@ -346,7 +346,7 @@ function MyAdsPage() {
       toast.success(t("market.ops.duplicated"));
       await ads.refetch();
       if (typeof newId === "string") {
-        void navigate({ to: "/dashboard/ads/$id/edit", params: { id: newId } });
+        void navigate({ to: "/my/ads/$id/edit", params: { id: newId } });
       }
     } catch {
       toast.error(t("market.actions.failed"));
@@ -362,7 +362,7 @@ function MyAdsPage() {
           <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>{t("market.addListing")}</Link>
         </Button>
         <Button asChild size="sm" variant="outline">
-          <Link to="/dashboard/points">{t("market.points.title")}</Link>
+          <Link to="/my/wallet">{t("market.points.title")}</Link>
         </Button>
         <div className="relative min-w-0 flex-1 sm:max-w-xs">
           <Search
@@ -588,7 +588,7 @@ function MyAdsPage() {
                 )}
                 {ops.edit && (
                   <Button asChild size="sm" variant="secondary">
-                    <Link to="/dashboard/ads/$id/edit" params={{ id: ad.id }}>
+                    <Link to="/my/ads/$id/edit" params={{ id: ad.id }}>
                       <Pencil className="me-1 size-3.5" aria-hidden />
                       {t("market.dash.edit")}
                     </Link>

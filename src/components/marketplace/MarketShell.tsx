@@ -103,7 +103,7 @@ export function MarketHeader({
               </Link>
               <a
                 href={
-                  session ? "/dashboard/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
+                  session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                 }
                 className="relative grid size-11 justify-self-end place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={t("market.bottomNav.alerts")}
@@ -237,9 +237,9 @@ function useMarketSetupGate() {
 
 const BOTTOM_NAV_PATHS = {
   home: "/",
-  messages: "/dashboard/messages",
+  messages: "/my/messages",
   search: "/search",
-  alerts: "/dashboard/notifications",
+  alerts: "/my/notifications",
   more: "/more",
 } as const;
 

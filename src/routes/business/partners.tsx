@@ -45,7 +45,7 @@ import {
   type ProviderRelationType,
 } from "@/lib/mkt-provider-network";
 
-export const Route = createFileRoute("/dashboard/network")({
+export const Route = createFileRoute("/business/partners")({
   ssr: false,
   head: () => ({
     meta: [
@@ -352,7 +352,7 @@ function ProviderNetworkPage() {
                     </h2>
                   </div>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to="/dashboard/store">
+                    <Link to="/business/store">
                       {locale === "ar" ? "فتح مركز المتجر" : "Open store center"}
                     </Link>
                   </Button>

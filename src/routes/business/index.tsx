@@ -20,7 +20,7 @@ import { useI18n } from "@/i18n";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { useOperationsOverview } from "@/lib/mkt-provider-onboarding";
 
-export const Route = createFileRoute("/dashboard/operations")({
+export const Route = createFileRoute("/business/")({
   ssr: false,
   head: () => ({
     meta: [
@@ -82,7 +82,7 @@ function ProviderOperationsPage() {
     has("orders.receive")
       ? {
           key: "orders",
-          to: "/dashboard/orders",
+          to: "/business/orders",
           icon: PackageCheck,
           title: locale === "ar" ? "الطلبات" : "Orders",
           hint:
@@ -94,7 +94,7 @@ function ProviderOperationsPage() {
     has("bookings.receive")
       ? {
           key: "appointments",
-          to: "/dashboard/service",
+          to: "/business/services",
           icon: CalendarClock,
           title: locale === "ar" ? "المواعيد والخدمات" : "Appointments & services",
           hint:
@@ -106,7 +106,7 @@ function ProviderOperationsPage() {
     has("catalog.products") || has("catalog.services")
       ? {
           key: "catalog",
-          to: "/dashboard/store/catalog",
+          to: "/business/store/catalog",
           icon: Boxes,
           title: locale === "ar" ? "المنتجات والخدمات" : "Products & services",
           hint:
@@ -118,7 +118,7 @@ function ProviderOperationsPage() {
     has("listings.publish")
       ? {
           key: "marketing",
-          to: "/dashboard/my-ads",
+          to: "/my/ads",
           icon: Megaphone,
           title: locale === "ar" ? "التسويق والإعلانات" : "Marketing & listings",
           hint:
@@ -130,7 +130,7 @@ function ProviderOperationsPage() {
     has("listings.publish")
       ? {
           key: "promotion",
-          to: "/dashboard/my-ads",
+          to: "/my/ads",
           icon: ChartNoAxesCombined,
           title: locale === "ar" ? "الترويج المدفوع" : "Paid promotion",
           hint:
@@ -142,7 +142,7 @@ function ProviderOperationsPage() {
     has("relationships.manage") || has("integrations.manage")
       ? {
           key: "network",
-          to: "/dashboard/network",
+          to: "/business/partners",
           icon: Network,
           title: locale === "ar" ? "الشركاء والتكامل" : "Partners & integrations",
           hint:
@@ -153,7 +153,7 @@ function ProviderOperationsPage() {
       : null,
     {
       key: "settings",
-      to: "/dashboard/business",
+      to: "/business/profile",
       icon: Settings2,
       title: locale === "ar" ? "إعدادات حساب العمل" : "Work account settings",
       hint:

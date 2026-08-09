@@ -12,7 +12,7 @@ import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/dashboard/points")({
+export const Route = createFileRoute("/my/wallet")({
   ssr: false,
   head: () => ({
     meta: [
@@ -188,7 +188,7 @@ function PointsPage() {
       </div>
 
       <Link
-        to="/dashboard/my-ads"
+        to="/my/ads"
         className="mt-6 inline-block text-xs font-medium text-primary hover:underline"
       >
         {t("market.dash.myAds")}

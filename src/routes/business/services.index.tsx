@@ -37,7 +37,7 @@ import {
 } from "@/lib/mkt-services";
 import { useMyStorefront } from "@/lib/mkt-store";
 
-export const Route = createFileRoute("/dashboard/service")({
+export const Route = createFileRoute("/business/services/")({
   ssr: false,
   head: () => ({
     meta: [
@@ -161,7 +161,7 @@ function ProviderServiceCenter() {
                 : "Choose Services while creating the store to turn this account into a provider account."}
             </p>
             <Button asChild>
-              <Link to="/dashboard/store/new">
+              <Link to="/business/store/new">
                 {locale === "ar" ? "إنشاء متجر خدمات" : "Create service store"}
               </Link>
             </Button>
@@ -187,12 +187,12 @@ function ProviderServiceCenter() {
             </p>
             <div className="flex justify-center gap-2">
               <Button asChild>
-                <Link to="/dashboard/store">
+                <Link to="/business/store">
                   {locale === "ar" ? "مركز البائع" : "Seller center"}
                 </Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link to="/dashboard/store/new">
+                <Link to="/business/store/new">
                   {locale === "ar" ? "تعديل النوع" : "Edit type"}
                 </Link>
               </Button>
@@ -233,7 +233,7 @@ function ProviderServiceCenter() {
               </div>
               <div className="flex gap-2">
                 <Button variant="secondary" size="sm" asChild>
-                  <Link to="/dashboard/service/settings">
+                  <Link to="/business/services/settings">
                     <Settings2 className="me-1 size-4" />
                     {locale === "ar" ? "الإعدادات" : "Settings"}
                   </Link>
@@ -277,7 +277,7 @@ function ProviderServiceCenter() {
             </TabsList>
           </Tabs>
           <Button variant="outline" asChild>
-            <Link to="/dashboard/store/catalog">
+            <Link to="/business/store/catalog">
               <Wrench className="me-1 size-4" />
               {locale === "ar" ? "إدارة الخدمات" : "Manage services"}
             </Link>

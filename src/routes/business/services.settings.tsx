@@ -22,7 +22,7 @@ import {
   type ServiceMode,
 } from "@/lib/mkt-services";
 
-export const Route = createFileRoute("/dashboard/service/settings")({
+export const Route = createFileRoute("/business/services/settings")({
   ssr: false,
   head: () => ({
     meta: [{ title: "إعدادات مقدم الخدمة — گحيل" }, { name: "robots", content: "noindex" }],
@@ -184,7 +184,7 @@ function ProviderSettingsPage() {
                 : "These settings require a service store."}
             </p>
             <Button asChild>
-              <Link to="/dashboard/store/new">
+              <Link to="/business/store/new">
                 {locale === "ar" ? "إعداد المتجر" : "Set up store"}
               </Link>
             </Button>
@@ -208,7 +208,7 @@ function ProviderSettingsPage() {
     <DashboardShell title={locale === "ar" ? "إعدادات مقدم الخدمة" : "Provider settings"} narrow>
       <div className="space-y-5">
         <Button variant="ghost" size="sm" asChild>
-          <Link to="/dashboard/service">
+          <Link to="/business/services">
             <ArrowLeft className="me-1 size-4 rtl:rotate-180" />
             {locale === "ar" ? "العودة إلى مركز الخدمة" : "Back to provider center"}
           </Link>

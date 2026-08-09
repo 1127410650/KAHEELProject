@@ -180,7 +180,7 @@ function ServiceBookingPage() {
             ? "أُرسل طلب الحجز إلى مقدم الخدمة."
             : "Booking request sent to the provider.",
       );
-      void navigate({ to: "/dashboard/bookings" });
+      void navigate({ to: "/my/bookings" });
     } catch (error) {
       toast.error(serviceErrorMessage(error, locale));
     } finally {

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/dashboard/notifications")({
+export const Route = createFileRoute("/my/notifications")({
   ssr: false,
   head: () => ({
     meta: [

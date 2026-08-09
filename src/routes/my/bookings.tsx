@@ -22,7 +22,7 @@ import {
   type ServiceMode,
 } from "@/lib/mkt-services";
 
-export const Route = createFileRoute("/dashboard/bookings")({
+export const Route = createFileRoute("/my/bookings")({
   ssr: false,
   head: () => ({
     meta: [

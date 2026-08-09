@@ -29,7 +29,7 @@ export function MktNotificationLink({
   if (target.kind === "none") return <span className={className}>{notification.title}</span>;
   if (target.kind === "violations") {
     return (
-      <Link to="/dashboard/violations" className={className} onClick={onNavigate}>
+      <Link to="/my/violations" className={className} onClick={onNavigate}>
         {notification.title}
       </Link>
     );
@@ -48,7 +48,7 @@ export function MktNotificationLink({
   }
   return (
     <Link
-      to="/dashboard/reports/$id"
+      to="/my/reports/$id"
       params={{ id: target.reportId }}
       className={className}
       onClick={onNavigate}
@@ -146,7 +146,7 @@ export function MktNotificationsBell() {
         </ul>
         <div className="border-t border-border px-3 py-2 text-center">
           <Link
-            to="/dashboard/notifications"
+            to="/my/notifications"
             className="text-xs font-semibold text-primary hover:underline"
           >
             {t("market.notif.viewAll")}

@@ -11,7 +11,7 @@ import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { ReportThread } from "@/components/marketplace/ReportThread";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/reports/$id")({
+export const Route = createFileRoute("/my/reports/$id")({
   ssr: false,
   head: () => ({
     meta: [
@@ -59,7 +59,7 @@ function ReportDetailPage() {
   return (
     <DashboardShell title={t("market.reports.detail.title")}>
       <Link
-        to="/dashboard/reports"
+        to="/my/reports"
         className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
       >
         <ChevronRight className="size-3 rtl:rotate-180" aria-hidden />

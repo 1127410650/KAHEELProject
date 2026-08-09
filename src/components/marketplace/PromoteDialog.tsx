@@ -176,7 +176,7 @@ export function PromoteDialog({
               className="text-xs text-primary underline underline-offset-2"
               onClick={() => {
                 onOpenChange(false);
-                void navigate({ to: "/dashboard/points" });
+                void navigate({ to: "/my/wallet" });
               }}
             >
               {t("market.promote.viewPoints")}

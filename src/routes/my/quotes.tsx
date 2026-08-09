@@ -7,7 +7,7 @@ import { useSession } from "@/lib/session";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 
-export const Route = createFileRoute("/dashboard/requests")({
+export const Route = createFileRoute("/my/quotes")({
   ssr: false,
   head: () => ({
     meta: [

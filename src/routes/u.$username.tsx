@@ -181,7 +181,7 @@ function UserProfilePage() {
           <div className="mt-3 flex flex-wrap gap-2">
             {me.is_owner ? (
               <Button asChild variant="outline" size="sm" className="min-h-11 flex-1 sm:flex-none">
-                <Link to="/dashboard/profile">
+                <Link to="/my/profile">
                   <Pencil className="size-4" aria-hidden />
                   {t("market.person.editProfile")}
                 </Link>

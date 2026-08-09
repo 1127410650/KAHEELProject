@@ -27,7 +27,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/dashboard/business")({
+export const Route = createFileRoute("/business/profile")({
   ssr: false,
   head: () => ({
     meta: [

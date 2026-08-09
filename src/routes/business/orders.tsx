@@ -22,7 +22,7 @@ import {
 
 type Filter = "all" | "submitted" | "active" | "completed";
 
-export const Route = createFileRoute("/dashboard/orders")({
+export const Route = createFileRoute("/business/orders")({
   ssr: false,
   head: () => ({
     meta: [

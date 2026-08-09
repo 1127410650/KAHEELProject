@@ -52,24 +52,22 @@ import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdminWorkforceRouteImport } from './routes/admin/workforce'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
+import { Route as BusinessIndexRouteImport } from './routes/business/index'
+import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
+import { Route as BusinessPartnersRouteImport } from './routes/business/partners'
+import { Route as BusinessProfileRouteImport } from './routes/business/profile'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
-import { Route as DashboardBookingsRouteImport } from './routes/dashboard/bookings'
-import { Route as DashboardBusinessRouteImport } from './routes/dashboard/business'
-import { Route as DashboardFavoritesRouteImport } from './routes/dashboard/favorites'
-import { Route as DashboardMessagesRouteImport } from './routes/dashboard/messages'
-import { Route as DashboardMyAdsRouteImport } from './routes/dashboard/my-ads'
-import { Route as DashboardNetworkRouteImport } from './routes/dashboard/network'
-import { Route as DashboardNotificationsRouteImport } from './routes/dashboard/notifications'
-import { Route as DashboardOperationsRouteImport } from './routes/dashboard/operations'
-import { Route as DashboardOrdersRouteImport } from './routes/dashboard/orders'
-import { Route as DashboardPointsRouteImport } from './routes/dashboard/points'
-import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
-import { Route as DashboardRequestsRouteImport } from './routes/dashboard/requests'
-import { Route as DashboardServiceRouteImport } from './routes/dashboard/service'
-import { Route as DashboardViolationsRouteImport } from './routes/dashboard/violations'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as MyBookingsRouteImport } from './routes/my/bookings'
+import { Route as MyFavoritesRouteImport } from './routes/my/favorites'
+import { Route as MyMessagesRouteImport } from './routes/my/messages'
+import { Route as MyNotificationsRouteImport } from './routes/my/notifications'
+import { Route as MyProfileRouteImport } from './routes/my/profile'
+import { Route as MyQuotesRouteImport } from './routes/my/quotes'
+import { Route as MyViolationsRouteImport } from './routes/my/violations'
+import { Route as MyWalletRouteImport } from './routes/my/wallet'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -79,14 +77,16 @@ import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.in
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
-import { Route as DashboardAdsNewRouteImport } from './routes/dashboard/ads.new'
-import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports.index'
-import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports.$id'
-import { Route as DashboardServiceSettingsRouteImport } from './routes/dashboard/service.settings'
-import { Route as DashboardStoreIndexRouteImport } from './routes/dashboard/store.index'
-import { Route as DashboardStoreCatalogRouteImport } from './routes/dashboard/store.catalog'
-import { Route as DashboardStoreNewRouteImport } from './routes/dashboard/store.new'
-import { Route as DashboardAdsIdEditRouteImport } from './routes/dashboard/ads.$id.edit'
+import { Route as BusinessServicesIndexRouteImport } from './routes/business/services.index'
+import { Route as BusinessServicesSettingsRouteImport } from './routes/business/services.settings'
+import { Route as BusinessStoreIndexRouteImport } from './routes/business/store.index'
+import { Route as BusinessStoreCatalogRouteImport } from './routes/business/store.catalog'
+import { Route as BusinessStoreNewRouteImport } from './routes/business/store.new'
+import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
+import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
+import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
+import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
+import { Route as MyAdsIdEditRouteImport } from './routes/my/ads.$id.edit'
 import { Route as ServicesSlugItemIdBookRouteImport } from './routes/services.$slug.$itemId.book'
 
 const IndexRoute = IndexRouteImport.update({
@@ -304,6 +304,26 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
   path: '/ads/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BusinessIndexRoute = BusinessIndexRouteImport.update({
+  id: '/business/',
+  path: '/business/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessOrdersRoute = BusinessOrdersRouteImport.update({
+  id: '/business/orders',
+  path: '/business/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessPartnersRoute = BusinessPartnersRouteImport.update({
+  id: '/business/partners',
+  path: '/business/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessProfileRoute = BusinessProfileRouteImport.update({
+  id: '/business/profile',
+  path: '/business/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
   id: '/businesses/$slug',
   path: '/businesses/$slug',
@@ -314,76 +334,6 @@ const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   path: '/categories/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardBookingsRoute = DashboardBookingsRouteImport.update({
-  id: '/bookings',
-  path: '/bookings',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardBusinessRoute = DashboardBusinessRouteImport.update({
-  id: '/business',
-  path: '/business',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardFavoritesRoute = DashboardFavoritesRouteImport.update({
-  id: '/favorites',
-  path: '/favorites',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardMyAdsRoute = DashboardMyAdsRouteImport.update({
-  id: '/my-ads',
-  path: '/my-ads',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardNetworkRoute = DashboardNetworkRouteImport.update({
-  id: '/network',
-  path: '/network',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardOperationsRoute = DashboardOperationsRouteImport.update({
-  id: '/operations',
-  path: '/operations',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardOrdersRoute = DashboardOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardPointsRoute = DashboardPointsRouteImport.update({
-  id: '/points',
-  path: '/points',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
-  id: '/requests',
-  path: '/requests',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardServiceRoute = DashboardServiceRouteImport.update({
-  id: '/service',
-  path: '/service',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardViolationsRoute = DashboardViolationsRouteImport.update({
-  id: '/violations',
-  path: '/violations',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
 const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
   id: '/demo-stores/$worldId',
   path: '/demo-stores/$worldId',
@@ -392,6 +342,46 @@ const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyBookingsRoute = MyBookingsRouteImport.update({
+  id: '/my/bookings',
+  path: '/my/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyFavoritesRoute = MyFavoritesRouteImport.update({
+  id: '/my/favorites',
+  path: '/my/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyMessagesRoute = MyMessagesRouteImport.update({
+  id: '/my/messages',
+  path: '/my/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyNotificationsRoute = MyNotificationsRouteImport.update({
+  id: '/my/notifications',
+  path: '/my/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyProfileRoute = MyProfileRouteImport.update({
+  id: '/my/profile',
+  path: '/my/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyQuotesRoute = MyQuotesRouteImport.update({
+  id: '/my/quotes',
+  path: '/my/quotes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyViolationsRoute = MyViolationsRouteImport.update({
+  id: '/my/violations',
+  path: '/my/violations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyWalletRoute = MyWalletRouteImport.update({
+  id: '/my/wallet',
+  path: '/my/wallet',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesIndexRoute = ServicesIndexRouteImport.update({
@@ -439,46 +429,56 @@ const AdminVerificationsIdRoute = AdminVerificationsIdRouteImport.update({
   path: '/verifications/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const DashboardAdsNewRoute = DashboardAdsNewRouteImport.update({
-  id: '/ads/new',
-  path: '/ads/new',
-  getParentRoute: () => DashboardRouteRoute,
+const BusinessServicesIndexRoute = BusinessServicesIndexRouteImport.update({
+  id: '/business/services/',
+  path: '/business/services/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardReportsIndexRoute = DashboardReportsIndexRouteImport.update({
-  id: '/reports/',
-  path: '/reports/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardReportsIdRoute = DashboardReportsIdRouteImport.update({
-  id: '/reports/$id',
-  path: '/reports/$id',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardServiceSettingsRoute =
-  DashboardServiceSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => DashboardServiceRoute,
+const BusinessServicesSettingsRoute =
+  BusinessServicesSettingsRouteImport.update({
+    id: '/business/services/settings',
+    path: '/business/services/settings',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const DashboardStoreIndexRoute = DashboardStoreIndexRouteImport.update({
-  id: '/store/',
-  path: '/store/',
-  getParentRoute: () => DashboardRouteRoute,
+const BusinessStoreIndexRoute = BusinessStoreIndexRouteImport.update({
+  id: '/business/store/',
+  path: '/business/store/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardStoreCatalogRoute = DashboardStoreCatalogRouteImport.update({
-  id: '/store/catalog',
-  path: '/store/catalog',
-  getParentRoute: () => DashboardRouteRoute,
+const BusinessStoreCatalogRoute = BusinessStoreCatalogRouteImport.update({
+  id: '/business/store/catalog',
+  path: '/business/store/catalog',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardStoreNewRoute = DashboardStoreNewRouteImport.update({
-  id: '/store/new',
-  path: '/store/new',
-  getParentRoute: () => DashboardRouteRoute,
+const BusinessStoreNewRoute = BusinessStoreNewRouteImport.update({
+  id: '/business/store/new',
+  path: '/business/store/new',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardAdsIdEditRoute = DashboardAdsIdEditRouteImport.update({
-  id: '/ads/$id/edit',
-  path: '/ads/$id/edit',
-  getParentRoute: () => DashboardRouteRoute,
+const MyAdsIndexRoute = MyAdsIndexRouteImport.update({
+  id: '/my/ads/',
+  path: '/my/ads/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyAdsNewRoute = MyAdsNewRouteImport.update({
+  id: '/my/ads/new',
+  path: '/my/ads/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyReportsIndexRoute = MyReportsIndexRouteImport.update({
+  id: '/my/reports/',
+  path: '/my/reports/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyReportsIdRoute = MyReportsIdRouteImport.update({
+  id: '/my/reports/$id',
+  path: '/my/reports/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyAdsIdEditRoute = MyAdsIdEditRouteImport.update({
+  id: '/my/ads/$id/edit',
+  path: '/my/ads/$id/edit',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
   id: '/$slug/$itemId/book',
@@ -489,7 +489,7 @@ const ServicesSlugItemIdBookRoute = ServicesSlugItemIdBookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
@@ -529,47 +529,47 @@ export interface FileRoutesByFullPath {
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/business/orders': typeof BusinessOrdersRoute
+  '/business/partners': typeof BusinessPartnersRoute
+  '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
-  '/dashboard/bookings': typeof DashboardBookingsRoute
-  '/dashboard/business': typeof DashboardBusinessRoute
-  '/dashboard/favorites': typeof DashboardFavoritesRoute
-  '/dashboard/messages': typeof DashboardMessagesRoute
-  '/dashboard/my-ads': typeof DashboardMyAdsRoute
-  '/dashboard/network': typeof DashboardNetworkRoute
-  '/dashboard/notifications': typeof DashboardNotificationsRoute
-  '/dashboard/operations': typeof DashboardOperationsRoute
-  '/dashboard/orders': typeof DashboardOrdersRoute
-  '/dashboard/points': typeof DashboardPointsRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
-  '/dashboard/requests': typeof DashboardRequestsRoute
-  '/dashboard/service': typeof DashboardServiceRouteWithChildren
-  '/dashboard/violations': typeof DashboardViolationsRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/bookings': typeof MyBookingsRoute
+  '/my/favorites': typeof MyFavoritesRoute
+  '/my/messages': typeof MyMessagesRoute
+  '/my/notifications': typeof MyNotificationsRoute
+  '/my/profile': typeof MyProfileRoute
+  '/my/quotes': typeof MyQuotesRoute
+  '/my/violations': typeof MyViolationsRoute
+  '/my/wallet': typeof MyWalletRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
+  '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
-  '/dashboard/ads/new': typeof DashboardAdsNewRoute
-  '/dashboard/reports/$id': typeof DashboardReportsIdRoute
-  '/dashboard/service/settings': typeof DashboardServiceSettingsRoute
-  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
-  '/dashboard/store/new': typeof DashboardStoreNewRoute
+  '/business/services/settings': typeof BusinessServicesSettingsRoute
+  '/business/store/catalog': typeof BusinessStoreCatalogRoute
+  '/business/store/new': typeof BusinessStoreNewRoute
+  '/my/ads/new': typeof MyAdsNewRoute
+  '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
-  '/dashboard/reports/': typeof DashboardReportsIndexRoute
-  '/dashboard/store/': typeof DashboardStoreIndexRoute
-  '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
+  '/business/services/': typeof BusinessServicesIndexRoute
+  '/business/store/': typeof BusinessStoreIndexRoute
+  '/my/ads/': typeof MyAdsIndexRoute
+  '/my/reports/': typeof MyReportsIndexRoute
+  '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
@@ -608,49 +608,49 @@ export interface FileRoutesByTo {
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/business/orders': typeof BusinessOrdersRoute
+  '/business/partners': typeof BusinessPartnersRoute
+  '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
-  '/dashboard/bookings': typeof DashboardBookingsRoute
-  '/dashboard/business': typeof DashboardBusinessRoute
-  '/dashboard/favorites': typeof DashboardFavoritesRoute
-  '/dashboard/messages': typeof DashboardMessagesRoute
-  '/dashboard/my-ads': typeof DashboardMyAdsRoute
-  '/dashboard/network': typeof DashboardNetworkRoute
-  '/dashboard/notifications': typeof DashboardNotificationsRoute
-  '/dashboard/operations': typeof DashboardOperationsRoute
-  '/dashboard/orders': typeof DashboardOrdersRoute
-  '/dashboard/points': typeof DashboardPointsRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
-  '/dashboard/requests': typeof DashboardRequestsRoute
-  '/dashboard/service': typeof DashboardServiceRouteWithChildren
-  '/dashboard/violations': typeof DashboardViolationsRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/bookings': typeof MyBookingsRoute
+  '/my/favorites': typeof MyFavoritesRoute
+  '/my/messages': typeof MyMessagesRoute
+  '/my/notifications': typeof MyNotificationsRoute
+  '/my/profile': typeof MyProfileRoute
+  '/my/quotes': typeof MyQuotesRoute
+  '/my/violations': typeof MyViolationsRoute
+  '/my/wallet': typeof MyWalletRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
+  '/business': typeof BusinessIndexRoute
   '/services': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
-  '/dashboard/ads/new': typeof DashboardAdsNewRoute
-  '/dashboard/reports/$id': typeof DashboardReportsIdRoute
-  '/dashboard/service/settings': typeof DashboardServiceSettingsRoute
-  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
-  '/dashboard/store/new': typeof DashboardStoreNewRoute
+  '/business/services/settings': typeof BusinessServicesSettingsRoute
+  '/business/store/catalog': typeof BusinessStoreCatalogRoute
+  '/business/store/new': typeof BusinessStoreNewRoute
+  '/my/ads/new': typeof MyAdsNewRoute
+  '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports': typeof AdminReportsIndexRoute
-  '/dashboard/reports': typeof DashboardReportsIndexRoute
-  '/dashboard/store': typeof DashboardStoreIndexRoute
-  '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
+  '/business/services': typeof BusinessServicesIndexRoute
+  '/business/store': typeof BusinessStoreIndexRoute
+  '/my/ads': typeof MyAdsIndexRoute
+  '/my/reports': typeof MyReportsIndexRoute
+  '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
@@ -690,42 +690,42 @@ export interface FileRoutesById {
   '/admin/verifications': typeof AdminVerificationsRoute
   '/admin/workforce': typeof AdminWorkforceRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/business/orders': typeof BusinessOrdersRoute
+  '/business/partners': typeof BusinessPartnersRoute
+  '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
-  '/dashboard/bookings': typeof DashboardBookingsRoute
-  '/dashboard/business': typeof DashboardBusinessRoute
-  '/dashboard/favorites': typeof DashboardFavoritesRoute
-  '/dashboard/messages': typeof DashboardMessagesRoute
-  '/dashboard/my-ads': typeof DashboardMyAdsRoute
-  '/dashboard/network': typeof DashboardNetworkRoute
-  '/dashboard/notifications': typeof DashboardNotificationsRoute
-  '/dashboard/operations': typeof DashboardOperationsRoute
-  '/dashboard/orders': typeof DashboardOrdersRoute
-  '/dashboard/points': typeof DashboardPointsRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
-  '/dashboard/requests': typeof DashboardRequestsRoute
-  '/dashboard/service': typeof DashboardServiceRouteWithChildren
-  '/dashboard/violations': typeof DashboardViolationsRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/my/bookings': typeof MyBookingsRoute
+  '/my/favorites': typeof MyFavoritesRoute
+  '/my/messages': typeof MyMessagesRoute
+  '/my/notifications': typeof MyNotificationsRoute
+  '/my/profile': typeof MyProfileRoute
+  '/my/quotes': typeof MyQuotesRoute
+  '/my/violations': typeof MyViolationsRoute
+  '/my/wallet': typeof MyWalletRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
+  '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
-  '/dashboard/ads/new': typeof DashboardAdsNewRoute
-  '/dashboard/reports/$id': typeof DashboardReportsIdRoute
-  '/dashboard/service/settings': typeof DashboardServiceSettingsRoute
-  '/dashboard/store/catalog': typeof DashboardStoreCatalogRoute
-  '/dashboard/store/new': typeof DashboardStoreNewRoute
+  '/business/services/settings': typeof BusinessServicesSettingsRoute
+  '/business/store/catalog': typeof BusinessStoreCatalogRoute
+  '/business/store/new': typeof BusinessStoreNewRoute
+  '/my/ads/new': typeof MyAdsNewRoute
+  '/my/reports/$id': typeof MyReportsIdRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
-  '/dashboard/reports/': typeof DashboardReportsIndexRoute
-  '/dashboard/store/': typeof DashboardStoreIndexRoute
-  '/dashboard/ads/$id/edit': typeof DashboardAdsIdEditRoute
+  '/business/services/': typeof BusinessServicesIndexRoute
+  '/business/store/': typeof BusinessStoreIndexRoute
+  '/my/ads/': typeof MyAdsIndexRoute
+  '/my/reports/': typeof MyReportsIndexRoute
+  '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
 }
 export interface FileRouteTypes {
@@ -773,42 +773,42 @@ export interface FileRouteTypes {
     | '/admin/verifications'
     | '/admin/workforce'
     | '/ads/$slug'
+    | '/business/orders'
+    | '/business/partners'
+    | '/business/profile'
     | '/businesses/$slug'
     | '/categories/$slug'
-    | '/dashboard/bookings'
-    | '/dashboard/business'
-    | '/dashboard/favorites'
-    | '/dashboard/messages'
-    | '/dashboard/my-ads'
-    | '/dashboard/network'
-    | '/dashboard/notifications'
-    | '/dashboard/operations'
-    | '/dashboard/orders'
-    | '/dashboard/points'
-    | '/dashboard/profile'
-    | '/dashboard/requests'
-    | '/dashboard/service'
-    | '/dashboard/violations'
     | '/demo-stores/$worldId'
     | '/invite/$token'
+    | '/my/bookings'
+    | '/my/favorites'
+    | '/my/messages'
+    | '/my/notifications'
+    | '/my/profile'
+    | '/my/quotes'
+    | '/my/violations'
+    | '/my/wallet'
     | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
+    | '/business/'
     | '/services/'
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
-    | '/dashboard/ads/new'
-    | '/dashboard/reports/$id'
-    | '/dashboard/service/settings'
-    | '/dashboard/store/catalog'
-    | '/dashboard/store/new'
+    | '/business/services/settings'
+    | '/business/store/catalog'
+    | '/business/store/new'
+    | '/my/ads/new'
+    | '/my/reports/$id'
     | '/admin/reports/'
-    | '/dashboard/reports/'
-    | '/dashboard/store/'
-    | '/dashboard/ads/$id/edit'
+    | '/business/services/'
+    | '/business/store/'
+    | '/my/ads/'
+    | '/my/reports/'
+    | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -852,42 +852,42 @@ export interface FileRouteTypes {
     | '/admin/verifications'
     | '/admin/workforce'
     | '/ads/$slug'
+    | '/business/orders'
+    | '/business/partners'
+    | '/business/profile'
     | '/businesses/$slug'
     | '/categories/$slug'
-    | '/dashboard/bookings'
-    | '/dashboard/business'
-    | '/dashboard/favorites'
-    | '/dashboard/messages'
-    | '/dashboard/my-ads'
-    | '/dashboard/network'
-    | '/dashboard/notifications'
-    | '/dashboard/operations'
-    | '/dashboard/orders'
-    | '/dashboard/points'
-    | '/dashboard/profile'
-    | '/dashboard/requests'
-    | '/dashboard/service'
-    | '/dashboard/violations'
     | '/demo-stores/$worldId'
     | '/invite/$token'
+    | '/my/bookings'
+    | '/my/favorites'
+    | '/my/messages'
+    | '/my/notifications'
+    | '/my/profile'
+    | '/my/quotes'
+    | '/my/violations'
+    | '/my/wallet'
     | '/stores/$slug'
     | '/u/$username'
     | '/admin'
+    | '/business'
     | '/services'
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
-    | '/dashboard/ads/new'
-    | '/dashboard/reports/$id'
-    | '/dashboard/service/settings'
-    | '/dashboard/store/catalog'
-    | '/dashboard/store/new'
+    | '/business/services/settings'
+    | '/business/store/catalog'
+    | '/business/store/new'
+    | '/my/ads/new'
+    | '/my/reports/$id'
     | '/admin/reports'
-    | '/dashboard/reports'
-    | '/dashboard/store'
-    | '/dashboard/ads/$id/edit'
+    | '/business/services'
+    | '/business/store'
+    | '/my/ads'
+    | '/my/reports'
+    | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   id:
     | '__root__'
@@ -933,49 +933,49 @@ export interface FileRouteTypes {
     | '/admin/verifications'
     | '/admin/workforce'
     | '/ads/$slug'
+    | '/business/orders'
+    | '/business/partners'
+    | '/business/profile'
     | '/businesses/$slug'
     | '/categories/$slug'
-    | '/dashboard/bookings'
-    | '/dashboard/business'
-    | '/dashboard/favorites'
-    | '/dashboard/messages'
-    | '/dashboard/my-ads'
-    | '/dashboard/network'
-    | '/dashboard/notifications'
-    | '/dashboard/operations'
-    | '/dashboard/orders'
-    | '/dashboard/points'
-    | '/dashboard/profile'
-    | '/dashboard/requests'
-    | '/dashboard/service'
-    | '/dashboard/violations'
     | '/demo-stores/$worldId'
     | '/invite/$token'
+    | '/my/bookings'
+    | '/my/favorites'
+    | '/my/messages'
+    | '/my/notifications'
+    | '/my/profile'
+    | '/my/quotes'
+    | '/my/violations'
+    | '/my/wallet'
     | '/stores/$slug'
     | '/u/$username'
     | '/admin/'
+    | '/business/'
     | '/services/'
     | '/admin/businesses_/$id'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
-    | '/dashboard/ads/new'
-    | '/dashboard/reports/$id'
-    | '/dashboard/service/settings'
-    | '/dashboard/store/catalog'
-    | '/dashboard/store/new'
+    | '/business/services/settings'
+    | '/business/store/catalog'
+    | '/business/store/new'
+    | '/my/ads/new'
+    | '/my/reports/$id'
     | '/admin/reports/'
-    | '/dashboard/reports/'
-    | '/dashboard/store/'
-    | '/dashboard/ads/$id/edit'
+    | '/business/services/'
+    | '/business/store/'
+    | '/my/ads/'
+    | '/my/reports/'
+    | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRoute
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AuditRoute: typeof AuditRoute
@@ -996,12 +996,34 @@ export interface RootRouteChildren {
   SyriaGuideRoute: typeof SyriaGuideRoute
   WelcomeRoute: typeof WelcomeRoute
   AdsSlugRoute: typeof AdsSlugRoute
+  BusinessOrdersRoute: typeof BusinessOrdersRoute
+  BusinessPartnersRoute: typeof BusinessPartnersRoute
+  BusinessProfileRoute: typeof BusinessProfileRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  MyBookingsRoute: typeof MyBookingsRoute
+  MyFavoritesRoute: typeof MyFavoritesRoute
+  MyMessagesRoute: typeof MyMessagesRoute
+  MyNotificationsRoute: typeof MyNotificationsRoute
+  MyProfileRoute: typeof MyProfileRoute
+  MyQuotesRoute: typeof MyQuotesRoute
+  MyViolationsRoute: typeof MyViolationsRoute
+  MyWalletRoute: typeof MyWalletRoute
   StoresSlugRoute: typeof StoresSlugRoute
   UUsernameRoute: typeof UUsernameRoute
+  BusinessIndexRoute: typeof BusinessIndexRoute
+  BusinessServicesSettingsRoute: typeof BusinessServicesSettingsRoute
+  BusinessStoreCatalogRoute: typeof BusinessStoreCatalogRoute
+  BusinessStoreNewRoute: typeof BusinessStoreNewRoute
+  MyAdsNewRoute: typeof MyAdsNewRoute
+  MyReportsIdRoute: typeof MyReportsIdRoute
+  BusinessServicesIndexRoute: typeof BusinessServicesIndexRoute
+  BusinessStoreIndexRoute: typeof BusinessStoreIndexRoute
+  MyAdsIndexRoute: typeof MyAdsIndexRoute
+  MyReportsIndexRoute: typeof MyReportsIndexRoute
+  MyAdsIdEditRoute: typeof MyAdsIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1307,6 +1329,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/business/': {
+      id: '/business/'
+      path: '/business'
+      fullPath: '/business/'
+      preLoaderRoute: typeof BusinessIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business/orders': {
+      id: '/business/orders'
+      path: '/business/orders'
+      fullPath: '/business/orders'
+      preLoaderRoute: typeof BusinessOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business/partners': {
+      id: '/business/partners'
+      path: '/business/partners'
+      fullPath: '/business/partners'
+      preLoaderRoute: typeof BusinessPartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business/profile': {
+      id: '/business/profile'
+      path: '/business/profile'
+      fullPath: '/business/profile'
+      preLoaderRoute: typeof BusinessProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/businesses/$slug': {
       id: '/businesses/$slug'
       path: '/businesses/$slug'
@@ -1321,104 +1371,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/bookings': {
-      id: '/dashboard/bookings'
-      path: '/bookings'
-      fullPath: '/dashboard/bookings'
-      preLoaderRoute: typeof DashboardBookingsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/business': {
-      id: '/dashboard/business'
-      path: '/business'
-      fullPath: '/dashboard/business'
-      preLoaderRoute: typeof DashboardBusinessRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/favorites': {
-      id: '/dashboard/favorites'
-      path: '/favorites'
-      fullPath: '/dashboard/favorites'
-      preLoaderRoute: typeof DashboardFavoritesRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/messages': {
-      id: '/dashboard/messages'
-      path: '/messages'
-      fullPath: '/dashboard/messages'
-      preLoaderRoute: typeof DashboardMessagesRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/my-ads': {
-      id: '/dashboard/my-ads'
-      path: '/my-ads'
-      fullPath: '/dashboard/my-ads'
-      preLoaderRoute: typeof DashboardMyAdsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/network': {
-      id: '/dashboard/network'
-      path: '/network'
-      fullPath: '/dashboard/network'
-      preLoaderRoute: typeof DashboardNetworkRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/notifications': {
-      id: '/dashboard/notifications'
-      path: '/notifications'
-      fullPath: '/dashboard/notifications'
-      preLoaderRoute: typeof DashboardNotificationsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/operations': {
-      id: '/dashboard/operations'
-      path: '/operations'
-      fullPath: '/dashboard/operations'
-      preLoaderRoute: typeof DashboardOperationsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/orders': {
-      id: '/dashboard/orders'
-      path: '/orders'
-      fullPath: '/dashboard/orders'
-      preLoaderRoute: typeof DashboardOrdersRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/points': {
-      id: '/dashboard/points'
-      path: '/points'
-      fullPath: '/dashboard/points'
-      preLoaderRoute: typeof DashboardPointsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/profile': {
-      id: '/dashboard/profile'
-      path: '/profile'
-      fullPath: '/dashboard/profile'
-      preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/requests': {
-      id: '/dashboard/requests'
-      path: '/requests'
-      fullPath: '/dashboard/requests'
-      preLoaderRoute: typeof DashboardRequestsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/service': {
-      id: '/dashboard/service'
-      path: '/service'
-      fullPath: '/dashboard/service'
-      preLoaderRoute: typeof DashboardServiceRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/violations': {
-      id: '/dashboard/violations'
-      path: '/violations'
-      fullPath: '/dashboard/violations'
-      preLoaderRoute: typeof DashboardViolationsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/demo-stores/$worldId': {
       id: '/demo-stores/$worldId'
       path: '/demo-stores/$worldId'
@@ -1431,6 +1383,62 @@ declare module '@tanstack/react-router' {
       path: '/invite/$token'
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/bookings': {
+      id: '/my/bookings'
+      path: '/my/bookings'
+      fullPath: '/my/bookings'
+      preLoaderRoute: typeof MyBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/favorites': {
+      id: '/my/favorites'
+      path: '/my/favorites'
+      fullPath: '/my/favorites'
+      preLoaderRoute: typeof MyFavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/messages': {
+      id: '/my/messages'
+      path: '/my/messages'
+      fullPath: '/my/messages'
+      preLoaderRoute: typeof MyMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/notifications': {
+      id: '/my/notifications'
+      path: '/my/notifications'
+      fullPath: '/my/notifications'
+      preLoaderRoute: typeof MyNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/profile': {
+      id: '/my/profile'
+      path: '/my/profile'
+      fullPath: '/my/profile'
+      preLoaderRoute: typeof MyProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/quotes': {
+      id: '/my/quotes'
+      path: '/my/quotes'
+      fullPath: '/my/quotes'
+      preLoaderRoute: typeof MyQuotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/violations': {
+      id: '/my/violations'
+      path: '/my/violations'
+      fullPath: '/my/violations'
+      preLoaderRoute: typeof MyViolationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/wallet': {
+      id: '/my/wallet'
+      path: '/my/wallet'
+      fullPath: '/my/wallet'
+      preLoaderRoute: typeof MyWalletRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/': {
@@ -1496,61 +1504,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVerificationsIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/dashboard/ads/new': {
-      id: '/dashboard/ads/new'
-      path: '/ads/new'
-      fullPath: '/dashboard/ads/new'
-      preLoaderRoute: typeof DashboardAdsNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/business/services/': {
+      id: '/business/services/'
+      path: '/business/services'
+      fullPath: '/business/services/'
+      preLoaderRoute: typeof BusinessServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/reports/': {
-      id: '/dashboard/reports/'
-      path: '/reports'
-      fullPath: '/dashboard/reports/'
-      preLoaderRoute: typeof DashboardReportsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/business/services/settings': {
+      id: '/business/services/settings'
+      path: '/business/services/settings'
+      fullPath: '/business/services/settings'
+      preLoaderRoute: typeof BusinessServicesSettingsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/reports/$id': {
-      id: '/dashboard/reports/$id'
-      path: '/reports/$id'
-      fullPath: '/dashboard/reports/$id'
-      preLoaderRoute: typeof DashboardReportsIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/business/store/': {
+      id: '/business/store/'
+      path: '/business/store'
+      fullPath: '/business/store/'
+      preLoaderRoute: typeof BusinessStoreIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/service/settings': {
-      id: '/dashboard/service/settings'
-      path: '/settings'
-      fullPath: '/dashboard/service/settings'
-      preLoaderRoute: typeof DashboardServiceSettingsRouteImport
-      parentRoute: typeof DashboardServiceRoute
+    '/business/store/catalog': {
+      id: '/business/store/catalog'
+      path: '/business/store/catalog'
+      fullPath: '/business/store/catalog'
+      preLoaderRoute: typeof BusinessStoreCatalogRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/store/': {
-      id: '/dashboard/store/'
-      path: '/store'
-      fullPath: '/dashboard/store/'
-      preLoaderRoute: typeof DashboardStoreIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/business/store/new': {
+      id: '/business/store/new'
+      path: '/business/store/new'
+      fullPath: '/business/store/new'
+      preLoaderRoute: typeof BusinessStoreNewRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/store/catalog': {
-      id: '/dashboard/store/catalog'
-      path: '/store/catalog'
-      fullPath: '/dashboard/store/catalog'
-      preLoaderRoute: typeof DashboardStoreCatalogRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/my/ads/': {
+      id: '/my/ads/'
+      path: '/my/ads'
+      fullPath: '/my/ads/'
+      preLoaderRoute: typeof MyAdsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/store/new': {
-      id: '/dashboard/store/new'
-      path: '/store/new'
-      fullPath: '/dashboard/store/new'
-      preLoaderRoute: typeof DashboardStoreNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/my/ads/new': {
+      id: '/my/ads/new'
+      path: '/my/ads/new'
+      fullPath: '/my/ads/new'
+      preLoaderRoute: typeof MyAdsNewRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/dashboard/ads/$id/edit': {
-      id: '/dashboard/ads/$id/edit'
-      path: '/ads/$id/edit'
-      fullPath: '/dashboard/ads/$id/edit'
-      preLoaderRoute: typeof DashboardAdsIdEditRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/my/reports/': {
+      id: '/my/reports/'
+      path: '/my/reports'
+      fullPath: '/my/reports/'
+      preLoaderRoute: typeof MyReportsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/reports/$id': {
+      id: '/my/reports/$id'
+      path: '/my/reports/$id'
+      fullPath: '/my/reports/$id'
+      preLoaderRoute: typeof MyReportsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my/ads/$id/edit': {
+      id: '/my/ads/$id/edit'
+      path: '/my/ads/$id/edit'
+      fullPath: '/my/ads/$id/edit'
+      preLoaderRoute: typeof MyAdsIdEditRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/services/$slug/$itemId/book': {
       id: '/services/$slug/$itemId/book'
@@ -1624,69 +1646,6 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
-interface DashboardServiceRouteChildren {
-  DashboardServiceSettingsRoute: typeof DashboardServiceSettingsRoute
-}
-
-const DashboardServiceRouteChildren: DashboardServiceRouteChildren = {
-  DashboardServiceSettingsRoute: DashboardServiceSettingsRoute,
-}
-
-const DashboardServiceRouteWithChildren =
-  DashboardServiceRoute._addFileChildren(DashboardServiceRouteChildren)
-
-interface DashboardRouteRouteChildren {
-  DashboardBookingsRoute: typeof DashboardBookingsRoute
-  DashboardBusinessRoute: typeof DashboardBusinessRoute
-  DashboardFavoritesRoute: typeof DashboardFavoritesRoute
-  DashboardMessagesRoute: typeof DashboardMessagesRoute
-  DashboardMyAdsRoute: typeof DashboardMyAdsRoute
-  DashboardNetworkRoute: typeof DashboardNetworkRoute
-  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
-  DashboardOperationsRoute: typeof DashboardOperationsRoute
-  DashboardOrdersRoute: typeof DashboardOrdersRoute
-  DashboardPointsRoute: typeof DashboardPointsRoute
-  DashboardProfileRoute: typeof DashboardProfileRoute
-  DashboardRequestsRoute: typeof DashboardRequestsRoute
-  DashboardServiceRoute: typeof DashboardServiceRouteWithChildren
-  DashboardViolationsRoute: typeof DashboardViolationsRoute
-  DashboardAdsNewRoute: typeof DashboardAdsNewRoute
-  DashboardReportsIdRoute: typeof DashboardReportsIdRoute
-  DashboardStoreCatalogRoute: typeof DashboardStoreCatalogRoute
-  DashboardStoreNewRoute: typeof DashboardStoreNewRoute
-  DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
-  DashboardStoreIndexRoute: typeof DashboardStoreIndexRoute
-  DashboardAdsIdEditRoute: typeof DashboardAdsIdEditRoute
-}
-
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardBookingsRoute: DashboardBookingsRoute,
-  DashboardBusinessRoute: DashboardBusinessRoute,
-  DashboardFavoritesRoute: DashboardFavoritesRoute,
-  DashboardMessagesRoute: DashboardMessagesRoute,
-  DashboardMyAdsRoute: DashboardMyAdsRoute,
-  DashboardNetworkRoute: DashboardNetworkRoute,
-  DashboardNotificationsRoute: DashboardNotificationsRoute,
-  DashboardOperationsRoute: DashboardOperationsRoute,
-  DashboardOrdersRoute: DashboardOrdersRoute,
-  DashboardPointsRoute: DashboardPointsRoute,
-  DashboardProfileRoute: DashboardProfileRoute,
-  DashboardRequestsRoute: DashboardRequestsRoute,
-  DashboardServiceRoute: DashboardServiceRouteWithChildren,
-  DashboardViolationsRoute: DashboardViolationsRoute,
-  DashboardAdsNewRoute: DashboardAdsNewRoute,
-  DashboardReportsIdRoute: DashboardReportsIdRoute,
-  DashboardStoreCatalogRoute: DashboardStoreCatalogRoute,
-  DashboardStoreNewRoute: DashboardStoreNewRoute,
-  DashboardReportsIndexRoute: DashboardReportsIndexRoute,
-  DashboardStoreIndexRoute: DashboardStoreIndexRoute,
-  DashboardAdsIdEditRoute: DashboardAdsIdEditRoute,
-}
-
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
-)
-
 interface ServicesRouteChildren {
   ServicesIndexRoute: typeof ServicesIndexRoute
   ServicesSlugItemIdBookRoute: typeof ServicesSlugItemIdBookRoute
@@ -1704,7 +1663,7 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRoute,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AuditRoute: AuditRoute,
@@ -1725,12 +1684,34 @@ const rootRouteChildren: RootRouteChildren = {
   SyriaGuideRoute: SyriaGuideRoute,
   WelcomeRoute: WelcomeRoute,
   AdsSlugRoute: AdsSlugRoute,
+  BusinessOrdersRoute: BusinessOrdersRoute,
+  BusinessPartnersRoute: BusinessPartnersRoute,
+  BusinessProfileRoute: BusinessProfileRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   InviteTokenRoute: InviteTokenRoute,
+  MyBookingsRoute: MyBookingsRoute,
+  MyFavoritesRoute: MyFavoritesRoute,
+  MyMessagesRoute: MyMessagesRoute,
+  MyNotificationsRoute: MyNotificationsRoute,
+  MyProfileRoute: MyProfileRoute,
+  MyQuotesRoute: MyQuotesRoute,
+  MyViolationsRoute: MyViolationsRoute,
+  MyWalletRoute: MyWalletRoute,
   StoresSlugRoute: StoresSlugRoute,
   UUsernameRoute: UUsernameRoute,
+  BusinessIndexRoute: BusinessIndexRoute,
+  BusinessServicesSettingsRoute: BusinessServicesSettingsRoute,
+  BusinessStoreCatalogRoute: BusinessStoreCatalogRoute,
+  BusinessStoreNewRoute: BusinessStoreNewRoute,
+  MyAdsNewRoute: MyAdsNewRoute,
+  MyReportsIdRoute: MyReportsIdRoute,
+  BusinessServicesIndexRoute: BusinessServicesIndexRoute,
+  BusinessStoreIndexRoute: BusinessStoreIndexRoute,
+  MyAdsIndexRoute: MyAdsIndexRoute,
+  MyReportsIndexRoute: MyReportsIndexRoute,
+  MyAdsIdEditRoute: MyAdsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
