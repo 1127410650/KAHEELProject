@@ -416,14 +416,15 @@ export function PromoPopupHost() {
         : "animate-[mascot-drop-wobble_1.05s_ease-out_both] motion-reduce:animate-none";
 
   /**
-   * لا بطاقة بيضاء ولا إطار ولا ظل: الشخصية بخلفية شفافة فوق المحتوى مباشرة،
-   * والنص تحتها على لوح زجاجي خفيف جدًا خلف النص وحده لضمان القراءة، وزر × صغير
-   * ملاصق للشخصية. الحاوية تمرّر الضغطات (`pointer-events-none`) والعناصر
-   * التفاعلية وحدها تستقبلها.
+   * لا بطاقة بيضاء ولا إطار: الشخصية بخلفية شفافة، والنص على لوح زجاجي بنفسجي
+   * شفاف (`k-mascot-glass`) بنص داكن ⇒ مقروء فوق أي خلفية. الموضع من المنطقة
+   * الآمنة المقاسة وقت الظهور فقط، فلا تغطي بطاقة ولا نصًا ولا زرًا. الحاوية
+   * `pointer-events-none` وأزرارها وحدها `auto`.
    */
   return (
     <div
-      className="pointer-events-none fixed z-30 top-[calc(6.9rem+env(safe-area-inset-top))] bottom-[calc(4.6rem+env(safe-area-inset-bottom))] left-3 right-3 lg:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+      className="pointer-events-none fixed inset-0 z-30 overflow-hidden"
+      data-kaheel-stage="card"
       aria-live="polite"
     >
       <div
@@ -432,20 +433,21 @@ export function PromoPopupHost() {
         data-kaheel-side={card.side}
         role="status"
         style={{
-          transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
+          position: "absolute",
+          left: `${card.band.left + Math.max(0, (card.band.width - CARD_WIDTH) / 2)}px`,
+          top: `${card.band.top}px`,
+          width: `${CARD_WIDTH}px`,
+          transformOrigin: "bottom center",
           animation,
         }}
-        className={`pointer-events-none absolute flex max-h-full w-[14rem] max-w-full flex-col items-center gap-1 text-center ${
-          entrance ? "bottom-0 left-0" : ENTRY_POSITION[card.side]
-        }`}
+        className="pointer-events-none flex max-w-full flex-col items-center gap-1 text-center"
       >
-        {/* الشخصية وحدها — خلفية شفافة تمامًا، وزر × صغير ملاصق لها. */}
+        {/* الشخصية وحدها — خلفية شفافة تمامًا، وزر × صغير أنيق ملاصق لها. */}
         <div className="relative flex min-h-0 w-full shrink justify-center">
           <div className={`min-h-0 max-w-full overflow-hidden ${bodyMotion}`}>
             <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
           </div>
           <div className="absolute -top-1 end-0 flex flex-col gap-1">
-
             <button
               type="button"
               onClick={() => dismiss()}
@@ -458,24 +460,25 @@ export function PromoPopupHost() {
               type="button"
               onClick={() => dismiss(true)}
               aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-white/80 text-[#3c096c] shadow-[0_3px_10px_rgb(16_0_43/0.18)] backdrop-blur-sm"
+              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-[#3c096c]/85 text-white shadow-[0_3px_10px_rgb(16_0_43/0.18)] backdrop-blur-sm"
             >
               <EyeOff className="size-3" aria-hidden />
             </button>
           </div>
         </div>
 
-        {/* النص تحتها: لوح زجاجي خفيف جدًا خلف النص وحده — لا بطاقة. */}
-        <div className="pointer-events-auto w-full shrink-0 rounded-2xl bg-white/94 px-2.5 py-1.5 ring-1 ring-white/70 shadow-[0_4px_14px_rgb(16_0_43/0.16)] backdrop-blur-md">
-          <p className="py-0.5 text-[16px] font-black leading-snug text-[#240046] [overflow-wrap:anywhere]">
+        {/* النص تحتها: زجاج بنفسجي شفاف متناسق مع الخلفية — لا أبيض صريح. */}
+        <div className="k-mascot-glass pointer-events-auto w-full shrink-0 rounded-2xl px-2.5 py-1.5">
+          <p className="py-0.5 text-[15px] font-black leading-snug [overflow-wrap:anywhere]">
             {card.title}
           </p>
-          <p className="text-[13px] font-semibold leading-snug text-[#3c096c] [overflow-wrap:anywhere]">
+          <p className="k-mascot-glass-sub text-[12px] font-semibold leading-snug [overflow-wrap:anywhere]">
             {card.subtitle}
           </p>
         </div>
       </div>
     </div>
   );
+
 }
 
