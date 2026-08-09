@@ -420,23 +420,25 @@ export function PromoPopupHost() {
           transformOrigin: entrance ? "bottom center" : ENTRY_ORIGIN[card.side],
           animation,
         }}
-        className={`pointer-events-none absolute flex w-[17rem] max-w-[calc(100vw-1.5rem)] flex-col items-center gap-1 rounded-3xl border border-white/60 bg-white/92 p-2.5 pb-3 pt-12 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
+        className={`pointer-events-none absolute flex w-[15.5rem] max-w-[calc(100vw-1.5rem)] flex-col items-center gap-1.5 rounded-3xl border border-white/60 bg-white/95 px-3.5 pb-4 pt-14 text-center shadow-[0_18px_44px_rgb(16_0_43/0.22)] backdrop-blur-xl ${
           entrance ? "bottom-24 left-3" : ENTRY_POSITION[card.side]
         }`}
       >
+        <div className="absolute end-2 top-2 z-10">{closeButtons}</div>
 
-
-        <div className="absolute end-2 top-2">{closeButtons}</div>
-
-        <div className={bodyMotion}>
-          <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} />
+        {/* الشخصية هي البطل البصري: كبيرة وتطلّ خارج حافة البطاقة من الأعلى. */}
+        <div className={`-mt-[4.75rem] ${bodyMotion}`}>
+          <PopupMascot kind={card.mascot} lang={ar ? "ar" : "en"} scale="hero" />
         </div>
 
-        <p className="line-clamp-2 text-sm font-black leading-tight text-[#240046]">{card.title}</p>
-        <p className="line-clamp-3 text-[11px] font-bold leading-snug text-[#5a189a]">
+        <p className="w-full truncate text-[17px] font-black leading-tight text-[#240046]">
+          {card.title}
+        </p>
+        <p className="line-clamp-3 text-[13.5px] font-semibold leading-relaxed text-[#3c096c]">
           {card.subtitle}
         </p>
       </div>
+
     </div>
   );
 }
