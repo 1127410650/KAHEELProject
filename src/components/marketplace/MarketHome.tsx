@@ -34,8 +34,8 @@ import { useState } from "react";
 
 import carImage from "@/assets/market/cat-cars.webp";
 import propertyImage from "@/assets/market/cat-real-estate-hero.webp";
-import restaurantsImage from "@/assets/market/cat-restaurants-hero.jpg";
-import groceriesImage from "@/assets/market/cat-groceries-hero.jpg";
+import restaurantsImage from "@/assets/market/cat-restaurants-hero.webp";
+import groceriesImage from "@/assets/market/cat-groceries-hero.webp";
 
 import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
@@ -71,34 +71,53 @@ function primaryCategory(id: string): string {
   return slug;
 }
 
+/**
+ * Bento tiles for the four primary fields.
+ *
+ * `span` drives the visual rhythm instead of a uniform grid: «المطاعم» is the
+ * hero tile, the rest read as companions. `ratio` is the reserved aspect box, so
+ * every tile has its height before the photo decodes and nothing shifts.
+ */
 const MAIN_FIELDS = [
   {
     key: "restaurants",
     href: `/search?category=${primaryCategory("restaurants")}`,
     icon: Utensils,
     image: restaurantsImage,
-    tone: "linear-gradient(168deg,#7b2cbf 0%,#5a189a 52%,#240046 100%)",
+    width: 900,
+    height: 675,
+    span: "col-span-2 row-span-2 sm:col-span-4 sm:row-span-2",
+    ratio: "aspect-[16/11] sm:aspect-[4/5]",
   },
   {
     key: "groceries",
     href: "/search?domain=product",
     icon: ShoppingBasket,
     image: groceriesImage,
-    tone: "linear-gradient(168deg,#9d4edd 0%,#7b2cbf 50%,#3c096c 100%)",
+    width: 900,
+    height: 675,
+    span: "col-span-1 sm:col-span-2",
+    ratio: "aspect-[3/4] sm:aspect-[4/3]",
   },
   {
     key: "realEstate",
     href: `/search?category=${primaryCategory("realestate")}`,
     icon: Building2,
     image: propertyImage,
-    tone: "linear-gradient(168deg,#9d4edd 0%,#5a189a 50%,#240046 100%)",
+    width: 768,
+    height: 576,
+    span: "col-span-1 sm:col-span-2",
+    ratio: "aspect-[3/4] sm:aspect-[4/3]",
   },
   {
     key: "cars",
     href: `/search?category=${primaryCategory("cars")}`,
     icon: Car,
     image: carImage,
-    tone: "linear-gradient(168deg,#5a189a 0%,#3c096c 48%,#10002b 100%)",
+    width: 768,
+    height: 576,
+    span: "col-span-2 sm:col-span-4",
+    ratio: "aspect-[16/7] sm:aspect-[16/6]",
   },
 ] as const;
 
@@ -193,7 +212,8 @@ export function MarketHome() {
             </h2>
             <div
               ref={fieldsRef}
-              className="relative z-10 grid grid-cols-[repeat(auto-fit,minmax(148px,1fr))] gap-2 sm:gap-3"
+              data-field-grid
+              className="relative z-10 grid grid-cols-2 gap-2.5 sm:grid-cols-6 sm:gap-3"
             >
               {MAIN_FIELDS.map((field, index) => (
                 <MainFieldCard
@@ -363,44 +383,43 @@ function MainFieldCard({
     <a
       href={field.href}
       data-field-card
-      style={{ backgroundImage: field.tone, "--k-step": step } as React.CSSProperties}
-      className="group k-deep k-press k-rise k-shimmer relative flex min-w-0 flex-col justify-center overflow-hidden p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:p-3"
+      style={{ "--k-step": step } as React.CSSProperties}
+      className={`group k-press k-rise relative isolate flex min-w-0 overflow-hidden rounded-[22px] border border-white/55 shadow-[0_1px_0_rgb(255_255_255/0.5)_inset,0_16px_34px_-18px_rgb(60_9_108/0.55)] outline-none ring-1 ring-[#c77dff]/25 focus-visible:ring-2 focus-visible:ring-[#7b2cbf] ${field.span} ${field.ratio}`}
     >
-      {/* Fixed-ratio thumbnail with explicit dimensions: the box is reserved
-          before the image decodes, so nothing shifts. The section icon rides on
-          the corner instead of the title row, which keeps the heading readable
-          at the narrowest column. */}
-      <span className="flex min-w-0 items-center gap-2">
-        <span className="relative shrink-0">
-          <img
-            src={image}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            width={168}
-            height={168}
-            className="size-[48px] rounded-[0.8rem] object-cover shadow-[0_6px_14px_-8px_rgb(16_0_43/0.8)] transition-transform duration-300 group-hover:scale-[1.04] sm:size-[58px]"
-          />
-          <span className="k-glass k-float absolute -bottom-1 -end-1 grid size-6 place-items-center rounded-full sm:size-7">
-            <Icon className="size-3.5 sm:size-4" aria-hidden />
-          </span>
-        </span>
+      {/* The photo IS the card: it fills the reserved aspect box, so the colour
+          of each tile comes from real content instead of one flat purple. */}
+      <img
+        src={image}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        width={field.width}
+        height={field.height}
+        className="absolute inset-0 size-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.05]"
+      />
+      {/* Readability scrim: dark only at the bottom where the text sits. */}
+      <span
+        aria-hidden
+        className="absolute inset-0 bg-[linear-gradient(to_top,rgb(16_0_43/0.86)_0%,rgb(36_0_70/0.55)_38%,rgb(36_0_70/0.06)_68%,transparent_100%)]"
+      />
 
-        <span className="flex min-w-0 flex-1 flex-col">
-          <h3 className="min-w-0 truncate text-[15px] font-black leading-tight tracking-tight sm:text-base">
+      {/* Small identity badge instead of a heavy white button. */}
+      <span className="k-glass absolute end-2.5 top-2.5 grid size-8 place-items-center rounded-full text-white sm:size-9">
+        <Icon className="size-4 sm:size-[18px]" aria-hidden />
+      </span>
+
+      <span className="relative z-10 mt-auto flex w-full min-w-0 items-end gap-2 p-3 text-white sm:p-4">
+        <span className="min-w-0 flex-1">
+          <h3 className="truncate text-[17px] font-black leading-tight tracking-tight drop-shadow-[0_2px_8px_rgb(16_0_43/0.75)] sm:text-xl">
             {t(`market.homeV2.fields.${field.key}.title` as HomeKey)}
           </h3>
-          <p className="mt-0.5 line-clamp-2 text-[13px] font-medium leading-[1.35] text-white/92">
+          <p className="mt-0.5 truncate text-[12.5px] font-semibold leading-snug text-white/88 sm:text-sm">
             {t(`market.homeV2.fields.${field.key}.desc` as HomeKey)}
           </p>
         </span>
-      </span>
-
-      {/* Full-width call to action: it always has room for the whole label, so
-          nothing is clipped on the narrowest column. */}
-      <span className="k-pop mt-1.5 inline-flex min-h-[26px] w-full items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-white px-2 text-[13px] font-black leading-5 text-[#3c096c] shadow-[0_1px_1px_rgb(36_0_70/0.08),0_6px_14px_-8px_rgb(36_0_70/0.45)]">
-        {t(`market.homeV2.fields.${field.key}.cta` as HomeKey)}
-        <ChevronLeft className="size-3.5 shrink-0 rtl:rotate-0 ltr:rotate-180" aria-hidden />
+        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/18 text-white backdrop-blur-sm transition-transform duration-300 group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 sm:size-9">
+          <ChevronLeft className="size-4 ltr:rotate-180 sm:size-5" aria-hidden />
+        </span>
       </span>
     </a>
   );
