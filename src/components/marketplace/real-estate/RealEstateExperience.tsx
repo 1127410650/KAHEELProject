@@ -188,6 +188,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
         min: params.min,
         max: params.max,
         img: params.img,
+        rooms: params.rooms,
+        baths: params.baths,
+        area: params.area,
         sort: normalizedSort(params.sort),
         country: preference.countryIso2,
       },
@@ -207,6 +210,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
           countryIso2: preference.countryIso2,
           minPrice: validPrice(params.min),
           maxPrice: validPrice(params.max),
+          minRooms: validPrice(params.rooms),
+          minBaths: validPrice(params.baths),
+          minArea: validPrice(params.area),
           withImageOnly: params.img === "1" ? true : undefined,
           sort: normalizedSort(params.sort),
           limit: PAGE_SIZE,
@@ -230,6 +236,16 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
     return result;
   }, [listings.data]);
 
+  // صور المعرض الداخلي لكل البطاقات الظاهرة في استعلام واحد مجمّع.
+  const galleryIds = useMemo(() => rows.map((row) => row.id), [rows]);
+  const galleries = useQuery({
+    queryKey: ["mkt", "real-estate", "galleries", galleryIds],
+    enabled: galleryIds.length > 0,
+    staleTime: 60_000,
+    queryFn: () => loadListingGalleries(galleryIds),
+  });
+  const galleryFor = (id: string) => galleries.data?.[id] ?? [];
+
   const featuredRows = useMemo(() => rows.filter(activeFeatured).slice(0, 8), [rows]);
   const selectedCity = (cities.data ?? []).find((city) => city.id === params.cityId);
   const locationLabel =
@@ -244,6 +260,9 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
     params.min,
     params.max,
     params.img,
+    params.rooms,
+    params.baths,
+    params.area,
     params.sort && params.sort !== "newest" ? params.sort : undefined,
   ].filter(Boolean).length;
   const addHref = addListingHref({
@@ -260,8 +279,12 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
       min: undefined,
       max: undefined,
       img: undefined,
+      rooms: undefined,
+      baths: undefined,
+      area: undefined,
       sort: undefined,
     });
+
 
   return (
     <MarketShell footer="none">
