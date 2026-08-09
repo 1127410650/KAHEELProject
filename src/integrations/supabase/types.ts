@@ -5894,6 +5894,96 @@ export type Database = {
           },
         ]
       }
+      mkt_structure_guard: {
+        Row: {
+          disabled_at: string | null
+          disabled_by: string | null
+          disabled_reason: string | null
+          disabled_until: string | null
+          enabled: boolean
+          id: boolean
+          updated_at: string
+        }
+        Insert: {
+          disabled_at?: string | null
+          disabled_by?: string | null
+          disabled_reason?: string | null
+          disabled_until?: string | null
+          enabled?: boolean
+          id?: boolean
+          updated_at?: string
+        }
+        Update: {
+          disabled_at?: string | null
+          disabled_by?: string | null
+          disabled_reason?: string | null
+          disabled_until?: string | null
+          enabled?: boolean
+          id?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_structure_guard_events: {
+        Row: {
+          command_tag: string
+          created_at: string
+          id: string
+          object_identity: string
+          outcome: string
+          performed_by: string
+          performed_by_uid: string | null
+          reason: string | null
+        }
+        Insert: {
+          command_tag: string
+          created_at?: string
+          id?: string
+          object_identity: string
+          outcome: string
+          performed_by: string
+          performed_by_uid?: string | null
+          reason?: string | null
+        }
+        Update: {
+          command_tag?: string
+          created_at?: string
+          id?: string
+          object_identity?: string
+          outcome?: string
+          performed_by?: string
+          performed_by_uid?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      mkt_structure_guard_rejections: {
+        Row: {
+          attempted_by: string
+          attempted_by_uid: string | null
+          command_tag: string
+          created_at: string
+          id: string
+          object_identity: string
+        }
+        Insert: {
+          attempted_by: string
+          attempted_by_uid?: string | null
+          command_tag: string
+          created_at?: string
+          id?: string
+          object_identity: string
+        }
+        Update: {
+          attempted_by?: string
+          attempted_by_uid?: string | null
+          command_tag?: string
+          created_at?: string
+          id?: string
+          object_identity?: string
+        }
+        Relationships: []
+      }
       mkt_syria_directory_entries: {
         Row: {
           address: string | null
@@ -9287,6 +9377,24 @@ export type Database = {
       }
       set_active_tenant: { Args: { _tenant_id: string }; Returns: string }
       shares_active_tenant: { Args: { _user_id: string }; Returns: boolean }
+      structure_guard_allows_bucket: {
+        Args: { _name: string }
+        Returns: boolean
+      }
+      structure_guard_allows_table: {
+        Args: { _name: string }
+        Returns: boolean
+      }
+      structure_guard_disable: {
+        Args: { _minutes?: number; _reason: string }
+        Returns: string
+      }
+      structure_guard_enable: { Args: never; Returns: undefined }
+      structure_guard_is_enabled: { Args: never; Returns: boolean }
+      structure_guard_log_rejection: {
+        Args: { _command: string; _object: string; _reason?: string }
+        Returns: string
+      }
       tenant_members_list: {
         Args: never
         Returns: {

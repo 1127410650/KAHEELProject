@@ -15,7 +15,9 @@ import { logLegacyRoute, resolveLegacyTarget } from "@/lib/routes-map";
  * (sign-in, active account, membership, permission) exactly as for a direct hit.
  */
 export const Route = createFileRoute("/$")({
-  ssr: false,
+  // Resolved on the server so an unknown URL answers with a real 404 status.
+  // With `ssr: false` the shell was sent as 200 and the "not found" page only
+  // appeared after hydration — a soft 404 that crawlers index as a live page.
   beforeLoad: ({ location }) => {
     const target = resolveLegacyTarget(location.pathname);
     if (!target) throw notFound();
