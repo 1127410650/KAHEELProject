@@ -8,7 +8,7 @@ import { useI18n } from "@/i18n";
 import { useMarketPreference } from "@/lib/mkt-geo";
 import { LISTING_COLUMNS, type MktCategory, type MktListing } from "@/lib/mkt";
 import { decorateListings, loadCategories } from "@/lib/mkt-queries";
-import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { ListingCard } from "@/components/marketplace/ListingCard";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -60,7 +60,9 @@ function CategoryPage() {
 
   const categories = useQuery({ queryKey: ["mkt", "categories"], queryFn: loadCategories });
   const category = (categories.data ?? []).find((c) => c.slug === slug) ?? null;
-  const children = (categories.data ?? []).filter((c) => c.parent_id === category?.id);
+  const children = (categories.data ?? []).filter(
+    (c) => c.parent_id === category?.id && !isRetiredSubcategory(c.slug),
+  );
 
   const { preference } = useMarketPreference();
   const listings = useQuery({

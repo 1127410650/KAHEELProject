@@ -29,6 +29,7 @@ import { useI18n } from "@/i18n";
 import { addListingHref } from "@/lib/add-listing";
 import { track } from "@/lib/analytics";
 import { geoName, loadCities, loadCountries, useMarketPreference } from "@/lib/mkt-geo";
+import { isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { loadCategories, loadListingsPage } from "@/lib/mkt-queries";
 import { priceLabel, relativeTime } from "@/lib/mkt";
 import { useSession } from "@/lib/session";
@@ -151,7 +152,12 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
   const subcategories = useMemo(
     () =>
       (categories.data ?? []).filter(
-        (category) => !!category.parent_id && category.parent_id === root?.id,
+        (category) =>
+          !!category.parent_id &&
+          category.parent_id === root?.id &&
+          // The retired duplicate label is no longer offered as a choice; the
+          // row itself is untouched.
+          !isRetiredSubcategory(category.slug),
       ),
     [categories.data, root?.id],
   );

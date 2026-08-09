@@ -16,7 +16,7 @@ import {
   loadListingTypes,
   loadListingsPage,
 } from "@/lib/mkt-queries";
-import { canonicalCategorySlug } from "@/lib/mkt-category-alias";
+import { canonicalCategorySlug, isRetiredSubcategory } from "@/lib/mkt-category-alias";
 import { SELECTABLE_FIELDS, fieldMatches } from "@/lib/market-primary-navigation";
 import { track } from "@/lib/analytics";
 
@@ -291,7 +291,11 @@ function GenericSearchPage() {
   }, [params.sub, categories.data]);
 
   const subs = useMemo(
-    () => (categories.data ?? []).filter((c) => c.parent_id && c.parent_id === activeRoot?.id),
+    () =>
+      (categories.data ?? []).filter(
+        (c) =>
+          c.parent_id && c.parent_id === activeRoot?.id && !isRetiredSubcategory(c.slug),
+      ),
     [categories.data, activeRoot?.id],
   );
   // Offer types are derived from the chosen category path, so no impossible
