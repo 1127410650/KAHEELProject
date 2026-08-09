@@ -12,6 +12,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
+import { applyKaheelWatermark } from "@/lib/kaheel-watermark";
 import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
 import type { MascotName, MascotPose } from "@/components/marketplace/campaign/Mascot";
@@ -266,9 +267,15 @@ export async function uploadStoryImage(file: File): Promise<{ path: string; widt
   });
 
   const path = storyImagePath();
+  // ستوريات المنصة أصل تنتجه المنصة → علامة مائية + حقوق في البيانات الوصفية.
+  const marked = await applyKaheelWatermark(file);
   const { error } = await supabase.storage
     .from(MKT_BUCKET)
-    .upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+    .upload(path, marked, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: marked.type || file.type,
+    });
   if (error) throw error;
   return { path, ...dimensions };
 }
