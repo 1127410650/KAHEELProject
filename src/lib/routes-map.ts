@@ -256,9 +256,9 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/invitations", "legacy", "bare", { legacy_redirect: "/go" }),
   rule("/reports", "legacy", "bare", { legacy_redirect: "/go" }),
   rule("/trash", "legacy", "bare", { legacy_redirect: "/go" }),
-  // `src/routes/audit.tsx` owns `/audit` so the destination can depend on the
-  // caller (admin → the operations log); this entry records the fallback.
-  rule("/audit", "legacy", "bare", { legacy_redirect: "/admin/audit-log" }),
+  // The retired internal operations console. It now goes through `/go`, which
+  // resolves the caller and sends an admin on to the single operations log.
+  rule("/audit", "legacy", "bare", { legacy_redirect: "/go?next=audit-log" }),
 
   // ── د. Marketplace back office ─────────────────────────────────────────────
   rule("/admin", "admin", "admin"),
