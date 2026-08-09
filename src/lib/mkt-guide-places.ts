@@ -147,43 +147,96 @@ export async function fetchGuidePlace(slug: string): Promise<GuidePlace | null> 
   return place;
 }
 
-export interface GuideFacets {
-  sectors: string[];
-  governorates: string[];
-  categories: string[];
+/** One raw facet row: the four dimensions the filters are built from. */
+export interface GuideFacetRow {
+  sector: string | null;
+  governorate: string | null;
+  category: string | null;
+  subcategory: string | null;
 }
 
-/** Distinct filter values, read from a bounded slice to stay cheap. */
-export async function fetchGuideFacets(): Promise<GuideFacets> {
+export interface GuideFacetOption {
+  value: string;
+  count: number;
+}
+
+export interface GuideFacets {
+  sectors: GuideFacetOption[];
+  governorates: GuideFacetOption[];
+  categories: GuideFacetOption[];
+  subcategories: GuideFacetOption[];
+}
+
+/**
+ * Facet rows are fetched once and cached; the dependent option lists and their
+ * counts are then derived in memory so changing a filter never hits the network.
+ */
+export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
   const { data, error } = await supabase
     .from("mkt_guide_places")
-    .select("sector,governorate,category")
+    .select("sector,governorate,category,subcategory")
     .eq("is_published", true)
     .limit(10000);
 
   if (error) throw error;
+  return (data ?? []) as GuideFacetRow[];
+}
 
-  const sectors = new Set<string>();
-  const governorates = new Set<string>();
-  const categories = new Set<string>();
-
-  for (const row of (data ?? []) as Array<{
-    sector: string | null;
-    governorate: string | null;
-    category: string | null;
-  }>) {
-    if (row.sector) sectors.add(row.sector);
-    if (row.governorate) governorates.add(row.governorate);
-    if (row.category) categories.add(row.category);
+function tally(
+  rows: GuideFacetRow[],
+  key: keyof GuideFacetRow,
+  matches: (row: GuideFacetRow) => boolean,
+): GuideFacetOption[] {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    if (!matches(row)) continue;
+    const value = row[key];
+    if (!value) continue;
+    counts.set(value, (counts.get(value) ?? 0) + 1);
   }
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, count }))
+    .sort((a, b) => a.value.localeCompare(b.value, "ar"));
+}
 
-  const sort = (values: Set<string>) => [...values].sort((a, b) => a.localeCompare(b, "ar"));
+/**
+ * Cascading facets: each list is counted against the *other* active filters, so
+ * picking a sector narrows its categories, and picking a category narrows its
+ * subcategories — while every list keeps showing its own alternatives.
+ */
+export function buildGuideFacets(rows: GuideFacetRow[], filters: GuideFilters): GuideFacets {
+  const bySector = (row: GuideFacetRow) => !filters.sector || row.sector === filters.sector;
+  const byGov = (row: GuideFacetRow) =>
+    !filters.governorate || row.governorate === filters.governorate;
+  const byCategory = (row: GuideFacetRow) =>
+    !filters.category || row.category === filters.category;
+
   return {
-    sectors: sort(sectors),
-    governorates: sort(governorates),
-    categories: sort(categories),
+    sectors: tally(rows, "sector", byGov),
+    governorates: tally(rows, "governorate", (row) => bySector(row) && byCategory(row)),
+    categories: tally(rows, "category", (row) => bySector(row) && byGov(row)),
+    subcategories: tally(
+      rows,
+      "subcategory",
+      (row) => bySector(row) && byGov(row) && byCategory(row),
+    ),
   };
 }
+
+/** Human label for a record's source, with its date when present. */
+export function sourceLabel(place: GuidePlace): string | null {
+  const name = (place.source_label ?? "").trim() || (isOpenStreetMap(place) ? "OpenStreetMap" : "");
+  const source = name || (place.source_type ?? "").trim();
+  if (!source) return null;
+  const date = (place.source_date ?? "").trim();
+  if (!date) return source;
+  const parsed = new Date(date);
+  const shown = Number.isNaN(parsed.getTime())
+    ? date
+    : `${String(parsed.getUTCDate()).padStart(2, "0")}/${String(parsed.getUTCMonth() + 1).padStart(2, "0")}/${parsed.getUTCFullYear()}`;
+  return `${source} — ${shown}`;
+}
+
 
 /** Directions link: the record's own map URL, else a plain place search. */
 export function directionsHref(place: GuidePlace): string | null {
