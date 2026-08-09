@@ -242,7 +242,9 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
         ))}
       </div>
 
-      <div className="mt-2 flex items-center justify-center gap-1.5">
+      {/* Tiny dashes. The button keeps a 16px tap row, the visible dash is 4px,
+          so the rail gains no dead space under the banner. */}
+      <div className="mt-0.5 flex h-4 items-center justify-center gap-1">
         {slides.map((slide, dotIndex) => (
           <button
             key={slide.id}
@@ -252,14 +254,19 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
               ar ? `الانتقال إلى العرض ${dotIndex + 1}` : `Go to offer ${dotIndex + 1}`
             }
             aria-current={dotIndex === index ? "true" : undefined}
-            className={
-              dotIndex === index
-                ? "h-1.5 w-6 rounded-full bg-[#3c096c] transition-all duration-300"
-                : "h-1.5 w-1.5 rounded-full bg-[#c77dff]/55 transition-all duration-300 hover:bg-[#7b2cbf]"
-            }
-          />
+            className="flex h-4 items-center px-0.5"
+          >
+            <span
+              className={
+                dotIndex === index
+                  ? "block h-1 w-4 rounded-full bg-[#3c096c] transition-all duration-300"
+                  : "block h-1 w-1 rounded-full bg-[#c77dff]/60 transition-all duration-300 hover:bg-[#7b2cbf]"
+              }
+            />
+          </button>
         ))}
       </div>
+
     </section>
   );
 }

@@ -1,7 +1,8 @@
 /**
  * Animated ad campaigns (Keeta-style).
  *
- * Two placements only — the home banner rail and a once-a-day welcome takeover.
+ * Three placements only — the home banner rail, the compact home strip between
+ * the main field cards, and a once-a-day welcome takeover.
  * A campaign is a row in `mkt_ad_campaigns` plus one object in the public media
  * folder (`public/campaigns/…`). The browser never writes performance data
  * directly: `mkt_ad_campaign_track` is the single definer that validates the
@@ -16,7 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { MKT_BUCKET } from "@/lib/mkt";
 
-export type CampaignPlacement = "home_banner" | "welcome_takeover";
+export type CampaignPlacement = "home_banner" | "home_strip" | "welcome_takeover";
 export type CampaignAssetKind = "lottie" | "webp" | "mp4" | "image";
 export type CampaignStatus = "draft" | "active" | "paused" | "ended";
 
