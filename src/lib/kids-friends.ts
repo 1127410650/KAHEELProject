@@ -81,7 +81,7 @@ export const KIDS_FRIENDS: KidsFriendMeta[] = [
 const FRIEND_ORDER: KidsFriendId[] = KIDS_FRIENDS.map((f) => f.id);
 
 export function kidsFriendMeta(id: KidsFriendId): KidsFriendMeta {
-  return KIDS_FRIENDS.find((f) => f.id === id) ?? KIDS_FRIENDS[0];
+  return KIDS_FRIENDS.find((f) => f.id === id) ?? KIDS_FRIENDS[0]!;
 }
 
 /**
@@ -97,7 +97,7 @@ export function kidsFriendFor(
   for (const friend of KIDS_FRIENDS) {
     if (friend.match.some((token) => haystack.includes(token.toLowerCase()))) return friend.id;
   }
-  return FRIEND_ORDER[index % FRIEND_ORDER.length];
+  return FRIEND_ORDER[index % FRIEND_ORDER.length]!;
 }
 
 /** هل هذا التصنيف داخل عالم الأطفال؟ */
