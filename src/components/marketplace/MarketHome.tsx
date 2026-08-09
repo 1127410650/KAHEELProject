@@ -358,9 +358,8 @@ export function MarketHome() {
           </section>
         </Reveal>
       </div>
-
-      </div>
     </div>
+
   );
 }
 
