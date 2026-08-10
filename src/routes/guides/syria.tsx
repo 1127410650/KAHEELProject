@@ -214,7 +214,7 @@ function SyriaGuidePage() {
 
         <section className="mx-auto w-full max-w-[1240px] px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
           {places.isLoading ? (
-            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-[var(--sp-4)] sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
@@ -239,7 +239,7 @@ function SyriaGuidePage() {
               <div className="mb-4 text-desc font-bold text-muted-foreground">
                 صفحة {page + 1} من {pages} — {total.toLocaleString("en-US")} نتيجة
               </div>
-              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-[var(--sp-4)] sm:grid-cols-2 lg:grid-cols-3">
                 {places.data!.rows.map((place) => (
                   <GuidePlaceCard key={place.id} place={place} />
                 ))}
@@ -255,7 +255,7 @@ function SyriaGuidePage() {
                   <ChevronRight className="size-3.5" aria-hidden />
                   السابق
                 </button>
-                <span className="rounded-xl bg-market-navy px-3.5 py-2 text-desc font-black text-white">
+                <span className="rounded-xl bg-market-navy px-[var(--sp-4)] py-2 text-desc font-black text-white">
                   {page + 1} / {pages}
                 </span>
                 <button

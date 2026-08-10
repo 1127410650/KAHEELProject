@@ -102,7 +102,7 @@ export function CollapsingHomeHeader({
         <HeaderShapes />
 
         {/* صف الهوية — يبقى (فوق كل شيء وبخلفية الهيدر نفسها) */}
-        <div className="k-header-hero relative z-20 mx-auto flex h-11 w-full max-w-[1240px] items-center justify-between gap-2 px-3 sm:px-5 lg:px-8">
+        <div className="k-header-hero relative z-20 mx-auto flex h-11 w-full max-w-[1240px] items-center justify-between gap-2 px-[var(--page-x)]">
           <Link
             to="/"
             className="flex min-h-[44px] items-center gap-[var(--sp-2)]"
@@ -140,7 +140,7 @@ export function CollapsingHomeHeader({
         <div style={{ transform: "translateY(calc(-44px * var(--p)))" }}>
         {/* صف الموقع — يُغلق (ينزلق تحت صف الهوية) مع التمرير لأسفل */}
         <div
-          className="relative z-0 h-11 overflow-hidden px-3 sm:px-5 lg:px-8"
+          className="relative z-0 h-11 overflow-hidden px-[var(--page-x)]"
           style={{ opacity: "calc(1 - var(--p)*1.6)" }}
         >
           <button
@@ -171,7 +171,7 @@ export function CollapsingHomeHeader({
         </HeaderChipsRow>
 
         {/* صف البحث — يبقى دائمًا قابلًا للنقر */}
-        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-3 pb-[var(--sp-3)] sm:px-5 lg:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-3 pb-[var(--sp-3)] ">
           <a
             href="/search"
             onClick={(event) => {

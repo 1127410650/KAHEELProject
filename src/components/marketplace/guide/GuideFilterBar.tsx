@@ -85,7 +85,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
           type="button"
           onClick={() => setOpen((current) => !current)}
           aria-expanded={open}
-          className="inline-flex h-9 shrink-0 items-center gap-[var(--sp-2)] rounded-full border border-market-navy/25 bg-market-navy px-3.5 text-desc font-black text-white"
+          className="inline-flex h-9 shrink-0 items-center gap-[var(--sp-2)] rounded-full border border-market-navy/25 bg-market-navy px-[var(--sp-4)] text-desc font-black text-white"
         >
           <Filter className="size-3.5" aria-hidden />
           تصفية

@@ -33,7 +33,7 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
         {/* نفس بطاقة الصفحة الموحّدة، بلا كتلة بنفسجية مصمتة. */}
         <Link
           to={addHref}
-          className={`${BOX} k-surface k-lift group flex items-center gap-3 px-3.5 text-brand-950 outline-none focus-visible:ring-2 focus-visible:ring-brand-700 sm:px-5`}
+          className={`${BOX} k-surface k-lift group flex items-center gap-3 px-[var(--sp-4)] text-brand-950 outline-none focus-visible:ring-2 focus-visible:ring-brand-700 sm:px-5`}
         >
           <span className="grid size-9 shrink-0 place-items-center rounded-[var(--r-card)] border-2 border-white bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary sm:size-11">
             <Megaphone className="size-4 sm:size-5" aria-hidden />

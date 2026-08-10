@@ -28,7 +28,7 @@ export function AddListingButton({ href, className }: Props) {
         "outline-none transition-transform duration-150 will-change-transform",
         "hover:-translate-y-0.5 active:scale-95",
         "focus-visible:ring-2 focus-visible:ring-white",
-        "min-[420px]:size-auto min-[420px]:h-11 min-[420px]:px-3.5",
+        "min-[420px]:size-auto min-[420px]:h-11 min-[420px]:px-[var(--sp-4)]",
         className ?? "",
       ].join(" ")}
     >

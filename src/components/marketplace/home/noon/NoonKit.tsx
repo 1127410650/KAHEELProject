@@ -45,7 +45,7 @@ export function SectionHead({
 
 /** رقعة تمرير أفقية موحّدة: بطاقة بعرض 80% وحافة البطاقة التالية ظاهرة. */
 export const RAIL_SCROLLER =
-  "-mx-3 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0";
+  "-mx-[var(--page-x)] mt-[var(--sp-3)] flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-[var(--page-x)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0";
 export const RAIL_ITEM = "w-[80%] max-w-[300px] shrink-0 snap-start sm:w-[46%] lg:w-[31%]";
 
 export function LazyMount({

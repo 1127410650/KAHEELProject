@@ -234,7 +234,7 @@ function BusinessPage() {
             </div>
 
             <div className="mt-[var(--sp-3)] flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
-              {activitySummary && <span className="">{activitySummary}</span>}
+              {activitySummary && <span>{activitySummary}</span>}
               {city && (
                 <span className="inline-flex min-w-0 items-center gap-1">
                   <MapPin className="size-3.5 shrink-0" aria-hidden />

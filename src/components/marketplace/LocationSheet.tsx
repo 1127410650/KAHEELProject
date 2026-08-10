@@ -337,8 +337,8 @@ export function LocationSheet({
                       aria-pressed={active}
                       className={
                         active
-                          ? "inline-flex min-h-9 items-center rounded-full bg-primary px-3.5 text-desc font-bold text-primary-foreground"
-                          : "inline-flex min-h-9 items-center rounded-full border border-border px-3.5 text-desc font-semibold text-foreground transition hover:bg-secondary"
+                          ? "inline-flex min-h-9 items-center rounded-full bg-primary px-[var(--sp-4)] text-desc font-bold text-primary-foreground"
+                          : "inline-flex min-h-9 items-center rounded-full border border-border px-[var(--sp-4)] text-desc font-semibold text-foreground transition hover:bg-secondary"
                       }
                     >
                       {geoName(city, locale)}

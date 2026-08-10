@@ -142,7 +142,7 @@ export function MarketHeader({
 
         {/* صف الهوية: الشعار + الموقع + إنشاء إعلان. */}
         <div
-          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-3 sm:px-5 lg:px-8"
+          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-[var(--page-x)]"
           style={{ minHeight: "44px" }}
         >
           <Link

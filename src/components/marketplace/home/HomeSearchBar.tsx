@@ -63,7 +63,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
         to="/search"
         search={{}}
         aria-label={label}
-        className="flex min-w-0 flex-1 items-center gap-[var(--sp-3)] px-3.5 text-brand-800 outline-none"
+        className="flex min-w-0 flex-1 items-center gap-[var(--sp-3)] px-[var(--sp-4)] text-brand-800 outline-none"
       >
         <Search className="size-[18px] shrink-0 text-brand-900" aria-hidden />
         {/* ارتفاع ثابت للسطر: النص يتبدّل داخله بلا أي تحرّك للشريط */}

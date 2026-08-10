@@ -676,7 +676,7 @@ function ClaimSection({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-2 inline-flex h-9 items-center rounded-[var(--r-card)] border border-border px-3.5 text-desc font-black"
+          className="mt-2 inline-flex h-9 items-center rounded-[var(--r-card)] border border-border px-[var(--sp-4)] text-desc font-black"
         >
           تقديم مطالبة
         </button>

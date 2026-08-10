@@ -364,7 +364,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
         </section>
 
         <div className="relative z-10 -mt-9 rounded-t-[2rem] bg-background pb-8 pt-6 shadow-[0_-12px_40px_-28px_var(--foreground)] sm:-mt-14 sm:rounded-t-[2.5rem] sm:pt-9">
-          <div className="mx-auto w-full max-w-[1240px] px-3 sm:px-5 lg:px-8">
+          <div className="mx-auto w-full max-w-[1240px] px-[var(--page-x)]">
             <SectionHeading
               title={t("market.realEstate.intentTitle")}
               description={t("market.realEstate.intentDescription")}

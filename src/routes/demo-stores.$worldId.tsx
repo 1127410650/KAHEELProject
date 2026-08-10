@@ -69,7 +69,7 @@ function DemoStoreWorldPage() {
                 <Plus className="size-4" aria-hidden />
                 أنشئ متجرًا بهذا الأسلوب
               </Link>
-              <span className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/20 px-3.5 text-desc font-bold text-white backdrop-blur-md sm:min-h-11 sm:text-desc">
+              <span className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/25 bg-black/20 px-[var(--sp-4)] text-desc font-bold text-white backdrop-blur-md sm:min-h-11 sm:text-desc">
                 <Layers3 className="size-4" aria-hidden />
                 {world.stores.length} متاجر تجريبية
               </span>
@@ -124,7 +124,7 @@ function DemoStoreWorldPage() {
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-[1240px] px-4 pb-3 sm:px-5 lg:px-8">
+        <section className="mx-auto w-full max-w-[1240px] px-4 pb-3 ">
           <div className="rounded-[1.35rem] border border-border bg-card p-4 shadow-panel sm:p-5">
             <div className="flex items-end justify-between gap-3">
               <div>
