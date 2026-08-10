@@ -26,7 +26,7 @@ export function StoreOffersStrip({
 
   return (
     <section aria-label="عروض المتجر" className="space-y-2">
-      <h2 className="flex items-center gap-2 text-sm font-black">
+      <h2 className="text-section flex items-center gap-2 font-black">
         <Tag className="size-4 text-market-navy" aria-hidden />
         {locale === "ar" ? "عروض سارية" : "Live offers"}
       </h2>

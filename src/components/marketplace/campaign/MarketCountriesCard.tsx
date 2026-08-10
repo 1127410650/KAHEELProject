@@ -59,7 +59,7 @@ export function MarketCountriesCard() {
     <Card>
       <CardContent className="space-y-4 p-4">
         <div className="space-y-1">
-          <h2 className="text-base font-semibold">
+          <h2 className="text-section font-semibold">
             {locale === "en" ? "Market countries" : "نطاق الدول المفعّلة"}
           </h2>
           <p className="text-sm text-muted-foreground">

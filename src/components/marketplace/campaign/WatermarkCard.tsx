@@ -104,7 +104,7 @@ export function WatermarkCard() {
     <section className="rounded-xl border border-border bg-card p-4">
       <header className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
-          <h2 className="text-sm font-bold text-foreground">{t("admin.watermark.title")}</h2>
+          <h2 className="text-section font-bold text-foreground">{t("admin.watermark.title")}</h2>
           <p className="mt-1 text-desc text-muted-foreground">{t("admin.watermark.hint")}</p>
         </div>
         {config && (

@@ -110,7 +110,7 @@ function PointsPage() {
         </div>
       </div>
 
-      <h2 className="mb-2 text-sm font-semibold text-foreground">{t("market.points.ledger")}</h2>
+      <h2 className="text-section mb-2 font-semibold text-foreground">{t("market.points.ledger")}</h2>
 
       {ledger.isLoading ? (
         <div className="space-y-2">

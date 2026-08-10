@@ -163,7 +163,7 @@ export function Panel({
     <section className="rounded-xl border border-border bg-card p-4">
       {(title || actions) && (
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          {title && <h2 className="text-sm font-bold text-foreground">{title}</h2>}
+          {title && <h2 className="text-section font-bold text-foreground">{title}</h2>}
           {actions}
         </div>
       )}

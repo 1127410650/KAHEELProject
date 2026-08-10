@@ -156,7 +156,7 @@ function AdminGeoPage() {
 
         {countryId && (
           <section className="rounded-xl border border-border bg-card p-3">
-            <h2 className="text-sm font-bold text-foreground">{t("market.admin.geoCities")}</h2>
+            <h2 className="text-section font-bold text-foreground">{t("market.admin.geoCities")}</h2>
             <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
               <Input
                 value={nameAr}
@@ -208,7 +208,7 @@ function AdminGeoPage() {
         )}
 
         <section className="rounded-xl border border-border bg-card p-3">
-          <h2 className="text-sm font-bold text-foreground">
+          <h2 className="text-section font-bold text-foreground">
             {t("market.admin.geoSuggestions")}
           </h2>
           {suggestions.isLoading ? (

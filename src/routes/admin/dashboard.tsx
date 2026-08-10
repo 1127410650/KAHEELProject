@@ -73,7 +73,7 @@ function Section({
 }) {
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{title}</h2>
+      <h2 className="text-section font-bold text-foreground">{title}</h2>
       {hint && <p className="mt-0.5 text-desc text-muted-foreground">{hint}</p>}
       <div className="mt-3">{children}</div>
     </section>

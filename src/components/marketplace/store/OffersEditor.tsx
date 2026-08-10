@@ -183,7 +183,7 @@ export function OffersEditor({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="flex items-center gap-2 text-base font-black">
+          <h2 className="text-section flex items-center gap-2 font-black">
             <Tag className="size-4 text-market-navy" aria-hidden />
             عروض المتجر
           </h2>

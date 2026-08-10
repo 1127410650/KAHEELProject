@@ -116,7 +116,7 @@ export function SyriaHomeGateway() {
               <Sparkles className="size-2.5 sm:size-3" aria-hidden />
               {gateway.eyebrow}
             </span>
-            <h2 className="mt-0.5 text-base font-black leading-none tracking-tight sm:mt-1 sm:text-lg">
+            <h2 className="text-section mt-0.5 font-black leading-none tracking-tight sm:mt-1">
               {gateway.title}
             </h2>
             <p className="mt-1 line-clamp-2 max-w-[28rem] text-desc leading-4 text-brand-800 sm:line-clamp-1">

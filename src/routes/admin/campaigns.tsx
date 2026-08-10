@@ -226,7 +226,7 @@ function AdminCampaignsPage() {
             <Clapperboard className="size-5" aria-hidden />
           </span>
           <div>
-            <h1 className="text-lg font-black">
+            <h1 className="text-page font-black">
               {ar ? "الحملات المتحركة" : "Animated campaigns"}
             </h1>
             <p className="text-desc text-muted-foreground">

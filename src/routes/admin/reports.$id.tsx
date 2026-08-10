@@ -82,7 +82,7 @@ const DECISIONS = ["violation", "no_violation", "duplicate", "invalid", "out_of_
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-semibold text-foreground">{title}</h2>
+      <h2 className="text-section font-semibold text-foreground">{title}</h2>
       <div className="mt-3">{children}</div>
     </section>
   );

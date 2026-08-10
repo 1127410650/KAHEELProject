@@ -174,7 +174,7 @@ function ErrandsPage() {
               />
             </div>
             <div className="min-w-0">
-              <h1 className="text-lg font-black leading-tight text-foreground">
+              <h1 className="text-page font-black leading-tight text-foreground">
                 {ar ? "جيب لي" : "Get it for me"}
               </h1>
               <p className="mt-0.5 text-desc leading-snug text-muted-foreground">
@@ -188,7 +188,7 @@ function ErrandsPage() {
 
         {/* الخدمات المرافقة */}
         <section className="mb-3">
-          <h2 className="mb-2 text-sm font-bold text-foreground">
+          <h2 className="text-section mb-2 font-bold text-foreground">
             {ar ? "شو بدّك تعمل؟" : "What do you need?"}
           </h2>
           {services.isLoading ? (

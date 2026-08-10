@@ -45,7 +45,7 @@ function ForgotPasswordPage() {
       className="market-surface flex min-h-screen items-center justify-center px-5 py-10"
     >
       <section className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-sm">
-        <h1 className="text-xl font-bold">{t("auth.recoveryTitle")}</h1>
+        <h1 className="text-page font-bold">{t("auth.recoveryTitle")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {sent ? t("auth.recoverySent") : t("auth.recoveryDescription")}
         </p>

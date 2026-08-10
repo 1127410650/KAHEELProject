@@ -59,7 +59,7 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
         className="flex min-h-11 w-full items-center gap-2 p-4 text-start"
       >
         <BadgeCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-        <h2 className="min-w-0 flex-1 text-sm font-bold text-foreground">
+        <h2 className="text-section min-w-0 flex-1 font-bold text-foreground">
           {t("market.license.sectionTitle")}
         </h2>
         <span className={`shrink-0 rounded-full px-2 py-0.5 text-desc font-medium ${tone}`}>

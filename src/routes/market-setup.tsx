@@ -143,7 +143,7 @@ function MarketSetupPage() {
           </span>
         </div>
 
-        <h1 className="text-xl font-bold text-foreground">إعداد حسابك في سوريا</h1>
+        <h1 className="text-page font-bold text-foreground">إعداد حسابك في سوريا</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           نسخة السعودية متوقفة مؤقتًا، وجميع الحسابات والإعلانات الجديدة في هذه النسخة سورية.
         </p>

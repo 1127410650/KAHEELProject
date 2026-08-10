@@ -196,7 +196,7 @@ export function StudentBotChat() {
     return (
       <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-panel">
         <Lock className="mx-auto size-6 text-muted-foreground" aria-hidden />
-        <h2 className="mt-2 text-sm font-black text-foreground">
+        <h2 className="text-section mt-2 font-black text-foreground">
           {ar ? "سجّل الدخول لتسأل المساعد" : "Sign in to ask the assistant"}
         </h2>
         <p className="mt-1 text-desc text-muted-foreground">

@@ -53,7 +53,7 @@ function AdminGuideRequestsPage() {
     <AdminShell title="طلبات تعديل وإزالة الدليل">
       <div className="space-y-4">
         <div>
-          <h1 className="text-lg font-black">طلبات تعديل وإزالة الدليل</h1>
+          <h1 className="text-page font-black">طلبات تعديل وإزالة الدليل</h1>
           <p className="text-desc text-muted-foreground">
             الإزالة تُنفَّذ كإخفاء من العرض العام مع تسجيل السبب والتاريخ — بلا حذف نهائي.
           </p>

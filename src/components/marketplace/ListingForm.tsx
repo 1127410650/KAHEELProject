@@ -771,7 +771,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
       </p>
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-        <h2 className="min-w-0 truncate text-base font-semibold text-foreground">
+        <h2 className="text-section min-w-0 truncate font-semibold text-foreground">
           {t(`market.form.step.${STEPS[step]}`)}
         </h2>
         <div className="flex shrink-0 items-center gap-2">

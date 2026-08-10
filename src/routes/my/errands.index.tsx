@@ -44,7 +44,7 @@ function MyErrandsPage() {
     <DashboardShell title={ar ? "طلبات جيب لي" : "My errands"}>
       <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
         <div className="mb-3 flex items-center justify-between gap-2">
-          <h1 className="text-base font-black text-foreground">
+          <h1 className="text-page font-black text-foreground">
             {ar ? "طلبات جيب لي" : "My errands"}
           </h1>
           <Button asChild size="sm" className="h-9 gap-1 text-desc font-bold">

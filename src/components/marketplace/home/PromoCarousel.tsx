@@ -222,7 +222,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
                 {ar ? slide.badgeAr : slide.badgeEn}
               </span>
               {slideIndex === 0 ? (
-                <h1 className="mt-1 line-clamp-2 text-body font-black leading-tight text-brand-950 min-[380px]:text-section sm:mt-1.5 sm:text-[30px]">
+                <h1 className="text-page mt-1 line-clamp-2 font-black leading-tight text-brand-950 min-[380px]:text-section sm:mt-1.5 sm:text-[30px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </h1>
               ) : (

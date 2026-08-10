@@ -106,7 +106,7 @@ function ViolationsPage() {
 
       {(restrictions.data ?? []).length > 0 && (
         <div className="mb-4 rounded-xl border border-destructive/40 bg-destructive/5 p-4">
-          <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+          <h2 className="text-section flex items-center gap-1.5 font-semibold text-foreground">
             <ShieldAlert className="size-4 text-destructive" aria-hidden />
             {t("market.reports.violations.restrictions")}
           </h2>

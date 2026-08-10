@@ -66,7 +66,7 @@ function StudentToolsPage() {
                     <Sparkles className="size-3.5" aria-hidden />
                     خدمة مجانية للطالب السوري
                   </span>
-                  <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
+                  <h1 className="text-page mt-1 font-black tracking-tight sm:text-3xl">
                     دليل الطالب
                   </h1>
                   <p className="mt-2 max-w-xl text-desc leading-6 text-muted-foreground sm:text-sm sm:leading-7">

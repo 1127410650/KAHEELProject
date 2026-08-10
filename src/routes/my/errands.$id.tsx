@@ -227,7 +227,7 @@ function ErrandDetailPage() {
         {/* العروض */}
         {openForOffers ? (
           <section className="mb-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "عروض الكباتن" : "Captain offers"}
             </h2>
             {offers.isLoading ? (
@@ -314,7 +314,7 @@ function ErrandDetailPage() {
         {/* التقييم */}
         {request.status === "delivered" && request.rating == null ? (
           <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "قيّم الكابتن" : "Rate the captain"}
             </h2>
             <div className="flex items-center gap-1">
@@ -357,7 +357,7 @@ function ErrandDetailPage() {
 
         {/* السجل */}
         <section>
-          <h2 className="mb-2 text-sm font-bold text-foreground">
+          <h2 className="text-section mb-2 font-bold text-foreground">
             {ar ? "سجل الطلب" : "Request log"}
           </h2>
           <div className="grid gap-1.5">

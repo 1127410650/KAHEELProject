@@ -31,7 +31,7 @@ export function GuideDirectoryNotice({
       <div className="flex items-start gap-2">
         <Info className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
         <div className="min-w-0 space-y-1.5">
-          <h2 className="text-desc font-black text-foreground">دليل عام لخدمة الناس</h2>
+          <h2 className="text-section font-black text-foreground">دليل عام لخدمة الناس</h2>
           <p className="text-desc font-bold leading-5 text-muted-foreground">
             كَحيل دليل خدمي مجاني يساعدك على الوصول إلى الجهة الصحيحة. المعلومات مجمّعة من مصادر
             عامة منشورة: سجلات رسمية للجهات المعنية وبيانات خرائط مفتوحة (© مساهمو OpenStreetMap —

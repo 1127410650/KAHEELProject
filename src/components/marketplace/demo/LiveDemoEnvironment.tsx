@@ -278,7 +278,7 @@ export function LiveDemoEnvironment() {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-2xl font-black sm:text-3xl">
+                  <h2 className="text-section font-black sm:text-3xl">
                     {text(locale, active.accountAr, active.accountEn)}
                   </h2>
                   <span className="inline-flex items-center gap-1 rounded-full bg-white/14 px-2.5 py-1 text-desc font-black ring-1 ring-white/20 sm:text-desc">
@@ -448,7 +448,7 @@ export function LiveDemoEnvironment() {
           <div className="rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
             <div className="flex items-center gap-2">
               <Link2 className="size-5 text-[#7b2cbf]" aria-hidden />
-              <h2 className="text-lg font-black">
+              <h2 className="text-section font-black">
                 {text(locale, "التكاملات الخارجية", "External integrations")}
               </h2>
             </div>
@@ -491,7 +491,7 @@ export function LiveDemoEnvironment() {
                 {text(locale, "جاهزية العرض", "Demo readiness")}
               </span>
             </div>
-            <h2 className="mt-2 text-xl font-black">
+            <h2 className="text-section mt-2 font-black">
               {text(locale, "كل الفئات داخل نموذج واحد", "Every category in one model")}
             </h2>
             <p className="mt-2 text-desc leading-6 text-white/65">
@@ -550,7 +550,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
     <section className="rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
       <div className="flex items-center gap-2">
         <CalendarCheck2 className="size-5 text-[#7b2cbf]" aria-hidden />
-        <h2 className="text-lg font-black">
+        <h2 className="text-section font-black">
           {text(locale, "رحلة مترابطة في النظام", "A connected platform journey")}
         </h2>
       </div>

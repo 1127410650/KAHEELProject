@@ -53,7 +53,7 @@ function StudentAssistantPage() {
               <GraduationCap className="size-5" aria-hidden />
             </span>
             <div className="min-w-0">
-              <h1 className="truncate text-base font-black text-foreground sm:text-lg">
+              <h1 className="text-page truncate font-black text-foreground">
                 مساعد الطالب
               </h1>
               <p className="text-desc text-muted-foreground">

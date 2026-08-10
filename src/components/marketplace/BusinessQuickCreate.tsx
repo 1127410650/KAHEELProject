@@ -977,7 +977,7 @@ function Shell({
     return (
       <div className="flex min-w-0 flex-col gap-4">
         <div className="min-w-0">
-          <h1 className="wrap-anywhere text-lg font-bold leading-tight sm:text-2xl">{title}</h1>
+          <h1 className="text-page wrap-anywhere font-bold leading-tight">{title}</h1>
           <p className="wrap-anywhere mt-1 text-desc leading-snug text-muted-foreground sm:text-sm">
             {description}
           </p>
@@ -1022,7 +1022,7 @@ function ReviewGroup({
   return (
     <section className="min-w-0 rounded-xl border border-border bg-card p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <h2 className="wrap-anywhere text-desc font-semibold text-foreground">{title}</h2>
+        <h2 className="text-section wrap-anywhere font-semibold text-foreground">{title}</h2>
         <Button type="button" variant="ghost" size="sm" className="gap-1" onClick={onEdit}>
           <Pencil className="size-3.5" aria-hidden />
           {t("market.form.edit")}

@@ -108,7 +108,7 @@ function InvitePage() {
           ) : accepted ? (
             <>
               <CheckCircle2 className="size-6 text-primary" aria-hidden />
-              <h1 className="mt-3 text-lg font-bold text-foreground">{t("invite.accepted")}</h1>
+              <h1 className="text-page mt-3 font-bold text-foreground">{t("invite.accepted")}</h1>
               <p className="mt-2 text-sm text-muted-foreground">
                 {accepted.multi ? t("invite.switchNote") : t("invite.acceptedBody")}
               </p>
@@ -119,7 +119,7 @@ function InvitePage() {
           ) : row?.state !== "valid" ? (
             <>
               <MailWarning className="size-6 text-destructive" aria-hidden />
-              <h1 className="mt-3 text-lg font-bold text-foreground">
+              <h1 className="text-page mt-3 font-bold text-foreground">
                 {t(
                   row?.state === "expired"
                     ? "invite.expired"
@@ -136,7 +136,7 @@ function InvitePage() {
             </>
           ) : (
             <>
-              <h1 className="text-lg font-bold text-foreground">{t("invite.title")}</h1>
+              <h1 className="text-page font-bold text-foreground">{t("invite.title")}</h1>
               <dl className="mt-4 space-y-2 text-sm">
                 <div className="flex items-start justify-between gap-3">
                   <dt className="text-muted-foreground">{t("invite.workspace")}</dt>

@@ -69,7 +69,7 @@ function AdminGuideQueuePage() {
     <AdminShell title="مراجعة مساهمات الدليل">
       <div className="space-y-4">
         <div>
-          <h1 className="text-lg font-black">مراجعة مساهمات الدليل</h1>
+          <h1 className="text-page font-black">مراجعة مساهمات الدليل</h1>
           <p className="text-desc text-muted-foreground">
             الصور والتقييمات والمطالبات لا تُنشر إلا بعد الاعتماد من هنا.
           </p>
@@ -191,7 +191,7 @@ function QueueGroup({
 }) {
   return (
     <section>
-      <h2 className="mb-2 text-sm font-black">
+      <h2 className="text-section mb-2 font-black">
         {title} <span className="text-muted-foreground">({count.toLocaleString("en-US")})</span>
       </h2>
       {count === 0 ? (

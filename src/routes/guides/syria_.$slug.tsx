@@ -79,7 +79,7 @@ function GuidePlacePage() {
             <section className="rounded-2xl border border-border/80 bg-card p-3.5 sm:p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <h1 className="text-xl font-black leading-tight sm:text-[26px]">{data.name_ar}</h1>
+                  <h1 className="text-page font-black leading-tight sm:text-[26px]">{data.name_ar}</h1>
                   {data.name_en ? (
                     <p className="mt-0.5 text-desc font-bold text-muted-foreground">{data.name_en}</p>
                   ) : null}
@@ -136,7 +136,7 @@ function GuidePlacePage() {
             <GuidePlaceCommunity placeId={data.id} placeName={data.name_ar} />
 
             <section className="rounded-2xl border border-border/80 bg-card p-3.5 text-desc leading-5 sm:p-4">
-              <h2 className="mb-1.5 text-desc font-black">المصدر والتحقق</h2>
+              <h2 className="text-section mb-1.5 font-black">المصدر والتحقق</h2>
               <p className="text-muted-foreground">
                 {[data.source_label, data.source_type, data.source_date].filter(Boolean).join(" · ") ||
                   "لا يوجد مصدر منشور لهذا السجل."}

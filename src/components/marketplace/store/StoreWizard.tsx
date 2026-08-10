@@ -434,7 +434,7 @@ export function StoreWizard() {
         ))}
       </ol>
 
-      <h2 className="text-base font-semibold">
+      <h2 className="text-section font-semibold">
         {step === 4 && form.store_type === "services"
           ? locale === "ar"
             ? "طريقة تقديم الخدمة"

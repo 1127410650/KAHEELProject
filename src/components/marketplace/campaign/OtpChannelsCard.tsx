@@ -126,7 +126,7 @@ export function OtpChannelsCard() {
 
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("admin.otp.title")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("admin.otp.title")}</h2>
       <p className="mt-1 text-desc text-muted-foreground">{t("admin.otp.hint")}</p>
 
       {channels.isLoading ? (

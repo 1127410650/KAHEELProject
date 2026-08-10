@@ -164,7 +164,7 @@ function AuthPage() {
             </div>
           </div>
 
-          <h1 className="text-xl font-bold text-foreground">{t("auth.signIn")}</h1>
+          <h1 className="text-page font-bold text-foreground">{t("auth.signIn")}</h1>
 
           <div className="mt-4 inline-flex w-full items-center gap-1 rounded-full border border-border bg-secondary p-1">
             {(["code", "password"] as const).map((value) => (

@@ -529,7 +529,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               )}
 
               {featuredRows.length > 0 && (
-                <h2 className="mt-8 text-lg font-bold tracking-tight text-foreground sm:text-xl">
+                <h2 className="text-section mt-8 font-bold tracking-tight text-foreground">
                   {t("market.realEstate.latestTitle")}
                 </h2>
               )}
@@ -550,7 +550,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               ) : rows.length === 0 ? (
                 <div className="mt-4 overflow-hidden rounded-3xl border border-border bg-card p-6 text-center shadow-panel sm:p-10">
                   <Mascot name="kaheel" pose="present" size="sm" className="mx-auto h-28 w-auto" />
-                  <h2 className="mt-3 text-lg font-bold text-foreground">
+                  <h2 className="text-section mt-3 font-bold text-foreground">
                     {t("market.realEstate.emptyTitle")}
                   </h2>
                   <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
@@ -821,7 +821,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 function SectionHeading({ title, description }: { title: string; description: string }) {
   return (
     <div className="min-w-0">
-      <h2 className="text-lg font-bold tracking-tight text-foreground sm:text-2xl">{title}</h2>
+      <h2 className="text-section font-bold tracking-tight text-foreground">{title}</h2>
       <p className="mt-1 text-desc leading-5 text-muted-foreground sm:text-sm">{description}</p>
     </div>
   );

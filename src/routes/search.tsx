@@ -774,7 +774,7 @@ function GenericSearchPage() {
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
         <section className="market-page-intro">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-lg font-black tracking-tight text-foreground sm:text-xl">
+            <h1 className="text-page font-black tracking-tight text-foreground">
               {t("market.search.title")}
             </h1>
             {params.featured === "1" && (

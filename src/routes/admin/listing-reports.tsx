@@ -734,7 +734,7 @@ function CaseDrawer({
 
       {/* lifecycle */}
       <section className="mt-4">
-        <h2 className="text-desc font-bold text-foreground">{t("market.lr.lifecycle")}</h2>
+        <h2 className="text-section font-bold text-foreground">{t("market.lr.lifecycle")}</h2>
         {nexts.length === 0 ? (
           <p className="mt-1 text-desc text-muted-foreground">{t("market.lr.noTransitions")}</p>
         ) : (
@@ -763,7 +763,7 @@ function CaseDrawer({
       {/* assignment */}
       {(can("ads.reports_assign") || can("reports.assign") || can("ads.reports_manage")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-desc font-bold text-foreground">{t("market.lr.assignment")}</h2>
+          <h2 className="text-section font-bold text-foreground">{t("market.lr.assignment")}</h2>
           <div className="flex flex-wrap gap-2">
             <select
               value={assignee}
@@ -792,7 +792,7 @@ function CaseDrawer({
 
       {/* listing enforcement */}
       <section className="mt-4 space-y-2">
-        <h2 className="text-desc font-bold text-foreground">{t("market.lr.listingActions")}</h2>
+        <h2 className="text-section font-bold text-foreground">{t("market.lr.listingActions")}</h2>
         <div className="flex flex-wrap gap-2">
           <select
             value={listingAction}
@@ -835,7 +835,7 @@ function CaseDrawer({
       {/* internal note */}
       {(can("ads.reports_internal_notes") || can("reports.add_internal_note")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-desc font-bold text-foreground">{t("market.lr.internalNotes")}</h2>
+          <h2 className="text-section font-bold text-foreground">{t("market.lr.internalNotes")}</h2>
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -867,7 +867,7 @@ function CaseDrawer({
       {/* owner message */}
       {(can("ads.reports_contact_owner") || can("reports.message_advertiser")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-desc font-bold text-foreground">{t("market.lr.contactOwner")}</h2>
+          <h2 className="text-section font-bold text-foreground">{t("market.lr.contactOwner")}</h2>
           <Textarea
             value={ownerMsg}
             onChange={(e) => setOwnerMsg(e.target.value)}
@@ -888,7 +888,7 @@ function CaseDrawer({
       {/* reporter reply */}
       {(can("ads.reports_reply_reporter") || can("reports.message_reporter")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-desc font-bold text-foreground">{t("market.lr.replyReporter")}</h2>
+          <h2 className="text-section font-bold text-foreground">{t("market.lr.replyReporter")}</h2>
           <p className="text-desc text-muted-foreground">{t("market.lr.replyReporterHint")}</p>
           <Textarea
             value={reporterMsg}
@@ -909,7 +909,7 @@ function CaseDrawer({
 
       {/* status history */}
       <section className="mt-4">
-        <h2 className="text-desc font-bold text-foreground">{t("market.lr.history")}</h2>
+        <h2 className="text-section font-bold text-foreground">{t("market.lr.history")}</h2>
         <ul className="mt-2 space-y-1">
           {(history.data ?? []).map((h) => (
             <li key={h.id} className="rounded-lg border border-border bg-card p-2 text-desc">

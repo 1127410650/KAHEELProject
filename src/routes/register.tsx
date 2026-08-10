@@ -181,7 +181,7 @@ function RegisterPage() {
       <Shell>
         <div className="surface p-5">
           <MailCheck className="size-6 text-primary" aria-hidden />
-          <h1 className="mt-3 text-lg font-bold text-foreground">{t("signup.checkEmail")}</h1>
+          <h1 className="text-page mt-3 font-bold text-foreground">{t("signup.checkEmail")}</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             {t("signup.checkEmailBody")}
           </p>
@@ -195,7 +195,7 @@ function RegisterPage() {
 
   return (
     <Shell>
-      <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.title")}</h1>
+      <h1 className="text-page font-bold text-foreground">{t("signup.title")}</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
       <p className="mt-3 rounded-lg bg-secondary p-2.5 text-desc text-muted-foreground">
         {t("signup.inviteNote")}{" "}
@@ -337,7 +337,7 @@ function PublicSignupForm() {
 
   return (
     <Shell>
-      <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.publicTitle")}</h1>
+      <h1 className="text-page font-bold text-foreground">{t("signup.publicTitle")}</h1>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
         {t("signup.publicSubtitle")}
       </p>

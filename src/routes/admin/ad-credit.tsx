@@ -89,7 +89,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">{t("market.adCredit.admin.pending")}</h2>
+            <h2 className="text-section font-semibold">{t("market.adCredit.admin.pending")}</h2>
             {entries.isLoading ? (
               <Skeleton className="h-20 w-full" />
             ) : pending.length === 0 ? (
@@ -149,7 +149,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">{t("market.adCredit.admin.grantTitle")}</h2>
+            <h2 className="text-section font-semibold">{t("market.adCredit.admin.grantTitle")}</h2>
             <div className="flex flex-wrap gap-2">
               <Input
                 value={walletId}
@@ -194,7 +194,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="p-4">
-            <h2 className="mb-3 text-sm font-semibold">{t("market.adCredit.admin.wallets")}</h2>
+            <h2 className="text-section mb-3 font-semibold">{t("market.adCredit.admin.wallets")}</h2>
             {wallets.isLoading ? (
               <Skeleton className="h-24 w-full" />
             ) : (
@@ -224,7 +224,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="p-4">
-            <h2 className="mb-3 text-sm font-semibold">{t("market.adCredit.admin.allEntries")}</h2>
+            <h2 className="text-section mb-3 font-semibold">{t("market.adCredit.admin.allEntries")}</h2>
             {entries.isLoading ? (
               <Skeleton className="h-24 w-full" />
             ) : (

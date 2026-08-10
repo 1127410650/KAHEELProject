@@ -152,7 +152,7 @@ function ProviderServiceCenter() {
         <Card className="rounded-3xl">
           <CardContent className="space-y-3 p-6 text-center">
             <Store className="mx-auto size-10 text-primary" />
-            <h2 className="text-lg font-black">
+            <h2 className="text-section font-black">
               {locale === "ar" ? "أنشئ متجر خدمات أولًا" : "Create a service store first"}
             </h2>
             <p className="text-sm text-muted-foreground">
@@ -177,7 +177,7 @@ function ProviderServiceCenter() {
         <Card className="rounded-3xl">
           <CardContent className="space-y-3 p-6 text-center">
             <Wrench className="mx-auto size-10 text-primary" />
-            <h2 className="text-lg font-black">
+            <h2 className="text-section font-black">
               {locale === "ar" ? "هذا الحساب متجر بيع" : "This is a seller store"}
             </h2>
             <p className="text-sm text-muted-foreground">
@@ -220,7 +220,7 @@ function ProviderServiceCenter() {
                 <p className="text-desc font-bold text-primary-foreground/75">
                   {locale === "ar" ? "حساب مقدم خدمة" : "Service provider account"}
                 </p>
-                <h2 className="mt-1 text-2xl font-black">{setup.data.store_name}</h2>
+                <h2 className="text-section mt-1 font-black">{setup.data.store_name}</h2>
                 <p className="mt-1 text-desc text-white/65">
                   {setup.data.settings.accepts_bookings
                     ? locale === "ar"

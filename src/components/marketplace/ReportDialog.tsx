@@ -119,7 +119,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
         {refNo ? (
           <div className="py-2 text-center">
             <CheckCircle2 className="mx-auto size-8 text-primary" aria-hidden />
-            <h2 className="mt-3 text-base font-semibold text-foreground">
+            <h2 className="text-section mt-3 font-semibold text-foreground">
               {t("market.reports.submittedTitle")}
             </h2>
             <p className="mt-3 text-desc text-muted-foreground">{t("market.reports.refIs")}</p>

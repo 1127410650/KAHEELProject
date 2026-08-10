@@ -185,7 +185,7 @@ function DescriptionBlock({ text }: { text: string }) {
 
   return (
     <section className="mt-4 rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.description")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.description")}</h2>
       <p
         className={
           long && !open
@@ -253,7 +253,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
 
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.aboutAdvertiser")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.aboutAdvertiser")}</h2>
 
       <div className="mt-3 flex items-start gap-3">
         <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-muted-foreground">
@@ -345,7 +345,7 @@ function OwnerTools({ listing, onDone }: { listing: MktListing; onDone: () => vo
 
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.ownerTools")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.ownerTools")}</h2>
       <p className="mt-1 text-desc text-muted-foreground">{t("market.ad.yourAd")}</p>
       <div className="mt-3 grid gap-2">
         <Button asChild size="sm" variant="secondary">
@@ -466,7 +466,7 @@ function AdPage() {
     return (
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="text-xl font-bold text-foreground">{t("market.ad.notFound")}</h1>
+          <h1 className="text-page font-bold text-foreground">{t("market.ad.notFound")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
@@ -541,7 +541,7 @@ function AdPage() {
             )}
           </div>
 
-          <h1 className="mt-2 break-words text-lg font-bold leading-snug text-foreground sm:text-2xl">
+          <h1 className="text-page mt-2 break-words font-bold leading-snug text-foreground">
             {listing.title}
           </h1>
           <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
@@ -608,7 +608,7 @@ function AdPage() {
 
           {leadSummary && (
             <section className="mt-4 rounded-xl border border-border bg-card p-4">
-              <h2 className="text-sm font-bold text-foreground">{t("market.ad.summary")}</h2>
+              <h2 className="text-section font-bold text-foreground">{t("market.ad.summary")}</h2>
               <p className="mt-2 break-words text-sm leading-relaxed text-muted-foreground">
                 {leadSummary}
               </p>
@@ -629,7 +629,7 @@ function AdPage() {
 
           {(similar.data ?? []).length > 0 && (
             <section className="mt-8">
-              <h2 className="mb-3 text-base font-bold text-foreground">{t("market.ad.similar")}</h2>
+              <h2 className="text-section mb-3 font-bold text-foreground">{t("market.ad.similar")}</h2>
               <div className="flex flex-col gap-2.5 sm:hidden">
                 {(similar.data ?? []).map((l) => (
                   <ListingCard key={l.id} listing={l} view="row" />

@@ -76,7 +76,7 @@ export function AdCreditTopupQueue() {
     <Card>
       <CardContent className="space-y-3 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold">{t("market.adCredit.topup.admin.title")}</h2>
+          <h2 className="text-section font-semibold">{t("market.adCredit.topup.admin.title")}</h2>
           <div className="flex flex-wrap gap-1">
             {FILTERS.map((value) => (
               <button

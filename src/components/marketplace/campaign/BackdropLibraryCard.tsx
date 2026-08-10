@@ -120,7 +120,7 @@ export function BackdropLibraryCard() {
           <div className="flex min-w-0 items-center gap-2">
             <Images className="size-5 shrink-0 text-primary" aria-hidden />
             <div className="min-w-0">
-              <h2 className="truncate text-sm font-black">
+              <h2 className="text-section truncate font-black">
                 {ar ? "مكتبة خلفيات كَحيل" : "Kaheel backdrop library"}
               </h2>
               <p className="text-desc text-muted-foreground">

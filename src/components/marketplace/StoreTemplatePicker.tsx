@@ -196,7 +196,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
             <Sparkles className="size-3.5" aria-hidden />
             قوالب مختلفة لكل نشاط
           </span>
-          <h1 className="mt-4 text-2xl font-black leading-tight sm:text-4xl">اختر شكل متجرك</h1>
+          <h1 className="text-page mt-4 font-black leading-tight sm:text-4xl">اختر شكل متجرك</h1>
           <p className="mt-2 max-w-xl text-sm leading-7 text-market-silver-muted sm:text-base">
             كل قالب له ألوان وهوية وتجربة مناسبة لنوع المتجر، ويمكن تغييره لاحقًا دون التأثير على المنتجات.
           </p>
@@ -227,7 +227,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
                   ) : null}
                 </div>
                 <div className="mt-auto pt-5">
-                  <h2 className="text-sm font-black sm:text-lg">{template.title}</h2>
+                  <h2 className="text-section font-black">{template.title}</h2>
                   <p className="mt-1 line-clamp-2 text-desc leading-4 text-white/75 sm:text-desc sm:leading-5">{template.description}</p>
                   <div className="mt-2.5 flex flex-wrap gap-1">
                     {template.features.slice(0, 3).map((feature) => (
@@ -260,7 +260,7 @@ export function SelectedStoreTemplate({ template, onChange }: { template: StoreT
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-desc font-semibold text-white/60">قالب المتجر المختار</p>
-          <h2 className="truncate text-base font-black">{template.title}</h2>
+          <h2 className="text-section truncate font-black">{template.title}</h2>
         </div>
         <button type="button" onClick={onChange} className="shrink-0 rounded-full border border-white/20 bg-black/15 px-3 py-1.5 text-desc font-bold hover:bg-black/25">
           تغيير

@@ -92,7 +92,7 @@ function AdminSettingsPage() {
         <div className="mt-4 grid gap-4">
           {sections.map((section) => (
             <section key={section} className="rounded-xl border border-border bg-card p-4">
-              <h2 className="text-sm font-bold text-foreground">{t(`admin.settings.section.${section}`)}</h2>
+              <h2 className="text-section font-bold text-foreground">{t(`admin.settings.section.${section}`)}</h2>
               <div className="mt-3 grid gap-2">
                 {rows
                   .filter((row) => row.section === section)

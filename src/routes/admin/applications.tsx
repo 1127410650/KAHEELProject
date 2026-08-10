@@ -207,7 +207,7 @@ function JoinApplicationsAdminPage() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-desc font-bold text-primary">{selected.application_number}</p>
-                <h2 className="mt-1 text-xl font-black">{selected.applicant_name}</h2>
+                <h2 className="text-section mt-1 font-black">{selected.applicant_name}</h2>
                 <p className="mt-1 text-desc text-muted-foreground">
                   {kindLabel(selected.application_kind, locale)}
                   {selected.tenant_name ? ` · ${selected.tenant_name}` : ""}

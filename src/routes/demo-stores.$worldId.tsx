@@ -26,7 +26,7 @@ function DemoStoreWorldPage() {
       <MarketShell>
         <main className="mx-auto flex min-h-[55vh] w-full max-w-xl flex-col items-center justify-center px-5 text-center">
           <Layers3 className="size-10 text-muted-foreground" aria-hidden />
-          <h1 className="mt-4 text-xl font-black text-foreground">هذا العالم غير موجود</h1>
+          <h1 className="text-page mt-4 font-black text-foreground">هذا العالم غير موجود</h1>
           <p className="mt-2 text-sm text-muted-foreground">ارجع إلى الرئيسية واختر عالمًا آخر من عوالم المتاجر.</p>
           <Link to="/" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground">
             <ArrowRight className="size-4" aria-hidden />
@@ -129,7 +129,7 @@ function DemoStoreWorldPage() {
             <div className="flex items-end justify-between gap-3">
               <div>
                 <span className="text-desc font-bold text-primary sm:text-desc">استكشف المزيد</span>
-                <h2 className="mt-0.5 text-body font-black text-foreground sm:text-2xl">عوالم أخرى</h2>
+                <h2 className="text-section mt-0.5 font-black text-foreground">عوالم أخرى</h2>
               </div>
               <Link to="/" className="inline-flex items-center gap-1 text-desc font-bold text-primary sm:text-desc">
                 عرض الكل

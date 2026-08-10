@@ -245,7 +245,7 @@ function WorkList({
   const { t } = useI18n();
   return (
     <section className="mt-6">
-      <h2 className="text-sm font-bold text-foreground">{title}</h2>
+      <h2 className="text-section font-bold text-foreground">{title}</h2>
       {loading ? (
         <Skeleton className="mt-3 h-24 w-full rounded-xl" />
       ) : items.length === 0 ? (

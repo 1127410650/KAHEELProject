@@ -224,7 +224,7 @@ function AdminWorkforcePage() {
       </div>
 
       {/* ---------------- Staff ---------------- */}
-      <h2 className="mt-6 text-sm font-bold text-foreground">{t("admin.workforce.staffTitle")}</h2>
+      <h2 className="text-section mt-6 font-bold text-foreground">{t("admin.workforce.staffTitle")}</h2>
       {staff.isLoading ? (
         <Skeleton className="mt-3 h-48 w-full rounded-xl" />
       ) : rows.length === 0 ? (
@@ -247,7 +247,7 @@ function AdminWorkforcePage() {
       )}
 
       {/* ---------------- Leaves ---------------- */}
-      <h2 className="mt-6 text-sm font-bold text-foreground">{t("admin.workforce.leavesTitle")}</h2>
+      <h2 className="text-section mt-6 font-bold text-foreground">{t("admin.workforce.leavesTitle")}</h2>
       {(leaves.data ?? []).length === 0 ? (
         <p className="mt-3 text-sm text-muted-foreground">{t("admin.workforce.noLeaves")}</p>
       ) : (
@@ -283,7 +283,7 @@ function AdminWorkforcePage() {
       )}
 
       {/* ---------------- Shared queue ---------------- */}
-      <h2 className="mt-6 text-sm font-bold text-foreground">{t("admin.workforce.queueTitle")}</h2>
+      <h2 className="text-section mt-6 font-bold text-foreground">{t("admin.workforce.queueTitle")}</h2>
       <Tabs value={scope} onValueChange={(value) => setScope(value as QueueScope)} className="mt-3">
         <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="all">{t("admin.workforce.scope.all")}</TabsTrigger>

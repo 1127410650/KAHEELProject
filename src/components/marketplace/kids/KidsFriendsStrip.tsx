@@ -14,7 +14,7 @@ export function KidsFriendsStrip({ className }: { className?: string }) {
       )}
       aria-label="أصدقاء كَحيل الصغار"
     >
-      <h2 className="text-sm font-bold text-foreground">أصدقاء كَحيل الصغار</h2>
+      <h2 className="text-section font-bold text-foreground">أصدقاء كَحيل الصغار</h2>
       <p className="mt-1 text-desc text-muted-foreground">
         كل صديق يدلّك على قسمه — اضغط عليه ليغمز لك.
       </p>

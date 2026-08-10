@@ -374,7 +374,7 @@ function BusinessDashboardPage() {
               />
             )}
             <div className="min-w-0">
-              <h2 className="text-lg font-bold text-foreground">
+              <h2 className="text-section font-bold text-foreground">
                 {locale === "ar"
                   ? view.display_name_ar
                   : view.display_name_en || view.display_name_ar}
@@ -599,7 +599,7 @@ function BusinessDashboardPage() {
       )}
 
       <section className="mt-6 max-w-2xl rounded-xl border border-border bg-card p-5">
-        <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+        <h2 className="text-section flex items-center gap-2 font-bold text-foreground">
           <ShieldCheck className="size-4" aria-hidden />
           {t("market.biz.verification")}
         </h2>

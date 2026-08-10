@@ -109,7 +109,7 @@ function UserProfilePage() {
     return (
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="text-lg font-bold text-foreground">{t("market.person.unavailable")}</h1>
+          <h1 className="text-page font-bold text-foreground">{t("market.person.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
@@ -146,7 +146,7 @@ function UserProfilePage() {
               )}
             </span>
             <div className="min-w-0 flex-1">
-              <h1 className="break-words text-lg font-bold leading-tight text-foreground sm:text-2xl">
+              <h1 className="text-page break-words font-bold leading-tight text-foreground">
                 {name}
               </h1>
               {/* The trust check mark lives under the name only. */}
@@ -218,7 +218,7 @@ function UserProfilePage() {
 
           {about && (
             <div className="mt-4">
-              <h2 className="text-sm font-bold text-foreground">{t("market.business.about")}</h2>
+              <h2 className="text-section font-bold text-foreground">{t("market.business.about")}</h2>
               <p
                 className={`mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground ${
                   aboutLong && !aboutOpen ? "line-clamp-4" : ""
@@ -239,7 +239,7 @@ function UserProfilePage() {
           )}
         </header>
 
-        <h2 className="mt-5 text-base font-bold text-foreground">{t("market.person.listings")}</h2>
+        <h2 className="text-section mt-5 font-bold text-foreground">{t("market.person.listings")}</h2>
 
         {cats.length > 1 && (
           <div className="mt-2 flex flex-wrap gap-1.5">

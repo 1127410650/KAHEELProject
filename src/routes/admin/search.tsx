@@ -101,7 +101,7 @@ function AdminSearchPage() {
         <div className="mt-5 grid gap-4">
           {groups.map((group) => (
             <section key={group.type} className="rounded-xl border border-border bg-card p-4">
-              <h2 className="flex items-center justify-between gap-2 text-sm font-bold text-foreground">
+              <h2 className="text-section flex items-center justify-between gap-2 font-bold text-foreground">
                 <span className="truncate">{t(GROUP_LABEL[group.type])}</span>
                 <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-desc tabular-nums">
                   {group.count}

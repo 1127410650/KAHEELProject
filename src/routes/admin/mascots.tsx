@@ -84,7 +84,7 @@ function MascotsPreviewPage() {
           <CardContent className="space-y-4 p-4">
             <div className="flex flex-wrap items-center gap-2">
               <Smile className="size-4 text-primary" aria-hidden />
-              <h2 className="text-sm font-semibold">
+              <h2 className="text-section font-semibold">
                 {ar ? "الشكل المعتمد للشخصيتين" : "Approved mascot look"}
               </h2>
               <Badge variant="secondary">{ar ? "لا يُغيَّر" : "Locked"}</Badge>
@@ -112,7 +112,7 @@ function MascotsPreviewPage() {
         {(["kaheel", "kaheelan"] as MascotName[]).map((name) => (
           <Card key={name}>
             <CardContent className="space-y-3 p-4">
-              <h2 className="text-sm font-semibold">
+              <h2 className="text-section font-semibold">
                 {name === "kaheel"
                   ? ar
                     ? "كَحيل — الرسمي المؤدب"
@@ -148,7 +148,7 @@ function MascotsPreviewPage() {
         {(["kaheel", "kaheelan"] as MascotName[]).map((name) => (
           <Card key={`${name}-walk`} data-walk-card={name}>
             <CardContent className="space-y-3 p-4">
-              <h2 className="text-sm font-semibold">
+              <h2 className="text-section font-semibold">
                 {ar ? "إطارات المشي — " : "Walk frames — "}
                 {name === "kaheel" ? (ar ? "كَحيل" : "Kaheel") : ar ? "كَحيلان" : "Kaheelan"}
               </h2>
@@ -192,7 +192,7 @@ function MascotsPreviewPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">{ar ? "الحركات" : "Animations"}</h2>
+            <h2 className="text-section font-semibold">{ar ? "الحركات" : "Animations"}</h2>
             <div className="flex flex-wrap gap-2">
               {DEMOS.map((item) => (
                 <Button key={item.id} size="sm" variant="outline" onClick={() => playDemo(item.id)}>
@@ -235,7 +235,7 @@ function MascotsPreviewPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">
+            <h2 className="text-section font-semibold">
               {ar ? "مشهد التعارف (الشخصيتان معًا)" : "Duo introduction scene"}
             </h2>
             <div className="flex h-44 items-end justify-center rounded-lg border bg-muted/30">
@@ -246,7 +246,7 @@ function MascotsPreviewPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">
+            <h2 className="text-section font-semibold">
               {ar ? "مشاهد النوافذ الترويجية" : "Popup scenes"}
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -305,7 +305,7 @@ function CopyList({
     <Card>
       <CardContent className="space-y-2 p-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold">{title}</h2>
+          <h2 className="text-section font-semibold">{title}</h2>
           <Badge variant="secondary">{count}</Badge>
         </div>
         <ul className="space-y-2">

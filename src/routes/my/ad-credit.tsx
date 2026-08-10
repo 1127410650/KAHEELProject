@@ -113,7 +113,7 @@ function AdCreditPage() {
           <CardContent className="space-y-3 p-4">
             <div className="flex items-center gap-2">
               <Wallet className="size-4 text-muted-foreground" aria-hidden />
-              <h2 className="text-sm font-semibold">{t("market.adCredit.buyTitle")}</h2>
+              <h2 className="text-section font-semibold">{t("market.adCredit.buyTitle")}</h2>
             </div>
             <p className="text-desc text-muted-foreground">{t("market.adCredit.manualNotice")}</p>
 
@@ -154,7 +154,7 @@ function AdCreditPage() {
         {pending.length > 0 && (
           <Card>
             <CardContent className="space-y-2 p-4">
-              <h2 className="text-sm font-semibold">{t("market.adCredit.pendingTitle")}</h2>
+              <h2 className="text-section font-semibold">{t("market.adCredit.pendingTitle")}</h2>
               {pending.map((e) => (
                 <div
                   key={e.id}
@@ -184,7 +184,7 @@ function AdCreditPage() {
 
         <Card>
           <CardContent className="p-4">
-            <h2 className="mb-3 text-sm font-semibold">{t("market.adCredit.ledger")}</h2>
+            <h2 className="text-section mb-3 font-semibold">{t("market.adCredit.ledger")}</h2>
             {entries.isLoading ? (
               <Skeleton className="h-24 w-full" />
             ) : (entries.data ?? []).length === 0 ? (

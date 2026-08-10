@@ -69,7 +69,7 @@ function AdminGuideClaimsPage() {
     <AdminShell title="مطالبات ملكية جهات الدليل">
       <div className="space-y-4">
         <div>
-          <h1 className="text-lg font-black">مطالبات ملكية جهات الدليل</h1>
+          <h1 className="text-page font-black">مطالبات ملكية جهات الدليل</h1>
           <p className="text-desc text-muted-foreground">
             لا موافقة بلا إثبات: كل مطالبة تُعتمد يدويًا بعد فحص المستندات، وتُحذف المستندات تلقائيًا
             بعد {CLAIM_DOC_RETENTION_DAYS.toLocaleString("en-US")} يومًا من البتّ.

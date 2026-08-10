@@ -229,7 +229,7 @@ function AdminHomePage() {
                   <Sparkles className="size-3.5" aria-hidden />
                   {t("admin.dashboardBadge")}
                 </span>
-                <h2 className="mt-2 text-lg font-black sm:text-2xl">
+                <h2 className="text-section mt-2 font-black">
                   {t("admin.dashboardWelcome")}
                 </h2>
                 <p className="mt-1 max-w-2xl text-desc leading-5 text-white/75 sm:text-sm sm:leading-6">
@@ -248,7 +248,7 @@ function AdminHomePage() {
           <section>
             <div className="mb-3 flex items-end justify-between gap-3">
               <div>
-                <h2 className="text-sm font-black text-foreground sm:text-base">
+                <h2 className="text-section font-black text-foreground">
                   {t("admin.dashboardOverview")}
                 </h2>
                 <p className="mt-0.5 text-desc text-muted-foreground sm:text-desc">
@@ -358,7 +358,7 @@ function AdminHomePage() {
           <section className="rounded-2xl border border-border bg-card p-4 shadow-panel sm:p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <h2 className="text-base font-black text-foreground">{t("admin.actionNeeded")}</h2>
+                <h2 className="text-section font-black text-foreground">{t("admin.actionNeeded")}</h2>
                 <p className="mt-0.5 text-desc text-muted-foreground sm:text-desc">
                   {t("admin.actionNeededHint")}
                 </p>

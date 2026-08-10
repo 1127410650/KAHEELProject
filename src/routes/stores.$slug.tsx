@@ -94,7 +94,7 @@ function PublicStorePage() {
       <MarketShell>
         <div className="mx-auto w-full max-w-3xl px-4 py-16 text-center">
           <Store className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">{t("market.store.publicPage.notFound")}</h1>
+          <h1 className="text-page font-semibold">{t("market.store.publicPage.notFound")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {t("market.store.publicPage.notFoundHint")}
           </p>
@@ -172,7 +172,7 @@ function PublicStorePage() {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h1 className="flex items-center gap-2 text-xl font-black">
+                <h1 className="text-page flex items-center gap-2 font-black">
                   <span className="truncate">{name}</span>
                   <VerifiedBadge status={store.verification_status} />
                 </h1>

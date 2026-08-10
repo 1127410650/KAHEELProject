@@ -607,7 +607,7 @@ export function AdminShell({
                 <p className="text-desc font-bold text-[#7b2cbf] dark:text-primary">
                   {t("admin.pageEyebrow")}
                 </p>
-                <h1 className="mt-0.5 min-w-0 truncate text-xl font-black tracking-tight text-foreground sm:text-2xl">
+                <h1 className="text-page mt-0.5 min-w-0 truncate font-black tracking-tight text-foreground">
                   {title}
                 </h1>
               </div>

@@ -45,7 +45,7 @@ export function AdminSafetyCard({
   return (
     <section className="rounded-xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
+        <h2 className="text-section inline-flex items-center gap-1.5 font-bold text-foreground">
           <ShieldQuestion className="size-4 shrink-0" aria-hidden />
           {t("admin.safety.title")}
         </h2>

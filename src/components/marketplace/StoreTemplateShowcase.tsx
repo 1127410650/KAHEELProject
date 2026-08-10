@@ -60,7 +60,7 @@ function Header({ template, action = "تسوق الآن" }: { template: StoreTem
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-desc font-semibold text-white/60">معاينة واجهة المتجر</p>
-        <h2 className="truncate text-base font-black sm:text-lg">{template.title}</h2>
+        <h2 className="text-section truncate font-black">{template.title}</h2>
       </div>
       <span className="rounded-full bg-white px-3 py-1.5 text-desc font-black text-slate-900 sm:text-desc">{action}</span>
     </div>

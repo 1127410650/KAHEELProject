@@ -172,7 +172,7 @@ export function CallOverlay() {
           )}
         </span>
 
-        <h2 className="max-w-[22ch] text-2xl font-black leading-tight">
+        <h2 className="text-section max-w-[22ch] font-black leading-tight">
           {call.peerName || t("market.call.title")}
         </h2>
         {call.listingTitle && (

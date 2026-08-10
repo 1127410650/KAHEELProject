@@ -129,7 +129,7 @@ function AdminErrandsPage() {
         {/* الخدمات */}
         <Card>
           <CardContent className="p-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "الخدمات المرافقة" : "Service catalogue"}
             </h2>
             {services.isLoading ? (
@@ -161,7 +161,7 @@ function AdminErrandsPage() {
         {/* الكباتن */}
         <Card>
           <CardContent className="p-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "الكباتن" : "Captains"}
             </h2>
             {captains.isLoading ? (
@@ -246,7 +246,7 @@ function AdminErrandsPage() {
         {/* الطلبات */}
         <Card>
           <CardContent className="p-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "آخر الطلبات" : "Latest requests"}
             </h2>
             {requests.isLoading ? (

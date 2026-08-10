@@ -275,7 +275,7 @@ function CaptainPage() {
           <>
             {/* طلباتي المكلّف بها */}
             <section className="mb-3">
-              <h2 className="mb-2 text-sm font-bold text-foreground">
+              <h2 className="text-section mb-2 font-bold text-foreground">
                 {ar ? "طلباتي الجارية" : "My active jobs"}
               </h2>
               {(queue.data?.mine ?? []).filter((request) =>
@@ -339,7 +339,7 @@ function CaptainPage() {
 
             {/* الطلبات المفتوحة */}
             <section>
-              <h2 className="mb-2 text-sm font-bold text-foreground">
+              <h2 className="text-section mb-2 font-bold text-foreground">
                 {ar ? "طلبات مفتوحة" : "Open requests"}
               </h2>
               {queue.isLoading ? (

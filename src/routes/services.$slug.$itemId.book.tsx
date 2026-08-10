@@ -116,7 +116,7 @@ function ServiceBookingPage() {
       <MarketShell>
         <div className="mx-auto max-w-xl px-4 py-20 text-center">
           <CalendarDays className="mx-auto size-10 text-muted-foreground" />
-          <h1 className="mt-3 text-xl font-black">
+          <h1 className="text-page mt-3 font-black">
             {locale === "ar" ? "الخدمة غير متاحة للحجز" : "Service unavailable"}
           </h1>
           <Button asChild className="mt-5">
@@ -212,7 +212,7 @@ function ServiceBookingPage() {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-lg font-black sm:text-xl">{serviceName}</h1>
+                  <h1 className="text-page font-black">{serviceName}</h1>
                   <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-muted-foreground">
                     {storeName}
                     <VerifiedBadge status={data.store.verification_status} />
@@ -253,7 +253,7 @@ function ServiceBookingPage() {
               <Card className="rounded-3xl">
                 <CardContent className="space-y-5 p-4 sm:p-6">
                   <div>
-                    <h2 className="text-lg font-black">
+                    <h2 className="text-section font-black">
                       {locale === "ar" ? "اختر المختص والموعد" : "Choose a professional and time"}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -341,7 +341,7 @@ function ServiceBookingPage() {
               <Card className="rounded-3xl">
                 <CardContent className="space-y-5 p-4 sm:p-6">
                   <div>
-                    <h2 className="text-lg font-black">
+                    <h2 className="text-section font-black">
                       {locale === "ar" ? "تفاصيل تقديم الخدمة" : "Service details"}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -434,7 +434,7 @@ function ServiceBookingPage() {
               <Card className="rounded-3xl">
                 <CardContent className="space-y-4 p-4 sm:p-6">
                   <div>
-                    <h2 className="text-lg font-black">
+                    <h2 className="text-section font-black">
                       {locale === "ar" ? "راجع وأكد الحجز" : "Review and confirm"}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">

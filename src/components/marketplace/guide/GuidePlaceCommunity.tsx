@@ -236,7 +236,7 @@ function UploadSection({ placeId, userId }: { placeId: string; userId: string | 
 
   return (
     <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
-      <h2 className="mb-1 flex items-center gap-1.5 text-sm font-black">
+      <h2 className="text-section mb-1 flex items-center gap-1.5 font-black">
         <Camera className="size-4 text-market-navy" aria-hidden />
         أضف صورًا للجهة
       </h2>
@@ -292,7 +292,7 @@ function MyPhotosSection({
   const remove = useDeleteGuidePhoto();
   return (
     <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
-      <h2 className="mb-2 text-sm font-black">صوري لهذه الجهة</h2>
+      <h2 className="text-section mb-2 font-black">صوري لهذه الجهة</h2>
       <ul className="space-y-2">
         {photos.map((photo) => (
           <li key={photo.id} className="flex items-center gap-2.5">
@@ -358,7 +358,7 @@ function ReviewsSection({
   return (
     <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-sm font-black">التقييمات والتعليقات</h2>
+        <h2 className="text-section font-black">التقييمات والتعليقات</h2>
         <GuidePlaceRating average={average} total={total} size="lg" />
       </div>
 
@@ -469,7 +469,7 @@ function PromoteSection({
 
   return (
     <section className="rounded-3xl border border-market-purple/30 bg-market-purple/[0.04] p-4 sm:p-5">
-      <h2 className="mb-1 flex items-center gap-1.5 text-sm font-black">
+      <h2 className="text-section mb-1 flex items-center gap-1.5 font-black">
         <Megaphone className="size-4 text-market-purple" aria-hidden />
         روّج «{placeName}» في «إعلانات مميزة»
       </h2>
@@ -556,7 +556,7 @@ function ClaimSection({
 
   return (
     <section id="guide-claim" className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
-      <h2 className="mb-1 flex items-center gap-1.5 text-sm font-black">
+      <h2 className="text-section mb-1 flex items-center gap-1.5 font-black">
         <ShieldQuestion className="size-4 text-primary" aria-hidden />
         هذه جهتك؟ طالب بإدارتها
       </h2>

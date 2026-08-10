@@ -187,7 +187,7 @@ function AdminStudentBotPage() {
     <AdminShell title="مساعد الطالب">
       <div className="grid gap-3">
         <header className="rounded-2xl border border-border bg-card p-4 shadow-panel">
-          <h1 className="text-sm font-black text-foreground">مساعد الطالب</h1>
+          <h1 className="text-page font-black text-foreground">مساعد الطالب</h1>
           <p className="mt-1 text-desc leading-6 text-muted-foreground">
             الاستهلاك يُحسب تقديريًا من رموز الإدخال والإخراج لكل طلب. عند بلوغ السقف الشهري يتوقف
             المساعد تلقائيًا، وتُرسل تنبيهات للإدارة عند ٥٠٪ و٨٠٪ و١٠٠٪.

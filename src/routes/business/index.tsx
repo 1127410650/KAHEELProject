@@ -57,7 +57,7 @@ function ProviderOperationsPage() {
         <Card className="mx-auto max-w-2xl rounded-3xl">
           <CardContent className="space-y-4 p-6 text-center sm:p-8">
             <Store className="mx-auto size-11 text-primary" />
-            <h2 className="text-lg font-black">
+            <h2 className="text-section font-black">
               {locale === "ar" ? "المركز متاح بعد قبول طلب الانضمام" : "Available after approval"}
             </h2>
             <p className="text-sm leading-7 text-muted-foreground">
@@ -197,7 +197,7 @@ function ProviderOperationsPage() {
                     {locale === "ar" ? "معتمد تشغيليًا" : "Operationally approved"}
                   </Badge>
                 </div>
-                <h1 className="mt-3 text-2xl font-black sm:text-3xl">
+                <h1 className="text-page mt-3 font-black sm:text-3xl">
                   {locale === "ar" ? "كل أعمالك من مكان واحد" : "Run everything from one place"}
                 </h1>
                 <p className="mt-2 max-w-2xl text-sm leading-7 text-white/70">

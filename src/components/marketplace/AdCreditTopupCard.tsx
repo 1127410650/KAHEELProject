@@ -161,7 +161,7 @@ export function AdCreditTopupCard({
       <CardContent className="space-y-4 p-4">
         <div className="flex items-center gap-2">
           <Wallet className="size-4 text-muted-foreground" aria-hidden />
-          <h2 className="text-sm font-semibold">{t("market.adCredit.topup.title")}</h2>
+          <h2 className="text-section font-semibold">{t("market.adCredit.topup.title")}</h2>
         </div>
 
         <div className="flex flex-wrap gap-2">
