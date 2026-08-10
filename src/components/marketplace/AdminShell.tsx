@@ -17,6 +17,7 @@ import {
   Flag,
   Gauge,
   Globe2,
+  GraduationCap,
   ListChecks,
   LogOut,
   Megaphone,
