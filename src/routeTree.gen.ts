@@ -38,6 +38,7 @@ import { Route as AdminApplicationsRouteImport } from './routes/admin/applicatio
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
+import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
 import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
@@ -72,6 +73,7 @@ import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
 import { Route as BusinessPartnersRouteImport } from './routes/business/partners'
 import { Route as BusinessProfileRouteImport } from './routes/business/profile'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
+import { Route as CSlugRouteImport } from './routes/c.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
 import { Route as GuidesRemovalRequestRouteImport } from './routes/guides/removal-request'
@@ -270,6 +272,11 @@ const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
   path: '/campaigns',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -438,6 +445,11 @@ const BusinessProfileRoute = BusinessProfileRouteImport.update({
 const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
   id: '/businesses/$slug',
   path: '/businesses/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CSlugRoute = CSlugRouteImport.update({
+  id: '/c/$slug',
+  path: '/c/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
@@ -734,6 +746,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
@@ -766,6 +779,7 @@ export interface FileRoutesByFullPath {
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
+  '/c/$slug': typeof CSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/guides/removal-request': typeof GuidesRemovalRequestRoute
@@ -847,6 +861,7 @@ export interface FileRoutesByTo {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
@@ -879,6 +894,7 @@ export interface FileRoutesByTo {
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
+  '/c/$slug': typeof CSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/guides/removal-request': typeof GuidesRemovalRequestRoute
@@ -965,6 +981,7 @@ export interface FileRoutesById {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
@@ -997,6 +1014,7 @@ export interface FileRoutesById {
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
+  '/c/$slug': typeof CSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/guides/removal-request': typeof GuidesRemovalRequestRoute
@@ -1084,6 +1102,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/campaigns'
+    | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/designs'
     | '/admin/errands'
@@ -1116,6 +1135,7 @@ export interface FileRouteTypes {
     | '/business/partners'
     | '/business/profile'
     | '/businesses/$slug'
+    | '/c/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
     | '/guides/removal-request'
@@ -1197,6 +1217,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/campaigns'
+    | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/designs'
     | '/admin/errands'
@@ -1229,6 +1250,7 @@ export interface FileRouteTypes {
     | '/business/partners'
     | '/business/profile'
     | '/businesses/$slug'
+    | '/c/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
     | '/guides/removal-request'
@@ -1314,6 +1336,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/campaigns'
+    | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/designs'
     | '/admin/errands'
@@ -1346,6 +1369,7 @@ export interface FileRouteTypes {
     | '/business/partners'
     | '/business/profile'
     | '/businesses/$slug'
+    | '/c/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
     | '/guides/removal-request'
@@ -1428,6 +1452,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRouteWithChildren
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
+  CSlugRoute: typeof CSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   GuidesRemovalRequestRoute: typeof GuidesRemovalRequestRoute
@@ -1650,6 +1675,13 @@ declare module '@tanstack/react-router' {
       path: '/campaigns'
       fullPath: '/admin/campaigns'
       preLoaderRoute: typeof AdminCampaignsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/dashboard': {
@@ -1888,6 +1920,13 @@ declare module '@tanstack/react-router' {
       path: '/businesses/$slug'
       fullPath: '/businesses/$slug'
       preLoaderRoute: typeof BusinessesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/c/$slug': {
+      id: '/c/$slug'
+      path: '/c/$slug'
+      fullPath: '/c/$slug'
+      preLoaderRoute: typeof CSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories/$slug': {
@@ -2264,6 +2303,7 @@ interface AdminRouteRouteChildren {
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminDesignsRoute: typeof AdminDesignsRoute
   AdminErrandsRoute: typeof AdminErrandsRoute
@@ -2305,6 +2345,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminDesignsRoute: AdminDesignsRoute,
   AdminErrandsRoute: AdminErrandsRoute,
@@ -2477,6 +2518,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRouteWithChildren,
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
+  CSlugRoute: CSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   GuidesRemovalRequestRoute: GuidesRemovalRequestRoute,

@@ -1851,42 +1851,67 @@ export type Database = {
       }
       mkt_categories: {
         Row: {
+          cover_slot_key: string | null
           created_at: string
+          deleted_at: string | null
           icon: string | null
           id: string
           is_active: boolean
+          is_primary: boolean
+          merged_into_id: string | null
           name_ar: string
           name_en: string
           parent_id: string | null
           slug: string
           sort_order: number
+          tagline_ar: string | null
+          tagline_en: string | null
           updated_at: string
         }
         Insert: {
+          cover_slot_key?: string | null
           created_at?: string
+          deleted_at?: string | null
           icon?: string | null
           id?: string
           is_active?: boolean
+          is_primary?: boolean
+          merged_into_id?: string | null
           name_ar: string
           name_en: string
           parent_id?: string | null
           slug: string
           sort_order?: number
+          tagline_ar?: string | null
+          tagline_en?: string | null
           updated_at?: string
         }
         Update: {
+          cover_slot_key?: string | null
           created_at?: string
+          deleted_at?: string | null
           icon?: string | null
           id?: string
           is_active?: boolean
+          is_primary?: boolean
+          merged_into_id?: string | null
           name_ar?: string
           name_en?: string
           parent_id?: string | null
           slug?: string
           sort_order?: number
+          tagline_ar?: string | null
+          tagline_en?: string | null
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "mkt_categories_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "mkt_categories_parent_id_fkey"
             columns: ["parent_id"]
@@ -1927,6 +1952,89 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "mkt_category_aliases_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_category_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json
+          id: string
+          moved_children: number
+          moved_listings: number
+          source_id: string | null
+          source_slug: string | null
+          target_id: string | null
+          target_slug: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          moved_children?: number
+          moved_listings?: number
+          source_id?: string | null
+          source_slug?: string | null
+          target_id?: string | null
+          target_slug?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          moved_children?: number
+          moved_listings?: number
+          source_id?: string | null
+          source_slug?: string | null
+          target_id?: string | null
+          target_slug?: string | null
+        }
+        Relationships: []
+      }
+      mkt_category_redirects: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          created_by: string | null
+          from_path: string
+          id: string
+          reason: string
+          to_path: string
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          from_path: string
+          id?: string
+          reason?: string
+          to_path: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          from_path?: string
+          id?: string
+          reason?: string
+          to_path?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_category_redirects_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "mkt_categories"
@@ -10996,6 +11104,36 @@ export type Database = {
         }[]
       }
       mkt_admin_can: { Args: { _perm: string }; Returns: boolean }
+      mkt_admin_category_demote: {
+        Args: { _id: string; _parent_id: string }
+        Returns: undefined
+      }
+      mkt_admin_category_merge: {
+        Args: { _source_id: string; _target_id: string }
+        Returns: Json
+      }
+      mkt_admin_category_move: {
+        Args: { _id: string; _parent_id: string }
+        Returns: undefined
+      }
+      mkt_admin_category_promote: { Args: { _id: string }; Returns: undefined }
+      mkt_admin_category_set_active: {
+        Args: { _active: boolean; _id: string }
+        Returns: undefined
+      }
+      mkt_admin_category_upsert: {
+        Args: {
+          _icon?: string
+          _id?: string
+          _name_ar?: string
+          _name_en?: string
+          _parent_id?: string
+          _slug?: string
+          _sort_order?: number
+          _tagline_ar?: string
+        }
+        Returns: string
+      }
       mkt_admin_claim: {
         Args: { _kind: string; _subject_id: string }
         Returns: string
@@ -11880,6 +12018,10 @@ export type Database = {
       mkt_can_view_quote: { Args: { _quote_id: string }; Returns: boolean }
       mkt_cart_item_owner: { Args: { _cart_item_id: string }; Returns: boolean }
       mkt_cart_owner: { Args: { _cart_id: string }; Returns: boolean }
+      mkt_category_world_slots: {
+        Args: { _name: string; _slug: string }
+        Returns: undefined
+      }
       mkt_chat_block_set: {
         Args: { _blocked: boolean; _conversation_id: string }
         Returns: undefined

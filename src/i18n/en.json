@@ -3855,7 +3855,8 @@
       "guideRequests": "Guide edit/removal requests",
       "guideClaims": "Guide ownership claims",
       "appearance": "Appearance & media",
-      "pageVariants": "Page layouts"
+      "pageVariants": "Page layouts",
+      "categories": "Categories & worlds"
     },
     "alerts": {
       "title": "Alerts",

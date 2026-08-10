@@ -1,4 +1,6 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+
+import { getCategoryRedirect } from "@/lib/mkt-category-redirects.functions";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -30,17 +32,25 @@ export const Route = createFileRoute("/categories/$slug")({
   // Legacy alias slugs land on the canonical «عقارات» page with their
   // city / filters / sort / page / hash intact. `canonicalCategorySlug` is a
   // fixed point for canonical slugs, so this can never loop.
-  beforeLoad: ({ params, location }) => {
+  beforeLoad: async ({ params, location }) => {
     const canonical = canonicalCategorySlug(params.slug);
-    if (canonical === params.slug) return;
-    throw redirect({
-      to: "/categories/$slug",
-      params: { slug: canonical },
-      search: location.search as never,
-      ...(location.hash ? { hash: location.hash } : {}),
-      replace: true,
+    if (canonical !== params.slug) {
+      throw redirect({
+        to: "/categories/$slug",
+        params: { slug: canonical },
+        search: location.search as never,
+        ...(location.hash ? { hash: location.hash } : {}),
+        replace: true,
+      });
+    }
+    // قسم مدموج أو مخفَّض: جدول `mkt_category_redirects` هو المصدر الوحيد
+    // لمساره الجديد، فلا تظهر صفحة فارغة لقسم انتقلت إعلاناته.
+    const { toPath } = await getCategoryRedirect({
+      data: { fromPath: `/categories/${params.slug}` },
     });
+    if (toPath) throw redirect({ href: toPath, statusCode: 301, replace: true });
   },
+
 
 
   head: ({ params }) => {

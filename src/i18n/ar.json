@@ -3855,7 +3855,8 @@
       "guideRequests": "طلبات تعديل وإزالة",
       "guideClaims": "مطالبات ملكية الدليل",
       "appearance": "المظهر والوسائط",
-      "pageVariants": "تصاميم الصفحات"
+      "pageVariants": "تصاميم الصفحات",
+      "categories": "الأقسام والعوالم"
     },
     "alerts": {
       "title": "مركز التنبيهات",
