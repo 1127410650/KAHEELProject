@@ -124,32 +124,33 @@
 :root {
   --radius: 0.75rem;
 
-  /* #FFFFFF / #240046 */
+  /* أسطح محايدة: أبيض للصفحة والبطاقات، ونص أسود مائل (#111) */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.2354 0.1416 303.37);
+  --foreground: oklch(0.1776 0 0);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2354 0.1416 303.37);
+  --card-foreground: oklch(0.1776 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2354 0.1416 303.37);
+  --popover-foreground: oklch(0.1776 0 0);
 
-  /* #7B2CBF / #5A189A / #3C096C */
+  /* #7B2CBF / #5A189A / #3C096C — البنفسجي لون تجميلي فقط */
   --primary: oklch(0.4854 0.2222 303.37);
   --primary-foreground: oklch(1 0 0);
   --primary-dark: oklch(0.3906 0.1922 303.44);
   --primary-pressed: oklch(0.3009 0.1601 303.65);
-  /* أعمق درجة للهوية (#10002B) — للحالة النشطة والتدرجات الداكنة */
+  /* أعمق درجة للهوية (#10002B) — للتفاصيل الدقيقة فقط */
   --primary-deep: oklch(0.1584 0.1103 303.5);
 
-  /* أسطح فاتحة مشتقة من #E0AAFF و #C77DFF */
-  --secondary: oklch(0.9536 0.0338 305.5);
-  --secondary-foreground: oklch(0.3009 0.1601 303.65);
+  /* أسطح رمادية محايدة جدًا — لا تلوين بنفسجي للمساحات */
+  --secondary: oklch(0.968 0 0);
+  --secondary-foreground: oklch(0.2178 0 0);
 
-  --muted: oklch(0.9662 0.0252 305.5);
-  --muted-foreground: oklch(0.3906 0.1922 303.44);
+  --muted: oklch(0.972 0 0);
+  --muted-foreground: oklch(0.4386 0 0);
 
-  --accent: oklch(0.9432 0.0409 305.5);
+  --accent: oklch(0.9702 0.0075 305.5);
   --accent-foreground: oklch(0.3009 0.1601 303.65);
+
 
   /* الذهبي — للعناصر المميزة فقط */
   --gold: oklch(0.7686 0.1647 70.08);
