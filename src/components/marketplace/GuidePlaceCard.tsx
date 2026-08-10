@@ -22,11 +22,12 @@ import {
   recordOutreach,
   type OutreachRecord,
 } from "@/lib/mkt-guide-outreach";
+import { formatDistance } from "@/lib/mkt-nearby";
 
 
 
 /** No source imagery is rendered anywhere — rights are unverified by design. */
-({ place }: { place: GuidePlace }) {
+export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   if (isOpenStreetMap(place)) {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-gold-soft px-2.5 py-1 text-[10px] font-black text-gold-foreground">
