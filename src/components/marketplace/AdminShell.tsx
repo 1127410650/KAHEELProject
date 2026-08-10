@@ -22,6 +22,8 @@ import {
   LogOut,
   Megaphone,
   Menu,
+  Plug,
+  Shapes,
   ScrollText,
   Search,
   Settings,
@@ -185,6 +187,19 @@ const NAV: NavItem[] = [
     labelKey: "admin.nav.aiServices",
     icon: Sparkles,
     section: "studio",
+    ownerOnly: true,
+  },
+  {
+    to: "/admin/studio/canvas",
+    labelKey: "admin.nav.canvasStudio",
+    icon: Shapes,
+    section: "studio",
+  },
+  {
+    to: "/admin/integrations",
+    labelKey: "admin.nav.integrations",
+    icon: Plug,
+    section: "settings",
     ownerOnly: true,
   },
   {

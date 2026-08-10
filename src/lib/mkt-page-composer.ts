@@ -48,7 +48,8 @@ export type BlockType =
   | "stories_rail"
   | "category_marquee"
   | "jeeb_li"
-  | "exclusive_offers";
+  | "exclusive_offers"
+  | "custom_block";
 
 export type FieldType =
   | "text"
@@ -58,7 +59,9 @@ export type FieldType =
   | "slot"
   | "link"
   | "shape"
-  | "anchor";
+  | "anchor"
+  /** كتلة مخصصة مرسومة في استوديو الرسم. */
+  | "custom_block";
 
 export interface BlockField {
   key: string;
@@ -393,6 +396,16 @@ export const BLOCK_LIBRARY: BlockDefinition[] = [
     icon: "badge-percent",
     fields: [
       { key: "title_ar", label_ar: "العنوان", type: "text", default: "عروض حصرية" },
+    ],
+  },
+  {
+    type: "custom_block",
+    name_ar: "كتلتي المخصصة",
+    description_ar: "تصميم مرسوم في استوديو الرسم مع مناطق نقر لها وجهات محددة.",
+    icon: "shapes",
+    fields: [
+      { key: "custom_block_id", label_ar: "الكتلة المخصصة", type: "custom_block" },
+      { key: "alt_ar", label_ar: "وصف الصورة للقارئ الصوتي", type: "text" },
     ],
   },
 ];

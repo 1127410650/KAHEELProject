@@ -47,6 +47,7 @@ import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideClaimsRouteImport } from './routes/admin/guide-claims'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
 import { Route as AdminGuideRequestsRouteImport } from './routes/admin/guide-requests'
+import { Route as AdminIntegrationsRouteImport } from './routes/admin/integrations'
 import { Route as AdminLabelsRouteImport } from './routes/admin/labels'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
@@ -109,6 +110,7 @@ import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.in
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
 import { Route as AdminStaffAttendanceRouteImport } from './routes/admin/staff.attendance'
 import { Route as AdminStaffWorkloadRouteImport } from './routes/admin/staff.workload'
+import { Route as AdminStudioCanvasRouteImport } from './routes/admin/studio.canvas'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as ApiPublicKaheelIntroDotpdfRouteImport } from './routes/api/public/kaheel-intro[.]pdf'
@@ -320,6 +322,11 @@ const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
 const AdminGuideRequestsRoute = AdminGuideRequestsRouteImport.update({
   id: '/guide-requests',
   path: '/guide-requests',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminIntegrationsRoute = AdminIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminLabelsRoute = AdminLabelsRouteImport.update({
@@ -632,6 +639,11 @@ const AdminStaffWorkloadRoute = AdminStaffWorkloadRouteImport.update({
   path: '/staff/workload',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminStudioCanvasRoute = AdminStudioCanvasRouteImport.update({
+  id: '/studio/canvas',
+  path: '/studio/canvas',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
   id: '/users_/$id',
   path: '/users/$id',
@@ -785,6 +797,7 @@ export interface FileRoutesByFullPath {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -847,6 +860,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
+  '/admin/studio/canvas': typeof AdminStudioCanvasRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
@@ -905,6 +919,7 @@ export interface FileRoutesByTo {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -967,6 +982,7 @@ export interface FileRoutesByTo {
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
+  '/admin/studio/canvas': typeof AdminStudioCanvasRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1030,6 +1046,7 @@ export interface FileRoutesById {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
@@ -1092,6 +1109,7 @@ export interface FileRoutesById {
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
+  '/admin/studio/canvas': typeof AdminStudioCanvasRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1156,6 +1174,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/integrations'
     | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1218,6 +1237,7 @@ export interface FileRouteTypes {
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
     | '/admin/staff/workload'
+    | '/admin/studio/canvas'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
@@ -1276,6 +1296,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/integrations'
     | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1338,6 +1359,7 @@ export interface FileRouteTypes {
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
     | '/admin/staff/workload'
+    | '/admin/studio/canvas'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
@@ -1400,6 +1422,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/integrations'
     | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
@@ -1462,6 +1485,7 @@ export interface FileRouteTypes {
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
     | '/admin/staff/workload'
+    | '/admin/studio/canvas'
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
     | '/api/public/kaheel-intro.pdf'
@@ -1799,6 +1823,13 @@ declare module '@tanstack/react-router' {
       path: '/guide-requests'
       fullPath: '/admin/guide-requests'
       preLoaderRoute: typeof AdminGuideRequestsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/integrations': {
+      id: '/admin/integrations'
+      path: '/integrations'
+      fullPath: '/admin/integrations'
+      preLoaderRoute: typeof AdminIntegrationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/labels': {
@@ -2235,6 +2266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStaffWorkloadRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/studio/canvas': {
+      id: '/admin/studio/canvas'
+      path: '/studio/canvas'
+      fullPath: '/admin/studio/canvas'
+      preLoaderRoute: typeof AdminStudioCanvasRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users_/$id': {
       id: '/admin/users_/$id'
       path: '/users/$id'
@@ -2408,6 +2446,7 @@ interface AdminRouteRouteChildren {
   AdminGuideClaimsRoute: typeof AdminGuideClaimsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
   AdminGuideRequestsRoute: typeof AdminGuideRequestsRoute
+  AdminIntegrationsRoute: typeof AdminIntegrationsRoute
   AdminLabelsRoute: typeof AdminLabelsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
@@ -2432,6 +2471,7 @@ interface AdminRouteRouteChildren {
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   AdminStaffAttendanceRoute: typeof AdminStaffAttendanceRoute
   AdminStaffWorkloadRoute: typeof AdminStaffWorkloadRoute
+  AdminStudioCanvasRoute: typeof AdminStudioCanvasRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
@@ -2453,6 +2493,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminGuideClaimsRoute: AdminGuideClaimsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
   AdminGuideRequestsRoute: AdminGuideRequestsRoute,
+  AdminIntegrationsRoute: AdminIntegrationsRoute,
   AdminLabelsRoute: AdminLabelsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
@@ -2477,6 +2518,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminReportsIdRoute: AdminReportsIdRoute,
   AdminStaffAttendanceRoute: AdminStaffAttendanceRoute,
   AdminStaffWorkloadRoute: AdminStaffWorkloadRoute,
+  AdminStudioCanvasRoute: AdminStudioCanvasRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,

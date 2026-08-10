@@ -61,6 +61,12 @@ interface StudioTile {
 
 const TILES: StudioTile[] = [
   {
+    to: "/admin/studio/canvas",
+    labelKey: "admin.studio.canvas",
+    descKey: "admin.studio.canvasDesc",
+    icon: Brush,
+  },
+  {
     to: "/admin/composer",
     labelKey: "admin.studio.composer",
     descKey: "admin.studio.composerDesc",
