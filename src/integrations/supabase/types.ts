@@ -2159,6 +2159,72 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_demo_accounts: {
+        Row: {
+          account_kind: string
+          city: string | null
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          display_name_ar: string
+          display_name_en: string | null
+          district: string | null
+          fake_email: string
+          fake_phone_label: string
+          headline_ar: string | null
+          id: string
+          is_demo: boolean
+          updated_at: string
+        }
+        Insert: {
+          account_kind: string
+          city?: string | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          display_name_ar: string
+          display_name_en?: string | null
+          district?: string | null
+          fake_email: string
+          fake_phone_label?: string
+          headline_ar?: string | null
+          id?: string
+          is_demo?: boolean
+          updated_at?: string
+        }
+        Update: {
+          account_kind?: string
+          city?: string | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          display_name_ar?: string
+          display_name_en?: string | null
+          district?: string | null
+          fake_email?: string
+          fake_phone_label?: string
+          headline_ar?: string | null
+          id?: string
+          is_demo?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_demo_accounts_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_demo_accounts_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_enforcement_actions: {
         Row: {
           action: string
@@ -3765,6 +3831,7 @@ export type Database = {
           height: number | null
           id: string
           is_cover: boolean
+          is_demo: boolean
           listing_id: string
           mime_type: string | null
           original_filename: string | null
@@ -3786,6 +3853,7 @@ export type Database = {
           height?: number | null
           id?: string
           is_cover?: boolean
+          is_demo?: boolean
           listing_id: string
           mime_type?: string | null
           original_filename?: string | null
@@ -3807,6 +3875,7 @@ export type Database = {
           height?: number | null
           id?: string
           is_cover?: boolean
+          is_demo?: boolean
           listing_id?: string
           mime_type?: string | null
           original_filename?: string | null
@@ -5648,6 +5717,7 @@ export type Database = {
           district: string
           floor_no: number | null
           id: string
+          is_demo: boolean
           is_furnished: boolean
           latitude: number | null
           longitude: number | null
@@ -5682,6 +5752,7 @@ export type Database = {
           district: string
           floor_no?: number | null
           id?: string
+          is_demo?: boolean
           is_furnished?: boolean
           latitude?: number | null
           longitude?: number | null
@@ -5716,6 +5787,7 @@ export type Database = {
           district?: string
           floor_no?: number | null
           id?: string
+          is_demo?: boolean
           is_furnished?: boolean
           latitude?: number | null
           longitude?: number | null
@@ -5752,6 +5824,7 @@ export type Database = {
           height: number | null
           id: string
           is_cover: boolean
+          is_demo: boolean
           listing_id: string
           magic_verified: boolean
           mime_type: string
@@ -5769,6 +5842,7 @@ export type Database = {
           height?: number | null
           id?: string
           is_cover?: boolean
+          is_demo?: boolean
           listing_id: string
           magic_verified?: boolean
           mime_type: string
@@ -5786,6 +5860,7 @@ export type Database = {
           height?: number | null
           id?: string
           is_cover?: boolean
+          is_demo?: boolean
           listing_id?: string
           magic_verified?: boolean
           mime_type?: string
@@ -5931,6 +6006,7 @@ export type Database = {
           deleted_reason: string | null
           display_name: string | null
           id: string
+          is_demo: boolean
           management_mode: string
           owner_user_id: string
           phone: string | null
@@ -5950,6 +6026,7 @@ export type Database = {
           deleted_reason?: string | null
           display_name?: string | null
           id?: string
+          is_demo?: boolean
           management_mode?: string
           owner_user_id: string
           phone?: string | null
@@ -5969,6 +6046,7 @@ export type Database = {
           deleted_reason?: string | null
           display_name?: string | null
           id?: string
+          is_demo?: boolean
           management_mode?: string
           owner_user_id?: string
           phone?: string | null
@@ -11824,6 +11902,7 @@ export type Database = {
         }[]
       }
       mkt_public_phone: { Args: { _user_id: string }; Returns: string }
+      mkt_purge_demo_data: { Args: never; Returns: Json }
       mkt_purge_login_otps: { Args: never; Returns: undefined }
       mkt_qa_cleanup: { Args: { _batch_id: string }; Returns: Json }
       mkt_queue_perm: { Args: { _kind: string }; Returns: string }
