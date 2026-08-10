@@ -281,7 +281,7 @@ export function StudentBotChat() {
       <section className="min-h-64 rounded-2xl border border-border bg-card p-3 shadow-panel sm:p-4">
         {bubbles.length === 0 ? (
           <div className="grid place-items-center px-3 py-8 text-center">
-            <Mascot name="kaheel" className="h-24 w-auto" alt="" />
+            <Mascot name="kaheel" className="h-24 w-auto" />
             <p className="mt-2 text-sm font-black text-foreground">
               {ar ? "اسألني عن أي درس 🙂" : "Ask me about any lesson 🙂"}
             </p>

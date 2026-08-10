@@ -69,17 +69,17 @@ export function StudentBotPlans({ className }: { className?: string }) {
             </p>
             <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
               {ar
-                ? `${formatNumber(plan.daily_limit, locale)} سؤالًا يوميًا · حفظ المحادثات · أسئلة تدريب`
-                : `${formatNumber(plan.daily_limit, locale)} questions a day · saved chats · practice questions`}
+                ? `${formatNumber(plan.daily_limit)} سؤالًا يوميًا · حفظ المحادثات · أسئلة تدريب`
+                : `${formatNumber(plan.daily_limit)} questions a day · saved chats · practice questions`}
               {plan.kind === "season" && plan.season_ends_at
                 ? ar
-                  ? ` · حتى ${formatDate(plan.season_ends_at, locale)}`
-                  : ` · until ${formatDate(plan.season_ends_at, locale)}`
+                  ? ` · حتى ${formatDate(plan.season_ends_at)}`
+                  : ` · until ${formatDate(plan.season_ends_at)}`
                 : null}
             </p>
             <div className="mt-2 flex items-center justify-between gap-2">
               <span className="text-[11px] font-black tabular-nums text-foreground">
-                {formatNumber(plan.price_credits, locale)}{" "}
+                {formatNumber(plan.price_credits)}{" "}
                 <span className="text-[10px] font-bold text-muted-foreground">
                   {ar ? "من رصيدك" : "credits"}
                 </span>
