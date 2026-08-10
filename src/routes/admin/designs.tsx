@@ -278,6 +278,38 @@ function DesignsPage() {
               </label>
             </div>
 
+            <div className="grid grid-cols-2 items-end gap-2">
+              <label className="text-desc font-bold text-foreground">
+                تخطيط القالب
+                <select
+                  className={SELECT}
+                  style={{ minHeight: 44 }}
+                  value={draft.layout_key}
+                  onChange={(e) => set("layout_key", e.target.value)}
+                >
+                  {LAYOUT_OPTIONS.map((item) => (
+                    <option key={item.value} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label
+                className="flex items-center gap-2 text-desc font-bold text-foreground"
+                style={{ minHeight: 44 }}
+              >
+                <input
+                  type="checkbox"
+                  checked={draft.brand_stamp}
+                  onChange={(e) => set("brand_stamp", e.target.checked)}
+                  className="size-5 accent-primary"
+                />
+                اختم باسم كَحيل
+              </label>
+            </div>
+
+
+
             <fieldset className="rounded-2xl border border-border p-2.5">
               <legend className="px-1 text-desc font-bold text-foreground">الخلفية</legend>
               <div className="flex flex-wrap items-center gap-2">
