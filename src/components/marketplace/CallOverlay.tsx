@@ -140,7 +140,7 @@ export function CallOverlay() {
       role="dialog"
       aria-modal="true"
       aria-label={t("market.call.title")}
-      className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[radial-gradient(circle_at_22%_-10%,rgb(195_171_255/0.4),transparent_46%),linear-gradient(165deg,#8A4FFF_0%,#C3ABFF_100%)] text-primary-foreground animate-fade-in"
+      className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[radial-gradient(circle_at_22%_-10%,color-mix(in_srgb,color-mix(in_srgb,var(--kt-primary)_45%,#ffffff)_40%,transparent),transparent_46%),linear-gradient(165deg,var(--kt-header-from)_0%,var(--kt-header-to)_100%)] text-primary-foreground animate-fade-in"
     >
       <div className="flex items-center justify-between px-3 pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <button

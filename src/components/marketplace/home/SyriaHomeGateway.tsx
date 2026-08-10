@@ -88,7 +88,7 @@ export function SyriaHomeGateway() {
           }
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
-          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border-2 border-white bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(138_79_255/0.45)] sm:size-[58px] sm:rounded-[1rem]">
+          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border-2 border-white bg-[radial-gradient(circle_at_32%_25%,color-mix(in_srgb,var(--kt-primary)_10%,transparent),color-mix(in_srgb,var(--kt-primary)_35%,transparent)_78%)] text-primary shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_color-mix(in_srgb,var(--kt-primary)_45%,transparent)] sm:size-[58px] sm:rounded-[1rem]">
             {isSyria ? (
               <>
                 <img
