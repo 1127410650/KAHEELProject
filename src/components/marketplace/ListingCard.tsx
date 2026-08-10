@@ -228,7 +228,7 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
             className="absolute -bottom-8 -start-8 size-24 rounded-full bg-market-navy/10 blur-2xl"
             aria-hidden
           />
-          <span className="relative grid size-10 place-items-center rounded-[var(--r-card)] border border-border/70 bg-background/75 text-primary shadow-sm backdrop-blur">
+          <span className="relative grid size-10 place-items-center k-press rounded-[var(--r-card)] border border-border/70 bg-background/75 text-primary shadow-sm backdrop-blur">
             <ImageIcon className="size-5" aria-hidden />
           </span>
           <p className="relative mt-2 line-clamp-1 max-w-full text-desc font-bold text-foreground/70">
@@ -300,26 +300,28 @@ export function ListingCard({
 
 
   const meta = (
-    <div className="mt-auto flex h-[26px] items-center gap-x-[var(--sp-3)] overflow-hidden pt-[var(--sp-2)] text-desc text-muted-foreground sm:text-desc">
+    <div className="mt-auto flex h-[26px] min-w-0 items-center gap-x-[var(--sp-3)] overflow-hidden pt-[var(--sp-2)] text-desc text-muted-foreground sm:text-desc">
 
       {listing.city && (
-        <span className="inline-flex min-w-0 items-center gap-1">
+        <span className="inline-flex min-w-0 items-center gap-1 whitespace-nowrap">
           <MapPin className="size-3 shrink-0" aria-hidden />
           <span className="truncate">{listing.city}</span>
         </span>
       )}
       {distance && (
-        <span className="num inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-[var(--sp-2)] py-[1px] font-bold text-primary">
+        <span className="num inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-primary/10 px-[var(--sp-2)] py-[1px] font-bold text-primary">
           <Navigation className="size-[11px] shrink-0" aria-hidden />
           <bdi>{distance}</bdi>
         </span>
       )}
-      <span className="inline-flex items-center gap-1">
-        <Clock className="size-3" aria-hidden />
+      {/* الوقت لا يتقلّص ولا يلتف: الالتفاف كان يكسر الكلمة العربية رأسيًا. */}
+      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap">
+        <Clock className="size-3 shrink-0" aria-hidden />
         <bdi>{relativeTime(listing.published_at ?? listing.created_at, locale)}</bdi>
       </span>
     </div>
   );
+
 
   return (
     <div className="relative">

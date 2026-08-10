@@ -6,19 +6,27 @@
  * قسم رئيسي جديد من /admin/categories تُظهره هنا فورًا بلا تعديل كود. تُعرض
  * القائمة الثابتة الاحتياطية فقط قبل وصول البيانات أو إذا لم يوجد أي رئيسي.
  */
+import type { CSSProperties } from "react";
+
 import { Link } from "@tanstack/react-router";
 import {
   Briefcase,
   Building2,
   Car,
+  Code2,
   GraduationCap,
   Laptop,
   LayoutGrid,
   MoreHorizontal,
+  Palette,
   PartyPopper,
+  Plane,
+  Search,
   Shirt,
   ShoppingBasket,
   Sofa,
+  Trees,
+  TrendingUp,
   Utensils,
   Wrench,
   type LucideIcon,
@@ -26,6 +34,7 @@ import {
 
 import { useI18n } from "@/i18n";
 import { categoryName, primaryCategories, useCategoryTree } from "@/lib/mkt-category-tree";
+import { sectionAccent } from "@/lib/section-accent";
 
 const ICONS: Record<string, LucideIcon> = {
   "building-2": Building2,
@@ -40,6 +49,29 @@ const ICONS: Record<string, LucideIcon> = {
   "graduation-cap": GraduationCap,
   "party-popper": PartyPopper,
   "layout-grid": LayoutGrid,
+};
+
+/* أيقونة القسم من الـ slug: معظم الأقسام لا تحمل قيمة icon في القاعدة، فبدلًا
+   من أيقونة عامة واحدة لكل البلاطات نستنتجها من الـ slug. */
+const SLUG_ICONS: Record<string, LucideIcon> = {
+  "real-estate": Building2,
+  restaurants: Utensils,
+  cars: Car,
+  devices: Laptop,
+  furniture: Sofa,
+  services: Wrench,
+  fashion: Shirt,
+  jobs: Briefcase,
+  training: GraduationCap,
+  "schools-universities": GraduationCap,
+  events: PartyPopper,
+  programming: Code2,
+  gardens: Trees,
+  arts: Palette,
+  "lost-found": Search,
+  "projects-investments": TrendingUp,
+  "travel-tourism": Plane,
+  supplies: ShoppingBasket,
 };
 
 const FALLBACK = [
@@ -59,7 +91,7 @@ const FALLBACK = [
 /* مقياس مضغوط مطابق لبطاقة «البحث في السوق»: مربع 56px والاسم تحته ⇒ ارتفاع
    الصف ≈84px، وصفّان لثماني بلاطات ≈ 180px بلا هزّة تخطيط (الأبعاد ثابتة). */
 const tileClass =
-  "k-tile grid size-[56px] place-items-center rounded-[var(--r-card)] shadow-[0_1px_2px_rgb(23_20_35/0.05)] transition group-hover:-translate-y-0.5";
+  "k-tile k-press grid size-[56px] place-items-center rounded-[var(--r-card)] shadow-[0_1px_2px_rgb(23_20_35/0.05)] transition group-hover:-translate-y-0.5";
 const linkClass =
   "group flex h-[84px] min-w-0 flex-col items-center justify-start gap-1 outline-none focus-visible:ring-2 focus-visible:ring-primary/45";
 const labelClass = "w-full truncate text-center text-desc font-bold leading-tight text-foreground";
@@ -79,10 +111,13 @@ export function CategoryTileGrid() {
       <div className="mt-2 grid grid-cols-4 place-items-center gap-2 sm:grid-cols-6 lg:grid-cols-8">
         {rows.length > 0
           ? rows.slice(0, 7).map((row) => {
-              const Icon = ICONS[row.icon ?? ""] ?? LayoutGrid;
+              const Icon = ICONS[row.icon ?? ""] ?? SLUG_ICONS[row.slug] ?? LayoutGrid;
               return (
                 <Link key={row.id} to="/c/$slug" params={{ slug: row.slug }} className={linkClass}>
-                  <span className={tileClass}>
+                  <span
+                    className={tileClass}
+                    style={{ "--section-accent": sectionAccent(row.slug) } as CSSProperties}
+                  >
                     <Icon className="size-6" aria-hidden />
                   </span>
                   <span className={labelClass}>{categoryName(row, locale)}</span>

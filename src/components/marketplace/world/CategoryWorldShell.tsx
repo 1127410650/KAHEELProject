@@ -9,6 +9,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowRight, LayoutGrid, MessagesSquare, Search, Sparkles } from "lucide-react";
 
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
+import { sectionAccent } from "@/lib/section-accent";
 
 export function CategoryWorldShell({
   slug,
@@ -24,6 +25,8 @@ export function CategoryWorldShell({
   return (
     <div
       dir="rtl"
+      /* لمسة لون القسم تُضبط هنا فتسري على الرأس والحالات النشطة داخل العالم. */
+      style={{ "--section-accent": sectionAccent(slug) } as React.CSSProperties}
       className="market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(3.5rem+env(safe-area-inset-bottom))]"
     >
       <header
@@ -76,8 +79,8 @@ function WorldBottomNav({ slug }: { slug: string }) {
             <a
               href={to}
               aria-current={active ? "page" : undefined}
-              className={`flex min-h-[47px] flex-col items-center justify-center gap-0.5 py-1 text-nav ${
-                active ? "text-primary" : "text-muted-foreground"
+              className={`k-press flex min-h-[47px] flex-col items-center justify-center gap-0.5 py-1 text-nav ${
+                active ? "k-accent-text" : "text-muted-foreground"
               }`}
             >
               <Icon className="size-5" aria-hidden />

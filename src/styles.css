@@ -189,6 +189,8 @@
   --page-x: 16px;
   /* فراغ رأسي ثابت بين الأقسام. */
   --section-gap: 28px;
+  /* لمسة لون القسم: البنفسجي الأساس افتراضيًا، وتُبدَّل لكل عالم قسم. */
+  --section-accent: #8a4fff;
   /* الحاشية الداخلية للبطاقات البيضاء. */
   --card-pad: 14px;
 
@@ -846,7 +848,13 @@ body:has(.market-surface) .shadow-raised {
 .k-header-hero {
   position: relative;
   isolation: isolate;
-  background-image: linear-gradient(90deg, var(--header-from) 0%, var(--header-to) 100%);
+  /* تدرّج الرأس يستعير لون القسم: الرئيسية والعقار بنفسجي، وبقية العوالم
+     بلونها المعتمد في section-accent.ts. */
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--section-accent) 88%, var(--header-from)) 0%,
+    color-mix(in srgb, var(--section-accent) 62%, var(--header-to)) 100%
+  );
   border-bottom-left-radius: 26px;
   border-bottom-right-radius: 26px;
   border-bottom-color: transparent;
@@ -895,12 +903,60 @@ body:has(.market-surface) .shadow-raised {
   background: #ffffff;
 }
 
-/* بلاطة تصنيف: مربع أبيض بإطار بنفسجي رفيع وأيقونة خطية بنفسجية. */
+/* بلاطة تصنيف: مربع أبيض بإطار من لون القسم وأيقونة بلونه. */
 @utility k-tile {
-  background: var(--card);
-  border: 1.5px solid color-mix(in srgb, var(--primary) 40%, white);
-  color: var(--primary);
+  background: color-mix(in srgb, var(--section-accent) 7%, white);
+  border: 1.5px solid color-mix(in srgb, var(--section-accent) 34%, white);
+  color: var(--section-accent);
 }
+
+/* لمسة القسم: خلفية خفيفة، ونص/إطار بلون القسم — للرؤوس والحالات النشطة. */
+@utility k-accent-text {
+  color: var(--section-accent);
+}
+
+@utility k-accent-soft {
+  background: color-mix(in srgb, var(--section-accent) 10%, white);
+  color: var(--section-accent);
+}
+
+@utility k-accent-bar {
+  background: var(--section-accent);
+}
+
+/* لمسة ضغط موحّدة: تصغير طفيف عند اللمس بلا إزاحة تخطيط. */
+@utility k-press {
+  transition: transform 120ms var(--k-ease, ease);
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* دخول ناعم للأقسام: 200ms صعود بسيط، ويُلغى مع تقليل الحركة. */
+@utility k-fade-up {
+  animation: k-fade-up-in 200ms var(--k-ease, ease) both;
+}
+
+@keyframes k-fade-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-fade-up {
+    animation: none;
+  }
+  .k-press:active {
+    transform: none;
+  }
+}
+
 
 /* حبّة ممتلئة: بنفسجي متوسط ونص أبيض — للأزرار والوسوم. */
 @utility k-pill {
