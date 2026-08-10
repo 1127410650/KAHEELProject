@@ -55,7 +55,7 @@ function StudentToolsPage() {
             العودة إلى المتجر
           </Link>
 
-          <div className="overflow-hidden rounded-[1.6rem] border border-border bg-card shadow-[0_12px_38px_rgb(15_23_42/0.1)]">
+          <div className="overflow-hidden rounded-[1.6rem] border border-border bg-card shadow-panel">
             <div className="relative overflow-hidden border-b border-border bg-background px-5 py-6 text-foreground sm:px-7 sm:py-8">
               <div className="relative flex items-start gap-3">
                 <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-border bg-accent text-primary">
