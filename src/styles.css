@@ -1694,17 +1694,25 @@ body:has(.market-surface) {
 
 /* The default content card: crisp white, hairline amethyst edge, three-layer
    shadow, and a lift that only transforms. */
+/* حالة الزر النشط في مجموعات التبديل (شبكة/قائمة، تبويبات مصغّرة):
+   بنفسجي داكن من الهوية + نص أبيض. لا لون دلالي ولا قيمة مباشرة. */
+@utility k-toggle-active {
+  background: linear-gradient(140deg, var(--primary), var(--primary-pressed));
+  color: var(--primary-foreground);
+}
+
 @utility k-surface {
   position: relative;
   border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, #c77dff 30%, white);
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--card);
   box-shadow: var(--k-shadow-1, 0 8px 16px -10px rgb(36 0 70 / 0.1));
   transition:
     box-shadow var(--k-mid, 240ms) var(--k-ease, ease),
     transform var(--k-mid, 240ms) var(--k-ease, ease),
     border-color var(--k-mid, 240ms) var(--k-ease, ease);
 }
+
 
 @utility k-lift {
   transition:
