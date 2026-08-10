@@ -301,6 +301,32 @@ export function MarketHeader({
             </div>
           </nav>
         )}
+        {home && (
+          /* صف البحث: يبقى دائمًا ظاهرًا — وهو وحده ما يتبقّى بعد الانكماش.
+             عند الانكماش يصبح الضغط عليه صعودًا سلسًا لأعلى الصفحة. */
+          <div
+            className="relative z-10 mx-auto flex w-full max-w-[1240px] items-center px-3 sm:px-5 lg:px-8"
+            style={{ height: `${HOME_SEARCH_H}px` }}
+          >
+            {collapsedEnough ? (
+              <button
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                aria-label={t("market.homeV2.searchPlaceholder" as "market.brand")}
+                className="flex h-11 w-full items-center gap-2.5 rounded-full border border-border bg-card px-4 text-start text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+              >
+                <Search className="size-[18px] shrink-0" aria-hidden />
+                <span className="truncate text-desc font-semibold">
+                  {t("market.homeV2.searchPlaceholder" as "market.brand")}
+                </span>
+              </button>
+            ) : (
+              <div className="w-full">
+                <BigSearchField />
+              </div>
+            )}
+          </div>
+        )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
           <div className="border-t border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground sm:text-desc">
@@ -314,15 +340,22 @@ export function MarketHeader({
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
           home
-            ? "h-[80px] sm:h-[86px]"
+            ? undefined
 
             : showCategories
               ? "h-[11.25rem] sm:h-[11.75rem]"
               : "h-[46px] sm:h-[50px]"
 
         }
-        style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
+        style={
+          home
+            ? { height: `${HOME_HEADER_H}px` }
+            : headerHeight > 0
+              ? { height: `${headerHeight}px` }
+              : undefined
+        }
       />
+
       {/* Mounted only after a tap so the sheet never costs anything on first paint. */}
       {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
     </>
