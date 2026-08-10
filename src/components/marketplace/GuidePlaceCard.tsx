@@ -7,13 +7,14 @@ import {
   directionsHref,
   isOpenStreetMap,
   isVerified,
+  officialPhone,
+  officialWhatsapp,
   sourceHref,
   sourceLabel,
-
   websiteHref,
-  whatsappHref,
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
+
 import { outreachMessage, outreachWhatsappHref } from "@/lib/kaheel-intro";
 import { inviteTemplate, renderInvite, whatsappWithText } from "@/lib/mkt-guide-booking";
 import {
