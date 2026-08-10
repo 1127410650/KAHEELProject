@@ -13249,7 +13249,6 @@ export type Database = {
       mkt_purge_demo_data: { Args: never; Returns: Json }
       mkt_purge_login_otps: { Args: never; Returns: undefined }
       mkt_qa_cleanup: { Args: { _batch_id: string }; Returns: Json }
-      mkt_qa_rls_probe: { Args: never; Returns: string }
       mkt_queue_perm: { Args: { _kind: string }; Returns: string }
       mkt_re_booking_decide: {
         Args: { _accept: boolean; _booking_id: string; _reason?: string }
