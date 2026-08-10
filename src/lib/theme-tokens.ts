@@ -171,6 +171,31 @@ export interface ContrastIssue {
  * أزواج «نص فوق خلفية» الواجبة الفحص. النصوص عند 4.5:1، والرموز الرسومية
  * (أيقونة زر الإجراء) عند 3:1 وفق WCAG للعناصر غير النصية.
  */
+/** يمزج لونين سداسيين بنسبة `weight` من الأول — يحاكي `color-mix` في CSS. */
+function mixHex(a: string, b: string, weight: number): string {
+  const parse = (hex: string): [number, number, number] => {
+    const value = hex.replace("#", "");
+    const full =
+      value.length === 3
+        ? value
+            .split("")
+            .map((channel) => channel + channel)
+            .join("")
+        : value.slice(0, 6);
+    return [
+      parseInt(full.slice(0, 2), 16),
+      parseInt(full.slice(2, 4), 16),
+      parseInt(full.slice(4, 6), 16),
+    ];
+  };
+  const [r1, g1, b1] = parse(a);
+  const [r2, g2, b2] = parse(b);
+  const blend = (x: number, y: number) => Math.round(x * weight + y * (1 - weight));
+  return `#${[blend(r1, r2), blend(g1, g2), blend(b1, b2)]
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
 const PAIRS: Array<{ text: ThemeToken | "#FFFFFF"; bg: ThemeToken; label: string; min: number }> = [
   { text: "text-primary", bg: "page-bg", label: "النص الأساسي فوق خلفية الصفحة", min: 4.5 },
   { text: "text-primary", bg: "card", label: "النص الأساسي فوق البطاقة", min: 4.5 },
@@ -180,15 +205,29 @@ const PAIRS: Array<{ text: ThemeToken | "#FFFFFF"; bg: ThemeToken; label: string
   { text: "primary-deep", bg: "primary-soft", label: "الأساس الغامق فوق الأساس الفاتح", min: 4.5 },
   { text: "#FFFFFF", bg: "primary-deep", label: "نص أبيض فوق الأساس الغامق", min: 4.5 },
   { text: "#FFFFFF", bg: "header-from", label: "نص أبيض فوق بداية تدرج الهيدر", min: 4.5 },
-  /* نهاية التدرج تُفحص عند 3:1 لأن نص الهيدر عريض/كبير، ولأن طبقة التعتيم
-     (`.k-header-hero::before`) تُغمّق الطرف الفاتح فعليًا قبل ظهور النص. */
-  { text: "#FFFFFF", bg: "header-to", label: "نص أبيض فوق نهاية تدرج الهيدر", min: 3 },
   { text: "cta-fg", bg: "cta-bg", label: "رمز زر الإجراء فوق خلفيته", min: 3 },
 ];
 
 /** كل الأزواج التي لا تجتاز الحد — قائمة فارغة تعني «مسموح بالحفظ». */
 export function contrastIssues(tokens: ThemeTokenMap): ContrastIssue[] {
   const issues: ContrastIssue[] = [];
+  /*
+   * نهاية تدرج الهيدر تُفحص على اللون المركّب فعليًا: طبقة التعتيم
+   * (`.k-header-hero::before`) تمزج 46% من `header-from` فوق الطرف الفاتح،
+   * فالنص الأبيض لا يقع على `header-to` الخالص. الحد 4.5:1 كبقية النصوص.
+   */
+  {
+    const composited = mixHex(tokens["header-from"], tokens["header-to"], 0.46);
+    const ratio = contrastRatio("#FFFFFF", composited);
+    if (Number.isFinite(ratio) && ratio + 0.005 < 4.5) {
+      issues.push({
+        pair: "نص أبيض فوق نهاية تدرج الهيدر",
+        ratio: Math.round(ratio * 100) / 100,
+        min: 4.5,
+      });
+    }
+  }
+
   for (const pair of PAIRS) {
     const text = pair.text === "#FFFFFF" ? "#FFFFFF" : tokens[pair.text];
     const bg = tokens[pair.bg];
