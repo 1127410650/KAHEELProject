@@ -326,3 +326,43 @@ export function slotsCss(slots: MediaSlotRow[], lib: DesignLibrary | undefined):
 export function needsDesignLibrary(slots: MediaSlotRow[] | undefined): boolean {
   return (slots ?? []).some((slot) => !!slot.shape_key || slot.motion_state === "animated");
 }
+
+/* ───────────────── أنماط جاهزة للمكوّنات (نفس القيم المقيّدة) ───────────────── */
+
+/** خلفية البطاقة: لون أو تدرّج بلونين — لا شيء غير ذلك. */
+export function surfaceStyle(input: {
+  bg_color: string | null;
+  grad_from: string | null;
+  grad_to: string | null;
+  grad_angle: number | null;
+}): React.CSSProperties {
+  const style: React.CSSProperties = {};
+  if (input.bg_color && HEX.test(input.bg_color)) style.backgroundColor = input.bg_color;
+  if (input.grad_from && input.grad_to && HEX.test(input.grad_from) && HEX.test(input.grad_to)) {
+    const angle = Math.min(360, Math.max(0, input.grad_angle ?? 90));
+    style.backgroundImage = `linear-gradient(${angle}deg, ${input.grad_from} 0%, ${input.grad_to} 100%)`;
+    style.backgroundSize = "180% 180%";
+  }
+  return style;
+}
+
+/** الشكل الزخرفي كطبقة خلفية داخل البطاقة. */
+export function decorStyle(input: DecorInput, shapes: DesignShape[]): React.CSSProperties | null {
+  const decls = decorDeclarations(input, shapes);
+  if (decls.length === 0) return null;
+  const shape = shapes.find((item) => item.key === input.shape_key)!;
+  const uri = shapeDataUri(shape, input.shape_color ?? "#8a4fff", input.shape_opacity ?? 18)!;
+  return {
+    backgroundImage: uri,
+    backgroundPosition: SHAPE_POS_CSS[input.shape_pos ?? "corner-tr"] ?? "right top",
+    backgroundSize: SHAPE_SIZE_CSS[(input.shape_size as DesignSize) ?? "md"] ?? SHAPE_SIZE_CSS.md,
+    backgroundRepeat: "no-repeat",
+  };
+}
+
+/** حركة العنصر كنمط جاهز — الاسم من المجموعة المسماة فقط. */
+export function motionStyle(input: DecorInput, motions: DesignMotion[]): React.CSSProperties {
+  const decl = motionDeclaration(input, motions);
+  if (!decl) return {};
+  return { animation: decl.slice("animation:".length) };
+}
