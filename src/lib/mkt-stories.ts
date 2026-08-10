@@ -54,12 +54,29 @@ export const STORY_GRADIENTS: StoryGradient[] = ["violet", "sunset", "mint", "ni
 
 /** خلفيات جاهزة — تدرجات CSS فقط، فلا وزن على الشبكة. */
 export const STORY_GRADIENT_CSS: Record<StoryGradient, string> = {
-  violet: "linear-gradient(160deg,#8A4FFF 0%,#C3ABFF 100%)",
+  /* «violet» و«night» يأخذان لونهما من اللوحة المفعّلة — لا لون مكتوب. */
+  violet:
+    "linear-gradient(160deg,var(--kt-primary-deep) 0%,color-mix(in srgb,var(--kt-primary) 45%,#ffffff) 100%)",
   sunset: "linear-gradient(160deg,#4a1042,#a4133c 55%,#ff8500)",
   mint: "linear-gradient(160deg,#10403b,#128f7e 55%,#7ae582)",
-  night: "linear-gradient(160deg,#1B1B1F 0%,#8A4FFF 100%)",
+  night:
+    "linear-gradient(160deg,var(--kt-header-from) 0%,var(--kt-primary) 100%)",
   gold: "linear-gradient(160deg,#3f2c05,#a97a11 55%,#ffd166)",
 };
+
+/**
+ * أغلفة محلية للستوريات التجريبية: `image_path` يبدأ بـ `asset:` ⇒ الغلاف صورة
+ * مرفقة بالحزمة، فكل دائرة لها مشهد مختلف بدل تكرار رسم الشخصية نفسها.
+ */
+export const STORY_LOCAL_COVERS: Record<string, string> = {
+  "asset:restaurants": "/src/assets/market/cat-restaurants-hero.webp",
+  "asset:groceries": "/src/assets/market/cat-groceries-hero.webp",
+};
+
+export function storyLocalCover(imagePath: string | null | undefined): string | undefined {
+  if (!imagePath || !imagePath.startsWith("asset:")) return undefined;
+  return STORY_LOCAL_COVERS[imagePath];
+}
 
 /** حد صورة الستوري: 150KB. أي شيء أكبر يُرفض قبل أن يلمس التخزين. */
 export const STORY_IMAGE_LIMIT = 150 * 1024;
