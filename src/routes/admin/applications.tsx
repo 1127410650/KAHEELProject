@@ -199,7 +199,7 @@ function JoinApplicationsAdminPage() {
 
       {selected ? (
         <div
-          className="fixed inset-0 z-[80] flex items-end bg-black/45 p-0 sm:items-center sm:justify-center sm:p-4"
+          className="fixed inset-0 z-[80] flex items-end bg-foreground/45 p-0 sm:items-center sm:justify-center sm:p-4"
           role="dialog"
           aria-modal="true"
         >
