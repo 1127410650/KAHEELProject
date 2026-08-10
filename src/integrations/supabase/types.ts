@@ -2319,6 +2319,7 @@ export type Database = {
         Row: {
           bg_color: string | null
           body_ar: string | null
+          brand_stamp: boolean
           campaign_id: string | null
           created_at: string
           created_by: string | null
@@ -2331,6 +2332,7 @@ export type Database = {
           image_path: string | null
           is_active: boolean
           kind: string
+          layout_key: string
           link_path: string | null
           motion_key: string | null
           motion_speed: string
@@ -2344,10 +2346,12 @@ export type Database = {
           starts_at: string | null
           title_ar: string | null
           updated_at: string
+          variation_of: string | null
         }
         Insert: {
           bg_color?: string | null
           body_ar?: string | null
+          brand_stamp?: boolean
           campaign_id?: string | null
           created_at?: string
           created_by?: string | null
@@ -2360,6 +2364,7 @@ export type Database = {
           image_path?: string | null
           is_active?: boolean
           kind: string
+          layout_key?: string
           link_path?: string | null
           motion_key?: string | null
           motion_speed?: string
@@ -2373,10 +2378,12 @@ export type Database = {
           starts_at?: string | null
           title_ar?: string | null
           updated_at?: string
+          variation_of?: string | null
         }
         Update: {
           bg_color?: string | null
           body_ar?: string | null
+          brand_stamp?: boolean
           campaign_id?: string | null
           created_at?: string
           created_by?: string | null
@@ -2389,6 +2396,7 @@ export type Database = {
           image_path?: string | null
           is_active?: boolean
           kind?: string
+          layout_key?: string
           link_path?: string | null
           motion_key?: string | null
           motion_speed?: string
@@ -2402,6 +2410,7 @@ export type Database = {
           starts_at?: string | null
           title_ar?: string | null
           updated_at?: string
+          variation_of?: string | null
         }
         Relationships: [
           {
@@ -2431,6 +2440,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "mkt_design_shapes"
             referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "mkt_design_templates_variation_of_fkey"
+            columns: ["variation_of"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_templates"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -4749,6 +4765,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
@@ -4786,6 +4807,11 @@ export type Database = {
           motion_speed?: string
           motion_state?: string
           path?: string | null
+          path_original?: string | null
+          rotate_enabled?: boolean
+          rotate_period?: string | null
+          rotate_started_at?: string | null
+          rotate_template_ids?: string[]
           section: string
           shape_color?: string | null
           shape_key?: string | null
@@ -4823,6 +4849,11 @@ export type Database = {
           motion_speed?: string
           motion_state?: string
           path?: string | null
+          path_original?: string | null
+          rotate_enabled?: boolean
+          rotate_period?: string | null
+          rotate_started_at?: string | null
+          rotate_template_ids?: string[]
           section?: string
           shape_color?: string | null
           shape_key?: string | null
@@ -10983,6 +11014,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
@@ -11279,6 +11315,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
@@ -11330,6 +11371,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
@@ -11401,6 +11447,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
@@ -11451,6 +11502,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
@@ -13047,6 +13103,11 @@ export type Database = {
           motion_speed: string
           motion_state: string
           path: string | null
+          path_original: string | null
+          rotate_enabled: boolean
+          rotate_period: string | null
+          rotate_started_at: string | null
+          rotate_template_ids: string[]
           section: string
           shape_color: string | null
           shape_key: string | null
