@@ -73,11 +73,11 @@ export function MarketHome() {
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-background pb-5 text-foreground">
-      <div className="mx-auto w-full max-w-[1240px] space-y-5 overflow-x-clip px-3 pb-3 pt-3 sm:space-y-7 sm:px-5 lg:px-8">
+      <div className="mx-auto w-full max-w-[1240px] space-y-[var(--section-gap)] overflow-x-clip px-[var(--page-x)] pb-[var(--sp-4)] pt-[var(--sp-4)]">
         {/* شريط التصنيفات الدائري بصفّين متعاكسين ثم بطاقات «جيب لي»: يظهران
             في كل التصميمات (سواء كانت الصفحة مؤلَّفة من /admin/composer أو لا)
             وارتفاعهما محجوز فلا هزّة تخطيط. */}
-        <div className="-mx-3 sm:-mx-5 lg:-mx-8">
+        <div className="-mx-[var(--page-x)]">
           <MarketCategoryStrip />
         </div>
 
