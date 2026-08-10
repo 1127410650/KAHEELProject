@@ -8,7 +8,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowRight, Heart, ClipboardList, MessagesSquare, Search } from "lucide-react";
 
-import { Mascot } from "@/components/marketplace/Mascot";
+import { Mascot } from "@/components/marketplace/campaign/Mascot";
 
 const NAV = [
   { to: "/aqar/browse", label: "بحث", icon: Search },
@@ -79,7 +79,7 @@ export function AqarShell({
             <strong className="block truncate text-section font-extrabold">{title}</strong>
             {subtitle ? <span className="block truncate text-desc opacity-90">{subtitle}</span> : null}
           </div>
-          <Mascot name="kaheel" className="hidden h-14 w-14 shrink-0 sm:block" alt="" />
+          <Mascot name="kaheel" size="sm" className="hidden h-14 w-auto shrink-0 sm:block" />
         </div>
       </header>
 
