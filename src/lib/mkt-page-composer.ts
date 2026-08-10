@@ -42,7 +42,10 @@ export type BlockType =
   | "link_tile"
   | "design_banner"
   | "spacer"
-  | "shape_layer";
+  | "shape_layer"
+  | "quick_tiles"
+  | "pride_strip"
+  | "exclusive_offers";
 
 export type FieldType =
   | "text"
