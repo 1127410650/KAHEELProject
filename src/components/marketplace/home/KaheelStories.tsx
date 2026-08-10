@@ -195,7 +195,7 @@ function StoryViewer({
 
   if (!story) return null;
 
-  const imageUrl = story.image_path ? images[story.image_path] : undefined;
+  const imageUrl = storyCover(story, images);
 
   const openTarget = () => {
     trackStory(story.id, "click");
