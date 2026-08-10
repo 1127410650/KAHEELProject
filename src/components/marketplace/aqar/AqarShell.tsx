@@ -56,10 +56,10 @@ export function AqarShell({
   backLabel = "السوق",
 }: {
   children: React.ReactNode;
-  title?: string;
-  subtitle?: string;
-  back?: string;
-  backLabel?: string;
+  title?: string | undefined;
+  subtitle?: string | undefined;
+  back?: string | undefined;
+  backLabel?: string | undefined;
 }) {
   return (
     <div
