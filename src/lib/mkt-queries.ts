@@ -53,13 +53,21 @@ export interface ListingFilters {
   maxPrice?: number | undefined;
 
   deal?: "sale" | "rent" | undefined;
-  sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | undefined;
+  sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | "nearest" | undefined;
+  /**
+   * «الأقرب إليك»: نقطة انطلاق المستخدم ونصف قطر اختياري. الترتيب والتصفية
+   * وحساب المسافة تنفّذها القاعدة (`mkt_nearby_listings`) لا المتصفح.
+   */
+  originLat?: number | undefined;
+  originLng?: number | undefined;
+  radiusKm?: number | null | undefined;
   limit?: number | undefined;
   advertiser?: "individual" | "business" | undefined;
   withImageOnly?: boolean | undefined;
   hasPrice?: boolean | undefined;
   /** Home "featured" row: only listings with a live promotion window. */
   featuredOnly?: boolean | undefined;
+
   /**
    * Real-estate detail minimums. They live inside the `specs` JSON, so they are
    * applied on the fetched rows; `fetched` still reports the raw row count so
