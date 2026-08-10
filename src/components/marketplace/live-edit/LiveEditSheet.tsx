@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { readableSize } from "@/lib/media-compress";
-import { fmtDateTime } from "@/lib/format";
+import { formatDateTime } from "@/lib/format";
 import { activatePageVariant, usePageVariants, useRefreshPageVariants } from "@/lib/mkt-page-variants";
 import { useAdminCampaigns } from "@/lib/mkt-campaigns";
 import type { MediaSlot } from "@/lib/mkt-media-slots";
@@ -102,13 +102,19 @@ export function LiveEditSheet({
   const contrast = worstContrast("#ffffff", [bg || null, from || null, to || null]);
   const contrastFails = contrast < CONTRAST_MIN;
 
-  const saveStyle = () => {
-    if (bg && !HEX.test(bg)) return toast.error(ERRORS["BAD_COLOR"]!);
-    if ((from && !HEX.test(from)) || (to && !HEX.test(to))) return toast.error(ERRORS["BAD_COLOR"]!);
-    if (contrastFails)
-      return toast.error(
-        `التباين ${contrast.toFixed(2)}:1 أقل من ٤٫٥:١ — اختر لونًا أغمق ليبقى النص مقروءًا.`,
-      );
+  const saveStyle = (): void => {
+    if (bg && !HEX.test(bg)) {
+      toast.error(ERRORS["BAD_COLOR"]!);
+      return;
+    }
+    if ((from && !HEX.test(from)) || (to && !HEX.test(to))) {
+      toast.error(ERRORS["BAD_COLOR"]!);
+      return;
+    }
+    if (contrastFails) {
+      toast.error(`التباين ${contrast.toFixed(2)}:1 أقل من ٤٫٥:١ — اختر لونًا أغمق ليبقى النص مقروءًا.`);
+      return;
+    }
     void run(
       () =>
         saveSlotDraft(slot.slot_key, {
@@ -367,7 +373,7 @@ export function LiveEditSheet({
           <ul className="mt-3 space-y-1">
             {(history.data ?? []).map((row) => (
               <li key={row.id} className="text-desc text-muted-foreground">
-                <span className="num">{fmtDateTime(row.created_at)}</span> — تعديل منشور
+                <span className="num">{formatDateTime(row.created_at)}</span> — تعديل منشور
               </li>
             ))}
           </ul>
