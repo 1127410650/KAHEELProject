@@ -49,7 +49,7 @@ export function MarketCategoryStrip() {
 
       <nav
         aria-label={t("market.home.strip.label")}
-        className="mx-auto flex w-full max-w-[1320px] flex-col gap-1.5 pb-2.5 pt-2"
+        className="mx-auto flex w-full max-w-[1320px] flex-col gap-1 pb-1.5 pt-1.5"
       >
         <StripRow fields={TOP_ROW} direction={-1} pathname={pathname} current={current} kept={kept} />
         <StripRow fields={BOTTOM_ROW} direction={1} pathname={pathname} current={current} kept={kept} />
@@ -127,9 +127,9 @@ function StripTile({
   // Every tile reserves the same box — round photo plus a two-line label slot —
   // so decoding images and longer names can never nudge a neighbour.
   const tileClass =
-    "group flex w-[78px] shrink-0 flex-col items-center gap-1 px-1 text-center outline-none sm:w-[86px] lg:w-[92px]";
+    "group flex w-[64px] shrink-0 flex-col items-center gap-[3px] px-1 text-center outline-none sm:w-[72px] lg:w-[78px]";
   const frameClass =
-    "grid size-[58px] place-items-center overflow-hidden rounded-full border-2 transition duration-300 sm:size-[64px] lg:size-[68px]";
+    "grid size-[44px] place-items-center overflow-hidden rounded-full border-2 transition duration-300 sm:size-[50px] lg:size-[54px]";
   const idleFrame =
     "border-white/75 bg-white shadow-[0_6px_16px_rgb(36_0_70/0.28),inset_0_1px_0_rgb(255_255_255/0.9)] group-hover:-translate-y-0.5";
   const activeFrame =
@@ -157,7 +157,7 @@ function StripTile({
       {/* Full name, wrapped over at most two lines — never clipped. */}
       <span
         dir={dir}
-        className="flex min-h-[26px] w-full items-start justify-center whitespace-normal break-words text-[10px] font-black leading-[1.25] text-market-navy-foreground/95 sm:text-[11px]"
+        className="flex min-h-[24px] w-full items-start justify-center whitespace-normal break-words text-[9.5px] font-black leading-[1.2] text-market-navy-foreground/95 sm:text-[10.5px]"
       >
         {label}
       </span>

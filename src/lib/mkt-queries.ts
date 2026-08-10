@@ -13,6 +13,7 @@ import {
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
 import { loadCountryIdByIso2 } from "@/lib/mkt-geo";
+import { nearbyListingIds, orderByIds, type RadiusKm } from "@/lib/mkt-nearby";
 import { isEnabledMarket } from "@/lib/mkt-markets";
 
 
@@ -53,13 +54,21 @@ export interface ListingFilters {
   maxPrice?: number | undefined;
 
   deal?: "sale" | "rent" | undefined;
-  sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | undefined;
+  sort?: "newest" | "oldest" | "views" | "price_asc" | "price_desc" | "nearest" | undefined;
+  /**
+   * «الأقرب إليك»: نقطة انطلاق المستخدم ونصف قطر اختياري. الترتيب والتصفية
+   * وحساب المسافة تنفّذها القاعدة (`mkt_nearby_listings`) لا المتصفح.
+   */
+  originLat?: number | undefined;
+  originLng?: number | undefined;
+  radiusKm?: number | null | undefined;
   limit?: number | undefined;
   advertiser?: "individual" | "business" | undefined;
   withImageOnly?: boolean | undefined;
   hasPrice?: boolean | undefined;
   /** Home "featured" row: only listings with a live promotion window. */
   featuredOnly?: boolean | undefined;
+
   /**
    * Real-estate detail minimums. They live inside the `specs` JSON, so they are
    * applied on the fetched rows; `fetched` still reports the raw row count so
@@ -211,6 +220,49 @@ async function queryListings(
     countryId = resolvedCountryId;
   }
 
+  // «الأقرب إليك»: القاعدة ترتّب وتصفّي وتحسب المسافة، والمتصفح يجلب صفحة
+  // واحدة من الصفوف بمعرّفاتها المرتّبة — لا جلبَ لكل السجلات ولا ترتيبَ محلي.
+  const size = filters.limit ?? 48;
+  if (filters.sort === "nearest" && filters.originLat != null && filters.originLng != null) {
+    const page = await nearbyListingIds({
+      lat: filters.originLat,
+      lng: filters.originLng,
+      radiusKm: (filters.radiusKm ?? null) as RadiusKm,
+      limit: size,
+      offset: (filters.page ?? 0) * size,
+      countryId,
+      cityId: filters.cityId,
+      categoryId,
+      subcategoryId: filters.subcategoryId,
+      typeCode: filters.type,
+      deal: filters.deal,
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+      q: filters.q,
+      advertiser: filters.advertiser,
+      withImage: filters.withImageOnly,
+      hasPrice: filters.hasPrice,
+      featuredOnly: filters.featuredOnly,
+    });
+    if (page.ids.length === 0) return { rows: [], fetched: 0 };
+
+    const { data } = await supabase
+      .from("mkt_listings")
+      .select(LISTING_COLUMNS)
+      .in("id", page.ids);
+    const ordered = orderByIds((data ?? []) as unknown as MktListing[], page.ids);
+    const decorated = await decorateListings(ordered, locale);
+    const withDistance = decorated.map((row) => ({
+      ...row,
+      distanceM: page.distances[row.id] ?? null,
+    }));
+    return {
+      rows: filterBySpecMinimums(withDistance, filters),
+      fetched: page.ids.length,
+    };
+  }
+
+
   let query = supabase
     .from("mkt_listings")
     .select(LISTING_COLUMNS)
@@ -263,7 +315,6 @@ async function queryListings(
   // Tie-breaker so rows never shift between pages and appear twice.
   query = query.order("id", { ascending: false });
 
-  const size = filters.limit ?? 48;
   if (filters.page !== undefined) {
     const from = filters.page * size;
     query = query.range(from, from + size - 1);

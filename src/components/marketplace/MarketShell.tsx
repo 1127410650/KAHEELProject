@@ -18,8 +18,8 @@ import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
-import { useActiveAccount } from "@/lib/mkt-account";
 import { routeRuleFor } from "@/lib/routes-map";
+import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { BackdropLayer } from "@/components/marketplace/BackdropLayer";
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
@@ -39,7 +39,6 @@ export function MarketHeader({
 }) {
   const { t, locale } = useI18n();
   const { session } = useSession();
-  const { account } = useActiveAccount();
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -50,7 +49,11 @@ export function MarketHeader({
     setLocationOpenState(value);
   };
   const addHref = addListingHref({ authenticated: !!session });
-  const locationLabel = account?.city?.trim() || (locale === "ar" ? "سوريا" : "Syria");
+  // الموقع الحقيقي للمستخدم مختصرًا («دمشق · المزة»)، وإلا دعوة صريحة لتحديده.
+  const { shortLabel } = useNearbyOrigin();
+  const locationLabel = shortLabel ?? t("market.geo.setLocation");
+  const locationKnown = !!shortLabel;
+
 
   const unreadAlerts = useQuery({
     queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
@@ -89,8 +92,8 @@ export function MarketHeader({
         <div
           className={
             home
-              ? "relative z-10 mx-auto grid min-h-[46px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[50px] sm:px-5 lg:px-8"
-              : "relative z-10 mx-auto grid min-h-[46px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:min-h-[50px] sm:px-5 lg:px-8"
+              ? "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
+              : "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
           }
         >
 
@@ -102,15 +105,17 @@ export function MarketHeader({
                 className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
-                <MapPin className="size-[18px] shrink-0" aria-hidden />
-                <span className="min-w-0">
-                  <strong className="block truncate text-sm font-black leading-tight">
-                    {locationLabel}
-                  </strong>
-                  <span className="block truncate text-[10px] font-semibold leading-tight text-[#f0d5ff]">
-                    {t("market.homeV2.locationNow")}
-                  </span>
-                </span>
+                <MapPin className="size-4 shrink-0" aria-hidden />
+                {/* سطر واحد بلا التفاف: المدينة والحي فقط. */}
+                <strong
+                  className={
+                    locationKnown
+                      ? "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight"
+                      : "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight text-[#ffd166] underline decoration-dotted underline-offset-2"
+                  }
+                >
+                  {locationLabel}
+                </strong>
               </button>
 
               <Link
@@ -124,10 +129,10 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-7 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-8"
+                  className="size-6 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-7"
                   aria-hidden
                 />
-                <span className="text-[21px] font-black leading-none tracking-[-0.07em] text-white sm:text-2xl">
+                <span className="text-[18px] font-black leading-none tracking-[-0.07em] text-white sm:text-xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -136,10 +141,10 @@ export function MarketHeader({
                   href={
                     session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                   }
-                  className="relative grid size-9 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                  className="relative grid size-8 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
                   aria-label={t("market.bottomNav.alerts")}
                 >
-                  <Bell className="size-5" aria-hidden />
+                  <Bell className="size-[18px]" aria-hidden />
                   {(unreadAlerts.data ?? 0) > 0 && (
                     <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
                       {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
@@ -163,10 +168,10 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-7 shrink-0 rounded-lg bg-white p-0.5 sm:size-8"
+                  className="size-6 shrink-0 rounded-lg bg-white p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-xl font-black leading-none tracking-[-0.06em] text-white sm:text-2xl">
+                <span className="text-lg font-black leading-none tracking-[-0.06em] text-white sm:text-xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -192,7 +197,7 @@ export function MarketHeader({
             aria-label={t("market.nav.menu")}
             className="border-t border-white/12 bg-brand-950/92"
           >
-            <div className="mx-auto flex min-h-[40px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+            <div className="mx-auto flex min-h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
               {[
                 [t("market.bottomNav.home"), "/"],
                 [t("market.homeV2.fields.restaurants.title"), "/search?category=restaurants"],
@@ -206,8 +211,8 @@ export function MarketHeader({
                   href={href}
                   className={
                     index === 0
-                      ? "inline-flex min-h-8 shrink-0 items-center rounded-full bg-white px-4 text-[11px] font-black text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
-                      : "inline-flex min-h-8 shrink-0 items-center rounded-full px-3.5 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
+                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-white px-3.5 text-[11px] font-black text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
+                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
                   }
                 >
                   {label}
@@ -229,10 +234,10 @@ export function MarketHeader({
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
           home
-            ? "h-[96px] sm:h-[100px]"
+            ? "h-[74px] sm:h-[80px]"
             : showCategories
-              ? "h-[12.6rem] sm:h-[13.2rem]"
-              : "h-[54px] sm:h-[58px]"
+              ? "h-[11.25rem] sm:h-[11.75rem]"
+              : "h-[46px] sm:h-[50px]"
 
         }
         style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}

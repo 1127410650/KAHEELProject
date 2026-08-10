@@ -9,6 +9,7 @@ import {
   ImageIcon,
   MapPin,
   MoreHorizontal,
+  Navigation,
   Share2,
   Sparkles,
 } from "lucide-react";
@@ -22,6 +23,7 @@ import { useSession } from "@/lib/session";
 import { trackMarketActivity } from "@/lib/mkt-activity";
 import { currentPath, loginHref, priceLabel, relativeTime, type MktListing } from "@/lib/mkt";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
+import { formatDistance } from "@/lib/mkt-nearby";
 import { canonicalUrl } from "@/lib/share-links";
 
 import {
@@ -65,6 +67,8 @@ export interface ListingCardData extends MktListing {
   typeLabel?: string | undefined;
   categoryLabel?: string | undefined;
   subcategoryLabel?: string | undefined;
+  /** المسافة الفعلية بالأمتار من موقع المستخدم — تحسبها القاعدة عند ترتيب القرب. */
+  distanceM?: number | null | undefined;
 }
 
 function useFavoriteIds() {
@@ -292,6 +296,7 @@ export function ListingCard({
   const tag = listing.subcategoryLabel ?? listing.categoryLabel ?? listing.typeLabel;
   const navBlocked = useRef(false);
   const featured = activeFeatured(listing);
+  const distance = formatDistance(listing.distanceM, locale === "ar" ? "ar" : "en");
 
 
   const meta = (
@@ -301,6 +306,12 @@ export function ListingCard({
         <span className="inline-flex min-w-0 items-center gap-1">
           <MapPin className="size-3 shrink-0" aria-hidden />
           <span className="truncate">{listing.city}</span>
+        </span>
+      )}
+      {distance && (
+        <span className="num inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-1.5 py-[1px] font-bold text-primary">
+          <Navigation className="size-[11px] shrink-0" aria-hidden />
+          {distance}
         </span>
       )}
       <span className="inline-flex items-center gap-1">

@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { LayoutGrid, List, Loader2, SlidersHorizontal, X } from "lucide-react";
+import { LayoutGrid, List, Loader2, MapPin, SlidersHorizontal, X } from "lucide-react";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
@@ -60,6 +60,8 @@ export interface SearchParams {
   featured?: string | undefined;
   filters?: 1 | undefined;
   sort?: string | undefined;
+  /** نطاق «الأقرب إليك» بالكيلومتر: 5 / 10 / 20 / 50 — وبلا قيمة يعني كل سوريا. */
+  radius?: string | undefined;
   rooms?: string | undefined;
   baths?: string | undefined;
   area?: string | undefined;
@@ -78,6 +80,7 @@ const PARAM_KEYS = [
   "featured",
   "filters",
   "sort",
+  "radius",
   "rooms",
   "baths",
   "area",
@@ -100,7 +103,7 @@ const DOMAINS: DomainDef[] = [
   { key: "business" },
 ];
 
-const SORTS = ["newest", "oldest", "price_asc", "price_desc"] as const;
+const SORTS = ["newest", "oldest", "price_asc", "price_desc", "nearest"] as const;
 type SortKey = (typeof SORTS)[number];
 
 const VIEW_STORAGE_KEY = "tahqaq.mkt.search.view";
@@ -116,6 +119,14 @@ const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
 
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
+import { LocationSheet } from "@/components/marketplace/LocationSheet";
+import { RADIUS_OPTIONS, useNearbyOrigin, type RadiusKm } from "@/lib/mkt-nearby";
+
+/** يقرأ نطاق القرب من الرابط: قيمة معتمدة فقط، وإلا «كل سوريا». */
+function parseRadius(value: string | undefined): RadiusKm {
+  const km = Number(value);
+  return (RADIUS_OPTIONS as readonly number[]).includes(km) ? (km as RadiusKm) : null;
+}
 
 export const Route = createFileRoute("/search")({
   ssr: "data-only",
@@ -214,6 +225,17 @@ function GenericSearchPage() {
     ? (params.sort as SortKey)
     : "newest";
   const businessMode = domain === "business";
+
+  /*
+   * «الأقرب إليك»: نقطة الانطلاق من موقع المستخدم أو عنوانه الافتراضي، والمسافة
+   * والترتيب يحدثان في القاعدة. بلا إذن موقع لا ينكسر شيء: الترتيب يعود إلى
+   * الأحدث داخل المحافظة المختارة يدويًا، مع دعوة صريحة لتحديد الموقع.
+   */
+  const { origin, shortLabel } = useNearbyOrigin();
+  const radiusKm = parseRadius(params.radius);
+  const nearestRequested = sort === "nearest";
+  const nearestActive = nearestRequested && !!origin;
+  const [locationOpen, setLocationOpen] = useState(false);
 
   /** Only a UI preference — never part of the query or of the shared URL. */
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -340,6 +362,9 @@ function GenericSearchPage() {
     sort,
     country: accountCountryIso2,
     field: termFieldSlug,
+    // إحداثيات مقرّبة: تكفي لإعادة الترتيب ولا تُخزَّن ولا تُنشر في الرابط.
+    near: nearestActive ? `${origin!.lat.toFixed(3)},${origin!.lng.toFixed(3)}` : null,
+    radius: nearestActive ? radiusKm : null,
   };
   const listings = useInfiniteQuery({
     queryKey: ["mkt", "search", "listings", listingKey, locale],
@@ -360,7 +385,10 @@ function GenericSearchPage() {
           maxPrice: params.max ? Number(params.max) : undefined,
           withImageOnly: params.img === "1",
           featuredOnly: params.featured === "1",
-          sort,
+          sort: nearestActive ? "nearest" : nearestRequested ? "newest" : sort,
+          ...(nearestActive
+            ? { originLat: origin!.lat, originLng: origin!.lng, radiusKm }
+            : {}),
         },
         locale,
         pageParam,
@@ -848,7 +876,35 @@ function GenericSearchPage() {
               <option value="oldest">{t("market.sort.oldest")}</option>
               {!businessMode && <option value="price_asc">{t("market.sort.priceAsc")}</option>}
               {!businessMode && <option value="price_desc">{t("market.sort.priceDesc")}</option>}
+              {!businessMode && <option value="nearest">{t("market.sort.nearest")}</option>}
             </select>
+
+            {nearestRequested && !businessMode && (
+              nearestActive ? (
+                <select
+                  value={params.radius ?? ""}
+                  onChange={(event) => update({ radius: event.target.value })}
+                  aria-label={t("market.geo.radius")}
+                  className="k-press h-9 min-w-0 shrink rounded-xl border border-primary/25 bg-white px-2 text-sm font-semibold"
+                >
+                  <option value="">{t("market.geo.radiusAll")}</option>
+                  {RADIUS_OPTIONS.map((km) => (
+                    <option key={km} value={String(km)}>
+                      {t("market.geo.radiusKm").replace("{km}", String(km))}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setLocationOpen(true)}
+                  className="k-press inline-flex h-9 shrink-0 items-center gap-1 rounded-xl border border-primary/30 bg-primary/10 px-3 text-xs font-bold text-primary"
+                >
+                  <MapPin className="size-3.5" aria-hidden />
+                  {t("market.geo.setLocation")}
+                </button>
+              )
+            )}
 
             <div className="inline-flex shrink-0 overflow-hidden rounded-xl border border-primary/25 bg-white">
               <button
@@ -972,6 +1028,10 @@ function GenericSearchPage() {
           )}
         </div>
       </div>
+      {locationOpen && (
+        <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />
+      )}
     </MarketShell>
+
   );
 }

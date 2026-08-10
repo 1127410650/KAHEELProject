@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, Search, ShieldCheck, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Navigation, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { GuidePlaceCard } from "@/components/marketplace/GuidePlaceCard";
+import { LocationSheet } from "@/components/marketplace/LocationSheet";
+import { RADIUS_OPTIONS, useNearbyOrigin, type RadiusKm } from "@/lib/mkt-nearby";
 import { GuideFilterBar } from "@/components/marketplace/guide/GuideFilterBar";
 import {
   EMPTY_GUIDE_FILTERS,
@@ -78,9 +80,27 @@ function SyriaGuidePage() {
     () => buildGuideFacets(facetRows.data ?? [], filters),
     [facetRows.data, filters],
   );
+  /*
+   * «الأقرب إليك» للدليل: المسافة والترتيب في القاعدة. بلا موقع نبقى على
+   * الترتيب الافتراضي داخل المحافظة المختارة، بلا كسر ولا نتائج فارغة.
+   */
+  const { origin } = useNearbyOrigin();
+  const [nearest, setNearest] = useState(false);
+  const [radiusKm, setRadiusKm] = useState<RadiusKm>(null);
+  const [locationOpen, setLocationOpen] = useState(false);
+  const nearActive = nearest && !!origin;
+  const near = nearActive
+    ? { lat: origin!.lat, lng: origin!.lng, radiusKm }
+    : undefined;
+
   const places = useQuery({
-    queryKey: ["guide-places", effective, page],
-    queryFn: () => fetchGuidePlaces(effective, page),
+    queryKey: [
+      "guide-places",
+      effective,
+      page,
+      near ? `${near.lat.toFixed(3)},${near.lng.toFixed(3)},${radiusKm ?? "all"}` : null,
+    ],
+    queryFn: () => fetchGuidePlaces(effective, page, near),
     placeholderData: keepPreviousData,
   });
 
@@ -129,6 +149,50 @@ function SyriaGuidePage() {
                 className="h-11 w-full rounded-2xl border border-input bg-background pe-4 ps-10 text-sm outline-none transition focus:border-market-navy focus:ring-2 focus:ring-market-navy/15"
               />
             </label>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                aria-pressed={nearest}
+                onClick={() => {
+                  if (!origin) {
+                    setLocationOpen(true);
+                    return;
+                  }
+                  setPage(0);
+                  setNearest((value) => !value);
+                }}
+                className={
+                  nearActive
+                    ? "k-press k-toggle-active inline-flex h-9 items-center gap-1 rounded-xl px-3 text-[12px] font-black"
+                    : "k-press inline-flex h-9 items-center gap-1 rounded-xl border border-primary/30 bg-card px-3 text-[12px] font-black text-primary"
+                }
+              >
+                <Navigation className="size-3.5" aria-hidden />
+                الأقرب إليك
+              </button>
+              {nearActive && (
+                <select
+                  value={radiusKm ?? ""}
+                  onChange={(event) => {
+                    setPage(0);
+                    const km = Number(event.target.value);
+                    setRadiusKm(
+                      (RADIUS_OPTIONS as readonly number[]).includes(km) ? (km as RadiusKm) : null,
+                    );
+                  }}
+                  aria-label="النطاق"
+                  className="h-9 rounded-xl border border-primary/25 bg-card px-2 text-[12px] font-bold"
+                >
+                  <option value="">كل سوريا</option>
+                  {RADIUS_OPTIONS.map((km) => (
+                    <option key={km} value={String(km)}>
+                      داخل {km} كم
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
 
             <GuideFilterBar
               filters={filters}
@@ -202,6 +266,9 @@ function SyriaGuidePage() {
           )}
         </section>
       </main>
+      {locationOpen && (
+        <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />
+      )}
     </MarketShell>
   );
 }
