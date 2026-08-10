@@ -72,6 +72,7 @@ import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
 import { Route as BusinessPartnersRouteImport } from './routes/business/partners'
 import { Route as BusinessProfileRouteImport } from './routes/business/profile'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
+import { Route as CSlugRouteImport } from './routes/c.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
 import { Route as GuidesRemovalRequestRouteImport } from './routes/guides/removal-request'
@@ -440,6 +441,11 @@ const BusinessesSlugRoute = BusinessesSlugRouteImport.update({
   path: '/businesses/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CSlugRoute = CSlugRouteImport.update({
+  id: '/c/$slug',
+  path: '/c/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
   path: '/categories/$slug',
@@ -766,6 +772,7 @@ export interface FileRoutesByFullPath {
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
+  '/c/$slug': typeof CSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/guides/removal-request': typeof GuidesRemovalRequestRoute
@@ -879,6 +886,7 @@ export interface FileRoutesByTo {
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
+  '/c/$slug': typeof CSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/guides/removal-request': typeof GuidesRemovalRequestRoute
@@ -997,6 +1005,7 @@ export interface FileRoutesById {
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
   '/businesses/$slug': typeof BusinessesSlugRoute
+  '/c/$slug': typeof CSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
   '/guides/removal-request': typeof GuidesRemovalRequestRoute
@@ -1116,6 +1125,7 @@ export interface FileRouteTypes {
     | '/business/partners'
     | '/business/profile'
     | '/businesses/$slug'
+    | '/c/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
     | '/guides/removal-request'
@@ -1229,6 +1239,7 @@ export interface FileRouteTypes {
     | '/business/partners'
     | '/business/profile'
     | '/businesses/$slug'
+    | '/c/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
     | '/guides/removal-request'
@@ -1346,6 +1357,7 @@ export interface FileRouteTypes {
     | '/business/partners'
     | '/business/profile'
     | '/businesses/$slug'
+    | '/c/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
     | '/guides/removal-request'
@@ -1428,6 +1440,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRouteWithChildren
   AdsSlugRoute: typeof AdsSlugRoute
   BusinessesSlugRoute: typeof BusinessesSlugRoute
+  CSlugRoute: typeof CSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
   GuidesRemovalRequestRoute: typeof GuidesRemovalRequestRoute
@@ -1888,6 +1901,13 @@ declare module '@tanstack/react-router' {
       path: '/businesses/$slug'
       fullPath: '/businesses/$slug'
       preLoaderRoute: typeof BusinessesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/c/$slug': {
+      id: '/c/$slug'
+      path: '/c/$slug'
+      fullPath: '/c/$slug'
+      preLoaderRoute: typeof CSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories/$slug': {
@@ -2477,6 +2497,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRouteWithChildren,
   AdsSlugRoute: AdsSlugRoute,
   BusinessesSlugRoute: BusinessesSlugRoute,
+  CSlugRoute: CSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
   GuidesRemovalRequestRoute: GuidesRemovalRequestRoute,
