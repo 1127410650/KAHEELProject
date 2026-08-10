@@ -9999,6 +9999,10 @@ export type Database = {
         }[]
       }
       mkt_departments_manage: { Args: never; Returns: boolean }
+      mkt_distance_m: {
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
+        Returns: number
+      }
       mkt_enforce_listing: {
         Args: {
           _action: string
@@ -10439,6 +10443,84 @@ export type Database = {
           status: string
           store_type: string
           tenant_id: string
+        }[]
+      }
+      mkt_nearby_directory: {
+        Args: {
+          _governorate?: string
+          _lat: number
+          _limit?: number
+          _lng: number
+          _offset?: number
+          _q?: string
+          _radius_km?: number
+          _sector?: string
+        }
+        Returns: {
+          distance_m: number
+          id: string
+        }[]
+      }
+      mkt_nearby_guide_places: {
+        Args: {
+          _category?: string
+          _country_iso2?: string
+          _governorate?: string
+          _lat: number
+          _limit?: number
+          _lng: number
+          _offset?: number
+          _q?: string
+          _radius_km?: number
+          _sector?: string
+          _subcategory?: string
+        }
+        Returns: {
+          distance_m: number
+          id: string
+        }[]
+      }
+      mkt_nearby_listings: {
+        Args: {
+          _advertiser?: string
+          _category_id?: string
+          _city_id?: string
+          _country_id?: string
+          _deal?: string
+          _featured_only?: boolean
+          _has_price?: boolean
+          _lat: number
+          _limit?: number
+          _lng: number
+          _max_price?: number
+          _min_price?: number
+          _offset?: number
+          _q?: string
+          _radius_km?: number
+          _subcategory_id?: string
+          _type_code?: string
+          _with_image?: boolean
+        }
+        Returns: {
+          distance_m: number
+          id: string
+        }[]
+      }
+      mkt_nearby_storefronts: {
+        Args: {
+          _city_id?: string
+          _country_id?: string
+          _lat: number
+          _limit?: number
+          _lng: number
+          _offset?: number
+          _q?: string
+          _radius_km?: number
+          _store_type?: string
+        }
+        Returns: {
+          distance_m: number
+          id: string
         }[]
       }
       mkt_norm_activity_text: { Args: { _t: string }; Returns: string }
