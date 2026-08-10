@@ -308,7 +308,7 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
 
   return (
     <li className={mine ? "flex flex-col items-end" : "flex flex-col items-start"}>
-      <div className="flex max-w-[85%] items-start gap-1">
+      <div className="flex max-w-[78%] items-start gap-[var(--sp-2)]">
         {mine && !message.deleted_at && !optimistic && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
