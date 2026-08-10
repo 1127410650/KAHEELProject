@@ -8,6 +8,8 @@ import { GuidePlaceCard } from "@/components/marketplace/GuidePlaceCard";
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 import { RADIUS_OPTIONS, useNearbyOrigin, type RadiusKm } from "@/lib/mkt-nearby";
 import { GuideFilterBar } from "@/components/marketplace/guide/GuideFilterBar";
+import { GuideDirectoryNotice } from "@/components/marketplace/guide/GuideDirectoryNotice";
+import { OsmAttribution } from "@/components/marketplace/guide/OsmAttribution";
 import {
   EMPTY_GUIDE_FILTERS,
   GUIDE_PAGE_SIZE,
@@ -206,6 +208,10 @@ function SyriaGuidePage() {
           </div>
         </section>
 
+        <div className="mx-auto w-full max-w-[1240px] px-4 pt-4 sm:px-6 lg:px-8">
+          <GuideDirectoryNotice />
+        </div>
+
         <section className="mx-auto w-full max-w-[1240px] px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
           {places.isLoading ? (
             <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
@@ -264,6 +270,7 @@ function SyriaGuidePage() {
               </nav>
             </>
           )}
+          <OsmAttribution className="mt-6" />
         </section>
       </main>
       {locationOpen && (
