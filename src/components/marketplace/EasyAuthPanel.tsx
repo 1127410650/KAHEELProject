@@ -104,7 +104,14 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
     try {
       enablePersistentSession();
       if (isPhoneOnly) {
-        const result = await requestOtp({ data: { phone: e164!, channel: phoneChannel } });
+        // البريد يُمرَّر كاحتياط: إن تعذّر إرسال SMS يذهب الرمز إليه تلقائيًا.
+        const result = await requestOtp({
+          data: {
+            phone: e164!,
+            channel: phoneChannel,
+            email: emailReady ? email.trim() : null,
+          },
+        });
         if (!result.ok) {
           toast.error(
             result.error === "COOLDOWN"
@@ -112,17 +119,21 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                   "{seconds}",
                   String(result.retry_after_seconds ?? 60),
                 )
-              : result.error === "PROVIDER_UNCONFIGURED"
-              ? t("market.easyAuth.disabled")
               : result.error === "RATE_LIMITED"
                 ? t("market.easyAuth.rateLimited")
                 : result.error === "INVALID_PHONE"
                   ? t("market.easyAuth.invalidPhone")
-                  : t("market.easyAuth.failed"),
+                  : // قناة معطّلة أو فشل إرسال حقيقي: سبب صريح + بديل يعمل.
+                    t("market.easyAuth.sendFailedUsePassword"),
           );
           return;
         }
-        toast.success(t("market.easyAuth.sent").replace("{target}", e164!));
+        setDeliveredChannel(result.channel);
+        toast.success(
+          result.channel === "email"
+            ? t("market.easyAuth.sentEmail").replace("{target}", result.target_masked ?? email.trim())
+            : t("market.easyAuth.sent").replace("{target}", e164!),
+        );
         setStage("code");
         return;
       }
@@ -130,25 +141,35 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
         toast.error(t("market.easyAuth.invalidEmail"));
         return;
       }
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: {
-          shouldCreateUser: true,
-          data: { phone_e164: e164 ?? "", full_name: fullName.trim() },
-        },
+      // خارج سوريا: البريد هو القناة الأساسية الآن (قنوات الجوال غير مفعّلة).
+      const sent = await requestEmail({
+        data: { email: email.trim(), phone: e164 ?? null, full_name: fullName.trim() },
       });
-      if (error) {
-        toast.error(t("market.easyAuth.failed"));
+      if (!sent.ok) {
+        toast.error(
+          sent.error === "COOLDOWN"
+            ? t("market.easyAuth.cooldown").replace(
+                "{seconds}",
+                String(sent.retry_after_seconds ?? 60),
+              )
+            : sent.error === "RATE_LIMITED"
+              ? t("market.easyAuth.rateLimited")
+              : sent.error === "INVALID_EMAIL"
+                ? t("market.easyAuth.invalidEmail")
+                : t("market.easyAuth.sendFailedUsePassword"),
+        );
         return;
       }
-      toast.success(t("market.easyAuth.emailSent"));
+      setDeliveredChannel("email");
+      toast.success(t("market.easyAuth.sentEmail").replace("{target}", sent.masked));
       setStage("code");
     } catch {
-      toast.error(t("market.easyAuth.failed"));
+      toast.error(t("market.easyAuth.sendFailedUsePassword"));
     } finally {
       setBusy(false);
     }
   }
+
 
   async function verify() {
     const digits = code.replace(/\D/g, "");
