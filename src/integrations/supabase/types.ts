@@ -847,6 +847,7 @@ export type Database = {
         Row: {
           asset_path: string | null
           bytes: number
+          capability: string
           cost_credits: number
           cost_usd: number
           created_at: string
@@ -865,6 +866,7 @@ export type Database = {
         Insert: {
           asset_path?: string | null
           bytes?: number
+          capability?: string
           cost_credits?: number
           cost_usd?: number
           created_at?: string
@@ -883,6 +885,7 @@ export type Database = {
         Update: {
           asset_path?: string | null
           bytes?: number
+          capability?: string
           cost_credits?: number
           cost_usd?: number
           created_at?: string
@@ -12352,6 +12355,16 @@ export type Database = {
         Args: { _tenant_id?: string; _user_id: string }
         Returns: Json
       }
+      mkt_ai_capability_cap: { Args: { _capability: string }; Returns: number }
+      mkt_ai_enhance_claim: {
+        Args: {
+          _provider: string
+          _purpose?: string
+          _slot_key?: string
+          _unit_usd?: number
+        }
+        Returns: Json
+      }
       mkt_ai_image_budget: { Args: never; Returns: Json }
       mkt_ai_image_claim: {
         Args: {
@@ -12379,6 +12392,11 @@ export type Database = {
       }
       mkt_ai_image_monthly_cap: { Args: never; Returns: number }
       mkt_ai_image_set_budget: { Args: { _usd: number }; Returns: number }
+      mkt_ai_set_capability_budget: {
+        Args: { _capability: string; _usd: number }
+        Returns: number
+      }
+      mkt_ai_spend_summary: { Args: never; Returns: Json }
       mkt_analytics_fields: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_funnel: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_geo: { Args: { _limit?: number }; Returns: Json }
