@@ -248,9 +248,9 @@ function AnalyticsDashboardPage() {
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Area type="monotone" dataKey="views" stroke="#8A4FFF" fill="#8A4FFF" fillOpacity={0.15} />
-                <Area type="monotone" dataKey="listings" stroke="#C3ABFF" fill="#C3ABFF" fillOpacity={0.15} />
-                <Area type="monotone" dataKey="messages" stroke="#6E6E7D" fill="#6E6E7D" fillOpacity={0.12} />
+                <Area type="monotone" dataKey="views" stroke="var(--kt-primary)" fill="var(--kt-primary)" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="listings" stroke="var(--kt-accent, var(--kt-primary))" fill="var(--kt-accent, var(--kt-primary))" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="messages" stroke="var(--muted-foreground)" fill="var(--muted-foreground)" fillOpacity={0.12} />
                 <Area type="monotone" dataKey="searches" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.12} />
                 <Area type="monotone" dataKey="users" stroke="#1B1B1F" fill="#1B1B1F" fillOpacity={0.12} />
               </AreaChart>
