@@ -85,6 +85,13 @@ export function MascotPresence() {
     return false;
   }, [muted, pathname, settings.enabled]);
 
+  /* المشهد الحاضر في مرجع أيضًا: المؤقّت لا يُعاد بناؤه عند كل ظهور، فلا يُلغى
+     مؤقّت الاختفاء التلقائي في منتصف الطريق. */
+  const sceneRef = useRef(false);
+  useEffect(() => {
+    sceneRef.current = !!scene;
+  }, [scene]);
+
   // محرّك التوقيت: يعدّ الثواني «النشطة» فقط، ويظهر عند اكتمال الفاصل.
   useEffect(() => {
     if (!settings.enabled || muted) return;
@@ -93,8 +100,7 @@ export function MascotPresence() {
 
     let active = 0;
     const tick = window.setInterval(() => {
-      if (blocked()) return;
-      if (scene) return;
+      if (sceneRef.current || blocked()) return;
       active += 1;
       if (active < settings.intervalSeconds) return;
       active = 0;
@@ -102,15 +108,20 @@ export function MascotPresence() {
       if (!next) return;
       releaseRef.current = acquireStage("presence");
       keyRef.current += 1;
+      sceneRef.current = true;
       setScene({ ...next, key: keyRef.current });
-      hideTimer.current = window.setTimeout(() => end(false), settings.visibleSeconds * 1000);
     }, 1000);
 
-    return () => {
-      window.clearInterval(tick);
-      window.clearTimeout(hideTimer.current);
-    };
-  }, [blocked, end, muted, phrases.data, scene, settings.enabled, settings.intervalSeconds, settings.visibleSeconds]);
+    return () => window.clearInterval(tick);
+  }, [blocked, muted, phrases.data, settings.enabled, settings.intervalSeconds]);
+
+  // الاختفاء التلقائي بعد مدة البقاء — مؤقّت مستقل لكل مشهد.
+  useEffect(() => {
+    if (!scene) return;
+    hideTimer.current = window.setTimeout(() => end(false), settings.visibleSeconds * 1000);
+    return () => window.clearTimeout(hideTimer.current);
+  }, [end, scene, settings.visibleSeconds]);
+
 
   // إخفاء فوري إن تغيّر المسار أو صار المسار حسّاسًا أو خُفي التبويب.
   useEffect(() => {
