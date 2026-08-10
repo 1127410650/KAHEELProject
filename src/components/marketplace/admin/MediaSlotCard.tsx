@@ -176,7 +176,38 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
       </div>
 
       <fieldset className="mt-3 rounded-xl border border-border p-[var(--sp-3)]">
+        <legend className="px-1 text-desc font-bold text-foreground">نصاعة الصورة</legend>
+        <label
+          className="flex items-center gap-2 text-desc font-bold text-foreground"
+          style={{ minHeight: 44 }}
+        >
+          <input
+            type="checkbox"
+            checked={enhanceOn}
+            onChange={(event) => setEnhanceOn(event.target.checked)}
+            className="size-5 accent-primary"
+          />
+          <Wand2 className="size-4 text-primary" aria-hidden />
+          حسّن الصورة تلقائيًا عند الرفع
+        </label>
+        <button
+          type="button"
+          onClick={enhanceCurrent}
+          disabled={!slot.url || busy !== null}
+          className="k-press mt-2 inline-flex items-center gap-2 rounded-[var(--r-btn,12px)] border border-border px-4 text-desc font-bold text-foreground disabled:opacity-50"
+          style={{ minHeight: 44 }}
+        >
+          <Wand2 className="size-4 text-primary" aria-hidden />
+          {busy === "enhance" ? "جارٍ التحسين…" : "حسّن الصورة الحالية"}
+        </button>
+        <p className="mt-1 text-desc text-muted-foreground">
+          تكبير إلى ١٥٣٦ بكسل مع إبراز الحدود وإعادة ضغط WebP بحدّ ٣٠٠ كيلوبايت.
+        </p>
+      </fieldset>
+
+      <fieldset className="mt-3 rounded-xl border border-border p-[var(--sp-3)]">
         <legend className="px-1 text-desc font-bold text-foreground">ختم العلامة</legend>
+
         <label className="flex items-center gap-2 text-desc font-bold text-foreground" style={{ minHeight: 44 }}>
           <input
             type="checkbox"
