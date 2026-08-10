@@ -89,9 +89,16 @@ export function CollapsingHomeHeader({
     <>
       <header
         data-kslot="home.header"
-        style={style}
-        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground [height:calc(190px-44px*var(--p))] shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)] rounded-b-[calc(28px*(1-var(--p))+14px*var(--p))]"
+        style={{
+          ...style,
+          // تُفرض هنا لأن `.k-header-hero` تعرّف position/الاستدارة خارج طبقات الأدوات.
+          position: "fixed",
+          borderBottomLeftRadius: "calc(28px*(1 - var(--p)) + 14px*var(--p))",
+          borderBottomRightRadius: "calc(28px*(1 - var(--p)) + 14px*var(--p))",
+        }}
+        className="k-header-hero inset-x-0 top-0 z-40 overflow-hidden text-foreground [height:calc(190px-44px*var(--p))] shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)]"
       >
+
         <HeaderShapes />
 
         {/* صف الهوية — يبقى (فوق كل شيء وبخلفية الهيدر نفسها) */}
