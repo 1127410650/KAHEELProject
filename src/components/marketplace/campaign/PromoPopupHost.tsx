@@ -46,6 +46,9 @@ import {
   areaStillFree,
   canShowMascot,
   findSafeBand,
+  floatingTextStyle,
+  sampleAreaTone,
+  type AreaTone,
   type SafeBand,
 } from "@/lib/mascot-stage";
 import {
@@ -162,6 +165,8 @@ interface MascotCard {
   peekSide: PeekSide;
   /** الموضع الآمن المقاس لحظة الظهور. */
   band: SafeBand;
+  /** سطوع المكان لحظة الظهور — يحدّد لون النص العائم وظلّه. */
+  tone: AreaTone;
 }
 
 export function PromoPopupHost() {
@@ -263,6 +268,17 @@ export function PromoPopupHost() {
       // قاعدة «لا تغطية»: مساحة آمنة أو لا ظهور.
       const band = safeBandFor(mode);
       if (!band) return;
+      const boxHeight = mode === "peek" ? PEEK_HEIGHT : CARD_HEIGHT;
+      const boxWidth = mode === "peek" ? PEEK_WIDTH : CARD_WIDTH;
+      const box = {
+        left: band.left + Math.max(0, (band.width - boxWidth) / 2),
+        top: band.top,
+        width: boxWidth,
+        height: boxHeight,
+      };
+      // تأكيد لحظي: المنطقة فارغة فعلًا من البطاقات والنصوص، وإلا فلا ظهور.
+      if (!areaStillFree(box, 14)) return;
+      const tone = sampleAreaTone(box);
       keyRef.current += 1;
       let copy;
       if (mode === "rapid") {
@@ -288,6 +304,7 @@ export function PromoPopupHost() {
         side,
         peekSide,
         band,
+        tone,
         ...copy,
       });
 
@@ -361,7 +378,17 @@ export function PromoPopupHost() {
     releaseRef.current = acquireStage(`card:${record.mode}`);
     keyRef.current += 1;
     openRef.current = true;
-    setCard({ key: keyRef.current, band, ...record });
+    setCard({
+      key: keyRef.current,
+      band,
+      tone: sampleAreaTone({
+        left: band.left,
+        top: band.top,
+        width: band.width,
+        height: record.mode === "peek" ? PEEK_HEIGHT : CARD_HEIGHT,
+      }),
+      ...record,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -401,17 +428,17 @@ export function PromoPopupHost() {
         type="button"
         onClick={() => dismiss(true)}
         aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-        className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-brand-950/10 text-brand-900"
+        className="pointer-events-auto grid size-6 shrink-0 place-items-center rounded-full bg-brand-950/35 text-white backdrop-blur-sm"
       >
-        <EyeOff className="size-4" aria-hidden />
+        <EyeOff className="size-3" aria-hidden />
       </button>
       <button
         type="button"
         onClick={() => dismiss()}
         aria-label={ar ? "إغلاق" : "Close"}
-        className="pointer-events-auto grid size-9 shrink-0 place-items-center rounded-full bg-brand-950 text-white shadow-md"
+        className="pointer-events-auto grid size-7 shrink-0 place-items-center rounded-full bg-brand-950/45 text-white backdrop-blur-sm"
       >
-        <X className="size-5" aria-hidden />
+        <X className="size-4" aria-hidden />
       </button>
     </div>
   );
@@ -457,17 +484,19 @@ export function PromoPopupHost() {
           className={`pointer-events-none flex items-end gap-1.5 ${layout.row}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
+          {/* نص عائم بلا خلفية: اللون والظل يتكيّفان مع سطوع المكان. */}
           <div
             dir={ar ? "rtl" : "ltr"}
-            className="k-mascot-glass mb-2 max-w-[9.5rem] min-[360px]:max-w-[11rem] rounded-2xl rounded-ee-sm px-3 py-2 text-start"
+            style={floatingTextStyle(card.tone)}
+            className="mb-2 max-w-[9.5rem] bg-transparent px-1 text-start min-[360px]:max-w-[11rem]"
           >
-            <div className="mb-1 flex items-start justify-between gap-2">
-              <p className="py-0.5 text-[13px] font-black leading-snug [overflow-wrap:anywhere]">
+            <div className="mb-0.5 flex items-start justify-between gap-2">
+              <p className="text-[13px] font-black leading-snug [overflow-wrap:anywhere]">
                 {card.title}
               </p>
               {closeButtons}
             </div>
-            <p className="k-mascot-glass-sub text-[11px] font-bold leading-snug [overflow-wrap:anywhere]">
+            <p className="text-[11px] font-bold leading-snug [overflow-wrap:anywhere]">
               {card.subtitle}
             </p>
           </div>
@@ -550,12 +579,15 @@ export function PromoPopupHost() {
           </div>
         </div>
 
-        {/* النص تحتها: زجاج بنفسجي شفاف متناسق مع الخلفية — لا أبيض صريح. */}
-        <div className="k-mascot-glass pointer-events-auto w-full shrink-0 rounded-2xl px-2.5 py-1.5">
-          <p className="py-0.5 text-[15px] font-black leading-snug [overflow-wrap:anywhere]">
+        {/* النص تحتها: عائم بلا أي خلفية، بلون وظل متكيّفين مع سطوع المكان. */}
+        <div
+          style={floatingTextStyle(card.tone)}
+          className="w-full shrink-0 bg-transparent px-1"
+        >
+          <p className="text-[15px] font-black leading-snug [overflow-wrap:anywhere]">
             {card.title}
           </p>
-          <p className="k-mascot-glass-sub text-[12px] font-semibold leading-snug [overflow-wrap:anywhere]">
+          <p className="text-[12px] font-semibold leading-snug [overflow-wrap:anywhere]">
             {card.subtitle}
           </p>
         </div>
