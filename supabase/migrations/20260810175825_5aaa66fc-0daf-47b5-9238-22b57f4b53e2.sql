@@ -1,0 +1,2 @@
+alter table public.mkt_media_slots add column if not exists source_note text;
+comment on column public.mkt_media_slots.source_note is 'نسب الصورة الافتراضية ورخصتها (المصدر/المؤلف/الترخيص) — للحفظ الإداري فقط.';
