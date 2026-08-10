@@ -234,7 +234,7 @@ export async function fetchAqarListing(id: string): Promise<AqarListing | null> 
 export async function fetchAqarProvider(id: string): Promise<AqarProvider | null> {
   const { data } = await supabase
     .from("mkt_realestate_providers")
-    .select("id, display_name, provider_type, city, verification_status, is_demo")
+    .select("id, slug, display_name, provider_type, city, verification_status, is_demo")
     .eq("id", id)
     .is("deleted_at", null)
     .maybeSingle();
