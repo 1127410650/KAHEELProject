@@ -2615,3 +2615,50 @@ body:has(.market-surface) {
     opacity: 0 !important;
   }
 }
+
+/* ===== دبوس الخريطة (Leaflet) ===== */
+.mkt-map-pin {
+  background: transparent;
+  border: 0;
+}
+.mkt-pin {
+  position: relative;
+  display: block;
+  width: 28px;
+  height: 40px;
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.28));
+}
+.mkt-pin::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 2px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px 9999px 9999px 9999px;
+  background: linear-gradient(160deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.82) 100%);
+  border: 2px solid hsl(var(--background));
+}
+.mkt-pin::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 11px;
+  top: 21px;
+  width: 6px;
+  height: 17px;
+  background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.35) 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.mkt-pin-dot {
+  position: absolute;
+  inset-inline-start: 10px;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: hsl(var(--background));
+}
+.leaflet-container {
+  font-family: inherit;
+  background: hsl(var(--secondary));
+}
