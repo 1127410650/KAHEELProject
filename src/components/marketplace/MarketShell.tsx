@@ -174,17 +174,17 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-6 shrink-0 rounded-lg bg-white p-0.5 sm:size-7"
+                  className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-lg font-black leading-none tracking-[-0.06em] text-white sm:text-xl">
+                <span className="text-lg font-black leading-none tracking-[-0.06em] text-foreground sm:text-xl">
                   {t("market.brand")}
                 </span>
               </Link>
               <button
                 type="button"
                 onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-brand-300 outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
