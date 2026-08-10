@@ -257,9 +257,9 @@ function ProviderNetworkPage() {
 
         <TabsContent value="account" className="space-y-4">
           <Card className="overflow-hidden rounded-3xl">
-            <CardHeader className="bg-gradient-to-br from-market-navy to-cyan-950 text-white">
+            <CardHeader className="bg-gradient-to-br from-market-navy to-primary-deep text-white">
               <CardTitle className="flex items-center gap-2">
-                <Boxes className="size-5 text-cyan-200" />
+                <Boxes className="size-5 text-primary-foreground/75" />
                 {locale === "ar" ? "فئة حساب المتجر" : "Store account category"}
               </CardTitle>
               <p className="text-sm leading-6 text-white/70">

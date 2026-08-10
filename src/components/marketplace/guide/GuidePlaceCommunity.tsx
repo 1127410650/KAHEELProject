@@ -54,7 +54,7 @@ export function GuidePlaceRating({
         size === "lg" ? "text-sm" : "text-[11px]"
       }`}
     >
-      <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden />
+      <Star className="size-3.5 fill-gold text-gold" aria-hidden />
       {average.toFixed(1)}
       <span className="opacity-70">({total.toLocaleString("en-US")})</span>
     </span>
@@ -67,7 +67,7 @@ function Stars({ value }: { value: number }) {
       {[1, 2, 3, 4, 5].map((step) => (
         <Star
           key={step}
-          className={`size-3.5 ${step <= value ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`}
+          className={`size-3.5 ${step <= value ? "fill-gold text-gold" : "text-muted-foreground/40"}`}
           aria-hidden
         />
       ))}
@@ -377,7 +377,7 @@ function ReviewsSection({
                 onClick={() => setRating(step)}
               >
                 <Star
-                  className={`size-6 ${step <= rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`}
+                  className={`size-6 ${step <= rating ? "fill-gold text-gold" : "text-muted-foreground/40"}`}
                   aria-hidden
                 />
               </button>

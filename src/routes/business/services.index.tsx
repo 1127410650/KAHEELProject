@@ -213,11 +213,11 @@ function ProviderServiceCenter() {
   return (
     <DashboardShell title={locale === "ar" ? "مركز مقدم الخدمة" : "Provider center"}>
       <div className="space-y-5">
-        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy via-slate-900 to-cyan-950 text-white shadow-xl">
+        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-bold text-cyan-200">
+                <p className="text-xs font-bold text-primary-foreground/75">
                   {locale === "ar" ? "حساب مقدم خدمة" : "Service provider account"}
                 </p>
                 <h2 className="mt-1 text-2xl font-black">{setup.data.store_name}</h2>

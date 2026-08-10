@@ -204,7 +204,7 @@ function ServiceBookingPage() {
           <div className="space-y-4">
             <Card className="overflow-hidden rounded-3xl">
               <CardContent className="flex gap-4 p-4 sm:p-5">
-                <div className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-market-navy to-cyan-800 sm:size-28">
+                <div className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-market-navy to-primary-pressed sm:size-28">
                   {image ? (
                     <img src={image} alt={serviceName} className="size-full object-cover" />
                   ) : (
@@ -223,7 +223,7 @@ function ServiceBookingPage() {
                       {data.service.duration_minutes} {locale === "ar" ? "دقيقة" : "min"}
                     </Badge>
                     <Badge variant="secondary">
-                      <Star className="me-1 size-3.5 fill-amber-400 text-amber-400" />
+                      <Star className="me-1 size-3.5 fill-gold text-gold" />
                       {data.rating || (locale === "ar" ? "جديد" : "New")}
                     </Badge>
                   </div>

@@ -130,7 +130,7 @@ function AdminGuideQueuePage() {
                 <Card key={review.id}>
                   <CardContent className="flex flex-wrap items-center gap-3 p-3">
                     <Badge variant="outline" className="shrink-0 gap-1">
-                      <Star className="size-3 fill-amber-400 text-amber-400" aria-hidden />
+                      <Star className="size-3 fill-gold text-gold" aria-hidden />
                       {review.rating}
                     </Badge>
                     <div className="min-w-0 flex-1 text-[12px]">

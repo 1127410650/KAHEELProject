@@ -159,7 +159,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
         </button>
       </div>
       {contacted ? (
-        <p className="text-[10px] font-bold text-amber-700">
+        <p className="text-[10px] font-bold text-gold-dark">
           تم التواصل مع هذه الجهة سابقًا — يُفضّل عدم تكرار المراسلة.
         </p>
       ) : null}

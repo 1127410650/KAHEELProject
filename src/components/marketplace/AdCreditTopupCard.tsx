@@ -356,7 +356,7 @@ export function AdCreditTopupCard({
         )}
 
         {pending.length > 0 && (
-          <p className="text-xs text-amber-700 dark:text-amber-400">
+          <p className="text-xs text-gold-dark">
             {t("market.adCredit.topup.hasPending")}
           </p>
         )}

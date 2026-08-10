@@ -228,7 +228,7 @@ function CaptainPage() {
               </p>
               <p className="mt-0.5 flex items-center gap-2 text-[11.5px] text-muted-foreground">
                 <span className="flex items-center gap-0.5">
-                  <Star className="h-3 w-3 text-amber-500" />
+                  <Star className="h-3 w-3 text-gold-dark" />
                   {formatNumber(captain.rating_avg)} ({captain.rating_count})
                 </span>
                 <span>
