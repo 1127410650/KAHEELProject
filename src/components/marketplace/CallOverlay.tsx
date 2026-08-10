@@ -233,7 +233,7 @@ export function CallOverlay() {
               onClick={() => void accept()}
               className="flex flex-col items-center gap-2 text-[12px] font-bold"
             >
-              <span className="grid size-16 place-items-center rounded-full bg-[#31c48d] text-[#062b1e] shadow-[0_14px_34px_rgb(16_0_43/0.5)] transition active:scale-95">
+              <span className="grid size-16 place-items-center rounded-full bg-[#2f9e6a] text-[#ffffff] shadow-[0_14px_34px_rgb(16_0_43/0.5)] transition active:scale-95">
                 <Phone className="size-6" aria-hidden />
               </span>
               {needsGesture ? t("market.call.startAudio") : t("market.call.accept")}

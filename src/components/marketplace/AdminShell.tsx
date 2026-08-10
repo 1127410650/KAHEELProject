@@ -285,7 +285,7 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
                     className={
                       "group flex min-h-11 items-center gap-3 rounded-xl px-3 text-[13px] font-semibold transition-all duration-200 " +
                       (active
-                        ? "bg-[#e5f6f3] text-[#087f78] shadow-[inset_0_0_0_1px_rgba(8,127,120,0.08)] dark:bg-primary/15 dark:text-primary"
+                        ? "bg-[#f3e3ff] text-[#7b2cbf] shadow-[inset_0_0_0_1px_rgba(8,127,120,0.08)] dark:bg-primary/15 dark:text-primary"
                         : "text-muted-foreground hover:bg-white hover:text-foreground hover:shadow-sm dark:hover:bg-accent")
                     }
                   >
@@ -293,8 +293,8 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
                       className={
                         "grid size-8 shrink-0 place-items-center rounded-lg transition-colors " +
                         (active
-                          ? "bg-white text-[#087f78] shadow-sm dark:bg-background dark:text-primary"
-                          : "bg-transparent text-muted-foreground group-hover:bg-[#eef8f6] group-hover:text-[#087f78] dark:group-hover:bg-primary/10")
+                          ? "bg-white text-[#7b2cbf] shadow-sm dark:bg-background dark:text-primary"
+                          : "bg-transparent text-muted-foreground group-hover:bg-[#f6f0ff] group-hover:text-[#7b2cbf] dark:group-hover:bg-primary/10")
                       }
                     >
                       <Icon className="size-[17px]" aria-hidden />
@@ -315,9 +315,9 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
 function AdminSidebarBrand() {
   const { t } = useI18n();
   return (
-    <div className="border-b border-[#dcebea] px-4 py-4 dark:border-border">
+    <div className="border-b border-[#ead9fb] px-4 py-4 dark:border-border">
       <Link to="/admin" className="flex items-center gap-3 rounded-xl">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#087f78] text-white shadow-[0_8px_24px_rgba(8,127,120,0.22)]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#7b2cbf] text-white shadow-[0_8px_24px_rgba(8,127,120,0.22)]">
           <ShieldCheck className="size-5" aria-hidden />
         </span>
         <span className="min-w-0">
@@ -372,7 +372,7 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
         <Button
           variant="ghost"
           size="icon"
-          className="relative size-10 rounded-xl border border-transparent hover:border-[#d6e8e6] hover:bg-[#f2f9f8]"
+          className="relative size-10 rounded-xl border border-transparent hover:border-[#e0aaff] hover:bg-[#f8f2ff]"
           aria-label={t("admin.alerts.title")}
         >
           <Bell className="size-[18px]" aria-hidden />
@@ -385,11 +385,11 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
       </PopoverTrigger>
       <PopoverContent
         align="end"
-        className="w-[min(20rem,92vw)] rounded-2xl border-[#dcebea] p-2 shadow-xl"
+        className="w-[min(20rem,92vw)] rounded-2xl border-[#ead9fb] p-2 shadow-xl"
       >
         <div className="flex items-center justify-between px-2 py-2">
           <p className="text-sm font-black text-foreground">{t("admin.alerts.title")}</p>
-          <span className="rounded-full bg-[#e5f6f3] px-2 py-0.5 text-[10px] font-bold text-[#087f78]">
+          <span className="rounded-full bg-[#f3e3ff] px-2 py-0.5 text-[10px] font-bold text-[#7b2cbf]">
             {total}
           </span>
         </div>
@@ -398,7 +398,7 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
             <Link
               key={row.key}
               to={row.to}
-              className="flex min-h-11 items-center justify-between gap-2 rounded-xl px-3 text-sm text-foreground hover:bg-[#f2f9f8]"
+              className="flex min-h-11 items-center justify-between gap-2 rounded-xl px-3 text-sm text-foreground hover:bg-[#f8f2ff]"
             >
               <span className="truncate">{t(row.key)}</span>
               <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
@@ -460,8 +460,8 @@ export function AdminShell({
   }
 
   return (
-    <div className="min-h-dvh bg-[#f4f9f8] text-foreground dark:bg-background">
-      <header className="sticky top-0 z-40 border-b border-[#dcebea] bg-white/95 backdrop-blur-xl dark:border-border dark:bg-card/95">
+    <div className="min-h-dvh bg-[#f9f4ff] text-foreground dark:bg-background">
+      <header className="sticky top-0 z-40 border-b border-[#ead9fb] bg-white/95 backdrop-blur-xl dark:border-border dark:bg-card/95">
         <div className="flex min-h-[64px] w-full items-center gap-2 px-3 sm:px-5 lg:px-6">
           {allowed ? (
             <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -469,7 +469,7 @@ export function AdminShell({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="size-10 shrink-0 rounded-xl border border-[#dcebea] bg-white shadow-sm lg:hidden dark:border-border dark:bg-card"
+                  className="size-10 shrink-0 rounded-xl border border-[#ead9fb] bg-white shadow-sm lg:hidden dark:border-border dark:bg-card"
                   aria-label={t("admin.menu")}
                 >
                   <Menu className="size-5" aria-hidden />
@@ -477,7 +477,7 @@ export function AdminShell({
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[19rem] max-w-[88vw] overflow-hidden border-[#dcebea] bg-[#f7fbfa] p-0 dark:border-border dark:bg-background"
+                className="w-[19rem] max-w-[88vw] overflow-hidden border-[#ead9fb] bg-[#fbf7ff] p-0 dark:border-border dark:bg-background"
               >
                 <SheetTitle className="sr-only">{t("admin.console")}</SheetTitle>
                 <AdminSidebarBrand />
@@ -489,7 +489,7 @@ export function AdminShell({
           ) : null}
 
           <Link to="/admin" className="flex min-w-0 items-center gap-2.5 lg:hidden">
-            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#087f78] text-white">
+            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#7b2cbf] text-white">
               <ShieldCheck className="size-[17px]" aria-hidden />
             </span>
             <span className="hidden min-w-0 sm:block">
@@ -521,7 +521,7 @@ export function AdminShell({
                 asChild
                 variant="outline"
                 size="sm"
-                className="min-h-10 shrink-0 rounded-xl border-[#d6e8e6] bg-white px-3 text-[#087f78] shadow-sm hover:bg-[#f2f9f8] dark:border-border dark:bg-card dark:text-primary"
+                className="min-h-10 shrink-0 rounded-xl border-[#e0aaff] bg-white px-3 text-[#7b2cbf] shadow-sm hover:bg-[#f8f2ff] dark:border-border dark:bg-card dark:text-primary"
               >
                 <a href="/?admin_preview=1">
                   <Store className="size-4" aria-hidden />
@@ -532,19 +532,19 @@ export function AdminShell({
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="grid size-10 shrink-0 place-items-center rounded-xl border border-[#d6e8e6] bg-white shadow-sm transition hover:bg-[#f2f9f8] dark:border-border dark:bg-card"
+                    className="grid size-10 shrink-0 place-items-center rounded-xl border border-[#e0aaff] bg-white shadow-sm transition hover:bg-[#f8f2ff] dark:border-border dark:bg-card"
                     aria-label={t("admin.account")}
                   >
-                    <span className="grid size-8 place-items-center rounded-lg bg-[#e5f6f3] text-[10px] font-black text-[#087f78] dark:bg-primary/15 dark:text-primary">
+                    <span className="grid size-8 place-items-center rounded-lg bg-[#f3e3ff] text-[10px] font-black text-[#7b2cbf] dark:bg-primary/15 dark:text-primary">
                       {initials(displayName)}
                     </span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-64 rounded-2xl border-[#dcebea] p-2 shadow-xl"
+                  className="w-64 rounded-2xl border-[#ead9fb] p-2 shadow-xl"
                 >
-                  <DropdownMenuLabel className="rounded-xl bg-[#f4f9f8] px-3 py-2 dark:bg-accent">
+                  <DropdownMenuLabel className="rounded-xl bg-[#f9f4ff] px-3 py-2 dark:bg-accent">
                     <span className="block truncate text-sm font-black">{displayName}</span>
                     <span className="mt-0.5 block text-[10px] font-medium text-muted-foreground">
                       {owner ? t("admin.role.systemOwner") : t("admin.role.platformAdmin")}
@@ -571,7 +571,7 @@ export function AdminShell({
 
       <div className="flex w-full items-start">
         {allowed ? (
-          <aside className="sticky top-[65px] hidden h-[calc(100dvh-65px)] w-[17rem] shrink-0 overflow-hidden border-e border-[#dcebea] bg-[#f7fbfa] lg:block dark:border-border dark:bg-card/40 xl:w-[18rem]">
+          <aside className="sticky top-[65px] hidden h-[calc(100dvh-65px)] w-[17rem] shrink-0 overflow-hidden border-e border-[#ead9fb] bg-[#fbf7ff] lg:block dark:border-border dark:bg-card/40 xl:w-[18rem]">
             <AdminSidebarBrand />
             <div className="h-[calc(100%-77px)] overflow-y-auto overscroll-contain">
               <AdminNavList items={items} />
@@ -581,9 +581,9 @@ export function AdminShell({
 
         <main className="min-w-0 flex-1 px-3 pb-8 pt-4 sm:px-5 sm:pt-5 lg:px-7 lg:pb-10 xl:px-9">
           <div className="mx-auto w-full max-w-[1500px]">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#dcebea] bg-white px-4 py-3 shadow-[0_8px_30px_rgba(13,90,84,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#ead9fb] bg-white px-4 py-3 shadow-[0_8px_30px_rgba(13,90,84,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
               <div className="min-w-0">
-                <p className="text-[10px] font-bold text-[#087f78] dark:text-primary">
+                <p className="text-[10px] font-bold text-[#7b2cbf] dark:text-primary">
                   {t("admin.pageEyebrow")}
                 </p>
                 <h1 className="mt-0.5 min-w-0 truncate text-xl font-black tracking-tight text-foreground sm:text-2xl">
@@ -604,7 +604,7 @@ export function AdminShell({
             ) : allowed ? (
               children
             ) : (
-              <div className="rounded-2xl border border-[#dcebea] bg-white p-8 text-center shadow-sm dark:border-border dark:bg-card">
+              <div className="rounded-2xl border border-[#ead9fb] bg-white p-8 text-center shadow-sm dark:border-border dark:bg-card">
                 <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-secondary">
                   <ShieldAlert className="size-6 text-muted-foreground" aria-hidden />
                 </span>

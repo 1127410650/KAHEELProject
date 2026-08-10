@@ -248,11 +248,11 @@ function AnalyticsDashboardPage() {
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Area type="monotone" dataKey="views" stroke="#071A3D" fill="#071A3D" fillOpacity={0.15} />
-                <Area type="monotone" dataKey="listings" stroke="#2563eb" fill="#2563eb" fillOpacity={0.15} />
-                <Area type="monotone" dataKey="messages" stroke="#0f766e" fill="#0f766e" fillOpacity={0.12} />
-                <Area type="monotone" dataKey="searches" stroke="#a16207" fill="#a16207" fillOpacity={0.12} />
-                <Area type="monotone" dataKey="users" stroke="#7c3aed" fill="#7c3aed" fillOpacity={0.12} />
+                <Area type="monotone" dataKey="views" stroke="#240046" fill="#240046" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="listings" stroke="#7b2cbf" fill="#7b2cbf" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="messages" stroke="#9d4edd" fill="#9d4edd" fillOpacity={0.12} />
+                <Area type="monotone" dataKey="searches" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.12} />
+                <Area type="monotone" dataKey="users" stroke="#5a189a" fill="#5a189a" fillOpacity={0.12} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -300,8 +300,8 @@ function AnalyticsDashboardPage() {
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: 11 }} />
-                  <Bar dataKey="listings" fill="#071A3D" />
-                  <Bar dataKey="views" fill="#94a3b8" />
+                  <Bar dataKey="listings" fill="#240046" />
+                  <Bar dataKey="views" fill="#a08fb8" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
