@@ -24,6 +24,7 @@ import { enablePersistentSession } from "@/lib/auth-storage";
 import {
   otpChannelsForPhone,
   otpProviderStatus,
+  requestEmailOtp,
   requestPhoneOtp,
   verifyPhoneOtp,
 } from "@/lib/otp.functions";
@@ -41,6 +42,7 @@ const FALLBACK_PHONE_ONLY_DIALS = [DEFAULT_DIAL];
 export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   const { t } = useI18n();
   const requestOtp = useServerFn(requestPhoneOtp);
+  const requestEmail = useServerFn(requestEmailOtp);
   const verifyOtp = useServerFn(verifyPhoneOtp);
   const readProviders = useServerFn(otpProviderStatus);
   const readChannels = useServerFn(otpChannelsForPhone);
