@@ -260,15 +260,16 @@ export function MarketHeader({
             </>
           )}
         </div>
-        )}
-        {home && !shrunk && (
-
+        {home && (
           <nav
             aria-label={t("market.nav.menu")}
-            className="border-t border-white/25 bg-transparent"
-
+            className={`overflow-hidden border-t border-white/25 bg-transparent ${
+              collapsedEnough ? "pointer-events-none" : ""
+            }`}
+            style={{ height: `${HOME_NAV_H * (1 - shrink)}px`, opacity: 1 - shrink }}
           >
-            <div className="mx-auto flex min-h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+            <div className="mx-auto flex h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+
               {[
                 [t("market.bottomNav.home"), "/"],
                 [t("market.homeV2.fields.restaurants.title"), "/search?category=restaurants"],
