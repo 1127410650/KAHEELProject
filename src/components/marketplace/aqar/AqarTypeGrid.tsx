@@ -1,7 +1,7 @@
 /**
- * بطاقات أنواع العقار: فسيفساء عمودين — البطاقة الأولى تأخذ العمودين،
- * والباقي بنسبة 4:3. النسب مثبّتة (aspect) فلا إزاحة تخطيط عند تحميل الصور.
- * الصور تأتي من `src/lib/aqar-imagery.ts` (قابلة للتعديل من الإعدادات).
+ * بطاقات أنواع العقار: فسيفساء عمودين — البطاقة الأولى تأخذ العمودين بنسبة 16:7،
+ * والباقي 16:10 فتظهر الستة في مساحة قصيرة (كثافة أعلى). النسب مثبّتة فلا إزاحة
+ * تخطيط. الصور فوتوغرافية حقيقية من `src/lib/aqar-imagery.ts`.
  */
 
 import { Link } from "@tanstack/react-router";
@@ -19,9 +19,9 @@ export function AqarTypeGrid({
   counts: Record<string, number>;
 }) {
   return (
-    <section className="mt-7 px-4">
-      <h2 className="mb-3 text-section font-extrabold text-foreground">تصفّح حسب نوع العقار</h2>
-      <ul className="grid grid-cols-2 gap-3">
+    <section className="mt-5 px-4">
+      <h2 className="mb-2.5 text-lg font-bold text-foreground">تصفّح حسب نوع العقار</h2>
+      <ul className="grid grid-cols-2 gap-2.5">
         {types.map((card, index) => {
           const total = [card.key, ...(card.also ?? [])].reduce(
             (sum, key) => sum + (counts[key] ?? 0),
@@ -33,8 +33,8 @@ export function AqarTypeGrid({
               <Link
                 to="/aqar/browse"
                 search={{ track, type: card.key }}
-                className={`k-lift group relative block overflow-hidden rounded-2xl ${
-                  wide ? "aspect-[16/8]" : "aspect-[4/3]"
+                className={`k-lift group relative block overflow-hidden rounded-[var(--r-card)] ${
+                  wide ? "aspect-[16/7]" : "aspect-[16/10]"
                 }`}
               >
                 <img
@@ -46,16 +46,15 @@ export function AqarTypeGrid({
                 />
                 {/* تعتيم متدرّج يضمن تباين النص الأبيض 4.5:1 فوق أي صورة. */}
                 <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-                {/* الاسم والعدد في صف واحد: الاسم يُقصّ بدل أن يتراكب مع الشارة. */}
-                <span className="absolute inset-x-3 bottom-2.5 flex flex-row-reverse items-center justify-between gap-2">
-                  <strong className="min-w-0 truncate text-section font-extrabold text-white drop-shadow-md">
+                {/* الاسم في البداية والعدد في النهاية — أسلوب ناضج بلا كبسولات ضخمة. */}
+                <span className="absolute inset-x-2.5 bottom-2 flex items-end justify-between gap-2">
+                  <strong className="min-w-0 truncate text-base font-bold text-white drop-shadow-md">
                     {card.label}
                   </strong>
-                  <span className="shrink-0 rounded-full bg-white/90 px-2.5 py-0.5 text-nav font-bold text-foreground">
+                  <span className="shrink-0 rounded-full bg-black/50 px-2 py-0.5 text-[14px] font-semibold leading-5 text-white">
                     {total.toLocaleString("en-US")}
                   </span>
                 </span>
-
               </Link>
             </li>
           );

@@ -198,14 +198,14 @@ function AqarListingPage() {
         {/* ثلاث بطاقات مزايا بارزة — الدخول، المساحة/النوع، وحالة توثيق المعلن. */}
         <section className="px-4 pt-3">
           <ul className="grid grid-cols-3 gap-2">
-            <li className="rounded-2xl border border-border bg-card p-3 text-center">
+            <li className="rounded-[var(--r-card)] border border-border bg-card p-3 text-center">
               <KeyRound className="mx-auto size-5 text-primary" aria-hidden />
               <strong className="mt-1 block text-desc font-bold text-foreground">
                 {row.deal_track === "daily_rent" ? "دخول ذاتي" : "زيارة بموعد"}
               </strong>
               <span className="block text-nav text-muted-foreground">تنسيق مع المعلن</span>
             </li>
-            <li className="rounded-2xl border border-border bg-card p-3 text-center">
+            <li className="rounded-[var(--r-card)] border border-border bg-card p-3 text-center">
               <Ruler className="mx-auto size-5 text-primary" aria-hidden />
               <strong className="mt-1 block text-desc font-bold text-foreground">
                 {row.area_sqm
@@ -216,7 +216,7 @@ function AqarListingPage() {
                 {row.rooms ? `${row.rooms} غرف` : "المساحة والنوع"}
               </span>
             </li>
-            <li className="rounded-2xl border border-border bg-card p-3 text-center">
+            <li className="rounded-[var(--r-card)] border border-border bg-card p-3 text-center">
               <ShieldCheck className="mx-auto size-5 text-primary" aria-hidden />
               <strong className="mt-1 block text-desc font-bold text-foreground">
                 {provider.data?.verification_status === "verified" ? "معلن موثّق" : "معلن مسجّل"}
@@ -313,7 +313,7 @@ function AqarListingPage() {
         {hasPoint ? (
           <section className="px-4 pt-4">
             <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.location", "الموقع")}</h2>
-            <ClientOnly fallback={<div className="h-56 rounded-2xl border border-border bg-muted" />}>
+            <ClientOnly fallback={<div className="h-56 rounded-[var(--r-card)] border border-border bg-muted" />}>
               <AqarMapView
                 lat={row.latitude as number}
                 lng={row.longitude as number}

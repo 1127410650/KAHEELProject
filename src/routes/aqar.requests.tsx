@@ -86,7 +86,7 @@ function BookingCard({
 
 
   return (
-    <li className="rounded-2xl border border-border bg-card p-4">
+    <li className="rounded-[var(--r-card)] border border-border bg-card p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <span className="k-pill px-3 py-0.5 text-nav font-bold">
@@ -331,8 +331,8 @@ function AqarRequestsPage() {
 
             {bookings.isPending ? (
               <div className="space-y-3">
-                <Skeleton className="h-40 w-full rounded-2xl" />
-                <Skeleton className="h-40 w-full rounded-2xl" />
+                <Skeleton className="h-40 w-full rounded-[var(--r-card)]" />
+                <Skeleton className="h-40 w-full rounded-[var(--r-card)]" />
               </div>
             ) : shown.length === 0 ? (
               <div className="flex flex-col items-center gap-2 py-10 text-center">

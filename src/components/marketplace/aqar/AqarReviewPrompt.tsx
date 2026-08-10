@@ -62,7 +62,7 @@ export function AqarReviewPrompt({ row }: { row: AqarBookingRow }) {
   return (
     <section
       aria-label="تقييم إقامتك"
-      className="mx-4 mt-4 rounded-2xl border border-border bg-card p-4 shadow-sm"
+      className="mx-4 mt-4 rounded-[var(--r-card)] border border-border bg-card p-4 shadow-sm"
     >
       <div className="flex items-start gap-2">
         <Star className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />

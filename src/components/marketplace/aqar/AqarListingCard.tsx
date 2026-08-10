@@ -30,7 +30,7 @@ export function AqarListingCard({
 
   return (
     <article
-      className={`k-surface relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card ${className ?? ""}`}
+      className={`k-surface relative flex flex-col overflow-hidden rounded-[var(--r-card)] border border-border bg-card ${className ?? ""}`}
     >
       <div className="relative aspect-4/3 w-full bg-muted">
         {shown ? (
@@ -80,10 +80,10 @@ export function AqarListingCard({
           aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
           aria-pressed={isFavorite}
           onClick={() => onToggleFavorite(listing.id)}
-          className="absolute end-2 top-2 inline-flex size-11 items-center justify-center rounded-full bg-card/90 text-foreground shadow-sm"
+          className="absolute end-2 top-2 inline-flex size-9 items-center justify-center rounded-full bg-card/90 text-foreground shadow-sm"
         >
           <Heart
-            className={`size-5 ${isFavorite ? "fill-primary text-primary" : ""}`}
+            className={`size-4 ${isFavorite ? "fill-primary text-primary" : ""}`}
             aria-hidden
           />
         </button>
@@ -115,7 +115,7 @@ export function AqarListingCard({
         </p>
         <p className="text-desc text-muted-foreground">{aqarMetaLine(listing)}</p>
         <p className="mt-auto pt-1">
-          <strong className="text-price font-extrabold text-primary">{price.main}</strong>
+          <strong className="text-price font-extrabold text-foreground">{price.main}</strong>
           {price.period ? (
             <span className="text-desc text-muted-foreground"> {price.period}</span>
           ) : null}
