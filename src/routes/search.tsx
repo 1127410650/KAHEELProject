@@ -1028,6 +1028,10 @@ function GenericSearchPage() {
           )}
         </div>
       </div>
+      {locationOpen && (
+        <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />
+      )}
     </MarketShell>
+
   );
 }
