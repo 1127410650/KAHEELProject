@@ -128,9 +128,9 @@ function StripTile({
   const frameClass =
     "grid size-[44px] place-items-center overflow-hidden rounded-full border-2 transition duration-300 sm:size-[50px] lg:size-[54px]";
   const idleFrame =
-    "border-white/75 bg-white shadow-[0_6px_16px_rgb(36_0_70/0.28),inset_0_1px_0_rgb(255_255_255/0.9)] group-hover:-translate-y-0.5";
-  const activeFrame =
-    "border-white bg-[linear-gradient(145deg,#9d4edd,#5a189a)] shadow-[0_8px_22px_rgb(60_9_108/0.42)]";
+    "border-border bg-background shadow-panel group-hover:-translate-y-0.5";
+  const activeFrame = "border-primary bg-accent shadow-panel";
+
 
   const body = (
     <>
