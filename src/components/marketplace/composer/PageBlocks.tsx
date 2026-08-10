@@ -19,6 +19,9 @@ import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTil
 import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
+import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
+import { SyriaPrideStrip } from "@/components/marketplace/home/noon/SyriaPrideStrip";
+import { ExclusiveOffersRail } from "@/components/marketplace/season/ExclusiveOffersRail";
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { shapeDataUri } from "@/lib/mkt-design-library";
 import { slotAlt, slotUrl, useMediaSlots } from "@/lib/mkt-media-slots";
