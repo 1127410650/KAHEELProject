@@ -96,6 +96,9 @@ function CampaignTile({
 }
 
 
+/** بطاقات القسم الافتراضية: تُكمل الإيقاع حين تقل الحملات المُدارة عن أربع. */
+type Slot = { campaign?: LiveCampaign; title: string; href: string; image?: string };
+
 export function CampaignMosaic() {
   const { locale } = useI18n();
   const ar = locale === "ar";
@@ -103,76 +106,47 @@ export function CampaignMosaic() {
   const campaigns = data ?? [];
   const fallbackTitle = ar ? "جينا لخدمتكم" : "Here to serve you";
 
-  // مجموعات متناوبة: واحدة عريضة، ثم اثنتان، ثم واحدة عريضة…
-  const groups: LiveCampaign[][] = [];
-  let cursor = 0;
-  let wide = true;
-  while (cursor < campaigns.length) {
-    const size = wide ? 1 : 2;
-    groups.push(campaigns.slice(cursor, cursor + size));
-    cursor += size;
-    wide = !wide;
-  }
+  const fillers: Slot[] = [
+    { title: fallbackTitle, href: "/search", image: restaurantsImg },
+    { title: ar ? "مقاضي البيت" : "Groceries", href: "/search?domain=product", image: groceriesImg },
+    { title: ar ? "سيارات" : "Cars", href: "/search?category=cars", image: carsImg },
+    {
+      title: ar ? "عقارات للإيجار والبيع" : "Homes to rent and buy",
+      href: "/aqar",
+      image: realEstateImg,
+    },
+  ];
+
+  /* الإيقاع ثابت دائمًا: عريضة ← بطاقتان ← عريضة. الحملات المُدارة تأخذ المواضع
+     أولًا، وما تبقّى يُكمَل ببطاقات أقسام حقيقية بصور — فلا موضع أبيض فارغ ولا
+     إيقاع منقوص ببطاقة واحدة. */
+  const slots: Slot[] = Array.from({ length: 4 }, (_, index) => {
+    const campaign = campaigns[index];
+    const filler = fillers[index]!;
+    return campaign ? { campaign, title: fallbackTitle, href: "/search" } : filler;
+  });
+
+  const tile = (slot: Slot, className: string, key: string) => (
+    <CampaignTile
+      key={key}
+      campaign={slot.campaign}
+      className={className}
+      fallbackTitle={slot.title}
+      fallbackHref={slot.href}
+      {...(slot.image ? { fallbackImage: slot.image } : {})}
+    />
+  );
 
   return (
     <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-2.5">
-      {groups.length === 0 ? (
-        /* لا حملات مُدارة الآن ⇒ نعرض الإيقاع المتفاوت نفسه (عريضة / اثنتان /
-           عريضة) ببطاقات أقسام حقيقية بصور — لا بطاقة بيضاء فارغة. */
-        <>
-          <CampaignTile
-            className={WIDE}
-            fallbackTitle={fallbackTitle}
-            fallbackHref="/search"
-            fallbackImage={restaurantsImg}
-          />
-          <div className="grid grid-cols-2 gap-2.5">
-            <CampaignTile
-              className={HALF}
-              fallbackTitle={ar ? "مقاضي البيت" : "Groceries"}
-              fallbackHref="/search?domain=product"
-              fallbackImage={groceriesImg}
-            />
-            <CampaignTile
-              className={HALF}
-              fallbackTitle={ar ? "سيارات" : "Cars"}
-              fallbackHref="/search?category=cars"
-              fallbackImage={carsImg}
-            />
-          </div>
-          <CampaignTile
-            className={WIDE}
-            fallbackTitle={ar ? "عقارات للإيجار والبيع" : "Homes to rent and buy"}
-            fallbackHref="/aqar"
-            fallbackImage={realEstateImg}
-          />
-        </>
-      ) : (
-
-        groups.map((group, index) =>
-          group.length === 1 ? (
-            <CampaignTile
-              key={group[0]!.id}
-              campaign={group[0]!}
-              className={WIDE}
-              fallbackTitle={fallbackTitle}
-              fallbackHref="/search"
-            />
-          ) : (
-            <div key={`pair-${index}`} className="grid grid-cols-2 gap-2.5">
-              {group.map((campaign) => (
-                <CampaignTile
-                  key={campaign.id}
-                  campaign={campaign}
-                  className={HALF}
-                  fallbackTitle={fallbackTitle}
-                  fallbackHref="/search"
-                />
-              ))}
-            </div>
-          ),
-        )
-      )}
+      {tile(slots[0]!, WIDE, "wide-1")}
+      <div className="grid grid-cols-2 gap-2.5">
+        {tile(slots[1]!, HALF, "half-1")}
+        {tile(slots[2]!, HALF, "half-2")}
+      </div>
+      {tile(slots[3]!, WIDE, "wide-2")}
     </section>
   );
+}
+
 }
