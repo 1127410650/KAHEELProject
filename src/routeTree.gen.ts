@@ -58,6 +58,7 @@ import { Route as AdminTaxonomyRouteImport } from './routes/admin/taxonomy'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
+import { Route as AqarIndexRouteImport } from './routes/aqar.index'
 import { Route as BusinessIndexRouteImport } from './routes/business/index'
 import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
 import { Route as BusinessPartnersRouteImport } from './routes/business/partners'
@@ -360,6 +361,11 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
   path: '/ads/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AqarIndexRoute = AqarIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AqarRoute,
+} as any)
 const BusinessIndexRoute = BusinessIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -652,7 +658,7 @@ export interface FileRoutesByFullPath {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/aqar': typeof AqarRoute
+  '/aqar': typeof AqarRouteWithChildren
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -722,6 +728,7 @@ export interface FileRoutesByFullPath {
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/aqar/': typeof AqarIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -757,7 +764,6 @@ export interface FileRoutesByTo {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/aqar': typeof AqarRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -826,6 +832,7 @@ export interface FileRoutesByTo {
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/aqar': typeof AqarIndexRoute
   '/business': typeof BusinessIndexRoute
   '/services': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -864,7 +871,7 @@ export interface FileRoutesById {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/aqar': typeof AqarRoute
+  '/aqar': typeof AqarRouteWithChildren
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -934,6 +941,7 @@ export interface FileRoutesById {
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/aqar/': typeof AqarIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
@@ -1043,6 +1051,7 @@ export interface FileRouteTypes {
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin/'
+    | '/aqar/'
     | '/business/'
     | '/services/'
     | '/admin/businesses/$id'
@@ -1078,7 +1087,6 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
-    | '/aqar'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -1147,6 +1155,7 @@ export interface FileRouteTypes {
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin'
+    | '/aqar'
     | '/business'
     | '/services'
     | '/admin/businesses/$id'
@@ -1254,6 +1263,7 @@ export interface FileRouteTypes {
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin/'
+    | '/aqar/'
     | '/business/'
     | '/services/'
     | '/admin/businesses_/$id'
@@ -1292,7 +1302,7 @@ export interface RootRouteChildren {
   MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
-  AqarRoute: typeof AqarRoute
+  AqarRoute: typeof AqarRouteWithChildren
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
@@ -1673,6 +1683,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ads/$slug'
       preLoaderRoute: typeof AdsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/aqar/': {
+      id: '/aqar/'
+      path: '/'
+      fullPath: '/aqar/'
+      preLoaderRoute: typeof AqarIndexRouteImport
+      parentRoute: typeof AqarRoute
     }
     '/business/': {
       id: '/business/'
@@ -2222,6 +2239,16 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
 const MyRouteRouteWithChildren =
   MyRouteRoute._addFileChildren(MyRouteRouteChildren)
 
+interface AqarRouteChildren {
+  AqarIndexRoute: typeof AqarIndexRoute
+}
+
+const AqarRouteChildren: AqarRouteChildren = {
+  AqarIndexRoute: AqarIndexRoute,
+}
+
+const AqarRouteWithChildren = AqarRoute._addFileChildren(AqarRouteChildren)
+
 interface ServicesRouteChildren {
   ServicesIndexRoute: typeof ServicesIndexRoute
   ServicesSlugItemIdBookRoute: typeof ServicesSlugItemIdBookRoute
@@ -2243,7 +2270,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
-  AqarRoute: AqarRoute,
+  AqarRoute: AqarRouteWithChildren,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
