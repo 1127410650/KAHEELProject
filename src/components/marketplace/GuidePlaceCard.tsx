@@ -65,7 +65,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
    */
   const message = outreachMessage({ name: place.name_ar, city: place.city });
   const rawWhatsapp = officialWhatsapp(place);
-  const whatsapp = outreachWhatsappHref(rawWhatsapp, message) ?? whatsappHref(place);
+  const whatsapp = rawWhatsapp ? outreachWhatsappHref(rawWhatsapp, message) : null;
 
   const [previous, setPrevious] = useState<OutreachRecord | null>(null);
   useEffect(() => {
