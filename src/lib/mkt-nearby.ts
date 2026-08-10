@@ -166,6 +166,17 @@ export interface NearbyPage {
 
 type NearbyRow = { id: string; distance_m: number | null };
 
+/**
+ * الوسائط الاختيارية تُحذف بدل تمريرها `undefined`: دوال القاعدة تعتمد قيمها
+ * الافتراضية، والمشروع يمنع الخصائص الاختيارية الحاملة لـ `undefined`.
+ */
+function compact<T extends Record<string, unknown>>(input: T): T {
+  for (const key of Object.keys(input)) {
+    if (input[key] === undefined) delete (input as Record<string, unknown>)[key];
+  }
+  return input;
+}
+
 function toPage(rows: NearbyRow[] | null | undefined): NearbyPage {
   const list = rows ?? [];
   const distances: Record<string, number | null> = {};
@@ -195,7 +206,7 @@ export interface NearbyListingArgs {
 }
 
 export async function nearbyListingIds(args: NearbyListingArgs): Promise<NearbyPage> {
-  const { data, error } = await supabase.rpc("mkt_nearby_listings", {
+  const { data, error } = await supabase.rpc("mkt_nearby_listings", compact({
     _lat: args.lat,
     _lng: args.lng,
     _radius_km: args.radiusKm ?? undefined,
@@ -214,7 +225,7 @@ export async function nearbyListingIds(args: NearbyListingArgs): Promise<NearbyP
     _with_image: args.withImage ?? false,
     _has_price: args.hasPrice ?? false,
     _featured_only: args.featuredOnly ?? false,
-  });
+  }) as never);
   if (error) throw error;
   return toPage(data as unknown as NearbyRow[]);
 }
@@ -232,7 +243,7 @@ export async function nearbyGuidePlaceIds(args: {
   subcategory?: string | undefined;
   q?: string | undefined;
 }): Promise<NearbyPage> {
-  const { data, error } = await supabase.rpc("mkt_nearby_guide_places", {
+  const { data, error } = await supabase.rpc("mkt_nearby_guide_places", compact({
     _lat: args.lat,
     _lng: args.lng,
     _radius_km: args.radiusKm ?? undefined,
@@ -244,7 +255,7 @@ export async function nearbyGuidePlaceIds(args: {
     _category: args.category ?? undefined,
     _subcategory: args.subcategory ?? undefined,
     _q: sanitizeTerm(args.q),
-  });
+  }) as never);
   if (error) throw error;
   return toPage(data as unknown as NearbyRow[]);
 }
@@ -260,7 +271,7 @@ export async function nearbyStorefrontIds(args: {
   storeType?: string | undefined;
   q?: string | undefined;
 }): Promise<NearbyPage> {
-  const { data, error } = await supabase.rpc("mkt_nearby_storefronts", {
+  const { data, error } = await supabase.rpc("mkt_nearby_storefronts", compact({
     _lat: args.lat,
     _lng: args.lng,
     _radius_km: args.radiusKm ?? undefined,
@@ -270,7 +281,7 @@ export async function nearbyStorefrontIds(args: {
     _city_id: args.cityId ?? undefined,
     _store_type: args.storeType ?? undefined,
     _q: sanitizeTerm(args.q),
-  });
+  }) as never);
   if (error) throw error;
   return toPage(data as unknown as NearbyRow[]);
 }
@@ -285,7 +296,7 @@ export async function nearbyDirectoryIds(args: {
   governorate?: string | undefined;
   q?: string | undefined;
 }): Promise<NearbyPage> {
-  const { data, error } = await supabase.rpc("mkt_nearby_directory", {
+  const { data, error } = await supabase.rpc("mkt_nearby_directory", compact({
     _lat: args.lat,
     _lng: args.lng,
     _radius_km: args.radiusKm ?? undefined,
@@ -294,7 +305,7 @@ export async function nearbyDirectoryIds(args: {
     _sector: args.sector ?? undefined,
     _governorate: args.governorate ?? undefined,
     _q: sanitizeTerm(args.q),
-  });
+  }) as never);
   if (error) throw error;
   return toPage(data as unknown as NearbyRow[]);
 }
