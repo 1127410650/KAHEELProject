@@ -51,6 +51,7 @@ import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminMascotsRouteImport } from './routes/admin/mascots'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
+import { Route as AdminPricingRouteImport } from './routes/admin/pricing'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
@@ -332,6 +333,11 @@ const AdminModerationRoute = AdminModerationRouteImport.update({
 const AdminMyWorkRoute = AdminMyWorkRouteImport.update({
   id: '/my-work',
   path: '/my-work',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
@@ -741,6 +747,7 @@ export interface FileRoutesByFullPath {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -853,6 +860,7 @@ export interface FileRoutesByTo {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -970,6 +978,7 @@ export interface FileRoutesById {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -1088,6 +1097,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1200,6 +1210,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1316,6 +1327,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1729,6 +1741,13 @@ declare module '@tanstack/react-router' {
       path: '/my-work'
       fullPath: '/admin/my-work'
       preLoaderRoute: typeof AdminMyWorkRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/roles': {
@@ -2258,6 +2277,7 @@ interface AdminRouteRouteChildren {
   AdminMascotsRoute: typeof AdminMascotsRoute
   AdminModerationRoute: typeof AdminModerationRoute
   AdminMyWorkRoute: typeof AdminMyWorkRoute
+  AdminPricingRoute: typeof AdminPricingRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -2298,6 +2318,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminMascotsRoute: AdminMascotsRoute,
   AdminModerationRoute: AdminModerationRoute,
   AdminMyWorkRoute: AdminMyWorkRoute,
+  AdminPricingRoute: AdminPricingRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
