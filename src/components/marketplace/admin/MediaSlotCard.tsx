@@ -176,16 +176,17 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
               </select>
             </label>
             <label className="text-desc font-bold text-foreground">
-              الشفافية <span className="num">{Math.round(stamp.opacity * 100)}%</span>
+              الشفافية <span className="num">{stamp.opacity}%</span>
               <input
                 type="range"
-                min={20}
+                min={30}
                 max={100}
-                value={Math.round(stamp.opacity * 100)}
-                onChange={(event) => setStampField("opacity", Number(event.target.value) / 100)}
+                value={stamp.opacity}
+                onChange={(event) => setStampField("opacity", Number(event.target.value))}
                 className="mt-2 w-full accent-primary"
               />
             </label>
+
             <label
               className="flex items-center gap-2 text-desc font-bold text-foreground sm:col-span-2"
               style={{ minHeight: 44 }}
