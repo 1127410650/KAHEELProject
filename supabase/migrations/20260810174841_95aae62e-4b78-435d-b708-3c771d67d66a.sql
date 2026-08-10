@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS public.mkt_qa_rls_probe();

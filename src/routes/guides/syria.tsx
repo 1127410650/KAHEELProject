@@ -255,7 +255,7 @@ function SyriaGuidePage() {
                   <ChevronRight className="size-3.5" aria-hidden />
                   السابق
                 </button>
-                <span className="rounded-xl bg-market-navy px-[var(--sp-4)] py-2 text-desc font-black text-white">
+                <span className="rounded-xl bg-market-navy px-[var(--sp-4)] py-2 text-desc font-black text-primary-foreground">
                   {page + 1} / {pages}
                 </span>
                 <button

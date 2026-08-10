@@ -122,7 +122,7 @@ export function CallOverlay() {
         type="button"
         onClick={() => setMinimized(false)}
         aria-label={t("market.call.returnToCall")}
-        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#8A4FFF,#C3ABFF)] px-3 text-desc font-bold text-white shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
+        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#8A4FFF,#C3ABFF)] px-3 text-desc font-bold text-primary-foreground shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
       >
         <Phone className="size-3.5 shrink-0" aria-hidden />
         <span className="max-w-[45%] truncate">{call.peerName || t("market.call.title")}</span>
@@ -140,19 +140,19 @@ export function CallOverlay() {
       role="dialog"
       aria-modal="true"
       aria-label={t("market.call.title")}
-      className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[radial-gradient(circle_at_22%_-10%,rgb(195_171_255/0.4),transparent_46%),linear-gradient(165deg,#8A4FFF_0%,#C3ABFF_100%)] text-white animate-fade-in"
+      className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[radial-gradient(circle_at_22%_-10%,rgb(195_171_255/0.4),transparent_46%),linear-gradient(165deg,#8A4FFF_0%,#C3ABFF_100%)] text-primary-foreground animate-fade-in"
     >
       <div className="flex items-center justify-between px-3 pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <button
           type="button"
           onClick={() => setMinimized(true)}
           aria-label={t("market.call.minimize")}
-          className="inline-flex h-11 items-center gap-[var(--sp-2)] rounded-full bg-white/12 px-4 text-desc font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
+          className="inline-flex h-11 items-center gap-[var(--sp-2)] rounded-full bg-white/12 px-4 text-desc font-bold text-primary-foreground backdrop-blur-sm transition hover:bg-white/20"
         >
           <ChevronDown className="size-4" aria-hidden />
           {t("market.call.minimize")}
         </button>
-        <p className="text-desc font-semibold text-white/70">
+        <p className="text-desc font-semibold text-primary-foreground/70">
           {call.role === "caller" ? t("market.call.outgoing") : t("market.call.incoming")}
         </p>
       </div>
@@ -176,9 +176,9 @@ export function CallOverlay() {
           {call.peerName || t("market.call.title")}
         </h2>
         {call.listingTitle && (
-          <p className="max-w-[30ch] truncate text-desc text-white/70">{call.listingTitle}</p>
+          <p className="max-w-[30ch] truncate text-desc text-primary-foreground/70">{call.listingTitle}</p>
         )}
-        <p className="text-base font-semibold text-white/90 tabular-nums" aria-live="polite">
+        <p className="text-base font-semibold text-primary-foreground/90 tabular-nums" aria-live="polite">
           {stateLine}
         </p>
 
@@ -209,7 +209,7 @@ export function CallOverlay() {
               </Button>
             </div>
             {!phone && (
-              <p className="mt-2 text-desc text-white/70">{t("market.call.fallback.noPhone")}</p>
+              <p className="mt-2 text-desc text-primary-foreground/70">{t("market.call.fallback.noPhone")}</p>
             )}
           </div>
         )}
@@ -251,7 +251,7 @@ export function CallOverlay() {
             >
               <span
                 className={`grid size-14 place-items-center rounded-full border border-white/25 transition active:scale-95 ${
-                  call.muted ? "bg-white text-brand-900" : "bg-white/12 text-white"
+                  call.muted ? "bg-white text-brand-900" : "bg-white/12 text-primary-foreground"
                 }`}
               >
                 {call.muted ? (
@@ -282,7 +282,7 @@ export function CallOverlay() {
             >
               <span
                 className={`grid size-14 place-items-center rounded-full border border-white/25 transition active:scale-95 ${
-                  call.speaker ? "bg-white text-brand-900" : "bg-white/12 text-white"
+                  call.speaker ? "bg-white text-brand-900" : "bg-white/12 text-primary-foreground"
                 }`}
               >
                 {call.speaker ? (
@@ -308,13 +308,13 @@ export function CallOverlay() {
           {live && (
             <button
               type="button"
-              className="text-desc text-white/70 underline"
+              className="text-desc text-primary-foreground/70 underline"
               onClick={() => void stopReceiving()}
             >
               {t("market.call.stopReceiving")}
             </button>
           )}
-          <p className="text-center text-desc text-white/65">{t("market.call.noPhoneHint")}</p>
+          <p className="text-center text-desc text-primary-foreground/65">{t("market.call.noPhoneHint")}</p>
         </div>
       </div>
     </div>

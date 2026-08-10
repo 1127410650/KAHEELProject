@@ -218,7 +218,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
               />
             )}
             <div className="relative z-10 mx-auto flex min-h-[132px] w-[78%] max-w-[520px] flex-col items-center justify-center rounded-[20px] bg-white/78 px-[var(--page-x)] py-2 text-center backdrop-blur-[2px] sm:min-h-[172px] sm:w-[52%]">
-              <span className="rounded-full bg-brand-950 px-3 py-1 text-desc font-bold text-white shadow-sm sm:text-desc">
+              <span className="rounded-full bg-brand-950 px-3 py-1 text-desc font-bold text-primary-foreground shadow-sm sm:text-desc">
                 {ar ? slide.badgeAr : slide.badgeEn}
               </span>
               {slideIndex === 0 ? (
@@ -233,7 +233,7 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
               <p className="mt-1 line-clamp-2 text-desc font-bold text-brand-800 min-[380px]:text-desc sm:text-desc">
                 {ar ? slide.descAr : slide.descEn}
               </p>
-              <span className="mt-[var(--sp-2)] inline-flex min-h-9 items-center rounded-full bg-brand-900 px-4 text-desc font-bold text-white shadow-[0_8px_20px_rgb(138_79_255/0.24)] sm:mt-2 sm:min-h-10 sm:text-desc">
+              <span className="mt-[var(--sp-2)] inline-flex min-h-9 items-center rounded-full bg-brand-900 px-4 text-desc font-bold text-primary-foreground shadow-[0_8px_20px_rgb(138_79_255/0.24)] sm:mt-2 sm:min-h-10 sm:text-desc">
                 {t("market.homeV2.hero.cta")}
                 <ChevronLeft className="ms-1 size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
               </span>

@@ -179,12 +179,12 @@ function ProviderOperationsPage() {
   return (
     <DashboardShell title={locale === "ar" ? "مركز التشغيل" : "Operations center"}>
       <div className="space-y-5">
-        <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
+        <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-primary-foreground shadow-xl">
           <CardContent className="space-y-5 p-5 sm:p-[var(--sp-8)]">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="bg-white/15 text-white hover:bg-white/15">
+                  <Badge className="bg-white/15 text-primary-foreground hover:bg-white/15">
                     {data.operational_kind === "service_provider"
                       ? locale === "ar"
                         ? "مقدم خدمة"
@@ -200,7 +200,7 @@ function ProviderOperationsPage() {
                 <h1 className="text-page mt-3 font-black sm:text-3xl">
                   {locale === "ar" ? "كل أعمالك من مكان واحد" : "Run everything from one place"}
                 </h1>
-                <p className="mt-2 max-w-2xl text-sm leading-7 text-white/70">
+                <p className="mt-2 max-w-2xl text-sm leading-7 text-primary-foreground/70">
                   {locale === "ar"
                     ? "الطلبات والمواعيد والكتالوج والتسويق والترويج تظهر بحسب نوع حسابك المقبول فقط."
                     : "Orders, bookings, catalog, marketing and promotion appear only when granted to the approved account type."}
@@ -214,7 +214,7 @@ function ProviderOperationsPage() {
                   key={String(label)}
                   className="rounded-[var(--r-card)] border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
-                  <p className="text-desc text-white/60">{label}</p>
+                  <p className="text-desc text-primary-foreground/60">{label}</p>
                   <p className="mt-1 text-xl font-black tabular-nums">{value}</p>
                 </div>
               ))}

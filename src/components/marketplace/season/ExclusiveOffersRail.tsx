@@ -63,7 +63,7 @@ export function ExclusiveOffersRail() {
               <Link
                 key={offer.id}
                 to={offer.click_url}
-                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-[var(--r-card)] border border-brand-400/30 bg-brand-900 p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
+                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-[var(--r-card)] border border-brand-400/30 bg-brand-900 p-3 text-start text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
               >
                 {offer.imageUrl ? (
                   <img
@@ -85,7 +85,7 @@ export function ExclusiveOffersRail() {
                   ) : null}
                   <span className="block truncate text-sm font-black">{title}</span>
                   {subtitle ? (
-                    <span className="block line-clamp-2 text-desc text-white/80">{subtitle}</span>
+                    <span className="block line-clamp-2 text-desc text-primary-foreground/80">{subtitle}</span>
                   ) : null}
                   <span className="block pt-0.5 text-desc font-bold text-market-gold">{cta} ›</span>
                 </span>
