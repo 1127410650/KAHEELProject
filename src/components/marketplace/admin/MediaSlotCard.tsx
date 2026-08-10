@@ -6,12 +6,32 @@
  * إرسالها (١٦٠٠px · WebP · ≤٣٠٠KB)، والفيديو رابط خارجي فقط حاليًا.
  */
 import { useRef, useState } from "react";
-import { Eye, EyeOff, ImagePlus, Link2, RefreshCw, Stamp, Trash2, Upload } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  ImagePlus,
+  Link2,
+  RefreshCw,
+  Sparkles,
+  Stamp,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { readableSize } from "@/lib/media-compress";
+
 import {
   BRAND_STAMP_DEFAULTS,
   STAMP_COLORS,
