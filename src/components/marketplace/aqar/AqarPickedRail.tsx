@@ -27,14 +27,14 @@ export function AqarPickedRail({
   emptyText?: string;
 }) {
   return (
-    <section className="mt-5">
-      <div className="mb-2.5 flex items-center justify-between gap-2 px-4">
-        <h2 className="text-lg font-bold text-foreground">{title}</h2>
+    <section className="k-section">
+      <div className="k-gutter flex items-center justify-between gap-[var(--sp-2)] pb-[var(--sp-3)]">
+        <h2 className="k-section-title mb-0">{title}</h2>
         {moreTrack && listings.length > 0 ? (
           <Link
             to="/aqar/browse"
             search={{ track: moreTrack }}
-            className="inline-flex min-h-[44px] items-center gap-0.5 text-desc font-bold text-primary"
+            className="inline-flex min-h-11 items-center gap-[var(--sp-1)] text-[14px] font-bold text-primary"
           >
             الكل
             <ChevronLeft className="size-4" aria-hidden />
@@ -43,9 +43,9 @@ export function AqarPickedRail({
       </div>
 
       {listings.length === 0 ? (
-        <p className="px-4 text-desc text-muted-foreground">{emptyText}</p>
+        <p className="k-gutter text-[14px] font-medium text-muted-foreground">{emptyText}</p>
       ) : (
-        <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="k-rail flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {listings.map((listing) => {
             const price = formatAqarPrice(listing, usdRate);
             const rating = aqarDisplayRating(listing.id);
@@ -54,7 +54,7 @@ export function AqarPickedRail({
             return (
               <li key={listing.id} className="w-[62%] max-w-[240px] shrink-0 snap-start">
                 <Link to="/aqar/$id" params={{ id: listing.id }} className="block">
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--r-img)] bg-muted">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[10px] bg-muted">
                     {cover ? (
                       <img
                         src={cover}
@@ -84,20 +84,20 @@ export function AqarPickedRail({
                       />
                     </button>
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1 text-sm">
+                  <p className="mt-[var(--sp-2)] flex items-center gap-[var(--sp-1)] text-[14px] font-medium leading-[1.6]">
                     <Star className="size-3.5 fill-current text-foreground" aria-hidden />
                     <b className="font-bold text-foreground">{rating.score}</b>
                     <span className="text-muted-foreground">({rating.count})</span>
                   </p>
-                  <p className="truncate text-[15px] font-bold text-foreground">{listing.title}</p>
-                  <p className="truncate text-sm text-muted-foreground">
+                  <p className="mt-[var(--sp-1)] truncate text-[15px] font-bold leading-[1.3] text-foreground">{listing.title}</p>
+                  <p className="mt-[var(--sp-1)] truncate text-[14px] font-medium leading-[1.6] text-muted-foreground">
                     {listing.city}
                     {listing.district ? ` - ${listing.district}` : ""}
                   </p>
-                  <p className="text-[15px] font-extrabold text-foreground">
+                  <p className="mt-[var(--sp-2)] text-[16px] font-extrabold leading-[1.3] text-foreground">
                     {price.main}
                     {price.period ? (
-                      <span className="text-sm font-semibold text-muted-foreground">
+                      <span className="text-[14px] font-medium text-muted-foreground">
                         {" "}
                         {price.period}
                       </span>
