@@ -2636,8 +2636,8 @@ body:has(.market-surface) {
   width: 24px;
   height: 24px;
   border-radius: 9999px 9999px 9999px 9999px;
-  background: linear-gradient(160deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.82) 100%);
-  border: 2px solid hsl(var(--background));
+  background: linear-gradient(160deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 82%, black) 100%);
+  border: 2px solid var(--background);
 }
 .mkt-pin::after {
   content: "";
@@ -2646,7 +2646,7 @@ body:has(.market-surface) {
   top: 21px;
   width: 6px;
   height: 17px;
-  background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.35) 100%);
+  background: linear-gradient(180deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 45%, transparent) 100%);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 .mkt-pin-dot {
@@ -2656,9 +2656,9 @@ body:has(.market-surface) {
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background: hsl(var(--background));
+  background: var(--background);
 }
 .leaflet-container {
   font-family: inherit;
-  background: hsl(var(--secondary));
+  background: var(--secondary);
 }
