@@ -53,7 +53,7 @@ export function FeaturedGuideStrip() {
             <span className="flex items-center gap-1.5 truncate text-[10.5px] font-bold text-muted-foreground">
               {row.rating != null && (row.rating_total ?? 0) > 0 ? (
                 <span className="inline-flex items-center gap-0.5 text-foreground">
-                  <Star className="size-3 fill-amber-400 text-amber-400" aria-hidden />
+                  <Star className="size-3 fill-gold text-gold" aria-hidden />
                   {row.rating.toFixed(1)}
                 </span>
               ) : null}
