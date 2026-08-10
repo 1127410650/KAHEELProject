@@ -33,20 +33,20 @@ export function ExclusiveOffersRail() {
       aria-labelledby="exclusive-offers-title"
       style={{ height: RAIL_HEIGHT }}
       /* بطاقة موحّدة كبقية الأقسام؛ التنوّع اللوني يأتي من صور العروض نفسها. */
-      className="k-surface relative isolate overflow-hidden p-4 text-[#240046]"
+      className="k-surface relative isolate overflow-hidden p-4 text-brand-950"
     >
       <SeasonalLayer placement="exclusive" showMascot={false} />
 
       <div className="relative z-10">
         <header className="flex items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c]">
+          <span className="grid size-9 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900">
             <Sparkles className="size-5" aria-hidden />
           </span>
           <div className="min-w-0">
             <h2 id="exclusive-offers-title" className="k-h2">
               {ar ? "عروض حصرية" : "Exclusive offers"}
             </h2>
-            <p className="text-[11px] text-[#5a189a]">
+            <p className="text-[11px] text-brand-800">
               {ar ? "مختارة بعناية من كَحيل" : "Hand-picked by Kaheel"}
             </p>
           </div>
@@ -63,7 +63,7 @@ export function ExclusiveOffersRail() {
               <Link
                 key={offer.id}
                 to={offer.click_url}
-                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-[#c77dff]/30 bg-[#3c096c] p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
+                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-brand-400/30 bg-brand-900 p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
               >
                 {offer.imageUrl ? (
                   <img
@@ -79,7 +79,7 @@ export function ExclusiveOffersRail() {
                 <span className="absolute inset-0 bg-[linear-gradient(180deg,rgb(36_0_70/0.25),rgb(36_0_70/0.82))]" />
                 <span className="relative z-10 space-y-1">
                   {badge ? (
-                    <span className="inline-block rounded-full bg-market-gold/90 px-2 py-0.5 text-[10px] font-black text-[#240046]">
+                    <span className="inline-block rounded-full bg-market-gold/90 px-2 py-0.5 text-[10px] font-black text-brand-950">
                       {badge}
                     </span>
                   ) : null}

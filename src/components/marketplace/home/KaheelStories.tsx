@@ -48,7 +48,7 @@ export function KaheelStories() {
               <button
                 type="button"
                 onClick={() => setOpenIndex(index)}
-                className="k-press flex w-[86px] flex-col items-center gap-1.5 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
+                className="k-press flex w-[86px] flex-col items-center gap-1.5 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
               >
                 <span
                   className="grid size-[66px] place-items-center rounded-full p-[3px]"
@@ -70,7 +70,7 @@ export function KaheelStories() {
                     />
                   </span>
                 </span>
-                <span className="line-clamp-2 min-h-[26px] w-full text-center text-[10px] font-bold leading-[13px] text-[#3c096c]">
+                <span className="line-clamp-2 min-h-[26px] w-full text-center text-[10px] font-bold leading-[13px] text-brand-900">
                   {ar ? story.title_ar : story.title_en}
                 </span>
               </button>
@@ -284,7 +284,7 @@ function StoryViewer({
           <button
             type="button"
             onClick={openTarget}
-            className="k-press mt-1 inline-flex min-h-11 items-center rounded-full bg-white px-6 text-sm font-black text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="k-press mt-1 inline-flex min-h-11 items-center rounded-full bg-white px-6 text-sm font-black text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             {(ar ? story.cta_ar : story.cta_en) || (ar ? "اذهب للعرض" : "Go to the offer")}
           </button>

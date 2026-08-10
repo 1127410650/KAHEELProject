@@ -42,7 +42,7 @@ function KidsWorldPage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-4 py-6">
-        <header className="rounded-3xl bg-[#f6f0ff] p-5 dark:bg-[#2a1f3d]">
+        <header className="rounded-3xl bg-brand-50 p-5 dark:bg-brand-950">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-[11px] font-bold text-primary">أطفال · مواليد · ألعاب</p>

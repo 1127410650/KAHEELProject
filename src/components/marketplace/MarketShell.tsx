@@ -173,7 +173,7 @@ export function MarketHeader({
               <button
                 type="button"
                 onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-[#e0aaff] outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-brand-300 outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
@@ -190,7 +190,7 @@ export function MarketHeader({
         {home && (
           <nav
             aria-label={t("market.nav.menu")}
-            className="border-t border-white/12 bg-[#240046]/92"
+            className="border-t border-white/12 bg-brand-950/92"
           >
             <div className="mx-auto flex min-h-[40px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
               {[
@@ -206,8 +206,8 @@ export function MarketHeader({
                   href={href}
                   className={
                     index === 0
-                      ? "inline-flex min-h-8 shrink-0 items-center rounded-full bg-white px-4 text-[11px] font-black text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
-                      : "inline-flex min-h-8 shrink-0 items-center rounded-full px-3.5 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#e0aaff] sm:text-xs"
+                      ? "inline-flex min-h-8 shrink-0 items-center rounded-full bg-white px-4 text-[11px] font-black text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
+                      : "inline-flex min-h-8 shrink-0 items-center rounded-full px-3.5 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
                   }
                 >
                   {label}
@@ -218,7 +218,7 @@ export function MarketHeader({
         )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
-          <div className="border-t border-white/14 bg-[#e0aaff] px-3 py-1 text-center text-[11px] font-medium text-[#240046] sm:text-xs">
+          <div className="border-t border-white/14 bg-brand-300 px-3 py-1 text-center text-[11px] font-medium text-brand-950 sm:text-xs">
             {t("market.offlineNotice")}
           </div>
         )}
@@ -334,7 +334,7 @@ export function MarketBottomNav() {
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
       data-auth={authenticated ? "member" : "guest"}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#c77dff]/40 bg-white/94 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-1px_0_rgb(199_125_255/0.3),0_-6px_16px_-12px_rgb(60_9_108/0.28)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-brand-400/40 bg-white/94 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-1px_0_rgb(199_125_255/0.3),0_-6px_16px_-12px_rgb(60_9_108/0.28)] backdrop-blur-xl lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch px-1">
         {items.map((item) => {

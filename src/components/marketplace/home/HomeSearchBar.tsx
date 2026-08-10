@@ -55,7 +55,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
 
   return (
     <div
-      className="k-surface flex min-h-11 overflow-hidden rounded-2xl focus-within:border-[#9d4edd]/60 focus-within:ring-2 focus-within:ring-[#7b2cbf]/30 sm:min-h-12"
+      className="k-surface flex min-h-11 overflow-hidden rounded-2xl focus-within:border-brand-600/60 focus-within:ring-2 focus-within:ring-brand-700/30 sm:min-h-12"
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
@@ -63,9 +63,9 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
         to="/search"
         search={{}}
         aria-label={label}
-        className="flex min-w-0 flex-1 items-center gap-2.5 px-3.5 text-[#5a189a] outline-none"
+        className="flex min-w-0 flex-1 items-center gap-2.5 px-3.5 text-brand-800 outline-none"
       >
-        <Search className="size-[18px] shrink-0 text-[#3c096c]" aria-hidden />
+        <Search className="size-[18px] shrink-0 text-brand-900" aria-hidden />
         {/* ارتفاع ثابت للسطر: النص يتبدّل داخله بلا أي تحرّك للشريط */}
         <span className="relative h-[18px] min-w-0 flex-1 overflow-hidden">
           <span
@@ -81,7 +81,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
         search={{ filters: 1 }}
         aria-label={detailedLabel}
         title={detailedLabel}
-        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-xl bg-[linear-gradient(140deg,#7b2cbf,#5a189a)] px-2.5 text-[11px] font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
+        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-xl bg-[linear-gradient(140deg,#7b2cbf,#5a189a)] px-2.5 text-[11px] font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
       >
         <SlidersHorizontal className="size-4" aria-hidden />
         <span className="hidden sm:inline">{detailedLabel}</span>

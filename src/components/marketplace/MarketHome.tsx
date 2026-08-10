@@ -214,7 +214,7 @@ export function MarketHome() {
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
-    <div className="k-page-surface bg-white pb-5 text-[#240046]">
+    <div className="k-page-surface bg-white pb-5 text-brand-950">
       {/* One rhythm for the whole page: the same vertical gap between every
           section, so no block reads as louder than its neighbours. */}
       <div className="mx-auto w-full max-w-[1240px] space-y-7 px-3 pb-3 pt-3 sm:space-y-10 sm:px-5 lg:px-8">
@@ -293,7 +293,7 @@ export function MarketHome() {
                   className={
                     featuredCategory === slug
                       ? "k-press min-h-11 shrink-0 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white shadow-[0_8px_18px_-8px_rgb(60_9_108/0.7)]"
-                      : "k-press min-h-11 shrink-0 rounded-full border border-[#c77dff]/35 bg-white px-5 text-xs font-bold text-[#5a189a] hover:border-[#9d4edd]/50 hover:bg-[#e0aaff]/22"
+                      : "k-press min-h-11 shrink-0 rounded-full border border-brand-400/35 bg-white px-5 text-xs font-bold text-brand-800 hover:border-brand-600/50 hover:bg-brand-300/22"
                   }
                 >
                   {t(`market.homeV2.filters.${key}` as HomeKey)}
@@ -374,24 +374,24 @@ function LiveDemoEntry() {
   return (
     <Link
       to="/demo"
-      className="k-surface k-lift group relative flex min-h-[112px] overflow-hidden px-4 py-4 text-[#240046] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:min-h-[124px] sm:px-6"
+      className="k-surface k-lift group relative flex min-h-[112px] overflow-hidden px-4 py-4 text-brand-950 outline-none focus-visible:ring-2 focus-visible:ring-brand-700 sm:min-h-[124px] sm:px-6"
     >
-      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-[#c77dff]/20 blur-3xl" />
-      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-[#e0aaff]/22 blur-3xl" />
+      <div className="absolute -end-10 -top-16 size-44 rounded-full bg-brand-400/20 blur-3xl" />
+      <div className="absolute -bottom-20 start-[35%] size-40 rounded-full bg-brand-300/22 blur-3xl" />
       <div className="relative flex w-full items-center gap-3 sm:gap-5">
         <DemoParcelScene scene={copy.scene} />
         <span className="min-w-0 flex-1">
-          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-[#7b2cbf] sm:text-[10px]">
-            <span className="size-1.5 rounded-full bg-[#f59e0b] motion-safe:animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-brand-700 sm:text-[10px]">
+            <span className="size-1.5 rounded-full bg-gold motion-safe:animate-pulse" />
             {locale === "ar" ? "بيئة تجريبية حيّة" : "Live demo environment"}
           </span>
           <strong className="mt-1 block text-base font-black sm:text-xl">
             {ar ? copy.titleAr : copy.titleEn}
           </strong>
-          <span className="mt-0.5 block text-[10px] font-bold text-[#5a189a] sm:text-sm">
+          <span className="mt-0.5 block text-[10px] font-bold text-brand-800 sm:text-sm">
             {ar ? copy.subtitleAr : copy.subtitleEn}
           </span>
-          <span className="mt-1 block line-clamp-1 text-[9px] text-[#5a189a]/80 sm:text-xs">
+          <span className="mt-1 block line-clamp-1 text-[9px] text-brand-800/80 sm:text-xs">
             {ar
               ? "جرّب كل أنواع الحسابات: عميل، متجر، عيادة، حلاق، محطة، ناقل، وإدارة المنصة"
               : "Try every account type: customer, store, clinic, barber, station, carrier, operations"}
@@ -423,7 +423,7 @@ function MainFieldCard({
       href={field.href}
       data-field-card
       style={{ "--k-step": step } as React.CSSProperties}
-      className={`group k-press k-rise relative isolate flex min-w-0 overflow-hidden rounded-[22px] border border-white/55 shadow-[0_1px_0_rgb(255_255_255/0.5)_inset,0_16px_34px_-18px_rgb(60_9_108/0.55)] outline-none ring-1 ring-[#c77dff]/25 focus-visible:ring-2 focus-visible:ring-[#7b2cbf] ${field.span} ${field.ratio}`}
+      className={`group k-press k-rise relative isolate flex min-w-0 overflow-hidden rounded-[22px] border border-white/55 shadow-[0_1px_0_rgb(255_255_255/0.5)_inset,0_16px_34px_-18px_rgb(60_9_108/0.55)] outline-none ring-1 ring-brand-400/25 focus-visible:ring-2 focus-visible:ring-brand-700 ${field.span} ${field.ratio}`}
     >
       {/* The photo IS the card: it fills the reserved aspect box, so the colour
           of each tile comes from real content instead of one flat purple. */}
@@ -481,13 +481,13 @@ function BenefitsStrip() {
         <div
           key={ar}
           className={`flex min-h-[68px] items-center gap-2.5 px-3 py-3 sm:min-h-[76px] sm:px-4 ${
-            index % 2 ? "border-s border-[#c77dff]/25" : ""
-          } ${index >= 2 ? "border-t border-[#c77dff]/25 sm:border-t-0" : ""}`}
+            index % 2 ? "border-s border-brand-400/25" : ""
+          } ${index >= 2 ? "border-t border-brand-400/25 sm:border-t-0" : ""}`}
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_4px_10px_-4px_rgb(60_9_108/0.35)]">
+          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900 shadow-[inset_0_1px_0_#fff,0_4px_10px_-4px_rgb(60_9_108/0.35)]">
             <Icon className="size-5" aria-hidden />
           </span>
-          <strong className="text-[11px] font-black text-[#240046] sm:text-xs">
+          <strong className="text-[11px] font-black text-brand-950 sm:text-xs">
             {locale === "ar" ? ar : en}
           </strong>
         </div>
@@ -511,10 +511,10 @@ function SecondaryServices() {
           <a
             key={key}
             href={href}
-            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[10px] font-bold text-[#3c096c] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:w-auto"
+            className="k-press group flex w-[70px] shrink-0 flex-col items-center justify-start gap-1.5 rounded-2xl px-1 py-1 text-center text-[10px] font-bold text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-brand-700 sm:w-auto"
           >
             {/* One shared chip for every tile: the labels differentiate them, not 12 tints. */}
-            <span className="grid size-14 place-items-center rounded-full border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16">
+            <span className="grid size-14 place-items-center rounded-full border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900 shadow-[inset_0_1px_0_#fff,0_0_0_1.5px_rgb(199_125_255/0.34),0_8px_18px_-8px_rgb(60_9_108/0.45)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:size-16">
               <Icon className="size-5 sm:size-6" aria-hidden />
             </span>
             <span className="flex min-h-8 items-start justify-center leading-4">
@@ -549,7 +549,7 @@ function SectionHeading({
           className={
             tone === "gold"
               ? "k-gold-chip grid size-8 shrink-0 place-items-center rounded-xl sm:size-9"
-              : "grid size-8 shrink-0 place-items-center rounded-xl bg-[linear-gradient(145deg,#f3e3ff,#e0aaff)] text-[#5a189a] shadow-[inset_0_1px_0_#fff,0_5px_12px_-6px_rgb(60_9_108/0.45)] sm:size-9"
+              : "grid size-8 shrink-0 place-items-center rounded-xl bg-[linear-gradient(145deg,#f3e3ff,#e0aaff)] text-brand-800 shadow-[inset_0_1px_0_#fff,0_5px_12px_-6px_rgb(60_9_108/0.45)] sm:size-9"
           }
         >
           <Icon className="size-4 sm:size-5" aria-hidden />
@@ -559,7 +559,7 @@ function SectionHeading({
 
       <a
         href={href}
-        className="k-press inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-xs font-black text-[#7b2cbf] hover:bg-[#e0aaff]/28"
+        className="k-press inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-xs font-black text-brand-700 hover:bg-brand-300/28"
       >
         {t("common.viewAll")}
         <ChevronLeft className="ms-1 size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
@@ -627,7 +627,7 @@ function QueryRail({
     );
   if (query.isError)
     return (
-      <div className="k-surface mt-3 p-5 text-center text-sm text-[#5a189a]">
+      <div className="k-surface mt-3 p-5 text-center text-sm text-brand-800">
         <p>{errorLabel}</p>
         <Button variant="outline" size="sm" className="mt-3" onClick={() => void query.refetch()}>
           {retryLabel}
@@ -639,10 +639,10 @@ function QueryRail({
   if (!query.data?.length)
     return (
       <div className="k-surface mt-3 flex flex-col items-center gap-3 px-4 py-6 text-center">
-        <span className="grid size-11 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c]">
+        <span className="grid size-11 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900">
           <Sparkles className="size-5" aria-hidden />
         </span>
-        <p className="text-sm font-bold text-[#5a189a]">{empty}</p>
+        <p className="text-sm font-bold text-brand-800">{empty}</p>
         <a
           href={ctaHref}
           className="k-press inline-flex min-h-11 items-center gap-1.5 rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] px-5 text-xs font-black text-white"
@@ -680,14 +680,14 @@ function QuickAction({
   return (
     <a
       href={href}
-      className="k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
+      className="k-surface k-lift flex min-h-[80px] items-center gap-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
     >
-      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
+      <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900 shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)]">
         <Icon className="size-6" aria-hidden />
       </span>
       <span className="min-w-0">
-        <strong className="block text-sm font-black tracking-tight text-[#240046]">{title}</strong>
-        <span className="block text-[11px] text-[#5a189a]">{description}</span>
+        <strong className="block text-sm font-black tracking-tight text-brand-950">{title}</strong>
+        <span className="block text-[11px] text-brand-800">{description}</span>
       </span>
     </a>
   );

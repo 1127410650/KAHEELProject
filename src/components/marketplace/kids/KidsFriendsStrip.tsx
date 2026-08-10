@@ -22,7 +22,7 @@ export function KidsFriendsStrip({ className }: { className?: string }) {
         {KIDS_FRIENDS.map((friend) => (
           <li
             key={friend.id}
-            className="flex items-center gap-2 rounded-2xl bg-[#f6f0ff] px-2.5 py-2 dark:bg-[#2a1f3d]"
+            className="flex items-center gap-2 rounded-2xl bg-brand-50 px-2.5 py-2 dark:bg-brand-950"
           >
             <KidsFriendTap id={friend.id} size={40} />
             <span className="min-w-0">
@@ -44,7 +44,7 @@ export function KidsFriendsStrip({ className }: { className?: string }) {
 export function KidsFriendBadge({ id, size = 26 }: { id: KidsFriendId; size?: number }) {
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full bg-[#f6f0ff] dark:bg-[#2a1f3d]"
+      className="inline-flex items-center justify-center rounded-full bg-brand-50 dark:bg-brand-950"
       style={{ width: size + 6, height: size + 6 }}
     >
       <KidsFriend id={id} size={size} motion="sway" />

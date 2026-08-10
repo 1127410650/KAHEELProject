@@ -251,7 +251,7 @@ export function CallOverlay() {
             >
               <span
                 className={`grid size-14 place-items-center rounded-full border border-white/25 transition active:scale-95 ${
-                  call.muted ? "bg-white text-[#3c096c]" : "bg-white/12 text-white"
+                  call.muted ? "bg-white text-brand-900" : "bg-white/12 text-white"
                 }`}
               >
                 {call.muted ? (
@@ -282,7 +282,7 @@ export function CallOverlay() {
             >
               <span
                 className={`grid size-14 place-items-center rounded-full border border-white/25 transition active:scale-95 ${
-                  call.speaker ? "bg-white text-[#3c096c]" : "bg-white/12 text-white"
+                  call.speaker ? "bg-white text-brand-900" : "bg-white/12 text-white"
                 }`}
               >
                 {call.speaker ? (
