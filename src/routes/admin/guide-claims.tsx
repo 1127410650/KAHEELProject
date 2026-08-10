@@ -109,8 +109,9 @@ function AdminGuideClaimsPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     {claim.place_slug ? (
                       <Link
-                        to="/guides/syria_/$slug"
+                        to="/guides/syria/$slug"
                         params={{ slug: claim.place_slug }}
+
                         className="text-[13px] font-black underline decoration-dotted"
                       >
                         {claim.place_name ?? "جهة"}

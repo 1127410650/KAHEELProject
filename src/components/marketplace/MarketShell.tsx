@@ -42,7 +42,15 @@ export function MarketHeader({
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  /**
+   * الهيدر المتكيّف (الرئيسية فقط): ينكمش تدريجيًا مع التمرير لأسفل حتى يبقى
+   * شريط رفيع فيه حقل البحث، ويعود كاملًا عند السحب لأعلى. الارتفاع المحجوز
+   * أسفله يبقى ارتفاع الحالة الكاملة، فلا هزّة تخطيط عند الانكماش.
+   */
+  const [collapsed, setCollapsed] = useState(false);
+  const collapsedRef = useRef(false);
   const [locationOpen, setLocationOpenState] = useState(false);
+
   const [locationMounted, setLocationMounted] = useState(false);
   const setLocationOpen = (value: boolean) => {
     if (value) setLocationMounted(true);
@@ -71,7 +79,11 @@ export function MarketHeader({
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
-    const measure = () => setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
+    const measure = () => {
+      // القياس في الحالة الكاملة فقط: المساحة المحجوزة أدناه لا تتقلّص أبدًا.
+      if (collapsedRef.current) return;
+      setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
+    };
     measure();
     if (typeof ResizeObserver === "undefined") {
       window.addEventListener("resize", measure);
@@ -81,6 +93,34 @@ export function MarketHeader({
     observer.observe(header);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!home) return;
+    let last = window.scrollY;
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const y = window.scrollY;
+        const goingDown = y > last + 4;
+        const goingUp = y < last - 4;
+        last = y;
+        const next = y < 96 ? false : goingDown ? true : goingUp ? false : collapsedRef.current;
+        if (next !== collapsedRef.current) {
+          collapsedRef.current = next;
+          setCollapsed(next);
+        }
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [home]);
+
+  const shrunk = home && collapsed;
 
   return (
     <>
@@ -94,6 +134,22 @@ export function MarketHeader({
           className="pointer-events-none absolute inset-0 opacity-[0.5] [background-image:linear-gradient(115deg,rgb(123_44_191/0.05)_0_1px,transparent_1px_9px)] [background-size:9px_9px]"
         />
 
+        {shrunk ? (
+          /* الشريط الرفيع: حقل البحث وحده، والضغط عليه يعيد المستخدم لأعلى الصفحة. */
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="relative z-10 mx-auto flex h-[42px] w-full max-w-[1240px] items-center gap-2 px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:px-5 lg:px-8"
+            aria-label={t("market.homeV2.searchPlaceholder" as "market.brand")}
+          >
+            <span className="flex h-8 min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 text-muted-foreground">
+              <MapPin className="size-4 shrink-0 text-primary" aria-hidden />
+              <span className="truncate text-[12px] font-semibold">
+                {t("market.homeV2.searchPlaceholder" as "market.brand")}
+              </span>
+            </span>
+          </button>
+        ) : (
         <div
           className={
             home
@@ -101,6 +157,7 @@ export function MarketHeader({
               : "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
           }
         >
+
 
           {home ? (
             <>
@@ -198,7 +255,9 @@ export function MarketHeader({
             </>
           )}
         </div>
-        {home && (
+        )}
+        {home && !shrunk && (
+
           <nav
             aria-label={t("market.nav.menu")}
             className="border-t border-border bg-background"
@@ -242,7 +301,8 @@ export function MarketHeader({
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
           home
-            ? "h-[74px] sm:h-[80px]"
+            ? "h-[80px] sm:h-[86px]"
+
             : showCategories
               ? "h-[11.25rem] sm:h-[11.75rem]"
               : "h-[46px] sm:h-[50px]"

@@ -15,9 +15,10 @@ export function GuideDirectoryNotice({
   placeSlug?: string | null;
   onClaim?: () => void;
 }) {
-  const removalSearch = placeSlug
-    ? { place: placeSlug, name: placeName ?? undefined }
-    : undefined;
+  const removalSearch: { place?: string; name?: string } = placeSlug
+    ? { place: placeSlug, ...(placeName ? { name: placeName } : {}) }
+    : {};
+
 
   const actionClass =
     "min-h-9 content-center rounded-xl border border-primary/30 bg-card px-2.5 text-[10.5px] font-black text-primary hover:bg-primary/8";
