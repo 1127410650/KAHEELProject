@@ -2,7 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
-import { normalizeMobile } from "@/lib/register.server";
+
 
 function publishableClient() {
   const url = process.env["SUPABASE_URL"]!;
