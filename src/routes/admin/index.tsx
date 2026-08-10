@@ -108,7 +108,7 @@ function Stat({
     <Link
       to={to}
       search={search ?? {}}
-      className={`group relative isolate min-h-[126px] overflow-hidden rounded-2xl border border-[#dcebea] bg-white p-4 shadow-[0_8px_24px_rgba(13,90,84,0.035)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(13,90,84,0.08)] dark:border-border dark:bg-card ${palette.border}`}
+      className={`group relative isolate min-h-[126px] overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:shadow-raised dark:border-border dark:bg-card ${palette.border}`}
     >
       <div
         className={`pointer-events-none absolute -end-8 -top-10 -z-10 size-28 rounded-full bg-gradient-to-br ${palette.glow} to-transparent blur-2xl`}
@@ -119,7 +119,7 @@ function Stat({
           <Icon className="size-[17px]" aria-hidden />
         </span>
         <Arrow
-          className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-[#087f78]"
+          className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-primary"
           aria-hidden
         />
       </div>
@@ -159,14 +159,14 @@ function ActionRow({
     <Link
       to={to}
       search={search ?? {}}
-      className="group flex min-h-[68px] items-center gap-3 rounded-2xl border border-[#dcebea] bg-[#fbfdfd] px-3.5 py-3 transition hover:border-[#9bcfc9] hover:bg-white hover:shadow-sm dark:border-border dark:bg-background"
+      className="group flex min-h-[68px] items-center gap-3 rounded-2xl border border-border bg-secondary/45 px-3.5 py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
     >
       <span
         className={
           "grid size-10 shrink-0 place-items-center rounded-xl " +
           (urgent && count > 0
-            ? "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300"
-            : "bg-[#e5f6f3] text-[#087f78] dark:bg-primary/15 dark:text-primary")
+            ? "bg-admin-critical-soft text-admin-critical"
+            : "bg-primary/12 text-primary")
         }
       >
         <Icon className="size-[18px]" aria-hidden />
@@ -181,14 +181,14 @@ function ActionRow({
         className={
           "grid min-w-8 shrink-0 place-items-center rounded-full px-2 py-1 text-[11px] font-black tabular-nums " +
           (count > 0
-            ? "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300"
+            ? "bg-admin-critical-soft text-admin-critical"
             : "bg-secondary text-muted-foreground")
         }
       >
         {count}
       </span>
       <Arrow
-        className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-[#087f78]"
+        className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-primary"
         aria-hidden
       />
     </Link>
@@ -214,13 +214,13 @@ function AdminHomePage() {
         </div>
       ) : (
         <div className="space-y-5">
-          <section className="relative overflow-hidden rounded-2xl border border-[#cfe5e2] bg-gradient-to-l from-[#087f78] via-[#0b9188] to-[#13a096] px-4 py-4 text-white shadow-[0_14px_34px_rgba(8,127,120,0.16)] sm:px-5 sm:py-5">
+          <section className="relative overflow-hidden rounded-2xl border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:px-5 sm:py-5">
             <div
               className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl"
               aria-hidden
             />
             <div
-              className="absolute -bottom-20 end-10 size-48 rounded-full bg-cyan-200/10 blur-3xl"
+              className="absolute -bottom-20 end-10 size-48 rounded-full bg-primary-foreground/10 blur-3xl"
               aria-hidden
             />
             <div className="relative flex flex-wrap items-center justify-between gap-3">
@@ -355,7 +355,7 @@ function AdminHomePage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-[#dcebea] bg-white p-4 shadow-[0_8px_24px_rgba(13,90,84,0.035)] dark:border-border dark:bg-card sm:p-5">
+          <section className="rounded-2xl border border-border bg-card p-4 shadow-panel sm:p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <h2 className="text-base font-black text-foreground">{t("admin.actionNeeded")}</h2>
@@ -363,7 +363,7 @@ function AdminHomePage() {
                   {t("admin.actionNeededHint")}
                 </p>
               </div>
-              <span className="rounded-full bg-[#e5f6f3] px-3 py-1 text-[10px] font-black text-[#087f78] dark:bg-primary/15 dark:text-primary">
+              <span className="rounded-full bg-primary/12 px-3 py-1 text-[10px] font-black text-primary">
                 {data.listings_pending +
                   data.reports_new +
                   data.verifications_pending +
