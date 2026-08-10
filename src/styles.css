@@ -725,27 +725,21 @@ body:has(.market-surface) {
 
 
 /*
- * Elevation: ظلال محايدة ناعمة جدًا — الفصل بالحد الرفيع أولًا ثم بظل خفيف.
+ * Elevation: ظل البطاقة المعتمد الوحيد — 0 2px 8px rgba(0,0,0,0.05).
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(17 17 17 / 0.04), 0 8px 22px -18px rgb(17 17 17 / 0.12);
-  --shadow-raised: 0 1px 3px rgb(17 17 17 / 0.05), 0 16px 36px -26px rgb(17 17 17 / 0.16);
+  --shadow-panel: 0 2px 8px rgb(0 0 0 / 0.05);
+  --shadow-raised: 0 2px 8px rgb(0 0 0 / 0.05);
 }
 
 .market-surface .shadow-panel,
-body:has(.market-surface) .shadow-panel {
-  box-shadow:
-    0 1px 2px rgb(17 17 17 / 0.05),
-    0 8px 20px -16px rgb(17 17 17 / 0.12) !important;
-}
-
+body:has(.market-surface) .shadow-panel,
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
-  box-shadow:
-    0 1px 3px rgb(17 17 17 / 0.06),
-    0 14px 32px -24px rgb(17 17 17 / 0.16) !important;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05) !important;
 }
+
 
 /*
  * الهيدر/الهيرو: التدرج المعتمد نهائيًا كما هو
