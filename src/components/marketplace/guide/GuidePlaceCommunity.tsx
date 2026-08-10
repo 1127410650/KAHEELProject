@@ -15,11 +15,16 @@ import { toast } from "sonner";
 import { useActiveAccount } from "@/lib/mkt-account";
 import { useAdCreditWallet } from "@/lib/mkt-ad-credit";
 import {
+  CLAIM_DOC_ACCEPT,
+  CLAIM_DOC_KIND_LABEL,
+  CLAIM_DOC_RETENTION_DAYS,
+  useSubmitGuideClaim,
+} from "@/lib/mkt-guide-legal";
+import {
   GUIDE_PHOTO_ACCEPT,
   GUIDE_PHOTO_BATCH_LIMIT,
   GUIDE_PROMOTION_CREDITS_PER_DAY,
   guidePhotoUrl,
-  useClaimGuidePlace,
   useDeleteGuidePhoto,
   useGuidePlacePhotos,
   useGuidePlaceRating,
@@ -602,9 +607,9 @@ function ClaimSection({
             onChange={(event) => setDocKind(event.target.value)}
             className={inputClass}
           >
-            {Object.entries(CLAIM_DOC_KIND_LABEL).map(([value, label]) => (
+            {Object.keys(CLAIM_DOC_KIND_LABEL).map((value) => (
               <option key={value} value={value}>
-                {label}
+                {CLAIM_DOC_KIND_LABEL[value]}
               </option>
             ))}
           </select>
@@ -653,7 +658,7 @@ function ClaimSection({
                     setFiles([]);
                     toast.success("تم إرسال المطالبة للمراجعة اليدوية");
                   },
-                  onError: (error) =>
+                  onError: (error: unknown) =>
                     toast.error(
                       String((error as Error).message).includes("DOC_TOO_LARGE")
                         ? "حجم المستند كبير — الحد ٨ ميجابايت."
