@@ -114,26 +114,34 @@
   --color-gold-soft: var(--gold-soft);
   --color-gold-foreground: var(--gold-foreground);
 
-  /* سلّم بنفسجي كَحيل الرسمي — المصدر الوحيد لأي درجة بنفسجية في الواجهة.
-     يُستخدم عبر أدوات مثل text-brand-800 و bg-brand-200 بدل كتابة القيمة مباشرة. */
-  --color-brand-ink: #10002b;
-  --color-brand-950: #240046;
-  --color-brand-900: #3c096c;
-  --color-brand-800: #5a189a;
-  --color-brand-700: #7b2cbf;
-  --color-brand-600: #9d4edd;
-  --color-brand-400: #c77dff;
-  --color-brand-300: #e0aaff;
-  --color-brand-100: #f3e3ff;
-  --color-brand-50: #f6f0ff;
+  /* اللوحة النهائية المعتمدة — المصدر الوحيد لأي لون في المنصة.
+     كل التوكنات القديمة (brand-*, market-*) صارت أسماء بديلة تشير إلى هذه القيم
+     كي يرث أي مكوّن قديم اللوحة الجديدة بلا تعديل. */
+  --color-purple-primary: #8a4fff;
+  --color-purple-light: #c3abff;
+  --color-neutral-white: #ffffff;
+  --color-neutral-bg: #f7f7f8;
+  --color-neutral-divider: #e5e5ea;
+  --color-text-primary: #1b1b1f;
+  --color-text-secondary: #6e6e7d;
+  --color-disabled: #c7c7cc;
+
+  /* سلّم «brand» التاريخي: أسماء محفوظة، وقيمها الآن من اللوحة المعتمدة فقط. */
+  --color-brand-ink: #1b1b1f;
+  --color-brand-950: #1b1b1f;
+  --color-brand-900: #8a4fff;
+  --color-brand-800: #8a4fff;
+  --color-brand-700: #8a4fff;
+  --color-brand-600: #8a4fff;
+  --color-brand-400: #c3abff;
+  --color-brand-300: #c3abff;
+  --color-brand-100: #f7f7f8;
+  --color-brand-50: #f7f7f8;
 
 
-  --shadow-panel:
-    0 1px 2px oklch(0 0 0 / 0.04),
-    0 6px 18px -14px oklch(0 0 0 / 0.1);
-  --shadow-raised:
-    0 1px 3px oklch(0 0 0 / 0.05),
-    0 14px 32px -22px oklch(0 0 0 / 0.14);
+  --shadow-panel: 0 2px 8px rgb(0 0 0 / 0.05);
+  --shadow-raised: 0 2px 8px rgb(0 0 0 / 0.05);
+
 
 }
 
