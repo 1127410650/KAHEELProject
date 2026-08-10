@@ -50,6 +50,7 @@ import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
+import { Route as AdminStudentBotRouteImport } from './routes/admin/student-bot'
 import { Route as AdminTaxonomyRouteImport } from './routes/admin/taxonomy'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
@@ -310,6 +311,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminStoresRoute = AdminStoresRouteImport.update({
   id: '/stores',
   path: '/stores',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminStudentBotRoute = AdminStudentBotRouteImport.update({
+  id: '/student-bot',
+  path: '/student-bot',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminTaxonomyRoute = AdminTaxonomyRouteImport.update({
@@ -638,6 +644,7 @@ export interface FileRoutesByFullPath {
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/student-bot': typeof AdminStudentBotRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -734,6 +741,7 @@ export interface FileRoutesByTo {
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/student-bot': typeof AdminStudentBotRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -834,6 +842,7 @@ export interface FileRoutesById {
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/student-bot': typeof AdminStudentBotRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -935,6 +944,7 @@ export interface FileRouteTypes {
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/student-bot'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1031,6 +1041,7 @@ export interface FileRouteTypes {
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/student-bot'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1130,6 +1141,7 @@ export interface FileRouteTypes {
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/student-bot'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1515,6 +1527,13 @@ declare module '@tanstack/react-router' {
       path: '/stores'
       fullPath: '/admin/stores'
       preLoaderRoute: typeof AdminStoresRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/student-bot': {
+      id: '/admin/student-bot'
+      path: '/student-bot'
+      fullPath: '/admin/student-bot'
+      preLoaderRoute: typeof AdminStudentBotRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/taxonomy': {
@@ -1932,6 +1951,7 @@ interface AdminRouteRouteChildren {
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStoresRoute: typeof AdminStoresRoute
+  AdminStudentBotRoute: typeof AdminStudentBotRoute
   AdminTaxonomyRoute: typeof AdminTaxonomyRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
@@ -1966,6 +1986,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStoresRoute: AdminStoresRoute,
+  AdminStudentBotRoute: AdminStudentBotRoute,
   AdminTaxonomyRoute: AdminTaxonomyRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,

@@ -128,7 +128,7 @@ function AdminStudentBotPage() {
 
   if (stats.isLoading) {
     return (
-      <AdminShell>
+      <AdminShell title="مساعد الطالب">
         <Skeleton className="h-64 w-full rounded-2xl" />
       </AdminShell>
     );
@@ -137,7 +137,7 @@ function AdminStudentBotPage() {
   const data = stats.data;
   if (!data) {
     return (
-      <AdminShell>
+      <AdminShell title="مساعد الطالب">
         <p className="rounded-2xl border border-border bg-card p-6 text-center text-xs text-muted-foreground">
           لا تملك صلاحية عرض هذه اللوحة.
         </p>
@@ -184,7 +184,7 @@ function AdminStudentBotPage() {
   );
 
   return (
-    <AdminShell>
+    <AdminShell title="مساعد الطالب">
       <div className="grid gap-3">
         <header className="rounded-2xl border border-border bg-card p-4 shadow-panel">
           <h1 className="text-sm font-black text-foreground">مساعد الطالب</h1>
@@ -453,7 +453,8 @@ function AdminStudentBotPage() {
       <ReasonDialog
         open={!!pending}
         title={`تعديل: ${pending?.label ?? ""}`}
-        busy={busy}
+        confirmLabel="حفظ"
+        pending={busy}
         onCancel={() => setPending(null)}
         onConfirm={confirm}
       />
