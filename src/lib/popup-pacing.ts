@@ -84,7 +84,7 @@ export const DEFAULT_PACING: PopupPacing = {
   roamDurationMs: 14_000,
   mascotMinGapMs: 50_000,
   mascotMaxPerSession: 6,
-  mascotQuietAfterCloseMs: 45_000,
+  mascotQuietAfterCloseMs: 90_000,
   mascotIdleMs: 2_500,
 };
 
@@ -117,7 +117,8 @@ export function normalisePacing(raw: Record<string, unknown> | null | undefined)
     mascotQuietAfterCloseMs: num(
       "mascot_quiet_after_close_ms",
       DEFAULT_PACING.mascotQuietAfterCloseMs,
-      15_000,
+      // فترة الصمت لا تقلّ عن ٩٠ ثانية بعد أي إخفاء (قاعدة معتمدة).
+      90_000,
       1_800_000,
     ),
     mascotIdleMs: num("mascot_idle_ms", DEFAULT_PACING.mascotIdleMs, 1_000, 10_000),

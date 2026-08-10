@@ -2684,3 +2684,9 @@ body:has(.market-surface) {
   font-family: inherit;
   background: var(--secondary);
 }
+
+/* خروج فوري وسريع للمشهد المشترك عند الضغط في أي مكان — لا تعلّق الحركة. */
+@keyframes mascot-scene-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(6px) scale(0.94); }
+}

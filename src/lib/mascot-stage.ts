@@ -154,7 +154,12 @@ export function resetStage(): void {
  */
 const OBSTACLES =
   "a,button,input,textarea,select,summary,label,img,svg,video,canvas," +
-  "h1,h2,h3,h4,h5,p,li,table,[role='button'],[role='link'],[role='tab'],[data-kaheel-card]";
+  "h1,h2,h3,h4,h5,h6,p,li,table,dl,form,header,nav,footer,aside," +
+  "[role='button'],[role='link'],[role='tab'],[role='alert'],[role='status']," +
+  "[role='dialog'],[role='navigation'],[role='banner'],[role='listbox']," +
+  "[data-kaheel-card],[data-kaheel-stories],[data-kaheel-banner]," +
+  "[data-kaheel-strip],[data-kaheel-nav],[data-slot='card']";
+
 
 export interface SafeBand {
   /** يسار الشريط الحر بالبكسل (إحداثيات الشاشة). */
@@ -203,9 +208,76 @@ function freeSegments(blocked: [number, number][], from: number, to: number): [n
 }
 
 /**
- * أوسع شريط حر يتّسع لصندوق `width × height` داخل النطاق المسموح — يُبحث من
- * الحافة السفلية صعودًا (المساحة الفارغة عادة أسفل الصفحة). `null` تعني: لا
- * مساحة آمنة ⇒ لا تُظهر الشخصية.
+ * فحص نقطة فعلية بـ`elementsFromPoint`: هل تحت هذه النقطة محتوى؟
+ *
+ * القياس بالمستطيلات وحده لا يكفي: بانر بصورة خلفية أو دائرة ستوري أو شريط
+ * تنبيه قد لا يطابق أي محدّد. هنا نسأل الصفحة نفسها: ما العناصر تحت النقطة؟
+ * ونعدّ النقطة مشغولة إن كان أيٌّ منها نصًا أو صورة أو عنصرًا تفاعليًا أو
+ * سطحًا بصورة خلفية (بانر) — والتدرّجات وحدها تُعدّ زخرفة خلفية.
+ */
+function pointBlocked(x: number, y: number): boolean {
+  if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return true;
+  const vArea = window.innerWidth * window.innerHeight;
+  const stack = document.elementsFromPoint(x, y).slice(0, 8);
+  for (const el of stack) {
+    if (!(el instanceof HTMLElement) && !(el instanceof SVGElement)) continue;
+    if (el.closest("[data-kaheel-stage]")) continue;
+    if (el.tagName === "HTML" || el.tagName === "BODY") continue;
+    const style = window.getComputedStyle(el as Element);
+    // زخرفة خالصة: بلا نص وتتجاهل النقر (خلفيات، أعلام، طبقات موسمية) — ولولا
+    // استثناؤها لغطّت الشاشة كلها ومنعت أي ظهور.
+    const decorative =
+      !(el.textContent ?? "").trim() &&
+      style.pointerEvents === "none" &&
+      !(el instanceof HTMLImageElement);
+    if (decorative) continue;
+    // حاوية بحجم الشاشة (طبقة خلفية أو غلاف صفحة) ليست محتوى بحد ذاتها.
+    const r = el.getBoundingClientRect();
+    if (r.width * r.height >= vArea * 0.9) continue;
+    if (el.matches(OBSTACLES)) return true;
+    const bg = style.backgroundImage;
+    // صورة خلفية حقيقية (بانر «مساحتك الإعلانية»، صور الستوريات) = محتوى.
+    if (bg && bg !== "none" && !/^(linear|radial|conic|repeating)-gradient/.test(bg.trim())) {
+      return true;
+    }
+    // نص مباشر داخل هذا العنصر (عناوين أقسام، شرائح، تسميات).
+    for (const node of Array.from(el.childNodes)) {
+      if (node.nodeType === 3 && (node.textContent ?? "").trim().length > 0) return true;
+    }
+  }
+  return false;
+}
+
+
+/** شبكة نقاط داخل الصندوق: أي نقطة مشغولة ⇒ الصندوق غير صالح. */
+function boxIsClear(
+  rect: { left: number; top: number; width: number; height: number },
+  pad = 0,
+): boolean {
+  const left = rect.left - pad;
+  const top = rect.top - pad;
+  const right = rect.left + rect.width + pad;
+  const bottom = rect.top + rect.height + pad;
+  // العيّنات داخل الصندوق بهامش بسيط: الحافة تمامًا تلمس هوامش العوائق.
+  const xs = [0.06, 0.3, 0.5, 0.7, 0.94].map((f) => left + (right - left) * f);
+  const ys = [0.06, 0.25, 0.45, 0.65, 0.85, 0.96].map((f) => top + (bottom - top) * f);
+  for (const x of xs) {
+    for (const y of ys) {
+      if (pointBlocked(Math.min(window.innerWidth - 1, Math.max(1, x)), Math.min(window.innerHeight - 1, Math.max(1, y)))) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * أوسع منطقة فارغة **فعلًا** تتّسع للمشهد كاملًا (الشخصية + الرفيق + الفقاعة).
+ *
+ * الخوارزمية: نقيس كل العناصر المرئية (`getBoundingClientRect`) ونستبعدها،
+ * ثم نبحث من الحافة السفلية صعودًا عن شريط عرضه ≥ `width`، ثم **نتحقق حسّيًا**
+ * بشبكة نقاط (`elementsFromPoint`) أنّ الصندوق خالٍ تمامًا. نجمع كل المرشّحين
+ * الصالحين ونختار الأوسع. `null` تعني: **لا مساحة كافية ⇒ لا ظهور إطلاقًا**.
  */
 export function findSafeBand(
   width: number,
@@ -221,17 +293,25 @@ export function findSafeBand(
   const maxBottom = vh - opts.bottomInset;
   if (maxBottom - minTop < height) return null;
 
-  for (let bottom = maxBottom; bottom - height >= minTop; bottom -= 40) {
+  let best: SafeBand | null = null;
+  for (let bottom = maxBottom; bottom - height >= minTop; bottom -= 24) {
     const top = bottom - height;
     const blocked = boxes
       .filter((b) => b[3] > top && b[1] < bottom)
       .map((b) => [b[0], b[2]] as [number, number]);
-    const best = freeSegments(blocked, pad, vw - pad)
+    const candidates = freeSegments(blocked, pad, vw - pad)
       .filter(([a, b]) => b - a >= width)
-      .sort((a, b) => b[1] - b[0] - (a[1] - a[0]))[0];
-    if (best) return { left: best[0], top, width: best[1] - best[0] };
+      .sort((a, b) => b[1] - b[0] - (a[1] - a[0]));
+    for (const [a, b] of candidates) {
+      const band: SafeBand = { left: a, top, width: b - a };
+      if (!boxIsClear({ left: a, top, width: b - a, height })) continue;
+      if (!best || band.width > best.width) best = band;
+      break;
+    }
+    // منطقة سفلية واسعة كفاية ⇒ نكتفي بها (المساحة الفارغة عادة أسفل الصفحة).
+    if (best && best.width >= width * 1.6) break;
   }
-  return null;
+  return best;
 }
 
 /** هل الصندوق المعطى ما زال خاليًا من المحتوى؟ (يُستخدم لإعادة التحقق بعد التمرير) */
@@ -243,8 +323,13 @@ export function areaStillFree(
   const boxes = viewportObstacles(pad);
   const right = rect.left + rect.width;
   const bottom = rect.top + rect.height;
-  return !boxes.some((b) => b[0] < right && b[2] > rect.left && b[1] < bottom && b[3] > rect.top);
+  const overlaps = boxes.some(
+    (b) => b[0] < right && b[2] > rect.left && b[1] < bottom && b[3] > rect.top,
+  );
+  if (overlaps) return false;
+  return boxIsClear(rect);
 }
+
 
 // ── الذكاء اللوني: لون النص يتكيّف مع خلفية المكان ──────────────────────────
 /**
