@@ -348,7 +348,31 @@ export const BLOCK_LIBRARY: BlockDefinition[] = [
       },
     ],
   },
+  {
+    type: "quick_tiles",
+    name_ar: "بلاطات سريعة",
+    description_ar: "ثلاث بلاطات ملوّنة أعلى الصفحة للوصول السريع.",
+    icon: "layout-grid",
+    fields: [],
+  },
+  {
+    type: "pride_strip",
+    name_ar: "شريط «سوريا فخرنا»",
+    description_ar: "شريط الهوية الوطنية بالعلم والشعار.",
+    icon: "flag",
+    fields: [],
+  },
+  {
+    type: "exclusive_offers",
+    name_ar: "صف العروض الحصرية",
+    description_ar: "صف أفقي للعروض الحصرية النشطة.",
+    icon: "badge-percent",
+    fields: [
+      { key: "title_ar", label_ar: "العنوان", type: "text", default: "عروض حصرية" },
+    ],
+  },
 ];
+
 
 export function blockDefinition(type: string): BlockDefinition | undefined {
   return BLOCK_LIBRARY.find((b) => b.type === type);
