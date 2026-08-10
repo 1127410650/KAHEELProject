@@ -32,19 +32,24 @@ function CampaignTile({
 
   const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-card shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
 
+  /* الطبقة الأساسية: تدرّج خفيف والنص الافتراضي — تضمن ألّا يظهر صندوق أبيض
+     فارغ إذا كان أصل الحملة شفافًا أو تعذّر تحميله. */
+  const base = (
+    <>
+      <span
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(120%_120%_at_88%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_62%)]"
+      />
+      <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-4 sm:px-6">
+        <strong className="text-lg font-black tracking-tight sm:text-2xl">{fallbackTitle}</strong>
+      </span>
+    </>
+  );
+
   if (!campaign)
     return (
       <a href={fallbackHref} className={box}>
-        <span
-          aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(120%_120%_at_88%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_62%)]"
-        />
-        <span className="relative z-10 flex h-full flex-col justify-center gap-1 px-4 sm:px-6">
-          <strong className="text-lg font-black tracking-tight sm:text-2xl">{fallbackTitle}</strong>
-          <span className="text-[11px] font-bold text-muted-foreground sm:text-sm">
-            {fallbackHref === "/search" ? "" : ""}
-          </span>
-        </span>
+        {base}
       </a>
     );
 
@@ -54,10 +59,14 @@ function CampaignTile({
       onClick={() => trackCampaign(campaign.id, "click")}
       className={box}
     >
-      <CampaignAsset campaign={campaign} />
+      {base}
+      <span className="absolute inset-0 z-10">
+        <CampaignAsset campaign={campaign} />
+      </span>
     </a>
   );
 }
+
 
 export function CampaignMosaic() {
   const { locale } = useI18n();
