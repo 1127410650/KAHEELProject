@@ -28,8 +28,8 @@
   --text-desc--line-height: 1.6;
   --text-body: 16px;
   --text-body--line-height: 1.6;
-  --text-card: 16px;
-  --text-card--line-height: 1.35;
+  --text-title: 16px;
+  --text-title--line-height: 1.35;
   --text-price: 18px;
   --text-price--line-height: 1.25;
   --text-section: 20px;
@@ -652,30 +652,35 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  --background: #ffffff;
-  --foreground: #111111;
+  /* لافندر فاتح جدًا للصفحة، وأبيض نقي للبطاقات — التباين بينهما هو أداة الفصل. */
+  --background: #f2f0fa;
+  --foreground: #171423;
   --card: #ffffff;
-  --card-foreground: #111111;
+  --card-foreground: #171423;
   --popover: #ffffff;
-  --popover-foreground: #111111;
+  --popover-foreground: #171423;
 
-  --primary: #7b2cbf;
+  /* تدرج الهيدر الفاتح المضيء — مُغمّق قليلًا ليحقق 4.5:1 للنص الأبيض. */
+  --header-from: #7a4fc7;
+  --header-to: #8b5cd6;
+
+  --primary: #7551c2;
   --primary-foreground: #ffffff;
-  --primary-dark: #5a189a;
-  --primary-pressed: #3c096c;
+  --primary-dark: #5f35a8;
+  --primary-pressed: #4a2680;
 
-  /* أسطح رمادية محايدة — لا مساحات بنفسجية */
-  --secondary: #f5f5f7;
-  --secondary-foreground: #1f1f24;
-  --muted: #f7f7f8;
-  --muted-foreground: #55555f;
-  --accent: #f7f4fb;
-  --accent-foreground: #3c096c;
+  /* أسطح لافندر أغمق قليلًا من الخلفية — للاختصارات الدائرية والحبّات الهادئة */
+  --secondary: #e6e1f7;
+  --secondary-foreground: #3b2e63;
+  --muted: #edeaf8;
+  --muted-foreground: #4b4658;
+  --accent: #f4f1fc;
+  --accent-foreground: #4a2680;
 
-  /* حد رمادي فاتح جدًا 1px هو أداة الفصل الوحيدة */
-  --border: #e8e8ec;
-  --input: #dcdce2;
-  --ring: #7b2cbf;
+  /* حد رمادي-لافندر رفيع يبقى أداة الفصل الأولى */
+  --border: #e2ddf0;
+  --input: #d6cfea;
+  --ring: #7551c2;
 
   --gold: #f59e0b;
   --gold-dark: #c77b15;
@@ -683,16 +688,16 @@ body:has(.market-surface) {
   --gold-foreground: #59451f;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #111111;
-  --sidebar-accent: #f5f5f7;
-  --sidebar-accent-foreground: #111111;
-  --sidebar-border: #e8e8ec;
-  --sidebar-primary: #7b2cbf;
+  --sidebar-foreground: #171423;
+  --sidebar-accent: #e6e1f7;
+  --sidebar-accent-foreground: #171423;
+  --sidebar-border: #e2ddf0;
+  --sidebar-primary: #7551c2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #7b2cbf;
+  --sidebar-ring: #7551c2;
 
-  --chart-1: #7b2cbf;
-  --chart-2: #3c096c;
+  --chart-1: #7551c2;
+  --chart-2: #4a2680;
   --chart-3: #f59e0b;
   --chart-4: #9d4edd;
 
@@ -724,9 +729,64 @@ body:has(.market-surface) .shadow-raised {
     0 14px 32px -24px rgb(17 17 17 / 0.16) !important;
 }
 
-/* سطح المنصة أبيض نظيف: لا تدرجات ولا بوكيه خلف المحتوى. */
-.market-shell > main {
+/*
+ * الهيدر: تدرج بنفسجي فاتح مضيء بحواف سفلية دائرية كبيرة. الرموز الدلالية
+ * تُعاد توجيهها داخل نطاق الهيدر فقط، فيصبح كل نص وأيقونة أبيض بلا تعديل JSX.
+ */
+.k-header-hero {
+  background-image: linear-gradient(135deg, var(--header-from), var(--header-to));
+  border-bottom-left-radius: 26px;
+  border-bottom-right-radius: 26px;
+  border-bottom-color: transparent;
+
+  --foreground: #ffffff;
+  --card-foreground: #ffffff;
+  --muted-foreground: rgb(255 255 255 / 0.9);
+  --secondary: rgb(255 255 255 / 0.18);
+  --secondary-foreground: #ffffff;
+  --card: rgb(255 255 255 / 0.16);
+  --border: rgb(255 255 255 / 0.42);
+  --input: rgb(255 255 255 / 0.42);
+  --primary: #ffffff;
+  --primary-foreground: #5f35a8;
+  --accent: rgb(255 255 255 / 0.18);
+  --accent-foreground: #ffffff;
+  color: #ffffff;
+}
+
+.k-header-hero :where(strong, span, a, button) {
+  text-shadow: none;
+}
+
+/* نقاط ترقيم الكاروسيل بيضاء صغيرة داخل الهيدر. */
+.k-header-hero [data-dot] {
+  background: rgb(255 255 255 / 0.45);
+}
+
+.k-header-hero [data-dot][data-active="true"] {
   background: #ffffff;
+}
+
+/* بلاطة تصنيف: مربع أبيض بإطار بنفسجي رفيع وأيقونة خطية بنفسجية. */
+@utility k-tile {
+  background: var(--card);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 40%, white);
+  color: var(--primary);
+}
+
+/* حبّة ممتلئة: بنفسجي متوسط ونص أبيض — للأزرار والوسوم. */
+@utility k-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* سطح المنصة لافندر فاتح جدًا، والبطاقات البيضاء تطفو فوقه. */
+.market-shell > main {
+  background: var(--background);
 }
 
 

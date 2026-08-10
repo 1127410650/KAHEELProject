@@ -355,7 +355,7 @@ export function ListingCard({
               category never renders a shorter card than its neighbours. */}
           <span className="flex h-[18px] items-center">
             {tag ? (
-              <span className="max-w-full truncate rounded-full bg-primary/10 px-2 py-0.5 text-desc font-bold text-primary sm:text-desc">
+              <span className="max-w-full truncate rounded-full bg-primary px-2.5 py-0.5 text-desc font-bold text-primary-foreground sm:text-desc">
                 {tag}
               </span>
             ) : null}
@@ -363,7 +363,7 @@ export function ListingCard({
 
           {/* Two reserved lines: the height is identical for one- and
               two-line titles, which is what keeps the rails shift-free. */}
-          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-card font-semibold text-foreground sm:text-card">
+          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-title font-semibold text-foreground sm:text-title">
             {listing.title}
           </h3>
 
