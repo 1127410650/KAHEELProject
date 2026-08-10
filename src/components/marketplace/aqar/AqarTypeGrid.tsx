@@ -46,12 +46,16 @@ export function AqarTypeGrid({
                 />
                 {/* تعتيم متدرّج يضمن تباين النص الأبيض 4.5:1 فوق أي صورة. */}
                 <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-                <strong className="absolute bottom-2.5 end-3 text-section font-extrabold text-white drop-shadow-md">
-                  {card.label}
-                </strong>
-                <span className="absolute bottom-2.5 start-3 rounded-full bg-white/90 px-2.5 py-0.5 text-nav font-bold text-foreground">
-                  {total.toLocaleString("en-US")}
+                {/* الاسم والعدد في صف واحد: الاسم يُقصّ بدل أن يتراكب مع الشارة. */}
+                <span className="absolute inset-x-3 bottom-2.5 flex flex-row-reverse items-center justify-between gap-2">
+                  <strong className="min-w-0 truncate text-section font-extrabold text-white drop-shadow-md">
+                    {card.label}
+                  </strong>
+                  <span className="shrink-0 rounded-full bg-white/90 px-2.5 py-0.5 text-nav font-bold text-foreground">
+                    {total.toLocaleString("en-US")}
+                  </span>
                 </span>
+
               </Link>
             </li>
           );
