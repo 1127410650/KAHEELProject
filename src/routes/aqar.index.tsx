@@ -15,6 +15,7 @@ import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
 import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
+import { useActivePageVariant } from "@/lib/mkt-page-variants";
 import { DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
 import {
   fetchAqarListings,
@@ -48,6 +49,7 @@ export const Route = createFileRoute("/aqar/")({
 function AqarHomePage() {
   const [track, setTrack] = useState<AqarTrack>("daily_rent");
   const { ids, toggle } = useAqarFavorites();
+  const variant = useActivePageVariant("aqar", "aqar.types_first");
 
   const imagery = useQuery({
     queryKey: ["aqar", "imagery"],
