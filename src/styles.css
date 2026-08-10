@@ -257,7 +257,7 @@
 
 
 .dark {
-  /* الوضع الداكن يبنى على #10002B — أعمق درجة في هوية كَحيل */
+  /* الوضع الداكن يبنى على #1B1B1F — أعمق درجة في هوية كَحيل */
   --background: oklch(0.1584 0.1103 303.5);
   --foreground: oklch(0.9666 0.0217 305.5);
   --card: oklch(0.2109 0.1287 303.4);
@@ -845,7 +845,7 @@ body:has(.market-surface) .shadow-raised {
 
 .market-surface ::selection {
   background: rgb(199 125 255 / 0.32);
-  color: #240046;
+  color: #1b1b1f;
 }
 
 .market-surface :where([data-slot="card"]) {
@@ -1826,9 +1826,9 @@ body:has(.market-surface) {
   --k-glow: 0 10px 30px -12px rgb(157 78 221 / 0.5);
 
   /* gradient stock */
-  --k-grad-deep: linear-gradient(155deg, #240046 0%, #3c096c 46%, #7b2cbf 100%);
-  --k-grad-royal: linear-gradient(150deg, #5a189a 0%, #7b2cbf 52%, #9d4edd 100%);
-  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, color-mix(in srgb, #e0aaff 22%, white) 100%);
+  --k-grad-deep: linear-gradient(155deg, #1b1b1f 0%, #8a4fff 46%, #8a4fff 100%);
+  --k-grad-royal: linear-gradient(150deg, #8a4fff 0%, #8a4fff 52%, #8a4fff 100%);
+  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, color-mix(in srgb, #c3abff 22%, white) 100%);
 }
 
 /* ── surfaces ─────────────────────────────────────────────────────────── */
@@ -1863,7 +1863,7 @@ body:has(.market-surface) {
 
   &:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, #9d4edd 52%, white);
+    border-color: color-mix(in srgb, #8a4fff 52%, white);
     box-shadow: var(--k-shadow-3, 0 28px 52px -20px rgb(36 0 70 / 0.24));
   }
 
@@ -1881,7 +1881,7 @@ body:has(.market-surface) {
   isolation: isolate;
   overflow: hidden;
   border-radius: 1.5rem;
-  background: var(--k-grad-deep, linear-gradient(155deg, #240046, #7b2cbf));
+  background: var(--k-grad-deep, linear-gradient(155deg, #1b1b1f, #8a4fff));
   color: #fff;
   box-shadow:
     var(--k-shadow-2, 0 16px 28px -14px rgb(36 0 70 / 0.16)),
@@ -1915,7 +1915,7 @@ body:has(.market-surface) {
   letter-spacing: 0.06em;
   line-height: 1rem;
   text-transform: none;
-  color: #7b2cbf;
+  color: #8a4fff;
 }
 
 @utility k-h1 {
@@ -1924,7 +1924,7 @@ body:has(.market-surface) {
   line-height: 1.18;
   letter-spacing: -0.012em;
   text-wrap: balance;
-  color: #240046;
+  color: #1b1b1f;
 }
 
 @utility k-h2 {
@@ -1932,21 +1932,21 @@ body:has(.market-surface) {
   font-weight: 900;
   line-height: 1.24;
   letter-spacing: -0.01em;
-  color: #240046;
+  color: #1b1b1f;
 }
 
 @utility k-h3 {
   font-size: 1rem;
   font-weight: 800;
   line-height: 1.35;
-  color: #240046;
+  color: #1b1b1f;
 }
 
 @utility k-sub {
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.6;
-  color: #5a189a;
+  color: #8a4fff;
 }
 
 /* ── micro-interactions ──────────────────────────────────────────────── */
@@ -2083,7 +2083,7 @@ body:has(.market-surface) {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  background: color-mix(in srgb, #e0aaff 26%, white);
+  background: color-mix(in srgb, #c3abff 26%, white);
 
   /* The sweep animates `background-position` only: no transform, no paint
      containment surprises, and nothing a layout-shift observer can attribute
