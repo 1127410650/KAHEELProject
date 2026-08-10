@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { passwordPolicyError } from "@/lib/password-policy";
+import { isBreachedPassword } from "@/lib/password-breach";
 
 export const Route = createFileRoute("/reset-password")({
   ssr: "data-only",
@@ -51,7 +52,7 @@ function ResetPasswordPage() {
       toast.error(t("auth.passwordMismatch"));
       return;
     }
-    if (passwordPolicyError(password)) {
+    if (passwordPolicyError(password) || (await isBreachedPassword(password))) {
       toast.error(t("auth.passwordWeak"));
       return;
     }

@@ -11,6 +11,7 @@
 import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
+import { isBreachedPassword } from "@/lib/password-breach";
 import { normalizePhone, DEFAULT_DIAL } from "@/lib/phone-normalize";
 import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
 
@@ -55,6 +56,8 @@ export async function publicSignupImpl(
     return { ok: false, error: "INVALID" };
   }
   if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
+  // Reject credentials that already appear in public breach corpora.
+  if (await isBreachedPassword(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
