@@ -180,6 +180,13 @@ const NAV: NavItem[] = [
     section: "studio",
   },
   {
+    to: "/admin/ai",
+    labelKey: "admin.nav.aiServices",
+    icon: Sparkles,
+    section: "studio",
+    ownerOnly: true,
+  },
+  {
     to: "/admin/designs",
     labelKey: "admin.nav.designs",
     icon: LayoutTemplate,
