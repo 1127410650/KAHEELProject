@@ -16,6 +16,8 @@ import { useI18n } from "@/i18n";
 import { categoryName, childrenOf, type CategoryNode } from "@/lib/mkt-category-tree";
 import { slotAlt, slotUrl, useMediaSlots } from "@/lib/mkt-media-slots";
 import { loadListings } from "@/lib/mkt-queries";
+import { PageBlocks, type BlockOverrides } from "@/components/marketplace/composer/PageBlocks";
+import { str, usePageBlocks } from "@/lib/mkt-page-composer";
 
 const HERO_FALLBACK = "/images/market/world-hero.svg";
 const SUB_FALLBACK = "/images/market/world-sub.svg";
