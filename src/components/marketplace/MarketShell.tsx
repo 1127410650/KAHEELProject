@@ -201,7 +201,8 @@ export function MarketHeader({
         {home && (
           <nav
             aria-label={t("market.nav.menu")}
-            className="border-t border-white/12 bg-brand-950/92"
+            className="border-t border-border bg-background"
+
           >
             <div className="mx-auto flex min-h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
               {[
