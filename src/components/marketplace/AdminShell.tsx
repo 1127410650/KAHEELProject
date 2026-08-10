@@ -285,7 +285,7 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
                     className={
                       "group flex min-h-11 items-center gap-3 rounded-xl px-3 text-[13px] font-semibold transition-all duration-200 " +
                       (active
-                        ? "bg-[#f3e3ff] text-[#7b2cbf] shadow-[inset_0_0_0_1px_rgba(8,127,120,0.08)] dark:bg-primary/15 dark:text-primary"
+                        ? "bg-[#f3e3ff] text-[#7b2cbf] shadow-[inset_0_0_0_1px_rgba(123,44,191,0.08)] dark:bg-primary/15 dark:text-primary"
                         : "text-muted-foreground hover:bg-white hover:text-foreground hover:shadow-sm dark:hover:bg-accent")
                     }
                   >
@@ -317,7 +317,7 @@ function AdminSidebarBrand() {
   return (
     <div className="border-b border-[#ead9fb] px-4 py-4 dark:border-border">
       <Link to="/admin" className="flex items-center gap-3 rounded-xl">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#7b2cbf] text-white shadow-[0_8px_24px_rgba(8,127,120,0.22)]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#7b2cbf] text-white shadow-[0_8px_24px_rgba(123,44,191,0.22)]">
           <ShieldCheck className="size-5" aria-hidden />
         </span>
         <span className="min-w-0">
@@ -581,7 +581,7 @@ export function AdminShell({
 
         <main className="min-w-0 flex-1 px-3 pb-8 pt-4 sm:px-5 sm:pt-5 lg:px-7 lg:pb-10 xl:px-9">
           <div className="mx-auto w-full max-w-[1500px]">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#ead9fb] bg-white px-4 py-3 shadow-[0_8px_30px_rgba(13,90,84,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#ead9fb] bg-white px-4 py-3 shadow-[0_8px_30px_rgba(36,0,70,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
               <div className="min-w-0">
                 <p className="text-[10px] font-bold text-[#7b2cbf] dark:text-primary">
                   {t("admin.pageEyebrow")}
