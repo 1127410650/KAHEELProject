@@ -65,17 +65,13 @@ export const STORY_GRADIENT_CSS: Record<StoryGradient, string> = {
 };
 
 /**
- * أغلفة محلية للستوريات التجريبية: `image_path` يبدأ بـ `asset:` ⇒ الغلاف صورة
- * مرفقة بالحزمة، فكل دائرة لها مشهد مختلف بدل تكرار رسم الشخصية نفسها.
+ * أغلفة مرفقة بالحزمة: `image_path` يبدأ بـ `asset:` ⇒ المفتاح بعده يُترجم إلى
+ * صورة مستوردة في `KaheelStories`، فكل دائرة لها مشهد مختلف بدل تكرار رسم
+ * الشخصية نفسها. لا شبكة ولا توقيع روابط.
  */
-export const STORY_LOCAL_COVERS: Record<string, string> = {
-  "asset:restaurants": "/src/assets/market/cat-restaurants-hero.webp",
-  "asset:groceries": "/src/assets/market/cat-groceries-hero.webp",
-};
-
-export function storyLocalCover(imagePath: string | null | undefined): string | undefined {
+export function storyAssetKey(imagePath: string | null | undefined): string | undefined {
   if (!imagePath || !imagePath.startsWith("asset:")) return undefined;
-  return STORY_LOCAL_COVERS[imagePath];
+  return imagePath.slice("asset:".length);
 }
 
 /** حد صورة الستوري: 150KB. أي شيء أكبر يُرفض قبل أن يلمس التخزين. */
