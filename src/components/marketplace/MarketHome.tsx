@@ -122,6 +122,9 @@ export function MarketHome() {
             <ExclusiveOffersRail />
           </>
         )}
+          </>
+        )}
+
       </div>
     </div>
   );
