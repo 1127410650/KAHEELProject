@@ -26,8 +26,12 @@ import {
   areaStillFree,
   canShowMascot,
   findSafeBand,
+  floatingTextStyle,
+  sampleAreaTone,
+  type AreaTone,
   type SafeBand,
 } from "@/lib/mascot-stage";
+
 import { useCallCenter } from "@/lib/mkt-call-center";
 import { watchScrollIdle } from "@/lib/scroll-idle";
 import {
