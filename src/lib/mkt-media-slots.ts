@@ -196,10 +196,17 @@ export function slotLink(slots: MediaSlot[] | undefined, key: string, fallback: 
   return slots?.find((item) => item.slot_key === key)?.link_path || fallback;
 }
 
-/** قالب «تصاميمي» المربوط بفتحة إعلانية. */
+/**
+ * قالب «تصاميمي» المعروض في الفتحة الآن. إن كان «التدوير التلقائي» مفعّلًا فالقالب
+ * النشط يُحسب من قائمة التدوير وفترتها (يومي/أسبوعي/شهري) بترتيب دائري، وإلا
+ * فالقالب المربوط يدويًا.
+ */
 export function slotTemplateId(slots: MediaSlot[] | undefined, key: string): string | null {
-  return slots?.find((item) => item.slot_key === key)?.template_id ?? null;
+  const slot = slots?.find((item) => item.slot_key === key);
+  if (!slot) return null;
+  return activeRotationTemplateId(slot) ?? slot.template_id ?? null;
 }
+
 
 /** معرّف الحملة المربوطة بموضع إعلاني، إن كانت داخل فترة العرض. */
 export function slotCampaignId(slots: MediaSlot[] | undefined, key: string): string | null {
