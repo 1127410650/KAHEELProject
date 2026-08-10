@@ -11,6 +11,7 @@ import { AdminShell } from "@/components/marketplace/AdminShell";
 import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
 import { useAiLibrary } from "@/lib/mkt-ai-studio";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
+import { MascotPresenceCard } from "@/components/marketplace/admin/MascotPresenceCard";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
