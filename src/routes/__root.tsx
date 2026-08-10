@@ -20,7 +20,7 @@ import { canonicalUrl } from "@/lib/share-links";
 import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { PromoPopupHost } from "@/components/marketplace/campaign/PromoPopupHost";
-import { MascotRoam } from "@/components/marketplace/campaign/MascotRoam";
+import { MascotPresence } from "@/components/marketplace/campaign/MascotPresence";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
 import { SlotStyleLayer } from "@/components/marketplace/SlotStyleLayer";
@@ -204,7 +204,7 @@ function RootComponent() {
             <LiveEditGate />
             <CallOverlay />
             <PromoPopupHost />
-            <MascotRoam />
+            <MascotPresence />
             <Toaster position="top-center" />
           </CallCenterProvider>
         </SessionProvider>
