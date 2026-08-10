@@ -222,6 +222,13 @@ const NAV: NavItem[] = [
     ownerOnly: true,
   },
   {
+    to: "/admin/student-bot",
+    labelKey: "admin.nav.studentBot",
+    icon: GraduationCap,
+    section: "system",
+    ownerOnly: true,
+  },
+  {
     to: "/admin/settings",
     labelKey: "admin.nav.settings",
     icon: Settings,
@@ -229,6 +236,7 @@ const NAV: NavItem[] = [
     ownerOnly: true,
   },
 ];
+
 
 const NAV_SECTIONS: NavSection[] = ["overview", "market", "accounts", "operations", "system"];
 
