@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { LayoutGrid, List, Loader2, SlidersHorizontal, X } from "lucide-react";
+import { LayoutGrid, List, Loader2, MapPin, SlidersHorizontal, X } from "lucide-react";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
@@ -119,6 +119,14 @@ const description =
   "ابحث عن العقارات والخدمات والموردين والمعدات ومواد البناء وفلتر النتائج حسب التصنيف والمدينة والسعر.";
 
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
+import { LocationSheet } from "@/components/marketplace/LocationSheet";
+import { RADIUS_OPTIONS, useNearbyOrigin, type RadiusKm } from "@/lib/mkt-nearby";
+
+/** يقرأ نطاق القرب من الرابط: قيمة معتمدة فقط، وإلا «كل سوريا». */
+function parseRadius(value: string | undefined): RadiusKm {
+  const km = Number(value);
+  return (RADIUS_OPTIONS as readonly number[]).includes(km) ? (km as RadiusKm) : null;
+}
 
 export const Route = createFileRoute("/search")({
   ssr: "data-only",
