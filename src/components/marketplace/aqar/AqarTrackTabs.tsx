@@ -1,4 +1,4 @@
-/** تبويبات المسار: يومي / طويل / بيع بكبسولة بنفسجية للنشط. */
+/** تبويبات المسار: عنصر تحكم مجزّأ مضغوط (h-10) بكبسولة نشطة بنفسجية. */
 
 import { AQAR_TRACKS, type AqarTrack } from "@/lib/mkt-aqar";
 
@@ -13,7 +13,7 @@ export function AqarTrackTabs({
     <div
       role="tablist"
       aria-label="نوع العرض"
-      className="mx-4 flex gap-1 rounded-full border border-border bg-card p-1"
+      className="mx-4 flex h-10 items-stretch gap-1 rounded-[var(--r-control)] border border-border bg-card p-1"
     >
       {AQAR_TRACKS.map((item) => {
         const active = item.key === track;
@@ -24,19 +24,16 @@ export function AqarTrackTabs({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(item.key)}
-            className={`flex flex-1 items-center justify-center rounded-full px-3 text-desc font-bold transition-colors ${
+            className={`flex flex-1 items-center justify-center rounded-[10px] px-3 text-desc font-bold transition-colors ${
               active
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }`}
-            style={{ minHeight: 44 }}
-
           >
             {item.label}
           </button>
         );
       })}
-
     </div>
   );
 }
