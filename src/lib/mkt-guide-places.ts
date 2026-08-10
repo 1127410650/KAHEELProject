@@ -50,7 +50,10 @@ export interface GuidePlace {
   verification_status: string;
   completeness: number | null;
   notes: string | null;
+  /** المسافة بالأمتار من موقع المستخدم عند الترتيب حسب القرب. */
+  distanceM?: number | null;
 }
+
 
 export interface GuideFilters {
   query: string;
