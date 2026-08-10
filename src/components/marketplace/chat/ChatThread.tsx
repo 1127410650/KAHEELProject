@@ -129,14 +129,14 @@ export function ChatThread({
               <p className="text-sm font-semibold text-foreground">
                 {t("market.chat.emptyTitle")}
               </p>
-              <p className="text-xs text-muted-foreground">{t("market.chat.emptyHint")}</p>
+              <p className="text-desc text-muted-foreground">{t("market.chat.emptyHint")}</p>
             </div>
           </div>
         ) : (
           <div className="space-y-4">
             {groups.map((group) => (
               <section key={group.key} aria-label={group.label}>
-                <p className="mx-auto mb-3 w-fit rounded-full bg-background px-3 py-1 text-[11px] font-medium text-muted-foreground shadow-sm">
+                <p className="mx-auto mb-3 w-fit rounded-full bg-background px-3 py-1 text-desc font-medium text-muted-foreground shadow-sm">
                   {group.label}
                 </p>
                 <ul className="flex flex-col gap-2">
@@ -155,7 +155,7 @@ export function ChatThread({
 
             {peerTyping && (
               <p
-                className="flex w-fit items-center gap-1 rounded-2xl rounded-ss-sm bg-secondary px-3 py-2 text-xs text-secondary-foreground"
+                className="flex w-fit items-center gap-1 rounded-2xl rounded-ss-sm bg-secondary px-3 py-2 text-desc text-secondary-foreground"
                 aria-live="polite"
               >
                 <span className="size-1.5 animate-bounce rounded-full bg-current [animation-delay:0ms]" />

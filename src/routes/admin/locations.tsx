@@ -187,7 +187,7 @@ function AdminGeoPage() {
                       {locale === "ar" ? c.name_ar : c.name_en || c.name_ar}
                     </span>
                     {!c.is_active && (
-                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[11px] text-muted-foreground">
+                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-desc text-muted-foreground">
                         {t("market.admin.geoDisable")}
                       </span>
                     )}
@@ -203,7 +203,7 @@ function AdminGeoPage() {
                 ))}
               </ul>
             )}
-            <p className="mt-2 text-xs text-muted-foreground">{t("market.admin.geoInUse")}</p>
+            <p className="mt-2 text-desc text-muted-foreground">{t("market.admin.geoInUse")}</p>
           </section>
         )}
 
@@ -237,7 +237,7 @@ function AdminGeoPage() {
               ))}
             </ul>
           ) : (
-            <p className="mt-2 text-xs text-muted-foreground">{t("market.admin.noResults")}</p>
+            <p className="mt-2 text-desc text-muted-foreground">{t("market.admin.noResults")}</p>
           )}
         </section>
       </div>

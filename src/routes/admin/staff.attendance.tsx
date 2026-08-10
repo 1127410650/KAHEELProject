@@ -137,7 +137,7 @@ function AttendanceAdminPage() {
 
   return (
     <AdminShell title={t("admin.attendance.title")} staffAccess={canView} staffChecking={loading}>
-      <p className="text-xs text-muted-foreground">{t("admin.attendance.hint")}</p>
+      <p className="text-desc text-muted-foreground">{t("admin.attendance.hint")}</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
         {(["attendance", "shifts"] as Tab[]).map((item) => (
@@ -155,7 +155,7 @@ function AttendanceAdminPage() {
 
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         <div>
-          <Label htmlFor="att-from" className="text-[11px]">
+          <Label htmlFor="att-from" className="text-desc">
             {t("admin.attendance.from")}
           </Label>
           <Input
@@ -168,7 +168,7 @@ function AttendanceAdminPage() {
           />
         </div>
         <div>
-          <Label htmlFor="att-to" className="text-[11px]">
+          <Label htmlFor="att-to" className="text-desc">
             {t("admin.attendance.to")}
           </Label>
           <Input
@@ -181,7 +181,7 @@ function AttendanceAdminPage() {
           />
         </div>
         <div>
-          <Label className="text-[11px]">{t("admin.attendance.staff")}</Label>
+          <Label className="text-desc">{t("admin.attendance.staff")}</Label>
           <Select value={staffFilter} onValueChange={setStaffFilter}>
             <SelectTrigger className="mt-1 h-10">
               <SelectValue />
@@ -212,13 +212,13 @@ function AttendanceAdminPage() {
                     <p className="truncate text-sm font-semibold text-foreground">
                       {staffName(row)}
                     </p>
-                    <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                    <p className="mt-0.5 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                       <span>{formatDate(row.work_date)}</span>
                       <span>{t(`admin.attendance.status.${row.status}`)}</span>
                       {row.remote && <span>{t("admin.attendance.remote")}</span>}
                       {row.source === "admin" && <span>{t("admin.attendance.adminEdited")}</span>}
                     </p>
-                    <p className="mt-1 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                    <p className="mt-1 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                       <span>
                         {t("admin.attendance.in")}:{" "}
                         {row.checked_in_at ? formatDateTime(row.checked_in_at) : "—"}
@@ -228,7 +228,7 @@ function AttendanceAdminPage() {
                         {row.checked_out_at ? formatDateTime(row.checked_out_at) : "—"}
                       </span>
                     </p>
-                    <p className="mt-1 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                    <p className="mt-1 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                       <span>
                         {t("admin.attendance.planned")}: {formatMinutes(row.planned_minutes)}
                       </span>
@@ -321,7 +321,7 @@ function AttendanceAdminPage() {
                     <p className="truncate text-sm font-semibold text-foreground">
                       {staffName(row)}
                     </p>
-                    <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                    <p className="mt-0.5 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                       <span>{formatDate(row.work_date)}</span>
                       <span>{t(`admin.attendance.shiftKind.${row.kind}`)}</span>
                       {row.planned_start && row.planned_end && (
@@ -400,7 +400,7 @@ function AttendanceAdminPage() {
           {edits.isLoading ? (
             <Skeleton className="h-20 w-full rounded-lg" />
           ) : (
-            <ul className="grid max-h-72 gap-2 overflow-y-auto text-[11px]">
+            <ul className="grid max-h-72 gap-2 overflow-y-auto text-desc">
               {(edits.data ?? []).map((edit) => (
                 <li key={edit.id} className="rounded-lg border border-border p-2">
                   <p className="tabular-nums text-muted-foreground">
@@ -481,7 +481,7 @@ function CorrectionDialog({
         </DialogHeader>
         <div className="grid gap-3">
           <div>
-            <Label htmlFor="corr-in" className="text-[11px]">
+            <Label htmlFor="corr-in" className="text-desc">
               {t("admin.attendance.in")}
             </Label>
             <Input
@@ -493,7 +493,7 @@ function CorrectionDialog({
             />
           </div>
           <div>
-            <Label htmlFor="corr-out" className="text-[11px]">
+            <Label htmlFor="corr-out" className="text-desc">
               {t("admin.attendance.out")}
             </Label>
             <Input
@@ -505,13 +505,13 @@ function CorrectionDialog({
             />
           </div>
           <div className="flex items-center justify-between gap-3">
-            <Label htmlFor="corr-remote" className="text-[11px]">
+            <Label htmlFor="corr-remote" className="text-desc">
               {t("admin.attendance.remote")}
             </Label>
             <Switch id="corr-remote" checked={remote} onCheckedChange={setRemote} />
           </div>
           <div>
-            <Label htmlFor="corr-note" className="text-[11px]">
+            <Label htmlFor="corr-note" className="text-desc">
               {t("admin.attendance.note")}
             </Label>
             <Textarea
@@ -522,7 +522,7 @@ function CorrectionDialog({
             />
           </div>
           <div>
-            <Label htmlFor="corr-reason" className="text-[11px]">
+            <Label htmlFor="corr-reason" className="text-desc">
               {t("admin.reason")}
             </Label>
             <Textarea
@@ -608,7 +608,7 @@ function ShiftDialog({
         </DialogHeader>
         <div className="grid gap-3">
           <div>
-            <Label className="text-[11px]">{t("admin.attendance.staff")}</Label>
+            <Label className="text-desc">{t("admin.attendance.staff")}</Label>
             <Select value={userId} onValueChange={setUserId}>
               <SelectTrigger className="mt-1 h-10">
                 <SelectValue />
@@ -623,7 +623,7 @@ function ShiftDialog({
             </Select>
           </div>
           <div>
-            <Label htmlFor="shift-date" className="text-[11px]">
+            <Label htmlFor="shift-date" className="text-desc">
               {t("admin.attendance.date")}
             </Label>
             <Input
@@ -635,7 +635,7 @@ function ShiftDialog({
             />
           </div>
           <div>
-            <Label className="text-[11px]">{t("admin.attendance.template")}</Label>
+            <Label className="text-desc">{t("admin.attendance.template")}</Label>
             <Select value={template} onValueChange={setTemplate}>
               <SelectTrigger className="mt-1 h-10">
                 <SelectValue placeholder={t("admin.attendance.template")} />
@@ -650,13 +650,13 @@ function ShiftDialog({
             </Select>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <Label htmlFor="shift-remote" className="text-[11px]">
+            <Label htmlFor="shift-remote" className="text-desc">
               {t("admin.attendance.remote")}
             </Label>
             <Switch id="shift-remote" checked={remote} onCheckedChange={setRemote} />
           </div>
           <div>
-            <Label htmlFor="shift-note" className="text-[11px]">
+            <Label htmlFor="shift-note" className="text-desc">
               {t("admin.attendance.note")}
             </Label>
             <Textarea

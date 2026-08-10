@@ -138,7 +138,7 @@ export function PromoteDialog({
             </div>
 
             {data?.active && (
-              <p className="rounded-lg bg-secondary px-3 py-2 text-xs text-primary">
+              <p className="rounded-lg bg-secondary px-3 py-2 text-desc text-primary">
                 {t("market.promote.alreadyActiveUntil", { date: formatDateTime(data.active.ends_at) })}
               </p>
             )}
@@ -163,7 +163,7 @@ export function PromoteDialog({
                     <span className="block font-semibold" dir="ltr">
                       {days}
                     </span>
-                    <span className="mt-0.5 block text-[11px] text-muted-foreground" dir="ltr">
+                    <span className="mt-0.5 block text-desc text-muted-foreground" dir="ltr">
                       {typeof price === "number" ? price : "—"}
                     </span>
                   </button>
@@ -173,7 +173,7 @@ export function PromoteDialog({
 
             <button
               type="button"
-              className="text-xs text-primary underline underline-offset-2"
+              className="text-desc text-primary underline underline-offset-2"
               onClick={() => {
                 onOpenChange(false);
                 void navigate({ to: "/my/wallet" });

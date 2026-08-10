@@ -56,11 +56,11 @@ export function PhoneField({
           aria-invalid={invalid ?? false}
         />
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-desc text-muted-foreground">
         {country ? `${geoName(country, locale)} · ` : ""}
         {status === "verified" ? t("market.phone.verified") : t("market.phone.unverified")}
       </p>
-      {invalid && <p className="text-xs font-medium text-destructive">{t("market.phone.invalid")}</p>}
+      {invalid && <p className="text-desc font-medium text-destructive">{t("market.phone.invalid")}</p>}
     </div>
   );
 }
@@ -88,7 +88,7 @@ export function PhoneVisibilityField({
         <option value="public">{t("market.phone.public")}</option>
       </select>
       {value === "public" && (
-        <p className="flex items-start gap-1.5 rounded-lg bg-destructive/10 p-2 text-xs text-destructive">
+        <p className="flex items-start gap-1.5 rounded-lg bg-destructive/10 p-2 text-desc text-destructive">
           <AlertTriangle className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           {t("market.phone.publicWarning")}
         </p>

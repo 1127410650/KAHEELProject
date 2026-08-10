@@ -119,7 +119,7 @@ function AuthPage() {
           className="size-20 rounded-2xl"
           aria-hidden
         />
-        <span className="text-5xl font-black tracking-[-0.08em] text-market-navy-foreground">
+        <span className="text-5xl font-black text-market-navy-foreground">
           {t("market.brand")}
         </span>
       </div>
@@ -144,8 +144,8 @@ function AuthPage() {
                 onClick={() => setLocale("ar")}
                 className={
                   locale === "ar"
-                    ? "rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground"
-                    : "rounded-full px-3 py-1 text-xs font-semibold text-muted-foreground"
+                    ? "rounded-full bg-primary px-3 py-1 text-desc font-semibold text-primary-foreground"
+                    : "rounded-full px-3 py-1 text-desc font-semibold text-muted-foreground"
                 }
               >
                 العربية
@@ -155,8 +155,8 @@ function AuthPage() {
                 onClick={() => setLocale("en")}
                 className={
                   locale === "en"
-                    ? "rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground"
-                    : "rounded-full px-3 py-1 text-xs font-semibold text-muted-foreground"
+                    ? "rounded-full bg-primary px-3 py-1 text-desc font-semibold text-primary-foreground"
+                    : "rounded-full px-3 py-1 text-desc font-semibold text-muted-foreground"
                 }
               >
                 English
@@ -174,8 +174,8 @@ function AuthPage() {
                 onClick={() => setMode(value)}
                 className={
                   mode === value
-                    ? "flex-1 rounded-full bg-primary px-3 py-2 text-xs font-bold text-primary-foreground"
-                    : "flex-1 rounded-full px-3 py-2 text-xs font-bold text-muted-foreground"
+                    ? "flex-1 rounded-full bg-primary px-3 py-2 text-desc font-bold text-primary-foreground"
+                    : "flex-1 rounded-full px-3 py-2 text-desc font-bold text-muted-foreground"
                 }
               >
                 {value === "code"
@@ -233,7 +233,7 @@ function AuthPage() {
             </Button>
           </form>
 
-          <div className="mt-5 flex flex-col items-center gap-2 text-xs text-muted-foreground">
+          <div className="mt-5 flex flex-col items-center gap-2 text-desc text-muted-foreground">
             <Link
               to="/forgot-password"
               className="font-semibold text-muted-foreground underline hover:text-primary"
@@ -249,7 +249,7 @@ function AuthPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-muted-foreground">{t("auth.rights")}</p>
+        <p className="mt-6 text-center text-desc text-muted-foreground">{t("auth.rights")}</p>
       </div>
     </main>
   );

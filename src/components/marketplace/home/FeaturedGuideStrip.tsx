@@ -36,7 +36,7 @@ export function FeaturedGuideStrip() {
       aria-label="إعلانات مميزة"
       className="rounded-3xl border border-market-purple/35 bg-market-purple/[0.05] p-2.5 shadow-[0_0_24px_-12px_hsl(var(--market-purple)/0.55)]"
     >
-      <h2 className="mb-2 flex items-center gap-1.5 px-1 text-[12px] font-black text-market-purple">
+      <h2 className="mb-2 flex items-center gap-1.5 px-1 text-desc font-black text-market-purple">
         <Sparkles className="size-3.5" aria-hidden />
         إعلانات مميزة
       </h2>
@@ -49,8 +49,8 @@ export function FeaturedGuideStrip() {
             onClick={() => trackGuidePromo(row.promotion_id, "click")}
             className="flex h-[64px] w-[62%] shrink-0 snap-start flex-col justify-center gap-0.5 rounded-2xl border border-market-purple/25 bg-card px-3 transition active:scale-[0.97] sm:w-[30%]"
           >
-            <span className="truncate text-[12.5px] font-black leading-5">{row.name_ar}</span>
-            <span className="flex items-center gap-1.5 truncate text-[10.5px] font-bold text-muted-foreground">
+            <span className="truncate text-desc font-black leading-5">{row.name_ar}</span>
+            <span className="flex items-center gap-1.5 truncate text-desc font-bold text-muted-foreground">
               {row.rating != null && (row.rating_total ?? 0) > 0 ? (
                 <span className="inline-flex items-center gap-0.5 text-foreground">
                   <Star className="size-3 fill-gold text-gold" aria-hidden />

@@ -138,7 +138,7 @@ function AdminStudentBotPage() {
   if (!data) {
     return (
       <AdminShell title="مساعد الطالب">
-        <p className="rounded-2xl border border-border bg-card p-6 text-center text-xs text-muted-foreground">
+        <p className="rounded-2xl border border-border bg-card p-6 text-center text-desc text-muted-foreground">
           لا تملك صلاحية عرض هذه اللوحة.
         </p>
       </AdminShell>
@@ -154,12 +154,12 @@ function AdminStudentBotPage() {
     hint: string,
   ) => (
     <div className="rounded-xl border border-border bg-background p-3">
-      <p className="text-[11px] font-black text-foreground">{label}</p>
-      <p className="mt-0.5 text-[10px] text-muted-foreground">{hint}</p>
+      <p className="text-desc font-black text-foreground">{label}</p>
+      <p className="mt-0.5 text-desc text-muted-foreground">{hint}</p>
       <div className="mt-2 flex items-center gap-2">
         <Input
           inputMode="decimal"
-          className="h-9 max-w-28 text-xs tabular-nums"
+          className="h-9 max-w-28 text-desc tabular-nums"
           value={drafts[key] ?? String(current)}
           onChange={(event) => setDrafts((prev) => ({ ...prev, [key]: event.target.value }))}
         />
@@ -188,7 +188,7 @@ function AdminStudentBotPage() {
       <div className="grid gap-3">
         <header className="rounded-2xl border border-border bg-card p-4 shadow-panel">
           <h1 className="text-sm font-black text-foreground">مساعد الطالب</h1>
-          <p className="mt-1 text-[11px] leading-6 text-muted-foreground">
+          <p className="mt-1 text-desc leading-6 text-muted-foreground">
             الاستهلاك يُحسب تقديريًا من رموز الإدخال والإخراج لكل طلب. عند بلوغ السقف الشهري يتوقف
             المساعد تلقائيًا، وتُرسل تنبيهات للإدارة عند ٥٠٪ و٨٠٪ و١٠٠٪.
           </p>
@@ -205,7 +205,7 @@ function AdminStudentBotPage() {
             { label: "اشتراكات نشطة", value: formatNumber(data.subscriptions) },
           ].map((card) => (
             <div key={card.label} className="rounded-xl border border-border bg-card p-3">
-              <p className="text-[10px] font-bold text-muted-foreground">{card.label}</p>
+              <p className="text-desc font-bold text-muted-foreground">{card.label}</p>
               <p className="mt-1 text-sm font-black tabular-nums text-foreground">{card.value}</p>
             </div>
           ))}
@@ -213,8 +213,8 @@ function AdminStudentBotPage() {
 
         <section className="rounded-2xl border border-border bg-card p-4 shadow-panel">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[11px] font-black text-foreground">نسبة السقف الشهري</p>
-            <p className="text-[11px] font-black tabular-nums text-foreground">
+            <p className="text-desc font-black text-foreground">نسبة السقف الشهري</p>
+            <p className="text-desc font-black tabular-nums text-foreground">
               {capPct.toFixed(0)}%
             </p>
           </div>
@@ -231,7 +231,7 @@ function AdminStudentBotPage() {
             />
           </div>
           {capPct >= 100 ? (
-            <p className="mt-2 text-[10px] font-bold text-destructive">
+            <p className="mt-2 text-desc font-bold text-destructive">
               المساعد متوقف الآن حتى بداية الشهر أو حتى ترفع السقف.
             </p>
           ) : null}
@@ -240,7 +240,7 @@ function AdminStudentBotPage() {
         {/* Charts */}
         <section className="grid gap-3 lg:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-3 shadow-panel">
-            <p className="mb-2 text-[11px] font-black text-foreground">الاستهلاك اليومي (٣٠ يومًا)</p>
+            <p className="mb-2 text-desc font-black text-foreground">الاستهلاك اليومي (٣٠ يومًا)</p>
             <div className="h-52 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.daily}>
@@ -254,7 +254,7 @@ function AdminStudentBotPage() {
             </div>
           </div>
           <div className="rounded-2xl border border-border bg-card p-3 shadow-panel">
-            <p className="mb-2 text-[11px] font-black text-foreground">الاستهلاك الشهري</p>
+            <p className="mb-2 text-desc font-black text-foreground">الاستهلاك الشهري</p>
             <div className="h-52 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.monthly}>
@@ -273,8 +273,8 @@ function AdminStudentBotPage() {
         <section className="rounded-2xl border border-border bg-card p-4 shadow-panel">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-black text-foreground">تفعيل المساعد</p>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">
+              <p className="text-desc font-black text-foreground">تفعيل المساعد</p>
+              <p className="mt-0.5 text-desc text-muted-foreground">
                 عند الإيقاف يرى الطالب رسالة لطيفة بلا أي طلب خارجي.
               </p>
             </div>
@@ -320,8 +320,8 @@ function AdminStudentBotPage() {
 
         {/* Plans */}
         <section className="rounded-2xl border border-border bg-card p-4 shadow-panel">
-          <p className="text-[11px] font-black text-foreground">الباقات والأسعار</p>
-          <p className="mt-0.5 text-[10px] text-muted-foreground">
+          <p className="text-desc font-black text-foreground">الباقات والأسعار</p>
+          <p className="mt-0.5 text-desc text-muted-foreground">
             السعر بوحدات رصيد المحفظة — احسبه على التكلفة الفعلية بهامش ربحك.
           </p>
           <div className="mt-2 grid gap-2">
@@ -332,9 +332,9 @@ function AdminStudentBotPage() {
               return (
                 <div key={plan.id} className="rounded-xl border border-border bg-background p-3">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[11px] font-black text-foreground">
+                    <p className="text-desc font-black text-foreground">
                       {plan.name_ar}{" "}
-                      <span className="text-[10px] font-bold text-muted-foreground">
+                      <span className="text-desc font-bold text-muted-foreground">
                         {plan.kind === "season" ? "موسمية" : "شهرية"}
                       </span>
                     </p>
@@ -344,30 +344,30 @@ function AdminStudentBotPage() {
                     />
                   </div>
                   <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                    <label className="grid gap-1 text-[10px] font-bold text-muted-foreground">
+                    <label className="grid gap-1 text-desc font-bold text-muted-foreground">
                       السعر (رصيد)
                       <Input
                         inputMode="numeric"
-                        className="h-9 text-xs tabular-nums"
+                        className="h-9 text-desc tabular-nums"
                         value={String(draft.price_credits ?? plan.price_credits)}
                         onChange={(event) => patch({ price_credits: Number(event.target.value) })}
                       />
                     </label>
-                    <label className="grid gap-1 text-[10px] font-bold text-muted-foreground">
+                    <label className="grid gap-1 text-desc font-bold text-muted-foreground">
                       أسئلة يوميًا
                       <Input
                         inputMode="numeric"
-                        className="h-9 text-xs tabular-nums"
+                        className="h-9 text-desc tabular-nums"
                         value={String(draft.daily_limit ?? plan.daily_limit)}
                         onChange={(event) => patch({ daily_limit: Number(event.target.value) })}
                       />
                     </label>
                     {plan.kind === "season" ? (
-                      <label className="grid gap-1 text-[10px] font-bold text-muted-foreground">
+                      <label className="grid gap-1 text-desc font-bold text-muted-foreground">
                         ينتهي الموسم
                         <Input
                           type="date"
-                          className="h-9 text-xs tabular-nums"
+                          className="h-9 text-desc tabular-nums"
                           value={(draft.season_ends_at ?? plan.season_ends_at ?? "").slice(0, 10)}
                           onChange={(event) =>
                             patch({ season_ends_at: `${event.target.value}T23:59:00+03:00` })
@@ -375,13 +375,13 @@ function AdminStudentBotPage() {
                         />
                       </label>
                     ) : (
-                      <p className="self-end text-[10px] text-muted-foreground">
+                      <p className="self-end text-desc text-muted-foreground">
                         مدة الاشتراك: {formatNumber(plan.duration_days ?? 30)} يومًا
                       </p>
                     )}
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-2">
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-desc text-muted-foreground">
                       {plan.season_ends_at ? `الموسم الحالي حتى ${formatDate(plan.season_ends_at)}` : ""}
                     </p>
                     <Button
@@ -403,9 +403,9 @@ function AdminStudentBotPage() {
         {/* Content signals */}
         <section className="grid gap-3 lg:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-4 shadow-panel">
-            <p className="text-[11px] font-black text-foreground">أكثر المواد سؤالًا</p>
+            <p className="text-desc font-black text-foreground">أكثر المواد سؤالًا</p>
             {data.subjects.length === 0 ? (
-              <p className="mt-2 text-[10px] text-muted-foreground">لا أسئلة بعد.</p>
+              <p className="mt-2 text-desc text-muted-foreground">لا أسئلة بعد.</p>
             ) : (
               <ul className="mt-2 grid gap-1">
                 {data.subjects.map((row) => (
@@ -413,10 +413,10 @@ function AdminStudentBotPage() {
                     key={`${row.grade}-${row.subject}`}
                     className="flex items-center justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
                   >
-                    <span className="truncate text-[11px] font-bold text-foreground">
+                    <span className="truncate text-desc font-bold text-foreground">
                       {row.subject}
                     </span>
-                    <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                    <span className="shrink-0 text-desc tabular-nums text-muted-foreground">
                       {formatNumber(row.count)}
                     </span>
                   </li>
@@ -425,12 +425,12 @@ function AdminStudentBotPage() {
             )}
           </div>
           <div className="rounded-2xl border border-border bg-card p-4 shadow-panel">
-            <p className="text-[11px] font-black text-foreground">أكثر الأسئلة تكرارًا</p>
-            <p className="mt-0.5 text-[10px] text-muted-foreground">
+            <p className="text-desc font-black text-foreground">أكثر الأسئلة تكرارًا</p>
+            <p className="mt-0.5 text-desc text-muted-foreground">
               مادة خام لتطوير محتوى دليل الطالب لاحقًا.
             </p>
             {data.top_questions.length === 0 ? (
-              <p className="mt-2 text-[10px] text-muted-foreground">لا تكرار بعد.</p>
+              <p className="mt-2 text-desc text-muted-foreground">لا تكرار بعد.</p>
             ) : (
               <ol className="mt-2 grid gap-1">
                 {data.top_questions.map((row, index) => (
@@ -438,8 +438,8 @@ function AdminStudentBotPage() {
                     key={`${index}-${row.question.slice(0, 12)}`}
                     className="flex items-start justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
                   >
-                    <span className="line-clamp-2 text-[11px] text-foreground">{row.question}</span>
-                    <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                    <span className="line-clamp-2 text-desc text-foreground">{row.question}</span>
+                    <span className="shrink-0 text-desc tabular-nums text-muted-foreground">
                       {formatNumber(row.count)}
                     </span>
                   </li>

@@ -257,7 +257,7 @@ export function ChatComposer({
         <span className="text-sm tabular-nums" dir="ltr">
           {Math.floor(elapsed / 60)}:{String(Math.floor(elapsed % 60)).padStart(2, "0")}
         </span>
-        <span className="text-xs text-muted-foreground">{t("market.chat.voice.maxLength")}</span>
+        <span className="text-desc text-muted-foreground">{t("market.chat.voice.maxLength")}</span>
         <div className="ms-auto flex items-center gap-2">
           <Button size="sm" variant="ghost" onClick={cancelRecording}>
             <Trash2 className="size-4" aria-hidden />

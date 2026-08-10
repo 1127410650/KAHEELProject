@@ -158,7 +158,7 @@ export function SmartListingPriceController() {
       if (!hint) {
         hint = document.createElement("p");
         hint.id = "smart-price-unit-hint";
-        hint.className = "text-[11px] text-muted-foreground sm:col-span-2";
+        hint.className = "text-desc text-muted-foreground sm:col-span-2";
         select.closest("div.grid")?.insertAdjacentElement("afterend", hint);
       }
       hint.textContent = result.hint;

@@ -70,7 +70,7 @@ function AdminGuideQueuePage() {
       <div className="space-y-4">
         <div>
           <h1 className="text-lg font-black">مراجعة مساهمات الدليل</h1>
-          <p className="text-[12px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             الصور والتقييمات والمطالبات لا تُنشر إلا بعد الاعتماد من هنا.
           </p>
         </div>
@@ -109,7 +109,7 @@ function AdminGuideQueuePage() {
                       height={80}
                       className="size-20 shrink-0 rounded-xl object-cover"
                     />
-                    <div className="min-w-0 flex-1 text-[12px]">
+                    <div className="min-w-0 flex-1 text-desc">
                       <PlaceLink name={photo.place_name} slug={photo.place_slug} />
                       <p className="text-muted-foreground">
                         {photo.caption || "بدون وصف"} · {formatDateTime(photo.created_at)}
@@ -133,12 +133,12 @@ function AdminGuideQueuePage() {
                       <Star className="size-3 fill-gold text-gold" aria-hidden />
                       {review.rating}
                     </Badge>
-                    <div className="min-w-0 flex-1 text-[12px]">
+                    <div className="min-w-0 flex-1 text-desc">
                       <PlaceLink name={review.place_name} slug={review.place_slug} />
                       <p className="whitespace-pre-line text-muted-foreground">
                         {review.comment || "بدون تعليق"}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-desc text-muted-foreground">
                         {review.display_name ?? "زائر"} · {formatDateTime(review.created_at)}
                       </p>
                     </div>
@@ -157,10 +157,10 @@ function AdminGuideQueuePage() {
                 <Card key={claim.id}>
                   <CardContent className="flex flex-wrap items-center gap-3 p-3">
                     <ShieldQuestion className="size-5 shrink-0 text-market-navy" aria-hidden />
-                    <div className="min-w-0 flex-1 text-[12px]">
+                    <div className="min-w-0 flex-1 text-desc">
                       <PlaceLink name={claim.place_name} slug={claim.place_slug} />
                       <p className="whitespace-pre-line text-muted-foreground">{claim.evidence}</p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-desc text-muted-foreground">
                         {claim.contact ?? "بدون رقم"} · {formatDateTime(claim.created_at)}
                       </p>
                     </div>
@@ -195,7 +195,7 @@ function QueueGroup({
         {title} <span className="text-muted-foreground">({count.toLocaleString("en-US")})</span>
       </h2>
       {count === 0 ? (
-        <p className="text-[12px] text-muted-foreground">لا عناصر.</p>
+        <p className="text-desc text-muted-foreground">لا عناصر.</p>
       ) : (
         <div className="space-y-2">{children}</div>
       )}

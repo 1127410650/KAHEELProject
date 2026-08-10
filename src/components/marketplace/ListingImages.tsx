@@ -94,7 +94,7 @@ export function ListingImages({ api }: Props) {
         <ImagePlus className="size-4" aria-hidden />
         {t("market.media.add")}
       </button>
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-desc text-muted-foreground">
         {t("market.media.hint").replace("{max}", String(MAX_LISTING_IMAGES))}
       </p>
 
@@ -175,7 +175,7 @@ function PhotoTile({ item, isCover, onCover, onRemove, onRetry, onReplace }: Til
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div className="h-full bg-primary" style={{ width: `${item.progress}%` }} />
             </div>
-            <span className="mt-0.5 flex items-center gap-1 text-[10px] text-muted-foreground">
+            <span className="mt-0.5 flex items-center gap-1 text-desc text-muted-foreground">
               <Loader2 className="size-3 animate-spin" aria-hidden />
               <span dir="ltr">{item.progress}%</span>
             </span>
@@ -184,12 +184,12 @@ function PhotoTile({ item, isCover, onCover, onRemove, onRetry, onReplace }: Til
       </div>
 
       {item.status === "failed" && (
-        <p className="mt-1 text-[11px] text-destructive">
+        <p className="mt-1 text-desc text-destructive">
           {t(`market.media.err.${item.error ?? "upload"}`)}
         </p>
       )}
       {isCover && item.status === "ready" && (
-        <p className="mt-1 text-[11px] font-medium text-primary">{t("market.dash.cover")}</p>
+        <p className="mt-1 text-desc font-medium text-primary">{t("market.dash.cover")}</p>
       )}
 
       <div className="mt-1 flex items-center justify-between gap-0.5">

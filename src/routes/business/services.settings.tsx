@@ -282,7 +282,7 @@ function ProviderSettingsPage() {
                 <span className="block text-sm font-black">
                   {locale === "ar" ? "استقبال الحجوزات" : "Accept bookings"}
                 </span>
-                <span className="mt-1 block text-xs text-muted-foreground">
+                <span className="mt-1 block text-desc text-muted-foreground">
                   {locale === "ar"
                     ? "يمكن إيقاف المواعيد مؤقتًا دون إخفاء المتجر."
                     : "Pause appointments without hiding the store."}

@@ -168,7 +168,7 @@ function MyBookingsPage() {
                         <Link
                           to="/stores/$slug"
                           params={{ slug: booking.store_slug }}
-                          className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-primary"
+                          className="mt-1 inline-flex items-center gap-1 text-desc font-bold text-muted-foreground hover:text-primary"
                         >
                           <Store className="size-3.5" />
                           {booking.store_name}
@@ -208,12 +208,12 @@ function MyBookingsPage() {
                       </p>
                     </div>
                     {booking.address_text ? (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-desc text-muted-foreground">
                         <MapPin className="me-1 inline size-3.5" />
                         {booking.address_text}
                       </p>
                     ) : null}
-                    <div className="flex items-center justify-between gap-2 border-t pt-3 text-xs">
+                    <div className="flex items-center justify-between gap-2 border-t pt-3 text-desc">
                       <span className="font-mono text-muted-foreground" dir="ltr">
                         {booking.booking_number}
                       </span>

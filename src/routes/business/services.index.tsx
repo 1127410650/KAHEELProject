@@ -217,11 +217,11 @@ function ProviderServiceCenter() {
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-bold text-primary-foreground/75">
+                <p className="text-desc font-bold text-primary-foreground/75">
                   {locale === "ar" ? "حساب مقدم خدمة" : "Service provider account"}
                 </p>
                 <h2 className="mt-1 text-2xl font-black">{setup.data.store_name}</h2>
-                <p className="mt-1 text-xs text-white/65">
+                <p className="mt-1 text-desc text-white/65">
                   {setup.data.settings.accepts_bookings
                     ? locale === "ar"
                       ? "يستقبل الحجوزات الآن"
@@ -259,7 +259,7 @@ function ProviderServiceCenter() {
                   key={String(label)}
                   className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
-                  <p className="text-xs text-white/60">{label}</p>
+                  <p className="text-desc text-white/60">{label}</p>
                   <p className="mt-1 text-2xl font-black">{value}</p>
                 </div>
               ))}
@@ -310,7 +310,7 @@ function ProviderServiceCenter() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <h3 className="truncate font-black">{booking.service_name}</h3>
-                      <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <p className="mt-1 flex items-center gap-1 text-desc text-muted-foreground">
                         <UserRound className="size-3.5" />
                         {booking.customer_name || (locale === "ar" ? "عميل" : "Customer")}
                       </p>
@@ -343,14 +343,14 @@ function ProviderServiceCenter() {
                     </p>
                   </div>
                   {booking.address_text ? (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-desc text-muted-foreground">
                       <MapPin className="me-1 inline size-3.5" />
                       {booking.address_text}
                       {booking.district ? ` · ${booking.district}` : ""}
                     </p>
                   ) : null}
                   {booking.customer_notes ? (
-                    <p className="rounded-xl border-s-4 border-primary bg-primary/5 p-3 text-xs leading-5">
+                    <p className="rounded-xl border-s-4 border-primary bg-primary/5 p-3 text-desc leading-5">
                       {booking.customer_notes}
                     </p>
                   ) : null}
@@ -422,7 +422,7 @@ function ProviderServiceCenter() {
                         {locale === "ar" ? "إلغاء" : "Cancel"}
                       </Button>
                     ) : null}
-                    <span className="ms-auto font-mono text-[10px] text-muted-foreground" dir="ltr">
+                    <span className="ms-auto font-mono text-desc text-muted-foreground" dir="ltr">
                       {booking.booking_number}
                     </span>
                   </div>

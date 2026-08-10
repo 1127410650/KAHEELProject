@@ -104,7 +104,7 @@ function Section({
   return (
     <section className="border-t border-border pt-5 first:border-t-0 first:pt-0">
       <h2 className="text-sm font-semibold text-foreground">{title}</h2>
-      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      {hint && <p className="mt-1 text-desc text-muted-foreground">{hint}</p>}
       <div className="mt-3 space-y-3">{children}</div>
     </section>
   );
@@ -112,7 +112,7 @@ function Section({
 
 function FieldError({ message }: { message?: string | undefined }) {
   if (!message) return null;
-  return <p className="text-[11px] font-medium text-destructive">{message}</p>;
+  return <p className="text-desc font-medium text-destructive">{message}</p>;
 }
 
 function ProfilePage() {
@@ -381,7 +381,7 @@ function ProfilePage() {
                     </Button>
                   )}
                 </div>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {t("market.person.avatarRules")}
                 </p>
               </div>
@@ -473,7 +473,7 @@ function ProfilePage() {
               <div className="min-w-0 space-y-1.5 sm:col-span-2">
                 <Label htmlFor="region">
                   {t("market.person.districtLabel")}{" "}
-                  <span className="text-[11px] font-normal text-muted-foreground">
+                  <span className="text-desc font-normal text-muted-foreground">
                     ({t("market.person.optional")})
                   </span>
                 </Label>
@@ -500,12 +500,12 @@ function ProfilePage() {
               status={contact.data?.phone_status}
               invalid={!!errors.phone}
             />
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {locale === "ar"
                 ? "رقم الجوال الدولي هو اسم المستخدم لحسابك."
                 : "Your international mobile number is your account username."}
             </p>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {t("market.person.phoneStatusHint")}
             </p>
             <FieldError message={errors.phone} />
@@ -521,7 +521,7 @@ function ProfilePage() {
               <div className="min-w-0 space-y-1.5">
                 <Label htmlFor="public_whatsapp">
                   {t("market.form.whatsapp")}{" "}
-                  <span className="text-[11px] font-normal text-muted-foreground">
+                  <span className="text-desc font-normal text-muted-foreground">
                     ({t("market.person.optional")})
                   </span>
                 </Label>
@@ -532,7 +532,7 @@ function ProfilePage() {
                   onChange={(e) => set("public_whatsapp", e.target.value)}
                   aria-invalid={!!errors.public_whatsapp}
                 />
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <label className="flex items-center gap-2 text-desc text-muted-foreground">
                   <input
                     type="checkbox"
                     checked={draft.show_whatsapp}
@@ -545,7 +545,7 @@ function ProfilePage() {
               <div className="min-w-0 space-y-1.5">
                 <Label htmlFor="public_email">
                   {t("market.form.email")}{" "}
-                  <span className="text-[11px] font-normal text-muted-foreground">
+                  <span className="text-desc font-normal text-muted-foreground">
                     ({t("market.person.optional")})
                   </span>
                 </Label>
@@ -557,7 +557,7 @@ function ProfilePage() {
                   onChange={(e) => set("public_email", e.target.value)}
                   aria-invalid={!!errors.public_email}
                 />
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <label className="flex items-center gap-2 text-desc text-muted-foreground">
                   <input
                     type="checkbox"
                     checked={draft.show_email}
@@ -565,7 +565,7 @@ function ProfilePage() {
                   />
                   {t("market.person.showField")}
                 </label>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {t("market.person.publicEmailHint")}
                 </p>
                 <FieldError message={errors.public_email} />
@@ -582,7 +582,7 @@ function ProfilePage() {
               />
               {t("market.person.publishProfile")}
             </label>
-            <p className="text-[11px] text-muted-foreground">{t("market.person.publishHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("market.person.publishHint")}</p>
 
             <label className="mt-3 flex items-center gap-2 text-sm text-foreground">
               <input
@@ -592,11 +592,11 @@ function ProfilePage() {
               />
               {t("market.person.personalize")}
             </label>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {t("market.person.personalizeHint")}
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-3 text-desc">
               <span className="text-muted-foreground">{t("market.person.badgeState")}</span>
               <VerifiedBadge status={row?.verification_status} size="xs" />
               <span className="text-muted-foreground">
@@ -625,7 +625,7 @@ function ProfilePage() {
               {busy ? t("market.person.saving") : t("market.person.saveChanges")}
             </Button>
             {dirty && !busy && (
-              <span className="text-xs text-muted-foreground">{t("market.person.unsaved")}</span>
+              <span className="text-desc text-muted-foreground">{t("market.person.unsaved")}</span>
             )}
           </div>
         </form>

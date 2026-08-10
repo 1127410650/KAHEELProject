@@ -286,7 +286,7 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
 
         return (
           <div key={section}>
-            <p className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground/75">
+            <p className="mb-1.5 px-3 text-desc font-bold uppercase tracking-[0.08em] text-muted-foreground/75">
               {t(`admin.navSections.${section}`)}
             </p>
             <div className="space-y-1">
@@ -304,7 +304,7 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
                     onClick={onNavigate}
                     aria-current={active ? "page" : undefined}
                     className={
-                      "group flex min-h-11 items-center gap-3 rounded-xl px-3 text-[13px] font-semibold transition-all duration-200 " +
+                      "group flex min-h-11 items-center gap-3 rounded-xl px-3 text-desc font-semibold transition-all duration-200 " +
                       (active
                         ? "bg-[#f3e3ff] text-[#7b2cbf] shadow-[inset_0_0_0_1px_rgba(123,44,191,0.08)] dark:bg-primary/15 dark:text-primary"
                         : "text-muted-foreground hover:bg-white hover:text-foreground hover:shadow-sm dark:hover:bg-accent")
@@ -345,7 +345,7 @@ function AdminSidebarBrand() {
           <span className="block truncate text-sm font-black text-foreground">
             {t("admin.console")}
           </span>
-          <span className="mt-0.5 block truncate text-[10px] font-medium text-muted-foreground">
+          <span className="mt-0.5 block truncate text-desc font-medium text-muted-foreground">
             {t("admin.consoleSubtitle")}
           </span>
         </span>
@@ -398,7 +398,7 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
         >
           <Bell className="size-[18px]" aria-hidden />
           {total > 0 ? (
-            <span className="absolute -end-1 -top-1 min-w-[18px] rounded-full border-2 border-white bg-destructive px-1 text-[9px] font-black leading-[14px] text-destructive-foreground dark:border-card">
+            <span className="absolute -end-1 -top-1 min-w-[18px] rounded-full border-2 border-white bg-destructive px-1 text-desc font-black leading-[14px] text-destructive-foreground dark:border-card">
               {total > 99 ? "99+" : total}
             </span>
           ) : null}
@@ -410,7 +410,7 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
       >
         <div className="flex items-center justify-between px-2 py-2">
           <p className="text-sm font-black text-foreground">{t("admin.alerts.title")}</p>
-          <span className="rounded-full bg-[#f3e3ff] px-2 py-0.5 text-[10px] font-bold text-[#7b2cbf]">
+          <span className="rounded-full bg-[#f3e3ff] px-2 py-0.5 text-desc font-bold text-[#7b2cbf]">
             {total}
           </span>
         </div>
@@ -422,14 +422,14 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
               className="flex min-h-11 items-center justify-between gap-2 rounded-xl px-3 text-sm text-foreground hover:bg-[#f8f2ff]"
             >
               <span className="truncate">{t(row.key)}</span>
-              <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+              <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-desc font-bold tabular-nums">
                 {row.value}
               </span>
             </Link>
           ))}
         </div>
         {total === 0 ? (
-          <p className="px-3 py-4 text-center text-xs text-muted-foreground">
+          <p className="px-3 py-4 text-center text-desc text-muted-foreground">
             {t("admin.alerts.empty")}
           </p>
         ) : null}
@@ -515,7 +515,7 @@ export function AdminShell({
             </span>
             <span className="hidden min-w-0 sm:block">
               <span className="block truncate text-sm font-black">{t("admin.console")}</span>
-              <span className="block truncate text-[10px] text-muted-foreground">
+              <span className="block truncate text-desc text-muted-foreground">
                 {t("admin.consoleSubtitle")}
               </span>
             </span>
@@ -556,7 +556,7 @@ export function AdminShell({
                     className="grid size-10 shrink-0 place-items-center rounded-xl border border-[#e0aaff] bg-white shadow-sm transition hover:bg-[#f8f2ff] dark:border-border dark:bg-card"
                     aria-label={t("admin.account")}
                   >
-                    <span className="grid size-8 place-items-center rounded-lg bg-[#f3e3ff] text-[10px] font-black text-[#7b2cbf] dark:bg-primary/15 dark:text-primary">
+                    <span className="grid size-8 place-items-center rounded-lg bg-[#f3e3ff] text-desc font-black text-[#7b2cbf] dark:bg-primary/15 dark:text-primary">
                       {initials(displayName)}
                     </span>
                   </button>
@@ -567,7 +567,7 @@ export function AdminShell({
                 >
                   <DropdownMenuLabel className="rounded-xl bg-[#f9f4ff] px-3 py-2 dark:bg-accent">
                     <span className="block truncate text-sm font-black">{displayName}</span>
-                    <span className="mt-0.5 block text-[10px] font-medium text-muted-foreground">
+                    <span className="mt-0.5 block text-desc font-medium text-muted-foreground">
                       {owner ? t("admin.role.systemOwner") : t("admin.role.platformAdmin")}
                     </span>
                   </DropdownMenuLabel>
@@ -604,7 +604,7 @@ export function AdminShell({
           <div className="mx-auto w-full max-w-[1500px]">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#ead9fb] bg-white px-4 py-3 shadow-[0_8px_30px_rgba(36,0,70,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
               <div className="min-w-0">
-                <p className="text-[10px] font-bold text-[#7b2cbf] dark:text-primary">
+                <p className="text-desc font-bold text-[#7b2cbf] dark:text-primary">
                   {t("admin.pageEyebrow")}
                 </p>
                 <h1 className="mt-0.5 min-w-0 truncate text-xl font-black tracking-tight text-foreground sm:text-2xl">
@@ -632,7 +632,7 @@ export function AdminShell({
                 <p className="mt-3 text-sm font-black text-foreground">
                   {t("market.admin.denied")}
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground">{t("market.admin.deniedHint")}</p>
+                <p className="mt-1 text-desc text-muted-foreground">{t("market.admin.deniedHint")}</p>
                 <Button asChild variant="outline" size="sm" className="mt-4 rounded-xl">
                   <a href="/">{t("admin.backToMarket")}</a>
                 </Button>

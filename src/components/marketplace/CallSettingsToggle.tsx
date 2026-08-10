@@ -83,7 +83,7 @@ export function CallSettingsToggle() {
     <div className="space-y-3">
       <div>
         <p className="text-sm font-medium text-foreground">{t("market.call.availability")}</p>
-        <p className="text-[11px] text-muted-foreground">{t("market.call.enableHint")}</p>
+        <p className="text-desc text-muted-foreground">{t("market.call.enableHint")}</p>
       </div>
 
       <div className="space-y-2">
@@ -107,7 +107,7 @@ export function CallSettingsToggle() {
               <span className="block font-medium text-foreground">
                 {t(`market.call.mode.${value}`)}
               </span>
-              <span className="block text-[11px] text-muted-foreground">
+              <span className="block text-desc text-muted-foreground">
                 {t(`market.call.modeHint.${value}`)}
               </span>
             </span>
@@ -115,14 +115,14 @@ export function CallSettingsToggle() {
         ))}
       </div>
 
-      <p className="text-[11px] text-muted-foreground">{t("market.call.messagesAlways")}</p>
+      <p className="text-desc text-muted-foreground">{t("market.call.messagesAlways")}</p>
 
       {(requests.data?.length ?? 0) > 0 && (
         <div className="space-y-2 rounded-xl border border-border p-3">
           <p className="text-sm font-medium text-foreground">{t("market.call.requests")}</p>
           {requests.data?.map((request) => (
             <div key={request.id} className="flex flex-wrap items-center gap-2">
-              <span className="flex-1 truncate text-xs text-muted-foreground">
+              <span className="flex-1 truncate text-desc text-muted-foreground">
                 {t("market.call.requestPending")}
               </span>
               <Button

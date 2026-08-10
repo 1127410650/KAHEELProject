@@ -279,7 +279,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-desc text-muted-foreground">
                 {isPhoneOnly
                   ? t("market.easyAuth.emailFallback")
                   : t("market.easyAuth.emailRequired")}
@@ -309,11 +309,11 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                       : t("market.easyAuth.sms"),
                 )}
               </p>
-              <p className="text-xs text-muted-foreground">{t("market.easyAuth.syriaSmsOnly")}</p>
+              <p className="text-desc text-muted-foreground">{t("market.easyAuth.syriaSmsOnly")}</p>
               {providersOff && (
                 <p
                   data-testid="otp-disabled-note"
-                  className="rounded-xl border border-gold/45 bg-gold-soft px-3 py-2 text-xs font-semibold text-gold-foreground"
+                  className="rounded-xl border border-gold/45 bg-gold-soft px-3 py-2 text-desc font-semibold text-gold-foreground"
                 >
                   {t("market.easyAuth.disabledEmailFallback")}
                 </p>
@@ -349,7 +349,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
               value={code}
               onChange={(event) => setCode(event.target.value)}
             />
-            <p className="num text-xs text-muted-foreground">
+            <p className="num text-desc text-muted-foreground">
               {t("market.easyAuth.codeHint").replace("{minutes}", "5")}
             </p>
           </div>
@@ -357,7 +357,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {busy ? t("market.easyAuth.verifying") : t("market.easyAuth.verify")}
           </Button>
-          <div className="flex items-center justify-between gap-2 text-xs">
+          <div className="flex items-center justify-between gap-2 text-desc">
             <button
               type="button"
               className="font-semibold text-primary"

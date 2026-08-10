@@ -41,7 +41,7 @@ export function Chip({
     bad: "bg-destructive/10 text-destructive",
   } as const;
   return (
-    <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${tones[tone]}`}>
+    <span className={`rounded-full px-2 py-0.5 text-desc font-medium ${tones[tone]}`}>
       {children}
     </span>
   );
@@ -64,7 +64,7 @@ export function DetailHeader({
         <div className="min-w-0">
           <p className="break-words text-base font-bold text-foreground sm:text-lg">{title}</p>
           {subtitle && (
-            <p className="mt-0.5 break-words text-xs text-muted-foreground">{subtitle}</p>
+            <p className="mt-0.5 break-words text-desc text-muted-foreground">{subtitle}</p>
           )}
           {chips && <div className="mt-2 flex flex-wrap items-center gap-1.5">{chips}</div>}
         </div>
@@ -79,7 +79,7 @@ export function StatGrid({ items }: { items: { label: string; value: number | st
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
       {items.map((item) => (
         <div key={item.label} className="rounded-xl border border-border bg-card p-3">
-          <p className="truncate text-[11px] text-muted-foreground">{item.label}</p>
+          <p className="truncate text-desc text-muted-foreground">{item.label}</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{item.value}</p>
         </div>
       ))}
@@ -120,7 +120,7 @@ export function TabStrip({
           >
             <span className="whitespace-nowrap">{tab.label}</span>
             {typeof tab.count === "number" && tab.count > 0 && (
-              <span className="rounded-full bg-secondary px-1.5 text-[11px] tabular-nums">
+              <span className="rounded-full bg-secondary px-1.5 text-desc tabular-nums">
                 {tab.count}
               </span>
             )}
@@ -140,7 +140,7 @@ export function InfoGrid({
     <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
         <div key={item.label} className="min-w-0">
-          <dt className="text-[11px] text-muted-foreground">{item.label}</dt>
+          <dt className="text-desc text-muted-foreground">{item.label}</dt>
           <dd className="mt-0.5 break-words text-sm text-foreground">
             {item.value === null || item.value === undefined || item.value === "" ? "—" : item.value}
           </dd>
@@ -200,12 +200,12 @@ export function Timeline({
           </div>
           <div className="min-w-0 flex-1 pb-4">
             <p className="break-words text-sm font-medium text-foreground">{item.title}</p>
-            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+            <p className="mt-0.5 text-desc tabular-nums text-muted-foreground">
               {formatDateTime(item.at)}
               {item.actor ? ` · ${item.actor}` : ""}
             </p>
             {item.detail && (
-              <p className="mt-1 break-words text-xs text-muted-foreground">{item.detail}</p>
+              <p className="mt-1 break-words text-desc text-muted-foreground">{item.detail}</p>
             )}
           </div>
         </li>
@@ -235,7 +235,7 @@ export function RowList({
           <>
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-foreground">{row.title}</p>
-              <p className="mt-0.5 truncate text-[11px] tabular-nums text-muted-foreground">
+              <p className="mt-0.5 truncate text-desc tabular-nums text-muted-foreground">
                 {row.meta.filter(Boolean).join(" · ")}
               </p>
             </div>

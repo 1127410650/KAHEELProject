@@ -56,8 +56,8 @@ function MyReportsPage() {
             onClick={() => setTab(key)}
             className={
               tab === key
-                ? "rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
-                : "rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                ? "rounded-full bg-primary px-3 py-1.5 text-desc font-semibold text-primary-foreground"
+                : "rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
             }
           >
             {t(`market.reports.my.${key}`)}
@@ -77,27 +77,27 @@ function MyReportsPage() {
             <li key={report.id} className="rounded-xl border border-border bg-card p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p dir="ltr" className="font-mono text-xs font-bold text-foreground">
+                  <p dir="ltr" className="font-mono text-desc font-bold text-foreground">
                     {report.ref_no ?? "—"}
                   </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="mt-1 text-desc text-muted-foreground">
                     {t("market.reports.my.submittedAt")}: {formatDateTime(report.created_at)}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     {t("market.reports.my.lastUpdate")}: {formatDateTime(report.updated_at)}
                   </p>
                 </div>
-                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
                   {t(`market.reports.stage.${simpleStage(report.status)}`)}
                 </span>
               </div>
               {report.note && (
-                <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{report.note}</p>
+                <p className="mt-2 line-clamp-2 text-desc text-muted-foreground">{report.note}</p>
               )}
               <Link
                 to="/my/reports/$id"
                 params={{ id: report.id }}
-                className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                className="mt-3 inline-flex items-center gap-1 text-desc font-medium text-primary hover:underline"
               >
                 {t("market.reports.my.openDetails")}
                 <ChevronLeft className="size-3 rtl:rotate-180" aria-hidden />

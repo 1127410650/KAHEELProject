@@ -87,19 +87,19 @@ function AdCreditPage() {
             ) : (
               <div className="flex flex-wrap items-end gap-6">
                 <div>
-                  <p className="text-xs text-muted-foreground">{t("market.adCredit.balance")}</p>
+                  <p className="text-desc text-muted-foreground">{t("market.adCredit.balance")}</p>
                   <p className="text-3xl font-semibold tabular-nums">
                     {formatNumber(wallet.data?.balance ?? 0)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">{t("market.adCredit.purchased")}</p>
+                  <p className="text-desc text-muted-foreground">{t("market.adCredit.purchased")}</p>
                   <p className="text-lg tabular-nums">
                     {formatNumber(wallet.data?.total_purchased ?? 0)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">{t("market.adCredit.consumed")}</p>
+                  <p className="text-desc text-muted-foreground">{t("market.adCredit.consumed")}</p>
                   <p className="text-lg tabular-nums">
                     {formatNumber(wallet.data?.total_consumed ?? 0)}
                   </p>
@@ -115,7 +115,7 @@ function AdCreditPage() {
               <Wallet className="size-4 text-muted-foreground" aria-hidden />
               <h2 className="text-sm font-semibold">{t("market.adCredit.buyTitle")}</h2>
             </div>
-            <p className="text-xs text-muted-foreground">{t("market.adCredit.manualNotice")}</p>
+            <p className="text-desc text-muted-foreground">{t("market.adCredit.manualNotice")}</p>
 
             <div className="flex flex-wrap gap-2">
               {AD_CREDIT_PACKS.map((p) => (
@@ -133,7 +133,7 @@ function AdCreditPage() {
                   <span className="block text-sm font-semibold tabular-nums">
                     {formatNumber(p.credits)}
                   </span>
-                  <span className="block text-xs text-muted-foreground">
+                  <span className="block text-desc text-muted-foreground">
                     {formatMoney(p.priceSar, locale)}
                   </span>
                 </button>
@@ -161,7 +161,7 @@ function AdCreditPage() {
                   className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-2"
                 >
                   <span className="text-sm tabular-nums">{formatNumber(e.amount)}</span>
-                  <span className="text-xs text-muted-foreground">{formatDateTime(e.created_at)}</span>
+                  <span className="text-desc text-muted-foreground">{formatDateTime(e.created_at)}</span>
                   <Button
                     size="sm"
                     variant="outline"
@@ -213,7 +213,7 @@ function EntryRow({ entry }: { entry: AdCreditEntry }) {
           {t(`market.adCredit.kind.${entry.kind}`)}
           {entry.note ? <span className="text-muted-foreground"> — {entry.note}</span> : null}
         </p>
-        <p className="text-[11px] text-muted-foreground">{formatDateTime(entry.created_at)}</p>
+        <p className="text-desc text-muted-foreground">{formatDateTime(entry.created_at)}</p>
       </div>
       <div className="flex items-center gap-2">
         {entry.status !== "settled" && (
@@ -229,7 +229,7 @@ function EntryRow({ entry }: { entry: AdCreditEntry }) {
           {formatNumber(entry.amount)}
         </span>
         {entry.balance_after != null && (
-          <span className="text-[11px] text-muted-foreground tabular-nums">
+          <span className="text-desc text-muted-foreground tabular-nums">
             {formatNumber(entry.balance_after)}
           </span>
         )}

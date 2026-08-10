@@ -317,7 +317,7 @@ function AdminContentRulesPage() {
               </span>
             </div>
           )}
-          <p className="mt-2 text-[11px] text-muted-foreground">{t("admin.contentRules.thresholdsHint")}</p>
+          <p className="mt-2 text-desc text-muted-foreground">{t("admin.contentRules.thresholdsHint")}</p>
         </Panel>
 
         <Panel
@@ -397,14 +397,14 @@ function AdminContentRulesPage() {
                           <AdminStatusBadge tone="idle" label={t(`admin.moderation.category.${rule.category}`)} />
                           <AdminStatusBadge tone={SEVERITY_TONE[rule.severity]} label={t(`admin.moderation.severity.${rule.severity}`)} />
                           <AdminStatusBadge tone={ACTION_TONE[rule.action]} label={t(`admin.contentRules.actionValue.${rule.action}`)} />
-                          <span className="text-[11px] tabular-nums text-muted-foreground">
+                          <span className="text-desc tabular-nums text-muted-foreground">
                             {t("admin.moderation.weight")}: {rule.weight}
                           </span>
-                          <span className="text-[11px] text-muted-foreground">
+                          <span className="text-desc text-muted-foreground">
                             {rule.lang === "any" ? t("admin.contentRules.langAny") : rule.lang.toUpperCase()}
                           </span>
                         </div>
-                        {rule.notes && <p className="mt-1 break-words text-xs text-muted-foreground">{rule.notes}</p>}
+                        {rule.notes && <p className="mt-1 break-words text-desc text-muted-foreground">{rule.notes}</p>}
                       </div>
                       <div className="flex shrink-0 items-center gap-1.5">
                         <span className="grid min-h-11 min-w-11 place-items-center">
@@ -446,7 +446,7 @@ function AdminContentRulesPage() {
         </Panel>
 
         <Panel title={t("admin.contentRules.testTitle")}>
-          <p className="text-xs text-muted-foreground">{t("admin.contentRules.testHint")}</p>
+          <p className="text-desc text-muted-foreground">{t("admin.contentRules.testHint")}</p>
           <Textarea
             value={sampleText}
             onChange={(e) => setSampleText(e.target.value)}
@@ -460,7 +460,7 @@ function AdminContentRulesPage() {
             ) : (
               <ul className="grid gap-1.5">
                 {matchedPreview.map((m) => (
-                  <li key={m.rule.id} className="flex flex-wrap items-center gap-1.5 rounded-lg bg-background px-3 py-2 text-xs">
+                  <li key={m.rule.id} className="flex flex-wrap items-center gap-1.5 rounded-lg bg-background px-3 py-2 text-desc">
                     <AdminStatusBadge tone={ACTION_TONE[m.rule.action]} label={t(`admin.contentRules.actionValue.${m.rule.action}`)} />
                     <span className="font-medium text-foreground">{m.rule.pattern}</span>
                     <span className="text-muted-foreground">· {t(`admin.moderation.category.${m.rule.category}`)}</span>
@@ -492,14 +492,14 @@ function AdminContentRulesPage() {
                     <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                       <AdminStatusBadge tone={run.ok ? "done" : "critical"} label={t(run.ok ? "admin.contentRules.jobOk" : "admin.contentRules.jobFailed")} />
                       <span className="truncate text-sm font-medium text-foreground">{run.job}</span>
-                      {run.source && <span className="text-[11px] text-muted-foreground">({run.source})</span>}
+                      {run.source && <span className="text-desc text-muted-foreground">({run.source})</span>}
                     </div>
-                    <span className="text-[11px] tabular-nums text-muted-foreground">{formatDateTime(run.started_at)}</span>
+                    <span className="text-desc tabular-nums text-muted-foreground">{formatDateTime(run.started_at)}</span>
                   </div>
-                  <p className="mt-1 text-[11px] tabular-nums text-muted-foreground">
+                  <p className="mt-1 text-desc tabular-nums text-muted-foreground">
                     {t("admin.contentRules.duration")}: {run.duration_ms != null ? `${run.duration_ms}ms` : "—"}
                   </p>
-                  {run.error && <p className="mt-1 break-words text-xs text-destructive">{run.error}</p>}
+                  {run.error && <p className="mt-1 break-words text-desc text-destructive">{run.error}</p>}
                 </li>
               ))}
             </ul>
@@ -514,7 +514,7 @@ function AdminContentRulesPage() {
           </DialogHeader>
           {draft && (
             <div className="grid gap-3">
-              <label className="block text-xs font-medium text-foreground">
+              <label className="block text-desc font-medium text-foreground">
                 {t("admin.contentRules.pattern")}
                 <Textarea
                   value={draft.pattern}
@@ -524,7 +524,7 @@ function AdminContentRulesPage() {
                 />
               </label>
               <div className="grid grid-cols-2 gap-2">
-                <label className="block text-xs font-medium text-foreground">
+                <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.kind")}
                   <Select value={draft.kind} onValueChange={(v) => setDraft({ ...draft, kind: v as RuleKind })}>
                     <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
@@ -533,7 +533,7 @@ function AdminContentRulesPage() {
                     </SelectContent>
                   </Select>
                 </label>
-                <label className="block text-xs font-medium text-foreground">
+                <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.lang")}
                   <Select value={draft.lang} onValueChange={(v) => setDraft({ ...draft, lang: v as RuleLang })}>
                     <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
@@ -542,7 +542,7 @@ function AdminContentRulesPage() {
                     </SelectContent>
                   </Select>
                 </label>
-                <label className="block text-xs font-medium text-foreground">
+                <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.category")}
                   <Select value={draft.category} onValueChange={(v) => setDraft({ ...draft, category: v as RuleCategory })}>
                     <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
@@ -551,7 +551,7 @@ function AdminContentRulesPage() {
                     </SelectContent>
                   </Select>
                 </label>
-                <label className="block text-xs font-medium text-foreground">
+                <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.severity")}
                   <Select value={draft.severity} onValueChange={(v) => setDraft({ ...draft, severity: v as RuleSeverity })}>
                     <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
@@ -560,7 +560,7 @@ function AdminContentRulesPage() {
                     </SelectContent>
                   </Select>
                 </label>
-                <label className="block text-xs font-medium text-foreground">
+                <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.action")}
                   <Select value={draft.action} onValueChange={(v) => setDraft({ ...draft, action: v as RuleAction })}>
                     <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
@@ -569,7 +569,7 @@ function AdminContentRulesPage() {
                     </SelectContent>
                   </Select>
                 </label>
-                <label className="block text-xs font-medium text-foreground">
+                <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.weight")}
                   <Input
                     value={draft.weight}
@@ -583,7 +583,7 @@ function AdminContentRulesPage() {
                 <span className="text-sm text-foreground">{t("admin.contentRules.toggleActive")}</span>
                 <Switch checked={draft.is_active} onCheckedChange={(v) => setDraft({ ...draft, is_active: v })} />
               </label>
-              <label className="block text-xs font-medium text-foreground">
+              <label className="block text-desc font-medium text-foreground">
                 {t("admin.contentRules.notes")}
                 <Textarea
                   value={draft.notes}
@@ -592,7 +592,7 @@ function AdminContentRulesPage() {
                   className="mt-1.5"
                 />
               </label>
-              {draftError && <p className="text-xs text-destructive">{draftError}</p>}
+              {draftError && <p className="text-desc text-destructive">{draftError}</p>}
             </div>
           )}
           <DialogFooter>

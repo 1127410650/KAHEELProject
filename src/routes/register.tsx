@@ -65,7 +65,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
         {children}
-        <p className="mt-6 text-center text-[11px] text-muted-foreground">
+        <p className="mt-6 text-center text-desc text-muted-foreground">
           {t("market.footer.rights")}
         </p>
       </div>
@@ -197,13 +197,13 @@ function RegisterPage() {
     <Shell>
       <h1 className="text-xl font-bold text-foreground sm:text-2xl">{t("signup.title")}</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
-      <p className="mt-3 rounded-lg bg-secondary p-2.5 text-xs text-muted-foreground">
+      <p className="mt-3 rounded-lg bg-secondary p-2.5 text-desc text-muted-foreground">
         {t("signup.inviteNote")}{" "}
         <span dir="ltr" className="font-semibold text-foreground">
           {preview.data?.masked_email ?? ""}
         </span>
       </p>
-      <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
+      <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-desc font-semibold text-primary">
         {t("signup.adsSyriaOnly")}
       </p>
 
@@ -341,7 +341,7 @@ function PublicSignupForm() {
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
         {t("signup.publicSubtitle")}
       </p>
-      <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-xs font-semibold text-primary">
+      <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-desc font-semibold text-primary">
         {t("signup.adsSyriaOnly")}
       </p>
 
@@ -370,7 +370,7 @@ function PublicSignupForm() {
             value={form.email}
             onChange={set("email")}
           />
-          <p className="text-xs leading-relaxed text-muted-foreground">{emailNote}</p>
+          <p className="text-desc leading-relaxed text-muted-foreground">{emailNote}</p>
         </div>
 
         <PasswordFields form={form} set={set} />
@@ -382,7 +382,7 @@ function PublicSignupForm() {
         </Button>
       </form>
 
-      <p className="mt-4 rounded-lg bg-secondary p-2.5 text-xs leading-relaxed text-muted-foreground">
+      <p className="mt-4 rounded-lg bg-secondary p-2.5 text-desc leading-relaxed text-muted-foreground">
         {t("signup.individualNote")}
       </p>
       <SignInLink />
@@ -438,7 +438,7 @@ function PhoneField({
           onChange={onChange}
         />
       </div>
-      {note && <p className="text-xs leading-relaxed text-muted-foreground">{note}</p>}
+      {note && <p className="text-desc leading-relaxed text-muted-foreground">{note}</p>}
     </div>
   );
 }
@@ -465,7 +465,7 @@ function PasswordFields({
           value={form.password}
           onChange={set("password")}
         />
-        <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
+        <p className="text-desc text-muted-foreground">{t("signup.passwordHint")}</p>
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="confirm_shared">{t("signup.confirm")}</Label>
@@ -494,7 +494,7 @@ function Terms({
   label: string;
 }) {
   return (
-    <label className="flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+    <label className="flex items-start gap-2.5 text-desc leading-relaxed text-muted-foreground">
       <Checkbox
         checked={checked}
         onCheckedChange={(value) => onChange(value === true)}
@@ -508,7 +508,7 @@ function Terms({
 function SignInLink() {
   const { t } = useI18n();
   return (
-    <p className="mt-5 text-center text-xs text-muted-foreground">
+    <p className="mt-5 text-center text-desc text-muted-foreground">
       {t("signup.haveAccount")}{" "}
       <Link to="/auth" className="font-semibold text-primary">
         {t("signup.signIn")}

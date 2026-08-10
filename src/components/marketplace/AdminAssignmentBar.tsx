@@ -78,7 +78,7 @@ export function AdminAssignmentBar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-3">
-      <span className="inline-flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
+      <span className="inline-flex min-w-0 items-center gap-1.5 text-desc text-muted-foreground">
         <UserCheck className="size-4 shrink-0" aria-hidden />
         <span className="truncate">
           {mine
@@ -125,7 +125,7 @@ export function AdminAssignmentBar({
             </Button>
           </>
         )}
-        {held && <span className="text-xs text-admin-urgent">{t("admin.queue.readOnly")}</span>}
+        {held && <span className="text-desc text-admin-urgent">{t("admin.queue.readOnly")}</span>}
       </div>
 
       <ReasonDialog
@@ -147,7 +147,7 @@ export function AdminAssignmentBar({
         }}
         onConfirm={(reason) => void run(() => transferSubject(kind, subjectId, target, reason))}
       >
-        <label className="block text-xs font-medium text-foreground">
+        <label className="block text-desc font-medium text-foreground">
           {t("admin.queue.transferTo")}
           <select
             value={target}

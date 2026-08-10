@@ -218,22 +218,22 @@ export function PromoCarousel({ addHref }: { addHref: string }) {
               />
             )}
             <div className="relative z-10 mx-auto flex min-h-[132px] w-[78%] max-w-[520px] flex-col items-center justify-center rounded-[20px] bg-white/78 px-2 py-2 text-center backdrop-blur-[2px] sm:min-h-[172px] sm:w-[52%] sm:px-4">
-              <span className="rounded-full bg-brand-950 px-3 py-1 text-[9px] font-bold text-white shadow-sm sm:text-xs">
+              <span className="rounded-full bg-brand-950 px-3 py-1 text-desc font-bold text-white shadow-sm sm:text-desc">
                 {ar ? slide.badgeAr : slide.badgeEn}
               </span>
               {slideIndex === 0 ? (
-                <h1 className="mt-1 line-clamp-2 text-[17px] font-black leading-tight text-brand-950 min-[380px]:text-[20px] sm:mt-1.5 sm:text-[30px]">
+                <h1 className="mt-1 line-clamp-2 text-body font-black leading-tight text-brand-950 min-[380px]:text-section sm:mt-1.5 sm:text-[30px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </h1>
               ) : (
-                <p className="mt-1 line-clamp-2 text-[17px] font-black leading-tight text-brand-950 min-[380px]:text-[20px] sm:mt-1.5 sm:text-[30px]">
+                <p className="mt-1 line-clamp-2 text-body font-black leading-tight text-brand-950 min-[380px]:text-section sm:mt-1.5 sm:text-[30px]">
                   {ar ? slide.titleAr : slide.titleEn}
                 </p>
               )}
-              <p className="mt-1 line-clamp-2 text-[9px] font-bold text-brand-800 min-[380px]:text-[10px] sm:text-[13px]">
+              <p className="mt-1 line-clamp-2 text-desc font-bold text-brand-800 min-[380px]:text-desc sm:text-desc">
                 {ar ? slide.descAr : slide.descEn}
               </p>
-              <span className="mt-1.5 inline-flex min-h-9 items-center rounded-full bg-brand-900 px-4 text-[10px] font-bold text-white shadow-[0_8px_20px_rgb(60_9_108/0.24)] sm:mt-2 sm:min-h-10 sm:px-6 sm:text-xs">
+              <span className="mt-1.5 inline-flex min-h-9 items-center rounded-full bg-brand-900 px-4 text-desc font-bold text-white shadow-[0_8px_20px_rgb(60_9_108/0.24)] sm:mt-2 sm:min-h-10 sm:px-6 sm:text-desc">
                 {t("market.homeV2.hero.cta")}
                 <ChevronLeft className="ms-1 size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
               </span>

@@ -123,7 +123,7 @@ export function BackdropLibraryCard() {
               <h2 className="truncate text-sm font-black">
                 {ar ? "مكتبة خلفيات كَحيل" : "Kaheel backdrop library"}
               </h2>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-desc text-muted-foreground">
                 {ar
                   ? `${BACKDROP_LIBRARY.length} خلفية جاهزة — تُحمَّل خلفية اليوم وحدها في الزيارة.`
                   : `${BACKDROP_LIBRARY.length} ready backdrops — only today's file is downloaded.`}
@@ -148,7 +148,7 @@ export function BackdropLibraryCard() {
               {MODE_LABEL[mode][ar ? 0 : 1]}
             </Button>
           ))}
-          <span className="text-[11px] font-bold text-muted-foreground">
+          <span className="text-desc font-bold text-muted-foreground">
             {ar ? "خلفية اليوم:" : "Today:"} {today?.label ?? (ar ? "لا شيء" : "none")}
           </span>
         </div>
@@ -176,8 +176,8 @@ export function BackdropLibraryCard() {
                     className="aspect-[16/9] w-full object-cover"
                   />
                 </button>
-                <p className="truncate text-[12px] font-black">{item.label[ar ? 0 : 1]}</p>
-                <p className="text-[10px] font-bold text-muted-foreground">
+                <p className="truncate text-desc font-black">{item.label[ar ? 0 : 1]}</p>
+                <p className="text-desc font-bold text-muted-foreground">
                   {SEASON_LABEL[item.season][ar ? 0 : 1]} · {Math.round(item.bytes / 1024)} KB
                   {today?.id === item.id ? (ar ? " · اليوم" : " · today") : ""}
                 </p>
@@ -186,7 +186,7 @@ export function BackdropLibraryCard() {
                     type="button"
                     size="sm"
                     variant={enabled ? "default" : "outline"}
-                    className="h-7 px-2 text-[11px]"
+                    className="h-7 px-2 text-desc"
                     onClick={() => toggle("enabled", item.id)}
                   >
                     {enabled ? (ar ? "مفعّلة" : "On") : ar ? "موقوفة" : "Off"}
@@ -195,7 +195,7 @@ export function BackdropLibraryCard() {
                     type="button"
                     size="sm"
                     variant={held ? "secondary" : "outline"}
-                    className="h-7 px-2 text-[11px]"
+                    className="h-7 px-2 text-desc"
                     onClick={() => toggle("holdback", item.id)}
                   >
                     {ar ? "لموسمها" : "Season only"}
@@ -205,7 +205,7 @@ export function BackdropLibraryCard() {
                       type="button"
                       size="sm"
                       variant={settings.fixedId === item.id ? "default" : "outline"}
-                      className="h-7 px-2 text-[11px]"
+                      className="h-7 px-2 text-desc"
                       onClick={() => setSettings((prev) => ({ ...prev, fixedId: item.id }))}
                     >
                       {ar ? "ثابتة" : "Fixed"}
@@ -218,14 +218,14 @@ export function BackdropLibraryCard() {
                     aria-label={ar ? "من تاريخ" : "From"}
                     value={win?.from ?? ""}
                     onChange={(event) => setWindow(item.id, "from", event.target.value)}
-                    className="h-7 px-1 text-[11px]"
+                    className="h-7 px-1 text-desc"
                   />
                   <Input
                     type="date"
                     aria-label={ar ? "إلى تاريخ" : "To"}
                     value={win?.to ?? ""}
                     onChange={(event) => setWindow(item.id, "to", event.target.value)}
-                    className="h-7 px-1 text-[11px]"
+                    className="h-7 px-1 text-desc"
                   />
                 </div>
               </li>
@@ -238,14 +238,14 @@ export function BackdropLibraryCard() {
             {settings.custom.map((item) => (
               <li
                 key={item.id}
-                className="flex items-center justify-between gap-2 rounded-xl border border-border px-3 py-2 text-[12px] font-bold"
+                className="flex items-center justify-between gap-2 rounded-xl border border-border px-3 py-2 text-desc font-bold"
               >
                 <span className="min-w-0 truncate">{item.label}</span>
                 <Button
                   type="button"
                   size="sm"
                   variant="outline"
-                  className="h-7 px-2 text-[11px]"
+                  className="h-7 px-2 text-desc"
                   onClick={() =>
                     setSettings((prev) => ({
                       ...prev,
@@ -264,7 +264,7 @@ export function BackdropLibraryCard() {
         <div className="flex flex-wrap items-center gap-3">
           <Label
             htmlFor="backdrop-upload"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-3 py-2 text-[12px] font-black"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-3 py-2 text-desc font-black"
           >
             {uploading ? (
               <Loader2 className="size-4 animate-spin" aria-hidden />
@@ -284,7 +284,7 @@ export function BackdropLibraryCard() {
               if (file) void upload(file);
             }}
           />
-          <p className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+          <p className="inline-flex items-center gap-1 text-desc text-muted-foreground">
             <CalendarClock className="size-3.5" aria-hidden />
             {ar
               ? `إجمالي المكتبة ${Math.round(totalBytes / 1024)} KB — والزيارة تحمّل خلفية واحدة فقط.`

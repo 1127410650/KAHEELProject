@@ -151,7 +151,7 @@ function StoreHubPage() {
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="rounded-lg border p-3">
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-desc text-muted-foreground">{stat.label}</p>
                   <p className="text-lg font-semibold">{stat.value}</p>
                 </div>
               ))}
@@ -194,7 +194,7 @@ function StoreHubPage() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="font-black">{t("market.services.providerCenter")}</p>
-                <p className="mt-1 text-xs leading-5 text-white/65">
+                <p className="mt-1 text-desc leading-5 text-white/65">
                   {t("market.services.providerCenterHint")}
                 </p>
               </div>

@@ -54,7 +54,7 @@ function AdminGuideRequestsPage() {
       <div className="space-y-4">
         <div>
           <h1 className="text-lg font-black">طلبات تعديل وإزالة الدليل</h1>
-          <p className="text-[12px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             الإزالة تُنفَّذ كإخفاء من العرض العام مع تسجيل السبب والتاريخ — بلا حذف نهائي.
           </p>
         </div>
@@ -79,7 +79,7 @@ function AdminGuideRequestsPage() {
           </div>
         ) : rows.length === 0 ? (
           <Card>
-            <CardContent className="flex items-center gap-2 py-8 text-[12px] font-bold text-muted-foreground">
+            <CardContent className="flex items-center gap-2 py-8 text-desc font-bold text-muted-foreground">
               <FileWarning className="size-4" aria-hidden />
               لا طلبات في هذه الحالة.
             </CardContent>
@@ -90,24 +90,24 @@ function AdminGuideRequestsPage() {
               <Card key={row.id}>
                 <CardContent className="space-y-2 py-3.5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[13px] font-black">{row.entity_name}</span>
-                    <span className="rounded-full border border-primary/30 bg-primary/8 px-2 py-0.5 text-[10px] font-black text-primary">
+                    <span className="text-desc font-black">{row.entity_name}</span>
+                    <span className="rounded-full border border-primary/30 bg-primary/8 px-2 py-0.5 text-desc font-black text-primary">
                       {REMOVAL_TYPE_LABEL[row.request_type]}
                     </span>
-                    <span className="text-[10.5px] font-bold text-muted-foreground">
+                    <span className="text-desc font-bold text-muted-foreground">
                       {formatDateTime(row.created_at)}
                     </span>
                   </div>
-                  <p className="text-[11.5px] leading-6 text-muted-foreground">{row.description}</p>
-                  <p className="text-[11px] font-bold text-muted-foreground">
+                  <p className="text-desc leading-6 text-muted-foreground">{row.description}</p>
+                  <p className="text-desc font-bold text-muted-foreground">
                     صفة المُبلِّغ: {row.reporter_role} · تواصل: {row.contact}
                   </p>
                   {row.place_id ? (
-                    <p className="text-[11px] font-bold text-muted-foreground">
+                    <p className="text-desc font-bold text-muted-foreground">
                       سجل مرتبط في الدليل ✓
                     </p>
                   ) : (
-                    <p className="text-[11px] font-bold text-muted-foreground">
+                    <p className="text-desc font-bold text-muted-foreground">
                       لا سجل مرتبط — ابحث عن الجهة في{" "}
                       <Link to="/guides/syria" className="underline decoration-dotted">
                         الدليل
@@ -115,12 +115,12 @@ function AdminGuideRequestsPage() {
                     </p>
                   )}
                   {row.decision_note ? (
-                    <p className="text-[11px] font-bold text-foreground">
+                    <p className="text-desc font-bold text-foreground">
                       ملاحظة القرار: {row.decision_note}
                     </p>
                   ) : null}
                   {row.reviewed_at ? (
-                    <p className="text-[10.5px] font-bold text-muted-foreground">
+                    <p className="text-desc font-bold text-muted-foreground">
                       بُتّ فيه: {formatDateTime(row.reviewed_at)}
                     </p>
                   ) : null}

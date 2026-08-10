@@ -56,12 +56,12 @@ function RequestsPage() {
           <li key={r.id} className="rounded-xl border border-border bg-card p-4">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <p className="text-sm font-semibold text-foreground">{r.title}</p>
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground">
+              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc text-secondary-foreground">
                 {t(`market.dash.quoteStatus.${r.status}`)}
               </span>
             </div>
-            {r.description && <p className="mt-1 text-xs text-muted-foreground">{r.description}</p>}
-            <p className="mt-1 text-xs text-muted-foreground" dir="ltr">
+            {r.description && <p className="mt-1 text-desc text-muted-foreground">{r.description}</p>}
+            <p className="mt-1 text-desc text-muted-foreground" dir="ltr">
               {new Date(r.created_at).toLocaleDateString("en-GB", { timeZone: "Asia/Riyadh" })}
               {r.city ? ` · ${r.city}` : ""}
             </p>

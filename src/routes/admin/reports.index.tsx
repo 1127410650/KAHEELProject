@@ -111,7 +111,7 @@ function AdminReportsPage() {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
         {kpis.map((kpi) => (
           <div key={kpi.key} className="rounded-xl border border-border bg-card p-3">
-            <p className="text-[11px] text-muted-foreground">{t(`market.reports.admin.${kpi.key}`)}</p>
+            <p className="text-desc text-muted-foreground">{t(`market.reports.admin.${kpi.key}`)}</p>
             <p dir="ltr" className="mt-1 text-lg font-bold text-foreground">
               {kpi.value ?? "—"}
             </p>
@@ -127,8 +127,8 @@ function AdminReportsPage() {
             onClick={() => set("worklist", key)}
             className={
               filters.worklist === key
-                ? "shrink-0 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
-                : "shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                ? "shrink-0 rounded-full bg-primary px-3 py-1.5 text-desc font-semibold text-primary-foreground"
+                : "shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
             }
           >
             {t(`market.reports.admin.worklist.${key}`)}
@@ -139,7 +139,7 @@ function AdminReportsPage() {
       {filters.worklist !== "appeals" && (
         <div className="mt-4 grid gap-2 rounded-xl border border-border bg-card p-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-1">
-            <Label htmlFor="f-ref" className="text-[11px]">
+            <Label htmlFor="f-ref" className="text-desc">
               {t("market.reports.admin.filters.ref")}
             </Label>
             <Input
@@ -147,18 +147,18 @@ function AdminReportsPage() {
               dir="ltr"
               value={filters.ref ?? ""}
               onChange={(e) => set("ref", e.target.value)}
-              className="h-8 text-xs"
+              className="h-8 text-desc"
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-status" className="text-[11px]">
+            <Label htmlFor="f-status" className="text-desc">
               {t("market.reports.admin.filters.status")}
             </Label>
             <select
               id="f-status"
               value={filters.status ?? ""}
               onChange={(e) => set("status", e.target.value)}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
             >
               <option value="">{t("market.reports.admin.filters.all")}</option>
               {REPORT_STATUSES.map((s) => (
@@ -169,14 +169,14 @@ function AdminReportsPage() {
             </select>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-priority" className="text-[11px]">
+            <Label htmlFor="f-priority" className="text-desc">
               {t("market.reports.admin.filters.priority")}
             </Label>
             <select
               id="f-priority"
               value={filters.priority ?? ""}
               onChange={(e) => set("priority", e.target.value)}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
             >
               <option value="">{t("market.reports.admin.filters.all")}</option>
               {REPORT_PRIORITIES.map((p) => (
@@ -187,14 +187,14 @@ function AdminReportsPage() {
             </select>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-severity" className="text-[11px]">
+            <Label htmlFor="f-severity" className="text-desc">
               {t("market.reports.admin.filters.severity")}
             </Label>
             <select
               id="f-severity"
               value={filters.severity ?? ""}
               onChange={(e) => set("severity", e.target.value)}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
             >
               <option value="">{t("market.reports.admin.filters.all")}</option>
               {REPORT_SEVERITIES.map((s) => (
@@ -205,14 +205,14 @@ function AdminReportsPage() {
             </select>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-reason" className="text-[11px]">
+            <Label htmlFor="f-reason" className="text-desc">
               {t("market.reports.admin.filters.reason")}
             </Label>
             <select
               id="f-reason"
               value={filters.reason ?? ""}
               onChange={(e) => set("reason", e.target.value)}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
             >
               <option value="">{t("market.reports.admin.filters.all")}</option>
               {(reasons.data ?? []).map((r) => (
@@ -223,7 +223,7 @@ function AdminReportsPage() {
             </select>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-from" className="text-[11px]">
+            <Label htmlFor="f-from" className="text-desc">
               {t("market.reports.admin.filters.from")}
             </Label>
             <Input
@@ -232,11 +232,11 @@ function AdminReportsPage() {
               dir="ltr"
               value={filters.from ?? ""}
               onChange={(e) => set("from", e.target.value)}
-              className="h-8 text-xs"
+              className="h-8 text-desc"
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-to" className="text-[11px]">
+            <Label htmlFor="f-to" className="text-desc">
               {t("market.reports.admin.filters.to")}
             </Label>
             <Input
@@ -245,18 +245,18 @@ function AdminReportsPage() {
               dir="ltr"
               value={filters.to ?? ""}
               onChange={(e) => set("to", e.target.value)}
-              className="h-8 text-xs"
+              className="h-8 text-desc"
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="f-sla" className="text-[11px]">
+            <Label htmlFor="f-sla" className="text-desc">
               {t("market.reports.admin.filters.sla")}
             </Label>
             <select
               id="f-sla"
               value={filters.sla ?? ""}
               onChange={(e) => set("sla", e.target.value as AdminReportFilters["sla"])}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
             >
               <option value="">{t("market.reports.admin.filters.all")}</option>
               <option value="overdue">{t("market.reports.admin.filters.overdue")}</option>
@@ -288,19 +288,19 @@ function AdminReportsPage() {
               {(appeals.data ?? []).map((appeal) => (
                 <li key={appeal.id} className="rounded-xl border border-border bg-card p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-xs font-medium text-foreground">
+                    <span className="text-desc font-medium text-foreground">
                       {t(`market.reports.appealStatus.${appeal.status}`)} ·{" "}
                       {formatDateTime(appeal.created_at)}
                     </span>
                     <Link
                       to="/admin/reports/$id"
                       params={{ id: appeal.report_id }}
-                      className="text-xs font-medium text-primary hover:underline"
+                      className="text-desc font-medium text-primary hover:underline"
                     >
                       {t("market.reports.admin.openCase")}
                     </Link>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{appeal.reason}</p>
+                  <p className="mt-1 line-clamp-2 text-desc text-muted-foreground">{appeal.reason}</p>
                 </li>
               ))}
             </ul>
@@ -320,13 +320,13 @@ function AdminReportsPage() {
                 <li key={report.id} className="rounded-xl border border-border bg-card p-3">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <p dir="ltr" className="font-mono text-xs font-bold text-foreground">
+                      <p dir="ltr" className="font-mono text-desc font-bold text-foreground">
                         {report.ref_no ?? "—"}
                       </p>
                       <p className="mt-1 truncate text-sm font-medium text-foreground">
                         {report.listing_snapshot?.title ?? "—"}
                       </p>
-                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      <p className="mt-0.5 text-desc text-muted-foreground">
                         {t(`market.reports.status.${report.status}`)} ·{" "}
                         {t(`market.reports.severity.${report.severity}`)} ·{" "}
                         {t(`market.reports.priority.${report.priority}`)} ·{" "}
@@ -336,7 +336,7 @@ function AdminReportsPage() {
                             : t("market.reports.admin.table.other")
                           : t("market.reports.admin.table.unassigned")}
                       </p>
-                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      <p className="mt-0.5 text-desc text-muted-foreground">
                         {formatDateTime(report.created_at)}
                         {hours !== null && (
                           <span className={late ? "ms-2 font-medium text-destructive" : "ms-2"}>
@@ -355,7 +355,7 @@ function AdminReportsPage() {
                     <Link
                       to="/admin/reports/$id"
                       params={{ id: report.id }}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-desc font-medium text-primary hover:underline"
                     >
                       {t("market.reports.admin.openCase")}
                       <ChevronLeft className="size-3 rtl:rotate-180" aria-hidden />

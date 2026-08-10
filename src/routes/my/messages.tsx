@@ -356,21 +356,21 @@ function MessagesPage() {
                         )}
                         {row.unread_count > 0 && (
                           <span
-                            className="inline-flex min-w-5 shrink-0 justify-center rounded-full bg-primary px-1.5 text-[11px] font-bold text-primary-foreground tabular-nums"
+                            className="inline-flex min-w-5 shrink-0 justify-center rounded-full bg-primary px-1.5 text-desc font-bold text-primary-foreground tabular-nums"
                             aria-label={t("market.chat.unread")}
                           >
                             {row.unread_count}
                           </span>
                         )}
                       </span>
-                      <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                      <span className="mt-0.5 block truncate text-desc text-muted-foreground">
                         {row.listing_title ?? "—"}
                       </span>
-                      <span className="mt-0.5 block truncate text-xs text-foreground/80">
+                      <span className="mt-0.5 block truncate text-desc text-foreground/80">
                         {previewOf(row, t)}
                       </span>
                       {row.last_message_at && (
-                        <span className="mt-1 block text-[11px] text-muted-foreground">
+                        <span className="mt-1 block text-desc text-muted-foreground">
                           {formatDateTime(row.last_message_at)}
                         </span>
                       )}

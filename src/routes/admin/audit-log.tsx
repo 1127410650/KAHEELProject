@@ -108,26 +108,26 @@ function AdminAuditLogPage() {
             <article key={row.id} className="rounded-xl border border-border bg-card p-3">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <p className="min-w-0 truncate text-sm font-semibold text-foreground">{row.action}</p>
-                <time className="shrink-0 text-[11px] tabular-nums text-muted-foreground">
+                <time className="shrink-0 text-desc tabular-nums text-muted-foreground">
                   {formatDateTime(row.created_at)}
                 </time>
               </div>
-              <p className="mt-1 truncate text-xs text-muted-foreground">
+              <p className="mt-1 truncate text-desc text-muted-foreground">
                 {row.entity_type}
                 {row.entity_id ? ` · ${row.entity_id}` : ""}
               </p>
-              <p className="mt-1 truncate text-xs text-foreground">
+              <p className="mt-1 truncate text-desc text-foreground">
                 {t("admin.audit.actor")}:{" "}
                 <AdminUserLink
                   id={row.actor_id}
                   name={row.actor_name}
                   fallback={t("admin.audit.system")}
-                  className="text-xs"
+                  className="text-desc"
                 />
               </p>
 
               {row.reason && (
-                <p className="mt-1.5 rounded-lg bg-background px-2 py-1.5 text-xs text-foreground">
+                <p className="mt-1.5 rounded-lg bg-background px-2 py-1.5 text-desc text-foreground">
                   {row.reason}
                 </p>
               )}

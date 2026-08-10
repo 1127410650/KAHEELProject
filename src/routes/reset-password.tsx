@@ -114,7 +114,7 @@ function ResetPasswordPage() {
                 onChange={(e) => setConfirm(e.target.value)}
               />
             </div>
-            <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("signup.passwordHint")}</p>
             <Button type="submit" className="h-12 w-full" disabled={busy}>
               {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {t("auth.updatePassword")}

@@ -778,7 +778,7 @@ function GenericSearchPage() {
               {t("market.search.title")}
             </h1>
             {params.featured === "1" && (
-              <span className="rounded-full bg-market-gold-soft px-3 py-1 text-xs font-bold text-market-gold">
+              <span className="rounded-full bg-market-gold-soft px-3 py-1 text-desc font-bold text-market-gold">
                 {t("market.homeV2.featured")}
               </span>
             )}
@@ -789,7 +789,7 @@ function GenericSearchPage() {
               <Link
                 to="/categories/$slug"
                 params={{ slug: activeRoot.slug }}
-                className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-bold text-primary transition hover:bg-primary/10"
+                className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-desc font-bold text-primary transition hover:bg-primary/10"
               >
                 {t("market.search.categoryPage")}
               </Link>
@@ -836,7 +836,7 @@ function GenericSearchPage() {
                   <SlidersHorizontal className="size-4" aria-hidden />
                   {t("market.search.filtersBtn")}
                   {activeFilterCount > 0 && (
-                    <span className="ms-1 grid min-w-5 place-items-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
+                    <span className="ms-1 grid min-w-5 place-items-center rounded-full bg-primary px-1 text-desc font-bold text-primary-foreground">
                       {activeFilterCount}
                     </span>
                   )}
@@ -898,7 +898,7 @@ function GenericSearchPage() {
                 <button
                   type="button"
                   onClick={() => setLocationOpen(true)}
-                  className="k-press inline-flex h-9 shrink-0 items-center gap-1 rounded-xl border border-primary/30 bg-primary/10 px-3 text-xs font-bold text-primary"
+                  className="k-press inline-flex h-9 shrink-0 items-center gap-1 rounded-xl border border-primary/30 bg-primary/10 px-3 text-desc font-bold text-primary"
                 >
                   <MapPin className="size-3.5" aria-hidden />
                   {t("market.geo.setLocation")}
@@ -939,7 +939,7 @@ function GenericSearchPage() {
           {/* The result count owns a fixed-height line of its own: its text can
               change length without ever re-wrapping the toolbar above it. */}
           <p
-            className={`mt-2 flex h-5 items-center justify-end text-xs font-semibold text-muted-foreground transition-opacity duration-200 ${
+            className={`mt-2 flex h-5 items-center justify-end text-desc font-semibold text-muted-foreground transition-opacity duration-200 ${
               active.isLoading ? "opacity-0" : "opacity-100"
             }`}
             aria-live="polite"
@@ -1016,13 +1016,13 @@ function GenericSearchPage() {
 
           <div ref={sentinel} className="h-8" aria-hidden />
           {active.isFetchingNextPage && (
-            <p className="flex items-center justify-center gap-2 py-3 text-xs text-muted-foreground">
+            <p className="flex items-center justify-center gap-2 py-3 text-desc text-muted-foreground">
               <Loader2 className="size-4 animate-spin" aria-hidden />
               {t("market.search.loadingMore")}
             </p>
           )}
           {!active.hasNextPage && count > 0 && (
-            <p className="py-3 text-center text-xs text-muted-foreground">
+            <p className="py-3 text-center text-desc text-muted-foreground">
               {t("market.endOfResults")}
             </p>
           )}

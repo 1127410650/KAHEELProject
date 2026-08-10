@@ -624,7 +624,7 @@ function ItemDialog({
                 </option>
               ))}
             </select>
-            <p className="text-xs leading-5 text-muted-foreground">
+            <p className="text-desc leading-5 text-muted-foreground">
               {locale === "ar"
                 ? "يجب ربط الإعلان بالمتجر أولًا. عند ربط خدمة يظهر زر الحجز داخل الإعلان نفسه."
                 : "Attach the listing to this store first. A linked service gets a booking button on the listing page."}
@@ -719,7 +719,7 @@ function ItemDialog({
                   : t("market.store.catalog.addPhoto")}
               </Button>
               {form.imagePath ? (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-desc text-muted-foreground">
                   {t("market.store.catalog.photoReady")}
                 </span>
               ) : null}
@@ -917,7 +917,7 @@ function OptionsDialog({
                     </div>
                   ))}
                   {group.options.length === 0 ? (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-desc text-muted-foreground">
                       {t("market.store.catalog.noOptions")}
                     </p>
                   ) : null}

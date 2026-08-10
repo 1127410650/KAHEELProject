@@ -31,7 +31,7 @@ import { formatDistance } from "@/lib/mkt-nearby";
 export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   if (isOpenStreetMap(place)) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-gold-soft px-2.5 py-1 text-[10px] font-black text-gold-foreground">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-gold-soft px-2.5 py-1 text-desc font-black text-gold-foreground">
         <Info className="size-3.5" aria-hidden />
         معلومات أولية — ساعدنا في التحقق
       </span>
@@ -39,14 +39,14 @@ export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   }
   if (isVerified(place)) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/40 bg-success-soft px-2.5 py-1 text-[10px] font-black text-success-strong">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/40 bg-success-soft px-2.5 py-1 text-desc font-black text-success-strong">
         <ShieldCheck className="size-3.5" aria-hidden />
         موثّق
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[10px] font-black text-muted-foreground">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-desc font-black text-muted-foreground">
       <Info className="size-3.5" aria-hidden />
       بانتظار التحقق
     </span>
@@ -121,7 +121,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
 
 
   const base =
-    "k-press inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-primary/25 bg-card px-3 py-2 text-[11px] font-black hover:border-primary/50 hover:bg-primary/6 hover:text-primary";
+    "k-press inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-primary/25 bg-card px-3 py-2 text-desc font-black hover:border-primary/50 hover:bg-primary/6 hover:text-primary";
 
   return (
     <div className="space-y-1.5">
@@ -162,7 +162,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
         </button>
       </div>
       {contacted ? (
-        <p className="text-[10px] font-bold text-gold-dark">
+        <p className="text-desc font-bold text-gold-dark">
           تم التواصل مع هذه الجهة سابقًا — يُفضّل عدم تكرار المراسلة.
         </p>
       ) : null}
@@ -191,7 +191,7 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
             {place.name_ar}
           </Link>
           {place.subcategory || place.category ? (
-            <p className="mt-1 text-[11px] font-bold text-market-navy-soft">
+            <p className="mt-1 text-desc font-bold text-market-navy-soft">
               {place.subcategory || place.category}
             </p>
           ) : null}
@@ -200,7 +200,7 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
       </div>
 
       {location || distance ? (
-        <p className="flex items-start gap-1.5 text-[11px] leading-6 text-muted-foreground">
+        <p className="flex items-start gap-1.5 text-desc leading-6 text-muted-foreground">
           <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           <span className="line-clamp-2">{place.address || location}</span>
           {distance ? (
@@ -213,7 +213,7 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
 
 
       {place.opening_hours ? (
-        <p className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+        <p className="flex items-center gap-1.5 text-desc font-bold text-muted-foreground">
           <Clock className="size-3.5" aria-hidden />
           {place.opening_hours}
         </p>
@@ -224,13 +224,13 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
         <Link
           to="/guides/syria/$slug"
           params={{ slug: place.slug }}
-          className="inline-flex items-center gap-1.5 text-[11px] font-black text-market-navy"
+          className="inline-flex items-center gap-1.5 text-desc font-black text-market-navy"
         >
           التفاصيل
           <ExternalLink className="size-3.5" aria-hidden />
         </Link>
         {source ? (
-          <p className="border-t border-border/60 pt-2 text-[10px] font-normal leading-4 text-muted-foreground/80">
+          <p className="border-t border-border/60 pt-2 text-desc font-normal leading-4 text-muted-foreground/80">
             المصدر:{" "}
             {href ? (
               <a

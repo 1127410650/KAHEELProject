@@ -214,7 +214,7 @@ function ProviderOperationsPage() {
                   key={String(label)}
                   className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
-                  <p className="text-[11px] text-white/60">{label}</p>
+                  <p className="text-desc text-white/60">{label}</p>
                   <p className="mt-1 text-xl font-black tabular-nums">{value}</p>
                 </div>
               ))}
@@ -235,7 +235,7 @@ function ProviderOperationsPage() {
               <h2 className="mt-4 font-black text-foreground group-hover:text-primary">
                 {module.title}
               </h2>
-              <p className="mt-1.5 text-xs leading-6 text-muted-foreground">{module.hint}</p>
+              <p className="mt-1.5 text-desc leading-6 text-muted-foreground">{module.hint}</p>
             </Link>
           ))}
         </div>

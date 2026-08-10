@@ -217,7 +217,7 @@ function ServiceBookingPage() {
                     {storeName}
                     <VerifiedBadge status={data.store.verification_status} />
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                  <div className="mt-3 flex flex-wrap gap-2 text-desc">
                     <Badge variant="secondary">
                       <Clock3 className="me-1 size-3.5" />
                       {data.service.duration_minutes} {locale === "ar" ? "دقيقة" : "min"}
@@ -238,7 +238,7 @@ function ServiceBookingPage() {
               {[1, 2, 3].map((value) => (
                 <div key={value} className="flex min-w-0 flex-1 items-center gap-2">
                   <span
-                    className={`grid size-8 shrink-0 place-items-center rounded-full text-xs font-black ${value <= step ? "bg-primary text-primary-foreground" : "border bg-card text-muted-foreground"}`}
+                    className={`grid size-8 shrink-0 place-items-center rounded-full text-desc font-black ${value <= step ? "bg-primary text-primary-foreground" : "border bg-card text-muted-foreground"}`}
                   >
                     {value < step ? <Check className="size-4" /> : value}
                   </span>
@@ -370,7 +370,7 @@ function ServiceBookingPage() {
                             {labels[value][locale === "ar" ? 0 : 1]}
                           </span>
                           {value === "at_customer" && data.settings.visit_fee > 0 ? (
-                            <span className="mt-1 block text-xs text-muted-foreground">
+                            <span className="mt-1 block text-desc text-muted-foreground">
                               +{data.settings.visit_fee}{" "}
                               {currencyLabel(data.service.currency_code, locale)}
                             </span>
@@ -483,7 +483,7 @@ function ServiceBookingPage() {
                       </dd>
                     </div>
                   </dl>
-                  <div className="flex items-start gap-2 rounded-2xl bg-secondary/60 p-3 text-xs leading-5 text-muted-foreground">
+                  <div className="flex items-start gap-2 rounded-2xl bg-secondary/60 p-3 text-desc leading-5 text-muted-foreground">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
                     {locale === "ar"
                       ? `يمكنك الإلغاء قبل الموعد، وتظهر سياسة الإلغاء (${data.settings.cancellation_window_hours} ساعات) بوضوح في حجوزاتك.`
@@ -525,7 +525,7 @@ function ServiceBookingPage() {
           <aside className="hidden lg:block">
             <Card className="sticky top-28 rounded-3xl">
               <CardContent className="space-y-4 p-5">
-                <p className="text-xs font-bold text-primary">
+                <p className="text-desc font-bold text-primary">
                   {locale === "ar" ? "ملخص السعر" : "Price summary"}
                 </p>
                 <div className="flex justify-between text-sm">
@@ -550,7 +550,7 @@ function ServiceBookingPage() {
                     {total} {currencyLabel(data.service.currency_code, locale)}
                   </span>
                 </div>
-                <div className="space-y-2 border-t pt-4 text-xs text-muted-foreground">
+                <div className="space-y-2 border-t pt-4 text-desc text-muted-foreground">
                   <p>
                     <Clock3 className="me-1 inline size-3.5" />
                     {data.service.duration_minutes} {locale === "ar" ? "دقيقة" : "minutes"}

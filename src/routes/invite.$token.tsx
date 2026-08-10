@@ -171,7 +171,7 @@ function InvitePage() {
                 </Button>
               ) : (
                 <div className="mt-5 space-y-2">
-                  <p className="text-xs text-muted-foreground">{t("invite.signInFirst")}</p>
+                  <p className="text-desc text-muted-foreground">{t("invite.signInFirst")}</p>
                   <Button asChild className="w-full">
                     <Link to="/auth" search={{ next: `/invite/${token}` } as never}>
                       {t("signup.signIn")}
@@ -182,7 +182,7 @@ function InvitePage() {
                       {t("signup.createAccount")}
                     </Link>
                   </Button>
-                  <p className="text-xs text-muted-foreground">{t("invite.createAccountFirst")}</p>
+                  <p className="text-desc text-muted-foreground">{t("invite.createAccountFirst")}</p>
                 </div>
               )}
             </>

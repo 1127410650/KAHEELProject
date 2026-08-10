@@ -192,7 +192,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
         <div className="absolute -end-12 -top-12 size-44 rounded-full bg-market-silver/10 blur-2xl" aria-hidden />
         <div className="absolute -bottom-16 -start-10 size-48 rounded-full bg-primary-foreground/10 blur-3xl" aria-hidden />
         <div className="relative max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-market-silver/30 bg-market-navy-soft/50 px-3 py-1 text-[11px] font-semibold text-market-silver">
+          <span className="inline-flex items-center gap-2 rounded-full border border-market-silver/30 bg-market-navy-soft/50 px-3 py-1 text-desc font-semibold text-market-silver">
             <Sparkles className="size-3.5" aria-hidden />
             قوالب مختلفة لكل نشاط
           </span>
@@ -221,22 +221,22 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
                     <Icon className="size-5 sm:size-6" aria-hidden />
                   </span>
                   {template.badge ? (
-                    <span className="rounded-full border border-white/20 bg-black/20 px-2 py-1 text-[9px] font-bold backdrop-blur sm:text-[10px]">
+                    <span className="rounded-full border border-white/20 bg-black/20 px-2 py-1 text-desc font-bold backdrop-blur sm:text-desc">
                       {template.badge}
                     </span>
                   ) : null}
                 </div>
                 <div className="mt-auto pt-5">
                   <h2 className="text-sm font-black sm:text-lg">{template.title}</h2>
-                  <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-white/75 sm:text-xs sm:leading-5">{template.description}</p>
+                  <p className="mt-1 line-clamp-2 text-desc leading-4 text-white/75 sm:text-desc sm:leading-5">{template.description}</p>
                   <div className="mt-2.5 flex flex-wrap gap-1">
                     {template.features.slice(0, 3).map((feature) => (
-                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-1.5 py-0.5 text-[8px] font-medium sm:px-2 sm:py-1 sm:text-[10px]">
+                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-1.5 py-0.5 text-desc font-medium sm:px-2 sm:py-1 sm:text-desc">
                         {feature}
                       </span>
                     ))}
                   </div>
-                  <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold text-white transition group-hover:gap-2 sm:text-xs">
+                  <span className="mt-3 inline-flex items-center gap-1 text-desc font-bold text-white transition group-hover:gap-2 sm:text-desc">
                     اختيار القالب
                     <ChevronLeft className="size-3.5 sm:size-4" aria-hidden />
                   </span>
@@ -259,10 +259,10 @@ export function SelectedStoreTemplate({ template, onChange }: { template: StoreT
           <Icon className="size-5" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold text-white/60">قالب المتجر المختار</p>
+          <p className="text-desc font-semibold text-white/60">قالب المتجر المختار</p>
           <h2 className="truncate text-base font-black">{template.title}</h2>
         </div>
-        <button type="button" onClick={onChange} className="shrink-0 rounded-full border border-white/20 bg-black/15 px-3 py-1.5 text-[11px] font-bold hover:bg-black/25">
+        <button type="button" onClick={onChange} className="shrink-0 rounded-full border border-white/20 bg-black/15 px-3 py-1.5 text-desc font-bold hover:bg-black/25">
           تغيير
         </button>
       </div>

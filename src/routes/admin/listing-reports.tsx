@@ -137,7 +137,7 @@ function AdminListingReportsPage() {
   const filterFields = (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       <div className="space-y-1">
-        <Label htmlFor="lr-status" className="text-xs">
+        <Label htmlFor="lr-status" className="text-desc">
           {t("market.lr.filters.status")}
         </Label>
         <select
@@ -155,7 +155,7 @@ function AdminListingReportsPage() {
         </select>
       </div>
       <div className="space-y-1">
-        <Label htmlFor="lr-reason" className="text-xs">
+        <Label htmlFor="lr-reason" className="text-desc">
           {t("market.lr.filters.reason")}
         </Label>
         <select
@@ -173,7 +173,7 @@ function AdminListingReportsPage() {
         </select>
       </div>
       <div className="space-y-1">
-        <Label htmlFor="lr-priority" className="text-xs">
+        <Label htmlFor="lr-priority" className="text-desc">
           {t("market.lr.filters.priority")}
         </Label>
         <select
@@ -191,7 +191,7 @@ function AdminListingReportsPage() {
         </select>
       </div>
       <div className="space-y-1">
-        <Label htmlFor="lr-assignee" className="text-xs">
+        <Label htmlFor="lr-assignee" className="text-desc">
           {t("market.lr.filters.assignee")}
         </Label>
         <select
@@ -209,7 +209,7 @@ function AdminListingReportsPage() {
         </select>
       </div>
       <div className="space-y-1">
-        <Label htmlFor="lr-from" className="text-xs">
+        <Label htmlFor="lr-from" className="text-desc">
           {t("market.lr.filters.from")}
         </Label>
         <Input
@@ -222,7 +222,7 @@ function AdminListingReportsPage() {
         />
       </div>
       <div className="space-y-1">
-        <Label htmlFor="lr-to" className="text-xs">
+        <Label htmlFor="lr-to" className="text-desc">
           {t("market.lr.filters.to")}
         </Label>
         <Input
@@ -234,7 +234,7 @@ function AdminListingReportsPage() {
           className="h-10"
         />
       </div>
-      <label className="flex min-h-11 items-center gap-2 self-end text-xs text-foreground">
+      <label className="flex min-h-11 items-center gap-2 self-end text-desc text-foreground">
         <input
           type="checkbox"
           checked={filters.suspendedOnly ?? false}
@@ -263,7 +263,7 @@ function AdminListingReportsPage() {
     >
       <div className="flex flex-wrap items-end gap-2">
         <div className="min-w-0 flex-1 space-y-1">
-          <Label htmlFor="lr-search" className="text-xs">
+          <Label htmlFor="lr-search" className="text-desc">
             {t("market.lr.searchLabel")}
           </Label>
           <Input
@@ -326,7 +326,7 @@ function AdminListingReportsPage() {
 
           {/* desktop: table */}
           <div className="mt-4 hidden overflow-hidden rounded-xl border border-border lg:block">
-            <table className="w-full text-start text-xs">
+            <table className="w-full text-start text-desc">
               <thead className="bg-muted/50 text-muted-foreground">
                 <tr>
                   <th className="p-2 text-start font-medium">{t("market.lr.col.ref")}</th>
@@ -353,9 +353,9 @@ function AdminListingReportsPage() {
                         id={r.listing_id}
                         name={r.listing_title}
                         truncate
-                        className="text-xs"
+                        className="text-desc"
                       />
-                      <p dir="ltr" className="font-mono text-[11px] text-muted-foreground">
+                      <p dir="ltr" className="font-mono text-desc text-muted-foreground">
                         {r.listing_ref ?? "—"}
                       </p>
                     </td>
@@ -364,9 +364,9 @@ function AdminListingReportsPage() {
                         id={subjectMap[subjectKey("report_owner", r.id)] ?? null}
                         name={r.owner_label}
                         truncate
-                        className="text-xs"
+                        className="text-desc"
                       />
-                      <p className="truncate text-[11px] text-muted-foreground">
+                      <p className="truncate text-desc text-muted-foreground">
                         {r.owner_business ?? "—"}
                       </p>
                     </td>
@@ -413,7 +413,7 @@ function AdminListingReportsPage() {
             >
               {t("market.lr.prev")}
             </Button>
-            <span dir="ltr" className="text-xs text-muted-foreground">
+            <span dir="ltr" className="text-desc text-muted-foreground">
               {(filters.page ?? 0) * PAGE_SIZE + 1}–{(filters.page ?? 0) * PAGE_SIZE + list.length}{" "}
               / {total}
             </span>
@@ -468,7 +468,7 @@ function ReportCard({
     <div className="rounded-xl border border-border bg-card p-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p dir="ltr" className="font-mono text-xs font-bold text-foreground">
+          <p dir="ltr" className="font-mono text-desc font-bold text-foreground">
             {report.ref_no ?? "—"}
           </p>
           <AdminListingLink
@@ -477,25 +477,25 @@ function ReportCard({
             truncate
             className="mt-1 min-h-11 py-2.5 text-sm font-medium"
           />
-          <p dir="ltr" className="font-mono text-[11px] text-muted-foreground">
+          <p dir="ltr" className="font-mono text-desc text-muted-foreground">
             {report.listing_ref ?? "—"}
           </p>
         </div>
         <Badge variant="outline">{t(`market.lr.status.${report.status}`)}</Badge>
       </div>
-      <p className="mt-2 text-[11px] text-muted-foreground">
+      <p className="mt-2 text-desc text-muted-foreground">
         {(locale === "ar" ? report.reason_name_ar : report.reason_name_en) ??
           report.reason_code ??
           "—"}{" "}
         · {t(`market.reports.priority.${report.priority}`)} ·{" "}
         {t("market.lr.col.count")}: <span dir="ltr">{report.listing_report_count}</span>
       </p>
-      <p className="mt-1 text-[11px] text-muted-foreground">
-        <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-[11px]" />
+      <p className="mt-1 text-desc text-muted-foreground">
+        <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-desc" />
         {report.owner_business ? ` · ${report.owner_business}` : ""}
       </p>
 
-      <p className="mt-1 text-[11px] text-muted-foreground">
+      <p className="mt-1 text-desc text-muted-foreground">
         {report.assignee_label ?? t("market.lr.unassigned")} · {formatDateTime(report.updated_at)}
         {overdue && (
           <span className="ms-2 font-medium text-destructive">
@@ -646,11 +646,11 @@ function CaseDrawer({
         </SheetTitle>
       </SheetHeader>
 
-      <div className="mt-3 grid gap-2 rounded-xl border border-border bg-card p-3 text-xs sm:grid-cols-2">
+      <div className="mt-3 grid gap-2 rounded-xl border border-border bg-card p-3 text-desc sm:grid-cols-2">
         <Row label={t("market.lr.col.listing")} value={report.listing_ref ?? "—"} ltr />
         <div className="flex items-baseline justify-between gap-2 py-1">
-          <span className="text-[11px] text-muted-foreground">{t("market.lr.col.owner")}</span>
-          <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-xs" />
+          <span className="text-desc text-muted-foreground">{t("market.lr.col.owner")}</span>
+          <AdminUserLink id={ownerUserId} name={report.owner_label} className="text-desc" />
         </div>
         <Row label={t("market.lr.col.business")} value={report.owner_business ?? "—"} />
         <Row
@@ -674,15 +674,15 @@ function CaseDrawer({
         <Row label={t("market.lr.col.created")} value={formatDateTime(report.created_at)} ltr />
         <Row label={t("market.lr.col.updated")} value={formatDateTime(report.updated_at)} ltr />
         <div className="flex items-baseline justify-between gap-2 py-1">
-          <span className="text-[11px] text-muted-foreground">{t("market.lr.reporter")}</span>
+          <span className="text-desc text-muted-foreground">{t("market.lr.reporter")}</span>
           {report.can_view_reporter && reporterUserId ? (
             <AdminUserLink
               id={reporterUserId}
               name={report.reporter_identity ?? report.reporter_alias}
-              className="text-xs"
+              className="text-desc"
             />
           ) : (
-            <span className="text-xs text-foreground">
+            <span className="text-desc text-foreground">
               {report.can_view_reporter && report.reporter_identity
                 ? report.reporter_identity
                 : report.reporter_alias}
@@ -698,13 +698,13 @@ function CaseDrawer({
       </div>
 
       {report.note && (
-        <p className="mt-2 whitespace-pre-wrap rounded-xl border border-border bg-muted/40 p-3 text-xs text-foreground">
+        <p className="mt-2 whitespace-pre-wrap rounded-xl border border-border bg-muted/40 p-3 text-desc text-foreground">
           {report.note}
         </p>
       )}
 
       {!report.can_view_reporter && (
-        <p className="mt-2 flex items-start gap-2 rounded-xl border border-border bg-card p-3 text-[11px] text-muted-foreground">
+        <p className="mt-2 flex items-start gap-2 rounded-xl border border-border bg-card p-3 text-desc text-muted-foreground">
           <ShieldCheck className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           {t("market.lr.identityHidden")}
         </p>
@@ -714,13 +714,13 @@ function CaseDrawer({
       <AdminListingLink
         id={report.listing_id}
         name={t("market.lr.openListing")}
-        className="mt-3 min-h-11 py-2.5 text-xs font-medium"
+        className="mt-3 min-h-11 py-2.5 text-desc font-medium"
       />
 
 
       {/* reason shared by every decision */}
       <div className="mt-4 space-y-1">
-        <Label htmlFor="lr-reason-input" className="text-xs">
+        <Label htmlFor="lr-reason-input" className="text-desc">
           {t("market.lr.reasonLabel")}
         </Label>
         <Textarea
@@ -734,9 +734,9 @@ function CaseDrawer({
 
       {/* lifecycle */}
       <section className="mt-4">
-        <h2 className="text-xs font-bold text-foreground">{t("market.lr.lifecycle")}</h2>
+        <h2 className="text-desc font-bold text-foreground">{t("market.lr.lifecycle")}</h2>
         {nexts.length === 0 ? (
-          <p className="mt-1 text-[11px] text-muted-foreground">{t("market.lr.noTransitions")}</p>
+          <p className="mt-1 text-desc text-muted-foreground">{t("market.lr.noTransitions")}</p>
         ) : (
           <div className="mt-2 flex flex-wrap gap-2">
             {nexts.map((to) => {
@@ -763,7 +763,7 @@ function CaseDrawer({
       {/* assignment */}
       {(can("ads.reports_assign") || can("reports.assign") || can("ads.reports_manage")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-xs font-bold text-foreground">{t("market.lr.assignment")}</h2>
+          <h2 className="text-desc font-bold text-foreground">{t("market.lr.assignment")}</h2>
           <div className="flex flex-wrap gap-2">
             <select
               value={assignee}
@@ -792,7 +792,7 @@ function CaseDrawer({
 
       {/* listing enforcement */}
       <section className="mt-4 space-y-2">
-        <h2 className="text-xs font-bold text-foreground">{t("market.lr.listingActions")}</h2>
+        <h2 className="text-desc font-bold text-foreground">{t("market.lr.listingActions")}</h2>
         <div className="flex flex-wrap gap-2">
           <select
             value={listingAction}
@@ -835,7 +835,7 @@ function CaseDrawer({
       {/* internal note */}
       {(can("ads.reports_internal_notes") || can("reports.add_internal_note")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-xs font-bold text-foreground">{t("market.lr.internalNotes")}</h2>
+          <h2 className="text-desc font-bold text-foreground">{t("market.lr.internalNotes")}</h2>
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -853,7 +853,7 @@ function CaseDrawer({
           </Button>
           <ul className="space-y-1">
             {(notes.data ?? []).map((n) => (
-              <li key={n.id} className="rounded-lg border border-border bg-muted/40 p-2 text-[11px]">
+              <li key={n.id} className="rounded-lg border border-border bg-muted/40 p-2 text-desc">
                 <span dir="ltr" className="text-muted-foreground">
                   {formatDateTime(n.created_at)}
                 </span>
@@ -867,7 +867,7 @@ function CaseDrawer({
       {/* owner message */}
       {(can("ads.reports_contact_owner") || can("reports.message_advertiser")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-xs font-bold text-foreground">{t("market.lr.contactOwner")}</h2>
+          <h2 className="text-desc font-bold text-foreground">{t("market.lr.contactOwner")}</h2>
           <Textarea
             value={ownerMsg}
             onChange={(e) => setOwnerMsg(e.target.value)}
@@ -888,8 +888,8 @@ function CaseDrawer({
       {/* reporter reply */}
       {(can("ads.reports_reply_reporter") || can("reports.message_reporter")) && (
         <section className="mt-4 space-y-2">
-          <h2 className="text-xs font-bold text-foreground">{t("market.lr.replyReporter")}</h2>
-          <p className="text-[11px] text-muted-foreground">{t("market.lr.replyReporterHint")}</p>
+          <h2 className="text-desc font-bold text-foreground">{t("market.lr.replyReporter")}</h2>
+          <p className="text-desc text-muted-foreground">{t("market.lr.replyReporterHint")}</p>
           <Textarea
             value={reporterMsg}
             onChange={(e) => setReporterMsg(e.target.value)}
@@ -909,10 +909,10 @@ function CaseDrawer({
 
       {/* status history */}
       <section className="mt-4">
-        <h2 className="text-xs font-bold text-foreground">{t("market.lr.history")}</h2>
+        <h2 className="text-desc font-bold text-foreground">{t("market.lr.history")}</h2>
         <ul className="mt-2 space-y-1">
           {(history.data ?? []).map((h) => (
-            <li key={h.id} className="rounded-lg border border-border bg-card p-2 text-[11px]">
+            <li key={h.id} className="rounded-lg border border-border bg-card p-2 text-desc">
               <span className="text-foreground">
                 {h.from_status ? t(`market.lr.status.${h.from_status}`) : "—"} →{" "}
                 {t(`market.lr.status.${h.to_status}`)}
@@ -932,10 +932,10 @@ function CaseDrawer({
 function Row({ label, value, ltr }: { label: string; value: string; ltr?: boolean }) {
   return (
     <div className="min-w-0">
-      <p className="text-[11px] text-muted-foreground">{label}</p>
+      <p className="text-desc text-muted-foreground">{label}</p>
       <p
         {...(ltr ? { dir: "ltr" as const } : {})}
-        className="truncate text-xs font-medium text-foreground"
+        className="truncate text-desc font-medium text-foreground"
       >
         {value}
       </p>

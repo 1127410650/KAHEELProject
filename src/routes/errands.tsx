@@ -177,7 +177,7 @@ function ErrandsPage() {
               <h1 className="text-lg font-black leading-tight text-foreground">
                 {ar ? "جيب لي" : "Get it for me"}
               </h1>
-              <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
+              <p className="mt-0.5 text-desc leading-snug text-muted-foreground">
                 {ar
                   ? "اكتب شو بدّك من أي مكان… والكابتن يجيبه لك. وطبعًا بواسطتي أنا."
                   : "Ask for anything from anywhere — a captain brings it to you."}
@@ -213,13 +213,13 @@ function ErrandsPage() {
                     }`}
                   >
                     <span
-                      className={`block truncate text-[13px] font-bold ${
+                      className={`block truncate text-desc font-bold ${
                         selected ? "text-primary" : "text-foreground"
                       }`}
                     >
                       {serviceName(service, ar)}
                     </span>
-                    <span className="mt-0.5 line-clamp-2 block text-[11px] leading-snug text-muted-foreground">
+                    <span className="mt-0.5 line-clamp-2 block text-desc leading-snug text-muted-foreground">
                       {serviceTagline(service, ar)}
                     </span>
                   </button>
@@ -235,7 +235,7 @@ function ErrandsPage() {
             <Label className="text-sm font-bold text-foreground">
               {ar ? "اكتب طلبك بالتفصيل" : "Describe your order"}
             </Label>
-            <p className="mb-2 mt-0.5 text-[11px] text-muted-foreground">
+            <p className="mb-2 mt-0.5 text-desc text-muted-foreground">
               {ar
                 ? "بدون قوائم ولا تصنيفات — اكتب زي ما تحكي: «جيبلي كيلو منقوشة زعتر من فرن أبو أحمد»."
                 : "No catalogue needed — write it the way you'd say it."}
@@ -252,7 +252,7 @@ function ErrandsPage() {
               }
               className="resize-none text-sm"
             />
-            <div className="mt-1 text-end text-[11px] text-muted-foreground">
+            <div className="mt-1 text-end text-desc text-muted-foreground">
               {details.length}/1200
             </div>
 
@@ -269,7 +269,7 @@ function ErrandsPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 gap-1 text-[11px]"
+                className="h-8 gap-1 text-desc"
                 onClick={() => fileInput.current?.click()}
               >
                 <Camera className="h-3.5 w-3.5" />
@@ -288,7 +288,7 @@ function ErrandsPage() {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="h-8 gap-1 text-[11px] text-destructive"
+                    className="h-8 gap-1 text-desc text-destructive"
                     onClick={clearPhoto}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -296,7 +296,7 @@ function ErrandsPage() {
                   </Button>
                 </div>
               ) : (
-                <span className="text-[11px] text-muted-foreground">
+                <span className="text-desc text-muted-foreground">
                   {ar ? "تُضغط تلقائيًا قبل الرفع" : "Compressed automatically"}
                 </span>
               )}
@@ -324,7 +324,7 @@ function ErrandsPage() {
           {/* الميزانية وتكلفة التوصيل */}
           <div className="grid gap-2 rounded-2xl border border-border/70 bg-card/60 p-3 sm:grid-cols-2">
             <div className="grid gap-1">
-              <Label className="text-[11px] text-muted-foreground">
+              <Label className="text-desc text-muted-foreground">
                 {ar ? "ميزانية تقديرية للطلب (اختياري)" : "Rough budget (optional)"}
               </Label>
               <Input
@@ -336,10 +336,10 @@ function ErrandsPage() {
               />
             </div>
             <div className="grid gap-1">
-              <Label className="text-[11px] text-muted-foreground">
+              <Label className="text-desc text-muted-foreground">
                 {ar ? "تكلفة التوصيل" : "Delivery fee"}
               </Label>
-              <div className="flex h-9 items-center rounded-md border border-dashed border-primary/40 bg-primary/5 px-2.5 text-[12px] font-bold text-primary">
+              <div className="flex h-9 items-center rounded-md border border-dashed border-primary/40 bg-primary/5 px-2.5 text-desc font-bold text-primary">
                 <PackageSearch className="me-1.5 h-3.5 w-3.5" />
                 {ar ? "بانتظار عرض الكابتن" : "Waiting for the captain's offer"}
               </div>
@@ -357,18 +357,18 @@ function ErrandsPage() {
             </Button>
           ) : (
             <div className="rounded-2xl border border-primary/30 bg-primary/5 p-3 text-center">
-              <p className="text-[12.5px] font-semibold text-foreground">
+              <p className="text-desc font-semibold text-foreground">
                 {ar
                   ? "سجّل دخولك حتى نوصل طلبك للكباتن ونتابعه معك."
                   : "Sign in so we can send your request to captains."}
               </p>
-              <Button asChild size="sm" className="mt-2 h-9 text-[12.5px] font-bold">
+              <Button asChild size="sm" className="mt-2 h-9 text-desc font-bold">
                 <Link to="/auth">{ar ? "تسجيل الدخول" : "Sign in"}</Link>
               </Button>
             </div>
           )}
 
-          <div className="flex items-center justify-center gap-3 pt-1 text-[11.5px] text-muted-foreground">
+          <div className="flex items-center justify-center gap-3 pt-1 text-desc text-muted-foreground">
             <Link to="/my/errands" className="font-semibold text-primary hover:underline">
               {ar ? "طلباتي" : "My requests"}
             </Link>

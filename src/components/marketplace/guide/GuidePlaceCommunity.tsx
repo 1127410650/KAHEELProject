@@ -56,7 +56,7 @@ export function GuidePlaceRating({
   return (
     <span
       className={`inline-flex items-center gap-1 font-black ${
-        size === "lg" ? "text-sm" : "text-[11px]"
+        size === "lg" ? "text-sm" : "text-desc"
       }`}
     >
       <Star className="size-3.5 fill-gold text-gold" aria-hidden />
@@ -217,7 +217,7 @@ function GallerySection({
               className="size-full object-cover"
             />
             {item.kind === "official" ? (
-              <span className="absolute bottom-1.5 start-1.5 rounded-full bg-market-navy/90 px-2 py-0.5 text-[9px] font-black text-white">
+              <span className="absolute bottom-1.5 start-1.5 rounded-full bg-market-navy/90 px-2 py-0.5 text-desc font-black text-white">
                 صورة رسمية
               </span>
             ) : null}
@@ -240,7 +240,7 @@ function UploadSection({ placeId, userId }: { placeId: string; userId: string | 
         <Camera className="size-4 text-market-navy" aria-hidden />
         أضف صورًا للجهة
       </h2>
-      <p className="text-[11px] leading-6 text-muted-foreground">
+      <p className="text-desc leading-6 text-muted-foreground">
         تُضغط الصور في متصفحك قبل الرفع (أقصى عرض 1600px، صيغة WebP، وحد 300KB لكل صورة) وتُراجع من
         الإدارة قبل النشر.
       </p>
@@ -268,13 +268,13 @@ function UploadSection({ placeId, userId }: { placeId: string; userId: string | 
         type="button"
         disabled={!userId || upload.isPending}
         onClick={() => input.current?.click()}
-        className="mt-3 inline-flex h-10 items-center gap-1.5 rounded-2xl bg-market-navy px-4 text-[12px] font-black text-white disabled:opacity-50"
+        className="mt-3 inline-flex h-10 items-center gap-1.5 rounded-2xl bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
       >
         <ImagePlus className="size-4" aria-hidden />
         {upload.isPending ? "جاري الضغط والرفع…" : `اختر صورًا (حتى ${GUIDE_PHOTO_BATCH_LIMIT})`}
       </button>
       {!userId ? (
-        <p className="mt-2 text-[11px] font-bold text-muted-foreground">
+        <p className="mt-2 text-desc font-bold text-muted-foreground">
           سجّل الدخول لإضافة صور أو تقييم.
         </p>
       ) : null}
@@ -304,7 +304,7 @@ function MyPhotosSection({
               height={56}
               className="size-14 shrink-0 rounded-xl object-cover"
             />
-            <div className="min-w-0 flex-1 text-[11px] font-bold">
+            <div className="min-w-0 flex-1 text-desc font-bold">
               {photo.status === "approved" ? (
                 <span className="inline-flex items-center gap-1 text-success">
                   <CheckCircle2 className="size-3.5" aria-hidden /> معتمدة وظاهرة
@@ -365,7 +365,7 @@ function ReviewsSection({
       {userId ? (
         <div className="mb-4 rounded-2xl border border-border bg-background p-3">
           {myReview ? (
-            <p className="mb-2 text-[11px] font-black">
+            <p className="mb-2 text-desc font-black">
               {myReview.status === "approved"
                 ? "تقييمك منشور — يمكنك تعديله وسيعاد للمراجعة."
                 : myReview.status === "rejected"
@@ -394,7 +394,7 @@ function ReviewsSection({
             rows={2}
             maxLength={1200}
             placeholder="اكتب تجربتك مع هذه الجهة…"
-            className="mt-2 w-full resize-none rounded-xl border border-input bg-background p-2.5 text-[12px] outline-none focus:border-market-navy"
+            className="mt-2 w-full resize-none rounded-xl border border-input bg-background p-2.5 text-desc outline-none focus:border-market-navy"
           />
           <button
             type="button"
@@ -411,29 +411,29 @@ function ReviewsSection({
                 },
               )
             }
-            className="mt-2 inline-flex h-10 items-center rounded-2xl bg-market-navy px-4 text-[12px] font-black text-white disabled:opacity-50"
+            className="mt-2 inline-flex h-10 items-center rounded-2xl bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
           >
             {submit.isPending ? "جاري الإرسال…" : "إرسال التقييم"}
           </button>
         </div>
       ) : (
-        <p className="mb-3 text-[11px] font-bold text-muted-foreground">
+        <p className="mb-3 text-desc font-bold text-muted-foreground">
           سجّل الدخول لكتابة تقييم.
         </p>
       )}
 
       {rows.length === 0 ? (
-        <p className="text-[12px] text-muted-foreground">لا تقييمات معتمدة بعد.</p>
+        <p className="text-desc text-muted-foreground">لا تقييمات معتمدة بعد.</p>
       ) : (
         <ul className="space-y-3">
           {rows.map((row) => (
             <li key={row.id} className="border-t border-border/70 pt-3 first:border-0 first:pt-0">
               <div className="flex items-center gap-2">
                 <Stars value={row.rating} />
-                <span className="text-[11px] font-black">{row.display_name ?? "زائر"}</span>
+                <span className="text-desc font-black">{row.display_name ?? "زائر"}</span>
               </div>
               {row.comment ? (
-                <p className="mt-1 whitespace-pre-line text-[12px] leading-6 text-muted-foreground">
+                <p className="mt-1 whitespace-pre-line text-desc leading-6 text-muted-foreground">
                   {row.comment}
                 </p>
               ) : null}
@@ -473,7 +473,7 @@ function PromoteSection({
         <Megaphone className="size-4 text-market-purple" aria-hidden />
         روّج «{placeName}» في «إعلانات مميزة»
       </h2>
-      <p className="text-[11px] leading-6 text-muted-foreground">
+      <p className="text-desc leading-6 text-muted-foreground">
         تظهر الجهة في المساحة المميزة أسفل شريط البحث في الرئيسية. التكلفة{" "}
         {GUIDE_PROMOTION_CREDITS_PER_DAY} من رصيد الإعلانات لكل يوم.
       </p>
@@ -483,7 +483,7 @@ function PromoteSection({
             key={option}
             type="button"
             onClick={() => setDays(option)}
-            className={`rounded-full border px-3 py-1 text-[11px] font-black transition ${
+            className={`rounded-full border px-3 py-1 text-desc font-black transition ${
               days === option
                 ? "border-market-purple bg-market-purple text-white"
                 : "border-border bg-background"
@@ -492,7 +492,7 @@ function PromoteSection({
             {option} يوم
           </button>
         ))}
-        <span className="ms-auto text-[11px] font-black text-muted-foreground">
+        <span className="ms-auto text-desc font-black text-muted-foreground">
           رصيدك: {(wallet.data?.balance ?? 0).toLocaleString("en-US")}
         </span>
       </div>
@@ -510,7 +510,7 @@ function PromoteSection({
               ),
           })
         }
-        className="mt-3 inline-flex h-10 items-center rounded-2xl bg-market-purple px-4 text-[12px] font-black text-white disabled:opacity-50"
+        className="mt-3 inline-flex h-10 items-center rounded-2xl bg-market-purple px-4 text-desc font-black text-white disabled:opacity-50"
       >
         {promote.isPending ? "جاري التنفيذ…" : `ترويج الآن — ${cost.toLocaleString("en-US")} رصيد`}
       </button>
@@ -552,7 +552,7 @@ function ClaimSection({
   if (!userId) return null;
 
   const inputClass =
-    "h-10 w-full rounded-xl border border-input bg-background px-3 text-[12px] outline-none focus:border-primary";
+    "h-10 w-full rounded-xl border border-input bg-background px-3 text-desc outline-none focus:border-primary";
 
   return (
     <section id="guide-claim" className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
@@ -561,7 +561,7 @@ function ClaimSection({
         هذه جهتك؟ طالب بإدارتها
       </h2>
       {claim ? (
-        <p className="text-[11px] font-bold text-muted-foreground">
+        <p className="text-desc font-bold text-muted-foreground">
           {claim.status === "approved"
             ? "مطالبتك معتمدة — تستطيع إدارة صور الجهة."
             : claim.status === "rejected"
@@ -582,7 +582,7 @@ function ClaimSection({
                 key={role}
                 type="button"
                 onClick={() => setApplicantRole(role)}
-                className={`h-10 flex-1 rounded-xl border text-[12px] font-black ${
+                className={`h-10 flex-1 rounded-xl border text-desc font-black ${
                   applicantRole === role
                     ? "border-primary bg-primary/10 text-primary"
                     : "border-border bg-background text-muted-foreground"
@@ -594,8 +594,8 @@ function ClaimSection({
           </div>
 
           <div className="rounded-xl border border-border bg-muted/40 p-2.5">
-            <p className="text-[11px] font-black">الجوال الموثّق</p>
-            <p className="mt-0.5 text-[11px] font-bold text-muted-foreground">
+            <p className="text-desc font-black">الجوال الموثّق</p>
+            <p className="mt-0.5 text-desc font-bold text-muted-foreground">
               {verifiedPhone
                 ? `${verifiedPhone} — موثّق برمز التحقق عند تسجيل الدخول`
                 : "لا يوجد جوال موثّق على حسابك — أضف جوالك ووثّقه بالدخول برمز التحقق قبل تقديم المطالبة."}
@@ -618,9 +618,9 @@ function ClaimSection({
             multiple
             accept={CLAIM_DOC_ACCEPT}
             onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
-            className="w-full rounded-xl border border-input bg-background p-2 text-[11px]"
+            className="w-full rounded-xl border border-input bg-background p-2 text-desc"
           />
-          <p className="text-[10.5px] font-bold text-muted-foreground">
+          <p className="text-desc font-bold text-muted-foreground">
             مستند واحد على الأقل (سجل تجاري أو ترخيص أو تفويض رسمي). المستندات تُحفظ في حاوية خاصة
             وتُحذف تلقائيًا بعد {CLAIM_DOC_RETENTION_DAYS.toLocaleString("en-US")} يومًا من البتّ في
             الطلب.
@@ -631,7 +631,7 @@ function ClaimSection({
             onChange={(event) => setEvidence(event.target.value)}
             rows={2}
             placeholder="توضيح إضافي (اختياري)"
-            className="w-full resize-none rounded-xl border border-input bg-background p-2.5 text-[12px] outline-none focus:border-primary"
+            className="w-full resize-none rounded-xl border border-input bg-background p-2.5 text-desc outline-none focus:border-primary"
           />
 
           <button
@@ -667,7 +667,7 @@ function ClaimSection({
                 },
               )
             }
-            className="inline-flex h-10 items-center rounded-2xl bg-primary px-4 text-[12px] font-black text-primary-foreground disabled:opacity-50"
+            className="inline-flex h-10 items-center rounded-2xl bg-primary px-4 text-desc font-black text-primary-foreground disabled:opacity-50"
           >
             {submit.isPending ? "جاري الإرسال…" : "إرسال المطالبة"}
           </button>
@@ -676,7 +676,7 @@ function ClaimSection({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-2 inline-flex h-9 items-center rounded-2xl border border-border px-3.5 text-[12px] font-black"
+          className="mt-2 inline-flex h-9 items-center rounded-2xl border border-border px-3.5 text-desc font-black"
         >
           تقديم مطالبة
         </button>

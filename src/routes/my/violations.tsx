@@ -100,7 +100,7 @@ function ViolationsPage() {
 
   return (
     <DashboardShell title={t("market.reports.violations.title")}>
-      <p className="mb-4 rounded-lg border border-border bg-muted/50 p-3 text-xs text-muted-foreground">
+      <p className="mb-4 rounded-lg border border-border bg-muted/50 p-3 text-desc text-muted-foreground">
         {t("market.reports.violations.hint")}
       </p>
 
@@ -112,7 +112,7 @@ function ViolationsPage() {
           </h2>
           <ul className="mt-2 space-y-2">
             {(restrictions.data ?? []).map((item) => (
-              <li key={item.id} className="text-xs text-foreground">
+              <li key={item.id} className="text-desc text-foreground">
                 <span className="font-semibold">
                   {t(`market.reports.restriction.${item.restriction}`)}
                 </span>
@@ -149,23 +149,23 @@ function ViolationsPage() {
               <li key={item.report_id} className="rounded-xl border border-border bg-card p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p dir="ltr" className="font-mono text-xs font-bold text-foreground">
+                    <p dir="ltr" className="font-mono text-desc font-bold text-foreground">
                       {item.ref_no ?? "—"}
                     </p>
                     <p className="mt-1 truncate text-sm font-semibold text-foreground">
                       {item.listing_title ?? "—"}
                     </p>
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">
+                    <p className="mt-0.5 text-desc text-muted-foreground">
                       {t("market.reports.violations.anonymous")} ·{" "}
                       {formatDateTime(item.created_at)}
                     </p>
                   </div>
-                  <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+                  <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
                     {t(`market.reports.status.${item.status}`)}
                   </span>
                 </div>
 
-                <dl className="mt-3 space-y-1.5 text-xs">
+                <dl className="mt-3 space-y-1.5 text-desc">
                   <div>
                     <dt className="text-muted-foreground">
                       {t("market.reports.violations.decision")}

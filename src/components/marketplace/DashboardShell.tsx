@@ -65,7 +65,7 @@ export function DashboardShell({
         <header className="market-page-intro">
           <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">{title}</h1>
           {account && (
-            <p className="mt-1 truncate text-xs text-muted-foreground">
+            <p className="mt-1 truncate text-desc text-muted-foreground">
               {t("market.entry.workingUnder", {
                 name: account.name || t("market.account.fallbackName"),
               })}
@@ -79,7 +79,7 @@ export function DashboardShell({
             // it says the connection failed, states the session is intact, and retries.
             <div className="space-y-3 rounded-xl border border-border bg-card p-4">
               <p className="text-sm text-foreground">{t("market.entry.offline")}</p>
-              <p className="text-xs text-muted-foreground">{t("market.entry.loadFailed")}</p>
+              <p className="text-desc text-muted-foreground">{t("market.entry.loadFailed")}</p>
               <Button
                 type="button"
                 className="min-h-11"

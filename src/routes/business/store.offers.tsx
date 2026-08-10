@@ -57,7 +57,7 @@ function StoreOffersPage() {
 
   return (
     <DashboardShell title="عروض المتجر">
-      <p className="text-xs text-muted-foreground">
+      <p className="text-desc text-muted-foreground">
         سند كَحيل: خصومات يراها زوّار صفحة متجرك العامة.
       </p>
       {store.isLoading ? (

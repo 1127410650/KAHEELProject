@@ -213,7 +213,7 @@ export function AiImageStudio({ onApproved }: Props) {
                   alt={ar ? "معاينة الصورة المولّدة" : "Generated image preview"}
                   className="h-auto w-full rounded-xl bg-muted"
                 />
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {formatNumber(asset.width)}×{formatNumber(asset.height)} ·{" "}
                   {formatNumber(Math.round(asset.blob.size / 1024))} KB
                 </p>
@@ -247,9 +247,9 @@ export function AiImageStudio({ onApproved }: Props) {
 
         {rows.length > 0 ? (
           <div className="space-y-1 border-t pt-3">
-            <p className="text-xs font-bold">{ar ? "سجل التوليد" : "Generation log"}</p>
+            <p className="text-desc font-bold">{ar ? "سجل التوليد" : "Generation log"}</p>
             {rows.map((row) => (
-              <p key={row.id} className="text-[11px] text-muted-foreground">
+              <p key={row.id} className="text-desc text-muted-foreground">
                 {formatDateTime(row.created_at)} · {row.size_key} · {row.status} ·{" "}
                 {formatNumber(Math.round(row.bytes / 1024))} KB ·{" "}
                 {ar ? "تكلفة تقديرية" : "est. cost"} {formatNumber(Number(row.cost_credits))} ·{" "}

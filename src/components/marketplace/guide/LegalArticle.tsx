@@ -16,14 +16,14 @@ export function LegalArticle({
   return (
     <main className="mx-auto w-full max-w-[820px] px-4 py-6 sm:px-6 sm:py-8">
       <h1 className="text-2xl font-black">{title}</h1>
-      <p className="mt-1.5 text-[12px] font-bold leading-6 text-muted-foreground">{intro}</p>
+      <p className="mt-1.5 text-desc font-bold leading-6 text-muted-foreground">{intro}</p>
       <div className="mt-4 space-y-3">
         {blocks.map((block) => (
           <section key={block.h} className="rounded-2xl border border-border/80 bg-card p-4">
-            <h2 className="text-[13px] font-black">{block.h}</h2>
+            <h2 className="text-desc font-black">{block.h}</h2>
             <div className="mt-1.5 space-y-1.5">
               {block.p.map((line) => (
-                <p key={line} className="text-[11.5px] leading-6 text-muted-foreground">
+                <p key={line} className="text-desc leading-6 text-muted-foreground">
                   {line}
                 </p>
               ))}

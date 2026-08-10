@@ -73,7 +73,7 @@ export function PropertySpecsBar({
     <ul
       className={cn(
         "flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground",
-        size === "lg" ? "text-sm" : "text-[11px] sm:text-xs",
+        size === "lg" ? "text-sm" : "text-desc sm:text-desc",
       )}
     >
       {items.map((item) => {
@@ -184,7 +184,7 @@ export function PropertyCard({
 
         <div className="pointer-events-none absolute top-2.5 flex max-w-[70%] flex-wrap gap-1.5 start-2.5">
           {deal && (
-            <span className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground shadow-sm">
+            <span className="rounded-full bg-primary px-2.5 py-1 text-desc font-bold text-primary-foreground shadow-sm">
               {deal}
             </span>
           )}
@@ -197,7 +197,7 @@ export function PropertyCard({
         </div>
 
         {category && (
-          <span className="pointer-events-none absolute bottom-2.5 max-w-[65%] truncate rounded-full bg-background/85 px-2 py-1 text-[10px] font-bold text-foreground shadow-sm backdrop-blur start-2.5">
+          <span className="pointer-events-none absolute bottom-2.5 max-w-[65%] truncate rounded-full bg-background/85 px-2 py-1 text-desc font-bold text-foreground shadow-sm backdrop-blur start-2.5">
             {category}
           </span>
         )}
@@ -249,7 +249,7 @@ export function PropertyCard({
         <div className="mt-2 flex min-h-[18px] items-center">
           <PropertySpecsBar listing={listing} />
         </div>
-        <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-[10px] text-muted-foreground sm:text-xs">
+        <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-desc text-muted-foreground sm:text-desc">
           <span className="inline-flex min-w-0 items-center gap-1">
             <MapPin className="size-3.5 shrink-0" aria-hidden />
             <span className="truncate">{location || t("market.realEstate.locationFallback")}</span>

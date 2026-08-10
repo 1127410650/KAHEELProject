@@ -199,7 +199,7 @@ export function StudentBotChat() {
         <h2 className="mt-2 text-sm font-black text-foreground">
           {ar ? "سجّل الدخول لتسأل المساعد" : "Sign in to ask the assistant"}
         </h2>
-        <p className="mt-1 text-[11px] text-muted-foreground">
+        <p className="mt-1 text-desc text-muted-foreground">
           {ar
             ? "٥ أسئلة مجانية يوميًا لكل طالب، بلا أي بيانات دفع."
             : "Five free questions a day, no payment details needed."}
@@ -218,7 +218,7 @@ export function StudentBotChat() {
     <div className="grid gap-3">
       {/* Grade + subject */}
       <section className="rounded-2xl border border-border bg-card p-3 shadow-panel sm:p-4">
-        <p className="text-[11px] font-black text-foreground">
+        <p className="text-desc font-black text-foreground">
           {ar ? "صفّك ومادتك" : "Your grade and subject"}
         </p>
         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -233,8 +233,8 @@ export function StudentBotChat() {
               }}
               className={
                 grade === item.key
-                  ? "min-h-9 rounded-full bg-primary px-3 text-[11px] font-black text-primary-foreground"
-                  : "min-h-9 rounded-full border border-border bg-background px-3 text-[11px] font-black text-muted-foreground"
+                  ? "min-h-9 rounded-full bg-primary px-3 text-desc font-black text-primary-foreground"
+                  : "min-h-9 rounded-full border border-border bg-background px-3 text-desc font-black text-muted-foreground"
               }
             >
               {ar ? item.ar : item.en}
@@ -255,8 +255,8 @@ export function StudentBotChat() {
                 }}
                 className={
                   subject === label
-                    ? "min-h-9 rounded-full bg-accent px-3 text-[11px] font-black text-accent-foreground"
-                    : "min-h-9 rounded-full border border-border bg-background px-3 text-[11px] font-black text-muted-foreground"
+                    ? "min-h-9 rounded-full bg-accent px-3 text-desc font-black text-accent-foreground"
+                    : "min-h-9 rounded-full border border-border bg-background px-3 text-desc font-black text-muted-foreground"
                 }
               >
                 {label}
@@ -266,7 +266,7 @@ export function StudentBotChat() {
         </div>
 
         {info ? (
-          <p className="mt-3 text-[10px] font-bold tabular-nums text-muted-foreground">
+          <p className="mt-3 text-desc font-bold tabular-nums text-muted-foreground">
             {ar
               ? `أسئلتك المتاحة اليوم: ${info.remaining} من ${info.daily_limit}`
               : `Questions left today: ${info.remaining} of ${info.daily_limit}`}
@@ -285,7 +285,7 @@ export function StudentBotChat() {
             <p className="mt-2 text-sm font-black text-foreground">
               {ar ? "اسألني عن أي درس 🙂" : "Ask me about any lesson 🙂"}
             </p>
-            <p className="mt-1 max-w-sm text-[11px] leading-6 text-muted-foreground">
+            <p className="mt-1 max-w-sm text-desc leading-6 text-muted-foreground">
               {ar
                 ? "اكتب سؤالك أو ارفع صورته. سأشرح خطوة بخطوة، وأحبّ أن تجرّب أولًا قبل الحل الكامل."
                 : "Type your question or upload a photo. I explain step by step and like you to try first."}
@@ -299,14 +299,14 @@ export function StudentBotChat() {
                 className={bubble.role === "user" ? "flex justify-end" : "flex justify-start"}
               >
                 {bubble.role === "user" ? (
-                  <span className="max-w-[85%] rounded-2xl rounded-be-sm bg-primary px-3 py-2 text-xs leading-6 text-primary-foreground">
+                  <span className="max-w-[85%] rounded-2xl rounded-be-sm bg-primary px-3 py-2 text-desc leading-6 text-primary-foreground">
                     {bubble.hadImage ? (
                       <ImageIcon className="mb-1 inline size-3.5 align-middle" aria-hidden />
                     ) : null}{" "}
                     {bubble.text}
                   </span>
                 ) : (
-                  <span className="max-w-[92%] whitespace-pre-wrap text-xs leading-7 text-foreground">
+                  <span className="max-w-[92%] whitespace-pre-wrap text-desc leading-7 text-foreground">
                     {bubble.pending ? (
                       <span className="inline-flex items-center gap-1.5 text-muted-foreground">
                         <Loader2 className="size-3.5 animate-spin" aria-hidden />
@@ -331,11 +331,11 @@ export function StudentBotChat() {
             <Sparkles className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
             <div className="min-w-0">
               <p className="text-sm font-black text-foreground">{refusalCopy.title}</p>
-              <p className="mt-1 text-[11px] leading-6 text-muted-foreground">{refusalCopy.body}</p>
+              <p className="mt-1 text-desc leading-6 text-muted-foreground">{refusalCopy.body}</p>
               {refusalCopy.showPlans ? <StudentBotPlans className="mt-3" /> : null}
               <Link
                 to="/guides/students"
-                className="mt-3 inline-flex min-h-9 items-center rounded-full border border-border bg-card px-3 text-[11px] font-black text-foreground"
+                className="mt-3 inline-flex min-h-9 items-center rounded-full border border-border bg-card px-3 text-desc font-black text-foreground"
               >
                 {ar ? "أدوات الدراسة المجانية" : "Free study tools"}
               </Link>
@@ -353,7 +353,7 @@ export function StudentBotChat() {
               alt={ar ? "معاينة صورة السؤال" : "Question photo preview"}
               className="size-14 rounded-lg object-cover"
             />
-            <p className="min-w-0 flex-1 text-[10px] leading-5 text-muted-foreground">
+            <p className="min-w-0 flex-1 text-desc leading-5 text-muted-foreground">
               {ar
                 ? `مضغوطة داخل جهازك (${Math.round(image.bytes / 1024)} ك.ب) — تُحذف فور الإجابة.`
                 : `Compressed in your browser (${Math.round(image.bytes / 1024)} KB) — deleted right after the answer.`}
@@ -377,7 +377,7 @@ export function StudentBotChat() {
             rows={2}
             disabled={busy}
             placeholder={ar ? "اكتب سؤالك…" : "Type your question…"}
-            className="min-h-11 flex-1 resize-y rounded-xl border border-input bg-background p-2.5 text-xs leading-6 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+            className="min-h-11 flex-1 resize-y rounded-xl border border-input bg-background p-2.5 text-desc leading-6 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
           <input
             ref={fileRef}
@@ -413,7 +413,7 @@ export function StudentBotChat() {
           </Button>
         </div>
 
-        <p className="mt-2 flex items-start gap-1.5 text-[10px] leading-5 text-muted-foreground">
+        <p className="mt-2 flex items-start gap-1.5 text-desc leading-5 text-muted-foreground">
           <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
           {ar
             ? "صورتك تُحذف فور الإجابة ولا نحتفظ بها — نحفظ نص السؤال والجواب فقط لتتابع مراجعتك."
@@ -424,7 +424,7 @@ export function StudentBotChat() {
       {/* Earlier conversations */}
       {history.data && history.data.length > 0 ? (
         <section className="rounded-2xl border border-border bg-card p-3 shadow-panel">
-          <p className="text-[11px] font-black text-foreground">
+          <p className="text-desc font-black text-foreground">
             {ar ? "محادثاتك السابقة" : "Your earlier conversations"}
           </p>
           <ul className="mt-2 grid gap-1.5">
@@ -446,17 +446,17 @@ export function StudentBotChat() {
                   }}
                   className="flex w-full items-center justify-between gap-2 rounded-xl bg-background px-3 py-2 text-start"
                 >
-                  <span className="min-w-0 flex-1 truncate text-[11px] font-bold text-foreground">
+                  <span className="min-w-0 flex-1 truncate text-desc font-bold text-foreground">
                     {row.title || (ar ? "محادثة" : "Conversation")}
                   </span>
-                  <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                  <span className="shrink-0 text-desc tabular-nums text-muted-foreground">
                     {row.subject} · {row.message_count}
                   </span>
                 </button>
               </li>
             ))}
           </ul>
-          <p className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground">
+          <p className="mt-2 flex items-center gap-1.5 text-desc text-muted-foreground">
             <Trash2 className="size-3 shrink-0" aria-hidden />
             {ar
               ? "لا صور محفوظة هنا إطلاقًا — نص فقط."

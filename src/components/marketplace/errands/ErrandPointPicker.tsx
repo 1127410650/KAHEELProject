@@ -74,7 +74,7 @@ export function ErrandPointPicker({
       <div className="mb-2 flex items-center justify-between gap-2">
         <div>
           <p className="text-sm font-bold text-foreground">{title}</p>
-          <p className="text-[11px] text-muted-foreground">{hint}</p>
+          <p className="text-desc text-muted-foreground">{hint}</p>
         </div>
         <Button
           type="button"
@@ -82,7 +82,7 @@ export function ErrandPointPicker({
           variant="outline"
           onClick={useDevice}
           disabled={locating}
-          className="h-8 shrink-0 gap-1 text-[11px]"
+          className="h-8 shrink-0 gap-1 text-desc"
         >
           {locating ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -109,7 +109,7 @@ export function ErrandPointPicker({
                     lng: address.lng,
                   })
                 }
-                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition ${
+                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-desc transition ${
                   active
                     ? "border-primary bg-primary/10 font-bold text-primary"
                     : "border-border/70 bg-background text-muted-foreground hover:border-primary/50"
@@ -125,7 +125,7 @@ export function ErrandPointPicker({
 
       <div className="grid gap-2">
         <div className="grid gap-1">
-          <Label className="text-[11px] text-muted-foreground">
+          <Label className="text-desc text-muted-foreground">
             {ar ? "اسم المكان" : "Place name"}
           </Label>
           <Input
@@ -144,7 +144,7 @@ export function ErrandPointPicker({
           />
         </div>
         <div className="grid gap-1">
-          <Label className="text-[11px] text-muted-foreground">
+          <Label className="text-desc text-muted-foreground">
             {ar ? "وصف يوصل الكابتن" : "Directions for the captain"}
           </Label>
           <Textarea
@@ -168,7 +168,7 @@ export function ErrandPointPicker({
       </div>
 
       {value?.lat != null && value?.lng != null ? (
-        <p className="mt-2 text-[11px] font-semibold text-primary">
+        <p className="mt-2 text-desc font-semibold text-primary">
           {ar ? "مربوط بإحداثيات الجهاز ✓" : "Pinned to device coordinates ✓"}
         </p>
       ) : null}

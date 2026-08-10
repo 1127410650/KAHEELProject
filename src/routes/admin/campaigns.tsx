@@ -229,7 +229,7 @@ function AdminCampaignsPage() {
             <h1 className="text-lg font-black">
               {ar ? "الحملات المتحركة" : "Animated campaigns"}
             </h1>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {ar
                 ? `${formatNumber(totals.impressions)} ظهور · ${formatNumber(totals.clicks)} نقرة`
                 : `${formatNumber(totals.impressions)} impressions · ${formatNumber(totals.clicks)} clicks`}
@@ -367,7 +367,7 @@ function AdminCampaignsPage() {
                   accept={CAMPAIGN_ACCEPT}
                   onChange={(event) => setFile(event.target.files?.[0] ?? null)}
                 />
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {ar
                     ? "Lottie ≤ 300KB · WebP ≤ 1MB · MP4 ≤ 2MB"
                     : "Lottie ≤ 300KB · WebP ≤ 1MB · MP4 ≤ 2MB"}
@@ -417,11 +417,11 @@ function AdminCampaignsPage() {
                   <CardContent className="flex flex-wrap items-center gap-3 p-4">
                     <div className="min-w-40 flex-1">
                       <p className="text-sm font-bold">{ar ? row.title_ar : row.title_en}</p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-desc text-muted-foreground">
                         {row.slug} · {row.placement} · {row.asset_kind} ·{" "}
                         {formatDateTime(row.created_at)}
                       </p>
-                      <p className="mt-1 text-[11px] text-muted-foreground">
+                      <p className="mt-1 text-desc text-muted-foreground">
                         {formatNumber(Number(row.impressions))}{" "}
                         {ar ? "ظهور" : "impressions"} · {formatNumber(Number(row.clicks))}{" "}
                         {ar ? "نقرة" : "clicks"} · CTR {formatNumber(ctr)}%

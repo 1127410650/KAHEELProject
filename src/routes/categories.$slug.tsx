@@ -160,8 +160,8 @@ function CategoryPage() {
                       params={{ slug: c.slug }}
                       className={
                         kidsWorld
-                          ? "k-press inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-xs font-bold text-foreground hover:bg-accent"
-                          : "rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                          ? "k-press inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-desc font-bold text-foreground hover:bg-accent"
+                          : "rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
                       }
                     >
                       {kidsWorld && (

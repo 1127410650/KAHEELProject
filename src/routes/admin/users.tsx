@@ -68,12 +68,12 @@ function RestrictionBadge({ value }: { value: string | null }) {
   const { t } = useI18n();
   if (!value)
     return (
-      <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] text-muted-foreground">
+      <span className="rounded-full bg-secondary px-2 py-0.5 text-desc text-muted-foreground">
         {t("admin.status.active")}
       </span>
     );
   return (
-    <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-medium text-destructive">
+    <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-desc font-medium text-destructive">
       {t(`admin.restriction.${value}`)}
     </span>
   );
@@ -224,7 +224,7 @@ function AdminUsersPage() {
           {/* Desktop: a table that fits the column widths, no horizontal drag. */}
           <div className="mt-4 hidden rounded-xl border border-border bg-card lg:block">
             <table className="w-full table-fixed text-sm">
-              <thead className="border-b border-border text-start text-xs text-muted-foreground">
+              <thead className="border-b border-border text-start text-desc text-muted-foreground">
                 <tr>
                   <th className="w-[26%] px-3 py-2 text-start font-medium">{t("admin.users.user")}</th>
                   <th className="w-[16%] px-3 py-2 text-start font-medium">{t("admin.users.phone")}</th>
@@ -252,7 +252,7 @@ function AdminUsersPage() {
                       />
                       <AdminUserLink
                         id={row.user_id}
-                        className="block truncate text-xs font-normal text-muted-foreground"
+                        className="block truncate text-desc font-normal text-muted-foreground"
                       >
                         <span dir="ltr">{row.email}</span>
                       </AdminUserLink>
@@ -299,7 +299,7 @@ function AdminUsersPage() {
                     />
                     <AdminUserLink
                       id={row.user_id}
-                      className="flex min-h-11 items-center truncate text-xs font-normal text-muted-foreground"
+                      className="flex min-h-11 items-center truncate text-desc font-normal text-muted-foreground"
                     >
                       <span dir="ltr" className="truncate">
                         {row.email}
@@ -308,7 +308,7 @@ function AdminUsersPage() {
                     {row.phone ? (
                       <AdminUserLink
                         id={row.user_id}
-                        className="flex min-h-11 items-center text-xs font-normal text-muted-foreground"
+                        className="flex min-h-11 items-center text-desc font-normal text-muted-foreground"
                       >
                         <span dir="ltr">{row.phone}</span>
                       </AdminUserLink>
@@ -316,7 +316,7 @@ function AdminUsersPage() {
                   </div>
                   <ActionsMenu row={row} />
                 </div>
-                <dl className="mt-2 grid grid-cols-2 gap-1.5 text-xs">
+                <dl className="mt-2 grid grid-cols-2 gap-1.5 text-desc">
                   <div className="flex gap-1">
                     <dt className="text-muted-foreground">{t("admin.users.created")}:</dt>
                     <dd className="tabular-nums text-foreground">{formatDate(row.created_at)}</dd>

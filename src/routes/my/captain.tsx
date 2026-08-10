@@ -145,7 +145,7 @@ function CaptainPage() {
   if (!session) {
     return (
       <DashboardShell title={title}>
-        <p className="mx-auto max-w-md px-3 pt-6 text-center text-[12.5px] text-muted-foreground">
+        <p className="mx-auto max-w-md px-3 pt-6 text-center text-desc text-muted-foreground">
           {ar ? "سجّل دخولك أولًا." : "Sign in first."}
         </p>
       </DashboardShell>
@@ -167,13 +167,13 @@ function CaptainPage() {
     return (
       <DashboardShell title={title}>
         <form onSubmit={apply} className="mx-auto grid w-full max-w-md gap-2 px-3 pb-24 pt-3">
-          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-3 text-[12.5px] text-foreground">
+          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-3 text-desc text-foreground">
             {ar
               ? "سجّل كابتن وجيب طلبات الناس. بعد اعتماد الإدارة تشوف الطلبات المفتوحة وتقدّم عرضك."
               : "Register as a captain. After approval you can see open requests and send offers."}
           </div>
           <div className="grid gap-1">
-            <Label className="text-[11px] text-muted-foreground">
+            <Label className="text-desc text-muted-foreground">
               {ar ? "الاسم الظاهر للعميل" : "Name clients will see"}
             </Label>
             <Input
@@ -184,7 +184,7 @@ function CaptainPage() {
             />
           </div>
           <div className="grid gap-1">
-            <Label className="text-[11px] text-muted-foreground">
+            <Label className="text-desc text-muted-foreground">
               {ar ? "رقم الجوال" : "Mobile number"}
             </Label>
             <Input
@@ -196,7 +196,7 @@ function CaptainPage() {
             />
           </div>
           <div className="grid gap-1">
-            <Label className="text-[11px] text-muted-foreground">
+            <Label className="text-desc text-muted-foreground">
               {ar ? "المركبة" : "Vehicle"}
             </Label>
             <Input
@@ -223,10 +223,10 @@ function CaptainPage() {
         <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="truncate text-[14px] font-black text-foreground">
+              <p className="truncate text-desc font-black text-foreground">
                 {captain.display_name}
               </p>
-              <p className="mt-0.5 flex items-center gap-2 text-[11.5px] text-muted-foreground">
+              <p className="mt-0.5 flex items-center gap-2 text-desc text-muted-foreground">
                 <span className="flex items-center gap-0.5">
                   <Star className="h-3 w-3 text-gold-dark" />
                   {formatNumber(captain.rating_avg)} ({captain.rating_count})
@@ -238,7 +238,7 @@ function CaptainPage() {
             </div>
             <Badge
               variant={captain.status === "approved" ? "default" : "secondary"}
-              className="shrink-0 gap-1 text-[10.5px]"
+              className="shrink-0 gap-1 text-desc"
             >
               <BadgeCheck className="h-3 w-3" />
               {captain.status === "approved"
@@ -257,13 +257,13 @@ function CaptainPage() {
 
           {captain.status === "approved" ? (
             <div className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-border/60 bg-background/60 px-3 py-2">
-              <span className="text-[12px] font-semibold text-foreground">
+              <span className="text-desc font-semibold text-foreground">
                 {ar ? "متاح لاستلام الطلبات" : "Available for requests"}
               </span>
               <Switch checked={captain.is_online} onCheckedChange={toggleOnline} />
             </div>
           ) : (
-            <p className="mt-2 text-[11.5px] text-muted-foreground">
+            <p className="mt-2 text-desc text-muted-foreground">
               {ar
                 ? "بانتظار اعتماد الإدارة — ما تقدر تقدّم عروض قبل الاعتماد."
                 : "Waiting for approval before you can send offers."}
@@ -281,7 +281,7 @@ function CaptainPage() {
               {(queue.data?.mine ?? []).filter((request) =>
                 ["accepted", "purchasing", "delivering"].includes(request.status),
               ).length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-[12px] text-muted-foreground">
+                <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
                   {ar ? "ما عندك طلب جاري." : "No active job."}
                 </p>
               ) : (
@@ -296,21 +296,21 @@ function CaptainPage() {
                         className="rounded-2xl border border-primary/30 bg-primary/5 p-3"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <p className="line-clamp-2 min-w-0 text-[13px] font-semibold text-foreground">
+                          <p className="line-clamp-2 min-w-0 text-desc font-semibold text-foreground">
                             {request.details}
                           </p>
-                          <Badge variant="secondary" className="shrink-0 text-[10.5px]">
+                          <Badge variant="secondary" className="shrink-0 text-desc">
                             {errandStatusLabel(request.status, ar)}
                           </Badge>
                         </div>
-                        <p className="mt-1 flex items-center gap-1 text-[11.5px] text-muted-foreground">
+                        <p className="mt-1 flex items-center gap-1 text-desc text-muted-foreground">
                           <MapPin className="h-3.5 w-3.5" />
                           {request.dropoff_label}
                         </p>
                         <Button
                           type="button"
                           size="sm"
-                          className="mt-2 h-9 gap-1 text-[12px] font-bold"
+                          className="mt-2 h-9 gap-1 text-desc font-bold"
                           disabled={busy === request.id}
                           onClick={() => advance(request)}
                         >
@@ -345,7 +345,7 @@ function CaptainPage() {
               {queue.isLoading ? (
                 <Skeleton className="h-[96px] rounded-2xl" />
               ) : (queue.data?.open.length ?? 0) === 0 ? (
-                <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-[12px] text-muted-foreground">
+                <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
                   {ar ? "ما في طلبات مفتوحة الآن." : "No open requests right now."}
                 </p>
               ) : (
@@ -355,10 +355,10 @@ function CaptainPage() {
                       key={request.id}
                       className="rounded-2xl border border-border/70 bg-card/60 p-3"
                     >
-                      <p className="line-clamp-3 text-[13px] leading-snug text-foreground">
+                      <p className="line-clamp-3 text-desc leading-snug text-foreground">
                         {request.details}
                       </p>
-                      <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                      <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <MapPin className="h-3.5 w-3.5" />
                           {request.dropoff_label}
@@ -408,7 +408,7 @@ function CaptainPage() {
                             <Button
                               type="button"
                               size="sm"
-                              className="h-9 flex-1 text-[12px] font-bold"
+                              className="h-9 flex-1 text-desc font-bold"
                               disabled={busy === request.id}
                               onClick={() => submitOffer(request.id)}
                             >
@@ -421,7 +421,7 @@ function CaptainPage() {
                               type="button"
                               size="sm"
                               variant="ghost"
-                              className="h-9 text-[12px]"
+                              className="h-9 text-desc"
                               onClick={() => setOfferFor(null)}
                             >
                               {ar ? "إلغاء" : "Cancel"}
@@ -433,7 +433,7 @@ function CaptainPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          className="mt-2 h-9 text-[12px] font-bold"
+                          className="mt-2 h-9 text-desc font-bold"
                           onClick={() => {
                             setOfferFor(request.id);
                             setOffer({ fee: "", eta: "", note: "" });

@@ -123,7 +123,7 @@ function AdminReportCardPage() {
     >
       <Link
         to="/admin/reports"
-        className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+        className="inline-flex items-center gap-1 text-desc font-medium text-primary hover:underline"
       >
         <ChevronRight className="size-3 rtl:rotate-180" aria-hidden />
         {t("market.reports.admin.backToInbox")}
@@ -271,12 +271,12 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               <p dir="ltr" className="font-mono text-sm font-bold text-foreground">
                 {report.ref_no ?? "—"}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-desc text-muted-foreground">
                 {formatDateTime(report.created_at)} ·{" "}
                 {reason ? (locale === "ar" ? reason.name_ar : reason.name_en) : "—"}
               </p>
             </div>
-            <div className="flex flex-wrap gap-1.5 text-[11px]">
+            <div className="flex flex-wrap gap-1.5 text-desc">
               <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-secondary-foreground">
                 {t(`market.reports.status.${report.status}`)}
               </span>
@@ -308,12 +308,12 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
           </div>
 
           {report.note && (
-            <p className="mt-3 whitespace-pre-wrap rounded-lg bg-muted/50 p-3 text-xs text-foreground">
+            <p className="mt-3 whitespace-pre-wrap rounded-lg bg-muted/50 p-3 text-desc text-foreground">
               {report.note}
             </p>
           )}
 
-          <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
+          <dl className="mt-3 grid gap-2 text-desc sm:grid-cols-2">
             <div>
               <dt className="text-muted-foreground">{t("market.reports.admin.snapshot")}</dt>
               <dd className="mt-0.5 text-foreground">
@@ -349,7 +349,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
             </div>
             <div>
               <dt className="text-muted-foreground">{t("market.reports.admin.reporterIdentity")}</dt>
-              <dd dir="ltr" className="mt-0.5 font-mono text-[11px] text-foreground">
+              <dd dir="ltr" className="mt-0.5 font-mono text-desc text-foreground">
                 {staff.can("reports.view_reporter_identity")
                   ? report.reporter_user_id
                   : t("market.reports.admin.hiddenIdentity")}
@@ -359,7 +359,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
 
           {(files.data ?? []).length > 0 && (
             <div className="mt-3 space-y-1">
-              <p className="text-[11px] font-medium text-muted-foreground">
+              <p className="text-desc font-medium text-muted-foreground">
                 {t("market.reports.admin.files")}
               </p>
               {(files.data ?? []).map((file) => (
@@ -367,7 +367,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
                   key={file.id}
                   type="button"
                   onClick={() => void openFile(file.storage_path)}
-                  className="flex items-center gap-1 text-[11px] text-primary hover:underline"
+                  className="flex items-center gap-1 text-desc text-primary hover:underline"
                 >
                   <Paperclip className="size-3" aria-hidden />
                   {file.file_name}
@@ -400,7 +400,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         </Section>
 
         <Section title={t("market.reports.admin.internalNotes")}>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {t("market.reports.admin.internalHint")}
           </p>
           {staff.can("reports.add_internal_note") && (
@@ -428,15 +428,15 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
           )}
           <ul className="mt-3 space-y-2">
             {(notes.data ?? []).map((item) => (
-              <li key={item.id} className="rounded-lg bg-muted/50 p-2 text-xs text-foreground">
+              <li key={item.id} className="rounded-lg bg-muted/50 p-2 text-desc text-foreground">
                 <p className="whitespace-pre-wrap">{item.body}</p>
-                <p className="mt-1 text-[11px] text-muted-foreground">
+                <p className="mt-1 text-desc text-muted-foreground">
                   {formatDateTime(item.created_at)}
                 </p>
               </li>
             ))}
             {(notes.data ?? []).length === 0 && (
-              <li className="text-xs text-muted-foreground">{t("market.reports.admin.noNotes")}</li>
+              <li className="text-desc text-muted-foreground">{t("market.reports.admin.noNotes")}</li>
             )}
           </ul>
         </Section>
@@ -444,14 +444,14 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         <Section title={t("market.reports.admin.enforcement")}>
           <div className="grid gap-2 sm:grid-cols-3">
             <div className="space-y-1">
-              <Label htmlFor="enf-action" className="text-[11px]">
+              <Label htmlFor="enf-action" className="text-desc">
                 {t("market.reports.admin.enforceAction")}
               </Label>
               <select
                 id="enf-action"
                 value={enforceAction}
                 onChange={(e) => setEnforceAction(e.target.value as ListingEnforcement)}
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               >
                 {LISTING_ENFORCEMENTS.map((action) => (
                   <option key={action} value={action}>
@@ -461,18 +461,18 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               </select>
             </div>
             <div className="space-y-1 sm:col-span-2">
-              <Label htmlFor="enf-reason" className="text-[11px]">
+              <Label htmlFor="enf-reason" className="text-desc">
                 {t("market.reports.admin.enforceReason")}
               </Label>
               <Input
                 id="enf-reason"
                 value={enforceReason}
                 onChange={(e) => setEnforceReason(e.target.value)}
-                className="h-8 text-xs"
+                className="h-8 text-desc"
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="enf-days" className="text-[11px]">
+              <Label htmlFor="enf-days" className="text-desc">
                 {t("market.reports.admin.enforceDays")}
               </Label>
               <Input
@@ -481,7 +481,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
                 inputMode="numeric"
                 value={enforceDays}
                 onChange={(e) => setEnforceDays(e.target.value)}
-                className="h-8 text-xs"
+                className="h-8 text-desc"
               />
             </div>
             <div className="flex items-end">
@@ -509,7 +509,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               </Button>
             </div>
           </div>
-          <ul className="mt-3 space-y-1 text-xs">
+          <ul className="mt-3 space-y-1 text-desc">
             {(actions.data ?? []).map((action) => (
               <li key={action.id} className="text-muted-foreground">
                 <span className="font-medium text-foreground">
@@ -526,28 +526,28 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         <Section title={t("market.reports.admin.restrictAccount")}>
           <div className="grid gap-2 sm:grid-cols-3">
             <div className="space-y-1">
-              <Label htmlFor="res-subject" className="text-[11px]">
+              <Label htmlFor="res-subject" className="text-desc">
                 {t("market.reports.admin.subject")}
               </Label>
               <select
                 id="res-subject"
                 value={subjectType}
                 onChange={(e) => setSubjectType(e.target.value as "user" | "business")}
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               >
                 <option value="user">{t("market.reports.admin.subjectUser")}</option>
                 <option value="business">{t("market.reports.admin.subjectBusiness")}</option>
               </select>
             </div>
             <div className="space-y-1">
-              <Label htmlFor="res-type" className="text-[11px]">
+              <Label htmlFor="res-type" className="text-desc">
                 {t("market.reports.admin.restrictionType")}
               </Label>
               <select
                 id="res-type"
                 value={restriction}
                 onChange={(e) => setRestriction(e.target.value as AccountRestriction)}
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               >
                 {ACCOUNT_RESTRICTIONS.map((item) => (
                   <option key={item} value={item}>
@@ -557,7 +557,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               </select>
             </div>
             <div className="space-y-1">
-              <Label htmlFor="res-days" className="text-[11px]">
+              <Label htmlFor="res-days" className="text-desc">
                 {t("market.reports.admin.restrictDays")}
               </Label>
               <Input
@@ -566,18 +566,18 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
                 inputMode="numeric"
                 value={restrictDays}
                 onChange={(e) => setRestrictDays(e.target.value)}
-                className="h-8 text-xs"
+                className="h-8 text-desc"
               />
             </div>
             <div className="space-y-1 sm:col-span-3">
-              <Label htmlFor="res-reason" className="text-[11px]">
+              <Label htmlFor="res-reason" className="text-desc">
                 {t("market.reports.admin.restrictReason")}
               </Label>
               <Input
                 id="res-reason"
                 value={restrictReason}
                 onChange={(e) => setRestrictReason(e.target.value)}
-                className="h-8 text-xs"
+                className="h-8 text-desc"
               />
             </div>
           </div>
@@ -624,7 +624,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
             {t("market.reports.admin.restrictApply")}
           </Button>
 
-          <ul className="mt-3 space-y-2 text-xs">
+          <ul className="mt-3 space-y-2 text-desc">
             {(restrictions.data ?? []).map((item) => (
               <li key={item.id} className="rounded-lg bg-muted/50 p-2">
                 <p className="font-medium text-foreground">
@@ -642,7 +642,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="mt-1 h-7 text-[11px]"
+                    className="mt-1 h-7 text-desc"
                     disabled={busy}
                     onClick={() =>
                       void run(
@@ -663,7 +663,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         </Section>
 
         <Section title={t("market.reports.admin.appeals")}>
-          <ul className="space-y-2 text-xs">
+          <ul className="space-y-2 text-desc">
             {(appeals.data ?? []).length === 0 && (
               <li className="text-muted-foreground">{t("market.reports.admin.noAppeals")}</li>
             )}
@@ -697,7 +697,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
 
       <aside className="space-y-4">
         <Section title={t("market.reports.admin.assign")}>
-          <p dir="ltr" className="text-[11px] text-muted-foreground">
+          <p dir="ltr" className="text-desc text-muted-foreground">
             {report.assigned_to
               ? report.assigned_to === currentUserId
                 ? t("market.reports.admin.table.me")
@@ -721,14 +721,14 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         <Section title={t("market.reports.admin.assessment")}>
           <div className="space-y-2">
             <div className="space-y-1">
-              <Label htmlFor="a-priority" className="text-[11px]">
+              <Label htmlFor="a-priority" className="text-desc">
                 {t("market.reports.admin.priority")}
               </Label>
               <select
                 id="a-priority"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as ReportPriority)}
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               >
                 {REPORT_PRIORITIES.map((item) => (
                   <option key={item} value={item}>
@@ -738,14 +738,14 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               </select>
             </div>
             <div className="space-y-1">
-              <Label htmlFor="a-severity" className="text-[11px]">
+              <Label htmlFor="a-severity" className="text-desc">
                 {t("market.reports.admin.severity")}
               </Label>
               <select
                 id="a-severity"
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value as ReportSeverity)}
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               >
                 {REPORT_SEVERITIES.map((item) => (
                   <option key={item} value={item}>
@@ -774,7 +774,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as ReportStatus)}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               aria-label={t("market.reports.admin.statusChange")}
             >
               {REPORT_STATUSES.map((item) => (
@@ -787,7 +787,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               value={statusReason}
               onChange={(e) => setStatusReason(e.target.value)}
               placeholder={t("market.reports.admin.statusReason")}
-              className="h-8 text-xs"
+              className="h-8 text-desc"
             />
             <Button
               size="sm"
@@ -811,7 +811,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
             <select
               value={decision}
               onChange={(e) => setDecision(e.target.value)}
-              className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+              className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
               aria-label={t("market.reports.admin.decision")}
             >
               {DECISIONS.map((item) => (
@@ -855,7 +855,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               value={reopenReasonText}
               onChange={(e) => setReopenReasonText(e.target.value)}
               placeholder={t("market.reports.admin.reopenReason")}
-              className="h-8 text-xs"
+              className="h-8 text-desc"
             />
             <Button
               size="sm"
@@ -876,7 +876,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
               value={mergeInto}
               onChange={(e) => setMergeInto(e.target.value)}
               placeholder={t("market.reports.admin.mergeInto")}
-              className="h-8 text-xs"
+              className="h-8 text-desc"
             />
             <Button
               size="sm"
@@ -895,7 +895,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
         </Section>
 
         <Section title={t("market.reports.admin.history")}>
-          <ol className="space-y-2 text-[11px]">
+          <ol className="space-y-2 text-desc">
             {(history.data ?? []).map((event) => (
               <li key={event.id} className="border-s-2 border-border ps-2">
                 <p className="font-medium text-foreground">
@@ -932,7 +932,7 @@ function AppealDecision({
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value as AppealStatus)}
-        className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs"
+        className="h-8 w-full rounded-md border border-input bg-background px-2 text-desc"
         aria-label={t("market.reports.admin.appealDecide")}
       >
         {(["accepted", "partially_accepted", "rejected", "under_review"] as AppealStatus[]).map(
@@ -947,7 +947,7 @@ function AppealDecision({
         value={reason}
         onChange={(e) => setReason(e.target.value)}
         placeholder={t("market.reports.admin.appealReason")}
-        className="h-8 text-xs"
+        className="h-8 text-desc"
       />
       <Button
         size="sm"
@@ -1011,10 +1011,10 @@ function StaffChannel({
 
   return (
     <div className="rounded-lg border border-border p-3">
-      <h3 className="text-xs font-semibold text-foreground">{label}</h3>
+      <h3 className="text-desc font-semibold text-foreground">{label}</h3>
       <div className="mt-2 max-h-64 space-y-2 overflow-y-auto">
         {(messages.data ?? []).length === 0 ? (
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {t("market.reports.detail.noMessages")}
           </p>
         ) : (
@@ -1027,8 +1027,8 @@ function StaffChannel({
                   : "rounded-md bg-muted/60 p-2"
               }
             >
-              <p className="whitespace-pre-wrap text-[11px] text-foreground">{message.body}</p>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">
+              <p className="whitespace-pre-wrap text-desc text-foreground">{message.body}</p>
+              <p className="mt-0.5 text-desc text-muted-foreground">
                 {formatDateTime(message.created_at)}
               </p>
             </div>
@@ -1050,7 +1050,7 @@ function StaffChannel({
               value={dueDays}
               onChange={(e) => setDueDays(e.target.value)}
               placeholder={t("market.reports.admin.dueDays")}
-              className="h-8 w-28 text-xs"
+              className="h-8 w-28 text-desc"
             />
             <Button size="sm" disabled={busy || !body.trim()} onClick={() => void send("message")}>
               {t("market.reports.admin.send")}

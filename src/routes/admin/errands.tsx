@@ -142,10 +142,10 @@ function AdminErrandsPage() {
                     className="flex items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/50 p-2.5"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-[12.5px] font-bold text-foreground">
+                      <p className="truncate text-desc font-bold text-foreground">
                         {ar ? service.name_ar : service.name_en}
                       </p>
-                      <p className="truncate text-[11px] text-muted-foreground">{service.slug}</p>
+                      <p className="truncate text-desc text-muted-foreground">{service.slug}</p>
                     </div>
                     <Switch
                       checked={service.is_active}
@@ -167,7 +167,7 @@ function AdminErrandsPage() {
             {captains.isLoading ? (
               <Skeleton className="h-[120px] rounded-xl" />
             ) : (captains.data?.length ?? 0) === 0 ? (
-              <p className="p-3 text-center text-[12px] text-muted-foreground">
+              <p className="p-3 text-center text-desc text-muted-foreground">
                 {ar ? "ما في كباتن مسجّلين بعد." : "No captains yet."}
               </p>
             ) : (
@@ -178,10 +178,10 @@ function AdminErrandsPage() {
                     className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/50 p-2.5"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-[12.5px] font-bold text-foreground">
+                      <p className="truncate text-desc font-bold text-foreground">
                         {captain.display_name}
                       </p>
-                      <p className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                      <p className="flex items-center gap-2 text-desc text-muted-foreground">
                         <span className="flex items-center gap-0.5">
                           <Star className="h-3 w-3 text-gold-dark" />
                           {formatNumber(captain.rating_avg)} ({captain.rating_count})
@@ -193,7 +193,7 @@ function AdminErrandsPage() {
                     <div className="flex items-center gap-1.5">
                       <Badge
                         variant={captain.status === "approved" ? "default" : "secondary"}
-                        className="text-[10.5px]"
+                        className="text-desc"
                       >
                         {captain.status === "approved"
                           ? ar
@@ -211,7 +211,7 @@ function AdminErrandsPage() {
                         <Button
                           type="button"
                           size="sm"
-                          className="h-8 gap-1 text-[11px]"
+                          className="h-8 gap-1 text-desc"
                           disabled={busy === captain.id}
                           onClick={() => setCaptainStatus(captain.id, "approved")}
                         >
@@ -227,7 +227,7 @@ function AdminErrandsPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          className="h-8 gap-1 text-[11px]"
+                          className="h-8 gap-1 text-desc"
                           disabled={busy === captain.id}
                           onClick={() => setCaptainStatus(captain.id, "suspended")}
                         >
@@ -252,7 +252,7 @@ function AdminErrandsPage() {
             {requests.isLoading ? (
               <Skeleton className="h-[120px] rounded-xl" />
             ) : (requests.data?.length ?? 0) === 0 ? (
-              <p className="p-3 text-center text-[12px] text-muted-foreground">
+              <p className="p-3 text-center text-desc text-muted-foreground">
                 {ar ? "ما في طلبات بعد." : "No requests yet."}
               </p>
             ) : (
@@ -263,14 +263,14 @@ function AdminErrandsPage() {
                     className="rounded-xl border border-border/60 bg-card/50 p-2.5"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <p className="line-clamp-2 min-w-0 text-[12.5px] text-foreground">
+                      <p className="line-clamp-2 min-w-0 text-desc text-foreground">
                         {request.details}
                       </p>
-                      <Badge variant="secondary" className="shrink-0 text-[10.5px]">
+                      <Badge variant="secondary" className="shrink-0 text-desc">
                         {errandStatusLabel(request.status as ErrandStatus, ar)}
                       </Badge>
                     </div>
-                    <p className="mt-1 flex flex-wrap gap-x-3 text-[11px] text-muted-foreground">
+                    <p className="mt-1 flex flex-wrap gap-x-3 text-desc text-muted-foreground">
                       <span>{request.service_slug}</span>
                       <span>{request.dropoff_label}</span>
                       <span>{formatDateTime(request.created_at)}</span>

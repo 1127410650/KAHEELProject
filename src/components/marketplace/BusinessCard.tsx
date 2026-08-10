@@ -43,7 +43,7 @@ export function BusinessCard({
           <p className="truncate text-sm font-semibold text-foreground">{name}</p>
           <VerifiedBadge status={business.verification_status} size="xs" />
           {business.headline && (
-            <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
+            <p className="mt-0.5 line-clamp-1 text-desc text-muted-foreground">
               {business.headline}
             </p>
           )}
@@ -51,7 +51,7 @@ export function BusinessCard({
       </div>
 
       {business.city && (
-        <p className="mt-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+        <p className="mt-2 inline-flex items-center gap-1 text-desc text-muted-foreground">
           <MapPin className="size-3" aria-hidden />
           <span className="truncate">{business.city}</span>
         </p>
@@ -60,7 +60,7 @@ export function BusinessCard({
       <Link
         to="/businesses/$slug"
         params={{ slug: business.slug }}
-        className="mt-3 inline-flex h-9 items-center justify-center rounded-xl border border-input bg-background text-xs font-bold text-foreground transition hover:border-primary/50 hover:bg-market-blue-soft hover:text-primary"
+        className="mt-3 inline-flex h-9 items-center justify-center rounded-xl border border-input bg-background text-desc font-bold text-foreground transition hover:border-primary/50 hover:bg-market-blue-soft hover:text-primary"
       >
         {t("market.business.visit")}
       </Link>

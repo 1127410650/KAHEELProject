@@ -115,7 +115,7 @@ function CategoryButton({
         <Icon className="size-6 sm:size-7" />
       </span>
       <span
-        className={`line-clamp-2 text-[11px] leading-4 ${selected ? "font-black" : "font-semibold"}`}
+        className={`line-clamp-2 text-desc leading-4 ${selected ? "font-black" : "font-semibold"}`}
       >
         {label}
       </span>
@@ -156,7 +156,7 @@ function ServicesMarketplacePage() {
         <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
           <div className="market-hero-band relative mx-auto w-full max-w-7xl px-4">
             <div className="max-w-2xl">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-bold text-primary">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-desc font-bold text-primary">
                 <ShieldCheck className="size-4" />
                 {locale === "ar"
                   ? "مواعيد واضحة ومقدمو خدمات موثوقون"
@@ -192,7 +192,7 @@ function ServicesMarketplacePage() {
           <section aria-labelledby="service-categories-title">
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-bold text-primary">
+                <p className="text-desc font-bold text-primary">
                   {locale === "ar" ? "استكشف بسرعة" : "Explore quickly"}
                 </p>
                 <h2 id="service-categories-title" className="mt-0.5 text-xl font-black">
@@ -231,7 +231,7 @@ function ServicesMarketplacePage() {
           <section aria-labelledby="service-results-title">
             <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
               <div>
-                <p className="text-xs font-bold text-primary">
+                <p className="text-desc font-bold text-primary">
                   {selectedLabel ?? (locale === "ar" ? "خدمات قابلة للحجز" : "Bookable services")}
                 </p>
                 <h2 id="service-results-title" className="mt-0.5 text-xl font-black">
@@ -239,7 +239,7 @@ function ServicesMarketplacePage() {
                 </h2>
               </div>
               {!directory.isLoading ? (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-desc text-muted-foreground">
                   {directory.data?.length ?? 0} {locale === "ar" ? "خدمة" : "services"}
                 </span>
               ) : null}
@@ -291,7 +291,7 @@ function ServicesMarketplacePage() {
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent" />
-                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black text-foreground shadow">
+                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-desc font-black text-foreground shadow">
                           {item.confirmation_mode === "instant"
                             ? locale === "ar"
                               ? "تأكيد فوري"
@@ -300,7 +300,7 @@ function ServicesMarketplacePage() {
                               ? "يراجعه مقدم الخدمة"
                               : "Provider confirms"}
                         </span>
-                        <div className="absolute bottom-3 start-3 flex items-center gap-1 text-xs font-bold text-white">
+                        <div className="absolute bottom-3 start-3 flex items-center gap-1 text-desc font-bold text-white">
                           <Star className="size-4 fill-gold text-gold" />
                           {item.rating > 0
                             ? item.rating.toFixed(1)
@@ -318,13 +318,13 @@ function ServicesMarketplacePage() {
                           <Link
                             to="/stores/$slug"
                             params={{ slug: item.slug }}
-                            className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground hover:text-primary"
+                            className="mt-1 inline-flex items-center gap-1 text-desc font-semibold text-muted-foreground hover:text-primary"
                           >
                             {storeName}
                             <VerifiedBadge status={item.verification_status} />
                           </Link>
                         </div>
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 text-desc text-muted-foreground">
                           <span>
                             <Clock3 className="me-1 inline size-3.5" />
                             {item.duration_minutes} {locale === "ar" ? "دقيقة" : "min"}

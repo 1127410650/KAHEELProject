@@ -122,7 +122,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
             <h2 className="mt-3 text-base font-semibold text-foreground">
               {t("market.reports.submittedTitle")}
             </h2>
-            <p className="mt-3 text-xs text-muted-foreground">{t("market.reports.refIs")}</p>
+            <p className="mt-3 text-desc text-muted-foreground">{t("market.reports.refIs")}</p>
             <div className="mt-1 flex items-center justify-center gap-2">
               <span dir="ltr" className="font-mono text-sm font-bold text-foreground">
                 {refNo}
@@ -139,7 +139,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
                 <Copy className="size-3.5" aria-hidden />
               </button>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">
+            <p className="mt-3 text-desc text-muted-foreground">
               {t("market.reports.submittedHint")}
             </p>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
@@ -164,7 +164,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
               <DialogTitle>{t("market.reports.report")}</DialogTitle>
               <DialogDescription>{listingTitle}</DialogDescription>
             </DialogHeader>
-            <p className="text-xs text-muted-foreground">{t("market.reports.dialogHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("market.reports.dialogHint")}</p>
 
             <div className="space-y-3">
               <div className="space-y-1.5">
@@ -210,9 +210,9 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
                     addFiles(e.target.files);
                     e.target.value = "";
                   }}
-                  className="block w-full cursor-pointer rounded-md border border-input bg-background p-2 text-xs text-muted-foreground"
+                  className="block w-full cursor-pointer rounded-md border border-input bg-background p-2 text-desc text-muted-foreground"
                 />
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {t("market.reports.attachHint")}
                 </p>
                 {files.length > 0 && (
@@ -220,7 +220,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
                     {files.map((file, index) => (
                       <li
                         key={`${file.name}-${index}`}
-                        className="flex items-center gap-2 rounded-md bg-muted px-2 py-1 text-xs text-foreground"
+                        className="flex items-center gap-2 rounded-md bg-muted px-2 py-1 text-desc text-foreground"
                       >
                         <Paperclip className="size-3 shrink-0" aria-hidden />
                         <span className="min-w-0 flex-1 truncate">{file.name}</span>
@@ -238,7 +238,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
                 )}
               </div>
 
-              <label className="flex items-start gap-2 text-xs text-foreground">
+              <label className="flex items-start gap-2 text-desc text-foreground">
                 <Checkbox
                   checked={confirmed}
                   onCheckedChange={(value) => setConfirmed(value === true)}

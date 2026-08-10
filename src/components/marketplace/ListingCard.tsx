@@ -46,8 +46,8 @@ export function VerifiedBadge({
     <span
       className={
         size === "xs"
-          ? "inline-flex items-center gap-0.5 text-[10px] font-semibold text-primary"
-          : "inline-flex items-center gap-1 text-[11px] font-semibold text-primary"
+          ? "inline-flex items-center gap-0.5 text-desc font-semibold text-primary"
+          : "inline-flex items-center gap-1 text-desc font-semibold text-primary"
       }
     >
       <BadgeCheck className={size === "xs" ? "size-3" : "size-3.5"} aria-hidden />
@@ -231,7 +231,7 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
           <span className="relative grid size-10 place-items-center rounded-2xl border border-border/70 bg-background/75 text-primary shadow-sm backdrop-blur">
             <ImageIcon className="size-5" aria-hidden />
           </span>
-          <p className="relative mt-2 line-clamp-1 max-w-full text-[10px] font-bold text-foreground/70">
+          <p className="relative mt-2 line-clamp-1 max-w-full text-desc font-bold text-foreground/70">
             {fallbackLabel}
           </p>
         </div>
@@ -270,7 +270,7 @@ export function FeaturedChip() {
   return (
     <span
       ref={ref}
-      className={`k-gold-chip pointer-events-none inline-flex items-center gap-1 rounded-full px-2 py-[3px] text-[9px] font-black leading-none sm:text-[10px] ${
+      className={`k-gold-chip pointer-events-none inline-flex items-center gap-1 rounded-full px-2 py-[3px] text-desc font-black leading-none sm:text-desc ${
         visible ? "is-in" : ""
       }`}
     >
@@ -300,7 +300,7 @@ export function ListingCard({
 
 
   const meta = (
-    <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-[10px] text-muted-foreground sm:text-[11px]">
+    <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-desc text-muted-foreground sm:text-desc">
 
       {listing.city && (
         <span className="inline-flex min-w-0 items-center gap-1">
@@ -355,7 +355,7 @@ export function ListingCard({
               category never renders a shorter card than its neighbours. */}
           <span className="flex h-[18px] items-center">
             {tag ? (
-              <span className="max-w-full truncate rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold text-primary sm:text-[10px]">
+              <span className="max-w-full truncate rounded-full bg-primary/10 px-2 py-0.5 text-desc font-bold text-primary sm:text-desc">
                 {tag}
               </span>
             ) : null}
@@ -363,11 +363,11 @@ export function ListingCard({
 
           {/* Two reserved lines: the height is identical for one- and
               two-line titles, which is what keeps the rails shift-free. */}
-          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-[13px] font-extrabold leading-[1.3] tracking-tight text-foreground sm:text-sm">
+          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-desc font-extrabold leading-[1.3] tracking-tight text-foreground sm:text-sm">
             {listing.title}
           </h3>
 
-          <p className="mt-1 flex h-[20px] items-center text-[13px] font-black text-primary sm:text-sm">
+          <p className="mt-1 flex h-[20px] items-center text-desc font-black text-primary sm:text-sm">
             {price}
           </p>
           {meta}

@@ -124,7 +124,7 @@ function Stat({
         />
       </div>
       <div className="mt-3">
-        <p className="truncate text-[11px] font-semibold text-muted-foreground sm:text-xs">
+        <p className="truncate text-desc font-semibold text-muted-foreground sm:text-desc">
           {label}
         </p>
         <p
@@ -172,14 +172,14 @@ function ActionRow({
         <Icon className="size-[18px]" aria-hidden />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-xs font-bold text-foreground sm:text-sm">{label}</span>
-        <span className="mt-0.5 block text-[10px] text-muted-foreground">
+        <span className="block truncate text-desc font-bold text-foreground sm:text-sm">{label}</span>
+        <span className="mt-0.5 block text-desc text-muted-foreground">
           {count > 0 ? "بانتظار المراجعة أو الإجراء" : "لا توجد عناصر معلّقة"}
         </span>
       </span>
       <span
         className={
-          "grid min-w-8 shrink-0 place-items-center rounded-full px-2 py-1 text-[11px] font-black tabular-nums " +
+          "grid min-w-8 shrink-0 place-items-center rounded-full px-2 py-1 text-desc font-black tabular-nums " +
           (count > 0
             ? "bg-admin-critical-soft text-admin-critical"
             : "bg-secondary text-muted-foreground")
@@ -225,19 +225,19 @@ function AdminHomePage() {
             />
             <div className="relative flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold backdrop-blur">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-desc font-bold backdrop-blur">
                   <Sparkles className="size-3.5" aria-hidden />
                   {t("admin.dashboardBadge")}
                 </span>
                 <h2 className="mt-2 text-lg font-black sm:text-2xl">
                   {t("admin.dashboardWelcome")}
                 </h2>
-                <p className="mt-1 max-w-2xl text-[11px] leading-5 text-white/75 sm:text-sm sm:leading-6">
+                <p className="mt-1 max-w-2xl text-desc leading-5 text-white/75 sm:text-sm sm:leading-6">
                   {t("admin.dashboardIntro")}
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2 rounded-2xl border border-white/15 bg-black/10 px-3 py-2 backdrop-blur">
-                <span className="text-[10px] text-white/70">{t("admin.dashboardPending")}</span>
+                <span className="text-desc text-white/70">{t("admin.dashboardPending")}</span>
                 <strong className="text-xl font-black tabular-nums">
                   {data.listings_pending + data.reports_new + data.verifications_pending}
                 </strong>
@@ -251,7 +251,7 @@ function AdminHomePage() {
                 <h2 className="text-sm font-black text-foreground sm:text-base">
                   {t("admin.dashboardOverview")}
                 </h2>
-                <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
+                <p className="mt-0.5 text-desc text-muted-foreground sm:text-desc">
                   {t("admin.dashboardOverviewHint")}
                 </p>
               </div>
@@ -359,11 +359,11 @@ function AdminHomePage() {
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <h2 className="text-base font-black text-foreground">{t("admin.actionNeeded")}</h2>
-                <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
+                <p className="mt-0.5 text-desc text-muted-foreground sm:text-desc">
                   {t("admin.actionNeededHint")}
                 </p>
               </div>
-              <span className="rounded-full bg-primary/12 px-3 py-1 text-[10px] font-black text-primary">
+              <span className="rounded-full bg-primary/12 px-3 py-1 text-desc font-black text-primary">
                 {data.listings_pending +
                   data.reports_new +
                   data.verifications_pending +

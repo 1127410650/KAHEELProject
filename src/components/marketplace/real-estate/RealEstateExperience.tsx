@@ -305,18 +305,18 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 
           <div className="market-hero-band relative mx-auto flex min-h-[240px] w-full max-w-[1240px] flex-col px-4 pb-10 sm:min-h-[280px] sm:px-6 sm:pb-14 lg:px-8">
             <div className="flex items-center justify-between gap-3 text-market-navy-foreground">
-              <span className="inline-flex items-center gap-2 rounded-full border border-market-navy-foreground/25 bg-market-navy/45 px-3 py-1.5 text-xs font-semibold shadow-sm">
+              <span className="inline-flex items-center gap-2 rounded-full border border-market-navy-foreground/25 bg-market-navy/45 px-3 py-1.5 text-desc font-semibold shadow-sm">
                 <Building2 className="size-4" aria-hidden />
                 {t("market.realEstate.brand")}
               </span>
-              <span className="inline-flex min-w-0 items-center gap-1.5 text-xs font-medium text-market-silver sm:text-sm">
+              <span className="inline-flex min-w-0 items-center gap-1.5 text-desc font-medium text-market-silver sm:text-sm">
                 <MapPin className="size-4 shrink-0" aria-hidden />
                 <span className="truncate">{locationLabel}</span>
               </span>
             </div>
 
             <div className="my-auto max-w-2xl py-3 text-market-navy-foreground sm:py-4">
-              <p className="text-xs font-semibold tracking-wide text-market-silver sm:text-sm">
+              <p className="text-desc font-semibold tracking-wide text-market-silver sm:text-sm">
                 {t("market.realEstate.eyebrow")}
               </p>
               <h1 className="mt-1.5 font-bold leading-tight tracking-tight">
@@ -402,7 +402,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                     <strong className="mt-3 block text-sm">{t(purpose.labelKey)}</strong>
                     <span
                       className={cn(
-                        "mt-1 block text-[11px] leading-5",
+                        "mt-1 block text-desc leading-5",
                         active ? "text-market-silver" : "text-muted-foreground",
                       )}
                     >
@@ -451,7 +451,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               <Link
                 to="/categories/$slug"
                 params={{ slug: "real-estate" }}
-                className="mt-3 inline-block text-xs font-bold text-primary underline-offset-4 hover:underline"
+                className="mt-3 inline-block text-desc font-bold text-primary underline-offset-4 hover:underline"
               >
                 {t("market.search.categoryPage")}
               </Link>
@@ -498,12 +498,12 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-semibold text-foreground shadow-panel hover:border-market-navy-soft"
+                  className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-desc font-semibold text-foreground shadow-panel hover:border-market-navy-soft"
                 >
                   <SlidersHorizontal className="size-4" aria-hidden />
                   {t("market.search.filtersBtn")}
                   {activeFilters > 0 && (
-                    <span className="num grid min-w-5 place-items-center rounded-full bg-market-navy px-1 text-[10px] leading-5 text-market-navy-foreground">
+                    <span className="num grid min-w-5 place-items-center rounded-full bg-market-navy px-1 text-desc leading-5 text-market-navy-foreground">
                       {activeFilters}
                     </span>
                   )}
@@ -822,7 +822,7 @@ function SectionHeading({ title, description }: { title: string; description: st
   return (
     <div className="min-w-0">
       <h2 className="text-lg font-bold tracking-tight text-foreground sm:text-2xl">{title}</h2>
-      <p className="mt-1 text-xs leading-5 text-muted-foreground sm:text-sm">{description}</p>
+      <p className="mt-1 text-desc leading-5 text-muted-foreground sm:text-sm">{description}</p>
     </div>
   );
 }
@@ -844,7 +844,7 @@ function FilterChip({
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-semibold transition-colors",
+        "inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 text-desc font-semibold transition-colors",
         active
           ? "border-market-navy bg-market-navy text-market-navy-foreground"
           : "border-border bg-card text-foreground hover:border-market-navy-soft",

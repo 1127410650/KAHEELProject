@@ -316,7 +316,7 @@ function ProviderNetworkPage() {
                   <span className="block font-bold">
                     {locale === "ar" ? "استقبال طلبات الربط" : "Accept partner requests"}
                   </span>
-                  <span className="mt-1 block text-xs text-muted-foreground">
+                  <span className="mt-1 block text-desc text-muted-foreground">
                     {locale === "ar"
                       ? "يمكن لمتاجر أخرى طلب ربط نقل أو توريد أو خدمات دون رؤية بياناتك الخاصة."
                       : "Other stores may request delivery, supply or service links without private-data access."}
@@ -342,7 +342,7 @@ function ProviderNetworkPage() {
               <CardContent className="space-y-3 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-desc text-muted-foreground">
                       {locale === "ar" ? "القدرات المفعلة" : "Enabled capabilities"}
                     </p>
                     <h2 className="mt-1 font-black">
@@ -389,7 +389,7 @@ function ProviderNetworkPage() {
                     <h2 className="font-black">
                       {locale === "ar" ? "ابحث عن شريك تشغيل" : "Find an operating partner"}
                     </h2>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="mt-1 text-desc text-muted-foreground">
                       {locale === "ar"
                         ? "مثال: يربط المتجر شركة شحن، أو يربط المقاول موردًا، بعد قبول الطرف الآخر."
                         : "For example, a store links a carrier or a contractor links a supplier after acceptance."}
@@ -454,7 +454,7 @@ function ProviderNetworkPage() {
                                   ? provider.name_ar
                                   : provider.name_en || provider.name_ar}
                               </Link>
-                              <p className="truncate text-xs text-muted-foreground">
+                              <p className="truncate text-desc text-muted-foreground">
                                 {locale === "ar"
                                   ? provider.category_name_ar
                                   : provider.category_name_en}
@@ -510,7 +510,7 @@ function ProviderNetworkPage() {
                           >
                             {relation.other_store_name}
                           </Link>
-                          <p className="mt-1 text-xs text-muted-foreground">
+                          <p className="mt-1 text-desc text-muted-foreground">
                             {RELATION_LABELS[relation.relation_type][locale === "ar" ? 0 : 1]} ·{" "}
                             {relation.direction === "incoming"
                               ? locale === "ar"
@@ -671,7 +671,7 @@ function ProviderNetworkPage() {
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-black">{integration.display_name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
+                      <p className="mt-1 text-desc text-muted-foreground">
                         {catalog
                           ? locale === "ar"
                             ? catalog.name_ar

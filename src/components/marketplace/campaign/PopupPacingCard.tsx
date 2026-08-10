@@ -90,7 +90,7 @@ export function PopupPacingCard() {
     hintAr: string,
 
   ) => (
-    <label key={key} className="space-y-1 text-xs">
+    <label key={key} className="space-y-1 text-desc">
       <span className="font-bold">{ar ? labelAr : labelEn}</span>
       <Input
         type="number"
@@ -100,7 +100,7 @@ export function PopupPacingCard() {
           setValues((prev) => ({ ...prev, [key]: Number(event.target.value) || 0 }))
         }
       />
-      <span className="block text-[11px] text-muted-foreground">{hintAr}</span>
+      <span className="block text-desc text-muted-foreground">{hintAr}</span>
     </label>
   );
 
@@ -113,7 +113,7 @@ export function PopupPacingCard() {
             {ar ? "بطاقات الشخصية عند اللمس" : "Tap-triggered mascot cards"}
           </p>
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-desc text-muted-foreground">
           {ar
             ? "الشخصية لا تظهر من تلقاء نفسها: يسقط «الزعيم كَحيلان» عند لمس الزائر لرابط أو زر، وتبقى البطاقة ظاهرة حتى يضغط الزائر زر الإغلاق (×) — لا اختفاء تلقائي. ولا تحجب المحتوى ولا تعطّل التمرير، ولا تظهر أثناء الكتابة أو المحادثة أو المكالمة أو الدفع، ولا تظهر بطاقة ثانية ما دامت واحدة مفتوحة."
             : "The mascot never self-appears: Boss Kaheelan drops in when the visitor taps a link or button, and the card stays until the visitor presses close (×) — no auto-dismiss. It never blocks content or scrolling, never shows during typing, chat, a call or checkout, and never stacks a second card."}
@@ -123,7 +123,7 @@ export function PopupPacingCard() {
           <p className="text-sm font-bold">
             {ar ? "حدود الظهور — شخصية واحدة وتكرار قليل" : "Appearance limits — one mascot, rarely"}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {ar
               ? "الظهور مرتبط بسلوك الزائر: عندما يتوقّف عن التمرير ويثبت على منطقة للمدة المحددة أدناه، تظهر الشخصية — وأثناء التمرير لا تظهر، والاستئناف السريع يُخفيها. تبقى القواعد الصارمة: شخصية واحدة فقط على الشاشة، ولا تتكرّر نفس الشخصية ولا نفس الرسالة مرتين متتاليتين، ولا ظهور إلا في مساحة فارغة آمنة."
               : "Appearances follow behaviour: when the visitor stops scrolling and dwells for the duration below, a mascot appears — never while scrolling, and a fast resume hides it. The hard rules stay: one mascot on screen, never the same mascot or line twice in a row, and only inside safe empty space."}
@@ -178,7 +178,7 @@ export function PopupPacingCard() {
           <p className="text-sm font-bold">
             {ar ? "تجوّل الشخصيتين عبر الصفحات" : "Mascots roaming across pages"}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {ar
               ? "كَحيل يتمشّى بهدوء عند حافة الشاشة السفلية مع ترحيب قصير، وكَحيلان يتجوّل «عم دوّر على واسطة» فيتوقّف ويلتفت ويفتل شاربه. الحركة على transform فقط، لا تحجب المحتوى ولا تعطّل التفاعل، وتتوقّف مع prefers-reduced-motion أو عند إخفاء التبويب."
               : "Kaheel strolls calmly along the bottom edge with a short greeting; Kaheelan roams looking for a favour, stopping and twirling his mustache. Transform-only, never blocks content or input, and stops under prefers-reduced-motion or a hidden tab."}

@@ -233,7 +233,7 @@ function BusinessPage() {
               </div>
             </div>
 
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
               {activitySummary && <span className="break-words">{activitySummary}</span>}
               {city && (
                 <span className="inline-flex min-w-0 items-center gap-1">
@@ -347,7 +347,7 @@ function BusinessPage() {
                 {aboutLong && (
                   <button
                     type="button"
-                    className="mt-1 text-xs font-semibold text-primary"
+                    className="mt-1 text-desc font-semibold text-primary"
                     onClick={() => setAboutOpen((v) => !v)}
                   >
                     {t(aboutOpen ? "market.ad.showLess" : "market.ad.showMore")}
@@ -365,7 +365,7 @@ function BusinessPage() {
                   {shownChips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-xs text-muted-foreground"
+                      className="rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-desc text-muted-foreground"
                     >
                       {chip}
                     </span>
@@ -374,7 +374,7 @@ function BusinessPage() {
                 {chips.length > ACTIVITY_LIMIT && (
                   <button
                     type="button"
-                    className="mt-1.5 text-xs font-semibold text-primary"
+                    className="mt-1.5 text-desc font-semibold text-primary"
                     onClick={() => setAllActivities((v) => !v)}
                   >
                     {t(allActivities ? "market.ad.showLess" : "market.business.showAllActivities")}
@@ -398,7 +398,7 @@ function BusinessPage() {
                   />
                 </button>
                 {detailsOpen && (
-                  <dl className="mt-2 space-y-1 text-xs">
+                  <dl className="mt-2 space-y-1 text-desc">
                     {entityLabel && (
                       <div className="flex flex-wrap gap-x-2">
                         <dt className="text-muted-foreground">{t("market.business.entityType")}</dt>
@@ -430,7 +430,7 @@ function BusinessPage() {
                       type="button"
                       aria-pressed={active}
                       onClick={() => setCategoryId(chip.id)}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-card text-muted-foreground hover:border-primary/40"

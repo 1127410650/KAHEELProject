@@ -200,7 +200,7 @@ export function SeasonalBackdropsCard() {
           </span>
           <div>
             <p className="text-sm font-black">{ar ? "الخلفيات الموسمية" : "Seasonal backdrops"}</p>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {ar
                 ? "طبقة مزخرفة خلف الهيدر وأقسام المتاجر، تبدأ وتنتهي بالتاريخ تلقائيًا"
                 : "A decorative layer behind the header and store sections, starting and ending by date"}
@@ -229,7 +229,7 @@ export function SeasonalBackdropsCard() {
             />
           ) : null}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(36_0_70/0.62),rgb(36_0_70/0.8))]" />
-          <p className="absolute inset-x-3 bottom-3 text-xs font-black text-white">
+          <p className="absolute inset-x-3 bottom-3 text-desc font-black text-white">
             {labelAr || labelEn || (ar ? "معاينة الموسم" : "Season preview")}
           </p>
         </div>
@@ -332,7 +332,7 @@ export function SeasonalBackdropsCard() {
         </div>
 
         <div className="space-y-2">
-          <p className="text-xs font-bold">{ar ? "أين تظهر" : "Where it shows"}</p>
+          <p className="text-desc font-bold">{ar ? "أين تظهر" : "Where it shows"}</p>
           <div className="flex flex-wrap gap-2">
             {SEASON_PLACEMENTS.map((value) => (
               <Button
@@ -357,7 +357,7 @@ export function SeasonalBackdropsCard() {
 
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="space-y-2">
-            <p className="text-xs font-bold">{ar ? "العناصر المتحركة" : "Animated elements"}</p>
+            <p className="text-desc font-bold">{ar ? "العناصر المتحركة" : "Animated elements"}</p>
             <div className="flex flex-wrap gap-1.5">
               {MOTIFS.map((value) => (
                 <Button
@@ -373,7 +373,7 @@ export function SeasonalBackdropsCard() {
             </div>
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-bold">{ar ? "حجاب القراءة" : "Readability scrim"}</p>
+            <p className="text-desc font-bold">{ar ? "حجاب القراءة" : "Readability scrim"}</p>
             <div className="flex flex-wrap gap-1.5">
               {OVERLAYS.map((value) => (
                 <Button
@@ -389,7 +389,7 @@ export function SeasonalBackdropsCard() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="season-accent" className="text-xs font-bold">
+            <Label htmlFor="season-accent" className="text-desc font-bold">
               {ar ? "لون البريق" : "Accent"}
             </Label>
             <Input
@@ -403,7 +403,7 @@ export function SeasonalBackdropsCard() {
         </div>
 
         <div className="space-y-2">
-          <p className="text-xs font-bold">{ar ? "شخصية تطلّ من الأعلى" : "Character peeking on top"}</p>
+          <p className="text-desc font-bold">{ar ? "شخصية تطلّ من الأعلى" : "Character peeking on top"}</p>
           <div className="flex flex-wrap gap-1.5">
             {MASCOTS.map((value) => (
               <Button
@@ -452,7 +452,7 @@ export function SeasonalBackdropsCard() {
 
         {/* القائمة */}
         <div className="space-y-2">
-          <p className="text-xs font-bold">
+          <p className="text-desc font-bold">
             {ar ? "المواسم المعرّفة" : "Defined seasons"}
             {isLoading ? " …" : ` (${rows.length})`}
           </p>
@@ -463,7 +463,7 @@ export function SeasonalBackdropsCard() {
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-bold">{seasonLabel(row, ar)}</p>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {PLACEMENT_LABEL[row.placement][ar ? 0 : 1]}
                   {row.section_key ? ` · ${row.section_key}` : ""} ·{" "}
                   {SEASON_STATUS_LABEL[row.status][ar ? 0 : 1]} · {formatDateTime(row.starts_at)}
@@ -514,7 +514,7 @@ export function SeasonalBackdropsCard() {
 
           ))}
           {!isLoading && rows.length === 0 ? (
-            <p className="flex items-center gap-2 text-xs text-muted-foreground">
+            <p className="flex items-center gap-2 text-desc text-muted-foreground">
               <CalendarClock className="size-4" aria-hidden />
               {ar ? "لا مواسم بعد" : "No seasons yet"}
             </p>
@@ -540,7 +540,7 @@ function FilePick({
 }) {
   return (
     <div className="space-y-1">
-      <Label htmlFor={id} className="flex items-center gap-1 text-xs font-bold">
+      <Label htmlFor={id} className="flex items-center gap-1 text-desc font-bold">
         <Upload className="size-3.5" aria-hidden />
         {label}
       </Label>
@@ -551,7 +551,7 @@ function FilePick({
         disabled={busy}
         onChange={(event) => onPick(event.target.files?.[0] ?? null)}
       />
-      {done ? <p className="text-[11px] text-success">✓</p> : null}
+      {done ? <p className="text-desc text-success">✓</p> : null}
     </div>
   );
 }

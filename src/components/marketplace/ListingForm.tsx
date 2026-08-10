@@ -684,7 +684,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
           </option>
         ))}
       </select>
-      {errors.city && <p className="text-xs text-destructive">{errors.city}</p>}
+      {errors.city && <p className="text-desc text-destructive">{errors.city}</p>}
     </div>
   );
 
@@ -750,7 +750,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
         window.setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 250);
       }}
     >
-      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-card px-3 py-2 text-desc text-muted-foreground">
         <span className="min-w-0">
           {t("market.form.publishingAs", {
             name: (listing ? listing.tenant_id : account?.tenant_id)
@@ -778,13 +778,13 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
           {step > 0 && (
             <button
               type="button"
-              className="min-h-11 text-xs font-semibold text-primary underline sm:hidden"
+              className="min-h-11 text-desc font-semibold text-primary underline sm:hidden"
               onClick={() => setStep((prev) => prev - 1)}
             >
               {t("market.form.back")}
             </button>
           )}
-          <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
+          <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-desc text-secondary-foreground">
             {t("market.form.stepOf", { n: step + 1, total: STEPS.length })}
           </span>
         </div>
@@ -808,7 +808,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                   setErrors((prev) => ({ ...prev, path: fieldError("path") ?? undefined }));
               }}
             />
-            {errors.path && <p className="mt-1.5 text-xs text-destructive">{errors.path}</p>}
+            {errors.path && <p className="mt-1.5 text-desc text-destructive">{errors.path}</p>}
             {purposeOptions.length > 1 && (
               <div className="mt-3 space-y-1.5">
                 <span className="text-sm font-medium text-foreground">
@@ -853,9 +853,9 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
               onBlur={() => blur("title")}
             />
             {errors.title ? (
-              <p className="text-xs text-destructive">{errors.title}</p>
+              <p className="text-desc text-destructive">{errors.title}</p>
             ) : (
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-desc text-muted-foreground">
                 {t("market.form.titleHint", { min: TITLE_MIN, max: TITLE_MAX })}
               </p>
             )}
@@ -900,9 +900,9 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                 </span>
               </div>
               {errors.price ? (
-                <p className="text-xs text-destructive">{errors.price}</p>
+                <p className="text-desc text-destructive">{errors.price}</p>
               ) : (
-                <p className="text-xs text-muted-foreground">{t("market.form.currencyHint")}</p>
+                <p className="text-desc text-muted-foreground">{t("market.form.currencyHint")}</p>
               )}
             </div>
             <div className="space-y-1.5">
@@ -925,7 +925,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
 
           {cityField("city")}
 
-          <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+          <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-desc text-muted-foreground">
             {t("market.form.durationFixed")}
           </p>
 
@@ -1017,7 +1017,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                     maxLength={240}
                     onChange={(e) => touch(setSummary)(e.target.value)}
                   />
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     {t("market.form.summaryAuto")}
                   </p>
                 </div>
@@ -1029,7 +1029,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                     value={keywords}
                     onChange={(e) => touch(setKeywords)(e.target.value)}
                   />
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     {t("market.form.keywordsHint")}
                   </p>
                 </div>
@@ -1061,7 +1061,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
             <div id="images-block">
               <ListingImages api={media} />
             </div>
-            {errors.images && <p className="text-xs text-destructive">{errors.images}</p>}
+            {errors.images && <p className="text-desc text-destructive">{errors.images}</p>}
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -1092,7 +1092,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
             )}
             {t("market.loc.useMyLocation")}
           </Button>
-          <p className="text-[11px] text-muted-foreground">{t("market.form.locationHint")}</p>
+          <p className="text-desc text-muted-foreground">{t("market.form.locationHint")}</p>
         </div>
       )}
 
@@ -1145,12 +1145,12 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
               {account?.name || t(`market.entry.kind.${account?.kind ?? "individual"}`)}
             </dd>
           </div>
-          <p className="pt-1 text-[11px] text-muted-foreground">{t("market.form.reviewHint")}</p>
+          <p className="pt-1 text-desc text-muted-foreground">{t("market.form.reviewHint")}</p>
         </dl>
       )}
 
       {!canPublish && (
-        <p className="rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+        <p className="rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-desc text-destructive">
           {t("market.form.noPublishPermission")}
         </p>
       )}
@@ -1159,8 +1159,8 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
         <p
           className={
             draftNote === "saved"
-              ? "text-[11px] text-muted-foreground"
-              : "text-[11px] text-destructive"
+              ? "text-desc text-muted-foreground"
+              : "text-desc text-destructive"
           }
         >
           {draftNote === "saved" ? t("market.form.draftSaved") : t("market.form.draftSaveFailed")}

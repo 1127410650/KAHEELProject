@@ -25,16 +25,16 @@ export function SectionHead({
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
       <div className="min-w-0">
-        <h2 id={id} className="truncate text-[15px] font-black tracking-tight sm:text-lg">
+        <h2 id={id} className="truncate text-body font-black tracking-tight sm:text-lg">
           {title}
         </h2>
         {hint ? (
-          <p className="truncate text-[11px] font-semibold text-muted-foreground">{hint}</p>
+          <p className="truncate text-desc font-semibold text-muted-foreground">{hint}</p>
         ) : null}
       </div>
       <a
         href={href}
-        className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-2.5 text-[11px] font-black text-primary outline-none transition hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
+        className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-2.5 text-desc font-black text-primary outline-none transition hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
       >
         {locale === "ar" ? "عرض الكل" : "View all"}
         <ChevronLeft className="size-4 ltr:rotate-180" aria-hidden />

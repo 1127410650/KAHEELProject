@@ -187,7 +187,7 @@ export function OffersEditor({
             <Tag className="size-4 text-market-navy" aria-hidden />
             عروض المتجر
           </h2>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-desc text-muted-foreground">
             العرض السارٍ يظهر للزوّار في صفحة متجرك العامة.
           </p>
         </div>
@@ -279,14 +279,14 @@ export function OffersEditor({
             </div>
 
             <div className="flex flex-wrap items-center gap-4 rounded-xl border p-3">
-              <label className="flex items-center gap-2 text-xs font-bold">
+              <label className="flex items-center gap-2 text-desc font-bold">
                 <Switch
                   checked={draft.is_active}
                   onCheckedChange={(checked) => setDraft({ ...draft, is_active: checked })}
                 />
                 العرض مُفعّل
               </label>
-              <label className="flex items-center gap-2 text-xs font-bold">
+              <label className="flex items-center gap-2 text-desc font-bold">
                 <Switch
                   checked={draft.applies_to_all}
                   onCheckedChange={(checked) =>
@@ -299,11 +299,11 @@ export function OffersEditor({
 
             {!draft.applies_to_all ? (
               <div className="space-y-2 rounded-xl border p-3">
-                <p className="text-xs font-bold">المنتجات المشمولة</p>
+                <p className="text-desc font-bold">المنتجات المشمولة</p>
                 {catalog.isLoading ? (
                   <Skeleton className="h-16 w-full" />
                 ) : items.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     لا توجد منتجات بعد — أضِف منتجات من صفحة الأقسام والمنتجات.
                   </p>
                 ) : (
@@ -322,7 +322,7 @@ export function OffersEditor({
                                 : [...draftItemIds, item.id],
                             })
                           }
-                          className={`rounded-full border px-3 py-1.5 text-[11px] font-bold transition ${
+                          className={`rounded-full border px-3 py-1.5 text-desc font-bold transition ${
                             selected
                               ? "border-market-navy bg-market-navy/10 text-market-navy"
                               : "border-border text-muted-foreground hover:border-market-navy/40"
@@ -370,14 +370,14 @@ export function OffersEditor({
                       {STATUS_LABEL[status]}
                     </Badge>
                   </div>
-                  <p className="text-xs font-bold text-market-navy">
+                  <p className="text-desc font-bold text-market-navy">
                     {offer.discount_type === "percent"
                       ? `خصم ${offer.discount_value}%`
                       : `خصم ${offer.discount_value} ${currencyLabel(currency, locale)}`}
                     {offer.applies_to_all ? " · على كل المتجر" : " · على منتجات محددة"}
                   </p>
                   {offer.description ? (
-                    <p className="text-xs text-muted-foreground">{offer.description}</p>
+                    <p className="text-desc text-muted-foreground">{offer.description}</p>
                   ) : null}
                   <div className="flex flex-wrap gap-2 pt-1">
                     <Button size="sm" variant="outline" onClick={() => openEdit(offer)}>

@@ -211,7 +211,7 @@ function AdminVerificationDetailPage() {
                   </p>
                 )}
                 {header.decision_reason && (
-                  <p className="mt-2 break-words text-xs text-muted-foreground">
+                  <p className="mt-2 break-words text-desc text-muted-foreground">
                     {t("admin.detail.decisionReason")}: {header.decision_reason}
                   </p>
                 )}
@@ -236,7 +236,7 @@ function AdminVerificationDetailPage() {
                 <EmptyState label={t("common.noData")} />
               ) : (
                 <>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     {t("admin.detail.docAccessLogged")}
                   </p>
                   <ul className="mt-3 grid gap-2">
@@ -249,7 +249,7 @@ function AdminVerificationDetailPage() {
                           <p className="truncate text-sm font-medium text-foreground">
                             {file.file_name || file.doc_kind || file.id.slice(0, 8)}
                           </p>
-                          <p className="truncate text-[11px] tabular-nums text-muted-foreground">
+                          <p className="truncate text-desc tabular-nums text-muted-foreground">
                             {[file.doc_kind, file.mime_type, formatDateTime(file.created_at)]
                               .filter(Boolean)
                               .join(" · ")}

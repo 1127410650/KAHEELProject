@@ -137,7 +137,7 @@ function JoinPage() {
           <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
             {locale === "ar" ? content.hintAr : content.hintEn}
           </p>
-          <p className="mt-4 rounded-2xl border border-border bg-secondary px-4 py-3 text-xs leading-6 text-muted-foreground">
+          <p className="mt-4 rounded-2xl border border-border bg-secondary px-4 py-3 text-desc leading-6 text-muted-foreground">
 
             {locale === "ar"
               ? "لن تتغير صلاحيات حسابك عند الإرسال. يتم التفعيل فقط بعد مراجعة الطلب وقبوله."

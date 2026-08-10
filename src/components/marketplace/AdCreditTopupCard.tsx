@@ -192,7 +192,7 @@ export function AdCreditTopupCard({
               <Skeleton className="h-12 w-full" />
             ) : sham?.walletId ? (
               <>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {t("market.adCredit.topup.platformWallet")}
                 </p>
                 <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -214,13 +214,13 @@ export function AdCreditTopupCard({
                   {sham.walletName && <Badge variant="outline">{sham.walletName}</Badge>}
                 </div>
                 {instructions && (
-                  <p className="mt-2 whitespace-pre-line text-xs text-muted-foreground">
+                  <p className="mt-2 whitespace-pre-line text-desc text-muted-foreground">
                     {instructions}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-desc text-muted-foreground">
                 {t("market.adCredit.topup.walletMissing")}
               </p>
             )}
@@ -228,12 +228,12 @@ export function AdCreditTopupCard({
         )}
 
         {method === "bank_transfer" && (
-          <p className="text-xs text-muted-foreground">{t("market.adCredit.topup.bankNotice")}</p>
+          <p className="text-desc text-muted-foreground">{t("market.adCredit.topup.bankNotice")}</p>
         )}
 
         {method === "card_gateway" && (
           <div className="space-y-3">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {t("market.adCredit.topup.card.notice")}
             </p>
             <div className="grid gap-2 sm:grid-cols-2">
@@ -342,7 +342,7 @@ export function AdCreditTopupCard({
           />
         </div>
 
-        <p className="text-xs text-muted-foreground">{t("market.adCredit.topup.reviewNotice")}</p>
+        <p className="text-desc text-muted-foreground">{t("market.adCredit.topup.reviewNotice")}</p>
 
         <Button onClick={send} disabled={submit.isPending} className="h-10">
           {submit.isPending ? (
@@ -356,7 +356,7 @@ export function AdCreditTopupCard({
         )}
 
         {pending.length > 0 && (
-          <p className="text-xs text-gold-dark">
+          <p className="text-desc text-gold-dark">
             {t("market.adCredit.topup.hasPending")}
           </p>
         )}
@@ -381,7 +381,7 @@ export function AdCreditTopupCard({
                         </span>
                       )}
                     </p>
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-desc text-muted-foreground">
                       {formatDateTime(row.created_at)}
                       {row.status === "rejected" && row.reject_reason
                         ? ` — ${row.reject_reason}`

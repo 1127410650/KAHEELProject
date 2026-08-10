@@ -110,10 +110,10 @@ function AdminAdCreditPage() {
                       {formatNumber(Number(e.price_sar))} SAR
                     </Badge>
                   )}
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {formatDateTime(e.created_at)}
                   </span>
-                  <span className="text-[11px] text-muted-foreground" dir="ltr">
+                  <span className="text-desc text-muted-foreground" dir="ltr">
                     {e.wallet_id}
                   </span>
                   <Input
@@ -188,7 +188,7 @@ function AdminAdCreditPage() {
                 {t("market.adCredit.admin.adjust")}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">{t("market.adCredit.admin.grantHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("market.adCredit.admin.grantHint")}</p>
           </CardContent>
         </Card>
 
@@ -203,7 +203,7 @@ function AdminAdCreditPage() {
                   <li key={w.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                     <button
                       type="button"
-                      className="text-[11px] text-muted-foreground underline"
+                      className="text-desc text-muted-foreground underline"
                       dir="ltr"
                       onClick={() => setWalletId(w.id)}
                     >
@@ -212,7 +212,7 @@ function AdminAdCreditPage() {
                     <span className="text-sm font-semibold tabular-nums">
                       {formatNumber(w.balance)}
                     </span>
-                    <span className="text-[11px] text-muted-foreground tabular-nums">
+                    <span className="text-desc text-muted-foreground tabular-nums">
                       {formatNumber(w.total_purchased)} / {formatNumber(w.total_consumed)}
                     </span>
                   </li>
@@ -240,7 +240,7 @@ function AdminAdCreditPage() {
                         </span>
                       ) : null}
                     </span>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span className="text-desc text-muted-foreground">
                       {formatDateTime(e.created_at)}
                     </span>
                     <span className="text-sm tabular-nums" dir="ltr">

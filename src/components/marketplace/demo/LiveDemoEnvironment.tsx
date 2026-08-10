@@ -134,7 +134,7 @@ export function LiveDemoEnvironment() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#eef3f9_0%,#f8fafc_20rem,#f3f6fa_100%)] pb-8 text-slate-950">
-      <div className="border-b border-amber-200 bg-amber-50 px-4 py-2.5 text-center text-[11px] font-black leading-5 text-amber-950 sm:text-xs">
+      <div className="border-b border-amber-200 bg-amber-50 px-4 py-2.5 text-center text-desc font-black leading-5 text-amber-950 sm:text-desc">
         <span className="me-1.5 inline-block size-2 rounded-full bg-amber-500 motion-safe:animate-pulse" />
         {text(
           locale,
@@ -149,7 +149,7 @@ export function LiveDemoEnvironment() {
           <div className="absolute -bottom-24 start-[25%] size-64 rounded-full bg-cyan-300/15 blur-3xl" />
           <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_0.78fr]">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-black text-cyan-100 backdrop-blur sm:text-xs">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-desc font-black text-cyan-100 backdrop-blur sm:text-desc">
                 <Sparkles className="size-3.5" aria-hidden />
                 {text(locale, "عرض كامل قبل الإطلاق النهائي", "Full preview before final launch")}
               </div>
@@ -166,7 +166,7 @@ export function LiveDemoEnvironment() {
               <div className="mt-5 flex flex-wrap gap-2">
                 <a
                   href="#demo-workspace"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-xs font-black text-[#071d46] shadow-lg transition hover:-translate-y-0.5"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-desc font-black text-[#071d46] shadow-lg transition hover:-translate-y-0.5"
                 >
                   <Play className="size-4 fill-current" aria-hidden />
                   {text(locale, "ابدأ التجربة", "Start the demo")}
@@ -174,7 +174,7 @@ export function LiveDemoEnvironment() {
                 <Link
                   to="/demo-stores/$worldId"
                   params={{ worldId: "restaurants" }}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-xs font-black text-white backdrop-blur transition hover:bg-white/15"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-desc font-black text-white backdrop-blur transition hover:bg-white/15"
                 >
                   <ShoppingBag className="size-4" aria-hidden />
                   {text(locale, "شاهد نماذج المتاجر", "View store examples")}
@@ -196,7 +196,7 @@ export function LiveDemoEnvironment() {
                   <strong className="num block text-2xl font-black text-white sm:text-3xl">
                     {value}
                   </strong>
-                  <span className="mt-1 block text-[10px] font-bold text-white/58 sm:text-xs">
+                  <span className="mt-1 block text-desc font-bold text-white/58 sm:text-desc">
                     {label}
                   </span>
                 </div>
@@ -208,14 +208,14 @@ export function LiveDemoEnvironment() {
         <section id="demo-workspace" aria-labelledby="demo-roles-title" className="scroll-mt-24">
           <div className="mb-3 flex items-end justify-between gap-3">
             <div>
-              <p className="text-[10px] font-black text-[#7b2cbf] sm:text-xs">
+              <p className="text-desc font-black text-[#7b2cbf] sm:text-desc">
                 {text(locale, "تبديل الهوية التجريبية", "Demo identity switcher")}
               </p>
               <h2 id="demo-roles-title" className="mt-1 text-xl font-black sm:text-2xl">
                 {text(locale, "اختر الحساب الذي تريد تجربته", "Choose an account to explore")}
               </h2>
             </div>
-            <span className="hidden rounded-full bg-white px-3 py-1.5 text-[10px] font-black text-slate-500 shadow-sm ring-1 ring-slate-200 sm:inline-flex">
+            <span className="hidden rounded-full bg-white px-3 py-1.5 text-desc font-black text-slate-500 shadow-sm ring-1 ring-slate-200 sm:inline-flex">
               {completed.size}/{LIVE_DEMO_ROLES.length}{" "}
               {text(locale, "إجراءات جُرّبت", "actions tried")}
             </span>
@@ -246,14 +246,14 @@ export function LiveDemoEnvironment() {
                   >
                     <RoleIcon className="size-[18px]" aria-hidden />
                   </span>
-                  <span className="mt-2 block text-xs font-black">
+                  <span className="mt-2 block text-desc font-black">
                     {text(locale, role.titleAr, role.titleEn)}
                   </span>
                   <span
                     className={
                       selected
-                        ? "mt-1 block text-[9px] text-white/70"
-                        : "mt-1 block text-[9px] text-slate-400"
+                        ? "mt-1 block text-desc text-white/70"
+                        : "mt-1 block text-desc text-slate-400"
                     }
                   >
                     {text(locale, ROLE_DOMAINS[role.id].ar, ROLE_DOMAINS[role.id].en)}
@@ -281,12 +281,12 @@ export function LiveDemoEnvironment() {
                   <h2 className="text-2xl font-black sm:text-3xl">
                     {text(locale, active.accountAr, active.accountEn)}
                   </h2>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/14 px-2.5 py-1 text-[9px] font-black ring-1 ring-white/20 sm:text-[10px]">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/14 px-2.5 py-1 text-desc font-black ring-1 ring-white/20 sm:text-desc">
                     <BadgeCheck className="size-3" aria-hidden />
                     {text(locale, active.badgeAr, active.badgeEn)}
                   </span>
                 </div>
-                <p className="mt-1 text-xs font-bold text-white/72 sm:text-sm">
+                <p className="mt-1 text-desc font-bold text-white/72 sm:text-sm">
                   {text(locale, active.subtitleAr, active.subtitleEn)}
                 </p>
               </div>
@@ -314,13 +314,13 @@ export function LiveDemoEnvironment() {
                   key={metric.labelAr}
                   className={`rounded-2xl bg-slate-50 p-3.5 ring-1 ${tone.ring}`}
                 >
-                  <p className="text-[10px] font-bold text-slate-500 sm:text-xs">
+                  <p className="text-desc font-bold text-slate-500 sm:text-desc">
                     {text(locale, metric.labelAr, metric.labelEn)}
                   </p>
                   <p className={`num mt-1 text-2xl font-black sm:text-3xl ${tone.text}`}>
                     {metric.value}
                   </p>
-                  <p className="mt-1 truncate text-[9px] font-semibold text-slate-400 sm:text-[10px]">
+                  <p className="mt-1 truncate text-desc font-semibold text-slate-400 sm:text-desc">
                     {text(locale, metric.hintAr, metric.hintEn)}
                   </p>
                 </div>
@@ -331,7 +331,7 @@ export function LiveDemoEnvironment() {
               <div className="rounded-2xl border border-slate-200 bg-white p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-[10px] font-black text-slate-400">
+                    <p className="text-desc font-black text-slate-400">
                       {text(locale, "العمل المطلوب الآن", "What needs attention")}
                     </p>
                     <h3 className="mt-0.5 text-base font-black">
@@ -364,14 +364,14 @@ export function LiveDemoEnvironment() {
                         )}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-xs font-black sm:text-sm">
+                        <p className="truncate text-desc font-black sm:text-sm">
                           {text(locale, item.titleAr, item.titleEn)}
                         </p>
-                        <p className="mt-1 truncate text-[10px] text-slate-500 sm:text-xs">
+                        <p className="mt-1 truncate text-desc text-slate-500 sm:text-desc">
                           {text(locale, item.metaAr, item.metaEn)}
                         </p>
                       </div>
-                      <span className="shrink-0 rounded-full bg-white px-2 py-1 text-[8px] font-black text-slate-600 ring-1 ring-slate-200 sm:text-[9px]">
+                      <span className="shrink-0 rounded-full bg-white px-2 py-1 text-desc font-black text-slate-600 ring-1 ring-slate-200 sm:text-desc">
                         {text(locale, item.statusAr, item.statusEn)}
                       </span>
                     </div>
@@ -392,7 +392,7 @@ export function LiveDemoEnvironment() {
                       (capability) => (
                         <div
                           key={capability}
-                          className="flex min-h-14 items-center gap-2 rounded-xl bg-white px-3 text-[10px] font-bold text-slate-700 ring-1 ring-slate-200 sm:text-xs"
+                          className="flex min-h-14 items-center gap-2 rounded-xl bg-white px-3 text-desc font-bold text-slate-700 ring-1 ring-slate-200 sm:text-desc"
                         >
                           <Check className="size-3.5 shrink-0 text-emerald-600" aria-hidden />
                           {capability}
@@ -420,12 +420,12 @@ export function LiveDemoEnvironment() {
                     )}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <strong className="block text-xs font-black sm:text-sm">
+                    <strong className="block text-desc font-black sm:text-sm">
                       {actionCompleted
                         ? text(locale, active.actionDoneAr, active.actionDoneEn)
                         : text(locale, active.primaryActionAr, active.primaryActionEn)}
                     </strong>
-                    <small className="mt-1 block text-[9px] text-white/65 sm:text-[10px]">
+                    <small className="mt-1 block text-desc text-white/65 sm:text-desc">
                       {text(
                         locale,
                         "محاكاة آمنة بلا كتابة في بيانات العملاء",
@@ -452,7 +452,7 @@ export function LiveDemoEnvironment() {
                 {text(locale, "التكاملات الخارجية", "External integrations")}
               </h2>
             </div>
-            <p className="mt-1 text-[10px] leading-5 text-slate-500 sm:text-xs">
+            <p className="mt-1 text-desc leading-5 text-slate-500 sm:text-desc">
               {text(
                 locale,
                 "مراجع الربط ظاهرة، أما الأسرار ومفاتيح المزود فتبقى خادمية ولا تُرسل للمتصفح.",
@@ -469,14 +469,14 @@ export function LiveDemoEnvironment() {
                     <ExternalLink className="size-4" aria-hidden />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-black">
+                    <p className="truncate text-desc font-black">
                       {text(locale, integration.nameAr, integration.nameEn)}
                     </p>
-                    <p className="mt-0.5 truncate text-[9px] text-slate-500">
+                    <p className="mt-0.5 truncate text-desc text-slate-500">
                       {text(locale, integration.ownerAr, integration.ownerEn)}
                     </p>
                   </div>
-                  <span className="rounded-full bg-emerald-100 px-2 py-1 text-[8px] font-black text-emerald-700">
+                  <span className="rounded-full bg-emerald-100 px-2 py-1 text-desc font-black text-emerald-700">
                     {text(locale, integration.statusAr, integration.statusEn)}
                   </span>
                 </div>
@@ -487,14 +487,14 @@ export function LiveDemoEnvironment() {
           <div className="rounded-[26px] bg-[#071d46] p-5 text-white shadow-sm sm:p-6">
             <div className="flex items-center gap-2 text-cyan-200">
               <BarChart3 className="size-5" aria-hidden />
-              <span className="text-[10px] font-black sm:text-xs">
+              <span className="text-desc font-black sm:text-desc">
                 {text(locale, "جاهزية العرض", "Demo readiness")}
               </span>
             </div>
             <h2 className="mt-2 text-xl font-black">
               {text(locale, "كل الفئات داخل نموذج واحد", "Every category in one model")}
             </h2>
-            <p className="mt-2 text-xs leading-6 text-white/65">
+            <p className="mt-2 text-desc leading-6 text-white/65">
               {text(
                 locale,
                 "إضافة فئة جديدة لا تحتاج نظامًا مستقلًا؛ نحدد قدراتها، ثم تظهر لها الوحدات المناسبة مع بقاء الحساب والبيانات معزولين.",
@@ -503,7 +503,7 @@ export function LiveDemoEnvironment() {
             </p>
             <Link
               to="/services"
-              className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-xs font-black text-[#071d46]"
+              className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-desc font-black text-[#071d46]"
             >
               {text(locale, "تصفح الخدمات الحيّة", "Browse live services")}
               <ArrowLeft className="size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
@@ -554,7 +554,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
           {text(locale, "رحلة مترابطة في النظام", "A connected platform journey")}
         </h2>
       </div>
-      <p className="mt-1 text-[10px] leading-5 text-slate-500 sm:text-xs">
+      <p className="mt-1 text-desc leading-5 text-slate-500 sm:text-desc">
         {text(
           locale,
           "الشراكة تمرر المهمة اللازمة فقط ولا تمنح عضوية أو صلاحية داخل حساب الطرف الآخر.",
@@ -568,10 +568,10 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
               <span className="grid size-10 place-items-center rounded-xl bg-[#e0aaff]/42 text-[#7b2cbf]">
                 <step.icon className="size-5" aria-hidden />
               </span>
-              <span className="num text-[10px] font-black text-slate-300">0{index + 1}</span>
+              <span className="num text-desc font-black text-slate-300">0{index + 1}</span>
             </div>
-            <h3 className="mt-3 text-xs font-black sm:text-sm">{text(locale, step.ar, step.en)}</h3>
-            <p className="mt-1 text-[9px] text-slate-500 sm:text-[10px]">
+            <h3 className="mt-3 text-desc font-black sm:text-sm">{text(locale, step.ar, step.en)}</h3>
+            <p className="mt-1 text-desc text-slate-500 sm:text-desc">
               {text(locale, step.detailAr, step.detailEn)}
             </p>
           </div>

@@ -82,7 +82,7 @@ function AdminSettingsPage() {
 
   return (
     <AdminShell title={t("admin.nav.settings")} systemOwnerOnly>
-      <p className="text-xs text-muted-foreground">{t("admin.settings.hint")}</p>
+      <p className="text-desc text-muted-foreground">{t("admin.settings.hint")}</p>
 
       {settings.isLoading ? (
         <Skeleton className="mt-4 h-48 w-full rounded-xl" />
@@ -109,7 +109,7 @@ function AdminSettingsPage() {
                           <p className="truncate text-sm text-foreground">
                             {row.description_ar || row.key}
                           </p>
-                          <p className="text-[11px] tabular-nums text-muted-foreground">
+                          <p className="text-desc tabular-nums text-muted-foreground">
                             {t("admin.settings.updatedAt")}: {formatDateTime(row.updated_at)}
                           </p>
                         </div>
