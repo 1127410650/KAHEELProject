@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function FormRoutePending() {
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-3 px-4 py-6" aria-busy="true">
+    <div className="mx-auto w-full max-w-2xl space-y-3 px-[var(--page-x)] py-6" aria-busy="true">
       <Skeleton className="h-6 w-40 rounded-lg" />
       <Skeleton className="h-10 w-full rounded-lg" />
       <Skeleton className="h-11 w-full rounded-lg" />
@@ -26,7 +26,7 @@ export function FormRoutePending() {
 export function FormRouteError() {
   const { t } = useI18n();
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-3 px-4 py-6">
+    <div className="mx-auto w-full max-w-2xl space-y-3 px-[var(--page-x)] py-6">
       <div className="space-y-3 rounded-xl border border-border bg-card p-4">
         <p className="text-sm text-foreground">{t("market.form.loadFailed")}</p>
         <Button type="button" className="min-h-11" onClick={() => window.location.reload()}>

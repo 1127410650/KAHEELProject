@@ -143,7 +143,7 @@ function CategoryPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-4 py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-6">
         {categories.isLoading ? (
           <Skeleton className="h-8 w-48" />
         ) : !category ? (

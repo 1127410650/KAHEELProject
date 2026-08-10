@@ -14,7 +14,7 @@ export function LegalArticle({
   blocks: LegalBlock[];
 }) {
   return (
-    <main className="mx-auto w-full max-w-[820px] px-4 py-6 sm:px-6 sm:py-8">
+    <main className="mx-auto w-full max-w-[820px] px-[var(--page-x)] py-6 sm:py-8">
       <h1 className="text-page font-black">{title}</h1>
       <p className="mt-1.5 text-desc font-bold leading-6 text-muted-foreground">{intro}</p>
       <div className="mt-4 space-y-3">

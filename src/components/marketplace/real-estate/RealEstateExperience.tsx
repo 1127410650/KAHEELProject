@@ -303,7 +303,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
           />
           <div className="absolute inset-0 bg-gradient-to-b from-market-navy/25 via-market-navy/55 to-market-navy-dark" />
 
-          <div className="market-hero-band relative mx-auto flex min-h-[240px] w-full max-w-[1240px] flex-col px-4 pb-10 sm:min-h-[280px] sm:px-6 sm:pb-14 lg:px-8">
+          <div className="market-hero-band relative mx-auto flex min-h-[240px] w-full max-w-[1240px] flex-col px-[var(--page-x)] pb-10 sm:min-h-[280px] sm:pb-14">
             <div className="flex items-center justify-between gap-3 text-market-navy-foreground">
               <span className="inline-flex items-center gap-2 rounded-full border border-market-navy-foreground/25 bg-market-navy/45 px-3 py-[var(--sp-2)] text-desc font-semibold shadow-sm">
                 <Building2 className="size-4" aria-hidden />

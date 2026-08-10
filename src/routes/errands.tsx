@@ -168,7 +168,7 @@ function ErrandsPage() {
         banner={<HomeAdStrip addHref="/my/listings/new" />}
         progress={progressSteps}
       />
-      <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+      <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
         {/* رأس الخدمة: كَحيلان بيوعد إنه هو الواسطة */}
         <section className="relative mb-3 overflow-hidden rounded-[var(--r-card)] border border-primary/25 bg-gradient-to-br from-primary/15 via-background to-background p-3">
           <div className="flex items-center gap-3">

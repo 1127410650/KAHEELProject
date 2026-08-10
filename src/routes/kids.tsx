@@ -41,7 +41,7 @@ function KidsWorldPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-4 py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-6">
         <header className="rounded-[var(--r-card)] bg-brand-50 p-5 dark:bg-brand-950">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">

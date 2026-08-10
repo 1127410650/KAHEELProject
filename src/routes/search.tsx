@@ -202,7 +202,7 @@ function RealEstateFallback() {
     <MarketShell footer="none">
       <div className="real-estate-experience bg-background">
         <Skeleton className="h-[240px] w-full rounded-none sm:h-[280px]" />
-        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-3 py-6 sm:grid-cols-4 ">
+        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-[var(--page-x)] py-6 sm:grid-cols-4 ">
           {Array.from({ length: 8 }).map((_, index) => (
             <Skeleton key={index} className="aspect-[3/4] rounded-[var(--r-card)]" />
           ))}
@@ -771,7 +771,7 @@ function GenericSearchPage() {
         banner={<HomeAdStrip addHref="/my/listings/new" />}
         progress={progressSteps}
       />
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
         <section className="market-page-intro">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-page font-black text-foreground">

@@ -80,7 +80,7 @@ function PublicStorePage() {
   if (query.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-5xl space-y-4 px-4 py-6">
+        <div className="mx-auto w-full max-w-5xl space-y-4 px-[var(--page-x)] py-6">
           <Skeleton className="h-44 w-full rounded-[var(--r-card)]" />
           <Skeleton className="h-8 w-56" />
           <Skeleton className="h-32 w-full rounded-[var(--r-card)]" />
@@ -92,7 +92,7 @@ function PublicStorePage() {
   if (!store) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-3xl px-4 py-16 text-center">
+        <div className="mx-auto w-full max-w-3xl px-[var(--page-x)] py-16 text-center">
           <Store className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
           <h1 className="text-page font-semibold">{t("market.store.publicPage.notFound")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -142,7 +142,7 @@ function PublicStorePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-5xl space-y-5 px-4 py-5">
+      <div className="mx-auto w-full max-w-5xl space-y-5 px-[var(--page-x)] py-5">
         <div
           className={`overflow-hidden rounded-[1.75rem] border bg-card shadow-panel ring-1 ${theme.ring}`}
         >

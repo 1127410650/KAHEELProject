@@ -117,7 +117,7 @@ function BusinessPage() {
   if (business.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4">
+        <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-5">
           <Skeleton className="h-28 w-full rounded-xl" />
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -135,7 +135,7 @@ function BusinessPage() {
     // alike — the reason is never disclosed.
     return (
       <MarketShell>
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <div className="mx-auto max-w-3xl px-[var(--page-x)] py-20 text-center">
           <h1 className="text-page font-bold text-foreground">{t("market.business.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
@@ -208,7 +208,7 @@ function BusinessPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
         <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-5">
           <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5 lg:sticky lg:top-20">
             <div className="flex items-start gap-3">

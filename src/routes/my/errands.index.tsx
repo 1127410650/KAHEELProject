@@ -42,7 +42,7 @@ function MyErrandsPage() {
 
   return (
     <DashboardShell title={ar ? "طلبات جيب لي" : "My errands"}>
-      <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+      <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
         <div className="mb-3 flex items-center justify-between gap-2">
           <h1 className="text-page font-black text-foreground">
             {ar ? "طلبات جيب لي" : "My errands"}

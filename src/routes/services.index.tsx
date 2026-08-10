@@ -154,7 +154,7 @@ function ServicesMarketplacePage() {
           progress={progressSteps}
         />
         <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
-          <div className="market-hero-band relative mx-auto w-full max-w-7xl px-4">
+          <div className="market-hero-band relative mx-auto w-full max-w-7xl px-[var(--page-x)]">
             <div className="max-w-2xl">
               <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-desc font-bold text-primary">
                 <ShieldCheck className="size-4" />
@@ -188,7 +188,7 @@ function ServicesMarketplacePage() {
         </section>
 
 
-        <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-7">
+        <div className="mx-auto w-full max-w-7xl space-y-8 px-[var(--page-x)] py-7">
           <section aria-labelledby="service-categories-title">
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>

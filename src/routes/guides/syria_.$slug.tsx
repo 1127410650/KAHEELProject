@@ -39,7 +39,7 @@ function GuidePlacePage() {
 
   return (
     <MarketShell>
-      <main className="mx-auto w-full max-w-[860px] px-3 py-3 sm:px-5 sm:py-4">
+      <main className="mx-auto w-full max-w-[860px] px-[var(--page-x)] py-3 sm:py-4">
         {/* سطر تنقّل خفيف — لا بطاقة كبيرة */}
         <nav
           aria-label="مسار التنقّل"

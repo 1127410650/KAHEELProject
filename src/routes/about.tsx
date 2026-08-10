@@ -31,7 +31,7 @@ function PoliciesPage() {
   const { locale } = useI18n();
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
+      <div className="mx-auto w-full max-w-3xl px-[var(--page-x)] pb-10 pt-6">
         <header className="market-page-intro">
           <h1 className="text-page font-black text-foreground">
             {locale === "ar" ? "عن المنصة والسياسات" : "About & policies"}

@@ -185,7 +185,7 @@ function MorePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-3xl px-4 pb-6 pt-6">
+      <div className="mx-auto w-full max-w-3xl px-[var(--page-x)] pb-6 pt-6">
         <header className="market-page-intro">
           <h1 className="text-page font-black text-foreground">{t("market.more.title")}</h1>
           <p className="mt-1 text-desc text-muted-foreground">{t("market.more.subtitle")}</p>

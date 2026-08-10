@@ -171,7 +171,7 @@ export function CollapsingHomeHeader({
         </HeaderChipsRow>
 
         {/* صف البحث — يبقى دائمًا قابلًا للنقر */}
-        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-3 pb-[var(--sp-3)] ">
+        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-[var(--page-x)] pb-[var(--sp-3)] ">
           <a
             href="/search"
             onClick={(event) => {

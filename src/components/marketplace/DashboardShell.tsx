@@ -59,7 +59,7 @@ export function DashboardShell({
     <MarketShell footer="none">
       <div
         className={
-          narrow ? "mx-auto w-full max-w-[920px] px-4 py-6" : "mx-auto w-full max-w-7xl px-4 py-6"
+          narrow ? "mx-auto w-full max-w-[920px] px-[var(--page-x)] py-6" : "mx-auto w-full max-w-7xl px-[var(--page-x)] py-6"
         }
       >
         <header className="market-page-intro">

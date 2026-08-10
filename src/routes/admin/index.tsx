@@ -214,7 +214,7 @@ function AdminHomePage() {
         </div>
       ) : (
         <div className="space-y-5">
-          <section className="relative overflow-hidden rounded-[var(--r-card)] border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:px-5 sm:py-5">
+          <section className="relative overflow-hidden rounded-[var(--r-card)] border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:py-5">
             <div
               className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl"
               aria-hidden

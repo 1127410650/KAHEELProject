@@ -83,8 +83,8 @@ export function SyriaHomeGateway() {
           to={gateway.to}
           className={
             reducedMotion
-              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:px-5 sm:py-4"
-              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:px-5 sm:py-4"
+              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:py-4"
+              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:py-4"
           }
           aria-label={`${gateway.title}: ${gateway.description}`}
         >

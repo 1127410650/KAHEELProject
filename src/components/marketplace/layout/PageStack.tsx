@@ -206,8 +206,8 @@ export function PageStack({
 }) {
   return (
     <div
-      className={`mx-auto flex w-full flex-col gap-3 px-3 py-3 sm:px-4 ${
-        width === "narrow" ? "max-w-2xl" : "max-w-[1240px] lg:px-8"
+      className={`mx-auto flex w-full flex-col gap-3 px-[var(--page-x)] py-3 ${
+        width === "narrow" ? "max-w-2xl" : "max-w-[1240px]"
       }`}
     >
       {search && <PageSearchBar placeholder={searchPlaceholder} />}

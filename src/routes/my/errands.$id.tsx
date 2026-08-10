@@ -122,7 +122,7 @@ function ErrandDetailPage() {
   if (errand.isLoading) {
     return (
       <DashboardShell title={title}>
-        <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+        <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
           <Skeleton className="h-[220px] rounded-[var(--r-card)]" />
         </div>
       </DashboardShell>
@@ -132,7 +132,7 @@ function ErrandDetailPage() {
   if (!errand.data) {
     return (
       <DashboardShell title={title}>
-        <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-6 text-center">
+        <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-6 text-center">
           <p className="text-desc text-muted-foreground">
             {ar ? "هذا الطلب غير موجود أو ليس لك." : "This request does not exist or isn't yours."}
           </p>
@@ -151,7 +151,7 @@ function ErrandDetailPage() {
 
   return (
     <DashboardShell title={title}>
-      <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+      <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
         {/* الحالة والخط الزمني */}
         <section className="mb-3 rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
           <div className="flex items-center justify-between gap-2">

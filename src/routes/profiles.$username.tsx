@@ -90,7 +90,7 @@ function UserProfilePage() {
   if (person.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4">
+        <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-5">
           <Skeleton className="h-28 w-full rounded-xl" />
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -108,7 +108,7 @@ function UserProfilePage() {
     // the reason is never disclosed.
     return (
       <MarketShell>
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <div className="mx-auto max-w-3xl px-[var(--page-x)] py-20 text-center">
           <h1 className="text-page font-bold text-foreground">{t("market.person.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
@@ -130,7 +130,7 @@ function UserProfilePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
         <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5">
           <div className="flex items-start gap-3">
             <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-sm font-bold text-muted-foreground">

@@ -124,7 +124,7 @@ export function HeaderChipsRow({ children }: { children: ReactNode }) {
   const rtl = dir === "rtl";
   return (
     <div className="relative z-10 h-12 overflow-hidden">
-      <div className="mx-auto flex h-12 w-full max-w-[1240px] items-center gap-2 overflow-x-auto px-3 [scrollbar-width:none]  [&::-webkit-scrollbar]:hidden">
+      <div className="mx-auto flex h-12 w-full max-w-[1240px] items-center gap-2 overflow-x-auto px-[var(--page-x)] [scrollbar-width:none]  [&::-webkit-scrollbar]:hidden">
         {Children.map(children, (child, index) =>
           isValidElement<{ index?: number; rtl?: boolean }>(child)
             ? cloneElement(child, { index, rtl })

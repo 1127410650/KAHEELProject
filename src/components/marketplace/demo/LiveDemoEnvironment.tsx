@@ -143,8 +143,8 @@ export function LiveDemoEnvironment() {
         )}
       </div>
 
-      <main className="mx-auto w-full max-w-[1240px] space-y-5 px-4 py-4 sm:px-5 sm:py-6 lg:px-8">
-        <section className="relative overflow-hidden rounded-[30px] bg-[#071d46] px-5 py-7 text-white shadow-[0_22px_54px_rgb(7_29_70/0.23)] sm:px-8 sm:py-9 lg:px-10">
+      <main className="mx-auto w-full max-w-[1240px] space-y-5 px-[var(--page-x)] py-4 sm:py-6">
+        <section className="relative overflow-hidden rounded-[30px] bg-[#071d46] px-5 py-7 text-white shadow-[0_22px_54px_rgb(7_29_70/0.23)] sm:py-9">
           <div className="absolute -end-16 -top-24 size-72 rounded-full bg-[#1685ff]/30 blur-3xl" />
           <div className="absolute -bottom-24 start-[25%] size-64 rounded-full bg-cyan-300/15 blur-3xl" />
           <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_0.78fr]">
@@ -269,7 +269,7 @@ export function LiveDemoEnvironment() {
           className="overflow-hidden rounded-[30px] bg-white shadow-[0_18px_50px_rgb(15_23_42/0.10)] ring-1 ring-slate-200"
         >
           <div
-            className={`relative overflow-hidden bg-gradient-to-br ${tone.hero} px-5 py-6 text-white sm:px-7`}
+            className={`relative overflow-hidden bg-gradient-to-br ${tone.hero} px-5 py-6 text-white`}
           >
             <div className="absolute -end-14 -top-16 size-48 rounded-full bg-white/10 blur-2xl" />
             <div className="relative flex flex-wrap items-start gap-4">

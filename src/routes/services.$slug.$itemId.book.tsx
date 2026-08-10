@@ -102,7 +102,7 @@ function ServiceBookingPage() {
   if (context.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-4xl space-y-4 px-4 py-6">
+        <div className="mx-auto w-full max-w-4xl space-y-4 px-[var(--page-x)] py-6">
           <Skeleton className="h-32 rounded-[var(--r-card)]" />
           <Skeleton className="h-96 rounded-[var(--r-card)]" />
         </div>
@@ -114,7 +114,7 @@ function ServiceBookingPage() {
   if (!data) {
     return (
       <MarketShell>
-        <div className="mx-auto max-w-xl px-4 py-20 text-center">
+        <div className="mx-auto max-w-xl px-[var(--page-x)] py-20 text-center">
           <CalendarDays className="mx-auto size-10 text-muted-foreground" />
           <h1 className="text-page mt-3 font-black">
             {locale === "ar" ? "الخدمة غير متاحة للحجز" : "Service unavailable"}
@@ -190,7 +190,7 @@ function ServiceBookingPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-5xl px-4 py-5 sm:py-8">
+      <div className="mx-auto w-full max-w-5xl px-[var(--page-x)] py-5 sm:py-8">
         <Link
           to="/stores/$slug"
           params={{ slug }}

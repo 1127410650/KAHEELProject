@@ -116,7 +116,7 @@ function RemovalRequestPage() {
 
   return (
     <MarketShell>
-      <main className="mx-auto w-full max-w-[720px] px-4 py-6 sm:px-6">
+      <main className="mx-auto w-full max-w-[720px] px-[var(--page-x)] py-6">
         <h1 className="text-page font-black">طلب تعديل أو إزالة</h1>
         <p className="mt-1 text-desc font-bold leading-6 text-muted-foreground">
           {description}{" "}

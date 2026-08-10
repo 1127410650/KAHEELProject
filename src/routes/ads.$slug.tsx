@@ -453,7 +453,7 @@ function AdPage() {
   if (ad.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto max-w-7xl space-y-3 px-4 py-8">
+        <div className="mx-auto max-w-7xl space-y-3 px-[var(--page-x)] py-8">
           <Skeleton className="h-6 w-3/4" />
           <Skeleton className="h-5 w-32" />
           <Skeleton className="aspect-[16/10] w-full rounded-xl" />
@@ -465,7 +465,7 @@ function AdPage() {
   if (!ad.data) {
     return (
       <MarketShell>
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <div className="mx-auto max-w-3xl px-[var(--page-x)] py-20 text-center">
           <h1 className="text-page font-bold text-foreground">{t("market.ad.notFound")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
@@ -513,7 +513,7 @@ function AdPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto grid w-full max-w-7xl gap-6 px-3 pb-6 pt-5 sm:px-4 sm:py-6 lg:grid-cols-[1fr_340px] lg:pb-6">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 px-[var(--page-x)] pb-6 pt-5 sm:py-6 lg:grid-cols-[1fr_340px] lg:pb-6">
         <article className="min-w-0">
           {!visible && (
             <div className="mb-3 rounded-xl border border-border bg-secondary p-3">

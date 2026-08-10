@@ -231,7 +231,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
                   <p className="mt-1 line-clamp-2 text-desc leading-4 text-white/75 sm:text-desc sm:leading-5">{template.description}</p>
                   <div className="mt-[var(--sp-3)] flex flex-wrap gap-1">
                     {template.features.slice(0, 3).map((feature) => (
-                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-[var(--sp-2)] py-0.5 text-desc font-medium sm:px-2 sm:py-1 sm:text-desc">
+                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-[var(--sp-2)] py-0.5 text-desc font-medium sm:py-1 sm:text-desc">
                         {feature}
                       </span>
                     ))}

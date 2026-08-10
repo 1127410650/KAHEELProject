@@ -24,7 +24,7 @@ function DemoStoreWorldPage() {
   if (!world) {
     return (
       <MarketShell>
-        <main className="mx-auto flex min-h-[55vh] w-full max-w-xl flex-col items-center justify-center px-5 text-center">
+        <main className="mx-auto flex min-h-[55vh] w-full max-w-xl flex-col items-center justify-center px-[var(--page-x)] text-center">
           <Layers3 className="size-10 text-muted-foreground" aria-hidden />
           <h1 className="text-page mt-4 font-black text-foreground">هذا العالم غير موجود</h1>
           <p className="mt-2 text-sm text-muted-foreground">ارجع إلى الرئيسية واختر عالمًا آخر من عوالم المتاجر.</p>
@@ -47,7 +47,7 @@ function DemoStoreWorldPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/48 to-black/5" aria-hidden />
           <div className={`absolute inset-0 bg-gradient-to-br ${world.gradient} opacity-32 mix-blend-color`} aria-hidden />
 
-          <div className="market-hero-band relative mx-auto flex min-h-[180px] w-full max-w-[1240px] flex-col justify-end px-5 sm:min-h-[220px] sm:px-[var(--page-x)]">
+          <div className="market-hero-band relative mx-auto flex min-h-[180px] w-full max-w-[1240px] flex-col justify-end px-[var(--page-x)] sm:min-h-[220px]">
             <Link to="/" className="mb-auto inline-flex w-fit items-center gap-[var(--sp-2)] rounded-full border border-white/25 bg-black/20 px-3 py-[var(--sp-2)] text-desc font-bold text-white backdrop-blur-md">
               <ArrowRight className="size-3.5" aria-hidden />
               جميع العوالم
@@ -64,7 +64,7 @@ function DemoStoreWorldPage() {
               <Link
                 to="/business/store/new"
                 search={{ theme: demoWorldThemeId(world.id) }}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white px-4 text-desc font-black text-slate-950 shadow-lg sm:min-h-11 sm:px-5 sm:text-sm"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white px-4 text-desc font-black text-slate-950 shadow-lg sm:min-h-11 sm:text-sm"
               >
                 <Plus className="size-4" aria-hidden />
                 أنشئ متجرًا بهذا الأسلوب
@@ -77,7 +77,7 @@ function DemoStoreWorldPage() {
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-[1240px] px-4 py-5 sm:px-5 sm:py-8 lg:px-8">
+        <section className="mx-auto w-full max-w-[1240px] px-[var(--page-x)] py-5 sm:py-8">
           <div className="mb-3">
             <span className="text-desc font-bold text-primary sm:text-desc">نماذج داخلية جاهزة</span>
             <h2 className="mt-0.5 text-section font-black text-foreground sm:text-3xl">متاجر داخل {world.title}</h2>
@@ -124,7 +124,7 @@ function DemoStoreWorldPage() {
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-[1240px] px-4 pb-3 ">
+        <section className="mx-auto w-full max-w-[1240px] px-[var(--page-x)] pb-3 ">
           <div className="rounded-[1.35rem] border border-border bg-card p-4 shadow-panel sm:p-5">
             <div className="flex items-end justify-between gap-3">
               <div>

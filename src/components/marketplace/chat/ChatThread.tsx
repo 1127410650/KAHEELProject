@@ -136,7 +136,7 @@ export function ChatThread({
           <div className="space-y-4">
             {groups.map((group) => (
               <section key={group.key} aria-label={group.label}>
-                <p className="mx-auto mb-3 w-fit rounded-full bg-background px-3 py-1 text-desc font-medium text-muted-foreground shadow-sm">
+                <p className="mx-auto mb-3 w-fit rounded-full bg-background px-[var(--page-x)] py-1 text-desc font-medium text-muted-foreground shadow-sm">
                   {group.label}
                 </p>
                 <ul className="flex flex-col gap-2">

@@ -46,7 +46,7 @@ function StudentToolsPage() {
   return (
     <MarketShell>
       <main className="min-h-screen bg-[linear-gradient(180deg,var(--secondary)_0%,var(--background)_24rem)] pb-8">
-        <section className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 sm:py-8">
+        <section className="mx-auto w-full max-w-3xl px-[var(--page-x)] py-5 sm:py-8">
           <Link
             to="/"
             className="mb-4 inline-flex min-h-9 items-center gap-1 rounded-full border border-border bg-card px-3 text-desc font-black text-muted-foreground shadow-sm sm:text-desc"
@@ -56,7 +56,7 @@ function StudentToolsPage() {
           </Link>
 
           <div className="overflow-hidden rounded-[1.6rem] border border-border bg-card shadow-panel">
-            <div className="relative overflow-hidden border-b border-border bg-background px-5 py-6 text-foreground sm:px-7 sm:py-8">
+            <div className="relative overflow-hidden border-b border-border bg-background px-5 py-6 text-foreground sm:py-8">
               <div className="relative flex items-start gap-3">
                 <span className="grid size-12 shrink-0 place-items-center rounded-[var(--r-card)] border border-border bg-accent text-primary">
                   <GraduationCap className="size-6" aria-hidden />

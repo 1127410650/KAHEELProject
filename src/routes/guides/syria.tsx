@@ -135,7 +135,7 @@ function SyriaGuidePage() {
 
 
         <section className="sticky top-[56px] z-20 border-b border-border/70 bg-background/95 shadow-sm backdrop-blur">
-          <div className="mx-auto w-full max-w-[1240px] space-y-[var(--sp-3)] px-4 py-3 sm:px-[var(--page-x)]">
+          <div className="mx-auto w-full max-w-[1240px] space-y-[var(--sp-3)] px-[var(--page-x)] py-3">
             <label className="relative block" htmlFor="syria-guide-search">
               <Search
                 className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -208,11 +208,11 @@ function SyriaGuidePage() {
           </div>
         </section>
 
-        <div className="mx-auto w-full max-w-[1240px] px-4 pt-4 sm:px-[var(--page-x)]">
+        <div className="mx-auto w-full max-w-[1240px] px-[var(--page-x)] pt-4">
           <GuideDirectoryNotice />
         </div>
 
-        <section className="mx-auto w-full max-w-[1240px] px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+        <section className="mx-auto w-full max-w-[1240px] px-[var(--page-x)] py-5 sm:py-7">
           {places.isLoading ? (
             <div className="grid grid-cols-1 gap-[var(--sp-4)] sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, index) => (

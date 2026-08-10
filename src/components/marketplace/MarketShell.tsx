@@ -351,7 +351,7 @@ export function MarketCompactFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
-      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-4 text-desc text-muted-foreground lg:px-6">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-[var(--page-x)] py-4 text-desc text-muted-foreground">
         <p>{t("market.footer.rights")}</p>
         {(
           [

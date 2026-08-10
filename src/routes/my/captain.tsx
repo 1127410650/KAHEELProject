@@ -145,7 +145,7 @@ function CaptainPage() {
   if (!session) {
     return (
       <DashboardShell title={title}>
-        <p className="mx-auto max-w-md px-3 pt-6 text-center text-desc text-muted-foreground">
+        <p className="mx-auto max-w-md px-[var(--page-x)] pt-6 text-center text-desc text-muted-foreground">
           {ar ? "سجّل دخولك أولًا." : "Sign in first."}
         </p>
       </DashboardShell>
@@ -155,7 +155,7 @@ function CaptainPage() {
   if (captainQuery.isLoading) {
     return (
       <DashboardShell title={title}>
-        <div className="mx-auto w-full max-w-2xl px-3 pt-3">
+        <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pt-3">
           <Skeleton className="h-[180px] rounded-[var(--r-card)]" />
         </div>
       </DashboardShell>
@@ -166,7 +166,7 @@ function CaptainPage() {
   if (!captain) {
     return (
       <DashboardShell title={title}>
-        <form onSubmit={apply} className="mx-auto grid w-full max-w-md gap-2 px-3 pb-24 pt-3">
+        <form onSubmit={apply} className="mx-auto grid w-full max-w-md gap-2 px-[var(--page-x)] pb-24 pt-3">
           <div className="rounded-[var(--r-card)] border border-primary/25 bg-primary/5 p-3 text-desc text-foreground">
             {ar
               ? "سجّل كابتن وجيب طلبات الناس. بعد اعتماد الإدارة تشوف الطلبات المفتوحة وتقدّم عرضك."
@@ -218,7 +218,7 @@ function CaptainPage() {
 
   return (
     <DashboardShell title={title}>
-      <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+      <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
         {/* بطاقة الكابتن */}
         <section className="mb-3 rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
           <div className="flex items-center justify-between gap-2">
