@@ -62,6 +62,7 @@ import { Route as BusinessProfileRouteImport } from './routes/business/profile'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
+import { Route as GuidesRemovalRequestRouteImport } from './routes/guides/removal-request'
 import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -376,6 +377,11 @@ const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
   path: '/demo-stores/$worldId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesRemovalRequestRoute = GuidesRemovalRequestRouteImport.update({
+  id: '/guides/removal-request',
+  path: '/guides/removal-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesStudentsRoute = GuidesStudentsRouteImport.update({
   id: '/guides/students',
   path: '/guides/students',
@@ -673,6 +679,7 @@ export interface FileRoutesByFullPath {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/removal-request': typeof GuidesRemovalRequestRoute
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -773,6 +780,7 @@ export interface FileRoutesByTo {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/removal-request': typeof GuidesRemovalRequestRoute
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -877,6 +885,7 @@ export interface FileRoutesById {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/removal-request': typeof GuidesRemovalRequestRoute
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -982,6 +991,7 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/removal-request'
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
@@ -1082,6 +1092,7 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/removal-request'
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
@@ -1185,6 +1196,7 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/removal-request'
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
@@ -1263,6 +1275,7 @@ export interface RootRouteChildren {
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
+  GuidesRemovalRequestRoute: typeof GuidesRemovalRequestRoute
   GuidesStudentsRoute: typeof GuidesStudentsRoute
   GuidesSyriaRoute: typeof GuidesSyriaRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -1650,6 +1663,13 @@ declare module '@tanstack/react-router' {
       path: '/demo-stores/$worldId'
       fullPath: '/demo-stores/$worldId'
       preLoaderRoute: typeof DemoStoresWorldIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/removal-request': {
+      id: '/guides/removal-request'
+      path: '/guides/removal-request'
+      fullPath: '/guides/removal-request'
+      preLoaderRoute: typeof GuidesRemovalRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guides/students': {
@@ -2180,6 +2200,7 @@ const rootRouteChildren: RootRouteChildren = {
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
+  GuidesRemovalRequestRoute: GuidesRemovalRequestRoute,
   GuidesStudentsRoute: GuidesStudentsRoute,
   GuidesSyriaRoute: GuidesSyriaRoute,
   InviteTokenRoute: InviteTokenRoute,
