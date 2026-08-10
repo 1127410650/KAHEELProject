@@ -312,13 +312,12 @@
   }
 
   /* Touch targets: every interactive control keeps a 44px hit area. */
-  button, a[href], [role="button"], summary, label[for] {
+  button:not([data-inline]), [role="button"]:not([data-inline]), summary {
     min-height: 44px;
   }
 
-  /* Inline links and text buttons inside prose keep their natural flow. */
-  p button, p a[href], span button, span a[href], li a[href],
-  button.inline-flex.min-h-0, a.inline-flex.min-h-0 {
+  /* Inline text buttons inside prose keep their natural flow. */
+  p button, span button, label button {
     min-height: 0;
   }
 
