@@ -4796,6 +4796,42 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_mascot_phrases: {
+        Row: {
+          character: string
+          created_at: string
+          id: string
+          is_active: boolean
+          link_path: string | null
+          sort: number
+          text_ar: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          character: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          link_path?: string | null
+          sort?: number
+          text_ar: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          character?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          link_path?: string | null
+          sort?: number
+          text_ar?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       mkt_media_slot_drafts: {
         Row: {
           patch: Json
