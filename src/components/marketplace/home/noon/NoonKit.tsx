@@ -75,7 +75,7 @@ export function LazyMount({
             observer.disconnect();
           }
       },
-      { rootMargin: "600px 0px" },
+      { rootMargin: "1400px 0px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
