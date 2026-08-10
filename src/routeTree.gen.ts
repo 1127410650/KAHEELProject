@@ -38,6 +38,7 @@ import { Route as AdminApplicationsRouteImport } from './routes/admin/applicatio
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
+import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
 import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
@@ -269,6 +270,11 @@ const AdminBusinessesRoute = AdminBusinessesRouteImport.update({
 const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
   id: '/campaigns',
   path: '/campaigns',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -740,6 +746,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
@@ -854,6 +861,7 @@ export interface FileRoutesByTo {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
@@ -973,6 +981,7 @@ export interface FileRoutesById {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
@@ -1093,6 +1102,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/campaigns'
+    | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/designs'
     | '/admin/errands'
@@ -1207,6 +1217,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/campaigns'
+    | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/designs'
     | '/admin/errands'
@@ -1325,6 +1336,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/businesses'
     | '/admin/campaigns'
+    | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/designs'
     | '/admin/errands'
@@ -1663,6 +1675,13 @@ declare module '@tanstack/react-router' {
       path: '/campaigns'
       fullPath: '/admin/campaigns'
       preLoaderRoute: typeof AdminCampaignsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/dashboard': {
@@ -2284,6 +2303,7 @@ interface AdminRouteRouteChildren {
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminDesignsRoute: typeof AdminDesignsRoute
   AdminErrandsRoute: typeof AdminErrandsRoute
@@ -2325,6 +2345,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminDesignsRoute: AdminDesignsRoute,
   AdminErrandsRoute: AdminErrandsRoute,
