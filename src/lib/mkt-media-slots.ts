@@ -13,6 +13,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { compressToWebp } from "@/lib/media-compress";
+import { stampImageBlob, type BrandStampOptions } from "@/lib/kaheel-brand-stamp";
+import { activeRotationTemplateId } from "@/lib/mkt-slot-rotation";
+
 
 export const MEDIA_SLOT_BUCKET = "mkt-media";
 export const MEDIA_SLOT_PREFIX = "public/media-slots";
