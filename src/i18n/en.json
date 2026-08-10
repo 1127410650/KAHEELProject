@@ -3853,7 +3853,9 @@
       "mascots": "Mascot preview",
       "errands": "Errands service",
       "guideRequests": "Guide edit/removal requests",
-      "guideClaims": "Guide ownership claims"
+      "guideClaims": "Guide ownership claims",
+      "appearance": "Appearance & media",
+      "pageVariants": "Page layouts"
     },
     "alerts": {
       "title": "Alerts",
