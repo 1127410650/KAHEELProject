@@ -83,7 +83,10 @@ interface Scene {
   kind: RoamScene;
   copy: string;
   band: SafeBand;
+  /** سطوع المكان لحظة الظهور — يحدّد لون النص وظلّه. */
+  tone: AreaTone;
 }
+
 
 export function MascotRoam() {
   const { locale } = useI18n();
