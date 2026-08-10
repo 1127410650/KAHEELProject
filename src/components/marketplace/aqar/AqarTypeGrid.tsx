@@ -1,5 +1,6 @@
 /**
- * بطاقات أنواع العقار: صورة خلفية مع اسم النوع بخط أبيض كبير فوقها.
+ * بطاقات أنواع العقار: فسيفساء عمودين — البطاقة الأولى تأخذ العمودين،
+ * والباقي بنسبة 4:3. النسب مثبّتة (aspect) فلا إزاحة تخطيط عند تحميل الصور.
  * الصور تأتي من `src/lib/aqar-imagery.ts` (قابلة للتعديل من الإعدادات).
  */
 
@@ -18,37 +19,38 @@ export function AqarTypeGrid({
   counts: Record<string, number>;
 }) {
   return (
-    <section className="px-4 py-3">
-      <h2 className="mb-2 text-section font-extrabold text-foreground">تصفّح حسب نوع العقار</h2>
+    <section className="mt-7 px-4">
+      <h2 className="mb-3 text-section font-extrabold text-foreground">تصفّح حسب نوع العقار</h2>
       <ul className="grid grid-cols-2 gap-3">
-        {types.map((card) => {
+        {types.map((card, index) => {
           const total = [card.key, ...(card.also ?? [])].reduce(
             (sum, key) => sum + (counts[key] ?? 0),
             0,
           );
+          const wide = index === 0;
           return (
-            <li key={card.key} className={card.wide ? "col-span-2" : ""}>
+            <li key={card.key} className={wide ? "col-span-2" : ""}>
               <Link
                 to="/aqar/browse"
                 search={{ track, type: card.key }}
-                className="k-lift relative block overflow-hidden rounded-2xl border border-border"
+                className={`k-lift group relative block overflow-hidden rounded-2xl ${
+                  wide ? "aspect-[16/8]" : "aspect-[4/3]"
+                }`}
               >
                 <img
                   src={card.image}
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  className={`w-full object-cover ${card.wide ? "h-36" : "h-28"}`}
+                  className="absolute inset-0 size-full object-cover transition duration-300 group-hover:scale-[1.03]"
                 />
                 {/* تعتيم متدرّج يضمن تباين النص الأبيض 4.5:1 فوق أي صورة. */}
-                <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
-                <span className="absolute inset-x-3 bottom-2 flex items-end justify-between gap-2">
-                  <strong className="text-section font-extrabold text-white drop-shadow-md">
-                    {card.label}
-                  </strong>
-                  <span className="rounded-full bg-white/90 px-2 py-0.5 text-nav font-bold text-foreground">
-                    {total.toLocaleString("en-US")}
-                  </span>
+                <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+                <strong className="absolute bottom-2.5 end-3 text-section font-extrabold text-white drop-shadow-md">
+                  {card.label}
+                </strong>
+                <span className="absolute bottom-2.5 start-3 rounded-full bg-white/90 px-2.5 py-0.5 text-nav font-bold text-foreground">
+                  {total.toLocaleString("en-US")}
                 </span>
               </Link>
             </li>
