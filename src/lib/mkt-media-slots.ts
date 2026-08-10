@@ -28,6 +28,8 @@ export interface MediaSlotRow {
   group_key: string | null;
   kind: string;
   path: string | null;
+  /** النسخة الأصلية بلا ختم كَحيل — تُحفظ بجانب المختومة. */
+  path_original: string | null;
   external_url: string | null;
   title_ar: string | null;
   subtitle_ar: string | null;
@@ -59,12 +61,20 @@ export interface MediaSlotRow {
   tile_size: string | null;
   link_path: string | null;
   template_id: string | null;
+  /** التدوير الزمني بين عدة تصاميم من المكتبة. */
+  rotate_enabled: boolean;
+  rotate_period: string | null;
+  rotate_template_ids: string[] | null;
+  rotate_started_at: string | null;
 }
 
 export interface MediaSlot extends MediaSlotRow {
   /** الرابط الجاهز للعرض — `null` يعني «استخدم الاحتياطي». */
   url: string | null;
+  /** رابط النسخة الأصلية غير المختومة، إن وُجدت. */
+  originalUrl: string | null;
 }
+
 
 /** أقسام الفتحات كما تظهر في شاشة الإدارة. */
 export const MEDIA_SECTION_LABELS: Record<string, string> = {
