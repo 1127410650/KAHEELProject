@@ -1,6 +1,7 @@
 // نافذة اختيار الموقع على خريطة OpenStreetMap بملء الشاشة.
 // الخريطة (Leaflet ‎≈145KB) تُحمَّل كسولًا هنا فقط — لا شيء منها في الصفحة الرئيسية.
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ClientOnly } from "@tanstack/react-router";
 import { Check, Crosshair, Loader2, MapPin, X } from "lucide-react";
 import { toast } from "sonner";
@@ -105,7 +106,8 @@ export function MapPickerDialog({ open, onOpenChange, initial, onConfirm }: Prop
 
   const accuracyText = accuracyLabel(accuracy);
 
-  return (
+  // النافذة تُحمل في body: لوحة الموقع (z-50) لا تعترض لمساتها.
+  return createPortal(
     <div
       dir={dir}
       role="dialog"
