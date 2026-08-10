@@ -492,12 +492,92 @@ function DesignsPage() {
                   >
                     {row.is_active ? "إخفاء" : "تشغيل"}
                   </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-1.5"
+                    onClick={() => {
+                      setVariations(generateVariations(row, lib.data));
+                      setVariationSource(row.name_ar);
+                      toast.success(`وُلّدت ${VARIATION_COUNT.toLocaleString("en-US")} تنويعة — احفظ ما يعجبك.`);
+                    }}
+                  >
+                    <Sparkles className="size-4" aria-hidden />
+                    ولّد تنويعات
+                  </Button>
                 </div>
               </li>
             ))}
           </ul>
         )}
       </section>
+
+      {variations.length > 0 ? (
+        <section aria-labelledby="variations" className="mt-6">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="variations" className="text-section font-extrabold text-foreground">
+              تنويعات «{variationSource}»
+              <span className="ms-2 num text-nav font-bold text-muted-foreground">
+                {variations.length.toLocaleString("en-US")}
+              </span>
+            </h2>
+            <Button size="sm" variant="outline" onClick={() => setVariations([])}>
+              إهمال الباقي
+            </Button>
+          </div>
+          <p className="mb-3 text-desc text-muted-foreground">
+            كل تنويعة تحمل ختم اسم كَحيل تلقائيًا. احفظ ما يعجبك في «تصاميمي» ثم اربطه بأي فتحة من
+            وضع التحرير — والباقي يُهمل بلا أثر.
+          </p>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {variations.map((row) => (
+              <li key={row.id} className="space-y-2 rounded-2xl border border-border bg-card p-2.5">
+                <DesignCard template={row} library={lib.data} />
+                <p className="text-desc font-bold text-foreground">{row.name_ar}</p>
+                <Button
+                  size="sm"
+                  disabled={busy}
+                  onClick={() =>
+                    void (async () => {
+                      setBusy(true);
+                      try {
+                        await saveDesignTemplate(null, variationPatch(row));
+                        refresh();
+                        setVariations((prev) => prev.filter((item) => item.id !== row.id));
+                        toast.success("حُفظت التنويعة في «تصاميمي».");
+                      } catch {
+                        toast.error("تعذّر حفظ التنويعة.");
+                      } finally {
+                        setBusy(false);
+                      }
+                    })()
+                  }
+                >
+                  حفظ في تصاميمي
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <section
+        aria-labelledby="ai-notice"
+        className="mt-6 rounded-2xl border border-border bg-muted/40 p-3"
+      >
+        <h2 id="ai-notice" className="text-desc font-extrabold text-foreground">
+          توليد صور جديدة كليًا بالذكاء الاصطناعي غير مفعّل — يتطلب اشتراك خدمة خارجية
+        </h2>
+        <p className="mt-1 text-desc text-muted-foreground">
+          المولّد الحالي يعمل على مكتبات المشروع نفسها (ألوان الهوية، الأشكال، التخطيطات) بلا أي
+          خدمة خارجية. مكان التفعيل جاهز أدناه ويُفتح بقرار المالك فقط.
+        </p>
+        <Button size="sm" variant="outline" className="mt-2 gap-1.5" disabled>
+          <Sparkles className="size-4" aria-hidden />
+          توليد بالذكاء الاصطناعي (معطّل)
+        </Button>
+      </section>
+
     </AdminShell>
   );
 }
