@@ -113,12 +113,12 @@ export async function createCategory(input: {
   sortOrder?: number;
 }): Promise<string> {
   const { data, error } = await supabase.rpc("mkt_admin_category_upsert", {
-    _parent_id: input.parentId,
+    ...(input.parentId ? { _parent_id: input.parentId } : {}),
     _slug: input.slug,
     _name_ar: input.nameAr,
-    _name_en: input.nameEn ?? input.nameAr,
-    _icon: input.icon ?? undefined,
-    _tagline_ar: input.taglineAr ?? undefined,
+    _name_en: input.nameEn || input.nameAr,
+    ...(input.icon ? { _icon: input.icon } : {}),
+    ...(input.taglineAr ? { _tagline_ar: input.taglineAr } : {}),
     _sort_order: input.sortOrder ?? 0,
   });
   if (error) throw error;
@@ -135,9 +135,9 @@ export async function renameCategory(input: {
   const { error } = await supabase.rpc("mkt_admin_category_upsert", {
     _id: input.id,
     _name_ar: input.nameAr,
-    _name_en: input.nameEn ?? undefined,
-    _tagline_ar: input.taglineAr ?? undefined,
-    _sort_order: input.sortOrder ?? undefined,
+    ...(input.nameEn ? { _name_en: input.nameEn } : {}),
+    ...(input.taglineAr ? { _tagline_ar: input.taglineAr } : {}),
+    ...(typeof input.sortOrder === "number" ? { _sort_order: input.sortOrder } : {}),
   });
   if (error) throw error;
 }
