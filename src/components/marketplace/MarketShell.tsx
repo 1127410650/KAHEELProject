@@ -8,7 +8,6 @@ import {
   MapPin,
   MessageCircle,
   MoreHorizontal,
-  Search,
   Tag,
 } from "lucide-react";
 
@@ -24,7 +23,7 @@ import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
-import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
+import { CollapsingHomeHeader } from "@/components/marketplace/home/noon/CollapsingHomeHeader";
 
 
 
@@ -33,12 +32,6 @@ import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
 import kaheelLogo from "@/assets/kaheel-logo.png";
 import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
-
-/** أبعاد هيدر الرئيسية بالبكسل — ثابتة كي تبقى المساحة المحجوزة أدناه ثابتة. */
-const HOME_ROW_H = 44;
-const HOME_NAV_H = 34;
-const HOME_SEARCH_H = 58;
-const HOME_HEADER_H = HOME_ROW_H + HOME_NAV_H + HOME_SEARCH_H;
 
 export function MarketHeader({
 
@@ -53,14 +46,6 @@ export function MarketHeader({
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
-  /**
-   * الهيدر المتكيّف (الرئيسية فقط): ينكمش **تدريجيًا** مع حركة الإصبع — لا قفزة
-   * بين حالتين. `shrink` قيمة متصلة من 0 (كامل) إلى 1 (شريط البحث فقط)، تتقدّم
-   * بمقدار التمرير لأسفل وتعود إلى الصفر فورًا مع أول سحب لأعلى.
-   * المساحة المحجوزة أسفل الهيدر ثابتة على ارتفاع الحالة الكاملة ⇒ صفر هزّة.
-   */
-  const [shrink, setShrink] = useState(0);
-  const shrinkRef = useRef(0);
 
   const [locationOpen, setLocationOpenState] = useState(false);
 
@@ -107,45 +92,39 @@ export function MarketHeader({
     return () => observer.disconnect();
   }, [home]);
 
-  useEffect(() => {
-    if (!home) return;
-    let last = window.scrollY;
-    let frame = 0;
-    /** مسافة التمرير اللازمة للانكماش الكامل — تجعل الحركة متدرّجة مع الإصبع. */
-    const RANGE = 90;
-    const onScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        const y = window.scrollY;
-        const delta = y - last;
-        last = y;
-        let next = shrinkRef.current;
-        if (y <= 8) next = 0;
-        else if (delta > 0) next = Math.min(1, shrinkRef.current + delta / RANGE);
-        else if (delta < 0) next = 0; // أول سحب لأعلى يعيد الهيدر كاملًا فورًا
-        if (Math.abs(next - shrinkRef.current) > 0.003) {
-          shrinkRef.current = next;
-          setShrink(next);
-        }
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [home]);
 
-  const collapsedEnough = home && shrink > 0.6;
-
+  if (home) {
+    return (
+      <>
+        <CollapsingHomeHeader
+          locationLabel={locationLabel}
+          locationKnown={locationKnown}
+          onLocation={() => setLocationOpen(true)}
+          addHref={addHref}
+          unreadCount={unreadAlerts.data ?? 0}
+          notificationsHref={
+            session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
+          }
+          extra={
+            session && offline ? (
+              <div className="relative z-10 border-t border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground">
+                {t("market.offlineNotice")}
+              </div>
+            ) : null
+          }
+        />
+        {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
+      </>
+    );
+  }
 
   return (
+
     <>
       <header
         ref={headerRef}
         data-kslot="home.header"
-        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-white shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)]"
+        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)]"
       >
         {/* زخرفة خطية بيضاء خفيفة — بلا أي تأثير على القياسات. */}
         <div
@@ -161,176 +140,43 @@ export function MarketHeader({
           className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(74_38_128/0.35)] sm:block"
         />
 
-        {/* صف الهوية: الشعار + الموقع + إنشاء إعلان — يتقلّص تدريجيًا مع التمرير. */}
+        {/* صف الهوية: الشعار + الموقع + إنشاء إعلان. */}
         <div
-          className={`relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-3 sm:px-5 lg:px-8 ${
-            collapsedEnough ? "pointer-events-none" : ""
-          }`}
-          style={
-            home
-              ? { height: `${HOME_ROW_H * (1 - shrink)}px`, opacity: 1 - shrink }
-              : { minHeight: "44px" }
-          }
+          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-3 sm:px-5 lg:px-8"
+          style={{ minHeight: "44px" }}
         >
+          <Link
+            to="/"
+            className="flex shrink-0 items-center gap-1.5"
+            aria-label={t("market.brand")}
+          >
+            <img
+              src={kaheelLogo}
+              alt=""
+              width={1024}
+              height={1024}
+              loading="lazy"
+              className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
+              aria-hidden
+            />
+            <span className="text-lg font-black leading-none text-foreground sm:text-xl">
+              {t("market.brand")}
+            </span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setLocationOpen(true)}
+            className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
+          >
+            <MapPin className="size-4 shrink-0" aria-hidden />
+            <span className="max-w-[12rem] truncate text-desc font-semibold sm:text-sm">
+              {locationLabel}
+            </span>
+          </button>
 
-
-
-          {home ? (
-            <>
-              <button
-                type="button"
-                onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-                aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
-              >
-                <MapPin className="size-4 shrink-0" aria-hidden />
-                {/* سطر واحد بلا التفاف: المدينة والحي فقط. */}
-                <strong
-                  className={
-                    locationKnown
-                      ? "min-w-0 truncate whitespace-nowrap text-desc font-black leading-tight"
-                      : "min-w-0 truncate whitespace-nowrap text-desc font-black leading-tight text-primary underline decoration-dotted underline-offset-2"
-                  }
-                >
-                  {locationLabel}
-                </strong>
-              </button>
-
-              <Link
-                to="/"
-                className="flex items-center gap-1.5 justify-self-center"
-                aria-label={t("market.brand")}
-              >
-                <img
-                  src={kaheelLogo}
-                  alt=""
-                  width={1024}
-                  height={1024}
-                  loading="lazy"
-                  className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
-                  aria-hidden
-                />
-                <span className="text-lg font-black leading-none text-foreground sm:text-xl">
-                  {t("market.brand")}
-                </span>
-
-              </Link>
-              <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
-                <a
-                  href={
-                    session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
-                  }
-                  className="relative grid size-8 place-items-center rounded-full text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45"
-                  aria-label={t("market.bottomNav.alerts")}
-                >
-                  <Bell className="size-[18px]" aria-hidden />
-                  {(unreadAlerts.data ?? 0) > 0 && (
-                    <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-desc font-bold leading-5 text-white">
-                      {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
-                    </span>
-                  )}
-                </a>
-                <AddListingButton href={addHref} />
-              </div>
-
-            </>
-          ) : (
-            <>
-              <Link
-                to="/"
-                className="flex shrink-0 items-center gap-1.5"
-                aria-label={t("market.brand")}
-              >
-                <img
-                  src={kaheelLogo}
-                  alt=""
-                  width={1024}
-                  height={1024}
-                  loading="lazy"
-                  className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
-                  aria-hidden
-                />
-                <span className="text-lg font-black leading-none text-foreground sm:text-xl">
-                  {t("market.brand")}
-                </span>
-              </Link>
-              <button
-                type="button"
-                onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-                aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
-              >
-                <MapPin className="size-4 shrink-0" aria-hidden />
-                <span className="max-w-[12rem] truncate text-desc font-semibold sm:text-sm">
-                  {locationLabel}
-                </span>
-              </button>
-
-              <AddListingButton href={addHref} className="justify-self-end" />
-
-            </>
-          )}
+          <AddListingButton href={addHref} className="justify-self-end" />
         </div>
-        {home && (
-          <nav
-            aria-label={t("market.nav.menu")}
-            className={`overflow-hidden border-t border-white/25 bg-transparent ${
-              collapsedEnough ? "pointer-events-none" : ""
-            }`}
-            style={{ height: `${HOME_NAV_H * (1 - shrink)}px`, opacity: 1 - shrink }}
-          >
-            <div className="mx-auto flex h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
-
-              {[
-                [t("market.bottomNav.home"), "/"],
-                [t("market.homeV2.fields.restaurants.title"), "/search?category=restaurants"],
-                [t("market.homeV2.fields.groceries.title"), "/search?domain=product"],
-                [t("market.homeV2.fields.realEstate.title"), "/search?category=real-estate"],
-                [t("market.homeV2.fields.cars.title"), "/search?category=cars"],
-                [t("market.homeV2.filters.services"), "/services"],
-              ].map(([label, href], index) => (
-                <a
-                  key={href}
-                  href={href}
-                  className={
-                    index === 0
-                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-primary px-3.5 text-desc font-black text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
-                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-desc font-bold text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
-
-                  }
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
-          </nav>
-        )}
-        {home && (
-          /* صف البحث: يبقى دائمًا ظاهرًا — وهو وحده ما يتبقّى بعد الانكماش.
-             عند الانكماش يصبح الضغط عليه صعودًا سلسًا لأعلى الصفحة. */
-          <div
-            className="relative z-10 mx-auto flex w-full max-w-[1240px] items-center px-3 sm:px-5 lg:px-8"
-            style={{ height: `${HOME_SEARCH_H}px` }}
-          >
-            {collapsedEnough ? (
-              <button
-                type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                aria-label={t("market.homeV2.searchPlaceholder" as "market.brand")}
-                className="flex h-11 w-full items-center gap-2.5 rounded-full border border-border bg-card px-4 text-start text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
-              >
-                <Search className="size-[18px] shrink-0" aria-hidden />
-                <span className="truncate text-desc font-semibold">
-                  {t("market.homeV2.searchPlaceholder" as "market.brand")}
-                </span>
-              </button>
-            ) : (
-              <div className="w-full">
-                <BigSearchField />
-              </div>
-            )}
-          </div>
-        )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
           <div className="border-t border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground sm:text-desc">
@@ -343,22 +189,11 @@ export function MarketHeader({
         className={
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
-          home
-            ? undefined
-
-            : showCategories
-              ? "h-[11.25rem] sm:h-[11.75rem]"
-              : "h-[46px] sm:h-[50px]"
-
+          showCategories ? "h-[11.25rem] sm:h-[11.75rem]" : "h-[46px] sm:h-[50px]"
         }
-        style={
-          home
-            ? { height: `${HOME_HEADER_H}px` }
-            : headerHeight > 0
-              ? { height: `${headerHeight}px` }
-              : undefined
-        }
+        style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
       />
+
 
       {/* Mounted only after a tap so the sheet never costs anything on first paint. */}
       {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
