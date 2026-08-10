@@ -92,7 +92,7 @@ function AqarHomePage() {
     <AqarShell subtitle="إيجار يومي وطويل وبيع في سوريا">
       <div className="mx-auto w-full max-w-3xl">
         {/* الهيرو: صورة معلم سوري بارتفاع ثابت + حقل بحث أبيض عائم فوق حدّها السفلي. */}
-        <section className="px-4 pt-4">
+        <section className="relative px-4 pt-4">
           <div data-kslot="aqar.hero" className="relative overflow-hidden rounded-2xl border border-border">
             <img
               src={hero.image}
@@ -111,27 +111,28 @@ function AqarHomePage() {
                 {hero.name} — {hero.city}
               </span>
             </div>
-            {/* الحقل العائم: بطاقة بيضاء نصفها خارج الصورة، كما في مرجع التصميم. */}
-            <div className="absolute inset-x-4 -bottom-6">
-              <Link
-                to="/aqar/browse"
-                search={{ track }}
-                className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 shadow-lg"
-                style={{ minHeight: 56 }}
-              >
-                <Search className="size-5 shrink-0 text-primary" aria-hidden />
-                <span className="min-w-0">
-                  <strong className="block truncate text-desc font-bold text-foreground">
-                    إلى أين؟
-                  </strong>
-                  <span className="block truncate text-nav text-muted-foreground">
-                    مدينة، حي، أو نوع عقار
-                  </span>
+          </div>
+          {/* الحقل العائم: بطاقة بيضاء نصفها خارج الصورة، كما في مرجع التصميم. */}
+          <div className="absolute inset-x-7 -bottom-7">
+            <Link
+              to="/aqar/browse"
+              search={{ track }}
+              className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 shadow-lg"
+              style={{ minHeight: 60 }}
+            >
+              <Search className="size-5 shrink-0 text-primary" aria-hidden />
+              <span className="min-w-0">
+                <strong className="block truncate text-desc font-bold text-foreground">
+                  إلى أين؟
+                </strong>
+                <span className="block truncate text-nav text-muted-foreground">
+                  مدينة، حي، أو نوع عقار
                 </span>
-              </Link>
-            </div>
+              </span>
+            </Link>
           </div>
         </section>
+
 
         <div className="pt-10">
           <AqarTrackTabs track={track} onChange={setTrack} />
