@@ -175,7 +175,9 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
 
   async function verify() {
     const digits = code.replace(/\D/g, "");
-    if (digits.length !== 6) {
+    // رمز البريد المدمج قد يكون ٦ أو ٨ أرقام بحسب إعداد المشروع.
+    const expected = deliveredChannel === "email" ? [6, 8] : [6];
+    if (!expected.includes(digits.length)) {
       toast.error(t("market.easyAuth.invalidCode"));
       return;
     }
@@ -342,7 +344,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
               dir="ltr"
               inputMode="numeric"
               autoComplete="one-time-code"
-              maxLength={6}
+              maxLength={deliveredChannel === "email" ? 8 : 6}
               className="num h-12 text-center text-lg tracking-[0.4em]"
               value={code}
               onChange={(event) => setCode(event.target.value)}
