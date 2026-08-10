@@ -413,7 +413,7 @@ export function MarketBottomNav() {
         {items.map((item) => {
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
-          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-desc font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-desc ${
+          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-nav font-bold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-nav ${
             active ? "text-primary" : "text-muted-foreground hover:text-foreground"
           }`;
           const inner = (
