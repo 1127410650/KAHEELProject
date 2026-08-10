@@ -1419,7 +1419,8 @@
       "priceAsc": "Price: low to high",
       "priceDesc": "Price: high to low",
       "views": "Most viewed",
-      "oldest": "Oldest"
+      "oldest": "Oldest",
+      "nearest": "Nearest to you"
     },
     "view": {
       "grid": "Grid",
@@ -2505,7 +2506,13 @@
       "incomplete": "Location incomplete",
       "locationRequired": "Select a country and city before saving.",
       "cityMismatch": "The selected city does not belong to the selected country.",
-      "countryAccountHint": "The country comes from your account. Changing it updates the cities available later; it does not move existing ads."
+      "countryAccountHint": "The country comes from your account. Changing it updates the cities available later; it does not move existing ads.",
+      "setLocation": "Set your location",
+      "noCoords": "No coordinates — grouped by governorate",
+      "needLocation": "Set your location to sort by distance",
+      "radius": "Range",
+      "radiusAll": "All Syria",
+      "radiusKm": "Within {km} km"
     },
     "setup": {
       "title": "Set up your marketplace account",
