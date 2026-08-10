@@ -19,9 +19,9 @@ export function AqarTypeGrid({
   counts: Record<string, number>;
 }) {
   return (
-    <section className="mt-5 px-4">
-      <h2 className="mb-2.5 text-lg font-bold text-foreground">تصفّح حسب نوع العقار</h2>
-      <ul className="grid grid-cols-2 gap-2.5">
+    <section className="k-section k-gutter">
+      <h2 className="k-section-title">تصفّح حسب نوع العقار</h2>
+      <ul className="grid grid-cols-2 gap-[var(--sp-3)]">
         {types.map((card, index) => {
           const total = [card.key, ...(card.also ?? [])].reduce(
             (sum, key) => sum + (counts[key] ?? 0),
@@ -47,11 +47,11 @@ export function AqarTypeGrid({
                 {/* تعتيم متدرّج يضمن تباين النص الأبيض 4.5:1 فوق أي صورة. */}
                 <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
                 {/* الاسم في البداية والعدد في النهاية — أسلوب ناضج بلا كبسولات ضخمة. */}
-                <span className="absolute inset-x-2.5 bottom-2 flex items-end justify-between gap-2">
+                <span className="absolute inset-x-[var(--sp-3)] bottom-[var(--sp-2)] flex items-end justify-between gap-[var(--sp-2)]">
                   <strong className="min-w-0 truncate text-base font-bold text-white drop-shadow-md">
                     {card.label}
                   </strong>
-                  <span className="shrink-0 rounded-full bg-black/50 px-2 py-0.5 text-[14px] font-semibold leading-5 text-white">
+                  <span className="shrink-0 rounded-full bg-black/50 px-[var(--sp-2)] py-0.5 text-[14px] font-semibold leading-5 text-white">
                     {total.toLocaleString("en-US")}
                   </span>
                 </span>

@@ -16,15 +16,15 @@ export function AqarCityCircles({
   track: AqarTrack;
 }) {
   return (
-    <section className="mt-5">
-      <h2 className="mb-2.5 px-4 text-lg font-bold text-foreground">المدن</h2>
-      <ul className="flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <section className="k-section">
+      <h2 className="k-section-title k-gutter">المدن</h2>
+      <ul className="k-rail flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {cities.map((city) => (
           <li key={city.name} className="shrink-0">
             <Link
               to="/aqar/browse"
               search={{ track, city: city.name }}
-              className="flex w-[68px] flex-col items-center gap-1"
+              className="flex w-[72px] flex-col items-center gap-[var(--sp-2)]"
             >
               <span className="block size-16 overflow-hidden rounded-full border border-border bg-muted">
                 <img
@@ -35,8 +35,11 @@ export function AqarCityCircles({
                   className="size-full object-cover"
                 />
               </span>
-              <span className="w-full truncate text-center text-desc font-semibold text-foreground">
+              <span className="w-full truncate text-center text-[14px] font-semibold leading-[1.3] text-foreground">
                 {city.name}
+              </span>
+              <span className="w-full truncate text-center text-[14px] font-medium leading-[1.3] text-muted-foreground">
+                {city.landmark}
               </span>
             </Link>
           </li>

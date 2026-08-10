@@ -16,20 +16,22 @@ const RANGES: { key: string; label: string; note: string }[] = [
 
 export function AqarPriceRanges({ track }: { track: AqarTrack }) {
   return (
-    <section className="mt-5">
-      <h2 className="mb-2.5 px-4 text-lg font-bold text-foreground">حسب ميزانيتك</h2>
-      <ul className="flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <section className="k-section">
+      <h2 className="k-section-title k-gutter">حسب ميزانيتك</h2>
+      <ul className="k-rail flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
         {RANGES.map((range) => (
           <li key={range.key} className="shrink-0">
             <Link
               to="/aqar/browse"
               search={{ track, price: range.key }}
-              className="k-lift flex w-36 flex-col justify-center rounded-[var(--r-card)] border border-border bg-card px-3 py-3"
+              className="k-lift k-card-premium flex w-36 flex-col justify-center"
               style={{ minHeight: 72 }}
             >
-              <strong className="text-title font-extrabold text-primary">{range.label}</strong>
-              <span className="text-nav text-muted-foreground">{range.note}</span>
+              <strong className="text-[16px] font-extrabold leading-[1.3] text-foreground">{range.label}</strong>
+              <span className="mt-[var(--sp-1)] text-[14px] font-medium leading-[1.6] text-muted-foreground">
+                {range.note}
+              </span>
             </Link>
           </li>
         ))}

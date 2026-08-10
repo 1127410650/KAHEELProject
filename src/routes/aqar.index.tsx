@@ -147,10 +147,10 @@ function AqarHomePage() {
   const blocks = composed.data ?? [];
   const overrides: BlockOverrides = {
     hero_image: () => (
-      <section className="-mt-3 px-4">
+      <section className="k-gutter -mt-[var(--sp-3)]">
         <div
           data-kslot="aqar.hero"
-          className="relative aspect-[16/7] overflow-hidden rounded-[var(--r-card)] shadow-md"
+          className="relative aspect-[16/7] overflow-hidden rounded-[var(--r-card)] shadow-[0_2px_8px_rgba(0,0,0,0.05)]"
         >
           <img
             src={hero.image}
@@ -161,11 +161,11 @@ function AqarHomePage() {
             decoding="async"
           />
           <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 p-3">
-            <strong className="block text-lg font-bold text-white drop-shadow-md">
+          <div className="absolute inset-x-0 bottom-0 p-[var(--card-pad)]">
+            <strong className="block text-[18px] font-bold leading-[1.3] text-white drop-shadow-md">
               {firstName ? `حيا الله ${firstName}` : "أهلًا بك"}
             </strong>
-            <span className="block text-desc font-semibold text-white/90">
+            <span className="mt-[var(--sp-1)] block text-[14px] font-medium leading-[1.6] text-white/90">
               إيجار يومي وطويل وبيع — {hero.city}
             </span>
           </div>
@@ -173,18 +173,18 @@ function AqarHomePage() {
       </section>
     ),
     search_field: () => (
-      <div className="px-4">
+      <div className="k-gutter">
         <Link
           to="/aqar/browse"
           search={{ track }}
-          className="flex h-11 items-center gap-2 rounded-[var(--r-control)] border border-border bg-card px-3 shadow-sm"
+          className="flex h-11 items-center gap-[var(--sp-2)] rounded-[var(--r-control)] border border-border bg-card px-[var(--sp-3)] shadow-[0_2px_8px_rgba(0,0,0,0.05)]"
         >
           <Search className="size-4 shrink-0 text-primary" aria-hidden />
-          <span className="truncate text-desc font-semibold text-muted-foreground">
+          <span className="truncate text-[14px] font-medium text-muted-foreground">
             إلى أين؟ مدينة، حي، أو نوع عقار
           </span>
         </Link>
-        <div className="mt-3">
+        <div className="mt-[var(--sp-3)]">
           <AqarTrackTabs track={track} onChange={setTrack} />
         </div>
       </div>
@@ -223,10 +223,10 @@ function AqarHomePage() {
           <>
 
         {/* الهيرو: بطاقة صورة فوتوغرافية 16:7 تطفو فوق حدّ الهيدر (لا إزاحة تخطيط). */}
-        <section className="-mt-3 px-4">
+        <section className="k-gutter -mt-[var(--sp-3)]">
           <div
             data-kslot="aqar.hero"
-            className="relative aspect-[16/7] overflow-hidden rounded-[var(--r-card)] shadow-md"
+            className="relative aspect-[16/7] overflow-hidden rounded-[var(--r-card)] shadow-[0_2px_8px_rgba(0,0,0,0.05)]"
           >
             <img
               src={hero.image}
@@ -237,11 +237,11 @@ function AqarHomePage() {
               decoding="async"
             />
             <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-3">
-              <strong className="block text-lg font-bold text-white drop-shadow-md">
+            <div className="absolute inset-x-0 bottom-0 p-[var(--card-pad)]">
+              <strong className="block text-[18px] font-bold leading-[1.3] text-white drop-shadow-md">
                 {firstName ? `حيا الله ${firstName}` : "أهلًا بك"}
               </strong>
-              <span className="block text-desc font-semibold text-white/90">
+              <span className="mt-[var(--sp-1)] block text-[14px] font-medium leading-[1.6] text-white/90">
                 إيجار يومي وطويل وبيع — {hero.city}
               </span>
             </div>
@@ -249,20 +249,20 @@ function AqarHomePage() {
         </section>
 
         {/* حقل البحث: ارتفاع 44px واستدارة 12px ثم تبويبات المسار المضغوطة. */}
-        <div className="mt-4 px-4">
+        <div className="k-gutter mt-[var(--sp-4)]">
           <Link
             to="/aqar/browse"
             search={{ track }}
-            className="flex h-11 items-center gap-2 rounded-[var(--r-control)] border border-border bg-card px-3 shadow-sm"
+            className="flex h-11 items-center gap-[var(--sp-2)] rounded-[var(--r-control)] border border-border bg-card px-[var(--sp-3)] shadow-[0_2px_8px_rgba(0,0,0,0.05)]"
           >
             <Search className="size-4 shrink-0 text-primary" aria-hidden />
-            <span className="truncate text-desc font-semibold text-muted-foreground">
+            <span className="truncate text-[14px] font-medium text-muted-foreground">
               إلى أين؟ مدينة، حي، أو نوع عقار
             </span>
           </Link>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-[var(--sp-3)]">
           <AqarTrackTabs track={track} onChange={setTrack} />
         </div>
 
@@ -309,7 +309,7 @@ function AqarHomePage() {
         />
 
 
-            <p className="px-4 py-4 text-desc text-muted-foreground">
+            <p className="k-gutter k-section text-[14px] font-medium leading-[1.6] text-muted-foreground">
               {label("aqar.price_note", "الأسعار كما أدخلها المزوّد")}، والمعادل بالدولار تقديري وفق سعر صرف معتمد من الإدارة.
             </p>
           </>

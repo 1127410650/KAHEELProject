@@ -75,7 +75,7 @@ export function AqarShell({
   return (
     <div
       dir="rtl"
-      className="market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(3.5rem+env(safe-area-inset-bottom))]"
+      className="market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(96px+env(safe-area-inset-bottom))]"
     >
       <header
         data-kslot="aqar.header"
@@ -90,10 +90,10 @@ export function AqarShell({
       >
         <HeaderShapes />
         {/* صف الهوية: رجوع + اسم القسم + الشخصية — ارتفاع 44px */}
-        <div className="k-header-hero relative z-20 mx-auto flex h-11 max-w-3xl items-center gap-3 px-4">
+        <div className="k-header-hero k-gutter relative z-20 mx-auto flex h-11 max-w-3xl items-center gap-[var(--sp-3)]">
           <Link
             to={back}
-            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 rounded-full bg-card/20 px-3 text-desc font-semibold"
+            className="inline-flex h-9 min-w-11 items-center justify-center gap-[var(--sp-1)] rounded-full bg-card/20 px-[var(--sp-4)] text-[14px] font-semibold"
           >
             <ArrowRight className="size-4" aria-hidden />
             <span>{backLabel}</span>
@@ -103,10 +103,10 @@ export function AqarShell({
           <Mascot name="kaheel" size="sm" className="hidden h-9 w-auto shrink-0 sm:block" />
         </div>
         {/* صف البحث — يبقى دائمًا قابلًا للنقر، بلا أي إعادة تخطيط ⇒ صفر CLS */}
-        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-2">
+        <div className="k-gutter relative z-10 mx-auto w-full max-w-3xl pb-[var(--sp-2)]">
           <a
             href="/aqar/browse"
-            className="flex h-11 w-full items-center gap-2 rounded-[var(--r-control)] border border-border bg-card px-3 text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            className="flex h-11 w-full items-center gap-[var(--sp-2)] rounded-[var(--r-control)] border border-border bg-card px-[var(--sp-3)] text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             aria-label={label("aqar.searchPlaceholder", "ابحث عن وحدة أو مدينة")}
           >
             <Search className="size-4 shrink-0" aria-hidden />

@@ -176,6 +176,23 @@
   --r-control: 12px;
   --r-img: 12px;
 
+  /* شبكة 8pt: كل تباعد في الواجهة يُشتق من هذه الرموز فقط — لا قيم عشوائية. */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  /* هامش أفقي واحد لكل الأقسام ⇒ حواف متطابقة رأسيًا في كل الصفحة. */
+  --page-x: 16px;
+  /* فراغ رأسي ثابت بين الأقسام. */
+  --section-gap: 28px;
+  /* الحاشية الداخلية للبطاقات البيضاء. */
+  --card-pad: 14px;
+
+
   /* أسطح محايدة: خلفية الصفحة #F7F7F8 وبطاقات بيضاء ونص #1B1B1F */
   --background: var(--neutral-bg);
   --foreground: var(--text-primary);
@@ -395,6 +412,44 @@
   max-width: 100%;
 }
 
+/* هامش أفقي واحد: كل قسم يستعمله فتتطابق الحواف رأسيًا في كل الصفحة. */
+@utility k-gutter {
+  padding-inline: var(--page-x);
+}
+
+/* فراغ بين الأقسام: 28px بالضبط في كل مكان. */
+@utility k-section {
+  margin-block-start: var(--section-gap);
+}
+
+/* عنوان القسم إلى محتواه: 12px. */
+@utility k-section-title {
+  margin-block-end: var(--sp-3);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text-primary);
+}
+
+/* صف أفقي: أول/آخر بطاقة تتحاذى مع الهامش العام. */
+@utility k-rail {
+  scroll-padding-inline: var(--page-x);
+  padding-inline: var(--page-x);
+  gap: var(--sp-3);
+}
+
+/* بطاقة بيضاء فاخرة: استدارة 14px، حدّ فاصل، ظل خفيف، حاشية داخلية موحّدة. */
+@utility k-card-premium {
+  border-radius: var(--r-card);
+  border: 1px solid var(--neutral-divider);
+  background: var(--neutral-white);
+  padding: var(--card-pad);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+}
+
+
 #print-root {
   display: none;
 }
@@ -503,6 +558,14 @@ body {
   main {
     padding: var(--m-page-pad) !important;
   }
+
+  /* أسطح السوق تعتمد هامشًا أفقيًا واحدًا (--page-x) داخل الأقسام،
+     فلا تُضاف حاشية على <main> كي تتطابق حواف كل الأقسام رأسيًا. */
+  .market-surface > main,
+  .market-shell > main {
+    padding: 0 !important;
+  }
+
 
   /* typography scale */
   h1 {
