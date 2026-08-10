@@ -155,7 +155,7 @@ export function CanvasEditor({
     const dxPct = ((event.clientX - state.startX) / state.rect.width) * 100;
     const dyPct = ((event.clientY - state.startY) / state.rect.height) * 100;
     // في الاتجاه من اليمين لليسار يكون محور البداية معكوسًا.
-    const rtl = getComputedStyle(state.rect ? document.documentElement : document.documentElement).direction === "rtl";
+    const rtl = getComputedStyle(document.documentElement).direction === "rtl";
     const dx = rtl ? -dxPct : dxPct;
 
     if (state.mode === "move") {
