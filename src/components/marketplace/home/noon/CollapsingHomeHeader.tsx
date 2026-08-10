@@ -146,7 +146,7 @@ export function CollapsingHomeHeader({
           <button
             type="button"
             onClick={onLocation}
-            className="flex min-h-[44px] min-w-0 items-center gap-1.5 rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            className="flex h-11 min-h-[44px] min-w-0 items-center gap-1.5 rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
             tabIndex={p > 0.6 ? -1 : 0}
           >
