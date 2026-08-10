@@ -44,12 +44,14 @@ export function MarketHeader({
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
   /**
-   * الهيدر المتكيّف (الرئيسية فقط): ينكمش تدريجيًا مع التمرير لأسفل حتى يبقى
-   * شريط رفيع فيه حقل البحث، ويعود كاملًا عند السحب لأعلى. الارتفاع المحجوز
-   * أسفله يبقى ارتفاع الحالة الكاملة، فلا هزّة تخطيط عند الانكماش.
+   * الهيدر المتكيّف (الرئيسية فقط): ينكمش **تدريجيًا** مع حركة الإصبع — لا قفزة
+   * بين حالتين. `shrink` قيمة متصلة من 0 (كامل) إلى 1 (شريط البحث فقط)، تتقدّم
+   * بمقدار التمرير لأسفل وتعود إلى الصفر فورًا مع أول سحب لأعلى.
+   * المساحة المحجوزة أسفل الهيدر ثابتة على ارتفاع الحالة الكاملة ⇒ صفر هزّة.
    */
-  const [collapsed, setCollapsed] = useState(false);
-  const collapsedRef = useRef(false);
+  const [shrink, setShrink] = useState(0);
+  const shrinkRef = useRef(0);
+
   const [locationOpen, setLocationOpenState] = useState(false);
 
   const [locationMounted, setLocationMounted] = useState(false);
