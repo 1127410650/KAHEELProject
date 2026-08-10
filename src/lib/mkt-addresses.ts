@@ -72,8 +72,11 @@ export async function saveMyAddress(input: NewAddressInput): Promise<MktUserAddr
       details: input.details?.trim() || null,
       lat: input.lat ?? null,
       lng: input.lng ?? null,
+      accuracy_m: input.accuracyM ?? null,
+      place_label: input.placeLabel?.trim() || null,
       source: input.source ?? "manual",
       is_default: input.isDefault ?? false,
+
     })
     .select(ADDRESS_COLUMNS)
     .single();
