@@ -336,7 +336,7 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
             return <SyriaPrideStrip key={block.id} />;
           case "exclusive_offers":
             return (
-              <LazyMount key={block.id}>
+              <LazyMount key={block.id} minHeight="220px">
                 <ExclusiveOffersRail />
               </LazyMount>
             );
