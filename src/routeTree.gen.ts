@@ -66,6 +66,7 @@ import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as LegalCopyrightRouteImport } from './routes/legal/copyright'
+import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
 import { Route as LegalTermsRouteImport } from './routes/legal/terms'
 import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
@@ -394,6 +395,11 @@ const LegalCopyrightRoute = LegalCopyrightRouteImport.update({
   path: '/legal/copyright',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LegalTermsRoute = LegalTermsRouteImport.update({
   id: '/legal/terms',
   path: '/legal/terms',
@@ -665,6 +671,7 @@ export interface FileRoutesByFullPath {
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
@@ -763,6 +770,7 @@ export interface FileRoutesByTo {
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
@@ -865,6 +873,7 @@ export interface FileRoutesById {
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
@@ -968,6 +977,7 @@ export interface FileRouteTypes {
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/privacy'
     | '/legal/terms'
     | '/my/ad-credit'
     | '/my/bookings'
@@ -1066,6 +1076,7 @@ export interface FileRouteTypes {
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/privacy'
     | '/legal/terms'
     | '/my/ad-credit'
     | '/my/bookings'
@@ -1167,6 +1178,7 @@ export interface FileRouteTypes {
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/privacy'
     | '/legal/terms'
     | '/my/ad-credit'
     | '/my/bookings'
@@ -1243,6 +1255,7 @@ export interface RootRouteChildren {
   GuidesSyriaRoute: typeof GuidesSyriaRoute
   InviteTokenRoute: typeof InviteTokenRoute
   LegalCopyrightRoute: typeof LegalCopyrightRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
@@ -1652,6 +1665,13 @@ declare module '@tanstack/react-router' {
       path: '/legal/copyright'
       fullPath: '/legal/copyright'
       preLoaderRoute: typeof LegalCopyrightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/terms': {
@@ -2144,6 +2164,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesSyriaRoute: GuidesSyriaRoute,
   InviteTokenRoute: InviteTokenRoute,
   LegalCopyrightRoute: LegalCopyrightRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
