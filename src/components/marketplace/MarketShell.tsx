@@ -80,11 +80,11 @@ export function MarketHeader({
   });
 
   useEffect(() => {
+    // الرئيسية تحجز ارتفاعًا ثابتًا (HOME_HEADER_H) فلا تحتاج قياسًا متغيرًا.
+    if (home) return;
     const header = headerRef.current;
     if (!header) return;
     const measure = () => {
-      // القياس في الحالة الكاملة فقط: المساحة المحجوزة أدناه لا تتقلّص أبدًا.
-      if (collapsedRef.current) return;
       setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
     };
     measure();
@@ -95,24 +95,28 @@ export function MarketHeader({
     const observer = new ResizeObserver(measure);
     observer.observe(header);
     return () => observer.disconnect();
-  }, []);
+  }, [home]);
 
   useEffect(() => {
     if (!home) return;
     let last = window.scrollY;
     let frame = 0;
+    /** مسافة التمرير اللازمة للانكماش الكامل — تجعل الحركة متدرّجة مع الإصبع. */
+    const RANGE = 90;
     const onScroll = () => {
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
         const y = window.scrollY;
-        const goingDown = y > last + 4;
-        const goingUp = y < last - 4;
+        const delta = y - last;
         last = y;
-        const next = y < 96 ? false : goingDown ? true : goingUp ? false : collapsedRef.current;
-        if (next !== collapsedRef.current) {
-          collapsedRef.current = next;
-          setCollapsed(next);
+        let next = shrinkRef.current;
+        if (y <= 8) next = 0;
+        else if (delta > 0) next = Math.min(1, shrinkRef.current + delta / RANGE);
+        else if (delta < 0) next = 0; // أول سحب لأعلى يعيد الهيدر كاملًا فورًا
+        if (Math.abs(next - shrinkRef.current) > 0.003) {
+          shrinkRef.current = next;
+          setShrink(next);
         }
       });
     };
@@ -123,7 +127,8 @@ export function MarketHeader({
     };
   }, [home]);
 
-  const shrunk = home && collapsed;
+  const collapsedEnough = home && shrink > 0.6;
+
 
   return (
     <>
