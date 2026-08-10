@@ -5497,6 +5497,713 @@ export type Database = {
           },
         ]
       }
+      mkt_realestate_bookings: {
+        Row: {
+          check_in: string | null
+          check_out: string | null
+          created_at: string
+          customer_name: string | null
+          customer_phone: string | null
+          customer_user_id: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          deleted_at: string | null
+          deleted_reason: string | null
+          expires_at: string
+          guests: number | null
+          id: string
+          listing_id: string
+          message: string | null
+          provider_id: string
+          room_type_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          check_in?: string | null
+          check_out?: string | null
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          customer_user_id: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          expires_at: string
+          guests?: number | null
+          id?: string
+          listing_id: string
+          message?: string | null
+          provider_id: string
+          room_type_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          check_in?: string | null
+          check_out?: string | null
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          customer_user_id?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          expires_at?: string
+          guests?: number | null
+          id?: string
+          listing_id?: string
+          message?: string | null
+          provider_id?: string
+          room_type_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_bookings_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_bookings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_bookings_room_type_id_fkey"
+            columns: ["room_type_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_room_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_exchange_rates: {
+        Row: {
+          base_currency: string
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          id: string
+          is_active: boolean
+          note: string | null
+          quote_currency: string
+          rate: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          base_currency?: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          id?: string
+          is_active?: boolean
+          note?: string | null
+          quote_currency: string
+          rate: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          base_currency?: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          id?: string
+          is_active?: boolean
+          note?: string | null
+          quote_currency?: string
+          rate?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      mkt_realestate_listings: {
+        Row: {
+          address_text: string | null
+          amenities: string[]
+          area_sqm: number | null
+          bathrooms: number | null
+          build_year: number | null
+          city: string
+          country_code: string
+          created_at: string
+          currency_display: string
+          deal_track: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          description: string | null
+          district: string
+          floor_no: number | null
+          id: string
+          is_furnished: boolean
+          latitude: number | null
+          longitude: number | null
+          owner_user_id: string
+          price: number
+          price_currency: string
+          price_period: string | null
+          price_usd_sort: number | null
+          property_type: string
+          provider_id: string
+          published_at: string | null
+          rooms: number | null
+          status: string
+          title: string
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          address_text?: string | null
+          amenities?: string[]
+          area_sqm?: number | null
+          bathrooms?: number | null
+          build_year?: number | null
+          city: string
+          country_code?: string
+          created_at?: string
+          currency_display?: string
+          deal_track: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          description?: string | null
+          district: string
+          floor_no?: number | null
+          id?: string
+          is_furnished?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          owner_user_id: string
+          price: number
+          price_currency: string
+          price_period?: string | null
+          price_usd_sort?: number | null
+          property_type: string
+          provider_id: string
+          published_at?: string | null
+          rooms?: number | null
+          status?: string
+          title: string
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          address_text?: string | null
+          amenities?: string[]
+          area_sqm?: number | null
+          bathrooms?: number | null
+          build_year?: number | null
+          city?: string
+          country_code?: string
+          created_at?: string
+          currency_display?: string
+          deal_track?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          description?: string | null
+          district?: string
+          floor_no?: number | null
+          id?: string
+          is_furnished?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          owner_user_id?: string
+          price?: number
+          price_currency?: string
+          price_period?: string | null
+          price_usd_sort?: number | null
+          property_type?: string
+          provider_id?: string
+          published_at?: string | null
+          rooms?: number | null
+          status?: string
+          title?: string
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_listings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_photos: {
+        Row: {
+          byte_size: number
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          height: number | null
+          id: string
+          is_cover: boolean
+          listing_id: string
+          magic_verified: boolean
+          mime_type: string
+          sort_order: number
+          storage_path: string
+          updated_at: string
+          uploaded_by: string | null
+          width: number | null
+        }
+        Insert: {
+          byte_size: number
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          height?: number | null
+          id?: string
+          is_cover?: boolean
+          listing_id: string
+          magic_verified?: boolean
+          mime_type: string
+          sort_order?: number
+          storage_path: string
+          updated_at?: string
+          uploaded_by?: string | null
+          width?: number | null
+        }
+        Update: {
+          byte_size?: number
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          height?: number | null
+          id?: string
+          is_cover?: boolean
+          listing_id?: string
+          magic_verified?: boolean
+          mime_type?: string
+          sort_order?: number
+          storage_path?: string
+          updated_at?: string
+          uploaded_by?: string | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_photos_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_promotion_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          listing_id: string
+          promotion_id: string | null
+          session_hash: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          listing_id: string
+          promotion_id?: string | null
+          session_hash?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          listing_id?: string
+          promotion_id?: string | null
+          session_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_promotion_events_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_promotion_events_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_promotions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_reason: string | null
+          duration_days: number
+          ended_at: string | null
+          ends_at: string
+          id: string
+          listing_id: string
+          points_spent: number
+          provider_id: string
+          starts_at: string
+          status: string
+          updated_at: string
+          wallet_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          duration_days: number
+          ended_at?: string | null
+          ends_at: string
+          id?: string
+          listing_id: string
+          points_spent: number
+          provider_id: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          wallet_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          duration_days?: number
+          ended_at?: string | null
+          ends_at?: string
+          id?: string
+          listing_id?: string
+          points_spent?: number
+          provider_id?: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_promotions_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_promotions_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_promotions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_credit_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_providers: {
+        Row: {
+          city: string | null
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          display_name: string | null
+          id: string
+          management_mode: string
+          owner_user_id: string
+          phone: string | null
+          provider_type: string
+          provider_type_locked: boolean
+          response_deadline_minutes: number
+          tenant_id: string | null
+          updated_at: string
+          verification_status: string
+          verified_at: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          display_name?: string | null
+          id?: string
+          management_mode?: string
+          owner_user_id: string
+          phone?: string | null
+          provider_type?: string
+          provider_type_locked?: boolean
+          response_deadline_minutes?: number
+          tenant_id?: string | null
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          display_name?: string | null
+          id?: string
+          management_mode?: string
+          owner_user_id?: string
+          phone?: string | null
+          provider_type?: string
+          provider_type_locked?: boolean
+          response_deadline_minutes?: number
+          tenant_id?: string | null
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      mkt_realestate_room_types: {
+        Row: {
+          availability: string
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          id: string
+          listing_id: string
+          name: string
+          price: number
+          price_currency: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          availability?: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          id?: string
+          listing_id: string
+          name: string
+          price: number
+          price_currency: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          availability?: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          id?: string
+          listing_id?: string
+          name?: string
+          price?: number
+          price_currency?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_room_types_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_staff: {
+        Row: {
+          can_view_finance: boolean
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          full_name: string | null
+          id: string
+          invited_by: string | null
+          phone: string | null
+          provider_id: string
+          role: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          can_view_finance?: boolean
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          full_name?: string | null
+          id?: string
+          invited_by?: string | null
+          phone?: string | null
+          provider_id: string
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          can_view_finance?: boolean
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          full_name?: string | null
+          id?: string
+          invited_by?: string | null
+          phone?: string | null
+          provider_id?: string
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_staff_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_verification_files: {
+        Row: {
+          byte_size: number
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          doc_type: string
+          id: string
+          magic_verified: boolean
+          mime_type: string
+          owner_user_id: string
+          storage_path: string
+          updated_at: string
+          verification_id: string
+        }
+        Insert: {
+          byte_size: number
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          doc_type: string
+          id?: string
+          magic_verified?: boolean
+          mime_type: string
+          owner_user_id: string
+          storage_path: string
+          updated_at?: string
+          verification_id: string
+        }
+        Update: {
+          byte_size?: number
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          doc_type?: string
+          id?: string
+          magic_verified?: boolean
+          mime_type?: string
+          owner_user_id?: string
+          storage_path?: string
+          updated_at?: string
+          verification_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_verification_files_verification_id_fkey"
+            columns: ["verification_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_verifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_verifications: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          id: string
+          legal_name: string | null
+          license_no: string | null
+          notes: string | null
+          owner_user_id: string
+          provider_id: string
+          requested_type: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          id?: string
+          legal_name?: string | null
+          license_no?: string | null
+          notes?: string | null
+          owner_user_id: string
+          provider_id: string
+          requested_type: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          id?: string
+          legal_name?: string | null
+          license_no?: string | null
+          notes?: string | null
+          owner_user_id?: string
+          provider_id?: string
+          requested_type?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_verifications_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_report_files: {
         Row: {
           appeal_id: string | null
@@ -11120,9 +11827,100 @@ export type Database = {
       mkt_purge_login_otps: { Args: never; Returns: undefined }
       mkt_qa_cleanup: { Args: { _batch_id: string }; Returns: Json }
       mkt_queue_perm: { Args: { _kind: string }; Returns: string }
+      mkt_re_booking_decide: {
+        Args: { _accept: boolean; _booking_id: string; _reason?: string }
+        Returns: {
+          check_in: string | null
+          check_out: string | null
+          created_at: string
+          customer_name: string | null
+          customer_phone: string | null
+          customer_user_id: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          deleted_at: string | null
+          deleted_reason: string | null
+          expires_at: string
+          guests: number | null
+          id: string
+          listing_id: string
+          message: string | null
+          provider_id: string
+          room_type_id: string | null
+          status: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_realestate_bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mkt_re_expire_bookings: { Args: never; Returns: number }
+      mkt_re_is_member: { Args: { _provider_id: string }; Returns: boolean }
+      mkt_re_is_owner: { Args: { _provider_id: string }; Returns: boolean }
       mkt_re_license_active: {
         Args: { p_listing_id: string }
         Returns: boolean
+      }
+      mkt_re_listing_member: { Args: { _listing_id: string }; Returns: boolean }
+      mkt_re_listing_published: {
+        Args: { _listing_id: string }
+        Returns: boolean
+      }
+      mkt_re_promote_listing: {
+        Args: { _days: number; _listing_id: string; _points: number }
+        Returns: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_reason: string | null
+          duration_days: number
+          ended_at: string | null
+          ends_at: string
+          id: string
+          listing_id: string
+          points_spent: number
+          provider_id: string
+          starts_at: string
+          status: string
+          updated_at: string
+          wallet_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_realestate_promotions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mkt_re_verification_review: {
+        Args: { _approve: boolean; _note?: string; _verification_id: string }
+        Returns: {
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          id: string
+          legal_name: string | null
+          license_no: string | null
+          notes: string | null
+          owner_user_id: string
+          provider_id: string
+          requested_type: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_realestate_verifications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       mkt_report_apply_status: {
         Args: { _reason: string; _report_id: string; _status: string }
