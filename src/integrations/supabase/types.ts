@@ -11370,6 +11370,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_admin_set_usd_rate: {
+        Args: { _rate: number; _reason?: string }
+        Returns: number
+      }
       mkt_admin_slot_discard_draft: {
         Args: { _slot_key: string }
         Returns: undefined
