@@ -1351,7 +1351,10 @@
       "account": "Account",
       "rights": "All rights reserved — Kaheel",
       "legal": "Policies",
-      "copyright": "Visual asset copyright"
+      "copyright": "Visual asset copyright",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "directoryPolicy": "Directory policy"
     },
     "filters": {
       "all": "All",
