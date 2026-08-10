@@ -86,9 +86,14 @@ export function MarketHeader({
     <>
       <header
         ref={headerRef}
-        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-white/15 bg-[linear-gradient(112deg,#240046_0%,#3c096c_56%,#5a189a_118%)] text-white shadow-[0_7px_28px_rgb(36_0_70/0.22)] backdrop-blur-xl"
+        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-border bg-background/95 text-foreground shadow-[0_1px_0_rgb(17_17_17/0.04)] backdrop-blur-xl"
       >
-        <SeasonalLayer placement="header" />
+        {/* زخرفة هندسية خفيفة جدًا بدل الكتلة الملوّنة — بلا أي تأثير على القياسات. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.5] [background-image:linear-gradient(115deg,rgb(123_44_191/0.05)_0_1px,transparent_1px_9px)] [background-size:9px_9px]"
+        />
+
         <div
           className={
             home
