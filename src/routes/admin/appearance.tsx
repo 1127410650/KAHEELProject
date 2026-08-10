@@ -8,7 +8,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CircleDollarSign, LayoutTemplate, MousePointerClick, Sparkles } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
+import { useAiLibrary } from "@/lib/mkt-ai-studio";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { groupSlotsBySection, useMediaSlots, useRefreshMediaSlots } from "@/lib/mkt-media-slots";
