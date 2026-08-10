@@ -680,7 +680,7 @@ export function AdminShell({
           </aside>
         ) : null}
 
-        <main className="min-w-0 flex-1 px-3 pb-8 pt-4 sm:pt-5 lg:pb-10">
+        <main className="min-w-0 flex-1 px-3 pb-[calc(var(--sp-6)+56px+env(safe-area-inset-bottom))] pt-4 sm:pt-5 lg:pb-10">
           <div className="mx-auto w-full max-w-[1500px]">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[var(--r-card)] border border-primary/15 bg-white px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:border-border dark:bg-card sm:py-4">
               <div className="min-w-0">
