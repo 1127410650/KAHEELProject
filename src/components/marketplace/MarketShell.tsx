@@ -134,12 +134,13 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-6 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-7"
+                  className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-[18px] font-black leading-none tracking-[-0.07em] text-white sm:text-xl">
+                <span className="text-[18px] font-black leading-none tracking-[-0.07em] text-foreground sm:text-xl">
                   {t("market.brand")}
                 </span>
+
               </Link>
               <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
                 <a
