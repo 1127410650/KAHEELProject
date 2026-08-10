@@ -55,6 +55,8 @@ export interface AqarListing {
 
 export interface AqarProvider {
   id: string;
+  /** معرّف الرابط العام للبروفايل: /p/{slug} */
+  slug: string | null;
   display_name: string;
   provider_type: "agency" | "hotel" | "individual";
   city: string | null;
