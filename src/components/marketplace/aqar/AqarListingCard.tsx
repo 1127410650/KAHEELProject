@@ -30,9 +30,9 @@ export function AqarListingCard({
 
   return (
     <article
-      className={`k-surface relative flex flex-col overflow-hidden rounded-[var(--r-card)] border border-border bg-card ${className ?? ""}`}
+      className={`k-card-premium relative flex flex-col ${className ?? ""}`}
     >
-      <div className="relative aspect-4/3 w-full bg-muted">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-[10px] bg-muted">
         {shown ? (
           <img
             src={shown}
@@ -98,29 +98,29 @@ export function AqarListingCard({
         ) : null}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-3">
+      <div className="mt-[var(--sp-2)] flex flex-1 flex-col">
         <Link
           to="/aqar/$id"
           params={{ id: listing.id }}
-          className="line-clamp-2 text-title font-bold text-foreground"
+          className="line-clamp-2 text-[15px] font-bold leading-[1.3] text-foreground"
         >
           {listing.title}
         </Link>
-        <p className="flex items-center gap-1 text-desc text-muted-foreground">
+        <p className="mt-[var(--sp-1)] flex items-center gap-[var(--sp-1)] text-[14px] font-medium leading-[1.6] text-muted-foreground">
           <MapPin className="size-4 shrink-0" aria-hidden />
           <span className="truncate">
             {listing.city}
             {listing.district ? ` — ${listing.district}` : ""}
           </span>
         </p>
-        <p className="text-desc text-muted-foreground">{aqarMetaLine(listing)}</p>
-        <p className="mt-auto pt-1">
-          <strong className="text-price font-extrabold text-foreground">{price.main}</strong>
+        <p className="text-[14px] font-medium leading-[1.6] text-muted-foreground">{aqarMetaLine(listing)}</p>
+        <p className="mt-auto pt-[var(--sp-2)]">
+          <strong className="text-[16px] font-extrabold leading-[1.3] text-foreground">{price.main}</strong>
           {price.period ? (
-            <span className="text-desc text-muted-foreground"> {price.period}</span>
+            <span className="text-[14px] font-medium text-muted-foreground"> {price.period}</span>
           ) : null}
           {price.secondary ? (
-            <span className="block text-desc text-muted-foreground">≈ {price.secondary}</span>
+            <span className="block text-[14px] font-medium text-muted-foreground">≈ {price.secondary}</span>
           ) : null}
         </p>
       </div>
