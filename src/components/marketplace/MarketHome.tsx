@@ -69,19 +69,19 @@ export function MarketHome() {
   /* التأليف من /admin/composer له الأولوية؛ وإن لم تُؤلَّف الصفحة بعد يظهر
      ترتيبها المكتوب أدناه كما هو ⇒ لا شاشة فارغة أبدًا. */
   const composed = usePageBlocks("market.home");
-  /* بانر «سوريا فخرنا» صار ثابتًا في رأس الصفحة، فنستبعد نسخته المؤلَّفة
-     كي لا يظهر مرتين في الصفحات التي أُلِّفت من /admin/composer. */
-  const blocks = (composed.data ?? []).filter((block) => block.block_type !== "pride_strip");
+  /* رأس الصفحة ثابت الترتيب: البانر ← الستوريات ← شريط التصنيفات ← لوحة
+     الإعلانات ← «جيب لي». فنستبعد نُسخ هذه الكتل من التأليف كي لا تتكرّر. */
+  const blocks = (composed.data ?? []).filter(
+    (block) => block.block_type !== "pride_strip" && block.block_type !== "campaign_mosaic",
+  );
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-background pb-5 text-foreground">
       <div className="mx-auto w-full max-w-[1240px] space-y-[var(--section-gap)] overflow-x-clip px-[var(--page-x)] pb-[var(--sp-4)] pt-[var(--sp-4)]">
-        {/* شريط التصنيفات الدائري بصفّين متعاكسين ثم بطاقات «جيب لي»: يظهران
-            في كل التصميمات (سواء كانت الصفحة مؤلَّفة من /admin/composer أو لا)
-            وارتفاعهما محجوز فلا هزّة تخطيط. */}
-        {/* بانر «سوريا فخرنا» ثم الستوريات ثم شريط التصنيفات الماشي: يظهر هذا
-            الرأس في كل التصميمات (مؤلَّفة أو لا) وارتفاع كل قطعة محجوز. */}
+        {/* بانر «سوريا فخرنا» ثم الستوريات ثم شريط التصنيفات الماشي ثم لوحة
+            الإعلانات و«جيب لي»: يظهر هذا الرأس في كل التصميمات (مؤلَّفة أو لا)
+            وارتفاع كل قطعة محجوز فلا هزّة تخطيط. */}
         <SyriaPrideBanner />
 
         <KaheelStories />
@@ -90,17 +90,17 @@ export function MarketHome() {
           <MarketCategoryStrip />
         </div>
 
+        <CampaignMosaic />
+
+        <HomeJeebLi />
+
         {blocks.length > 0 ? (
           <PageBlocks blocks={blocks} />
         ) : (
           <>
 
-        {/* لوحة الإعلانات تأتي مباشرة بعد الشريط، ثم «جيب لي» ثم البلاطات. */}
-        <CampaignMosaic />
-
-        <HomeJeebLi />
-
         <QuickTiles />
+
 
         {/* حقل البحث العريض يعيش في الهيدر (MarketShell) كي يبقى وحده بعد الانكماش. */}
 
