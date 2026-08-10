@@ -355,7 +355,7 @@ export function ListingCard({
               category never renders a shorter card than its neighbours. */}
           <span className="flex h-[18px] items-center">
             {tag ? (
-              <span className="max-w-full truncate rounded-full bg-primary/10 px-2 py-0.5 text-desc font-bold text-primary sm:text-desc">
+              <span className="max-w-full truncate rounded-full bg-primary px-2.5 py-0.5 text-desc font-bold text-primary-foreground sm:text-desc">
                 {tag}
               </span>
             ) : null}

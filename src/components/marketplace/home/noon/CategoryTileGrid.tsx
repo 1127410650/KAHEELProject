@@ -49,7 +49,7 @@ export function CategoryTileGrid() {
             href={href}
             className="group flex min-w-0 flex-col items-center gap-1.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
           >
-            <span className="grid aspect-square w-full place-items-center rounded-2xl border border-border bg-accent text-primary shadow-sm transition group-hover:-translate-y-0.5">
+            <span className="k-tile grid aspect-square w-full place-items-center rounded-2xl shadow-[0_1px_2px_rgb(23_20_35/0.05)] transition group-hover:-translate-y-0.5">
               <Icon className="size-6 sm:size-7" aria-hidden />
             </span>
             <span className="w-full truncate text-center text-desc font-bold text-foreground sm:text-desc">

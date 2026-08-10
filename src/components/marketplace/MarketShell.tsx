@@ -29,6 +29,7 @@ import { AddListingButton } from "@/components/marketplace/AddListingButton";
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
 import kaheelLogo from "@/assets/kaheel-logo.png";
+import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
 export function MarketHeader({
   showCategories = false,
@@ -126,12 +127,20 @@ export function MarketHeader({
     <>
       <header
         ref={headerRef}
-        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-border bg-background/95 text-foreground shadow-[0_1px_0_rgb(17_17_17/0.04)] backdrop-blur-xl"
+        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-white shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)]"
       >
-        {/* زخرفة هندسية خفيفة جدًا بدل الكتلة الملوّنة — بلا أي تأثير على القياسات. */}
+        {/* زخرفة خطية بيضاء خفيفة — بلا أي تأثير على القياسات. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.5] [background-image:linear-gradient(115deg,rgb(123_44_191/0.05)_0_1px,transparent_1px_9px)] [background-size:9px_9px]"
+          className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(115deg,rgb(255_255_255/0.5)_0_1px,transparent_1px_9px)] [background-size:9px_9px]"
+        />
+        {/* رسمة مرحة من شخصيات كَحيل في جانب الهيدر — مطلقة الموضع فلا تحرّك شيئًا. */}
+        <img
+          src={kaheelMascot}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(74_38_128/0.35)] sm:block"
         />
 
         {shrunk ? (
@@ -260,7 +269,7 @@ export function MarketHeader({
 
           <nav
             aria-label={t("market.nav.menu")}
-            className="border-t border-border bg-background"
+            className="border-t border-white/25 bg-transparent"
 
           >
             <div className="mx-auto flex min-h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
