@@ -133,7 +133,7 @@ export function CollapsingHomeHeader({
             <a
               href={notificationsHref}
               className="inline-flex size-10 shrink-0 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
-              aria-label={t("market.nav.alerts" as "market.brand")}
+              aria-label={t("market.bottomNav.alerts" as "market.brand")}
               tabIndex={collapsed ? -1 : 0}
             >
               <Bell className="size-5" aria-hidden />
