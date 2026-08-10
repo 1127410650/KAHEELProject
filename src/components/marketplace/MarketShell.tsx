@@ -112,7 +112,9 @@ export function MarketHeader({
       <header
         ref={headerRef}
         data-kslot="home.header"
-        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_rgb(138_79_255/0.55)]"
+        /* حاشية أمان iOS تُطبَّق هنا مرة واحدة فقط — لا تكرارها في أي حاوية داخلية. */
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}
+        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_color-mix(in_srgb,var(--kt-header-from)_55%,transparent)]"
       >
         {/* زخرفة خطية بيضاء خفيفة — بلا أي تأثير على القياسات. */}
         <div
@@ -130,7 +132,7 @@ export function MarketHeader({
 
         {/* صف الهوية: الشعار + الموقع + إنشاء إعلان. */}
         <div
-          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-[var(--page-x)]"
+          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-1.5 overflow-hidden px-[var(--page-x)]"
           style={{ minHeight: "44px" }}
         >
           <Link
@@ -287,14 +289,16 @@ export function MarketBottomNav() {
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
           const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-nav font-bold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-nav ${
-            active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+            active
+              ? "text-[var(--kt-bottomnav-active)]"
+              : "text-muted-foreground hover:text-foreground"
           }`;
           const inner = (
             <>
               <span
                 className={
                   active
-                    ? "grid h-[22px] w-9 place-items-center rounded-full bg-accent text-primary"
+                    ? "grid h-[22px] w-9 place-items-center rounded-full bg-accent text-[var(--kt-bottomnav-active)]"
                     : "grid h-[22px] w-9 place-items-center rounded-full"
                 }
               >

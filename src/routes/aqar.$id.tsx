@@ -301,7 +301,7 @@ function AqarListingPage() {
                         : label("aqar.full", "مكتمل")}
                     </span>
                   </span>
-                  <strong className="shrink-0 text-price font-extrabold text-primary">
+                  <strong className="shrink-0 text-price font-extrabold text-[var(--kt-price-color)]">
                     {formatAqarAmount(roomType.price, roomType.price_currency)}
                   </strong>
                 </li>
@@ -362,7 +362,7 @@ function AqarListingPage() {
       >
         <div className="mx-auto flex max-w-3xl items-center gap-3">
           <span className="min-w-0 flex-1">
-            <strong className="block truncate text-price font-extrabold text-primary">
+            <strong className="block truncate text-price font-extrabold text-[var(--kt-price-color)]">
               {price.main}
               {price.period ? (
                 <span className="text-desc font-semibold text-muted-foreground"> {price.period}</span>

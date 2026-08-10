@@ -117,26 +117,26 @@
   /* اللوحة النهائية المعتمدة — المصدر الوحيد لأي لون في المنصة.
      كل التوكنات القديمة (brand-*, market-*) صارت أسماء بديلة تشير إلى هذه القيم
      كي يرث أي مكوّن قديم اللوحة الجديدة بلا تعديل. */
-  --color-purple-primary: #8a4fff;
-  --color-purple-light: #c3abff;
+  --color-purple-primary: var(--kt-primary);
+  --color-purple-light: var(--kt-header-to);
   --color-neutral-white: #ffffff;
-  --color-neutral-bg: #f7f7f8;
-  --color-neutral-divider: #e5e5ea;
-  --color-text-primary: #1b1b1f;
-  --color-text-secondary: #6e6e7d;
-  --color-disabled: #c7c7cc;
+  --color-neutral-bg: var(--kt-page-bg);
+  --color-neutral-divider: var(--kt-divider);
+  --color-text-primary: var(--kt-text-primary);
+  --color-text-secondary: var(--kt-text-secondary);
+  --color-disabled: var(--kt-disabled);
 
   /* سلّم «brand» التاريخي: أسماء محفوظة، وقيمها الآن من اللوحة المعتمدة فقط. */
-  --color-brand-ink: #1b1b1f;
-  --color-brand-950: #1b1b1f;
-  --color-brand-900: #8a4fff;
-  --color-brand-800: #8a4fff;
-  --color-brand-700: #8a4fff;
-  --color-brand-600: #8a4fff;
-  --color-brand-400: #c3abff;
-  --color-brand-300: #c3abff;
-  --color-brand-100: #f7f7f8;
-  --color-brand-50: #f7f7f8;
+  --color-brand-ink: var(--kt-text-primary);
+  --color-brand-950: var(--kt-text-primary);
+  --color-brand-900: var(--kt-primary-deep);
+  --color-brand-800: var(--kt-primary-deep);
+  --color-brand-700: var(--kt-primary-deep);
+  --color-brand-600: var(--kt-primary);
+  --color-brand-400: var(--kt-primary);
+  --color-brand-300: var(--kt-primary-soft);
+  --color-brand-100: var(--kt-primary-soft);
+  --color-brand-50: var(--kt-page-bg);
 
 
   --shadow-panel: 0 2px 8px rgb(0 0 0 / 0.05);
@@ -146,26 +146,69 @@
 }
 
 /*
- * اللوحة النهائية المعتمدة من المالك — تلغي كل قيمة لون سابقة (بما فيها خلفية
- * اللافندر). البنفسجي #8A4FFF مع نهاية التدرج #C3ABFF، خلفية الصفحة #F7F7F8،
- * البطاقات بيضاء، النص #1B1B1F والثانوي #6E6E7D. لا يُكتب لون في أي مكوّن.
+ * محرك ألوان المنصة: كل لون في الواجهة يشتق من رمز `--kt-*` واحد. القيم هنا هي
+ * الافتراضي المطبوع (لوحة «أخضر × كحلي» المعتمدة) فلا يحدث وميض قبل وصول
+ * اللوحة من القاعدة، وطبقة `ThemeVarsLayer` تعيد طباعتها عند تبديل اللوحة من
+ * `/admin/appearance` فيسري اللون فورًا على كل المنصة.
+ *
+ * لا يُكتب لون سداسي في أي مكوّن — الرمز فقط.
  */
 :root,
 .market-surface {
-  --purple-primary: #8a4fff;
-  --purple-light: #c3abff;
-  --gradient-purple: linear-gradient(90deg, #8a4fff 0%, #c3abff 100%);
+  --kt-primary: #0e9f6e;
+  --kt-primary-deep: #0b7a55;
+  --kt-primary-soft: #e6f5ef;
+  --kt-header-from: #14324f;
+  --kt-header-to: #1e4c77;
+  --kt-page-bg: #ffffff;
+  --kt-card: #ffffff;
+  --kt-divider: #e5e7eb;
+  --kt-text-primary: #14324f;
+  --kt-text-secondary: #64748b;
+  --kt-disabled: #c7cdd4;
+  --kt-focus: #0e9f6e;
+  --kt-price-color: #14324f;
+  --kt-story-ring: #0e9f6e;
+  --kt-cta-bg: #ffffff;
+  --kt-cta-fg: #0e9f6e;
+  --kt-pulse-color: rgba(14, 159, 110, 0.5);
+  --kt-bottomnav-active: #0e9f6e;
+}
+
+/*
+ * الأسماء التاريخية للوحة — قيمها الآن من الرموز أعلاه وحدها.
+ * `--purple-*` أسماء مُبقاة للتوافق فقط؛ اللون يأتي من اللوحة المفعّلة.
+ */
+:root,
+.market-surface {
+  --purple-primary: var(--kt-primary);
+  --purple-light: var(--kt-header-to);
+  --brand-vivid: var(--kt-primary);
+  --gradient-purple: linear-gradient(
+    90deg,
+    var(--kt-header-from) 0%,
+    var(--kt-header-to) 100%
+  );
 
   --neutral-white: #ffffff;
-  --neutral-bg: #f7f7f8;
-  --neutral-divider: #e5e5ea;
+  --neutral-bg: var(--kt-page-bg);
+  --neutral-card: var(--kt-card);
+  --neutral-divider: var(--kt-divider);
   --neutral-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
 
-  --text-primary: #1b1b1f;
-  --text-secondary: #6e6e7d;
+  --text-primary: var(--kt-text-primary);
+  --text-secondary: var(--kt-text-secondary);
 
-  --disabled: #c7c7cc;
-  --focus: #8a4fff;
+  --disabled: var(--kt-disabled);
+  --focus: var(--kt-focus);
+
+  /* لون السعر وحلقة الستوري والشريط السفلي — رموز مستقلة قابلة للتبديل. */
+  --price-color: var(--kt-price-color);
+  --story-ring: var(--kt-story-ring);
+  --bottomnav-active: var(--kt-bottomnav-active);
+  --cta-bg: var(--kt-cta-bg);
+  --cta-fg: var(--kt-cta-fg);
+  --pulse-color: var(--kt-pulse-color);
 }
 
 :root {
@@ -189,37 +232,40 @@
   --page-x: 16px;
   /* فراغ رأسي ثابت بين الأقسام. */
   --section-gap: 28px;
-  /* لمسة لون القسم: البنفسجي الأساس افتراضيًا، وتُبدَّل لكل عالم قسم. */
-  --section-accent: #8a4fff;
+  /* لمسة لون القسم: لون الهيدر افتراضيًا، وتُبدَّل لكل عالم قسم. */
+  --section-accent: var(--kt-header-from);
   /* الحاشية الداخلية للبطاقات البيضاء. */
   --card-pad: 14px;
 
 
-  /* أسطح محايدة: خلفية الصفحة #F7F7F8 وبطاقات بيضاء ونص #1B1B1F */
+  /* أسطح محايدة — كلها من رموز اللوحة المفعّلة */
   --background: var(--neutral-bg);
   --foreground: var(--text-primary);
 
-  --card: var(--neutral-white);
+  --card: var(--neutral-card);
   --card-foreground: var(--text-primary);
-  --popover: var(--neutral-white);
+  --popover: var(--neutral-card);
   --popover-foreground: var(--text-primary);
 
-  /* البنفسجي المعتمد — وحالاته مشتقة منه فقط */
-  --primary: var(--purple-primary);
+  /*
+   * الأساس الممتلئ يستخدم الدرجة الغامقة: نص أبيض فوقه يجتاز 4.5:1، بينما
+   * `--brand-vivid` هو اللون الحيوي للعناصر الرسومية (حلقات، نبضة، أيقونات).
+   */
+  --primary: var(--kt-primary-deep);
   --primary-foreground: var(--neutral-white);
-  --primary-dark: #7a3af5;
-  --primary-pressed: #6522d6;
-  --primary-deep: #1b1b1f;
+  --primary-dark: var(--kt-primary-deep);
+  --primary-pressed: var(--kt-primary-deep);
+  --primary-deep: var(--kt-primary-deep);
 
-  /* أسطح محايدة/بنفسجية فاتحة جدًا */
-  --secondary: #f2f2f4;
+  /* أسطح محايدة فاتحة جدًا */
+  --secondary: color-mix(in srgb, var(--kt-divider) 45%, #ffffff);
   --secondary-foreground: var(--text-primary);
 
-  --muted: #f2f2f4;
+  --muted: color-mix(in srgb, var(--kt-divider) 45%, #ffffff);
   --muted-foreground: var(--text-secondary);
 
-  --accent: color-mix(in srgb, var(--purple-primary) 8%, #ffffff);
-  --accent-foreground: var(--purple-primary);
+  --accent: var(--kt-primary-soft);
+  --accent-foreground: var(--kt-primary-deep);
 
 
   /* الذهبي — للعناصر المميزة فقط */
@@ -248,7 +294,7 @@
   --chart-1: var(--purple-primary);
   --chart-2: var(--purple-light);
   --chart-3: oklch(0.7686 0.1647 70.08);
-  --chart-4: #6522d6;
+  --chart-4: var(--kt-primary-deep);
   --chart-5: var(--text-secondary);
 
   --sidebar: var(--neutral-white);
@@ -736,86 +782,91 @@ body {
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * أسماء `market-*` التاريخية: محفوظة كي لا يتعطّل أي مكوّن قديم، لكن قيمها الآن
- * من اللوحة المعتمدة وحدها (بنفسجي #8A4FFF / #C3ABFF + محايدات + ذهبي التمييز).
+ * من رموز اللوحة المفعّلة وحدها — لا لون سداسي هنا.
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: #8a4fff;
-  --color-market-navy-dark: #1b1b1f;
-  --color-market-navy-soft: #8a4fff;
+  --color-market-navy: var(--kt-header-from);
+  --color-market-navy-dark: var(--kt-text-primary);
+  --color-market-navy-soft: var(--kt-header-to);
   --color-market-navy-foreground: #ffffff;
-  --color-market-blue: #8a4fff;
-  --color-market-blue-dark: #8a4fff;
-  --color-market-blue-soft: #c3abff;
+  --color-market-blue: var(--kt-primary-deep);
+  --color-market-blue-dark: var(--kt-primary-deep);
+  --color-market-blue-soft: var(--kt-primary-soft);
   --color-market-gold: #f59e0b;
   --color-market-gold-soft: #fff4de;
-  --color-market-electric: #8a4fff;
-  --color-market-electric-dark: #8a4fff;
-  --color-market-electric-bright: #c3abff;
-  --color-market-void: #1b1b1f;
-  --color-market-panel: #1b1b1f;
-  --color-market-panel-soft: #8a4fff;
-  --color-market-silver: #ffffff;
-  --color-market-silver-line: #e5e5ea;
-  --color-market-silver-muted: #6e6e7d;
+  --color-market-electric: var(--kt-primary);
+  --color-market-electric-dark: var(--kt-primary-deep);
+  --color-market-electric-bright: var(--kt-primary);
+  --color-market-void: var(--kt-text-primary);
+  --color-market-panel: var(--kt-text-primary);
+  --color-market-panel-soft: var(--kt-primary-soft);
+  --color-market-silver: var(--kt-card);
+  --color-market-silver-line: var(--kt-divider);
+  --color-market-silver-muted: var(--kt-text-secondary);
+  --color-brand-vivid: var(--kt-primary);
+  --color-price: var(--kt-price-color);
+  --color-story-ring: var(--kt-story-ring);
+  --color-nav-active: var(--kt-bottomnav-active);
+  --color-cta-bg: var(--kt-cta-bg);
+  --color-cta-fg: var(--kt-cta-fg);
 }
 
 /*
- * `.market-surface` يوجّه التوكنات الدلالية للوحة كَحيل المعتمدة في كل شجرة السوق
- * العامة. القيم مأخوذة من متغيّرات اللوحة أعلاه فلا تتكرر أرقام سداسية هنا.
+ * `.market-surface` يوجّه التوكنات الدلالية لرموز اللوحة المفعّلة في كل شجرة
+ * السوق العامة. لا رقم سداسي هنا — كل قيمة من `--kt-*`.
  */
 .market-surface,
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  /* خلفية الصفحة الرسمية #F7F7F8 وبطاقات بيضاء نقية. */
-  --background: #f7f7f8;
-  --foreground: #1b1b1f;
-  --card: #ffffff;
-  --card-foreground: #1b1b1f;
-  --popover: #ffffff;
-  --popover-foreground: #1b1b1f;
+  --background: var(--kt-page-bg);
+  --foreground: var(--kt-text-primary);
+  --card: var(--kt-card);
+  --card-foreground: var(--kt-text-primary);
+  --popover: var(--kt-card);
+  --popover-foreground: var(--kt-text-primary);
 
-  /* تدرج الهوية النهائي المعتمد — قيم لا تُغمّق ولا تُعدّل. */
-  --header-from: #8a4fff;
-  --header-to: #c3abff;
+  /* تدرج الهيدر من رموز اللوحة. */
+  --header-from: var(--kt-header-from);
+  --header-to: var(--kt-header-to);
 
-  --primary: #8a4fff;
+  --primary: var(--kt-primary-deep);
   --primary-foreground: #ffffff;
-  /* درجات مساندة مشتقة من #8a4fff نفسه */
-  --primary-dark: #7a3af5;
-  --primary-pressed: #6522d6;
+  --primary-dark: var(--kt-primary-deep);
+  --primary-pressed: var(--kt-primary-deep);
+  --brand-vivid: var(--kt-primary);
 
-  /* أسطح محايدة فاتحة + تلوين بنفسجي شفاف للحالة المختارة فقط */
-  --secondary: #f2f2f4;
-  --secondary-foreground: #1b1b1f;
-  --muted: #f2f2f4;
-  --muted-foreground: #6e6e7d;
-  --accent: #f4efff;
-  --accent-foreground: #8a4fff;
+  /* أسطح محايدة فاتحة + تلوين شفاف للحالة المختارة فقط */
+  --secondary: color-mix(in srgb, var(--kt-divider) 45%, #ffffff);
+  --secondary-foreground: var(--kt-text-primary);
+  --muted: color-mix(in srgb, var(--kt-divider) 45%, #ffffff);
+  --muted-foreground: var(--kt-text-secondary);
+  --accent: var(--kt-primary-soft);
+  --accent-foreground: var(--kt-primary-deep);
 
   /* حد رمادي محايد رفيع يبقى أداة الفصل الأولى */
-  --border: #e5e5ea;
-  --input: #e5e5ea;
-  --ring: #8a4fff;
+  --border: var(--kt-divider);
+  --input: var(--kt-divider);
+  --ring: var(--kt-focus);
 
   --gold: #f59e0b;
   --gold-dark: #c77b15;
   --gold-soft: #fff8ec;
   --gold-foreground: #59451f;
 
-  --sidebar: #ffffff;
-  --sidebar-foreground: #1b1b1f;
-  --sidebar-accent: #f2f2f4;
-  --sidebar-accent-foreground: #1b1b1f;
-  --sidebar-border: #e5e5ea;
-  --sidebar-primary: #8a4fff;
+  --sidebar: var(--kt-card);
+  --sidebar-foreground: var(--kt-text-primary);
+  --sidebar-accent: color-mix(in srgb, var(--kt-divider) 45%, #ffffff);
+  --sidebar-accent-foreground: var(--kt-text-primary);
+  --sidebar-border: var(--kt-divider);
+  --sidebar-primary: var(--kt-primary-deep);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #8a4fff;
+  --sidebar-ring: var(--kt-focus);
 
-  --chart-1: #8a4fff;
-  --chart-2: #c3abff;
+  --chart-1: var(--kt-primary);
+  --chart-2: var(--kt-header-to);
   --chart-3: #f59e0b;
-  --chart-4: #6522d6;
+  --chart-4: var(--kt-primary-deep);
 
   background-color: var(--background);
   color: var(--foreground);
@@ -841,14 +892,13 @@ body:has(.market-surface) .shadow-raised {
 
 
 /*
- * الهيدر/الهيرو: التدرج المعتمد نهائيًا كما هو
- * linear-gradient(90deg, #8a4fff 0%, #c3abff 100%) — لا يُغمّق.
+ * الهيدر/الهيرو: تدرّج من رموز اللوحة (`--header-from` → `--header-to`).
  * التباين يُعالج بطبقة تعتيم رقيقة خلف النص فقط (::before) والمحتوى فوقها.
  */
 .k-header-hero {
   position: relative;
   isolation: isolate;
-  /* تدرّج الرأس يستعير لون القسم: الرئيسية والعقار بنفسجي، وبقية العوالم
+  /* تدرّج الرأس يستعير لون القسم: الرئيسية والعقار بلون الهيدر، وبقية العوالم
      بلونها المعتمد في section-accent.ts. */
   background-image: linear-gradient(
     90deg,
@@ -867,14 +917,14 @@ body:has(.market-surface) .shadow-raised {
   --card: rgb(255 255 255 / 0.16);
   --border: rgb(255 255 255 / 0.42);
   --input: rgb(255 255 255 / 0.42);
-  --primary: #ffffff;
-  --primary-foreground: #6522d6;
+  --primary: var(--kt-cta-bg);
+  --primary-foreground: var(--kt-cta-fg);
   --accent: rgb(255 255 255 / 0.18);
   --accent-foreground: #ffffff;
   color: #ffffff;
 }
 
-/* طبقة التعتيم: خلف المحتوى فقط، تتكثّف تجاه طرف #c3abff الفاتح. */
+/* طبقة التعتيم: خلف المحتوى فقط، مشتقة من لون الهيدر الغامق. */
 .k-header-hero::before {
   content: "";
   position: absolute;
@@ -883,8 +933,8 @@ body:has(.market-surface) .shadow-raised {
   pointer-events: none;
   background-image: linear-gradient(
     90deg,
-    rgb(43 12 92 / 0.18) 0%,
-    rgb(43 12 92 / 0.46) 100%
+    color-mix(in srgb, var(--header-from) 18%, transparent) 0%,
+    color-mix(in srgb, var(--header-from) 46%, transparent) 100%
   );
   border-radius: inherit;
 }
@@ -989,20 +1039,20 @@ body:has(.market-surface) .shadow-raised {
     position: absolute;
     inset: 0;
     border-radius: 9999px;
-    box-shadow: 0 0 0 0 rgb(138 79 255 / 0.45);
+    box-shadow: 0 0 0 0 var(--kt-pulse-color);
     animation: k-cta-pulse-ring 2.2s ease-out infinite;
   }
 }
 
 @keyframes k-cta-pulse-ring {
   0% {
-    box-shadow: 0 0 0 0 rgb(138 79 255 / 0.45);
+    box-shadow: 0 0 0 0 var(--kt-pulse-color);
   }
   70% {
-    box-shadow: 0 0 0 10px rgb(138 79 255 / 0);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--kt-pulse-color) 0%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 0 rgb(138 79 255 / 0);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--kt-pulse-color) 0%, transparent);
   }
 }
 
@@ -1148,7 +1198,7 @@ body:has(.market-surface) .shadow-raised {
 
 .market-surface ::selection {
   background: rgb(199 125 255 / 0.32);
-  color: #1b1b1f;
+  color: var(--kt-text-primary);
 }
 
 .market-surface :where([data-slot="card"]) {
@@ -2129,9 +2179,9 @@ body:has(.market-surface) {
   --k-glow: 0 10px 30px -12px rgb(157 78 221 / 0.5);
 
   /* gradient stock */
-  --k-grad-deep: linear-gradient(155deg, #1b1b1f 0%, #8a4fff 46%, #8a4fff 100%);
-  --k-grad-royal: linear-gradient(150deg, #8a4fff 0%, #8a4fff 52%, #8a4fff 100%);
-  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, color-mix(in srgb, #c3abff 22%, white) 100%);
+  --k-grad-deep: linear-gradient(155deg, var(--kt-header-from) 0%, var(--kt-primary-deep) 46%, var(--kt-primary) 100%);
+  --k-grad-royal: linear-gradient(150deg, var(--kt-header-from) 0%, var(--kt-primary-deep) 52%, var(--kt-primary) 100%);
+  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, var(--kt-primary-soft) 100%);
 }
 
 /* ── surfaces ─────────────────────────────────────────────────────────── */
@@ -2166,7 +2216,7 @@ body:has(.market-surface) {
 
   &:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, #8a4fff 52%, white);
+    border-color: color-mix(in srgb, var(--kt-primary) 52%, white);
     box-shadow: var(--k-shadow-3, 0 28px 52px -20px rgb(36 0 70 / 0.24));
   }
 
@@ -2184,7 +2234,7 @@ body:has(.market-surface) {
   isolation: isolate;
   overflow: hidden;
   border-radius: 1.5rem;
-  background: var(--k-grad-deep, linear-gradient(155deg, #1b1b1f, #8a4fff));
+  background: var(--k-grad-deep, linear-gradient(155deg, var(--kt-header-from), var(--kt-primary)));
   color: #fff;
   box-shadow:
     var(--k-shadow-2, 0 16px 28px -14px rgb(36 0 70 / 0.16)),
@@ -2218,7 +2268,7 @@ body:has(.market-surface) {
   letter-spacing: 0.06em;
   line-height: 1rem;
   text-transform: none;
-  color: #8a4fff;
+  color: var(--kt-primary-deep);
 }
 
 @utility k-h1 {
@@ -2227,7 +2277,7 @@ body:has(.market-surface) {
   line-height: 1.18;
   letter-spacing: -0.012em;
   text-wrap: balance;
-  color: #1b1b1f;
+  color: var(--kt-text-primary);
 }
 
 @utility k-h2 {
@@ -2235,21 +2285,21 @@ body:has(.market-surface) {
   font-weight: 900;
   line-height: 1.24;
   letter-spacing: -0.01em;
-  color: #1b1b1f;
+  color: var(--kt-text-primary);
 }
 
 @utility k-h3 {
   font-size: 1rem;
   font-weight: 800;
   line-height: 1.35;
-  color: #1b1b1f;
+  color: var(--kt-text-primary);
 }
 
 @utility k-sub {
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.6;
-  color: #8a4fff;
+  color: var(--kt-primary-deep);
 }
 
 /* ── micro-interactions ──────────────────────────────────────────────── */
@@ -2386,7 +2436,7 @@ body:has(.market-surface) {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  background: color-mix(in srgb, #c3abff 26%, white);
+  background: color-mix(in srgb, var(--kt-primary) 26%, white);
 
   /* The sweep animates `background-position` only: no transform, no paint
      containment surprises, and nothing a layout-shift observer can attribute

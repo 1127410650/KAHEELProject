@@ -12,6 +12,7 @@ import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudi
 import { useAiLibrary } from "@/lib/mkt-ai-studio";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
 import { MascotPresenceCard } from "@/components/marketplace/admin/MascotPresenceCard";
+import { ThemePaletteCard } from "@/components/marketplace/admin/ThemePaletteCard";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -110,6 +111,10 @@ function AppearancePage() {
           </ul>
         ) : null}
       </details>
+
+      <div className="mb-6">
+        <ThemePaletteCard />
+      </div>
 
       <div className="mb-6">
         <MascotPresenceCard />

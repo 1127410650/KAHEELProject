@@ -290,7 +290,7 @@ function AqarBookPage() {
           </ul>
           <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-2">
             <span className="text-body font-bold text-foreground">الإجمالي التقديري</span>
-            <strong className="text-price font-extrabold text-primary">
+            <strong className="text-price font-extrabold text-[var(--kt-price-color)]">
               {estimate.total ?? `${price.main}${price.period ? ` ${price.period}` : ""}`}
             </strong>
           </div>

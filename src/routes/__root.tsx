@@ -24,6 +24,7 @@ import { MascotPresence } from "@/components/marketplace/campaign/MascotPresence
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
 import { SlotStyleLayer } from "@/components/marketplace/SlotStyleLayer";
+import { ThemeVarsLayer } from "@/components/marketplace/ThemeVarsLayer";
 import { LiveEditGate } from "@/components/marketplace/live-edit/LiveEditGate";
 
 /**
@@ -200,6 +201,7 @@ function RootComponent() {
           <CallCenterProvider>
             {/* Required: nested routes render here. */}
             <Outlet />
+            <ThemeVarsLayer />
             <SlotStyleLayer />
             <LiveEditGate />
             <CallOverlay />

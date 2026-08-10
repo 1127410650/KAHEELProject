@@ -122,7 +122,7 @@ export function CallOverlay() {
         type="button"
         onClick={() => setMinimized(false)}
         aria-label={t("market.call.returnToCall")}
-        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#8A4FFF,#C3ABFF)] px-3 text-desc font-bold text-primary-foreground shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
+        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,var(--kt-header-from),var(--kt-header-to))] px-3 text-desc font-bold text-primary-foreground shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
       >
         <Phone className="size-3.5 shrink-0" aria-hidden />
         <span className="max-w-[45%] truncate">{call.peerName || t("market.call.title")}</span>
@@ -233,7 +233,7 @@ export function CallOverlay() {
               onClick={() => void accept()}
               className="flex flex-col items-center gap-2 text-desc font-bold"
             >
-              <span className="grid size-16 place-items-center rounded-full bg-[#2f9e6a] text-[#ffffff] shadow-[0_14px_34px_rgb(0_0_0/0.5)] transition active:scale-95">
+              <span className="grid size-16 place-items-center rounded-full bg-success text-success-foreground shadow-[0_14px_34px_rgb(0_0_0/0.5)] transition active:scale-95">
                 <Phone className="size-6" aria-hidden />
               </span>
               {needsGesture ? t("market.call.startAudio") : t("market.call.accept")}

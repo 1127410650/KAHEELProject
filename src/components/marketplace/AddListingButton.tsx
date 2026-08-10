@@ -24,7 +24,7 @@ export function AddListingButton({ href, className }: Props) {
       aria-label={label}
       className={[
         "k-cta-pulse relative grid size-11 shrink-0 place-items-center rounded-full",
-        "bg-card text-primary shadow-md outline-none",
+        "bg-[var(--kt-cta-bg)] text-[var(--kt-cta-fg)] shadow-md outline-none",
         "focus-visible:ring-2 focus-visible:ring-card",
         className ?? "",
       ].join(" ")}

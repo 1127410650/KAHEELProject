@@ -10052,6 +10052,113 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_theme_audit: {
+        Row: {
+          action: string
+          actor: string | null
+          created_at: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          palette_id: string | null
+          palette_name: string | null
+          token_key: string | null
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          created_at?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          palette_id?: string | null
+          palette_name?: string | null
+          token_key?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          created_at?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          palette_id?: string | null
+          palette_name?: string | null
+          token_key?: string | null
+        }
+        Relationships: []
+      }
+      mkt_theme_palettes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          is_active: boolean
+          is_builtin: boolean
+          key: string | null
+          name_ar: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_active?: boolean
+          is_builtin?: boolean
+          key?: string | null
+          name_ar: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_active?: boolean
+          is_builtin?: boolean
+          key?: string | null
+          name_ar?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_theme_settings: {
+        Row: {
+          created_at: string
+          id: string
+          palette_id: string
+          token_key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          palette_id: string
+          token_key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          palette_id?: string
+          token_key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_theme_settings_palette_id_fkey"
+            columns: ["palette_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_theme_palettes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_typing: {
         Row: {
           conversation_id: string
@@ -13964,6 +14071,36 @@ export type Database = {
         Args: { _tenant_id: string }
         Returns: boolean
       }
+      mkt_theme_active: { Args: never; Returns: Json }
+      mkt_theme_palette_activate: {
+        Args: { _palette_id: string }
+        Returns: undefined
+      }
+      mkt_theme_palette_delete: {
+        Args: { _palette_id: string }
+        Returns: undefined
+      }
+      mkt_theme_palette_list: {
+        Args: never
+        Returns: {
+          id: string
+          is_active: boolean
+          is_builtin: boolean
+          name_ar: string
+          tokens: Json
+          updated_at: string
+        }[]
+      }
+      mkt_theme_palette_save: {
+        Args: {
+          _activate?: boolean
+          _name_ar: string
+          _palette_id: string
+          _tokens: Json
+        }
+        Returns: string
+      }
+      mkt_theme_reset_default: { Args: never; Returns: undefined }
       mkt_track: { Args: { _events: Json }; Returns: number }
       mkt_typing_peer: { Args: { _conversation_id: string }; Returns: boolean }
       mkt_typing_ping: {

@@ -48,7 +48,7 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
                 : "Put your offer in front of the whole marketplace"}
             </span>
           </span>
-          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,#8A4FFF,#C3ABFF)] text-white shadow-md transition group-hover:-translate-x-1 sm:size-9 rtl:group-hover:translate-x-1">
+          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,var(--kt-header-from),var(--kt-header-to))] text-white shadow-md transition group-hover:-translate-x-1 sm:size-9 rtl:group-hover:translate-x-1">
             <ChevronLeft className="size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
           </span>
         </Link>

@@ -77,7 +77,7 @@ export function CollapsingHomeHeader({
         style={{
           "--p": p,
           // التدرّج المعتمد نهائيًا — بلا أي طبقة تعتيم فوقه.
-          backgroundImage: "linear-gradient(90deg, #8A4FFF 0%, #C3ABFF 100%)",
+          backgroundImage: "linear-gradient(90deg, var(--kt-header-from) 0%, var(--kt-header-to) 100%)",
           // حاشية شريط حالة iOS تُطبَّق هنا مرة واحدة فقط في كل الشجرة.
           paddingTop: `calc(env(safe-area-inset-top, 0px) + ${PT}px)`,
           paddingBottom: `${PB}px`,
