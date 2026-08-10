@@ -110,6 +110,9 @@ function AppearancePage() {
         ) : null}
       </details>
 
+      <div className="mb-6">
+        <MascotPresenceCard />
+      </div>
 
 
       {slots.isPending ? (
