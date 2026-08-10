@@ -261,6 +261,18 @@ function AdminStudioPage() {
           </div>
         )}
       </AdminCard>
+
+      {/* الطبقة التنفيذية: المؤشرات ثم صندوق الوارد ثم النشاط والصحّة والصرف */}
+      <KpiDeck />
+      <WorkQueue />
+      <div className="mt-[var(--sp-4)] grid grid-cols-1 gap-[var(--sp-3)] xl:grid-cols-2">
+        <ActivityFeed />
+        <div className="grid gap-[var(--sp-3)]">
+          <SystemHealthCard />
+          <AiSpendCard />
+        </div>
+      </div>
     </AdminShell>
+
   );
 }
