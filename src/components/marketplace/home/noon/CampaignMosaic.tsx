@@ -117,12 +117,38 @@ export function CampaignMosaic() {
   return (
     <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-2.5">
       {groups.length === 0 ? (
-        <CampaignTile
-          className={WIDE}
-          fallbackTitle={fallbackTitle}
-          fallbackHref="/search"
-        />
+        /* لا حملات مُدارة الآن ⇒ نعرض الإيقاع المتفاوت نفسه (عريضة / اثنتان /
+           عريضة) ببطاقات أقسام حقيقية بصور — لا بطاقة بيضاء فارغة. */
+        <>
+          <CampaignTile
+            className={WIDE}
+            fallbackTitle={fallbackTitle}
+            fallbackHref="/search"
+            fallbackImage={restaurantsImg}
+          />
+          <div className="grid grid-cols-2 gap-2.5">
+            <CampaignTile
+              className={HALF}
+              fallbackTitle={ar ? "مقاضي البيت" : "Groceries"}
+              fallbackHref="/search?domain=product"
+              fallbackImage={groceriesImg}
+            />
+            <CampaignTile
+              className={HALF}
+              fallbackTitle={ar ? "سيارات" : "Cars"}
+              fallbackHref="/search?category=cars"
+              fallbackImage={carsImg}
+            />
+          </div>
+          <CampaignTile
+            className={WIDE}
+            fallbackTitle={ar ? "عقارات للإيجار والبيع" : "Homes to rent and buy"}
+            fallbackHref="/aqar"
+            fallbackImage={realEstateImg}
+          />
+        </>
       ) : (
+
         groups.map((group, index) =>
           group.length === 1 ? (
             <CampaignTile
