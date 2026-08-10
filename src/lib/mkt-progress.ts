@@ -50,13 +50,13 @@ export function useKaheelProgressSteps(): ProgressStep[] {
     {
       key: "store",
       label: ar ? "فعّل صفحتك وخلّي الناس يشوفوك" : "Activate your page so people find you",
-      href: "/dashboard/store",
+      href: "/business/store",
       done: stores > 0,
     },
     {
       key: "listing",
       label: ar ? "أضف أول إعلان — دقيقة وبتخلص" : "Add your first listing — takes a minute",
-      href: "/my/listings",
+      href: "/my/ads",
       done: listings > 0,
     },
   ];

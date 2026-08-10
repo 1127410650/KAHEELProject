@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import { formatDateTime } from "@/lib/format";
 import { claimSubject, releaseSubject } from "@/lib/mkt-admin-queue";
@@ -69,6 +70,13 @@ function MyWorkPage() {
   const queryClient = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [releasing, setReleasing] = useState<WorkItem | null>(null);
+  const { identity, loading: identityLoading } = usePlatformIdentity();
+  // Only real staff (admins, owners, or holders of any staff permission) may
+  // open the work centre. Passing a bare `staffAccess` let any signed-in user in.
+  const staffAccess =
+    identity?.is_system_owner === true ||
+    identity?.is_platform_admin === true ||
+    (identity?.staff_perms.length ?? 0) > 0;
 
   const status = useQuery({ queryKey: STATUS_KEY, queryFn: loadMyWorkStatus });
   const mine = useQuery({
@@ -101,7 +109,11 @@ function MyWorkPage() {
   const onLeave = me?.on_leave === true;
 
   return (
-    <AdminShell title={t("admin.myWork.title")} staffAccess>
+    <AdminShell
+      title={t("admin.myWork.title")}
+      staffAccess={staffAccess}
+      staffChecking={identityLoading}
+    >
       <p className="text-xs text-muted-foreground">{t("admin.myWork.hint")}</p>
 
       {status.isLoading ? (
