@@ -133,7 +133,9 @@ export async function fetchGuidePlaces(
     const ordered = orderByIds((data ?? []) as unknown as GuidePlace[], nearPage.ids)
       .filter((row) => !isForbiddenPlace(row))
       .map((row) => ({ ...row, distanceM: nearPage.distances[row.id] ?? null }));
-    return { rows: ordered, total: ordered.length };
+    // ترقيم متدرّج: صفحة ممتلئة تعني وجود صفحة تالية على الأقل.
+    const seen = page * GUIDE_PAGE_SIZE + ordered.length;
+    return { rows: ordered, total: ordered.length === GUIDE_PAGE_SIZE ? seen + 1 : seen };
   }
   // نطاق الدولة من إعداد «الدول المفعّلة»، لا من قيمة ثابتة في الكود.
   let request = supabase
