@@ -13,6 +13,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import { slotStyleCss, type MediaSlotRow } from "@/lib/mkt-media-slots";
 
 export const DESIGN_LIB_QUERY_KEY = ["mkt", "design-library"] as const;
 export const DESIGN_TEMPLATES_QUERY_KEY = ["mkt", "design-templates"] as const;
@@ -124,10 +125,11 @@ async function fetchDesignLibrary(): Promise<DesignLibrary> {
 }
 
 /** المكتبة كاملة — استعلام واحد مشترك، ويُخزَّن طويلًا لأنه شبه ثابت. */
-export function useDesignLibrary() {
+export function useDesignLibrary(enabled = true) {
   return useQuery({
     queryKey: DESIGN_LIB_QUERY_KEY,
     queryFn: fetchDesignLibrary,
+    enabled,
     staleTime: 30 * 60_000,
     gcTime: 60 * 60_000,
     retry: 1,
@@ -273,4 +275,54 @@ export function motionDeclaration(input: DecorInput, motions: DesignMotion[]): s
     `animation:${motion.anim_name} ${duration}ms ` +
     `${once ? "ease-out 1 both" : "ease-in-out infinite"}`
   );
+}
+
+
+/** أقصى عدد عناصر متحركة في الشاشة الواحدة — حدّ أداء لا يُتجاوز. */
+export const MAX_ANIMATED_SLOTS = 3;
+
+/**
+ * كل قواعد أنماط الفتحات: الخلفية المنشورة + الشكل الزخرفي على `::after` +
+ * الحركة. الحركة تُمنح لأول ثلاث فتحات متحركة فقط (بترتيب العرض) حتى لا يتحرك
+ * أكثر من ثلاثة عناصر في الشاشة، والباقي يظهر ثابتًا.
+ */
+export function slotsCss(slots: MediaSlotRow[], lib: DesignLibrary | undefined): string {
+  const rules: string[] = [];
+  let animated = 0;
+
+  for (const slot of slots) {
+    const base = slotStyleCss(slot);
+    if (base) rules.push(base);
+    if (!lib) continue;
+
+    const decor = decorDeclarations(slot, lib.shapes);
+    const allowMotion = animated < MAX_ANIMATED_SLOTS;
+    const motion = allowMotion ? motionDeclaration(slot, lib.motions) : null;
+    if (motion) animated += 1;
+    if (decor.length === 0 && !motion) continue;
+
+    const target = `[data-kslot="${slot.slot_key}"]`;
+    rules.push(`${target}{position:relative}`);
+    if (decor.length > 0) {
+      const inner = [
+        'content:""',
+        "position:absolute",
+        "inset:0",
+        "pointer-events:none",
+        "border-radius:inherit",
+        ...decor,
+        ...(motion ? [motion] : []),
+      ];
+      rules.push(`${target}::after{${inner.join(";")}}`);
+    } else if (motion) {
+      rules.push(`${target}{${motion}}`);
+    }
+  }
+
+  return rules.join("\n");
+}
+
+/** هل تحتاج هذه الفتحات مكتبة الأشكال أصلًا؟ (لتجنّب استعلام بلا داعٍ للزائر) */
+export function needsDesignLibrary(slots: MediaSlotRow[] | undefined): boolean {
+  return (slots ?? []).some((slot) => !!slot.shape_key || slot.motion_state === "animated");
 }
