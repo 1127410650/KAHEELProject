@@ -39,7 +39,6 @@ export function MarketHeader({
 }) {
   const { t, locale } = useI18n();
   const { session } = useSession();
-  const { account } = useActiveAccount();
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -50,7 +49,11 @@ export function MarketHeader({
     setLocationOpenState(value);
   };
   const addHref = addListingHref({ authenticated: !!session });
-  const locationLabel = account?.city?.trim() || (locale === "ar" ? "سوريا" : "Syria");
+  // الموقع الحقيقي للمستخدم مختصرًا («دمشق · المزة»)، وإلا دعوة صريحة لتحديده.
+  const { shortLabel } = useNearbyOrigin();
+  const locationLabel = shortLabel ?? t("market.geo.setLocation");
+  const locationKnown = !!shortLabel;
+
 
   const unreadAlerts = useQuery({
     queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
