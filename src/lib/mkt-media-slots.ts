@@ -72,9 +72,8 @@ const SLOT_COLUMNS =
 export async function fetchMediaSlots(): Promise<MediaSlot[]> {
   const { data, error } = await supabase
     .from("mkt_media_slots")
-    .select(
-      "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, sort_order, hidden, is_demo",
-    )
+    .select(SLOT_COLUMNS)
+
     .order("sort_order", { ascending: true })
     .order("slot_key", { ascending: true });
   if (error) throw error;
