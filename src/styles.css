@@ -756,15 +756,10 @@ body:has(.market-surface) .shadow-raised {
 .market-page-intro {
   position: relative;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--border) 80%, white);
+  border: 1px solid var(--border);
   border-radius: 1.35rem;
-  background:
-    radial-gradient(circle at 96% -10%, rgb(157 78 221 / 0.2), transparent 11rem),
-    radial-gradient(circle at 2% 120%, rgb(224 170 255 / 0.28), transparent 10rem),
-    linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, #e0aaff 12%, white) 100%);
-  box-shadow:
-    0 1px 1px rgb(36 0 70 / 0.04), 0 4px 10px -4px rgb(36 0 70 / 0.08),
-    0 20px 34px -20px rgb(36 0 70 / 0.2), inset 0 1px 0 #fff;
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(17 17 17 / 0.04), 0 10px 24px -20px rgb(17 17 17 / 0.12);
   padding: 1.1rem 1.2rem;
 }
 
@@ -772,21 +767,20 @@ body:has(.market-surface) .shadow-raised {
   position: absolute;
   inset-block: 0.95rem;
   inset-inline-start: 0;
-  width: 4px;
+  width: 3px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #3c096c, #c77dff);
+  background: var(--primary);
   content: "";
 }
 
 .market-section {
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--border) 88%, white);
+  border: 1px solid var(--border);
   border-radius: 1.15rem;
-  background: rgb(255 255 255 / 0.96);
-  box-shadow:
-    0 1px 1px rgb(36 0 70 / 0.04), 0 3px 8px -3px rgb(36 0 70 / 0.07),
-    0 16px 28px -18px rgb(36 0 70 / 0.18);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(17 17 17 / 0.04), 0 8px 20px -18px rgb(17 17 17 / 0.12);
 }
+
 
 /* ───────────────────────── Compact page hero band ─────────────────────────
  * One shared size for every large purple section header (guides, services,
