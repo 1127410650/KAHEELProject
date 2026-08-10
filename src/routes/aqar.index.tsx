@@ -157,7 +157,7 @@ function AqarHomePage() {
         />
 
         <p className="px-4 py-4 text-desc text-muted-foreground">
-          الأسعار كما أدخلها المزوّد، والمعادل بالدولار تقديري وفق سعر صرف معتمد من الإدارة.
+          {label("aqar.price_note", "الأسعار كما أدخلها المزوّد")}، والمعادل بالدولار تقديري وفق سعر صرف معتمد من الإدارة.
         </p>
       </div>
     </AqarShell>
