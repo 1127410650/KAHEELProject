@@ -11,7 +11,7 @@
  */
 import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
 import { CampaignMosaic } from "@/components/marketplace/home/noon/CampaignMosaic";
-import { CategoryRail } from "@/components/marketplace/home/noon/CategoryRail";
+import { CategoryRail, useHomeRails } from "@/components/marketplace/home/noon/CategoryRail";
 import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTileGrid";
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
