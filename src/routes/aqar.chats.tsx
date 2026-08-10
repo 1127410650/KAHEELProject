@@ -27,7 +27,7 @@ function AqarChatsPage() {
         <p className="text-body text-foreground">
           محادثات القسم تُفتح مع دفعة الطلبات. محادثاتك الحالية متاحة في مركز محادثات السوق.
         </p>
-        <Link to="/my/chats" className="text-desc font-bold text-primary">
+        <Link to="/my/messages" className="text-desc font-bold text-primary">
           فتح مركز المحادثات
         </Link>
       </div>

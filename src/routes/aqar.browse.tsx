@@ -33,6 +33,8 @@ const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
 });
 
+type AqarSearch = z.infer<typeof searchSchema>;
+
 export const Route = createFileRoute("/aqar/browse")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
@@ -114,7 +116,7 @@ function AqarBrowsePage() {
               type="search"
               value={search.q}
               onChange={(event) =>
-                void navigate({ search: (prev) => ({ ...prev, q: event.target.value }) })
+                void navigate({ search: (prev: AqarSearch) => ({ ...prev, q: event.target.value }) })
               }
               placeholder="مدينة، حي، أو عنوان الإعلان"
               className="w-full border-0 bg-transparent py-3 text-body text-foreground outline-none placeholder:text-muted-foreground"
@@ -127,7 +129,7 @@ function AqarBrowsePage() {
           <AqarTrackTabs
             track={track}
             onChange={(next) =>
-              void navigate({ search: (prev) => ({ ...prev, track: next, district: "" }) })
+              void navigate({ search: (prev: AqarSearch) => ({ ...prev, track: next, district: "" }) })
             }
           />
         </div>
@@ -139,10 +141,10 @@ function AqarBrowsePage() {
           district={search.district || "all"}
           priceKey={search.price}
           hasFilters={hasFilters}
-          onChange={(patch) => void navigate({ search: (prev) => ({ ...prev, ...patch }) })}
+          onChange={(patch) => void navigate({ search: (prev: AqarSearch) => ({ ...prev, ...patch }) })}
           onReset={() =>
             void navigate({
-              search: (prev) => ({ ...prev, city: "", district: "", type: "", price: "any" }),
+              search: (prev: AqarSearch) => ({ ...prev, city: "", district: "", type: "", price: "any" }),
             })
           }
         />

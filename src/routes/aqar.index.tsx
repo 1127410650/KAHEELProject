@@ -127,7 +127,7 @@ function AqarHomePage() {
           usdRate={rate}
           favorites={ids}
           onToggleFavorite={toggle}
-          moreTo={{ to: "/aqar/browse", search: { track } }}
+          moreTrack={track}
           emptyText="لا توجد إعلانات مميزة حاليًا في هذا المسار."
         />
         <AqarListingRail
@@ -136,7 +136,7 @@ function AqarHomePage() {
           usdRate={rate}
           favorites={ids}
           onToggleFavorite={toggle}
-          moreTo={{ to: "/aqar/browse", search: { track } }}
+          moreTrack={track}
         />
 
         <p className="px-4 py-4 text-desc text-muted-foreground">

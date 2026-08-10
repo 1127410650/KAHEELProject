@@ -7,7 +7,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 
 import { AqarListingCard } from "@/components/marketplace/aqar/AqarListingCard";
-import type { AqarListing } from "@/lib/mkt-aqar";
+import type { AqarListing, AqarTrack } from "@/lib/mkt-aqar";
 
 export function AqarListingRail({
   title,
@@ -15,7 +15,7 @@ export function AqarListingRail({
   usdRate,
   favorites,
   onToggleFavorite,
-  moreTo,
+  moreTrack,
   emptyText = "لا توجد إعلانات في هذا القسم بعد.",
 }: {
   title: string;
@@ -23,17 +23,18 @@ export function AqarListingRail({
   usdRate: number | null;
   favorites: string[];
   onToggleFavorite: (id: string) => void;
-  moreTo?: { to: string; search?: Record<string, string> };
+  /** رابط «الكل» — يفتح صفحة البحث على نفس المسار. */
+  moreTrack?: AqarTrack;
   emptyText?: string;
 }) {
   return (
     <section className="py-3">
       <div className="mb-2 flex items-center justify-between gap-2 px-4">
         <h2 className="text-section font-extrabold text-foreground">{title}</h2>
-        {moreTo && listings.length > 0 ? (
+        {moreTrack && listings.length > 0 ? (
           <Link
-            to={moreTo.to}
-            search={moreTo.search}
+            to="/aqar/browse"
+            search={{ track: moreTrack }}
             className="inline-flex min-h-[44px] items-center gap-0.5 text-desc font-bold text-primary"
           >
             الكل
