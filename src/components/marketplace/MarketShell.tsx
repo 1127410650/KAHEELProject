@@ -255,7 +255,9 @@ export function MarketHeader({
             </>
           )}
         </div>
-        {home && (
+        )}
+        {home && !shrunk && (
+
           <nav
             aria-label={t("market.nav.menu")}
             className="border-t border-border bg-background"
