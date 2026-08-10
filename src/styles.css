@@ -443,7 +443,7 @@
 /* بطاقة بيضاء فاخرة: استدارة 14px، حدّ فاصل، ظل خفيف، حاشية داخلية موحّدة. */
 @utility k-card-premium {
   border-radius: var(--r-card);
-  border: 1px solid var(--divider);
+  border: 1px solid var(--neutral-divider);
   background: var(--neutral-white);
   padding: var(--card-pad);
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
