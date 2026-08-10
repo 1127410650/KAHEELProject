@@ -169,11 +169,18 @@ export function MascotRoam() {
     });
 
     const quick = window.location.search.includes("roam=now");
-    const first = window.setTimeout(run, quick ? 900 : pacing.pageSettleMs + pacing.mascotIdleMs);
+    const first = window.setTimeout(
+      run,
+      quick ? 900 : pacing.pageSettleMs + pacing.mascotIdleMs,
+    );
+    // صفحة قصيرة لا تُمرَّر: نُعيد المحاولة بهدوء — كل محاولة تمرّ على كل
+    // البوابات (المسرح، الوتيرة، فترة الصمت، المنطقة الآمنة) فلا إزعاج.
+    const retry = window.setInterval(run, Math.max(4_000, pacing.mascotIdleMs * 2));
 
     return () => {
       stop();
       window.clearTimeout(first);
+      window.clearInterval(retry);
       window.clearTimeout(hideTimer.current);
       window.clearTimeout(exitTimer.current);
       releaseRef.current?.(true);
