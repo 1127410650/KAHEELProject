@@ -28,12 +28,12 @@ export function AddListingButton({ href, className }: Props) {
         "outline-none transition-transform duration-150 will-change-transform",
         "hover:-translate-y-0.5 active:scale-95",
         "focus-visible:ring-2 focus-visible:ring-white",
-        "min-[420px]:size-auto min-[420px]:h-11 min-[420px]:px-[var(--sp-4)]",
+        "min-[360px]:size-auto min-[360px]:h-11 min-[360px]:px-[var(--sp-4)]",
         className ?? "",
       ].join(" ")}
     >
       <Plus className="size-5 shrink-0" strokeWidth={3} aria-hidden />
-      <span className="hidden whitespace-nowrap text-desc font-black leading-none min-[420px]:inline sm:text-desc">
+      <span className="hidden whitespace-nowrap text-desc font-black leading-none min-[360px]:inline sm:text-desc">
         {label}
       </span>
     </a>

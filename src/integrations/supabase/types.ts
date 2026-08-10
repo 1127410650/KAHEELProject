@@ -4895,6 +4895,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null
@@ -4937,6 +4938,7 @@ export type Database = {
           shape_size?: string | null
           slot_key: string
           sort_order?: number
+          source_note?: string | null
           subtitle_ar?: string | null
           template_id?: string | null
           tile_size?: string | null
@@ -4979,6 +4981,7 @@ export type Database = {
           shape_size?: string | null
           slot_key?: string
           sort_order?: number
+          source_note?: string | null
           subtitle_ar?: string | null
           template_id?: string | null
           tile_size?: string | null
@@ -11527,6 +11530,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null
@@ -11873,6 +11877,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null
@@ -11929,6 +11934,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null
@@ -12005,6 +12011,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null
@@ -12060,6 +12067,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null
@@ -13728,6 +13736,7 @@ export type Database = {
           shape_size: string | null
           slot_key: string
           sort_order: number
+          source_note: string | null
           subtitle_ar: string | null
           template_id: string | null
           tile_size: string | null

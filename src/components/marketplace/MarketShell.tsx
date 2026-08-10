@@ -63,18 +63,8 @@ export function MarketHeader({
   const locationKnown = !!shortLabel;
 
 
-  const unreadAlerts = useQuery({
-    queryKey: ["mkt", "unread-notifications", session?.user.id ?? null],
-    enabled: !!session && home,
-    refetchInterval: 60_000,
-    queryFn: async () => {
-      const { count } = await supabase
-        .from("mkt_notifications")
-        .select("id", { count: "exact", head: true })
-        .is("read_at", null);
-      return count ?? 0;
-    },
-  });
+  // عدّاد التنبيهات صار في الشريط السفلي فقط — الهيدر بصفّين بلا جرس.
+
 
   useEffect(() => {
     // الرئيسية تحجز ارتفاعًا ثابتًا (HOME_HEADER_H) فلا تحتاج قياسًا متغيرًا.
@@ -103,22 +93,18 @@ export function MarketHeader({
           locationKnown={locationKnown}
           onLocation={() => setLocationOpen(true)}
           addHref={addHref}
-          unreadCount={unreadAlerts.data ?? 0}
-          notificationsHref={
-            session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
-          }
-          extra={
-            session && offline ? (
-              <div className="relative z-10 border-t border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground">
-                {t("market.offlineNotice")}
-              </div>
-            ) : null
-          }
         />
+        {/* تنبيه عدم الاتصال يعيش أسفل الهيدر لا داخله، فلا يزيد ارتفاعه الثابت. */}
+        {session && offline ? (
+          <div className="border-b border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground">
+            {t("market.offlineNotice")}
+          </div>
+        ) : null}
         {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
       </>
     );
   }
+
 
   return (
 
