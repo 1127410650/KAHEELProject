@@ -170,8 +170,9 @@
   --info: oklch(0.4854 0.2222 303.37);
   --info-foreground: oklch(1 0 0);
 
-  --border: oklch(0.8837 0.0755 305.5);
-  --input: oklch(0.8299 0.1046 304.7);
+  /* حدود رمادية فاتحة 1px — الفصل بالحد لا باللون */
+  --border: oklch(0.918 0 0);
+  --input: oklch(0.888 0 0);
   --ring: oklch(0.4854 0.2222 303.37);
 
   --chart-1: oklch(0.4854 0.2222 303.37);
@@ -181,13 +182,14 @@
   --chart-5: oklch(0.7413 0.1435 305.5);
 
   --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.2354 0.1416 303.37);
+  --sidebar-foreground: oklch(0.1776 0 0);
   --sidebar-primary: oklch(0.4854 0.2222 303.37);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.9536 0.0338 305.5);
-  --sidebar-accent-foreground: oklch(0.2354 0.1416 303.37);
-  --sidebar-border: oklch(0.8837 0.0755 305.5);
+  --sidebar-accent: oklch(0.968 0 0);
+  --sidebar-accent-foreground: oklch(0.1776 0 0);
+  --sidebar-border: oklch(0.918 0 0);
   --sidebar-ring: oklch(0.4854 0.2222 303.37);
+
 
   /* admin status tones — مشتقة من البنفسجي عدا الدلالي (خطر/إنجاز) */
   --admin-critical: oklch(0.42 0.17 25);
