@@ -24,6 +24,7 @@ import { enablePersistentSession } from "@/lib/auth-storage";
 import {
   otpChannelsForPhone,
   otpProviderStatus,
+  requestEmailOtp,
   requestPhoneOtp,
   verifyPhoneOtp,
 } from "@/lib/otp.functions";
@@ -41,6 +42,7 @@ const FALLBACK_PHONE_ONLY_DIALS = [DEFAULT_DIAL];
 export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   const { t } = useI18n();
   const requestOtp = useServerFn(requestPhoneOtp);
+  const requestEmail = useServerFn(requestEmailOtp);
   const verifyOtp = useServerFn(verifyPhoneOtp);
   const readProviders = useServerFn(otpProviderStatus);
   const readChannels = useServerFn(otpChannelsForPhone);
@@ -52,6 +54,8 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   // القناة لا يختارها المستخدم: المحوّل الخادمي يقررها من مفتاح الدولة.
   const [channels, setChannels] = useState<OtpChannel[] | null>(null);
   const [code, setCode] = useState("");
+  /** القناة التي وصل عبرها الرمز فعلًا — تحدد كيف نتحقق منه. */
+  const [deliveredChannel, setDeliveredChannel] = useState<OtpChannel>("sms");
   const [stage, setStage] = useState<"identify" | "code">("identify");
   const [busy, setBusy] = useState(false);
   const [providers, setProviders] = useState<{ sms: boolean; whatsapp: boolean } | null>(null);
@@ -102,7 +106,14 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
     try {
       enablePersistentSession();
       if (isPhoneOnly) {
-        const result = await requestOtp({ data: { phone: e164!, channel: phoneChannel } });
+        // البريد يُمرَّر كاحتياط: إن تعذّر إرسال SMS يذهب الرمز إليه تلقائيًا.
+        const result = await requestOtp({
+          data: {
+            phone: e164!,
+            channel: phoneChannel,
+            email: emailReady ? email.trim() : null,
+          },
+        });
         if (!result.ok) {
           toast.error(
             result.error === "COOLDOWN"
@@ -110,17 +121,21 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                   "{seconds}",
                   String(result.retry_after_seconds ?? 60),
                 )
-              : result.error === "PROVIDER_UNCONFIGURED"
-              ? t("market.easyAuth.disabled")
               : result.error === "RATE_LIMITED"
                 ? t("market.easyAuth.rateLimited")
                 : result.error === "INVALID_PHONE"
                   ? t("market.easyAuth.invalidPhone")
-                  : t("market.easyAuth.failed"),
+                  : // قناة معطّلة أو فشل إرسال حقيقي: سبب صريح + بديل يعمل.
+                    t("market.easyAuth.sendFailedUsePassword"),
           );
           return;
         }
-        toast.success(t("market.easyAuth.sent").replace("{target}", e164!));
+        setDeliveredChannel(result.channel);
+        toast.success(
+          result.channel === "email"
+            ? t("market.easyAuth.sentEmail").replace("{target}", result.target_masked ?? email.trim())
+            : t("market.easyAuth.sent").replace("{target}", e164!),
+        );
         setStage("code");
         return;
       }
@@ -128,36 +143,49 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
         toast.error(t("market.easyAuth.invalidEmail"));
         return;
       }
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: {
-          shouldCreateUser: true,
-          data: { phone_e164: e164 ?? "", full_name: fullName.trim() },
-        },
+      // خارج سوريا: البريد هو القناة الأساسية الآن (قنوات الجوال غير مفعّلة).
+      const sent = await requestEmail({
+        data: { email: email.trim(), phone: e164 ?? null, full_name: fullName.trim() },
       });
-      if (error) {
-        toast.error(t("market.easyAuth.failed"));
+      if (!sent.ok) {
+        toast.error(
+          sent.error === "COOLDOWN"
+            ? t("market.easyAuth.cooldown").replace(
+                "{seconds}",
+                String(sent.retry_after_seconds ?? 60),
+              )
+            : sent.error === "RATE_LIMITED"
+              ? t("market.easyAuth.rateLimited")
+              : sent.error === "INVALID_EMAIL"
+                ? t("market.easyAuth.invalidEmail")
+                : t("market.easyAuth.sendFailedUsePassword"),
+        );
         return;
       }
-      toast.success(t("market.easyAuth.emailSent"));
+      setDeliveredChannel("email");
+      toast.success(t("market.easyAuth.sentEmail").replace("{target}", sent.masked));
       setStage("code");
     } catch {
-      toast.error(t("market.easyAuth.failed"));
+      toast.error(t("market.easyAuth.sendFailedUsePassword"));
     } finally {
       setBusy(false);
     }
   }
 
+
   async function verify() {
     const digits = code.replace(/\D/g, "");
-    if (digits.length !== 6) {
+    // رمز البريد المدمج قد يكون ٦ أو ٨ أرقام بحسب إعداد المشروع.
+    const expected = deliveredChannel === "email" ? [6, 8] : [6];
+    if (!expected.includes(digits.length)) {
       toast.error(t("market.easyAuth.invalidCode"));
       return;
     }
     setBusy(true);
     try {
       enablePersistentSession();
-      if (isPhoneOnly) {
+      // التحقق يتبع القناة التي وصل بها الرمز فعلًا، لا مفتاح الدولة.
+      if (deliveredChannel !== "email") {
         const result = await verifyOtp({
           data: { phone: e164!, code: digits, full_name: fullName.trim() },
         });
@@ -238,7 +266,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             </div>
           </div>
 
-          {!isPhoneOnly && (
+          {(!isPhoneOnly || providersOff) && (
             <div className="space-y-2">
               <Label htmlFor="easy-email">{t("market.easyAuth.email")}</Label>
               <Input
@@ -251,7 +279,11 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
-              <p className="text-xs text-muted-foreground">{t("market.easyAuth.emailRequired")}</p>
+              <p className="text-xs text-muted-foreground">
+                {isPhoneOnly
+                  ? t("market.easyAuth.emailFallback")
+                  : t("market.easyAuth.emailRequired")}
+              </p>
             </div>
           )}
 
@@ -283,7 +315,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                   data-testid="otp-disabled-note"
                   className="rounded-xl border border-gold/45 bg-gold-soft px-3 py-2 text-xs font-semibold text-gold-foreground"
                 >
-                  {t("market.easyAuth.disabled")}
+                  {t("market.easyAuth.disabledEmailFallback")}
                 </p>
               )}
             </div>
@@ -293,7 +325,11 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             type="button"
             className="h-12 w-full"
             onClick={send}
-            disabled={busy || (isPhoneOnly && (!phoneReady || providersOff)) || (!isPhoneOnly && !emailReady)}
+            disabled={
+              busy ||
+              (isPhoneOnly && (!phoneReady || (providersOff && !emailReady))) ||
+              (!isPhoneOnly && !emailReady)
+            }
           >
             {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {busy ? t("market.easyAuth.sending") : t("market.easyAuth.send")}
@@ -308,7 +344,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
               dir="ltr"
               inputMode="numeric"
               autoComplete="one-time-code"
-              maxLength={6}
+              maxLength={deliveredChannel === "email" ? 8 : 6}
               className="num h-12 text-center text-lg tracking-[0.4em]"
               value={code}
               onChange={(event) => setCode(event.target.value)}

@@ -15,11 +15,13 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
 import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
+import { sendEmailOtpImpl } from "@/lib/otp-email.server";
 import {
   channelsFor,
   hashPhone,
   loadChannelConfig,
   providerConfigured,
+  routeFor,
   sendOtp,
   type OtpChannel,
 } from "@/lib/otp-providers.server";
@@ -75,10 +77,23 @@ function equalHash(a: string, b: string): boolean {
 }
 
 export type RequestOtpResult =
-  | { ok: true; channel: OtpChannel; expires_in_minutes: number; resend_after_seconds: number }
+  | {
+      ok: true;
+      channel: OtpChannel;
+      expires_in_minutes: number;
+      resend_after_seconds: number;
+      /** البريد المقنّع حين يكون التسليم عبر البريد. */
+      target_masked?: string;
+    }
   | {
       ok: false;
-      error: "INVALID_PHONE" | "RATE_LIMITED" | "COOLDOWN" | "PROVIDER_UNCONFIGURED" | "SEND_FAILED";
+      error:
+        | "INVALID_PHONE"
+        | "RATE_LIMITED"
+        | "COOLDOWN"
+        | "PROVIDER_UNCONFIGURED"
+        | "SEND_FAILED"
+        | "EMAIL_SEND_FAILED";
       retry_after_seconds?: number;
     };
 
@@ -86,10 +101,47 @@ export async function requestOtpImpl(
   phone: string,
   preferred: OtpChannel | null,
   clientKey: string,
+  email?: string | null,
 ): Promise<RequestOtpResult> {
   if (!/^\+[1-9][0-9]{7,14}$/.test(phone)) return { ok: false, error: "INVALID_PHONE" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const countryIso2 = await resolveMarketIso2ByPhone(phone);
+  const trimmedEmail = (email ?? "").trim();
+
+  // البريد قناة أساسية حين لا توجد أي قناة جوال قابلة للإرسال فعلًا:
+  // لا نحاول قناة معطّلة لتفشل، بل نرسل مباشرة إلى البريد.
+  const config = await loadChannelConfig(supabaseAdmin);
+  const phoneChannelsLive = routeFor(phone, config).length > 0;
+  if (!phoneChannelsLive && trimmedEmail) {
+    const sent = await sendEmailOtpImpl({
+      email: trimmedEmail,
+      phone,
+      fullName: "",
+      countryIso2,
+      clientKey,
+    });
+    if (sent.ok)
+      return {
+        ok: true,
+        channel: "email",
+        expires_in_minutes: OTP_TTL_MINUTES,
+        resend_after_seconds: OTP_RESEND_SECONDS,
+        target_masked: sent.masked,
+      };
+    return {
+      ok: false,
+      error:
+        sent.error === "COOLDOWN"
+          ? "COOLDOWN"
+          : sent.error === "RATE_LIMITED"
+            ? "RATE_LIMITED"
+            : "EMAIL_SEND_FAILED",
+      ...(sent.retry_after_seconds === undefined
+        ? {}
+        : { retry_after_seconds: sent.retry_after_seconds }),
+    };
+  }
 
   // منع إعادة الإرسال قبل ٦٠ ثانية: أحدث سطر لهذا الرقم يحدد الانتظار.
   const { data: recent } = await supabaseAdmin
@@ -131,12 +183,31 @@ export async function requestOtpImpl(
   const outcome = await sendOtp(supabaseAdmin, {
     phone,
     code,
-    countryIso2: await resolveMarketIso2ByPhone(phone),
+    countryIso2,
     idempotencyKey: `${hashPhone(phone).slice(0, 24)}:${Date.now()}`,
     preferred,
   });
 
   if (!outcome.ok) {
+    // فشل الجوال (قناة معطّلة أو مزوّد أخفق) → البريد تلقائيًا بلا إعادة محاولة.
+    if (trimmedEmail) {
+      const sent = await sendEmailOtpImpl({
+        email: trimmedEmail,
+        phone,
+        fullName: "",
+        countryIso2,
+        clientKey,
+        attempt: 2,
+      });
+      if (sent.ok)
+        return {
+          ok: true,
+          channel: "email",
+          expires_in_minutes: OTP_TTL_MINUTES,
+          resend_after_seconds: OTP_RESEND_SECONDS,
+          target_masked: sent.masked,
+        };
+    }
     return {
       ok: false,
       error: outcome.status === "unconfigured" ? "PROVIDER_UNCONFIGURED" : "SEND_FAILED",
@@ -168,6 +239,7 @@ export async function requestOtpImpl(
     resend_after_seconds: OTP_RESEND_SECONDS,
   };
 }
+
 
 export type VerifyOtpResult =
   | { ok: true; access_token: string; refresh_token: string; created: boolean }
