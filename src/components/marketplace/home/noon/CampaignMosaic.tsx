@@ -50,7 +50,7 @@ function CampaignTile({
   const template = templateId ? templates.data?.find((item) => item.id === templateId) : undefined;
 
   // الأساس لافندر خفيف (لا أبيض) كي لا يبدو الموضع فارغًا مع أصل حملة شفاف.
-  const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
+  const box = `relative block w-full overflow-hidden rounded-[var(--r-card)] border border-border bg-secondary shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
 
 
   /* الطبقة الأساسية: صورة القسم + تدرّج بنفسجي فوقها والنص — تضمن ألّا يظهر
@@ -161,9 +161,9 @@ export function CampaignMosaic() {
   );
 
   return (
-    <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-2.5">
+    <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-[var(--sp-3)]">
       {tile(slots[0]!, WIDE, "wide-1", "home.campaign.1")}
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-[var(--sp-3)]">
         {tile(slots[1]!, HALF, "half-1", "home.campaign.2")}
         {tile(slots[2]!, HALF, "half-2", "home.campaign.3")}
       </div>

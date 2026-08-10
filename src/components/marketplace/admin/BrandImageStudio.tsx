@@ -140,7 +140,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
   return (
     <div className="space-y-4">
       {/* العدّاد والسقف */}
-      <div className="rounded-2xl border border-border bg-muted/40 p-3">
+      <div className="rounded-[var(--r-card)] border border-border bg-muted/40 p-3">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="secondary" className="gap-1">
             <Sparkles className="size-3.5" aria-hidden />
@@ -205,7 +205,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
       </div>
 
       {/* نموذج التوليد */}
-      <div className="space-y-3 rounded-2xl border border-border bg-card p-3">
+      <div className="space-y-3 rounded-[var(--r-card)] border border-border bg-card p-3">
         <div>
           <Label htmlFor="ai-prompt" className="text-desc">
             وصف الصورة بالعربية
@@ -314,7 +314,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
       {candidates.length > 0 ? (
         <ul className="grid gap-3 sm:grid-cols-2">
           {candidates.map((candidate) => (
-            <li key={candidate.jobId} className="rounded-2xl border border-border bg-card p-2">
+            <li key={candidate.jobId} className="rounded-[var(--r-card)] border border-border bg-card p-2">
               <img
                 src={candidate.previewUrl}
                 alt="صورة مولّدة مختومة باسم كَحيل"
@@ -363,7 +363,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
       ) : null}
 
       {/* السجل */}
-      <details className="rounded-2xl border border-border bg-card p-3">
+      <details className="rounded-[var(--r-card)] border border-border bg-card p-3">
         <summary className="cursor-pointer text-desc font-extrabold text-foreground">
           سجل التوليد ({(jobs.data ?? []).length.toLocaleString("en-US")})
         </summary>

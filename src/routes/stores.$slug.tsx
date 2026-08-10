@@ -81,9 +81,9 @@ function PublicStorePage() {
     return (
       <MarketShell>
         <div className="mx-auto w-full max-w-5xl space-y-4 px-4 py-6">
-          <Skeleton className="h-44 w-full rounded-3xl" />
+          <Skeleton className="h-44 w-full rounded-[var(--r-card)]" />
           <Skeleton className="h-8 w-56" />
-          <Skeleton className="h-32 w-full rounded-2xl" />
+          <Skeleton className="h-32 w-full rounded-[var(--r-card)]" />
         </div>
       </MarketShell>
     );
@@ -154,7 +154,7 @@ function PublicStorePage() {
               className={`absolute inset-0 bg-gradient-to-t ${theme.softGradient}`}
               aria-hidden
             />
-            <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-desc font-bold text-white backdrop-blur-md">
+            <span className="absolute start-4 top-4 inline-flex items-center gap-[var(--sp-2)] rounded-full border border-white/25 bg-black/20 px-3 py-[var(--sp-2)] text-desc font-bold text-white backdrop-blur-md">
               <Sparkles className="size-3.5" aria-hidden />
               هوية متجر كَحيل
             </span>
@@ -163,7 +163,7 @@ function PublicStorePage() {
           <div className="space-y-4 p-4 sm:p-5">
             <div className="flex flex-wrap items-center gap-3">
               <div
-                className={`grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border-4 border-background bg-background shadow-lg ring-2 ${theme.ring}`}
+                className={`grid size-16 shrink-0 place-items-center overflow-hidden rounded-[var(--r-card)] border-4 border-background bg-background shadow-lg ring-2 ${theme.ring}`}
               >
                 {logo ? (
                   <img src={logo} alt={name} className="size-full object-cover" />
@@ -294,7 +294,7 @@ function PublicStorePage() {
                 return (
                   <div
                     key={item.id}
-                    className={`flex gap-3 rounded-2xl border p-3 shadow-sm ${theme.surface}`}
+                    className={`flex gap-3 rounded-[var(--r-card)] border p-3 shadow-sm ${theme.surface}`}
                   >
                     <div
                       className={`grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}
@@ -388,7 +388,7 @@ function PublicStorePage() {
                   key={listing.id}
                   to="/ads/$slug"
                   params={{ slug: listing.slug }}
-                  className="rounded-2xl border bg-card p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel"
+                  className="rounded-[var(--r-card)] border bg-card p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel"
                 >
                   <div
                     className={`mb-2 grid h-28 w-full place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}

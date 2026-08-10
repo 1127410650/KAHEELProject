@@ -44,8 +44,8 @@ function ProviderOperationsPage() {
     return (
       <DashboardShell title={locale === "ar" ? "مركز التشغيل" : "Operations center"}>
         <div className="space-y-3">
-          <Skeleton className="h-44 rounded-3xl" />
-          <Skeleton className="h-56 rounded-3xl" />
+          <Skeleton className="h-44 rounded-[var(--r-card)]" />
+          <Skeleton className="h-56 rounded-[var(--r-card)]" />
         </div>
       </DashboardShell>
     );
@@ -54,7 +54,7 @@ function ProviderOperationsPage() {
   if (!overview.data || overview.isError || !overview.data.allowed) {
     return (
       <DashboardShell title={locale === "ar" ? "مركز التشغيل" : "Operations center"}>
-        <Card className="mx-auto max-w-2xl rounded-3xl">
+        <Card className="mx-auto max-w-2xl rounded-[var(--r-card)]">
           <CardContent className="space-y-4 p-6 text-center sm:p-8">
             <Store className="mx-auto size-11 text-primary" />
             <h2 className="text-section font-black">
@@ -179,7 +179,7 @@ function ProviderOperationsPage() {
   return (
     <DashboardShell title={locale === "ar" ? "مركز التشغيل" : "Operations center"}>
       <div className="space-y-5">
-        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
+        <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
           <CardContent className="space-y-5 p-5 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -212,7 +212,7 @@ function ProviderOperationsPage() {
               {stats.map(([label, value]) => (
                 <div
                   key={String(label)}
-                  className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur"
+                  className="rounded-[var(--r-card)] border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
                   <p className="text-desc text-white/60">{label}</p>
                   <p className="mt-1 text-xl font-black tabular-nums">{value}</p>
@@ -227,9 +227,9 @@ function ProviderOperationsPage() {
             <Link
               key={module.key}
               to={module.to}
-              className="group rounded-3xl border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              className="group rounded-[var(--r-card)] border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
             >
-              <span className="grid size-11 place-items-center rounded-2xl bg-primary/10 text-primary">
+              <span className="grid size-11 place-items-center rounded-[var(--r-card)] bg-primary/10 text-primary">
                 <module.icon className="size-5" aria-hidden />
               </span>
               <h2 className="mt-4 font-black text-foreground group-hover:text-primary">

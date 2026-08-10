@@ -277,13 +277,13 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
 
       <dl className="mt-3 space-y-1 text-desc text-muted-foreground">
         {city && (
-          <div className="flex gap-1.5">
+          <div className="flex gap-[var(--sp-2)]">
             <dt>{t("market.filters.city")}:</dt>
             <dd className="min-w-0 text-foreground">{city}</dd>
           </div>
         )}
         {joined && (
-          <div className="flex gap-1.5">
+          <div className="flex gap-[var(--sp-2)]">
             <dt>{t("market.business.joined")}:</dt>
             <dd className="text-foreground" dir="ltr">
               {new Date(joined).toLocaleDateString("en-GB", { timeZone: "Asia/Riyadh" })}
@@ -291,7 +291,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
           </div>
         )}
         {typeof activeAds === "number" && activeAds > 0 && (
-          <div className="flex gap-1.5">
+          <div className="flex gap-[var(--sp-2)]">
             <dt>{t("market.ad.activeAds")}:</dt>
             <dd className="text-foreground">{activeAds}</dd>
           </div>
@@ -528,14 +528,14 @@ function AdPage() {
           )}
 
           {/* Key facts first, gallery after: the order buyers read in. */}
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
             {type && (
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
+              <span className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc font-medium text-secondary-foreground">
                 {locale === "ar" ? type.name_ar : type.name_en}
               </span>
             )}
             {listing.deal_kind && (
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc text-secondary-foreground">
+              <span className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc text-secondary-foreground">
                 {t(`market.filters.${listing.deal_kind}`)}
               </span>
             )}
@@ -630,7 +630,7 @@ function AdPage() {
           {(similar.data ?? []).length > 0 && (
             <section className="mt-8">
               <h2 className="text-section mb-3 font-bold text-foreground">{t("market.ad.similar")}</h2>
-              <div className="flex flex-col gap-2.5 sm:hidden">
+              <div className="flex flex-col gap-[var(--sp-3)] sm:hidden">
                 {(similar.data ?? []).map((l) => (
                   <ListingCard key={l.id} listing={l} view="row" />
                 ))}

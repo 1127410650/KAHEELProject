@@ -147,7 +147,7 @@ export function MarketHeader({
         >
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-1.5"
+            className="flex shrink-0 items-center gap-[var(--sp-2)]"
             aria-label={t("market.brand")}
           >
             <img
@@ -166,7 +166,7 @@ export function MarketHeader({
           <button
             type="button"
             onClick={() => setLocationOpen(true)}
-            className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            className="flex min-w-0 items-center justify-center gap-[var(--sp-2)] rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
           >
             <MapPin className="size-4 shrink-0" aria-hidden />

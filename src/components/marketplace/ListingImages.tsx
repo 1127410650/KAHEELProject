@@ -158,7 +158,7 @@ function PhotoTile({ item, isCover, onCover, onRemove, onRetry, onReplace }: Til
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`min-w-0 rounded-lg border border-border bg-card p-1.5 ${
+      className={`min-w-0 rounded-lg border border-border bg-card p-[var(--sp-2)] ${
         isDragging ? "z-10 opacity-80 shadow-lg" : ""
       }`}
     >
@@ -171,7 +171,7 @@ function PhotoTile({ item, isCover, onCover, onRemove, onRetry, onReplace }: Til
           </div>
         )}
         {item.status === "uploading" && (
-          <div className="absolute inset-x-0 bottom-0 bg-background/80 px-1.5 py-1">
+          <div className="absolute inset-x-0 bottom-0 bg-background/80 px-[var(--sp-2)] py-1">
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div className="h-full bg-primary" style={{ width: `${item.progress}%` }} />
             </div>

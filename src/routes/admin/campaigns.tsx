@@ -222,7 +222,7 @@ function AdminCampaignsPage() {
     <AdminShell title={ar ? "الحملات المتحركة" : "Animated campaigns"}>
       <div className="space-y-6">
         <header className="flex flex-wrap items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-2xl bg-primary/10 text-primary">
+          <span className="grid size-10 place-items-center rounded-[var(--r-card)] bg-primary/10 text-primary">
             <Clapperboard className="size-5" aria-hidden />
           </span>
           <div>
@@ -318,7 +318,7 @@ function AdminCampaignsPage() {
                 </div>
                 {/* معاينة حيّة للشخصية المختارة بنفس أصول المنصة المعتمدة. */}
                 {popupMascot !== "auto" ? (
-                  <div className="mt-2 w-fit rounded-2xl border bg-card p-2">
+                  <div className="mt-2 w-fit rounded-[var(--r-card)] border bg-card p-2">
                     <PopupMascot kind={popupMascot as MascotKind} lang={ar ? "ar" : "en"} />
                   </div>
                 ) : null}

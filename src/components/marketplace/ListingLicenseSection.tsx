@@ -73,7 +73,7 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
 
       {open && (
         <div id="ad-license-panel" className="border-t border-border p-4">
-          <dl className="space-y-1.5 text-desc">
+          <dl className="space-y-[var(--sp-2)] text-desc">
             {rows.map((row) => (
               <div key={row.label} className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <dt className="text-muted-foreground">{row.label}:</dt>
@@ -93,7 +93,7 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
             rel="noopener noreferrer"
             title={t("market.license.verifyHint")}
             aria-label={t("market.license.verifyHint")}
-            className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-desc font-semibold text-primary underline"
+            className="mt-3 inline-flex min-h-11 items-center gap-[var(--sp-2)] text-desc font-semibold text-primary underline"
           >
             <ExternalLink className="size-3.5" aria-hidden />
             {t("market.license.verify")}

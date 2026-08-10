@@ -116,7 +116,7 @@ export function AiImageStudio({ onApproved }: Props) {
     <Card>
       <CardContent className="space-y-4 p-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-primary/10 text-primary">
+          <span className="grid size-9 place-items-center rounded-[var(--r-card)] bg-primary/10 text-primary">
             <Sparkles className="size-4" aria-hidden />
           </span>
           <p className="text-sm font-bold">{ar ? "توليد صورة" : "Generate an image"}</p>
@@ -205,7 +205,7 @@ export function AiImageStudio({ onApproved }: Props) {
         {candidates.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {candidates.map((asset) => (
-              <div key={asset.previewUrl} className="space-y-2 rounded-2xl border p-2">
+              <div key={asset.previewUrl} className="space-y-2 rounded-[var(--r-card)] border p-2">
                 <img
                   src={asset.previewUrl}
                   width={asset.width}

@@ -68,9 +68,9 @@ export default function LiveEditOverlay({ onExit }: { onExit: () => void }) {
       <div
         data-kslot-ui
         dir="rtl"
-        className="fixed inset-x-0 top-0 z-[70] flex items-center justify-between gap-2 bg-[#3d2179] px-3 py-1.5 text-white"
+        className="fixed inset-x-0 top-0 z-[70] flex items-center justify-between gap-2 bg-[#3d2179] px-3 py-[var(--sp-2)] text-white"
       >
-        <span className="flex min-w-0 items-center gap-1.5 text-desc font-extrabold">
+        <span className="flex min-w-0 items-center gap-[var(--sp-2)] text-desc font-extrabold">
           <PanelsTopLeft className="size-4 shrink-0" aria-hidden />
           <span className="truncate">
             وضع التحرير نشط — اضغط أي عنصر متوهّج لتعديله

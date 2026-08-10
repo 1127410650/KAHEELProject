@@ -141,7 +141,7 @@ function ProviderServiceCenter() {
   if (store.isLoading || setup.isLoading) {
     return (
       <DashboardShell title={locale === "ar" ? "مركز مقدم الخدمة" : "Provider center"}>
-        <Skeleton className="h-80 rounded-3xl" />
+        <Skeleton className="h-80 rounded-[var(--r-card)]" />
       </DashboardShell>
     );
   }
@@ -149,7 +149,7 @@ function ProviderServiceCenter() {
   if (!store.data) {
     return (
       <DashboardShell title={locale === "ar" ? "مركز مقدم الخدمة" : "Provider center"}>
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-3 p-6 text-center">
             <Store className="mx-auto size-10 text-primary" />
             <h2 className="text-section font-black">
@@ -174,7 +174,7 @@ function ProviderServiceCenter() {
   if (!setup.data) {
     return (
       <DashboardShell title={locale === "ar" ? "مركز مقدم الخدمة" : "Provider center"}>
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-3 p-6 text-center">
             <Wrench className="mx-auto size-10 text-primary" />
             <h2 className="text-section font-black">
@@ -213,7 +213,7 @@ function ProviderServiceCenter() {
   return (
     <DashboardShell title={locale === "ar" ? "مركز مقدم الخدمة" : "Provider center"}>
       <div className="space-y-5">
-        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
+        <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -257,7 +257,7 @@ function ProviderServiceCenter() {
               {stats.map(([label, value]) => (
                 <div
                   key={String(label)}
-                  className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur"
+                  className="rounded-[var(--r-card)] border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
                   <p className="text-desc text-white/60">{label}</p>
                   <p className="mt-1 text-2xl font-black">{value}</p>
@@ -287,11 +287,11 @@ function ProviderServiceCenter() {
         {bookings.isLoading ? (
           <div className="grid gap-3 lg:grid-cols-2">
             {Array.from({ length: 4 }, (_, index) => (
-              <Skeleton key={index} className="h-64 rounded-3xl" />
+              <Skeleton key={index} className="h-64 rounded-[var(--r-card)]" />
             ))}
           </div>
         ) : rows.length === 0 ? (
-          <div className="rounded-3xl border border-dashed bg-card px-4 py-14 text-center">
+          <div className="rounded-[var(--r-card)] border border-dashed bg-card px-4 py-14 text-center">
             <CalendarClock className="mx-auto size-10 text-primary" />
             <h3 className="mt-3 font-black">
               {locale === "ar" ? "لا توجد حجوزات في هذا القسم" : "No bookings in this section"}
@@ -305,7 +305,7 @@ function ProviderServiceCenter() {
         ) : (
           <div className="grid gap-3 lg:grid-cols-2">
             {rows.map((booking) => (
-              <Card key={booking.id} className="rounded-3xl">
+              <Card key={booking.id} className="rounded-[var(--r-card)]">
                 <CardContent className="space-y-4 p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -319,7 +319,7 @@ function ProviderServiceCenter() {
                       {providerStatusLabel(booking.status, locale)}
                     </Badge>
                   </div>
-                  <div className="grid gap-2 rounded-2xl bg-secondary/55 p-3 text-sm sm:grid-cols-2">
+                  <div className="grid gap-2 rounded-[var(--r-card)] bg-secondary/55 p-3 text-sm sm:grid-cols-2">
                     <p>
                       <CalendarClock className="me-1 inline size-4 text-primary" />
                       {new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", {

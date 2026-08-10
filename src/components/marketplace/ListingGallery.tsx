@@ -32,7 +32,7 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
   if (images.length === 0) {
     // A balanced placeholder: no counter, no arrows, no thumbnail strip.
     return (
-      <div className="grid h-36 w-full place-items-center gap-1.5 rounded-xl border border-border bg-muted text-sm text-muted-foreground sm:h-44">
+      <div className="grid h-36 w-full place-items-center gap-[var(--sp-2)] rounded-xl border border-border bg-muted text-sm text-muted-foreground sm:h-44">
         <ImageOff className="size-6" aria-hidden />
         <span>{t("market.noImage")}</span>
       </div>
@@ -93,7 +93,7 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
               type="button"
               onClick={() => go(active - 1)}
               aria-label={t("common.previous")}
-              className="absolute top-1/2 start-2 hidden -translate-y-1/2 rounded-full bg-background/80 p-1.5 text-foreground sm:block"
+              className="absolute top-1/2 start-2 hidden -translate-y-1/2 rounded-full bg-background/80 p-[var(--sp-2)] text-foreground sm:block"
             >
               <ChevronRight className="size-4 ltr:hidden" aria-hidden />
               <ChevronLeft className="size-4 rtl:hidden" aria-hidden />
@@ -102,7 +102,7 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
               type="button"
               onClick={() => go(active + 1)}
               aria-label={t("common.next")}
-              className="absolute top-1/2 end-2 hidden -translate-y-1/2 rounded-full bg-background/80 p-1.5 text-foreground sm:block"
+              className="absolute top-1/2 end-2 hidden -translate-y-1/2 rounded-full bg-background/80 p-[var(--sp-2)] text-foreground sm:block"
             >
               <ChevronLeft className="size-4 ltr:hidden" aria-hidden />
               <ChevronRight className="size-4 rtl:hidden" aria-hidden />
@@ -179,7 +179,7 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
 
           {images.length > 1 && (
             <span
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/85 px-2.5 py-1 text-desc font-medium text-foreground"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/85 px-[var(--sp-3)] py-1 text-desc font-medium text-foreground"
               dir="ltr"
             >
               {active + 1} / {images.length}

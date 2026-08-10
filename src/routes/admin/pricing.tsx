@@ -125,7 +125,7 @@ function PricingPage() {
       <AdminShell title="الأسعار والقيم التشغيلية">
         <div className="space-y-3">
           {[0, 1, 2].map((row) => (
-            <Skeleton key={row} className="h-32 w-full rounded-2xl" />
+            <Skeleton key={row} className="h-32 w-full rounded-[var(--r-card)]" />
           ))}
         </div>
       </AdminShell>
@@ -144,12 +144,12 @@ function PricingPage() {
         </Button>
       }
     >
-      <p className="mb-4 rounded-2xl border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
+      <p className="mb-4 rounded-[var(--r-card)] border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
         كل قيمة هنا تُقرأ من القاعدة وقت التنفيذ، فلا شيء مكتوب في الكود. إضافة أو خصم رصيد يدوي بسبب
         مسجّل يجري من شاشة «أرصدة المحافظ».
       </p>
 
-      <section aria-labelledby="packs" className="mb-6 rounded-2xl border border-border bg-card p-3">
+      <section aria-labelledby="packs" className="mb-6 rounded-[var(--r-card)] border border-border bg-card p-3">
         <h2 id="packs" className="mb-2 text-section font-extrabold text-foreground">
           حزم شحن الرصيد (SAR)
         </h2>
@@ -205,7 +205,7 @@ function PricingPage() {
         </div>
       </section>
 
-      <section aria-labelledby="promos" className="mb-6 rounded-2xl border border-border bg-card p-3">
+      <section aria-labelledby="promos" className="mb-6 rounded-[var(--r-card)] border border-border bg-card p-3">
         <h2 id="promos" className="mb-2 text-section font-extrabold text-foreground">
           أسعار التمييز ومدده (نقاط لكل عدد أيام)
         </h2>
@@ -262,7 +262,7 @@ function PricingPage() {
         </div>
       </section>
 
-      <section aria-labelledby="fx" className="rounded-2xl border border-border bg-card p-3">
+      <section aria-labelledby="fx" className="rounded-[var(--r-card)] border border-border bg-card p-3">
         <h2 id="fx" className="mb-2 text-section font-extrabold text-foreground">
           سعر الصرف (دولار → ليرة سورية)
         </h2>

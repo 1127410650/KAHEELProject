@@ -77,13 +77,13 @@ function AppearancePage() {
         </div>
       }
     >
-      <p className="mb-4 rounded-2xl border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
+      <p className="mb-4 rounded-[var(--r-card)] border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
         كل صورة في الواجهة العامة مرتبطة بفتحة هنا. الرفع يضغط الصورة تلقائيًا (أطول ضلع ١٦٠٠ بكسل ·
         صيغة WebP · حتى ٣٠٠ كيلوبايت)، والفتحة الفارغة تعرض صورة احتياطية مفتوحة الترخيص. الفيديو
         حاليًا برابط خارجي فقط.
       </p>
 
-      <details className="mb-4 rounded-2xl border border-border bg-card p-3">
+      <details className="mb-4 rounded-[var(--r-card)] border border-border bg-card p-3">
         <summary className="flex cursor-pointer items-center gap-1.5 text-section font-extrabold text-foreground">
           <Sparkles className="size-4 text-primary" aria-hidden />
           مكتبة تصاميمي — توليد بالذكاء الاصطناعي
@@ -115,7 +115,7 @@ function AppearancePage() {
       {slots.isPending ? (
         <div className="space-y-3">
           {[0, 1, 2, 3].map((row) => (
-            <Skeleton key={row} className="h-28 w-full rounded-2xl" />
+            <Skeleton key={row} className="h-28 w-full rounded-[var(--r-card)]" />
           ))}
         </div>
       ) : slots.isError ? (

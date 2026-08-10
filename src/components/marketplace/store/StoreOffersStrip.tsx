@@ -34,7 +34,7 @@ export function StoreOffersStrip({
         {live.map((offer) => (
           <article
             key={offer.id}
-            className="min-w-[15rem] shrink-0 rounded-2xl border border-market-navy/25 bg-market-navy/5 p-3"
+            className="min-w-[15rem] shrink-0 rounded-[var(--r-card)] border border-market-navy/25 bg-market-navy/5 p-3"
           >
             <p className="text-desc font-black">{offer.title}</p>
             <p className="mt-1 text-desc font-bold text-market-navy">

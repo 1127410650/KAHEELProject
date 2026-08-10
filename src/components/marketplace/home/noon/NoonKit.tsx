@@ -34,7 +34,7 @@ export function SectionHead({
       </div>
       <a
         href={href}
-        className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-2.5 text-desc font-black text-primary outline-none transition hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
+        className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-[var(--sp-3)] text-desc font-black text-primary outline-none transition hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
       >
         {locale === "ar" ? "عرض الكل" : "View all"}
         <ChevronLeft className="size-4 ltr:rotate-180" aria-hidden />

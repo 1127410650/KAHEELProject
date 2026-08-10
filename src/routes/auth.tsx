@@ -116,7 +116,7 @@ function AuthPage() {
           alt=""
           width={1024}
           height={1024}
-          className="size-20 rounded-2xl"
+          className="size-20 rounded-[var(--r-card)]"
           aria-hidden
         />
         <span className="text-5xl font-black text-market-navy-foreground">

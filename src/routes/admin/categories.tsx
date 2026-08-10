@@ -165,7 +165,7 @@ function AdminCategoriesPage() {
         ) : (
           <ul className="space-y-3">
             {primaries.map((primary) => (
-              <li key={primary.id} className="rounded-2xl border border-border bg-card p-3">
+              <li key={primary.id} className="rounded-[var(--r-card)] border border-border bg-card p-3">
                 <CategoryRow
                   row={primary}
                   locale={locale}
@@ -225,7 +225,7 @@ function AdminCategoriesPage() {
         )}
 
         {/* دمج قسم في قسم */}
-        <section className="rounded-2xl border border-border bg-card p-3">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-3">
           <h2 className="text-section font-bold text-foreground">دمج قسم في قسم</h2>
           <p className="mt-1 text-desc text-muted-foreground">
             كل إعلانات المصدر تنتقل إلى الهدف، والمصدر يُخفى بحذف ناعم ومساره القديم يحوَّل 301 —
@@ -278,7 +278,7 @@ function AdminCategoriesPage() {
         </section>
 
         {/* سجل التدقيق */}
-        <section className="rounded-2xl border border-border bg-card p-3">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-3">
           <h2 className="text-section font-bold text-foreground">سجل عمليات الأقسام</h2>
           <ul className="mt-2 divide-y divide-border">
             {(audit.data ?? []).map((row) => (
@@ -457,7 +457,7 @@ function AddCategoryCard({
   const [parentId, setParentId] = useState("");
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-3">
+    <section className="rounded-[var(--r-card)] border border-border bg-card p-3">
       <div className="grid gap-2 sm:grid-cols-4">
         <div>
           <Label htmlFor="new-slug">المعرّف (slug)</Label>

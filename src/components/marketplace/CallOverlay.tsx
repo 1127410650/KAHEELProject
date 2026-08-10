@@ -147,7 +147,7 @@ export function CallOverlay() {
           type="button"
           onClick={() => setMinimized(true)}
           aria-label={t("market.call.minimize")}
-          className="inline-flex h-11 items-center gap-1.5 rounded-full bg-white/12 px-4 text-desc font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
+          className="inline-flex h-11 items-center gap-[var(--sp-2)] rounded-full bg-white/12 px-4 text-desc font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
         >
           <ChevronDown className="size-4" aria-hidden />
           {t("market.call.minimize")}
@@ -183,7 +183,7 @@ export function CallOverlay() {
         </p>
 
         {relayFailed && (
-          <div className="mt-2 w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-3 text-start backdrop-blur-sm">
+          <div className="mt-2 w-full max-w-sm rounded-[var(--r-card)] border border-white/20 bg-white/10 p-3 text-start backdrop-blur-sm">
             <p className="text-desc">{t("market.call.fallback.title")}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {whatsappHref && (

@@ -57,7 +57,7 @@ export function QuickTiles() {
           key={key}
           data-kslot={slot}
           href={slotLink(slots.data, slot, href)}
-          className={`${TILE_SPAN[slotTileSize(slots.data, slot)]} flex min-h-[76px] min-w-0 flex-col items-center justify-center gap-1.5 rounded-2xl px-1.5 py-2 text-center ring-1 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${tint}`}
+          className={`${TILE_SPAN[slotTileSize(slots.data, slot)]} flex min-h-[76px] min-w-0 flex-col items-center justify-center gap-[var(--sp-2)] rounded-[var(--r-card)] px-[var(--sp-2)] py-2 text-center ring-1 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${tint}`}
         >
           <Icon className="size-6 shrink-0" aria-hidden />
           <span className="w-full truncate text-desc font-black leading-tight sm:text-desc">

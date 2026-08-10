@@ -52,7 +52,7 @@ export function DesignCard({ template, library, imageUrl, className }: DesignCar
 
   const body: ReactNode = (
     <div
-      className={`k-slot-anim relative isolate flex min-w-0 overflow-hidden rounded-2xl ring-1 ring-border ${
+      className={`k-slot-anim relative isolate flex min-w-0 overflow-hidden rounded-[var(--r-card)] ring-1 ring-border ${
         promo
           ? "min-h-[104px] flex-row items-center justify-between gap-3 px-4 py-3"
           : `min-h-[132px] p-3 ${layout}`
@@ -71,7 +71,7 @@ export function DesignCard({ template, library, imageUrl, className }: DesignCar
         ) : null}
       </div>
       {template.discount_pct != null ? (
-        <span className="inline-flex shrink-0 items-center gap-1 self-start rounded-full bg-gold px-2.5 py-1 text-desc font-black text-gold-foreground">
+        <span className="inline-flex shrink-0 items-center gap-1 self-start rounded-full bg-gold px-[var(--sp-3)] py-1 text-desc font-black text-gold-foreground">
           {template.discount_pct}%
           <span className="font-bold">خصم</span>
         </span>

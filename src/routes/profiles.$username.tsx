@@ -242,7 +242,7 @@ function UserProfilePage() {
         <h2 className="text-section mt-5 font-bold text-foreground">{t("market.person.listings")}</h2>
 
         {cats.length > 1 && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
+          <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
             {[{ id: null, label: t("market.person.allCategories") }, ...cats.map((c) => ({
               id: c.category_id,
               label: locale === "ar" ? c.name_ar : c.name_en || c.name_ar,
@@ -254,7 +254,7 @@ function UserProfilePage() {
                   type="button"
                   aria-pressed={active}
                   onClick={() => setCategoryId(chip.id)}
-                  className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
+                  className={`rounded-full border px-3 py-[var(--sp-2)] text-desc font-medium transition-colors ${
                     active
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-muted-foreground hover:border-primary/40"
@@ -279,7 +279,7 @@ function UserProfilePage() {
           </p>
         ) : (
           <>
-            <div className="mt-3 flex flex-col gap-2.5 sm:hidden">
+            <div className="mt-3 flex flex-col gap-[var(--sp-3)] sm:hidden">
               {rows.map((l) => (
                 <ListingCard key={l.id} listing={l} view="row" />
               ))}

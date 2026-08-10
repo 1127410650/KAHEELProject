@@ -215,14 +215,14 @@ function DesignsPage() {
 
   return (
     <AdminShell title="بانِ العروض والترويج">
-      <p className="mb-4 rounded-2xl border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
+      <p className="mb-4 rounded-[var(--r-card)] border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
         املأ القالب فتظهر البطاقة في المعاينة فورًا، ثم احفظها في «تصاميمي» لإعادة استخدامها. كل
         الخيارات من مكتبات مسجّلة — لا كود ولا أنماط حرة، والحركات CSS خفيفة تتوقف تلقائيًا لمن فعّل
         «تقليل الحركة» في جهازه.
       </p>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
-        <section aria-labelledby="builder" className="rounded-2xl border border-border bg-card p-3">
+        <section aria-labelledby="builder" className="rounded-[var(--r-card)] border border-border bg-card p-3">
           <h2 id="builder" className="mb-3 text-section font-extrabold text-foreground">
             القالب
           </h2>
@@ -312,7 +312,7 @@ function DesignsPage() {
 
 
 
-            <fieldset className="rounded-2xl border border-border p-2.5">
+            <fieldset className="rounded-[var(--r-card)] border border-border p-2.5">
               <legend className="px-1 text-desc font-bold text-foreground">الخلفية</legend>
               <div className="flex flex-wrap items-center gap-2">
                 <input
@@ -350,7 +350,7 @@ function DesignsPage() {
               </div>
             </fieldset>
 
-            <fieldset className="rounded-2xl border border-border p-2.5">
+            <fieldset className="rounded-[var(--r-card)] border border-border p-2.5">
               <legend className="px-1 text-desc font-bold text-foreground">الشكل والحركة</legend>
               <div className="grid grid-cols-2 gap-2">
                 <label className="text-desc font-bold text-foreground">
@@ -442,7 +442,7 @@ function DesignsPage() {
             </fieldset>
 
             {draft.kind === "promo" ? (
-              <fieldset className="rounded-2xl border border-border p-2.5">
+              <fieldset className="rounded-[var(--r-card)] border border-border p-2.5">
                 <legend className="px-1 text-desc font-bold text-foreground">الجدولة والحملة</legend>
                 <label className="block text-desc font-bold text-foreground">
                   حملة قائمة
@@ -503,7 +503,7 @@ function DesignsPage() {
         {templates.isPending ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2].map((row) => (
-              <Skeleton key={row} className="h-40 w-full rounded-2xl" />
+              <Skeleton key={row} className="h-40 w-full rounded-[var(--r-card)]" />
             ))}
           </div>
         ) : (templates.data ?? []).length === 0 ? (
@@ -511,7 +511,7 @@ function DesignsPage() {
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(templates.data ?? []).map((row) => (
-              <li key={row.id} className="space-y-2 rounded-2xl border border-border bg-card p-2.5">
+              <li key={row.id} className="space-y-2 rounded-[var(--r-card)] border border-border bg-card p-2.5">
                 <DesignCard template={row} library={lib.data} />
                 <p className="text-desc font-bold text-foreground">{row.name_ar}</p>
                 <p className="text-desc text-muted-foreground">
@@ -586,7 +586,7 @@ function DesignsPage() {
           </p>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {variations.map((row) => (
-              <li key={row.id} className="space-y-2 rounded-2xl border border-border bg-card p-2.5">
+              <li key={row.id} className="space-y-2 rounded-[var(--r-card)] border border-border bg-card p-2.5">
                 <DesignCard template={row} library={lib.data} />
                 <p className="text-desc font-bold text-foreground">{row.name_ar}</p>
                 <Button
@@ -618,7 +618,7 @@ function DesignsPage() {
 
       <section
         aria-labelledby="ai-studio"
-        className="mt-6 rounded-2xl border border-border bg-card p-3"
+        className="mt-6 rounded-[var(--r-card)] border border-border bg-card p-3"
       >
         <h2 id="ai-studio" className="flex items-center gap-1.5 text-section font-extrabold text-foreground">
           <Sparkles className="size-4 text-primary" aria-hidden />

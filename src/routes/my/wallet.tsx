@@ -86,7 +86,7 @@ function PointsPage() {
     <DashboardShell title={t("market.points.title")}>
       <div className="mb-4 grid grid-cols-2 gap-3 sm:max-w-md">
         <div className="rounded-xl border border-border bg-card p-3">
-          <p className="flex items-center gap-1.5 text-desc text-muted-foreground">
+          <p className="flex items-center gap-[var(--sp-2)] text-desc text-muted-foreground">
             <Coins className="size-3.5 text-primary" aria-hidden />
             {t("market.points.balance")}
           </p>

@@ -115,7 +115,7 @@ function SyriaGuidePage() {
       <main className="min-h-screen bg-background pb-10">
         <section className="relative isolate overflow-hidden border-b border-border bg-background text-foreground">
           <div className="market-hero-band relative mx-auto flex w-full max-w-[1240px] flex-col justify-end px-4 sm:px-6 lg:px-8">
-            <span className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1.5 text-desc font-black text-primary sm:text-desc">
+            <span className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary px-3 py-[var(--sp-2)] text-desc font-black text-primary sm:text-desc">
               <ShieldCheck className="size-4" aria-hidden />
               مصادر ظاهرة وشارات تحقق صادقة
             </span>
@@ -123,19 +123,19 @@ function SyriaGuidePage() {
             <p className="mt-1.5 max-w-2xl text-muted-foreground">
               جهات حكومية ومشافٍ وجامعات وخدمات وأماكن، مع اتجاهات وطرق تواصل مباشرة.
             </p>
-            <div className="mt-2.5 flex flex-wrap gap-2 text-desc font-bold text-muted-foreground sm:text-desc">
-              <span className="rounded-full border border-border bg-secondary px-3 py-1.5">
+            <div className="mt-[var(--sp-3)] flex flex-wrap gap-2 text-desc font-bold text-muted-foreground sm:text-desc">
+              <span className="rounded-full border border-border bg-secondary px-3 py-[var(--sp-2)]">
                 {total.toLocaleString("en-US")} سجل
               </span>
-              <span className="rounded-full border border-border bg-secondary px-3 py-1.5">بحث فوري</span>
-              <span className="rounded-full border border-border bg-secondary px-3 py-1.5">فلاتر بالمحافظة والقطاع</span>
+              <span className="rounded-full border border-border bg-secondary px-3 py-[var(--sp-2)]">بحث فوري</span>
+              <span className="rounded-full border border-border bg-secondary px-3 py-[var(--sp-2)]">فلاتر بالمحافظة والقطاع</span>
             </div>
           </div>
         </section>
 
 
         <section className="sticky top-[56px] z-20 border-b border-border/70 bg-background/95 shadow-sm backdrop-blur">
-          <div className="mx-auto w-full max-w-[1240px] space-y-2.5 px-4 py-3 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[1240px] space-y-[var(--sp-3)] px-4 py-3 sm:px-6 lg:px-8">
             <label className="relative block" htmlFor="syria-guide-search">
               <Search
                 className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -148,7 +148,7 @@ function SyriaGuidePage() {
                   setFilters((current) => ({ ...current, query: event.target.value }))
                 }
                 placeholder="ابحث بالاسم أو المدينة أو العنوان…"
-                className="h-11 w-full rounded-2xl border border-input bg-background pe-4 ps-10 text-sm outline-none transition focus:border-market-navy focus:ring-2 focus:ring-market-navy/15"
+                className="h-11 w-full rounded-[var(--r-card)] border border-input bg-background pe-4 ps-10 text-sm outline-none transition focus:border-market-navy focus:ring-2 focus:ring-market-navy/15"
               />
             </label>
 
@@ -218,16 +218,16 @@ function SyriaGuidePage() {
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
-                  className="h-44 animate-pulse rounded-3xl border border-border bg-muted/40"
+                  className="h-44 animate-pulse rounded-[var(--r-card)] border border-border bg-muted/40"
                 />
               ))}
             </div>
           ) : places.error ? (
-            <p className="rounded-3xl border border-destructive/30 bg-destructive/5 p-5 text-sm font-bold text-destructive">
+            <p className="rounded-[var(--r-card)] border border-destructive/30 bg-destructive/5 p-5 text-sm font-bold text-destructive">
               تعذّر تحميل الدليل، حاول لاحقًا.
             </p>
           ) : (places.data?.rows.length ?? 0) === 0 ? (
-            <div className="rounded-3xl border border-border bg-card p-8 text-center">
+            <div className="rounded-[var(--r-card)] border border-border bg-card p-8 text-center">
               <Sparkles className="mx-auto mb-2 size-5 text-market-navy" aria-hidden />
               <p className="text-sm font-black">لا نتائج مطابقة</p>
               <p className="mt-1 text-desc text-muted-foreground">

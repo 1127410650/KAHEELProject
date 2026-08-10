@@ -50,7 +50,7 @@ export function SlotDesignControls({
 
   return (
     <div className="mt-4 space-y-3 border-t border-border pt-3">
-      <fieldset className="rounded-2xl border border-border p-2.5">
+      <fieldset className="rounded-[var(--r-card)] border border-border p-[var(--sp-3)]">
         <legend className="px-1 text-desc font-bold text-foreground">الشكل الزخرفي</legend>
         <select className={SELECT} style={{ minHeight: 44 }} value={shape} onChange={(e) => setShape(e.target.value)}>
           <option value="">بلا شكل</option>
@@ -109,7 +109,7 @@ export function SlotDesignControls({
         ) : null}
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-border p-2.5">
+      <fieldset className="rounded-[var(--r-card)] border border-border p-[var(--sp-3)]">
         <legend className="px-1 text-desc font-bold text-foreground">الحركة</legend>
         <label className="flex items-center gap-2 text-desc font-bold text-foreground">
           <input

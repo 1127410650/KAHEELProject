@@ -59,7 +59,7 @@ export function StudentBotPlans({ className }: { className?: string }) {
       <ul className="grid gap-2 sm:grid-cols-2">
         {active.map((plan) => (
           <li key={plan.id} className="rounded-xl border border-border bg-card p-3">
-            <p className="flex items-center gap-1.5 text-desc font-black text-foreground">
+            <p className="flex items-center gap-[var(--sp-2)] text-desc font-black text-foreground">
               {plan.kind === "season" ? (
                 <CalendarClock className="size-3.5 text-accent" aria-hidden />
               ) : (
@@ -88,7 +88,7 @@ export function StudentBotPlans({ className }: { className?: string }) {
                 type="button"
                 onClick={() => void subscribe(plan.id)}
                 disabled={pending !== null}
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-primary px-3 text-desc font-black text-primary-foreground disabled:opacity-60"
+                className="inline-flex min-h-9 items-center gap-[var(--sp-2)] rounded-full bg-primary px-3 text-desc font-black text-primary-foreground disabled:opacity-60"
               >
                 {pending === plan.id ? (
                   <Loader2 className="size-3.5 animate-spin" aria-hidden />

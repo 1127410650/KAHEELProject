@@ -18,7 +18,7 @@ export function BigSearchField() {
           to="/search"
           search={{}}
           aria-label={label}
-          className="flex min-w-0 flex-1 items-center gap-2.5 px-4 text-muted-foreground outline-none"
+          className="flex min-w-0 flex-1 items-center gap-[var(--sp-3)] px-4 text-muted-foreground outline-none"
         >
           <Search className="size-[18px] shrink-0" aria-hidden />
           <span className="truncate text-desc font-semibold sm:text-sm">

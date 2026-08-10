@@ -41,7 +41,7 @@ function SignalRow({ signal }: { signal: ModerationSignal }) {
   const severity = signal.severity ? t(`admin.moderation.severity.${signal.severity}`) : null;
   return (
     <div className="rounded-lg bg-background px-3 py-2">
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
         <AdminStatusBadge tone="idle" label={t(`admin.moderation.signalType.${signal.type}`)} />
         {category && <AdminStatusBadge tone="idle" label={category} />}
         {severity && <AdminStatusBadge tone={severity === "high" ? "critical" : severity === "medium" ? "urgent" : "idle"} label={severity} />}
@@ -75,7 +75,7 @@ function ScanBlock({
   return (
     <div className="rounded-xl border border-border bg-card p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
           <AdminStatusBadge tone={DECISION_TONE[scan.decision] ?? "idle"} label={t(`admin.moderation.decision.${scan.decision}`)} />
           <span className="text-desc tabular-nums text-muted-foreground">
             {t("admin.moderation.score")}: {scan.score}
@@ -88,7 +88,7 @@ function ScanBlock({
       </div>
 
       {scan.dismissed_at ? (
-        <p className="mt-2 rounded-md bg-secondary px-2 py-1.5 text-desc text-muted-foreground">
+        <p className="mt-2 rounded-md bg-secondary px-2 py-[var(--sp-2)] text-desc text-muted-foreground">
           {t("admin.moderation.dismissedAt")}: {formatDateTime(scan.dismissed_at)}
           {scan.dismiss_reason ? ` — ${scan.dismiss_reason}` : ""}
         </p>
@@ -105,7 +105,7 @@ function ScanBlock({
       )}
 
       {scan.signals.length > 0 && (
-        <div className="mt-3 grid gap-1.5">
+        <div className="mt-3 grid gap-[var(--sp-2)]">
           {scan.signals.map((signal, index) => (
             <SignalRow key={index} signal={signal} />
           ))}
@@ -171,7 +171,7 @@ export function ModerationCard({ listingId }: { listingId: string }) {
     <Panel
       title={t("admin.moderation.title")}
       actions={
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
           <AdminStatusBadge
             tone={STATE_TONE[moderationState ?? "unscanned"] ?? "idle"}
             label={t(`admin.moderation.state.${moderationState ?? "unscanned"}`)}
@@ -191,7 +191,7 @@ export function ModerationCard({ listingId }: { listingId: string }) {
         </span>
       </div>
 
-      <div className="mt-3 flex items-center gap-1.5 text-desc text-muted-foreground">
+      <div className="mt-3 flex items-center gap-[var(--sp-2)] text-desc text-muted-foreground">
         <ShieldAlert className="size-3.5 shrink-0" aria-hidden />
         <span>{t("admin.moderation.hint")}</span>
       </div>
@@ -208,7 +208,7 @@ export function ModerationCard({ listingId }: { listingId: string }) {
             {history.length > 0 && (
               <Collapsible open={historyOpen} onOpenChange={setHistoryOpen}>
                 <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="sm" className="min-h-11 gap-1.5">
+                  <Button variant="ghost" size="sm" className="min-h-11 gap-[var(--sp-2)]">
                     <ChevronDown className={`size-4 transition-transform ${historyOpen ? "rotate-180" : ""}`} aria-hidden />
                     {t("admin.moderation.history")} ({history.length})
                   </Button>

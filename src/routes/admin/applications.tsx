@@ -110,7 +110,7 @@ function JoinApplicationsAdminPage() {
       staffChecking={loading}
     >
       <div className="space-y-4">
-        <div className="grid gap-2 rounded-2xl border bg-card p-3 sm:grid-cols-[1fr_11rem_12rem]">
+        <div className="grid gap-2 rounded-[var(--r-card)] border bg-card p-3 sm:grid-cols-[1fr_11rem_12rem]">
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -150,9 +150,9 @@ function JoinApplicationsAdminPage() {
         </div>
 
         {applications.isLoading ? (
-          <Skeleton className="h-72 rounded-3xl" />
+          <Skeleton className="h-72 rounded-[var(--r-card)]" />
         ) : rows.length === 0 ? (
-          <Card className="rounded-3xl border-dashed">
+          <Card className="rounded-[var(--r-card)] border-dashed">
             <CardContent className="p-10 text-center text-sm text-muted-foreground">
               {locale === "ar" ? "لا توجد طلبات مطابقة." : "No matching applications."}
             </CardContent>
@@ -167,7 +167,7 @@ function JoinApplicationsAdminPage() {
                   setSelected(row);
                   setReason(row.decision_reason ?? "");
                 }}
-                className="rounded-3xl border bg-card p-4 text-start shadow-sm transition hover:border-primary/30 hover:shadow-md sm:p-5"
+                className="rounded-[var(--r-card)] border bg-card p-4 text-start shadow-sm transition hover:border-primary/30 hover:shadow-md sm:p-5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -203,7 +203,7 @@ function JoinApplicationsAdminPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-background p-4 shadow-2xl sm:max-w-2xl sm:rounded-3xl sm:p-6">
+          <div className="max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-background p-4 shadow-2xl sm:max-w-2xl sm:rounded-[var(--r-card)] sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-desc font-bold text-primary">{selected.application_number}</p>
@@ -223,7 +223,7 @@ function JoinApplicationsAdminPage() {
               </Button>
             </div>
 
-            <div className="mt-5 grid gap-2 rounded-2xl bg-secondary/45 p-4 text-sm sm:grid-cols-2">
+            <div className="mt-5 grid gap-2 rounded-[var(--r-card)] bg-secondary/45 p-4 text-sm sm:grid-cols-2">
               {payloadRows(selected, locale).map(([label, value]) => (
                 <div key={label} className="min-w-0">
                   <p className="text-desc text-muted-foreground">{label}</p>
@@ -309,7 +309,7 @@ function JoinApplicationsAdminPage() {
                 </div>
               </section>
             ) : (
-              <p className="mt-5 rounded-2xl border p-4 text-sm">
+              <p className="mt-5 rounded-[var(--r-card)] border p-4 text-sm">
                 <BadgeCheck className="me-1 inline size-4 text-primary" />
                 {locale === "ar"
                   ? `الحالة النهائية: ${statusLabel(selected.status, locale)}`

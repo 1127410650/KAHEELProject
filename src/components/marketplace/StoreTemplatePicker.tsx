@@ -188,7 +188,7 @@ export const STORE_TEMPLATES: StoreTemplate[] = [
 export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTemplate) => void }) {
   return (
     <section className="space-y-5">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-market-navy via-market-navy-dark to-primary p-5 text-market-navy-foreground shadow-raised sm:p-8">
+      <div className="relative overflow-hidden rounded-[var(--r-card)] border border-border bg-gradient-to-br from-market-navy via-market-navy-dark to-primary p-5 text-market-navy-foreground shadow-raised sm:p-8">
         <div className="absolute -end-12 -top-12 size-44 rounded-full bg-market-silver/10 blur-2xl" aria-hidden />
         <div className="absolute -bottom-16 -start-10 size-48 rounded-full bg-primary-foreground/10 blur-3xl" aria-hidden />
         <div className="relative max-w-2xl">
@@ -203,7 +203,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-[var(--sp-3)] sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
         {STORE_TEMPLATES.map((template) => {
           const Icon = template.icon;
           return (
@@ -211,13 +211,13 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
               key={template.id}
               type="button"
               onClick={() => onSelect(template)}
-              className="group relative min-h-48 overflow-hidden rounded-2xl border border-border bg-card text-start shadow-panel transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-52"
+              className="group relative min-h-48 overflow-hidden rounded-[var(--r-card)] border border-border bg-card text-start shadow-panel transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-52"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${template.gradient}`} aria-hidden />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_38%)]" aria-hidden />
               <div className="relative flex h-full min-h-48 flex-col p-3.5 text-white sm:min-h-52 sm:p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <span className="grid size-10 place-items-center rounded-xl border border-white/20 bg-white/15 backdrop-blur sm:size-12 sm:rounded-2xl">
+                  <span className="grid size-10 place-items-center rounded-xl border border-white/20 bg-white/15 backdrop-blur sm:size-12 sm:rounded-[var(--r-card)]">
                     <Icon className="size-5 sm:size-6" aria-hidden />
                   </span>
                   {template.badge ? (
@@ -229,9 +229,9 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
                 <div className="mt-auto pt-5">
                   <h2 className="text-section font-black">{template.title}</h2>
                   <p className="mt-1 line-clamp-2 text-desc leading-4 text-white/75 sm:text-desc sm:leading-5">{template.description}</p>
-                  <div className="mt-2.5 flex flex-wrap gap-1">
+                  <div className="mt-[var(--sp-3)] flex flex-wrap gap-1">
                     {template.features.slice(0, 3).map((feature) => (
-                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-1.5 py-0.5 text-desc font-medium sm:px-2 sm:py-1 sm:text-desc">
+                      <span key={feature} className="rounded-full border border-white/15 bg-white/10 px-[var(--sp-2)] py-0.5 text-desc font-medium sm:px-2 sm:py-1 sm:text-desc">
                         {feature}
                       </span>
                     ))}
@@ -253,7 +253,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
 export function SelectedStoreTemplate({ template, onChange }: { template: StoreTemplate; onChange: () => void }) {
   const Icon = template.icon;
   return (
-    <div className={`mb-5 overflow-hidden rounded-2xl bg-gradient-to-br ${template.gradient} p-4 text-white shadow-panel`}>
+    <div className={`mb-5 overflow-hidden rounded-[var(--r-card)] bg-gradient-to-br ${template.gradient} p-4 text-white shadow-panel`}>
       <div className="flex items-center gap-3">
         <span className="grid size-11 shrink-0 place-items-center rounded-xl border border-white/20 bg-white/15">
           <Icon className="size-5" aria-hidden />
@@ -262,7 +262,7 @@ export function SelectedStoreTemplate({ template, onChange }: { template: StoreT
           <p className="text-desc font-semibold text-white/60">قالب المتجر المختار</p>
           <h2 className="text-section truncate font-black">{template.title}</h2>
         </div>
-        <button type="button" onClick={onChange} className="shrink-0 rounded-full border border-white/20 bg-black/15 px-3 py-1.5 text-desc font-bold hover:bg-black/25">
+        <button type="button" onClick={onChange} className="shrink-0 rounded-full border border-white/20 bg-black/15 px-3 py-[var(--sp-2)] text-desc font-bold hover:bg-black/25">
           تغيير
         </button>
       </div>

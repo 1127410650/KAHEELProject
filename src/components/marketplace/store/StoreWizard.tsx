@@ -417,7 +417,7 @@ export function StoreWizard() {
 
   return (
     <div className="space-y-5">
-      <ol className="flex flex-wrap items-center gap-1.5 text-desc">
+      <ol className="flex flex-wrap items-center gap-[var(--sp-2)] text-desc">
         {Array.from({ length: TOTAL_STEPS }, (_, index) => index + 1).map((value) => (
           <li
             key={value}
@@ -467,7 +467,7 @@ export function StoreWizard() {
                 </button>
               ))}
               {form.store_type === "restaurant" && (
-                <div className="space-y-1.5 sm:col-span-2">
+                <div className="space-y-[var(--sp-2)] sm:col-span-2">
                   <Label htmlFor="cuisine">{t("market.store.cuisine")}</Label>
                   <select
                     id="cuisine"
@@ -489,7 +489,7 @@ export function StoreWizard() {
 
           {step === 2 && (
             <div className="space-y-4">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="name_ar">{t("market.store.nameAr")}</Label>
                 <Input
                   id="name_ar"
@@ -497,7 +497,7 @@ export function StoreWizard() {
                   onChange={(e) => set("name_ar", e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="name_en">{t("market.store.nameEn")}</Label>
                 <Input
                   id="name_en"
@@ -506,7 +506,7 @@ export function StoreWizard() {
                   onChange={(e) => set("name_en", e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="desc_ar">{t("market.store.descAr")}</Label>
                 <Textarea
                   id="desc_ar"
@@ -516,7 +516,7 @@ export function StoreWizard() {
                   onChange={(e) => set("short_description_ar", e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="desc_en">{t("market.store.descEn")}</Label>
                 <Textarea
                   id="desc_en"
@@ -551,7 +551,7 @@ export function StoreWizard() {
                   {geoName(country.data ?? undefined, locale)}
                 </span>
               </p>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="city">{t("market.store.city")}</Label>
                 <select
                   id="city"
@@ -567,7 +567,7 @@ export function StoreWizard() {
                   ))}
                 </select>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="district">{t("market.store.district")}</Label>
                 <Input
                   id="district"
@@ -575,7 +575,7 @@ export function StoreWizard() {
                   onChange={(e) => set("district", e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="address">{t("market.store.address")}</Label>
                 <Textarea
                   id="address"
@@ -585,7 +585,7 @@ export function StoreWizard() {
                 />
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-1.5">
+                <div className="space-y-[var(--sp-2)]">
                   <Label htmlFor="lat">{t("market.store.latitude")}</Label>
                   <Input
                     id="lat"
@@ -595,7 +595,7 @@ export function StoreWizard() {
                     onChange={(e) => set("latitude", e.target.value)}
                   />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-[var(--sp-2)]">
                   <Label htmlFor="lng">{t("market.store.longitude")}</Label>
                   <Input
                     id="lng"
@@ -621,7 +621,7 @@ export function StoreWizard() {
               >
                 {t("market.store.useMyLocation")}
               </Button>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="precision">{t("market.store.precision")}</Label>
                 <select
                   id="precision"
@@ -635,7 +635,7 @@ export function StoreWizard() {
                   <option value="approximate">{t("market.store.precisionApprox")}</option>
                 </select>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="phone">{t("market.store.contactPhone")}</Label>
                 <Input
                   id="phone"
@@ -710,7 +710,7 @@ export function StoreWizard() {
               {form.store_type !== "services" && form.merchant_delivery_enabled && (
                 <div className="space-y-4 rounded-lg border border-input p-3">
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="fee">
                         {t("market.store.deliveryFee")} ({currencyLabel("SAR", locale)})
                       </Label>
@@ -721,7 +721,7 @@ export function StoreWizard() {
                         onChange={(e) => set("delivery_fee", e.target.value.replace(/[^\d.]/g, ""))}
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="min">{t("market.store.minOrder")}</Label>
                       <Input
                         id="min"
@@ -732,7 +732,7 @@ export function StoreWizard() {
                         }
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="etamin">{t("market.store.etaMin")}</Label>
                       <Input
                         id="etamin"
@@ -743,7 +743,7 @@ export function StoreWizard() {
                         }
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="etamax">{t("market.store.etaMax")}</Label>
                       <Input
                         id="etamax"
@@ -754,7 +754,7 @@ export function StoreWizard() {
                         }
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="dphone">{t("market.store.deliveryPhone")}</Label>
                       <Input
                         id="dphone"
@@ -765,7 +765,7 @@ export function StoreWizard() {
                         }
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="permit">{t("market.store.permitNumber")}</Label>
                       <Input
                         id="permit"
@@ -773,7 +773,7 @@ export function StoreWizard() {
                         onChange={(e) => set("delivery_permit_number", e.target.value)}
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="permitexp">{t("market.store.permitExpiry")}</Label>
                       <Input
                         id="permitexp"
@@ -782,7 +782,7 @@ export function StoreWizard() {
                         onChange={(e) => set("delivery_permit_expires_on", e.target.value)}
                       />
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="permitdoc">{t("market.store.permitDoc")}</Label>
                       <Input
                         id="permitdoc"
@@ -1053,7 +1053,7 @@ export function StoreWizard() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-start justify-between gap-3 border-b border-border/60 pb-1.5">
+    <div className="flex items-start justify-between gap-3 border-b border-border/60 pb-[var(--sp-2)]">
       <dt className="text-muted-foreground">{label}</dt>
       <dd className="text-end font-medium">{value || "—"}</dd>
     </div>
@@ -1091,7 +1091,7 @@ function ImagePicker({
   onPick: (file: File | null) => void;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <Label>{label}</Label>
       <div
         className={`overflow-hidden rounded-lg border border-input bg-secondary/40 ${

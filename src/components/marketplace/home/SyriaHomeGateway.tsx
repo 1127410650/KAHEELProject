@@ -112,7 +112,7 @@ export function SyriaHomeGateway() {
           </span>
 
           <div className="min-w-0 flex-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-brand-400/35 bg-brand-300/25 px-1.5 py-0.5 text-desc font-black text-brand-800">
+            <span className="inline-flex items-center gap-1 rounded-full border border-brand-400/35 bg-brand-300/25 px-[var(--sp-2)] py-0.5 text-desc font-black text-brand-800">
               <Sparkles className="size-2.5 sm:size-3" aria-hidden />
               {gateway.eyebrow}
             </span>

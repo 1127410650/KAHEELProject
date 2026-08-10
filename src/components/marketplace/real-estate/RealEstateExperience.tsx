@@ -305,11 +305,11 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 
           <div className="market-hero-band relative mx-auto flex min-h-[240px] w-full max-w-[1240px] flex-col px-4 pb-10 sm:min-h-[280px] sm:px-6 sm:pb-14 lg:px-8">
             <div className="flex items-center justify-between gap-3 text-market-navy-foreground">
-              <span className="inline-flex items-center gap-2 rounded-full border border-market-navy-foreground/25 bg-market-navy/45 px-3 py-1.5 text-desc font-semibold shadow-sm">
+              <span className="inline-flex items-center gap-2 rounded-full border border-market-navy-foreground/25 bg-market-navy/45 px-3 py-[var(--sp-2)] text-desc font-semibold shadow-sm">
                 <Building2 className="size-4" aria-hidden />
                 {t("market.realEstate.brand")}
               </span>
-              <span className="inline-flex min-w-0 items-center gap-1.5 text-desc font-medium text-market-silver sm:text-sm">
+              <span className="inline-flex min-w-0 items-center gap-[var(--sp-2)] text-desc font-medium text-market-silver sm:text-sm">
                 <MapPin className="size-4 shrink-0" aria-hidden />
                 <span className="truncate">{locationLabel}</span>
               </span>
@@ -344,7 +344,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 onChange={(event) => setTerm(event.target.value)}
                 aria-label={t("market.realEstate.searchLabel")}
                 placeholder={t("market.realEstate.searchPlaceholder")}
-                className="h-14 w-full rounded-2xl border border-market-navy-foreground/35 bg-market-navy-foreground px-12 text-base font-medium text-market-navy shadow-raised outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-market-silver sm:h-16 sm:rounded-3xl"
+                className="h-14 w-full rounded-[var(--r-card)] border border-market-navy-foreground/35 bg-market-navy-foreground px-12 text-base font-medium text-market-navy shadow-raised outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-market-silver sm:h-16 sm:rounded-[var(--r-card)]"
               />
               {term && (
                 <button
@@ -370,7 +370,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               description={t("market.realEstate.intentDescription")}
             />
 
-            <div className="market-rail -mx-3 mt-4 flex snap-x gap-2.5 overflow-x-auto px-3 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">
+            <div className="market-rail -mx-3 mt-4 flex snap-x gap-[var(--sp-3)] overflow-x-auto px-3 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">
               {PURPOSES.map((purpose) => {
                 const Icon = purpose.icon;
                 const active = params.type === purpose.code;
@@ -383,7 +383,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                       onUpdate({ type: active ? undefined : purpose.code, sub: undefined })
                     }
                     className={cn(
-                      "group min-w-[148px] snap-start rounded-2xl border p-3 text-start shadow-panel transition duration-200 sm:min-w-0 sm:p-4",
+                      "group min-w-[148px] snap-start rounded-[var(--r-card)] border p-3 text-start shadow-panel transition duration-200 sm:min-w-0 sm:p-4",
                       active
                         ? "border-market-navy bg-market-navy text-market-navy-foreground"
                         : "border-border bg-card text-foreground hover:-translate-y-0.5 hover:border-market-navy-soft",
@@ -498,7 +498,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-desc font-semibold text-foreground shadow-panel hover:border-market-navy-soft"
+                  className="inline-flex h-10 shrink-0 items-center gap-[var(--sp-2)] rounded-full border border-border bg-card px-3 text-desc font-semibold text-foreground shadow-panel hover:border-market-navy-soft"
                 >
                   <SlidersHorizontal className="size-4" aria-hidden />
                   {t("market.search.filtersBtn")}
@@ -541,14 +541,14 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                   ))}
                 </div>
               ) : listings.isError ? (
-                <div className="mt-4 rounded-2xl border border-dashed border-border bg-card px-4 py-10 text-center">
+                <div className="mt-4 rounded-[var(--r-card)] border border-dashed border-border bg-card px-4 py-10 text-center">
                   <p className="text-sm font-medium text-foreground">{t("market.loadError")}</p>
                   <Button className="mt-4" size="sm" onClick={() => void listings.refetch()}>
                     {t("market.retry")}
                   </Button>
                 </div>
               ) : rows.length === 0 ? (
-                <div className="mt-4 overflow-hidden rounded-3xl border border-border bg-card p-6 text-center shadow-panel sm:p-10">
+                <div className="mt-4 overflow-hidden rounded-[var(--r-card)] border border-border bg-card p-6 text-center shadow-panel sm:p-10">
                   <Mascot name="kaheel" pose="present" size="sm" className="mx-auto h-28 w-auto" />
                   <h2 className="text-section mt-3 font-bold text-foreground">
                     {t("market.realEstate.emptyTitle")}
@@ -622,7 +622,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
             </SheetClose>
           </SheetHeader>
           <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="real-estate-filter-city">{t("market.filters.city")}</Label>
               <select
                 id="real-estate-filter-city"
@@ -641,7 +641,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </select>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="real-estate-filter-type">{t("market.search.offerType")}</Label>
               <select
                 id="real-estate-filter-type"
@@ -658,7 +658,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </select>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="real-estate-filter-sub">{t("market.filters.subcategory")}</Label>
               <select
                 id="real-estate-filter-sub"
@@ -678,7 +678,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="real-estate-filter-min">{t("market.filters.minPrice")}</Label>
                 <Input
                   id="real-estate-filter-min"
@@ -693,7 +693,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                   }
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="real-estate-filter-max">{t("market.filters.maxPrice")}</Label>
                 <Input
                   id="real-estate-filter-max"
@@ -712,7 +712,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 
             {/* تفاصيل العقار: حدود دنيا واضحة بدل حقول تقنية. */}
             <div className="grid grid-cols-3 gap-2">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="real-estate-filter-rooms">{t("market.realEstate.roomsMin")}</Label>
                 <select
                   id="real-estate-filter-rooms"
@@ -728,7 +728,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                   ))}
                 </select>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="real-estate-filter-baths">{t("market.realEstate.bathsMin")}</Label>
                 <select
                   id="real-estate-filter-baths"
@@ -744,7 +744,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                   ))}
                 </select>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="real-estate-filter-area">{t("market.realEstate.areaMin")}</Label>
                 <Input
                   id="real-estate-filter-area"
@@ -763,7 +763,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 
 
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="real-estate-filter-sort">{t("market.filters.sort")}</Label>
               <select
                 id="real-estate-filter-sort"
@@ -844,7 +844,7 @@ function FilterChip({
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 text-desc font-semibold transition-colors",
+        "inline-flex min-h-10 shrink-0 items-center gap-[var(--sp-2)] rounded-full border px-3 text-desc font-semibold transition-colors",
         active
           ? "border-market-navy bg-market-navy text-market-navy-foreground"
           : "border-border bg-card text-foreground hover:border-market-navy-soft",

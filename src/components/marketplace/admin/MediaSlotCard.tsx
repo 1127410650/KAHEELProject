@@ -104,7 +104,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
 
 
   return (
-    <li className="rounded-2xl border border-border bg-card p-3">
+    <li className="rounded-[var(--r-card)] border border-border bg-card p-3">
       <div className="flex items-start gap-3">
         <span className="relative block size-20 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
           {slot.url ? (

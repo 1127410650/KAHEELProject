@@ -42,7 +42,7 @@ function KidsWorldPage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-4 py-6">
-        <header className="rounded-3xl bg-brand-50 p-5 dark:bg-brand-950">
+        <header className="rounded-[var(--r-card)] bg-brand-50 p-5 dark:bg-brand-950">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-desc font-bold text-primary">أطفال · مواليد · ألعاب</p>
@@ -74,7 +74,7 @@ function KidsWorldPage() {
                 key={c.id}
                 to="/categories/$slug"
                 params={{ slug: c.slug }}
-                className="k-press flex items-center gap-3 rounded-2xl border border-border bg-card p-3 hover:bg-accent"
+                className="k-press flex items-center gap-3 rounded-[var(--r-card)] border border-border bg-card p-3 hover:bg-accent"
               >
                 <KidsFriendTap id={kidsFriendFor({ slug: c.slug, name: c.name_ar }, i)} size={40} />
                 <span className="min-w-0 truncate text-desc font-bold text-foreground">

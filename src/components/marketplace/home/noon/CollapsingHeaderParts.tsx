@@ -95,7 +95,7 @@ export function HeaderChip({
   return (
     <a
       href={href}
-      className="relative flex h-11 shrink-0 items-center gap-1.5 bg-card ps-[14px] text-card-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+      className="relative flex h-11 shrink-0 items-center gap-[var(--sp-2)] bg-card ps-[14px] text-card-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
       style={{
         width: `${CHIP_W}px`,
         transform: `translateX(calc(${sign * slide}px * var(--p)))`,

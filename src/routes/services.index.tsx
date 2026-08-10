@@ -181,7 +181,7 @@ function ServicesMarketplacePage() {
                     ? "ابحث عن تنظيف، صيانة، تدريب…"
                     : "Search cleaning, maintenance, training…"
                 }
-                className="h-14 rounded-2xl border-border bg-card ps-12 text-base text-foreground shadow-panel placeholder:text-muted-foreground"
+                className="h-14 rounded-[var(--r-card)] border-border bg-card ps-12 text-base text-foreground shadow-panel placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -248,11 +248,11 @@ function ServicesMarketplacePage() {
             {directory.isLoading ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }, (_, index) => (
-                  <Skeleton key={index} className="h-72 rounded-3xl" />
+                  <Skeleton key={index} className="h-72 rounded-[var(--r-card)]" />
                 ))}
               </div>
             ) : (directory.data ?? []).length === 0 ? (
-              <div className="rounded-3xl border border-dashed bg-card px-5 py-14 text-center">
+              <div className="rounded-[var(--r-card)] border border-dashed bg-card px-5 py-14 text-center">
                 <Sparkles className="mx-auto size-9 text-primary" />
                 <h3 className="mt-3 font-black">
                   {locale === "ar" ? "لا توجد خدمات مطابقة حاليًا" : "No matching services yet"}
@@ -275,7 +275,7 @@ function ServicesMarketplacePage() {
                   return (
                     <article
                       key={`${item.storefront_id}:${item.item_id}`}
-                      className="group overflow-hidden rounded-3xl border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                      className="group overflow-hidden rounded-[var(--r-card)] border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
                     >
                       <div className="relative h-40 overflow-hidden bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep">
                         {image ? (
@@ -291,7 +291,7 @@ function ServicesMarketplacePage() {
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent" />
-                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-desc font-black text-foreground shadow">
+                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-[var(--sp-3)] py-1 text-desc font-black text-foreground shadow">
                           {item.confirmation_mode === "instant"
                             ? locale === "ar"
                               ? "تأكيد فوري"

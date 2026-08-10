@@ -103,8 +103,8 @@ function ServiceBookingPage() {
     return (
       <MarketShell>
         <div className="mx-auto w-full max-w-4xl space-y-4 px-4 py-6">
-          <Skeleton className="h-32 rounded-3xl" />
-          <Skeleton className="h-96 rounded-3xl" />
+          <Skeleton className="h-32 rounded-[var(--r-card)]" />
+          <Skeleton className="h-96 rounded-[var(--r-card)]" />
         </div>
       </MarketShell>
     );
@@ -202,9 +202,9 @@ function ServiceBookingPage() {
 
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_330px]">
           <div className="space-y-4">
-            <Card className="overflow-hidden rounded-3xl">
+            <Card className="overflow-hidden rounded-[var(--r-card)]">
               <CardContent className="flex gap-4 p-4 sm:p-5">
-                <div className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-market-navy to-primary-pressed sm:size-28">
+                <div className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-[var(--r-card)] bg-gradient-to-br from-market-navy to-primary-pressed sm:size-28">
                   {image ? (
                     <img src={image} alt={serviceName} className="size-full object-cover" />
                   ) : (
@@ -250,7 +250,7 @@ function ServiceBookingPage() {
             </div>
 
             {step === 1 ? (
-              <Card className="rounded-3xl">
+              <Card className="rounded-[var(--r-card)]">
                 <CardContent className="space-y-5 p-4 sm:p-6">
                   <div>
                     <h2 className="text-section font-black">
@@ -269,7 +269,7 @@ function ServiceBookingPage() {
                         <button
                           type="button"
                           onClick={() => setProfessionalId(null)}
-                          className={`min-w-28 rounded-2xl border p-3 text-sm font-bold ${professionalId === null ? "border-primary bg-primary/5" : ""}`}
+                          className={`min-w-28 rounded-[var(--r-card)] border p-3 text-sm font-bold ${professionalId === null ? "border-primary bg-primary/5" : ""}`}
                         >
                           {locale === "ar" ? "أي مختص متاح" : "Any available"}
                         </button>
@@ -278,7 +278,7 @@ function ServiceBookingPage() {
                             key={professional.id}
                             type="button"
                             onClick={() => setProfessionalId(professional.id)}
-                            className={`min-w-28 rounded-2xl border p-3 text-sm font-bold ${professionalId === professional.id ? "border-primary bg-primary/5" : ""}`}
+                            className={`min-w-28 rounded-[var(--r-card)] border p-3 text-sm font-bold ${professionalId === professional.id ? "border-primary bg-primary/5" : ""}`}
                           >
                             <UserRound className="mx-auto mb-1 size-5 text-primary" />
                             {professional.display_name}
@@ -309,7 +309,7 @@ function ServiceBookingPage() {
                         ))}
                       </div>
                     ) : (slots.data ?? []).length === 0 ? (
-                      <div className="rounded-2xl border border-dashed p-5 text-center text-sm text-muted-foreground">
+                      <div className="rounded-[var(--r-card)] border border-dashed p-5 text-center text-sm text-muted-foreground">
                         {locale === "ar"
                           ? "لا توجد مواعيد في هذا اليوم. جرّب يومًا آخر."
                           : "No slots on this day. Try another date."}
@@ -321,7 +321,7 @@ function ServiceBookingPage() {
                             key={`${slot.professional_id}:${slot.starts_at}`}
                             type="button"
                             onClick={() => setSlotStart(slot.starts_at)}
-                            className={`rounded-xl border px-2 py-2.5 text-sm font-black transition ${slotStart === slot.starts_at ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:border-primary"}`}
+                            className={`rounded-xl border px-2 py-[var(--sp-3)] text-sm font-black transition ${slotStart === slot.starts_at ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:border-primary"}`}
                           >
                             {new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", {
                               hour: "numeric",
@@ -338,7 +338,7 @@ function ServiceBookingPage() {
             ) : null}
 
             {step === 2 ? (
-              <Card className="rounded-3xl">
+              <Card className="rounded-[var(--r-card)]">
                 <CardContent className="space-y-5 p-4 sm:p-6">
                   <div>
                     <h2 className="text-section font-black">
@@ -363,7 +363,7 @@ function ServiceBookingPage() {
                           key={value}
                           type="button"
                           onClick={() => setMode(value)}
-                          className={`rounded-2xl border p-4 text-start ${mode === value ? "border-primary bg-primary/5" : ""}`}
+                          className={`rounded-[var(--r-card)] border p-4 text-start ${mode === value ? "border-primary bg-primary/5" : ""}`}
                         >
                           <Icon className="mb-2 size-5 text-primary" />
                           <span className="text-sm font-black">
@@ -379,7 +379,7 @@ function ServiceBookingPage() {
                       );
                     })}
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-[var(--sp-2)]">
                     <Label htmlFor="phone">
                       {locale === "ar" ? "رقم التواصل (اختياري)" : "Contact number (optional)"}
                     </Label>
@@ -393,7 +393,7 @@ function ServiceBookingPage() {
                   </div>
                   {mode === "at_customer" ? (
                     <>
-                      <div className="space-y-1.5">
+                      <div className="space-y-[var(--sp-2)]">
                         <Label htmlFor="district">{locale === "ar" ? "الحي" : "District"}</Label>
                         <Input
                           id="district"
@@ -401,7 +401,7 @@ function ServiceBookingPage() {
                           onChange={(event) => setDistrict(event.target.value)}
                         />
                       </div>
-                      <div className="space-y-1.5">
+                      <div className="space-y-[var(--sp-2)]">
                         <Label htmlFor="address">
                           {locale === "ar" ? "العنوان التفصيلي" : "Full address"}
                         </Label>
@@ -414,7 +414,7 @@ function ServiceBookingPage() {
                       </div>
                     </>
                   ) : null}
-                  <div className="space-y-1.5">
+                  <div className="space-y-[var(--sp-2)]">
                     <Label htmlFor="notes">
                       {locale === "ar" ? "ملاحظات لمقدم الخدمة" : "Notes for the provider"}
                     </Label>
@@ -431,7 +431,7 @@ function ServiceBookingPage() {
             ) : null}
 
             {step === 3 ? (
-              <Card className="rounded-3xl">
+              <Card className="rounded-[var(--r-card)]">
                 <CardContent className="space-y-4 p-4 sm:p-6">
                   <div>
                     <h2 className="text-section font-black">
@@ -447,7 +447,7 @@ function ServiceBookingPage() {
                           : "The provider will review and confirm the request."}
                     </p>
                   </div>
-                  <dl className="divide-y rounded-2xl border px-4 text-sm">
+                  <dl className="divide-y rounded-[var(--r-card)] border px-4 text-sm">
                     <div className="flex justify-between gap-4 py-3">
                       <dt className="text-muted-foreground">
                         {locale === "ar" ? "الخدمة" : "Service"}
@@ -483,7 +483,7 @@ function ServiceBookingPage() {
                       </dd>
                     </div>
                   </dl>
-                  <div className="flex items-start gap-2 rounded-2xl bg-secondary/60 p-3 text-desc leading-5 text-muted-foreground">
+                  <div className="flex items-start gap-2 rounded-[var(--r-card)] bg-secondary/60 p-3 text-desc leading-5 text-muted-foreground">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
                     {locale === "ar"
                       ? `يمكنك الإلغاء قبل الموعد، وتظهر سياسة الإلغاء (${data.settings.cancellation_window_hours} ساعات) بوضوح في حجوزاتك.`
@@ -523,7 +523,7 @@ function ServiceBookingPage() {
           </div>
 
           <aside className="hidden lg:block">
-            <Card className="sticky top-28 rounded-3xl">
+            <Card className="sticky top-28 rounded-[var(--r-card)]">
               <CardContent className="space-y-4 p-5">
                 <p className="text-desc font-bold text-primary">
                   {locale === "ar" ? "ملخص السعر" : "Price summary"}

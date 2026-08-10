@@ -129,11 +129,11 @@ function MyBookingsPage() {
         {bookings.isLoading ? (
           <div className="grid gap-3 lg:grid-cols-2">
             {Array.from({ length: 4 }, (_, index) => (
-              <Skeleton key={index} className="h-52 rounded-3xl" />
+              <Skeleton key={index} className="h-52 rounded-[var(--r-card)]" />
             ))}
           </div>
         ) : rows.length === 0 ? (
-          <div className="rounded-3xl border border-dashed bg-card px-4 py-14 text-center">
+          <div className="rounded-[var(--r-card)] border border-dashed bg-card px-4 py-14 text-center">
             <CalendarCheck2 className="mx-auto size-10 text-primary" />
             <h2 className="mt-3 font-black">
               {tab === "upcoming"
@@ -160,7 +160,7 @@ function MyBookingsPage() {
                 (booking.status === "pending" || booking.status === "confirmed") &&
                 Date.now() < cancellationClosesAt;
               return (
-                <Card key={booking.id} className="overflow-hidden rounded-3xl">
+                <Card key={booking.id} className="overflow-hidden rounded-[var(--r-card)]">
                   <CardContent className="space-y-4 p-4 sm:p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
@@ -184,7 +184,7 @@ function MyBookingsPage() {
                         {statusLabel(booking.status, locale)}
                       </Badge>
                     </div>
-                    <div className="grid gap-2 rounded-2xl bg-secondary/50 p-3 text-sm sm:grid-cols-2">
+                    <div className="grid gap-2 rounded-[var(--r-card)] bg-secondary/50 p-3 text-sm sm:grid-cols-2">
                       <p>
                         <CalendarCheck2 className="me-1.5 inline size-4 text-primary" />
                         {new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", {

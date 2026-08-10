@@ -212,7 +212,7 @@ function MorePage() {
                   <span className="block truncate text-sm font-semibold text-foreground">
                     {active.name || t("market.account.fallbackName")}
                   </span>
-                  <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-desc text-muted-foreground">
+                  <span className="mt-0.5 flex flex-wrap items-center gap-[var(--sp-2)] text-desc text-muted-foreground">
                     <span>{t(`market.entry.classification.${active.classification}`)}</span>
                     {active.city ? <span>· {active.city}</span> : null}
                     {active.verification_status === "approved" ? (

@@ -58,8 +58,8 @@ function CategoryWorldRoute() {
     return (
       <CategoryWorldShell slug={slug} title="…">
         <div className="mx-auto w-full max-w-5xl space-y-3 p-4">
-          <Skeleton className="h-40 rounded-3xl" />
-          <Skeleton className="h-28 rounded-2xl" />
+          <Skeleton className="h-40 rounded-[var(--r-card)]" />
+          <Skeleton className="h-28 rounded-[var(--r-card)]" />
         </div>
       </CategoryWorldShell>
     );

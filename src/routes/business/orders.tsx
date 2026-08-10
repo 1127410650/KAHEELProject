@@ -98,7 +98,7 @@ function MerchantOrdersPage() {
   if (access.isLoading || orders.isLoading) {
     return (
       <DashboardShell title={locale === "ar" ? "إدارة الطلبات" : "Order management"}>
-        <Skeleton className="h-80 rounded-3xl" />
+        <Skeleton className="h-80 rounded-[var(--r-card)]" />
       </DashboardShell>
     );
   }
@@ -108,7 +108,7 @@ function MerchantOrdersPage() {
   if (!canReceiveOrders) {
     return (
       <DashboardShell title={locale === "ar" ? "إدارة الطلبات" : "Order management"}>
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-3 p-7 text-center">
             <PackageCheck className="mx-auto size-10 text-primary" />
             <p className="font-black">
@@ -129,7 +129,7 @@ function MerchantOrdersPage() {
     <DashboardShell title={locale === "ar" ? "إدارة الطلبات" : "Order management"}>
       <div className="space-y-4">
         <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-          <TabsList className="h-auto w-full justify-start gap-1 overflow-x-auto rounded-2xl p-1.5 sm:w-auto">
+          <TabsList className="h-auto w-full justify-start gap-1 overflow-x-auto rounded-[var(--r-card)] p-[var(--sp-2)] sm:w-auto">
             <TabsTrigger value="all">{locale === "ar" ? "الكل" : "All"}</TabsTrigger>
             <TabsTrigger value="submitted">{locale === "ar" ? "جديدة" : "New"}</TabsTrigger>
             <TabsTrigger value="active">{locale === "ar" ? "قيد التنفيذ" : "Active"}</TabsTrigger>
@@ -138,7 +138,7 @@ function MerchantOrdersPage() {
         </Tabs>
 
         {rows.length === 0 ? (
-          <Card className="rounded-3xl border-dashed">
+          <Card className="rounded-[var(--r-card)] border-dashed">
             <CardContent className="p-10 text-center text-sm text-muted-foreground">
               {locale === "ar" ? "لا توجد طلبات في هذه المرحلة." : "No orders in this stage."}
             </CardContent>
@@ -185,7 +185,7 @@ function OrderCard({
   }).format(new Date(order.created_at));
 
   return (
-    <Card className="rounded-3xl">
+    <Card className="rounded-[var(--r-card)]">
       <CardContent className="space-y-4 p-4 sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -197,7 +197,7 @@ function OrderCard({
           </Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 rounded-2xl bg-secondary/45 p-3 text-desc sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 rounded-[var(--r-card)] bg-secondary/45 p-3 text-desc sm:grid-cols-4">
           <Metric
             label={locale === "ar" ? "العميل" : "Customer"}
             value={order.customer_name || "—"}

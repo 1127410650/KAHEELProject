@@ -55,7 +55,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       className="market-surface flex min-h-screen flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] sm:items-center sm:justify-center sm:py-10"
     >
       <div className="mx-auto w-full max-w-[440px]">
-        <div className="mb-6 flex items-center gap-2.5">
+        <div className="mb-6 flex items-center gap-[var(--sp-3)]">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <ShieldCheck className="size-5" aria-hidden />
           </span>
@@ -197,18 +197,18 @@ function RegisterPage() {
     <Shell>
       <h1 className="text-page font-bold text-foreground">{t("signup.title")}</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
-      <p className="mt-3 rounded-lg bg-secondary p-2.5 text-desc text-muted-foreground">
+      <p className="mt-3 rounded-lg bg-secondary p-[var(--sp-3)] text-desc text-muted-foreground">
         {t("signup.inviteNote")}{" "}
         <span dir="ltr" className="font-semibold text-foreground">
           {preview.data?.masked_email ?? ""}
         </span>
       </p>
-      <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-desc font-semibold text-primary">
+      <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-[var(--sp-3)] text-desc font-semibold text-primary">
         {t("signup.adsSyriaOnly")}
       </p>
 
       <form onSubmit={onInviteSubmit} className="mt-5 space-y-3.5">
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="full_name">{nameLabel}</Label>
           <Input id="full_name" required value={form.full_name} onChange={set("full_name")} />
         </div>
@@ -219,7 +219,7 @@ function RegisterPage() {
           value={form.phone}
           onChange={set("phone")}
         />
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="national_id">{t("signup.nationalId")}</Label>
           <Input
             id="national_id"
@@ -341,12 +341,12 @@ function PublicSignupForm() {
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
         {t("signup.publicSubtitle")}
       </p>
-      <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-2.5 text-desc font-semibold text-primary">
+      <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-[var(--sp-3)] text-desc font-semibold text-primary">
         {t("signup.adsSyriaOnly")}
       </p>
 
       <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="p_full_name">{nameLabel}</Label>
           <Input id="p_full_name" required value={form.full_name} onChange={set("full_name")} />
         </div>
@@ -360,7 +360,7 @@ function PublicSignupForm() {
           note={phoneNote}
         />
 
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="p_email">{optionalEmailLabel}</Label>
           <Input
             id="p_email"
@@ -382,7 +382,7 @@ function PublicSignupForm() {
         </Button>
       </form>
 
-      <p className="mt-4 rounded-lg bg-secondary p-2.5 text-desc leading-relaxed text-muted-foreground">
+      <p className="mt-4 rounded-lg bg-secondary p-[var(--sp-3)] text-desc leading-relaxed text-muted-foreground">
         {t("signup.individualNote")}
       </p>
       <SignInLink />
@@ -412,7 +412,7 @@ function PhoneField({
 }) {
   const { t, locale } = useI18n();
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <Label htmlFor={id}>{t("signup.phone")}</Label>
       <div className="flex gap-2" dir="ltr">
         <select
@@ -453,7 +453,7 @@ function PasswordFields({
   const { t } = useI18n();
   return (
     <>
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="password_shared">{t("signup.password")}</Label>
         <Input
           id="password_shared"
@@ -467,7 +467,7 @@ function PasswordFields({
         />
         <p className="text-desc text-muted-foreground">{t("signup.passwordHint")}</p>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="confirm_shared">{t("signup.confirm")}</Label>
         <Input
           id="confirm_shared"
@@ -494,7 +494,7 @@ function Terms({
   label: string;
 }) {
   return (
-    <label className="flex items-start gap-2.5 text-desc leading-relaxed text-muted-foreground">
+    <label className="flex items-start gap-[var(--sp-3)] text-desc leading-relaxed text-muted-foreground">
       <Checkbox
         checked={checked}
         onCheckedChange={(value) => onChange(value === true)}

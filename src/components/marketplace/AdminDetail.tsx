@@ -19,7 +19,7 @@ export function DetailBack({ to, label }: { to: string; label: string }) {
   return (
     <Link
       to={to}
-      className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+      className="inline-flex min-h-11 items-center gap-[var(--sp-2)] text-sm font-medium text-muted-foreground hover:text-foreground"
     >
       <ArrowRight className="size-4 rtl:rotate-0 ltr:rotate-180" aria-hidden />
       <span className="truncate">{label}</span>
@@ -66,7 +66,7 @@ export function DetailHeader({
           {subtitle && (
             <p className="mt-0.5 text-desc text-muted-foreground">{subtitle}</p>
           )}
-          {chips && <div className="mt-2 flex flex-wrap items-center gap-1.5">{chips}</div>}
+          {chips && <div className="mt-2 flex flex-wrap items-center gap-[var(--sp-2)]">{chips}</div>}
         </div>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
@@ -112,7 +112,7 @@ export function TabStrip({
             aria-selected={on}
             onClick={() => onChange(tab.key)}
             className={
-              "flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-3 text-sm font-medium transition-colors " +
+              "flex min-h-11 shrink-0 items-center gap-[var(--sp-2)] rounded-lg px-3 text-sm font-medium transition-colors " +
               (on
                 ? "bg-primary/10 text-primary"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground")
@@ -120,7 +120,7 @@ export function TabStrip({
           >
             <span className="whitespace-nowrap">{tab.label}</span>
             {typeof tab.count === "number" && tab.count > 0 && (
-              <span className="rounded-full bg-secondary px-1.5 text-desc tabular-nums">
+              <span className="rounded-full bg-secondary px-[var(--sp-2)] text-desc tabular-nums">
                 {tab.count}
               </span>
             )}
@@ -194,7 +194,7 @@ export function Timeline({
     <ol className="space-y-0">
       {items.map((item, index) => (
         <li key={item.id} className="flex gap-3">
-          <div className="flex flex-col items-center pt-1.5">
+          <div className="flex flex-col items-center pt-[var(--sp-2)]">
             <span className="size-2 shrink-0 rounded-full bg-primary" aria-hidden />
             {index < items.length - 1 && <span className="w-px flex-1 bg-border" aria-hidden />}
           </div>

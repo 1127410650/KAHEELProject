@@ -195,7 +195,7 @@ export function SeasonalBackdropsCard() {
     <Card>
       <CardContent className="space-y-5 p-4">
         <header className="flex flex-wrap items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-primary/10 text-primary">
+          <span className="grid size-9 place-items-center rounded-[var(--r-card)] bg-primary/10 text-primary">
             <Images className="size-5" aria-hidden />
           </span>
           <div>
@@ -209,7 +209,7 @@ export function SeasonalBackdropsCard() {
         </header>
 
         {/* معاينة حية للموسم قيد الإنشاء */}
-        <div className="relative h-28 overflow-hidden rounded-2xl bg-[linear-gradient(130deg,#8A4FFF,#C3ABFF)]">
+        <div className="relative h-28 overflow-hidden rounded-[var(--r-card)] bg-[linear-gradient(130deg,#8A4FFF,#C3ABFF)]">
           {image ? (
             <img
               src={image.url}
@@ -358,7 +358,7 @@ export function SeasonalBackdropsCard() {
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="space-y-2">
             <p className="text-desc font-bold">{ar ? "العناصر المتحركة" : "Animated elements"}</p>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-[var(--sp-2)]">
               {MOTIFS.map((value) => (
                 <Button
                   key={value}
@@ -374,7 +374,7 @@ export function SeasonalBackdropsCard() {
           </div>
           <div className="space-y-2">
             <p className="text-desc font-bold">{ar ? "حجاب القراءة" : "Readability scrim"}</p>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-[var(--sp-2)]">
               {OVERLAYS.map((value) => (
                 <Button
                   key={value}
@@ -404,7 +404,7 @@ export function SeasonalBackdropsCard() {
 
         <div className="space-y-2">
           <p className="text-desc font-bold">{ar ? "شخصية تطلّ من الأعلى" : "Character peeking on top"}</p>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-[var(--sp-2)]">
             {MASCOTS.map((value) => (
               <Button
                 key={value}
@@ -459,7 +459,7 @@ export function SeasonalBackdropsCard() {
           {rows.map((row) => (
             <div
               key={row.id}
-              className="flex flex-wrap items-center gap-2 rounded-2xl border border-border/70 p-3"
+              className="flex flex-wrap items-center gap-2 rounded-[var(--r-card)] border border-border/70 p-3"
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-bold">{seasonLabel(row, ar)}</p>
@@ -470,7 +470,7 @@ export function SeasonalBackdropsCard() {
                   {row.ends_at ? ` → ${formatDateTime(row.ends_at)}` : ""}
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
                 {STATUSES.map((value) => (
                   <Button
                     key={value}

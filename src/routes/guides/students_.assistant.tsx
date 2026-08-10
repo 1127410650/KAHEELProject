@@ -49,7 +49,7 @@ function StudentAssistantPage() {
           </Link>
 
           <header className="mb-3 flex items-center gap-2">
-            <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-primary/12 text-primary">
+            <span className="grid size-10 shrink-0 place-items-center rounded-[var(--r-card)] bg-primary/12 text-primary">
               <GraduationCap className="size-5" aria-hidden />
             </span>
             <div className="min-w-0">

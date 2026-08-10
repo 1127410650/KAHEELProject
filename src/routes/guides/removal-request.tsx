@@ -129,7 +129,7 @@ function RemovalRequestPage() {
         </p>
 
         {done ? (
-          <section className="mt-4 rounded-2xl border border-primary/25 bg-primary/6 p-4">
+          <section className="mt-4 rounded-[var(--r-card)] border border-primary/25 bg-primary/6 p-4">
             <p className="flex items-center gap-2 text-desc font-black text-primary">
               <CheckCircle2 className="size-4" aria-hidden />
               وصلنا طلبك وسيُراجع يدويًا.
@@ -139,13 +139,13 @@ function RemovalRequestPage() {
             </p>
             <Link
               to="/guides/syria"
-              className="mt-3 inline-flex h-10 items-center rounded-2xl border border-border px-4 text-desc font-black"
+              className="mt-3 inline-flex h-10 items-center rounded-[var(--r-card)] border border-border px-4 text-desc font-black"
             >
               العودة إلى الدليل
             </Link>
           </section>
         ) : (
-          <section className="mt-4 space-y-3 rounded-2xl border border-border/80 bg-card p-4">
+          <section className="mt-4 space-y-3 rounded-[var(--r-card)] border border-border/80 bg-card p-4">
             <Field label="اسم الجهة" error={errors["entityName"]}>
               <input
                 className={field}
@@ -207,7 +207,7 @@ function RemovalRequestPage() {
               />
             </Field>
 
-            <p className="flex items-start gap-1.5 text-desc font-bold leading-5 text-muted-foreground">
+            <p className="flex items-start gap-[var(--sp-2)] text-desc font-bold leading-5 text-muted-foreground">
               <ShieldAlert className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
               الإزالة تعني إخفاء السجل من العرض العام مع تسجيل السبب والتاريخ، ولا يُحذف السجل
               نهائيًا.
@@ -217,7 +217,7 @@ function RemovalRequestPage() {
               type="button"
               disabled={submit.isPending}
               onClick={() => void send()}
-              className="inline-flex h-11 items-center rounded-2xl bg-primary px-5 text-desc font-black text-primary-foreground disabled:opacity-50"
+              className="inline-flex h-11 items-center rounded-[var(--r-card)] bg-primary px-5 text-desc font-black text-primary-foreground disabled:opacity-50"
             >
               {submit.isPending ? "جاري الإرسال…" : "إرسال الطلب"}
             </button>

@@ -175,9 +175,9 @@ export function MapPickerDialog({ open, onOpenChange, initial, onConfirm }: Prop
         </Button>
       </div>
 
-      <footer className="shrink-0 space-y-2.5 border-t border-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <footer className="shrink-0 space-y-[var(--sp-3)] border-t border-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="min-h-[42px] rounded-xl bg-secondary px-3 py-2">
-          <p className="flex items-center gap-1.5 text-sm font-bold text-foreground">
+          <p className="flex items-center gap-[var(--sp-2)] text-sm font-bold text-foreground">
             {resolving && <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden />}
             <span className="truncate">
               {place?.placeLabel ||

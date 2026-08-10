@@ -370,7 +370,7 @@ function AdminSidebarBrand() {
   return (
     <div className="border-b border-primary/15 px-4 py-4 dark:border-border">
       <Link to="/admin" className="flex items-center gap-3 rounded-xl">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-primary text-white shadow-[0_8px_24px_rgba(123,44,191,0.22)]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-[var(--r-card)] bg-primary text-white shadow-[0_8px_24px_rgba(123,44,191,0.22)]">
           <ShieldCheck className="size-5" aria-hidden />
         </span>
         <span className="min-w-0">
@@ -438,7 +438,7 @@ function AdminAlerts({ enabled }: { enabled: boolean }) {
       </PopoverTrigger>
       <PopoverContent
         align="end"
-        className="w-[min(20rem,92vw)] rounded-2xl border-primary/15 p-2 shadow-xl"
+        className="w-[min(20rem,92vw)] rounded-[var(--r-card)] border-primary/15 p-2 shadow-xl"
       >
         <div className="flex items-center justify-between px-2 py-2">
           <p className="text-sm font-black text-foreground">{t("admin.alerts.title")}</p>
@@ -541,7 +541,7 @@ export function AdminShell({
             </Sheet>
           ) : null}
 
-          <Link to="/admin" className="flex min-w-0 items-center gap-2.5 lg:hidden">
+          <Link to="/admin" className="flex min-w-0 items-center gap-[var(--sp-3)] lg:hidden">
             <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-white">
               <ShieldCheck className="size-[17px]" aria-hidden />
             </span>
@@ -595,7 +595,7 @@ export function AdminShell({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-64 rounded-2xl border-primary/15 p-2 shadow-xl"
+                  className="w-64 rounded-[var(--r-card)] border-primary/15 p-2 shadow-xl"
                 >
                   <DropdownMenuLabel className="rounded-xl bg-primary/5 px-3 py-2 dark:bg-accent">
                     <span className="block truncate text-sm font-black">{displayName}</span>
@@ -634,7 +634,7 @@ export function AdminShell({
 
         <main className="min-w-0 flex-1 px-3 pb-8 pt-4 sm:px-5 sm:pt-5 lg:px-7 lg:pb-10 xl:px-9">
           <div className="mx-auto w-full max-w-[1500px]">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/15 bg-white px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[var(--r-card)] border border-primary/15 bg-white px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:border-border dark:bg-card sm:px-5 sm:py-4">
               <div className="min-w-0">
                 <p className="text-desc font-bold text-primary dark:text-primary">
                   {t("admin.pageEyebrow")}
@@ -651,14 +651,14 @@ export function AdminShell({
             {checking ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, index) => (
-                  <Skeleton key={index} className="h-32 w-full rounded-2xl" />
+                  <Skeleton key={index} className="h-32 w-full rounded-[var(--r-card)]" />
                 ))}
               </div>
             ) : allowed ? (
               children
             ) : (
-              <div className="rounded-2xl border border-primary/15 bg-white p-8 text-center shadow-sm dark:border-border dark:bg-card">
-                <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-secondary">
+              <div className="rounded-[var(--r-card)] border border-primary/15 bg-white p-8 text-center shadow-sm dark:border-border dark:bg-card">
+                <span className="mx-auto grid size-12 place-items-center rounded-[var(--r-card)] bg-secondary">
                   <ShieldAlert className="size-6 text-muted-foreground" aria-hidden />
                 </span>
                 <p className="mt-3 text-sm font-black text-foreground">

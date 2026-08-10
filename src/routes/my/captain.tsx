@@ -156,7 +156,7 @@ function CaptainPage() {
     return (
       <DashboardShell title={title}>
         <div className="mx-auto w-full max-w-2xl px-3 pt-3">
-          <Skeleton className="h-[180px] rounded-2xl" />
+          <Skeleton className="h-[180px] rounded-[var(--r-card)]" />
         </div>
       </DashboardShell>
     );
@@ -167,7 +167,7 @@ function CaptainPage() {
     return (
       <DashboardShell title={title}>
         <form onSubmit={apply} className="mx-auto grid w-full max-w-md gap-2 px-3 pb-24 pt-3">
-          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-3 text-desc text-foreground">
+          <div className="rounded-[var(--r-card)] border border-primary/25 bg-primary/5 p-3 text-desc text-foreground">
             {ar
               ? "سجّل كابتن وجيب طلبات الناس. بعد اعتماد الإدارة تشوف الطلبات المفتوحة وتقدّم عرضك."
               : "Register as a captain. After approval you can see open requests and send offers."}
@@ -220,7 +220,7 @@ function CaptainPage() {
     <DashboardShell title={title}>
       <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
         {/* بطاقة الكابتن */}
-        <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
+        <section className="mb-3 rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
               <p className="truncate text-desc font-black text-foreground">
@@ -281,7 +281,7 @@ function CaptainPage() {
               {(queue.data?.mine ?? []).filter((request) =>
                 ["accepted", "purchasing", "delivering"].includes(request.status),
               ).length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
+                <p className="rounded-[var(--r-card)] border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
                   {ar ? "ما عندك طلب جاري." : "No active job."}
                 </p>
               ) : (
@@ -293,7 +293,7 @@ function CaptainPage() {
                     .map((request) => (
                       <div
                         key={request.id}
-                        className="rounded-2xl border border-primary/30 bg-primary/5 p-3"
+                        className="rounded-[var(--r-card)] border border-primary/30 bg-primary/5 p-3"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <p className="line-clamp-2 min-w-0 text-desc font-semibold text-foreground">
@@ -343,9 +343,9 @@ function CaptainPage() {
                 {ar ? "طلبات مفتوحة" : "Open requests"}
               </h2>
               {queue.isLoading ? (
-                <Skeleton className="h-[96px] rounded-2xl" />
+                <Skeleton className="h-[96px] rounded-[var(--r-card)]" />
               ) : (queue.data?.open.length ?? 0) === 0 ? (
-                <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
+                <p className="rounded-[var(--r-card)] border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
                   {ar ? "ما في طلبات مفتوحة الآن." : "No open requests right now."}
                 </p>
               ) : (
@@ -353,7 +353,7 @@ function CaptainPage() {
                   {queue.data!.open.map((request) => (
                     <div
                       key={request.id}
-                      className="rounded-2xl border border-border/70 bg-card/60 p-3"
+                      className="rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3"
                     >
                       <p className="line-clamp-3 text-desc leading-snug text-foreground">
                         {request.details}

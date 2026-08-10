@@ -56,8 +56,8 @@ function MyReportsPage() {
             onClick={() => setTab(key)}
             className={
               tab === key
-                ? "rounded-full bg-primary px-3 py-1.5 text-desc font-semibold text-primary-foreground"
-                : "rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
+                ? "rounded-full bg-primary px-3 py-[var(--sp-2)] text-desc font-semibold text-primary-foreground"
+                : "rounded-full border border-border bg-card px-3 py-[var(--sp-2)] text-desc font-medium text-foreground hover:bg-accent"
             }
           >
             {t(`market.reports.my.${key}`)}
@@ -87,7 +87,7 @@ function MyReportsPage() {
                     {t("market.reports.my.lastUpdate")}: {formatDateTime(report.updated_at)}
                   </p>
                 </div>
-                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
+                <span className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc font-medium text-secondary-foreground">
                   {t(`market.reports.stage.${simpleStage(report.status)}`)}
                 </span>
               </div>

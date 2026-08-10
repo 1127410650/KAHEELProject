@@ -74,7 +74,7 @@ export function AdminSearchBox() {
       </PopoverAnchor>
       <PopoverContent
         align="start"
-        className="w-[min(25rem,92vw)] rounded-2xl border-primary/15 p-2 shadow-2xl"
+        className="w-[min(25rem,92vw)] rounded-[var(--r-card)] border-primary/15 p-2 shadow-2xl"
         onOpenAutoFocus={(event) => event.preventDefault()}
       >
         <div className="mb-1 flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2 dark:bg-accent">
@@ -90,7 +90,7 @@ export function AdminSearchBox() {
           <div className="max-h-[60vh] overflow-y-auto overscroll-contain">
             {groups.map((group) => (
               <div key={group.type} className="mb-2">
-                <p className="flex items-center justify-between px-3 py-1.5 text-desc font-bold text-muted-foreground">
+                <p className="flex items-center justify-between px-3 py-[var(--sp-2)] text-desc font-bold text-muted-foreground">
                   <span>{t(GROUP_LABEL[group.type])}</span>
                   <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums">{group.count}</span>
                 </p>

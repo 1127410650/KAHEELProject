@@ -48,12 +48,12 @@ function DemoStoreWorldPage() {
           <div className={`absolute inset-0 bg-gradient-to-br ${world.gradient} opacity-32 mix-blend-color`} aria-hidden />
 
           <div className="market-hero-band relative mx-auto flex min-h-[180px] w-full max-w-[1240px] flex-col justify-end px-5 sm:min-h-[220px] sm:px-6 lg:px-8">
-            <Link to="/" className="mb-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-desc font-bold text-white backdrop-blur-md">
+            <Link to="/" className="mb-auto inline-flex w-fit items-center gap-[var(--sp-2)] rounded-full border border-white/25 bg-black/20 px-3 py-[var(--sp-2)] text-desc font-bold text-white backdrop-blur-md">
               <ArrowRight className="size-3.5" aria-hidden />
               جميع العوالم
             </Link>
 
-            <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-desc font-bold text-white/90 backdrop-blur-md sm:text-desc">
+            <span className="inline-flex w-fit items-center gap-[var(--sp-2)] rounded-full border border-white/20 bg-white/10 px-3 py-[var(--sp-2)] text-desc font-bold text-white/90 backdrop-blur-md sm:text-desc">
               <Sparkles className="size-3.5" aria-hidden />
               {world.eyebrow}
             </span>
@@ -92,7 +92,7 @@ function DemoStoreWorldPage() {
                 <div className="relative aspect-[16/9] overflow-hidden bg-muted sm:aspect-[16/10]">
                   <img src={store.image} alt={store.name} loading={index === 0 ? "eager" : "lazy"} className="size-full object-cover transition duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" aria-hidden />
-                  <span className="absolute start-3 top-3 rounded-full border border-white/25 bg-black/25 px-2.5 py-1 text-desc font-bold text-white backdrop-blur-md">متجر تجريبي</span>
+                  <span className="absolute start-3 top-3 rounded-full border border-white/25 bg-black/25 px-[var(--sp-3)] py-1 text-desc font-bold text-white backdrop-blur-md">متجر تجريبي</span>
                   <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3 text-white">
                     <div className="min-w-0">
                       <h3 className="truncate text-body font-black drop-shadow">{store.name}</h3>
@@ -113,9 +113,9 @@ function DemoStoreWorldPage() {
                       معاينة داخلية
                     </span>
                   </div>
-                  <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  <div className="mt-[var(--sp-3)] flex flex-wrap gap-[var(--sp-2)]">
                     {store.tags.map((tag) => (
-                      <span key={tag} className="rounded-full bg-secondary px-2.5 py-1 text-desc font-medium text-secondary-foreground sm:text-desc">{tag}</span>
+                      <span key={tag} className="rounded-full bg-secondary px-[var(--sp-3)] py-1 text-desc font-medium text-secondary-foreground sm:text-desc">{tag}</span>
                     ))}
                   </div>
                 </div>
@@ -137,9 +137,9 @@ function DemoStoreWorldPage() {
               </Link>
             </div>
 
-            <div className="mt-3 flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-5">
+            <div className="mt-3 flex gap-[var(--sp-3)] overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-5">
               {otherWorlds.map((item) => (
-                <Link key={item.id} to="/demo-stores/$worldId" params={{ worldId: item.id }} className="relative aspect-[4/3] w-[42%] min-w-[42%] overflow-hidden rounded-2xl text-white sm:w-auto sm:min-w-0">
+                <Link key={item.id} to="/demo-stores/$worldId" params={{ worldId: item.id }} className="relative aspect-[4/3] w-[42%] min-w-[42%] overflow-hidden rounded-[var(--r-card)] text-white sm:w-auto sm:min-w-0">
                   <img src={item.image} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-black/10" aria-hidden />
                   <span className="absolute inset-x-3 bottom-3 text-desc font-black">{item.title}</span>

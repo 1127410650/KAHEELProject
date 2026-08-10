@@ -74,15 +74,15 @@ function VariantsPage() {
         </Button>
       }
     >
-      <p className="mb-4 rounded-2xl border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
+      <p className="mb-4 rounded-[var(--r-card)] border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
         لكل صفحة تصميم نشط واحد. التبديل يظهر لكل الزوار فورًا ولا يكسر أي رابط، والمحتوى نفسه لا
         يتغيّر — يتغيّر ترتيبه وحجم بطاقاته فقط.
       </p>
 
       {variants.isPending ? (
         <div className="space-y-3">
-          <Skeleton className="h-24 w-full rounded-2xl" />
-          <Skeleton className="h-24 w-full rounded-2xl" />
+          <Skeleton className="h-24 w-full rounded-[var(--r-card)]" />
+          <Skeleton className="h-24 w-full rounded-[var(--r-card)]" />
         </div>
       ) : variants.isError ? (
         <p className="text-body text-destructive">تعذّر تحميل التصاميم — حدّث الصفحة.</p>
@@ -111,7 +111,7 @@ function VariantsPage() {
                   {rows.map((variant) => (
                     <li
                       key={variant.variant_key}
-                      className={`rounded-2xl border p-3 ${
+                      className={`rounded-[var(--r-card)] border p-3 ${
                         variant.is_active ? "border-primary bg-primary/8" : "border-border bg-card"
                       }`}
                     >

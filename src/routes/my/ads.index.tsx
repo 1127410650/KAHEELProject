@@ -414,14 +414,14 @@ function MyAdsPage() {
         ))}
       </dl>
 
-      <div className="-mx-1 mb-4 flex gap-1.5 overflow-x-auto px-1 pb-1">
+      <div className="-mx-1 mb-4 flex gap-[var(--sp-2)] overflow-x-auto px-1 pb-1">
         {FILTERS.map((key) => (
           <button
             key={key}
             type="button"
             onClick={() => setFilter(key)}
             aria-pressed={filter === key}
-            className={`shrink-0 rounded-full px-3 py-1.5 text-desc font-medium transition-colors ${
+            className={`shrink-0 rounded-full px-3 py-[var(--sp-2)] text-desc font-medium transition-colors ${
               filter === key
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground"
@@ -483,7 +483,7 @@ function MyAdsPage() {
                       </p>
                     </div>
                     <span
-                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-desc font-medium ${statusClass(ad.status, !!ad.is_featured)}`}
+                      className={`shrink-0 rounded-full px-[var(--sp-3)] py-0.5 text-desc font-medium ${statusClass(ad.status, !!ad.is_featured)}`}
                     >
                       {ad.is_featured && <Sparkles className="me-1 inline size-3" aria-hidden />}
                       {t(`market.dash.status.${ad.status}`)}
@@ -503,7 +503,7 @@ function MyAdsPage() {
                     </span>
                     {remaining && <span className="text-foreground">{remaining}</span>}
                     {ad.promoted_until && new Date(ad.promoted_until).getTime() > Date.now() && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 text-primary">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-[var(--sp-2)] text-primary">
                         <Sparkles className="size-3" aria-hidden />
                         {t("market.promote.activeUntil", {
                           date: formatDateTime(ad.promoted_until),

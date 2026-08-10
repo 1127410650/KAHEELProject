@@ -120,14 +120,14 @@ function StoreThemeGate() {
 
   if (!accountKey) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-5 text-sm text-muted-foreground">
+      <div className="rounded-[var(--r-card)] border border-border bg-card p-5 text-sm text-muted-foreground">
         اختر حسابًا نشطًا أولًا لإنشاء المتجر.
       </div>
     );
   }
 
   if (draft.isLoading || (requestedTheme && requestedTheme !== storedTheme && saving)) {
-    return <Skeleton className="h-72 w-full rounded-3xl" />;
+    return <Skeleton className="h-72 w-full rounded-[var(--r-card)]" />;
   }
 
   if (!selectedTemplate || choosing) {

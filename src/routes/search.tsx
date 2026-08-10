@@ -204,7 +204,7 @@ function RealEstateFallback() {
         <Skeleton className="h-[240px] w-full rounded-none sm:h-[280px]" />
         <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-3 py-6 sm:grid-cols-4 sm:px-5 lg:px-8">
           {Array.from({ length: 8 }).map((_, index) => (
-            <Skeleton key={index} className="aspect-[3/4] rounded-2xl" />
+            <Skeleton key={index} className="aspect-[3/4] rounded-[var(--r-card)]" />
           ))}
         </div>
       </div>
@@ -597,7 +597,7 @@ function GenericSearchPage() {
 
   const filterBody = (
     <div className="space-y-4">
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="f-domain">{t("market.search.domain")}</Label>
         <select
           id="f-domain"
@@ -615,7 +615,7 @@ function GenericSearchPage() {
       </div>
 
       {!draftIsBusiness && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="f-cat">{t("market.filters.category")}</Label>
           <select
             id="f-cat"
@@ -637,7 +637,7 @@ function GenericSearchPage() {
       )}
 
       {!draftIsBusiness && draftSubs.length > 0 && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="f-sub">{t("market.filters.subcategory")}</Label>
           <select
             id="f-sub"
@@ -655,7 +655,7 @@ function GenericSearchPage() {
         </div>
       )}
 
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="f-city">{t("market.filters.city")}</Label>
         <select
           id="f-city"
@@ -674,7 +674,7 @@ function GenericSearchPage() {
       </div>
 
       {!draftIsBusiness && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="f-type">{t("market.search.offerType")}</Label>
           <select
             id="f-type"
@@ -694,7 +694,7 @@ function GenericSearchPage() {
 
       {!draftIsBusiness && (
         <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="f-min">{t("market.filters.minPrice")}</Label>
             <Input
               id="f-min"
@@ -706,7 +706,7 @@ function GenericSearchPage() {
               }
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="f-max">{t("market.filters.maxPrice")}</Label>
             <Input
               id="f-max"
@@ -955,7 +955,7 @@ function GenericSearchPage() {
               {/* Placeholders mirror the real cards box-for-box — row cards on
                   phones, grid cards from `sm` — so results swap in without any
                   reflow. */}
-              <div className="flex flex-col gap-2.5 sm:hidden">
+              <div className="flex flex-col gap-[var(--sp-3)] sm:hidden">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <ListingRowSkeleton key={i} />
                 ))}
@@ -995,7 +995,7 @@ function GenericSearchPage() {
           ) : view === "grid" ? (
             <>
               {/* Phones show one clear card per row; two columns from tablet up. */}
-              <div className="flex flex-col gap-2.5 sm:hidden">
+              <div className="flex flex-col gap-[var(--sp-3)] sm:hidden">
                 {rows.map((l) => (
                   <ListingCard key={l.id} listing={l} view="row" origin="search" />
                 ))}
@@ -1007,7 +1007,7 @@ function GenericSearchPage() {
               </div>
             </>
           ) : (
-            <div className="space-y-2.5">
+            <div className="space-y-[var(--sp-3)]">
               {rows.map((l) => (
                 <ListingCard key={l.id} listing={l} view="list" origin="search" />
               ))}

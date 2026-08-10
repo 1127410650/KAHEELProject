@@ -430,15 +430,15 @@ export function ChatComposer({
               );
             }}
           >
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="contact-name">{t("market.chat.contactCard.name")}</Label>
               <Input id="contact-name" name="name" maxLength={80} required />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="contact-phone">{t("market.chat.contactCard.phone")}</Label>
               <Input id="contact-phone" name="phone" dir="ltr" maxLength={20} required />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="contact-note">{t("market.chat.contactCard.note")}</Label>
               <Input id="contact-note" name="note" maxLength={120} />
             </div>

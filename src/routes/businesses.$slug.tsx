@@ -233,7 +233,7 @@ function BusinessPage() {
               </div>
             </div>
 
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
+            <div className="mt-[var(--sp-3)] flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
               {activitySummary && <span className="">{activitySummary}</span>}
               {city && (
                 <span className="inline-flex min-w-0 items-center gap-1">
@@ -361,11 +361,11 @@ function BusinessPage() {
                 <h2 className="text-section font-bold text-foreground">
                   {t("market.business.activities")}
                 </h2>
-                <div className="mt-2 flex flex-wrap gap-1.5">
+                <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
                   {shownChips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-desc text-muted-foreground"
+                      className="rounded-full border border-border bg-secondary/50 px-[var(--sp-3)] py-1 text-desc text-muted-foreground"
                     >
                       {chip}
                     </span>
@@ -415,7 +415,7 @@ function BusinessPage() {
             <h2 className="text-section font-bold text-foreground">{t("market.business.listings")}</h2>
 
             {cats.length > 1 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
                 {[
                   { id: null as string | null, label: t("market.person.allCategories") },
                   ...cats.map((c) => ({
@@ -430,7 +430,7 @@ function BusinessPage() {
                       type="button"
                       aria-pressed={active}
                       onClick={() => setCategoryId(chip.id)}
-                      className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
+                      className={`rounded-full border px-3 py-[var(--sp-2)] text-desc font-medium transition-colors ${
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-card text-muted-foreground hover:border-primary/40"

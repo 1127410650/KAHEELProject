@@ -632,7 +632,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
       );
     }
     return (
-      <div key={field.key} className="space-y-1.5">
+      <div key={field.key} className="space-y-[var(--sp-2)]">
         <Label htmlFor={`spec_${field.key}`}>
           {t(field.labelKey)}
           {field.unitKey ? ` (${t(field.unitKey)})` : ""}
@@ -665,7 +665,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
   }
 
   const cityField = (id: string) => (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <Label htmlFor={id}>{t("market.geo.city")}</Label>
       <select
         id={id}
@@ -784,7 +784,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
               {t("market.form.back")}
             </button>
           )}
-          <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-desc text-secondary-foreground">
+          <span className="shrink-0 rounded-full bg-secondary px-[var(--sp-3)] py-1 text-desc text-secondary-foreground">
             {t("market.form.stepOf", { n: step + 1, total: STEPS.length })}
           </span>
         </div>
@@ -810,7 +810,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
             />
             {errors.path && <p className="mt-1.5 text-desc text-destructive">{errors.path}</p>}
             {purposeOptions.length > 1 && (
-              <div className="mt-3 space-y-1.5">
+              <div className="mt-3 space-y-[var(--sp-2)]">
                 <span className="text-sm font-medium text-foreground">
                   {t("market.form.purpose")}
                 </span>
@@ -838,7 +838,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
             )}
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="title">{t("market.dash.listingTitle")}</Label>
             <Input
               id="title"
@@ -861,7 +861,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
             )}
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="description">{t("market.form.adDescription")}</Label>
             <Textarea
               id="description"
@@ -872,7 +872,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="price">
                 {isWantedType(typeCode) ? t("market.form.budget") : t("market.form.priceValue")}
               </Label>
@@ -905,7 +905,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                 <p className="text-desc text-muted-foreground">{t("market.form.currencyHint")}</p>
               )}
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="price_unit">{t("market.dash.priceUnit")}</Label>
               <select
                 id="price_unit"
@@ -935,7 +935,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
 
           {showQuantity && (
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="quantity">{t("market.quote.quantity")}</Label>
                 <Input
                   id="quantity"
@@ -946,7 +946,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                   onChange={(e) => touch(setQuantity)(e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="item_condition">{t("market.dash.condition")}</Label>
                 <select
                   id="item_condition"
@@ -962,7 +962,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
           )}
 
           {isEquipment && !showQuantity && (
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="item_condition">{t("market.dash.condition")}</Label>
               <select
                 id="item_condition"
@@ -981,7 +981,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
               type="button"
               onClick={() => setExtraOpen((prev) => !prev)}
               aria-expanded={extraOpen}
-              className="flex min-h-11 w-full items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium text-foreground"
+              className="flex min-h-11 w-full items-center justify-between gap-2 px-3 py-[var(--sp-3)] text-sm font-medium text-foreground"
             >
               {t("market.form.moreDetails")}
               <ChevronDown
@@ -994,7 +994,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   {extra.filter((f) => f.kind !== "bool").map((f) => specInput(f))}
                   {showQuantity && (
-                    <div className="space-y-1.5">
+                    <div className="space-y-[var(--sp-2)]">
                       <Label htmlFor="unit">{t("market.quote.unit")}</Label>
                       <Input
                         id="unit"
@@ -1008,7 +1008,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                 <div className="space-y-2">
                   {extra.filter((f) => f.kind === "bool").map((f) => specInput(f))}
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-[var(--sp-2)]">
                   <Label htmlFor="summary">{t("market.form.summaryOverride")}</Label>
                   <Input
                     id="summary"
@@ -1021,7 +1021,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                     {t("market.form.summaryAuto")}
                   </p>
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-[var(--sp-2)]">
                   <Label htmlFor="keywords">{t("market.form.keywords")}</Label>
                   <Input
                     id="keywords"
@@ -1056,7 +1056,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
 
       {step === 1 && (
         <div className="space-y-4">
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <span className="text-sm font-medium text-foreground">{t("market.dash.images")}</span>
             <div id="images-block">
               <ListingImages api={media} />
@@ -1066,7 +1066,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
 
           <div className="grid gap-3 sm:grid-cols-2">
             {cityField("city_step2")}
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="district">{t("market.form.districtOptional")}</Label>
               <Input
                 id="district"

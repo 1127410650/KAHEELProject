@@ -167,7 +167,7 @@ function ProviderSettingsPage() {
   if (setup.isLoading || categories.isLoading) {
     return (
       <DashboardShell title={locale === "ar" ? "إعدادات مقدم الخدمة" : "Provider settings"}>
-        <Skeleton className="h-[560px] rounded-3xl" />
+        <Skeleton className="h-[560px] rounded-[var(--r-card)]" />
       </DashboardShell>
     );
   }
@@ -214,7 +214,7 @@ function ProviderSettingsPage() {
           </Link>
         </Button>
 
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div>
               <h2 className="text-section font-black">
@@ -226,7 +226,7 @@ function ProviderSettingsPage() {
                   : "These settings control what customers see and how requests reach you."}
               </p>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="service-category">
                 {locale === "ar" ? "تصنيف الخدمات" : "Service category"}
               </Label>
@@ -244,7 +244,7 @@ function ProviderSettingsPage() {
               </select>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="professional-name">
                   {locale === "ar" ? "اسم مقدم الخدمة" : "Provider name"}
                 </Label>
@@ -254,7 +254,7 @@ function ProviderSettingsPage() {
                   onChange={(event) => setProfessionalName(event.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="professional-title">
                   {locale === "ar" ? "المسمى أو التخصص" : "Title or specialty"}
                 </Label>
@@ -265,7 +265,7 @@ function ProviderSettingsPage() {
                 />
               </div>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="professional-bio">
                 {locale === "ar" ? "نبذة مختصرة" : "Short bio"}
               </Label>
@@ -277,7 +277,7 @@ function ProviderSettingsPage() {
                 onChange={(event) => setProfessionalBio(event.target.value)}
               />
             </div>
-            <label className="flex items-center justify-between gap-3 rounded-2xl border p-4">
+            <label className="flex items-center justify-between gap-3 rounded-[var(--r-card)] border p-4">
               <span>
                 <span className="block text-sm font-black">
                   {locale === "ar" ? "استقبال الحجوزات" : "Accept bookings"}
@@ -293,7 +293,7 @@ function ProviderSettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div>
               <h2 className="text-section font-black">
@@ -312,7 +312,7 @@ function ProviderSettingsPage() {
                   type="button"
                   aria-pressed={modes.includes(mode)}
                   onClick={() => toggleMode(mode)}
-                  className={`rounded-2xl border p-4 text-start text-sm font-black ${modes.includes(mode) ? "border-primary bg-primary/5 text-primary" : "text-muted-foreground"}`}
+                  className={`rounded-[var(--r-card)] border p-4 text-start text-sm font-black ${modes.includes(mode) ? "border-primary bg-primary/5 text-primary" : "text-muted-foreground"}`}
                 >
                   {modes.includes(mode) ? (
                     <Check className="mb-2 size-4" />
@@ -324,7 +324,7 @@ function ProviderSettingsPage() {
               ))}
             </div>
             {modes.includes("at_customer") ? (
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="visit-fee">{locale === "ar" ? "رسوم الزيارة" : "Visit fee"}</Label>
                 <Input
                   id="visit-fee"
@@ -341,7 +341,7 @@ function ProviderSettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div>
               <h2 className="text-section font-black">
@@ -353,7 +353,7 @@ function ProviderSettingsPage() {
                   : "Rules are enforced on the server and cannot be bypassed by the customer."}
               </p>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="confirmation">
                 {locale === "ar" ? "تأكيد الحجز" : "Booking confirmation"}
               </Label>
@@ -411,7 +411,7 @@ function ProviderSettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl">
+        <Card className="rounded-[var(--r-card)]">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <CalendarRange className="size-5 text-primary" />
@@ -430,7 +430,7 @@ function ProviderSettingsPage() {
               {days.map((day) => (
                 <div
                   key={day.weekday}
-                  className="grid grid-cols-[minmax(88px,1fr)_auto] items-center gap-3 rounded-2xl border p-3 sm:grid-cols-[140px_1fr_1fr_auto]"
+                  className="grid grid-cols-[minmax(88px,1fr)_auto] items-center gap-3 rounded-[var(--r-card)] border p-3 sm:grid-cols-[140px_1fr_1fr_auto]"
                 >
                   <span className="text-sm font-black">{dayNames[day.weekday]}</span>
                   <Input
@@ -457,7 +457,7 @@ function ProviderSettingsPage() {
           </CardContent>
         </Card>
 
-        <div className="sticky bottom-3 z-10 flex justify-end rounded-2xl border bg-background/90 p-3 shadow-xl backdrop-blur">
+        <div className="sticky bottom-3 z-10 flex justify-end rounded-[var(--r-card)] border bg-background/90 p-3 shadow-xl backdrop-blur">
           <Button size="lg" disabled={saving} onClick={() => void save()}>
             {saving ? (
               <Loader2 className="me-2 size-4 animate-spin" />
@@ -486,7 +486,7 @@ function NumberField({
   min: number;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}
@@ -514,7 +514,7 @@ function SelectNumber({
   values: number[];
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <Label htmlFor={id}>{label}</Label>
       <select
         id={id}

@@ -646,7 +646,7 @@ export function BusinessQuickCreate({
 
       {stage === 1 && (
         <div className="space-y-3">
-          <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
+          <p className="rounded-lg bg-secondary/50 p-[var(--sp-3)] text-desc leading-relaxed text-muted-foreground">
             {t("market.biz.officerPrivacy")}
           </p>
           <div className="grid gap-3 md:grid-cols-2">
@@ -827,7 +827,7 @@ export function BusinessQuickCreate({
             )}
           </div>
 
-          <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
+          <p className="rounded-lg bg-secondary/50 p-[var(--sp-3)] text-desc leading-relaxed text-muted-foreground">
             {t("market.biz.verificationRules")}
           </p>
           {DOC_ORDER.filter((kind) => kind !== "authorization" || capacity !== "owner").map(
@@ -904,7 +904,7 @@ export function BusinessQuickCreate({
             />
           </ReviewGroup>
 
-          <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
+          <p className="rounded-lg bg-secondary/50 p-[var(--sp-3)] text-desc leading-relaxed text-muted-foreground">
             {t("market.biz.verificationLocked")}
           </p>
 
@@ -1028,7 +1028,7 @@ function ReviewGroup({
           {t("market.form.edit")}
         </Button>
       </div>
-      <dl className="space-y-1.5">{children}</dl>
+      <dl className="space-y-[var(--sp-2)]">{children}</dl>
     </section>
   );
 }
@@ -1054,7 +1054,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-w-0 space-y-1.5">
+    <div className="min-w-0 space-y-[var(--sp-2)]">
       <Label htmlFor={id}>{label}</Label>
       {children}
       {hint && <p className="wrap-anywhere text-desc text-muted-foreground">{hint}</p>}

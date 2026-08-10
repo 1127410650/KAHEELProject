@@ -65,7 +65,7 @@ function LabelRowEditor({ row, onSaved }: { row: UiLabelRow; onSaved: () => void
   }
 
   return (
-    <li className="rounded-2xl border border-border bg-card p-3">
+    <li className="rounded-[var(--r-card)] border border-border bg-card p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <code className="text-nav text-muted-foreground" dir="ltr">
           {row.label_key}
@@ -164,8 +164,8 @@ function AdminLabelsPage() {
 
         {rows.isPending ? (
           <div className="space-y-2">
-            <Skeleton className="h-28 w-full rounded-2xl" />
-            <Skeleton className="h-28 w-full rounded-2xl" />
+            <Skeleton className="h-28 w-full rounded-[var(--r-card)]" />
+            <Skeleton className="h-28 w-full rounded-[var(--r-card)]" />
           </div>
         ) : filtered.length === 0 ? (
           <p className="text-body text-muted-foreground">لا نتائج مطابقة.</p>

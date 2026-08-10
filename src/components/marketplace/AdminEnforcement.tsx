@@ -172,7 +172,7 @@ export function AdminEnforcement({
             const live = !row.lifted_at && (!row.expires_at || new Date(row.expires_at) > new Date());
             return (
               <li key={row.id} className="rounded-lg border border-border bg-background p-3">
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
                   <span className="text-sm font-medium text-foreground">
                     {t(`admin.restriction.${row.restriction}`)}
                   </span>

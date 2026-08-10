@@ -39,7 +39,7 @@ export function ExclusiveOffersRail() {
 
       <div className="relative z-10">
         <header className="flex items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary">
+          <span className="grid size-9 place-items-center rounded-[var(--r-card)] bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary">
             <Sparkles className="size-5" aria-hidden />
           </span>
           <div className="min-w-0">
@@ -63,7 +63,7 @@ export function ExclusiveOffersRail() {
               <Link
                 key={offer.id}
                 to={offer.click_url}
-                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-brand-400/30 bg-brand-900 p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
+                className="k-press relative flex min-h-[7.5rem] w-[15.5rem] shrink-0 flex-col justify-end overflow-hidden rounded-[var(--r-card)] border border-brand-400/30 bg-brand-900 p-3 text-start text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
               >
                 {offer.imageUrl ? (
                   <img

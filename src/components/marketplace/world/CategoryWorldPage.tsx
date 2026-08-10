@@ -56,7 +56,7 @@ export function CategoryWorldPage({
      الكود، والتأليف من /admin/composer (قالب واحد لكل عوالم الأقسام). */
   const heroSection = (
     <section data-kslot={`world.${world.slug}.hero`} className="px-4 pt-3">
-      <div className="relative overflow-hidden rounded-3xl border border-border">
+      <div className="relative overflow-hidden rounded-[var(--r-card)] border border-border">
         <img
           src={heroUrl}
           alt={slotAlt(slots.data, `world.${world.slug}.hero`, categoryName(world, locale))}
@@ -117,7 +117,7 @@ export function CategoryWorldPage({
                 <a
                   data-kslot={key}
                   href={`/categories/${sub.slug}`}
-                  className="k-lift relative block overflow-hidden rounded-2xl border border-border"
+                  className="k-lift relative block overflow-hidden rounded-[var(--r-card)] border border-border"
                 >
                   <img
                     src={slotUrl(slots.data, key, SUB_FALLBACK)}

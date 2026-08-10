@@ -239,7 +239,7 @@ function MyOrdersPage() {
 
       <div className="mt-4 space-y-3">
         {query.isLoading &&
-          [0, 1, 2].map((key) => <Skeleton key={key} className="h-24 w-full rounded-2xl" />)}
+          [0, 1, 2].map((key) => <Skeleton key={key} className="h-24 w-full rounded-[var(--r-card)]" />)}
 
         {!query.isLoading && visible.length === 0 && (
           <Card>

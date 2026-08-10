@@ -106,7 +106,7 @@ function ViolationsPage() {
 
       {(restrictions.data ?? []).length > 0 && (
         <div className="mb-4 rounded-xl border border-destructive/40 bg-destructive/5 p-4">
-          <h2 className="text-section flex items-center gap-1.5 font-semibold text-foreground">
+          <h2 className="text-section flex items-center gap-[var(--sp-2)] font-semibold text-foreground">
             <ShieldAlert className="size-4 text-destructive" aria-hidden />
             {t("market.reports.violations.restrictions")}
           </h2>
@@ -160,12 +160,12 @@ function ViolationsPage() {
                       {formatDateTime(item.created_at)}
                     </p>
                   </div>
-                  <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
+                  <span className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc font-medium text-secondary-foreground">
                     {t(`market.reports.status.${item.status}`)}
                   </span>
                 </div>
 
-                <dl className="mt-3 space-y-1.5 text-desc">
+                <dl className="mt-3 space-y-[var(--sp-2)] text-desc">
                   <div>
                     <dt className="text-muted-foreground">
                       {t("market.reports.violations.decision")}

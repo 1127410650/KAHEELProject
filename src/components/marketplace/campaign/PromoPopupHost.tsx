@@ -423,7 +423,7 @@ export function PromoPopupHost() {
 
 
   const closeButtons = (
-    <div className="flex gap-1.5">
+    <div className="flex gap-[var(--sp-2)]">
       <button
         type="button"
         onClick={() => dismiss(true)}
@@ -481,7 +481,7 @@ export function PromoPopupHost() {
             transformOrigin: layout.origin,
             animation: peekAnimation,
           }}
-          className={`pointer-events-none flex items-end gap-1.5 ${layout.row}`}
+          className={`pointer-events-none flex items-end gap-[var(--sp-2)] ${layout.row}`}
         >
           <MascotPeek lang={ar ? "ar" : "en"} animated={!calm} />
           {/* نص عائم بلا خلفية: اللون والظل يتكيّفان مع سطوع المكان. */}
