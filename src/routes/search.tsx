@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { LayoutGrid, List, Loader2, MapPin, SlidersHorizontal, X } from "lucide-react";
+import { LayoutGrid, List, Loader2, MapPin, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { KEmptyState } from "@/components/marketplace/KEmptyState";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
@@ -967,21 +968,25 @@ function GenericSearchPage() {
               </div>
             </>
           ) : empty ? (
-            <div className="k-surface border-dashed px-4 py-8 text-center">
-              <p className="text-sm font-medium text-foreground">{t("market.noResults")}</p>
-              <div className="mt-3 flex flex-wrap justify-center gap-2">
-                {activeFilterCount > 0 && (
-                  <Button variant="outline" size="sm" onClick={clearFilters}>
-                    {t("market.search.clearFilters")}
+            <KEmptyState
+              icon={SearchX}
+              title={t("market.noResults")}
+              hint={t("market.search.emptyHint")}
+              action={
+                <>
+                  {activeFilterCount > 0 && (
+                    <Button variant="outline" className="h-11" onClick={clearFilters}>
+                      {t("market.search.clearFilters")}
+                    </Button>
+                  )}
+                  <Button asChild className="h-11">
+                    <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
+                      {t("market.addListing")}
+                    </Link>
                   </Button>
-                )}
-                <Button asChild size="sm">
-                  <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
-                    {t("market.addListing")}
-                  </Link>
-                </Button>
-              </div>
-            </div>
+                </>
+              }
+            />
           ) : businessMode ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {bizRows.map((row) => (
