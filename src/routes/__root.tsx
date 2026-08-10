@@ -23,6 +23,8 @@ import { PromoPopupHost } from "@/components/marketplace/campaign/PromoPopupHost
 import { MascotRoam } from "@/components/marketplace/campaign/MascotRoam";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
+import { SlotStyleLayer } from "@/components/marketplace/SlotStyleLayer";
+import { LiveEditGate } from "@/components/marketplace/live-edit/LiveEditGate";
 
 /**
  * `notFoundComponent` / `errorComponent` of the ROOT route render INSTEAD of
@@ -198,6 +200,8 @@ function RootComponent() {
           <CallCenterProvider>
             {/* Required: nested routes render here. */}
             <Outlet />
+            <SlotStyleLayer />
+            <LiveEditGate />
             <CallOverlay />
             <PromoPopupHost />
             <MascotRoam />
