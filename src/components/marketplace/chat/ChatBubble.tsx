@@ -339,8 +339,9 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
             card
               ? "w-full"
               : mine
-                ? "rounded-[var(--r-card)] rounded-ee-sm bg-primary px-3 py-2 text-sm text-primary-foreground shadow-sm"
-                : "rounded-[var(--r-card)] rounded-ss-sm bg-secondary px-3 py-2 text-sm text-secondary-foreground shadow-sm",
+                ? "k-bubble rounded-ee-sm bg-primary p-[var(--sp-3)] text-primary-foreground shadow-sm"
+                : "k-bubble rounded-ss-sm bg-secondary p-[var(--sp-3)] text-secondary-foreground shadow-sm",
+
             message.pending ? "opacity-70" : "",
             message.failed ? "ring-1 ring-destructive" : "",
           ]
