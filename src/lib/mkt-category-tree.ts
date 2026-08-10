@@ -117,8 +117,8 @@ export async function createCategory(input: {
     _slug: input.slug,
     _name_ar: input.nameAr,
     _name_en: input.nameEn ?? input.nameAr,
-    _icon: input.icon ?? null,
-    _tagline_ar: input.taglineAr ?? null,
+    _icon: input.icon ?? undefined,
+    _tagline_ar: input.taglineAr ?? undefined,
     _sort_order: input.sortOrder ?? 0,
   });
   if (error) throw error;
@@ -135,9 +135,9 @@ export async function renameCategory(input: {
   const { error } = await supabase.rpc("mkt_admin_category_upsert", {
     _id: input.id,
     _name_ar: input.nameAr,
-    _name_en: input.nameEn ?? null,
-    _tagline_ar: input.taglineAr ?? null,
-    _sort_order: input.sortOrder ?? null,
+    _name_en: input.nameEn ?? undefined,
+    _tagline_ar: input.taglineAr ?? undefined,
+    _sort_order: input.sortOrder ?? undefined,
   });
   if (error) throw error;
 }
