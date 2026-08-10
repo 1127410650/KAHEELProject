@@ -114,7 +114,99 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
         </div>
       </div>
 
+      <fieldset className="mt-3 rounded-xl border border-border p-2.5">
+        <legend className="px-1 text-desc font-bold text-foreground">ختم العلامة</legend>
+        <label className="flex items-center gap-2 text-desc font-bold text-foreground" style={{ minHeight: 44 }}>
+          <input
+            type="checkbox"
+            checked={stampOn}
+            onChange={(event) => setStampOn(event.target.checked)}
+            className="size-5 accent-primary"
+          />
+          <Stamp className="size-4 text-primary" aria-hidden />
+          اختم باسم كَحيل عند الرفع
+        </label>
+        {stampOn ? (
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            <label className="text-desc font-bold text-foreground">
+              الموضع
+              <select
+                className="mt-1 w-full rounded-xl border border-border bg-card px-3 text-body font-bold text-foreground"
+                style={{ minHeight: 44 }}
+                value={stamp.position}
+                onChange={(event) =>
+                  setStampField("position", event.target.value as BrandStampOptions["position"])
+                }
+              >
+                {STAMP_POSITIONS.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-desc font-bold text-foreground">
+              الحجم
+              <select
+                className="mt-1 w-full rounded-xl border border-border bg-card px-3 text-body font-bold text-foreground"
+                style={{ minHeight: 44 }}
+                value={stamp.size}
+                onChange={(event) => setStampField("size", event.target.value as BrandStampOptions["size"])}
+              >
+                {STAMP_SIZES.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-desc font-bold text-foreground">
+              اللون
+              <select
+                className="mt-1 w-full rounded-xl border border-border bg-card px-3 text-body font-bold text-foreground"
+                style={{ minHeight: 44 }}
+                value={stamp.color}
+                onChange={(event) => setStampField("color", event.target.value as BrandStampOptions["color"])}
+              >
+                {STAMP_COLORS.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-desc font-bold text-foreground">
+              الشفافية <span className="num">{Math.round(stamp.opacity * 100)}%</span>
+              <input
+                type="range"
+                min={20}
+                max={100}
+                value={Math.round(stamp.opacity * 100)}
+                onChange={(event) => setStampField("opacity", Number(event.target.value) / 100)}
+                className="mt-2 w-full accent-primary"
+              />
+            </label>
+            <label
+              className="flex items-center gap-2 text-desc font-bold text-foreground sm:col-span-2"
+              style={{ minHeight: 44 }}
+            >
+              <input
+                type="checkbox"
+                checked={stamp.ribbon}
+                onChange={(event) => setStampField("ribbon", event.target.checked)}
+                className="size-5 accent-primary"
+              />
+              خلفية شريط بتدرّج الهوية خلف الاسم
+            </label>
+            <p className="text-desc text-muted-foreground sm:col-span-2">
+              تُحفظ النسخة المختومة للعرض، والأصلية بجانبها في المكتبة.
+            </p>
+          </div>
+        ) : null}
+      </fieldset>
+
       <div className="mt-3 flex flex-wrap gap-2">
+
         <input
           ref={fileRef}
           type="file"
