@@ -51,7 +51,7 @@ function ResetPasswordPage() {
       toast.error(t("auth.passwordMismatch"));
       return;
     }
-    if (passwordPolicyError(password)) {
+    if (passwordPolicyError(password) || (await isBreachedPassword(password))) {
       toast.error(t("auth.passwordWeak"));
       return;
     }

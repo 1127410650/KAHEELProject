@@ -55,6 +55,8 @@ export async function publicSignupImpl(
     return { ok: false, error: "INVALID" };
   }
   if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
+  // Reject credentials that already appear in public breach corpora.
+  if (await isBreachedPassword(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

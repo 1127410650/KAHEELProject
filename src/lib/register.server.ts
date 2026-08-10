@@ -46,6 +46,8 @@ export async function registerAccountImpl(
   if (fullName.length < 3) return { ok: false, error: "INVALID" };
   if (!/^\+[1-9][0-9]{7,14}$/.test(phone)) return { ok: false, error: "INVALID" };
   if (passwordPolicyError(password)) return { ok: false, error: "WEAK_PASSWORD" };
+  // Reject credentials that already appear in public breach corpora.
+  if (await isBreachedPassword(password)) return { ok: false, error: "WEAK_PASSWORD" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
