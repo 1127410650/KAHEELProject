@@ -22,12 +22,14 @@ const HALF = "h-[112px] sm:h-[150px]";
 
 function CampaignTile({
   campaign,
+  slotKey,
   className,
   fallbackTitle,
   fallbackHref,
   fallbackImage,
 }: {
   campaign?: LiveCampaign | undefined;
+  slotKey: string;
   className: string;
   fallbackTitle: string;
   fallbackHref: string;
@@ -77,7 +79,7 @@ function CampaignTile({
 
   if (!campaign)
     return (
-      <a href={fallbackHref} className={box}>
+      <a href={fallbackHref} data-kslot={slotKey} className={box}>
         {base}
       </a>
     );
@@ -86,6 +88,7 @@ function CampaignTile({
     <a
       href={campaign.click_url}
       onClick={() => trackCampaign(campaign.id, "click")}
+      data-kslot={slotKey}
       className={box}
     >
 
@@ -128,9 +131,10 @@ export function CampaignMosaic() {
     return campaign ? { campaign, title: fallbackTitle, href: "/search" } : filler;
   });
 
-  const tile = (slot: Slot, className: string, key: string) => (
+  const tile = (slot: Slot, className: string, key: string, slotKey: string) => (
     <CampaignTile
       key={key}
+      slotKey={slotKey}
       campaign={slot.campaign}
       className={className}
       fallbackTitle={slot.title}
@@ -141,12 +145,12 @@ export function CampaignMosaic() {
 
   return (
     <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-2.5">
-      {tile(slots[0]!, WIDE, "wide-1")}
+      {tile(slots[0]!, WIDE, "wide-1", "home.campaign.1")}
       <div className="grid grid-cols-2 gap-2.5">
-        {tile(slots[1]!, HALF, "half-1")}
-        {tile(slots[2]!, HALF, "half-2")}
+        {tile(slots[1]!, HALF, "half-1", "home.campaign.2")}
+        {tile(slots[2]!, HALF, "half-2", "home.campaign.3")}
       </div>
-      {tile(slots[3]!, WIDE, "wide-2")}
+      {tile(slots[3]!, WIDE, "wide-2", "home.campaign.4")}
     </section>
   );
 }

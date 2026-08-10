@@ -88,7 +88,7 @@ function AqarHomePage() {
       <div className="mx-auto w-full max-w-3xl">
         {/* الهيرو: صورة معلم سوري بارتفاع ثابت، فلا إزاحة تخطيط عند التحميل. */}
         <section className="px-4 pt-4">
-          <div className="relative overflow-hidden rounded-2xl border border-border">
+          <div data-kslot="aqar.hero" className="relative overflow-hidden rounded-2xl border border-border">
             <img
               src={hero.image}
               alt={`${hero.name} — ${hero.city}`}

@@ -66,7 +66,7 @@ export function AqarShell({
       dir="rtl"
       className="market-surface flex min-h-dvh flex-col overflow-x-clip pb-[calc(3.5rem+env(safe-area-inset-bottom))]"
     >
-      <header data-kslot="aqar.hero" className="k-header-hero relative overflow-hidden px-4 pb-5 pt-3">
+      <header data-kslot="aqar.header" className="k-header-hero relative overflow-hidden px-4 pb-5 pt-3">
         <div className="mx-auto flex max-w-3xl items-center gap-3">
           <Link
             to={back}

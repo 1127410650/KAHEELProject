@@ -7,13 +7,17 @@ import { useEffect } from "react";
 import { CampaignAsset } from "@/components/marketplace/campaign/CampaignAsset";
 import { useI18n } from "@/i18n";
 import { trackCampaign, useLiveCampaigns } from "@/lib/mkt-campaigns";
+import { slotCampaignId, useMediaSlots } from "@/lib/mkt-media-slots";
 import fallbackImage from "@/assets/market/kaheel-home-hero-v2.webp";
 
 export function SponsoredBanner() {
   const { locale } = useI18n();
   const ar = locale === "ar";
   const { data } = useLiveCampaigns("home_strip");
-  const campaign = data?.[0];
+  /* الحملة المربوطة بالفتحة من وضع التحرير تتقدّم، وإلا فالأولوية التلقائية. */
+  const slots = useMediaSlots();
+  const boundId = slotCampaignId(slots.data, "home.sponsored");
+  const campaign = (boundId ? data?.find((item) => item.id === boundId) : undefined) ?? data?.[0];
 
   useEffect(() => {
     if (campaign) trackCampaign(campaign.id, "impression");
@@ -34,7 +38,7 @@ export function SponsoredBanner() {
   if (!campaign)
     return (
       <section aria-label={ar ? "إعلان ممول" : "Sponsored"}>
-        <a href="/search" className={box}>
+        <a href="/search" data-kslot="home.sponsored" className={box}>
           <img
             src={fallbackImage}
             alt=""
@@ -54,6 +58,7 @@ export function SponsoredBanner() {
       <a
         href={campaign.click_url}
         onClick={() => trackCampaign(campaign.id, "click")}
+        data-kslot="home.sponsored"
         className={box}
       >
         <CampaignAsset campaign={campaign} />
