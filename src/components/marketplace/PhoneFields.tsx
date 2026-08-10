@@ -39,7 +39,7 @@ export function PhoneField({
   }, [countryId, onChange]);
 
   return (
-    <div className="min-w-0 space-y-1.5">
+    <div className="min-w-0 space-y-[var(--sp-2)]">
       <Label htmlFor="phone_national">{t("market.phone.label")}</Label>
       <div className="flex min-w-0 items-center gap-2" dir="ltr">
         <span className="shrink-0 rounded-md border border-input bg-secondary px-2 py-2 text-sm text-foreground">
@@ -75,7 +75,7 @@ export function PhoneVisibilityField({
 }) {
   const { t } = useI18n();
   return (
-    <div className="min-w-0 space-y-1.5">
+    <div className="min-w-0 space-y-[var(--sp-2)]">
       <Label htmlFor="phone_visibility">{t("market.phone.visibility")}</Label>
       <select
         id="phone_visibility"
@@ -88,7 +88,7 @@ export function PhoneVisibilityField({
         <option value="public">{t("market.phone.public")}</option>
       </select>
       {value === "public" && (
-        <p className="flex items-start gap-1.5 rounded-lg bg-destructive/10 p-2 text-desc text-destructive">
+        <p className="flex items-start gap-[var(--sp-2)] rounded-lg bg-destructive/10 p-2 text-desc text-destructive">
           <AlertTriangle className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           {t("market.phone.publicWarning")}
         </p>

@@ -168,9 +168,9 @@ function ErrandsPage() {
         banner={<HomeAdStrip addHref="/my/listings/new" />}
         progress={progressSteps}
       />
-      <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+      <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
         {/* رأس الخدمة: كَحيلان بيوعد إنه هو الواسطة */}
-        <section className="relative mb-3 overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/15 via-background to-background p-3">
+        <section className="relative mb-3 overflow-hidden rounded-[var(--r-card)] border border-primary/25 bg-gradient-to-br from-primary/15 via-background to-background p-3">
           <div className="flex items-center gap-3">
             <div className="h-[84px] w-[68px] shrink-0">
               <Mascot
@@ -203,7 +203,7 @@ function ErrandsPage() {
           {services.isLoading ? (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton key={index} className="h-[76px] rounded-2xl" />
+                <Skeleton key={index} className="h-[76px] rounded-[var(--r-card)]" />
               ))}
             </div>
           ) : (
@@ -215,7 +215,7 @@ function ErrandsPage() {
                     key={service.id}
                     type="button"
                     onClick={() => setServiceSlug(service.slug)}
-                    className={`h-[76px] rounded-2xl border p-2.5 text-start transition ${
+                    className={`h-[76px] rounded-[var(--r-card)] border p-[var(--sp-3)] text-start transition ${
                       selected
                         ? "border-primary bg-primary/10 shadow-sm"
                         : "border-border/70 bg-card/60 hover:border-primary/50"
@@ -240,7 +240,7 @@ function ErrandsPage() {
 
         <form onSubmit={submit} className="grid gap-3">
           {/* الوصف الحر */}
-          <div className="rounded-2xl border border-border/70 bg-card/60 p-3">
+          <div className="rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
             <Label className="text-sm font-bold text-foreground">
               {ar ? "اكتب طلبك بالتفصيل" : "Describe your order"}
             </Label>
@@ -331,7 +331,7 @@ function ErrandsPage() {
           />
 
           {/* الميزانية وتكلفة التوصيل */}
-          <div className="grid gap-2 rounded-2xl border border-border/70 bg-card/60 p-3 sm:grid-cols-2">
+          <div className="grid gap-2 rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3 sm:grid-cols-2">
             <div className="grid gap-1">
               <Label className="text-desc text-muted-foreground">
                 {ar ? "ميزانية تقديرية للطلب (اختياري)" : "Rough budget (optional)"}
@@ -348,8 +348,8 @@ function ErrandsPage() {
               <Label className="text-desc text-muted-foreground">
                 {ar ? "تكلفة التوصيل" : "Delivery fee"}
               </Label>
-              <div className="flex h-9 items-center rounded-md border border-dashed border-primary/40 bg-primary/5 px-2.5 text-desc font-bold text-primary">
-                <PackageSearch className="me-1.5 h-3.5 w-3.5" />
+              <div className="flex h-9 items-center rounded-md border border-dashed border-primary/40 bg-primary/5 px-[var(--sp-3)] text-desc font-bold text-primary">
+                <PackageSearch className="me-[var(--sp-2)] h-3.5 w-3.5" />
                 {ar ? "بانتظار عرض الكابتن" : "Waiting for the captain's offer"}
               </div>
             </div>
@@ -365,7 +365,7 @@ function ErrandsPage() {
               {ar ? "أرسل الطلب للكباتن" : "Send to captains"}
             </Button>
           ) : (
-            <div className="rounded-2xl border border-primary/30 bg-primary/5 p-3 text-center">
+            <div className="rounded-[var(--r-card)] border border-primary/30 bg-primary/5 p-3 text-center">
               <p className="text-desc font-semibold text-foreground">
                 {ar
                   ? "سجّل دخولك حتى نوصل طلبك للكباتن ونتابعه معك."

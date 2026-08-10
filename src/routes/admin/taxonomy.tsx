@@ -80,8 +80,8 @@ function AdminActivitiesPage() {
               onClick={() => setTab(key)}
               className={
                 tab === key
-                  ? "shrink-0 rounded-full bg-primary px-3 py-1.5 text-desc font-medium text-primary-foreground"
-                  : "shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
+                  ? "shrink-0 rounded-full bg-primary px-3 py-[var(--sp-2)] text-desc font-medium text-primary-foreground"
+                  : "shrink-0 rounded-full border border-border bg-card px-3 py-[var(--sp-2)] text-desc font-medium text-foreground hover:bg-accent"
               }
             >
               {t(label)}
@@ -245,11 +245,11 @@ function AddSectorForm({
   return (
     <div className="min-w-0 space-y-3 rounded-xl border border-border bg-card p-4">
       <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-[var(--sp-2)]">
           <Label htmlFor="sec_ar">{t("market.admin.actSectorName")}</Label>
           <Input id="sec_ar" value={nameAr} maxLength={80} onChange={(e) => setNameAr(e.target.value)} />
         </div>
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-[var(--sp-2)]">
           <Label htmlFor="sec_en">{t("market.admin.actSectorNameEn")}</Label>
           <Input
             id="sec_en"
@@ -310,7 +310,7 @@ function AddActivityForm({
   return (
     <div className="min-w-0 space-y-3 rounded-xl border border-border bg-card p-4">
       <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-[var(--sp-2)]">
           <Label htmlFor="act_group">{t("market.activity.sector")}</Label>
           <select
             id="act_group"
@@ -328,7 +328,7 @@ function AddActivityForm({
             ))}
           </select>
         </div>
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-[var(--sp-2)]">
           <Label htmlFor="act_parent">{t("market.admin.actParent")}</Label>
           <select
             id="act_parent"
@@ -344,11 +344,11 @@ function AddActivityForm({
             ))}
           </select>
         </div>
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-[var(--sp-2)]">
           <Label htmlFor="act_ar">{t("market.admin.actName")}</Label>
           <Input id="act_ar" value={nameAr} maxLength={120} onChange={(e) => setNameAr(e.target.value)} />
         </div>
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-[var(--sp-2)]">
           <Label htmlFor="act_en">{t("market.admin.actNameEn")}</Label>
           <Input
             id="act_en"
@@ -424,7 +424,7 @@ function ActivityRow({
             {row.entity_count} {t("market.admin.actEntities")}
           </p>
         </div>
-        <div className="flex shrink-0 flex-wrap gap-1.5">
+        <div className="flex shrink-0 flex-wrap gap-[var(--sp-2)]">
           <Button
             type="button"
             size="sm"
@@ -451,9 +451,9 @@ function ActivityRow({
         </div>
       </div>
 
-      <div className="mt-2 min-w-0 space-y-1.5">
+      <div className="mt-2 min-w-0 space-y-[var(--sp-2)]">
         <p className="text-desc text-muted-foreground">{t("market.admin.actAliases")}</p>
-        <ul className="flex min-w-0 flex-wrap gap-1.5">
+        <ul className="flex min-w-0 flex-wrap gap-[var(--sp-2)]">
           {aliases.map((a) => (
             <li key={a.id}>
               <button
@@ -611,7 +611,7 @@ function SuggestionRow({
       </p>
       <p className="text-desc text-muted-foreground">{t("market.admin.actPending")}</p>
 
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
         <Button type="button" size="sm" variant="outline" onClick={() => setMode("new")}>
           {t("market.admin.actApproveNew")}
         </Button>
@@ -637,7 +637,7 @@ function SuggestionRow({
         </Button>
       </div>
 
-      <div className="mt-2 min-w-0 space-y-1.5">
+      <div className="mt-2 min-w-0 space-y-[var(--sp-2)]">
         <Label htmlFor={`note_${suggestion.id}`}>{t("market.admin.actReviewNote")}</Label>
         <Input
           id={`note_${suggestion.id}`}
@@ -750,7 +750,7 @@ function ReportTab() {
 
   return (
     <div className="min-w-0 space-y-4">
-      <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
+      <p className="rounded-lg bg-secondary/50 p-[var(--sp-3)] text-desc leading-relaxed text-muted-foreground">
         {t("market.admin.actReportHint")}
       </p>
 

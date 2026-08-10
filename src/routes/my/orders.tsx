@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Bike, CalendarCheck2, ShoppingBag } from "lucide-react";
+import { Bike, CalendarCheck2, ClipboardList, ShoppingBag } from "lucide-react";
+import { KEmptyState } from "@/components/marketplace/KEmptyState";
 
 import { DashboardShell } from "@/components/marketplace/DashboardShell";
 import { Badge } from "@/components/ui/badge";
@@ -237,27 +238,26 @@ function MyOrdersPage() {
         ))}
       </div>
 
-      <div className="mt-4 space-y-3">
+      <div className="mt-[var(--sp-4)] space-y-[var(--sp-3)]">
         {query.isLoading &&
-          [0, 1, 2].map((key) => <Skeleton key={key} className="h-24 w-full rounded-2xl" />)}
+          [0, 1, 2].map((key) => <Skeleton key={key} className="h-24 w-full rounded-[var(--r-card)]" />)}
 
         {!query.isLoading && visible.length === 0 && (
-          <Card>
-            <CardContent className="py-8 text-center">
-              <p className="font-semibold text-foreground">{t("market.myOrders.empty")}</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t("market.myOrders.emptyHint")}
-              </p>
-              <Button asChild className="mt-4">
+          <KEmptyState
+            icon={ClipboardList}
+            title={t("market.myOrders.empty")}
+            hint={t("market.myOrders.emptyHint")}
+            action={
+              <Button asChild className="h-11">
                 <Link to="/">{t("market.bottomNav.home")}</Link>
               </Button>
-            </CardContent>
-          </Card>
+            }
+          />
         )}
 
         {visible.map((row) => (
           <Card key={`${row.kind}-${row.id}`}>
-            <CardContent className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 py-4">
+            <CardContent className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-[var(--sp-3)] py-[var(--sp-4)]">
               <div className="min-w-0">
                 <div className="flex min-w-0 items-center gap-2">
                   <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-secondary text-foreground">

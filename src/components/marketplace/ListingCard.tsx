@@ -228,7 +228,7 @@ function Media({ listing, horizontal }: { listing: ListingCardData; horizontal: 
             className="absolute -bottom-8 -start-8 size-24 rounded-full bg-market-navy/10 blur-2xl"
             aria-hidden
           />
-          <span className="relative grid size-10 place-items-center rounded-2xl border border-border/70 bg-background/75 text-primary shadow-sm backdrop-blur">
+          <span className="relative grid size-10 place-items-center rounded-[var(--r-card)] border border-border/70 bg-background/75 text-primary shadow-sm backdrop-blur">
             <ImageIcon className="size-5" aria-hidden />
           </span>
           <p className="relative mt-2 line-clamp-1 max-w-full text-desc font-bold text-foreground/70">
@@ -300,7 +300,7 @@ export function ListingCard({
 
 
   const meta = (
-    <div className="mt-auto flex h-[26px] items-center gap-x-2.5 overflow-hidden pt-1.5 text-desc text-muted-foreground sm:text-desc">
+    <div className="mt-auto flex h-[26px] items-center gap-x-[var(--sp-3)] overflow-hidden pt-[var(--sp-2)] text-desc text-muted-foreground sm:text-desc">
 
       {listing.city && (
         <span className="inline-flex min-w-0 items-center gap-1">
@@ -309,7 +309,7 @@ export function ListingCard({
         </span>
       )}
       {distance && (
-        <span className="num inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-1.5 py-[1px] font-bold text-primary">
+        <span className="num inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-[var(--sp-2)] py-[1px] font-bold text-primary">
           <Navigation className="size-[11px] shrink-0" aria-hidden />
           <bdi>{distance}</bdi>
         </span>
@@ -338,7 +338,7 @@ export function ListingCard({
         }}
         className={[
           horizontal
-            ? "group k-surface k-lift relative flex gap-3 p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            ? "group k-surface k-lift relative flex gap-3 p-[var(--sp-3)] outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             : "group k-surface k-lift relative flex flex-col overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
           featured ? "k-featured" : "",
         ].join(" ")}
@@ -348,14 +348,14 @@ export function ListingCard({
 
         <div
           className={
-            horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-2.5 sm:p-3"
+            horizontal ? "flex min-w-0 flex-1 flex-col pe-9" : "flex flex-1 flex-col p-[var(--sp-3)] sm:p-3"
           }
         >
           {/* The tag row always occupies its line, so a listing without a
               category never renders a shorter card than its neighbours. */}
           <span className="flex h-[18px] items-center">
             {tag ? (
-              <span className="max-w-full truncate rounded-full bg-primary px-2.5 py-0.5 text-desc font-bold text-primary-foreground sm:text-desc">
+              <span className="max-w-full truncate rounded-full bg-primary px-[var(--sp-3)] py-0.5 text-desc font-bold text-primary-foreground sm:text-desc">
                 {tag}
               </span>
             ) : null}
@@ -363,7 +363,7 @@ export function ListingCard({
 
           {/* Two reserved lines: the height is identical for one- and
               two-line titles, which is what keeps the rails shift-free. */}
-          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-title font-semibold text-foreground sm:text-title">
+          <h3 className="mt-[var(--sp-2)] line-clamp-2 min-h-[2.6em] text-title font-semibold text-foreground sm:text-title">
             {listing.title}
           </h3>
 
@@ -411,18 +411,18 @@ export function ListingCardSkeleton() {
   return (
     <div className="k-surface flex flex-col overflow-hidden" aria-hidden>
       <div className="k-skel aspect-[5/4] w-full rounded-none" />
-      <div className="flex flex-1 flex-col p-2.5 sm:p-3">
+      <div className="flex flex-1 flex-col p-[var(--sp-3)] sm:p-3">
         <span className="flex h-[18px] items-center">
           <span className="k-skel h-3.5 w-14 rounded-full" />
         </span>
-        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+        <div className="mt-[var(--sp-2)] min-h-[2.6em] space-y-1">
           <span className="k-skel block h-[0.95em] w-full rounded" />
           <span className="k-skel block h-[0.95em] w-3/5 rounded" />
         </div>
         <span className="mt-1 flex h-[20px] items-center">
           <span className="k-skel h-3.5 w-16 rounded" />
         </span>
-        <span className="mt-auto flex h-[26px] items-center pt-1.5">
+        <span className="mt-auto flex h-[26px] items-center pt-[var(--sp-2)]">
           <span className="k-skel h-3 w-24 rounded" />
         </span>
       </div>
@@ -437,20 +437,20 @@ export function ListingCardSkeleton() {
  */
 export function ListingRowSkeleton() {
   return (
-    <div className="k-surface flex gap-3 p-2.5" aria-hidden>
+    <div className="k-surface flex gap-3 p-[var(--sp-3)]" aria-hidden>
       <div className="k-skel size-[84px] shrink-0 rounded-xl sm:size-28" />
       <div className="flex min-w-0 flex-1 flex-col pe-9">
         <span className="flex h-[18px] items-center">
           <span className="k-skel h-3.5 w-16 rounded-full" />
         </span>
-        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+        <div className="mt-[var(--sp-2)] min-h-[2.6em] space-y-1">
           <span className="k-skel block h-[0.95em] w-full rounded" />
           <span className="k-skel block h-[0.95em] w-2/3 rounded" />
         </div>
         <span className="mt-1 flex h-[20px] items-center">
           <span className="k-skel h-3.5 w-20 rounded" />
         </span>
-        <span className="mt-auto flex h-[26px] items-center pt-1.5">
+        <span className="mt-auto flex h-[26px] items-center pt-[var(--sp-2)]">
           <span className="k-skel h-3 w-28 rounded" />
         </span>
       </div>

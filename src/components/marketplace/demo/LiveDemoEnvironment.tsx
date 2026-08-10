@@ -134,8 +134,8 @@ export function LiveDemoEnvironment() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#eef3f9_0%,#f8fafc_20rem,#f3f6fa_100%)] pb-8 text-slate-950">
-      <div className="border-b border-amber-200 bg-amber-50 px-4 py-2.5 text-center text-desc font-black leading-5 text-amber-950 sm:text-desc">
-        <span className="me-1.5 inline-block size-2 rounded-full bg-amber-500 motion-safe:animate-pulse" />
+      <div className="border-b border-amber-200 bg-amber-50 px-4 py-[var(--sp-3)] text-center text-desc font-black leading-5 text-amber-950 sm:text-desc">
+        <span className="me-[var(--sp-2)] inline-block size-2 rounded-full bg-amber-500 motion-safe:animate-pulse" />
         {text(
           locale,
           "بيئة تجريبية حيّة على كَحيل — البيانات للعرض، ولا تُنفَّذ منها دفعات أو طلبات حقيقية",
@@ -143,13 +143,13 @@ export function LiveDemoEnvironment() {
         )}
       </div>
 
-      <main className="mx-auto w-full max-w-[1240px] space-y-5 px-4 py-4 sm:px-5 sm:py-6 lg:px-8">
-        <section className="relative overflow-hidden rounded-[30px] bg-[#071d46] px-5 py-7 text-white shadow-[0_22px_54px_rgb(7_29_70/0.23)] sm:px-8 sm:py-9 lg:px-10">
+      <main className="mx-auto w-full max-w-[1240px] space-y-5 px-[var(--page-x)] py-4 sm:py-6">
+        <section className="relative overflow-hidden rounded-[30px] bg-[#071d46] px-5 py-[var(--sp-8)] text-white shadow-[0_22px_54px_rgb(7_29_70/0.23)] sm:py-9">
           <div className="absolute -end-16 -top-24 size-72 rounded-full bg-[#1685ff]/30 blur-3xl" />
           <div className="absolute -bottom-24 start-[25%] size-64 rounded-full bg-cyan-300/15 blur-3xl" />
-          <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_0.78fr]">
+          <div className="relative grid items-center gap-[var(--sp-8)] lg:grid-cols-[1fr_0.78fr]">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-desc font-black text-cyan-100 backdrop-blur sm:text-desc">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-[var(--sp-2)] text-desc font-black text-cyan-100 backdrop-blur sm:text-desc">
                 <Sparkles className="size-3.5" aria-hidden />
                 {text(locale, "عرض كامل قبل الإطلاق النهائي", "Full preview before final launch")}
               </div>
@@ -191,7 +191,7 @@ export function LiveDemoEnvironment() {
               ].map(([value, label]) => (
                 <div
                   key={label}
-                  className="rounded-2xl border border-white/12 bg-white/[0.08] p-4 text-center backdrop-blur"
+                  className="rounded-[var(--r-card)] border border-white/12 bg-white/[0.08] p-4 text-center backdrop-blur"
                 >
                   <strong className="num block text-2xl font-black text-white sm:text-3xl">
                     {value}
@@ -215,13 +215,13 @@ export function LiveDemoEnvironment() {
                 {text(locale, "اختر الحساب الذي تريد تجربته", "Choose an account to explore")}
               </h2>
             </div>
-            <span className="hidden rounded-full bg-white px-3 py-1.5 text-desc font-black text-slate-500 shadow-sm ring-1 ring-slate-200 sm:inline-flex">
+            <span className="hidden rounded-full bg-white px-3 py-[var(--sp-2)] text-desc font-black text-slate-500 shadow-sm ring-1 ring-slate-200 sm:inline-flex">
               {completed.size}/{LIVE_DEMO_ROLES.length}{" "}
               {text(locale, "إجراءات جُرّبت", "actions tried")}
             </span>
           </div>
 
-          <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-4 sm:px-0 lg:grid-cols-7">
+          <div className="-mx-[var(--page-x)] flex snap-x gap-2 overflow-x-auto px-[var(--page-x)] pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-4 sm:px-0 lg:grid-cols-7">
             {LIVE_DEMO_ROLES.map((role) => {
               const RoleIcon = ROLE_ICONS[role.id];
               const selected = role.id === active.id;
@@ -233,8 +233,8 @@ export function LiveDemoEnvironment() {
                   aria-pressed={selected}
                   className={
                     selected
-                      ? `min-h-[112px] min-w-[132px] snap-start rounded-2xl p-3 text-start shadow-lg transition ${TONES[role.tone].rail}`
-                      : "min-h-[112px] min-w-[132px] snap-start rounded-2xl bg-white p-3 text-start text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md"
+                      ? `min-h-[112px] min-w-[132px] snap-start rounded-[var(--r-card)] p-3 text-start shadow-lg transition ${TONES[role.tone].rail}`
+                      : "min-h-[112px] min-w-[132px] snap-start rounded-[var(--r-card)] bg-white p-3 text-start text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md"
                   }
                 >
                   <span
@@ -269,11 +269,11 @@ export function LiveDemoEnvironment() {
           className="overflow-hidden rounded-[30px] bg-white shadow-[0_18px_50px_rgb(15_23_42/0.10)] ring-1 ring-slate-200"
         >
           <div
-            className={`relative overflow-hidden bg-gradient-to-br ${tone.hero} px-5 py-6 text-white sm:px-7`}
+            className={`relative overflow-hidden bg-gradient-to-br ${tone.hero} px-5 py-6 text-white`}
           >
             <div className="absolute -end-14 -top-16 size-48 rounded-full bg-white/10 blur-2xl" />
             <div className="relative flex flex-wrap items-start gap-4">
-              <span className="grid size-14 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/12 backdrop-blur">
+              <span className="grid size-14 shrink-0 place-items-center rounded-[var(--r-card)] border border-white/15 bg-white/12 backdrop-blur">
                 <Icon className="size-7" aria-hidden />
               </span>
               <div className="min-w-0 flex-1">
@@ -281,7 +281,7 @@ export function LiveDemoEnvironment() {
                   <h2 className="text-section font-black sm:text-3xl">
                     {text(locale, active.accountAr, active.accountEn)}
                   </h2>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/14 px-2.5 py-1 text-desc font-black ring-1 ring-white/20 sm:text-desc">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/14 px-[var(--sp-3)] py-1 text-desc font-black ring-1 ring-white/20 sm:text-desc">
                     <BadgeCheck className="size-3" aria-hidden />
                     {text(locale, active.badgeAr, active.badgeEn)}
                   </span>
@@ -312,7 +312,7 @@ export function LiveDemoEnvironment() {
               {active.metrics.map((metric) => (
                 <div
                   key={metric.labelAr}
-                  className={`rounded-2xl bg-slate-50 p-3.5 ring-1 ${tone.ring}`}
+                  className={`rounded-[var(--r-card)] bg-slate-50 p-[var(--sp-4)] ring-1 ${tone.ring}`}
                 >
                   <p className="text-desc font-bold text-slate-500 sm:text-desc">
                     {text(locale, metric.labelAr, metric.labelEn)}
@@ -328,7 +328,7 @@ export function LiveDemoEnvironment() {
             </div>
 
             <div className="grid gap-4 lg:grid-cols-[1.16fr_0.84fr]">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="rounded-[var(--r-card)] border border-slate-200 bg-white p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-desc font-black text-slate-400">
@@ -380,7 +380,7 @@ export function LiveDemoEnvironment() {
               </div>
 
               <div className="space-y-4">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="rounded-[var(--r-card)] border border-slate-200 bg-slate-50 p-4">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className={`size-5 ${tone.text}`} aria-hidden />
                     <h3 className="text-sm font-black">
@@ -408,8 +408,8 @@ export function LiveDemoEnvironment() {
                   disabled={actionCompleted}
                   className={
                     actionCompleted
-                      ? "flex min-h-[72px] w-full items-center gap-3 rounded-2xl bg-emerald-600 px-4 text-start text-white shadow-lg shadow-emerald-900/15"
-                      : `flex min-h-[72px] w-full items-center gap-3 rounded-2xl bg-gradient-to-br ${tone.hero} px-4 text-start text-white shadow-lg transition hover:-translate-y-0.5`
+                      ? "flex min-h-[72px] w-full items-center gap-3 rounded-[var(--r-card)] bg-emerald-600 px-4 text-start text-white shadow-lg shadow-emerald-900/15"
+                      : `flex min-h-[72px] w-full items-center gap-3 rounded-[var(--r-card)] bg-gradient-to-br ${tone.hero} px-4 text-start text-white shadow-lg transition hover:-translate-y-0.5`
                   }
                 >
                   <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white/15">
@@ -463,7 +463,7 @@ export function LiveDemoEnvironment() {
               {LIVE_DEMO_INTEGRATIONS.map((integration) => (
                 <div
                   key={integration.nameAr}
-                  className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200"
+                  className="flex items-center gap-3 rounded-[var(--r-card)] bg-slate-50 p-3 ring-1 ring-slate-200"
                 >
                   <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary/20 text-primary">
                     <ExternalLink className="size-4" aria-hidden />
@@ -563,7 +563,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
       </p>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
-          <div key={step.ar} className="relative rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+          <div key={step.ar} className="relative rounded-[var(--r-card)] bg-slate-50 p-4 ring-1 ring-slate-200">
             <div className="flex items-center justify-between">
               <span className="grid size-10 place-items-center rounded-xl bg-primary/20 text-primary">
                 <step.icon className="size-5" aria-hidden />

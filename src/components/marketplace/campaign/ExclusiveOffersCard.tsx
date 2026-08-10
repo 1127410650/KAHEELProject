@@ -81,7 +81,7 @@ export function ExclusiveOffersCard() {
     <Card>
       <CardContent className="space-y-5 p-4">
         <header className="flex flex-wrap items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-primary/10 text-primary">
+          <span className="grid size-9 place-items-center rounded-[var(--r-card)] bg-primary/10 text-primary">
             <Sparkles className="size-5" aria-hidden />
           </span>
           <div>
@@ -160,7 +160,7 @@ export function ExclusiveOffersCard() {
           {rows.map((row) => (
             <div
               key={row.id}
-              className="flex flex-wrap items-center gap-2 rounded-2xl border border-border/70 p-3"
+              className="flex flex-wrap items-center gap-2 rounded-[var(--r-card)] border border-border/70 p-3"
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-bold">
@@ -172,7 +172,7 @@ export function ExclusiveOffersCard() {
                   {row.ends_at ? ` → ${formatDateTime(row.ends_at)}` : ""}
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
                 {STATUSES.map((value) => (
                   <Button
                     key={value}

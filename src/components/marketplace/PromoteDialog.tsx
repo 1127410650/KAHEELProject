@@ -128,7 +128,7 @@ export function PromoteDialog({
         ) : (
           <div className="space-y-3">
             <div className="flex items-center justify-between rounded-lg border border-border bg-secondary/40 px-3 py-2">
-              <span className="flex items-center gap-1.5 text-sm text-foreground">
+              <span className="flex items-center gap-[var(--sp-2)] text-sm text-foreground">
                 <Coins className="size-4 text-primary" aria-hidden />
                 {t("market.points.balance")}
               </span>
@@ -154,7 +154,7 @@ export function PromoteDialog({
                     type="button"
                     disabled={!affordable || pending}
                     onClick={() => setDuration(days)}
-                    className={`rounded-lg border px-2 py-2.5 text-center text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                    className={`rounded-lg border px-2 py-[var(--sp-3)] text-center text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                       selected
                         ? "border-primary bg-secondary text-primary"
                         : "border-border bg-card text-foreground hover:bg-accent"

@@ -131,7 +131,7 @@ export function PropertyCard({
 
   return (
     <article
-      className={`group k-surface relative flex flex-col overflow-hidden rounded-3xl transition duration-200 hover:-translate-y-0.5 hover:shadow-raised ${
+      className={`group k-surface relative flex flex-col overflow-hidden rounded-[var(--r-card)] transition duration-200 hover:-translate-y-0.5 hover:shadow-raised ${
         featured || activePromotion(listing) ? "k-featured" : ""
       }`}
     >
@@ -182,9 +182,9 @@ export function PropertyCard({
           />
         </Link>
 
-        <div className="pointer-events-none absolute top-2.5 flex max-w-[70%] flex-wrap gap-1.5 start-2.5">
+        <div className="pointer-events-none absolute top-2.5 flex max-w-[70%] flex-wrap gap-[var(--sp-2)] start-2.5">
           {deal && (
-            <span className="rounded-full bg-primary px-2.5 py-1 text-desc font-bold text-primary-foreground shadow-sm">
+            <span className="rounded-full bg-primary px-[var(--sp-3)] py-1 text-desc font-bold text-primary-foreground shadow-sm">
               {deal}
             </span>
           )}
@@ -249,7 +249,7 @@ export function PropertyCard({
         <div className="mt-2 flex min-h-[18px] items-center">
           <PropertySpecsBar listing={listing} />
         </div>
-        <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-desc text-muted-foreground sm:text-desc">
+        <div className="mt-[var(--sp-3)] flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-desc text-muted-foreground sm:text-desc">
           <span className="inline-flex min-w-0 items-center gap-1">
             <MapPin className="size-3.5 shrink-0" aria-hidden />
             <span className="truncate">{location || t("market.realEstate.locationFallback")}</span>
@@ -266,7 +266,7 @@ export function PropertyCard({
 /** هيكل تحميل بنفس هندسة البطاقة، فلا تتغيّر أطوال الشبكة عند وصول البيانات. */
 export function PropertyCardSkeleton() {
   return (
-    <div className="k-surface overflow-hidden rounded-3xl" aria-hidden>
+    <div className="k-surface overflow-hidden rounded-[var(--r-card)]" aria-hidden>
       <div className="k-skel aspect-[4/3] w-full rounded-none" />
       <div className="p-3 sm:p-4">
         <span className="k-skel block h-4 w-24 rounded" />

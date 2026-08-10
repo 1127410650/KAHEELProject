@@ -165,7 +165,7 @@ export function GuidePlaceCommunity({
           <img
             src={lightbox}
             alt=""
-            className="max-h-[85vh] w-auto max-w-full rounded-2xl object-contain"
+            className="max-h-[85vh] w-auto max-w-full rounded-[var(--r-card)] object-contain"
           />
         </div>
       ) : null}
@@ -193,19 +193,19 @@ function GallerySection({
 }) {
   if (loading) {
     // Fixed skeleton height: the gallery never resizes once the photos land.
-    return <div className="h-[168px] animate-pulse rounded-3xl border border-border bg-muted/40" />;
+    return <div className="h-[168px] animate-pulse rounded-[var(--r-card)] border border-border bg-muted/40" />;
   }
   if (items.length === 0) return null;
 
   return (
-    <section className="overflow-hidden rounded-3xl border border-border/80 bg-card">
-      <div className="flex snap-x gap-1.5 overflow-x-auto p-1.5">
+    <section className="overflow-hidden rounded-[var(--r-card)] border border-border/80 bg-card">
+      <div className="flex snap-x gap-[var(--sp-2)] overflow-x-auto p-[var(--sp-2)]">
         {items.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => onOpen(item.url)}
-            className="relative h-[160px] w-[52%] shrink-0 snap-start overflow-hidden rounded-2xl bg-muted sm:w-[30%]"
+            className="relative h-[160px] w-[52%] shrink-0 snap-start overflow-hidden rounded-[var(--r-card)] bg-muted sm:w-[30%]"
           >
             <img
               src={item.url}
@@ -235,8 +235,8 @@ function UploadSection({ placeId, userId }: { placeId: string; userId: string | 
   const upload = useUploadGuidePhotos(placeId, userId);
 
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
-      <h2 className="text-section mb-1 flex items-center gap-1.5 font-black">
+    <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-4 sm:p-5">
+      <h2 className="text-section mb-1 flex items-center gap-[var(--sp-2)] font-black">
         <Camera className="size-4 text-market-navy" aria-hidden />
         أضف صورًا للجهة
       </h2>
@@ -268,7 +268,7 @@ function UploadSection({ placeId, userId }: { placeId: string; userId: string | 
         type="button"
         disabled={!userId || upload.isPending}
         onClick={() => input.current?.click()}
-        className="mt-3 inline-flex h-10 items-center gap-1.5 rounded-2xl bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
+        className="mt-3 inline-flex h-10 items-center gap-[var(--sp-2)] rounded-[var(--r-card)] bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
       >
         <ImagePlus className="size-4" aria-hidden />
         {upload.isPending ? "جاري الضغط والرفع…" : `اختر صورًا (حتى ${GUIDE_PHOTO_BATCH_LIMIT})`}
@@ -291,11 +291,11 @@ function MyPhotosSection({
 }) {
   const remove = useDeleteGuidePhoto();
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
+    <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-4 sm:p-5">
       <h2 className="text-section mb-2 font-black">صوري لهذه الجهة</h2>
       <ul className="space-y-2">
         {photos.map((photo) => (
-          <li key={photo.id} className="flex items-center gap-2.5">
+          <li key={photo.id} className="flex items-center gap-[var(--sp-3)]">
             <img
               src={guidePhotoUrl(photo.storage_path)}
               alt=""
@@ -356,14 +356,14 @@ function ReviewsSection({
   const submit = useSubmitGuideReview(placeId, userId);
 
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
+    <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-4 sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="text-section font-black">التقييمات والتعليقات</h2>
         <GuidePlaceRating average={average} total={total} size="lg" />
       </div>
 
       {userId ? (
-        <div className="mb-4 rounded-2xl border border-border bg-background p-3">
+        <div className="mb-4 rounded-[var(--r-card)] border border-border bg-background p-3">
           {myReview ? (
             <p className="mb-2 text-desc font-black">
               {myReview.status === "approved"
@@ -373,7 +373,7 @@ function ReviewsSection({
                   : "تقييمك قيد المراجعة."}
             </p>
           ) : null}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-[var(--sp-2)]">
             {[1, 2, 3, 4, 5].map((step) => (
               <button
                 key={step}
@@ -394,7 +394,7 @@ function ReviewsSection({
             rows={2}
             maxLength={1200}
             placeholder="اكتب تجربتك مع هذه الجهة…"
-            className="mt-2 w-full resize-none rounded-xl border border-input bg-background p-2.5 text-desc outline-none focus:border-market-navy"
+            className="mt-2 w-full resize-none rounded-xl border border-input bg-background p-[var(--sp-3)] text-desc outline-none focus:border-market-navy"
           />
           <button
             type="button"
@@ -411,7 +411,7 @@ function ReviewsSection({
                 },
               )
             }
-            className="mt-2 inline-flex h-10 items-center rounded-2xl bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
+            className="mt-2 inline-flex h-10 items-center rounded-[var(--r-card)] bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
           >
             {submit.isPending ? "جاري الإرسال…" : "إرسال التقييم"}
           </button>
@@ -468,8 +468,8 @@ function PromoteSection({
   if (!userId) return null;
 
   return (
-    <section className="rounded-3xl border border-market-purple/30 bg-market-purple/[0.04] p-4 sm:p-5">
-      <h2 className="text-section mb-1 flex items-center gap-1.5 font-black">
+    <section className="rounded-[var(--r-card)] border border-market-purple/30 bg-market-purple/[0.04] p-4 sm:p-5">
+      <h2 className="text-section mb-1 flex items-center gap-[var(--sp-2)] font-black">
         <Megaphone className="size-4 text-market-purple" aria-hidden />
         روّج «{placeName}» في «إعلانات مميزة»
       </h2>
@@ -477,7 +477,7 @@ function PromoteSection({
         تظهر الجهة في المساحة المميزة أسفل شريط البحث في الرئيسية. التكلفة{" "}
         {GUIDE_PROMOTION_CREDITS_PER_DAY} من رصيد الإعلانات لكل يوم.
       </p>
-      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+      <div className="mt-3 flex flex-wrap items-center gap-[var(--sp-2)]">
         {[3, 7, 14, 30].map((option) => (
           <button
             key={option}
@@ -510,7 +510,7 @@ function PromoteSection({
               ),
           })
         }
-        className="mt-3 inline-flex h-10 items-center rounded-2xl bg-market-purple px-4 text-desc font-black text-white disabled:opacity-50"
+        className="mt-3 inline-flex h-10 items-center rounded-[var(--r-card)] bg-market-purple px-4 text-desc font-black text-white disabled:opacity-50"
       >
         {promote.isPending ? "جاري التنفيذ…" : `ترويج الآن — ${cost.toLocaleString("en-US")} رصيد`}
       </button>
@@ -555,8 +555,8 @@ function ClaimSection({
     "h-10 w-full rounded-xl border border-input bg-background px-3 text-desc outline-none focus:border-primary";
 
   return (
-    <section id="guide-claim" className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
-      <h2 className="text-section mb-1 flex items-center gap-1.5 font-black">
+    <section id="guide-claim" className="rounded-[var(--r-card)] border border-border/80 bg-card p-4 sm:p-5">
+      <h2 className="text-section mb-1 flex items-center gap-[var(--sp-2)] font-black">
         <ShieldQuestion className="size-4 text-primary" aria-hidden />
         هذه جهتك؟ طالب بإدارتها
       </h2>
@@ -593,7 +593,7 @@ function ClaimSection({
             ))}
           </div>
 
-          <div className="rounded-xl border border-border bg-muted/40 p-2.5">
+          <div className="rounded-xl border border-border bg-muted/40 p-[var(--sp-3)]">
             <p className="text-desc font-black">الجوال الموثّق</p>
             <p className="mt-0.5 text-desc font-bold text-muted-foreground">
               {verifiedPhone
@@ -631,7 +631,7 @@ function ClaimSection({
             onChange={(event) => setEvidence(event.target.value)}
             rows={2}
             placeholder="توضيح إضافي (اختياري)"
-            className="w-full resize-none rounded-xl border border-input bg-background p-2.5 text-desc outline-none focus:border-primary"
+            className="w-full resize-none rounded-xl border border-input bg-background p-[var(--sp-3)] text-desc outline-none focus:border-primary"
           />
 
           <button
@@ -667,7 +667,7 @@ function ClaimSection({
                 },
               )
             }
-            className="inline-flex h-10 items-center rounded-2xl bg-primary px-4 text-desc font-black text-primary-foreground disabled:opacity-50"
+            className="inline-flex h-10 items-center rounded-[var(--r-card)] bg-primary px-4 text-desc font-black text-primary-foreground disabled:opacity-50"
           >
             {submit.isPending ? "جاري الإرسال…" : "إرسال المطالبة"}
           </button>
@@ -676,7 +676,7 @@ function ClaimSection({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-2 inline-flex h-9 items-center rounded-2xl border border-border px-3.5 text-desc font-black"
+          className="mt-2 inline-flex h-9 items-center rounded-[var(--r-card)] border border-border px-[var(--sp-4)] text-desc font-black"
         >
           تقديم مطالبة
         </button>

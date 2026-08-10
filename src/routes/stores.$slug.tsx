@@ -80,10 +80,10 @@ function PublicStorePage() {
   if (query.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-5xl space-y-4 px-4 py-6">
-          <Skeleton className="h-44 w-full rounded-3xl" />
+        <div className="mx-auto w-full max-w-5xl space-y-4 px-[var(--page-x)] py-6">
+          <Skeleton className="h-44 w-full rounded-[var(--r-card)]" />
           <Skeleton className="h-8 w-56" />
-          <Skeleton className="h-32 w-full rounded-2xl" />
+          <Skeleton className="h-32 w-full rounded-[var(--r-card)]" />
         </div>
       </MarketShell>
     );
@@ -92,7 +92,7 @@ function PublicStorePage() {
   if (!store) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-3xl px-4 py-16 text-center">
+        <div className="mx-auto w-full max-w-3xl px-[var(--page-x)] py-16 text-center">
           <Store className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
           <h1 className="text-page font-semibold">{t("market.store.publicPage.notFound")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -142,7 +142,7 @@ function PublicStorePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-5xl space-y-5 px-4 py-5">
+      <div className="mx-auto w-full max-w-5xl space-y-5 px-[var(--page-x)] py-5">
         <div
           className={`overflow-hidden rounded-[1.75rem] border bg-card shadow-panel ring-1 ${theme.ring}`}
         >
@@ -154,7 +154,7 @@ function PublicStorePage() {
               className={`absolute inset-0 bg-gradient-to-t ${theme.softGradient}`}
               aria-hidden
             />
-            <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-desc font-bold text-white backdrop-blur-md">
+            <span className="absolute start-4 top-4 inline-flex items-center gap-[var(--sp-2)] rounded-full border border-white/25 bg-black/20 px-3 py-[var(--sp-2)] text-desc font-bold text-white backdrop-blur-md">
               <Sparkles className="size-3.5" aria-hidden />
               هوية متجر كَحيل
             </span>
@@ -163,7 +163,7 @@ function PublicStorePage() {
           <div className="space-y-4 p-4 sm:p-5">
             <div className="flex flex-wrap items-center gap-3">
               <div
-                className={`grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border-4 border-background bg-background shadow-lg ring-2 ${theme.ring}`}
+                className={`grid size-16 shrink-0 place-items-center overflow-hidden rounded-[var(--r-card)] border-4 border-background bg-background shadow-lg ring-2 ${theme.ring}`}
               >
                 {logo ? (
                   <img src={logo} alt={name} className="size-full object-cover" />
@@ -268,7 +268,7 @@ function PublicStorePage() {
           </Card>
         ) : (
           <>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="-mx-[var(--page-x)] flex gap-2 overflow-x-auto px-[var(--page-x)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {sections.map((section) => (
                 <Button
                   key={section.id}
@@ -294,7 +294,7 @@ function PublicStorePage() {
                 return (
                   <div
                     key={item.id}
-                    className={`flex gap-3 rounded-2xl border p-3 shadow-sm ${theme.surface}`}
+                    className={`flex gap-3 rounded-[var(--r-card)] border p-3 shadow-sm ${theme.surface}`}
                   >
                     <div
                       className={`grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}
@@ -388,7 +388,7 @@ function PublicStorePage() {
                   key={listing.id}
                   to="/ads/$slug"
                   params={{ slug: listing.slug }}
-                  className="rounded-2xl border bg-card p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel"
+                  className="rounded-[var(--r-card)] border bg-card p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel"
                 >
                   <div
                     className={`mb-2 grid h-28 w-full place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}

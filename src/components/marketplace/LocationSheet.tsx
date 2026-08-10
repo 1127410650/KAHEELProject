@@ -283,7 +283,7 @@ export function LocationSheet({
                 className="space-y-1 rounded-xl border border-border bg-secondary/60 p-3"
                 data-testid="picked-location"
               >
-                <p className="flex items-center gap-1.5 text-sm font-bold text-foreground">
+                <p className="flex items-center gap-[var(--sp-2)] text-sm font-bold text-foreground">
                   <MapPin className="size-4 shrink-0 text-primary" aria-hidden />
                   <span className="truncate">
                     {picked.placeLabel ||
@@ -337,8 +337,8 @@ export function LocationSheet({
                       aria-pressed={active}
                       className={
                         active
-                          ? "inline-flex min-h-9 items-center rounded-full bg-primary px-3.5 text-desc font-bold text-primary-foreground"
-                          : "inline-flex min-h-9 items-center rounded-full border border-border px-3.5 text-desc font-semibold text-foreground transition hover:bg-secondary"
+                          ? "inline-flex min-h-9 items-center rounded-full bg-primary px-[var(--sp-4)] text-desc font-bold text-primary-foreground"
+                          : "inline-flex min-h-9 items-center rounded-full border border-border px-[var(--sp-4)] text-desc font-semibold text-foreground transition hover:bg-secondary"
                       }
                     >
                       {geoName(city, locale)}
@@ -353,7 +353,7 @@ export function LocationSheet({
               </div>
             </section>
 
-            <section className="space-y-2.5">
+            <section className="space-y-[var(--sp-3)]">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-sm font-bold text-foreground">
                   {ar ? "عناويني" : "My addresses"}
@@ -372,7 +372,7 @@ export function LocationSheet({
               </div>
 
               {!session && (
-                <p className="rounded-lg bg-secondary p-2.5 text-desc text-muted-foreground">
+                <p className="rounded-lg bg-secondary p-[var(--sp-3)] text-desc text-muted-foreground">
                   {ar
                     ? "سجّل الدخول لحفظ عناوينك واستخدامها في التوصيل."
                     : "Sign in to save addresses for delivery."}
@@ -383,14 +383,14 @@ export function LocationSheet({
                 (addresses.data ?? []).map((address) => (
                   <div
                     key={address.id}
-                    className="flex items-start gap-2 rounded-xl border border-border p-2.5"
+                    className="flex items-start gap-2 rounded-xl border border-border p-[var(--sp-3)]"
                   >
                     <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-foreground">
                         {address.label}
                         {address.is_default && (
-                          <span className="ms-1.5 rounded-full bg-primary/10 px-1.5 text-desc font-bold text-primary">
+                          <span className="ms-[var(--sp-2)] rounded-full bg-primary/10 px-[var(--sp-2)] text-desc font-bold text-primary">
                             {ar ? "الافتراضي" : "Default"}
                           </span>
                         )}
@@ -434,8 +434,8 @@ export function LocationSheet({
                 ))}
 
               {session && showForm && (
-                <form onSubmit={submitAddress} className="space-y-2.5 rounded-xl bg-secondary p-3">
-                  <div className="space-y-1.5">
+                <form onSubmit={submitAddress} className="space-y-[var(--sp-3)] rounded-xl bg-secondary p-3">
+                  <div className="space-y-[var(--sp-2)]">
                     <Label htmlFor="addr_label">{ar ? "اسم مختصر" : "Short name"}</Label>
                     <Input
                       id="addr_label"
@@ -446,7 +446,7 @@ export function LocationSheet({
                         setForm((previous) => ({ ...previous, label: event.target.value }))
                       }
                     />
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-[var(--sp-2)]">
                       {(ar
                         ? ["المنزل", "العمل", "عند الأهل"]
                         : ["Home", "Work", "Family"]
@@ -455,14 +455,14 @@ export function LocationSheet({
                           key={quick}
                           type="button"
                           onClick={() => setForm((previous) => ({ ...previous, label: quick }))}
-                          className="rounded-full border border-border bg-background px-2.5 py-1 text-desc font-semibold text-foreground transition hover:bg-secondary"
+                          className="rounded-full border border-border bg-background px-[var(--sp-3)] py-1 text-desc font-semibold text-foreground transition hover:bg-secondary"
                         >
                           {quick}
                         </button>
                       ))}
                     </div>
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-[var(--sp-2)]">
                     <Label htmlFor="addr_city">{ar ? "المحافظة / المدينة" : "City"}</Label>
                     <select
                       id="addr_city"
@@ -480,7 +480,7 @@ export function LocationSheet({
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-[var(--sp-2)]">
                     <Label htmlFor="addr_district">{ar ? "الحي" : "District"}</Label>
                     <Input
                       id="addr_district"
@@ -491,7 +491,7 @@ export function LocationSheet({
                       }
                     />
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-[var(--sp-2)]">
                     <Label htmlFor="addr_details">{ar ? "وصف العنوان" : "Details"}</Label>
                     <Textarea
                       id="addr_details"

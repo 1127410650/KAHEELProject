@@ -170,7 +170,7 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
                 }
                 setFile(picked);
               }}
-              className="min-w-0 flex-1 cursor-pointer rounded-md border border-input bg-background p-1.5 text-desc text-muted-foreground"
+              className="min-w-0 flex-1 cursor-pointer rounded-md border border-input bg-background p-[var(--sp-2)] text-desc text-muted-foreground"
             />
             <Button size="sm" disabled={busy || !body.trim()} onClick={() => void send()}>
               <Send className="size-3.5" aria-hidden />

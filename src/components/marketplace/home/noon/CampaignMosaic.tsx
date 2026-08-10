@@ -50,7 +50,7 @@ function CampaignTile({
   const template = templateId ? templates.data?.find((item) => item.id === templateId) : undefined;
 
   // الأساس لافندر خفيف (لا أبيض) كي لا يبدو الموضع فارغًا مع أصل حملة شفاف.
-  const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
+  const box = `relative block w-full overflow-hidden rounded-[var(--r-card)] border border-border bg-secondary shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
 
 
   /* الطبقة الأساسية: صورة القسم + تدرّج بنفسجي فوقها والنص — تضمن ألّا يظهر
@@ -75,7 +75,7 @@ function CampaignTile({
             : "absolute inset-0 bg-[radial-gradient(120%_120%_at_88%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_62%)]"
         }
       />
-      <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-4 sm:px-6">
+      <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-[var(--page-x)]">
         <strong
           className={`text-lg font-black sm:text-2xl ${
             fallbackImage ? "text-primary-foreground" : ""
@@ -161,9 +161,9 @@ export function CampaignMosaic() {
   );
 
   return (
-    <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-2.5">
+    <section aria-label={ar ? "إعلانات كَحيل" : "Kaheel ads"} className="space-y-[var(--sp-3)]">
       {tile(slots[0]!, WIDE, "wide-1", "home.campaign.1")}
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-[var(--sp-3)]">
         {tile(slots[1]!, HALF, "half-1", "home.campaign.2")}
         {tile(slots[2]!, HALF, "half-2", "home.campaign.3")}
       </div>

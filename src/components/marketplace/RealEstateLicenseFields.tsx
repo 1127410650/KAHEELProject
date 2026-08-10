@@ -135,7 +135,7 @@ export function RealEstateLicenseFields({
     const path = kind === "license" ? value.licenseDocPath : value.exemptionDocPath;
     const ref = kind === "license" ? licenseInput : exemptionInput;
     return (
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor={`${kind}_doc`}>
           {kind === "license" ? t("market.license.doc") : t("market.license.exemptionDoc")}
         </Label>
@@ -227,7 +227,7 @@ export function RealEstateLicenseFields({
       <p className="text-desc text-muted-foreground">{t("market.license.formIntro")}</p>
 
 
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="advertiser_role">{t("market.license.advertiserRole")}</Label>
         <select
           id="advertiser_role"
@@ -244,7 +244,7 @@ export function RealEstateLicenseFields({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="ad_license_number">{t("market.license.number")}</Label>
           <Input
             id="ad_license_number"
@@ -258,14 +258,14 @@ export function RealEstateLicenseFields({
             rel="noopener noreferrer"
             title={t("market.license.verifyHint")}
             aria-label={t("market.license.verifyHint")}
-            className="inline-flex min-h-11 items-center gap-1.5 text-desc font-semibold text-primary underline"
+            className="inline-flex min-h-11 items-center gap-[var(--sp-2)] text-desc font-semibold text-primary underline"
           >
             <ExternalLink className="size-3.5" aria-hidden />
             {t("market.license.verify")}
           </a>
         </div>
 
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="ad_license_expiry">{t("market.license.expiry")}</Label>
           <Input
             id="ad_license_expiry"
@@ -293,7 +293,7 @@ export function RealEstateLicenseFields({
       )}
 
       {needsPracticeLicense(value.advertiserRole) && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="practice_license_number">{t("market.license.practiceNumber")}</Label>
           <Input
             id="practice_license_number"
@@ -307,7 +307,7 @@ export function RealEstateLicenseFields({
             rel="noopener noreferrer"
             title={t("market.license.verifyBrokerHint")}
             aria-label={t("market.license.verifyBrokerHint")}
-            className="inline-flex min-h-11 items-center gap-1.5 text-desc font-semibold text-primary underline"
+            className="inline-flex min-h-11 items-center gap-[var(--sp-2)] text-desc font-semibold text-primary underline"
           >
             <ExternalLink className="size-3.5" aria-hidden />
             {t("market.license.verifyBroker")}
@@ -334,7 +334,7 @@ export function RealEstateLicenseFields({
         </label>
         {value.exemptionRequested && (
           <>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="exemption_reason">{t("market.license.exemptionReason")}</Label>
               <Textarea
                 id="exemption_reason"

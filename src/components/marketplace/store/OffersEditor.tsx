@@ -206,7 +206,7 @@ export function OffersEditor({
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="offer-title">عنوان العرض</Label>
                 <Input
                   id="offer-title"
@@ -215,7 +215,7 @@ export function OffersEditor({
                   placeholder="مثال: خصم افتتاح الفرع"
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="offer-value">
                   قيمة الخصم{" "}
                   {draft.discount_type === "percent" ? "(%)" : `(${currencyLabel(currency, locale)})`}
@@ -247,7 +247,7 @@ export function OffersEditor({
                   </Button>
                 </div>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="offer-start">بداية العرض</Label>
                 <Input
                   id="offer-start"
@@ -256,7 +256,7 @@ export function OffersEditor({
                   onChange={(event) => setDraft({ ...draft, starts_at: event.target.value })}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="offer-end">نهاية العرض (اختياري)</Label>
                 <Input
                   id="offer-end"
@@ -267,7 +267,7 @@ export function OffersEditor({
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="offer-description">تفاصيل العرض (اختياري)</Label>
               <Textarea
                 id="offer-description"
@@ -322,7 +322,7 @@ export function OffersEditor({
                                 : [...draftItemIds, item.id],
                             })
                           }
-                          className={`rounded-full border px-3 py-1.5 text-desc font-bold transition ${
+                          className={`rounded-full border px-3 py-[var(--sp-2)] text-desc font-bold transition ${
                             selected
                               ? "border-market-navy bg-market-navy/10 text-market-navy"
                               : "border-border text-muted-foreground hover:border-market-navy/40"
@@ -350,7 +350,7 @@ export function OffersEditor({
       ) : null}
 
       {offers.isLoading ? (
-        <Skeleton className="h-24 w-full rounded-2xl" />
+        <Skeleton className="h-24 w-full rounded-[var(--r-card)]" />
       ) : (offers.data ?? []).length === 0 ? (
         <Card>
           <CardContent className="pt-5 text-sm text-muted-foreground">

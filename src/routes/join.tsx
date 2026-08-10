@@ -127,8 +127,8 @@ function JoinPage() {
           {locale === "ar" ? "العودة إلى المزيد" : "Back to More"}
         </Link>
 
-        <section className="mb-4 overflow-hidden rounded-3xl border border-border bg-card p-5 text-foreground shadow-panel sm:p-7">
-          <span className="grid size-12 place-items-center rounded-2xl bg-accent text-primary">
+        <section className="mb-4 overflow-hidden rounded-[var(--r-card)] border border-border bg-card p-5 text-foreground shadow-panel sm:p-[var(--sp-8)]">
+          <span className="grid size-12 place-items-center rounded-[var(--r-card)] bg-accent text-primary">
             <Icon className="size-6" />
           </span>
           <h1 className="text-page mt-5 font-black sm:text-3xl">
@@ -137,7 +137,7 @@ function JoinPage() {
           <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
             {locale === "ar" ? content.hintAr : content.hintEn}
           </p>
-          <p className="mt-4 rounded-2xl border border-border bg-secondary px-4 py-3 text-desc leading-6 text-muted-foreground">
+          <p className="mt-4 rounded-[var(--r-card)] border border-border bg-secondary px-4 py-3 text-desc leading-6 text-muted-foreground">
 
             {locale === "ar"
               ? "لن تتغير صلاحيات حسابك عند الإرسال. يتم التفعيل فقط بعد مراجعة الطلب وقبوله."
@@ -146,7 +146,7 @@ function JoinPage() {
         </section>
 
         {businessKind ? (
-          <div className="overflow-hidden rounded-3xl border bg-card p-3 shadow-panel sm:p-5">
+          <div className="overflow-hidden rounded-[var(--r-card)] border bg-card p-3 shadow-panel sm:p-5">
             <BusinessQuickCreate
               open
               variant="page"
@@ -256,7 +256,7 @@ function PersonalJoinForm({ kind }: { kind: "delivery_team" | "platform_team" })
   return (
     <form
       onSubmit={(event) => void submit(event)}
-      className="space-y-5 rounded-3xl border bg-card p-4 shadow-panel sm:p-6"
+      className="space-y-5 rounded-[var(--r-card)] border bg-card p-4 shadow-panel sm:p-6"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label={locale === "ar" ? "الاسم الكامل" : "Full name"} htmlFor="join-name">
@@ -370,7 +370,7 @@ function PersonalJoinForm({ kind }: { kind: "delivery_team" | "platform_team" })
       >
         <label
           htmlFor="join-document"
-          className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-dashed px-4 text-sm hover:bg-secondary/50"
+          className="flex min-h-14 cursor-pointer items-center gap-3 rounded-[var(--r-card)] border border-dashed px-4 text-sm hover:bg-secondary/50"
         >
           <Upload className="size-5 text-primary" />
           <span className="min-w-0 flex-1 truncate">

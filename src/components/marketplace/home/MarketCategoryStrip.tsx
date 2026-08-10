@@ -46,7 +46,7 @@ export function MarketCategoryStrip() {
 
       <nav
         aria-label={t("market.home.strip.label")}
-        className="mx-auto flex w-full max-w-[1320px] flex-col gap-1 pb-1.5 pt-1.5"
+        className="mx-auto flex w-full max-w-[1320px] flex-col gap-1 pb-[var(--sp-2)] pt-[var(--sp-2)]"
       >
         <StripRow fields={TOP_ROW} direction={-1} pathname={pathname} current={current} kept={kept} />
         <StripRow fields={BOTTOM_ROW} direction={1} pathname={pathname} current={current} kept={kept} />

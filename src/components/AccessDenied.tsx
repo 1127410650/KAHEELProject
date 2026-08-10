@@ -38,7 +38,7 @@ export function AccessDenied({
         <ShieldAlert className="size-5" aria-hidden />
       </span>
       <h2 className="text-section mt-3 font-bold text-foreground">{t("market.access.title")}</h2>
-      <p className="mt-1.5 text-sm text-muted-foreground">{message}</p>
+      <p className="mt-[var(--sp-2)] text-sm text-muted-foreground">{message}</p>
 
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         {action && (

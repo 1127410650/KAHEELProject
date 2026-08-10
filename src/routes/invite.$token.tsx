@@ -95,7 +95,7 @@ function InvitePage() {
   return (
     <div dir={dir} className="market-surface flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
-        <div className="mb-6 flex items-center gap-2.5">
+        <div className="mb-6 flex items-center gap-[var(--sp-3)]">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <ShieldCheck className="size-5" aria-hidden />
           </span>

@@ -126,11 +126,11 @@ export function StoriesManager() {
 
       <Card>
         <CardContent className="grid gap-3 p-4 sm:grid-cols-2">
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-slug">{ar ? "المعرّف" : "Slug"}</Label>
             <Input id="story-slug" value={slug} onChange={(event) => setSlug(event.target.value)} />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-url">{ar ? "الرابط" : "Link"}</Label>
             <Input
               id="story-url"
@@ -138,7 +138,7 @@ export function StoriesManager() {
               onChange={(event) => setClickUrl(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-title-ar">{ar ? "العنوان (عربي)" : "Title (Arabic)"}</Label>
             <Input
               id="story-title-ar"
@@ -146,7 +146,7 @@ export function StoriesManager() {
               onChange={(event) => setTitleAr(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-title-en">{ar ? "العنوان (إنجليزي)" : "Title (English)"}</Label>
             <Input
               id="story-title-en"
@@ -154,7 +154,7 @@ export function StoriesManager() {
               onChange={(event) => setTitleEn(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-body-ar">{ar ? "النص (عربي)" : "Body (Arabic)"}</Label>
             <Input
               id="story-body-ar"
@@ -162,7 +162,7 @@ export function StoriesManager() {
               onChange={(event) => setBodyAr(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-body-en">{ar ? "النص (إنجليزي)" : "Body (English)"}</Label>
             <Input
               id="story-body-en"
@@ -170,7 +170,7 @@ export function StoriesManager() {
               onChange={(event) => setBodyEn(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-cta-ar">{ar ? "زر الإجراء (عربي)" : "CTA (Arabic)"}</Label>
             <Input
               id="story-cta-ar"
@@ -178,7 +178,7 @@ export function StoriesManager() {
               onChange={(event) => setCtaAr(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-cta-en">{ar ? "زر الإجراء (إنجليزي)" : "CTA (English)"}</Label>
             <Input
               id="story-cta-en"
@@ -186,7 +186,7 @@ export function StoriesManager() {
               onChange={(event) => setCtaEn(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-priority">{ar ? "الترتيب" : "Priority"}</Label>
             <Input
               id="story-priority"
@@ -195,7 +195,7 @@ export function StoriesManager() {
               onChange={(event) => setPriority(event.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-ends">{ar ? "ينتهي في" : "Ends at"}</Label>
             <Input
               id="story-ends"
@@ -205,7 +205,7 @@ export function StoriesManager() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label>{ar ? "الخلفية" : "Background"}</Label>
             <div className="flex flex-wrap gap-2">
               {STORY_GRADIENTS.map((value) => (
@@ -222,7 +222,7 @@ export function StoriesManager() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label>{ar ? "الشخصية والوضعية" : "Character and pose"}</Label>
             <div className="flex flex-wrap gap-2">
               {POSES.map((item, index) => (
@@ -239,7 +239,7 @@ export function StoriesManager() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="story-image">
               {ar
                 ? `صورة اختيارية (حد ${formatNumber(STORY_IMAGE_LIMIT / 1024)}KB)`
@@ -253,10 +253,10 @@ export function StoriesManager() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label>{ar ? "معاينة" : "Preview"}</Label>
             <div
-              className="grid h-[120px] place-items-center overflow-hidden rounded-2xl"
+              className="grid h-[120px] place-items-center overflow-hidden rounded-[var(--r-card)]"
               style={{ background: STORY_GRADIENT_CSS[gradient] }}
             >
               <Mascot

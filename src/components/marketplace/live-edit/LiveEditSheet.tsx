@@ -152,7 +152,7 @@ export function LiveEditSheet({
         </p>
 
         {draft ? (
-          <p className="mb-3 rounded-2xl border border-gold/40 bg-gold/12 p-2.5 text-desc font-bold text-foreground">
+          <p className="mb-3 rounded-[var(--r-card)] border border-gold/40 bg-gold/12 p-[var(--sp-3)] text-desc font-bold text-foreground">
             لديك مسوّدة غير منشورة على هذه الفتحة — يراها المدير فقط.
           </p>
         ) : null}
@@ -173,7 +173,7 @@ export function LiveEditSheet({
               </div>
             </label>
 
-            <fieldset className="rounded-2xl border border-border p-2.5">
+            <fieldset className="rounded-[var(--r-card)] border border-border p-[var(--sp-3)]">
               <legend className="px-1 text-desc font-bold text-foreground">تدرّج بلونين</legend>
               <div className="flex items-center gap-2">
                 <input
@@ -224,7 +224,7 @@ export function LiveEditSheet({
 
         {slot.edit_kind === "media" ? (
           <div className="space-y-3">
-            <span className="block h-32 overflow-hidden rounded-2xl border border-border bg-muted">
+            <span className="block h-32 overflow-hidden rounded-[var(--r-card)] border border-border bg-muted">
               {slot.url ? (
                 <img src={slot.url} alt="" className="size-full object-cover" loading="lazy" />
               ) : null}

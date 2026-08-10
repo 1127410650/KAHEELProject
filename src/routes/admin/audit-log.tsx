@@ -127,7 +127,7 @@ function AdminAuditLogPage() {
               </p>
 
               {row.reason && (
-                <p className="mt-1.5 rounded-lg bg-background px-2 py-1.5 text-desc text-foreground">
+                <p className="mt-[var(--sp-2)] rounded-lg bg-background px-2 py-[var(--sp-2)] text-desc text-foreground">
                   {row.reason}
                 </p>
               )}

@@ -75,7 +75,7 @@ function AdminGuideQueuePage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-[var(--sp-2)]">
           {STATUS_TABS.map((tab) => (
             <Button
               key={tab.value}
@@ -227,7 +227,7 @@ function Decision({
   onReject: () => void;
 }) {
   return (
-    <div className="flex shrink-0 gap-1.5">
+    <div className="flex shrink-0 gap-[var(--sp-2)]">
       {status !== "approved" ? (
         <Button size="sm" onClick={onApprove} className="gap-1">
           <CheckCircle2 className="size-3.5" aria-hidden />

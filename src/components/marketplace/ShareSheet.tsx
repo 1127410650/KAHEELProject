@@ -122,7 +122,7 @@ export function ShareSheet({
           <button
             type="button"
             onClick={row.onSelect}
-            className="flex w-full min-h-11 items-center gap-2.5 rounded-md px-3 py-2 text-start text-sm text-foreground transition-colors hover:bg-accent"
+            className="flex w-full min-h-11 items-center gap-[var(--sp-3)] rounded-md px-3 py-2 text-start text-sm text-foreground transition-colors hover:bg-accent"
           >
             <span className="shrink-0 text-muted-foreground">{row.icon}</span>
             <span className="min-w-0 truncate">{row.label}</span>

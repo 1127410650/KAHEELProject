@@ -24,7 +24,7 @@ export function BusinessCard({
       : business.display_name_en || business.display_name_ar;
 
   return (
-    <div className="flex flex-col rounded-2xl border border-border bg-card p-3.5 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised">
+    <div className="flex flex-col rounded-[var(--r-card)] border border-border bg-card p-[var(--sp-4)] shadow-panel transition duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-raised">
       <div className="flex items-start gap-3">
         <span className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-secondary text-muted-foreground">
           {logoUrl ? (

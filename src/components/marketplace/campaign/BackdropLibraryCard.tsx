@@ -159,7 +159,7 @@ export function BackdropLibraryCard() {
             const held = settings.holdback.includes(item.id);
             const win = settings.windows[item.id];
             return (
-              <li key={item.id} className="space-y-2 rounded-2xl border border-border p-2">
+              <li key={item.id} className="space-y-2 rounded-[var(--r-card)] border border-border p-2">
                 <button
                   type="button"
                   onClick={() => setPreview(item.url)}
@@ -299,7 +299,7 @@ export function BackdropLibraryCard() {
               alt={ar ? "معاينة الخلفية" : "Backdrop preview"}
               width={BACKDROP_WIDTH}
               height={BACKDROP_HEIGHT}
-              className="aspect-[16/9] w-full rounded-2xl object-cover"
+              className="aspect-[16/9] w-full rounded-[var(--r-card)] object-cover"
             />
             <Button type="button" size="sm" variant="outline" onClick={() => setPreview(null)}>
               {ar ? "إغلاق المعاينة" : "Close preview"}

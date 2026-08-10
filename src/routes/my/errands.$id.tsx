@@ -122,8 +122,8 @@ function ErrandDetailPage() {
   if (errand.isLoading) {
     return (
       <DashboardShell title={title}>
-        <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
-          <Skeleton className="h-[220px] rounded-2xl" />
+        <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
+          <Skeleton className="h-[220px] rounded-[var(--r-card)]" />
         </div>
       </DashboardShell>
     );
@@ -132,7 +132,7 @@ function ErrandDetailPage() {
   if (!errand.data) {
     return (
       <DashboardShell title={title}>
-        <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-6 text-center">
+        <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-6 text-center">
           <p className="text-desc text-muted-foreground">
             {ar ? "هذا الطلب غير موجود أو ليس لك." : "This request does not exist or isn't yours."}
           </p>
@@ -151,9 +151,9 @@ function ErrandDetailPage() {
 
   return (
     <DashboardShell title={title}>
-      <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-3">
+      <div className="mx-auto w-full max-w-2xl px-[var(--page-x)] pb-24 pt-3">
         {/* الحالة والخط الزمني */}
-        <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
+        <section className="mb-3 rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
           <div className="flex items-center justify-between gap-2">
             <Badge className="text-desc">{errandStatusLabel(request.status, ar)}</Badge>
             <span className="text-desc text-muted-foreground">
@@ -231,9 +231,9 @@ function ErrandDetailPage() {
               {ar ? "عروض الكباتن" : "Captain offers"}
             </h2>
             {offers.isLoading ? (
-              <Skeleton className="h-[84px] rounded-2xl" />
+              <Skeleton className="h-[84px] rounded-[var(--r-card)]" />
             ) : (offers.data ?? []).filter((offer) => offer.status === "pending").length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
+              <p className="rounded-[var(--r-card)] border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
                 {ar
                   ? "ما وصل عرض بعد — الكباتن يشوفون طلبك الآن."
                   : "No offers yet — captains can see your request."}
@@ -247,7 +247,7 @@ function ErrandDetailPage() {
                     return (
                       <div
                         key={offer.id}
-                        className="rounded-2xl border border-border/70 bg-card/60 p-3"
+                        className="rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
@@ -313,7 +313,7 @@ function ErrandDetailPage() {
 
         {/* التقييم */}
         {request.status === "delivered" && request.rating == null ? (
-          <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
+          <section className="mb-3 rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
             <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "قيّم الكابتن" : "Rate the captain"}
             </h2>
@@ -360,7 +360,7 @@ function ErrandDetailPage() {
           <h2 className="text-section mb-2 font-bold text-foreground">
             {ar ? "سجل الطلب" : "Request log"}
           </h2>
-          <div className="grid gap-1.5">
+          <div className="grid gap-[var(--sp-2)]">
             {(events.data ?? []).map((event) => (
               <div
                 key={event.id}

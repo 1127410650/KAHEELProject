@@ -287,7 +287,7 @@ function AdminBusinessesPage() {
                       id={row.tenant_id}
                       name={row.name}
                       truncate
-                      className="min-h-11 py-2.5 text-sm font-semibold"
+                      className="min-h-11 py-[var(--sp-3)] text-sm font-semibold"
                     />
                     <p className="truncate text-desc text-muted-foreground">
                       {[row.country, row.city].filter(Boolean).join(" · ")}

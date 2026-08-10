@@ -31,7 +31,7 @@ export function PageSearchBar({ placeholder, href = "/search" }: { placeholder?:
   return (
     <Link
       to={href}
-      className="k-surface flex min-h-11 items-center gap-2 rounded-2xl px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-brand-700/40"
+      className="k-surface flex min-h-11 items-center gap-2 rounded-[var(--r-card)] px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-brand-700/40"
       aria-label={ar ? "ابحث في كَحيل" : "Search Kaheel"}
     >
       <Search className="size-4 shrink-0 text-brand-700" aria-hidden />
@@ -124,7 +124,7 @@ export function PageTileGrid({ items }: { items: PageTile[] }) {
         <li key={tile.key} className="min-w-0">
           <a
             href={tile.href}
-            className="k-surface flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-2xl px-1 py-2 text-center outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-700/40"
+            className="k-surface flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-[var(--r-card)] px-1 py-2 text-center outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-700/40"
           >
             <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand-300/40 text-brand-900">
               {tile.icon}
@@ -161,13 +161,13 @@ export function PageProgressStrip({ steps }: { steps: ProgressStep[] }) {
   return (
     <a
       href={next.href}
-      className="k-surface flex min-h-[58px] items-center gap-3 rounded-2xl px-3 py-2 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-700/40"
+      className="k-surface flex min-h-[58px] items-center gap-3 rounded-[var(--r-card)] px-3 py-2 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-700/40"
     >
       <span className="min-w-0 flex-1">
         <span className="block truncate text-desc font-black text-brand-950">{next.label}</span>
         <span
           aria-hidden
-          className="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-brand-300/45"
+          className="mt-[var(--sp-2)] block h-1.5 w-full overflow-hidden rounded-full bg-brand-300/45"
         >
           <span
             className="block h-full rounded-full bg-[linear-gradient(90deg,#8A4FFF,#C3ABFF)]"
@@ -206,8 +206,8 @@ export function PageStack({
 }) {
   return (
     <div
-      className={`mx-auto flex w-full flex-col gap-3 px-3 py-3 sm:px-4 ${
-        width === "narrow" ? "max-w-2xl" : "max-w-[1240px] lg:px-8"
+      className={`mx-auto flex w-full flex-col gap-3 px-[var(--page-x)] py-3 ${
+        width === "narrow" ? "max-w-2xl" : "max-w-[1240px]"
       }`}
     >
       {search && <PageSearchBar placeholder={searchPlaceholder} />}

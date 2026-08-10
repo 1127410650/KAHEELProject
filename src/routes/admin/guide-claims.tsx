@@ -76,7 +76,7 @@ function AdminGuideClaimsPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-[var(--sp-2)]">
           {TABS.map((tab) => (
             <Button
               key={tab.value}
@@ -105,7 +105,7 @@ function AdminGuideClaimsPage() {
           <div className="space-y-2">
             {rows.map((claim) => (
               <Card key={claim.id}>
-                <CardContent className="space-y-2 py-3.5">
+                <CardContent className="space-y-2 py-[var(--sp-4)]">
                   <div className="flex flex-wrap items-center gap-2">
                     {claim.place_slug ? (
                       <Link
@@ -134,7 +134,7 @@ function AdminGuideClaimsPage() {
                     <p className="text-desc leading-6 text-muted-foreground">{claim.evidence}</p>
                   ) : null}
 
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-[var(--sp-2)]">
                     {claim.documents.length === 0 ? (
                       <span className="text-desc font-bold text-destructive">
                         {claim.documents_purged_at
@@ -147,7 +147,7 @@ function AdminGuideClaimsPage() {
                           key={doc.id}
                           type="button"
                           onClick={() => void openDocument(doc.storage_path)}
-                          className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-border px-2.5 text-desc font-black hover:border-primary/50"
+                          className="inline-flex min-h-9 items-center gap-[var(--sp-2)] rounded-xl border border-border px-[var(--sp-3)] text-desc font-black hover:border-primary/50"
                         >
                           <FileText className="size-3.5" aria-hidden />
                           {CLAIM_DOC_KIND_LABEL[doc.doc_kind] ?? doc.doc_kind}
@@ -168,7 +168,7 @@ function AdminGuideClaimsPage() {
                   ) : null}
 
                   {status === "pending" ? (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="flex flex-wrap gap-[var(--sp-2)] pt-1">
                       <Button
                         size="sm"
                         disabled={decide.isPending || claim.documents.length === 0}

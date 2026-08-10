@@ -70,7 +70,7 @@ export function ErrandPointPicker({
   }
 
   return (
-    <div className="rounded-2xl border border-border/70 bg-card/60 p-3">
+    <div className="rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
         <div>
           <p className="text-sm font-bold text-foreground">{title}</p>
@@ -94,7 +94,7 @@ export function ErrandPointPicker({
       </div>
 
       {(addresses.data?.length ?? 0) > 0 ? (
-        <div className="mb-2 flex flex-wrap gap-1.5">
+        <div className="mb-2 flex flex-wrap gap-[var(--sp-2)]">
           {addresses.data!.slice(0, 6).map((address) => {
             const active = value?.label === address.label;
             return (
@@ -109,7 +109,7 @@ export function ErrandPointPicker({
                     lng: address.lng,
                   })
                 }
-                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-desc transition ${
+                className={`inline-flex items-center gap-1 rounded-full border px-[var(--sp-3)] py-1 text-desc transition ${
                   active
                     ? "border-primary bg-primary/10 font-bold text-primary"
                     : "border-border/70 bg-background text-muted-foreground hover:border-primary/50"

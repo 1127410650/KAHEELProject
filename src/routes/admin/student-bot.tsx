@@ -129,7 +129,7 @@ function AdminStudentBotPage() {
   if (stats.isLoading) {
     return (
       <AdminShell title="مساعد الطالب">
-        <Skeleton className="h-64 w-full rounded-2xl" />
+        <Skeleton className="h-64 w-full rounded-[var(--r-card)]" />
       </AdminShell>
     );
   }
@@ -138,7 +138,7 @@ function AdminStudentBotPage() {
   if (!data) {
     return (
       <AdminShell title="مساعد الطالب">
-        <p className="rounded-2xl border border-border bg-card p-6 text-center text-desc text-muted-foreground">
+        <p className="rounded-[var(--r-card)] border border-border bg-card p-6 text-center text-desc text-muted-foreground">
           لا تملك صلاحية عرض هذه اللوحة.
         </p>
       </AdminShell>
@@ -186,7 +186,7 @@ function AdminStudentBotPage() {
   return (
     <AdminShell title="مساعد الطالب">
       <div className="grid gap-3">
-        <header className="rounded-2xl border border-border bg-card p-4 shadow-panel">
+        <header className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel">
           <h1 className="text-page font-black text-foreground">مساعد الطالب</h1>
           <p className="mt-1 text-desc leading-6 text-muted-foreground">
             الاستهلاك يُحسب تقديريًا من رموز الإدخال والإخراج لكل طلب. عند بلوغ السقف الشهري يتوقف
@@ -211,7 +211,7 @@ function AdminStudentBotPage() {
           ))}
         </section>
 
-        <section className="rounded-2xl border border-border bg-card p-4 shadow-panel">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel">
           <div className="flex items-center justify-between gap-2">
             <p className="text-desc font-black text-foreground">نسبة السقف الشهري</p>
             <p className="text-desc font-black tabular-nums text-foreground">
@@ -239,7 +239,7 @@ function AdminStudentBotPage() {
 
         {/* Charts */}
         <section className="grid gap-3 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-card p-3 shadow-panel">
+          <div className="rounded-[var(--r-card)] border border-border bg-card p-3 shadow-panel">
             <p className="mb-2 text-desc font-black text-foreground">الاستهلاك اليومي (٣٠ يومًا)</p>
             <div className="h-52 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -253,7 +253,7 @@ function AdminStudentBotPage() {
               </ResponsiveContainer>
             </div>
           </div>
-          <div className="rounded-2xl border border-border bg-card p-3 shadow-panel">
+          <div className="rounded-[var(--r-card)] border border-border bg-card p-3 shadow-panel">
             <p className="mb-2 text-desc font-black text-foreground">الاستهلاك الشهري</p>
             <div className="h-52 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -270,7 +270,7 @@ function AdminStudentBotPage() {
         </section>
 
         {/* Controls */}
-        <section className="rounded-2xl border border-border bg-card p-4 shadow-panel">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-desc font-black text-foreground">تفعيل المساعد</p>
@@ -319,7 +319,7 @@ function AdminStudentBotPage() {
         </section>
 
         {/* Plans */}
-        <section className="rounded-2xl border border-border bg-card p-4 shadow-panel">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel">
           <p className="text-desc font-black text-foreground">الباقات والأسعار</p>
           <p className="mt-0.5 text-desc text-muted-foreground">
             السعر بوحدات رصيد المحفظة — احسبه على التكلفة الفعلية بهامش ربحك.
@@ -402,7 +402,7 @@ function AdminStudentBotPage() {
 
         {/* Content signals */}
         <section className="grid gap-3 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-card p-4 shadow-panel">
+          <div className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel">
             <p className="text-desc font-black text-foreground">أكثر المواد سؤالًا</p>
             {data.subjects.length === 0 ? (
               <p className="mt-2 text-desc text-muted-foreground">لا أسئلة بعد.</p>
@@ -411,7 +411,7 @@ function AdminStudentBotPage() {
                 {data.subjects.map((row) => (
                   <li
                     key={`${row.grade}-${row.subject}`}
-                    className="flex items-center justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
+                    className="flex items-center justify-between gap-2 rounded-lg bg-background px-[var(--sp-3)] py-[var(--sp-2)]"
                   >
                     <span className="truncate text-desc font-bold text-foreground">
                       {row.subject}
@@ -424,7 +424,7 @@ function AdminStudentBotPage() {
               </ul>
             )}
           </div>
-          <div className="rounded-2xl border border-border bg-card p-4 shadow-panel">
+          <div className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel">
             <p className="text-desc font-black text-foreground">أكثر الأسئلة تكرارًا</p>
             <p className="mt-0.5 text-desc text-muted-foreground">
               مادة خام لتطوير محتوى دليل الطالب لاحقًا.
@@ -436,7 +436,7 @@ function AdminStudentBotPage() {
                 {data.top_questions.map((row, index) => (
                   <li
                     key={`${index}-${row.question.slice(0, 12)}`}
-                    className="flex items-start justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
+                    className="flex items-start justify-between gap-2 rounded-lg bg-background px-[var(--sp-3)] py-[var(--sp-2)]"
                   >
                     <span className="line-clamp-2 text-desc text-foreground">{row.question}</span>
                     <span className="shrink-0 text-desc tabular-nums text-muted-foreground">

@@ -108,7 +108,7 @@ function Stat({
     <Link
       to={to}
       search={search ?? {}}
-      className={`group relative isolate min-h-[126px] overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:shadow-raised dark:border-border dark:bg-card ${palette.border}`}
+      className={`group relative isolate min-h-[126px] overflow-hidden rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:shadow-raised dark:border-border dark:bg-card ${palette.border}`}
     >
       <div
         className={`pointer-events-none absolute -end-8 -top-10 -z-10 size-28 rounded-full bg-gradient-to-br ${palette.glow} to-transparent blur-2xl`}
@@ -159,7 +159,7 @@ function ActionRow({
     <Link
       to={to}
       search={search ?? {}}
-      className="group flex min-h-[68px] items-center gap-3 rounded-2xl border border-border bg-secondary/45 px-3.5 py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
+      className="group flex min-h-[68px] items-center gap-3 rounded-[var(--r-card)] border border-border bg-secondary/45 px-[var(--sp-4)] py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
     >
       <span
         className={
@@ -209,12 +209,12 @@ function AdminHomePage() {
       {overview.isLoading || !data ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 12 }).map((_, index) => (
-            <Skeleton key={index} className="h-[126px] w-full rounded-2xl" />
+            <Skeleton key={index} className="h-[126px] w-full rounded-[var(--r-card)]" />
           ))}
         </div>
       ) : (
         <div className="space-y-5">
-          <section className="relative overflow-hidden rounded-2xl border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:px-5 sm:py-5">
+          <section className="relative overflow-hidden rounded-[var(--r-card)] border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:py-5">
             <div
               className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl"
               aria-hidden
@@ -225,7 +225,7 @@ function AdminHomePage() {
             />
             <div className="relative flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-desc font-bold backdrop-blur">
+                <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full border border-white/20 bg-white/10 px-[var(--sp-3)] py-1 text-desc font-bold backdrop-blur">
                   <Sparkles className="size-3.5" aria-hidden />
                   {t("admin.dashboardBadge")}
                 </span>
@@ -236,7 +236,7 @@ function AdminHomePage() {
                   {t("admin.dashboardIntro")}
                 </p>
               </div>
-              <div className="flex shrink-0 items-center gap-2 rounded-2xl border border-white/15 bg-black/10 px-3 py-2 backdrop-blur">
+              <div className="flex shrink-0 items-center gap-2 rounded-[var(--r-card)] border border-white/15 bg-black/10 px-3 py-2 backdrop-blur">
                 <span className="text-desc text-white/70">{t("admin.dashboardPending")}</span>
                 <strong className="text-xl font-black tabular-nums">
                   {data.listings_pending + data.reports_new + data.verifications_pending}
@@ -355,7 +355,7 @@ function AdminHomePage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-4 shadow-panel sm:p-5">
+          <section className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel sm:p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <h2 className="text-section font-black text-foreground">{t("admin.actionNeeded")}</h2>
@@ -371,7 +371,7 @@ function AdminHomePage() {
               </span>
             </div>
 
-            <div className="mt-4 grid gap-2.5 md:grid-cols-2">
+            <div className="mt-4 grid gap-[var(--sp-3)] md:grid-cols-2">
               <ActionRow
                 to="/admin/listings"
                 label={t("admin.alerts.listingsPending")}

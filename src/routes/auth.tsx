@@ -116,7 +116,7 @@ function AuthPage() {
           alt=""
           width={1024}
           height={1024}
-          className="size-20 rounded-2xl"
+          className="size-20 rounded-[var(--r-card)]"
           aria-hidden
         />
         <span className="text-5xl font-black text-market-navy-foreground">
@@ -124,7 +124,7 @@ function AuthPage() {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] lg:px-10 lg:py-12">
+      <div className="flex flex-1 flex-col px-5 pb-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] lg:py-12">
         <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col lg:justify-center lg:rounded-[1.75rem] lg:border lg:border-border lg:bg-white lg:p-8 lg:shadow-raised">
           <div className="mb-6 flex items-center justify-between gap-3">
             <span className="flex items-center gap-2 text-xl font-bold text-foreground lg:hidden">

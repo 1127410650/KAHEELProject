@@ -402,7 +402,7 @@ export function ProfileCompletionPanel() {
             </div>
           )}
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="completion_email">{ar ? "البريد الإلكتروني" : "Email"}</Label>
             <Input
               id="completion_email"
@@ -455,7 +455,7 @@ export function ProfileCompletionPanel() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="completion_phone">{ar ? "رقم الجوال" : "Phone"}</Label>
             <Input
               id="completion_phone"
@@ -467,14 +467,14 @@ export function ProfileCompletionPanel() {
                 setDraft((previous) => ({ ...previous, phone: event.target.value }))
               }
             />
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-desc font-semibold text-muted-foreground">
+            <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full bg-secondary px-[var(--sp-3)] py-1 text-desc font-semibold text-muted-foreground">
               <Phone className="size-3.5" />
               {ar ? "يُحفظ كرقم تواصل — بدون رسوم SMS" : "Saved as contact — no SMS fees"}
             </span>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="completion_birth_year">
                 {ar ? "سنة الميلاد" : "Birth year"}
               </Label>
@@ -492,7 +492,7 @@ export function ProfileCompletionPanel() {
                 }
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="completion_gender">{ar ? "الجنس" : "Gender"}</Label>
               <select
                 id="completion_gender"
@@ -512,7 +512,7 @@ export function ProfileCompletionPanel() {
             </div>
           </div>
 
-          <label className="flex items-start gap-2.5 rounded-lg border border-border p-3 text-desc leading-relaxed text-muted-foreground">
+          <label className="flex items-start gap-[var(--sp-3)] rounded-lg border border-border p-3 text-desc leading-relaxed text-muted-foreground">
             <Checkbox
               checked={draft.consent}
               onCheckedChange={(value) =>

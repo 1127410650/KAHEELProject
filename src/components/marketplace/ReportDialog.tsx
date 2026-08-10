@@ -167,7 +167,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
             <p className="text-desc text-muted-foreground">{t("market.reports.dialogHint")}</p>
 
             <div className="space-y-3">
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="report-reason">{t("market.reports.reason")}</Label>
                 <select
                   id="report-reason"
@@ -184,7 +184,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
                 </select>
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="report-note">
                   {t("market.reports.note")}
                   {noteRequired ? " *" : ""}
@@ -199,7 +199,7 @@ export function ReportDialog({ listingId, listingTitle, open, onOpenChange }: Pr
                 />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <Label htmlFor="report-files">{t("market.reports.attachments")}</Label>
                 <input
                   id="report-files"

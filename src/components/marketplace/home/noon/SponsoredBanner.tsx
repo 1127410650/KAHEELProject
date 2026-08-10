@@ -33,14 +33,14 @@ export function SponsoredBanner() {
   /* وسم الإفصاح كما في نون: كبسولة رمادية صغيرة في الزاوية تبقى مقروءة فوق
      أي صورة — وهي الاستثناء الوحيد المسموح بحجم أصغر من 14px. */
   const label = (
-    <span className="absolute bottom-1.5 end-2 z-10 rounded-md bg-secondary/90 px-1.5 py-0.5 text-micro font-bold text-muted-foreground backdrop-blur-sm">
+    <span className="absolute bottom-1.5 end-2 z-10 rounded-md bg-secondary/90 px-[var(--sp-2)] py-0.5 text-micro font-bold text-muted-foreground backdrop-blur-sm">
       {ar ? "إعلان" : "Ad"}
     </span>
   );
 
 
   const box =
-    "relative block aspect-[16/6] w-full overflow-hidden rounded-2xl border border-border bg-card outline-none focus-visible:ring-2 focus-visible:ring-primary/45";
+    "relative block aspect-[16/6] w-full overflow-hidden rounded-[var(--r-card)] border border-border bg-card outline-none focus-visible:ring-2 focus-visible:ring-primary/45";
 
   if (template)
     return (

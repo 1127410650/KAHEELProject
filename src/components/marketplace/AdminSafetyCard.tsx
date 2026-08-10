@@ -45,14 +45,14 @@ export function AdminSafetyCard({
   return (
     <section className="rounded-xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-section inline-flex items-center gap-1.5 font-bold text-foreground">
+        <h2 className="text-section inline-flex items-center gap-[var(--sp-2)] font-bold text-foreground">
           <ShieldQuestion className="size-4 shrink-0" aria-hidden />
           {t("admin.safety.title")}
         </h2>
         <AdminStatusBadge tone={RISK_TONE[data.risk_level]} label={t(`admin.state.${data.risk_level}`)} />
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-[var(--sp-2)]">
         <AdminStatusBadge
           tone={data.verified ? "done" : "idle"}
           label={t(data.verified ? "admin.safety.verified" : "admin.verification.unverified")}

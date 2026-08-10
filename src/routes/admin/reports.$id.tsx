@@ -276,7 +276,7 @@ function CaseBody({ report, staff, currentUserId, onChanged, t, locale }: BodyPr
                 {reason ? (locale === "ar" ? reason.name_ar : reason.name_en) : "—"}
               </p>
             </div>
-            <div className="flex flex-wrap gap-1.5 text-desc">
+            <div className="flex flex-wrap gap-[var(--sp-2)] text-desc">
               <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-secondary-foreground">
                 {t(`market.reports.status.${report.status}`)}
               </span>

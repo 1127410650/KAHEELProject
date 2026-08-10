@@ -232,7 +232,7 @@ export function CategoryPicker({
         className={
           stage === "root" && !needle
             ? "grid max-h-[60vh] grid-cols-2 gap-2 overflow-y-auto pe-1"
-            : "max-h-[60vh] space-y-1.5 overflow-y-auto pe-1"
+            : "max-h-[60vh] space-y-[var(--sp-2)] overflow-y-auto pe-1"
         }
       >
         {items.map((item) => (
@@ -244,7 +244,7 @@ export function CategoryPicker({
               className={
                 stage === "root" && !needle
                   ? "flex min-h-24 w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-4 text-center text-sm font-medium text-foreground hover:border-primary/60 hover:bg-accent"
-                  : "flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-border px-3 py-2.5 text-start text-sm text-foreground hover:border-primary/50 hover:bg-accent"
+                  : "flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-border px-3 py-[var(--sp-3)] text-start text-sm text-foreground hover:border-primary/50 hover:bg-accent"
               }
             >
               <span className="min-w-0">{item.text}</span>
@@ -267,12 +267,12 @@ export function CategoryPicker({
   );
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <span className="text-sm font-medium text-foreground">{t("market.form.categoryPath")}</span>
       <button
         type="button"
         onClick={() => change(true)}
-        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2.5 text-start text-sm"
+        className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-[var(--sp-3)] text-start text-sm"
       >
         {pathText.length > 0 ? (
           <span className="min-w-0 text-foreground">{pathText.join(" ← ")}</span>

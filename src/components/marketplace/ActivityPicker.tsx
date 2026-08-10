@@ -136,7 +136,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
   return (
     <div className="space-y-4">
       {/* ---- sector filter: optional, and open to any new sector ---- */}
-      <div className="min-w-0 space-y-1.5">
+      <div className="min-w-0 space-y-[var(--sp-2)]">
         <Label htmlFor="activity_sector">{t("market.activity.sector")}</Label>
         <select
           id="activity_sector"
@@ -155,10 +155,10 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
       </div>
 
       {/* ---- main activity: exactly one ---- */}
-      <div className="min-w-0 space-y-1.5">
+      <div className="min-w-0 space-y-[var(--sp-2)]">
         <Label htmlFor="activity_main">{t("market.activity.main")}</Label>
         {value.main ? (
-          <div className="flex min-w-0 flex-wrap items-center gap-2 rounded-lg border border-border bg-secondary/40 p-2.5">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 rounded-lg border border-border bg-secondary/40 p-[var(--sp-3)]">
             <Check className="size-4 shrink-0 text-primary" aria-hidden />
             <span className="min-w-0 text-sm font-medium text-foreground">
               {activityName(value.main, locale)}
@@ -214,7 +214,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                         setMainQuery("");
                         onChange({ main: toChoice(hit), subs: [] });
                       }}
-                      className="flex w-full min-w-0 items-start gap-2 p-2.5 text-start hover:bg-accent"
+                      className="flex w-full min-w-0 items-start gap-2 p-[var(--sp-3)] text-start hover:bg-accent"
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm font-medium text-foreground">
@@ -243,13 +243,13 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
       </div>
 
       {/* ---- sub activities: many, inside the same main activity ---- */}
-      <div className="min-w-0 space-y-1.5">
+      <div className="min-w-0 space-y-[var(--sp-2)]">
         <Label htmlFor="activity_sub">{t("market.activity.subs")}</Label>
         {value.subs.length > 0 && (
-          <ul className="flex min-w-0 flex-wrap gap-1.5">
+          <ul className="flex min-w-0 flex-wrap gap-[var(--sp-2)]">
             {value.subs.map((sub) => (
               <li key={sub.id}>
-                <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-desc text-foreground">
+                <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 px-[var(--sp-3)] py-1 text-desc text-foreground">
                   <span className="truncate">{activityName(sub, locale)}</span>
                   <button
                     type="button"
@@ -299,7 +299,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                           : [...value.subs, toChoice(hit)],
                       });
                     }}
-                    className="flex w-full min-w-0 items-center gap-2 p-2.5 text-start hover:bg-accent"
+                    className="flex w-full min-w-0 items-center gap-2 p-[var(--sp-3)] text-start hover:bg-accent"
                   >
                     <span className="min-w-0 flex-1 text-sm text-foreground">
                       {activityName(hit, locale)}

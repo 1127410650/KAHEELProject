@@ -325,7 +325,7 @@ function AdminContentRulesPage() {
           actions={
             <Button
               size="sm"
-              className="min-h-11 gap-1.5"
+              className="min-h-11 gap-[var(--sp-2)]"
               onClick={() => {
                 setDraft({ ...EMPTY_DRAFT });
                 setDraftError(null);
@@ -392,7 +392,7 @@ function AdminContentRulesPage() {
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="min-w-0">
                         <p className=" text-sm font-medium text-foreground">{rule.pattern}</p>
-                        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                        <div className="mt-1 flex flex-wrap items-center gap-[var(--sp-2)]">
                           <AdminStatusBadge tone="idle" label={t(`admin.contentRules.kindValue.${rule.kind}`)} />
                           <AdminStatusBadge tone="idle" label={t(`admin.moderation.category.${rule.category}`)} />
                           <AdminStatusBadge tone={SEVERITY_TONE[rule.severity]} label={t(`admin.moderation.severity.${rule.severity}`)} />
@@ -406,7 +406,7 @@ function AdminContentRulesPage() {
                         </div>
                         {rule.notes && <p className="mt-1 text-desc text-muted-foreground">{rule.notes}</p>}
                       </div>
-                      <div className="flex shrink-0 items-center gap-1.5">
+                      <div className="flex shrink-0 items-center gap-[var(--sp-2)]">
                         <span className="grid min-h-11 min-w-11 place-items-center">
                           <Switch
                             checked={rule.is_active}
@@ -458,9 +458,9 @@ function AdminContentRulesPage() {
             {sampleText.trim() === "" ? null : matchedPreview.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t("admin.contentRules.testNoMatch")}</p>
             ) : (
-              <ul className="grid gap-1.5">
+              <ul className="grid gap-[var(--sp-2)]">
                 {matchedPreview.map((m) => (
-                  <li key={m.rule.id} className="flex flex-wrap items-center gap-1.5 rounded-lg bg-background px-3 py-2 text-desc">
+                  <li key={m.rule.id} className="flex flex-wrap items-center gap-[var(--sp-2)] rounded-lg bg-background px-3 py-2 text-desc">
                     <AdminStatusBadge tone={ACTION_TONE[m.rule.action]} label={t(`admin.contentRules.actionValue.${m.rule.action}`)} />
                     <span className="font-medium text-foreground">{m.rule.pattern}</span>
                     <span className="text-muted-foreground">· {t(`admin.moderation.category.${m.rule.category}`)}</span>
@@ -474,7 +474,7 @@ function AdminContentRulesPage() {
         <Panel
           title={t("admin.contentRules.jobsTitle")}
           actions={
-            <Button size="sm" className="min-h-11 gap-1.5" disabled={tickBusy} onClick={() => void runTick()}>
+            <Button size="sm" className="min-h-11 gap-[var(--sp-2)]" disabled={tickBusy} onClick={() => void runTick()}>
               <PlayCircle className="size-4" aria-hidden />
               {t("admin.contentRules.runNow")}
             </Button>
@@ -485,11 +485,11 @@ function AdminContentRulesPage() {
           ) : (jobRuns.data ?? []).length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">{t("common.noData")}</p>
           ) : (
-            <ul className="grid gap-1.5">
+            <ul className="grid gap-[var(--sp-2)]">
               {(jobRuns.data ?? []).map((run, index) => (
                 <li key={`${run.job}-${run.started_at}-${index}`} className="rounded-lg bg-background px-3 py-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                    <div className="flex min-w-0 flex-wrap items-center gap-[var(--sp-2)]">
                       <AdminStatusBadge tone={run.ok ? "done" : "critical"} label={t(run.ok ? "admin.contentRules.jobOk" : "admin.contentRules.jobFailed")} />
                       <span className="truncate text-sm font-medium text-foreground">{run.job}</span>
                       {run.source && <span className="text-desc text-muted-foreground">({run.source})</span>}
@@ -520,14 +520,14 @@ function AdminContentRulesPage() {
                   value={draft.pattern}
                   onChange={(e) => setDraft({ ...draft, pattern: e.target.value })}
                   rows={2}
-                  className="mt-1.5"
+                  className="mt-[var(--sp-2)]"
                 />
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.kind")}
                   <Select value={draft.kind} onValueChange={(v) => setDraft({ ...draft, kind: v as RuleKind })}>
-                    <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="mt-[var(--sp-2)] h-11"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {KINDS.map((k) => <SelectItem key={k} value={k}>{t(`admin.contentRules.kindValue.${k}`)}</SelectItem>)}
                     </SelectContent>
@@ -536,7 +536,7 @@ function AdminContentRulesPage() {
                 <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.lang")}
                   <Select value={draft.lang} onValueChange={(v) => setDraft({ ...draft, lang: v as RuleLang })}>
-                    <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="mt-[var(--sp-2)] h-11"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {LANGS.map((l) => <SelectItem key={l} value={l}>{l === "any" ? t("admin.contentRules.langAny") : l.toUpperCase()}</SelectItem>)}
                     </SelectContent>
@@ -545,7 +545,7 @@ function AdminContentRulesPage() {
                 <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.category")}
                   <Select value={draft.category} onValueChange={(v) => setDraft({ ...draft, category: v as RuleCategory })}>
-                    <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="mt-[var(--sp-2)] h-11"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{t(`admin.moderation.category.${c}`)}</SelectItem>)}
                     </SelectContent>
@@ -554,7 +554,7 @@ function AdminContentRulesPage() {
                 <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.severity")}
                   <Select value={draft.severity} onValueChange={(v) => setDraft({ ...draft, severity: v as RuleSeverity })}>
-                    <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="mt-[var(--sp-2)] h-11"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {SEVERITIES.map((s) => <SelectItem key={s} value={s}>{t(`admin.moderation.severity.${s}`)}</SelectItem>)}
                     </SelectContent>
@@ -563,7 +563,7 @@ function AdminContentRulesPage() {
                 <label className="block text-desc font-medium text-foreground">
                   {t("admin.contentRules.action")}
                   <Select value={draft.action} onValueChange={(v) => setDraft({ ...draft, action: v as RuleAction })}>
-                    <SelectTrigger className="mt-1.5 h-11"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="mt-[var(--sp-2)] h-11"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {ACTIONS.map((a) => <SelectItem key={a} value={a}>{t(`admin.contentRules.actionValue.${a}`)}</SelectItem>)}
                     </SelectContent>
@@ -574,7 +574,7 @@ function AdminContentRulesPage() {
                   <Input
                     value={draft.weight}
                     inputMode="numeric"
-                    className="mt-1.5 h-11"
+                    className="mt-[var(--sp-2)] h-11"
                     onChange={(e) => setDraft({ ...draft, weight: e.target.value })}
                   />
                 </label>
@@ -589,7 +589,7 @@ function AdminContentRulesPage() {
                   value={draft.notes}
                   onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
                   rows={2}
-                  className="mt-1.5"
+                  className="mt-[var(--sp-2)]"
                 />
               </label>
               {draftError && <p className="text-desc text-destructive">{draftError}</p>}

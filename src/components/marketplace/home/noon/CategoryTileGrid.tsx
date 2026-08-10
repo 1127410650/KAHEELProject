@@ -59,7 +59,7 @@ const FALLBACK = [
 /* مقياس مضغوط مطابق لبطاقة «البحث في السوق»: مربع 56px والاسم تحته ⇒ ارتفاع
    الصف ≈84px، وصفّان لثماني بلاطات ≈ 180px بلا هزّة تخطيط (الأبعاد ثابتة). */
 const tileClass =
-  "k-tile grid size-[56px] place-items-center rounded-2xl shadow-[0_1px_2px_rgb(23_20_35/0.05)] transition group-hover:-translate-y-0.5";
+  "k-tile grid size-[56px] place-items-center rounded-[var(--r-card)] shadow-[0_1px_2px_rgb(23_20_35/0.05)] transition group-hover:-translate-y-0.5";
 const linkClass =
   "group flex h-[84px] min-w-0 flex-col items-center justify-start gap-1 outline-none focus-visible:ring-2 focus-visible:ring-primary/45";
 const labelClass = "w-full truncate text-center text-desc font-bold leading-tight text-foreground";

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { LayoutGrid, List, Loader2, MapPin, SlidersHorizontal, X } from "lucide-react";
+import { LayoutGrid, List, Loader2, MapPin, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { KEmptyState } from "@/components/marketplace/KEmptyState";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ADD_LISTING_PATH } from "@/lib/add-listing";
@@ -202,9 +203,9 @@ function RealEstateFallback() {
     <MarketShell footer="none">
       <div className="real-estate-experience bg-background">
         <Skeleton className="h-[240px] w-full rounded-none sm:h-[280px]" />
-        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-3 py-6 sm:grid-cols-4 sm:px-5 lg:px-8">
+        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-2 gap-3 px-[var(--page-x)] py-6 sm:grid-cols-4 ">
           {Array.from({ length: 8 }).map((_, index) => (
-            <Skeleton key={index} className="aspect-[3/4] rounded-2xl" />
+            <Skeleton key={index} className="aspect-[3/4] rounded-[var(--r-card)]" />
           ))}
         </div>
       </div>
@@ -597,7 +598,7 @@ function GenericSearchPage() {
 
   const filterBody = (
     <div className="space-y-4">
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="f-domain">{t("market.search.domain")}</Label>
         <select
           id="f-domain"
@@ -615,7 +616,7 @@ function GenericSearchPage() {
       </div>
 
       {!draftIsBusiness && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="f-cat">{t("market.filters.category")}</Label>
           <select
             id="f-cat"
@@ -637,7 +638,7 @@ function GenericSearchPage() {
       )}
 
       {!draftIsBusiness && draftSubs.length > 0 && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="f-sub">{t("market.filters.subcategory")}</Label>
           <select
             id="f-sub"
@@ -655,7 +656,7 @@ function GenericSearchPage() {
         </div>
       )}
 
-      <div className="space-y-1.5">
+      <div className="space-y-[var(--sp-2)]">
         <Label htmlFor="f-city">{t("market.filters.city")}</Label>
         <select
           id="f-city"
@@ -674,7 +675,7 @@ function GenericSearchPage() {
       </div>
 
       {!draftIsBusiness && (
-        <div className="space-y-1.5">
+        <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="f-type">{t("market.search.offerType")}</Label>
           <select
             id="f-type"
@@ -694,7 +695,7 @@ function GenericSearchPage() {
 
       {!draftIsBusiness && (
         <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="f-min">{t("market.filters.minPrice")}</Label>
             <Input
               id="f-min"
@@ -706,7 +707,7 @@ function GenericSearchPage() {
               }
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="f-max">{t("market.filters.maxPrice")}</Label>
             <Input
               id="f-max"
@@ -771,7 +772,7 @@ function GenericSearchPage() {
         banner={<HomeAdStrip addHref="/my/listings/new" />}
         progress={progressSteps}
       />
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
         <section className="market-page-intro">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-page font-black text-foreground">
@@ -955,7 +956,7 @@ function GenericSearchPage() {
               {/* Placeholders mirror the real cards box-for-box — row cards on
                   phones, grid cards from `sm` — so results swap in without any
                   reflow. */}
-              <div className="flex flex-col gap-2.5 sm:hidden">
+              <div className="flex flex-col gap-[var(--sp-3)] sm:hidden">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <ListingRowSkeleton key={i} />
                 ))}
@@ -967,21 +968,25 @@ function GenericSearchPage() {
               </div>
             </>
           ) : empty ? (
-            <div className="k-surface border-dashed px-4 py-8 text-center">
-              <p className="text-sm font-medium text-foreground">{t("market.noResults")}</p>
-              <div className="mt-3 flex flex-wrap justify-center gap-2">
-                {activeFilterCount > 0 && (
-                  <Button variant="outline" size="sm" onClick={clearFilters}>
-                    {t("market.search.clearFilters")}
+            <KEmptyState
+              icon={SearchX}
+              title={t("market.noResults")}
+              hint={t("market.search.emptyHint")}
+              action={
+                <>
+                  {activeFilterCount > 0 && (
+                    <Button variant="outline" className="h-11" onClick={clearFilters}>
+                      {t("market.search.clearFilters")}
+                    </Button>
+                  )}
+                  <Button asChild className="h-11">
+                    <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
+                      {t("market.addListing")}
+                    </Link>
                   </Button>
-                )}
-                <Button asChild size="sm">
-                  <Link to={ADD_LISTING_PATH} search={{ field: undefined }}>
-                    {t("market.addListing")}
-                  </Link>
-                </Button>
-              </div>
-            </div>
+                </>
+              }
+            />
           ) : businessMode ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {bizRows.map((row) => (
@@ -995,7 +1000,7 @@ function GenericSearchPage() {
           ) : view === "grid" ? (
             <>
               {/* Phones show one clear card per row; two columns from tablet up. */}
-              <div className="flex flex-col gap-2.5 sm:hidden">
+              <div className="flex flex-col gap-[var(--sp-3)] sm:hidden">
                 {rows.map((l) => (
                   <ListingCard key={l.id} listing={l} view="row" origin="search" />
                 ))}
@@ -1007,7 +1012,7 @@ function GenericSearchPage() {
               </div>
             </>
           ) : (
-            <div className="space-y-2.5">
+            <div className="space-y-[var(--sp-3)]">
               {rows.map((l) => (
                 <ListingCard key={l.id} listing={l} view="list" origin="search" />
               ))}

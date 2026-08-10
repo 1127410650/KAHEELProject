@@ -62,7 +62,7 @@ export function GuideBookingButton({ place }: { place: GuidePlace }) {
     <button
       type="button"
       onClick={() => void onClick()}
-      className="k-press inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-primary to-primary/80 px-4 py-2.5 text-desc font-black text-primary-foreground shadow-sm sm:w-auto"
+      className="k-press inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-primary to-primary/80 px-4 py-[var(--sp-3)] text-desc font-black text-primary-foreground shadow-sm sm:w-auto"
     >
       <CalendarPlus className="size-4" aria-hidden />
       حجز موعد

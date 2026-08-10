@@ -230,8 +230,8 @@ function ProviderNetworkPage() {
     return (
       <DashboardShell title={locale === "ar" ? "حساب المتجر والشبكة" : "Store account & network"}>
         <div className="space-y-3">
-          <Skeleton className="h-40 rounded-3xl" />
-          <Skeleton className="h-80 rounded-3xl" />
+          <Skeleton className="h-40 rounded-[var(--r-card)]" />
+          <Skeleton className="h-80 rounded-[var(--r-card)]" />
         </div>
       </DashboardShell>
     );
@@ -240,7 +240,7 @@ function ProviderNetworkPage() {
   return (
     <DashboardShell title={locale === "ar" ? "حساب المتجر والشبكة" : "Store account & network"}>
       <Tabs defaultValue="account" className="space-y-5">
-        <TabsList className="h-auto w-full justify-start overflow-x-auto rounded-2xl p-1">
+        <TabsList className="h-auto w-full justify-start overflow-x-auto rounded-[var(--r-card)] p-1">
           <TabsTrigger value="account" className="shrink-0">
             <Store className="me-1 size-4" />
             {locale === "ar" ? "نوع الحساب" : "Account type"}
@@ -256,7 +256,7 @@ function ProviderNetworkPage() {
         </TabsList>
 
         <TabsContent value="account" className="space-y-4">
-          <Card className="overflow-hidden rounded-3xl">
+          <Card className="overflow-hidden rounded-[var(--r-card)]">
             <CardHeader className="bg-gradient-to-br from-market-navy to-primary-deep text-white">
               <CardTitle className="flex items-center gap-2">
                 <Boxes className="size-5 text-primary-foreground/75" />
@@ -311,7 +311,7 @@ function ProviderNetworkPage() {
                   />
                 </div>
               </div>
-              <label className="flex items-center justify-between gap-4 rounded-2xl border p-4 text-sm">
+              <label className="flex items-center justify-between gap-4 rounded-[var(--r-card)] border p-4 text-sm">
                 <span>
                   <span className="block font-bold">
                     {locale === "ar" ? "استقبال طلبات الربط" : "Accept partner requests"}
@@ -338,7 +338,7 @@ function ProviderNetworkPage() {
           </Card>
 
           {profile.data?.category ? (
-            <Card className="rounded-3xl">
+            <Card className="rounded-[var(--r-card)]">
               <CardContent className="space-y-3 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
@@ -371,7 +371,7 @@ function ProviderNetworkPage() {
 
         <TabsContent value="network" className="space-y-5">
           {!profile.data ? (
-            <Card className="rounded-3xl border-dashed">
+            <Card className="rounded-[var(--r-card)] border-dashed">
               <CardContent className="p-8 text-center">
                 <Store className="mx-auto size-9 text-primary" />
                 <p className="mt-3 font-black">
@@ -383,7 +383,7 @@ function ProviderNetworkPage() {
             </Card>
           ) : (
             <>
-              <Card className="rounded-3xl">
+              <Card className="rounded-[var(--r-card)]">
                 <CardContent className="space-y-4 p-5">
                   <div>
                     <h2 className="font-black">
@@ -421,9 +421,9 @@ function ProviderNetworkPage() {
                     </select>
                   </div>
                   {directory.isLoading ? (
-                    <Skeleton className="h-32 rounded-2xl" />
+                    <Skeleton className="h-32 rounded-[var(--r-card)]" />
                   ) : visibleProviders.length === 0 ? (
-                    <p className="rounded-2xl border border-dashed p-6 text-center text-sm text-muted-foreground">
+                    <p className="rounded-[var(--r-card)] border border-dashed p-6 text-center text-sm text-muted-foreground">
                       {locale === "ar"
                         ? "لا توجد حسابات منشورة مطابقة حاليًا."
                         : "No matching published accounts."}
@@ -435,7 +435,7 @@ function ProviderNetworkPage() {
                         return (
                           <div
                             key={provider.storefront_id}
-                            className="flex items-center gap-3 rounded-2xl border p-4"
+                            className="flex items-center gap-3 rounded-[var(--r-card)] border p-4"
                           >
                             <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-secondary">
                               {relationType === "delivery_partner" ? (
@@ -483,7 +483,7 @@ function ProviderNetworkPage() {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-3xl">
+              <Card className="rounded-[var(--r-card)]">
                 <CardHeader>
                   <CardTitle className="text-lg">
                     {locale === "ar" ? "طلبات وروابط الشركاء" : "Partner requests and links"}
@@ -491,7 +491,7 @@ function ProviderNetworkPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {relations.isLoading ? (
-                    <Skeleton className="h-28 rounded-2xl" />
+                    <Skeleton className="h-28 rounded-[var(--r-card)]" />
                   ) : (relations.data ?? []).length === 0 ? (
                     <p className="text-sm text-muted-foreground">
                       {locale === "ar" ? "لا توجد روابط بعد." : "No provider links yet."}
@@ -500,7 +500,7 @@ function ProviderNetworkPage() {
                     (relations.data ?? []).map((relation) => (
                       <div
                         key={relation.id}
-                        className="flex flex-wrap items-center gap-3 rounded-2xl border p-4"
+                        className="flex flex-wrap items-center gap-3 rounded-[var(--r-card)] border p-4"
                       >
                         <div className="min-w-0 flex-1">
                           <Link
@@ -573,7 +573,7 @@ function ProviderNetworkPage() {
         </TabsContent>
 
         <TabsContent value="integrations" className="space-y-5">
-          <Card className="rounded-3xl">
+          <Card className="rounded-[var(--r-card)]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <PlugZap className="size-5 text-primary" />
@@ -664,7 +664,7 @@ function ProviderNetworkPage() {
                 (row) => row.code === integration.integration_code,
               );
               return (
-                <Card key={integration.id} className="rounded-3xl">
+                <Card key={integration.id} className="rounded-[var(--r-card)]">
                   <CardContent className="flex items-start gap-3 p-5">
                     <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-secondary">
                       <PlugZap className="size-5 text-primary" />
@@ -690,7 +690,7 @@ function ProviderNetworkPage() {
             })}
           </div>
           {(integrations.data ?? []).length === 0 ? (
-            <p className="rounded-3xl border border-dashed p-8 text-center text-sm text-muted-foreground">
+            <p className="rounded-[var(--r-card)] border border-dashed p-8 text-center text-sm text-muted-foreground">
               {locale === "ar" ? "لا توجد موصلات خارجية بعد." : "No external connectors yet."}
             </p>
           ) : null}

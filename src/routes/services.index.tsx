@@ -154,7 +154,7 @@ function ServicesMarketplacePage() {
           progress={progressSteps}
         />
         <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
-          <div className="market-hero-band relative mx-auto w-full max-w-7xl px-4">
+          <div className="market-hero-band relative mx-auto w-full max-w-7xl px-[var(--page-x)]">
             <div className="max-w-2xl">
               <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-desc font-bold text-primary">
                 <ShieldCheck className="size-4" />
@@ -165,13 +165,13 @@ function ServicesMarketplacePage() {
               <h1 className="font-black">
                 {locale === "ar" ? "خدمتك، في الوقت الذي يناسبك" : "Your service, at your time"}
               </h1>
-              <p className="mt-1.5 max-w-xl text-muted-foreground">
+              <p className="mt-[var(--sp-2)] max-w-xl text-muted-foreground">
                 {locale === "ar"
                   ? "اختر الخدمة والمختص والموعد، ثم تابع حالة الحجز من حسابك خطوة بخطوة."
                   : "Choose a service, professional and time, then track every booking step from your account."}
               </p>
             </div>
-            <div className="relative mt-3.5 max-w-2xl">
+            <div className="relative mt-[var(--sp-4)] max-w-2xl">
               <Search className="pointer-events-none absolute start-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
               <Input
                 value={query}
@@ -181,14 +181,14 @@ function ServicesMarketplacePage() {
                     ? "ابحث عن تنظيف، صيانة، تدريب…"
                     : "Search cleaning, maintenance, training…"
                 }
-                className="h-14 rounded-2xl border-border bg-card ps-12 text-base text-foreground shadow-panel placeholder:text-muted-foreground"
+                className="h-14 rounded-[var(--r-card)] border-border bg-card ps-12 text-base text-foreground shadow-panel placeholder:text-muted-foreground"
               />
             </div>
           </div>
         </section>
 
 
-        <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-7">
+        <div className="mx-auto w-full max-w-7xl space-y-8 px-[var(--page-x)] py-[var(--sp-8)]">
           <section aria-labelledby="service-categories-title">
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
@@ -212,7 +212,7 @@ function ServicesMarketplacePage() {
                 ))}
               </div>
             ) : (
-              <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5">
+              <div className="-mx-[var(--page-x)] flex snap-x gap-3 overflow-x-auto px-[var(--page-x)] pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5">
                 {(categories.data ?? []).map((row) => (
                   <CategoryButton
                     key={row.code}
@@ -248,11 +248,11 @@ function ServicesMarketplacePage() {
             {directory.isLoading ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }, (_, index) => (
-                  <Skeleton key={index} className="h-72 rounded-3xl" />
+                  <Skeleton key={index} className="h-72 rounded-[var(--r-card)]" />
                 ))}
               </div>
             ) : (directory.data ?? []).length === 0 ? (
-              <div className="rounded-3xl border border-dashed bg-card px-5 py-14 text-center">
+              <div className="rounded-[var(--r-card)] border border-dashed bg-card px-5 py-14 text-center">
                 <Sparkles className="mx-auto size-9 text-primary" />
                 <h3 className="mt-3 font-black">
                   {locale === "ar" ? "لا توجد خدمات مطابقة حاليًا" : "No matching services yet"}
@@ -275,7 +275,7 @@ function ServicesMarketplacePage() {
                   return (
                     <article
                       key={`${item.storefront_id}:${item.item_id}`}
-                      className="group overflow-hidden rounded-3xl border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                      className="group overflow-hidden rounded-[var(--r-card)] border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
                     >
                       <div className="relative h-40 overflow-hidden bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep">
                         {image ? (
@@ -291,7 +291,7 @@ function ServicesMarketplacePage() {
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent" />
-                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-desc font-black text-foreground shadow">
+                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-[var(--sp-3)] py-1 text-desc font-black text-foreground shadow">
                           {item.confirmation_mode === "instant"
                             ? locale === "ar"
                               ? "تأكيد فوري"

@@ -83,8 +83,8 @@ export function SyriaHomeGateway() {
           to={gateway.to}
           className={
             reducedMotion
-              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:px-5 sm:py-4"
-              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:px-5 sm:py-4"
+              ? "group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:py-4"
+              : "kahli-guide-slide group relative z-10 flex items-center gap-3 px-3 py-3 text-brand-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-700 sm:gap-4 sm:py-4"
           }
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
@@ -112,7 +112,7 @@ export function SyriaHomeGateway() {
           </span>
 
           <div className="min-w-0 flex-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-brand-400/35 bg-brand-300/25 px-1.5 py-0.5 text-desc font-black text-brand-800">
+            <span className="inline-flex items-center gap-1 rounded-full border border-brand-400/35 bg-brand-300/25 px-[var(--sp-2)] py-0.5 text-desc font-black text-brand-800">
               <Sparkles className="size-2.5 sm:size-3" aria-hidden />
               {gateway.eyebrow}
             </span>
@@ -123,7 +123,7 @@ export function SyriaHomeGateway() {
               {gateway.description}
             </p>
 
-            <span className="mt-1 inline-flex items-center gap-1 text-desc font-black text-brand-700 sm:mt-1.5 sm:text-desc">
+            <span className="mt-1 inline-flex items-center gap-1 text-desc font-black text-brand-700 sm:mt-[var(--sp-2)] sm:text-desc">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
             </span>

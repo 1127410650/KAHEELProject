@@ -61,7 +61,7 @@ export function SlotRotationControls({ slot, current, busy, onSave }: SlotRotati
 
   return (
     <section className="mt-4 space-y-3 border-t border-border pt-3">
-      <h3 className="flex items-center gap-1.5 text-desc font-extrabold text-foreground">
+      <h3 className="flex items-center gap-[var(--sp-2)] text-desc font-extrabold text-foreground">
         <Repeat className="size-4 text-primary" aria-hidden />
         التدوير التلقائي
       </h3>
@@ -94,7 +94,7 @@ export function SlotRotationControls({ slot, current, busy, onSave }: SlotRotati
             </select>
           </label>
 
-          <fieldset className="rounded-xl border border-border p-2.5">
+          <fieldset className="rounded-xl border border-border p-[var(--sp-3)]">
             <legend className="px-1 text-desc font-bold text-foreground">
               التصاميم في الدورة <span className="num">{ids.length.toLocaleString("en-US")}</span>
             </legend>
@@ -128,7 +128,7 @@ export function SlotRotationControls({ slot, current, busy, onSave }: SlotRotati
             </p>
           </fieldset>
 
-          <div className="rounded-xl border border-primary/25 bg-primary/8 p-2.5 text-desc text-foreground">
+          <div className="rounded-xl border border-primary/25 bg-primary/8 p-[var(--sp-3)] text-desc text-foreground">
             <strong className="block font-extrabold">سجل التدوير</strong>
             <span className="block">
               النشط الآن: {activeName ?? "—"} · الفترة {periodLabel(period)}

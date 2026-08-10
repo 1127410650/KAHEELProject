@@ -133,7 +133,7 @@ function MarketSetupPage() {
   return (
     <div dir={dir} className="market-surface flex min-h-screen items-start justify-center px-4 py-8">
       <div className="w-full max-w-sm">
-        <div className="mb-5 flex items-center gap-2.5">
+        <div className="mb-5 flex items-center gap-[var(--sp-3)]">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
             <Store className="size-4" aria-hidden />
           </span>
@@ -149,7 +149,7 @@ function MarketSetupPage() {
         </p>
 
         <form onSubmit={onSubmit} className="mt-5 space-y-4">
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label>{t("market.geo.country")}</Label>
             <div className="flex min-h-11 items-center gap-2 rounded-md border border-input bg-muted/35 px-3 text-sm font-bold text-foreground">
               <Flag className="size-4 text-primary" aria-hidden />
@@ -174,7 +174,7 @@ function MarketSetupPage() {
           </p>
           <PhoneVisibilityField value={visibility} onChange={setVisibility} />
 
-          <div className="min-w-0 space-y-1.5">
+          <div className="min-w-0 space-y-[var(--sp-2)]">
             <Label htmlFor="display_name">{t("market.setup.displayName")}</Label>
             <Input
               id="display_name"

@@ -43,8 +43,8 @@ export function StoreTemplateShowcase({ template }: { template: StoreTemplate })
 
 function Shell({ template, children }: { template: StoreTemplate; children: React.ReactNode }) {
   return (
-    <section className={`mb-5 overflow-hidden rounded-3xl bg-gradient-to-br ${template.gradient} p-3 text-white shadow-raised sm:p-5`}>
-      <div className="rounded-2xl border border-white/15 bg-black/10 p-3 backdrop-blur-sm sm:p-4">
+    <section className={`mb-5 overflow-hidden rounded-[var(--r-card)] bg-gradient-to-br ${template.gradient} p-3 text-white shadow-raised sm:p-5`}>
+      <div className="rounded-[var(--r-card)] border border-white/15 bg-black/10 p-3 backdrop-blur-sm sm:p-4">
         {children}
       </div>
     </section>
@@ -55,14 +55,14 @@ function Header({ template, action = "تسوق الآن" }: { template: StoreTem
   const Icon = template.icon;
   return (
     <div className="flex items-center gap-3">
-      <span className="grid size-11 place-items-center rounded-2xl border border-white/20 bg-white/15">
+      <span className="grid size-11 place-items-center rounded-[var(--r-card)] border border-white/20 bg-white/15">
         <Icon className="size-5" aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-desc font-semibold text-white/60">معاينة واجهة المتجر</p>
         <h2 className="text-section truncate font-black">{template.title}</h2>
       </div>
-      <span className="rounded-full bg-white px-3 py-1.5 text-desc font-black text-slate-900 sm:text-desc">{action}</span>
+      <span className="rounded-full bg-white px-3 py-[var(--sp-2)] text-desc font-black text-slate-900 sm:text-desc">{action}</span>
     </div>
   );
 }
@@ -72,7 +72,7 @@ function ProductCards({ template, icon }: { template: StoreTemplate; icon?: Reac
   return (
     <div className="mt-4 grid grid-cols-3 gap-2">
       {items.map((item, index) => (
-        <div key={item} className="rounded-xl border border-white/15 bg-white/10 p-2.5 backdrop-blur-sm">
+        <div key={item} className="rounded-xl border border-white/15 bg-white/10 p-[var(--sp-3)] backdrop-blur-sm">
           <div className="flex items-center justify-between gap-1">
             <span className="grid size-7 place-items-center rounded-lg bg-white/15">
               {icon ?? <ShoppingBag className="size-3.5" aria-hidden />}
@@ -91,7 +91,7 @@ function FashionShowcase({ template, feminine = false }: { template: StoreTempla
   return (
     <Shell template={template}>
       <Header template={template} action={feminine ? "اكتشفي الجديد" : "اكتشف الجديد"} />
-      <div className="mt-4 rounded-2xl border border-white/15 bg-white/10 p-4">
+      <div className="mt-4 rounded-[var(--r-card)] border border-white/15 bg-white/10 p-4">
         <div className="flex items-start gap-3">
           <span className="grid size-12 shrink-0 place-items-center rounded-full bg-white/15">
             {feminine ? <Heart className="size-6" aria-hidden /> : <Sparkles className="size-6" aria-hidden />}
@@ -112,12 +112,12 @@ function GamesShowcase({ template }: { template: StoreTemplate }) {
     <Shell template={template}>
       <Header template={template} action="ابدأ اللعب" />
       <div className="mt-4 grid grid-cols-[1.3fr_0.7fr] gap-2">
-        <div className="rounded-2xl border border-cyan-300/30 bg-black/25 p-4 shadow-[0_0_24px_rgba(34,211,238,0.18)]">
+        <div className="rounded-[var(--r-card)] border border-cyan-300/30 bg-black/25 p-4 shadow-[0_0_24px_rgba(34,211,238,0.18)]">
           <Gamepad2 className="size-7 text-cyan-200" aria-hidden />
           <p className="mt-5 text-sm font-black">منطقة اللاعبين</p>
           <p className="mt-1 text-desc text-cyan-50/70">أجهزة، ألعاب، بطاقات وعروض حصرية.</p>
         </div>
-        <div className="rounded-2xl border border-fuchsia-300/30 bg-fuchsia-500/10 p-3">
+        <div className="rounded-[var(--r-card)] border border-fuchsia-300/30 bg-fuchsia-500/10 p-3">
           <Flame className="size-5 text-fuchsia-200" aria-hidden />
           <p className="mt-6 text-desc font-black">الأكثر رواجًا</p>
         </div>
@@ -131,8 +131,8 @@ function FitnessShowcase({ template }: { template: StoreTemplate }) {
   return (
     <Shell template={template}>
       <Header template={template} action="احجز تجربة" />
-      <div className="mt-4 flex items-center gap-3 rounded-2xl border border-lime-300/20 bg-black/20 p-4">
-        <span className="grid size-12 place-items-center rounded-2xl bg-lime-300 text-slate-950">
+      <div className="mt-4 flex items-center gap-3 rounded-[var(--r-card)] border border-lime-300/20 bg-black/20 p-4">
+        <span className="grid size-12 place-items-center rounded-[var(--r-card)] bg-lime-300 text-slate-950">
           <Dumbbell className="size-6" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
@@ -150,7 +150,7 @@ function RestaurantShowcase({ template }: { template: StoreTemplate }) {
   return (
     <Shell template={template}>
       <Header template={template} action="اطلب الآن" />
-      <div className="mt-4 rounded-2xl border border-amber-200/20 bg-black/15 p-4">
+      <div className="mt-4 rounded-[var(--r-card)] border border-amber-200/20 bg-black/15 p-4">
         <div className="flex items-center gap-3">
           <span className="grid size-12 place-items-center rounded-full bg-amber-300 text-orange-950">
             <UtensilsCrossed className="size-6" aria-hidden />
@@ -170,7 +170,7 @@ function GeneralShowcase({ template }: { template: StoreTemplate }) {
   return (
     <Shell template={template}>
       <Header template={template} />
-      <div className="mt-4 rounded-2xl border border-white/15 bg-white/10 p-4">
+      <div className="mt-4 rounded-[var(--r-card)] border border-white/15 bg-white/10 p-4">
         <p className="text-sm font-black">واجهة مصممة لنشاطك</p>
         <p className="mt-1 text-desc leading-5 text-white/70">تعرض أهم المنتجات والخدمات والتصنيفات بطريقة واضحة ومتجاوبة.</p>
       </div>

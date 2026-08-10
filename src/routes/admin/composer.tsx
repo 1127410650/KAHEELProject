@@ -241,7 +241,7 @@ function BlockRow({
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={[
-        "rounded-2xl border border-border bg-card p-3",
+        "rounded-[var(--r-card)] border border-border bg-card p-3",
         isDragging ? "opacity-70 shadow-lg" : "",
         deleted ? "opacity-60" : "",
       ].join(" ")}
@@ -371,7 +371,7 @@ function AdminComposerPage() {
     <AdminShell title="مؤلّف الشاشات">
       <div className="space-y-5">
         {/* اختيار الصفحة */}
-        <div className="rounded-2xl border border-border bg-card p-3">
+        <div className="rounded-[var(--r-card)] border border-border bg-card p-3">
           <Label className="text-desc">الصفحة</Label>
           <div className="mt-2 flex flex-wrap gap-2">
             {COMPOSER_PAGES.map((p) => (
@@ -391,7 +391,7 @@ function AdminComposerPage() {
         </div>
 
         {/* إضافة كتلة */}
-        <div className="rounded-2xl border border-border bg-card p-3">
+        <div className="rounded-[var(--r-card)] border border-border bg-card p-3">
           <Label className="text-desc">إضافة كتلة من المكتبة</Label>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <Select value={addType} onValueChange={(v) => setAddType(v as BlockType)}>
@@ -431,11 +431,11 @@ function AdminComposerPage() {
           <h2 className="mb-3 text-xl font-extrabold text-foreground">كتل الصفحة</h2>
           {blocks.isPending ? (
             <div className="space-y-2">
-              <Skeleton className="h-20 w-full rounded-2xl" />
-              <Skeleton className="h-20 w-full rounded-2xl" />
+              <Skeleton className="h-20 w-full rounded-[var(--r-card)]" />
+              <Skeleton className="h-20 w-full rounded-[var(--r-card)]" />
             </div>
           ) : live.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-border p-4 text-desc text-muted-foreground">
+            <p className="rounded-[var(--r-card)] border border-dashed border-border p-4 text-desc text-muted-foreground">
               لا كتل بعد — الصفحة تعرض تركيبها المكتوب في الكود حتى تُضاف أول كتلة.
             </p>
           ) : (
@@ -481,7 +481,7 @@ function AdminComposerPage() {
               {trashed.map((block) => (
                 <li
                   key={block.id}
-                  className="flex items-center justify-between gap-2 rounded-2xl border border-border bg-card p-3"
+                  className="flex items-center justify-between gap-2 rounded-[var(--r-card)] border border-border bg-card p-3"
                 >
                   <span className="text-body font-bold text-foreground">
                     {blockDefinition(block.block_type)?.name_ar ?? block.block_type}
@@ -502,7 +502,7 @@ function AdminComposerPage() {
         )}
 
         {/* نسخ التصميم */}
-        <section className="rounded-2xl border border-border bg-card p-3">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-3">
           <h2 className="text-xl font-extrabold text-foreground">نسخ التصميم</h2>
           <p className="mt-1 text-desc text-muted-foreground">
             حفظ التركيبة الحالية باسم، واسترجاع أي نسخة لاحقًا. الاسترجاع يحفظ الحالة الراهنة
@@ -559,7 +559,7 @@ function AdminComposerPage() {
         {/* معاينة حية بنفس عارض الكتل الذي يستخدمه الزائر */}
         <section>
           <h2 className="mb-3 text-xl font-extrabold text-foreground">معاينة حية</h2>
-          <div className="overflow-hidden rounded-2xl border border-border bg-background p-3">
+          <div className="overflow-hidden rounded-[var(--r-card)] border border-border bg-background p-3">
             {preview.length === 0 ? (
               <p className="text-desc text-muted-foreground">لا كتل مرئية لتُعرض.</p>
             ) : (

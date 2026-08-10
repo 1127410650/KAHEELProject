@@ -132,7 +132,7 @@ function HeroImageBlock({ settings }: { settings: BlockSettings }) {
     <BlockLinkWrap settings={settings}>
       <div
         className={cn(
-          "relative overflow-hidden rounded-3xl bg-muted",
+          "relative overflow-hidden rounded-[var(--r-card)] bg-muted",
           ratio,
           bool(settings, "overlap_header", false) && "-mt-8 shadow-lg",
         )}
@@ -164,7 +164,7 @@ function HeroGradientBlock({ settings }: { settings: BlockSettings }) {
     <BlockLinkWrap settings={settings}>
       <div
         className={cn(
-          "flex flex-col justify-center gap-2 rounded-3xl bg-gradient-to-l from-primary to-primary/70 px-5 py-6",
+          "flex flex-col justify-center gap-2 rounded-[var(--r-card)] bg-gradient-to-l from-primary to-primary/70 px-5 py-6",
           height,
         )}
       >
@@ -185,7 +185,7 @@ function TextStripBlock({ settings }: { settings: BlockSettings }) {
   if (!text) return null;
   return (
     <BlockLinkWrap settings={settings}>
-      <p className={cn("rounded-2xl px-4 py-3 text-center text-base font-bold", tone)}>{text}</p>
+      <p className={cn("rounded-[var(--r-card)] px-4 py-3 text-center text-base font-bold", tone)}>{text}</p>
     </BlockLinkWrap>
   );
 }
@@ -194,7 +194,7 @@ function LinkTileBlock({ settings }: { settings: BlockSettings }) {
   const tone = TONE_CLASS[str(settings, "tone", "brand")] ?? TONE_CLASS["brand"]!;
   return (
     <BlockLinkWrap settings={settings}>
-      <div className={cn("flex min-h-[56px] flex-col justify-center rounded-2xl px-4 py-3", tone)}>
+      <div className={cn("flex min-h-[56px] flex-col justify-center rounded-[var(--r-card)] px-4 py-3", tone)}>
         <span className="text-base font-extrabold">{str(settings, "title_ar", "اكتشف")}</span>
         {str(settings, "subtitle_ar") && (
           <span className="mt-0.5 text-sm opacity-85">{str(settings, "subtitle_ar")}</span>
@@ -282,7 +282,7 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
   const rails = useHomeRails(railSpecs);
 
   return (
-    <div className={cn("space-y-5 sm:space-y-7", className)}>
+    <div className={cn("space-y-5 sm:space-y-[var(--sp-8)]", className)}>
       {blocks.map((block) => {
         const override = overrides?.[block.block_type];
         if (override) return <div key={block.id}>{override(block)}</div>;

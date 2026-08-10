@@ -351,7 +351,7 @@ function ProfilePage() {
                   <img src={shownAvatar} alt="" className="size-full object-cover" />
                 ) : null}
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-[var(--sp-2)]">
                 <div className="flex flex-wrap gap-2">
                   <Button
                     type="button"
@@ -396,7 +396,7 @@ function ProfilePage() {
               />
             </div>
 
-            <div className="min-w-0 space-y-1.5">
+            <div className="min-w-0 space-y-[var(--sp-2)]">
               <Label htmlFor="display_name">{t("market.person.displayName")}</Label>
               <Input
                 id="display_name"
@@ -409,7 +409,7 @@ function ProfilePage() {
               <FieldError message={errors.display_name} />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="headline">{t("market.person.headline")}</Label>
               <Input
                 id="headline"
@@ -419,7 +419,7 @@ function ProfilePage() {
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="about">{t("market.business.about")}</Label>
               <Textarea
                 id="about"
@@ -436,7 +436,7 @@ function ProfilePage() {
             hint={t("market.geo.countryAccountHint")}
           >
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="min-w-0 space-y-1.5">
+              <div className="min-w-0 space-y-[var(--sp-2)]">
                 <Label htmlFor="country_id">{t("market.geo.country")}</Label>
                 <select
                   id="country_id"
@@ -452,7 +452,7 @@ function ProfilePage() {
                   ))}
                 </select>
               </div>
-              <div className="min-w-0 space-y-1.5">
+              <div className="min-w-0 space-y-[var(--sp-2)]">
                 <Label htmlFor="city_id">{t("market.geo.city")}</Label>
                 <select
                   id="city_id"
@@ -470,7 +470,7 @@ function ProfilePage() {
                 </select>
                 <FieldError message={errors.city_id} />
               </div>
-              <div className="min-w-0 space-y-1.5 sm:col-span-2">
+              <div className="min-w-0 space-y-[var(--sp-2)] sm:col-span-2">
                 <Label htmlFor="region">
                   {t("market.person.districtLabel")}{" "}
                   <span className="text-desc font-normal text-muted-foreground">
@@ -518,7 +518,7 @@ function ProfilePage() {
             />
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="min-w-0 space-y-1.5">
+              <div className="min-w-0 space-y-[var(--sp-2)]">
                 <Label htmlFor="public_whatsapp">
                   {t("market.form.whatsapp")}{" "}
                   <span className="text-desc font-normal text-muted-foreground">
@@ -542,7 +542,7 @@ function ProfilePage() {
                 </label>
                 <FieldError message={errors.public_whatsapp} />
               </div>
-              <div className="min-w-0 space-y-1.5">
+              <div className="min-w-0 space-y-[var(--sp-2)]">
                 <Label htmlFor="public_email">
                   {t("market.form.email")}{" "}
                   <span className="text-desc font-normal text-muted-foreground">
@@ -619,7 +619,7 @@ function ProfilePage() {
             <CallSettingsToggle />
           </Section>
 
-          <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur">
+          <div className="sticky bottom-0 -mx-[var(--page-x)] flex flex-wrap items-center gap-3 border-t border-border bg-background/95 px-[var(--page-x)] py-3 backdrop-blur">
             <Button type="submit" disabled={busy}>
               {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {busy ? t("market.person.saving") : t("market.person.saveChanges")}

@@ -152,7 +152,7 @@ function SafetyStrip({
         </span>
         <AdminStatusBadge tone={tone} label={t(`admin.state.${safety.risk_level}`)} />
       </div>
-      <div className="mt-1.5 flex flex-wrap gap-1">
+      <div className="mt-[var(--sp-2)] flex flex-wrap gap-1">
         <AdminStatusBadge
           tone={safety.verified ? "done" : "idle"}
           label={t(safety.verified ? "admin.safety.verified" : "admin.verification.unverified")}
@@ -184,7 +184,7 @@ function SafetyStrip({
             <AdminStatusBadge tone="done" label={t("admin.safety.clean")} />
           )}
       </div>
-      <div className="mt-1.5 truncate text-desc">{href}</div>
+      <div className="mt-[var(--sp-2)] truncate text-desc">{href}</div>
     </div>
   );
 }

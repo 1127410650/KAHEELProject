@@ -86,7 +86,7 @@ function Stat({
   value: string;
 }) {
   return (
-    <li className="rounded-2xl border border-border bg-card px-3 py-3">
+    <li className="rounded-[var(--r-card)] border border-border bg-card px-3 py-3">
       <span className="flex items-center gap-1 text-nav text-muted-foreground">
         <Icon className="size-4 shrink-0" aria-hidden />
         {label}
@@ -148,8 +148,8 @@ function AdvertiserProfilePage() {
     return (
       <AqarShell title="بروفايل المعلن" back="/aqar" backLabel={label("aqar.back", "عقار")}>
         <div className="mx-auto max-w-3xl space-y-3 p-4">
-          <Skeleton className="h-24 w-full rounded-2xl" />
-          <Skeleton className="h-20 w-full rounded-2xl" />
+          <Skeleton className="h-24 w-full rounded-[var(--r-card)]" />
+          <Skeleton className="h-20 w-full rounded-[var(--r-card)]" />
         </div>
       </AqarShell>
     );
@@ -195,7 +195,7 @@ function AdvertiserProfilePage() {
     >
       <div className="mx-auto w-full max-w-3xl pb-8">
         <section className="px-4 pt-4">
-          <div className="rounded-2xl border border-border bg-card p-4">
+          <div className="rounded-[var(--r-card)] border border-border bg-card p-4">
             <h1 className="flex flex-wrap items-center gap-2 text-page font-extrabold text-foreground">
               {row.display_name}
               {row.verification_status === "verified" ? (
@@ -346,8 +346,8 @@ function AdvertiserProfilePage() {
           </h2>
           {listings.isPending ? (
             <div className="grid grid-cols-2 gap-3">
-              <Skeleton className="h-52 rounded-2xl" />
-              <Skeleton className="h-52 rounded-2xl" />
+              <Skeleton className="h-52 rounded-[var(--r-card)]" />
+              <Skeleton className="h-52 rounded-[var(--r-card)]" />
             </div>
           ) : (listings.data ?? []).length === 0 ? (
             <p className="text-body text-muted-foreground">لا توجد إعلانات منشورة حاليًا.</p>
@@ -381,10 +381,10 @@ function AdvertiserProfilePage() {
               <img
                 src={qrPng}
                 alt="رمز QR لبروفايل المعلن"
-                className="size-56 rounded-2xl border border-border bg-card p-2"
+                className="size-56 rounded-[var(--r-card)] border border-border bg-card p-2"
               />
             ) : (
-              <Skeleton className="size-56 rounded-2xl" />
+              <Skeleton className="size-56 rounded-[var(--r-card)]" />
             )}
             <p className="text-nav text-muted-foreground" dir="ltr">
               {profileUrl.replace(/^https?:\/\//, "")}

@@ -142,12 +142,12 @@ export function MarketHeader({
 
         {/* صف الهوية: الشعار + الموقع + إنشاء إعلان. */}
         <div
-          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-3 sm:px-5 lg:px-8"
+          className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-[var(--page-x)]"
           style={{ minHeight: "44px" }}
         >
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-1.5"
+            className="flex shrink-0 items-center gap-[var(--sp-2)]"
             aria-label={t("market.brand")}
           >
             <img
@@ -166,7 +166,7 @@ export function MarketHeader({
           <button
             type="button"
             onClick={() => setLocationOpen(true)}
-            className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            className="flex min-w-0 items-center justify-center gap-[var(--sp-2)] rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
           >
             <MapPin className="size-4 shrink-0" aria-hidden />
@@ -351,7 +351,7 @@ export function MarketCompactFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
-      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-4 text-desc text-muted-foreground lg:px-6">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-[var(--page-x)] py-4 text-desc text-muted-foreground">
         <p>{t("market.footer.rights")}</p>
         {(
           [

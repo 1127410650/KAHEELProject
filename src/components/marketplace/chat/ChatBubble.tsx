@@ -308,7 +308,7 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
 
   return (
     <li className={mine ? "flex flex-col items-end" : "flex flex-col items-start"}>
-      <div className="flex max-w-[85%] items-start gap-1">
+      <div className="flex max-w-[78%] items-start gap-[var(--sp-2)]">
         {mine && !message.deleted_at && !optimistic && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -339,8 +339,9 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
             card
               ? "w-full"
               : mine
-                ? "rounded-2xl rounded-ee-sm bg-primary px-3 py-2 text-sm text-primary-foreground shadow-sm"
-                : "rounded-2xl rounded-ss-sm bg-secondary px-3 py-2 text-sm text-secondary-foreground shadow-sm",
+                ? "k-bubble rounded-ee-sm bg-primary p-[var(--sp-3)] text-primary-foreground shadow-sm"
+                : "k-bubble rounded-ss-sm bg-secondary p-[var(--sp-3)] text-secondary-foreground shadow-sm",
+
             message.pending ? "opacity-70" : "",
             message.failed ? "ring-1 ring-destructive" : "",
           ]

@@ -39,7 +39,7 @@ function StudentAssistantPage() {
   return (
     <MarketShell>
       <main className="min-h-screen bg-[linear-gradient(180deg,var(--secondary)_0%,var(--background)_20rem)] pb-10">
-        <section className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 sm:py-7">
+        <section className="mx-auto w-full max-w-3xl px-[var(--page-x)] py-5 sm:py-[var(--sp-8)]">
           <Link
             to="/guides/students"
             className="mb-3 inline-flex min-h-9 items-center gap-1 rounded-full border border-border bg-card px-3 text-desc font-black text-muted-foreground shadow-sm sm:text-desc"
@@ -49,7 +49,7 @@ function StudentAssistantPage() {
           </Link>
 
           <header className="mb-3 flex items-center gap-2">
-            <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-primary/12 text-primary">
+            <span className="grid size-10 shrink-0 place-items-center rounded-[var(--r-card)] bg-primary/12 text-primary">
               <GraduationCap className="size-5" aria-hidden />
             </span>
             <div className="min-w-0">

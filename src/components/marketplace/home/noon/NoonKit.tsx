@@ -34,7 +34,7 @@ export function SectionHead({
       </div>
       <a
         href={href}
-        className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-2.5 text-desc font-black text-primary outline-none transition hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
+        className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-[var(--sp-3)] text-desc font-black text-primary outline-none transition hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
       >
         {locale === "ar" ? "عرض الكل" : "View all"}
         <ChevronLeft className="size-4 ltr:rotate-180" aria-hidden />
@@ -45,7 +45,7 @@ export function SectionHead({
 
 /** رقعة تمرير أفقية موحّدة: بطاقة بعرض 80% وحافة البطاقة التالية ظاهرة. */
 export const RAIL_SCROLLER =
-  "-mx-3 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0";
+  "-mx-[var(--page-x)] mt-[var(--sp-3)] flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-[var(--page-x)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0";
 export const RAIL_ITEM = "w-[80%] max-w-[300px] shrink-0 snap-start sm:w-[46%] lg:w-[31%]";
 
 export function LazyMount({

@@ -15,7 +15,7 @@ export function MarketStaticPage({
   const { t } = useI18n();
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
+    <div className="mx-auto w-full max-w-3xl px-[var(--page-x)] pb-10 pt-6">
       <header className="market-page-intro">
         <h1 className="text-page font-black text-foreground">
           {t(`market.pages.${pageKey}.title`)}
@@ -37,7 +37,7 @@ export function MarketStaticSection({
 }) {
   const { t } = useI18n();
   return (
-    <article id={pageKey} className="market-section mt-4 scroll-mt-24 p-5 sm:p-7">
+    <article id={pageKey} className="market-section mt-4 scroll-mt-24 p-5 sm:p-[var(--sp-8)]">
       {!hideTitle ? (
         <h2 className="text-section font-black text-foreground">{t(`market.pages.${pageKey}.title`)}</h2>
       ) : null}

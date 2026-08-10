@@ -397,13 +397,13 @@ function BusinessDashboardPage() {
             </p>
           )}
           {(view.categories ?? []).length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5">
+            <div className="mt-4 flex flex-wrap gap-[var(--sp-2)]">
               {(view.categories ?? []).map((id) => {
                 const cat = roots.find((c) => c.id === id);
                 return cat ? (
                   <span
                     key={id}
-                    className="rounded-full bg-secondary px-2.5 py-0.5 text-desc text-secondary-foreground"
+                    className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc text-secondary-foreground"
                   >
                     {label(cat)}
                   </span>
@@ -421,7 +421,7 @@ function BusinessDashboardPage() {
       ) : (
         <section className="max-w-2xl space-y-4 rounded-xl border border-border bg-card p-5">
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="name_ar">{t("market.biz.nameAr")}</Label>
               <Input
                 id="name_ar"
@@ -430,7 +430,7 @@ function BusinessDashboardPage() {
                 required
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="name_en">{t("market.biz.nameEn")}</Label>
               <Input
                 id="name_en"
@@ -440,7 +440,7 @@ function BusinessDashboardPage() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="headline">{t("market.biz.headline")}</Label>
             <Input
               id="headline"
@@ -449,7 +449,7 @@ function BusinessDashboardPage() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="about">{t("market.biz.about")}</Label>
             <Textarea
               id="about"
@@ -459,7 +459,7 @@ function BusinessDashboardPage() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label htmlFor="logo">{t("market.biz.logo")}</Label>
             <input
               id="logo"
@@ -471,7 +471,7 @@ function BusinessDashboardPage() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <span className="block text-sm font-medium text-foreground">
                 {t("market.geo.country")}
               </span>
@@ -479,7 +479,7 @@ function BusinessDashboardPage() {
                 {accountCountry.data ? geoName(accountCountry.data, locale) : "—"}
               </p>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="city_id">{t("market.filters.city")}</Label>
               <select
                 id="city_id"
@@ -497,7 +497,7 @@ function BusinessDashboardPage() {
               </select>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="region">{t("market.dash.region")}</Label>
               <Input
                 id="region"
@@ -507,14 +507,14 @@ function BusinessDashboardPage() {
             </div>
           </div>
 
-          <div className="min-w-0 space-y-1.5">
+          <div className="min-w-0 space-y-[var(--sp-2)]">
             <Label>{t("market.activity.current")}</Label>
             <ActivityPicker value={activityValue} tenantId={tenantId} onChange={setActivityDraft} />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[var(--sp-2)]">
             <Label>{t("market.business.services")}</Label>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-[var(--sp-2)]">
               {roots.map((c) => {
                 const on = (view.categories ?? []).includes(c.id);
                 return (
@@ -524,8 +524,8 @@ function BusinessDashboardPage() {
                     onClick={() => toggleCategory(c.id)}
                     className={
                       on
-                        ? "rounded-full bg-primary px-2.5 py-1 text-desc font-medium text-primary-foreground"
-                        : "rounded-full border border-border px-2.5 py-1 text-desc text-foreground hover:bg-accent"
+                        ? "rounded-full bg-primary px-[var(--sp-3)] py-1 text-desc font-medium text-primary-foreground"
+                        : "rounded-full border border-border px-[var(--sp-3)] py-1 text-desc text-foreground hover:bg-accent"
                     }
                   >
                     {label(c)}
@@ -543,7 +543,7 @@ function BusinessDashboardPage() {
                 ["public_email", "market.biz.email", "show_email"],
               ] as const
             ).map(([field, key, flag]) => (
-              <div key={field} className="space-y-1.5">
+              <div key={field} className="space-y-[var(--sp-2)]">
                 <Label htmlFor={field}>{t(key)}</Label>
                 <Input
                   id={field}
@@ -562,7 +562,7 @@ function BusinessDashboardPage() {
                 </label>
               </div>
             ))}
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="public_website">{t("market.biz.website")}</Label>
               <Input
                 id="public_website"
@@ -611,11 +611,11 @@ function BusinessDashboardPage() {
 
         {!pending && (
           <form className="mt-4 space-y-3" onSubmit={(e) => void submitVerification(e)}>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="note">{t("market.biz.verificationNote")}</Label>
               <Textarea id="note" name="note" rows={3} />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="docs">{t("market.biz.verificationDocs")}</Label>
               <input
                 id="docs"
@@ -636,7 +636,7 @@ function BusinessDashboardPage() {
         <h3 className="mt-5 text-desc font-bold text-foreground">{t("market.biz.timeline")}</h3>
         <ol className="mt-2 space-y-2">
           {(events.data ?? []).map((ev) => (
-            <li key={ev.id} className="rounded-lg border border-border p-2.5 text-desc">
+            <li key={ev.id} className="rounded-lg border border-border p-[var(--sp-3)] text-desc">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-medium text-foreground">
                   {t(`market.biz.status.${ev.to_status}`)}

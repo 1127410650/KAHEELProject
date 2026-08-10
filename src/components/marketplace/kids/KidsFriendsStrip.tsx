@@ -9,7 +9,7 @@ export function KidsFriendsStrip({ className }: { className?: string }) {
   return (
     <section
       className={cn(
-        "rounded-3xl border border-border bg-card/80 p-4 shadow-sm",
+        "rounded-[var(--r-card)] border border-border bg-card/80 p-4 shadow-sm",
         className,
       )}
       aria-label="أصدقاء كَحيل الصغار"
@@ -22,7 +22,7 @@ export function KidsFriendsStrip({ className }: { className?: string }) {
         {KIDS_FRIENDS.map((friend) => (
           <li
             key={friend.id}
-            className="flex items-center gap-2 rounded-2xl bg-brand-50 px-2.5 py-2 dark:bg-brand-950"
+            className="flex items-center gap-2 rounded-[var(--r-card)] bg-brand-50 px-[var(--sp-3)] py-2 dark:bg-brand-950"
           >
             <KidsFriendTap id={friend.id} size={40} />
             <span className="min-w-0">
@@ -64,7 +64,7 @@ export function KidsEmptyState({
 }) {
   const meta = kidsFriendMeta(id);
   return (
-    <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card/70 px-4 py-10 text-center">
+    <div className="flex flex-col items-center gap-3 rounded-[var(--r-card)] border border-border bg-card/70 px-4 py-10 text-center">
       <KidsFriend id={id} mood="sad" size={96} motion="sway" title={`${meta.nameAr} حزين`} />
       <p className="text-sm font-bold text-foreground">ما في نتائج… جرّب تصنيف تاني</p>
       <p className="text-desc text-muted-foreground">

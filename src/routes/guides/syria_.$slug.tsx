@@ -39,11 +39,11 @@ function GuidePlacePage() {
 
   return (
     <MarketShell>
-      <main className="mx-auto w-full max-w-[860px] px-3 py-3 sm:px-5 sm:py-4">
+      <main className="mx-auto w-full max-w-[860px] px-[var(--page-x)] py-3 sm:py-4">
         {/* سطر تنقّل خفيف — لا بطاقة كبيرة */}
         <nav
           aria-label="مسار التنقّل"
-          className="mb-2.5 flex items-center gap-1 text-desc font-bold text-muted-foreground"
+          className="mb-[var(--sp-3)] flex items-center gap-1 text-desc font-bold text-muted-foreground"
         >
           <Link to="/guides/syria" className="inline-flex items-center gap-1 hover:text-market-navy">
             <ArrowRight className="size-3" aria-hidden />
@@ -54,17 +54,17 @@ function GuidePlacePage() {
         </nav>
 
         {isLoading ? (
-          <div className="h-32 animate-pulse rounded-2xl border border-border bg-muted/40" />
+          <div className="h-32 animate-pulse rounded-[var(--r-card)] border border-border bg-muted/40" />
         ) : error ? (
-          <p className="rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-desc font-bold text-destructive">
+          <p className="rounded-[var(--r-card)] border border-destructive/30 bg-destructive/5 p-4 text-desc font-bold text-destructive">
             تعذّر تحميل بيانات الجهة، حاول لاحقًا.
           </p>
         ) : !data ? (
-          <p className="rounded-2xl border border-border bg-card p-4 text-desc font-bold text-muted-foreground">
+          <p className="rounded-[var(--r-card)] border border-border bg-card p-4 text-desc font-bold text-muted-foreground">
             هذه الجهة غير متوفرة في الدليل.
           </p>
         ) : (
-          <article className="space-y-2.5">
+          <article className="space-y-[var(--sp-3)]">
             <GuideDirectoryNotice
               placeName={data.name_ar}
               placeSlug={data.slug}
@@ -76,7 +76,7 @@ function GuidePlacePage() {
             />
 
             {/* بطاقة واحدة مضغوطة: الاسم + التصنيف + العنوان والتواصل */}
-            <section className="rounded-2xl border border-border/80 bg-card p-3.5 sm:p-4">
+            <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-[var(--sp-4)] sm:p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <h1 className="text-page font-black leading-tight sm:text-[26px]">{data.name_ar}</h1>
@@ -90,7 +90,7 @@ function GuidePlacePage() {
                 <GuidePlaceBadges place={data} />
               </div>
 
-              <dl className="mt-2.5 grid gap-1.5 border-t border-border/60 pt-2.5 text-desc leading-5 sm:grid-cols-2">
+              <dl className="mt-[var(--sp-3)] grid gap-[var(--sp-2)] border-t border-border/60 pt-[var(--sp-3)] text-desc leading-5 sm:grid-cols-2">
                 <Row icon={<MapPin className="size-3.5" aria-hidden />} label="العنوان" value={location} />
                 {data.opening_hours ? (
                   <Row
@@ -125,7 +125,7 @@ function GuidePlacePage() {
                 ) : null}
               </dl>
 
-              <div className="mt-2.5 border-t border-border/60 pt-2.5">
+              <div className="mt-[var(--sp-3)] border-t border-border/60 pt-[var(--sp-3)]">
                 <GuideBookingButton place={data} />
                 <div className="mt-2">
                   <GuidePlaceActions place={data} />
@@ -135,13 +135,13 @@ function GuidePlacePage() {
 
             <GuidePlaceCommunity placeId={data.id} placeName={data.name_ar} />
 
-            <section className="rounded-2xl border border-border/80 bg-card p-3.5 text-desc leading-5 sm:p-4">
-              <h2 className="text-section mb-1.5 font-black">المصدر والتحقق</h2>
+            <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-[var(--sp-4)] text-desc leading-5 sm:p-4">
+              <h2 className="text-section mb-[var(--sp-2)] font-black">المصدر والتحقق</h2>
               <p className="text-muted-foreground">
                 {[data.source_label, data.source_type, data.source_date].filter(Boolean).join(" · ") ||
                   "لا يوجد مصدر منشور لهذا السجل."}
               </p>
-              {data.notes ? <p className="mt-1.5 text-muted-foreground">{data.notes}</p> : null}
+              {data.notes ? <p className="mt-[var(--sp-2)] text-muted-foreground">{data.notes}</p> : null}
               <OsmAttribution className="mt-2" />
             </section>
           </article>
@@ -164,7 +164,7 @@ function Row({
 }) {
   if (!value) return null;
   return (
-    <div className="flex items-start gap-1.5">
+    <div className="flex items-start gap-[var(--sp-2)]">
       <span className="mt-0.5 text-market-navy">{icon}</span>
       <div className="min-w-0">
         <dt className="font-black">{label}</dt>

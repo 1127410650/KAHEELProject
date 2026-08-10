@@ -85,7 +85,7 @@ function ReportDetailPage() {
                     {t("market.reports.my.submittedAt")}: {formatDateTime(report.data.created_at)}
                   </p>
                 </div>
-                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
+                <span className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc font-medium text-secondary-foreground">
                   {t(`market.reports.stage.${simpleStage(report.data.status)}`)}
                 </span>
               </div>

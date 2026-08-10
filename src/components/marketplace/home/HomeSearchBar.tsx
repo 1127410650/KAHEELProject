@@ -55,7 +55,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
 
   return (
     <div
-      className="k-surface flex min-h-11 overflow-hidden rounded-2xl focus-within:border-brand-600/60 focus-within:ring-2 focus-within:ring-brand-700/30 sm:min-h-12"
+      className="k-surface flex min-h-11 overflow-hidden rounded-[var(--r-card)] focus-within:border-brand-600/60 focus-within:ring-2 focus-within:ring-brand-700/30 sm:min-h-12"
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
@@ -63,7 +63,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
         to="/search"
         search={{}}
         aria-label={label}
-        className="flex min-w-0 flex-1 items-center gap-2.5 px-3.5 text-brand-800 outline-none"
+        className="flex min-w-0 flex-1 items-center gap-[var(--sp-3)] px-[var(--sp-4)] text-brand-800 outline-none"
       >
         <Search className="size-[18px] shrink-0 text-brand-900" aria-hidden />
         {/* ارتفاع ثابت للسطر: النص يتبدّل داخله بلا أي تحرّك للشريط */}
@@ -81,7 +81,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
         search={{ filters: 1 }}
         aria-label={detailedLabel}
         title={detailedLabel}
-        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-xl bg-[linear-gradient(140deg,#8A4FFF,#C3ABFF)] px-2.5 text-desc font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
+        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-[var(--sp-2)] rounded-xl bg-[linear-gradient(140deg,#8A4FFF,#C3ABFF)] px-[var(--sp-3)] text-desc font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
       >
         <SlidersHorizontal className="size-4" aria-hidden />
         <span className="hidden sm:inline">{detailedLabel}</span>

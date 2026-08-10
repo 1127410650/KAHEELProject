@@ -31,7 +31,7 @@ import { formatDistance } from "@/lib/mkt-nearby";
 export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   if (isOpenStreetMap(place)) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-gold-soft px-2.5 py-1 text-desc font-black text-gold-foreground">
+      <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full border border-gold/45 bg-gold-soft px-[var(--sp-3)] py-1 text-desc font-black text-gold-foreground">
         <Info className="size-3.5" aria-hidden />
         معلومات أولية — ساعدنا في التحقق
       </span>
@@ -39,14 +39,14 @@ export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   }
   if (isVerified(place)) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/40 bg-success-soft px-2.5 py-1 text-desc font-black text-success-strong">
+      <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full border border-success/40 bg-success-soft px-[var(--sp-3)] py-1 text-desc font-black text-success-strong">
         <ShieldCheck className="size-3.5" aria-hidden />
         موثّق
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-desc font-black text-muted-foreground">
+    <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full border border-border bg-muted px-[var(--sp-3)] py-1 text-desc font-black text-muted-foreground">
       <Info className="size-3.5" aria-hidden />
       بانتظار التحقق
     </span>
@@ -121,10 +121,10 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
 
 
   const base =
-    "k-press inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-primary/25 bg-card px-3 py-2 text-desc font-black hover:border-primary/50 hover:bg-primary/6 hover:text-primary";
+    "k-press inline-flex min-h-11 items-center gap-[var(--sp-2)] rounded-xl border border-primary/25 bg-card px-3 py-2 text-desc font-black hover:border-primary/50 hover:bg-primary/6 hover:text-primary";
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-[var(--sp-2)]">
       <div className="flex flex-wrap gap-2">
         {directions ? (
           <a className={base} href={directions} target="_blank" rel="noreferrer noopener">
@@ -200,11 +200,11 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
       </div>
 
       {location || distance ? (
-        <p className="flex items-start gap-1.5 text-desc leading-6 text-muted-foreground">
+        <p className="flex items-start gap-[var(--sp-2)] text-desc leading-6 text-muted-foreground">
           <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           <span className="line-clamp-2">{place.address || location}</span>
           {distance ? (
-            <span className="num ms-auto shrink-0 self-start rounded-full bg-primary/10 px-1.5 font-bold text-primary">
+            <span className="num ms-auto shrink-0 self-start rounded-full bg-primary/10 px-[var(--sp-2)] font-bold text-primary">
               {distance}
             </span>
           ) : null}
@@ -213,18 +213,18 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
 
 
       {place.opening_hours ? (
-        <p className="flex items-center gap-1.5 text-desc font-bold text-muted-foreground">
+        <p className="flex items-center gap-[var(--sp-2)] text-desc font-bold text-muted-foreground">
           <Clock className="size-3.5" aria-hidden />
           {place.opening_hours}
         </p>
       ) : null}
 
-      <div className="mt-auto space-y-2.5">
+      <div className="mt-auto space-y-[var(--sp-3)]">
         <GuidePlaceActions place={place} />
         <Link
           to="/guides/syria/$slug"
           params={{ slug: place.slug }}
-          className="inline-flex items-center gap-1.5 text-desc font-black text-market-navy"
+          className="inline-flex items-center gap-[var(--sp-2)] text-desc font-black text-market-navy"
         >
           التفاصيل
           <ExternalLink className="size-3.5" aria-hidden />

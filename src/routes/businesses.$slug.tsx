@@ -117,7 +117,7 @@ function BusinessPage() {
   if (business.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4">
+        <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-5">
           <Skeleton className="h-28 w-full rounded-xl" />
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -135,7 +135,7 @@ function BusinessPage() {
     // alike — the reason is never disclosed.
     return (
       <MarketShell>
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <div className="mx-auto max-w-3xl px-[var(--page-x)] py-20 text-center">
           <h1 className="text-page font-bold text-foreground">{t("market.business.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
@@ -208,9 +208,9 @@ function BusinessPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
         <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-5">
-          <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5 lg:sticky lg:top-20">
+          <header className="rounded-xl border border-border bg-card p-[var(--sp-4)] sm:p-5 lg:sticky lg:top-20">
             <div className="flex items-start gap-3">
               <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-secondary text-sm font-bold text-muted-foreground">
                 {logo.data ? (
@@ -233,8 +233,8 @@ function BusinessPage() {
               </div>
             </div>
 
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
-              {activitySummary && <span className="">{activitySummary}</span>}
+            <div className="mt-[var(--sp-3)] flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
+              {activitySummary && <span>{activitySummary}</span>}
               {city && (
                 <span className="inline-flex min-w-0 items-center gap-1">
                   <MapPin className="size-3.5 shrink-0" aria-hidden />
@@ -361,11 +361,11 @@ function BusinessPage() {
                 <h2 className="text-section font-bold text-foreground">
                   {t("market.business.activities")}
                 </h2>
-                <div className="mt-2 flex flex-wrap gap-1.5">
+                <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
                   {shownChips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-desc text-muted-foreground"
+                      className="rounded-full border border-border bg-secondary/50 px-[var(--sp-3)] py-1 text-desc text-muted-foreground"
                     >
                       {chip}
                     </span>
@@ -374,7 +374,7 @@ function BusinessPage() {
                 {chips.length > ACTIVITY_LIMIT && (
                   <button
                     type="button"
-                    className="mt-1.5 text-desc font-semibold text-primary"
+                    className="mt-[var(--sp-2)] text-desc font-semibold text-primary"
                     onClick={() => setAllActivities((v) => !v)}
                   >
                     {t(allActivities ? "market.ad.showLess" : "market.business.showAllActivities")}
@@ -415,7 +415,7 @@ function BusinessPage() {
             <h2 className="text-section font-bold text-foreground">{t("market.business.listings")}</h2>
 
             {cats.length > 1 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
                 {[
                   { id: null as string | null, label: t("market.person.allCategories") },
                   ...cats.map((c) => ({
@@ -430,7 +430,7 @@ function BusinessPage() {
                       type="button"
                       aria-pressed={active}
                       onClick={() => setCategoryId(chip.id)}
-                      className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
+                      className={`rounded-full border px-3 py-[var(--sp-2)] text-desc font-medium transition-colors ${
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-card text-muted-foreground hover:border-primary/40"

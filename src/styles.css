@@ -449,6 +449,31 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
 }
 
+/* حالة فراغ فاخرة: أيقونة + عنوان + تلميح + إجراء، بحاشية سخية 32px. */
+@utility k-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  border-radius: var(--r-card);
+  border: 1px solid var(--neutral-divider);
+  background: var(--neutral-white);
+  padding: var(--sp-8);
+  text-align: center;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+}
+
+/* فقاعة محادثة: حاشية 12px، فراغ 8px بين العناصر، عرض أقصى 78%. */
+@utility k-bubble {
+  max-width: 78%;
+  border-radius: var(--r-card);
+  padding: var(--sp-3);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
 
 #print-root {
   display: none;

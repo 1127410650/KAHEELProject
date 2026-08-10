@@ -102,10 +102,10 @@ export function CollapsingHomeHeader({
         <HeaderShapes />
 
         {/* صف الهوية — يبقى (فوق كل شيء وبخلفية الهيدر نفسها) */}
-        <div className="k-header-hero relative z-20 mx-auto flex h-11 w-full max-w-[1240px] items-center justify-between gap-2 px-3 sm:px-5 lg:px-8">
+        <div className="k-header-hero relative z-20 mx-auto flex h-11 w-full max-w-[1240px] items-center justify-between gap-2 px-[var(--page-x)]">
           <Link
             to="/"
-            className="flex min-h-[44px] items-center gap-1.5"
+            className="flex min-h-[44px] items-center gap-[var(--sp-2)]"
             aria-label={t("market.brand")}
           >
             <img
@@ -119,7 +119,7 @@ export function CollapsingHomeHeader({
             />
             <span className="text-lg font-black leading-none sm:text-xl">{t("market.brand")}</span>
           </Link>
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-[var(--sp-2)]">
             <a
               href={notificationsHref}
               className="relative grid size-11 place-items-center rounded-full outline-none transition hover:bg-secondary focus-visible:ring-2 focus-visible:ring-primary/45"
@@ -140,13 +140,13 @@ export function CollapsingHomeHeader({
         <div style={{ transform: "translateY(calc(-44px * var(--p)))" }}>
         {/* صف الموقع — يُغلق (ينزلق تحت صف الهوية) مع التمرير لأسفل */}
         <div
-          className="relative z-0 h-11 overflow-hidden px-3 sm:px-5 lg:px-8"
+          className="relative z-0 h-11 overflow-hidden px-[var(--page-x)]"
           style={{ opacity: "calc(1 - var(--p)*1.6)" }}
         >
           <button
             type="button"
             onClick={onLocation}
-            className="flex h-11 min-h-[44px] min-w-0 items-center gap-1.5 rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            className="flex h-11 min-h-[44px] min-w-0 items-center gap-[var(--sp-2)] rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
             tabIndex={p > 0.6 ? -1 : 0}
           >
@@ -171,7 +171,7 @@ export function CollapsingHomeHeader({
         </HeaderChipsRow>
 
         {/* صف البحث — يبقى دائمًا قابلًا للنقر */}
-        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-3 pb-2.5 sm:px-5 lg:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-[var(--page-x)] pb-[var(--sp-3)] ">
           <a
             href="/search"
             onClick={(event) => {

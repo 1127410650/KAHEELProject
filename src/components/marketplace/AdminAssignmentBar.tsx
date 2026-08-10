@@ -78,7 +78,7 @@ export function AdminAssignmentBar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-3">
-      <span className="inline-flex min-w-0 items-center gap-1.5 text-desc text-muted-foreground">
+      <span className="inline-flex min-w-0 items-center gap-[var(--sp-2)] text-desc text-muted-foreground">
         <UserCheck className="size-4 shrink-0" aria-hidden />
         <span className="truncate">
           {mine
@@ -152,7 +152,7 @@ export function AdminAssignmentBar({
           <select
             value={target}
             onChange={(event) => setTarget(event.target.value)}
-            className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground"
+            className="mt-[var(--sp-2)] h-11 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground"
           >
             <option value="">—</option>
             {(officers.data ?? [])

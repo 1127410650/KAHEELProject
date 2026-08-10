@@ -190,11 +190,11 @@ export function StudentBotChat() {
     }
   }
 
-  if (loading) return <Skeleton className="h-72 w-full rounded-2xl" />;
+  if (loading) return <Skeleton className="h-72 w-full rounded-[var(--r-card)]" />;
 
   if (!session) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-panel">
+      <div className="rounded-[var(--r-card)] border border-border bg-card p-6 text-center shadow-panel">
         <Lock className="mx-auto size-6 text-muted-foreground" aria-hidden />
         <h2 className="text-section mt-2 font-black text-foreground">
           {ar ? "سجّل الدخول لتسأل المساعد" : "Sign in to ask the assistant"}
@@ -217,11 +217,11 @@ export function StudentBotChat() {
   return (
     <div className="grid gap-3">
       {/* Grade + subject */}
-      <section className="rounded-2xl border border-border bg-card p-3 shadow-panel sm:p-4">
+      <section className="rounded-[var(--r-card)] border border-border bg-card p-3 shadow-panel sm:p-4">
         <p className="text-desc font-black text-foreground">
           {ar ? "صفّك ومادتك" : "Your grade and subject"}
         </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
           {STUDENT_GRADES.map((item) => (
             <button
               key={item.key}
@@ -241,7 +241,7 @@ export function StudentBotChat() {
             </button>
           ))}
         </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
           {subjects.map((item) => {
             const label = ar ? item.ar : item.en;
             return (
@@ -278,7 +278,7 @@ export function StudentBotChat() {
       </section>
 
       {/* Transcript */}
-      <section className="min-h-64 rounded-2xl border border-border bg-card p-3 shadow-panel sm:p-4">
+      <section className="min-h-64 rounded-[var(--r-card)] border border-border bg-card p-3 shadow-panel sm:p-4">
         {bubbles.length === 0 ? (
           <div className="grid place-items-center px-3 py-8 text-center">
             <Mascot name="kaheel" className="h-24 w-auto" />
@@ -292,14 +292,14 @@ export function StudentBotChat() {
             </p>
           </div>
         ) : (
-          <ol className="grid gap-2.5">
+          <ol className="grid gap-[var(--sp-3)]">
             {bubbles.map((bubble) => (
               <li
                 key={bubble.id}
                 className={bubble.role === "user" ? "flex justify-end" : "flex justify-start"}
               >
                 {bubble.role === "user" ? (
-                  <span className="max-w-[85%] rounded-2xl rounded-be-sm bg-primary px-3 py-2 text-desc leading-6 text-primary-foreground">
+                  <span className="max-w-[85%] rounded-[var(--r-card)] rounded-be-sm bg-primary px-3 py-2 text-desc leading-6 text-primary-foreground">
                     {bubble.hadImage ? (
                       <ImageIcon className="mb-1 inline size-3.5 align-middle" aria-hidden />
                     ) : null}{" "}
@@ -308,7 +308,7 @@ export function StudentBotChat() {
                 ) : (
                   <span className="max-w-[92%] whitespace-pre-wrap text-desc leading-7 text-foreground">
                     {bubble.pending ? (
-                      <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                      <span className="inline-flex items-center gap-[var(--sp-2)] text-muted-foreground">
                         <Loader2 className="size-3.5 animate-spin" aria-hidden />
                         {ar ? "أفكّر بالحل…" : "Thinking…"}
                       </span>
@@ -326,7 +326,7 @@ export function StudentBotChat() {
 
       {/* Server verdict (being set up / daily limit / monthly cap …) */}
       {refusalCopy ? (
-        <section className="rounded-2xl border border-accent/45 bg-accent/8 p-4">
+        <section className="rounded-[var(--r-card)] border border-accent/45 bg-accent/8 p-4">
           <div className="flex items-start gap-2">
             <Sparkles className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
             <div className="min-w-0">
@@ -345,7 +345,7 @@ export function StudentBotChat() {
       ) : null}
 
       {/* Composer */}
-      <section className="rounded-2xl border border-border bg-card p-3 shadow-panel">
+      <section className="rounded-[var(--r-card)] border border-border bg-card p-3 shadow-panel">
         {image ? (
           <div className="mb-2 flex items-center gap-2 rounded-xl bg-muted/45 p-2">
             <img
@@ -377,7 +377,7 @@ export function StudentBotChat() {
             rows={2}
             disabled={busy}
             placeholder={ar ? "اكتب سؤالك…" : "Type your question…"}
-            className="min-h-11 flex-1 resize-y rounded-xl border border-input bg-background p-2.5 text-desc leading-6 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+            className="min-h-11 flex-1 resize-y rounded-xl border border-input bg-background p-[var(--sp-3)] text-desc leading-6 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
           <input
             ref={fileRef}
@@ -413,7 +413,7 @@ export function StudentBotChat() {
           </Button>
         </div>
 
-        <p className="mt-2 flex items-start gap-1.5 text-desc leading-5 text-muted-foreground">
+        <p className="mt-2 flex items-start gap-[var(--sp-2)] text-desc leading-5 text-muted-foreground">
           <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
           {ar
             ? "صورتك تُحذف فور الإجابة ولا نحتفظ بها — نحفظ نص السؤال والجواب فقط لتتابع مراجعتك."
@@ -423,11 +423,11 @@ export function StudentBotChat() {
 
       {/* Earlier conversations */}
       {history.data && history.data.length > 0 ? (
-        <section className="rounded-2xl border border-border bg-card p-3 shadow-panel">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-3 shadow-panel">
           <p className="text-desc font-black text-foreground">
             {ar ? "محادثاتك السابقة" : "Your earlier conversations"}
           </p>
-          <ul className="mt-2 grid gap-1.5">
+          <ul className="mt-2 grid gap-[var(--sp-2)]">
             {history.data.slice(0, 8).map((row) => (
               <li key={row.id}>
                 <button
@@ -456,7 +456,7 @@ export function StudentBotChat() {
               </li>
             ))}
           </ul>
-          <p className="mt-2 flex items-center gap-1.5 text-desc text-muted-foreground">
+          <p className="mt-2 flex items-center gap-[var(--sp-2)] text-desc text-muted-foreground">
             <Trash2 className="size-3 shrink-0" aria-hidden />
             {ar
               ? "لا صور محفوظة هنا إطلاقًا — نص فقط."

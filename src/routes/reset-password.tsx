@@ -74,7 +74,7 @@ function ResetPasswordPage() {
       dir={dir}
       className="market-surface flex min-h-screen items-center justify-center px-5 py-10"
     >
-      <section className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <section className="w-full max-w-md rounded-[var(--r-card)] border border-border bg-card p-6 shadow-sm">
         <h1 className="text-page font-bold">{t("auth.resetTitle")}</h1>
         {checking ? (
           <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">

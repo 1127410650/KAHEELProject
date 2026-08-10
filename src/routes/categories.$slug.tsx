@@ -143,7 +143,7 @@ function CategoryPage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-4 py-6">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-6">
         {categories.isLoading ? (
           <Skeleton className="h-8 w-48" />
         ) : !category ? (
@@ -171,7 +171,7 @@ function CategoryPage() {
                       className={
                         kidsWorld
                           ? "k-press inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-desc font-bold text-foreground hover:bg-accent"
-                          : "rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
+                          : "rounded-full border border-border bg-card px-3 py-[var(--sp-2)] text-desc font-medium text-foreground hover:bg-accent"
                       }
                     >
                       {kidsWorld && (

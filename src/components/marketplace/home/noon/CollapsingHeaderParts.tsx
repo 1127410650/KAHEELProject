@@ -95,7 +95,7 @@ export function HeaderChip({
   return (
     <a
       href={href}
-      className="relative flex h-11 shrink-0 items-center gap-1.5 bg-card ps-[14px] text-card-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+      className="relative flex h-11 shrink-0 items-center gap-[var(--sp-2)] bg-card ps-[14px] text-card-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
       style={{
         width: `${CHIP_W}px`,
         transform: `translateX(calc(${sign * slide}px * var(--p)))`,
@@ -124,7 +124,7 @@ export function HeaderChipsRow({ children }: { children: ReactNode }) {
   const rtl = dir === "rtl";
   return (
     <div className="relative z-10 h-12 overflow-hidden">
-      <div className="mx-auto flex h-12 w-full max-w-[1240px] items-center gap-2 overflow-x-auto px-3 [scrollbar-width:none] sm:px-5 lg:px-8 [&::-webkit-scrollbar]:hidden">
+      <div className="mx-auto flex h-12 w-full max-w-[1240px] items-center gap-2 overflow-x-auto px-[var(--page-x)] [scrollbar-width:none]  [&::-webkit-scrollbar]:hidden">
         {Children.map(children, (child, index) =>
           isValidElement<{ index?: number; rtl?: boolean }>(child)
             ? cloneElement(child, { index, rtl })

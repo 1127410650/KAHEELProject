@@ -90,7 +90,7 @@ function UserProfilePage() {
   if (person.isLoading) {
     return (
       <MarketShell>
-        <div className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-4">
+        <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-5">
           <Skeleton className="h-28 w-full rounded-xl" />
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -108,7 +108,7 @@ function UserProfilePage() {
     // the reason is never disclosed.
     return (
       <MarketShell>
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <div className="mx-auto max-w-3xl px-[var(--page-x)] py-20 text-center">
           <h1 className="text-page font-bold text-foreground">{t("market.person.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
@@ -130,8 +130,8 @@ function UserProfilePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
-        <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5">
+      <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
+        <header className="rounded-xl border border-border bg-card p-[var(--sp-4)] sm:p-5">
           <div className="flex items-start gap-3">
             <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-sm font-bold text-muted-foreground">
               {avatar.data ? (
@@ -151,7 +151,7 @@ function UserProfilePage() {
               </h1>
               {/* The trust check mark lives under the name only. */}
               <VerifiedBadge status={me.verification_status} />
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
+              <div className="mt-[var(--sp-2)] flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
                 <span>{t("market.person.kindIndividual")}</span>
                 {city && (
                   <span className="inline-flex min-w-0 items-center gap-1">
@@ -242,7 +242,7 @@ function UserProfilePage() {
         <h2 className="text-section mt-5 font-bold text-foreground">{t("market.person.listings")}</h2>
 
         {cats.length > 1 && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
+          <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
             {[{ id: null, label: t("market.person.allCategories") }, ...cats.map((c) => ({
               id: c.category_id,
               label: locale === "ar" ? c.name_ar : c.name_en || c.name_ar,
@@ -254,7 +254,7 @@ function UserProfilePage() {
                   type="button"
                   aria-pressed={active}
                   onClick={() => setCategoryId(chip.id)}
-                  className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
+                  className={`rounded-full border px-3 py-[var(--sp-2)] text-desc font-medium transition-colors ${
                     active
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-muted-foreground hover:border-primary/40"
@@ -279,7 +279,7 @@ function UserProfilePage() {
           </p>
         ) : (
           <>
-            <div className="mt-3 flex flex-col gap-2.5 sm:hidden">
+            <div className="mt-3 flex flex-col gap-[var(--sp-3)] sm:hidden">
               {rows.map((l) => (
                 <ListingCard key={l.id} listing={l} view="row" />
               ))}

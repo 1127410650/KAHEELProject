@@ -125,7 +125,7 @@ function PricingPage() {
       <AdminShell title="الأسعار والقيم التشغيلية">
         <div className="space-y-3">
           {[0, 1, 2].map((row) => (
-            <Skeleton key={row} className="h-32 w-full rounded-2xl" />
+            <Skeleton key={row} className="h-32 w-full rounded-[var(--r-card)]" />
           ))}
         </div>
       </AdminShell>
@@ -136,7 +136,7 @@ function PricingPage() {
     <AdminShell
       title="الأسعار والقيم التشغيلية"
       actions={
-        <Button asChild size="sm" variant="outline" className="gap-1.5">
+        <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
           <Link to="/admin/ad-credit">
             <Wallet className="size-4" aria-hidden />
             أرصدة المحافظ
@@ -144,12 +144,12 @@ function PricingPage() {
         </Button>
       }
     >
-      <p className="mb-4 rounded-2xl border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
+      <p className="mb-4 rounded-[var(--r-card)] border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
         كل قيمة هنا تُقرأ من القاعدة وقت التنفيذ، فلا شيء مكتوب في الكود. إضافة أو خصم رصيد يدوي بسبب
         مسجّل يجري من شاشة «أرصدة المحافظ».
       </p>
 
-      <section aria-labelledby="packs" className="mb-6 rounded-2xl border border-border bg-card p-3">
+      <section aria-labelledby="packs" className="mb-6 rounded-[var(--r-card)] border border-border bg-card p-3">
         <h2 id="packs" className="mb-2 text-section font-extrabold text-foreground">
           حزم شحن الرصيد (SAR)
         </h2>
@@ -196,16 +196,16 @@ function PricingPage() {
           ))}
         </ul>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" className="gap-1.5" onClick={() => setPacks((prev) => [...prev, { credits: 100, amount: 100 }])}>
+          <Button size="sm" variant="outline" className="gap-[var(--sp-2)]" onClick={() => setPacks((prev) => [...prev, { credits: 100, amount: 100 }])}>
             <Plus className="size-4" aria-hidden /> حزمة
           </Button>
-          <Button size="sm" className="gap-1.5" disabled={busy} onClick={savePacks}>
+          <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={savePacks}>
             <Save className="size-4" aria-hidden /> حفظ الحزم
           </Button>
         </div>
       </section>
 
-      <section aria-labelledby="promos" className="mb-6 rounded-2xl border border-border bg-card p-3">
+      <section aria-labelledby="promos" className="mb-6 rounded-[var(--r-card)] border border-border bg-card p-3">
         <h2 id="promos" className="mb-2 text-section font-extrabold text-foreground">
           أسعار التمييز ومدده (نقاط لكل عدد أيام)
         </h2>
@@ -251,18 +251,18 @@ function PricingPage() {
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5"
+            className="gap-[var(--sp-2)]"
             onClick={() => setDurations((prev) => [...prev, { days: "1", points: "10" }])}
           >
             <Plus className="size-4" aria-hidden /> مدة
           </Button>
-          <Button size="sm" className="gap-1.5" disabled={busy} onClick={savePrices}>
+          <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={savePrices}>
             <Save className="size-4" aria-hidden /> حفظ الأسعار
           </Button>
         </div>
       </section>
 
-      <section aria-labelledby="fx" className="rounded-2xl border border-border bg-card p-3">
+      <section aria-labelledby="fx" className="rounded-[var(--r-card)] border border-border bg-card p-3">
         <h2 id="fx" className="mb-2 text-section font-extrabold text-foreground">
           سعر الصرف (دولار → ليرة سورية)
         </h2>
@@ -271,7 +271,7 @@ function PricingPage() {
             السعر المعتمد
             <Input className="num mt-1" type="number" min={1} value={usd} onChange={(event) => setUsd(event.target.value)} />
           </label>
-          <Button size="sm" className="gap-1.5" disabled={busy} onClick={saveRate}>
+          <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={saveRate}>
             <Save className="size-4" aria-hidden /> اعتماد
           </Button>
         </div>

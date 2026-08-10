@@ -62,7 +62,7 @@ function StoreOffersPage() {
       </p>
       {store.isLoading ? (
 
-        <Skeleton className="h-40 w-full rounded-2xl" />
+        <Skeleton className="h-40 w-full rounded-[var(--r-card)]" />
       ) : !store.data ? (
         <Card>
           <CardContent className="space-y-3 pt-5">

@@ -172,7 +172,7 @@ export function AdminEnforcement({
             const live = !row.lifted_at && (!row.expires_at || new Date(row.expires_at) > new Date());
             return (
               <li key={row.id} className="rounded-lg border border-border bg-background p-3">
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-[var(--sp-2)]">
                   <span className="text-sm font-medium text-foreground">
                     {t(`admin.restriction.${row.restriction}`)}
                   </span>
@@ -221,7 +221,7 @@ export function AdminEnforcement({
               onChange={(event) => setDays(event.target.value.replace(/\D/g, ""))}
               inputMode="numeric"
               placeholder={t("admin.detail.durationHint")}
-              className="mt-1.5 tabular-nums"
+              className="mt-[var(--sp-2)] tabular-nums"
             />
           </Label>
         )}
@@ -237,7 +237,7 @@ export function AdminEnforcement({
             <Input
               value={notifyTitle}
               onChange={(event) => setNotifyTitle(event.target.value)}
-              className="mt-1.5"
+              className="mt-[var(--sp-2)]"
             />
           </Label>
           <Label className="block text-desc font-medium text-foreground">
@@ -246,7 +246,7 @@ export function AdminEnforcement({
               value={notifyBody}
               onChange={(event) => setNotifyBody(event.target.value)}
               rows={4}
-              className="mt-1.5"
+              className="mt-[var(--sp-2)]"
             />
           </Label>
           <DialogFooter>

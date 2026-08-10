@@ -59,7 +59,7 @@ function AdminGuideRequestsPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-[var(--sp-2)]">
           {TABS.map((tab) => (
             <Button
               key={tab}
@@ -88,7 +88,7 @@ function AdminGuideRequestsPage() {
           <div className="space-y-2">
             {rows.map((row) => (
               <Card key={row.id}>
-                <CardContent className="space-y-2 py-3.5">
+                <CardContent className="space-y-2 py-[var(--sp-4)]">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-desc font-black">{row.entity_name}</span>
                     <span className="rounded-full border border-primary/30 bg-primary/8 px-2 py-0.5 text-desc font-black text-primary">
@@ -126,7 +126,7 @@ function AdminGuideRequestsPage() {
                   ) : null}
 
                   {status !== "done" && status !== "rejected" ? (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="flex flex-wrap gap-[var(--sp-2)] pt-1">
                       {status === "new" ? (
                         <Button
                           size="sm"

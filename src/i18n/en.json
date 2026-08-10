@@ -2672,7 +2672,8 @@
       "addListingHint": "Nothing matched your search — you can post your own listing.",
       "businessesCount": "stores",
       "categoryPage": "Full category page",
-      "loadingMore": "Loading more…"
+      "loadingMore": "Loading more…",
+      "emptyHint": "Try adjusting your filters or keywords, or add your own listing here."
     },
     "license": {
       "sectionTitle": "Real estate licence data",

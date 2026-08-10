@@ -104,8 +104,8 @@ function JeebLiCard({
       to="/errands"
       search={{ service: card.slug }}
       data-kslot={slotKey}
-      className={`group relative flex min-w-0 items-center gap-2 overflow-hidden rounded-2xl border border-border bg-card px-3 text-start shadow-panel outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${
-        wide ? "min-h-[104px] py-3" : "min-h-[92px] py-2.5"
+      className={`group relative flex min-w-0 items-center gap-2 overflow-hidden rounded-[var(--r-card)] border border-border bg-card px-3 text-start shadow-panel outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${
+        wide ? "min-h-[104px] py-3" : "min-h-[92px] py-[var(--sp-3)]"
       }`}
     >
       <span className="relative z-[1] flex min-w-0 flex-1 flex-col gap-1">

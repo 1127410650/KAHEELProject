@@ -356,7 +356,7 @@ function MessagesPage() {
                         )}
                         {row.unread_count > 0 && (
                           <span
-                            className="inline-flex min-w-5 shrink-0 justify-center rounded-full bg-primary px-1.5 text-desc font-bold text-primary-foreground tabular-nums"
+                            className="inline-flex min-w-5 shrink-0 justify-center rounded-full bg-primary px-[var(--sp-2)] text-desc font-bold text-primary-foreground tabular-nums"
                             aria-label={t("market.chat.unread")}
                           >
                             {row.unread_count}

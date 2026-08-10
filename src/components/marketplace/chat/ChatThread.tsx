@@ -106,7 +106,7 @@ export function ChatThread({
       <div
         ref={scroller}
         onScroll={onScroll}
-        className="h-full max-h-[52vh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-muted/30 p-3 lg:max-h-none"
+        className="h-full max-h-[52vh] overflow-y-auto overscroll-contain rounded-[var(--r-card)] border border-border bg-muted/30 p-3 lg:max-h-none"
       >
         {loading ? (
           // Fixed-height skeleton rows: same box as real bubbles, so no layout shift.
@@ -114,7 +114,7 @@ export function ChatThread({
             {[0, 1, 2, 3, 4].map((i) => (
               <div key={i} className={i % 2 ? "flex justify-end" : "flex justify-start"}>
                 <Skeleton
-                  className="h-14 rounded-2xl"
+                  className="h-14 rounded-[var(--r-card)]"
                   style={{ width: i % 3 === 0 ? "62%" : i % 3 === 1 ? "48%" : "72%" }}
                 />
               </div>
@@ -136,7 +136,7 @@ export function ChatThread({
           <div className="space-y-4">
             {groups.map((group) => (
               <section key={group.key} aria-label={group.label}>
-                <p className="mx-auto mb-3 w-fit rounded-full bg-background px-3 py-1 text-desc font-medium text-muted-foreground shadow-sm">
+                <p className="mx-auto mb-3 w-fit rounded-full bg-background px-[var(--page-x)] py-1 text-desc font-medium text-muted-foreground shadow-sm">
                   {group.label}
                 </p>
                 <ul className="flex flex-col gap-2">
@@ -155,7 +155,7 @@ export function ChatThread({
 
             {peerTyping && (
               <p
-                className="flex w-fit items-center gap-1 rounded-2xl rounded-ss-sm bg-secondary px-3 py-2 text-desc text-secondary-foreground"
+                className="flex w-fit items-center gap-1 rounded-[var(--r-card)] rounded-ss-sm bg-secondary px-3 py-2 text-desc text-secondary-foreground"
                 aria-live="polite"
               >
                 <span className="size-1.5 animate-bounce rounded-full bg-current [animation-delay:0ms]" />

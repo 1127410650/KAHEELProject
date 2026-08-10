@@ -104,7 +104,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
 
 
   return (
-    <li className="rounded-2xl border border-border bg-card p-3">
+    <li className="rounded-[var(--r-card)] border border-border bg-card p-3">
       <div className="flex items-start gap-3">
         <span className="relative block size-20 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
           {slot.url ? (
@@ -136,7 +136,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
         </div>
       </div>
 
-      <fieldset className="mt-3 rounded-xl border border-border p-2.5">
+      <fieldset className="mt-3 rounded-xl border border-border p-[var(--sp-3)]">
         <legend className="px-1 text-desc font-bold text-foreground">ختم العلامة</legend>
         <label className="flex items-center gap-2 text-desc font-bold text-foreground" style={{ minHeight: 44 }}>
           <input
@@ -245,7 +245,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
           size="sm"
           disabled={busy !== null}
           onClick={() => fileRef.current?.click()}
-          className="gap-1.5"
+          className="gap-[var(--sp-2)]"
         >
           {slot.path ? <RefreshCw className="size-4" aria-hidden /> : <Upload className="size-4" aria-hidden />}
           {busy === "upload" ? "جارٍ الرفع…" : slot.path ? "استبدال الصورة" : "رفع صورة"}
@@ -256,7 +256,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
           size="sm"
           variant="outline"
           disabled={busy !== null}
-          className="gap-1.5"
+          className="gap-[var(--sp-2)]"
           onClick={() =>
             void run(
               "hide",
@@ -275,7 +275,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
             size="sm"
             variant="outline"
             disabled={busy !== null}
-            className="gap-1.5"
+            className="gap-[var(--sp-2)]"
             onClick={() => void run("clear", () => clearMediaSlot(slot), "أُفرغت الفتحة — عاد الاحتياطي.")}
           >
             <Trash2 className="size-4" aria-hidden />
@@ -286,7 +286,7 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
         {slot.kind === "image" ? (
           <Dialog open={studioOpen} onOpenChange={setStudioOpen}>
             <DialogTrigger asChild>
-              <Button type="button" size="sm" variant="outline" className="gap-1.5" disabled={busy !== null}>
+              <Button type="button" size="sm" variant="outline" className="gap-[var(--sp-2)]" disabled={busy !== null}>
                 <Sparkles className="size-4" aria-hidden />
                 ولّد بالذكاء الاصطناعي
               </Button>

@@ -185,7 +185,7 @@ function MorePage() {
 
   return (
     <MarketShell>
-      <div className="mx-auto w-full max-w-3xl px-4 pb-6 pt-6">
+      <div className="mx-auto w-full max-w-3xl px-[var(--page-x)] pb-6 pt-6">
         <header className="market-page-intro">
           <h1 className="text-page font-black text-foreground">{t("market.more.title")}</h1>
           <p className="mt-1 text-desc text-muted-foreground">{t("market.more.subtitle")}</p>
@@ -196,7 +196,7 @@ function MorePage() {
             {/* Active account card — display only, no sensitive data. */}
             <section ref={accountsRef} className="mt-5 scroll-mt-20">
               <h2 className="text-section mb-2 font-bold text-foreground">{t("market.more.account")}</h2>
-              <div className="market-section flex items-center gap-3 p-3.5">
+              <div className="market-section flex items-center gap-3 p-[var(--sp-4)]">
                 {active.avatar_url ? (
                   <img
                     src={active.avatar_url}
@@ -212,7 +212,7 @@ function MorePage() {
                   <span className="block truncate text-sm font-semibold text-foreground">
                     {active.name || t("market.account.fallbackName")}
                   </span>
-                  <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-desc text-muted-foreground">
+                  <span className="mt-0.5 flex flex-wrap items-center gap-[var(--sp-2)] text-desc text-muted-foreground">
                     <span>{t(`market.entry.classification.${active.classification}`)}</span>
                     {active.city ? <span>· {active.city}</span> : null}
                     {active.verification_status === "approved" ? (
@@ -449,7 +449,7 @@ function JoinSection({
               </span>
               {application ? (
                 <span
-                  className={`mt-1.5 inline-flex rounded-full px-2 py-0.5 text-desc font-bold ${
+                  className={`mt-[var(--sp-2)] inline-flex rounded-full px-2 py-0.5 text-desc font-bold ${
                     application.status === "approved"
                       ? "bg-success-soft text-success-strong"
                       : application.status === "rejected" || application.status === "withdrawn"
