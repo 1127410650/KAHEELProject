@@ -17,6 +17,8 @@ import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
 import { SyriaPrideStrip } from "@/components/marketplace/home/noon/SyriaPrideStrip";
+import { PageBlocks } from "@/components/marketplace/composer/PageBlocks";
+import { usePageBlocks } from "@/lib/mkt-page-composer";
 import { useActivePageVariant } from "@/lib/mkt-page-variants";
 import { ExclusiveOffersRail } from "@/components/marketplace/season/ExclusiveOffersRail";
 import { useI18n } from "@/i18n";
