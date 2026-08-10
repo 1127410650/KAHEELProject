@@ -49,7 +49,7 @@ export function KaheelStories() {
               <button
                 type="button"
                 onClick={() => setOpenIndex(index)}
-                className="k-press flex w-[86px] flex-col items-center gap-[var(--sp-2)] rounded-[var(--r-card)] outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
+                className="k-press flex w-[96px] flex-col items-center gap-[var(--sp-2)] rounded-[var(--r-card)] outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
               >
                 <span
                   className="grid size-[66px] place-items-center rounded-full p-[3px]"
