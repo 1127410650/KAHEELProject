@@ -264,7 +264,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             </div>
           </div>
 
-          {!isPhoneOnly && (
+          {(!isPhoneOnly || providersOff) && (
             <div className="space-y-2">
               <Label htmlFor="easy-email">{t("market.easyAuth.email")}</Label>
               <Input
@@ -277,7 +277,11 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
-              <p className="text-xs text-muted-foreground">{t("market.easyAuth.emailRequired")}</p>
+              <p className="text-xs text-muted-foreground">
+                {isPhoneOnly
+                  ? t("market.easyAuth.emailFallback")
+                  : t("market.easyAuth.emailRequired")}
+              </p>
             </div>
           )}
 
@@ -309,7 +313,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
                   data-testid="otp-disabled-note"
                   className="rounded-xl border border-gold/45 bg-gold-soft px-3 py-2 text-xs font-semibold text-gold-foreground"
                 >
-                  {t("market.easyAuth.disabled")}
+                  {t("market.easyAuth.disabledEmailFallback")}
                 </p>
               )}
             </div>
@@ -319,7 +323,11 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
             type="button"
             className="h-12 w-full"
             onClick={send}
-            disabled={busy || (isPhoneOnly && (!phoneReady || providersOff)) || (!isPhoneOnly && !emailReady)}
+            disabled={
+              busy ||
+              (isPhoneOnly && (!phoneReady || (providersOff && !emailReady))) ||
+              (!isPhoneOnly && !emailReady)
+            }
           >
             {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {busy ? t("market.easyAuth.sending") : t("market.easyAuth.send")}

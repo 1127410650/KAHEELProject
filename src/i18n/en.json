@@ -3790,6 +3790,10 @@
       "codeTab": "Code",
       "channelAuto": "Delivery: {channel} — chosen automatically from your country code.",
       "syriaSmsOnly": "Syrian numbers receive the code by SMS only; WhatsApp is not supported in Syria.",
+      "sentEmail": "Code sent to your email {target} — open your inbox and enter it.",
+      "sendFailedUsePassword": "We couldn't send the code right now — sign in with your password, or try again shortly.",
+      "emailFallback": "Add your email to receive the code there while SMS delivery is not enabled.",
+      "disabledEmailFallback": "WhatsApp/SMS delivery is not enabled yet (provider keys missing). Add your email to get the code there, or sign in with a password.",
       "cooldown": "Wait {seconds} seconds before resending."
     }
   },
