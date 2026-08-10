@@ -636,55 +636,45 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("كَحيل") — amethyst + crisp white.
- *
- * These tokens exist ONLY for the public marketplace chrome (header, bottom
- * nav, footer, home banner). They are additive: no existing token is changed,
- * so the admin console (`AdminShell`) and the internal system keep their own
- * teal identity untouched. Isolation is by usage — nothing in `/admin` or the
- * internal pages references a `market-*` utility.
+ * أسماء `market-*` التاريخية: محفوظة كي لا يتعطّل أي مكوّن قديم، لكن قيمها الآن
+ * من اللوحة المعتمدة وحدها (بنفسجي #8A4FFF / #C3ABFF + محايدات + ذهبي التمييز).
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: #3c096c;
-  --color-market-navy-dark: #10002b;
-  --color-market-navy-soft: #5a189a;
+  --color-market-navy: #8a4fff;
+  --color-market-navy-dark: #1b1b1f;
+  --color-market-navy-soft: #8a4fff;
   --color-market-navy-foreground: #ffffff;
-  --color-market-blue: #7b2cbf;
-  --color-market-blue-dark: #5a189a;
-  --color-market-blue-soft: #e0aaff;
+  --color-market-blue: #8a4fff;
+  --color-market-blue-dark: #8a4fff;
+  --color-market-blue-soft: #c3abff;
   --color-market-gold: #f59e0b;
   --color-market-gold-soft: #fff4de;
-  --color-market-electric: #9d4edd;
-  --color-market-electric-dark: #7b2cbf;
-  --color-market-electric-bright: #e0aaff;
-  --color-market-void: #10002b;
-  --color-market-panel: #240046;
-  --color-market-panel-soft: #3c096c;
+  --color-market-electric: #8a4fff;
+  --color-market-electric-dark: #8a4fff;
+  --color-market-electric-bright: #c3abff;
+  --color-market-void: #1b1b1f;
+  --color-market-panel: #1b1b1f;
+  --color-market-panel-soft: #8a4fff;
   --color-market-silver: #ffffff;
-  --color-market-silver-line: #e0aaff;
-  --color-market-silver-muted: #5a189a;
+  --color-market-silver-line: #e5e5ea;
+  --color-market-silver-muted: #6e6e7d;
 }
 
 /*
- * `.market-surface` re-points the semantic tokens to the "كَحيل" palette for the
- * whole public marketplace tree (shell, dashboard pages, auth/registration and
- * the static pages). Because every marketplace component already styles itself
- * with semantic classes (`bg-primary`, `text-muted-foreground`, `border-border`
- * …), one scope keeps the identity consistent without duplicated components.
- * The admin console and the internal system never carry this class, so their
- * petrol identity is untouched.
+ * `.market-surface` يوجّه التوكنات الدلالية للوحة كَحيل المعتمدة في كل شجرة السوق
+ * العامة. القيم مأخوذة من متغيّرات اللوحة أعلاه فلا تتكرر أرقام سداسية هنا.
  */
 .market-surface,
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  /* لافندر فاتح جدًا للصفحة (مشتق من #8a4fff)، وأبيض نقي للبطاقات. */
-  --background: #f3efff;
-  --foreground: #171423;
+  /* خلفية الصفحة الرسمية #F7F7F8 وبطاقات بيضاء نقية. */
+  --background: #f7f7f8;
+  --foreground: #1b1b1f;
   --card: #ffffff;
-  --card-foreground: #171423;
+  --card-foreground: #1b1b1f;
   --popover: #ffffff;
-  --popover-foreground: #171423;
+  --popover-foreground: #1b1b1f;
 
   /* تدرج الهوية النهائي المعتمد — قيم لا تُغمّق ولا تُعدّل. */
   --header-from: #8a4fff;
@@ -696,17 +686,17 @@ body:has(.market-surface) {
   --primary-dark: #7a3af5;
   --primary-pressed: #6522d6;
 
-  /* أسطح لافندر أغمق قليلًا من الخلفية — للاختصارات الدائرية والحبّات الهادئة */
-  --secondary: #e8dfff;
-  --secondary-foreground: #3d2179;
-  --muted: #efe9ff;
-  --muted-foreground: #4b4658;
-  --accent: #f6f2ff;
-  --accent-foreground: #6522d6;
+  /* أسطح محايدة فاتحة + تلوين بنفسجي شفاف للحالة المختارة فقط */
+  --secondary: #f2f2f4;
+  --secondary-foreground: #1b1b1f;
+  --muted: #f2f2f4;
+  --muted-foreground: #6e6e7d;
+  --accent: #f4efff;
+  --accent-foreground: #8a4fff;
 
-  /* حد رمادي-لافندر رفيع يبقى أداة الفصل الأولى */
-  --border: #e4dcfa;
-  --input: #d8cdf7;
+  /* حد رمادي محايد رفيع يبقى أداة الفصل الأولى */
+  --border: #e5e5ea;
+  --input: #e5e5ea;
   --ring: #8a4fff;
 
   --gold: #f59e0b;
@@ -715,23 +705,24 @@ body:has(.market-surface) {
   --gold-foreground: #59451f;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #171423;
-  --sidebar-accent: #e8dfff;
-  --sidebar-accent-foreground: #171423;
-  --sidebar-border: #e4dcfa;
+  --sidebar-foreground: #1b1b1f;
+  --sidebar-accent: #f2f2f4;
+  --sidebar-accent-foreground: #1b1b1f;
+  --sidebar-border: #e5e5ea;
   --sidebar-primary: #8a4fff;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-ring: #8a4fff;
 
   --chart-1: #8a4fff;
-  --chart-2: #6522d6;
+  --chart-2: #c3abff;
   --chart-3: #f59e0b;
-  --chart-4: #c3abff;
+  --chart-4: #6522d6;
 
   background-color: var(--background);
   color: var(--foreground);
   color-scheme: light;
 }
+
 
 /*
  * Elevation: ظلال محايدة ناعمة جدًا — الفصل بالحد الرفيع أولًا ثم بظل خفيف.
