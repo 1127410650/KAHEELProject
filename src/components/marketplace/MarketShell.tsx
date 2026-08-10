@@ -24,6 +24,8 @@ import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
+import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
+
 
 
 
