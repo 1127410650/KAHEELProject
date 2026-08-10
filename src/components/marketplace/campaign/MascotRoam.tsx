@@ -14,7 +14,8 @@
  *  • `pointer-events: none` على كل الحاوية ⇒ لا تعترض ضغطة ولا تمريرًا.
  *  • الحركة على `transform`/`opacity` فقط (CLS = 0)، تتوقّف مع إخفاء التبويب
  *    وتُطفأ كليًا مع `prefers-reduced-motion`.
- *  • لا خلفية بيضاء: النص على لوح زجاجي بنفسجي شفاف (`k-mascot-glass`).
+ *  • **لا خلفية للنص إطلاقًا**: النص يُكتب فوق الصفحة بلون وظل حروف يتكيّفان
+ *    مع سطوع المكان (`sampleAreaTone` + `floatingTextStyle`) — كأسلوب الترجمة.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
