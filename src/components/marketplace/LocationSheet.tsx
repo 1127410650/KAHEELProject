@@ -32,6 +32,7 @@ import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { geoName, loadCities, useAccountCountry, useMarketPreference } from "@/lib/mkt-geo";
 import { countryCenter } from "@/lib/geo-centers";
+import { setLiveOrigin } from "@/lib/mkt-nearby";
 import { reverseGeocode } from "@/lib/geo-reverse.functions";
 import {
   MapPickerDialog,
@@ -106,6 +107,14 @@ export function LocationSheet({
 
   function applyPicked(next: Picked) {
     setPicked(next);
+    // نقطة انطلاق «الأقرب إليك» — في الذاكرة فقط، لا تُخزَّن أبدًا.
+    setLiveOrigin({
+      lat: next.lat,
+      lng: next.lng,
+      city: next.city,
+      district: next.district,
+      source: next.source,
+    });
     setForm((previous) => ({
       ...previous,
       district: previous.district || next.district || "",
