@@ -1,14 +1,18 @@
 /**
  * لمسة لون لكل قسم بنمط «نون»: كل عالم قسم له لون تمييز واحد يظهر في الرؤوس
- * والحالات النشطة والبلاطات، فوق سطح محايد واحد (#F7F7F8) وبطاقات بيضاء.
+ * والحالات النشطة والبلاطات، فوق سطح محايد واحد وبطاقات بيضاء.
  *
- * القاعدة: البنفسجي هو الأساس (الرئيسية والعقار)، وبقية الأقسام تستعير لونها
- * من هذه الخريطة فقط — لا لون مكتوب مباشرة في أي مكوّن.
+ * القاعدة: الأساس هو لون اللوحة المفعّلة (`--kt-primary`) — الرئيسية والعقار
+ * وكل قسم بلا لون خاص تتبعه، فتغيير اللوحة من لوحة الإدارة يسري فورًا. بقية
+ * الأقسام تستعير لونها من هذه الخريطة فقط؛ لا لون مكتوب في أي مكوّن.
  */
+
+/** لون الأساس: يُقرأ من اللوحة المفعّلة وقت العرض. */
+export const BASE_ACCENT = "var(--kt-primary)";
 
 /** لون تمييز كل قسم؛ المفتاح هو slug القسم في mkt_categories. */
 export const SECTION_ACCENTS: Record<string, string> = {
-  "real-estate": "#8a4fff",
+  "real-estate": BASE_ACCENT,
   restaurants: "#e2691b",
   cars: "#1f7ae0",
   devices: "#0f9b8e",
@@ -27,10 +31,10 @@ export const SECTION_ACCENTS: Record<string, string> = {
   "travel-tourism": "#0e8f9e",
 };
 
-/** لون القسم من الـ slug، والبنفسجي الأساس إن لم يوجد. */
+/** لون القسم من الـ slug، ولون اللوحة المفعّلة إن لم يوجد. */
 export function sectionAccent(slug?: string | null): string {
-  if (!slug) return "#8a4fff";
-  return SECTION_ACCENTS[slug] ?? "#8a4fff";
+  if (!slug) return BASE_ACCENT;
+  return SECTION_ACCENTS[slug] ?? BASE_ACCENT;
 }
 
 /** مسارات ثابتة لها لون قسم معروف (خارج عوالم /c/{slug}). */
@@ -47,5 +51,5 @@ export function accentForPath(pathname: string): string {
   const world = pathname.match(/^\/c\/([^/?#]+)/);
   if (world) return sectionAccent(decodeURIComponent(world[1]!));
   const hit = PATH_ACCENTS.find(([prefix]) => pathname === prefix || pathname.startsWith(`${prefix}/`));
-  return hit ? hit[1] : "#8a4fff";
+  return hit ? hit[1] : BASE_ACCENT;
 }
