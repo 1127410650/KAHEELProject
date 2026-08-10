@@ -150,29 +150,18 @@ export function MarketHeader({
           className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(74_38_128/0.35)] sm:block"
         />
 
-        {shrunk ? (
-          /* الشريط الرفيع: حقل البحث وحده، والضغط عليه يعيد المستخدم لأعلى الصفحة. */
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="relative z-10 mx-auto flex h-[42px] w-full max-w-[1240px] items-center gap-2 px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:px-5 lg:px-8"
-            aria-label={t("market.homeV2.searchPlaceholder" as "market.brand")}
-          >
-            <span className="flex h-8 min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 text-muted-foreground">
-              <MapPin className="size-4 shrink-0 text-primary" aria-hidden />
-              <span className="truncate text-desc font-semibold">
-                {t("market.homeV2.searchPlaceholder" as "market.brand")}
-              </span>
-            </span>
-          </button>
-        ) : (
+        {/* صف الهوية: الشعار + الموقع + إنشاء إعلان — يتقلّص تدريجيًا مع التمرير. */}
         <div
-          className={
+          className={`relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-3 sm:px-5 lg:px-8 ${
+            collapsedEnough ? "pointer-events-none" : ""
+          }`}
+          style={
             home
-              ? "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
-              : "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
+              ? { height: `${HOME_ROW_H * (1 - shrink)}px`, opacity: 1 - shrink }
+              : { minHeight: "44px" }
           }
         >
+
 
 
           {home ? (
