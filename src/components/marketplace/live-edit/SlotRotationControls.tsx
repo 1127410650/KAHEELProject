@@ -15,6 +15,7 @@ import { Repeat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/format";
 import { useDesignTemplates } from "@/lib/mkt-design-library";
+import type { SlotPatch } from "@/lib/mkt-live-edit";
 import type { MediaSlot } from "@/lib/mkt-media-slots";
 import {
   ROTATION_PERIODS,
@@ -26,9 +27,9 @@ import {
 interface SlotRotationControlsProps {
   slot: MediaSlot;
   /** القيم المعروضة حاليًا (المسوّدة إن وُجدت، وإلا المنشور). */
-  current: Record<string, unknown>;
+  current: SlotPatch;
   busy: boolean;
-  onSave: (patch: Record<string, unknown>, done: string) => void;
+  onSave: (patch: SlotPatch, done: string) => void;
 }
 
 function asIds(value: unknown): string[] {
@@ -37,12 +38,12 @@ function asIds(value: unknown): string[] {
 
 export function SlotRotationControls({ slot, current, busy, onSave }: SlotRotationControlsProps) {
   const templates = useDesignTemplates(true);
-  const [enabled, setEnabled] = useState(Boolean(current["rotate_enabled"] ?? slot.rotate_enabled));
+  const [enabled, setEnabled] = useState(Boolean(current.rotate_enabled ?? slot.rotate_enabled));
   const [period, setPeriod] = useState(
-    String(current["rotate_period"] ?? slot.rotate_period ?? "weekly"),
+    String(current.rotate_period ?? slot.rotate_period ?? "weekly"),
   );
   const [ids, setIds] = useState<string[]>(
-    asIds(current["rotate_template_ids"] ?? slot.rotate_template_ids),
+    asIds(current.rotate_template_ids ?? slot.rotate_template_ids),
   );
 
   const toggle = (id: string) =>
