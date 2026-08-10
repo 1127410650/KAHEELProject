@@ -465,14 +465,20 @@ export async function saveBlock(input: {
   sort_order?: number | null;
   hidden?: boolean | null;
 }): Promise<PageBlock> {
-  const { data, error } = await supabase.rpc("mkt_admin_page_block_save", {
-    _id: input.id ?? null,
+  // القاعدة تفسّر الحقول الغائبة كـ «لا تغيير»، لذا نحذفها بدل إرسال null.
+  const args: Record<string, unknown> = {
     _page: input.page,
     _block_type: input.block_type,
-    _settings: (input.settings ?? {}) as never,
-    _sort_order: input.sort_order ?? null,
-    _hidden: input.hidden ?? null,
-  });
+    _settings: input.settings ?? {},
+  };
+  if (input.id) args["_id"] = input.id;
+  if (typeof input.sort_order === "number") args["_sort_order"] = input.sort_order;
+  if (typeof input.hidden === "boolean") args["_hidden"] = input.hidden;
+
+  const { data, error } = await supabase.rpc(
+    "mkt_admin_page_block_save",
+    args as never,
+  );
   if (error) throw error;
   return data as unknown as PageBlock;
 }
