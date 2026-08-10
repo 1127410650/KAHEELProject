@@ -245,3 +245,85 @@ export function areaStillFree(
   const bottom = rect.top + rect.height;
   return !boxes.some((b) => b[0] < right && b[2] > rect.left && b[1] < bottom && b[3] > rect.top);
 }
+
+// ── الذكاء اللوني: لون النص يتكيّف مع خلفية المكان ──────────────────────────
+/**
+ * النص بلا خلفية إطلاقًا، فالقراءة تُضمن بلونين متكيّفين + ظل حروف خفيف
+ * (كأسلوب الترجمة على الفيديو). هنا نفحص فعليًا خلفية المنطقة التي سينزل فيها
+ * النص: نأخذ عيّنات نقاط داخل الصندوق، ولكل نقطة نصعد في شجرة العناصر حتى أول
+ * خلفية غير شفافة، ثم نحسب السطوع النسبي (luminance) ونصوّت: فاتحة أم داكنة.
+ */
+export type AreaTone = "light" | "dark";
+
+function parseColor(value: string): [number, number, number, number] | null {
+  const m = value.match(/rgba?\(([^)]+)\)/);
+  if (!m) return null;
+  const parts = m[1]!.split(/[\s,/]+/).filter(Boolean).map(Number);
+  if (parts.length < 3 || parts.some((n) => Number.isNaN(n))) return null;
+  return [parts[0]!, parts[1]!, parts[2]!, parts[3] === undefined ? 1 : parts[3]!];
+}
+
+function luminance(r: number, g: number, b: number): number {
+  const f = (c: number) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+}
+
+/** سطوع الخلفية الفعلية عند نقطة، أو `null` إن تعذّر القياس. */
+function toneAtPoint(x: number, y: number): number | null {
+  const stack = document.elementsFromPoint(x, y);
+  for (const el of stack) {
+    if (!(el instanceof HTMLElement) && !(el instanceof SVGElement)) continue;
+    if (el.closest("[data-kaheel-stage]")) continue;
+    const style = window.getComputedStyle(el as Element);
+    // تدرّج لوني: نحكم عليه بلون النص المضاد الشائع (تدرّجات كَحيل داكنة).
+    if (style.backgroundImage && style.backgroundImage !== "none") {
+      if (/gradient/.test(style.backgroundImage)) return 0.12;
+    }
+    const color = parseColor(style.backgroundColor);
+    if (color && color[3] > 0.55) return luminance(color[0], color[1], color[2]);
+  }
+  return null;
+}
+
+export function sampleAreaTone(rect: {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}): AreaTone {
+  if (typeof document === "undefined") return "light";
+  const xs = [0.2, 0.5, 0.8].map((f) => rect.left + rect.width * f);
+  const ys = [0.25, 0.6].map((f) => rect.top + rect.height * f);
+  const samples: number[] = [];
+  for (const x of xs) {
+    for (const y of ys) {
+      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) continue;
+      const value = toneAtPoint(x, y);
+      if (value !== null) samples.push(value);
+    }
+  }
+  if (samples.length === 0) return "light";
+  const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
+  return avg < 0.45 ? "dark" : "light";
+}
+
+/** أنماط النص العائم بلا خلفية — لون + ظل حروف حسب سطوع المكان. */
+export function floatingTextStyle(tone: AreaTone): {
+  color: string;
+  textShadow: string;
+} {
+  return tone === "dark"
+    ? {
+        color: "#FFFFFF",
+        textShadow:
+          "0 1px 2px rgba(16,0,43,0.85), 0 0 6px rgba(16,0,43,0.65), 0 0 1px rgba(16,0,43,0.9)",
+      }
+    : {
+        color: "#3C096C",
+        textShadow:
+          "0 1px 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.85), 0 0 1px rgba(255,255,255,0.9)",
+      };
+}

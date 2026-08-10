@@ -242,9 +242,11 @@ export async function resolveMedia(
   const storagePaths: string[] = [];
 
   for (const path of unique) {
-    if (/^https?:\/\//i.test(path)) result[path] = path;
+    // Absolute URLs and project CDN asset paths are already displayable.
+    if (/^https?:\/\//i.test(path) || path.startsWith("/__l5e/")) result[path] = path;
     else storagePaths.push(path);
   }
+
 
   if (storagePaths.length > 0) {
     const { data } = await supabase.storage.from(MKT_BUCKET).createSignedUrls(storagePaths, 3600);

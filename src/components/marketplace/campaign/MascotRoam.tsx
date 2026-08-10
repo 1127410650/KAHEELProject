@@ -14,7 +14,8 @@
  *  • `pointer-events: none` على كل الحاوية ⇒ لا تعترض ضغطة ولا تمريرًا.
  *  • الحركة على `transform`/`opacity` فقط (CLS = 0)، تتوقّف مع إخفاء التبويب
  *    وتُطفأ كليًا مع `prefers-reduced-motion`.
- *  • لا خلفية بيضاء: النص على لوح زجاجي بنفسجي شفاف (`k-mascot-glass`).
+ *  • **لا خلفية للنص إطلاقًا**: النص يُكتب فوق الصفحة بلون وظل حروف يتكيّفان
+ *    مع سطوع المكان (`sampleAreaTone` + `floatingTextStyle`) — كأسلوب الترجمة.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
@@ -26,8 +27,12 @@ import {
   areaStillFree,
   canShowMascot,
   findSafeBand,
+  floatingTextStyle,
+  sampleAreaTone,
+  type AreaTone,
   type SafeBand,
 } from "@/lib/mascot-stage";
+
 import { useCallCenter } from "@/lib/mkt-call-center";
 import { watchScrollIdle } from "@/lib/scroll-idle";
 import {
@@ -79,7 +84,10 @@ interface Scene {
   kind: RoamScene;
   copy: string;
   band: SafeBand;
+  /** سطوع المكان لحظة الظهور — يحدّد لون النص وظلّه. */
+  tone: AreaTone;
 }
+
 
 export function MascotRoam() {
   const { locale } = useI18n();
@@ -136,14 +144,18 @@ export function MascotRoam() {
       const band = findSafeBand(SCENE_WIDTH, SCENE_HEIGHT, {
         topInset: 118,
         bottomInset: 84,
-        pad: 14,
+        pad: 18,
       });
       if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return;
+      // تأكيد لحظي أنّ الصندوق فارغ فعلًا (بطاقات، نصوص، أزرار) قبل أي رسم.
+      const box = { left: band.left, top: band.top, width: band.width, height: SCENE_HEIGHT };
+      if (!areaStillFree(box, 14)) return;
       releaseRef.current = acquireStage(`roam:${kind}`);
       keyRef.current += 1;
       const pool = kind === "stroll" ? STROLL_COPY : SEARCH_COPY;
       const line = pickCopy(pool, lastCopyRef, ar);
-      setScene({ key: keyRef.current, kind, copy: line, band });
+      setScene({ key: keyRef.current, kind, copy: line, band, tone: sampleAreaTone(box) });
+
       window.clearTimeout(hideTimer.current);
       hideTimer.current = window.setTimeout(end, pacing.roamDurationMs);
     };
@@ -264,13 +276,15 @@ export function MascotRoam() {
         }}
         className="pointer-events-none flex flex-col items-center justify-end gap-1"
       >
-        {/* الفقاعة: زجاج بنفسجي شفاف متناسق مع الخلفية — لا مستطيل أبيض. */}
+        {/* النص عائم بلا أي خلفية: لونه وظلّه يتكيّفان مع سطوع المكان. */}
         <span
           dir={ar ? "rtl" : "ltr"}
-          className="k-mascot-glass max-w-[10.5rem] rounded-2xl px-2.5 py-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
+          style={floatingTextStyle(scene.tone)}
+          className="max-w-[10.5rem] bg-transparent px-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
         >
           {scene.copy}
         </span>
+
         {/* الجسم: مشي حقيقي بتسلسل الإطارات الأربعة + ارتدادة وميلان خفيفين. */}
         <MascotWalk
           name={search ? "kaheelan" : "kaheel"}
