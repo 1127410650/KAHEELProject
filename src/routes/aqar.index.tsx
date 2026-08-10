@@ -15,6 +15,7 @@ import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
 import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
+import { useLabels } from "@/lib/mkt-ui-labels";
 import { useActivePageVariant } from "@/lib/mkt-page-variants";
 import { applyMediaSlotsToAqar, DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
 import { useMediaSlots } from "@/lib/mkt-media-slots";
@@ -50,6 +51,7 @@ export const Route = createFileRoute("/aqar/")({
 function AqarHomePage() {
   const [track, setTrack] = useState<AqarTrack>("daily_rent");
   const { ids, toggle } = useAqarFavorites();
+  const label = useLabels();
   const variant = useActivePageVariant("aqar", "aqar.types_first");
 
   const imagery = useQuery({
