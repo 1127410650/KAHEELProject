@@ -3859,7 +3859,8 @@
       "composer": "Page composer",
       "pageVariants": "Page layouts",
       "categories": "Categories & worlds",
-      "labels": "UI labels"
+      "labels": "UI labels",
+      "aiServices": "AI services"
     },
     "alerts": {
       "title": "Alerts",
