@@ -691,17 +691,17 @@ body:has(.market-surface) {
 
   --sidebar: #ffffff;
   --sidebar-foreground: #171423;
-  --sidebar-accent: #e6e1f7;
+  --sidebar-accent: #e8dfff;
   --sidebar-accent-foreground: #171423;
-  --sidebar-border: #e2ddf0;
-  --sidebar-primary: #7551c2;
+  --sidebar-border: #e4dcfa;
+  --sidebar-primary: #8a4fff;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #7551c2;
+  --sidebar-ring: #8a4fff;
 
-  --chart-1: #7551c2;
-  --chart-2: #4a2680;
+  --chart-1: #8a4fff;
+  --chart-2: #6522d6;
   --chart-3: #f59e0b;
-  --chart-4: #9d4edd;
+  --chart-4: #c3abff;
 
   background-color: var(--background);
   color: var(--foreground);
