@@ -148,5 +148,3 @@ export function CampaignMosaic() {
     </section>
   );
 }
-
-}
