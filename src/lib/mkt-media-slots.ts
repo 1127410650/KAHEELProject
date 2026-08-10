@@ -87,10 +87,11 @@ export const MEDIA_SECTION_LABELS: Record<string, string> = {
 };
 
 const SLOT_COLUMNS =
-  "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, " +
-  "sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
+  "slot_key, section, group_key, kind, path, path_original, external_url, title_ar, subtitle_ar, " +
+  "alt_text, sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
   "campaign_from, campaign_to, edit_kind, variant_page, shape_key, shape_color, shape_opacity, " +
-  "shape_size, shape_pos, motion_key, motion_state, motion_speed, tile_size, link_path, template_id";
+  "shape_size, shape_pos, motion_key, motion_state, motion_speed, tile_size, link_path, template_id, " +
+  "rotate_enabled, rotate_period, rotate_template_ids, rotate_started_at";
 
 
 export async function fetchMediaSlots(): Promise<MediaSlot[]> {
@@ -103,7 +104,13 @@ export async function fetchMediaSlots(): Promise<MediaSlot[]> {
   if (error) throw error;
 
   const rows = (data ?? []) as unknown as MediaSlotRow[];
-  const paths = rows.map((row) => row.path).filter((path): path is string => !!path);
+  const paths = [
+    ...new Set(
+      rows
+        .flatMap((row) => [row.path, row.path_original])
+        .filter((path): path is string => !!path),
+    ),
+  ];
 
   const signed: Record<string, string> = {};
   if (paths.length > 0) {
@@ -124,8 +131,10 @@ export async function fetchMediaSlots(): Promise<MediaSlot[]> {
         : row.path
           ? signed[row.path] ?? null
           : null,
+    originalUrl: row.path_original ? signed[row.path_original] ?? null : null,
   }));
 }
+
 
 /** كل الفتحات للزيارة الحالية. استعلام واحد مشترك بين كل الشاشات. */
 export function useMediaSlots() {
