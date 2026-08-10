@@ -257,9 +257,6 @@ export function MarketHome() {
           </section>
         </Reveal>
 
-        <Reveal>
-          <HomeAdStrip addHref={addHref} />
-        </Reveal>
 
         <Reveal>
           <ExclusiveOffersRail />
