@@ -113,7 +113,7 @@ export function MapPickerDialog({ open, onOpenChange, initial, onConfirm }: Prop
       role="dialog"
       aria-modal="true"
       aria-label={ar ? "اختيار الموقع على الخريطة" : "Pick location on map"}
-      className="fixed inset-0 z-[70] flex flex-col bg-background"
+      className="fixed inset-0 z-[9999] flex flex-col bg-background"
     >
       <header className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border px-3">
         <div className="flex min-w-0 items-center gap-2">
