@@ -8,7 +8,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CircleDollarSign, LayoutTemplate, MousePointerClick, Sparkles } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
+import { useAiLibrary } from "@/lib/mkt-ai-studio";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { groupSlotsBySection, useMediaSlots, useRefreshMediaSlots } from "@/lib/mkt-media-slots";
@@ -32,6 +35,8 @@ export const Route = createFileRoute("/admin/appearance")({
 function AppearancePage() {
   const slots = useMediaSlots();
   const refresh = useRefreshMediaSlots();
+  const library = useAiLibrary(true);
+
   const groups = groupSlotsBySection(slots.data ?? []);
 
   return (
@@ -77,6 +82,35 @@ function AppearancePage() {
         صيغة WebP · حتى ٣٠٠ كيلوبايت)، والفتحة الفارغة تعرض صورة احتياطية مفتوحة الترخيص. الفيديو
         حاليًا برابط خارجي فقط.
       </p>
+
+      <details className="mb-4 rounded-2xl border border-border bg-card p-3">
+        <summary className="flex cursor-pointer items-center gap-1.5 text-section font-extrabold text-foreground">
+          <Sparkles className="size-4 text-primary" aria-hidden />
+          مكتبة تصاميمي — توليد بالذكاء الاصطناعي
+        </summary>
+        <p className="mt-1 mb-3 text-desc text-muted-foreground">
+          التوليد لمدير المنصة فقط، بسقف شهري بالدولار يوقف الخدمة آليًا، وكل صورة تُختَم باسم كَحيل
+          قبل الحفظ. لتوليد صورة لفتحة معيّنة استخدم زر «ولّد بالذكاء الاصطناعي» داخل بطاقتها.
+        </p>
+        <BrandImageStudio onChanged={refresh} />
+
+        {(library.data ?? []).length > 0 ? (
+          <ul className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+            {(library.data ?? []).map((item) => (
+              <li key={item.path} className="overflow-hidden rounded-xl border border-border">
+                <img
+                  src={item.url}
+                  alt="صورة في مكتبة كَحيل المولّدة"
+                  className="aspect-square w-full object-cover"
+                  loading="lazy"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </details>
+
+
 
       {slots.isPending ? (
         <div className="space-y-3">

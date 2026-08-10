@@ -15,7 +15,9 @@ import { toast } from "sonner";
 import { Megaphone, Save, Sparkles, Tag } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
 import { DesignCard } from "@/components/marketplace/design/DesignCard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -615,21 +617,20 @@ function DesignsPage() {
       ) : null}
 
       <section
-        aria-labelledby="ai-notice"
-        className="mt-6 rounded-2xl border border-border bg-muted/40 p-3"
+        aria-labelledby="ai-studio"
+        className="mt-6 rounded-2xl border border-border bg-card p-3"
       >
-        <h2 id="ai-notice" className="text-desc font-extrabold text-foreground">
-          توليد صور جديدة كليًا بالذكاء الاصطناعي غير مفعّل — يتطلب اشتراك خدمة خارجية
+        <h2 id="ai-studio" className="flex items-center gap-1.5 text-section font-extrabold text-foreground">
+          <Sparkles className="size-4 text-primary" aria-hidden />
+          توليد صور جديدة بالذكاء الاصطناعي
         </h2>
-        <p className="mt-1 text-desc text-muted-foreground">
-          المولّد الحالي يعمل على مكتبات المشروع نفسها (ألوان الهوية، الأشكال، التخطيطات) بلا أي
-          خدمة خارجية. مكان التفعيل جاهز أدناه ويُفتح بقرار المالك فقط.
+        <p className="mt-1 mb-3 text-desc text-muted-foreground">
+          مُفعّل بقرار المالك. التوليد لمدير المنصة فقط، بسقف شهري بالدولار يوقف الخدمة آليًا عند
+          بلوغه، وكل صورة تُختَم باسم كَحيل قبل حفظها في المكتبة أو ربطها بأي فتحة.
         </p>
-        <Button size="sm" variant="outline" className="mt-2 gap-1.5" disabled>
-          <Sparkles className="size-4" aria-hidden />
-          توليد بالذكاء الاصطناعي (معطّل)
-        </Button>
+        <BrandImageStudio />
       </section>
+
 
     </AdminShell>
   );

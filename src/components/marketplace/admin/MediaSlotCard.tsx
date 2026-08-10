@@ -6,12 +6,32 @@
  * إرسالها (١٦٠٠px · WebP · ≤٣٠٠KB)، والفيديو رابط خارجي فقط حاليًا.
  */
 import { useRef, useState } from "react";
-import { Eye, EyeOff, ImagePlus, Link2, RefreshCw, Stamp, Trash2, Upload } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  ImagePlus,
+  Link2,
+  RefreshCw,
+  Sparkles,
+  Stamp,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { readableSize } from "@/lib/media-compress";
+
 import {
   BRAND_STAMP_DEFAULTS,
   STAMP_COLORS,
@@ -47,6 +67,8 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
   const [alt, setAlt] = useState(slot.alt_text ?? "");
   const [videoUrl, setVideoUrl] = useState(slot.kind === "video_url" ? slot.external_url ?? "" : "");
   const [stampOn, setStampOn] = useState(false);
+  const [studioOpen, setStudioOpen] = useState(false);
+
   const [stamp, setStamp] = useState<BrandStampOptions>(BRAND_STAMP_DEFAULTS);
   const setStampField = <K extends keyof BrandStampOptions>(key: K, value: BrandStampOptions[K]) =>
     setStamp((prev) => ({ ...prev, [key]: value }));
@@ -260,7 +282,34 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
             إفراغ
           </Button>
         ) : null}
+
+        {slot.kind === "image" ? (
+          <Dialog open={studioOpen} onOpenChange={setStudioOpen}>
+            <DialogTrigger asChild>
+              <Button type="button" size="sm" variant="outline" className="gap-1.5" disabled={busy !== null}>
+                <Sparkles className="size-4" aria-hidden />
+                ولّد بالذكاء الاصطناعي
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-h-[88vh] max-w-2xl overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>توليد صورة لهذه الفتحة</DialogTitle>
+                <DialogDescription>
+                  {slot.title_ar ?? slot.slot_key} — الصورة المولّدة تُختَم باسم كَحيل ثم تُربط بالفتحة.
+                </DialogDescription>
+              </DialogHeader>
+              <BrandImageStudio
+                slot={slot}
+                onChanged={() => {
+                  onChanged();
+                  setStudioOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+        ) : null}
       </div>
+
 
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         <label className="block">
