@@ -48,6 +48,8 @@ import {
   uploadMediaSlotImage,
   type MediaSlot,
 } from "@/lib/mkt-media-slots";
+import { enhanceImageLocally, withEnhanceAudit } from "@/lib/mkt-image-enhance";
+
 
 
 const ERRORS: Record<string, string> = {
