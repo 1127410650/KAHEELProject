@@ -128,6 +128,18 @@ const NAV: NavItem[] = [
   },
 
   {
+    to: "/admin/guide-requests",
+    labelKey: "admin.nav.guideRequests",
+    icon: ShieldQuestion,
+    section: "market",
+  },
+  {
+    to: "/admin/guide-claims",
+    labelKey: "admin.nav.guideClaims",
+    icon: ShieldQuestion,
+    section: "market",
+  },
+  {
     to: "/admin/ad-credit",
     labelKey: "admin.nav.adCredit",
     icon: Coins,

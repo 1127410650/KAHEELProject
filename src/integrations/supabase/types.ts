@@ -2859,6 +2859,47 @@ export type Database = {
           },
         ]
       }
+      mkt_guide_claim_documents: {
+        Row: {
+          claim_id: string
+          created_at: string
+          doc_kind: string
+          id: string
+          mime_type: string | null
+          size_bytes: number | null
+          storage_path: string
+          user_id: string
+        }
+        Insert: {
+          claim_id: string
+          created_at?: string
+          doc_kind: string
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          user_id: string
+        }
+        Update: {
+          claim_id?: string
+          created_at?: string
+          doc_kind?: string
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_claim_documents_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_place_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_guide_outreach: {
         Row: {
           batch_id: string | null
@@ -2902,10 +2943,15 @@ export type Database = {
       }
       mkt_guide_place_claims: {
         Row: {
+          applicant_name: string | null
+          applicant_role: string | null
           contact: string | null
           created_at: string
+          documents_purged_at: string | null
           evidence: string | null
           id: string
+          phone: string | null
+          phone_verified_at: string | null
           place_id: string
           reject_reason: string | null
           reviewed_at: string | null
@@ -2915,10 +2961,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          applicant_name?: string | null
+          applicant_role?: string | null
           contact?: string | null
           created_at?: string
+          documents_purged_at?: string | null
           evidence?: string | null
           id?: string
+          phone?: string | null
+          phone_verified_at?: string | null
           place_id: string
           reject_reason?: string | null
           reviewed_at?: string | null
@@ -2928,10 +2979,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          applicant_name?: string | null
+          applicant_role?: string | null
           contact?: string | null
           created_at?: string
+          documents_purged_at?: string | null
           evidence?: string | null
           id?: string
+          phone?: string | null
+          phone_verified_at?: string | null
           place_id?: string
           reject_reason?: string | null
           reviewed_at?: string | null
@@ -3194,6 +3250,9 @@ export type Database = {
           phone: string | null
           phone_status: string | null
           region: string | null
+          removed_at: string | null
+          removed_by: string | null
+          removed_reason: string | null
           retrieved_at: string | null
           sector: string | null
           services: string | null
@@ -3241,6 +3300,9 @@ export type Database = {
           phone?: string | null
           phone_status?: string | null
           region?: string | null
+          removed_at?: string | null
+          removed_by?: string | null
+          removed_reason?: string | null
           retrieved_at?: string | null
           sector?: string | null
           services?: string | null
@@ -3288,6 +3350,9 @@ export type Database = {
           phone?: string | null
           phone_status?: string | null
           region?: string | null
+          removed_at?: string | null
+          removed_by?: string | null
+          removed_reason?: string | null
           retrieved_at?: string | null
           sector?: string | null
           services?: string | null
@@ -3309,6 +3374,65 @@ export type Database = {
           whatsapp_status?: string | null
         }
         Relationships: []
+      }
+      mkt_guide_removal_requests: {
+        Row: {
+          contact: string
+          created_at: string
+          created_by: string | null
+          decision_note: string | null
+          description: string
+          entity_name: string
+          id: string
+          place_id: string | null
+          reporter_role: string
+          request_type: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          contact: string
+          created_at?: string
+          created_by?: string | null
+          decision_note?: string | null
+          description: string
+          entity_name: string
+          id?: string
+          place_id?: string | null
+          reporter_role: string
+          request_type: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          created_by?: string | null
+          decision_note?: string | null
+          description?: string
+          entity_name?: string
+          id?: string
+          place_id?: string | null
+          reporter_role?: string
+          request_type?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_guide_removal_requests_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_integration_catalog: {
         Row: {
@@ -10348,6 +10472,7 @@ export type Database = {
         Args: { _category: string; _sector: string; _subcategory: string }
         Returns: string
       }
+      mkt_guide_purge_claim_documents: { Args: never; Returns: number }
       mkt_guide_review_claim: {
         Args: { _approve: boolean; _claim_id: string; _reason?: string }
         Returns: undefined

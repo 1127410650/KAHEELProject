@@ -7,13 +7,14 @@ import {
   directionsHref,
   isOpenStreetMap,
   isVerified,
+  officialPhone,
+  officialWhatsapp,
   sourceHref,
   sourceLabel,
-
   websiteHref,
-  whatsappHref,
   type GuidePlace,
 } from "@/lib/mkt-guide-places";
+
 import { outreachMessage, outreachWhatsappHref } from "@/lib/kaheel-intro";
 import { inviteTemplate, renderInvite, whatsappWithText } from "@/lib/mkt-guide-booking";
 import {
@@ -55,7 +56,8 @@ export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
 export function GuidePlaceActions({ place }: { place: GuidePlace }) {
   const directions = directionsHref(place);
   const site = websiteHref(place);
-  const phone = (place.phone ?? "").replace(/[^\d+]/g, "");
+  // Privacy: only entity numbers published in an official source are shown.
+  const phone = officialPhone(place) ?? "";
 
   /**
    * The invitation text is built here, so the WhatsApp button and the share
@@ -63,8 +65,8 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
    * PDF link — both are appended by `outreachMessage` itself.
    */
   const message = outreachMessage({ name: place.name_ar, city: place.city });
-  const rawWhatsapp = place.whatsapp_link || place.whatsapp || null;
-  const whatsapp = outreachWhatsappHref(rawWhatsapp, message) ?? whatsappHref(place);
+  const rawWhatsapp = officialWhatsapp(place);
+  const whatsapp = rawWhatsapp ? outreachWhatsappHref(rawWhatsapp, message) : null;
 
   const [previous, setPrevious] = useState<OutreachRecord | null>(null);
   useEffect(() => {
@@ -93,7 +95,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
    */
   const share = async () => {
     const invite = renderInvite(await inviteTemplate(), place);
-    const link = whatsappWithText(rawWhatsapp || place.phone, invite);
+    const link = whatsappWithText(rawWhatsapp || phone, invite);
     if (link) {
       window.open(link, "_blank", "noopener,noreferrer");
       log("share");

@@ -6,6 +6,8 @@ import { MarketShell } from "@/components/marketplace/MarketShell";
 import { GuidePlaceActions, GuidePlaceBadges } from "@/components/marketplace/GuidePlaceCard";
 import { GuidePlaceCommunity } from "@/components/marketplace/guide/GuidePlaceCommunity";
 import { GuideBookingButton } from "@/components/marketplace/guide/GuideBookingButton";
+import { GuideDirectoryNotice } from "@/components/marketplace/guide/GuideDirectoryNotice";
+import { OsmAttribution } from "@/components/marketplace/guide/OsmAttribution";
 
 import { fetchGuidePlace, websiteHref } from "@/lib/mkt-guide-places";
 import { canonicalLinks, canonicalMeta } from "@/lib/share-links";
@@ -63,6 +65,16 @@ function GuidePlacePage() {
           </p>
         ) : (
           <article className="space-y-2.5">
+            <GuideDirectoryNotice
+              placeName={data.name_ar}
+              placeSlug={data.slug}
+              onClaim={() =>
+                document
+                  .getElementById("guide-claim")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" })
+              }
+            />
+
             {/* بطاقة واحدة مضغوطة: الاسم + التصنيف + العنوان والتواصل */}
             <section className="rounded-2xl border border-border/80 bg-card p-3.5 sm:p-4">
               <div className="flex items-start justify-between gap-2">
@@ -130,6 +142,7 @@ function GuidePlacePage() {
                   "لا يوجد مصدر منشور لهذا السجل."}
               </p>
               {data.notes ? <p className="mt-1.5 text-muted-foreground">{data.notes}</p> : null}
+              <OsmAttribution className="mt-2" />
             </section>
           </article>
         )}

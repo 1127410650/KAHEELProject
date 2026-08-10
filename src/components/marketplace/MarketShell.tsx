@@ -399,12 +399,22 @@ export function MarketCompactFooter() {
     <footer className="mt-8 border-t border-border">
       <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-4 text-xs text-muted-foreground lg:px-6">
         <p>{t("market.footer.rights")}</p>
-        <Link
-          to="/legal/copyright"
-          className="min-h-11 content-center underline decoration-dotted underline-offset-4 hover:text-foreground"
-        >
-          {t("market.footer.copyright")}
-        </Link>
+        {(
+          [
+            ["/legal/copyright", "market.footer.copyright"],
+            ["/legal/terms", "market.footer.terms"],
+            ["/legal/privacy", "market.footer.privacy"],
+            ["/legal/directory-policy", "market.footer.directoryPolicy"],
+          ] as const
+        ).map(([to, key]) => (
+          <Link
+            key={to}
+            to={to}
+            className="min-h-11 content-center underline decoration-dotted underline-offset-4 hover:text-foreground"
+          >
+            {t(key)}
+          </Link>
+        ))}
       </div>
     </footer>
   );

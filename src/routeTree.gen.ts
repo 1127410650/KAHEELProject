@@ -38,7 +38,9 @@ import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
+import { Route as AdminGuideClaimsRouteImport } from './routes/admin/guide-claims'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
+import { Route as AdminGuideRequestsRouteImport } from './routes/admin/guide-requests'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
@@ -62,10 +64,14 @@ import { Route as BusinessProfileRouteImport } from './routes/business/profile'
 import { Route as BusinessesSlugRouteImport } from './routes/businesses.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as DemoStoresWorldIdRouteImport } from './routes/demo-stores.$worldId'
+import { Route as GuidesRemovalRequestRouteImport } from './routes/guides/removal-request'
 import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as LegalCopyrightRouteImport } from './routes/legal/copyright'
+import { Route as LegalDirectoryPolicyRouteImport } from './routes/legal/directory-policy'
+import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
+import { Route as LegalTermsRouteImport } from './routes/legal/terms'
 import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
 import { Route as MyBookingsRouteImport } from './routes/my/bookings'
 import { Route as MyCaptainRouteImport } from './routes/my/captain'
@@ -253,9 +259,19 @@ const AdminErrandsRoute = AdminErrandsRouteImport.update({
   path: '/errands',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminGuideClaimsRoute = AdminGuideClaimsRouteImport.update({
+  id: '/guide-claims',
+  path: '/guide-claims',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
   id: '/guide-queue',
   path: '/guide-queue',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminGuideRequestsRoute = AdminGuideRequestsRouteImport.update({
+  id: '/guide-requests',
+  path: '/guide-requests',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -373,6 +389,11 @@ const DemoStoresWorldIdRoute = DemoStoresWorldIdRouteImport.update({
   path: '/demo-stores/$worldId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesRemovalRequestRoute = GuidesRemovalRequestRouteImport.update({
+  id: '/guides/removal-request',
+  path: '/guides/removal-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesStudentsRoute = GuidesStudentsRouteImport.update({
   id: '/guides/students',
   path: '/guides/students',
@@ -391,6 +412,21 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
 const LegalCopyrightRoute = LegalCopyrightRouteImport.update({
   id: '/legal/copyright',
   path: '/legal/copyright',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalDirectoryPolicyRoute = LegalDirectoryPolicyRouteImport.update({
+  id: '/legal/directory-policy',
+  path: '/legal/directory-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/legal/terms',
+  path: '/legal/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyAdCreditRoute = MyAdCreditRouteImport.update({
@@ -632,7 +668,9 @@ export interface FileRoutesByFullPath {
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/errands': typeof AdminErrandsRoute
+  '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
+  '/admin/guide-requests': typeof AdminGuideRequestsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -655,10 +693,14 @@ export interface FileRoutesByFullPath {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/removal-request': typeof GuidesRemovalRequestRoute
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/directory-policy': typeof LegalDirectoryPolicyRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/captain': typeof MyCaptainRoute
@@ -729,7 +771,9 @@ export interface FileRoutesByTo {
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/errands': typeof AdminErrandsRoute
+  '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
+  '/admin/guide-requests': typeof AdminGuideRequestsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -752,10 +796,14 @@ export interface FileRoutesByTo {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/removal-request': typeof GuidesRemovalRequestRoute
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/directory-policy': typeof LegalDirectoryPolicyRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/captain': typeof MyCaptainRoute
@@ -830,7 +878,9 @@ export interface FileRoutesById {
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/errands': typeof AdminErrandsRoute
+  '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
+  '/admin/guide-requests': typeof AdminGuideRequestsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -853,10 +903,14 @@ export interface FileRoutesById {
   '/businesses/$slug': typeof BusinessesSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/demo-stores/$worldId': typeof DemoStoresWorldIdRoute
+  '/guides/removal-request': typeof GuidesRemovalRequestRoute
   '/guides/students': typeof GuidesStudentsRoute
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/directory-policy': typeof LegalDirectoryPolicyRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
   '/my/bookings': typeof MyBookingsRoute
   '/my/captain': typeof MyCaptainRoute
@@ -932,7 +986,9 @@ export interface FileRouteTypes {
     | '/admin/campaigns'
     | '/admin/dashboard'
     | '/admin/errands'
+    | '/admin/guide-claims'
     | '/admin/guide-queue'
+    | '/admin/guide-requests'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -955,10 +1011,14 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/removal-request'
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/directory-policy'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/my/ad-credit'
     | '/my/bookings'
     | '/my/captain'
@@ -1029,7 +1089,9 @@ export interface FileRouteTypes {
     | '/admin/campaigns'
     | '/admin/dashboard'
     | '/admin/errands'
+    | '/admin/guide-claims'
     | '/admin/guide-queue'
+    | '/admin/guide-requests'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1052,10 +1114,14 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/removal-request'
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/directory-policy'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/my/ad-credit'
     | '/my/bookings'
     | '/my/captain'
@@ -1129,7 +1195,9 @@ export interface FileRouteTypes {
     | '/admin/campaigns'
     | '/admin/dashboard'
     | '/admin/errands'
+    | '/admin/guide-claims'
     | '/admin/guide-queue'
+    | '/admin/guide-requests'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1152,10 +1220,14 @@ export interface FileRouteTypes {
     | '/businesses/$slug'
     | '/categories/$slug'
     | '/demo-stores/$worldId'
+    | '/guides/removal-request'
     | '/guides/students'
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/directory-policy'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/my/ad-credit'
     | '/my/bookings'
     | '/my/captain'
@@ -1227,10 +1299,14 @@ export interface RootRouteChildren {
   BusinessesSlugRoute: typeof BusinessesSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DemoStoresWorldIdRoute: typeof DemoStoresWorldIdRoute
+  GuidesRemovalRequestRoute: typeof GuidesRemovalRequestRoute
   GuidesStudentsRoute: typeof GuidesStudentsRoute
   GuidesSyriaRoute: typeof GuidesSyriaRoute
   InviteTokenRoute: typeof InviteTokenRoute
   LegalCopyrightRoute: typeof LegalCopyrightRoute
+  LegalDirectoryPolicyRoute: typeof LegalDirectoryPolicyRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalTermsRoute: typeof LegalTermsRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1445,11 +1521,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminErrandsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/guide-claims': {
+      id: '/admin/guide-claims'
+      path: '/guide-claims'
+      fullPath: '/admin/guide-claims'
+      preLoaderRoute: typeof AdminGuideClaimsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/guide-queue': {
       id: '/admin/guide-queue'
       path: '/guide-queue'
       fullPath: '/admin/guide-queue'
       preLoaderRoute: typeof AdminGuideQueueRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/guide-requests': {
+      id: '/admin/guide-requests'
+      path: '/guide-requests'
+      fullPath: '/admin/guide-requests'
+      preLoaderRoute: typeof AdminGuideRequestsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -1613,6 +1703,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStoresWorldIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/removal-request': {
+      id: '/guides/removal-request'
+      path: '/guides/removal-request'
+      fullPath: '/guides/removal-request'
+      preLoaderRoute: typeof GuidesRemovalRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/students': {
       id: '/guides/students'
       path: '/guides/students'
@@ -1639,6 +1736,27 @@ declare module '@tanstack/react-router' {
       path: '/legal/copyright'
       fullPath: '/legal/copyright'
       preLoaderRoute: typeof LegalCopyrightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/directory-policy': {
+      id: '/legal/directory-policy'
+      path: '/legal/directory-policy'
+      fullPath: '/legal/directory-policy'
+      preLoaderRoute: typeof LegalDirectoryPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/legal/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my/ad-credit': {
@@ -1939,7 +2057,9 @@ interface AdminRouteRouteChildren {
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminErrandsRoute: typeof AdminErrandsRoute
+  AdminGuideClaimsRoute: typeof AdminGuideClaimsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
+  AdminGuideRequestsRoute: typeof AdminGuideRequestsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
@@ -1974,7 +2094,9 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminErrandsRoute: AdminErrandsRoute,
+  AdminGuideClaimsRoute: AdminGuideClaimsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
+  AdminGuideRequestsRoute: AdminGuideRequestsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
@@ -2120,10 +2242,14 @@ const rootRouteChildren: RootRouteChildren = {
   BusinessesSlugRoute: BusinessesSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DemoStoresWorldIdRoute: DemoStoresWorldIdRoute,
+  GuidesRemovalRequestRoute: GuidesRemovalRequestRoute,
   GuidesStudentsRoute: GuidesStudentsRoute,
   GuidesSyriaRoute: GuidesSyriaRoute,
   InviteTokenRoute: InviteTokenRoute,
   LegalCopyrightRoute: LegalCopyrightRoute,
+  LegalDirectoryPolicyRoute: LegalDirectoryPolicyRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalTermsRoute: LegalTermsRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,

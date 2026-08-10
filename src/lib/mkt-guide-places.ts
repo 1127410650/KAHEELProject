@@ -98,6 +98,50 @@ export function isOpenStreetMap(place: GuidePlace): boolean {
   return source.includes("osm") || source.includes("openstreetmap");
 }
 
+/* ── privacy: only officially published entity numbers may be shown ──────── */
+
+/** A record without any published source is never used as a contact source. */
+function hasPublishedSource(place: GuidePlace): boolean {
+  return !!((place.source_label ?? "").trim() || (place.source_type ?? "").trim());
+}
+
+/** Syrian and Lebanese personal mobile ranges — a person, not a switchboard. */
+function looksPersonalMobile(raw: string): boolean {
+  const digits = raw.replace(/[^\d]/g, "");
+  const national = digits.replace(/^(?:00)?(?:963|961)/, "");
+  return /^0?9\d{8}$/.test(national) || /^0?(?:3|7\d)\d{6}$/.test(national);
+}
+
+/** A note that admits the number was inferred, not read from the source. */
+function inferredContact(status: string | null): boolean {
+  return /استدلالي|غير قابلة للتطبيع|يلزم تحقق/.test(status ?? "");
+}
+
+/**
+ * The entity's phone, only when it may lawfully be published: it must come from
+ * a published source, must not be an inferred value, and a personal mobile line
+ * is withheld unless the record itself is verified.
+ */
+export function officialPhone(place: GuidePlace): string | null {
+  const raw = (place.phone ?? "").replace(/[^\d+]/g, "");
+  if (raw.length < 6) return null;
+  if (!hasPublishedSource(place)) return null;
+  if (inferredContact(place.phone_status)) return null;
+  if (looksPersonalMobile(raw) && !isVerified(place)) return null;
+  return raw;
+}
+
+/** Same rule for WhatsApp, which is a mobile line by nature. */
+export function officialWhatsapp(place: GuidePlace): string | null {
+  if (!hasPublishedSource(place)) return null;
+  if (inferredContact(place.whatsapp_status)) return null;
+  const raw = place.whatsapp_link || place.whatsapp || "";
+  if (!raw) return null;
+  if (looksPersonalMobile(raw) && !isVerified(place)) return null;
+  return raw;
+}
+
+
 export interface GuidePlacesPage {
   rows: GuidePlace[];
   total: number;
@@ -128,6 +172,7 @@ export async function fetchGuidePlaces(
     const { data, error: nearError } = await supabase
       .from("mkt_guide_places")
       .select(SELECT_COLUMNS)
+      .is("removed_at", null)
       .in("id", nearPage.ids);
     if (nearError) throw nearError;
     const ordered = orderByIds((data ?? []) as unknown as GuidePlace[], nearPage.ids)
@@ -141,6 +186,7 @@ export async function fetchGuidePlaces(
   let request = supabase
     .from("mkt_guide_places")
     .select(SELECT_COLUMNS, { count: "exact" })
+    .is("removed_at", null)
     .eq("is_published", true)
     .eq("country_iso2", iso2);
 
@@ -176,6 +222,7 @@ export async function fetchGuidePlace(slug: string): Promise<GuidePlace | null> 
     .from("mkt_guide_places")
     .select(SELECT_COLUMNS)
     .eq("slug", slug)
+    .is("removed_at", null)
     .eq("is_published", true)
     .maybeSingle();
 
@@ -218,6 +265,7 @@ export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
     const { data, error, count } = await supabase
       .from("mkt_guide_places")
       .select("sector,governorate,category,subcategory", { count: "exact" })
+      .is("removed_at", null)
       .eq("is_published", true)
       .eq("country_iso2", iso2)
       .order("id", { ascending: true })
