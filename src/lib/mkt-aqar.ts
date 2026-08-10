@@ -239,6 +239,20 @@ export async function fetchAqarProvider(id: string): Promise<AqarProvider | null
   return (data as AqarProvider | null) ?? null;
 }
 
+/** إعلانات معلن واحد المنشورة — تُستخدم في بروفايله العام. */
+export async function fetchAqarListingsByProvider(
+  providerId: string,
+  limit = 24,
+): Promise<AqarListing[]> {
+  const { data } = await buildBase()
+    .eq("provider_id", providerId)
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .limit(limit);
+  return attachPhotos((data ?? []) as unknown as Omit<AqarListing, "photos">[]);
+}
+
+
+
 export interface AqarRoomType {
   id: string;
   name: string;
