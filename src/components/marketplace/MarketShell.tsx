@@ -116,7 +116,7 @@ export function MarketHeader({
                   className={
                     locationKnown
                       ? "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight"
-                      : "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight text-[#ffd166] underline decoration-dotted underline-offset-2"
+                      : "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight text-primary underline decoration-dotted underline-offset-2"
                   }
                 >
                   {locationLabel}
