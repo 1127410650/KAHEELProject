@@ -166,6 +166,12 @@ const NAV: NavItem[] = [
     section: "market",
   },
   {
+    to: "/admin/composer",
+    labelKey: "admin.nav.composer",
+    icon: LayoutTemplate,
+    section: "market",
+  },
+  {
     to: "/admin/appearance/variants",
     labelKey: "admin.nav.pageVariants",
     icon: LayoutTemplate,

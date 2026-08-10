@@ -5680,6 +5680,111 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_page_block_audit: {
+        Row: {
+          action: string
+          actor: string | null
+          after_data: Json | null
+          before_data: Json | null
+          block_id: string | null
+          created_at: string
+          id: string
+          page: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          block_id?: string | null
+          created_at?: string
+          id?: string
+          page: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          block_id?: string | null
+          created_at?: string
+          id?: string
+          page?: string
+        }
+        Relationships: []
+      }
+      mkt_page_blocks: {
+        Row: {
+          block_type: string
+          created_at: string
+          deleted_at: string | null
+          hidden: boolean
+          id: string
+          page: string
+          settings: Json
+          sort_order: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          block_type: string
+          created_at?: string
+          deleted_at?: string | null
+          hidden?: boolean
+          id?: string
+          page: string
+          settings?: Json
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          block_type?: string
+          created_at?: string
+          deleted_at?: string | null
+          hidden?: boolean
+          id?: string
+          page?: string
+          settings?: Json
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      mkt_page_compositions: {
+        Row: {
+          block_count: number
+          blocks: Json
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          name_ar: string
+          page: string
+        }
+        Insert: {
+          block_count?: number
+          blocks?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          name_ar: string
+          page: string
+        }
+        Update: {
+          block_count?: number
+          blocks?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          name_ar?: string
+          page?: string
+        }
+        Relationships: []
+      }
       mkt_page_variants: {
         Row: {
           created_at: string
@@ -11460,6 +11565,51 @@ export type Database = {
         Returns: undefined
       }
       mkt_admin_overview: { Args: never; Returns: Json }
+      mkt_admin_page_block_delete: { Args: { _id: string }; Returns: undefined }
+      mkt_admin_page_block_restore: {
+        Args: { _id: string }
+        Returns: undefined
+      }
+      mkt_admin_page_block_save: {
+        Args: {
+          _block_type: string
+          _hidden?: boolean
+          _id?: string
+          _page: string
+          _settings?: Json
+          _sort_order?: number
+        }
+        Returns: {
+          block_type: string
+          created_at: string
+          deleted_at: string | null
+          hidden: boolean
+          id: string
+          page: string
+          settings: Json
+          sort_order: number
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_page_blocks"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mkt_admin_page_blocks_reorder: {
+        Args: { _ids: string[]; _page: string }
+        Returns: undefined
+      }
+      mkt_admin_page_composition_apply: {
+        Args: { _id: string }
+        Returns: number
+      }
+      mkt_admin_page_composition_save: {
+        Args: { _kind?: string; _name_ar: string; _page: string }
+        Returns: string
+      }
       mkt_admin_refund_promotion: {
         Args: { _promotion_id: string; _reason: string }
         Returns: Json
@@ -12659,6 +12809,16 @@ export type Database = {
         Returns: boolean
       }
       mkt_order_party: { Args: { _order_id: string }; Returns: boolean }
+      mkt_page_block_log: {
+        Args: {
+          _action: string
+          _after: Json
+          _before: Json
+          _block_id: string
+          _page: string
+        }
+        Returns: undefined
+      }
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
       mkt_promotion_prices: { Args: never; Returns: Json }
