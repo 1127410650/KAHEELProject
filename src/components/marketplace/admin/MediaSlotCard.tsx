@@ -16,7 +16,9 @@ import {
   Stamp,
   Trash2,
   Upload,
+  Wand2,
 } from "lucide-react";
+
 import { toast } from "sonner";
 
 import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
