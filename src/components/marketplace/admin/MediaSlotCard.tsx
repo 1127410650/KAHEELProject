@@ -260,7 +260,34 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
             إفراغ
           </Button>
         ) : null}
+
+        {slot.kind === "image" ? (
+          <Dialog open={studioOpen} onOpenChange={setStudioOpen}>
+            <DialogTrigger asChild>
+              <Button type="button" size="sm" variant="outline" className="gap-1.5" disabled={busy !== null}>
+                <Sparkles className="size-4" aria-hidden />
+                ولّد بالذكاء الاصطناعي
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-h-[88vh] max-w-2xl overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>توليد صورة لهذه الفتحة</DialogTitle>
+                <DialogDescription>
+                  {slot.title_ar ?? slot.slot_key} — الصورة المولّدة تُختَم باسم كَحيل ثم تُربط بالفتحة.
+                </DialogDescription>
+              </DialogHeader>
+              <BrandImageStudio
+                slot={slot}
+                onChanged={() => {
+                  onChanged();
+                  setStudioOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+        ) : null}
       </div>
+
 
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         <label className="block">
