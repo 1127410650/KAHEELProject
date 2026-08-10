@@ -110,6 +110,7 @@ import { Route as AdminStaffWorkloadRouteImport } from './routes/admin/staff.wor
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as ApiPublicKaheelIntroDotpdfRouteImport } from './routes/api/public/kaheel-intro[.]pdf'
+import { Route as AqarBookIdRouteImport } from './routes/aqar.book.$id'
 import { Route as BusinessServicesIndexRouteImport } from './routes/business/services.index'
 import { Route as BusinessServicesSettingsRouteImport } from './routes/business/services.settings'
 import { Route as BusinessStoreIndexRouteImport } from './routes/business/store.index'
@@ -635,6 +636,11 @@ const ApiPublicKaheelIntroDotpdfRoute =
     path: '/api/public/kaheel-intro.pdf',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AqarBookIdRoute = AqarBookIdRouteImport.update({
+  id: '/book/$id',
+  path: '/book/$id',
+  getParentRoute: () => AqarRoute,
+} as any)
 const BusinessServicesIndexRoute = BusinessServicesIndexRouteImport.update({
   id: '/services/',
   path: '/services/',
@@ -830,6 +836,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
@@ -947,6 +954,7 @@ export interface FileRoutesByTo {
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
@@ -1069,6 +1077,7 @@ export interface FileRoutesById {
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
@@ -1192,6 +1201,7 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
@@ -1309,6 +1319,7 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
@@ -1430,6 +1441,7 @@ export interface FileRouteTypes {
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
     | '/business/store/new'
@@ -2206,6 +2218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicKaheelIntroDotpdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aqar/book/$id': {
+      id: '/aqar/book/$id'
+      path: '/book/$id'
+      fullPath: '/aqar/book/$id'
+      preLoaderRoute: typeof AqarBookIdRouteImport
+      parentRoute: typeof AqarRoute
+    }
     '/business/services/': {
       id: '/business/services/'
       path: '/services'
@@ -2507,6 +2526,7 @@ interface AqarRouteChildren {
   AqarFavoritesRoute: typeof AqarFavoritesRoute
   AqarRequestsRoute: typeof AqarRequestsRoute
   AqarIndexRoute: typeof AqarIndexRoute
+  AqarBookIdRoute: typeof AqarBookIdRoute
 }
 
 const AqarRouteChildren: AqarRouteChildren = {
@@ -2516,6 +2536,7 @@ const AqarRouteChildren: AqarRouteChildren = {
   AqarFavoritesRoute: AqarFavoritesRoute,
   AqarRequestsRoute: AqarRequestsRoute,
   AqarIndexRoute: AqarIndexRoute,
+  AqarBookIdRoute: AqarBookIdRoute,
 }
 
 const AqarRouteWithChildren = AqarRoute._addFileChildren(AqarRouteChildren)

@@ -160,8 +160,8 @@ function AqarBookPage() {
     <AqarShell
       title={isSale ? "طلب معاينة" : "طلب حجز"}
       subtitle={`${row.city}${row.district ? ` — ${row.district}` : ""}`}
-      back="/aqar/$id"
-      backLabel="الإعلان"
+      back="/aqar"
+      backLabel="عقار"
     >
       <div className="mx-auto w-full max-w-3xl p-4 pb-10">
         {/* ملخّص العقار المطلوب */}
