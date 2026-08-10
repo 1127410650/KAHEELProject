@@ -829,7 +829,7 @@ function GenericSearchPage() {
             )}
           </form>
 
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm" className="k-press h-9 shrink-0 rounded-xl border-primary/30 font-bold">
