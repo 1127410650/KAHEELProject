@@ -11800,6 +11800,15 @@ export type Database = {
         Args: { _identifier: string; _success: boolean }
         Returns: boolean
       }
+      resolve_login_candidates: {
+        Args: { _identifier: string }
+        Returns: {
+          email: string
+          is_active: boolean
+          locked: boolean
+          user_id: string
+        }[]
+      }
       resolve_login_identity: {
         Args: { _identifier: string }
         Returns: {

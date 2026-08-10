@@ -2,7 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
-import { normalizeMobile } from "@/lib/register.server";
+
 
 function publishableClient() {
   const url = process.env["SUPABASE_URL"]!;
@@ -31,10 +31,11 @@ export interface SignInResult {
   error?: "INVALID" | "LOCKED";
 }
 
-interface ResolvedIdentity {
+interface LoginCandidate {
+  user_id: string;
   email: string | null;
-  locked: boolean;
   is_active: boolean;
+  locked: boolean;
 }
 
 export async function signInWithIdentifierImpl(
@@ -44,41 +45,32 @@ export async function signInWithIdentifierImpl(
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const key = identifier.trim().toLowerCase();
 
-  const { data: resolved } = await supabaseAdmin.rpc("resolve_login_identity", {
+  // بحث مرن: البريد كما هو، والرقم بكل صيغه (بالصفر، بدونه، بالمفتاح الدولي).
+  const { data: rows, error: resolveError } = await supabaseAdmin.rpc("resolve_login_candidates", {
     _identifier: key,
   });
-  let row = (Array.isArray(resolved) ? resolved[0] : null) as ResolvedIdentity | null;
+  let candidates = ((rows ?? []) as LoginCandidate[]).filter(
+    (row) => !!row.email && row.is_active !== false,
+  );
 
-  // Public phone-first accounts authenticate against a private Auth email alias.
-  // Keep the existing resolver as the primary path, but resolve the alias through
-  // the private profiles row when older database versions do not yet map phones.
-  if (!row?.email) {
-    const phone = key.includes("@") ? "" : normalizeMobile(key);
-    const profileQuery = supabaseAdmin
-      .from("profiles")
-      .select("user_id, is_active")
-      .limit(1);
-    const { data: profile } = key.includes("@")
-      ? await profileQuery.eq("email", key).maybeSingle()
-      : phone
-        ? await profileQuery.eq("phone", phone).maybeSingle()
-        : { data: null };
-
-    if (profile?.user_id) {
-      const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(profile.user_id);
-      if (authUser.user?.email) {
-        row = {
-          email: authUser.user.email,
-          locked: false,
-          is_active: profile.is_active !== false,
-        };
-      }
-    }
+  // احتياط للنسخ الأقدم من القاعدة: المُحلِّل السابق بصيغة صف واحد.
+  if (resolveError || candidates.length === 0) {
+    const { data: legacy } = await supabaseAdmin.rpc("resolve_login_identity", {
+      _identifier: key,
+    });
+    const row = (Array.isArray(legacy) ? legacy[0] : null) as
+      | { email: string | null; is_active: boolean; locked: boolean }
+      | null;
+    if (row?.locked) return { ok: false, error: "LOCKED" };
+    if (row?.email && row.is_active !== false)
+      candidates = [{ user_id: "", email: row.email, is_active: true, locked: false }];
   }
 
-  if (row?.locked) return { ok: false, error: "LOCKED" };
+  if (candidates.some((row) => row.locked)) return { ok: false, error: "LOCKED" };
 
-  const fail = async () => {
+  const fail = async (reason: "NOT_FOUND" | "BAD_PASSWORD") => {
+    // تشخيص داخلي فقط: المستخدم يرى رسالة عامة لا تكشف وجود الحساب.
+    console.warn(`[auth] sign-in failed: ${reason} candidates=${candidates.length}`);
     const { data: locked } = await supabaseAdmin.rpc("register_login_result", {
       _identifier: key,
       _success: false,
@@ -86,19 +78,25 @@ export async function signInWithIdentifierImpl(
     return { ok: false, error: locked ? ("LOCKED" as const) : ("INVALID" as const) };
   };
 
-  if (!row?.email || row.is_active === false) return fail();
+  if (candidates.length === 0) return fail("NOT_FOUND");
 
+  // عند تطابق أكثر من حساب بنفس الرقم، تُجرَّب كلمة المرور على كل مرشّح.
   const auth = publishableClient();
-  const { data, error } = await auth.auth.signInWithPassword({
-    email: row.email,
-    password,
-  });
-  if (error || !data.session) return fail();
+  for (const candidate of candidates) {
+    const { data, error } = await auth.auth.signInWithPassword({
+      email: candidate.email!,
+      password,
+    });
+    if (!error && data.session) {
+      await supabaseAdmin.rpc("register_login_result", { _identifier: key, _success: true });
+      return {
+        ok: true,
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      };
+    }
+  }
 
-  await supabaseAdmin.rpc("register_login_result", { _identifier: key, _success: true });
-  return {
-    ok: true,
-    access_token: data.session.access_token,
-    refresh_token: data.session.refresh_token,
-  };
+  return fail("BAD_PASSWORD");
 }
+
