@@ -515,7 +515,7 @@ export function BusinessQuickCreate({
       title={t("market.biz.quickCreate")}
       description={t("market.biz.quickCreateHint")}
     >
-      <p className="text-[11px] font-medium text-muted-foreground">
+      <p className="text-desc font-medium text-muted-foreground">
         {t("market.biz.stepOf")
           .replace("{n}", String(stage + 1))
           .replace("{total}", "3")}{" "}
@@ -646,7 +646,7 @@ export function BusinessQuickCreate({
 
       {stage === 1 && (
         <div className="space-y-3">
-          <p className="rounded-lg bg-secondary/50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
+          <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
             {t("market.biz.officerPrivacy")}
           </p>
           <div className="grid gap-3 md:grid-cols-2">
@@ -827,7 +827,7 @@ export function BusinessQuickCreate({
             )}
           </div>
 
-          <p className="rounded-lg bg-secondary/50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
+          <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
             {t("market.biz.verificationRules")}
           </p>
           {DOC_ORDER.filter((kind) => kind !== "authorization" || capacity !== "owner").map(
@@ -904,11 +904,11 @@ export function BusinessQuickCreate({
             />
           </ReviewGroup>
 
-          <p className="rounded-lg bg-secondary/50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
+          <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
             {t("market.biz.verificationLocked")}
           </p>
 
-          <label className="flex min-w-0 items-start gap-2 text-xs leading-snug text-foreground">
+          <label className="flex min-w-0 items-start gap-2 text-desc leading-snug text-foreground">
             <input
               type="checkbox"
               className="mt-0.5 size-4 shrink-0"
@@ -977,8 +977,8 @@ function Shell({
     return (
       <div className="flex min-w-0 flex-col gap-4">
         <div className="min-w-0">
-          <h1 className="wrap-anywhere text-lg font-bold leading-tight sm:text-2xl">{title}</h1>
-          <p className="wrap-anywhere mt-1 text-xs leading-snug text-muted-foreground sm:text-sm">
+          <h1 className="text-page wrap-anywhere font-bold leading-tight">{title}</h1>
+          <p className="wrap-anywhere mt-1 text-desc leading-snug text-muted-foreground sm:text-sm">
             {description}
           </p>
         </div>
@@ -1022,7 +1022,7 @@ function ReviewGroup({
   return (
     <section className="min-w-0 rounded-xl border border-border bg-card p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <h2 className="wrap-anywhere text-xs font-semibold text-foreground">{title}</h2>
+        <h2 className="text-section wrap-anywhere font-semibold text-foreground">{title}</h2>
         <Button type="button" variant="ghost" size="sm" className="gap-1" onClick={onEdit}>
           <Pencil className="size-3.5" aria-hidden />
           {t("market.form.edit")}
@@ -1035,7 +1035,7 @@ function ReviewGroup({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex min-w-0 flex-wrap gap-x-2 text-[11px] sm:text-xs">
+    <div className="flex min-w-0 flex-wrap gap-x-2 text-desc sm:text-desc">
       <dt className="shrink-0 text-muted-foreground">{label}</dt>
       <dd className="wrap-anywhere min-w-0 font-medium text-foreground">{value || "—"}</dd>
     </div>
@@ -1057,7 +1057,7 @@ function Field({
     <div className="min-w-0 space-y-1.5">
       <Label htmlFor={id}>{label}</Label>
       {children}
-      {hint && <p className="wrap-anywhere text-[11px] text-muted-foreground">{hint}</p>}
+      {hint && <p className="wrap-anywhere text-desc text-muted-foreground">{hint}</p>}
     </div>
   );
 }

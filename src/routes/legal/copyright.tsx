@@ -97,10 +97,10 @@ function CopyrightPage() {
     <MarketShell>
       <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
         <header className="market-page-intro">
-          <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          <h1 className="text-page font-black tracking-tight text-foreground">
             {ar ? "حقوق الأصول البصرية" : "Visual asset copyright"}
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-desc text-muted-foreground">
             {ar
               ? "© منصة كَحيل — KAHEEL Platform · kaheel.market"
               : "© KAHEEL Platform — منصة كَحيل · kaheel.market"}
@@ -110,9 +110,9 @@ function CopyrightPage() {
         <div className="mt-4 grid gap-3">
           {blocks.map((block) => (
             <section key={block.h} className="rounded-xl border border-border bg-card p-4">
-              <h2 className="text-sm font-bold text-foreground">{block.h}</h2>
+              <h2 className="text-section font-bold text-foreground">{block.h}</h2>
               {block.p.map((line) => (
-                <p key={line} className="mt-2 text-xs leading-6 text-muted-foreground">
+                <p key={line} className="mt-2 text-desc leading-6 text-muted-foreground">
                   {line}
                 </p>
               ))}

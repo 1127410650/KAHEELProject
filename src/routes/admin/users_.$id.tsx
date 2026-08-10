@@ -156,7 +156,7 @@ function AdminUserDetailPage() {
                     { label: t("admin.detail.locale"), value: header.locale },
                   ]}
                 />
-                <p className="mt-3 text-[11px] text-muted-foreground">
+                <p className="mt-3 text-desc text-muted-foreground">
                   {t("admin.detail.noCredentials")}
                 </p>
               </Panel>

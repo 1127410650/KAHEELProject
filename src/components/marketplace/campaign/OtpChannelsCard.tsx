@@ -126,8 +126,8 @@ export function OtpChannelsCard() {
 
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("admin.otp.title")}</h2>
-      <p className="mt-1 text-xs text-muted-foreground">{t("admin.otp.hint")}</p>
+      <h2 className="text-section font-bold text-foreground">{t("admin.otp.title")}</h2>
+      <p className="mt-1 text-desc text-muted-foreground">{t("admin.otp.hint")}</p>
 
       {channels.isLoading ? (
         <Skeleton className="mt-4 h-40 w-full rounded-xl" />
@@ -145,7 +145,7 @@ export function OtpChannelsCard() {
                     <p className="truncate text-sm font-semibold text-foreground">
                       {locale === "ar" ? row.label_ar : row.label_en}
                     </p>
-                    <p className="num truncate text-xs text-muted-foreground" dir="ltr">
+                    <p className="num truncate text-desc text-muted-foreground" dir="ltr">
                       {row.provider} · {row.channel} · {row.dial_codes.join(" ") || "*"}
                     </p>
                   </div>
@@ -170,7 +170,7 @@ export function OtpChannelsCard() {
                     />
                   </div>
                 </div>
-                <dl className="num mt-2 grid grid-cols-3 gap-2 text-xs text-muted-foreground">
+                <dl className="num mt-2 grid grid-cols-3 gap-2 text-desc text-muted-foreground">
                   <div>
                     <dt>{t("admin.otp.sent30")}</dt>
                     <dd className="font-semibold text-foreground">{stat?.total ?? 0}</dd>
@@ -189,24 +189,24 @@ export function OtpChannelsCard() {
                     </dd>
                   </div>
                 </dl>
-                {row.notes && <p className="mt-1 text-xs text-muted-foreground">{row.notes}</p>}
+                {row.notes && <p className="mt-1 text-desc text-muted-foreground">{row.notes}</p>}
               </li>
             );
           })}
         </ul>
       )}
 
-      <h3 className="mt-4 text-xs font-bold text-foreground">{t("admin.otp.recent")}</h3>
+      <h3 className="mt-4 text-desc font-bold text-foreground">{t("admin.otp.recent")}</h3>
       {sends.isLoading ? (
         <Skeleton className="mt-2 h-24 w-full rounded-xl" />
       ) : (sends.data ?? []).length === 0 ? (
-        <p className="mt-2 text-xs text-muted-foreground">{t("common.noData")}</p>
+        <p className="mt-2 text-desc text-muted-foreground">{t("common.noData")}</p>
       ) : (
         <ul className="mt-2 grid gap-1">
           {(sends.data ?? []).slice(0, 10).map((row) => (
             <li
               key={row.id}
-              className="num flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border px-2 py-1 text-xs"
+              className="num flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border px-2 py-1 text-desc"
             >
               <span dir="ltr">{row.phone_masked}</span>
               <span dir="ltr">

@@ -59,7 +59,7 @@ export function MarketCountriesCard() {
     <Card>
       <CardContent className="space-y-4 p-4">
         <div className="space-y-1">
-          <h2 className="text-base font-semibold">
+          <h2 className="text-section font-semibold">
             {locale === "en" ? "Market countries" : "نطاق الدول المفعّلة"}
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -83,12 +83,12 @@ export function MarketCountriesCard() {
               >
                 <div className="min-w-32 flex-1">
                   <p className="text-sm font-semibold">{geoName(row, locale)}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     {row.iso2} · {row.calling_code} · {row.currency_code}
                   </p>
                 </div>
 
-                <label className="flex items-center gap-2 text-xs">
+                <label className="flex items-center gap-2 text-desc">
                   <Switch
                     checked={row.is_market_enabled}
                     disabled={busyId === row.id}
@@ -99,7 +99,7 @@ export function MarketCountriesCard() {
                   {locale === "en" ? "Market open" : "السوق مفعّل"}
                 </label>
 
-                <label className="flex items-center gap-2 text-xs">
+                <label className="flex items-center gap-2 text-desc">
                   <Switch
                     checked={row.phone_only_otp}
                     disabled={busyId === row.id}

@@ -21,7 +21,7 @@ export function BigSearchField() {
           className="flex min-w-0 flex-1 items-center gap-2.5 px-4 text-muted-foreground outline-none"
         >
           <Search className="size-[18px] shrink-0" aria-hidden />
-          <span className="truncate text-[13px] font-semibold sm:text-sm">
+          <span className="truncate text-desc font-semibold sm:text-sm">
             {ar ? "ابحث عن عقار، سيارة، مطعم، مستلزمات…" : "Search property, car, food, essentials…"}
           </span>
         </Link>

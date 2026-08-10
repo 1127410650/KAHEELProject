@@ -194,7 +194,7 @@ export function CategoryPicker({
   const body = (
     <div className="space-y-3">
       {stage !== "root" && (
-        <div className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-1 text-desc text-muted-foreground">
           <Button
             type="button"
             variant="ghost"
@@ -280,7 +280,7 @@ export function CategoryPicker({
           <span className="text-muted-foreground">{t("market.form.choosePath")}</span>
         )}
         {pathText.length > 0 ? (
-          <span className="flex shrink-0 items-center gap-1 text-xs text-primary">
+          <span className="flex shrink-0 items-center gap-1 text-desc text-primary">
             <Pencil className="size-3.5" aria-hidden />
             {t("market.form.editPath")}
           </span>

@@ -4,7 +4,7 @@
  */
 export function OsmAttribution({ className = "" }: { className?: string }) {
   return (
-    <p className={`text-[10px] font-bold text-muted-foreground ${className}`}>
+    <p className={`text-desc font-bold text-muted-foreground ${className}`}>
       © مساهمو{" "}
       <a
         href="https://www.openstreetmap.org/copyright"

@@ -49,7 +49,7 @@ function StudentToolsPage() {
         <section className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 sm:py-8">
           <Link
             to="/"
-            className="mb-4 inline-flex min-h-9 items-center gap-1 rounded-full border border-border bg-card px-3 text-[10px] font-black text-muted-foreground shadow-sm sm:text-xs"
+            className="mb-4 inline-flex min-h-9 items-center gap-1 rounded-full border border-border bg-card px-3 text-desc font-black text-muted-foreground shadow-sm sm:text-desc"
           >
             <ChevronRight className="size-3.5" aria-hidden />
             العودة إلى المتجر
@@ -62,14 +62,14 @@ function StudentToolsPage() {
                   <GraduationCap className="size-6" aria-hidden />
                 </span>
                 <div>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-black text-primary sm:text-xs">
+                  <span className="inline-flex items-center gap-1 text-desc font-black text-primary sm:text-desc">
                     <Sparkles className="size-3.5" aria-hidden />
                     خدمة مجانية للطالب السوري
                   </span>
-                  <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
+                  <h1 className="text-page mt-1 font-black tracking-tight sm:text-3xl">
                     دليل الطالب
                   </h1>
-                  <p className="mt-2 max-w-xl text-xs leading-6 text-muted-foreground sm:text-sm sm:leading-7">
+                  <p className="mt-2 max-w-xl text-desc leading-6 text-muted-foreground sm:text-sm sm:leading-7">
                     الصق فقرة أو درسًا للحصول على تلخيص منظم أو أسئلة مراجعة مباشرة، دون إرسال النص
                     إلى خدمة مدفوعة.
                   </p>
@@ -87,8 +87,8 @@ function StudentToolsPage() {
                   <MessageCircleQuestion className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-xs font-black text-foreground">مساعد الطالب</span>
-                  <span className="mt-0.5 block text-[11px] leading-5 text-muted-foreground">
+                  <span className="block text-desc font-black text-foreground">مساعد الطالب</span>
+                  <span className="mt-0.5 block text-desc leading-5 text-muted-foreground">
                     اسأل عن أي مسألة، أو ارفع صورة السؤال — شرح خطوة بخطوة، ٥ أسئلة مجانية يوميًا.
                   </span>
                 </span>
@@ -105,8 +105,8 @@ function StudentToolsPage() {
                   aria-pressed={studyMode === "summary"}
                   className={
                     studyMode === "summary"
-                      ? "rounded-xl bg-market-navy px-3 py-3 text-xs font-black text-white shadow-sm"
-                      : "rounded-xl border border-border bg-background px-3 py-3 text-xs font-black text-muted-foreground"
+                      ? "rounded-xl bg-market-navy px-3 py-3 text-desc font-black text-white shadow-sm"
+                      : "rounded-xl border border-border bg-background px-3 py-3 text-desc font-black text-muted-foreground"
                   }
                 >
                   <FileText className="mx-auto mb-1 size-4" aria-hidden />
@@ -118,8 +118,8 @@ function StudentToolsPage() {
                   aria-pressed={studyMode === "questions"}
                   className={
                     studyMode === "questions"
-                      ? "rounded-xl bg-market-navy px-3 py-3 text-xs font-black text-white shadow-sm"
-                      : "rounded-xl border border-border bg-background px-3 py-3 text-xs font-black text-muted-foreground"
+                      ? "rounded-xl bg-market-navy px-3 py-3 text-desc font-black text-white shadow-sm"
+                      : "rounded-xl border border-border bg-background px-3 py-3 text-desc font-black text-muted-foreground"
                   }
                 >
                   <ListChecks className="mx-auto mb-1 size-4" aria-hidden />
@@ -128,7 +128,7 @@ function StudentToolsPage() {
               </div>
 
               <label className="mt-4 block" htmlFor="student-tools-text">
-                <span className="mb-1.5 block text-xs font-black text-foreground">نص الدرس</span>
+                <span className="mb-1.5 block text-desc font-black text-foreground">نص الدرس</span>
                 <textarea
                   id="student-tools-text"
                   value={studyText}
@@ -140,11 +140,11 @@ function StudentToolsPage() {
 
               {studyResult.length > 0 ? (
                 <div className="mt-4 rounded-2xl border border-border bg-muted/45 p-3 sm:p-4">
-                  <div className="mb-2 flex items-center gap-1.5 text-xs font-black text-foreground">
+                  <div className="mb-2 flex items-center gap-1.5 text-desc font-black text-foreground">
                     <BookOpen className="size-4 text-market-navy" aria-hidden />
                     النتيجة
                   </div>
-                  <ol className="space-y-2 text-xs leading-6 text-muted-foreground sm:text-sm">
+                  <ol className="space-y-2 text-desc leading-6 text-muted-foreground sm:text-sm">
                     {studyResult.map((item, index) => (
                       <li key={`${item}-${index}`} className="rounded-xl bg-background px-3 py-2.5">
                         {item}
@@ -155,13 +155,13 @@ function StudentToolsPage() {
               ) : (
                 <div className="mt-4 rounded-2xl border border-dashed border-border bg-muted/25 px-4 py-7 text-center">
                   <BookOpen className="mx-auto size-6 text-muted-foreground" aria-hidden />
-                  <p className="mt-2 text-[11px] text-muted-foreground">
+                  <p className="mt-2 text-desc text-muted-foreground">
                     ستظهر النتيجة هنا بعد لصق النص.
                   </p>
                 </div>
               )}
 
-              <p className="mt-4 text-[9px] leading-5 text-muted-foreground sm:text-[10px]">
+              <p className="mt-4 text-desc leading-5 text-muted-foreground sm:text-desc">
                 الأداة ترتب النص الذي تدخله ولا تستبدل المعلم أو المرجع الأكاديمي.
               </p>
             </div>

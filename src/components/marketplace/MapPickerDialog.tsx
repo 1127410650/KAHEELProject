@@ -190,7 +190,7 @@ export function MapPickerDialog({ open, onOpenChange, initial, onConfirm }: Prop
                     : "Point on map")}
             </span>
           </p>
-          <p className="num mt-0.5 text-[11px] text-muted-foreground" dir="ltr">
+          <p className="num mt-0.5 text-desc text-muted-foreground" dir="ltr">
             {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
             {accuracyText ? ` · ${accuracyText}` : ""}
           </p>

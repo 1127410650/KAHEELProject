@@ -72,7 +72,7 @@ export function AdminNotes({
 
   return (
     <Panel title={t("admin.detail.notes")}>
-      <p className="text-xs text-muted-foreground">{t("admin.detail.notesHint")}</p>
+      <p className="text-desc text-muted-foreground">{t("admin.detail.notesHint")}</p>
 
       {canWrite && (
         <form
@@ -112,7 +112,7 @@ export function AdminNotes({
           rows.map((note) => (
             <article key={note.id} className="rounded-lg border border-border bg-background p-3">
               <p className="whitespace-pre-wrap break-words text-sm text-foreground">{note.body}</p>
-              <p className="mt-1.5 text-[11px] tabular-nums text-muted-foreground">
+              <p className="mt-1.5 text-desc tabular-nums text-muted-foreground">
                 {note.author_name || t("admin.detail.unknownActor")} · {formatDateTime(note.created_at)}
               </p>
             </article>

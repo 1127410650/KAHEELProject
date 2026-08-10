@@ -131,13 +131,13 @@ function JoinPage() {
           <span className="grid size-12 place-items-center rounded-2xl bg-accent text-primary">
             <Icon className="size-6" />
           </span>
-          <h1 className="mt-5 text-2xl font-black sm:text-3xl">
+          <h1 className="text-page mt-5 font-black sm:text-3xl">
             {locale === "ar" ? content.ar : content.en}
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
             {locale === "ar" ? content.hintAr : content.hintEn}
           </p>
-          <p className="mt-4 rounded-2xl border border-border bg-secondary px-4 py-3 text-xs leading-6 text-muted-foreground">
+          <p className="mt-4 rounded-2xl border border-border bg-secondary px-4 py-3 text-desc leading-6 text-muted-foreground">
 
             {locale === "ar"
               ? "لن تتغير صلاحيات حسابك عند الإرسال. يتم التفعيل فقط بعد مراجعة الطلب وقبوله."

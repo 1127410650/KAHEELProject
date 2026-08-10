@@ -84,22 +84,22 @@ function MascotsPreviewPage() {
           <CardContent className="space-y-4 p-4">
             <div className="flex flex-wrap items-center gap-2">
               <Smile className="size-4 text-primary" aria-hidden />
-              <h2 className="text-sm font-semibold">
+              <h2 className="text-section font-semibold">
                 {ar ? "الشكل المعتمد للشخصيتين" : "Approved mascot look"}
               </h2>
               <Badge variant="secondary">{ar ? "لا يُغيَّر" : "Locked"}</Badge>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {ar
                 ? "الشكل المعتمد — لا يُغيَّر إلا بطلب صريح من صاحب المنصة. كل الوضعيات تُشتق من نفس الصورتين بتحويلات CSS."
                 : "Approved look — changed only on the owner's explicit request. Every pose is derived from these two images via CSS."}
             </p>
             <ul className="space-y-2">
               {MASCOT_NAMES.map((name) => (
-                <li key={name} className="rounded-lg border bg-muted/20 p-2 text-xs">
+                <li key={name} className="rounded-lg border bg-muted/20 p-2 text-desc">
                   <p className="font-semibold">{name}</p>
                   <p className="text-muted-foreground">{MASCOT_ASSETS[name].note[ar ? "ar" : "en"]}</p>
-                  <p className="mt-1 text-[11px] text-muted-foreground/80">
+                  <p className="mt-1 text-desc text-muted-foreground/80">
                     full {MASCOT_ASSETS[name].full.width}×{MASCOT_ASSETS[name].full.height} · sm{" "}
                     {MASCOT_ASSETS[name].sm.width}×{MASCOT_ASSETS[name].sm.height}
                   </p>
@@ -112,7 +112,7 @@ function MascotsPreviewPage() {
         {(["kaheel", "kaheelan"] as MascotName[]).map((name) => (
           <Card key={name}>
             <CardContent className="space-y-3 p-4">
-              <h2 className="text-sm font-semibold">
+              <h2 className="text-section font-semibold">
                 {name === "kaheel"
                   ? ar
                     ? "كَحيل — الرسمي المؤدب"
@@ -136,7 +136,7 @@ function MascotsPreviewPage() {
                         className="h-28 w-auto"
                       />
                     </div>
-                    <span className="text-[11px] text-muted-foreground">{pose}</span>
+                    <span className="text-desc text-muted-foreground">{pose}</span>
                   </div>
                 ))}
               </div>
@@ -148,7 +148,7 @@ function MascotsPreviewPage() {
         {(["kaheel", "kaheelan"] as MascotName[]).map((name) => (
           <Card key={`${name}-walk`} data-walk-card={name}>
             <CardContent className="space-y-3 p-4">
-              <h2 className="text-sm font-semibold">
+              <h2 className="text-section font-semibold">
                 {ar ? "إطارات المشي — " : "Walk frames — "}
                 {name === "kaheel" ? (ar ? "كَحيل" : "Kaheel") : ar ? "كَحيلان" : "Kaheelan"}
               </h2>
@@ -165,12 +165,12 @@ function MascotsPreviewPage() {
                       height={MASCOT_WALK[name].height}
                       className="h-24 w-auto object-contain"
                     />
-                    <span className="text-[11px] text-muted-foreground">#{index + 1}</span>
+                    <span className="text-desc text-muted-foreground">#{index + 1}</span>
                   </div>
                 ))}
                 <div className="flex flex-col items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-2">
                   <MascotWalk name={name} lang={ar ? "ar" : "en"} className="h-24" />
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {ar ? "مشي حقيقي" : "live walk"}
                   </span>
                 </div>
@@ -181,7 +181,7 @@ function MascotsPreviewPage() {
                     facing={-1}
                     className="h-24"
                   />
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {ar ? "الاتجاه المعاكس" : "flipped"}
                   </span>
                 </div>
@@ -192,7 +192,7 @@ function MascotsPreviewPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">{ar ? "الحركات" : "Animations"}</h2>
+            <h2 className="text-section font-semibold">{ar ? "الحركات" : "Animations"}</h2>
             <div className="flex flex-wrap gap-2">
               {DEMOS.map((item) => (
                 <Button key={item.id} size="sm" variant="outline" onClick={() => playDemo(item.id)}>
@@ -220,12 +220,12 @@ function MascotsPreviewPage() {
                   />
                 </div>
               ) : (
-                <p className="self-center text-xs text-muted-foreground">
+                <p className="self-center text-desc text-muted-foreground">
                   {ar ? "اختر حركة لتشغيلها" : "Pick an animation to play"}
                 </p>
               )}
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {ar
                 ? `الساقط دائمًا الزعيم كَحيلان — مدة السقوط ${DROP_ANIMATION_MS}ms، فاصل بين السقطات ${MASCOT_TIMING.dropCooldownMs}ms.`
                 : `The falling one is always Boss Kaheelan — drop ${DROP_ANIMATION_MS}ms, cooldown ${MASCOT_TIMING.dropCooldownMs}ms.`}
@@ -235,7 +235,7 @@ function MascotsPreviewPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">
+            <h2 className="text-section font-semibold">
               {ar ? "مشهد التعارف (الشخصيتان معًا)" : "Duo introduction scene"}
             </h2>
             <div className="flex h-44 items-end justify-center rounded-lg border bg-muted/30">
@@ -246,7 +246,7 @@ function MascotsPreviewPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">
+            <h2 className="text-section font-semibold">
               {ar ? "مشاهد النوافذ الترويجية" : "Popup scenes"}
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -258,7 +258,7 @@ function MascotsPreviewPage() {
                   <div className="flex h-28 items-end justify-center">
                     <PopupMascot kind={kind} lang={ar ? "ar" : "en"} />
                   </div>
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {kind} · {MASCOT_PERSONA[kind]}
                   </span>
                 </div>
@@ -305,7 +305,7 @@ function CopyList({
     <Card>
       <CardContent className="space-y-2 p-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold">{title}</h2>
+          <h2 className="text-section font-semibold">{title}</h2>
           <Badge variant="secondary">{count}</Badge>
         </div>
         <ul className="space-y-2">
@@ -313,9 +313,9 @@ function CopyList({
             const copy = at(index);
             return (
               <li key={index} className="rounded-lg border bg-muted/20 p-2">
-                <p className="text-xs font-semibold">{copy.title}</p>
-                <p className="text-xs text-muted-foreground">{copy.subtitle}</p>
-                <p className="mt-1 text-[11px] text-muted-foreground/80">{copy.mascot}</p>
+                <p className="text-desc font-semibold">{copy.title}</p>
+                <p className="text-desc text-muted-foreground">{copy.subtitle}</p>
+                <p className="mt-1 text-desc text-muted-foreground/80">{copy.mascot}</p>
               </li>
             );
           })}

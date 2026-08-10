@@ -74,7 +74,7 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
   return (
     <div className="rounded-xl border border-border bg-card p-4">
       <h3 className="text-sm font-semibold text-foreground">{t("market.reports.detail.channel")}</h3>
-      <p className="mt-1 text-[11px] text-muted-foreground">
+      <p className="mt-1 text-desc text-muted-foreground">
         {t("market.reports.detail.channelHint")}
       </p>
 
@@ -82,7 +82,7 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
         {messages.isLoading ? (
           <Skeleton className="h-20 w-full rounded-lg" />
         ) : (messages.data ?? []).length === 0 ? (
-          <p className="py-4 text-center text-xs text-muted-foreground">
+          <p className="py-4 text-center text-desc text-muted-foreground">
             {t("market.reports.detail.noMessages")}
           </p>
         ) : (
@@ -98,16 +98,16 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
                 }
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-xs font-semibold text-foreground">
+                  <span className="text-desc font-semibold text-foreground">
                     {fromStaff ? t("market.reports.detail.staff") : t("market.reports.detail.you")}
                   </span>
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {formatDateTime(message.created_at)}
                   </span>
                 </div>
-                <p className="mt-1 whitespace-pre-wrap text-xs text-foreground">{message.body}</p>
+                <p className="mt-1 whitespace-pre-wrap text-desc text-foreground">{message.body}</p>
                 {message.due_at && (
-                  <p className="mt-1 text-[11px] font-medium text-destructive">
+                  <p className="mt-1 text-desc font-medium text-destructive">
                     {t("market.reports.detail.dueAt")}: {formatDateTime(message.due_at)}
                   </p>
                 )}
@@ -115,7 +115,7 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
                   <button
                     type="button"
                     onClick={() => void openFile(message.attachment_path!)}
-                    className="mt-1 inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
+                    className="mt-1 inline-flex items-center gap-1 text-desc text-primary hover:underline"
                   >
                     <Paperclip className="size-3" aria-hidden />
                     {t("market.reports.detail.files")}
@@ -134,7 +134,7 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
               <button
                 type="button"
                 onClick={() => void openFile(item.storage_path)}
-                className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
+                className="inline-flex items-center gap-1 text-desc text-primary hover:underline"
               >
                 <Paperclip className="size-3" aria-hidden />
                 {item.file_name}
@@ -170,7 +170,7 @@ export function ReportThread({ reportId, side, canReply = true }: Props) {
                 }
                 setFile(picked);
               }}
-              className="min-w-0 flex-1 cursor-pointer rounded-md border border-input bg-background p-1.5 text-[11px] text-muted-foreground"
+              className="min-w-0 flex-1 cursor-pointer rounded-md border border-input bg-background p-1.5 text-desc text-muted-foreground"
             />
             <Button size="sm" disabled={busy || !body.trim()} onClick={() => void send()}>
               <Send className="size-3.5" aria-hidden />

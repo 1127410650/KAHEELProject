@@ -185,7 +185,7 @@ function DescriptionBlock({ text }: { text: string }) {
 
   return (
     <section className="mt-4 rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.description")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.description")}</h2>
       <p
         className={
           long && !open
@@ -199,7 +199,7 @@ function DescriptionBlock({ text }: { text: string }) {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="mt-2 text-xs font-medium text-primary"
+          className="mt-2 text-desc font-medium text-primary"
         >
           {open ? t("market.ad.showLess") : t("market.ad.showMore")}
         </button>
@@ -253,7 +253,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
 
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.aboutAdvertiser")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.aboutAdvertiser")}</h2>
 
       <div className="mt-3 flex items-start gap-3">
         <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-muted-foreground">
@@ -269,13 +269,13 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
           <p className="truncate text-sm font-semibold text-foreground">{name}</p>
           {/* Check mark sits under the identity name only; nothing when absent. */}
           <VerifiedBadge status={status} size="xs" />
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {t(`market.advertiser.${isBusiness ? "business" : "individual"}`)}
           </p>
         </div>
       </div>
 
-      <dl className="mt-3 space-y-1 text-xs text-muted-foreground">
+      <dl className="mt-3 space-y-1 text-desc text-muted-foreground">
         {city && (
           <div className="flex gap-1.5">
             <dt>{t("market.filters.city")}:</dt>
@@ -313,7 +313,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
       )}
 
       {session && contacts.length > 0 && (
-        <div className="mt-3 space-y-1 text-xs text-foreground" dir="ltr">
+        <div className="mt-3 space-y-1 text-desc text-foreground" dir="ltr">
           {contacts.map((c) => (
             <p key={c}>{c}</p>
           ))}
@@ -345,8 +345,8 @@ function OwnerTools({ listing, onDone }: { listing: MktListing; onDone: () => vo
 
   return (
     <section className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.ownerTools")}</h2>
-      <p className="mt-1 text-xs text-muted-foreground">{t("market.ad.yourAd")}</p>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.ownerTools")}</h2>
+      <p className="mt-1 text-desc text-muted-foreground">{t("market.ad.yourAd")}</p>
       <div className="mt-3 grid gap-2">
         <Button asChild size="sm" variant="secondary">
           <Link to="/my/ads/$id/edit" params={{ id: listing.id }}>
@@ -466,7 +466,7 @@ function AdPage() {
     return (
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="text-xl font-bold text-foreground">{t("market.ad.notFound")}</h1>
+          <h1 className="text-page font-bold text-foreground">{t("market.ad.notFound")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
@@ -520,9 +520,9 @@ function AdPage() {
               <p className="text-sm font-semibold text-secondary-foreground">
                 {t(`market.dash.status.${listing.deleted_at ? "deleted" : listing.status}`)}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">{t("market.ad.statusNotice")}</p>
+              <p className="mt-1 text-desc text-muted-foreground">{t("market.ad.statusNotice")}</p>
               {listing.rejection_reason && (
-                <p className="mt-1 text-xs text-destructive">{listing.rejection_reason}</p>
+                <p className="mt-1 text-desc text-destructive">{listing.rejection_reason}</p>
               )}
             </div>
           )}
@@ -530,18 +530,18 @@ function AdPage() {
           {/* Key facts first, gallery after: the order buyers read in. */}
           <div className="flex flex-wrap items-center gap-1.5">
             {type && (
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
                 {locale === "ar" ? type.name_ar : type.name_en}
               </span>
             )}
             {listing.deal_kind && (
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground">
+              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc text-secondary-foreground">
                 {t(`market.filters.${listing.deal_kind}`)}
               </span>
             )}
           </div>
 
-          <h1 className="mt-2 break-words text-lg font-bold leading-snug text-foreground sm:text-2xl">
+          <h1 className="text-page mt-2 break-words font-bold leading-snug text-foreground">
             {listing.title}
           </h1>
           <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
@@ -554,10 +554,10 @@ function AdPage() {
           </div>
 
           {categoryPath && (
-            <p className="mt-2 break-words text-xs text-muted-foreground">{categoryPath}</p>
+            <p className="mt-2 break-words text-desc text-muted-foreground">{categoryPath}</p>
           )}
 
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-desc text-muted-foreground">
             {(cityLabel || listing.district) && (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" aria-hidden />
@@ -608,7 +608,7 @@ function AdPage() {
 
           {leadSummary && (
             <section className="mt-4 rounded-xl border border-border bg-card p-4">
-              <h2 className="text-sm font-bold text-foreground">{t("market.ad.summary")}</h2>
+              <h2 className="text-section font-bold text-foreground">{t("market.ad.summary")}</h2>
               <p className="mt-2 break-words text-sm leading-relaxed text-muted-foreground">
                 {leadSummary}
               </p>
@@ -629,7 +629,7 @@ function AdPage() {
 
           {(similar.data ?? []).length > 0 && (
             <section className="mt-8">
-              <h2 className="mb-3 text-base font-bold text-foreground">{t("market.ad.similar")}</h2>
+              <h2 className="text-section mb-3 font-bold text-foreground">{t("market.ad.similar")}</h2>
               <div className="flex flex-col gap-2.5 sm:hidden">
                 {(similar.data ?? []).map((l) => (
                   <ListingCard key={l.id} listing={l} view="row" />

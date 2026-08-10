@@ -60,7 +60,7 @@ function ReportDetailPage() {
     <DashboardShell title={t("market.reports.detail.title")}>
       <Link
         to="/my/reports"
-        className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+        className="inline-flex items-center gap-1 text-desc font-medium text-primary hover:underline"
       >
         <ChevronRight className="size-3 rtl:rotate-180" aria-hidden />
         {t("market.reports.detail.back")}
@@ -81,16 +81,16 @@ function ReportDetailPage() {
                   <p dir="ltr" className="font-mono text-sm font-bold text-foreground">
                     {report.data.ref_no ?? "—"}
                   </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="mt-1 text-desc text-muted-foreground">
                     {t("market.reports.my.submittedAt")}: {formatDateTime(report.data.created_at)}
                   </p>
                 </div>
-                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
                   {t(`market.reports.stage.${simpleStage(report.data.status)}`)}
                 </span>
               </div>
 
-              <dl className="mt-4 space-y-2 text-xs">
+              <dl className="mt-4 space-y-2 text-desc">
                 <div>
                   <dt className="text-muted-foreground">{t("market.reports.detail.listing")}</dt>
                   <dd className="mt-0.5 font-medium text-foreground">
@@ -132,11 +132,11 @@ function ReportDetailPage() {
               <h3 className="text-sm font-semibold text-foreground">
                 {t("market.reports.detail.outcome")}
               </h3>
-              <p className="mt-2 whitespace-pre-wrap text-xs text-muted-foreground">
+              <p className="mt-2 whitespace-pre-wrap text-desc text-muted-foreground">
                 {report.data.public_outcome ?? t("market.reports.detail.noOutcome")}
               </p>
               {report.data.closed_at && (
-                <p className="mt-2 text-[11px] text-muted-foreground">
+                <p className="mt-2 text-desc text-muted-foreground">
                   {t("market.reports.detail.closedAt")}: {formatDateTime(report.data.closed_at)}
                 </p>
               )}

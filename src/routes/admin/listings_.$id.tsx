@@ -200,7 +200,7 @@ function AdminListingDetailPage() {
                 )}
               </div>
               {header.rejection_reason && (
-                <p className="mt-3 break-words text-xs text-muted-foreground">
+                <p className="mt-3 break-words text-desc text-muted-foreground">
                   {t("admin.detail.lastRejection")}: {header.rejection_reason}
                 </p>
               )}

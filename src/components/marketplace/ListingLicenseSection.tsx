@@ -59,10 +59,10 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
         className="flex min-h-11 w-full items-center gap-2 p-4 text-start"
       >
         <BadgeCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-        <h2 className="min-w-0 flex-1 text-sm font-bold text-foreground">
+        <h2 className="text-section min-w-0 flex-1 font-bold text-foreground">
           {t("market.license.sectionTitle")}
         </h2>
-        <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${tone}`}>
+        <span className={`shrink-0 rounded-full px-2 py-0.5 text-desc font-medium ${tone}`}>
           {t(`market.license.badge.${badge}`)}
         </span>
         <ChevronDown
@@ -73,7 +73,7 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
 
       {open && (
         <div id="ad-license-panel" className="border-t border-border p-4">
-          <dl className="space-y-1.5 text-xs">
+          <dl className="space-y-1.5 text-desc">
             {rows.map((row) => (
               <div key={row.label} className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <dt className="text-muted-foreground">{row.label}:</dt>
@@ -93,7 +93,7 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
             rel="noopener noreferrer"
             title={t("market.license.verifyHint")}
             aria-label={t("market.license.verifyHint")}
-            className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-primary underline"
+            className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-desc font-semibold text-primary underline"
           >
             <ExternalLink className="size-3.5" aria-hidden />
             {t("market.license.verify")}

@@ -39,10 +39,10 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
             <Megaphone className="size-4 sm:size-5" aria-hidden />
           </span>
           <span className="min-w-0 flex-1">
-            <strong className="block truncate text-xs font-black sm:text-base">
+            <strong className="block truncate text-desc font-black sm:text-base">
               {ar ? "مساحتك الإعلانية على كَحيل" : "Your ad space on Kaheel"}
             </strong>
-            <span className="mt-0.5 block truncate text-[9px] text-brand-800 sm:text-xs">
+            <span className="mt-0.5 block truncate text-desc text-brand-800 sm:text-desc">
               {ar
                 ? "أوصل عرضك لجمهور السوق في المكان الأبرز"
                 : "Put your offer in front of the whole marketplace"}
@@ -65,7 +65,7 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
       >
 
         <CampaignAsset campaign={campaign} />
-        <span className="absolute bottom-1.5 end-2 z-10 rounded-full bg-black/45 px-2 py-0.5 text-[8px] font-black text-white/90 sm:text-[9px]">
+        <span className="absolute bottom-1.5 end-2 z-10 rounded-full bg-black/45 px-2 py-0.5 text-desc font-black text-white/90 sm:text-desc">
           {ar ? "إعلان" : "Ad"}
         </span>
       </a>

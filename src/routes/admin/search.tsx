@@ -91,7 +91,7 @@ function AdminSearchPage() {
           {t("admin.search.label")}
         </Button>
       </form>
-      <p className="mt-2 text-xs text-muted-foreground">{t("admin.search.hint")}</p>
+      <p className="mt-2 text-desc text-muted-foreground">{t("admin.search.hint")}</p>
 
       {q.trim().length < 2 ? null : results.isLoading ? (
         <Skeleton className="mt-5 h-48 w-full rounded-xl" />
@@ -101,9 +101,9 @@ function AdminSearchPage() {
         <div className="mt-5 grid gap-4">
           {groups.map((group) => (
             <section key={group.type} className="rounded-xl border border-border bg-card p-4">
-              <h2 className="flex items-center justify-between gap-2 text-sm font-bold text-foreground">
+              <h2 className="text-section flex items-center justify-between gap-2 font-bold text-foreground">
                 <span className="truncate">{t(GROUP_LABEL[group.type])}</span>
-                <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
+                <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-desc tabular-nums">
                   {group.count}
                 </span>
               </h2>
@@ -118,7 +118,7 @@ function AdminSearchPage() {
                       {item.title || item.id}
                     </span>
                     {(item.subtitle || item.meta) && (
-                      <span className="truncate text-[11px] text-muted-foreground">
+                      <span className="truncate text-desc text-muted-foreground">
                         {[item.subtitle, item.meta].filter(Boolean).join(" · ")}
                       </span>
                     )}

@@ -69,7 +69,7 @@ export function ListingSpecs({ listing }: { listing: MktListing }) {
 
   return (
     <section className="mt-4 rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{t("market.ad.specs")}</h2>
+      <h2 className="text-section font-bold text-foreground">{t("market.ad.specs")}</h2>
       <dl className="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2">
         {rows.map((row) => (
           <div

@@ -112,18 +112,18 @@ export function SyriaHomeGateway() {
           </span>
 
           <div className="min-w-0 flex-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-brand-400/35 bg-brand-300/25 px-1.5 py-0.5 text-[8px] font-black text-brand-800">
+            <span className="inline-flex items-center gap-1 rounded-full border border-brand-400/35 bg-brand-300/25 px-1.5 py-0.5 text-desc font-black text-brand-800">
               <Sparkles className="size-2.5 sm:size-3" aria-hidden />
               {gateway.eyebrow}
             </span>
-            <h2 className="mt-0.5 text-base font-black leading-none tracking-tight sm:mt-1 sm:text-lg">
+            <h2 className="text-section mt-0.5 font-black leading-none tracking-tight sm:mt-1">
               {gateway.title}
             </h2>
-            <p className="mt-1 line-clamp-2 max-w-[28rem] text-[10px] leading-4 text-brand-800 sm:line-clamp-1">
+            <p className="mt-1 line-clamp-2 max-w-[28rem] text-desc leading-4 text-brand-800 sm:line-clamp-1">
               {gateway.description}
             </p>
 
-            <span className="mt-1 inline-flex items-center gap-1 text-[9px] font-black text-brand-700 sm:mt-1.5 sm:text-[10px]">
+            <span className="mt-1 inline-flex items-center gap-1 text-desc font-black text-brand-700 sm:mt-1.5 sm:text-desc">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
             </span>

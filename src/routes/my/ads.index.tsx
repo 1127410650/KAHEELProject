@@ -406,7 +406,7 @@ function MyAdsPage() {
           ] as const
         ).map(([key, value]) => (
           <div key={key} className="rounded-xl border border-border bg-card p-3 text-center">
-            <dt className="text-[11px] text-muted-foreground">{t(key)}</dt>
+            <dt className="text-desc text-muted-foreground">{t(key)}</dt>
             <dd className="mt-0.5 text-lg font-semibold text-foreground" dir="ltr">
               {value}
             </dd>
@@ -421,7 +421,7 @@ function MyAdsPage() {
             type="button"
             onClick={() => setFilter(key)}
             aria-pressed={filter === key}
-            className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+            className={`shrink-0 rounded-full px-3 py-1.5 text-desc font-medium transition-colors ${
               filter === key
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground"
@@ -468,7 +468,7 @@ function MyAdsPage() {
                       className="size-full object-cover"
                     />
                   ) : (
-                    <span className="grid size-full place-items-center px-1 text-center text-[10px] text-muted-foreground">
+                    <span className="grid size-full place-items-center px-1 text-center text-desc text-muted-foreground">
                       {t("market.noImage")}
                     </span>
                   )}
@@ -478,23 +478,23 @@ function MyAdsPage() {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-foreground">{ad.title}</p>
-                      <p className="mt-0.5 text-[11px] text-muted-foreground" dir="ltr">
+                      <p className="mt-0.5 text-desc text-muted-foreground" dir="ltr">
                         #{ad.ref_no ?? "—"}
                       </p>
                     </div>
                     <span
-                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass(ad.status, !!ad.is_featured)}`}
+                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-desc font-medium ${statusClass(ad.status, !!ad.is_featured)}`}
                     >
                       {ad.is_featured && <Sparkles className="me-1 inline size-3" aria-hidden />}
                       {t(`market.dash.status.${ad.status}`)}
                     </span>
                   </div>
 
-                  <p className="mt-1 text-xs font-semibold text-primary">
+                  <p className="mt-1 text-desc font-semibold text-primary">
                     {priceLabel(ad, "—", locale)}
                   </p>
 
-                  <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+                  <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-desc text-muted-foreground">
                     {ad.activityLabel && <span>{ad.activityLabel}</span>}
                     <span>{ad.city ?? "—"}</span>
                     <span dir="ltr">{formatDate(ad.published_at ?? ad.created_at)}</span>
@@ -513,7 +513,7 @@ function MyAdsPage() {
                   </p>
 
 
-                  <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-muted-foreground">
+                  <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-desc text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Eye className="size-3" aria-hidden />
                       <span dir="ltr">{ad.views_count ?? 0}</span>
@@ -557,7 +557,7 @@ function MyAdsPage() {
                     const hint = moderationHint(ad.moderation_state);
                     if (!hint) return null;
                     return (
-                      <p className={`mt-1 flex items-start gap-1 text-xs ${hint.tone}`}>
+                      <p className={`mt-1 flex items-start gap-1 text-desc ${hint.tone}`}>
                         <ShieldAlert className="mt-0.5 size-3 shrink-0" aria-hidden />
                         <span>
                           {t(hint.key)}
@@ -572,7 +572,7 @@ function MyAdsPage() {
                   })()}
 
                   {ad.rejection_reason && (
-                    <p className="mt-1 text-xs text-destructive">{ad.rejection_reason}</p>
+                    <p className="mt-1 text-desc text-destructive">{ad.rejection_reason}</p>
                   )}
                 </div>
               </div>

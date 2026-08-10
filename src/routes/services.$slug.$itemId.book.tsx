@@ -116,7 +116,7 @@ function ServiceBookingPage() {
       <MarketShell>
         <div className="mx-auto max-w-xl px-4 py-20 text-center">
           <CalendarDays className="mx-auto size-10 text-muted-foreground" />
-          <h1 className="mt-3 text-xl font-black">
+          <h1 className="text-page mt-3 font-black">
             {locale === "ar" ? "الخدمة غير متاحة للحجز" : "Service unavailable"}
           </h1>
           <Button asChild className="mt-5">
@@ -212,12 +212,12 @@ function ServiceBookingPage() {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-lg font-black sm:text-xl">{serviceName}</h1>
+                  <h1 className="text-page font-black">{serviceName}</h1>
                   <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-muted-foreground">
                     {storeName}
                     <VerifiedBadge status={data.store.verification_status} />
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                  <div className="mt-3 flex flex-wrap gap-2 text-desc">
                     <Badge variant="secondary">
                       <Clock3 className="me-1 size-3.5" />
                       {data.service.duration_minutes} {locale === "ar" ? "دقيقة" : "min"}
@@ -238,7 +238,7 @@ function ServiceBookingPage() {
               {[1, 2, 3].map((value) => (
                 <div key={value} className="flex min-w-0 flex-1 items-center gap-2">
                   <span
-                    className={`grid size-8 shrink-0 place-items-center rounded-full text-xs font-black ${value <= step ? "bg-primary text-primary-foreground" : "border bg-card text-muted-foreground"}`}
+                    className={`grid size-8 shrink-0 place-items-center rounded-full text-desc font-black ${value <= step ? "bg-primary text-primary-foreground" : "border bg-card text-muted-foreground"}`}
                   >
                     {value < step ? <Check className="size-4" /> : value}
                   </span>
@@ -253,7 +253,7 @@ function ServiceBookingPage() {
               <Card className="rounded-3xl">
                 <CardContent className="space-y-5 p-4 sm:p-6">
                   <div>
-                    <h2 className="text-lg font-black">
+                    <h2 className="text-section font-black">
                       {locale === "ar" ? "اختر المختص والموعد" : "Choose a professional and time"}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -341,7 +341,7 @@ function ServiceBookingPage() {
               <Card className="rounded-3xl">
                 <CardContent className="space-y-5 p-4 sm:p-6">
                   <div>
-                    <h2 className="text-lg font-black">
+                    <h2 className="text-section font-black">
                       {locale === "ar" ? "تفاصيل تقديم الخدمة" : "Service details"}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -370,7 +370,7 @@ function ServiceBookingPage() {
                             {labels[value][locale === "ar" ? 0 : 1]}
                           </span>
                           {value === "at_customer" && data.settings.visit_fee > 0 ? (
-                            <span className="mt-1 block text-xs text-muted-foreground">
+                            <span className="mt-1 block text-desc text-muted-foreground">
                               +{data.settings.visit_fee}{" "}
                               {currencyLabel(data.service.currency_code, locale)}
                             </span>
@@ -434,7 +434,7 @@ function ServiceBookingPage() {
               <Card className="rounded-3xl">
                 <CardContent className="space-y-4 p-4 sm:p-6">
                   <div>
-                    <h2 className="text-lg font-black">
+                    <h2 className="text-section font-black">
                       {locale === "ar" ? "راجع وأكد الحجز" : "Review and confirm"}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -483,7 +483,7 @@ function ServiceBookingPage() {
                       </dd>
                     </div>
                   </dl>
-                  <div className="flex items-start gap-2 rounded-2xl bg-secondary/60 p-3 text-xs leading-5 text-muted-foreground">
+                  <div className="flex items-start gap-2 rounded-2xl bg-secondary/60 p-3 text-desc leading-5 text-muted-foreground">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
                     {locale === "ar"
                       ? `يمكنك الإلغاء قبل الموعد، وتظهر سياسة الإلغاء (${data.settings.cancellation_window_hours} ساعات) بوضوح في حجوزاتك.`
@@ -525,7 +525,7 @@ function ServiceBookingPage() {
           <aside className="hidden lg:block">
             <Card className="sticky top-28 rounded-3xl">
               <CardContent className="space-y-4 p-5">
-                <p className="text-xs font-bold text-primary">
+                <p className="text-desc font-bold text-primary">
                   {locale === "ar" ? "ملخص السعر" : "Price summary"}
                 </p>
                 <div className="flex justify-between text-sm">
@@ -550,7 +550,7 @@ function ServiceBookingPage() {
                     {total} {currencyLabel(data.service.currency_code, locale)}
                   </span>
                 </div>
-                <div className="space-y-2 border-t pt-4 text-xs text-muted-foreground">
+                <div className="space-y-2 border-t pt-4 text-desc text-muted-foreground">
                   <p>
                     <Clock3 className="me-1 inline size-3.5" />
                     {data.service.duration_minutes} {locale === "ar" ? "دقيقة" : "minutes"}

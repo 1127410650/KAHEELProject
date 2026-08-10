@@ -122,7 +122,7 @@ export function CallOverlay() {
         type="button"
         onClick={() => setMinimized(false)}
         aria-label={t("market.call.returnToCall")}
-        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#10002b,#5a189a_55%,#7b2cbf)] px-3 text-[12px] font-bold text-white shadow-[0_6px_18px_rgb(36_0_70/0.35)]"
+        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#10002b,#5a189a_55%,#7b2cbf)] px-3 text-desc font-bold text-white shadow-[0_6px_18px_rgb(36_0_70/0.35)]"
       >
         <Phone className="size-3.5 shrink-0" aria-hidden />
         <span className="max-w-[45%] truncate">{call.peerName || t("market.call.title")}</span>
@@ -147,12 +147,12 @@ export function CallOverlay() {
           type="button"
           onClick={() => setMinimized(true)}
           aria-label={t("market.call.minimize")}
-          className="inline-flex h-11 items-center gap-1.5 rounded-full bg-white/12 px-4 text-[12px] font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
+          className="inline-flex h-11 items-center gap-1.5 rounded-full bg-white/12 px-4 text-desc font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
         >
           <ChevronDown className="size-4" aria-hidden />
           {t("market.call.minimize")}
         </button>
-        <p className="text-[11px] font-semibold text-white/70">
+        <p className="text-desc font-semibold text-white/70">
           {call.role === "caller" ? t("market.call.outgoing") : t("market.call.incoming")}
         </p>
       </div>
@@ -172,11 +172,11 @@ export function CallOverlay() {
           )}
         </span>
 
-        <h2 className="max-w-[22ch] text-2xl font-black leading-tight">
+        <h2 className="text-section max-w-[22ch] font-black leading-tight">
           {call.peerName || t("market.call.title")}
         </h2>
         {call.listingTitle && (
-          <p className="max-w-[30ch] truncate text-xs text-white/70">{call.listingTitle}</p>
+          <p className="max-w-[30ch] truncate text-desc text-white/70">{call.listingTitle}</p>
         )}
         <p className="text-base font-semibold text-white/90 tabular-nums" aria-live="polite">
           {stateLine}
@@ -184,7 +184,7 @@ export function CallOverlay() {
 
         {relayFailed && (
           <div className="mt-2 w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-3 text-start backdrop-blur-sm">
-            <p className="text-xs">{t("market.call.fallback.title")}</p>
+            <p className="text-desc">{t("market.call.fallback.title")}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {whatsappHref && (
                 <Button asChild size="sm" variant="secondary" className="h-9">
@@ -209,7 +209,7 @@ export function CallOverlay() {
               </Button>
             </div>
             {!phone && (
-              <p className="mt-2 text-[11px] text-white/70">{t("market.call.fallback.noPhone")}</p>
+              <p className="mt-2 text-desc text-white/70">{t("market.call.fallback.noPhone")}</p>
             )}
           </div>
         )}
@@ -221,7 +221,7 @@ export function CallOverlay() {
             <button
               type="button"
               onClick={() => void decline()}
-              className="flex flex-col items-center gap-2 text-[12px] font-bold"
+              className="flex flex-col items-center gap-2 text-desc font-bold"
             >
               <span className="grid size-16 place-items-center rounded-full bg-destructive text-destructive-foreground shadow-[0_14px_34px_rgb(16_0_43/0.5)] transition active:scale-95">
                 <PhoneOff className="size-6" aria-hidden />
@@ -231,7 +231,7 @@ export function CallOverlay() {
             <button
               type="button"
               onClick={() => void accept()}
-              className="flex flex-col items-center gap-2 text-[12px] font-bold"
+              className="flex flex-col items-center gap-2 text-desc font-bold"
             >
               <span className="grid size-16 place-items-center rounded-full bg-[#2f9e6a] text-[#ffffff] shadow-[0_14px_34px_rgb(16_0_43/0.5)] transition active:scale-95">
                 <Phone className="size-6" aria-hidden />
@@ -247,7 +247,7 @@ export function CallOverlay() {
               type="button"
               onClick={toggleMute}
               aria-pressed={call.muted}
-              className="flex flex-col items-center gap-2 text-[12px] font-bold"
+              className="flex flex-col items-center gap-2 text-desc font-bold"
             >
               <span
                 className={`grid size-14 place-items-center rounded-full border border-white/25 transition active:scale-95 ${
@@ -266,7 +266,7 @@ export function CallOverlay() {
             <button
               type="button"
               onClick={() => void hangUp()}
-              className="flex flex-col items-center gap-2 text-[12px] font-bold"
+              className="flex flex-col items-center gap-2 text-desc font-bold"
             >
               <span className="grid size-[68px] place-items-center rounded-full bg-destructive text-destructive-foreground shadow-[0_16px_40px_rgb(16_0_43/0.55)] transition active:scale-95">
                 <PhoneOff className="size-7" aria-hidden />
@@ -278,7 +278,7 @@ export function CallOverlay() {
               type="button"
               onClick={toggleSpeaker}
               aria-pressed={call.speaker}
-              className="flex flex-col items-center gap-2 text-[12px] font-bold"
+              className="flex flex-col items-center gap-2 text-desc font-bold"
             >
               <span
                 className={`grid size-14 place-items-center rounded-full border border-white/25 transition active:scale-95 ${
@@ -308,13 +308,13 @@ export function CallOverlay() {
           {live && (
             <button
               type="button"
-              className="text-[11px] text-white/70 underline"
+              className="text-desc text-white/70 underline"
               onClick={() => void stopReceiving()}
             >
               {t("market.call.stopReceiving")}
             </button>
           )}
-          <p className="text-center text-[11px] text-white/65">{t("market.call.noPhoneHint")}</p>
+          <p className="text-center text-desc text-white/65">{t("market.call.noPhoneHint")}</p>
         </div>
       </div>
     </div>

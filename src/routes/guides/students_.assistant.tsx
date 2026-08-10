@@ -42,7 +42,7 @@ function StudentAssistantPage() {
         <section className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 sm:py-7">
           <Link
             to="/guides/students"
-            className="mb-3 inline-flex min-h-9 items-center gap-1 rounded-full border border-border bg-card px-3 text-[10px] font-black text-muted-foreground shadow-sm sm:text-xs"
+            className="mb-3 inline-flex min-h-9 items-center gap-1 rounded-full border border-border bg-card px-3 text-desc font-black text-muted-foreground shadow-sm sm:text-desc"
           >
             <ChevronRight className="size-3.5" aria-hidden />
             دليل الطالب
@@ -53,10 +53,10 @@ function StudentAssistantPage() {
               <GraduationCap className="size-5" aria-hidden />
             </span>
             <div className="min-w-0">
-              <h1 className="truncate text-base font-black text-foreground sm:text-lg">
+              <h1 className="text-page truncate font-black text-foreground">
                 مساعد الطالب
               </h1>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-desc text-muted-foreground">
                 التاسع والبكالوريا — شرح خطوة بخطوة بالعربية
               </p>
             </div>

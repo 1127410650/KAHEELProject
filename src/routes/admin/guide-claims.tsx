@@ -69,8 +69,8 @@ function AdminGuideClaimsPage() {
     <AdminShell title="مطالبات ملكية جهات الدليل">
       <div className="space-y-4">
         <div>
-          <h1 className="text-lg font-black">مطالبات ملكية جهات الدليل</h1>
-          <p className="text-[12px] text-muted-foreground">
+          <h1 className="text-page font-black">مطالبات ملكية جهات الدليل</h1>
+          <p className="text-desc text-muted-foreground">
             لا موافقة بلا إثبات: كل مطالبة تُعتمد يدويًا بعد فحص المستندات، وتُحذف المستندات تلقائيًا
             بعد {CLAIM_DOC_RETENTION_DAYS.toLocaleString("en-US")} يومًا من البتّ.
           </p>
@@ -96,7 +96,7 @@ function AdminGuideClaimsPage() {
           </div>
         ) : rows.length === 0 ? (
           <Card>
-            <CardContent className="flex items-center gap-2 py-8 text-[12px] font-bold text-muted-foreground">
+            <CardContent className="flex items-center gap-2 py-8 text-desc font-bold text-muted-foreground">
               <ShieldQuestion className="size-4" aria-hidden />
               لا مطالبات في هذه الحالة.
             </CardContent>
@@ -112,31 +112,31 @@ function AdminGuideClaimsPage() {
                         to="/guides/syria/$slug"
                         params={{ slug: claim.place_slug }}
 
-                        className="text-[13px] font-black underline decoration-dotted"
+                        className="text-desc font-black underline decoration-dotted"
                       >
                         {claim.place_name ?? "جهة"}
                       </Link>
                     ) : (
-                      <span className="text-[13px] font-black">{claim.place_name ?? "جهة"}</span>
+                      <span className="text-desc font-black">{claim.place_name ?? "جهة"}</span>
                     )}
-                    <span className="text-[10.5px] font-bold text-muted-foreground">
+                    <span className="text-desc font-bold text-muted-foreground">
                       {formatDateTime(claim.created_at)}
                     </span>
                   </div>
 
-                  <p className="text-[11.5px] font-bold text-muted-foreground">
+                  <p className="text-desc font-bold text-muted-foreground">
                     مقدّم الطلب: {claim.applicant_name ?? "—"} ·{" "}
                     {ROLE_LABEL[claim.applicant_role ?? ""] ?? claim.applicant_role ?? "—"} · جوال:{" "}
                     {claim.phone ?? claim.contact ?? "—"}{" "}
                     {claim.phone_verified_at ? "(موثّق برمز تحقق)" : "(غير موثّق)"}
                   </p>
                   {claim.evidence ? (
-                    <p className="text-[11.5px] leading-6 text-muted-foreground">{claim.evidence}</p>
+                    <p className="text-desc leading-6 text-muted-foreground">{claim.evidence}</p>
                   ) : null}
 
                   <div className="flex flex-wrap gap-1.5">
                     {claim.documents.length === 0 ? (
-                      <span className="text-[11px] font-bold text-destructive">
+                      <span className="text-desc font-bold text-destructive">
                         {claim.documents_purged_at
                           ? "المستندات حُذفت بعد انتهاء مدة الاحتفاظ."
                           : "لا مستندات — لا يجوز الاعتماد."}
@@ -147,7 +147,7 @@ function AdminGuideClaimsPage() {
                           key={doc.id}
                           type="button"
                           onClick={() => void openDocument(doc.storage_path)}
-                          className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-border px-2.5 text-[11px] font-black hover:border-primary/50"
+                          className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-border px-2.5 text-desc font-black hover:border-primary/50"
                         >
                           <FileText className="size-3.5" aria-hidden />
                           {CLAIM_DOC_KIND_LABEL[doc.doc_kind] ?? doc.doc_kind}
@@ -157,12 +157,12 @@ function AdminGuideClaimsPage() {
                   </div>
 
                   {claim.reject_reason ? (
-                    <p className="text-[11px] font-bold text-destructive">
+                    <p className="text-desc font-bold text-destructive">
                       سبب الرفض: {claim.reject_reason}
                     </p>
                   ) : null}
                   {claim.reviewed_at ? (
-                    <p className="text-[10.5px] font-bold text-muted-foreground">
+                    <p className="text-desc font-bold text-muted-foreground">
                       بُتّ فيها: {formatDateTime(claim.reviewed_at)}
                     </p>
                   ) : null}

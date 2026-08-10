@@ -75,7 +75,7 @@ function ResetPasswordPage() {
       className="market-surface flex min-h-screen items-center justify-center px-5 py-10"
     >
       <section className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-sm">
-        <h1 className="text-xl font-bold">{t("auth.resetTitle")}</h1>
+        <h1 className="text-page font-bold">{t("auth.resetTitle")}</h1>
         {checking ? (
           <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" aria-hidden />
@@ -114,7 +114,7 @@ function ResetPasswordPage() {
                 onChange={(e) => setConfirm(e.target.value)}
               />
             </div>
-            <p className="text-xs text-muted-foreground">{t("signup.passwordHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("signup.passwordHint")}</p>
             <Button type="submit" className="h-12 w-full" disabled={busy}>
               {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {t("auth.updatePassword")}

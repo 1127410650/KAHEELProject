@@ -8,7 +8,7 @@ export function SyriaPrideStrip() {
   const { locale } = useI18n();
   return (
     <div className="-mx-3 flex h-8 items-center justify-center bg-secondary px-3 sm:-mx-5 lg:-mx-8">
-      <p className="truncate text-[12px] font-black tracking-tight text-foreground sm:text-sm">
+      <p className="truncate text-desc font-black tracking-tight text-foreground sm:text-sm">
         {locale === "ar" ? "سوريا 🇸🇾 فخرنا" : "Syria 🇸🇾 our pride"}
       </p>
     </div>

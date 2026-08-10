@@ -73,8 +73,8 @@ function Section({
 }) {
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-foreground">{title}</h2>
-      {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
+      <h2 className="text-section font-bold text-foreground">{title}</h2>
+      {hint && <p className="mt-0.5 text-desc text-muted-foreground">{hint}</p>}
       <div className="mt-3">{children}</div>
     </section>
   );
@@ -83,7 +83,7 @@ function Section({
 function Tile({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-border bg-background p-3">
-      <p className="truncate text-xs text-muted-foreground">{label}</p>
+      <p className="truncate text-desc text-muted-foreground">{label}</p>
       <p className="mt-1 text-xl font-bold tabular-nums text-foreground" dir="ltr">
         {value}
       </p>
@@ -113,13 +113,13 @@ function Ranked({
     "—";
   return (
     <div className="rounded-lg border border-border bg-background p-3">
-      <h3 className="text-xs font-bold text-foreground">{title}</h3>
+      <h3 className="text-desc font-bold text-foreground">{title}</h3>
       {!rows || rows.length === 0 ? (
-        <p className="mt-2 text-xs text-muted-foreground">{empty}</p>
+        <p className="mt-2 text-desc text-muted-foreground">{empty}</p>
       ) : (
         <ol className="mt-2 space-y-1">
           {rows.map((r, i) => (
-            <li key={`${label(r)}-${i}`} className="flex items-center justify-between gap-2 text-xs">
+            <li key={`${label(r)}-${i}`} className="flex items-center justify-between gap-2 text-desc">
               <span className="min-w-0 truncate text-foreground">{label(r)}</span>
               <span className="shrink-0 tabular-nums text-muted-foreground" dir="ltr">
                 {n(r.metric)}
@@ -192,7 +192,7 @@ function AnalyticsDashboardPage() {
             type="button"
             onClick={() => setDays(r)}
             className={
-              "min-h-9 rounded-lg border px-3 text-xs font-semibold transition-colors " +
+              "min-h-9 rounded-lg border px-3 text-desc font-semibold transition-colors " +
               (days === r
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border bg-background text-foreground hover:bg-accent")
@@ -202,7 +202,7 @@ function AnalyticsDashboardPage() {
           </button>
         ))}
         {o && (
-          <span className="text-xs text-muted-foreground" dir="ltr">
+          <span className="text-desc text-muted-foreground" dir="ltr">
             {new Date(o.generated_at).toLocaleString("en-GB", { timeZone: "Asia/Riyadh", hour12: false })}
           </span>
         )}
@@ -231,14 +231,14 @@ function AnalyticsDashboardPage() {
             <Tile label={t("admin.analytics.pointsSpent")} value={n(o.revenue_points_spent)} />
           </div>
           {!o.revenue_money_enabled && (
-            <p className="mt-3 text-xs text-muted-foreground">{t("admin.analytics.noMoney")}</p>
+            <p className="mt-3 text-desc text-muted-foreground">{t("admin.analytics.noMoney")}</p>
           )}
         </Section>
       )}
 
       <Section title={t("admin.analytics.trend")} hint={t("admin.analytics.trendHint")}>
         {chartRows.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{empty}</p>
+          <p className="text-desc text-muted-foreground">{empty}</p>
         ) : (
           <div className="h-72 w-full" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
@@ -261,14 +261,14 @@ function AnalyticsDashboardPage() {
 
       <Section title={t("admin.analytics.funnel")} hint={t("admin.analytics.funnelHint")}>
         {!funnel.data || funnel.data.steps.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{empty}</p>
+          <p className="text-desc text-muted-foreground">{empty}</p>
         ) : (
           <div className="space-y-2">
             {funnel.data.steps.map((s) => {
               const top = Math.max(...funnel.data!.steps.map((x) => x.value), 1);
               return (
                 <div key={s.key}>
-                  <div className="flex items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center justify-between gap-2 text-desc">
                     <span className="text-foreground">{t(`admin.analytics.step.${s.key}`)}</span>
                     <span className="tabular-nums text-muted-foreground" dir="ltr">
                       {n(s.value)}
@@ -289,7 +289,7 @@ function AnalyticsDashboardPage() {
 
       <Section title={t("admin.analytics.fields")}>
         {fieldRows.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{empty}</p>
+          <p className="text-desc text-muted-foreground">{empty}</p>
         ) : (
           <>
             <div className="h-72 w-full" dir="ltr">
@@ -306,7 +306,7 @@ function AnalyticsDashboardPage() {
               </ResponsiveContainer>
             </div>
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full min-w-[720px] text-xs">
+              <table className="w-full min-w-[720px] text-desc">
                 <thead className="text-muted-foreground">
                   <tr>
                     <th className="p-2 text-start">{t("admin.analytics.field")}</th>
@@ -481,7 +481,7 @@ function AnalyticsDashboardPage() {
               <Tile label={t("admin.analytics.flagged")} value={n(ops.data.conversations.flagged)} />
             </>
           ) : (
-            <p className="col-span-full text-xs text-muted-foreground">{t("admin.analytics.noPermission")}</p>
+            <p className="col-span-full text-desc text-muted-foreground">{t("admin.analytics.noPermission")}</p>
           )}
         </div>
         {ops.data?.verification && (
@@ -515,10 +515,10 @@ function AnalyticsDashboardPage() {
 
       <Section title={t("admin.analytics.geoTitle")}>
         {!geo.data || geo.data.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{empty}</p>
+          <p className="text-desc text-muted-foreground">{empty}</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px] text-xs">
+            <table className="w-full min-w-[560px] text-desc">
               <thead className="text-muted-foreground">
                 <tr>
                   <th className="p-2 text-start">{t("admin.analytics.city")}</th>

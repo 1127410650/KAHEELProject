@@ -57,7 +57,7 @@ function ProviderOperationsPage() {
         <Card className="mx-auto max-w-2xl rounded-3xl">
           <CardContent className="space-y-4 p-6 text-center sm:p-8">
             <Store className="mx-auto size-11 text-primary" />
-            <h2 className="text-lg font-black">
+            <h2 className="text-section font-black">
               {locale === "ar" ? "المركز متاح بعد قبول طلب الانضمام" : "Available after approval"}
             </h2>
             <p className="text-sm leading-7 text-muted-foreground">
@@ -197,7 +197,7 @@ function ProviderOperationsPage() {
                     {locale === "ar" ? "معتمد تشغيليًا" : "Operationally approved"}
                   </Badge>
                 </div>
-                <h1 className="mt-3 text-2xl font-black sm:text-3xl">
+                <h1 className="text-page mt-3 font-black sm:text-3xl">
                   {locale === "ar" ? "كل أعمالك من مكان واحد" : "Run everything from one place"}
                 </h1>
                 <p className="mt-2 max-w-2xl text-sm leading-7 text-white/70">
@@ -214,7 +214,7 @@ function ProviderOperationsPage() {
                   key={String(label)}
                   className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
-                  <p className="text-[11px] text-white/60">{label}</p>
+                  <p className="text-desc text-white/60">{label}</p>
                   <p className="mt-1 text-xl font-black tabular-nums">{value}</p>
                 </div>
               ))}
@@ -235,7 +235,7 @@ function ProviderOperationsPage() {
               <h2 className="mt-4 font-black text-foreground group-hover:text-primary">
                 {module.title}
               </h2>
-              <p className="mt-1.5 text-xs leading-6 text-muted-foreground">{module.hint}</p>
+              <p className="mt-1.5 text-desc leading-6 text-muted-foreground">{module.hint}</p>
             </Link>
           ))}
         </div>

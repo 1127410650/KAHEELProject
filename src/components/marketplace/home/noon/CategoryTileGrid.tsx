@@ -39,7 +39,7 @@ export function CategoryTileGrid() {
   const ar = locale === "ar";
   return (
     <section aria-labelledby="home-categories-title">
-      <h2 id="home-categories-title" className="text-[15px] font-black tracking-tight sm:text-lg">
+      <h2 id="home-categories-title" className="text-body font-black tracking-tight sm:text-lg">
         {ar ? "التصنيفات الرئيسية" : "Main categories"}
       </h2>
       <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-12">
@@ -52,7 +52,7 @@ export function CategoryTileGrid() {
             <span className="grid aspect-square w-full place-items-center rounded-2xl border border-border bg-accent text-primary shadow-sm transition group-hover:-translate-y-0.5">
               <Icon className="size-6 sm:size-7" aria-hidden />
             </span>
-            <span className="w-full truncate text-center text-[10.5px] font-bold text-foreground sm:text-xs">
+            <span className="w-full truncate text-center text-desc font-bold text-foreground sm:text-desc">
               {ar ? labelAr : en}
             </span>
           </a>

@@ -143,7 +143,7 @@ function MarketSetupPage() {
           </span>
         </div>
 
-        <h1 className="text-xl font-bold text-foreground">إعداد حسابك في سوريا</h1>
+        <h1 className="text-page font-bold text-foreground">إعداد حسابك في سوريا</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           نسخة السعودية متوقفة مؤقتًا، وجميع الحسابات والإعلانات الجديدة في هذه النسخة سورية.
         </p>
@@ -154,7 +154,7 @@ function MarketSetupPage() {
             <div className="flex min-h-11 items-center gap-2 rounded-md border border-input bg-muted/35 px-3 text-sm font-bold text-foreground">
               <Flag className="size-4 text-primary" aria-hidden />
               <span>{locale === "en" ? "Syria" : "سوريا"}</span>
-              <span className="ms-auto rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+              <span className="ms-auto rounded-full bg-primary/10 px-2 py-0.5 text-desc font-bold text-primary">
                 السوق النشط
               </span>
             </div>
@@ -167,7 +167,7 @@ function MarketSetupPage() {
             status={existing.data?.contact?.phone_status}
             invalid={phoneInvalid}
           />
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {locale === "ar"
               ? "أدخل رقمًا سوريًا. سيُحفظ دوليًا بصيغة +963 ويُستخدم كاسم المستخدم."
               : "Enter a Syrian number. It will be stored with +963 and used as your username."}

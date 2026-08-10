@@ -33,10 +33,10 @@ function PoliciesPage() {
     <MarketShell>
       <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
         <header className="market-page-intro">
-          <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          <h1 className="text-page font-black tracking-tight text-foreground">
             {locale === "ar" ? "عن المنصة والسياسات" : "About & policies"}
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-desc text-muted-foreground">
             {locale === "ar"
               ? "عن كَحيل، وشروط الاستخدام، وسياسة الخصوصية في صفحة واحدة."
               : "About Kaheel, terms of use and privacy in one place."}

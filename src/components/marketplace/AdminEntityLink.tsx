@@ -176,17 +176,17 @@ export function AdminAccountCard({
           {(name ?? "").trim() || fallback || "—"}
         </span>
         {email ? (
-          <span className="block truncate text-xs text-muted-foreground" dir="ltr">
+          <span className="block truncate text-desc text-muted-foreground" dir="ltr">
             {email}
           </span>
         ) : null}
         {phone ? (
-          <span className="block truncate text-xs text-muted-foreground" dir="ltr">
+          <span className="block truncate text-desc text-muted-foreground" dir="ltr">
             {phone}
           </span>
         ) : null}
         {accountType || status ? (
-          <span className="mt-0.5 flex flex-wrap items-center gap-1 text-[11px] text-muted-foreground">
+          <span className="mt-0.5 flex flex-wrap items-center gap-1 text-desc text-muted-foreground">
             {accountType ? <span>{accountType}</span> : null}
             {accountType && status ? <span aria-hidden>·</span> : null}
             {status ? <span>{status}</span> : null}

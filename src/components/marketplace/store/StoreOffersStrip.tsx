@@ -26,7 +26,7 @@ export function StoreOffersStrip({
 
   return (
     <section aria-label="عروض المتجر" className="space-y-2">
-      <h2 className="flex items-center gap-2 text-sm font-black">
+      <h2 className="text-section flex items-center gap-2 font-black">
         <Tag className="size-4 text-market-navy" aria-hidden />
         {locale === "ar" ? "عروض سارية" : "Live offers"}
       </h2>
@@ -36,8 +36,8 @@ export function StoreOffersStrip({
             key={offer.id}
             className="min-w-[15rem] shrink-0 rounded-2xl border border-market-navy/25 bg-market-navy/5 p-3"
           >
-            <p className="text-xs font-black">{offer.title}</p>
-            <p className="mt-1 text-[11px] font-bold text-market-navy">
+            <p className="text-desc font-black">{offer.title}</p>
+            <p className="mt-1 text-desc font-bold text-market-navy">
               {offer.discount_type === "percent"
                 ? locale === "ar"
                   ? `خصم ${offer.discount_value}%`
@@ -52,7 +52,7 @@ export function StoreOffersStrip({
                   : " · selected items"}
             </p>
             {offer.description ? (
-              <p className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
+              <p className="mt-1 line-clamp-2 text-desc text-muted-foreground">
                 {offer.description}
               </p>
             ) : null}

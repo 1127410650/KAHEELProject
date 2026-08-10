@@ -167,7 +167,7 @@ export function RealEstateLicenseFields({
             {t("market.license.uploadDoc")}
           </Button>
           {path && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] text-secondary-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-desc text-secondary-foreground">
               {t("market.license.docAttached")}
               <button
                 type="button"
@@ -181,7 +181,7 @@ export function RealEstateLicenseFields({
             </span>
           )}
         </div>
-        <p className="text-[11px] text-muted-foreground">{t("market.license.docHint")}</p>
+        <p className="text-desc text-muted-foreground">{t("market.license.docHint")}</p>
       </div>
     );
   }
@@ -200,7 +200,7 @@ export function RealEstateLicenseFields({
           {t("market.license.sectionTitle")}
         </span>
         <span
-          className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+          className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-desc font-medium ${
             summary === "complete"
               ? "bg-primary/10 text-primary"
               : summary === "expired"
@@ -218,13 +218,13 @@ export function RealEstateLicenseFields({
       </button>
 
       {!open && (
-        <p className="px-3 pb-3 text-[11px] text-muted-foreground">
+        <p className="px-3 pb-3 text-desc text-muted-foreground">
           {t("market.license.completeNote")}
         </p>
       )}
 
       <fieldset id="license-panel" hidden={!open} className="space-y-4 border-t border-border p-3">
-      <p className="text-[11px] text-muted-foreground">{t("market.license.formIntro")}</p>
+      <p className="text-desc text-muted-foreground">{t("market.license.formIntro")}</p>
 
 
       <div className="space-y-1.5">
@@ -258,7 +258,7 @@ export function RealEstateLicenseFields({
             rel="noopener noreferrer"
             title={t("market.license.verifyHint")}
             aria-label={t("market.license.verifyHint")}
-            className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-primary underline"
+            className="inline-flex min-h-11 items-center gap-1.5 text-desc font-semibold text-primary underline"
           >
             <ExternalLink className="size-3.5" aria-hidden />
             {t("market.license.verify")}
@@ -274,7 +274,7 @@ export function RealEstateLicenseFields({
             value={value.adLicenseExpiry}
             onChange={(event) => set("adLicenseExpiry", event.target.value)}
           />
-          <p className="text-[11px] text-muted-foreground" dir="ltr">
+          <p className="text-desc text-muted-foreground" dir="ltr">
             {value.adLicenseExpiry ? licenseDate(value.adLicenseExpiry) : "DD/MM/YYYY"}
           </p>
         </div>
@@ -284,8 +284,8 @@ export function RealEstateLicenseFields({
         <p
           className={
             expiryNote.tone === "error"
-              ? "rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive"
-              : "rounded-lg border border-border bg-secondary px-3 py-2 text-xs text-secondary-foreground"
+              ? "rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-desc text-destructive"
+              : "rounded-lg border border-border bg-secondary px-3 py-2 text-desc text-secondary-foreground"
           }
         >
           {expiryNote.text}
@@ -307,7 +307,7 @@ export function RealEstateLicenseFields({
             rel="noopener noreferrer"
             title={t("market.license.verifyBrokerHint")}
             aria-label={t("market.license.verifyBrokerHint")}
-            className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-primary underline"
+            className="inline-flex min-h-11 items-center gap-1.5 text-desc font-semibold text-primary underline"
           >
             <ExternalLink className="size-3.5" aria-hidden />
             {t("market.license.verifyBroker")}
@@ -327,7 +327,7 @@ export function RealEstateLicenseFields({
           />
           <span>
             {t("market.license.exemptionRequest")}
-            <span className="block text-[11px] font-normal text-muted-foreground">
+            <span className="block text-desc font-normal text-muted-foreground">
               {t("market.license.exemptionHint")}
             </span>
           </span>
@@ -347,13 +347,13 @@ export function RealEstateLicenseFields({
           </>
         )}
         {value.exemptionRequested && !value.exemptionApproved && (
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {t("market.license.exemptionPendingNote")}
           </p>
         )}
       </div>
 
-      <p className="rounded-lg border border-border bg-secondary px-3 py-2 text-[11px] text-secondary-foreground">
+      <p className="rounded-lg border border-border bg-secondary px-3 py-2 text-desc text-secondary-foreground">
         {t(`market.license.status.${value.verificationStatus}`)} — {t("market.license.statusNote")}
       </p>
       </fieldset>

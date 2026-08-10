@@ -417,7 +417,7 @@ export function StoreWizard() {
 
   return (
     <div className="space-y-5">
-      <ol className="flex flex-wrap items-center gap-1.5 text-xs">
+      <ol className="flex flex-wrap items-center gap-1.5 text-desc">
         {Array.from({ length: TOTAL_STEPS }, (_, index) => index + 1).map((value) => (
           <li
             key={value}
@@ -434,7 +434,7 @@ export function StoreWizard() {
         ))}
       </ol>
 
-      <h2 className="text-base font-semibold">
+      <h2 className="text-section font-semibold">
         {step === 4 && form.store_type === "services"
           ? locale === "ar"
             ? "طريقة تقديم الخدمة"
@@ -460,7 +460,7 @@ export function StoreWizard() {
                     <span className="block text-sm font-medium">
                       {t(`market.store.type.${type}`)}
                     </span>
-                    <span className="block text-xs text-muted-foreground">
+                    <span className="block text-desc text-muted-foreground">
                       {t(`market.store.typeHint.${type}`)}
                     </span>
                   </span>
@@ -545,7 +545,7 @@ export function StoreWizard() {
 
           {step === 3 && (
             <div className="space-y-4">
-              <p className="rounded-md bg-secondary/60 p-2 text-xs text-muted-foreground">
+              <p className="rounded-md bg-secondary/60 p-2 text-desc text-muted-foreground">
                 {t("market.store.countryFromAccount")}{" "}
                 <span className="font-medium text-foreground">
                   {geoName(country.data ?? undefined, locale)}
@@ -644,7 +644,7 @@ export function StoreWizard() {
                   value={form.contact_phone}
                   onChange={(e) => set("contact_phone", e.target.value.replace(/[^\d+]/g, ""))}
                 />
-                <p className="text-xs text-muted-foreground">{t("market.store.phoneHiddenHint")}</p>
+                <p className="text-desc text-muted-foreground">{t("market.store.phoneHiddenHint")}</p>
               </div>
               <ToggleRow
                 label={t("market.store.publicPhone")}
@@ -700,7 +700,7 @@ export function StoreWizard() {
                     checked={form.remote_service_enabled}
                     onChange={(value) => set("remote_service_enabled", value)}
                   />
-                  <p className="rounded-lg bg-secondary/60 p-3 text-xs leading-5 text-muted-foreground">
+                  <p className="rounded-lg bg-secondary/60 p-3 text-desc leading-5 text-muted-foreground">
                     {locale === "ar"
                       ? "يمكنك ضبط رسوم الزيارة والتأكيد الفوري وفاصل المواعيد لاحقًا من مركز مقدم الخدمة."
                       : "You can set visit fees, instant confirmation and slot intervals later in the provider center."}
@@ -790,7 +790,7 @@ export function StoreWizard() {
                         accept="application/pdf,image/jpeg,image/png,image/webp"
                         onChange={(e) => void pickPermit(e.target.files?.[0] ?? null)}
                       />
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-desc text-muted-foreground">
                         {t("market.store.permitPrivate")}
                       </p>
                     </div>
@@ -894,7 +894,7 @@ export function StoreWizard() {
                     <span className="text-sm font-medium">
                       {t(`market.store.weekday.${row.weekday}`)}
                     </span>
-                    <label className="flex items-center gap-2 text-xs">
+                    <label className="flex items-center gap-2 text-desc">
                       <Switch
                         checked={!row.is_closed}
                         onCheckedChange={(checked) =>
@@ -1019,7 +1019,7 @@ export function StoreWizard() {
           {step === 7 && (
             <div className="space-y-3 text-sm">
               <p>{t("market.store.reviewNote")}</p>
-              <p className="text-xs text-muted-foreground">{t("market.store.freeLaunch")}</p>
+              <p className="text-desc text-muted-foreground">{t("market.store.freeLaunch")}</p>
             </div>
           )}
         </CardContent>

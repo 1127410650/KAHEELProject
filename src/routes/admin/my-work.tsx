@@ -114,7 +114,7 @@ function MyWorkPage() {
       staffAccess={staffAccess}
       staffChecking={identityLoading}
     >
-      <p className="text-xs text-muted-foreground">{t("admin.myWork.hint")}</p>
+      <p className="text-desc text-muted-foreground">{t("admin.myWork.hint")}</p>
 
       {status.isLoading ? (
         <Skeleton className="mt-4 h-24 w-full rounded-xl" />
@@ -124,12 +124,12 @@ function MyWorkPage() {
         <div className="mt-4 rounded-xl border border-border bg-card p-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] text-muted-foreground">{t("admin.myWork.myState")}</p>
+              <p className="text-desc text-muted-foreground">{t("admin.myWork.myState")}</p>
               <p className="mt-1 text-sm font-semibold text-foreground">
                 {t(`admin.workforce.state.${me.effective_state}`)}
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-[11px] tabular-nums text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-3 text-desc tabular-nums text-muted-foreground">
               <span>
                 {t("admin.myWork.load")}: {me.open_count}/{me.capacity_limit}
               </span>
@@ -155,7 +155,7 @@ function MyWorkPage() {
             </Select>
           </div>
           {onLeave && (
-            <p className="mt-2 text-[11px] text-muted-foreground">{t("admin.myWork.onLeaveNote")}</p>
+            <p className="mt-2 text-desc text-muted-foreground">{t("admin.myWork.onLeaveNote")}</p>
           )}
         </div>
       )}
@@ -245,7 +245,7 @@ function WorkList({
   const { t } = useI18n();
   return (
     <section className="mt-6">
-      <h2 className="text-sm font-bold text-foreground">{title}</h2>
+      <h2 className="text-section font-bold text-foreground">{title}</h2>
       {loading ? (
         <Skeleton className="mt-3 h-24 w-full rounded-xl" />
       ) : items.length === 0 ? (
@@ -262,7 +262,7 @@ function WorkList({
                   >
                     {t(`admin.workforce.kind.${item.kind}`)}
                   </Link>
-                  <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                  <p className="mt-0.5 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                     <span>{t(`admin.workforce.priority.${item.priority}`)}</span>
                     <span>{formatDateTime(item.created_at)}</span>
                     {item.auto_assigned && <span>{t("admin.workforce.autoAssigned")}</span>}
@@ -315,7 +315,7 @@ function AttendanceCard() {
     <section className="mt-4 rounded-xl border border-border bg-card p-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[11px] text-muted-foreground">{t("admin.attendance.todayTitle")}</p>
+          <p className="text-desc text-muted-foreground">{t("admin.attendance.todayTitle")}</p>
           {days.isLoading ? (
             <Skeleton className="mt-1 h-5 w-40 rounded" />
           ) : !row || !row.checked_in_at ? (
@@ -327,7 +327,7 @@ function AttendanceCard() {
               <p className="mt-1 text-sm font-semibold text-foreground">
                 {t(`admin.attendance.status.${row.status}`)}
               </p>
-              <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+              <p className="mt-0.5 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                 <span>
                   {t("admin.attendance.inAt")}: {formatDateTime(row.checked_in_at)}
                 </span>
@@ -348,7 +348,7 @@ function AttendanceCard() {
 
         <div className="flex flex-wrap items-center gap-3">
           {(!row || !row.checked_in_at) && (
-            <label className="flex items-center gap-2 text-[11px] text-muted-foreground">
+            <label className="flex items-center gap-2 text-desc text-muted-foreground">
               <Switch checked={remote} onCheckedChange={setRemote} aria-label={t("admin.attendance.remoteToggle")} />
               {t("admin.attendance.remoteToggle")}
             </label>

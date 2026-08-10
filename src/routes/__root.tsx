@@ -63,7 +63,7 @@ function NotFoundView() {
     >
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">
+        <h2 className="text-section mt-4 font-semibold text-foreground">
           {t("routeError.notFoundTitle")}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("routeError.notFoundBody")}</p>
@@ -103,7 +103,7 @@ function ErrorView({ error }: { error: Error }) {
       className={`${scope} flex min-h-dvh items-center justify-center bg-background px-4 py-10`}
     >
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+        <h1 className="text-page font-semibold tracking-tight text-foreground">
           {t("routeError.errorTitle")}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-2">

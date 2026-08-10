@@ -174,7 +174,7 @@ function JoinApplicationsAdminPage() {
                     <p className="font-black">
                       {row.applicant_name || (locale === "ar" ? "مستخدم" : "User")}
                     </p>
-                    <p className="mt-1 truncate text-xs text-muted-foreground">
+                    <p className="mt-1 truncate text-desc text-muted-foreground">
                       {row.tenant_name || kindLabel(row.application_kind, locale)}
                     </p>
                   </div>
@@ -182,7 +182,7 @@ function JoinApplicationsAdminPage() {
                     {statusLabel(row.status, locale)}
                   </Badge>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+                <div className="mt-4 flex flex-wrap gap-2 text-desc text-muted-foreground">
                   <span>{row.application_number}</span>
                   <span>·</span>
                   <span>{kindLabel(row.application_kind, locale)}</span>
@@ -206,9 +206,9 @@ function JoinApplicationsAdminPage() {
           <div className="max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-background p-4 shadow-2xl sm:max-w-2xl sm:rounded-3xl sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-bold text-primary">{selected.application_number}</p>
-                <h2 className="mt-1 text-xl font-black">{selected.applicant_name}</h2>
-                <p className="mt-1 text-xs text-muted-foreground">
+                <p className="text-desc font-bold text-primary">{selected.application_number}</p>
+                <h2 className="text-section mt-1 font-black">{selected.applicant_name}</h2>
+                <p className="mt-1 text-desc text-muted-foreground">
                   {kindLabel(selected.application_kind, locale)}
                   {selected.tenant_name ? ` · ${selected.tenant_name}` : ""}
                 </p>
@@ -226,7 +226,7 @@ function JoinApplicationsAdminPage() {
             <div className="mt-5 grid gap-2 rounded-2xl bg-secondary/45 p-4 text-sm sm:grid-cols-2">
               {payloadRows(selected, locale).map(([label, value]) => (
                 <div key={label} className="min-w-0">
-                  <p className="text-[10px] text-muted-foreground">{label}</p>
+                  <p className="text-desc text-muted-foreground">{label}</p>
                   <p className="mt-1 break-words font-semibold">{value || "—"}</p>
                 </div>
               ))}
@@ -256,7 +256,7 @@ function JoinApplicationsAdminPage() {
                   )}
                 </div>
               ) : (
-                <p className="mt-2 text-xs text-muted-foreground">
+                <p className="mt-2 text-desc text-muted-foreground">
                   {locale === "ar" ? "لا توجد مرفقات إضافية." : "No additional documents."}
                 </p>
               )}

@@ -115,7 +115,7 @@ function SyriaGuidePage() {
       <main className="min-h-screen bg-background pb-10">
         <section className="relative isolate overflow-hidden border-b border-border bg-background text-foreground">
           <div className="market-hero-band relative mx-auto flex w-full max-w-[1240px] flex-col justify-end px-4 sm:px-6 lg:px-8">
-            <span className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1.5 text-[10px] font-black text-primary sm:text-xs">
+            <span className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1.5 text-desc font-black text-primary sm:text-desc">
               <ShieldCheck className="size-4" aria-hidden />
               مصادر ظاهرة وشارات تحقق صادقة
             </span>
@@ -123,7 +123,7 @@ function SyriaGuidePage() {
             <p className="mt-1.5 max-w-2xl text-muted-foreground">
               جهات حكومية ومشافٍ وجامعات وخدمات وأماكن، مع اتجاهات وطرق تواصل مباشرة.
             </p>
-            <div className="mt-2.5 flex flex-wrap gap-2 text-[10px] font-bold text-muted-foreground sm:text-xs">
+            <div className="mt-2.5 flex flex-wrap gap-2 text-desc font-bold text-muted-foreground sm:text-desc">
               <span className="rounded-full border border-border bg-secondary px-3 py-1.5">
                 {total.toLocaleString("en-US")} سجل
               </span>
@@ -166,8 +166,8 @@ function SyriaGuidePage() {
                 }}
                 className={
                   nearActive
-                    ? "k-press k-toggle-active inline-flex h-9 items-center gap-1 rounded-xl px-3 text-[12px] font-black"
-                    : "k-press inline-flex h-9 items-center gap-1 rounded-xl border border-primary/30 bg-card px-3 text-[12px] font-black text-primary"
+                    ? "k-press k-toggle-active inline-flex h-9 items-center gap-1 rounded-xl px-3 text-desc font-black"
+                    : "k-press inline-flex h-9 items-center gap-1 rounded-xl border border-primary/30 bg-card px-3 text-desc font-black text-primary"
                 }
               >
                 <Navigation className="size-3.5" aria-hidden />
@@ -184,7 +184,7 @@ function SyriaGuidePage() {
                     );
                   }}
                   aria-label="النطاق"
-                  className="h-9 rounded-xl border border-primary/25 bg-card px-2 text-[12px] font-bold"
+                  className="h-9 rounded-xl border border-primary/25 bg-card px-2 text-desc font-bold"
                 >
                   <option value="">كل سوريا</option>
                   {RADIUS_OPTIONS.map((km) => (
@@ -230,13 +230,13 @@ function SyriaGuidePage() {
             <div className="rounded-3xl border border-border bg-card p-8 text-center">
               <Sparkles className="mx-auto mb-2 size-5 text-market-navy" aria-hidden />
               <p className="text-sm font-black">لا نتائج مطابقة</p>
-              <p className="mt-1 text-[12px] text-muted-foreground">
+              <p className="mt-1 text-desc text-muted-foreground">
                 جرّب كلمة أقصر أو أزل بعض الفلاتر.
               </p>
             </div>
           ) : (
             <>
-              <div className="mb-4 text-[12px] font-bold text-muted-foreground">
+              <div className="mb-4 text-desc font-bold text-muted-foreground">
                 صفحة {page + 1} من {pages} — {total.toLocaleString("en-US")} نتيجة
               </div>
               <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
@@ -250,19 +250,19 @@ function SyriaGuidePage() {
                   type="button"
                   onClick={() => setPage((current) => Math.max(0, current - 1))}
                   disabled={page === 0}
-                  className="inline-flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-black disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-desc font-black disabled:opacity-40"
                 >
                   <ChevronRight className="size-3.5" aria-hidden />
                   السابق
                 </button>
-                <span className="rounded-xl bg-market-navy px-3.5 py-2 text-[11px] font-black text-white">
+                <span className="rounded-xl bg-market-navy px-3.5 py-2 text-desc font-black text-white">
                   {page + 1} / {pages}
                 </span>
                 <button
                   type="button"
                   onClick={() => setPage((current) => Math.min(pages - 1, current + 1))}
                   disabled={page + 1 >= pages}
-                  className="inline-flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-black disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-desc font-black disabled:opacity-40"
                 >
                   التالي
                   <ChevronLeft className="size-3.5" aria-hidden />

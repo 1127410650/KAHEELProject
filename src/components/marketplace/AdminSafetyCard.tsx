@@ -45,7 +45,7 @@ export function AdminSafetyCard({
   return (
     <section className="rounded-xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
+        <h2 className="text-section inline-flex items-center gap-1.5 font-bold text-foreground">
           <ShieldQuestion className="size-4 shrink-0" aria-hidden />
           {t("admin.safety.title")}
         </h2>
@@ -72,7 +72,7 @@ export function AdminSafetyCard({
       <dl className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
         {facts.map((fact) => (
           <div key={fact.label} className="rounded-lg bg-background px-3 py-2">
-            <dt className="truncate text-[11px] text-muted-foreground">{fact.label}</dt>
+            <dt className="truncate text-desc text-muted-foreground">{fact.label}</dt>
             <dd
               className={
                 "text-base font-bold tabular-nums " +
@@ -92,11 +92,11 @@ export function AdminSafetyCard({
       </dl>
 
       {data.last_violation_at && (
-        <p className="mt-2 text-[11px] tabular-nums text-muted-foreground">
+        <p className="mt-2 text-desc tabular-nums text-muted-foreground">
           {t("admin.safety.lastViolation")}: {formatDateTime(data.last_violation_at)}
         </p>
       )}
-      <p className="mt-2 text-[11px] text-muted-foreground">{t("admin.safety.hint")}</p>
+      <p className="mt-2 text-desc text-muted-foreground">{t("admin.safety.hint")}</p>
     </section>
   );
 }

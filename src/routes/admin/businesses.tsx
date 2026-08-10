@@ -167,7 +167,7 @@ function AdminBusinessesPage() {
           ? "bg-gold-soft text-gold-dark"
           : "bg-secondary text-muted-foreground";
     return (
-      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${tone}`}>
+      <span className={`rounded-full px-2 py-0.5 text-desc font-medium ${tone}`}>
         {t(`admin.verification.${status}`)}
       </span>
     );
@@ -208,7 +208,7 @@ function AdminBusinessesPage() {
         <>
           <div className="mt-4 hidden rounded-xl border border-border bg-card lg:block">
             <table className="w-full table-fixed text-sm">
-              <thead className="border-b border-border text-xs text-muted-foreground">
+              <thead className="border-b border-border text-desc text-muted-foreground">
                 <tr>
                   <th className="w-[24%] px-3 py-2 text-start font-medium">
                     {t("admin.business.name")}
@@ -240,7 +240,7 @@ function AdminBusinessesPage() {
                   >
                     <td className="px-3 py-2">
                       <AdminBusinessLink id={row.tenant_id} name={row.name} truncate />
-                      <span className="block truncate text-xs tabular-nums text-muted-foreground">
+                      <span className="block truncate text-desc tabular-nums text-muted-foreground">
                         {formatDate(row.created_at)}
                       </span>
                     </td>
@@ -260,7 +260,7 @@ function AdminBusinessesPage() {
                     <td className="px-3 py-2">
                       <Verification value={row.verification_status} />
                       {row.restriction && (
-                        <span className="mt-1 block text-[11px] text-destructive">
+                        <span className="mt-1 block text-desc text-destructive">
                           {t(`admin.restriction.${row.restriction}`)}
                         </span>
                       )}
@@ -289,16 +289,16 @@ function AdminBusinessesPage() {
                       truncate
                       className="min-h-11 py-2.5 text-sm font-semibold"
                     />
-                    <p className="truncate text-xs text-muted-foreground">
+                    <p className="truncate text-desc text-muted-foreground">
                       {[row.country, row.city].filter(Boolean).join(" · ")}
                     </p>
                     {row.officer_name && (
-                      <p className="mt-1 truncate text-xs text-muted-foreground">
+                      <p className="mt-1 truncate text-desc text-muted-foreground">
                         {t("admin.business.officer")}:{" "}
                         <AdminUserLink
                           id={row.officer_user_id}
                           name={row.officer_name}
-                          className="text-xs"
+                          className="text-desc"
                         />
                       </p>
                     )}
@@ -306,7 +306,7 @@ function AdminBusinessesPage() {
                   <ActionsMenu row={row} />
                 </div>
 
-                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-desc">
                   <Verification value={row.verification_status} />
                   <span className="text-muted-foreground">
                     {t("admin.business.listings")}:{" "}

@@ -104,8 +104,8 @@ export function WatermarkCard() {
     <section className="rounded-xl border border-border bg-card p-4">
       <header className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
-          <h2 className="text-sm font-bold text-foreground">{t("admin.watermark.title")}</h2>
-          <p className="mt-1 text-xs text-muted-foreground">{t("admin.watermark.hint")}</p>
+          <h2 className="text-section font-bold text-foreground">{t("admin.watermark.title")}</h2>
+          <p className="mt-1 text-desc text-muted-foreground">{t("admin.watermark.hint")}</p>
         </div>
         {config && (
           <span className="grid min-h-11 min-w-11 shrink-0 place-items-center">
@@ -130,12 +130,12 @@ export function WatermarkCard() {
               className="h-[180px] w-full max-w-[320px] rounded-lg border border-border"
               aria-label={t("admin.watermark.preview")}
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">{t("admin.watermark.preview")}</p>
+            <p className="mt-1 text-desc text-muted-foreground">{t("admin.watermark.preview")}</p>
           </div>
 
           <div className="grid gap-4">
             <div>
-              <p className="text-xs font-semibold text-foreground">{t("admin.watermark.position")}</p>
+              <p className="text-desc font-semibold text-foreground">{t("admin.watermark.position")}</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {WATERMARK_POSITIONS.map((item) => (
                   <Button
@@ -153,7 +153,7 @@ export function WatermarkCard() {
             </div>
 
             <div>
-              <label className="flex items-center justify-between text-xs font-semibold text-foreground">
+              <label className="flex items-center justify-between text-desc font-semibold text-foreground">
                 <span>{t("admin.watermark.opacity")}</span>
                 <span className="tabular-nums text-muted-foreground">{config.opacity}%</span>
               </label>
@@ -169,7 +169,7 @@ export function WatermarkCard() {
             </div>
 
             <div>
-              <label className="flex items-center justify-between text-xs font-semibold text-foreground">
+              <label className="flex items-center justify-between text-desc font-semibold text-foreground">
                 <span>{t("admin.watermark.size")}</span>
                 <span className="tabular-nums text-muted-foreground">
                   {config.sizePct.toFixed(1)}%
@@ -187,7 +187,7 @@ export function WatermarkCard() {
             </div>
 
             <div className="grid gap-2 sm:grid-cols-2">
-              <label className="grid gap-1 text-xs font-semibold text-foreground">
+              <label className="grid gap-1 text-desc font-semibold text-foreground">
                 {t("admin.watermark.text")}
                 <Input
                   value={config.text}
@@ -196,7 +196,7 @@ export function WatermarkCard() {
                   onChange={(event) => update({ text: event.target.value })}
                 />
               </label>
-              <label className="grid gap-1 text-xs font-semibold text-foreground">
+              <label className="grid gap-1 text-desc font-semibold text-foreground">
                 {t("admin.watermark.url")}
                 <Input
                   value={config.url}

@@ -76,7 +76,7 @@ export function AdCreditTopupQueue() {
     <Card>
       <CardContent className="space-y-3 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold">{t("market.adCredit.topup.admin.title")}</h2>
+          <h2 className="text-section font-semibold">{t("market.adCredit.topup.admin.title")}</h2>
           <div className="flex flex-wrap gap-1">
             {FILTERS.map((value) => (
               <button
@@ -84,7 +84,7 @@ export function AdCreditTopupQueue() {
                 type="button"
                 onClick={() => setFilter(value)}
                 aria-pressed={filter === value}
-                className={`rounded-full border px-3 py-1 text-xs ${
+                className={`rounded-full border px-3 py-1 text-desc ${
                   filter === value
                     ? "border-primary bg-primary/5"
                     : "border-border hover:bg-muted/50"
@@ -114,19 +114,19 @@ export function AdCreditTopupQueue() {
                     {formatNumber(row.credits)}
                   </span>
                   {row.amount != null && (
-                    <span className="text-xs text-muted-foreground tabular-nums" dir="ltr">
+                    <span className="text-desc text-muted-foreground tabular-nums" dir="ltr">
                       {formatNumber(Number(row.amount))} {row.currency}
                     </span>
                   )}
                   {row.transfer_ref && (
-                    <span className="text-xs text-muted-foreground" dir="ltr">
+                    <span className="text-desc text-muted-foreground" dir="ltr">
                       {row.transfer_ref}
                     </span>
                   )}
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {formatDateTime(row.created_at)}
                   </span>
-                  <span className="text-[11px] text-muted-foreground" dir="ltr">
+                  <span className="text-desc text-muted-foreground" dir="ltr">
                     {row.wallet_id}
                   </span>
                   <Badge variant={row.status === "approved" ? "default" : "outline"}>
@@ -146,10 +146,10 @@ export function AdCreditTopupQueue() {
                 </div>
 
                 {row.sender_note && (
-                  <p className="mt-1 text-xs text-muted-foreground">{row.sender_note}</p>
+                  <p className="mt-1 text-desc text-muted-foreground">{row.sender_note}</p>
                 )}
                 {row.status === "rejected" && row.reject_reason && (
-                  <p className="mt-1 text-xs text-destructive">{row.reject_reason}</p>
+                  <p className="mt-1 text-desc text-destructive">{row.reject_reason}</p>
                 )}
 
                 {row.status === "pending" && (

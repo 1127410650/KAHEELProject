@@ -190,14 +190,14 @@ function OrderCard({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="font-black">{order.order_number}</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">{created}</p>
+            <p className="mt-1 text-desc text-muted-foreground">{created}</p>
           </div>
           <Badge variant={order.order_status === "submitted" ? "default" : "secondary"}>
             {statusLabel(order.order_status, locale)}
           </Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 rounded-2xl bg-secondary/45 p-3 text-xs sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 rounded-2xl bg-secondary/45 p-3 text-desc sm:grid-cols-4">
           <Metric
             label={locale === "ar" ? "العميل" : "Customer"}
             value={order.customer_name || "—"}
@@ -211,13 +211,13 @@ function OrderCard({
         </div>
 
         {order.delivery_address_text || order.delivery_district ? (
-          <p className="text-xs leading-6 text-muted-foreground">
+          <p className="text-desc leading-6 text-muted-foreground">
             <Truck className="me-1 inline size-4" />
             {[order.delivery_district, order.delivery_address_text].filter(Boolean).join(" · ")}
           </p>
         ) : null}
         {order.customer_notes ? (
-          <p className="rounded-xl border p-3 text-xs leading-6">{order.customer_notes}</p>
+          <p className="rounded-xl border p-3 text-desc leading-6">{order.customer_notes}</p>
         ) : null}
 
         {actions.length ? (
@@ -248,7 +248,7 @@ function OrderCard({
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="text-[10px] text-muted-foreground">{label}</p>
+      <p className="text-desc text-muted-foreground">{label}</p>
       <p className="mt-1 truncate font-bold">{value}</p>
     </div>
   );

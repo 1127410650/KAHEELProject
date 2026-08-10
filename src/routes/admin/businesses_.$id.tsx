@@ -181,7 +181,7 @@ function AdminBusinessDetailPage() {
                 />
                 {canDocs && (
                   <div className="mt-4 rounded-lg border border-border bg-background p-3">
-                    <p className="text-[11px] font-semibold text-muted-foreground">
+                    <p className="text-desc font-semibold text-muted-foreground">
                       {t("admin.detail.sensitiveData")}
                     </p>
                     <div className="mt-2">

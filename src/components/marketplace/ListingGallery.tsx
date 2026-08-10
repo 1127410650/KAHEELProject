@@ -108,7 +108,7 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
               <ChevronRight className="size-4 rtl:hidden" aria-hidden />
             </button>
             <span
-              className="absolute bottom-2 end-2 rounded-full bg-background/85 px-2 py-0.5 text-[11px] font-medium text-foreground"
+              className="absolute bottom-2 end-2 rounded-full bg-background/85 px-2 py-0.5 text-desc font-medium text-foreground"
               dir="ltr"
             >
               {active + 1} / {images.length}
@@ -179,7 +179,7 @@ export function ListingGallery({ images, title }: { images: string[]; title: str
 
           {images.length > 1 && (
             <span
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/85 px-2.5 py-1 text-xs font-medium text-foreground"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/85 px-2.5 py-1 text-desc font-medium text-foreground"
               dir="ltr"
             >
               {active + 1} / {images.length}

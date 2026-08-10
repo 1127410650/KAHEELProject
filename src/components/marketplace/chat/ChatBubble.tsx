@@ -123,10 +123,10 @@ function AttachmentBody({ message }: { message: ChatMessage }) {
         {url ? (
           <audio src={url} controls preload="metadata" className="h-9 max-w-[220px]" />
         ) : (
-          <span className="text-xs">…</span>
+          <span className="text-desc">…</span>
         )}
         {seconds ? (
-          <span className="text-xs tabular-nums opacity-80" dir="ltr">
+          <span className="text-desc tabular-nums opacity-80" dir="ltr">
             {Math.floor(seconds / 60)}:{String(Math.round(seconds % 60)).padStart(2, "0")}
           </span>
         ) : null}
@@ -199,7 +199,7 @@ function BankShareBody({ message }: { message: ChatMessage }) {
         {t("market.chat.bank.title")}
         <BadgeCheck className="size-4 text-primary" aria-hidden />
       </p>
-      <dl className="space-y-1 text-xs">
+      <dl className="space-y-1 text-desc">
         <div className="flex justify-between gap-2">
           <dt className="text-muted-foreground">{t("market.chat.bank.bankName")}</dt>
           <dd>{str(message.payload, "bank_name")}</dd>
@@ -227,7 +227,7 @@ function BankShareBody({ message }: { message: ChatMessage }) {
         <Copy className="size-4" aria-hidden />
         {t("market.chat.bank.copyIban")}
       </Button>
-      <p className="text-[11px] leading-4 text-muted-foreground">
+      <p className="text-desc leading-4 text-muted-foreground">
         {t("market.chat.bank.notice")}
       </p>
     </div>
@@ -261,7 +261,7 @@ function BankRequestBody({
         <Landmark className="size-4" aria-hidden />
         {t("market.chat.bank.request")}
       </p>
-      <p className="text-xs text-muted-foreground">{t(`market.chat.bank.${status}`)}</p>
+      <p className="text-desc text-muted-foreground">{t(`market.chat.bank.${status}`)}</p>
       {status === "pending" && (
         <div className="flex flex-wrap gap-2">
           {message.mine ? (
@@ -348,7 +348,7 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
             .join(" ")}
         >
           {message.deleted_at ? (
-            <span className="text-xs italic opacity-80">{t("market.chat.deleted")}</span>
+            <span className="text-desc italic opacity-80">{t("market.chat.deleted")}</span>
           ) : message.kind === "text" ? (
             <p className="whitespace-pre-wrap break-words">{message.body}</p>
           ) : message.kind === "location" ? (
@@ -364,7 +364,7 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
           )}
         </div>
       </div>
-      <span className="mt-1 flex items-center gap-1 px-1 text-[11px] text-muted-foreground">
+      <span className="mt-1 flex items-center gap-1 px-1 text-desc text-muted-foreground">
         <time dateTime={message.created_at} dir="ltr" className="tabular-nums">
           {formatTime(message.created_at)}
         </time>

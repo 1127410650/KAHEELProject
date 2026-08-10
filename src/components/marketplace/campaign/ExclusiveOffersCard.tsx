@@ -86,7 +86,7 @@ export function ExclusiveOffersCard() {
           </span>
           <div>
             <p className="text-sm font-black">{ar ? "العروض الحصرية" : "Exclusive offers"}</p>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {ar
                 ? "مساحة مميزة في الرئيسية بخلفية موسمية خلفها"
                 : "A featured home area with a seasonal backdrop behind it"}
@@ -153,7 +153,7 @@ export function ExclusiveOffersCard() {
         </Button>
 
         <div className="space-y-2">
-          <p className="text-xs font-bold">
+          <p className="text-desc font-bold">
             {ar ? "العروض" : "Offers"}
             {isLoading ? " …" : ` (${rows.length})`}
           </p>
@@ -166,7 +166,7 @@ export function ExclusiveOffersCard() {
                 <p className="truncate text-sm font-bold">
                   {(ar ? row.title_ar : row.title_en) || row.slug}
                 </p>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-desc text-muted-foreground">
                   {SEASON_STATUS_LABEL[row.status][ar ? 0 : 1]} · {row.click_url} ·{" "}
                   {formatDateTime(row.starts_at)}
                   {row.ends_at ? ` → ${formatDateTime(row.ends_at)}` : ""}

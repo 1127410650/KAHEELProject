@@ -118,7 +118,7 @@ export function AdminStatusBadge({
   return (
     <span
       className={
-        "inline-flex max-w-full items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold " +
+        "inline-flex max-w-full items-center gap-1 rounded-full border px-2 py-0.5 text-desc font-semibold " +
         TONE_CLASS[resolved]
       }
     >

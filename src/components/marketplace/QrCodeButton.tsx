@@ -54,7 +54,7 @@ export function QrCodeButton({ url, listingId, children }: QrCodeButtonProps) {
                 alt={t("market.share.qrTitle")}
                 className="size-48 max-w-full rounded-lg border border-border bg-background"
               />
-              <p className="w-full break-all text-center text-xs text-muted-foreground" dir="ltr">
+              <p className="w-full break-all text-center text-desc text-muted-foreground" dir="ltr">
                 {link}
               </p>
               <Button asChild variant="outline" size="sm" className="min-h-11 w-full">

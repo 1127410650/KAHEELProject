@@ -103,7 +103,7 @@ export function MktNotificationsBell() {
           {unread.length > 0 && (
             <span
               data-testid="mkt-bell-count"
-              className="num absolute -top-0.5 end-0 grid min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground"
+              className="num absolute -top-0.5 end-0 grid min-w-4 place-items-center rounded-full bg-destructive px-1 text-desc font-bold text-destructive-foreground"
             >
               {unread.length}
             </span>
@@ -115,7 +115,7 @@ export function MktNotificationsBell() {
           <span className="text-sm font-semibold">{t("market.notif.title")}</span>
           <button
             type="button"
-            className="text-xs text-primary hover:underline disabled:opacity-50"
+            className="text-desc text-primary hover:underline disabled:opacity-50"
             onClick={() => markAll.mutate()}
             disabled={unread.length === 0 || markAll.isPending}
           >
@@ -137,8 +137,8 @@ export function MktNotificationsBell() {
                   if (!row.read_at) markOne.mutate(row.id);
                 }}
               />
-              {row.body && <p className="text-xs text-muted-foreground">{row.body}</p>}
-              <p className="num text-[11px] text-muted-foreground">
+              {row.body && <p className="text-desc text-muted-foreground">{row.body}</p>}
+              <p className="num text-desc text-muted-foreground">
                 {formatDateTime(row.created_at)}
               </p>
             </li>
@@ -147,7 +147,7 @@ export function MktNotificationsBell() {
         <div className="border-t border-border px-3 py-2 text-center">
           <Link
             to="/my/notifications"
-            className="text-xs font-semibold text-primary hover:underline"
+            className="text-desc font-semibold text-primary hover:underline"
           >
             {t("market.notif.viewAll")}
           </Link>

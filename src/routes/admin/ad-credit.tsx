@@ -89,7 +89,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">{t("market.adCredit.admin.pending")}</h2>
+            <h2 className="text-section font-semibold">{t("market.adCredit.admin.pending")}</h2>
             {entries.isLoading ? (
               <Skeleton className="h-20 w-full" />
             ) : pending.length === 0 ? (
@@ -110,10 +110,10 @@ function AdminAdCreditPage() {
                       {formatNumber(Number(e.price_sar))} SAR
                     </Badge>
                   )}
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {formatDateTime(e.created_at)}
                   </span>
-                  <span className="text-[11px] text-muted-foreground" dir="ltr">
+                  <span className="text-desc text-muted-foreground" dir="ltr">
                     {e.wallet_id}
                   </span>
                   <Input
@@ -149,7 +149,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="space-y-3 p-4">
-            <h2 className="text-sm font-semibold">{t("market.adCredit.admin.grantTitle")}</h2>
+            <h2 className="text-section font-semibold">{t("market.adCredit.admin.grantTitle")}</h2>
             <div className="flex flex-wrap gap-2">
               <Input
                 value={walletId}
@@ -188,13 +188,13 @@ function AdminAdCreditPage() {
                 {t("market.adCredit.admin.adjust")}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">{t("market.adCredit.admin.grantHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("market.adCredit.admin.grantHint")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-4">
-            <h2 className="mb-3 text-sm font-semibold">{t("market.adCredit.admin.wallets")}</h2>
+            <h2 className="text-section mb-3 font-semibold">{t("market.adCredit.admin.wallets")}</h2>
             {wallets.isLoading ? (
               <Skeleton className="h-24 w-full" />
             ) : (
@@ -203,7 +203,7 @@ function AdminAdCreditPage() {
                   <li key={w.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                     <button
                       type="button"
-                      className="text-[11px] text-muted-foreground underline"
+                      className="text-desc text-muted-foreground underline"
                       dir="ltr"
                       onClick={() => setWalletId(w.id)}
                     >
@@ -212,7 +212,7 @@ function AdminAdCreditPage() {
                     <span className="text-sm font-semibold tabular-nums">
                       {formatNumber(w.balance)}
                     </span>
-                    <span className="text-[11px] text-muted-foreground tabular-nums">
+                    <span className="text-desc text-muted-foreground tabular-nums">
                       {formatNumber(w.total_purchased)} / {formatNumber(w.total_consumed)}
                     </span>
                   </li>
@@ -224,7 +224,7 @@ function AdminAdCreditPage() {
 
         <Card>
           <CardContent className="p-4">
-            <h2 className="mb-3 text-sm font-semibold">{t("market.adCredit.admin.allEntries")}</h2>
+            <h2 className="text-section mb-3 font-semibold">{t("market.adCredit.admin.allEntries")}</h2>
             {entries.isLoading ? (
               <Skeleton className="h-24 w-full" />
             ) : (
@@ -240,7 +240,7 @@ function AdminAdCreditPage() {
                         </span>
                       ) : null}
                     </span>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span className="text-desc text-muted-foreground">
                       {formatDateTime(e.created_at)}
                     </span>
                     <span className="text-sm tabular-nums" dir="ltr">

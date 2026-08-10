@@ -66,7 +66,7 @@ export function AdminSearchBox() {
                 void navigate({ to: "/admin/search", search: { q: term.trim() } });
               }
             }}
-            className="h-10 rounded-xl border-[#e0aaff] bg-[#fbf7ff] ps-9 text-xs shadow-none placeholder:text-[#7d7290] focus-visible:border-[#c77dff] focus-visible:ring-[#7b2cbf]/15 dark:border-border dark:bg-background sm:text-sm"
+            className="h-10 rounded-xl border-[#e0aaff] bg-[#fbf7ff] ps-9 text-desc shadow-none placeholder:text-[#7d7290] focus-visible:border-[#c77dff] focus-visible:ring-[#7b2cbf]/15 dark:border-border dark:bg-background sm:text-sm"
             aria-label={t("admin.search.label")}
             placeholder={t("admin.search.placeholder")}
           />
@@ -79,18 +79,18 @@ export function AdminSearchBox() {
       >
         <div className="mb-1 flex items-center gap-2 rounded-xl bg-[#f9f4ff] px-3 py-2 dark:bg-accent">
           <Search className="size-4 text-[#7b2cbf]" aria-hidden />
-          <p className="truncate text-xs font-bold text-foreground">{term}</p>
+          <p className="truncate text-desc font-bold text-foreground">{term}</p>
         </div>
 
         {results.isLoading ? (
-          <p className="px-3 py-5 text-center text-xs text-muted-foreground">{t("common.loading")}</p>
+          <p className="px-3 py-5 text-center text-desc text-muted-foreground">{t("common.loading")}</p>
         ) : !hasResults ? (
-          <p className="px-3 py-5 text-center text-xs text-muted-foreground">{t("admin.search.empty")}</p>
+          <p className="px-3 py-5 text-center text-desc text-muted-foreground">{t("admin.search.empty")}</p>
         ) : (
           <div className="max-h-[60vh] overflow-y-auto overscroll-contain">
             {groups.map((group) => (
               <div key={group.type} className="mb-2">
-                <p className="flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-muted-foreground">
+                <p className="flex items-center justify-between px-3 py-1.5 text-desc font-bold text-muted-foreground">
                   <span>{t(GROUP_LABEL[group.type])}</span>
                   <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums">{group.count}</span>
                 </p>
@@ -106,7 +106,7 @@ export function AdminSearchBox() {
                         {item.title || item.id}
                       </span>
                       {item.subtitle || item.meta ? (
-                        <span className="mt-0.5 w-full truncate text-[10px] text-muted-foreground">
+                        <span className="mt-0.5 w-full truncate text-desc text-muted-foreground">
                           {[item.subtitle, item.meta].filter(Boolean).join(" · ")}
                         </span>
                       ) : null}
@@ -121,7 +121,7 @@ export function AdminSearchBox() {
                 setOpen(false);
                 void navigate({ to: "/admin/search", search: { q: debounced } });
               }}
-              className="mt-1 flex min-h-11 w-full items-center justify-center rounded-xl border border-[#e0aaff] bg-white text-xs font-bold text-[#7b2cbf] transition hover:bg-[#f8f2ff] dark:border-border dark:bg-card dark:text-primary"
+              className="mt-1 flex min-h-11 w-full items-center justify-center rounded-xl border border-[#e0aaff] bg-white text-desc font-bold text-[#7b2cbf] transition hover:bg-[#f8f2ff] dark:border-border dark:bg-card dark:text-primary"
             >
               {t("admin.search.all")}
             </button>

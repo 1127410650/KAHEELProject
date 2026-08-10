@@ -202,7 +202,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                 />
               )}
             </div>
-            <p className="text-[11px] text-muted-foreground">{t("market.activity.mainHint")}</p>
+            <p className="text-desc text-muted-foreground">{t("market.activity.mainHint")}</p>
             {(mainResults.data ?? []).length > 0 && (
               <ul className="max-h-64 min-w-0 divide-y divide-border overflow-y-auto rounded-lg border border-border">
                 {(mainResults.data ?? []).map((hit) => (
@@ -220,14 +220,14 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                         <span className="block break-words text-sm font-medium text-foreground">
                           {activityName(hit, locale)}
                         </span>
-                        <span className="block break-words text-[11px] text-muted-foreground">
+                        <span className="block break-words text-desc text-muted-foreground">
                           {locale === "en"
                             ? hit.group_name_en || hit.group_name_ar
                             : hit.group_name_ar}
                           {hit.matched_alias ? ` · ${hit.matched_alias}` : ""}
                         </span>
                       </span>
-                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground">
+                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-desc text-muted-foreground">
                         {Math.round(hit.score * 100)}%
                       </span>
                     </button>
@@ -236,7 +236,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
               </ul>
             )}
             {noMainMatch && (
-              <p className="text-xs text-muted-foreground">{t("market.activity.noResults")}</p>
+              <p className="text-desc text-muted-foreground">{t("market.activity.noResults")}</p>
             )}
           </>
         )}
@@ -249,7 +249,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
           <ul className="flex min-w-0 flex-wrap gap-1.5">
             {value.subs.map((sub) => (
               <li key={sub.id}>
-                <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs text-foreground">
+                <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-desc text-foreground">
                   <span className="truncate">{activityName(sub, locale)}</span>
                   <button
                     type="button"
@@ -281,7 +281,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
           className="h-11 w-full min-w-0 sm:h-10"
           onChange={(e) => setSubQuery(e.target.value)}
         />
-        <p className="text-[11px] text-muted-foreground">{t("market.activity.subsHint")}</p>
+        <p className="text-desc text-muted-foreground">{t("market.activity.subsHint")}</p>
         {(subResults.data ?? []).length > 0 && (
           <ul className="max-h-56 min-w-0 divide-y divide-border overflow-y-auto rounded-lg border border-border">
             {(subResults.data ?? []).map((hit) => {
@@ -327,7 +327,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
               className="h-11 w-full min-w-0 sm:h-10"
               onChange={(e) => setSuggestText(e.target.value)}
             />
-            <p className="text-[11px] leading-relaxed text-muted-foreground">
+            <p className="text-desc leading-relaxed text-muted-foreground">
               {t("market.activity.suggestHint")}
             </p>
             <div className="flex flex-wrap gap-2">

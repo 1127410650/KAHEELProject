@@ -138,18 +138,18 @@ function CategoryPage() {
           <Skeleton className="h-8 w-48" />
         ) : !category ? (
           <div className="py-20 text-center">
-            <h1 className="text-xl font-bold text-foreground">{t("market.category.notFound")}</h1>
+            <h1 className="text-page font-bold text-foreground">{t("market.category.notFound")}</h1>
             <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
               {t("market.nav.marketplace")}
             </Link>
           </div>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-foreground sm:text-2xl">{name(category)}</h1>
+            <h1 className="text-page font-bold text-foreground">{name(category)}</h1>
             {kidsWorld && <KidsFriendsStrip className="mt-4" />}
             {children.length > 0 && (
               <>
-                <h2 className="mt-5 text-sm font-bold text-foreground">
+                <h2 className="text-section mt-5 font-bold text-foreground">
                   {t("market.category.subcategories")}
                 </h2>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -160,8 +160,8 @@ function CategoryPage() {
                       params={{ slug: c.slug }}
                       className={
                         kidsWorld
-                          ? "k-press inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-xs font-bold text-foreground hover:bg-accent"
-                          : "rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                          ? "k-press inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-desc font-bold text-foreground hover:bg-accent"
+                          : "rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
                       }
                     >
                       {kidsWorld && (

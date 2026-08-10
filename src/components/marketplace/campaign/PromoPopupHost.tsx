@@ -491,12 +491,12 @@ export function PromoPopupHost() {
             className="mb-2 max-w-[9.5rem] bg-transparent px-1 text-start min-[360px]:max-w-[11rem]"
           >
             <div className="mb-0.5 flex items-start justify-between gap-2">
-              <p className="text-[13px] font-black leading-snug [overflow-wrap:anywhere]">
+              <p className="text-desc font-black leading-snug [overflow-wrap:anywhere]">
                 {card.title}
               </p>
               {closeButtons}
             </div>
-            <p className="text-[11px] font-bold leading-snug [overflow-wrap:anywhere]">
+            <p className="text-desc font-bold leading-snug [overflow-wrap:anywhere]">
               {card.subtitle}
             </p>
           </div>
@@ -584,10 +584,10 @@ export function PromoPopupHost() {
           style={floatingTextStyle(card.tone)}
           className="w-full shrink-0 bg-transparent px-1"
         >
-          <p className="text-[15px] font-black leading-snug [overflow-wrap:anywhere]">
+          <p className="text-body font-black leading-snug [overflow-wrap:anywhere]">
             {card.title}
           </p>
-          <p className="text-[12px] font-semibold leading-snug [overflow-wrap:anywhere]">
+          <p className="text-desc font-semibold leading-snug [overflow-wrap:anywhere]">
             {card.subtitle}
           </p>
         </div>

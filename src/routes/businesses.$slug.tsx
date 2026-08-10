@@ -136,7 +136,7 @@ function BusinessPage() {
     return (
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="text-lg font-bold text-foreground">{t("market.business.unavailable")}</h1>
+          <h1 className="text-page font-bold text-foreground">{t("market.business.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
@@ -225,7 +225,7 @@ function BusinessPage() {
                 )}
               </span>
               <div className="min-w-0 flex-1">
-                <h1 className="break-words text-lg font-bold leading-tight text-foreground sm:text-xl">
+                <h1 className="text-page break-words font-bold leading-tight text-foreground">
                   {name}
                 </h1>
                 {/* The trust check mark lives under the name only. */}
@@ -233,7 +233,7 @@ function BusinessPage() {
               </div>
             </div>
 
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
               {activitySummary && <span className="break-words">{activitySummary}</span>}
               {city && (
                 <span className="inline-flex min-w-0 items-center gap-1">
@@ -336,7 +336,7 @@ function BusinessPage() {
 
             {about && (
               <div className="mt-4">
-                <h2 className="text-sm font-bold text-foreground">{t("market.business.about")}</h2>
+                <h2 className="text-section font-bold text-foreground">{t("market.business.about")}</h2>
                 <p
                   className={`mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground ${
                     aboutLong && !aboutOpen ? "line-clamp-4" : ""
@@ -347,7 +347,7 @@ function BusinessPage() {
                 {aboutLong && (
                   <button
                     type="button"
-                    className="mt-1 text-xs font-semibold text-primary"
+                    className="mt-1 text-desc font-semibold text-primary"
                     onClick={() => setAboutOpen((v) => !v)}
                   >
                     {t(aboutOpen ? "market.ad.showLess" : "market.ad.showMore")}
@@ -358,14 +358,14 @@ function BusinessPage() {
 
             {chips.length > 0 && (
               <div className="mt-4">
-                <h2 className="text-sm font-bold text-foreground">
+                <h2 className="text-section font-bold text-foreground">
                   {t("market.business.activities")}
                 </h2>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {shownChips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-xs text-muted-foreground"
+                      className="rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-desc text-muted-foreground"
                     >
                       {chip}
                     </span>
@@ -374,7 +374,7 @@ function BusinessPage() {
                 {chips.length > ACTIVITY_LIMIT && (
                   <button
                     type="button"
-                    className="mt-1.5 text-xs font-semibold text-primary"
+                    className="mt-1.5 text-desc font-semibold text-primary"
                     onClick={() => setAllActivities((v) => !v)}
                   >
                     {t(allActivities ? "market.ad.showLess" : "market.business.showAllActivities")}
@@ -398,7 +398,7 @@ function BusinessPage() {
                   />
                 </button>
                 {detailsOpen && (
-                  <dl className="mt-2 space-y-1 text-xs">
+                  <dl className="mt-2 space-y-1 text-desc">
                     {entityLabel && (
                       <div className="flex flex-wrap gap-x-2">
                         <dt className="text-muted-foreground">{t("market.business.entityType")}</dt>
@@ -412,7 +412,7 @@ function BusinessPage() {
           </header>
 
           <section className="mt-5 lg:mt-0">
-            <h2 className="text-base font-bold text-foreground">{t("market.business.listings")}</h2>
+            <h2 className="text-section font-bold text-foreground">{t("market.business.listings")}</h2>
 
             {cats.length > 1 && (
               <div className="mt-2 flex flex-wrap gap-1.5">
@@ -430,7 +430,7 @@ function BusinessPage() {
                       type="button"
                       aria-pressed={active}
                       onClick={() => setCategoryId(chip.id)}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-card text-muted-foreground hover:border-primary/40"

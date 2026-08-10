@@ -85,7 +85,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
           type="button"
           onClick={() => setOpen((current) => !current)}
           aria-expanded={open}
-          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-market-navy/25 bg-market-navy px-3.5 text-[12px] font-black text-white"
+          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-market-navy/25 bg-market-navy px-3.5 text-desc font-black text-white"
         >
           <Filter className="size-3.5" aria-hidden />
           تصفية
@@ -100,14 +100,14 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
             key={chip.key}
             type="button"
             onClick={() => clearFrom(chip.key)}
-            className="inline-flex h-8 max-w-[46vw] items-center gap-1 truncate rounded-full border border-market-navy/20 bg-market-navy/5 px-2.5 text-[11px] font-black text-market-navy"
+            className="inline-flex h-8 max-w-[46vw] items-center gap-1 truncate rounded-full border border-market-navy/20 bg-market-navy/5 px-2.5 text-desc font-black text-market-navy"
           >
             <span className="truncate">{chip.value}</span>
             <X className="size-3 shrink-0" aria-hidden />
           </button>
         ))}
 
-        <span className="ms-auto shrink-0 rounded-full bg-muted px-2.5 py-1 text-[11px] font-black text-muted-foreground">
+        <span className="ms-auto shrink-0 rounded-full bg-muted px-2.5 py-1 text-desc font-black text-muted-foreground">
           {loading ? "…" : `${total.toLocaleString("en-US")} نتيجة`}
         </span>
 
@@ -117,7 +117,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
             onClick={() =>
               onChange({ ...filters, governorate: "", sector: "", category: "", subcategory: "" })
             }
-            className="shrink-0 rounded-full border border-border px-2.5 py-1 text-[11px] font-black text-muted-foreground"
+            className="shrink-0 rounded-full border border-border px-2.5 py-1 text-desc font-black text-muted-foreground"
           >
             مسح الفلاتر
           </button>
@@ -129,8 +129,8 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
           <ol className="space-y-3">
             {visibleSteps.map((step, index) => (
               <li key={step}>
-                <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-black">
-                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-market-navy text-[10px] text-white">
+                <div className="mb-1.5 flex items-center gap-1.5 text-desc font-black">
+                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-market-navy text-desc text-white">
                     {index + 1}
                   </span>
                   {STEP_LABELS[step]}
@@ -140,7 +140,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
                 </div>
                 <div className="flex max-h-40 flex-wrap gap-1.5 overflow-y-auto">
                   {options[step].length === 0 ? (
-                    <span className="text-[11px] text-muted-foreground">لا خيارات متاحة</span>
+                    <span className="text-desc text-muted-foreground">لا خيارات متاحة</span>
                   ) : (
                     options[step].map((option) => {
                       const active = filters[step] === option.value;
@@ -149,7 +149,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
                           key={option.value}
                           type="button"
                           onClick={() => (active ? clearFrom(step) : pick(step, option.value))}
-                          className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
+                          className={`rounded-full border px-2.5 py-1 text-desc font-bold transition ${
                             active
                               ? "border-market-navy bg-market-navy text-white"
                               : "border-border bg-background hover:border-market-navy/40"
@@ -168,7 +168,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="mt-2 rounded-full border border-border px-3 py-1 text-[11px] font-black text-muted-foreground"
+                    className="mt-2 rounded-full border border-border px-3 py-1 text-desc font-black text-muted-foreground"
                   >
                     تخطّي وعرض النتائج
                   </button>

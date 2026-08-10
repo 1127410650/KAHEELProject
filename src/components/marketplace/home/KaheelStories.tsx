@@ -70,7 +70,7 @@ export function KaheelStories() {
                     />
                   </span>
                 </span>
-                <span className="line-clamp-2 min-h-[26px] w-full text-center text-[10px] font-bold leading-[13px] text-brand-900">
+                <span className="line-clamp-2 min-h-[26px] w-full text-center text-desc font-bold leading-[13px] text-brand-900">
                   {ar ? story.title_ar : story.title_en}
                 </span>
               </button>
@@ -254,7 +254,7 @@ function StoryViewer({
         </div>
 
         <div className="relative z-10 flex items-center justify-between px-4">
-          <span className="rounded-full bg-black/25 px-3 py-1 text-[11px] font-black">
+          <span className="rounded-full bg-black/25 px-3 py-1 text-desc font-black">
             {ar ? "ستوريات كَحيل" : "Kaheel stories"}
           </span>
           <button

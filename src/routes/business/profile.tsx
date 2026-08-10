@@ -363,7 +363,7 @@ function BusinessDashboardPage() {
 
       {preview ? (
         <section className="rounded-xl border border-border bg-card p-5">
-          <p className="mb-3 text-xs text-muted-foreground">{t("market.biz.previewNote")}</p>
+          <p className="mb-3 text-desc text-muted-foreground">{t("market.biz.previewNote")}</p>
           <div className="flex items-start gap-3">
             {logo.data && (
               <img
@@ -374,13 +374,13 @@ function BusinessDashboardPage() {
               />
             )}
             <div className="min-w-0">
-              <h2 className="text-lg font-bold text-foreground">
+              <h2 className="text-section font-bold text-foreground">
                 {locale === "ar"
                   ? view.display_name_ar
                   : view.display_name_en || view.display_name_ar}
               </h2>
               {view.headline && <p className="text-sm text-muted-foreground">{view.headline}</p>}
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-desc text-muted-foreground">
                 <VerifiedBadge status={view.verification_status ?? "unverified"} />
                 {view.city && (
                   <span className="inline-flex items-center gap-1">
@@ -403,7 +403,7 @@ function BusinessDashboardPage() {
                 return cat ? (
                   <span
                     key={id}
-                    className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground"
+                    className="rounded-full bg-secondary px-2.5 py-0.5 text-desc text-secondary-foreground"
                   >
                     {label(cat)}
                   </span>
@@ -465,7 +465,7 @@ function BusinessDashboardPage() {
               id="logo"
               type="file"
               accept="image/*"
-              className="block w-full text-xs"
+              className="block w-full text-desc"
               onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)}
             />
           </div>
@@ -524,8 +524,8 @@ function BusinessDashboardPage() {
                     onClick={() => toggleCategory(c.id)}
                     className={
                       on
-                        ? "rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground"
-                        : "rounded-full border border-border px-2.5 py-1 text-xs text-foreground hover:bg-accent"
+                        ? "rounded-full bg-primary px-2.5 py-1 text-desc font-medium text-primary-foreground"
+                        : "rounded-full border border-border px-2.5 py-1 text-desc text-foreground hover:bg-accent"
                     }
                   >
                     {label(c)}
@@ -551,7 +551,7 @@ function BusinessDashboardPage() {
                   value={(view[field] as string | null) ?? ""}
                   onChange={(e) => set(field, e.target.value)}
                 />
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <label className="flex items-center gap-2 text-desc text-muted-foreground">
                   <input
                     type="checkbox"
                     className="size-3.5"
@@ -591,7 +591,7 @@ function BusinessDashboardPage() {
             <Button size="sm" variant="outline" onClick={() => setPreview(true)}>
               {t("market.biz.previewBeforeSave")}
             </Button>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-desc text-muted-foreground">
               {t("market.biz.verificationLocked")}
             </span>
           </div>
@@ -599,15 +599,15 @@ function BusinessDashboardPage() {
       )}
 
       <section className="mt-6 max-w-2xl rounded-xl border border-border bg-card p-5">
-        <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+        <h2 className="text-section flex items-center gap-2 font-bold text-foreground">
           <ShieldCheck className="size-4" aria-hidden />
           {t("market.biz.verification")}
         </h2>
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-desc text-muted-foreground">
           <VerifiedBadge status={profile.data?.verification_status ?? "unverified"} />
           {profile.data?.verification_note && <span>{profile.data.verification_note}</span>}
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">{t("market.biz.verificationHint")}</p>
+        <p className="mt-2 text-desc text-muted-foreground">{t("market.biz.verificationHint")}</p>
 
         {!pending && (
           <form className="mt-4 space-y-3" onSubmit={(e) => void submitVerification(e)}>
@@ -623,7 +623,7 @@ function BusinessDashboardPage() {
                 type="file"
                 multiple
                 accept="image/*,application/pdf"
-                className="block w-full text-xs"
+                className="block w-full text-desc"
               />
             </div>
             <Button type="submit" size="sm" disabled={busy}>
@@ -633,10 +633,10 @@ function BusinessDashboardPage() {
           </form>
         )}
 
-        <h3 className="mt-5 text-xs font-bold text-foreground">{t("market.biz.timeline")}</h3>
+        <h3 className="mt-5 text-desc font-bold text-foreground">{t("market.biz.timeline")}</h3>
         <ol className="mt-2 space-y-2">
           {(events.data ?? []).map((ev) => (
-            <li key={ev.id} className="rounded-lg border border-border p-2.5 text-xs">
+            <li key={ev.id} className="rounded-lg border border-border p-2.5 text-desc">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-medium text-foreground">
                   {t(`market.biz.status.${ev.to_status}`)}
@@ -653,15 +653,15 @@ function BusinessDashboardPage() {
           ))}
         </ol>
         {(events.data ?? []).length === 0 && (
-          <p className="mt-2 text-xs text-muted-foreground">{t("market.biz.noTimeline")}</p>
+          <p className="mt-2 text-desc text-muted-foreground">{t("market.biz.noTimeline")}</p>
         )}
 
         {(files.data ?? []).length > 0 && (
           <>
-            <h3 className="mt-5 text-xs font-bold text-foreground">
+            <h3 className="mt-5 text-desc font-bold text-foreground">
               {t("market.biz.uploadedDocs")}
             </h3>
-            <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+            <ul className="mt-2 space-y-1 text-desc text-muted-foreground">
               {(files.data ?? []).map((f) => (
                 <li key={f.id}>{f.file_name}</li>
               ))}

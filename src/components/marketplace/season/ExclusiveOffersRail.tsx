@@ -46,7 +46,7 @@ export function ExclusiveOffersRail() {
             <h2 id="exclusive-offers-title" className="k-h2">
               {ar ? "عروض حصرية" : "Exclusive offers"}
             </h2>
-            <p className="text-[11px] text-brand-800">
+            <p className="text-desc text-brand-800">
               {ar ? "مختارة بعناية من كَحيل" : "Hand-picked by Kaheel"}
             </p>
           </div>
@@ -79,15 +79,15 @@ export function ExclusiveOffersRail() {
                 <span className="absolute inset-0 bg-[linear-gradient(180deg,rgb(36_0_70/0.25),rgb(36_0_70/0.82))]" />
                 <span className="relative z-10 space-y-1">
                   {badge ? (
-                    <span className="inline-block rounded-full bg-market-gold/90 px-2 py-0.5 text-[10px] font-black text-brand-950">
+                    <span className="inline-block rounded-full bg-market-gold/90 px-2 py-0.5 text-desc font-black text-brand-950">
                       {badge}
                     </span>
                   ) : null}
                   <span className="block truncate text-sm font-black">{title}</span>
                   {subtitle ? (
-                    <span className="block line-clamp-2 text-[11px] text-white/80">{subtitle}</span>
+                    <span className="block line-clamp-2 text-desc text-white/80">{subtitle}</span>
                   ) : null}
-                  <span className="block pt-0.5 text-[11px] font-bold text-market-gold">{cta} ›</span>
+                  <span className="block pt-0.5 text-desc font-bold text-market-gold">{cta} ›</span>
                 </span>
               </Link>
             );

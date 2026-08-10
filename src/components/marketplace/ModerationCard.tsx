@@ -46,13 +46,13 @@ function SignalRow({ signal }: { signal: ModerationSignal }) {
         {category && <AdminStatusBadge tone="idle" label={category} />}
         {severity && <AdminStatusBadge tone={severity === "high" ? "critical" : severity === "medium" ? "urgent" : "idle"} label={severity} />}
         {typeof signal.weight === "number" && (
-          <span className="text-[11px] tabular-nums text-muted-foreground">
+          <span className="text-desc tabular-nums text-muted-foreground">
             {t("admin.moderation.weight")}: {signal.weight}
           </span>
         )}
       </div>
       {(signal.field || signal.excerpt) && (
-        <p className="mt-1.5 break-words text-xs text-muted-foreground">
+        <p className="mt-1.5 break-words text-desc text-muted-foreground">
           {signal.field && <span>{t("admin.moderation.field")}: {signal.field}</span>}
           {signal.field && signal.excerpt ? " · " : ""}
           {signal.excerpt && <span className="font-medium text-foreground">"{signal.excerpt}"</span>}
@@ -77,18 +77,18 @@ function ScanBlock({
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1.5">
           <AdminStatusBadge tone={DECISION_TONE[scan.decision] ?? "idle"} label={t(`admin.moderation.decision.${scan.decision}`)} />
-          <span className="text-[11px] tabular-nums text-muted-foreground">
+          <span className="text-desc tabular-nums text-muted-foreground">
             {t("admin.moderation.score")}: {scan.score}
           </span>
-          <span className="text-[11px] text-muted-foreground">
+          <span className="text-desc text-muted-foreground">
             {t(`admin.moderation.trigger.${scan.trigger_source}`)}
           </span>
         </div>
-        <span className="text-[11px] tabular-nums text-muted-foreground">{formatDateTime(scan.created_at)}</span>
+        <span className="text-desc tabular-nums text-muted-foreground">{formatDateTime(scan.created_at)}</span>
       </div>
 
       {scan.dismissed_at ? (
-        <p className="mt-2 rounded-md bg-secondary px-2 py-1.5 text-[11px] text-muted-foreground">
+        <p className="mt-2 rounded-md bg-secondary px-2 py-1.5 text-desc text-muted-foreground">
           {t("admin.moderation.dismissedAt")}: {formatDateTime(scan.dismissed_at)}
           {scan.dismiss_reason ? ` — ${scan.dismiss_reason}` : ""}
         </p>
@@ -179,7 +179,7 @@ export function ModerationCard({ listingId }: { listingId: string }) {
         </div>
       }
     >
-      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-3 text-desc text-muted-foreground">
         <span>
           {t("admin.moderation.score")}: <span className="tabular-nums text-foreground">{moderationScore ?? "—"}</span>
           {thresholds && (
@@ -191,7 +191,7 @@ export function ModerationCard({ listingId }: { listingId: string }) {
         </span>
       </div>
 
-      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+      <div className="mt-3 flex items-center gap-1.5 text-desc text-muted-foreground">
         <ShieldAlert className="size-3.5 shrink-0" aria-hidden />
         <span>{t("admin.moderation.hint")}</span>
       </div>

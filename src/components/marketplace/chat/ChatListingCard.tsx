@@ -30,7 +30,7 @@ export function ChatListingCard({ context }: { context: ChatContext }) {
         <span className="block truncate text-sm font-semibold text-foreground">
           {context.listing_title ?? "—"}
         </span>
-        <span className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+        <span className="mt-0.5 flex flex-wrap items-center gap-2 text-desc text-muted-foreground">
           {context.listing_price !== null && (
             <span className="font-medium text-primary">{formatMoney(context.listing_price, locale)}</span>
           )}
@@ -42,7 +42,7 @@ export function ChatListingCard({ context }: { context: ChatContext }) {
           )}
         </span>
       </span>
-      <span className="shrink-0 text-xs text-primary">{t("market.chat.viewAd")}</span>
+      <span className="shrink-0 text-desc text-primary">{t("market.chat.viewAd")}</span>
     </Link>
   );
 }

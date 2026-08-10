@@ -82,7 +82,7 @@ function AdminRolesPage() {
 
   return (
     <AdminShell title={t("admin.nav.roles")} systemOwnerOnly>
-      <p className="text-xs text-muted-foreground">{t("admin.roles.hint")}</p>
+      <p className="text-desc text-muted-foreground">{t("admin.roles.hint")}</p>
 
       {roles.isLoading ? (
         <Skeleton className="mt-4 h-48 w-full rounded-xl" />
@@ -104,15 +104,15 @@ function AdminRolesPage() {
                       )}
                       {row.display_name || t("admin.users.noName")}
                     </p>
-                    <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+                    <p className="truncate text-desc text-muted-foreground">{row.email}</p>
                     {row.granted_at && (
-                      <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+                      <p className="mt-0.5 text-desc tabular-nums text-muted-foreground">
                         {t("admin.roles.grantedAt")}: {formatDateTime(row.granted_at)}
                       </p>
                     )}
                   </div>
                   <div className="flex shrink-0 items-center gap-1.5">
-                    <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
+                    <span className="rounded-full bg-secondary px-2 py-0.5 text-desc font-medium text-foreground">
                       {row.platform_role
                         ? t(`admin.role.${row.platform_role === "system_owner" ? "systemOwner" : "platformAdmin"}`)
                         : t("admin.role.staff")}
@@ -165,7 +165,7 @@ function AdminRolesPage() {
                       return (
                         <label
                           key={perm}
-                          className="flex min-h-11 items-center justify-between gap-2 rounded-lg bg-background px-3 text-xs"
+                          className="flex min-h-11 items-center justify-between gap-2 rounded-lg bg-background px-3 text-desc"
                         >
                           <span className="min-w-0 truncate text-foreground">{t(`admin.perm.${perm}`)}</span>
                           <Switch

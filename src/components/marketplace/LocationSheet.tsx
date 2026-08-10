@@ -291,12 +291,12 @@ export function LocationSheet({
                       (ar ? "نقطة محدّدة على الخريطة" : "Picked point")}
                   </span>
                 </p>
-                <p className="num text-[11px] text-muted-foreground" dir="ltr">
+                <p className="num text-desc text-muted-foreground" dir="ltr">
                   {picked.lat.toFixed(5)}, {picked.lng.toFixed(5)}
                   {accuracyText ? ` · ${accuracyText}` : ""}
                 </p>
                 {picked.city && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-desc text-muted-foreground">
                     {ar ? "المنطقة المستنتجة: " : "Detected area: "}
                     {[picked.district, picked.city].filter(Boolean).join(" — ")}
                     {" — "}
@@ -312,7 +312,7 @@ export function LocationSheet({
                 data-testid="outside-market"
               >
                 <Globe2 className="mt-0.5 size-4 shrink-0 text-gold-dark" aria-hidden />
-                <p className="text-xs leading-relaxed text-foreground">
+                <p className="text-desc leading-relaxed text-foreground">
                   {ar
                     ? `يبدو أنك خارج ${marketName || "سوريا"}${
                         picked?.countryIso2 ? ` (${picked.countryIso2})` : ""
@@ -337,8 +337,8 @@ export function LocationSheet({
                       aria-pressed={active}
                       className={
                         active
-                          ? "inline-flex min-h-9 items-center rounded-full bg-primary px-3.5 text-xs font-bold text-primary-foreground"
-                          : "inline-flex min-h-9 items-center rounded-full border border-border px-3.5 text-xs font-semibold text-foreground transition hover:bg-secondary"
+                          ? "inline-flex min-h-9 items-center rounded-full bg-primary px-3.5 text-desc font-bold text-primary-foreground"
+                          : "inline-flex min-h-9 items-center rounded-full border border-border px-3.5 text-desc font-semibold text-foreground transition hover:bg-secondary"
                       }
                     >
                       {geoName(city, locale)}
@@ -346,7 +346,7 @@ export function LocationSheet({
                   );
                 })}
                 {cities.isLoading && (
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-desc text-muted-foreground">
                     {ar ? "جارٍ التحميل…" : "Loading…"}
                   </span>
                 )}
@@ -372,7 +372,7 @@ export function LocationSheet({
               </div>
 
               {!session && (
-                <p className="rounded-lg bg-secondary p-2.5 text-xs text-muted-foreground">
+                <p className="rounded-lg bg-secondary p-2.5 text-desc text-muted-foreground">
                   {ar
                     ? "سجّل الدخول لحفظ عناوينك واستخدامها في التوصيل."
                     : "Sign in to save addresses for delivery."}
@@ -390,18 +390,18 @@ export function LocationSheet({
                       <p className="truncate text-sm font-bold text-foreground">
                         {address.label}
                         {address.is_default && (
-                          <span className="ms-1.5 rounded-full bg-primary/10 px-1.5 text-[10px] font-bold text-primary">
+                          <span className="ms-1.5 rounded-full bg-primary/10 px-1.5 text-desc font-bold text-primary">
                             {ar ? "الافتراضي" : "Default"}
                           </span>
                         )}
                       </p>
-                      <p className="truncate text-xs text-muted-foreground">
+                      <p className="truncate text-desc text-muted-foreground">
                         {[cityName(address.city_id), address.district, address.details]
                           .filter(Boolean)
                           .join(" — ")}
                       </p>
                       {address.lat != null && address.lng != null && (
-                        <p className="num text-[10px] text-muted-foreground" dir="ltr">
+                        <p className="num text-desc text-muted-foreground" dir="ltr">
                           {address.lat.toFixed(5)}, {address.lng.toFixed(5)}
                         </p>
                       )}
@@ -455,7 +455,7 @@ export function LocationSheet({
                           key={quick}
                           type="button"
                           onClick={() => setForm((previous) => ({ ...previous, label: quick }))}
-                          className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition hover:bg-secondary"
+                          className="rounded-full border border-border bg-background px-2.5 py-1 text-desc font-semibold text-foreground transition hover:bg-secondary"
                         >
                           {quick}
                         </button>
@@ -504,7 +504,7 @@ export function LocationSheet({
                     />
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-desc text-muted-foreground">
                       {picked
                         ? ar
                           ? `سيتم حفظ الإحداثيات الدقيقة${accuracyText ? ` (${accuracyText})` : ""}.`

@@ -133,10 +133,10 @@ function ErrandDetailPage() {
     return (
       <DashboardShell title={title}>
         <div className="mx-auto w-full max-w-2xl px-3 pb-24 pt-6 text-center">
-          <p className="text-[12.5px] text-muted-foreground">
+          <p className="text-desc text-muted-foreground">
             {ar ? "هذا الطلب غير موجود أو ليس لك." : "This request does not exist or isn't yours."}
           </p>
-          <Button asChild size="sm" className="mt-3 h-9 text-[12.5px] font-bold">
+          <Button asChild size="sm" className="mt-3 h-9 text-desc font-bold">
             <Link to="/my/errands">{ar ? "طلباتي" : "My requests"}</Link>
           </Button>
         </div>
@@ -155,8 +155,8 @@ function ErrandDetailPage() {
         {/* الحالة والخط الزمني */}
         <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
           <div className="flex items-center justify-between gap-2">
-            <Badge className="text-[11px]">{errandStatusLabel(request.status, ar)}</Badge>
-            <span className="text-[11px] text-muted-foreground">
+            <Badge className="text-desc">{errandStatusLabel(request.status, ar)}</Badge>
+            <span className="text-desc text-muted-foreground">
               {formatDateTime(request.created_at)}
             </span>
           </div>
@@ -171,10 +171,10 @@ function ErrandDetailPage() {
               </div>
             ))}
           </div>
-          <p className="mt-2 line-clamp-4 whitespace-pre-wrap text-[13px] leading-snug text-foreground">
+          <p className="mt-2 line-clamp-4 whitespace-pre-wrap text-desc leading-snug text-foreground">
             {request.details}
           </p>
-          <div className="mt-2 grid gap-1 text-[11.5px] text-muted-foreground">
+          <div className="mt-2 grid gap-1 text-desc text-muted-foreground">
             {request.pickup_label ? (
               <span className="flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5" />
@@ -197,10 +197,10 @@ function ErrandDetailPage() {
 
           {accepted && contact.data?.phone ? (
             <div className="mt-2 flex items-center justify-between gap-2 rounded-xl border border-primary/30 bg-primary/5 p-2">
-              <span className="min-w-0 truncate text-[12px] font-semibold text-foreground">
+              <span className="min-w-0 truncate text-desc font-semibold text-foreground">
                 {contact.data.display_name}
               </span>
-              <Button asChild size="sm" variant="outline" className="h-8 gap-1 text-[11px]">
+              <Button asChild size="sm" variant="outline" className="h-8 gap-1 text-desc">
                 <a href={`tel:${contact.data.phone}`}>
                   <Phone className="h-3.5 w-3.5" />
                   {ar ? "اتصال بالكابتن" : "Call the captain"}
@@ -216,7 +216,7 @@ function ErrandDetailPage() {
               size="sm"
               onClick={cancel}
               disabled={busy === "cancel"}
-              className="mt-2 h-8 text-[11px] text-destructive"
+              className="mt-2 h-8 text-desc text-destructive"
             >
               {busy === "cancel" ? <Loader2 className="me-1 h-3.5 w-3.5 animate-spin" /> : null}
               {ar ? "إلغاء الطلب" : "Cancel request"}
@@ -227,13 +227,13 @@ function ErrandDetailPage() {
         {/* العروض */}
         {openForOffers ? (
           <section className="mb-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "عروض الكباتن" : "Captain offers"}
             </h2>
             {offers.isLoading ? (
               <Skeleton className="h-[84px] rounded-2xl" />
             ) : (offers.data ?? []).filter((offer) => offer.status === "pending").length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-[12px] text-muted-foreground">
+              <p className="rounded-2xl border border-dashed border-border/70 bg-card/40 p-4 text-center text-desc text-muted-foreground">
                 {ar
                   ? "ما وصل عرض بعد — الكباتن يشوفون طلبك الآن."
                   : "No offers yet — captains can see your request."}
@@ -251,10 +251,10 @@ function ErrandDetailPage() {
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
-                            <p className="truncate text-[13px] font-bold text-foreground">
+                            <p className="truncate text-desc font-bold text-foreground">
                               {captain?.display_name ?? (ar ? "كابتن كَحيل" : "Kaheel captain")}
                             </p>
-                            <p className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+                            <p className="mt-0.5 flex items-center gap-2 text-desc text-muted-foreground">
                               <span className="flex items-center gap-0.5">
                                 <Star className="h-3 w-3 text-gold-dark" />
                                 {formatNumber(captain?.rating_avg ?? 0)}
@@ -267,12 +267,12 @@ function ErrandDetailPage() {
                               ) : null}
                             </p>
                           </div>
-                          <span className="shrink-0 text-[13px] font-black text-primary">
+                          <span className="shrink-0 text-desc font-black text-primary">
                             {formatMoney(offer.fee, locale)}
                           </span>
                         </div>
                         {offer.note ? (
-                          <p className="mt-1 line-clamp-2 text-[11.5px] text-muted-foreground">
+                          <p className="mt-1 line-clamp-2 text-desc text-muted-foreground">
                             {offer.note}
                           </p>
                         ) : null}
@@ -280,7 +280,7 @@ function ErrandDetailPage() {
                           <Button
                             type="button"
                             size="sm"
-                            className="h-8 flex-1 gap-1 text-[11.5px] font-bold"
+                            className="h-8 flex-1 gap-1 text-desc font-bold"
                             disabled={busy === offer.id}
                             onClick={() => decide(offer.id, true)}
                           >
@@ -295,7 +295,7 @@ function ErrandDetailPage() {
                             type="button"
                             size="sm"
                             variant="outline"
-                            className="h-8 gap-1 text-[11.5px]"
+                            className="h-8 gap-1 text-desc"
                             disabled={busy === offer.id}
                             onClick={() => decide(offer.id, false)}
                           >
@@ -314,7 +314,7 @@ function ErrandDetailPage() {
         {/* التقييم */}
         {request.status === "delivered" && request.rating == null ? (
           <section className="mb-3 rounded-2xl border border-border/70 bg-card/60 p-3">
-            <h2 className="mb-2 text-sm font-bold text-foreground">
+            <h2 className="text-section mb-2 font-bold text-foreground">
               {ar ? "قيّم الكابتن" : "Rate the captain"}
             </h2>
             <div className="flex items-center gap-1">
@@ -347,7 +347,7 @@ function ErrandDetailPage() {
               size="sm"
               onClick={submitRating}
               disabled={busy === "rate"}
-              className="mt-2 h-9 text-[12.5px] font-bold"
+              className="mt-2 h-9 text-desc font-bold"
             >
               {busy === "rate" ? <Loader2 className="me-1 h-4 w-4 animate-spin" /> : null}
               {ar ? "إرسال التقييم" : "Submit rating"}
@@ -357,14 +357,14 @@ function ErrandDetailPage() {
 
         {/* السجل */}
         <section>
-          <h2 className="mb-2 text-sm font-bold text-foreground">
+          <h2 className="text-section mb-2 font-bold text-foreground">
             {ar ? "سجل الطلب" : "Request log"}
           </h2>
           <div className="grid gap-1.5">
             {(events.data ?? []).map((event) => (
               <div
                 key={event.id}
-                className="flex items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/40 px-3 py-2 text-[11.5px]"
+                className="flex items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/40 px-3 py-2 text-desc"
               >
                 <span className="font-semibold text-foreground">
                   {errandStatusLabel(event.to_status as ErrandStatus, ar)}

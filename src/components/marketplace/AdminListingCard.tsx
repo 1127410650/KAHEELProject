@@ -146,7 +146,7 @@ function SafetyStrip({
   return (
     <div className={"rounded-lg border p-2 " + frame}>
       <div className="flex min-w-0 items-center justify-between gap-2">
-        <span className="inline-flex min-w-0 items-center gap-1 text-[11px] font-bold text-foreground">
+        <span className="inline-flex min-w-0 items-center gap-1 text-desc font-bold text-foreground">
           <ShieldQuestion className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">{t("admin.safety.title")}</span>
         </span>
@@ -184,7 +184,7 @@ function SafetyStrip({
             <AdminStatusBadge tone="done" label={t("admin.safety.clean")} />
           )}
       </div>
-      <div className="mt-1.5 truncate text-[11px]">{href}</div>
+      <div className="mt-1.5 truncate text-desc">{href}</div>
     </div>
   );
 }
@@ -226,13 +226,13 @@ export function AdminListingCard({
       <AdminBusinessLink
         id={listing.tenant_id}
         name={advertiserName === "—" ? t("market.admin.business") : advertiserName}
-        className="text-[11px]"
+        className="text-desc"
       />
     ) : (
       <AdminUserLink
         id={listing.owner_user_id}
         name={t("market.ad.individualAdvertiser")}
-        className="text-[11px]"
+        className="text-desc"
       />
     );
 
@@ -254,7 +254,7 @@ export function AdminListingCard({
         ) : (
           <span className="flex size-full flex-col items-center justify-center gap-1 text-muted-foreground">
             <ImageOff className="size-6" aria-hidden />
-            <span className="text-[11px]">{t("market.admin.noImage")}</span>
+            <span className="text-desc">{t("market.admin.noImage")}</span>
           </span>
         )}
         <span className="absolute top-2 start-2 max-w-[calc(100%-1rem)]">
@@ -274,7 +274,7 @@ export function AdminListingCard({
           {listing.title}
         </Link>
 
-        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-muted-foreground">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-desc text-muted-foreground">
           {listing.ref_no ? (
             <span className="tabular-nums" dir="ltr">
               #{listing.ref_no}
@@ -288,7 +288,7 @@ export function AdminListingCard({
           {priceLabel(listing, "—", locale === "ar" ? "ar" : "en")}
         </p>
 
-        <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground tabular-nums">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground tabular-nums">
           <span className="truncate">
             {t("market.admin.createdAt")}: {formatDate(listing.published_at ?? listing.created_at)}
           </span>
@@ -300,7 +300,7 @@ export function AdminListingCard({
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-3 text-desc">
           <Metric
             icon={Flag}
             label={t("market.admin.reports")}

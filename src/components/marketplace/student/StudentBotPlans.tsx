@@ -59,7 +59,7 @@ export function StudentBotPlans({ className }: { className?: string }) {
       <ul className="grid gap-2 sm:grid-cols-2">
         {active.map((plan) => (
           <li key={plan.id} className="rounded-xl border border-border bg-card p-3">
-            <p className="flex items-center gap-1.5 text-xs font-black text-foreground">
+            <p className="flex items-center gap-1.5 text-desc font-black text-foreground">
               {plan.kind === "season" ? (
                 <CalendarClock className="size-3.5 text-accent" aria-hidden />
               ) : (
@@ -67,7 +67,7 @@ export function StudentBotPlans({ className }: { className?: string }) {
               )}
               {ar ? plan.name_ar : plan.name_en}
             </p>
-            <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+            <p className="mt-1 text-desc leading-5 text-muted-foreground">
               {ar
                 ? `${formatNumber(plan.daily_limit)} سؤالًا يوميًا · حفظ المحادثات · أسئلة تدريب`
                 : `${formatNumber(plan.daily_limit)} questions a day · saved chats · practice questions`}
@@ -78,9 +78,9 @@ export function StudentBotPlans({ className }: { className?: string }) {
                 : null}
             </p>
             <div className="mt-2 flex items-center justify-between gap-2">
-              <span className="text-[11px] font-black tabular-nums text-foreground">
+              <span className="text-desc font-black tabular-nums text-foreground">
                 {formatNumber(plan.price_credits)}{" "}
-                <span className="text-[10px] font-bold text-muted-foreground">
+                <span className="text-desc font-bold text-muted-foreground">
                   {ar ? "من رصيدك" : "credits"}
                 </span>
               </span>
@@ -88,7 +88,7 @@ export function StudentBotPlans({ className }: { className?: string }) {
                 type="button"
                 onClick={() => void subscribe(plan.id)}
                 disabled={pending !== null}
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-primary px-3 text-[11px] font-black text-primary-foreground disabled:opacity-60"
+                className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-primary px-3 text-desc font-black text-primary-foreground disabled:opacity-60"
               >
                 {pending === plan.id ? (
                   <Loader2 className="size-3.5 animate-spin" aria-hidden />
@@ -99,7 +99,7 @@ export function StudentBotPlans({ className }: { className?: string }) {
           </li>
         ))}
       </ul>
-      <p className="mt-2 text-[10px] text-muted-foreground">
+      <p className="mt-2 text-desc text-muted-foreground">
         {ar
           ? "الدفع من رصيد محفظتك الحالي — لا بوابة دفع جديدة."
           : "Paid from your existing wallet balance — no new payment gateway."}

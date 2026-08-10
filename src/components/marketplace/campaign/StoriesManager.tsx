@@ -298,12 +298,12 @@ export function StoriesManager() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-bold">{ar ? row.title_ar : row.title_en}</p>
-                  <p className="truncate text-xs text-muted-foreground">
+                  <p className="truncate text-desc text-muted-foreground">
                     {row.slug} · {row.click_url}
                   </p>
                 </div>
                 <Badge variant="outline">{row.status}</Badge>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-desc text-muted-foreground">
                   {ar ? "مشاهدات" : "Views"} {formatNumber(row.views)} ·{" "}
                   {ar ? "نقرات" : "Clicks"} {formatNumber(row.clicks)}
                 </span>

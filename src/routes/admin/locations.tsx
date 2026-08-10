@@ -156,7 +156,7 @@ function AdminGeoPage() {
 
         {countryId && (
           <section className="rounded-xl border border-border bg-card p-3">
-            <h2 className="text-sm font-bold text-foreground">{t("market.admin.geoCities")}</h2>
+            <h2 className="text-section font-bold text-foreground">{t("market.admin.geoCities")}</h2>
             <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
               <Input
                 value={nameAr}
@@ -187,7 +187,7 @@ function AdminGeoPage() {
                       {locale === "ar" ? c.name_ar : c.name_en || c.name_ar}
                     </span>
                     {!c.is_active && (
-                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[11px] text-muted-foreground">
+                      <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-desc text-muted-foreground">
                         {t("market.admin.geoDisable")}
                       </span>
                     )}
@@ -203,12 +203,12 @@ function AdminGeoPage() {
                 ))}
               </ul>
             )}
-            <p className="mt-2 text-xs text-muted-foreground">{t("market.admin.geoInUse")}</p>
+            <p className="mt-2 text-desc text-muted-foreground">{t("market.admin.geoInUse")}</p>
           </section>
         )}
 
         <section className="rounded-xl border border-border bg-card p-3">
-          <h2 className="text-sm font-bold text-foreground">
+          <h2 className="text-section font-bold text-foreground">
             {t("market.admin.geoSuggestions")}
           </h2>
           {suggestions.isLoading ? (
@@ -237,7 +237,7 @@ function AdminGeoPage() {
               ))}
             </ul>
           ) : (
-            <p className="mt-2 text-xs text-muted-foreground">{t("market.admin.noResults")}</p>
+            <p className="mt-2 text-desc text-muted-foreground">{t("market.admin.noResults")}</p>
           )}
         </section>
       </div>

@@ -312,10 +312,10 @@ export function MascotRoam() {
           dir={ar ? "rtl" : "ltr"}
           onClick={open}
           style={textStyle}
-          className="max-w-[13rem] bg-transparent px-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
+          className="max-w-[13rem] bg-transparent px-1 text-center text-desc font-black leading-snug [overflow-wrap:anywhere]"
         >
           <span className="block">{ar ? data.hook.ar : data.hook.en}</span>
-          <span className="mt-0.5 block text-[10px] font-bold opacity-95">
+          <span className="mt-0.5 block text-desc font-bold opacity-95">
             {ar ? data.line.ar : data.line.en}
           </span>
         </button>
@@ -377,7 +377,7 @@ export function MascotRoam() {
               mutePopups(24);
               end();
             }}
-            className="text-[9px] font-bold underline underline-offset-2"
+            className="text-desc font-bold underline underline-offset-2"
           >
             {ar ? "لا تُظهرها اليوم" : "Not today"}
           </button>

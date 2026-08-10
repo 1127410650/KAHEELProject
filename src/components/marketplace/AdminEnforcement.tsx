@@ -161,7 +161,7 @@ export function AdminEnforcement({
         </div>
       )}
 
-      <h3 className="mt-4 text-xs font-semibold text-muted-foreground">
+      <h3 className="mt-4 text-desc font-semibold text-muted-foreground">
         {t("admin.detail.restrictionHistory")}
       </h3>
       {restrictions.length === 0 ? (
@@ -180,16 +180,16 @@ export function AdminEnforcement({
                     {live ? t("admin.detail.restrictionActive") : t("admin.detail.restrictionEnded")}
                   </Chip>
                 </div>
-                <p className="mt-1 break-words text-xs text-muted-foreground">
+                <p className="mt-1 break-words text-desc text-muted-foreground">
                   {row.reason || "—"}
                 </p>
-                <p className="mt-1 text-[11px] tabular-nums text-muted-foreground">
+                <p className="mt-1 text-desc tabular-nums text-muted-foreground">
                   {formatDateTime(row.starts_at ?? row.created_at)}
                   {row.expires_at ? ` → ${formatDateTime(row.expires_at)}` : ""}
                   {row.created_by_name ? ` · ${row.created_by_name}` : ""}
                 </p>
                 {row.lifted_at && (
-                  <p className="mt-1 text-[11px] text-muted-foreground">
+                  <p className="mt-1 text-desc text-muted-foreground">
                     {t("admin.detail.liftedAt")}: {formatDateTime(row.lifted_at)}
                     {row.lifted_reason ? ` — ${row.lifted_reason}` : ""}
                   </p>
@@ -214,7 +214,7 @@ export function AdminEnforcement({
         onConfirm={(reason) => void confirm(reason)}
       >
         {pending && pending !== "lift" && pending !== "ban" && (
-          <Label className="block text-xs font-medium text-foreground">
+          <Label className="block text-desc font-medium text-foreground">
             {t("admin.detail.durationDays")}
             <Input
               value={days}
@@ -232,7 +232,7 @@ export function AdminEnforcement({
           <DialogHeader>
             <DialogTitle>{t("admin.detail.notifyUser")}</DialogTitle>
           </DialogHeader>
-          <Label className="block text-xs font-medium text-foreground">
+          <Label className="block text-desc font-medium text-foreground">
             {t("admin.detail.noticeTitle")}
             <Input
               value={notifyTitle}
@@ -240,7 +240,7 @@ export function AdminEnforcement({
               className="mt-1.5"
             />
           </Label>
-          <Label className="block text-xs font-medium text-foreground">
+          <Label className="block text-desc font-medium text-foreground">
             {t("admin.detail.noticeBody")}
             <Textarea
               value={notifyBody}

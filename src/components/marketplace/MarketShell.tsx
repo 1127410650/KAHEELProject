@@ -144,7 +144,7 @@ export function MarketHeader({
           >
             <span className="flex h-8 min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 text-muted-foreground">
               <MapPin className="size-4 shrink-0 text-primary" aria-hidden />
-              <span className="truncate text-[12px] font-semibold">
+              <span className="truncate text-desc font-semibold">
                 {t("market.homeV2.searchPlaceholder" as "market.brand")}
               </span>
             </span>
@@ -172,8 +172,8 @@ export function MarketHeader({
                 <strong
                   className={
                     locationKnown
-                      ? "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight"
-                      : "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight text-primary underline decoration-dotted underline-offset-2"
+                      ? "min-w-0 truncate whitespace-nowrap text-desc font-black leading-tight"
+                      : "min-w-0 truncate whitespace-nowrap text-desc font-black leading-tight text-primary underline decoration-dotted underline-offset-2"
                   }
                 >
                   {locationLabel}
@@ -194,7 +194,7 @@ export function MarketHeader({
                   className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-[18px] font-black leading-none tracking-[-0.07em] text-foreground sm:text-xl">
+                <span className="text-lg font-black leading-none text-foreground sm:text-xl">
                   {t("market.brand")}
                 </span>
 
@@ -209,7 +209,7 @@ export function MarketHeader({
                 >
                   <Bell className="size-[18px]" aria-hidden />
                   {(unreadAlerts.data ?? 0) > 0 && (
-                    <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] font-bold leading-5 text-white">
+                    <span className="num absolute end-0 top-0 min-w-5 rounded-full bg-destructive px-1 text-center text-desc font-bold leading-5 text-white">
                       {(unreadAlerts.data ?? 0) > 99 ? "99+" : unreadAlerts.data}
                     </span>
                   )}
@@ -234,7 +234,7 @@ export function MarketHeader({
                   className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-lg font-black leading-none tracking-[-0.06em] text-foreground sm:text-xl">
+                <span className="text-lg font-black leading-none text-foreground sm:text-xl">
                   {t("market.brand")}
                 </span>
               </Link>
@@ -245,7 +245,7 @@ export function MarketHeader({
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
-                <span className="max-w-[12rem] truncate text-xs font-semibold sm:text-sm">
+                <span className="max-w-[12rem] truncate text-desc font-semibold sm:text-sm">
                   {locationLabel}
                 </span>
               </button>
@@ -277,8 +277,8 @@ export function MarketHeader({
                   href={href}
                   className={
                     index === 0
-                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-primary px-3.5 text-[11px] font-black text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
-                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-[11px] font-bold text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
+                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-primary px-3.5 text-desc font-black text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
+                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-desc font-bold text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-desc"
 
                   }
                 >
@@ -290,7 +290,7 @@ export function MarketHeader({
         )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
-          <div className="border-t border-border bg-secondary px-3 py-1 text-center text-[11px] font-medium text-foreground sm:text-xs">
+          <div className="border-t border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground sm:text-desc">
             {t("market.offlineNotice")}
           </div>
         )}
@@ -413,7 +413,7 @@ export function MarketBottomNav() {
         {items.map((item) => {
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
-          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-[9.5px] font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-[10px] ${
+          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-nav font-bold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-nav ${
             active ? "text-primary" : "text-muted-foreground hover:text-foreground"
           }`;
           const inner = (
@@ -466,7 +466,7 @@ export function MarketCompactFooter() {
   const { t } = useI18n();
   return (
     <footer className="mt-8 border-t border-border">
-      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-4 text-xs text-muted-foreground lg:px-6">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-4 text-desc text-muted-foreground lg:px-6">
         <p>{t("market.footer.rights")}</p>
         {(
           [

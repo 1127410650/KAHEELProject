@@ -109,7 +109,7 @@ function UserProfilePage() {
     return (
       <MarketShell>
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="text-lg font-bold text-foreground">{t("market.person.unavailable")}</h1>
+          <h1 className="text-page font-bold text-foreground">{t("market.person.unavailable")}</h1>
           <Link to="/" className="mt-4 inline-block text-sm font-medium text-primary">
             {t("market.nav.marketplace")}
           </Link>
@@ -146,12 +146,12 @@ function UserProfilePage() {
               )}
             </span>
             <div className="min-w-0 flex-1">
-              <h1 className="break-words text-lg font-bold leading-tight text-foreground sm:text-2xl">
+              <h1 className="text-page break-words font-bold leading-tight text-foreground">
                 {name}
               </h1>
               {/* The trust check mark lives under the name only. */}
               <VerifiedBadge status={me.verification_status} />
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
                 <span>{t("market.person.kindIndividual")}</span>
                 {city && (
                   <span className="inline-flex min-w-0 items-center gap-1">
@@ -218,7 +218,7 @@ function UserProfilePage() {
 
           {about && (
             <div className="mt-4">
-              <h2 className="text-sm font-bold text-foreground">{t("market.business.about")}</h2>
+              <h2 className="text-section font-bold text-foreground">{t("market.business.about")}</h2>
               <p
                 className={`mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground ${
                   aboutLong && !aboutOpen ? "line-clamp-4" : ""
@@ -229,7 +229,7 @@ function UserProfilePage() {
               {aboutLong && (
                 <button
                   type="button"
-                  className="mt-1 text-xs font-semibold text-primary"
+                  className="mt-1 text-desc font-semibold text-primary"
                   onClick={() => setAboutOpen((v) => !v)}
                 >
                   {t(aboutOpen ? "market.ad.showLess" : "market.ad.showMore")}
@@ -239,7 +239,7 @@ function UserProfilePage() {
           )}
         </header>
 
-        <h2 className="mt-5 text-base font-bold text-foreground">{t("market.person.listings")}</h2>
+        <h2 className="text-section mt-5 font-bold text-foreground">{t("market.person.listings")}</h2>
 
         {cats.length > 1 && (
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -254,7 +254,7 @@ function UserProfilePage() {
                   type="button"
                   aria-pressed={active}
                   onClick={() => setCategoryId(chip.id)}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  className={`rounded-full border px-3 py-1.5 text-desc font-medium transition-colors ${
                     active
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-muted-foreground hover:border-primary/40"

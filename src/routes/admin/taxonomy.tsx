@@ -80,8 +80,8 @@ function AdminActivitiesPage() {
               onClick={() => setTab(key)}
               className={
                 tab === key
-                  ? "shrink-0 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
-                  : "shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent"
+                  ? "shrink-0 rounded-full bg-primary px-3 py-1.5 text-desc font-medium text-primary-foreground"
+                  : "shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
               }
             >
               {t(label)}
@@ -412,12 +412,12 @@ function ActivityRow({
           <p className="min-w-0 break-words text-sm font-semibold text-foreground">
             {row.name_ar}
             {!row.is_active && (
-              <span className="ms-2 rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground">
+              <span className="ms-2 rounded-full bg-secondary px-2 py-0.5 text-desc text-muted-foreground">
                 {t("market.admin.actInactive")}
               </span>
             )}
           </p>
-          <p className="min-w-0 break-words text-[11px] text-muted-foreground">
+          <p className="min-w-0 break-words text-desc text-muted-foreground">
             {row.group_name_ar}
             {row.parent_name_ar ? ` · ${row.parent_name_ar}` : ""} ·{" "}
             {row.parent_id ? t("market.admin.actSub") : t("market.admin.actMain")} ·{" "}
@@ -452,14 +452,14 @@ function ActivityRow({
       </div>
 
       <div className="mt-2 min-w-0 space-y-1.5">
-        <p className="text-[11px] text-muted-foreground">{t("market.admin.actAliases")}</p>
+        <p className="text-desc text-muted-foreground">{t("market.admin.actAliases")}</p>
         <ul className="flex min-w-0 flex-wrap gap-1.5">
           {aliases.map((a) => (
             <li key={a.id}>
               <button
                 type="button"
                 disabled={busy}
-                className="rounded-full bg-secondary px-2 py-0.5 text-[11px] text-secondary-foreground"
+                className="rounded-full bg-secondary px-2 py-0.5 text-desc text-secondary-foreground"
                 onClick={() => void onRun(() => removeAlias(a.id), "market.admin.actUpdated")}
               >
                 {a.alias} ×
@@ -518,7 +518,7 @@ function ActivityRow({
                     }
                   >
                     <span className="min-w-0 flex-1 break-words">{hit.name_ar}</span>
-                    <span className="shrink-0 text-[11px] text-muted-foreground">
+                    <span className="shrink-0 text-desc text-muted-foreground">
                       {hit.group_name_ar}
                     </span>
                   </button>
@@ -609,7 +609,7 @@ function SuggestionRow({
       <p className="min-w-0 break-words text-sm font-semibold text-foreground">
         {suggestion.raw_text}
       </p>
-      <p className="text-[11px] text-muted-foreground">{t("market.admin.actPending")}</p>
+      <p className="text-desc text-muted-foreground">{t("market.admin.actPending")}</p>
 
       <div className="mt-2 flex flex-wrap gap-1.5">
         <Button type="button" size="sm" variant="outline" onClick={() => setMode("new")}>
@@ -718,7 +718,7 @@ function SuggestionRow({
                   }
                 >
                   <span className="min-w-0 flex-1 break-words">{hit.name_ar}</span>
-                  <span className="shrink-0 text-[11px] text-muted-foreground">
+                  <span className="shrink-0 text-desc text-muted-foreground">
                     {hit.group_name_ar}
                   </span>
                 </button>
@@ -750,18 +750,18 @@ function ReportTab() {
 
   return (
     <div className="min-w-0 space-y-4">
-      <p className="rounded-lg bg-secondary/50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
+      <p className="rounded-lg bg-secondary/50 p-2.5 text-desc leading-relaxed text-muted-foreground">
         {t("market.admin.actReportHint")}
       </p>
 
       <div className="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl border border-border bg-card p-3">
-          <p className="text-[11px] text-muted-foreground">{t("market.admin.actTotal")}</p>
+          <p className="text-desc text-muted-foreground">{t("market.admin.actTotal")}</p>
           <p className="text-lg font-bold text-foreground">{(report.data ?? []).length}</p>
         </div>
         {counts.map(([bucket, count]) => (
           <div key={bucket} className="rounded-xl border border-border bg-card p-3">
-            <p className="min-w-0 break-words text-[11px] text-muted-foreground">
+            <p className="min-w-0 break-words text-desc text-muted-foreground">
               {t(`market.admin.actBucket.${bucket}`)}
             </p>
             <p className="text-lg font-bold text-foreground">{count}</p>
@@ -778,7 +778,7 @@ function ReportTab() {
             <p className="min-w-0 break-words text-sm font-medium text-foreground">
               {row.legacy_text || "—"}
             </p>
-            <p className="min-w-0 break-words text-[11px] text-muted-foreground">
+            <p className="min-w-0 break-words text-desc text-muted-foreground">
               {t(`market.admin.actBucket.${row.bucket}`)}
               {row.matched_name_ar
                 ? ` · ${t("market.admin.actSuggested")}: ${row.matched_name_ar}`

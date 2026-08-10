@@ -157,11 +157,11 @@ export function SeasonalLayer({
           ) : null}
           {headline ? (
             <div className="min-w-0">
-              <p className="truncate text-[12px] font-extrabold leading-tight text-white drop-shadow-[0_1px_6px_rgb(0_0_0/0.6)] sm:text-sm">
+              <p className="truncate text-desc font-extrabold leading-tight text-white drop-shadow-[0_1px_6px_rgb(0_0_0/0.6)] sm:text-sm">
                 {headline}
               </p>
               {subheadline ? (
-                <p className="truncate text-[9px] leading-tight text-white/85 drop-shadow-[0_1px_4px_rgb(0_0_0/0.6)] sm:text-[11px]">
+                <p className="truncate text-desc leading-tight text-white/85 drop-shadow-[0_1px_4px_rgb(0_0_0/0.6)] sm:text-desc">
                   {subheadline}
                 </p>
               ) : null}

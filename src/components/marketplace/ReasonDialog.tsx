@@ -57,7 +57,7 @@ export function ReasonDialog({
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         {children}
-        <label className="block text-xs font-medium text-foreground">
+        <label className="block text-desc font-medium text-foreground">
           {t("admin.reason")}
           <Textarea
             value={reason}

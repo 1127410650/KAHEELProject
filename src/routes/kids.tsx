@@ -45,9 +45,9 @@ function KidsWorldPage() {
         <header className="rounded-3xl bg-brand-50 p-5 dark:bg-brand-950">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-bold text-primary">أطفال · مواليد · ألعاب</p>
-              <h1 className="mt-1 text-xl font-bold text-foreground sm:text-2xl">عالم الصغار</h1>
-              <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+              <p className="text-desc font-bold text-primary">أطفال · مواليد · ألعاب</p>
+              <h1 className="text-page mt-1 font-bold text-foreground">عالم الصغار</h1>
+              <p className="mt-1 text-desc text-muted-foreground sm:text-sm">
                 مساحة مرحة وآمنة — أصدقاؤنا الصغار بيدلّوك على القسم اللي بدّك ياه.
               </p>
             </div>
@@ -66,7 +66,7 @@ function KidsWorldPage() {
 
         <KidsFriendsStrip className="mt-4" />
 
-        <h2 className="mt-6 text-sm font-bold text-foreground">أقسام الصغار</h2>
+        <h2 className="text-section mt-6 font-bold text-foreground">أقسام الصغار</h2>
         {kidsCategories.length > 0 ? (
           <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {kidsCategories.map((c, i) => (
@@ -77,7 +77,7 @@ function KidsWorldPage() {
                 className="k-press flex items-center gap-3 rounded-2xl border border-border bg-card p-3 hover:bg-accent"
               >
                 <KidsFriendTap id={kidsFriendFor({ slug: c.slug, name: c.name_ar }, i)} size={40} />
-                <span className="min-w-0 truncate text-xs font-bold text-foreground">
+                <span className="min-w-0 truncate text-desc font-bold text-foreground">
                   {c.name_ar}
                 </span>
               </Link>
@@ -89,12 +89,12 @@ function KidsWorldPage() {
           </div>
         )}
 
-        <h2 className="mt-6 text-sm font-bold text-foreground">شارات ومكافآت</h2>
+        <h2 className="text-section mt-6 font-bold text-foreground">شارات ومكافآت</h2>
         <div className="mt-2 flex flex-wrap gap-2">
           {KIDS_FRIENDS.map((f) => (
             <span
               key={f.id}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-[11px] font-bold text-foreground"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 pe-3 ps-1 text-desc font-bold text-foreground"
             >
               <KidsFriend id={f.id} size={28} motion="sway" />
               نجمة {f.roleAr}

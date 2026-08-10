@@ -86,7 +86,7 @@ function PointsPage() {
     <DashboardShell title={t("market.points.title")}>
       <div className="mb-4 grid grid-cols-2 gap-3 sm:max-w-md">
         <div className="rounded-xl border border-border bg-card p-3">
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <p className="flex items-center gap-1.5 text-desc text-muted-foreground">
             <Coins className="size-3.5 text-primary" aria-hidden />
             {t("market.points.balance")}
           </p>
@@ -99,7 +99,7 @@ function PointsPage() {
           )}
         </div>
         <div className="rounded-xl border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">{t("market.points.lifetimeSpent")}</p>
+          <p className="text-desc text-muted-foreground">{t("market.points.lifetimeSpent")}</p>
           {wallet.isLoading ? (
             <Skeleton className="mt-1.5 h-6 w-16" />
           ) : (
@@ -110,7 +110,7 @@ function PointsPage() {
         </div>
       </div>
 
-      <h2 className="mb-2 text-sm font-semibold text-foreground">{t("market.points.ledger")}</h2>
+      <h2 className="text-section mb-2 font-semibold text-foreground">{t("market.points.ledger")}</h2>
 
       {ledger.isLoading ? (
         <div className="space-y-2">
@@ -145,7 +145,7 @@ function PointsPage() {
                   {t(`market.points.kind.${row.kind}`)}
                   {row.listingTitle ? ` · ${row.listingTitle}` : ""}
                 </span>
-                <span className="block text-[11px] text-muted-foreground" dir="ltr">
+                <span className="block text-desc text-muted-foreground" dir="ltr">
                   {formatDateTime(row.created_at)}
                 </span>
               </span>
@@ -159,7 +159,7 @@ function PointsPage() {
                   {row.direction === "credit" ? "+" : "-"}
                   {formatNumber(row.points)}
                 </span>
-                <span className="block text-[11px] text-muted-foreground" dir="ltr">
+                <span className="block text-desc text-muted-foreground" dir="ltr">
                   {formatNumber(row.balance_after)}
                 </span>
               </span>
@@ -189,7 +189,7 @@ function PointsPage() {
 
       <Link
         to="/my/ads"
-        className="mt-6 inline-block text-xs font-medium text-primary hover:underline"
+        className="mt-6 inline-block text-desc font-medium text-primary hover:underline"
       >
         {t("market.dash.myAds")}
       </Link>

@@ -149,18 +149,18 @@ function AdminVerificationsPage() {
                           {bizName(req.tenant_id)}
                         </Link>
                       </p>
-                      <p className="mt-1 text-xs text-muted-foreground" dir="ltr">
+                      <p className="mt-1 text-desc text-muted-foreground" dir="ltr">
                         {new Date(req.created_at).toLocaleString("en-GB", {
                           timeZone: "Asia/Riyadh",
                           hour12: false,
                         })}
                       </p>
-                      {req.note && <p className="mt-1 text-xs text-muted-foreground">{req.note}</p>}
+                      {req.note && <p className="mt-1 text-desc text-muted-foreground">{req.note}</p>}
                       {req.decision_reason && (
-                        <p className="mt-1 text-xs text-destructive">{req.decision_reason}</p>
+                        <p className="mt-1 text-desc text-destructive">{req.decision_reason}</p>
                       )}
                     </div>
-                    <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+                    <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
                       {t(`market.biz.status.${req.status}`)}
                     </span>
                   </div>
@@ -172,7 +172,7 @@ function AdminVerificationsPage() {
                           <button
                             type="button"
                             onClick={() => void openDoc(d.file_path)}
-                            className="rounded-full border border-border px-2.5 py-1 text-xs text-foreground hover:bg-accent"
+                            className="rounded-full border border-border px-2.5 py-1 text-desc text-foreground hover:bg-accent"
                           >
                             {d.file_name}
                           </button>

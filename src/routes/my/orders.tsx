@@ -217,7 +217,7 @@ function MyOrdersPage() {
       </Tabs>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold text-muted-foreground">
+        <span className="text-desc font-semibold text-muted-foreground">
           {t("market.myOrders.statusFilter")}
         </span>
         {(["all", "open", "done"] as const).map((value) => (
@@ -267,7 +267,7 @@ function MyOrdersPage() {
                     {t(`market.myOrders.kind.${row.kind}`)} · <span className="num">{row.reference}</span>
                   </span>
                 </div>
-                <p className="num mt-1 text-xs text-muted-foreground">
+                <p className="num mt-1 text-desc text-muted-foreground">
                   {formatDateTime(row.created_at)}
                 </p>
                 {row.total !== null && row.total > 0 && (

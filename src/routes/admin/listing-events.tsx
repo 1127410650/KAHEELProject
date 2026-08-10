@@ -143,7 +143,7 @@ function AdminListingEventsPage() {
       staffAccess={canView}
       staffChecking={access.isLoading}
     >
-      <p className="text-xs text-muted-foreground">{t("market.admin.log.hint")}</p>
+      <p className="text-desc text-muted-foreground">{t("market.admin.log.hint")}</p>
 
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-1">
@@ -191,7 +191,7 @@ function AdminListingEventsPage() {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 text-[11px] text-muted-foreground">
+      <div className="mt-3 flex items-center gap-2 text-desc text-muted-foreground">
         {canViewIp ? (
           <ShieldCheck className="size-3.5 text-primary" aria-hidden />
         ) : (
@@ -215,15 +215,15 @@ function AdminListingEventsPage() {
           {rows.map((event) => (
             <li key={event.id} className="rounded-xl border border-border bg-card p-3">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="text-[11px]">
+                <Badge variant="secondary" className="text-desc">
                   {t(`market.admin.log.type.${event.event_type}`)}
                 </Badge>
                 {event.listing_ref && (
-                  <span dir="ltr" className="text-xs font-semibold text-foreground">
+                  <span dir="ltr" className="text-desc font-semibold text-foreground">
                     #{event.listing_ref}
                   </span>
                 )}
-                <span dir="ltr" className="text-[11px] text-muted-foreground">
+                <span dir="ltr" className="text-desc text-muted-foreground">
                   {formatDateTime(event.created_at)}
                 </span>
               </div>
@@ -231,7 +231,7 @@ function AdminListingEventsPage() {
               <p className="mt-1 truncate text-sm font-medium text-foreground">
                 {event.listing_title ?? "—"}
               </p>
-              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-desc text-muted-foreground">
                 <span>
                   {t("market.admin.log.actor")}: {event.actor_label ?? t("market.admin.log.system")}
                 </span>
@@ -255,7 +255,7 @@ function AdminListingEventsPage() {
                     key={action}
                     size="sm"
                     variant="outline"
-                    className="h-7 text-[11px]"
+                    className="h-7 text-desc"
                     onClick={() => openAction(event, action)}
                   >
                     {t(`market.admin.log.action.${action}`)}
@@ -276,7 +276,7 @@ function AdminListingEventsPage() {
         >
           {t("market.admin.log.prev")}
         </Button>
-        <span dir="ltr" className="text-xs text-muted-foreground">
+        <span dir="ltr" className="text-desc text-muted-foreground">
           {page + 1}
         </span>
         <Button
@@ -328,7 +328,7 @@ function AdminListingEventsPage() {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             />
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {t("market.admin.log.reasonHint")}
             </p>
           </div>

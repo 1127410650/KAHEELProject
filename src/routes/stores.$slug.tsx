@@ -94,7 +94,7 @@ function PublicStorePage() {
       <MarketShell>
         <div className="mx-auto w-full max-w-3xl px-4 py-16 text-center">
           <Store className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">{t("market.store.publicPage.notFound")}</h1>
+          <h1 className="text-page font-semibold">{t("market.store.publicPage.notFound")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {t("market.store.publicPage.notFoundHint")}
           </p>
@@ -154,7 +154,7 @@ function PublicStorePage() {
               className={`absolute inset-0 bg-gradient-to-t ${theme.softGradient}`}
               aria-hidden
             />
-            <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md">
+            <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-desc font-bold text-white backdrop-blur-md">
               <Sparkles className="size-3.5" aria-hidden />
               هوية متجر كَحيل
             </span>
@@ -172,11 +172,11 @@ function PublicStorePage() {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h1 className="flex items-center gap-2 text-xl font-black">
+                <h1 className="text-page flex items-center gap-2 font-black">
                   <span className="truncate">{name}</span>
                   <VerifiedBadge status={store.verification_status} />
                 </h1>
-                <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                <p className="mt-1 text-desc text-muted-foreground sm:text-sm">
                   {t(`market.store.type.${store.store_type}`)}
                   {store.cuisine
                     ? ` · ${locale === "ar" ? store.cuisine.name_ar : store.cuisine.name_en || store.cuisine.name_ar}`
@@ -243,7 +243,7 @@ function PublicStorePage() {
               ) : null}
             </div>
 
-            <p className="text-xs text-muted-foreground">
+            <p className="text-desc text-muted-foreground">
               {serviceStore ? (
                 <CalendarDays className="me-1 inline h-3.5 w-3.5" />
               ) : (
@@ -324,7 +324,7 @@ function PublicStorePage() {
                         {money(item.base_price, item.currency_code || store.currency_code, locale)}
                       </p>
                       {item.addon_groups.length > 0 ? (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-desc text-muted-foreground">
                           {t("market.store.catalog.options")}:{" "}
                           {item.addon_groups
                             .map((group) =>
@@ -334,7 +334,7 @@ function PublicStorePage() {
                         </p>
                       ) : null}
                       {(bookable ? item.duration_minutes : item.preparation_minutes) ? (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-desc text-muted-foreground">
                           <Clock className="me-1 inline h-3.5 w-3.5" />
                           {bookable ? item.duration_minutes : item.preparation_minutes}{" "}
                           {t("market.store.publicPage.minutes")}

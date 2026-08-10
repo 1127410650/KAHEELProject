@@ -20,7 +20,7 @@ export function SponsoredBanner() {
   }, [campaign]);
 
   const label = (
-    <span className="absolute bottom-1 end-2 z-10 text-[8px] font-bold text-muted-foreground">
+    <span className="absolute bottom-1 end-2 z-10 text-desc font-bold text-muted-foreground">
       {ar ? "إعلان" : "Ad"}
     </span>
   );

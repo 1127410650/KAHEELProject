@@ -17,7 +17,7 @@ export function MarketStaticPage({
   return (
     <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
       <header className="market-page-intro">
-        <h1 className="text-xl font-black tracking-tight text-foreground sm:text-2xl">
+        <h1 className="text-page font-black tracking-tight text-foreground">
           {t(`market.pages.${pageKey}.title`)}
         </h1>
       </header>
@@ -39,7 +39,7 @@ export function MarketStaticSection({
   return (
     <article id={pageKey} className="market-section mt-4 scroll-mt-24 p-5 sm:p-7">
       {!hideTitle ? (
-        <h2 className="text-lg font-black text-foreground">{t(`market.pages.${pageKey}.title`)}</h2>
+        <h2 className="text-section font-black text-foreground">{t(`market.pages.${pageKey}.title`)}</h2>
       ) : null}
       <p className={`${hideTitle ? "" : "mt-3 "}text-sm leading-8 text-muted-foreground`}>
         {t(`market.pages.${pageKey}.body`)}

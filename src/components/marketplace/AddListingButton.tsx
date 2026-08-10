@@ -33,7 +33,7 @@ export function AddListingButton({ href, className }: Props) {
       ].join(" ")}
     >
       <Plus className="size-5 shrink-0" strokeWidth={3} aria-hidden />
-      <span className="hidden whitespace-nowrap text-[11px] font-black leading-none min-[420px]:inline sm:text-xs">
+      <span className="hidden whitespace-nowrap text-desc font-black leading-none min-[420px]:inline sm:text-desc">
         {label}
       </span>
     </a>

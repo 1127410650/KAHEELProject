@@ -61,7 +61,7 @@ function MktNotificationsPage() {
   return (
     <DashboardShell title={t("market.notif.title")}>
       <div className="mb-3 flex items-center justify-between gap-2">
-        <p className="num text-xs text-muted-foreground">
+        <p className="num text-desc text-muted-foreground">
           {t("market.notif.unread")}: {unread.length}
         </p>
         <Button
@@ -100,12 +100,12 @@ function MktNotificationsPage() {
                   className="font-medium text-primary hover:underline"
                 />
                 {n.body && <p className="break-words text-muted-foreground">{n.body}</p>}
-                <p className="num text-xs text-muted-foreground">{formatDateTime(n.created_at)}</p>
+                <p className="num text-desc text-muted-foreground">{formatDateTime(n.created_at)}</p>
               </div>
               {!n.read_at && (
                 <button
                   type="button"
-                  className="shrink-0 self-start text-xs text-primary hover:underline"
+                  className="shrink-0 self-start text-desc text-primary hover:underline"
                   onClick={() => markOne.mutate(n.id)}
                   disabled={markOne.isPending}
                 >

@@ -359,7 +359,7 @@ export function ProfileCompletionPanel() {
           <span className="block text-sm font-bold text-foreground">
             {ar ? "اكتمال الملف" : "Profile completion"}
           </span>
-          <span className="mt-0.5 block text-[11px] text-muted-foreground">
+          <span className="mt-0.5 block text-desc text-muted-foreground">
             {completion.isLoading
               ? ar
                 ? "جارٍ التحقق..."
@@ -382,7 +382,7 @@ export function ProfileCompletionPanel() {
 
       {open && (
         <div className="space-y-5 border-t border-border px-3 py-4">
-          <div className="rounded-lg bg-secondary/70 p-3 text-xs leading-relaxed text-muted-foreground">
+          <div className="rounded-lg bg-secondary/70 p-3 text-desc leading-relaxed text-muted-foreground">
             <span className="flex items-start gap-2">
               <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
               {ar
@@ -392,7 +392,7 @@ export function ProfileCompletionPanel() {
           </div>
 
           {usingFallback && (
-            <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-[11px] leading-relaxed text-muted-foreground">
+            <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-desc leading-relaxed text-muted-foreground">
               <span className="flex items-start gap-2">
                 <Info className="mt-0.5 size-4 shrink-0 text-primary" />
                 {ar
@@ -467,7 +467,7 @@ export function ProfileCompletionPanel() {
                 setDraft((previous) => ({ ...previous, phone: event.target.value }))
               }
             />
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-desc font-semibold text-muted-foreground">
               <Phone className="size-3.5" />
               {ar ? "يُحفظ كرقم تواصل — بدون رسوم SMS" : "Saved as contact — no SMS fees"}
             </span>
@@ -512,7 +512,7 @@ export function ProfileCompletionPanel() {
             </div>
           </div>
 
-          <label className="flex items-start gap-2.5 rounded-lg border border-border p-3 text-xs leading-relaxed text-muted-foreground">
+          <label className="flex items-start gap-2.5 rounded-lg border border-border p-3 text-desc leading-relaxed text-muted-foreground">
             <Checkbox
               checked={draft.consent}
               onCheckedChange={(value) =>

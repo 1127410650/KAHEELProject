@@ -195,12 +195,12 @@ function AdminWorkforcePage() {
 
   return (
     <AdminShell title={t("admin.nav.workforce")} staffAccess={canManage}>
-      <p className="text-xs text-muted-foreground">{t("admin.workforce.hint")}</p>
+      <p className="text-desc text-muted-foreground">{t("admin.workforce.hint")}</p>
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {statCards.map((card) => (
           <div key={card.key} className="rounded-xl border border-border bg-card p-3">
-            <p className="text-[11px] text-muted-foreground">{t(`admin.workforce.stat.${card.key}`)}</p>
+            <p className="text-desc text-muted-foreground">{t(`admin.workforce.stat.${card.key}`)}</p>
             <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{card.value ?? 0}</p>
           </div>
         ))}
@@ -224,7 +224,7 @@ function AdminWorkforcePage() {
       </div>
 
       {/* ---------------- Staff ---------------- */}
-      <h2 className="mt-6 text-sm font-bold text-foreground">{t("admin.workforce.staffTitle")}</h2>
+      <h2 className="text-section mt-6 font-bold text-foreground">{t("admin.workforce.staffTitle")}</h2>
       {staff.isLoading ? (
         <Skeleton className="mt-3 h-48 w-full rounded-xl" />
       ) : rows.length === 0 ? (
@@ -247,7 +247,7 @@ function AdminWorkforcePage() {
       )}
 
       {/* ---------------- Leaves ---------------- */}
-      <h2 className="mt-6 text-sm font-bold text-foreground">{t("admin.workforce.leavesTitle")}</h2>
+      <h2 className="text-section mt-6 font-bold text-foreground">{t("admin.workforce.leavesTitle")}</h2>
       {(leaves.data ?? []).length === 0 ? (
         <p className="mt-3 text-sm text-muted-foreground">{t("admin.workforce.noLeaves")}</p>
       ) : (
@@ -263,7 +263,7 @@ function AdminWorkforcePage() {
                   <p className="truncate text-sm font-medium text-foreground">
                     {person?.label ?? leave.user_id}
                   </p>
-                  <p className="text-[11px] tabular-nums text-muted-foreground">
+                  <p className="text-desc tabular-nums text-muted-foreground">
                     {t(`admin.workforce.leaveKind.${leave.kind}`)} · {formatDate(leave.starts_on)} —{" "}
                     {formatDate(leave.ends_on)}
                   </p>
@@ -283,7 +283,7 @@ function AdminWorkforcePage() {
       )}
 
       {/* ---------------- Shared queue ---------------- */}
-      <h2 className="mt-6 text-sm font-bold text-foreground">{t("admin.workforce.queueTitle")}</h2>
+      <h2 className="text-section mt-6 font-bold text-foreground">{t("admin.workforce.queueTitle")}</h2>
       <Tabs value={scope} onValueChange={(value) => setScope(value as QueueScope)} className="mt-3">
         <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="all">{t("admin.workforce.scope.all")}</TabsTrigger>
@@ -308,7 +308,7 @@ function AdminWorkforcePage() {
                   >
                     {t(`admin.workforce.kind.${item.kind}`)}
                   </Link>
-                  <p className="mt-0.5 flex flex-wrap gap-x-3 text-[11px] tabular-nums text-muted-foreground">
+                  <p className="mt-0.5 flex flex-wrap gap-x-3 text-desc tabular-nums text-muted-foreground">
                     <span>
                       {t("admin.workforce.assignee")}:{" "}
                       {item.assignee_label ?? t("admin.workforce.scope.unassigned")}
@@ -319,7 +319,7 @@ function AdminWorkforcePage() {
                 </div>
 
                 <div className="flex w-full flex-wrap items-center gap-1.5 sm:w-auto sm:shrink-0">
-                  <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-foreground">
+                  <span className="rounded-full bg-secondary px-2 py-0.5 text-desc font-medium text-foreground">
                     {t(`admin.workforce.priority.${item.priority}`)}
                   </span>
                   <Select
@@ -553,7 +553,7 @@ function StaffCard({
             <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             <span className="truncate">{row.label}</span>
           </p>
-          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tabular-nums text-muted-foreground">
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-desc tabular-nums text-muted-foreground">
             <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-foreground">
               {t(`admin.workforce.state.${row.effective_state}`)}
             </span>
@@ -606,18 +606,18 @@ function StaffCard({
       {open && (
         <div className="mt-3 border-t border-border pt-3">
           {row.email && row.email !== row.label && (
-            <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+            <p className="truncate text-desc text-muted-foreground">{row.email}</p>
           )}
-          <p className="mt-0.5 text-[11px] text-muted-foreground">
+          <p className="mt-0.5 text-desc text-muted-foreground">
             {t("admin.workforce.stateSource")}
           </p>
           {row.last_assigned_at && (
-            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+            <p className="mt-0.5 text-desc tabular-nums text-muted-foreground">
               {t("admin.workforce.lastAssigned")}: {formatDateTime(row.last_assigned_at)}
             </p>
           )}
           {row.on_leave && row.leave_ends_on && (
-            <p className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
+            <p className="mt-0.5 text-desc tabular-nums text-muted-foreground">
               {t("admin.workforce.leaveUntil")}: {formatDate(row.leave_ends_on)}
             </p>
           )}

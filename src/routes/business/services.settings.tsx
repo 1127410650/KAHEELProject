@@ -217,7 +217,7 @@ function ProviderSettingsPage() {
         <Card className="rounded-3xl">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div>
-              <h2 className="text-lg font-black">
+              <h2 className="text-section font-black">
                 {locale === "ar" ? "هوية الخدمة والحجز" : "Service and booking profile"}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -282,7 +282,7 @@ function ProviderSettingsPage() {
                 <span className="block text-sm font-black">
                   {locale === "ar" ? "استقبال الحجوزات" : "Accept bookings"}
                 </span>
-                <span className="mt-1 block text-xs text-muted-foreground">
+                <span className="mt-1 block text-desc text-muted-foreground">
                   {locale === "ar"
                     ? "يمكن إيقاف المواعيد مؤقتًا دون إخفاء المتجر."
                     : "Pause appointments without hiding the store."}
@@ -296,7 +296,7 @@ function ProviderSettingsPage() {
         <Card className="rounded-3xl">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div>
-              <h2 className="text-lg font-black">
+              <h2 className="text-section font-black">
                 {locale === "ar" ? "طريقة تقديم الخدمة" : "Service modes"}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -344,7 +344,7 @@ function ProviderSettingsPage() {
         <Card className="rounded-3xl">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div>
-              <h2 className="text-lg font-black">
+              <h2 className="text-section font-black">
                 {locale === "ar" ? "قواعد المواعيد" : "Booking rules"}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -416,7 +416,7 @@ function ProviderSettingsPage() {
             <div className="flex items-center gap-2">
               <CalendarRange className="size-5 text-primary" />
               <div>
-                <h2 className="text-lg font-black">
+                <h2 className="text-section font-black">
                   {locale === "ar" ? "جدول العمل الأسبوعي" : "Weekly availability"}
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
