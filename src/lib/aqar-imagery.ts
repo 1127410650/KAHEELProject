@@ -66,8 +66,9 @@ export interface AqarImagery {
 /** الافتراضي المدمج — يعمل بلا اتصال بقاعدة البيانات. */
 export const DEFAULT_AQAR_IMAGERY: AqarImagery = {
   types: [
-    { key: "villa", label: "فلل", image: typeVilla.url, wide: true },
     { key: "apartment", label: "شقق", image: typeApartment.url, wide: true },
+    { key: "villa", label: "فلل", image: typeVilla.url },
+
     { key: "building", label: "عمائر", image: typeBuilding.url },
     { key: "land", label: "أراضٍ", image: typeLand.url },
     { key: "shop", also: ["office", "warehouse"], label: "محلات", image: typeShop.url },
