@@ -15,11 +15,13 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
 import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
+import { sendEmailOtpImpl } from "@/lib/otp-email.server";
 import {
   channelsFor,
   hashPhone,
   loadChannelConfig,
   providerConfigured,
+  routeFor,
   sendOtp,
   type OtpChannel,
 } from "@/lib/otp-providers.server";
