@@ -57,6 +57,7 @@ import {
 } from "@/components/ui/select";
 import { LocatePreviewButton } from "@/components/marketplace/admin/LocatePreviewButton";
 import { formatDateTime } from "@/lib/format";
+import { useCustomBlocks } from "@/lib/mkt-custom-blocks";
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { useMediaSlots } from "@/lib/mkt-media-slots";
 import {
@@ -122,6 +123,7 @@ function FieldEditor({
 }) {
   const slots = useMediaSlots();
   const lib = useDesignLibrary(field.type === "shape");
+  const customBlocks = useCustomBlocks();
 
   const internalRoutes = useMemo(
     () => ROUTE_MAP.filter((r) => r.is_public && !r.path.includes("$")).map((r) => r.path),
@@ -148,7 +150,9 @@ function FieldEditor({
             ? (lib.data?.shapes ?? []).map((s) => ({ value: s.key, label_ar: s.label_ar }))
             : field.type === "link"
               ? internalRoutes.map((p) => ({ value: p, label_ar: p }))
-              : [];
+              : field.type === "custom_block"
+                ? (customBlocks.data ?? []).map((b) => ({ value: b.id, label_ar: b.name }))
+                : [];
 
   return (
     <div className="space-y-1">

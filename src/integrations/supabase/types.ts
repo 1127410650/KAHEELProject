@@ -1704,6 +1704,42 @@ export type Database = {
           },
         ]
       }
+      mkt_canvas_designs: {
+        Row: {
+          artboard_ratio: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          elements: Json
+          id: string
+          name: string
+          preview_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          artboard_ratio?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          elements?: Json
+          id?: string
+          name: string
+          preview_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          artboard_ratio?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          elements?: Json
+          id?: string
+          name?: string
+          preview_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_cart_item_addons: {
         Row: {
           addon_id: string
@@ -2278,6 +2314,47 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      mkt_custom_blocks: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          design_id: string
+          id: string
+          name: string
+          updated_at: string
+          zones: Json
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          design_id: string
+          id?: string
+          name: string
+          updated_at?: string
+          zones?: Json
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          design_id?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          zones?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_custom_blocks_design_id_fkey"
+            columns: ["design_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_canvas_designs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_demo_accounts: {
         Row: {
@@ -5887,6 +5964,51 @@ export type Database = {
           platform_role?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_platform_integrations: {
+        Row: {
+          adapter: string
+          code: string
+          created_at: string
+          enabled: boolean
+          id: string
+          monthly_cap_usd: number
+          name_ar: string
+          provider: string
+          secret_name: string | null
+          signup_url: string | null
+          unit_cost_usd: number
+          updated_at: string
+        }
+        Insert: {
+          adapter: string
+          code: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          monthly_cap_usd?: number
+          name_ar: string
+          provider: string
+          secret_name?: string | null
+          signup_url?: string | null
+          unit_cost_usd?: number
+          updated_at?: string
+        }
+        Update: {
+          adapter?: string
+          code?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          monthly_cap_usd?: number
+          name_ar?: string
+          provider?: string
+          secret_name?: string | null
+          signup_url?: string | null
+          unit_cost_usd?: number
+          updated_at?: string
         }
         Relationships: []
       }

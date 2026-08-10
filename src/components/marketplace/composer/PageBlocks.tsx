@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
+import { CustomBlockView } from "@/components/marketplace/composer/CustomBlockView";
 import { HomeJeebLi } from "@/components/marketplace/home/HomeJeebLi";
 import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
@@ -379,6 +380,13 @@ function renderBlock(
                 <ExclusiveOffersRail />
               </LazyMount>
             );
+          case "custom_block": {
+            const blockId = str(settings, "custom_block_id");
+            if (!blockId) return null;
+            return (
+              <CustomBlockView key={block.id} blockId={blockId} alt={str(settings, "alt_ar")} />
+            );
+          }
           default:
             /* نوع لا تعرفه هذه النسخة من الواجهة — يُتجاهل بلا خطأ. */
             return null;
