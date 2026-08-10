@@ -11,6 +11,7 @@
 import { createHash } from "crypto";
 
 import { passwordPolicyError } from "@/lib/password-policy";
+import { isBreachedPassword } from "@/lib/password-breach";
 import { normalizePhone, DEFAULT_DIAL } from "@/lib/phone-normalize";
 import { resolveMarketIso2ByPhone } from "@/lib/market-scope.server";
 
