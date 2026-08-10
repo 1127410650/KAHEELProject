@@ -146,3 +146,41 @@ export async function loadAqarImagery(): Promise<AqarImagery> {
     .maybeSingle();
   return mergeAqarImagery(data?.value);
 }
+
+/**
+ * يطبّق فتحات المظهر (`/admin/appearance`) فوق الصور الحالية.
+ *
+ * الفتحة الفارغة أو المخفية لا تغيّر شيئًا ⇒ يبقى الافتراضي، فلا يظهر فراغ عند
+ * عدم رفع صورة. دوائر المدن تُبنى من الفتحات فقط إذا رُفعت صورة واحدة على
+ * الأقل، وإلا تبقى المدن الست الافتراضية.
+ */
+export function applyMediaSlotsToAqar(
+  imagery: AqarImagery,
+  slots: { slot_key: string; group_key: string | null; subtitle_ar: string | null; url: string | null }[] | undefined,
+): AqarImagery {
+  if (!slots || slots.length === 0) return imagery;
+  const byKey = new Map(slots.map((slot) => [slot.slot_key, slot]));
+
+  const citySlots = slots.filter(
+    (slot) => slot.slot_key.startsWith("city.") && slot.group_key && slot.url,
+  );
+  const cities: AqarCityCircle[] = [];
+  for (const slot of citySlots) {
+    if (cities.some((city) => city.name === slot.group_key)) continue;
+    cities.push({
+      name: slot.group_key!,
+      landmark: slot.subtitle_ar ?? "",
+      image: slot.url!,
+    });
+  }
+
+  return {
+    types: imagery.types.map((card) => ({
+      ...card,
+      image: byKey.get(`aqar.type.${card.key}`)?.url ?? card.image,
+    })),
+    cities: cities.length > 0 ? cities : imagery.cities,
+    hero: { ...imagery.hero, image: byKey.get("aqar.hero")?.url ?? imagery.hero.image },
+  };
+}
+

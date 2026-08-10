@@ -3853,7 +3853,9 @@
       "mascots": "معاينة الشخصيات",
       "errands": "خدمة جيب لي",
       "guideRequests": "طلبات تعديل وإزالة",
-      "guideClaims": "مطالبات ملكية الدليل"
+      "guideClaims": "مطالبات ملكية الدليل",
+      "appearance": "المظهر والوسائط",
+      "pageVariants": "تصاميم الصفحات"
     },
     "alerts": {
       "title": "مركز التنبيهات",

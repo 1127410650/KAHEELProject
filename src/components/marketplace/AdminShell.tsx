@@ -27,6 +27,8 @@ import {
   Settings,
   ShieldAlert,
   ShieldCheck,
+  Images,
+  LayoutTemplate,
   Smile,
   ShieldQuestion,
   Store,
@@ -155,6 +157,18 @@ const NAV: NavItem[] = [
     to: "/admin/mascots",
     labelKey: "admin.nav.mascots",
     icon: Smile,
+    section: "market",
+  },
+  {
+    to: "/admin/appearance",
+    labelKey: "admin.nav.appearance",
+    icon: Images,
+    section: "market",
+  },
+  {
+    to: "/admin/appearance/variants",
+    labelKey: "admin.nav.pageVariants",
+    icon: LayoutTemplate,
     section: "market",
   },
   {

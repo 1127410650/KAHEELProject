@@ -15,7 +15,9 @@ import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
 import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
-import { DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
+import { useActivePageVariant } from "@/lib/mkt-page-variants";
+import { applyMediaSlotsToAqar, DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
+import { useMediaSlots } from "@/lib/mkt-media-slots";
 import {
   fetchAqarListings,
   fetchAqarPromoted,
@@ -48,6 +50,7 @@ export const Route = createFileRoute("/aqar/")({
 function AqarHomePage() {
   const [track, setTrack] = useState<AqarTrack>("daily_rent");
   const { ids, toggle } = useAqarFavorites();
+  const variant = useActivePageVariant("aqar", "aqar.types_first");
 
   const imagery = useQuery({
     queryKey: ["aqar", "imagery"],
@@ -73,7 +76,11 @@ function AqarHomePage() {
     queryFn: () => fetchAqarListings({ track, limit: 16 }),
   });
 
-  const hero = imagery.data.hero;
+  /* صور الفتحات المرفوعة من لوحة الإدارة تتقدّم على الافتراضي، والفارغة لا تغيّر شيئًا. */
+  const slots = useMediaSlots();
+  const visuals = applyMediaSlotsToAqar(imagery.data, slots.data);
+
+  const hero = visuals.hero;
   const rate = usdRate.data ?? null;
 
   return (
@@ -118,8 +125,18 @@ function AqarHomePage() {
           <AqarTrackTabs track={track} onChange={setTrack} />
         </div>
 
-        <AqarTypeGrid types={imagery.data.types} track={track} counts={counts.data ?? {}} />
-        <AqarCityCircles cities={imagery.data.cities} track={track} />
+        {/* ترتيب «الأنواع أولًا» أو «المدن أولًا» يُبدّله المدير من لوحة التصاميم. */}
+        {variant === "aqar.cities_first" ? (
+          <>
+            <AqarCityCircles cities={visuals.cities} track={track} />
+            <AqarTypeGrid types={visuals.types} track={track} counts={counts.data ?? {}} />
+          </>
+        ) : (
+          <>
+            <AqarTypeGrid types={visuals.types} track={track} counts={counts.data ?? {}} />
+            <AqarCityCircles cities={visuals.cities} track={track} />
+          </>
+        )}
 
         <AqarListingRail
           title="مميزة"

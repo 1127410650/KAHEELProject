@@ -4454,6 +4454,60 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_media_slots: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          external_url: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          external_url?: string | null
+          group_key?: string | null
+          hidden?: boolean
+          is_demo?: boolean
+          kind?: string
+          path?: string | null
+          section: string
+          slot_key: string
+          sort_order?: number
+          subtitle_ar?: string | null
+          title_ar?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          external_url?: string | null
+          group_key?: string | null
+          hidden?: boolean
+          is_demo?: boolean
+          kind?: string
+          path?: string | null
+          section?: string
+          slot_key?: string
+          sort_order?: number
+          subtitle_ar?: string | null
+          title_ar?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       mkt_message_hides: {
         Row: {
           created_at: string
@@ -5106,6 +5160,42 @@ export type Database = {
           provider_message_id?: string | null
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_page_variants: {
+        Row: {
+          created_at: string
+          description_ar: string
+          is_active: boolean
+          name_ar: string
+          page: string
+          preview_path: string | null
+          sort_order: number
+          updated_at: string
+          variant_key: string
+        }
+        Insert: {
+          created_at?: string
+          description_ar: string
+          is_active?: boolean
+          name_ar: string
+          page: string
+          preview_path?: string | null
+          sort_order?: number
+          updated_at?: string
+          variant_key: string
+        }
+        Update: {
+          created_at?: string
+          description_ar?: string
+          is_active?: boolean
+          name_ar?: string
+          page?: string
+          preview_path?: string | null
+          sort_order?: number
+          updated_at?: string
+          variant_key?: string
         }
         Relationships: []
       }
@@ -10405,6 +10495,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      mkt_admin_activate_page_variant: {
+        Args: { _page: string; _variant_key: string }
+        Returns: undefined
+      }
       mkt_admin_activities: {
         Args: {
           _group_id?: string
@@ -10496,6 +10590,32 @@ export type Database = {
       mkt_admin_claim: {
         Args: { _kind: string; _subject_id: string }
         Returns: string
+      }
+      mkt_admin_clear_media_slot: {
+        Args: { _slot_key: string }
+        Returns: {
+          alt_text: string | null
+          created_at: string
+          external_url: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_media_slots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       mkt_admin_create_activity: {
         Args: {
@@ -10730,11 +10850,72 @@ export type Database = {
         }[]
       }
       mkt_admin_run_tick: { Args: never; Returns: Json }
+      mkt_admin_save_media_slot: {
+        Args: {
+          _alt_text?: string
+          _external_url?: string
+          _kind?: string
+          _path?: string
+          _slot_key: string
+          _sort_order?: number
+          _subtitle_ar?: string
+          _title_ar?: string
+        }
+        Returns: {
+          alt_text: string | null
+          created_at: string
+          external_url: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_media_slots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       mkt_admin_scan_dismiss: {
         Args: { _reason: string; _scan_id: string }
         Returns: undefined
       }
       mkt_admin_search: { Args: { _limit?: number; _q: string }; Returns: Json }
+      mkt_admin_set_media_slot_hidden: {
+        Args: { _hidden: boolean; _slot_key: string }
+        Returns: {
+          alt_text: string | null
+          created_at: string
+          external_url: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_media_slots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       mkt_admin_set_platform_role: {
         Args: { _reason: string; _role: string; _user_id: string }
         Returns: undefined
