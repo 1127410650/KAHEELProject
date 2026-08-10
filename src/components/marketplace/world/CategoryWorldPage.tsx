@@ -49,6 +49,8 @@ export function CategoryWorldPage({
   });
 
   const heroUrl = slotUrl(slots.data, `world.${world.slug}.hero`, HERO_FALLBACK);
+  const composed = usePageBlocks("category.world");
+  const blocks = composed.data ?? [];
 
   /* أقسام الصفحة تُعرَّف مرة واحدة، ويستخدمها المسارَان: التركيب المكتوب في
      الكود، والتأليف من /admin/composer (قالب واحد لكل عوالم الأقسام). */
