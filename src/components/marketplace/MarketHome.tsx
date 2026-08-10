@@ -9,7 +9,7 @@
  * محجوز مسبقًا، وكل صورة لها أبعاد أو نسبة أبعاد ⇒ صفر هزّة تخطيط.
  * الهيدر ينكمش مع التمرير ويُدار في `MarketShell`، وارتفاعه محجوز هناك.
  */
-import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
+
 import { CampaignMosaic } from "@/components/marketplace/home/noon/CampaignMosaic";
 import { CategoryRail, useHomeRails } from "@/components/marketplace/home/noon/CategoryRail";
 import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTileGrid";
