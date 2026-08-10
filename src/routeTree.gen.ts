@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AqarRouteImport } from './routes/aqar'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
@@ -57,6 +58,12 @@ import { Route as AdminTaxonomyRouteImport } from './routes/admin/taxonomy'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
+import { Route as AqarIndexRouteImport } from './routes/aqar.index'
+import { Route as AqarIdRouteImport } from './routes/aqar.$id'
+import { Route as AqarBrowseRouteImport } from './routes/aqar.browse'
+import { Route as AqarChatsRouteImport } from './routes/aqar.chats'
+import { Route as AqarFavoritesRouteImport } from './routes/aqar.favorites'
+import { Route as AqarRequestsRouteImport } from './routes/aqar.requests'
 import { Route as BusinessIndexRouteImport } from './routes/business/index'
 import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
 import { Route as BusinessPartnersRouteImport } from './routes/business/partners'
@@ -132,6 +139,11 @@ const AboutRoute = AboutRouteImport.update({
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AqarRoute = AqarRouteImport.update({
+  id: '/aqar',
+  path: '/aqar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -353,6 +365,36 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
   id: '/ads/$slug',
   path: '/ads/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AqarIndexRoute = AqarIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AqarRoute,
+} as any)
+const AqarIdRoute = AqarIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AqarRoute,
+} as any)
+const AqarBrowseRoute = AqarBrowseRouteImport.update({
+  id: '/browse',
+  path: '/browse',
+  getParentRoute: () => AqarRoute,
+} as any)
+const AqarChatsRoute = AqarChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => AqarRoute,
+} as any)
+const AqarFavoritesRoute = AqarFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => AqarRoute,
+} as any)
+const AqarRequestsRoute = AqarRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AqarRoute,
 } as any)
 const BusinessIndexRoute = BusinessIndexRouteImport.update({
   id: '/',
@@ -646,6 +688,7 @@ export interface FileRoutesByFullPath {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/aqar': typeof AqarRouteWithChildren
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -687,6 +730,11 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/aqar/$id': typeof AqarIdRoute
+  '/aqar/browse': typeof AqarBrowseRoute
+  '/aqar/chats': typeof AqarChatsRoute
+  '/aqar/favorites': typeof AqarFavoritesRoute
+  '/aqar/requests': typeof AqarRequestsRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
@@ -715,6 +763,7 @@ export interface FileRoutesByFullPath {
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/aqar/': typeof AqarIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -790,6 +839,11 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/aqar/$id': typeof AqarIdRoute
+  '/aqar/browse': typeof AqarBrowseRoute
+  '/aqar/chats': typeof AqarChatsRoute
+  '/aqar/favorites': typeof AqarFavoritesRoute
+  '/aqar/requests': typeof AqarRequestsRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
@@ -818,6 +872,7 @@ export interface FileRoutesByTo {
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/aqar': typeof AqarIndexRoute
   '/business': typeof BusinessIndexRoute
   '/services': typeof ServicesIndexRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
@@ -856,6 +911,7 @@ export interface FileRoutesById {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/aqar': typeof AqarRouteWithChildren
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -897,6 +953,11 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/aqar/$id': typeof AqarIdRoute
+  '/aqar/browse': typeof AqarBrowseRoute
+  '/aqar/chats': typeof AqarChatsRoute
+  '/aqar/favorites': typeof AqarFavoritesRoute
+  '/aqar/requests': typeof AqarRequestsRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
@@ -925,6 +986,7 @@ export interface FileRoutesById {
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/aqar/': typeof AqarIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
@@ -964,6 +1026,7 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
+    | '/aqar'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -1005,6 +1068,11 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/aqar/$id'
+    | '/aqar/browse'
+    | '/aqar/chats'
+    | '/aqar/favorites'
+    | '/aqar/requests'
     | '/business/orders'
     | '/business/partners'
     | '/business/profile'
@@ -1033,6 +1101,7 @@ export interface FileRouteTypes {
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin/'
+    | '/aqar/'
     | '/business/'
     | '/services/'
     | '/admin/businesses/$id'
@@ -1108,6 +1177,11 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/aqar/$id'
+    | '/aqar/browse'
+    | '/aqar/chats'
+    | '/aqar/favorites'
+    | '/aqar/requests'
     | '/business/orders'
     | '/business/partners'
     | '/business/profile'
@@ -1136,6 +1210,7 @@ export interface FileRouteTypes {
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin'
+    | '/aqar'
     | '/business'
     | '/services'
     | '/admin/businesses/$id'
@@ -1173,6 +1248,7 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
+    | '/aqar'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -1214,6 +1290,11 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/aqar/$id'
+    | '/aqar/browse'
+    | '/aqar/chats'
+    | '/aqar/favorites'
+    | '/aqar/requests'
     | '/business/orders'
     | '/business/partners'
     | '/business/profile'
@@ -1242,6 +1323,7 @@ export interface FileRouteTypes {
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin/'
+    | '/aqar/'
     | '/business/'
     | '/services/'
     | '/admin/businesses_/$id'
@@ -1280,6 +1362,7 @@ export interface RootRouteChildren {
   MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
+  AqarRoute: typeof AqarRouteWithChildren
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
@@ -1344,6 +1427,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aqar': {
+      id: '/aqar'
+      path: '/aqar'
+      fullPath: '/aqar'
+      preLoaderRoute: typeof AqarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1653,6 +1743,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/ads/$slug'
       preLoaderRoute: typeof AdsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/aqar/': {
+      id: '/aqar/'
+      path: '/'
+      fullPath: '/aqar/'
+      preLoaderRoute: typeof AqarIndexRouteImport
+      parentRoute: typeof AqarRoute
+    }
+    '/aqar/$id': {
+      id: '/aqar/$id'
+      path: '/$id'
+      fullPath: '/aqar/$id'
+      preLoaderRoute: typeof AqarIdRouteImport
+      parentRoute: typeof AqarRoute
+    }
+    '/aqar/browse': {
+      id: '/aqar/browse'
+      path: '/browse'
+      fullPath: '/aqar/browse'
+      preLoaderRoute: typeof AqarBrowseRouteImport
+      parentRoute: typeof AqarRoute
+    }
+    '/aqar/chats': {
+      id: '/aqar/chats'
+      path: '/chats'
+      fullPath: '/aqar/chats'
+      preLoaderRoute: typeof AqarChatsRouteImport
+      parentRoute: typeof AqarRoute
+    }
+    '/aqar/favorites': {
+      id: '/aqar/favorites'
+      path: '/favorites'
+      fullPath: '/aqar/favorites'
+      preLoaderRoute: typeof AqarFavoritesRouteImport
+      parentRoute: typeof AqarRoute
+    }
+    '/aqar/requests': {
+      id: '/aqar/requests'
+      path: '/requests'
+      fullPath: '/aqar/requests'
+      preLoaderRoute: typeof AqarRequestsRouteImport
+      parentRoute: typeof AqarRoute
     }
     '/business/': {
       id: '/business/'
@@ -2202,6 +2334,26 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
 const MyRouteRouteWithChildren =
   MyRouteRoute._addFileChildren(MyRouteRouteChildren)
 
+interface AqarRouteChildren {
+  AqarIdRoute: typeof AqarIdRoute
+  AqarBrowseRoute: typeof AqarBrowseRoute
+  AqarChatsRoute: typeof AqarChatsRoute
+  AqarFavoritesRoute: typeof AqarFavoritesRoute
+  AqarRequestsRoute: typeof AqarRequestsRoute
+  AqarIndexRoute: typeof AqarIndexRoute
+}
+
+const AqarRouteChildren: AqarRouteChildren = {
+  AqarIdRoute: AqarIdRoute,
+  AqarBrowseRoute: AqarBrowseRoute,
+  AqarChatsRoute: AqarChatsRoute,
+  AqarFavoritesRoute: AqarFavoritesRoute,
+  AqarRequestsRoute: AqarRequestsRoute,
+  AqarIndexRoute: AqarIndexRoute,
+}
+
+const AqarRouteWithChildren = AqarRoute._addFileChildren(AqarRouteChildren)
+
 interface ServicesRouteChildren {
   ServicesIndexRoute: typeof ServicesIndexRoute
   ServicesSlugItemIdBookRoute: typeof ServicesSlugItemIdBookRoute
@@ -2223,6 +2375,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
+  AqarRoute: AqarRouteWithChildren,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
