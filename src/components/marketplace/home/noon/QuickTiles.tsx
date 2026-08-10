@@ -1,12 +1,16 @@
 /**
- * ثلاث بلاطات ملوّنة في صف واحد: دليل سوريا · دليل الطالب · مواعيد.
+ * ثلاث بلاطات ملوّنة: دليل سوريا · دليل الطالب · مواعيد.
  *
- * الألوان هنا تجميلية فقط ومأخوذة من رموز الهوية (البنفسجي والذهبي) عبر طبقات
- * شفافة فوق سطح أبيض، فلا لون مكتوب مباشرة ولا كتلة ملوّنة ثقيلة.
+ * الشبكة ستة أعمدة، وكل بلاطة تأخذ حجمها من فتحتها في وضع التحرير (صغير = ثلث
+ * الصف، عادي = نصفه، كبير = صف كامل) مع `grid-flow-dense` فلا تنشأ فجوات ولا
+ * يتغيّر ارتفاع الصف عند التبديل. الوجهة أيضًا من الفتحة، ومصدرها قائمة مسارات
+ * مسجّلة في القاعدة — لا رابط حر. الألوان تجميلية من رموز الهوية.
  */
 import { BookOpenCheck, CalendarClock, Compass } from "lucide-react";
 
 import { useI18n } from "@/i18n";
+import { TILE_SPAN } from "@/lib/mkt-design-library";
+import { slotLink, slotTileSize, useMediaSlots } from "@/lib/mkt-media-slots";
 
 const TILES = [
   {
@@ -38,18 +42,22 @@ const TILES = [
   },
 ] as const;
 
-
 export function QuickTiles() {
   const { locale } = useI18n();
   const ar = locale === "ar";
+  const slots = useMediaSlots();
+
   return (
-    <section aria-label={ar ? "أقسام سريعة" : "Quick sections"} className="grid grid-cols-3 gap-2">
+    <section
+      aria-label={ar ? "أقسام سريعة" : "Quick sections"}
+      className="grid grid-flow-row-dense grid-cols-6 gap-2"
+    >
       {TILES.map(({ key, slot, href, icon: Icon, ar: labelAr, en, tint }) => (
         <a
           key={key}
           data-kslot={slot}
-          href={href}
-          className={`flex min-h-[76px] min-w-0 flex-col items-center justify-center gap-1.5 rounded-2xl px-1.5 py-2 text-center ring-1 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${tint}`}
+          href={slotLink(slots.data, slot, href)}
+          className={`${TILE_SPAN[slotTileSize(slots.data, slot)]} flex min-h-[76px] min-w-0 flex-col items-center justify-center gap-1.5 rounded-2xl px-1.5 py-2 text-center ring-1 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${tint}`}
         >
           <Icon className="size-6 shrink-0" aria-hidden />
           <span className="w-full truncate text-desc font-black leading-tight sm:text-desc">
