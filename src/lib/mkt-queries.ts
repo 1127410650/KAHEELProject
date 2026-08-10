@@ -219,6 +219,49 @@ async function queryListings(
     countryId = resolvedCountryId;
   }
 
+  // «الأقرب إليك»: القاعدة ترتّب وتصفّي وتحسب المسافة، والمتصفح يجلب صفحة
+  // واحدة من الصفوف بمعرّفاتها المرتّبة — لا جلبَ لكل السجلات ولا ترتيبَ محلي.
+  const size = filters.limit ?? 48;
+  if (filters.sort === "nearest" && filters.originLat != null && filters.originLng != null) {
+    const page = await nearbyListingIds({
+      lat: filters.originLat,
+      lng: filters.originLng,
+      radiusKm: (filters.radiusKm ?? null) as RadiusKm,
+      limit: size,
+      offset: (filters.page ?? 0) * size,
+      countryId,
+      cityId: filters.cityId,
+      categoryId,
+      subcategoryId: filters.subcategoryId,
+      typeCode: filters.type,
+      deal: filters.deal,
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+      q: filters.q,
+      advertiser: filters.advertiser,
+      withImage: filters.withImageOnly,
+      hasPrice: filters.hasPrice,
+      featuredOnly: filters.featuredOnly,
+    });
+    if (page.ids.length === 0) return { rows: [], fetched: 0 };
+
+    const { data } = await supabase
+      .from("mkt_listings")
+      .select(LISTING_COLUMNS)
+      .in("id", page.ids);
+    const ordered = orderByIds((data ?? []) as unknown as MktListing[], page.ids);
+    const decorated = await decorateListings(ordered, locale);
+    const withDistance = decorated.map((row) => ({
+      ...row,
+      distanceM: page.distances[row.id] ?? null,
+    }));
+    return {
+      rows: filterBySpecMinimums(withDistance, filters),
+      fetched: page.ids.length,
+    };
+  }
+
+
   let query = supabase
     .from("mkt_listings")
     .select(LISTING_COLUMNS)
