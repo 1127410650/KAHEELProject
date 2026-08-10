@@ -142,8 +142,11 @@ function fromTemplate(row: DesignTemplate): Draft {
     campaign_id: row.campaign_id ?? "",
     starts_at: (row.starts_at ?? "").slice(0, 16),
     ends_at: (row.ends_at ?? "").slice(0, 16),
+    brand_stamp: row.brand_stamp,
+    layout_key: row.layout_key,
   };
 }
+
 
 function DesignsPage() {
   const lib = useDesignLibrary();
