@@ -128,6 +128,38 @@ export function slotsInSection(slots: MediaSlot[] | undefined, section: string):
   return (slots ?? []).filter((slot) => slot.section === section);
 }
 
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/**
+ * ترجمة مظهر الفتحة إلى CSS آمن. القيم تأتي من القاعدة بعد تنقية خادمية
+ * (لون سداسي أو زاوية رقمية فقط)، وتُفحص هنا مرة أخرى قبل الطباعة — فلا يمكن
+ * لأي نص حر أن يصل إلى صفحة أنماط.
+ */
+export function slotStyleCss(slot: MediaSlotRow): string | null {
+  const decls: string[] = [];
+  if (slot.bg_color && HEX.test(slot.bg_color)) {
+    decls.push(`background-color:${slot.bg_color}`);
+  }
+  if (slot.grad_from && slot.grad_to && HEX.test(slot.grad_from) && HEX.test(slot.grad_to)) {
+    const angle = Number.isFinite(slot.grad_angle) ? Math.min(360, Math.max(0, slot.grad_angle!)) : 90;
+    decls.push(`background-image:linear-gradient(${angle}deg,${slot.grad_from} 0%,${slot.grad_to} 100%)`);
+  }
+  if (decls.length === 0) return null;
+  return `[data-kslot="${slot.slot_key}"]{${decls.map((d) => `${d} !important`).join(";")}}`;
+}
+
+/** معرّف الحملة المربوطة بموضع إعلاني، إن كانت داخل فترة العرض. */
+export function slotCampaignId(slots: MediaSlot[] | undefined, key: string): string | null {
+  const slot = slots?.find((item) => item.slot_key === key);
+  if (!slot?.campaign_id) return null;
+  const now = Date.now();
+  if (slot.campaign_from && new Date(slot.campaign_from).getTime() > now) return null;
+  if (slot.campaign_to && new Date(slot.campaign_to).getTime() < now) return null;
+  return slot.campaign_id;
+}
+
+
+
 /** الأقسام بترتيب العرض مع فتحاتها — تُستخدم في شاشة الإدارة. */
 export function groupSlotsBySection(slots: MediaSlot[]): { section: string; label: string; slots: MediaSlot[] }[] {
   const order = Object.keys(MEDIA_SECTION_LABELS);
