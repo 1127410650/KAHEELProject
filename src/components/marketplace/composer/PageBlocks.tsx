@@ -22,7 +22,7 @@ import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBan
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { shapeDataUri } from "@/lib/mkt-design-library";
 import { slotAlt, slotUrl, useMediaSlots } from "@/lib/mkt-media-slots";
-import type { ListingFilters } from "@/lib/mkt-listings";
+import type { ListingFilters } from "@/lib/mkt-queries";
 import {
   bool,
   blockLink,
