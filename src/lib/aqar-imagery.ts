@@ -114,9 +114,11 @@ function safeImage(raw: unknown, fallback: string): string {
 /** يدمج تجاوزات الإدارة فوق الافتراضي؛ أي حقل ناقص أو غير صالح يبقى على الافتراضي. */
 export function mergeAqarImagery(value: unknown): AqarImagery {
   if (!isRecord(value)) return DEFAULT_AQAR_IMAGERY;
-  const types = isRecord(value.types) ? value.types : {};
-  const cities = isRecord(value.cities) ? value.cities : {};
-  const hero = isRecord(value.hero) ? value.hero : {};
+  const types = isRecord(value["types"]) ? value["types"] : {};
+  const cities = isRecord(value["cities"]) ? value["cities"] : {};
+  const hero = isRecord(value["hero"]) ? value["hero"] : {};
+  const heroName = hero["name"];
+  const heroCity = hero["city"];
 
   return {
     types: DEFAULT_AQAR_IMAGERY.types.map((card) => ({
@@ -128,9 +130,9 @@ export function mergeAqarImagery(value: unknown): AqarImagery {
       image: safeImage(cities[city.name], city.image),
     })),
     hero: {
-      image: safeImage(hero.image, DEFAULT_AQAR_IMAGERY.hero.image),
-      name: typeof hero.name === "string" && hero.name ? hero.name : DEFAULT_AQAR_IMAGERY.hero.name,
-      city: typeof hero.city === "string" && hero.city ? hero.city : DEFAULT_AQAR_IMAGERY.hero.city,
+      image: safeImage(hero["image"], DEFAULT_AQAR_IMAGERY.hero.image),
+      name: typeof heroName === "string" && heroName ? heroName : DEFAULT_AQAR_IMAGERY.hero.name,
+      city: typeof heroCity === "string" && heroCity ? heroCity : DEFAULT_AQAR_IMAGERY.hero.city,
     },
   };
 }
