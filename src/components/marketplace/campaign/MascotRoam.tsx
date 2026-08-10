@@ -123,7 +123,9 @@ export function MascotRoam() {
     /** تشخيص المعاينة فقط (`?roam=now`): سبب عدم الظهور. */
     const debug = (reason: string) => {
       if (window.location.search.includes("roam=now")) {
-        (window as unknown as { __roam?: string }).__roam = reason;
+        const w = window as unknown as { __roam?: string; __roamLog?: string[] };
+        w.__roam = reason;
+        (w.__roamLog ??= []).push(`${Date.now() % 100000}:${reason}`);
       }
     };
 
