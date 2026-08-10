@@ -134,7 +134,7 @@ function AqarHomePage() {
         </section>
 
 
-        <div className="pt-10">
+        <div className="pt-12">
           <AqarTrackTabs track={track} onChange={setTrack} />
         </div>
 
