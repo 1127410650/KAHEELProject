@@ -217,20 +217,24 @@ function freeSegments(blocked: [number, number][], from: number, to: number): [n
  */
 function pointBlocked(x: number, y: number): boolean {
   if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return true;
+  const vArea = window.innerWidth * window.innerHeight;
   const stack = document.elementsFromPoint(x, y).slice(0, 8);
   for (const el of stack) {
     if (!(el instanceof HTMLElement) && !(el instanceof SVGElement)) continue;
     if (el.closest("[data-kaheel-stage]")) continue;
     if (el.tagName === "HTML" || el.tagName === "BODY") continue;
-    if (el.matches(OBSTACLES)) {
-      // زخرفة خالصة: بلا نص وتتجاهل النقر (أعلام، طبقات موسمية).
-      const decorative =
-        !(el.textContent ?? "").trim() &&
-        window.getComputedStyle(el as Element).pointerEvents === "none" &&
-        !(el instanceof HTMLImageElement);
-      if (!decorative) return true;
-    }
     const style = window.getComputedStyle(el as Element);
+    // زخرفة خالصة: بلا نص وتتجاهل النقر (خلفيات، أعلام، طبقات موسمية) — ولولا
+    // استثناؤها لغطّت الشاشة كلها ومنعت أي ظهور.
+    const decorative =
+      !(el.textContent ?? "").trim() &&
+      style.pointerEvents === "none" &&
+      !(el instanceof HTMLImageElement);
+    if (decorative) continue;
+    // حاوية بحجم الشاشة (طبقة خلفية أو غلاف صفحة) ليست محتوى بحد ذاتها.
+    const r = el.getBoundingClientRect();
+    if (r.width * r.height >= vArea * 0.9) continue;
+    if (el.matches(OBSTACLES)) return true;
     const bg = style.backgroundImage;
     // صورة خلفية حقيقية (بانر «مساحتك الإعلانية»، صور الستوريات) = محتوى.
     if (bg && bg !== "none" && !/^(linear|radial|conic|repeating)-gradient/.test(bg.trim())) {
@@ -243,6 +247,7 @@ function pointBlocked(x: number, y: number): boolean {
   }
   return false;
 }
+
 
 /** شبكة نقاط داخل الصندوق: أي نقطة مشغولة ⇒ الصندوق غير صالح. */
 function boxIsClear(
