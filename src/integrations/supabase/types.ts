@@ -11574,7 +11574,7 @@ export type Database = {
         Args: {
           _block_type: string
           _hidden?: boolean
-          _id: string
+          _id?: string
           _page: string
           _settings?: Json
           _sort_order?: number
