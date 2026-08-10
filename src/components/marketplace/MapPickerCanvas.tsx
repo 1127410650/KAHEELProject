@@ -71,7 +71,7 @@ export default function MapPickerCanvas({
       pin.on("dragend", () => {
         dragging.current = false;
         const point = pin.getLatLng();
-        external.current = false;
+        target.current = { lat: point.lat, lng: point.lng };
         instance.panTo(point, { animate: true });
         change.current(point.lat, point.lng);
       });
@@ -83,11 +83,10 @@ export default function MapPickerCanvas({
       });
       instance.on("moveend", () => {
         if (dragging.current) return;
-        if (external.current) {
-          external.current = false;
-          return;
-        }
         const point = instance.getCenter();
+        // تجاهل الاستقرار الناتج عن ضبط برمجي (GPS/محافظة/تأكيد سحب).
+        if (near(point, target.current)) return;
+        target.current = { lat: point.lat, lng: point.lng };
         change.current(point.lat, point.lng);
       });
 
@@ -95,7 +94,7 @@ export default function MapPickerCanvas({
       instance.on("click", (event) => {
         const point = (event as unknown as { latlng: { lat: number; lng: number } }).latlng;
         pin.setLatLng(point);
-        external.current = false;
+        target.current = { lat: point.lat, lng: point.lng };
         instance.panTo(point, { animate: true });
         change.current(point.lat, point.lng);
       });
@@ -122,7 +121,7 @@ export default function MapPickerCanvas({
     if (!instance || !pin) return;
     const current = instance.getCenter();
     if (Math.abs(current.lat - lat) < 1e-7 && Math.abs(current.lng - lng) < 1e-7) return;
-    external.current = true;
+    target.current = { lat, lng };
     pin.setLatLng([lat, lng]);
     instance.setView([lat, lng], Math.max(instance.getZoom(), 15), { animate: true });
   }, [lat, lng]);
