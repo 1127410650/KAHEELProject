@@ -25,17 +25,20 @@ import { useHeaderProgress } from "@/lib/use-header-progress";
 import kaheelLogo from "@/assets/kaheel-logo.png";
 
 /** ارتفاعات الصفوف — ثابتة ومصدرها الوحيد هذا الملف. */
-const PT = 6;
+const PT = 8;
 const ROW1_H = 48;
 const ROW2_H = 44;
 const ROW3_H = 40;
-const PB = 6;
+const PB = 8;
 /** ارتفاع الجزء القابل للطي (الصفّان الأول والثاني). */
 const COLLAPSIBLE_H = ROW1_H + ROW2_H;
-export const HOME_HEADER_FULL_H = PT + COLLAPSIBLE_H + ROW3_H + PB; // 144
+/** الارتفاع المنكمش = حاشية الأمان + صف البحث وحده (8 + 40 + 8 = 56). */
+export const HOME_HEADER_COLLAPSED_H = PT + ROW3_H + PB; // 56
+export const HOME_HEADER_FULL_H = PT + COLLAPSIBLE_H + ROW3_H + PB; // 148
 
 /** ارتفاع المساحة المحجوزة: ثابت ولا يُقاس أبدًا في وقت التشغيل. */
 const SPACER_H = `calc(${HOME_HEADER_FULL_H}px + env(safe-area-inset-top, 0px))`;
+
 
 /** كبسولات الأقسام السريعة في الصف الثاني. */
 const CHIPS = [
