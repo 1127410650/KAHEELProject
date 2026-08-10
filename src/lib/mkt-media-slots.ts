@@ -246,34 +246,72 @@ function storagePathFor(slotKey: string): string {
 /**
  * يضغط الصورة (١٦٠٠px / WebP / ≤٣٠٠KB) ثم يرفعها ويربطها بالفتحة.
  * الملف القديم يُحذف بعد نجاح الربط فقط، فلا تفقد الفتحة صورتها عند أي خطأ.
+ *
+ * مع `stamp` تُرفع نسختان: الأصلية كما هي، والمختومة باسم كَحيل — والفتحة تعرض
+ * المختومة وتبقى الأصلية محفوظة بجانبها في المكتبة.
  */
 export async function uploadMediaSlotImage(
   slot: MediaSlotRow,
   file: File,
-): Promise<{ bytes: number; width: number; height: number }> {
+  stamp?: BrandStampOptions,
+): Promise<{ bytes: number; width: number; height: number; stamped: boolean }> {
   const { blob, width, height } = await compressToWebp(file);
   const path = storagePathFor(slot.slot_key);
+  const uploaded: string[] = [];
 
-  const { error: uploadError } = await supabase.storage
-    .from(MEDIA_SLOT_BUCKET)
-    .upload(path, blob, { contentType: "image/webp", cacheControl: "3600", upsert: false });
-  if (uploadError) throw uploadError;
+  const put = async (target: string, body: Blob) => {
+    const { error } = await supabase.storage
+      .from(MEDIA_SLOT_BUCKET)
+      .upload(target, body, { contentType: "image/webp", cacheControl: "3600", upsert: false });
+    if (error) throw error;
+    uploaded.push(target);
+  };
 
-  const { error } = await supabase.rpc("mkt_admin_save_media_slot", {
-    _slot_key: slot.slot_key,
-    _path: path,
-    _kind: "image",
-  });
-  if (error) {
-    await supabase.storage.from(MEDIA_SLOT_BUCKET).remove([path]).catch(() => undefined);
+  try {
+    if (!stamp) {
+      await put(path, blob);
+      const { error } = await supabase.rpc("mkt_admin_save_media_slot", {
+        _slot_key: slot.slot_key,
+        _path: path,
+        _kind: "image",
+      });
+      if (error) throw error;
+      await supabase.rpc("mkt_admin_slot_set_draft", {
+        _slot_key: slot.slot_key,
+        _patch: { path_original: null } as never,
+      });
+      await supabase.rpc("mkt_admin_slot_publish", { _slot_key: slot.slot_key });
+    } else {
+      const originalPath = storagePathFor(slot.slot_key);
+      const stampedBlob = await stampImageBlob(blob, stamp);
+      await put(originalPath, blob);
+      await put(path, stampedBlob);
+      const { error } = await supabase.rpc("mkt_admin_slot_set_draft", {
+        _slot_key: slot.slot_key,
+        _patch: { path, path_original: originalPath } as never,
+      });
+      if (error) throw error;
+      const { error: publishError } = await supabase.rpc("mkt_admin_slot_publish", {
+        _slot_key: slot.slot_key,
+      });
+      if (publishError) throw publishError;
+    }
+  } catch (error) {
+    if (uploaded.length > 0) {
+      await supabase.storage.from(MEDIA_SLOT_BUCKET).remove(uploaded).catch(() => undefined);
+    }
     throw error;
   }
 
-  if (slot.path && slot.path !== path) {
-    await supabase.storage.from(MEDIA_SLOT_BUCKET).remove([slot.path]).catch(() => undefined);
+  const stale = [slot.path, slot.path_original].filter(
+    (old): old is string => !!old && !uploaded.includes(old),
+  );
+  if (stale.length > 0) {
+    await supabase.storage.from(MEDIA_SLOT_BUCKET).remove(stale).catch(() => undefined);
   }
-  return { bytes: blob.size, width, height };
+  return { bytes: blob.size, width, height, stamped: !!stamp };
 }
+
 
 export async function saveMediaSlotMeta(
   slotKey: string,
