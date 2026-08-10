@@ -121,6 +121,23 @@ function AqarHomePage() {
   const hero = visuals.hero;
   const rate = usdRate.data ?? null;
 
+  /* ترحيب شخصي بأسلوب التطبيقات الناضجة: الاسم الأول فقط، وبديل محايد للزائر. */
+  const { profile } = useSession();
+  const firstName = profile?.full_name?.trim().split(/\s+/)[0] ?? "";
+
+  /* «اختيارات مخصصة لك»: مزيج المميزة ثم الأحدث بلا تكرار — عرض فقط. */
+  const picked = (() => {
+    const seen = new Set<string>();
+    const out: typeof latestList = [];
+    for (const listing of [...(promoted.data ?? []), ...(latest.data ?? [])]) {
+      if (seen.has(listing.id)) continue;
+      seen.add(listing.id);
+      out.push(listing);
+      if (out.length >= 8) break;
+    }
+    return out;
+  })();
+
   /* التأليف من /admin/composer له الأولوية؛ الكتل الخاصة بالعقار تُركَّب هنا
      بنفس بياناتها فلا يُنسخ خط بيانات في مكانين. */
   const composed = usePageBlocks("aqar.home");
