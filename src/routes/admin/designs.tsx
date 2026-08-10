@@ -192,7 +192,10 @@ function DesignsPage() {
         campaign_id: draft.kind === "promo" ? draft.campaign_id || null : null,
         starts_at: draft.kind === "promo" && draft.starts_at ? new Date(draft.starts_at).toISOString() : null,
         ends_at: draft.kind === "promo" && draft.ends_at ? new Date(draft.ends_at).toISOString() : null,
+        brand_stamp: draft.brand_stamp,
+        layout_key: draft.layout_key,
       });
+
       refresh();
       toast.success("حُفظ في «تصاميمي» — يمكنك ربطه بأي فتحة إعلانية من وضع التحرير.");
       setEditing(null);
