@@ -30,6 +30,7 @@ import {
   Images,
   LayoutTemplate,
   Smile,
+  Sparkles,
   ShieldQuestion,
   Store,
   UserCog,
