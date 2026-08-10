@@ -114,7 +114,7 @@ export function MarketHeader({
         data-kslot="home.header"
         /* حاشية أمان iOS تُطبَّق هنا مرة واحدة فقط — لا تكرارها في أي حاوية داخلية. */
         style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}
-        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_color-mix(in_srgb,var(--kt-header-from)_55%,transparent)]"
+        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_rgb(0_0_0/0.35)]"
       >
         {/* زخرفة خطية بيضاء خفيفة — بلا أي تأثير على القياسات. */}
         <div
