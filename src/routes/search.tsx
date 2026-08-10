@@ -774,7 +774,7 @@ function GenericSearchPage() {
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6">
         <section className="market-page-intro">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-page font-black tracking-tight text-foreground">
+            <h1 className="text-page font-black text-foreground">
               {t("market.search.title")}
             </h1>
             {params.featured === "1" && (
@@ -829,7 +829,7 @@ function GenericSearchPage() {
             )}
           </form>
 
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <Sheet open={sheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm" className="k-press h-9 shrink-0 rounded-xl border-primary/30 font-bold">

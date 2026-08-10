@@ -222,11 +222,11 @@ function AdminUsersPage() {
       ) : (
         <>
           {/* Desktop: a table that fits the column widths, no horizontal drag. */}
-          <div className="mt-4 hidden rounded-xl border border-border bg-card lg:block">
-            <table className="w-full table-fixed text-sm">
+          <div className="mt-4 hidden overflow-x-auto rounded-xl border border-border bg-card lg:block">
+            <table className="w-full min-w-[760px] table-fixed text-sm">
               <thead className="border-b border-border text-start text-desc text-muted-foreground">
                 <tr>
-                  <th className="w-[26%] px-3 py-2 text-start font-medium">{t("admin.users.user")}</th>
+                  <th className="sticky start-0 z-[1] w-[26%] bg-card px-3 py-2 text-start font-medium">{t("admin.users.user")}</th>
                   <th className="w-[16%] px-3 py-2 text-start font-medium">{t("admin.users.phone")}</th>
                   <th className="w-[13%] px-3 py-2 text-start font-medium">{t("admin.users.created")}</th>
                   <th className="w-[13%] px-3 py-2 text-start font-medium">{t("admin.users.lastSeen")}</th>
@@ -243,7 +243,7 @@ function AdminUsersPage() {
                     className="cursor-pointer border-b border-border/60 transition-colors last:border-0 hover:bg-muted/50"
                     onClick={(event) => openRow(event, row.user_id)}
                   >
-                    <td className="px-3 py-2">
+                    <td className="sticky start-0 z-[1] bg-card px-3 py-2">
                       <AdminUserLink
                         id={row.user_id}
                         name={row.display_name}
@@ -257,7 +257,7 @@ function AdminUsersPage() {
                         <span dir="ltr">{row.email}</span>
                       </AdminUserLink>
                     </td>
-                    <td className="px-3 py-2 tabular-nums">
+                    <td className="whitespace-nowrap px-3 py-2 tabular-nums">
                       {row.phone ? (
                         <AdminUserLink id={row.user_id} className="font-normal">
                           <span dir="ltr">{row.phone}</span>
@@ -266,12 +266,12 @@ function AdminUsersPage() {
                         "—"
                       )}
                     </td>
-                    <td className="px-3 py-2 tabular-nums">{formatDate(row.created_at)}</td>
-                    <td className="px-3 py-2 tabular-nums">
+                    <td className="whitespace-nowrap px-3 py-2 tabular-nums">{formatDate(row.created_at)}</td>
+                    <td className="whitespace-nowrap px-3 py-2 tabular-nums">
                       {row.last_seen_at ? formatDate(row.last_seen_at) : "—"}
                     </td>
-                    <td className="px-3 py-2 tabular-nums">{row.listings_count}</td>
-                    <td className="px-3 py-2 tabular-nums">{row.businesses_count}</td>
+                    <td className="whitespace-nowrap px-3 py-2 tabular-nums">{row.listings_count}</td>
+                    <td className="whitespace-nowrap px-3 py-2 tabular-nums">{row.businesses_count}</td>
                     <td className="px-3 py-2">
                       <RestrictionBadge value={row.restriction} />
                     </td>

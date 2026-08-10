@@ -62,9 +62,9 @@ export function DetailHeader({
     <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="break-words text-base font-bold text-foreground sm:text-lg">{title}</p>
+          <p className=" text-base font-bold text-foreground sm:text-lg">{title}</p>
           {subtitle && (
-            <p className="mt-0.5 break-words text-desc text-muted-foreground">{subtitle}</p>
+            <p className="mt-0.5 text-desc text-muted-foreground">{subtitle}</p>
           )}
           {chips && <div className="mt-2 flex flex-wrap items-center gap-1.5">{chips}</div>}
         </div>
@@ -141,7 +141,7 @@ export function InfoGrid({
       {items.map((item) => (
         <div key={item.label} className="min-w-0">
           <dt className="text-desc text-muted-foreground">{item.label}</dt>
-          <dd className="mt-0.5 break-words text-sm text-foreground">
+          <dd className="mt-0.5 text-sm text-foreground">
             {item.value === null || item.value === undefined || item.value === "" ? "—" : item.value}
           </dd>
         </div>
@@ -199,13 +199,13 @@ export function Timeline({
             {index < items.length - 1 && <span className="w-px flex-1 bg-border" aria-hidden />}
           </div>
           <div className="min-w-0 flex-1 pb-4">
-            <p className="break-words text-sm font-medium text-foreground">{item.title}</p>
+            <p className=" text-sm font-medium text-foreground">{item.title}</p>
             <p className="mt-0.5 text-desc tabular-nums text-muted-foreground">
               {formatDateTime(item.at)}
               {item.actor ? ` · ${item.actor}` : ""}
             </p>
             {item.detail && (
-              <p className="mt-1 break-words text-desc text-muted-foreground">{item.detail}</p>
+              <p className="mt-1 text-desc text-muted-foreground">{item.detail}</p>
             )}
           </div>
         </li>

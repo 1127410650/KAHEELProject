@@ -111,7 +111,7 @@ export function AdminNotes({
         ) : (
           rows.map((note) => (
             <article key={note.id} className="rounded-lg border border-border bg-background p-3">
-              <p className="whitespace-pre-wrap break-words text-sm text-foreground">{note.body}</p>
+              <p className="whitespace-pre-wrap text-sm text-foreground">{note.body}</p>
               <p className="mt-1.5 text-desc tabular-nums text-muted-foreground">
                 {note.author_name || t("admin.detail.unknownActor")} · {formatDateTime(note.created_at)}
               </p>

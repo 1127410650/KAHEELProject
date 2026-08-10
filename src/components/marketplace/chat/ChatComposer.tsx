@@ -287,9 +287,9 @@ export function ChatComposer({
         ) : pending.kind === "audio" ? (
           <audio src={pending.url} controls className="w-full" />
         ) : (
-          <p className="flex items-center gap-2 break-all text-sm">
+          <p className="flex min-w-0 items-center gap-2 text-sm">
             <Paperclip className="size-4 shrink-0" aria-hidden />
-            {pending.file.name}
+            <span className="min-w-0 truncate">{pending.file.name}</span>
           </p>
         )}
         <div className="flex items-center gap-2">

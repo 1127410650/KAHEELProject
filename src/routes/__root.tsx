@@ -105,7 +105,7 @@ function ErrorView({ error }: { error: Error }) {
       className={`${scope} flex min-h-dvh items-center justify-center bg-background px-4 py-10`}
     >
       <div className="max-w-md text-center">
-        <h1 className="text-page font-semibold tracking-tight text-foreground">
+        <h1 className="text-page font-semibold text-foreground">
           {t("routeError.errorTitle")}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-2">

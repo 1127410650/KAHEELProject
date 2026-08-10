@@ -114,64 +114,88 @@
   --color-gold-soft: var(--gold-soft);
   --color-gold-foreground: var(--gold-foreground);
 
-  /* سلّم بنفسجي كَحيل الرسمي — المصدر الوحيد لأي درجة بنفسجية في الواجهة.
-     يُستخدم عبر أدوات مثل text-brand-800 و bg-brand-200 بدل كتابة القيمة مباشرة. */
-  --color-brand-ink: #10002b;
-  --color-brand-950: #240046;
-  --color-brand-900: #3c096c;
-  --color-brand-800: #5a189a;
-  --color-brand-700: #7b2cbf;
-  --color-brand-600: #9d4edd;
-  --color-brand-400: #c77dff;
-  --color-brand-300: #e0aaff;
-  --color-brand-100: #f3e3ff;
-  --color-brand-50: #f6f0ff;
+  /* اللوحة النهائية المعتمدة — المصدر الوحيد لأي لون في المنصة.
+     كل التوكنات القديمة (brand-*, market-*) صارت أسماء بديلة تشير إلى هذه القيم
+     كي يرث أي مكوّن قديم اللوحة الجديدة بلا تعديل. */
+  --color-purple-primary: #8a4fff;
+  --color-purple-light: #c3abff;
+  --color-neutral-white: #ffffff;
+  --color-neutral-bg: #f7f7f8;
+  --color-neutral-divider: #e5e5ea;
+  --color-text-primary: #1b1b1f;
+  --color-text-secondary: #6e6e7d;
+  --color-disabled: #c7c7cc;
+
+  /* سلّم «brand» التاريخي: أسماء محفوظة، وقيمها الآن من اللوحة المعتمدة فقط. */
+  --color-brand-ink: #1b1b1f;
+  --color-brand-950: #1b1b1f;
+  --color-brand-900: #8a4fff;
+  --color-brand-800: #8a4fff;
+  --color-brand-700: #8a4fff;
+  --color-brand-600: #8a4fff;
+  --color-brand-400: #c3abff;
+  --color-brand-300: #c3abff;
+  --color-brand-100: #f7f7f8;
+  --color-brand-50: #f7f7f8;
 
 
-  --shadow-panel:
-    0 1px 2px oklch(0 0 0 / 0.04),
-    0 6px 18px -14px oklch(0 0 0 / 0.1);
-  --shadow-raised:
-    0 1px 3px oklch(0 0 0 / 0.05),
-    0 14px 32px -22px oklch(0 0 0 / 0.14);
+  --shadow-panel: 0 2px 8px rgb(0 0 0 / 0.05);
+  --shadow-raised: 0 2px 8px rgb(0 0 0 / 0.05);
+
 
 }
 
 /*
- * نظام ألوان كَحيل — المصدر الوحيد للحقيقة.
- * البنفسجي: #10002B · #3C096C · #5A189A · #7B2CBF · #C77DFF · #E0AAFF
- * الذهبي للتمييز فقط، والأحمر/الأخضر دلاليان فقط (خطر/حذف — قبول/متاح).
- * لا يُكتب أي لون مباشرة في أي مكوّن؛ كل شيء يمرّ من هنا.
+ * اللوحة النهائية المعتمدة من المالك — تلغي كل قيمة لون سابقة (بما فيها خلفية
+ * اللافندر). البنفسجي #8A4FFF مع نهاية التدرج #C3ABFF، خلفية الصفحة #F7F7F8،
+ * البطاقات بيضاء، النص #1B1B1F والثانوي #6E6E7D. لا يُكتب لون في أي مكوّن.
  */
+:root,
+.market-surface {
+  --purple-primary: #8a4fff;
+  --purple-light: #c3abff;
+  --gradient-purple: linear-gradient(90deg, #8a4fff 0%, #c3abff 100%);
+
+  --neutral-white: #ffffff;
+  --neutral-bg: #f7f7f8;
+  --neutral-divider: #e5e5ea;
+  --neutral-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+
+  --text-primary: #1b1b1f;
+  --text-secondary: #6e6e7d;
+
+  --disabled: #c7c7cc;
+  --focus: #8a4fff;
+}
+
 :root {
   --radius: 0.75rem;
 
-  /* أسطح محايدة: أبيض للصفحة والبطاقات، ونص أسود مائل (#111) */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.1776 0 0);
+  /* أسطح محايدة: خلفية الصفحة #F7F7F8 وبطاقات بيضاء ونص #1B1B1F */
+  --background: var(--neutral-bg);
+  --foreground: var(--text-primary);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.1776 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.1776 0 0);
+  --card: var(--neutral-white);
+  --card-foreground: var(--text-primary);
+  --popover: var(--neutral-white);
+  --popover-foreground: var(--text-primary);
 
-  /* #7B2CBF / #5A189A / #3C096C — البنفسجي لون تجميلي فقط */
-  --primary: oklch(0.4854 0.2222 303.37);
-  --primary-foreground: oklch(1 0 0);
-  --primary-dark: oklch(0.3906 0.1922 303.44);
-  --primary-pressed: oklch(0.3009 0.1601 303.65);
-  /* أعمق درجة للهوية (#10002B) — للتفاصيل الدقيقة فقط */
-  --primary-deep: oklch(0.1584 0.1103 303.5);
+  /* البنفسجي المعتمد — وحالاته مشتقة منه فقط */
+  --primary: var(--purple-primary);
+  --primary-foreground: var(--neutral-white);
+  --primary-dark: #7a3af5;
+  --primary-pressed: #6522d6;
+  --primary-deep: #1b1b1f;
 
-  /* أسطح رمادية محايدة جدًا — لا تلوين بنفسجي للمساحات */
-  --secondary: oklch(0.968 0 0);
-  --secondary-foreground: oklch(0.2178 0 0);
+  /* أسطح محايدة/بنفسجية فاتحة جدًا */
+  --secondary: #f2f2f4;
+  --secondary-foreground: var(--text-primary);
 
-  --muted: oklch(0.972 0 0);
-  --muted-foreground: oklch(0.4386 0 0);
+  --muted: #f2f2f4;
+  --muted-foreground: var(--text-secondary);
 
-  --accent: oklch(0.9702 0.0075 305.5);
-  --accent-foreground: oklch(0.3009 0.1601 303.65);
+  --accent: color-mix(in srgb, var(--purple-primary) 8%, #ffffff);
+  --accent-foreground: var(--purple-primary);
 
 
   /* الذهبي — للعناصر المميزة فقط */
@@ -189,28 +213,29 @@
   --success-strong: oklch(0.44 0.1 165);
   --warning: oklch(0.6567 0.1416 68.5);
   --warning-foreground: oklch(0.9764 0.0264 84.59);
-  --info: oklch(0.4854 0.2222 303.37);
-  --info-foreground: oklch(1 0 0);
+  --info: var(--purple-primary);
+  --info-foreground: var(--neutral-white);
 
-  /* حدود رمادية فاتحة 1px — الفصل بالحد لا باللون */
-  --border: oklch(0.918 0 0);
-  --input: oklch(0.888 0 0);
-  --ring: oklch(0.4854 0.2222 303.37);
+  /* الفواصل وحدود الحقول */
+  --border: var(--neutral-divider);
+  --input: var(--neutral-divider);
+  --ring: var(--focus);
 
-  --chart-1: oklch(0.4854 0.2222 303.37);
-  --chart-2: oklch(0.3009 0.1601 303.65);
+  --chart-1: var(--purple-primary);
+  --chart-2: var(--purple-light);
   --chart-3: oklch(0.7686 0.1647 70.08);
-  --chart-4: oklch(0.6114 0.204 304.7);
-  --chart-5: oklch(0.7413 0.1435 305.5);
+  --chart-4: #6522d6;
+  --chart-5: var(--text-secondary);
 
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.1776 0 0);
-  --sidebar-primary: oklch(0.4854 0.2222 303.37);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.968 0 0);
-  --sidebar-accent-foreground: oklch(0.1776 0 0);
-  --sidebar-border: oklch(0.918 0 0);
-  --sidebar-ring: oklch(0.4854 0.2222 303.37);
+  --sidebar: var(--neutral-white);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--purple-primary);
+  --sidebar-primary-foreground: var(--neutral-white);
+  --sidebar-accent: #f2f2f4;
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--neutral-divider);
+  --sidebar-ring: var(--focus);
+
 
 
   /* admin status tones — مشتقة من البنفسجي عدا الدلالي (خطر/إنجاز) */
@@ -232,7 +257,7 @@
 
 
 .dark {
-  /* الوضع الداكن يبنى على #10002B — أعمق درجة في هوية كَحيل */
+  /* الوضع الداكن يبنى على #1B1B1F — أعمق درجة في هوية كَحيل */
   --background: oklch(0.1584 0.1103 303.5);
   --foreground: oklch(0.9666 0.0217 305.5);
   --card: oklch(0.2109 0.1287 303.4);
@@ -424,6 +449,10 @@ body {
      container, which is what keeps `position: sticky` working inside pages. */
   overflow-x: clip;
   -webkit-text-size-adjust: 100%;
+  /* Arabic body copy needs generous leading so ascenders/descenders and
+     stacked diacritics never crowd the line above/below; headings still
+     override this via their own text-* line-height utilities. */
+  line-height: 1.6;
 }
 
 @media (max-width: 767px) {
@@ -611,55 +640,45 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Public marketplace surface ("كَحيل") — amethyst + crisp white.
- *
- * These tokens exist ONLY for the public marketplace chrome (header, bottom
- * nav, footer, home banner). They are additive: no existing token is changed,
- * so the admin console (`AdminShell`) and the internal system keep their own
- * teal identity untouched. Isolation is by usage — nothing in `/admin` or the
- * internal pages references a `market-*` utility.
+ * أسماء `market-*` التاريخية: محفوظة كي لا يتعطّل أي مكوّن قديم، لكن قيمها الآن
+ * من اللوحة المعتمدة وحدها (بنفسجي #8A4FFF / #C3ABFF + محايدات + ذهبي التمييز).
  * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-market-navy: #3c096c;
-  --color-market-navy-dark: #10002b;
-  --color-market-navy-soft: #5a189a;
+  --color-market-navy: #8a4fff;
+  --color-market-navy-dark: #1b1b1f;
+  --color-market-navy-soft: #8a4fff;
   --color-market-navy-foreground: #ffffff;
-  --color-market-blue: #7b2cbf;
-  --color-market-blue-dark: #5a189a;
-  --color-market-blue-soft: #e0aaff;
+  --color-market-blue: #8a4fff;
+  --color-market-blue-dark: #8a4fff;
+  --color-market-blue-soft: #c3abff;
   --color-market-gold: #f59e0b;
   --color-market-gold-soft: #fff4de;
-  --color-market-electric: #9d4edd;
-  --color-market-electric-dark: #7b2cbf;
-  --color-market-electric-bright: #e0aaff;
-  --color-market-void: #10002b;
-  --color-market-panel: #240046;
-  --color-market-panel-soft: #3c096c;
+  --color-market-electric: #8a4fff;
+  --color-market-electric-dark: #8a4fff;
+  --color-market-electric-bright: #c3abff;
+  --color-market-void: #1b1b1f;
+  --color-market-panel: #1b1b1f;
+  --color-market-panel-soft: #8a4fff;
   --color-market-silver: #ffffff;
-  --color-market-silver-line: #e0aaff;
-  --color-market-silver-muted: #5a189a;
+  --color-market-silver-line: #e5e5ea;
+  --color-market-silver-muted: #6e6e7d;
 }
 
 /*
- * `.market-surface` re-points the semantic tokens to the "كَحيل" palette for the
- * whole public marketplace tree (shell, dashboard pages, auth/registration and
- * the static pages). Because every marketplace component already styles itself
- * with semantic classes (`bg-primary`, `text-muted-foreground`, `border-border`
- * …), one scope keeps the identity consistent without duplicated components.
- * The admin console and the internal system never carry this class, so their
- * petrol identity is untouched.
+ * `.market-surface` يوجّه التوكنات الدلالية للوحة كَحيل المعتمدة في كل شجرة السوق
+ * العامة. القيم مأخوذة من متغيّرات اللوحة أعلاه فلا تتكرر أرقام سداسية هنا.
  */
 .market-surface,
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  /* لافندر فاتح جدًا للصفحة (مشتق من #8a4fff)، وأبيض نقي للبطاقات. */
-  --background: #f3efff;
-  --foreground: #171423;
+  /* خلفية الصفحة الرسمية #F7F7F8 وبطاقات بيضاء نقية. */
+  --background: #f7f7f8;
+  --foreground: #1b1b1f;
   --card: #ffffff;
-  --card-foreground: #171423;
+  --card-foreground: #1b1b1f;
   --popover: #ffffff;
-  --popover-foreground: #171423;
+  --popover-foreground: #1b1b1f;
 
   /* تدرج الهوية النهائي المعتمد — قيم لا تُغمّق ولا تُعدّل. */
   --header-from: #8a4fff;
@@ -671,17 +690,17 @@ body:has(.market-surface) {
   --primary-dark: #7a3af5;
   --primary-pressed: #6522d6;
 
-  /* أسطح لافندر أغمق قليلًا من الخلفية — للاختصارات الدائرية والحبّات الهادئة */
-  --secondary: #e8dfff;
-  --secondary-foreground: #3d2179;
-  --muted: #efe9ff;
-  --muted-foreground: #4b4658;
-  --accent: #f6f2ff;
-  --accent-foreground: #6522d6;
+  /* أسطح محايدة فاتحة + تلوين بنفسجي شفاف للحالة المختارة فقط */
+  --secondary: #f2f2f4;
+  --secondary-foreground: #1b1b1f;
+  --muted: #f2f2f4;
+  --muted-foreground: #6e6e7d;
+  --accent: #f4efff;
+  --accent-foreground: #8a4fff;
 
-  /* حد رمادي-لافندر رفيع يبقى أداة الفصل الأولى */
-  --border: #e4dcfa;
-  --input: #d8cdf7;
+  /* حد رمادي محايد رفيع يبقى أداة الفصل الأولى */
+  --border: #e5e5ea;
+  --input: #e5e5ea;
   --ring: #8a4fff;
 
   --gold: #f59e0b;
@@ -690,46 +709,41 @@ body:has(.market-surface) {
   --gold-foreground: #59451f;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #171423;
-  --sidebar-accent: #e8dfff;
-  --sidebar-accent-foreground: #171423;
-  --sidebar-border: #e4dcfa;
+  --sidebar-foreground: #1b1b1f;
+  --sidebar-accent: #f2f2f4;
+  --sidebar-accent-foreground: #1b1b1f;
+  --sidebar-border: #e5e5ea;
   --sidebar-primary: #8a4fff;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-ring: #8a4fff;
 
   --chart-1: #8a4fff;
-  --chart-2: #6522d6;
+  --chart-2: #c3abff;
   --chart-3: #f59e0b;
-  --chart-4: #c3abff;
+  --chart-4: #6522d6;
 
   background-color: var(--background);
   color: var(--foreground);
   color-scheme: light;
 }
 
+
 /*
- * Elevation: ظلال محايدة ناعمة جدًا — الفصل بالحد الرفيع أولًا ثم بظل خفيف.
+ * Elevation: ظل البطاقة المعتمد الوحيد — 0 2px 8px rgba(0,0,0,0.05).
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(17 17 17 / 0.04), 0 8px 22px -18px rgb(17 17 17 / 0.12);
-  --shadow-raised: 0 1px 3px rgb(17 17 17 / 0.05), 0 16px 36px -26px rgb(17 17 17 / 0.16);
+  --shadow-panel: 0 2px 8px rgb(0 0 0 / 0.05);
+  --shadow-raised: 0 2px 8px rgb(0 0 0 / 0.05);
 }
 
 .market-surface .shadow-panel,
-body:has(.market-surface) .shadow-panel {
-  box-shadow:
-    0 1px 2px rgb(17 17 17 / 0.05),
-    0 8px 20px -16px rgb(17 17 17 / 0.12) !important;
-}
-
+body:has(.market-surface) .shadow-panel,
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
-  box-shadow:
-    0 1px 3px rgb(17 17 17 / 0.06),
-    0 14px 32px -24px rgb(17 17 17 / 0.16) !important;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05) !important;
 }
+
 
 /*
  * الهيدر/الهيرو: التدرج المعتمد نهائيًا كما هو
@@ -829,7 +843,7 @@ body:has(.market-surface) .shadow-raised {
 
 .market-surface ::selection {
   background: rgb(199 125 255 / 0.32);
-  color: #240046;
+  color: #1b1b1f;
 }
 
 .market-surface :where([data-slot="card"]) {
@@ -1810,9 +1824,9 @@ body:has(.market-surface) {
   --k-glow: 0 10px 30px -12px rgb(157 78 221 / 0.5);
 
   /* gradient stock */
-  --k-grad-deep: linear-gradient(155deg, #240046 0%, #3c096c 46%, #7b2cbf 100%);
-  --k-grad-royal: linear-gradient(150deg, #5a189a 0%, #7b2cbf 52%, #9d4edd 100%);
-  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, color-mix(in srgb, #e0aaff 22%, white) 100%);
+  --k-grad-deep: linear-gradient(155deg, #1b1b1f 0%, #8a4fff 46%, #8a4fff 100%);
+  --k-grad-royal: linear-gradient(150deg, #8a4fff 0%, #8a4fff 52%, #8a4fff 100%);
+  --k-grad-mist: linear-gradient(160deg, #ffffff 0%, color-mix(in srgb, #c3abff 22%, white) 100%);
 }
 
 /* ── surfaces ─────────────────────────────────────────────────────────── */
@@ -1847,7 +1861,7 @@ body:has(.market-surface) {
 
   &:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, #9d4edd 52%, white);
+    border-color: color-mix(in srgb, #8a4fff 52%, white);
     box-shadow: var(--k-shadow-3, 0 28px 52px -20px rgb(36 0 70 / 0.24));
   }
 
@@ -1865,7 +1879,7 @@ body:has(.market-surface) {
   isolation: isolate;
   overflow: hidden;
   border-radius: 1.5rem;
-  background: var(--k-grad-deep, linear-gradient(155deg, #240046, #7b2cbf));
+  background: var(--k-grad-deep, linear-gradient(155deg, #1b1b1f, #8a4fff));
   color: #fff;
   box-shadow:
     var(--k-shadow-2, 0 16px 28px -14px rgb(36 0 70 / 0.16)),
@@ -1899,7 +1913,7 @@ body:has(.market-surface) {
   letter-spacing: 0.06em;
   line-height: 1rem;
   text-transform: none;
-  color: #7b2cbf;
+  color: #8a4fff;
 }
 
 @utility k-h1 {
@@ -1908,7 +1922,7 @@ body:has(.market-surface) {
   line-height: 1.18;
   letter-spacing: -0.012em;
   text-wrap: balance;
-  color: #240046;
+  color: #1b1b1f;
 }
 
 @utility k-h2 {
@@ -1916,21 +1930,21 @@ body:has(.market-surface) {
   font-weight: 900;
   line-height: 1.24;
   letter-spacing: -0.01em;
-  color: #240046;
+  color: #1b1b1f;
 }
 
 @utility k-h3 {
   font-size: 1rem;
   font-weight: 800;
   line-height: 1.35;
-  color: #240046;
+  color: #1b1b1f;
 }
 
 @utility k-sub {
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.6;
-  color: #5a189a;
+  color: #8a4fff;
 }
 
 /* ── micro-interactions ──────────────────────────────────────────────── */
@@ -2067,7 +2081,7 @@ body:has(.market-surface) {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  background: color-mix(in srgb, #e0aaff 26%, white);
+  background: color-mix(in srgb, #c3abff 26%, white);
 
   /* The sweep animates `background-position` only: no transform, no paint
      containment surprises, and nothing a layout-shift observer can attribute

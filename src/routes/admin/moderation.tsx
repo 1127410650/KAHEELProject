@@ -391,7 +391,7 @@ function AdminContentRulesPage() {
                   <li key={rule.id} className="rounded-lg border border-border bg-background p-3">
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <p className="break-words text-sm font-medium text-foreground">{rule.pattern}</p>
+                        <p className=" text-sm font-medium text-foreground">{rule.pattern}</p>
                         <div className="mt-1 flex flex-wrap items-center gap-1.5">
                           <AdminStatusBadge tone="idle" label={t(`admin.contentRules.kindValue.${rule.kind}`)} />
                           <AdminStatusBadge tone="idle" label={t(`admin.moderation.category.${rule.category}`)} />
@@ -404,7 +404,7 @@ function AdminContentRulesPage() {
                             {rule.lang === "any" ? t("admin.contentRules.langAny") : rule.lang.toUpperCase()}
                           </span>
                         </div>
-                        {rule.notes && <p className="mt-1 break-words text-desc text-muted-foreground">{rule.notes}</p>}
+                        {rule.notes && <p className="mt-1 text-desc text-muted-foreground">{rule.notes}</p>}
                       </div>
                       <div className="flex shrink-0 items-center gap-1.5">
                         <span className="grid min-h-11 min-w-11 place-items-center">
@@ -499,7 +499,7 @@ function AdminContentRulesPage() {
                   <p className="mt-1 text-desc tabular-nums text-muted-foreground">
                     {t("admin.contentRules.duration")}: {run.duration_ms != null ? `${run.duration_ms}ms` : "—"}
                   </p>
-                  {run.error && <p className="mt-1 break-words text-desc text-destructive">{run.error}</p>}
+                  {run.error && <p className="mt-1 text-desc text-destructive">{run.error}</p>}
                 </li>
               ))}
             </ul>

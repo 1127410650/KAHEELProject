@@ -128,7 +128,7 @@ function Stat({
           {label}
         </p>
         <p
-          className={`mt-1 text-2xl font-black tabular-nums tracking-tight sm:text-[28px] ${palette.value}`}
+          className={`mt-1 text-2xl font-black tabular-nums sm:text-[28px] ${palette.value}`}
         >
           {value.toLocaleString("en-US")}
         </p>

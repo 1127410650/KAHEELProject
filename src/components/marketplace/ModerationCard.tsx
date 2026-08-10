@@ -52,7 +52,7 @@ function SignalRow({ signal }: { signal: ModerationSignal }) {
         )}
       </div>
       {(signal.field || signal.excerpt) && (
-        <p className="mt-1.5 break-words text-desc text-muted-foreground">
+        <p className="mt-1.5 text-desc text-muted-foreground">
           {signal.field && <span>{t("admin.moderation.field")}: {signal.field}</span>}
           {signal.field && signal.excerpt ? " · " : ""}
           {signal.excerpt && <span className="font-medium text-foreground">"{signal.excerpt}"</span>}

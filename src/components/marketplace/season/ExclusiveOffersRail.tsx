@@ -39,7 +39,7 @@ export function ExclusiveOffersRail() {
 
       <div className="relative z-10">
         <header className="flex items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900">
+          <span className="grid size-9 place-items-center rounded-2xl bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary">
             <Sparkles className="size-5" aria-hidden />
           </span>
           <div className="min-w-0">
@@ -76,7 +76,7 @@ export function ExclusiveOffersRail() {
                     className="absolute inset-0 size-full object-cover opacity-70"
                   />
                 ) : null}
-                <span className="absolute inset-0 bg-[linear-gradient(180deg,rgb(36_0_70/0.25),rgb(36_0_70/0.82))]" />
+                <span className="absolute inset-0 bg-[linear-gradient(180deg,rgb(0_0_0/0.25),rgb(0_0_0/0.82))]" />
                 <span className="relative z-10 space-y-1">
                   {badge ? (
                     <span className="inline-block rounded-full bg-market-gold/90 px-2 py-0.5 text-desc font-black text-brand-950">

@@ -63,7 +63,7 @@ export function DashboardShell({
         }
       >
         <header className="market-page-intro">
-          <h1 className="text-page font-black tracking-tight text-foreground">{title}</h1>
+          <h1 className="text-page font-black text-foreground">{title}</h1>
           {account && (
             <p className="mt-1 truncate text-desc text-muted-foreground">
               {t("market.entry.workingUnder", {

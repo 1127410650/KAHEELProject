@@ -53,7 +53,7 @@ const TONES: Record<
 > = {
   blue: {
     rail: "bg-blue-600 text-white shadow-blue-900/20",
-    hero: "from-[#10002b] via-[#3c096c] to-[#9d4edd]",
+    hero: "from-primary via-primary to-[#C3ABFF]",
     soft: "bg-blue-50 text-blue-700",
     text: "text-blue-700",
     ring: "ring-blue-200",
@@ -153,7 +153,7 @@ export function LiveDemoEnvironment() {
                 <Sparkles className="size-3.5" aria-hidden />
                 {text(locale, "عرض كامل قبل الإطلاق النهائي", "Full preview before final launch")}
               </div>
-              <h1 className="mt-4 max-w-3xl text-3xl font-black leading-[1.2] tracking-tight sm:text-4xl lg:text-5xl">
+              <h1 className="mt-4 max-w-3xl text-3xl font-black leading-[1.2] sm:text-4xl lg:text-5xl">
                 {text(locale, "جرّب منظومة كَحيل كاملة", "Explore the complete Kaheel ecosystem")}
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-white/70 sm:text-base sm:leading-8">
@@ -208,7 +208,7 @@ export function LiveDemoEnvironment() {
         <section id="demo-workspace" aria-labelledby="demo-roles-title" className="scroll-mt-24">
           <div className="mb-3 flex items-end justify-between gap-3">
             <div>
-              <p className="text-desc font-black text-[#7b2cbf] sm:text-desc">
+              <p className="text-desc font-black text-primary sm:text-desc">
                 {text(locale, "تبديل الهوية التجريبية", "Demo identity switcher")}
               </p>
               <h2 id="demo-roles-title" className="mt-1 text-xl font-black sm:text-2xl">
@@ -447,7 +447,7 @@ export function LiveDemoEnvironment() {
         <section className="grid gap-4 lg:grid-cols-[1fr_0.8fr]">
           <div className="rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
             <div className="flex items-center gap-2">
-              <Link2 className="size-5 text-[#7b2cbf]" aria-hidden />
+              <Link2 className="size-5 text-primary" aria-hidden />
               <h2 className="text-section font-black">
                 {text(locale, "التكاملات الخارجية", "External integrations")}
               </h2>
@@ -465,7 +465,7 @@ export function LiveDemoEnvironment() {
                   key={integration.nameAr}
                   className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200"
                 >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#e0aaff]/42 text-[#7b2cbf]">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary/20 text-primary">
                     <ExternalLink className="size-4" aria-hidden />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -549,7 +549,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
   return (
     <section className="rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
       <div className="flex items-center gap-2">
-        <CalendarCheck2 className="size-5 text-[#7b2cbf]" aria-hidden />
+        <CalendarCheck2 className="size-5 text-primary" aria-hidden />
         <h2 className="text-section font-black">
           {text(locale, "رحلة مترابطة في النظام", "A connected platform journey")}
         </h2>
@@ -565,7 +565,7 @@ function ConnectedJourney({ locale }: { locale: "ar" | "en" }) {
         {steps.map((step, index) => (
           <div key={step.ar} className="relative rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
             <div className="flex items-center justify-between">
-              <span className="grid size-10 place-items-center rounded-xl bg-[#e0aaff]/42 text-[#7b2cbf]">
+              <span className="grid size-10 place-items-center rounded-xl bg-primary/20 text-primary">
                 <step.icon className="size-5" aria-hidden />
               </span>
               <span className="num text-desc font-black text-slate-300">0{index + 1}</span>

@@ -189,8 +189,8 @@ function DescriptionBlock({ text }: { text: string }) {
       <p
         className={
           long && !open
-            ? "mt-2 line-clamp-6 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground"
-            : "mt-2 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground"
+            ? "mt-2 line-clamp-6 whitespace-pre-line text-sm leading-relaxed text-muted-foreground"
+            : "mt-2 whitespace-pre-line text-sm leading-relaxed text-muted-foreground"
         }
       >
         {text}
@@ -279,7 +279,7 @@ function AdvertiserSection({ ad, cityLabel }: { ad: AdData; cityLabel: string | 
         {city && (
           <div className="flex gap-1.5">
             <dt>{t("market.filters.city")}:</dt>
-            <dd className="min-w-0 break-words text-foreground">{city}</dd>
+            <dd className="min-w-0 text-foreground">{city}</dd>
           </div>
         )}
         {joined && (
@@ -541,11 +541,11 @@ function AdPage() {
             )}
           </div>
 
-          <h1 className="text-page mt-2 break-words font-bold leading-snug text-foreground">
+          <h1 className="text-page mt-2 font-bold leading-snug text-foreground">
             {listing.title}
           </h1>
-          <p className="mt-1 break-words text-lg font-bold text-primary sm:text-xl">
-            {priceLabel(listing, "—", locale)}
+          <p className="mt-1 text-lg font-bold text-primary sm:text-xl">
+            <bdi>{priceLabel(listing, "—", locale)}</bdi>
           </p>
 
           {/* شريط المواصفات السريعة (غرف · حمامات · مساحة) — يظهر فقط عند وجود قيم. */}
@@ -554,7 +554,7 @@ function AdPage() {
           </div>
 
           {categoryPath && (
-            <p className="mt-2 break-words text-desc text-muted-foreground">{categoryPath}</p>
+            <p className="mt-2 text-desc text-muted-foreground">{categoryPath}</p>
           )}
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-desc text-muted-foreground">
@@ -568,7 +568,7 @@ function AdPage() {
             )}
             <span className="inline-flex items-center gap-1">
               <CalendarDays className="size-3.5" aria-hidden />
-              {relativeTime(listing.published_at ?? listing.created_at, locale)}
+              <bdi>{relativeTime(listing.published_at ?? listing.created_at, locale)}</bdi>
             </span>
             {visible && (
               <span className="inline-flex items-center gap-1">
@@ -609,7 +609,7 @@ function AdPage() {
           {leadSummary && (
             <section className="mt-4 rounded-xl border border-border bg-card p-4">
               <h2 className="text-section font-bold text-foreground">{t("market.ad.summary")}</h2>
-              <p className="mt-2 break-words text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {leadSummary}
               </p>
             </section>

@@ -17,7 +17,7 @@ const BRAND = {
   purple: "#8A4FFF",
   ink: "#1B1230",
   muted: "#6B6480",
-  lavender: "#F2F0FA",
+  lavender: "#F7F7F8",
   card: "#FFFFFF",
 };
 
@@ -82,7 +82,7 @@ export async function buildQrCardPng(input: QrCardInput): Promise<string> {
   ctx.fillRect(0, 0, A5.width, A5.height);
   const gradient = ctx.createLinearGradient(0, 0, A5.width, 380);
   gradient.addColorStop(0, BRAND.purple);
-  gradient.addColorStop(1, "#B98CFF");
+  gradient.addColorStop(1, "#C3ABFF");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, A5.width, 380);
 

@@ -72,7 +72,7 @@ export function CategoryTileGrid() {
 
   return (
     <section aria-labelledby="home-categories-title">
-      <h2 id="home-categories-title" className="text-body font-black tracking-tight sm:text-lg">
+      <h2 id="home-categories-title" className="text-body font-black sm:text-lg">
         {ar ? "التصنيفات الرئيسية" : "Main categories"}
       </h2>
       {/* سبع بلاطات + «المزيد» = صفّان على الجوال، والباقي في /more. */}

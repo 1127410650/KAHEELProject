@@ -409,7 +409,7 @@ function ActivityRow({
     <li className="min-w-0 rounded-xl border border-border bg-card p-3">
       <div className="flex min-w-0 flex-wrap items-start gap-2">
         <div className="min-w-0 flex-1">
-          <p className="min-w-0 break-words text-sm font-semibold text-foreground">
+          <p className="min-w-0 text-sm font-semibold text-foreground">
             {row.name_ar}
             {!row.is_active && (
               <span className="ms-2 rounded-full bg-secondary px-2 py-0.5 text-desc text-muted-foreground">
@@ -417,7 +417,7 @@ function ActivityRow({
               </span>
             )}
           </p>
-          <p className="min-w-0 break-words text-desc text-muted-foreground">
+          <p className="min-w-0 text-desc text-muted-foreground">
             {row.group_name_ar}
             {row.parent_name_ar ? ` · ${row.parent_name_ar}` : ""} ·{" "}
             {row.parent_id ? t("market.admin.actSub") : t("market.admin.actMain")} ·{" "}
@@ -517,7 +517,7 @@ function ActivityRow({
                       ).then(() => setMergeOpen(false))
                     }
                   >
-                    <span className="min-w-0 flex-1 break-words">{hit.name_ar}</span>
+                    <span className="min-w-0 flex-1">{hit.name_ar}</span>
                     <span className="shrink-0 text-desc text-muted-foreground">
                       {hit.group_name_ar}
                     </span>
@@ -606,7 +606,7 @@ function SuggestionRow({
 
   return (
     <li className="min-w-0 rounded-xl border border-border bg-card p-3">
-      <p className="min-w-0 break-words text-sm font-semibold text-foreground">
+      <p className="min-w-0 text-sm font-semibold text-foreground">
         {suggestion.raw_text}
       </p>
       <p className="text-desc text-muted-foreground">{t("market.admin.actPending")}</p>
@@ -717,7 +717,7 @@ function SuggestionRow({
                     )
                   }
                 >
-                  <span className="min-w-0 flex-1 break-words">{hit.name_ar}</span>
+                  <span className="min-w-0 flex-1">{hit.name_ar}</span>
                   <span className="shrink-0 text-desc text-muted-foreground">
                     {hit.group_name_ar}
                   </span>
@@ -761,7 +761,7 @@ function ReportTab() {
         </div>
         {counts.map(([bucket, count]) => (
           <div key={bucket} className="rounded-xl border border-border bg-card p-3">
-            <p className="min-w-0 break-words text-desc text-muted-foreground">
+            <p className="min-w-0 text-desc text-muted-foreground">
               {t(`market.admin.actBucket.${bucket}`)}
             </p>
             <p className="text-lg font-bold text-foreground">{count}</p>
@@ -775,10 +775,10 @@ function ReportTab() {
             key={`${row.tenant_id}-${index}`}
             className="min-w-0 rounded-xl border border-border bg-card p-3"
           >
-            <p className="min-w-0 break-words text-sm font-medium text-foreground">
+            <p className="min-w-0 text-sm font-medium text-foreground">
               {row.legacy_text || "—"}
             </p>
-            <p className="min-w-0 break-words text-desc text-muted-foreground">
+            <p className="min-w-0 text-desc text-muted-foreground">
               {t(`market.admin.actBucket.${row.bucket}`)}
               {row.matched_name_ar
                 ? ` · ${t("market.admin.actSuggested")}: ${row.matched_name_ar}`

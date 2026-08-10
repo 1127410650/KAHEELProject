@@ -35,7 +35,7 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
           to={addHref}
           className={`${BOX} k-surface k-lift group flex items-center gap-3 px-3.5 text-brand-950 outline-none focus-visible:ring-2 focus-visible:ring-brand-700 sm:px-5`}
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-2xl border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900 sm:size-11">
+          <span className="grid size-9 shrink-0 place-items-center rounded-2xl border-2 border-white bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary sm:size-11">
             <Megaphone className="size-4 sm:size-5" aria-hidden />
           </span>
           <span className="min-w-0 flex-1">
@@ -48,7 +48,7 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
                 : "Put your offer in front of the whole marketplace"}
             </span>
           </span>
-          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,#5a189a,#3c096c)] text-white shadow-md transition group-hover:-translate-x-1 sm:size-9 rtl:group-hover:translate-x-1">
+          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[linear-gradient(140deg,#8A4FFF,#C3ABFF)] text-white shadow-md transition group-hover:-translate-x-1 sm:size-9 rtl:group-hover:translate-x-1">
             <ChevronLeft className="size-4 ltr:rotate-180 rtl:rotate-0" aria-hidden />
           </span>
         </Link>

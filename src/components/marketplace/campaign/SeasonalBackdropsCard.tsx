@@ -209,7 +209,7 @@ export function SeasonalBackdropsCard() {
         </header>
 
         {/* معاينة حية للموسم قيد الإنشاء */}
-        <div className="relative h-28 overflow-hidden rounded-2xl bg-[linear-gradient(130deg,#240046,#5a189a)]">
+        <div className="relative h-28 overflow-hidden rounded-2xl bg-[linear-gradient(130deg,#8A4FFF,#C3ABFF)]">
           {image ? (
             <img
               src={image.url}
@@ -228,7 +228,7 @@ export function SeasonalBackdropsCard() {
               className="k-season-float absolute inset-0 size-full object-cover opacity-55 mix-blend-screen"
             />
           ) : null}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(36_0_70/0.62),rgb(36_0_70/0.8))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(0_0_0/0.62),rgb(0_0_0/0.8))]" />
           <p className="absolute inset-x-3 bottom-3 text-desc font-black text-white">
             {labelAr || labelEn || (ar ? "معاينة الموسم" : "Season preview")}
           </p>

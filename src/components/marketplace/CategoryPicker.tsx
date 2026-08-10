@@ -247,7 +247,7 @@ export function CategoryPicker({
                   : "flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-border px-3 py-2.5 text-start text-sm text-foreground hover:border-primary/50 hover:bg-accent"
               }
             >
-              <span className="min-w-0 break-words">{item.text}</span>
+              <span className="min-w-0">{item.text}</span>
               {(stage !== "root" || !!needle) && (
                 <span className="shrink-0 text-muted-foreground" aria-hidden>
                   {locale === "ar" ? "‹" : "›"}
@@ -275,7 +275,7 @@ export function CategoryPicker({
         className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2.5 text-start text-sm"
       >
         {pathText.length > 0 ? (
-          <span className="min-w-0 break-words text-foreground">{pathText.join(" ← ")}</span>
+          <span className="min-w-0 text-foreground">{pathText.join(" ← ")}</span>
         ) : (
           <span className="text-muted-foreground">{t("market.form.choosePath")}</span>
         )}

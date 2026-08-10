@@ -206,11 +206,11 @@ function AdminBusinessesPage() {
         <p className="mt-6 text-sm text-muted-foreground">{t("common.noData")}</p>
       ) : (
         <>
-          <div className="mt-4 hidden rounded-xl border border-border bg-card lg:block">
-            <table className="w-full table-fixed text-sm">
+          <div className="mt-4 hidden overflow-x-auto rounded-xl border border-border bg-card lg:block">
+            <table className="w-full min-w-[760px] table-fixed text-sm">
               <thead className="border-b border-border text-desc text-muted-foreground">
                 <tr>
-                  <th className="w-[24%] px-3 py-2 text-start font-medium">
+                  <th className="sticky start-0 z-[1] w-[24%] bg-card px-3 py-2 text-start font-medium">
                     {t("admin.business.name")}
                   </th>
                   <th className="w-[16%] px-3 py-2 text-start font-medium">
@@ -238,9 +238,9 @@ function AdminBusinessesPage() {
                     className="cursor-pointer border-b border-border/60 last:border-0 hover:bg-muted/40"
                     onClick={(event) => openRow(event, row.tenant_id)}
                   >
-                    <td className="px-3 py-2">
+                    <td className="sticky start-0 z-[1] bg-card px-3 py-2">
                       <AdminBusinessLink id={row.tenant_id} name={row.name} truncate />
-                      <span className="block truncate text-desc tabular-nums text-muted-foreground">
+                      <span className="block truncate whitespace-nowrap text-desc tabular-nums text-muted-foreground">
                         {formatDate(row.created_at)}
                       </span>
                     </td>
@@ -256,7 +256,7 @@ function AdminBusinessesPage() {
                         className="text-sm"
                       />
                     </td>
-                    <td className="px-3 py-2 tabular-nums">{row.listings_count}</td>
+                    <td className="whitespace-nowrap px-3 py-2 tabular-nums">{row.listings_count}</td>
                     <td className="px-3 py-2">
                       <Verification value={row.verification_status} />
                       {row.restriction && (

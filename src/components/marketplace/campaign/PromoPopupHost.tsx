@@ -564,7 +564,7 @@ export function PromoPopupHost() {
               type="button"
               onClick={() => dismiss()}
               aria-label={ar ? "إغلاق" : "Close"}
-              className="pointer-events-auto grid size-7 place-items-center rounded-full bg-brand-950/90 text-white shadow-[0_4px_12px_rgb(16_0_43/0.3)] backdrop-blur-sm"
+              className="pointer-events-auto grid size-7 place-items-center rounded-full bg-brand-950/90 text-white shadow-[0_4px_12px_rgb(0_0_0/0.3)] backdrop-blur-sm"
             >
               <X className="size-4" aria-hidden />
             </button>
@@ -572,7 +572,7 @@ export function PromoPopupHost() {
               type="button"
               onClick={() => dismiss(true)}
               aria-label={ar ? "عدم الإظهار اليوم" : "Don't show today"}
-              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-brand-900/85 text-white shadow-[0_3px_10px_rgb(16_0_43/0.18)] backdrop-blur-sm"
+              className="pointer-events-auto grid size-6 place-items-center rounded-full bg-brand-900/85 text-white shadow-[0_3px_10px_rgb(0_0_0/0.18)] backdrop-blur-sm"
             >
               <EyeOff className="size-3" aria-hidden />
             </button>

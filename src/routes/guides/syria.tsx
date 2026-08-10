@@ -119,7 +119,7 @@ function SyriaGuidePage() {
               <ShieldCheck className="size-4" aria-hidden />
               مصادر ظاهرة وشارات تحقق صادقة
             </span>
-            <h1 className="max-w-3xl font-black tracking-tight">دليل سوريا</h1>
+            <h1 className="max-w-3xl font-black">دليل سوريا</h1>
             <p className="mt-1.5 max-w-2xl text-muted-foreground">
               جهات حكومية ومشافٍ وجامعات وخدمات وأماكن، مع اتجاهات وطرق تواصل مباشرة.
             </p>

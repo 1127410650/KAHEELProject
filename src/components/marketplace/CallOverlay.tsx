@@ -122,7 +122,7 @@ export function CallOverlay() {
         type="button"
         onClick={() => setMinimized(false)}
         aria-label={t("market.call.returnToCall")}
-        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#10002b,#5a189a_55%,#7b2cbf)] px-3 text-desc font-bold text-white shadow-[0_6px_18px_rgb(36_0_70/0.35)]"
+        className="fixed inset-x-0 top-0 z-[70] flex h-9 w-full items-center justify-center gap-2 bg-[linear-gradient(105deg,#8A4FFF,#C3ABFF)] px-3 text-desc font-bold text-white shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
       >
         <Phone className="size-3.5 shrink-0" aria-hidden />
         <span className="max-w-[45%] truncate">{call.peerName || t("market.call.title")}</span>
@@ -140,7 +140,7 @@ export function CallOverlay() {
       role="dialog"
       aria-modal="true"
       aria-label={t("market.call.title")}
-      className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[radial-gradient(circle_at_22%_-10%,rgb(224_170_255/0.4),transparent_46%),linear-gradient(165deg,#10002b_0%,#3c096c_48%,#5a189a_100%)] text-white animate-fade-in"
+      className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[radial-gradient(circle_at_22%_-10%,rgb(195_171_255/0.4),transparent_46%),linear-gradient(165deg,#8A4FFF_0%,#C3ABFF_100%)] text-white animate-fade-in"
     >
       <div className="flex items-center justify-between px-3 pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <button
@@ -158,7 +158,7 @@ export function CallOverlay() {
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-8 text-center">
-        <span className="grid size-32 place-items-center overflow-hidden rounded-full border border-white/35 bg-white/12 text-4xl font-black shadow-[0_18px_50px_rgb(16_0_43/0.55)] sm:size-36">
+        <span className="grid size-32 place-items-center overflow-hidden rounded-full border border-white/35 bg-white/12 text-4xl font-black shadow-[0_18px_50px_rgb(0_0_0/0.55)] sm:size-36">
           {call.peerAvatar ? (
             <img
               src={call.peerAvatar}
@@ -223,7 +223,7 @@ export function CallOverlay() {
               onClick={() => void decline()}
               className="flex flex-col items-center gap-2 text-desc font-bold"
             >
-              <span className="grid size-16 place-items-center rounded-full bg-destructive text-destructive-foreground shadow-[0_14px_34px_rgb(16_0_43/0.5)] transition active:scale-95">
+              <span className="grid size-16 place-items-center rounded-full bg-destructive text-destructive-foreground shadow-[0_14px_34px_rgb(0_0_0/0.5)] transition active:scale-95">
                 <PhoneOff className="size-6" aria-hidden />
               </span>
               {t("market.call.decline")}
@@ -233,7 +233,7 @@ export function CallOverlay() {
               onClick={() => void accept()}
               className="flex flex-col items-center gap-2 text-desc font-bold"
             >
-              <span className="grid size-16 place-items-center rounded-full bg-[#2f9e6a] text-[#ffffff] shadow-[0_14px_34px_rgb(16_0_43/0.5)] transition active:scale-95">
+              <span className="grid size-16 place-items-center rounded-full bg-[#2f9e6a] text-[#ffffff] shadow-[0_14px_34px_rgb(0_0_0/0.5)] transition active:scale-95">
                 <Phone className="size-6" aria-hidden />
               </span>
               {needsGesture ? t("market.call.startAudio") : t("market.call.accept")}
@@ -268,7 +268,7 @@ export function CallOverlay() {
               onClick={() => void hangUp()}
               className="flex flex-col items-center gap-2 text-desc font-bold"
             >
-              <span className="grid size-[68px] place-items-center rounded-full bg-destructive text-destructive-foreground shadow-[0_16px_40px_rgb(16_0_43/0.55)] transition active:scale-95">
+              <span className="grid size-[68px] place-items-center rounded-full bg-destructive text-destructive-foreground shadow-[0_16px_40px_rgb(0_0_0/0.55)] transition active:scale-95">
                 <PhoneOff className="size-7" aria-hidden />
               </span>
               {t("market.call.hangup")}

@@ -396,8 +396,8 @@ export const VARIATION_PALETTE: {
 }[] = [
   { label: "بنفسجي صلب", bg_color: "#8a4fff", grad_from: null, grad_to: null, grad_angle: 90 },
   { label: "تدرّج الهوية", bg_color: "#8a4fff", grad_from: "#8a4fff", grad_to: "#c3abff", grad_angle: 90 },
-  { label: "بنفسجي غامق", bg_color: "#5b2bb8", grad_from: "#5b2bb8", grad_to: "#8a4fff", grad_angle: 135 },
-  { label: "بنفسجي وذهبي", bg_color: "#6a34d4", grad_from: "#6a34d4", grad_to: "#b8892b", grad_angle: 45 },
+  { label: "بنفسجي غامق", bg_color: "#8A4FFF", grad_from: "#8A4FFF", grad_to: "#8a4fff", grad_angle: 135 },
+  { label: "بنفسجي وذهبي", bg_color: "#8A4FFF", grad_from: "#8A4FFF", grad_to: "#b8892b", grad_angle: 45 },
 ];
 
 const VARIATION_LAYOUTS: TemplateLayout[] = ["classic", "centered", "split"];

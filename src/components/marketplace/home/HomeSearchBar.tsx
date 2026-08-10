@@ -81,7 +81,7 @@ export function HomeSearchBar({ label, detailedLabel }: { label: string; detaile
         search={{ filters: 1 }}
         aria-label={detailedLabel}
         title={detailedLabel}
-        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-xl bg-[linear-gradient(140deg,#7b2cbf,#5a189a)] px-2.5 text-desc font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
+        className="k-press m-1 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-xl bg-[linear-gradient(140deg,#8A4FFF,#C3ABFF)] px-2.5 text-desc font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
       >
         <SlidersHorizontal className="size-4" aria-hidden />
         <span className="hidden sm:inline">{detailedLabel}</span>

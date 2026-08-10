@@ -124,7 +124,7 @@ export function MarketHeader({
       <header
         ref={headerRef}
         data-kslot="home.header"
-        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)]"
+        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-foreground shadow-[0_10px_28px_-22px_rgb(138_79_255/0.55)]"
       >
         {/* زخرفة خطية بيضاء خفيفة — بلا أي تأثير على القياسات. */}
         <div
@@ -137,7 +137,7 @@ export function MarketHeader({
           alt=""
           aria-hidden
           loading="lazy"
-          className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(74_38_128/0.35)] sm:block"
+          className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(138_79_255/0.35)] sm:block"
         />
 
         {/* صف الهوية: الشعار + الموقع + إنشاء إعلان. */}

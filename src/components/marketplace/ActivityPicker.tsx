@@ -160,7 +160,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
         {value.main ? (
           <div className="flex min-w-0 flex-wrap items-center gap-2 rounded-lg border border-border bg-secondary/40 p-2.5">
             <Check className="size-4 shrink-0 text-primary" aria-hidden />
-            <span className="min-w-0 break-words text-sm font-medium text-foreground">
+            <span className="min-w-0 text-sm font-medium text-foreground">
               {activityName(value.main, locale)}
             </span>
             <Button
@@ -217,10 +217,10 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                       className="flex w-full min-w-0 items-start gap-2 p-2.5 text-start hover:bg-accent"
                     >
                       <span className="min-w-0 flex-1">
-                        <span className="block break-words text-sm font-medium text-foreground">
+                        <span className="block text-sm font-medium text-foreground">
                           {activityName(hit, locale)}
                         </span>
-                        <span className="block break-words text-desc text-muted-foreground">
+                        <span className="block text-desc text-muted-foreground">
                           {locale === "en"
                             ? hit.group_name_en || hit.group_name_ar
                             : hit.group_name_ar}
@@ -301,7 +301,7 @@ export function ActivityPicker({ value, onChange, tenantId, disabled }: Props) {
                     }}
                     className="flex w-full min-w-0 items-center gap-2 p-2.5 text-start hover:bg-accent"
                   >
-                    <span className="min-w-0 flex-1 break-words text-sm text-foreground">
+                    <span className="min-w-0 flex-1 text-sm text-foreground">
                       {activityName(hit, locale)}
                     </span>
                     {on && <Check className="size-4 shrink-0 text-primary" aria-hidden />}

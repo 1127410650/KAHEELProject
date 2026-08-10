@@ -55,7 +55,7 @@ export function KaheelStories() {
                   style={{
                     background: isSeen
                       ? "linear-gradient(140deg,#cfc6dd,#b9aecb)"
-                      : "linear-gradient(140deg,#ff8500,#c77dff 45%,#5a189a)",
+                      : "linear-gradient(140deg,#ff8500,#C3ABFF 45%,#8A4FFF)",
                   }}
                 >
                   <span

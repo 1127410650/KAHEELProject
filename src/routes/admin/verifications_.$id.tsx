@@ -206,12 +206,12 @@ function AdminVerificationDetailPage() {
                   ]}
                 />
                 {header.note && (
-                  <p className="mt-4 whitespace-pre-wrap break-words text-sm text-foreground">
+                  <p className="mt-4 whitespace-pre-wrap text-sm text-foreground">
                     {header.note}
                   </p>
                 )}
                 {header.decision_reason && (
-                  <p className="mt-2 break-words text-desc text-muted-foreground">
+                  <p className="mt-2 text-desc text-muted-foreground">
                     {t("admin.detail.decisionReason")}: {header.decision_reason}
                   </p>
                 )}
