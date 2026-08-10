@@ -22,6 +22,8 @@ import {
   LogOut,
   Megaphone,
   Menu,
+  Plug,
+  Shapes,
   ScrollText,
   Search,
   Settings,
