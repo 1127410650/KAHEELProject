@@ -218,8 +218,9 @@ export function MarketHeader({
                   href={href}
                   className={
                     index === 0
-                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-white px-3.5 text-[11px] font-black text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
-                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
+                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-primary px-3.5 text-[11px] font-black text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
+                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-[11px] font-bold text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
+
                   }
                 >
                   {label}
