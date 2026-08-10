@@ -39,6 +39,7 @@ import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
+import { Route as AdminGuideRequestsRouteImport } from './routes/admin/guide-requests'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
@@ -260,6 +261,11 @@ const AdminErrandsRoute = AdminErrandsRouteImport.update({
 const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
   id: '/guide-queue',
   path: '/guide-queue',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminGuideRequestsRoute = AdminGuideRequestsRouteImport.update({
+  id: '/guide-requests',
+  path: '/guide-requests',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -657,6 +663,7 @@ export interface FileRoutesByFullPath {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
+  '/admin/guide-requests': typeof AdminGuideRequestsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -758,6 +765,7 @@ export interface FileRoutesByTo {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
+  '/admin/guide-requests': typeof AdminGuideRequestsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -863,6 +871,7 @@ export interface FileRoutesById {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
+  '/admin/guide-requests': typeof AdminGuideRequestsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -969,6 +978,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/errands'
     | '/admin/guide-queue'
+    | '/admin/guide-requests'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1070,6 +1080,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/errands'
     | '/admin/guide-queue'
+    | '/admin/guide-requests'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1174,6 +1185,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/errands'
     | '/admin/guide-queue'
+    | '/admin/guide-requests'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1502,6 +1514,13 @@ declare module '@tanstack/react-router' {
       path: '/guide-queue'
       fullPath: '/admin/guide-queue'
       preLoaderRoute: typeof AdminGuideQueueRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/guide-requests': {
+      id: '/admin/guide-requests'
+      path: '/guide-requests'
+      fullPath: '/admin/guide-requests'
+      preLoaderRoute: typeof AdminGuideRequestsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -2020,6 +2039,7 @@ interface AdminRouteRouteChildren {
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminErrandsRoute: typeof AdminErrandsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
+  AdminGuideRequestsRoute: typeof AdminGuideRequestsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
@@ -2055,6 +2075,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminDashboardRoute: AdminDashboardRoute,
   AdminErrandsRoute: AdminErrandsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
+  AdminGuideRequestsRoute: AdminGuideRequestsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
