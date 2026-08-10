@@ -20,7 +20,7 @@ import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchFiel
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
-import { SyriaPrideStrip } from "@/components/marketplace/home/noon/SyriaPrideStrip";
+import { SyriaPrideBanner } from "@/components/marketplace/home/noon/SyriaPrideBanner";
 import { ExclusiveOffersRail } from "@/components/marketplace/season/ExclusiveOffersRail";
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { shapeDataUri } from "@/lib/mkt-design-library";
@@ -333,7 +333,7 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
           case "quick_tiles":
             return <QuickTiles key={block.id} />;
           case "pride_strip":
-            return <SyriaPrideStrip key={block.id} />;
+            return <SyriaPrideBanner key={block.id} />;
           case "exclusive_offers":
             return (
               <LazyMount key={block.id} minHeight="220px">

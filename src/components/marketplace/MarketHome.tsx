@@ -18,7 +18,8 @@ import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTil
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
-import { SyriaPrideStrip } from "@/components/marketplace/home/noon/SyriaPrideStrip";
+import { SyriaPrideBanner } from "@/components/marketplace/home/noon/SyriaPrideBanner";
+import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
 import { PageBlocks } from "@/components/marketplace/composer/PageBlocks";
 import { usePageBlocks } from "@/lib/mkt-page-composer";
 import { useActivePageVariant } from "@/lib/mkt-page-variants";
@@ -68,18 +69,28 @@ export function MarketHome() {
   /* التأليف من /admin/composer له الأولوية؛ وإن لم تُؤلَّف الصفحة بعد يظهر
      ترتيبها المكتوب أدناه كما هو ⇒ لا شاشة فارغة أبدًا. */
   const composed = usePageBlocks("market.home");
-  const blocks = composed.data ?? [];
+  /* رأس الصفحة ثابت الترتيب: البانر ← الستوريات ← شريط التصنيفات ← لوحة
+     الإعلانات ← «جيب لي». فنستبعد نُسخ هذه الكتل من التأليف كي لا تتكرّر. */
+  const blocks = (composed.data ?? []).filter(
+    (block) => block.block_type !== "pride_strip" && block.block_type !== "campaign_mosaic",
+  );
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-background pb-5 text-foreground">
       <div className="mx-auto w-full max-w-[1240px] space-y-[var(--section-gap)] overflow-x-clip px-[var(--page-x)] pb-[var(--sp-4)] pt-[var(--sp-4)]">
-        {/* شريط التصنيفات الدائري بصفّين متعاكسين ثم بطاقات «جيب لي»: يظهران
-            في كل التصميمات (سواء كانت الصفحة مؤلَّفة من /admin/composer أو لا)
-            وارتفاعهما محجوز فلا هزّة تخطيط. */}
+        {/* بانر «سوريا فخرنا» ثم الستوريات ثم شريط التصنيفات الماشي ثم لوحة
+            الإعلانات و«جيب لي»: يظهر هذا الرأس في كل التصميمات (مؤلَّفة أو لا)
+            وارتفاع كل قطعة محجوز فلا هزّة تخطيط. */}
+        <SyriaPrideBanner />
+
+        <KaheelStories />
+
         <div className="-mx-[var(--page-x)]">
           <MarketCategoryStrip />
         </div>
+
+        <CampaignMosaic />
 
         <HomeJeebLi />
 
@@ -93,22 +104,18 @@ export function MarketHome() {
 
         {/* حقل البحث العريض يعيش في الهيدر (MarketShell) كي يبقى وحده بعد الانكماش. */}
 
-        <SyriaPrideStrip />
-
         {/* تصميم «البطاقات الكبيرة» يقدّم شبكة التصنيفات قبل الحملات. */}
         {bigCards ? (
           <>
             <LazyMount minHeight="380px">
               <CategoryTileGrid />
             </LazyMount>
-            <CampaignMosaic />
             <LazyMount minHeight="150px">
               <SponsoredBanner />
             </LazyMount>
           </>
         ) : (
           <>
-            <CampaignMosaic />
             <LazyMount minHeight="150px">
               <SponsoredBanner />
             </LazyMount>

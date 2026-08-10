@@ -254,6 +254,8 @@ export function isPeoplePath(pathname: string): boolean {
 
 export function isQuietPath(pathname: string): boolean {
   const path = pathname.toLowerCase();
+  // الرئيسية لها شخصياتها الماشية في شريط التصنيفات ⇒ لا نافذة منبثقة فوقها.
+  if (path === "/") return true;
   if (QUIET_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))) return true;
   // Listing edit, service booking, checkout and cart flows.
   if (/\/(edit|book|checkout|cart|pay|payment|new)(\/|$)/.test(path)) return true;

@@ -949,6 +949,40 @@ body:has(.market-surface) .shadow-raised {
 }
 
 /* نبضة هادئة بلون الهوية لزر «إنشاء إعلان» الدائري. */
+/* ── مشي الشخصيتين في شريط التصنيفات ─────────────────────────────────────
+   حركتان أفقيتان طويلتان مع تمايل بسيط (bob) وميل خفيف = مشي مضحك بلا سبرايت.
+   الطبقة `pointer-events-none` وتحت الدوائر، وتتوقّف مع تقليل الحركة. */
+@utility k-mascot-walk {
+  animation: k-mascot-bob 0.62s ease-in-out infinite alternate;
+}
+
+@utility k-mascot-walk-ltr {
+  animation:
+    k-mascot-cross-ltr 26s linear infinite,
+    k-mascot-bob 0.62s ease-in-out infinite alternate;
+}
+
+@utility k-mascot-walk-rtl {
+  animation:
+    k-mascot-cross-rtl 31s linear infinite 4s,
+    k-mascot-bob 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes k-mascot-cross-ltr {
+  from { left: -18%; }
+  to { left: 112%; }
+}
+
+@keyframes k-mascot-cross-rtl {
+  from { left: 112%; }
+  to { left: -18%; }
+}
+
+@keyframes k-mascot-bob {
+  from { transform: translateY(0) rotate(-3deg); }
+  to { transform: translateY(-5px) rotate(3deg); }
+}
+
 @utility k-cta-pulse {
   &::after {
     content: "";
@@ -981,6 +1015,13 @@ body:has(.market-surface) .shadow-raised {
   }
   .k-cta-pulse::after {
     animation: none;
+  }
+
+  .k-mascot-walk,
+  .k-mascot-walk-ltr,
+  .k-mascot-walk-rtl {
+    animation: none;
+    display: none;
   }
 }
 
