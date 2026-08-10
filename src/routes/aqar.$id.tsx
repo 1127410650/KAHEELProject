@@ -23,6 +23,7 @@ import { lazy, useState } from "react";
 
 import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
+import { useLabels } from "@/lib/mkt-ui-labels";
 import { AQAR_TYPE_LABELS } from "@/lib/aqar-imagery";
 import {
   fetchAqarListing,
@@ -78,6 +79,7 @@ function Spec({
 function AqarListingPage() {
   const { id } = Route.useParams();
   const { ids, toggle } = useAqarFavorites();
+  const label = useLabels();
   const [index, setIndex] = useState(0);
 
   const listing = useQuery({ queryKey: ["aqar", "listing", id], queryFn: () => fetchAqarListing(id) });
@@ -100,8 +102,8 @@ function AqarListingPage() {
 
   if (listing.isPending) {
     return (
-      <AqarShell title="تفاصيل العقار" back="/aqar" backLabel="عقار">
-        <p className="p-4 text-body text-muted-foreground">جارٍ التحميل…</p>
+      <AqarShell title="تفاصيل العقار" back="/aqar" backLabel={label("aqar.back", "عقار")}>
+        <p className="p-4 text-body text-muted-foreground">{label("aqar.loading", "جارٍ التحميل…")}</p>
       </AqarShell>
     );
   }
@@ -109,11 +111,11 @@ function AqarListingPage() {
   const row = listing.data;
   if (!row) {
     return (
-      <AqarShell title="تفاصيل العقار" back="/aqar" backLabel="عقار">
+      <AqarShell title="تفاصيل العقار" back="/aqar" backLabel={label("aqar.back", "عقار")}>
         <div className="mx-auto max-w-3xl p-4">
-          <p className="text-body text-foreground">هذا الإعلان غير متاح أو تم إيقاف نشره.</p>
+          <p className="text-body text-foreground">{label("aqar.not_available", "هذا الإعلان غير متاح أو تم إيقاف نشره.")}</p>
           <Link to="/aqar" className="mt-3 inline-block text-desc font-bold text-primary">
-            رجوع إلى كَحيل عقار
+            {label("aqar.back_to_aqar", "رجوع إلى كَحيل عقار")}
           </Link>
         </div>
       </AqarShell>
@@ -130,7 +132,7 @@ function AqarListingPage() {
       title={AQAR_TYPE_LABELS[row.property_type] ?? "عقار"}
       subtitle={`${row.city}${row.district ? ` — ${row.district}` : ""}`}
       back="/aqar"
-      backLabel="عقار"
+      backLabel={label("aqar.back", "عقار")}
     >
       <div className="mx-auto w-full max-w-3xl pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
         {/* المعرض: ارتفاع ثابت + شرائح مصغّرة، فلا إزاحة تخطيط عند تبديل الصور. */}
@@ -144,7 +146,11 @@ function AqarListingPage() {
           )}
           <button
             type="button"
-            aria-label={favorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+            aria-label={
+              favorite
+                ? label("aqar.remove_favorite", "إزالة من المفضلة")
+                : label("aqar.add_favorite", "إضافة إلى المفضلة")
+            }
             aria-pressed={favorite}
             onClick={() => toggle(row.id)}
             className="absolute end-3 top-3 inline-flex size-11 items-center justify-center rounded-full bg-card/90 shadow-sm"
@@ -187,29 +193,34 @@ function AqarListingPage() {
         </section>
 
         <section className="px-4 pt-3">
-          <h2 className="mb-2 text-section font-extrabold text-foreground">تفاصيل العقار</h2>
+          <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.listing_details", "تفاصيل العقار")}</h2>
           <ul className="grid grid-cols-2 gap-2">
             {row.area_sqm ? (
               <Spec
                 icon={Ruler}
-                label="المساحة"
+                label={label("aqar.area", "المساحة")}
                 value={`${Number(row.area_sqm).toLocaleString("en-US")} م²`}
               />
             ) : null}
-            {row.rooms ? <Spec icon={BedDouble} label="الغرف" value={String(row.rooms)} /> : null}
+            {row.rooms ? <Spec icon={BedDouble} label={label("aqar.rooms", "الغرف")} value={String(row.rooms)} /> : null}
             {row.bathrooms ? (
-              <Spec icon={Bath} label="الحمّامات" value={String(row.bathrooms)} />
+              <Spec icon={Bath} label={label("aqar.bathrooms", "الحمّامات")} value={String(row.bathrooms)} />
             ) : null}
             {typeof row.floor_no === "number" ? (
-              <Spec icon={Layers} label="الطابق" value={String(row.floor_no)} />
+              <Spec icon={Layers} label={label("aqar.floor", "الطابق")} value={String(row.floor_no)} />
             ) : null}
             {row.build_year ? (
-              <Spec icon={CalendarDays} label="سنة البناء" value={String(row.build_year)} />
+              <Spec icon={CalendarDays} label={label("aqar.build_year", "سنة البناء")} value={String(row.build_year)} />
             ) : null}
-            <Spec icon={Sofa} label="الفرش" value={row.is_furnished ? "مفروش" : "غير مفروش"} />
+            <Spec icon={Sofa} label={label("aqar.furnishing", "الفرش")}
+              value={
+                row.is_furnished
+                  ? label("aqar.furnished", "مفروش")
+                  : label("aqar.unfurnished", "غير مفروش")
+              } />
             <Spec
               icon={Building2}
-              label="النوع"
+              label={label("aqar.type", "النوع")}
               value={AQAR_TYPE_LABELS[row.property_type] ?? "عقار"}
             />
           </ul>
@@ -217,7 +228,7 @@ function AqarListingPage() {
 
         {row.amenities && row.amenities.length > 0 ? (
           <section className="px-4 pt-4">
-            <h2 className="mb-2 text-section font-extrabold text-foreground">المزايا</h2>
+            <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.amenities", "المزايا")}</h2>
             <ul className="flex flex-wrap gap-2">
               {row.amenities.map((item) => (
                 <li key={item} className="k-pill text-desc font-semibold">
@@ -230,14 +241,14 @@ function AqarListingPage() {
 
         {row.description ? (
           <section className="px-4 pt-4">
-            <h2 className="mb-2 text-section font-extrabold text-foreground">الوصف</h2>
+            <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.description", "الوصف")}</h2>
             <p className="whitespace-pre-line text-body text-foreground">{row.description}</p>
           </section>
         ) : null}
 
         {(rooms.data ?? []).length > 0 ? (
           <section className="px-4 pt-4">
-            <h2 className="mb-2 text-section font-extrabold text-foreground">أنواع الغرف</h2>
+            <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.room_types", "أنواع الغرف")}</h2>
             <ul className="flex flex-col gap-2">
               {(rooms.data ?? []).map((roomType) => (
                 <li
@@ -249,7 +260,9 @@ function AqarListingPage() {
                       {roomType.name}
                     </strong>
                     <span className="text-desc text-muted-foreground">
-                      {roomType.availability === "available" ? "متاح" : "مكتمل"}
+                      {roomType.availability === "available"
+                        ? label("aqar.available", "متاح")
+                        : label("aqar.full", "مكتمل")}
                     </span>
                   </span>
                   <strong className="shrink-0 text-price font-extrabold text-primary">
@@ -263,7 +276,7 @@ function AqarListingPage() {
 
         {hasPoint ? (
           <section className="px-4 pt-4">
-            <h2 className="mb-2 text-section font-extrabold text-foreground">الموقع</h2>
+            <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.location", "الموقع")}</h2>
             <ClientOnly fallback={<div className="h-56 rounded-2xl border border-border bg-muted" />}>
               <AqarMapView
                 lat={row.latitude as number}
@@ -280,13 +293,29 @@ function AqarListingPage() {
 
         {provider.data ? (
           <section className="px-4 pt-4">
-            <h2 className="mb-2 text-section font-extrabold text-foreground">المزوّد</h2>
-            <p className="rounded-xl border border-border bg-card px-3 py-2 text-body text-foreground">
-              {provider.data.display_name}
-              {provider.data.verification_status === "verified" ? (
-                <span className="ms-1 text-desc font-bold text-primary">✔ موثّق</span>
-              ) : null}
-            </p>
+            <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.provider", "المزوّد")}</h2>
+            {provider.data.slug ? (
+              <Link
+                to="/p/$slug"
+                params={{ slug: provider.data.slug }}
+                className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2 text-body font-bold text-foreground"
+                style={{ minHeight: 44 }}
+              >
+                <span className="min-w-0 truncate">
+                  {provider.data.display_name}
+                  {provider.data.verification_status === "verified" ? (
+                    <span className="ms-1 text-desc font-bold text-primary">
+                      ✔ {label("aqar.verified", "موثّق")}
+                    </span>
+                  ) : null}
+                </span>
+                <span className="shrink-0 text-desc font-bold text-primary">البروفايل ←</span>
+              </Link>
+            ) : (
+              <p className="rounded-xl border border-border bg-card px-3 py-2 text-body text-foreground">
+                {provider.data.display_name}
+              </p>
+            )}
           </section>
         ) : null}
       </div>
@@ -314,7 +343,9 @@ function AqarListingPage() {
             className="inline-flex shrink-0 items-center rounded-full bg-primary px-5 text-body font-bold text-primary-foreground"
             style={{ minHeight: 44 }}
           >
-            {row.deal_track === "sale" ? "طلب معاينة" : "طلب حجز"}
+            {row.deal_track === "sale"
+              ? label("aqar.request_visit", "طلب معاينة")
+              : label("aqar.request_booking", "طلب حجز")}
           </Link>
         </div>
       </div>
