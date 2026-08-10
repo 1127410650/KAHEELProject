@@ -11177,6 +11177,45 @@ export type Database = {
       }
     }
     Views: {
+      mkt_ai_usage: {
+        Row: {
+          action: string | null
+          actor: string | null
+          cost_estimate: number | null
+          created_at: string | null
+          id: string | null
+          model: string | null
+          prompt: string | null
+          service: string | null
+          slot_key: string | null
+          status: string | null
+        }
+        Insert: {
+          action?: string | null
+          actor?: string | null
+          cost_estimate?: number | null
+          created_at?: string | null
+          id?: string | null
+          model?: string | null
+          prompt?: string | null
+          service?: string | null
+          slot_key?: string | null
+          status?: string | null
+        }
+        Update: {
+          action?: string | null
+          actor?: string | null
+          cost_estimate?: number | null
+          created_at?: string | null
+          id?: string | null
+          model?: string | null
+          prompt?: string | null
+          service?: string | null
+          slot_key?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       mkt_public_listing_licenses: {
         Row: {
           ad_license_expiry: string | null
@@ -12397,6 +12436,20 @@ export type Database = {
         Returns: number
       }
       mkt_ai_spend_summary: { Args: never; Returns: Json }
+      mkt_ai_usage_recent: {
+        Args: { _limit?: number; _service?: string }
+        Returns: {
+          action: string
+          actor: string
+          actor_name: string
+          cost_estimate: number
+          created_at: string
+          id: string
+          prompt: string
+          service: string
+          status: string
+        }[]
+      }
       mkt_analytics_fields: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_funnel: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_geo: { Args: { _limit?: number }; Returns: Json }
