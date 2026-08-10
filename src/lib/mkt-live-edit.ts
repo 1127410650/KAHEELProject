@@ -97,8 +97,9 @@ export function useSlotDrafts(enabled: boolean) {
 export async function saveSlotDraft(slotKey: string, patch: SlotPatch): Promise<void> {
   const { error } = await supabase.rpc("mkt_admin_slot_set_draft", {
     _slot_key: slotKey,
-    _patch: patch as unknown as Record<string, unknown>,
+    _patch: patch as never,
   });
+
   if (error) throw error;
 }
 
