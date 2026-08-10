@@ -97,9 +97,14 @@ export async function deleteMyAddress(id: string): Promise<void> {
 export interface DeviceCoords {
   lat: number;
   lng: number;
+  /** دقة القراءة بالأمتار كما يبلّغها الجهاز (قد تكون غير متوفرة). */
+  accuracy?: number | null;
 }
 
-/** GPS lookup with an Arabic reason when the browser or the user declines. */
+/**
+ * قراءة موقع الجهاز الحقيقي أيًّا كان البلد — بلا أي افتراض جغرافي.
+ * الإذن يُطلب عند الاستدعاء فقط (لا عند فتح التطبيق)، والنتيجة لا تُخزَّن.
+ */
 export function requestDeviceLocation(): Promise<DeviceCoords> {
   return new Promise((resolve, reject) => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -108,9 +113,28 @@ export function requestDeviceLocation(): Promise<DeviceCoords> {
     }
     navigator.geolocation.getCurrentPosition(
       (position) =>
-        resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
-      () => reject(new Error("تعذّر تحديد الموقع — تأكد من السماح بالوصول للموقع.")),
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          accuracy: Number.isFinite(position.coords.accuracy) ? position.coords.accuracy : null,
+        }),
+      (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          reject(new Error("PERMISSION_DENIED"));
+          return;
+        }
+        reject(new Error("تعذّر تحديد الموقع — يمكنك اختياره على الخريطة."));
+      },
       { enableHighAccuracy: true, timeout: 12_000, maximumAge: 60_000 },
     );
   });
 }
+
+/** نص عربي لدقة الموقع، مثل: «دقة تقريبية ±50م». */
+export function accuracyLabel(accuracy: number | null | undefined): string | null {
+  if (!accuracy || !Number.isFinite(accuracy)) return null;
+  const meters = Math.round(accuracy);
+  if (meters >= 1000) return `دقة تقريبية ±${(meters / 1000).toFixed(1)}كم`;
+  return `دقة تقريبية ±${meters}م`;
+}
+
