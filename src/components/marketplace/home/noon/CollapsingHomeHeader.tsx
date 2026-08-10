@@ -83,6 +83,11 @@ export function CollapsingHomeHeader({
           paddingBottom: `${PB}px`,
           // لا حد أدنى للارتفاع: الارتفاع مجموع الصفوف فحسب.
           minHeight: 0,
+          /* الانكماش بالإزاحة وحدها: الصندوق ثابت الارتفاع فلا يعيد المتصفح
+             تخطيط أي عنصر ⇒ لا مساهمة في CLS إطلاقًا. الحد المرئي للتدرّج
+             ينزلق لأعلى فيبقى صف البحث وحده = حاشية الأمان + 56px. */
+          transform: `translate3d(0, calc(-${COLLAPSIBLE_H}px * var(--p)), 0)`,
+          willChange: "transform",
         } as React.CSSProperties}
         className="fixed inset-x-0 top-0 z-40 rounded-b-[16px] text-primary-foreground shadow-[0_10px_28px_-22px_rgb(138_79_255/0.55)]"
         onClick={
@@ -91,12 +96,12 @@ export function CollapsingHomeHeader({
             : undefined
         }
       >
-        {/* الصفّان القابلان للطي — الارتفاع والحواشي والشفافية كلها تصل صفرًا
-            عند p=1 فلا يبقى أي «شبح» مساحة بنفسجية فوق شريط البحث. */}
+        {/* الصفّان القابلان للطي — يخرجان من الشاشة مع الإزاحة ويتلاشيان،
+            بلا أي ارتفاع أو حاشية باقية تصنع «شبح» مساحة بنفسجية. */}
         <div
           className="overflow-hidden"
           style={{
-            height: `calc(${COLLAPSIBLE_H}px * (1 - var(--p)))`,
+            height: `${COLLAPSIBLE_H}px`,
             minHeight: 0,
             marginBottom: 0,
             paddingTop: 0,
@@ -106,6 +111,7 @@ export function CollapsingHomeHeader({
           }}
           aria-hidden={collapsed}
         >
+
 
           {/* الصف ١ — الهوية والموقع والجرس وزر الإعلان. */}
           <div
