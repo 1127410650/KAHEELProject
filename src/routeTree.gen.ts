@@ -94,6 +94,7 @@ import { Route as MyWalletRouteImport } from './routes/my/wallet'
 import { Route as ProfilesUsernameRouteImport } from './routes/profiles.$username'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
+import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
@@ -547,6 +548,11 @@ const StoresSlugRoute = StoresSlugRouteImport.update({
   path: '/stores/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAppearanceVariantsRoute = AdminAppearanceVariantsRouteImport.update({
+  id: '/appearance_/variants',
+  path: '/appearance/variants',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
   id: '/businesses_/$id',
   path: '/businesses/$id',
@@ -773,6 +779,7 @@ export interface FileRoutesByFullPath {
   '/aqar/': typeof AqarIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -883,6 +890,7 @@ export interface FileRoutesByTo {
   '/aqar': typeof AqarIndexRoute
   '/business': typeof BusinessIndexRoute
   '/services': typeof ServicesIndexRoute
+  '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -998,6 +1006,7 @@ export interface FileRoutesById {
   '/aqar/': typeof AqarIndexRoute
   '/business/': typeof BusinessIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/admin/appearance_/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -1114,6 +1123,7 @@ export interface FileRouteTypes {
     | '/aqar/'
     | '/business/'
     | '/services/'
+    | '/admin/appearance/variants'
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
@@ -1224,6 +1234,7 @@ export interface FileRouteTypes {
     | '/aqar'
     | '/business'
     | '/services'
+    | '/admin/appearance/variants'
     | '/admin/businesses/$id'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
@@ -1338,6 +1349,7 @@ export interface FileRouteTypes {
     | '/aqar/'
     | '/business/'
     | '/services/'
+    | '/admin/appearance_/variants'
     | '/admin/businesses_/$id'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
@@ -2008,6 +2020,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoresSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/appearance_/variants': {
+      id: '/admin/appearance_/variants'
+      path: '/appearance/variants'
+      fullPath: '/admin/appearance/variants'
+      preLoaderRoute: typeof AdminAppearanceVariantsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/businesses_/$id': {
       id: '/admin/businesses_/$id'
       path: '/businesses/$id'
@@ -2228,6 +2247,7 @@ interface AdminRouteRouteChildren {
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminAppearanceVariantsRoute: typeof AdminAppearanceVariantsRoute
   AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
   AdminListingsIdRoute: typeof AdminListingsIdRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
@@ -2266,6 +2286,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminAppearanceVariantsRoute: AdminAppearanceVariantsRoute,
   AdminBusinessesIdRoute: AdminBusinessesIdRoute,
   AdminListingsIdRoute: AdminListingsIdRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
