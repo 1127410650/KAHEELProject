@@ -127,17 +127,18 @@ function JoinPage() {
           {locale === "ar" ? "العودة إلى المزيد" : "Back to More"}
         </Link>
 
-        <section className="mb-4 overflow-hidden rounded-3xl bg-gradient-to-br from-market-navy via-market-navy-dark to-primary-deep p-5 text-white shadow-raised sm:p-7">
-          <span className="grid size-12 place-items-center rounded-2xl bg-white/10">
-            <Icon className="size-6 text-primary-foreground/80" />
+        <section className="mb-4 overflow-hidden rounded-3xl border border-border bg-card p-5 text-foreground shadow-panel sm:p-7">
+          <span className="grid size-12 place-items-center rounded-2xl bg-accent text-primary">
+            <Icon className="size-6" />
           </span>
           <h1 className="mt-5 text-2xl font-black sm:text-3xl">
             {locale === "ar" ? content.ar : content.en}
           </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-white/75">
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
             {locale === "ar" ? content.hintAr : content.hintEn}
           </p>
-          <p className="mt-4 rounded-2xl bg-white/10 px-4 py-3 text-xs leading-6 text-white/80">
+          <p className="mt-4 rounded-2xl border border-border bg-secondary px-4 py-3 text-xs leading-6 text-muted-foreground">
+
             {locale === "ar"
               ? "لن تتغير صلاحيات حسابك عند الإرسال. يتم التفعيل فقط بعد مراجعة الطلب وقبوله."
               : "Submitting does not change your access. Activation happens only after review and approval."}
