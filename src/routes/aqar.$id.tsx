@@ -374,8 +374,9 @@ function AqarListingPage() {
               </span>
             ) : null}
             <span className="block truncate text-nav text-muted-foreground">
-              الإجمالي يُحسب في صفحة الطلب — لا دفع عبر المنصة
+              الإجمالي في صفحة الطلب — بلا دفع
             </span>
+
           </span>
           <Link
             to="/aqar/book/$id"
