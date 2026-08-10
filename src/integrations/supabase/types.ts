@@ -2225,6 +2225,215 @@ export type Database = {
           },
         ]
       }
+      mkt_design_motions: {
+        Row: {
+          anim_name: string
+          created_at: string
+          is_active: boolean
+          key: string
+          label_ar: string
+          label_en: string
+          medium_ms: number
+          slow_ms: number
+          sort_order: number
+        }
+        Insert: {
+          anim_name: string
+          created_at?: string
+          is_active?: boolean
+          key: string
+          label_ar: string
+          label_en: string
+          medium_ms?: number
+          slow_ms?: number
+          sort_order?: number
+        }
+        Update: {
+          anim_name?: string
+          created_at?: string
+          is_active?: boolean
+          key?: string
+          label_ar?: string
+          label_en?: string
+          medium_ms?: number
+          slow_ms?: number
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      mkt_design_routes: {
+        Row: {
+          is_active: boolean
+          label_ar: string
+          path: string
+          sort_order: number
+        }
+        Insert: {
+          is_active?: boolean
+          label_ar: string
+          path: string
+          sort_order?: number
+        }
+        Update: {
+          is_active?: boolean
+          label_ar?: string
+          path?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      mkt_design_shapes: {
+        Row: {
+          created_at: string
+          is_active: boolean
+          key: string
+          label_ar: string
+          label_en: string
+          path_d: string
+          sort_order: number
+          view_box: string
+        }
+        Insert: {
+          created_at?: string
+          is_active?: boolean
+          key: string
+          label_ar: string
+          label_en: string
+          path_d: string
+          sort_order?: number
+          view_box?: string
+        }
+        Update: {
+          created_at?: string
+          is_active?: boolean
+          key?: string
+          label_ar?: string
+          label_en?: string
+          path_d?: string
+          sort_order?: number
+          view_box?: string
+        }
+        Relationships: []
+      }
+      mkt_design_templates: {
+        Row: {
+          bg_color: string | null
+          body_ar: string | null
+          campaign_id: string | null
+          created_at: string
+          created_by: string | null
+          discount_pct: number | null
+          ends_at: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
+          id: string
+          image_path: string | null
+          is_active: boolean
+          kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
+          name_ar: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number
+          shape_pos: string
+          shape_size: string
+          starts_at: string | null
+          title_ar: string | null
+          updated_at: string
+        }
+        Insert: {
+          bg_color?: string | null
+          body_ar?: string | null
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          discount_pct?: number | null
+          ends_at?: string | null
+          grad_angle?: number | null
+          grad_from?: string | null
+          grad_to?: string | null
+          id?: string
+          image_path?: string | null
+          is_active?: boolean
+          kind: string
+          link_path?: string | null
+          motion_key?: string | null
+          motion_speed?: string
+          motion_state?: string
+          name_ar: string
+          shape_color?: string | null
+          shape_key?: string | null
+          shape_opacity?: number
+          shape_pos?: string
+          shape_size?: string
+          starts_at?: string | null
+          title_ar?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bg_color?: string | null
+          body_ar?: string | null
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          discount_pct?: number | null
+          ends_at?: string | null
+          grad_angle?: number | null
+          grad_from?: string | null
+          grad_to?: string | null
+          id?: string
+          image_path?: string | null
+          is_active?: boolean
+          kind?: string
+          link_path?: string | null
+          motion_key?: string | null
+          motion_speed?: string
+          motion_state?: string
+          name_ar?: string
+          shape_color?: string | null
+          shape_key?: string | null
+          shape_opacity?: number
+          shape_pos?: string
+          shape_size?: string
+          starts_at?: string | null
+          title_ar?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_design_templates_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_design_templates_link_path_fkey"
+            columns: ["link_path"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_routes"
+            referencedColumns: ["path"]
+          },
+          {
+            foreignKeyName: "mkt_design_templates_motion_key_fkey"
+            columns: ["motion_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_motions"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "mkt_design_templates_shape_key_fkey"
+            columns: ["shape_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_shapes"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
       mkt_enforcement_actions: {
         Row: {
           action: string
@@ -4535,11 +4744,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
@@ -4561,11 +4781,22 @@ export type Database = {
           hidden?: boolean
           is_demo?: boolean
           kind?: string
+          link_path?: string | null
+          motion_key?: string | null
+          motion_speed?: string
+          motion_state?: string
           path?: string | null
           section: string
+          shape_color?: string | null
+          shape_key?: string | null
+          shape_opacity?: number | null
+          shape_pos?: string | null
+          shape_size?: string | null
           slot_key: string
           sort_order?: number
           subtitle_ar?: string | null
+          template_id?: string | null
+          tile_size?: string | null
           title_ar?: string | null
           updated_at?: string
           updated_by?: string | null
@@ -4587,11 +4818,22 @@ export type Database = {
           hidden?: boolean
           is_demo?: boolean
           kind?: string
+          link_path?: string | null
+          motion_key?: string | null
+          motion_speed?: string
+          motion_state?: string
           path?: string | null
           section?: string
+          shape_color?: string | null
+          shape_key?: string | null
+          shape_opacity?: number | null
+          shape_pos?: string | null
+          shape_size?: string | null
           slot_key?: string
           sort_order?: number
           subtitle_ar?: string | null
+          template_id?: string | null
+          tile_size?: string | null
           title_ar?: string | null
           updated_at?: string
           updated_by?: string | null
@@ -4603,6 +4845,34 @@ export type Database = {
             columns: ["campaign_id"]
             isOneToOne: false
             referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_media_slots_link_path_fkey"
+            columns: ["link_path"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_routes"
+            referencedColumns: ["path"]
+          },
+          {
+            foreignKeyName: "mkt_media_slots_motion_key_fkey"
+            columns: ["motion_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_motions"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "mkt_media_slots_shape_key_fkey"
+            columns: ["shape_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_shapes"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "mkt_media_slots_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_design_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -10708,11 +10978,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
@@ -10742,6 +11023,14 @@ export type Database = {
           _sort_order?: number
         }
         Returns: string
+      }
+      mkt_admin_design_template_save: {
+        Args: { _id: string; _patch: Json }
+        Returns: string
+      }
+      mkt_admin_design_template_set_active: {
+        Args: { _active: boolean; _id: string }
+        Returns: undefined
       }
       mkt_admin_grant_points: {
         Args: {
@@ -10985,11 +11274,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
@@ -11025,11 +11325,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
@@ -11081,11 +11392,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
@@ -11120,11 +11442,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
@@ -12705,11 +13038,22 @@ export type Database = {
           hidden: boolean
           is_demo: boolean
           kind: string
+          link_path: string | null
+          motion_key: string | null
+          motion_speed: string
+          motion_state: string
           path: string | null
           section: string
+          shape_color: string | null
+          shape_key: string | null
+          shape_opacity: number | null
+          shape_pos: string | null
+          shape_size: string | null
           slot_key: string
           sort_order: number
           subtitle_ar: string | null
+          template_id: string | null
+          tile_size: string | null
           title_ar: string | null
           updated_at: string
           updated_by: string | null
