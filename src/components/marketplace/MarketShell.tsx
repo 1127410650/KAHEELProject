@@ -347,7 +347,7 @@ export function MarketBottomNav() {
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
       data-auth={authenticated ? "member" : "guest"}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-brand-400/40 bg-white/94 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-1px_0_rgb(199_125_255/0.3),0_-6px_16px_-12px_rgb(60_9_108/0.28)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/96 pb-[env(safe-area-inset-bottom)] text-foreground shadow-[0_-1px_0_rgb(17_17_17/0.04)] backdrop-blur-xl lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch px-1">
         {items.map((item) => {
