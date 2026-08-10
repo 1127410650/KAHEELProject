@@ -21,7 +21,7 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { routeRuleFor } from "@/lib/routes-map";
 import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
-import { BackdropLayer } from "@/components/marketplace/BackdropLayer";
+
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
 
 import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
