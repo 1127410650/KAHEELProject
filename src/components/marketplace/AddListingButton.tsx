@@ -8,10 +8,10 @@ type Props = {
 };
 
 /**
- * زر «إنشاء إعلان» الذهبي — كبسولة ممتلئة تُرسم فورًا مع أول رسم للصفحة:
- * بلا تحميل متأخّر، وبلا أي حركة ظهور أو حساب عرض مرتبط بتقدّم التمرير
- * (`--p`)، فلا يمكن أن يظهر فارغًا أو مقصوصًا في أي لحظة. الأيقونة والنص
- * موجودان دائمًا، والانكماش يحدث للصف بأكمله لا للزر.
+ * زر «إنشاء إعلان» — دائرة بيضاء بعلامة زائد بلون الهوية البنفسجي، مع نبضة
+ * هادئة بلون الهوية. يُرسم فورًا مع أول رسم للصفحة: بلا تحميل متأخّر، وبلا أي
+ * حركة ظهور أو حساب عرض مرتبط بتقدّم التمرير (`--p`)، فلا يظهر فارغًا أبدًا.
+ * هدف اللمس 44px، والنبضة تتوقف مع تفضيل تقليل الحركة.
  */
 export function AddListingButton({ href, className }: Props) {
   const { t } = useI18n();
@@ -23,15 +23,13 @@ export function AddListingButton({ href, className }: Props) {
       title={label}
       aria-label={label}
       className={[
-        "inline-flex h-10 shrink-0 items-center justify-center gap-1 rounded-full px-4",
-        "bg-gradient-to-l from-[#F5B301] to-[#FFCE3D] text-[#1B1B1F]",
-        "text-desc font-extrabold leading-none shadow-sm outline-none",
-        "focus-visible:ring-2 focus-visible:ring-white",
+        "k-cta-pulse relative grid size-11 shrink-0 place-items-center rounded-full",
+        "bg-card text-primary shadow-md outline-none",
+        "focus-visible:ring-2 focus-visible:ring-card",
         className ?? "",
       ].join(" ")}
     >
-      <Plus className="size-4 shrink-0" strokeWidth={3} aria-hidden />
-      <span className="whitespace-nowrap">{label}</span>
+      <Plus className="relative z-[1] size-5" strokeWidth={2.5} aria-hidden />
     </a>
   );
 }
