@@ -20,6 +20,11 @@ import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
 import { useLabels } from "@/lib/mkt-ui-labels";
 import { useActivePageVariant } from "@/lib/mkt-page-variants";
+import {
+  PageBlocks,
+  type BlockOverrides,
+} from "@/components/marketplace/composer/PageBlocks";
+import { str, usePageBlocks } from "@/lib/mkt-page-composer";
 import { applyMediaSlotsToAqar, DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
 import { useMediaSlots } from "@/lib/mkt-media-slots";
 import {
