@@ -14,6 +14,9 @@ import {
   CalendarDays,
   Heart,
   ImageOff,
+  KeyRound,
+  ShieldCheck,
+
   Layers,
   MapPin,
   Ruler,
@@ -192,6 +195,39 @@ function AqarListingPage() {
           ) : null}
         </section>
 
+        {/* ثلاث بطاقات مزايا بارزة — الدخول، المساحة/النوع، وحالة توثيق المعلن. */}
+        <section className="px-4 pt-3">
+          <ul className="grid grid-cols-3 gap-2">
+            <li className="rounded-2xl border border-border bg-card p-3 text-center">
+              <KeyRound className="mx-auto size-5 text-primary" aria-hidden />
+              <strong className="mt-1 block text-desc font-bold text-foreground">
+                {row.deal_track === "daily_rent" ? "دخول ذاتي" : "زيارة بموعد"}
+              </strong>
+              <span className="block text-nav text-muted-foreground">تنسيق مع المعلن</span>
+            </li>
+            <li className="rounded-2xl border border-border bg-card p-3 text-center">
+              <Ruler className="mx-auto size-5 text-primary" aria-hidden />
+              <strong className="mt-1 block text-desc font-bold text-foreground">
+                {row.area_sqm
+                  ? `${Number(row.area_sqm).toLocaleString("en-US")} م²`
+                  : (AQAR_TYPE_LABELS[row.property_type] ?? "عقار")}
+              </strong>
+              <span className="block text-nav text-muted-foreground">
+                {row.rooms ? `${row.rooms} غرف` : "المساحة والنوع"}
+              </span>
+            </li>
+            <li className="rounded-2xl border border-border bg-card p-3 text-center">
+              <ShieldCheck className="mx-auto size-5 text-primary" aria-hidden />
+              <strong className="mt-1 block text-desc font-bold text-foreground">
+                {provider.data?.verification_status === "verified" ? "معلن موثّق" : "معلن مسجّل"}
+              </strong>
+              <span className="block text-nav text-muted-foreground">سجل الطلبات محفوظ</span>
+            </li>
+          </ul>
+        </section>
+
+
+
         <section className="px-4 pt-3">
           <h2 className="mb-2 text-section font-extrabold text-foreground">{label("aqar.listing_details", "تفاصيل العقار")}</h2>
           <ul className="grid grid-cols-2 gap-2">
@@ -337,9 +373,14 @@ function AqarListingPage() {
                 ≈ {price.secondary}
               </span>
             ) : null}
+            <span className="block truncate text-nav text-muted-foreground">
+              الإجمالي في صفحة الطلب — بلا دفع
+            </span>
+
           </span>
           <Link
-            to="/aqar/requests"
+            to="/aqar/book/$id"
+            params={{ id: row.id }}
             className="inline-flex shrink-0 items-center rounded-full bg-primary px-5 text-body font-bold text-primary-foreground"
             style={{ minHeight: 44 }}
           >
@@ -347,6 +388,7 @@ function AqarListingPage() {
               ? label("aqar.request_visit", "طلب معاينة")
               : label("aqar.request_booking", "طلب حجز")}
           </Link>
+
         </div>
       </div>
     </AqarShell>
