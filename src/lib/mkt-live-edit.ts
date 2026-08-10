@@ -45,7 +45,14 @@ export interface SlotPatch {
   tile_size?: string | null;
   link_path?: string | null;
   template_id?: string | null;
+  /** النسخة الأصلية غير المختومة للصورة المرفوعة. */
+  path_original?: string | null;
+  /** التدوير الزمني بين تصاميم المكتبة. */
+  rotate_enabled?: boolean | null;
+  rotate_period?: string | null;
+  rotate_template_ids?: string[] | null;
 }
+
 
 export interface SlotDraft {
   slot_key: string;

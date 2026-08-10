@@ -71,6 +71,15 @@ export interface DesignRoute {
   sort_order: number;
 }
 
+export type TemplateLayout = "classic" | "centered" | "split";
+
+/** تخطيطات القالب الثلاثة — مواضع العناصر داخل البطاقة. */
+export const LAYOUT_OPTIONS: { value: TemplateLayout; label: string }[] = [
+  { value: "classic", label: "كلاسيكي (النص أعلى)" },
+  { value: "centered", label: "متوسّط" },
+  { value: "split", label: "مقسوم (النص والشارة جانبًا)" },
+];
+
 export interface DesignTemplate {
   id: string;
   kind: "offer" | "promo";
@@ -96,8 +105,14 @@ export interface DesignTemplate {
   starts_at: string | null;
   ends_at: string | null;
   is_active: boolean;
+  /** ختم اسم كَحيل على البطاقة. */
+  brand_stamp: boolean;
+  layout_key: TemplateLayout;
+  /** التصميم الأصل إن كانت هذه تنويعة مولّدة. */
+  variation_of: string | null;
   updated_at: string;
 }
+
 
 export interface DesignLibrary {
   shapes: DesignShape[];
@@ -139,7 +154,9 @@ export function useDesignLibrary(enabled = true) {
 const TEMPLATE_COLUMNS =
   "id, kind, name_ar, title_ar, body_ar, discount_pct, bg_color, grad_from, grad_to, grad_angle, " +
   "image_path, shape_key, shape_color, shape_opacity, shape_size, shape_pos, motion_key, " +
-  "motion_state, motion_speed, link_path, campaign_id, starts_at, ends_at, is_active, updated_at";
+  "motion_state, motion_speed, link_path, campaign_id, starts_at, ends_at, is_active, " +
+  "brand_stamp, layout_key, variation_of, updated_at";
+
 
 export async function fetchDesignTemplates(): Promise<DesignTemplate[]> {
   const { data, error } = await supabase
@@ -365,4 +382,102 @@ export function motionStyle(input: DecorInput, motions: DesignMotion[]): React.C
   const decl = motionDeclaration(input, motions);
   if (!decl) return {};
   return { animation: decl.slice("animation:".length) };
+}
+
+/* ───────────────────── مولّد التنويعات (Variations) ───────────────────── */
+
+/** لوح الهوية المسموح للتنويعات: بنفسجي كَحيل وتدرّجاته + الذهبي للتمييز. */
+export const VARIATION_PALETTE: {
+  label: string;
+  bg_color: string;
+  grad_from: string | null;
+  grad_to: string | null;
+  grad_angle: number;
+}[] = [
+  { label: "بنفسجي صلب", bg_color: "#8a4fff", grad_from: null, grad_to: null, grad_angle: 90 },
+  { label: "تدرّج الهوية", bg_color: "#8a4fff", grad_from: "#8a4fff", grad_to: "#c3abff", grad_angle: 90 },
+  { label: "بنفسجي غامق", bg_color: "#5b2bb8", grad_from: "#5b2bb8", grad_to: "#8a4fff", grad_angle: 135 },
+  { label: "بنفسجي وذهبي", bg_color: "#6a34d4", grad_from: "#6a34d4", grad_to: "#b8892b", grad_angle: 45 },
+];
+
+const VARIATION_LAYOUTS: TemplateLayout[] = ["classic", "centered", "split"];
+
+/** عدد التنويعات في الدفعة الواحدة — ثابت معتمد. */
+export const VARIATION_COUNT = 12;
+
+/**
+ * يولّد ١٢ تنويعة من تصميم أساس بتبديل منظّم بين: ألوان لوح الهوية وتدرّجاته،
+ * الأشكال الزخرفية من المكتبة، تخطيطات القالب الثلاثة، والحركة (ثابت/متحرك).
+ * كل تنويعة تحمل ختم اسم كَحيل تلقائيًا، ولا تُحفظ إلا ما يختاره المدير.
+ */
+export function generateVariations(
+  base: DesignTemplate,
+  lib: DesignLibrary | undefined,
+): DesignTemplate[] {
+  const shapes = lib?.shapes ?? [];
+  const motions = lib?.motions ?? [];
+  const out: DesignTemplate[] = [];
+
+  for (let index = 0; index < VARIATION_COUNT; index += 1) {
+    const palette = VARIATION_PALETTE[index % VARIATION_PALETTE.length]!;
+    const layout = VARIATION_LAYOUTS[index % VARIATION_LAYOUTS.length]!;
+    const shape = shapes.length > 0 ? shapes[index % shapes.length]! : null;
+    const animated = index % 2 === 0 && motions.length > 0;
+    const motion = animated ? motions[index % motions.length]! : null;
+
+    out.push({
+      ...base,
+      id: `variation-${index + 1}`,
+      name_ar: `${base.name_ar || "تصميم"} — تنويعة ${index + 1}`,
+      bg_color: palette.bg_color,
+      grad_from: palette.grad_from,
+      grad_to: palette.grad_to,
+      grad_angle: palette.grad_angle,
+      shape_key: shape?.key ?? null,
+      shape_color: index % 3 === 0 ? "#ffd27a" : "#ffffff",
+      shape_opacity: 12 + ((index * 4) % 24),
+      shape_size: (["sm", "md", "lg"] as DesignSize[])[index % 3]!,
+      shape_pos: SHAPE_POSITIONS[index % SHAPE_POSITIONS.length]!.value,
+      motion_key: motion?.key ?? null,
+      motion_state: motion ? "animated" : "static",
+      motion_speed: index % 4 === 0 ? "medium" : "slow",
+      layout_key: layout,
+      brand_stamp: true,
+      variation_of: base.id.startsWith("preview") || base.id.startsWith("variation") ? null : base.id,
+      is_active: true,
+      updated_at: new Date().toISOString(),
+    });
+  }
+
+  return out;
+}
+
+/** حِزمة الحفظ لتنويعة مختارة — نفس الحقول المسموح بها في دالة الحفظ. */
+export function variationPatch(template: DesignTemplate): Record<string, unknown> {
+  return {
+    kind: template.kind,
+    name_ar: template.name_ar.slice(0, 80),
+    title_ar: template.title_ar,
+    body_ar: template.body_ar,
+    discount_pct: template.discount_pct,
+    bg_color: template.bg_color,
+    grad_from: template.grad_from,
+    grad_to: template.grad_to,
+    grad_angle: template.grad_from && template.grad_to ? template.grad_angle : null,
+    shape_key: template.shape_key,
+    shape_color: template.shape_key ? template.shape_color : null,
+    shape_opacity: template.shape_opacity,
+    shape_size: template.shape_size,
+    shape_pos: template.shape_pos,
+    motion_key: template.motion_key,
+    motion_state: template.motion_state,
+    motion_speed: template.motion_speed,
+    link_path: template.link_path,
+    campaign_id: template.kind === "promo" ? template.campaign_id : null,
+    starts_at: template.starts_at,
+    ends_at: template.ends_at,
+    brand_stamp: template.brand_stamp,
+    layout_key: template.layout_key,
+    variation_of: template.variation_of,
+  };
 }

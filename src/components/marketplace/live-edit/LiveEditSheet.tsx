@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { SlotDesignControls } from "@/components/marketplace/live-edit/SlotDesignControls";
+import { SlotRotationControls } from "@/components/marketplace/live-edit/SlotRotationControls";
+
 import { readableSize } from "@/lib/media-compress";
 import { formatDateTime } from "@/lib/format";
 import { activatePageVariant, usePageVariants, useRefreshPageVariants } from "@/lib/mkt-page-variants";
@@ -339,6 +341,16 @@ export function LiveEditSheet({
           busy={busy}
           onSave={(patch, done) => void run(() => saveSlotDraft(slot.slot_key, patch), done)}
         />
+
+        {slot.edit_kind === "ad" || slot.edit_kind === "background" || slot.edit_kind === "media" ? (
+          <SlotRotationControls
+            slot={slot}
+            current={current}
+            busy={busy}
+            onSave={(patch, done) => void run(() => saveSlotDraft(slot.slot_key, patch), done)}
+          />
+        ) : null}
+
 
         <input
           ref={fileRef}

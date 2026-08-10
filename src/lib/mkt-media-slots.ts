@@ -13,6 +13,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { compressToWebp } from "@/lib/media-compress";
+import { stampImageBlob, type BrandStampOptions } from "@/lib/kaheel-brand-stamp";
+import { activeRotationTemplateId } from "@/lib/mkt-slot-rotation";
+
 
 export const MEDIA_SLOT_BUCKET = "mkt-media";
 export const MEDIA_SLOT_PREFIX = "public/media-slots";
@@ -28,6 +31,8 @@ export interface MediaSlotRow {
   group_key: string | null;
   kind: string;
   path: string | null;
+  /** النسخة الأصلية بلا ختم كَحيل — تُحفظ بجانب المختومة. */
+  path_original: string | null;
   external_url: string | null;
   title_ar: string | null;
   subtitle_ar: string | null;
@@ -59,12 +64,20 @@ export interface MediaSlotRow {
   tile_size: string | null;
   link_path: string | null;
   template_id: string | null;
+  /** التدوير الزمني بين عدة تصاميم من المكتبة. */
+  rotate_enabled: boolean;
+  rotate_period: string | null;
+  rotate_template_ids: string[] | null;
+  rotate_started_at: string | null;
 }
 
 export interface MediaSlot extends MediaSlotRow {
   /** الرابط الجاهز للعرض — `null` يعني «استخدم الاحتياطي». */
   url: string | null;
+  /** رابط النسخة الأصلية غير المختومة، إن وُجدت. */
+  originalUrl: string | null;
 }
+
 
 /** أقسام الفتحات كما تظهر في شاشة الإدارة. */
 export const MEDIA_SECTION_LABELS: Record<string, string> = {
@@ -77,10 +90,11 @@ export const MEDIA_SECTION_LABELS: Record<string, string> = {
 };
 
 const SLOT_COLUMNS =
-  "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, " +
-  "sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
+  "slot_key, section, group_key, kind, path, path_original, external_url, title_ar, subtitle_ar, " +
+  "alt_text, sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
   "campaign_from, campaign_to, edit_kind, variant_page, shape_key, shape_color, shape_opacity, " +
-  "shape_size, shape_pos, motion_key, motion_state, motion_speed, tile_size, link_path, template_id";
+  "shape_size, shape_pos, motion_key, motion_state, motion_speed, tile_size, link_path, template_id, " +
+  "rotate_enabled, rotate_period, rotate_template_ids, rotate_started_at";
 
 
 export async function fetchMediaSlots(): Promise<MediaSlot[]> {
@@ -93,7 +107,13 @@ export async function fetchMediaSlots(): Promise<MediaSlot[]> {
   if (error) throw error;
 
   const rows = (data ?? []) as unknown as MediaSlotRow[];
-  const paths = rows.map((row) => row.path).filter((path): path is string => !!path);
+  const paths = [
+    ...new Set(
+      rows
+        .flatMap((row) => [row.path, row.path_original])
+        .filter((path): path is string => !!path),
+    ),
+  ];
 
   const signed: Record<string, string> = {};
   if (paths.length > 0) {
@@ -114,8 +134,10 @@ export async function fetchMediaSlots(): Promise<MediaSlot[]> {
         : row.path
           ? signed[row.path] ?? null
           : null,
+    originalUrl: row.path_original ? signed[row.path_original] ?? null : null,
   }));
 }
+
 
 /** كل الفتحات للزيارة الحالية. استعلام واحد مشترك بين كل الشاشات. */
 export function useMediaSlots() {
@@ -177,10 +199,17 @@ export function slotLink(slots: MediaSlot[] | undefined, key: string, fallback: 
   return slots?.find((item) => item.slot_key === key)?.link_path || fallback;
 }
 
-/** قالب «تصاميمي» المربوط بفتحة إعلانية. */
+/**
+ * قالب «تصاميمي» المعروض في الفتحة الآن. إن كان «التدوير التلقائي» مفعّلًا فالقالب
+ * النشط يُحسب من قائمة التدوير وفترتها (يومي/أسبوعي/شهري) بترتيب دائري، وإلا
+ * فالقالب المربوط يدويًا.
+ */
 export function slotTemplateId(slots: MediaSlot[] | undefined, key: string): string | null {
-  return slots?.find((item) => item.slot_key === key)?.template_id ?? null;
+  const slot = slots?.find((item) => item.slot_key === key);
+  if (!slot) return null;
+  return activeRotationTemplateId(slot) ?? slot.template_id ?? null;
 }
+
 
 /** معرّف الحملة المربوطة بموضع إعلاني، إن كانت داخل فترة العرض. */
 export function slotCampaignId(slots: MediaSlot[] | undefined, key: string): string | null {
@@ -217,34 +246,72 @@ function storagePathFor(slotKey: string): string {
 /**
  * يضغط الصورة (١٦٠٠px / WebP / ≤٣٠٠KB) ثم يرفعها ويربطها بالفتحة.
  * الملف القديم يُحذف بعد نجاح الربط فقط، فلا تفقد الفتحة صورتها عند أي خطأ.
+ *
+ * مع `stamp` تُرفع نسختان: الأصلية كما هي، والمختومة باسم كَحيل — والفتحة تعرض
+ * المختومة وتبقى الأصلية محفوظة بجانبها في المكتبة.
  */
 export async function uploadMediaSlotImage(
   slot: MediaSlotRow,
   file: File,
-): Promise<{ bytes: number; width: number; height: number }> {
+  stamp?: BrandStampOptions,
+): Promise<{ bytes: number; width: number; height: number; stamped: boolean }> {
   const { blob, width, height } = await compressToWebp(file);
   const path = storagePathFor(slot.slot_key);
+  const uploaded: string[] = [];
 
-  const { error: uploadError } = await supabase.storage
-    .from(MEDIA_SLOT_BUCKET)
-    .upload(path, blob, { contentType: "image/webp", cacheControl: "3600", upsert: false });
-  if (uploadError) throw uploadError;
+  const put = async (target: string, body: Blob) => {
+    const { error } = await supabase.storage
+      .from(MEDIA_SLOT_BUCKET)
+      .upload(target, body, { contentType: "image/webp", cacheControl: "3600", upsert: false });
+    if (error) throw error;
+    uploaded.push(target);
+  };
 
-  const { error } = await supabase.rpc("mkt_admin_save_media_slot", {
-    _slot_key: slot.slot_key,
-    _path: path,
-    _kind: "image",
-  });
-  if (error) {
-    await supabase.storage.from(MEDIA_SLOT_BUCKET).remove([path]).catch(() => undefined);
+  try {
+    if (!stamp) {
+      await put(path, blob);
+      const { error } = await supabase.rpc("mkt_admin_save_media_slot", {
+        _slot_key: slot.slot_key,
+        _path: path,
+        _kind: "image",
+      });
+      if (error) throw error;
+      await supabase.rpc("mkt_admin_slot_set_draft", {
+        _slot_key: slot.slot_key,
+        _patch: { path_original: null } as never,
+      });
+      await supabase.rpc("mkt_admin_slot_publish", { _slot_key: slot.slot_key });
+    } else {
+      const originalPath = storagePathFor(slot.slot_key);
+      const stampedBlob = await stampImageBlob(blob, stamp);
+      await put(originalPath, blob);
+      await put(path, stampedBlob);
+      const { error } = await supabase.rpc("mkt_admin_slot_set_draft", {
+        _slot_key: slot.slot_key,
+        _patch: { path, path_original: originalPath } as never,
+      });
+      if (error) throw error;
+      const { error: publishError } = await supabase.rpc("mkt_admin_slot_publish", {
+        _slot_key: slot.slot_key,
+      });
+      if (publishError) throw publishError;
+    }
+  } catch (error) {
+    if (uploaded.length > 0) {
+      await supabase.storage.from(MEDIA_SLOT_BUCKET).remove(uploaded).catch(() => undefined);
+    }
     throw error;
   }
 
-  if (slot.path && slot.path !== path) {
-    await supabase.storage.from(MEDIA_SLOT_BUCKET).remove([slot.path]).catch(() => undefined);
+  const stale = [slot.path, slot.path_original].filter(
+    (old): old is string => !!old && !uploaded.includes(old),
+  );
+  if (stale.length > 0) {
+    await supabase.storage.from(MEDIA_SLOT_BUCKET).remove(stale).catch(() => undefined);
   }
-  return { bytes: blob.size, width, height };
+  return { bytes: blob.size, width, height, stamped: !!stamp };
 }
+
 
 export async function saveMediaSlotMeta(
   slotKey: string,

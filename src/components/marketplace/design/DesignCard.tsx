@@ -42,12 +42,20 @@ export function DesignCard({ template, library, imageUrl, className }: DesignCar
     surface.backgroundPosition = "center";
   }
 
+  // التخطيط من ثلاث قيم مسجّلة فقط — مواضع محددة مسبقًا بلا أنماط حرة.
+  const layout =
+    template.layout_key === "centered"
+      ? "items-center justify-center text-center"
+      : template.layout_key === "split"
+        ? "flex-row items-center justify-between gap-3"
+        : "flex-col justify-between gap-2";
+
   const body: ReactNode = (
     <div
       className={`k-slot-anim relative isolate flex min-w-0 overflow-hidden rounded-2xl ring-1 ring-border ${
         promo
           ? "min-h-[104px] flex-row items-center justify-between gap-3 px-4 py-3"
-          : "min-h-[132px] flex-col justify-between gap-2 p-3"
+          : `min-h-[132px] p-3 ${layout}`
       } ${className ?? ""}`}
       style={surface}
     >
@@ -68,8 +76,14 @@ export function DesignCard({ template, library, imageUrl, className }: DesignCar
           <span className="font-bold">خصم</span>
         </span>
       ) : null}
+      {template.brand_stamp ? (
+        <span className="pointer-events-none absolute bottom-1.5 left-2 rounded-full bg-black/35 px-2 py-0.5 text-nav font-black text-white/95">
+          كَحيل · KAHEEL
+        </span>
+      ) : null}
     </div>
   );
+
 
   if (!template.link_path) return body;
   return (

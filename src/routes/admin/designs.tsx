@@ -12,7 +12,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Megaphone, Save, Tag } from "lucide-react";
+import { Megaphone, Save, Sparkles, Tag } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { DesignCard } from "@/components/marketplace/design/DesignCard";
@@ -22,16 +22,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatDateTime } from "@/lib/format";
 import { useAdminCampaigns } from "@/lib/mkt-campaigns";
 import {
+  LAYOUT_OPTIONS,
   SHAPE_POSITIONS,
   SIZE_OPTIONS,
   SPEED_OPTIONS,
+  VARIATION_COUNT,
+  generateVariations,
   saveDesignTemplate,
   setDesignTemplateActive,
   useDesignLibrary,
   useDesignTemplates,
   useRefreshDesignTemplates,
+  variationPatch,
   type DesignTemplate,
 } from "@/lib/mkt-design-library";
+
 
 export const Route = createFileRoute("/admin/designs")({
   head: () => ({
@@ -73,6 +78,9 @@ const EMPTY = {
   campaign_id: "",
   starts_at: "",
   ends_at: "",
+  brand_stamp: true,
+  layout_key: "classic",
+
 };
 
 type Draft = typeof EMPTY;
@@ -103,9 +111,13 @@ function toTemplate(draft: Draft, id: string): DesignTemplate {
     starts_at: draft.starts_at || null,
     ends_at: draft.ends_at || null,
     is_active: true,
+    brand_stamp: draft.brand_stamp,
+    layout_key: draft.layout_key as DesignTemplate["layout_key"],
+    variation_of: null,
     updated_at: new Date().toISOString(),
   };
 }
+
 
 function fromTemplate(row: DesignTemplate): Draft {
   return {
@@ -130,8 +142,11 @@ function fromTemplate(row: DesignTemplate): Draft {
     campaign_id: row.campaign_id ?? "",
     starts_at: (row.starts_at ?? "").slice(0, 16),
     ends_at: (row.ends_at ?? "").slice(0, 16),
+    brand_stamp: row.brand_stamp,
+    layout_key: row.layout_key,
   };
 }
+
 
 function DesignsPage() {
   const lib = useDesignLibrary();
@@ -142,8 +157,11 @@ function DesignsPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [busy, setBusy] = useState(false);
+  const [variations, setVariations] = useState<DesignTemplate[]>([]);
+  const [variationSource, setVariationSource] = useState("");
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((prev) => ({ ...prev, [key]: value }));
+
 
   const save = async () => {
     if (!draft.name_ar.trim()) {
@@ -174,7 +192,10 @@ function DesignsPage() {
         campaign_id: draft.kind === "promo" ? draft.campaign_id || null : null,
         starts_at: draft.kind === "promo" && draft.starts_at ? new Date(draft.starts_at).toISOString() : null,
         ends_at: draft.kind === "promo" && draft.ends_at ? new Date(draft.ends_at).toISOString() : null,
+        brand_stamp: draft.brand_stamp,
+        layout_key: draft.layout_key,
       });
+
       refresh();
       toast.success("حُفظ في «تصاميمي» — يمكنك ربطه بأي فتحة إعلانية من وضع التحرير.");
       setEditing(null);
@@ -256,6 +277,38 @@ function DesignsPage() {
                 </select>
               </label>
             </div>
+
+            <div className="grid grid-cols-2 items-end gap-2">
+              <label className="text-desc font-bold text-foreground">
+                تخطيط القالب
+                <select
+                  className={SELECT}
+                  style={{ minHeight: 44 }}
+                  value={draft.layout_key}
+                  onChange={(e) => set("layout_key", e.target.value)}
+                >
+                  {LAYOUT_OPTIONS.map((item) => (
+                    <option key={item.value} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label
+                className="flex items-center gap-2 text-desc font-bold text-foreground"
+                style={{ minHeight: 44 }}
+              >
+                <input
+                  type="checkbox"
+                  checked={draft.brand_stamp}
+                  onChange={(e) => set("brand_stamp", e.target.checked)}
+                  className="size-5 accent-primary"
+                />
+                اختم باسم كَحيل
+              </label>
+            </div>
+
+
 
             <fieldset className="rounded-2xl border border-border p-2.5">
               <legend className="px-1 text-desc font-bold text-foreground">الخلفية</legend>
@@ -492,12 +545,92 @@ function DesignsPage() {
                   >
                     {row.is_active ? "إخفاء" : "تشغيل"}
                   </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-1.5"
+                    onClick={() => {
+                      setVariations(generateVariations(row, lib.data));
+                      setVariationSource(row.name_ar);
+                      toast.success(`وُلّدت ${VARIATION_COUNT.toLocaleString("en-US")} تنويعة — احفظ ما يعجبك.`);
+                    }}
+                  >
+                    <Sparkles className="size-4" aria-hidden />
+                    ولّد تنويعات
+                  </Button>
                 </div>
               </li>
             ))}
           </ul>
         )}
       </section>
+
+      {variations.length > 0 ? (
+        <section aria-labelledby="variations" className="mt-6">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="variations" className="text-section font-extrabold text-foreground">
+              تنويعات «{variationSource}»
+              <span className="ms-2 num text-nav font-bold text-muted-foreground">
+                {variations.length.toLocaleString("en-US")}
+              </span>
+            </h2>
+            <Button size="sm" variant="outline" onClick={() => setVariations([])}>
+              إهمال الباقي
+            </Button>
+          </div>
+          <p className="mb-3 text-desc text-muted-foreground">
+            كل تنويعة تحمل ختم اسم كَحيل تلقائيًا. احفظ ما يعجبك في «تصاميمي» ثم اربطه بأي فتحة من
+            وضع التحرير — والباقي يُهمل بلا أثر.
+          </p>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {variations.map((row) => (
+              <li key={row.id} className="space-y-2 rounded-2xl border border-border bg-card p-2.5">
+                <DesignCard template={row} library={lib.data} />
+                <p className="text-desc font-bold text-foreground">{row.name_ar}</p>
+                <Button
+                  size="sm"
+                  disabled={busy}
+                  onClick={() =>
+                    void (async () => {
+                      setBusy(true);
+                      try {
+                        await saveDesignTemplate(null, variationPatch(row));
+                        refresh();
+                        setVariations((prev) => prev.filter((item) => item.id !== row.id));
+                        toast.success("حُفظت التنويعة في «تصاميمي».");
+                      } catch {
+                        toast.error("تعذّر حفظ التنويعة.");
+                      } finally {
+                        setBusy(false);
+                      }
+                    })()
+                  }
+                >
+                  حفظ في تصاميمي
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <section
+        aria-labelledby="ai-notice"
+        className="mt-6 rounded-2xl border border-border bg-muted/40 p-3"
+      >
+        <h2 id="ai-notice" className="text-desc font-extrabold text-foreground">
+          توليد صور جديدة كليًا بالذكاء الاصطناعي غير مفعّل — يتطلب اشتراك خدمة خارجية
+        </h2>
+        <p className="mt-1 text-desc text-muted-foreground">
+          المولّد الحالي يعمل على مكتبات المشروع نفسها (ألوان الهوية، الأشكال، التخطيطات) بلا أي
+          خدمة خارجية. مكان التفعيل جاهز أدناه ويُفتح بقرار المالك فقط.
+        </p>
+        <Button size="sm" variant="outline" className="mt-2 gap-1.5" disabled>
+          <Sparkles className="size-4" aria-hidden />
+          توليد بالذكاء الاصطناعي (معطّل)
+        </Button>
+      </section>
+
     </AdminShell>
   );
 }
