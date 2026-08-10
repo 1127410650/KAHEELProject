@@ -214,10 +214,13 @@ export function MarketHome() {
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
-    <div className="k-page-surface bg-white pb-5 text-brand-950">
+    <div className="k-page-surface bg-background pb-5 text-foreground">
       {/* One rhythm for the whole page: the same vertical gap between every
           section, so no block reads as louder than its neighbours. */}
       <div className="mx-auto w-full max-w-[1240px] space-y-7 px-3 pb-3 pt-3 sm:space-y-10 sm:px-5 lg:px-8">
+        {/* مساحة إعلانية أفقية واحدة نظيفة أسفل الشريط العلوي مباشرة. */}
+        <HomeAdStrip addHref={addHref} />
+
         <HomeSearchBar
           label={t("market.homeV2.searchPlaceholder" as HomeKey)}
           detailedLabel={t("market.homeV2.detailedSearch" as HomeKey)}
@@ -226,6 +229,7 @@ export function MarketHome() {
         <KaheelStories />
 
         <PromoCarousel addHref={addHref} />
+
 
         <Reveal as="section">
           <section
