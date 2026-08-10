@@ -147,7 +147,7 @@ export function MarketHeader({
                   href={
                     session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                   }
-                  className="relative grid size-8 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                  className="relative grid size-8 place-items-center rounded-full text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45"
                   aria-label={t("market.bottomNav.alerts")}
                 >
                   <Bell className="size-[18px]" aria-hidden />
