@@ -182,7 +182,8 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
     setBusy(true);
     try {
       enablePersistentSession();
-      if (isPhoneOnly) {
+      // التحقق يتبع القناة التي وصل بها الرمز فعلًا، لا مفتاح الدولة.
+      if (deliveredChannel !== "email") {
         const result = await verifyOtp({
           data: { phone: e164!, code: digits, full_name: fullName.trim() },
         });
