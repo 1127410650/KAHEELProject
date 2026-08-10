@@ -368,7 +368,7 @@ function AdminComposerPage() {
   }
 
   return (
-    <AdminShell title="مؤلّف الشاشات" subtitle="كل شاشة عامة = قائمة كتل تتحكم بها من هنا">
+    <AdminShell title="مؤلّف الشاشات">
       <div className="space-y-5">
         {/* اختيار الصفحة */}
         <div className="rounded-2xl border border-border bg-card p-3">
