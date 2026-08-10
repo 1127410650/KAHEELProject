@@ -195,12 +195,18 @@ export function GuidePlaceCard({ place }: { place: GuidePlace }) {
         <GuidePlaceBadges place={place} />
       </div>
 
-      {location ? (
+      {location || distance ? (
         <p className="flex items-start gap-1.5 text-[11px] leading-6 text-muted-foreground">
           <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           <span className="line-clamp-2">{place.address || location}</span>
+          {distance ? (
+            <span className="num ms-auto shrink-0 self-start rounded-full bg-primary/10 px-1.5 font-bold text-primary">
+              {distance}
+            </span>
+          ) : null}
         </p>
       ) : null}
+
 
       {place.opening_hours ? (
         <p className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
