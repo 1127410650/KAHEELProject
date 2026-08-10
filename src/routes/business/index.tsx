@@ -179,7 +179,7 @@ function ProviderOperationsPage() {
   return (
     <DashboardShell title={locale === "ar" ? "مركز التشغيل" : "Operations center"}>
       <div className="space-y-5">
-        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy via-slate-900 to-cyan-950 text-white shadow-xl">
+        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
           <CardContent className="space-y-5 p-5 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -193,7 +193,7 @@ function ProviderOperationsPage() {
                         ? "بائع"
                         : "Seller"}
                   </Badge>
-                  <Badge className="bg-emerald-400/15 text-emerald-100 hover:bg-emerald-400/15">
+                  <Badge className="bg-success/25 text-primary-foreground hover:bg-success/25">
                     {locale === "ar" ? "معتمد تشغيليًا" : "Operationally approved"}
                   </Badge>
                 </div>
@@ -206,7 +206,7 @@ function ProviderOperationsPage() {
                     : "Orders, bookings, catalog, marketing and promotion appear only when granted to the approved account type."}
                 </p>
               </div>
-              <CircleDollarSign className="size-10 text-cyan-200" aria-hidden />
+              <CircleDollarSign className="size-10 text-primary-foreground/75" aria-hidden />
             </div>
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
               {stats.map(([label, value]) => (

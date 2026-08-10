@@ -174,7 +174,7 @@ function ServicesMarketplacePage() {
               </p>
             </div>
             <div className="relative mt-3.5 max-w-2xl">
-              <Search className="pointer-events-none absolute start-4 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
+              <Search className="pointer-events-none absolute start-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
               <Input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
@@ -183,7 +183,7 @@ function ServicesMarketplacePage() {
                     ? "ابحث عن تنظيف، صيانة، تدريب…"
                     : "Search cleaning, maintenance, training…"
                 }
-                className="h-14 rounded-2xl border-white/10 bg-white ps-12 text-base text-slate-950 shadow-2xl placeholder:text-slate-400"
+                className="h-14 rounded-2xl border-white/10 bg-white ps-12 text-base text-foreground shadow-2xl placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -302,7 +302,7 @@ function ServicesMarketplacePage() {
                               : "Provider confirms"}
                         </span>
                         <div className="absolute bottom-3 start-3 flex items-center gap-1 text-xs font-bold text-white">
-                          <Star className="size-4 fill-amber-400 text-amber-400" />
+                          <Star className="size-4 fill-gold text-gold" />
                           {item.rating > 0
                             ? item.rating.toFixed(1)
                             : locale === "ar"
