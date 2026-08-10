@@ -242,9 +242,11 @@ function AqarHomePage() {
           moreTrack={track}
         />
 
-        <p className="px-4 py-4 text-desc text-muted-foreground">
-          {label("aqar.price_note", "الأسعار كما أدخلها المزوّد")}، والمعادل بالدولار تقديري وفق سعر صرف معتمد من الإدارة.
-        </p>
+            <p className="px-4 py-4 text-desc text-muted-foreground">
+              {label("aqar.price_note", "الأسعار كما أدخلها المزوّد")}، والمعادل بالدولار تقديري وفق سعر صرف معتمد من الإدارة.
+            </p>
+          </>
+        )}
       </div>
     </AqarShell>
   );
