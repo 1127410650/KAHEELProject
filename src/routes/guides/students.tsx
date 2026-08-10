@@ -5,6 +5,7 @@ import {
   FileText,
   GraduationCap,
   ListChecks,
+  MessageCircleQuestion,
   Sparkles,
 } from "lucide-react";
 import { useMemo, useState } from "react";
