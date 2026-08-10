@@ -25,11 +25,13 @@ function CampaignTile({
   className,
   fallbackTitle,
   fallbackHref,
+  fallbackImage,
 }: {
   campaign?: LiveCampaign | undefined;
   className: string;
   fallbackTitle: string;
   fallbackHref: string;
+  fallbackImage?: string;
 }) {
   useEffect(() => {
     if (campaign) trackCampaign(campaign.id, "impression");
@@ -37,16 +39,36 @@ function CampaignTile({
 
   const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-card shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
 
-  /* الطبقة الأساسية: تدرّج خفيف والنص الافتراضي — تضمن ألّا يظهر صندوق أبيض
-     فارغ إذا كان أصل الحملة شفافًا أو تعذّر تحميله. */
+  /* الطبقة الأساسية: صورة القسم + تدرّج بنفسجي فوقها والنص — تضمن ألّا يظهر
+     صندوق أبيض فارغ إذا كان أصل الحملة شفافًا أو تعذّر تحميله. */
   const base = (
     <>
+      {fallbackImage ? (
+        <img
+          src={fallbackImage}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 size-full object-cover"
+        />
+      ) : null}
       <span
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(120%_120%_at_88%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_62%)]"
+        className={
+          fallbackImage
+            ? "absolute inset-0 bg-[linear-gradient(90deg,color-mix(in_oklab,var(--primary)_82%,transparent),color-mix(in_oklab,var(--primary)_18%,transparent))]"
+            : "absolute inset-0 bg-[radial-gradient(120%_120%_at_88%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_62%)]"
+        }
       />
       <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-4 sm:px-6">
-        <strong className="text-lg font-black tracking-tight sm:text-2xl">{fallbackTitle}</strong>
+        <strong
+          className={`text-lg font-black tracking-tight sm:text-2xl ${
+            fallbackImage ? "text-primary-foreground" : ""
+          }`}
+        >
+          {fallbackTitle}
+        </strong>
       </span>
     </>
   );
@@ -64,6 +86,7 @@ function CampaignTile({
       onClick={() => trackCampaign(campaign.id, "click")}
       className={box}
     >
+
       {base}
       <span className="absolute inset-0 z-10">
         <CampaignAsset campaign={campaign} />
