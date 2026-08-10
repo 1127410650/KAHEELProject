@@ -71,7 +71,7 @@ function UsageTable({ service }: { service: "generation" | "enhancement" }) {
       <AdminEmptyState
         icon={Sparkles}
         title="لا عمليات بعد"
-        description="سيظهر هنا من نفّذ العملية ومتى وتكلفتها التقديرية."
+        hint="سيظهر هنا من نفّذ العملية ومتى وتكلفتها التقديرية."
       />
     );
   }
@@ -211,7 +211,7 @@ function AiServicesPage() {
   }
 
   return (
-    <AdminShell>
+    <AdminShell title="خدمات الذكاء">
       <AdminPageHead
         title="خدمات الذكاء"
         description="توليد الصور والنصاعة: العدّادات والأسقف والسجل واعتماد النسخ المحسّنة — الأصل لا يُستبدل."
@@ -337,7 +337,7 @@ function AiServicesPage() {
               <AdminEmptyState
                 icon={Wand2}
                 title="لا صور مختارة"
-                description="اختر صورًا من جهازك لتجربة النصاعة قبل اعتمادها في المكتبة."
+                hint="اختر صورًا من جهازك لتجربة النصاعة قبل اعتمادها في المكتبة."
               />
             </div>
           ) : (

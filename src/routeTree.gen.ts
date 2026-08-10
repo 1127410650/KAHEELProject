@@ -33,6 +33,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAdCreditRouteImport } from './routes/admin/ad-credit'
+import { Route as AdminAiRouteImport } from './routes/admin/ai'
 import { Route as AdminAppearanceRouteImport } from './routes/admin/appearance'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
@@ -249,6 +250,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminAdCreditRoute = AdminAdCreditRouteImport.update({
   id: '/ad-credit',
   path: '/ad-credit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAiRoute = AdminAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAppearanceRoute = AdminAppearanceRouteImport.update({
@@ -765,6 +771,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/admin/ad-credit': typeof AdminAdCreditRoute
+  '/admin/ai': typeof AdminAiRoute
   '/admin/appearance': typeof AdminAppearanceRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
@@ -884,6 +891,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/admin/ad-credit': typeof AdminAdCreditRoute
+  '/admin/ai': typeof AdminAiRoute
   '/admin/appearance': typeof AdminAppearanceRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
@@ -1008,6 +1016,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/admin/ad-credit': typeof AdminAdCreditRoute
+  '/admin/ai': typeof AdminAiRoute
   '/admin/appearance': typeof AdminAppearanceRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
@@ -1133,6 +1142,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/services'
     | '/admin/ad-credit'
+    | '/admin/ai'
     | '/admin/appearance'
     | '/admin/applications'
     | '/admin/audit-log'
@@ -1252,6 +1262,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/admin/ad-credit'
+    | '/admin/ai'
     | '/admin/appearance'
     | '/admin/applications'
     | '/admin/audit-log'
@@ -1375,6 +1386,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/services'
     | '/admin/ad-credit'
+    | '/admin/ai'
     | '/admin/appearance'
     | '/admin/applications'
     | '/admin/audit-log'
@@ -1689,6 +1701,13 @@ declare module '@tanstack/react-router' {
       path: '/ad-credit'
       fullPath: '/admin/ad-credit'
       preLoaderRoute: typeof AdminAdCreditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/ai': {
+      id: '/admin/ai'
+      path: '/ai'
+      fullPath: '/admin/ai'
+      preLoaderRoute: typeof AdminAiRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/appearance': {
@@ -2375,6 +2394,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminAdCreditRoute: typeof AdminAdCreditRoute
+  AdminAiRoute: typeof AdminAiRoute
   AdminAppearanceRoute: typeof AdminAppearanceRoute
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
@@ -2419,6 +2439,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdCreditRoute: AdminAdCreditRoute,
+  AdminAiRoute: AdminAiRoute,
   AdminAppearanceRoute: AdminAppearanceRoute,
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
