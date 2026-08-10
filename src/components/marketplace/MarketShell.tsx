@@ -19,6 +19,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { routeRuleFor } from "@/lib/routes-map";
+import { accentForPath } from "@/lib/section-accent";
+
 import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 
@@ -427,15 +429,20 @@ export function MarketShell({
   const variant = footer ?? footerVariantForPath(pathname);
   const home = pathname === "/";
   const showCategories = pathname === "/search";
+  /* لمسة لون القسم: تُضبط مرة واحدة هنا فتسري على الرؤوس والبلاطات والحالات
+     النشطة داخل القسم، والسطح يبقى محايدًا. */
+  const accent = accentForPath(pathname);
   return (
     <div
       dir={dir}
+      style={{ "--section-accent": accent } as React.CSSProperties}
       className={
         bottomNav
           ? "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip pb-[calc(3.25rem+env(safe-area-inset-bottom))] lg:pb-0"
           : "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip"
       }
     >
+
       {/* سطح أبيض نظيف: لا طبقة خلفية مصوّرة خلف المحتوى. */}
       <MarketHeader showCategories={showCategories} home={home} />
       <main className="flex-1">{children}</main>

@@ -33,7 +33,7 @@ export function AqarTypeGrid({
               <Link
                 to="/aqar/browse"
                 search={{ track, type: card.key }}
-                className={`k-lift group relative block overflow-hidden rounded-[var(--r-card)] ${
+                className={`k-lift k-press group relative block overflow-hidden rounded-[var(--r-card)] ${
                   wide ? "aspect-[16/7]" : "aspect-[16/10]"
                 }`}
               >
