@@ -56,28 +56,25 @@ function StudentToolsPage() {
           </Link>
 
           <div className="overflow-hidden rounded-[1.6rem] border border-border bg-card shadow-[0_12px_38px_rgb(15_23_42/0.1)]">
-            <div className="relative overflow-hidden bg-market-navy px-5 py-6 text-white sm:px-7 sm:py-8">
-              <div
-                className="absolute -end-12 -top-14 size-44 rounded-full bg-primary/45 blur-3xl"
-                aria-hidden
-              />
+            <div className="relative overflow-hidden border-b border-border bg-background px-5 py-6 text-foreground sm:px-7 sm:py-8">
               <div className="relative flex items-start gap-3">
-                <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/10">
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-border bg-accent text-primary">
                   <GraduationCap className="size-6" aria-hidden />
                 </span>
                 <div>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-black text-market-silver sm:text-xs">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-black text-primary sm:text-xs">
                     <Sparkles className="size-3.5" aria-hidden />
                     خدمة مجانية للطالب السوري
                   </span>
                   <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
                     دليل الطالب
                   </h1>
-                  <p className="mt-2 max-w-xl text-xs leading-6 text-white/76 sm:text-sm sm:leading-7">
+                  <p className="mt-2 max-w-xl text-xs leading-6 text-muted-foreground sm:text-sm sm:leading-7">
                     الصق فقرة أو درسًا للحصول على تلخيص منظم أو أسئلة مراجعة مباشرة، دون إرسال النص
                     إلى خدمة مدفوعة.
                   </p>
                 </div>
+
               </div>
             </div>
 
