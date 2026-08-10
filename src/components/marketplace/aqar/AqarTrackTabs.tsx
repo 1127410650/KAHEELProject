@@ -13,7 +13,7 @@ export function AqarTrackTabs({
     <div
       role="tablist"
       aria-label="نوع العرض"
-      className="mx-4 flex gap-1 rounded-full border border-border bg-card p-1"
+      className="mx-4 flex h-12 gap-1 rounded-full border border-border bg-card p-1"
     >
       {AQAR_TRACKS.map((item) => {
         const active = item.key === track;
@@ -24,17 +24,17 @@ export function AqarTrackTabs({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(item.key)}
-            className={`flex-1 rounded-full px-3 py-2 text-desc font-bold transition-colors ${
+            className={`flex-1 rounded-full px-3 text-desc font-bold transition-colors ${
               active
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }`}
-            style={{ minHeight: 44 }}
           >
             {item.label}
           </button>
         );
       })}
+
     </div>
   );
 }
