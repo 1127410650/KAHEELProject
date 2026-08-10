@@ -1,0 +1,11 @@
+revoke execute on function public.mkt_re_is_owner(uuid) from public, anon;
+revoke execute on function public.mkt_re_is_member(uuid) from public, anon;
+revoke execute on function public.mkt_re_listing_member(uuid) from public, anon;
+revoke execute on function public.mkt_re_soft_delete_guard() from public, anon;
+revoke execute on function public.mkt_re_sync_sort_price() from public, anon;
+revoke execute on function public.mkt_re_lock_provider_type() from public, anon;
+revoke execute on function public.mkt_re_photos_limit() from public, anon;
+revoke execute on function public.mkt_re_booking_set_expiry() from public, anon;
+grant execute on function public.mkt_re_is_owner(uuid) to authenticated, service_role;
+grant execute on function public.mkt_re_is_member(uuid) to authenticated, service_role;
+grant execute on function public.mkt_re_listing_member(uuid) to authenticated, service_role;
