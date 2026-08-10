@@ -10,6 +10,7 @@ import { useI18n } from "@/i18n";
 
 const TILES = [
   {
+    slot: "home.tile.guide.bg",
     key: "guide",
     href: "/guides/syria",
     icon: Compass,
@@ -18,6 +19,7 @@ const TILES = [
     tint: "bg-primary/12 text-primary ring-primary/25",
   },
   {
+    slot: "home.tile.student.bg",
     key: "student",
     href: "/guides/students",
     icon: BookOpenCheck,
@@ -26,6 +28,7 @@ const TILES = [
     tint: "bg-gold/20 text-gold-foreground ring-gold/40",
   },
   {
+    slot: "home.tile.bookings.bg",
     key: "bookings",
     href: "/services",
     icon: CalendarClock,
@@ -41,9 +44,10 @@ export function QuickTiles() {
   const ar = locale === "ar";
   return (
     <section aria-label={ar ? "أقسام سريعة" : "Quick sections"} className="grid grid-cols-3 gap-2">
-      {TILES.map(({ key, href, icon: Icon, ar: labelAr, en, tint }) => (
+      {TILES.map(({ key, slot, href, icon: Icon, ar: labelAr, en, tint }) => (
         <a
           key={key}
+          data-kslot={slot}
           href={href}
           className={`flex min-h-[76px] min-w-0 flex-col items-center justify-center gap-1.5 rounded-2xl px-1.5 py-2 text-center ring-1 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary/45 ${tint}`}
         >

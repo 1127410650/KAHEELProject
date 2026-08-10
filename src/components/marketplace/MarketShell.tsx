@@ -144,6 +144,7 @@ export function MarketHeader({
     <>
       <header
         ref={headerRef}
+        data-kslot="home.header"
         className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden text-white shadow-[0_10px_28px_-22px_rgb(90_24_154/0.55)]"
       >
         {/* زخرفة خطية بيضاء خفيفة — بلا أي تأثير على القياسات. */}

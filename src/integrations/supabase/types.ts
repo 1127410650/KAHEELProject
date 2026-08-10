@@ -4454,11 +4454,83 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_media_slot_drafts: {
+        Row: {
+          patch: Json
+          slot_key: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          patch?: Json
+          slot_key: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          patch?: Json
+          slot_key?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_media_slot_drafts_slot_key_fkey"
+            columns: ["slot_key"]
+            isOneToOne: true
+            referencedRelation: "mkt_media_slots"
+            referencedColumns: ["slot_key"]
+          },
+        ]
+      }
+      mkt_media_slot_history: {
+        Row: {
+          actor: string | null
+          after_value: Json
+          before_value: Json
+          created_at: string
+          id: string
+          slot_key: string
+        }
+        Insert: {
+          actor?: string | null
+          after_value?: Json
+          before_value?: Json
+          created_at?: string
+          id?: string
+          slot_key: string
+        }
+        Update: {
+          actor?: string | null
+          after_value?: Json
+          before_value?: Json
+          created_at?: string
+          id?: string
+          slot_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_media_slot_history_slot_key_fkey"
+            columns: ["slot_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_media_slots"
+            referencedColumns: ["slot_key"]
+          },
+        ]
+      }
       mkt_media_slots: {
         Row: {
           alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
           group_key: string | null
           hidden: boolean
           is_demo: boolean
@@ -4471,11 +4543,20 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         Insert: {
           alt_text?: string | null
+          bg_color?: string | null
+          campaign_from?: string | null
+          campaign_id?: string | null
+          campaign_to?: string | null
           created_at?: string
+          edit_kind?: string
           external_url?: string | null
+          grad_angle?: number | null
+          grad_from?: string | null
+          grad_to?: string | null
           group_key?: string | null
           hidden?: boolean
           is_demo?: boolean
@@ -4488,11 +4569,20 @@ export type Database = {
           title_ar?: string | null
           updated_at?: string
           updated_by?: string | null
+          variant_page?: string | null
         }
         Update: {
           alt_text?: string | null
+          bg_color?: string | null
+          campaign_from?: string | null
+          campaign_id?: string | null
+          campaign_to?: string | null
           created_at?: string
+          edit_kind?: string
           external_url?: string | null
+          grad_angle?: number | null
+          grad_from?: string | null
+          grad_to?: string | null
           group_key?: string | null
           hidden?: boolean
           is_demo?: boolean
@@ -4505,8 +4595,17 @@ export type Database = {
           title_ar?: string | null
           updated_at?: string
           updated_by?: string | null
+          variant_page?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mkt_media_slots_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_message_hides: {
         Row: {
@@ -10595,8 +10694,16 @@ export type Database = {
         Args: { _slot_key: string }
         Returns: {
           alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
           group_key: string | null
           hidden: boolean
           is_demo: boolean
@@ -10609,6 +10716,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -10863,8 +10971,16 @@ export type Database = {
         }
         Returns: {
           alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
           group_key: string | null
           hidden: boolean
           is_demo: boolean
@@ -10877,6 +10993,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -10894,8 +11011,16 @@ export type Database = {
         Args: { _hidden: boolean; _slot_key: string }
         Returns: {
           alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
           group_key: string | null
           hidden: boolean
           is_demo: boolean
@@ -10908,6 +11033,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -10932,6 +11058,84 @@ export type Database = {
           _user_id: string
         }
         Returns: undefined
+      }
+      mkt_admin_slot_discard_draft: {
+        Args: { _slot_key: string }
+        Returns: undefined
+      }
+      mkt_admin_slot_publish: {
+        Args: { _slot_key: string }
+        Returns: {
+          alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
+          created_at: string
+          edit_kind: string
+          external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+          variant_page: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_media_slots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mkt_admin_slot_set_draft: {
+        Args: { _patch: Json; _slot_key: string }
+        Returns: Json
+      }
+      mkt_admin_slot_undo: {
+        Args: { _slot_key: string }
+        Returns: {
+          alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
+          created_at: string
+          edit_kind: string
+          external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+          variant_page: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_media_slots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       mkt_admin_store_action: {
         Args: { _action: string; _reason?: string; _storefront_id: string }
@@ -12483,6 +12687,43 @@ export type Database = {
           work_date: string
         }[]
       }
+      mkt_slot_apply: {
+        Args: { _clean: Json; _slot_key: string }
+        Returns: {
+          alt_text: string | null
+          bg_color: string | null
+          campaign_from: string | null
+          campaign_id: string | null
+          campaign_to: string | null
+          created_at: string
+          edit_kind: string
+          external_url: string | null
+          grad_angle: number | null
+          grad_from: string | null
+          grad_to: string | null
+          group_key: string | null
+          hidden: boolean
+          is_demo: boolean
+          kind: string
+          path: string | null
+          section: string
+          slot_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          title_ar: string | null
+          updated_at: string
+          updated_by: string | null
+          variant_page: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "mkt_media_slots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mkt_slot_sanitize_patch: { Args: { _patch: Json }; Returns: Json }
+      mkt_slot_snapshot: { Args: { _slot_key: string }; Returns: Json }
       mkt_slugify: { Args: { _text: string }; Returns: string }
       mkt_staff_eligible: {
         Args: { _kind: string; _user_id: string }

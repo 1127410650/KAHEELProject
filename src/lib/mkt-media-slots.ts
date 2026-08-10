@@ -19,6 +19,8 @@ export const MEDIA_SLOT_PREFIX = "public/media-slots";
 export const MEDIA_SLOTS_QUERY_KEY = ["mkt", "media-slots"] as const;
 
 export type MediaSlotKind = "image" | "video_url";
+/** نوع أدوات التعديل التي تظهر للفتحة في وضع التحرير البصري. */
+export type MediaSlotEditKind = "media" | "background" | "ad" | "design";
 
 export interface MediaSlotRow {
   slot_key: string;
@@ -33,6 +35,17 @@ export interface MediaSlotRow {
   sort_order: number;
   hidden: boolean;
   is_demo: boolean;
+  /** مظهر الفتحة المنشور: لون خلفية أو تدرّج بلونين وزاوية. */
+  bg_color: string | null;
+  grad_from: string | null;
+  grad_to: string | null;
+  grad_angle: number | null;
+  /** ربط موضع إعلاني بحملة من `mkt_ad_campaigns` مع فترة عرض. */
+  campaign_id: string | null;
+  campaign_from: string | null;
+  campaign_to: string | null;
+  edit_kind: MediaSlotEditKind;
+  variant_page: string | null;
 }
 
 export interface MediaSlot extends MediaSlotRow {
@@ -50,17 +63,22 @@ export const MEDIA_SECTION_LABELS: Record<string, string> = {
   cities: "دوائر المدن",
 };
 
+const SLOT_COLUMNS =
+  "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, " +
+  "sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
+  "campaign_from, campaign_to, edit_kind, variant_page";
+
+
 export async function fetchMediaSlots(): Promise<MediaSlot[]> {
   const { data, error } = await supabase
     .from("mkt_media_slots")
-    .select(
-      "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, sort_order, hidden, is_demo",
-    )
+    .select(SLOT_COLUMNS)
+
     .order("sort_order", { ascending: true })
     .order("slot_key", { ascending: true });
   if (error) throw error;
 
-  const rows = (data ?? []) as MediaSlotRow[];
+  const rows = (data ?? []) as unknown as MediaSlotRow[];
   const paths = rows.map((row) => row.path).filter((path): path is string => !!path);
 
   const signed: Record<string, string> = {};
@@ -109,6 +127,38 @@ export function slotAlt(slots: MediaSlot[] | undefined, key: string, fallback: s
 export function slotsInSection(slots: MediaSlot[] | undefined, section: string): MediaSlot[] {
   return (slots ?? []).filter((slot) => slot.section === section);
 }
+
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/**
+ * ترجمة مظهر الفتحة إلى CSS آمن. القيم تأتي من القاعدة بعد تنقية خادمية
+ * (لون سداسي أو زاوية رقمية فقط)، وتُفحص هنا مرة أخرى قبل الطباعة — فلا يمكن
+ * لأي نص حر أن يصل إلى صفحة أنماط.
+ */
+export function slotStyleCss(slot: MediaSlotRow): string | null {
+  const decls: string[] = [];
+  if (slot.bg_color && HEX.test(slot.bg_color)) {
+    decls.push(`background-color:${slot.bg_color}`);
+  }
+  if (slot.grad_from && slot.grad_to && HEX.test(slot.grad_from) && HEX.test(slot.grad_to)) {
+    const angle = Number.isFinite(slot.grad_angle) ? Math.min(360, Math.max(0, slot.grad_angle!)) : 90;
+    decls.push(`background-image:linear-gradient(${angle}deg,${slot.grad_from} 0%,${slot.grad_to} 100%)`);
+  }
+  if (decls.length === 0) return null;
+  return `[data-kslot="${slot.slot_key}"]{${decls.map((d) => `${d} !important`).join(";")}}`;
+}
+
+/** معرّف الحملة المربوطة بموضع إعلاني، إن كانت داخل فترة العرض. */
+export function slotCampaignId(slots: MediaSlot[] | undefined, key: string): string | null {
+  const slot = slots?.find((item) => item.slot_key === key);
+  if (!slot?.campaign_id) return null;
+  const now = Date.now();
+  if (slot.campaign_from && new Date(slot.campaign_from).getTime() > now) return null;
+  if (slot.campaign_to && new Date(slot.campaign_to).getTime() < now) return null;
+  return slot.campaign_id;
+}
+
+
 
 /** الأقسام بترتيب العرض مع فتحاتها — تُستخدم في شاشة الإدارة. */
 export function groupSlotsBySection(slots: MediaSlot[]): { section: string; label: string; slots: MediaSlot[] }[] {
