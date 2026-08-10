@@ -78,19 +78,24 @@ export function MarketHome() {
           <CategoryTileGrid />
         </LazyMount>
 
-        {RAILS.map((rail) => (
-          <CategoryRail
-            key={rail.id}
-            id={rail.id}
-            title={ar ? rail.ar : rail.en}
-            href={rail.href}
-            rows={rails.data?.[rail.id] ?? []}
-          />
-        ))}
+        {/* ذيل الصفحة يُضاف مرة واحدة بعد جهوز الصفوف: إضافة أسفل المحتوى
+            القائم لا تحرّك شيئًا ⇒ لا هزّة تخطيط. */}
+        {!rails.isPending && (
+          <>
+            {RAILS.map((rail) => (
+              <CategoryRail
+                key={rail.id}
+                id={rail.id}
+                title={ar ? rail.ar : rail.en}
+                href={rail.href}
+                rows={rails.data?.[rail.id] ?? []}
+              />
+            ))}
 
-        <LazyMount minHeight="220px">
-          <ExclusiveOffersRail />
-        </LazyMount>
+            <ExclusiveOffersRail />
+          </>
+        )}
+
 
 
       </div>
