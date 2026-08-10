@@ -275,13 +275,15 @@ export function MascotRoam() {
         }}
         className="pointer-events-none flex flex-col items-center justify-end gap-1"
       >
-        {/* الفقاعة: زجاج بنفسجي شفاف متناسق مع الخلفية — لا مستطيل أبيض. */}
+        {/* النص عائم بلا أي خلفية: لونه وظلّه يتكيّفان مع سطوع المكان. */}
         <span
           dir={ar ? "rtl" : "ltr"}
-          className="k-mascot-glass max-w-[10.5rem] rounded-2xl px-2.5 py-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
+          style={floatingTextStyle(scene.tone)}
+          className="max-w-[10.5rem] bg-transparent px-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
         >
           {scene.copy}
         </span>
+
         {/* الجسم: مشي حقيقي بتسلسل الإطارات الأربعة + ارتدادة وميلان خفيفين. */}
         <MascotWalk
           name={search ? "kaheelan" : "kaheel"}
