@@ -212,7 +212,7 @@ function ServicesMarketplacePage() {
                 ))}
               </div>
             ) : (
-              <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5">
+              <div className="-mx-[var(--page-x)] flex snap-x gap-3 overflow-x-auto px-[var(--page-x)] pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5">
                 {(categories.data ?? []).map((row) => (
                   <CategoryButton
                     key={row.code}

@@ -268,7 +268,7 @@ function PublicStorePage() {
           </Card>
         ) : (
           <>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="-mx-[var(--page-x)] flex gap-2 overflow-x-auto px-[var(--page-x)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {sections.map((section) => (
                 <Button
                   key={section.id}

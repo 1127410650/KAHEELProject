@@ -75,7 +75,7 @@ function CampaignTile({
             : "absolute inset-0 bg-[radial-gradient(120%_120%_at_88%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_62%)]"
         }
       />
-      <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-4 sm:px-6">
+      <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-[var(--page-x)]">
         <strong
           className={`text-lg font-black sm:text-2xl ${
             fallbackImage ? "text-primary-foreground" : ""

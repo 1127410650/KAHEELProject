@@ -619,7 +619,7 @@ function ProfilePage() {
             <CallSettingsToggle />
           </Section>
 
-          <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur">
+          <div className="sticky bottom-0 -mx-[var(--page-x)] flex flex-wrap items-center gap-3 border-t border-border bg-background/95 px-[var(--page-x)] py-3 backdrop-blur">
             <Button type="submit" disabled={busy}>
               {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {busy ? t("market.person.saving") : t("market.person.saveChanges")}

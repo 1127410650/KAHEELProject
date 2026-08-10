@@ -47,7 +47,7 @@ function DemoStoreWorldPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/48 to-black/5" aria-hidden />
           <div className={`absolute inset-0 bg-gradient-to-br ${world.gradient} opacity-32 mix-blend-color`} aria-hidden />
 
-          <div className="market-hero-band relative mx-auto flex min-h-[180px] w-full max-w-[1240px] flex-col justify-end px-5 sm:min-h-[220px] sm:px-6 lg:px-8">
+          <div className="market-hero-band relative mx-auto flex min-h-[180px] w-full max-w-[1240px] flex-col justify-end px-5 sm:min-h-[220px] sm:px-[var(--page-x)]">
             <Link to="/" className="mb-auto inline-flex w-fit items-center gap-[var(--sp-2)] rounded-full border border-white/25 bg-black/20 px-3 py-[var(--sp-2)] text-desc font-bold text-white backdrop-blur-md">
               <ArrowRight className="size-3.5" aria-hidden />
               جميع العوالم

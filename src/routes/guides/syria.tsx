@@ -114,7 +114,7 @@ function SyriaGuidePage() {
     <MarketShell>
       <main className="min-h-screen bg-background pb-10">
         <section className="relative isolate overflow-hidden border-b border-border bg-background text-foreground">
-          <div className="market-hero-band relative mx-auto flex w-full max-w-[1240px] flex-col justify-end px-4 sm:px-6 lg:px-8">
+          <div className="market-hero-band relative mx-auto flex w-full max-w-[1240px] flex-col justify-end px-[var(--page-x)]">
             <span className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary px-3 py-[var(--sp-2)] text-desc font-black text-primary sm:text-desc">
               <ShieldCheck className="size-4" aria-hidden />
               مصادر ظاهرة وشارات تحقق صادقة
@@ -135,7 +135,7 @@ function SyriaGuidePage() {
 
 
         <section className="sticky top-[56px] z-20 border-b border-border/70 bg-background/95 shadow-sm backdrop-blur">
-          <div className="mx-auto w-full max-w-[1240px] space-y-[var(--sp-3)] px-4 py-3 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[1240px] space-y-[var(--sp-3)] px-4 py-3 sm:px-[var(--page-x)]">
             <label className="relative block" htmlFor="syria-guide-search">
               <Search
                 className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -208,7 +208,7 @@ function SyriaGuidePage() {
           </div>
         </section>
 
-        <div className="mx-auto w-full max-w-[1240px] px-4 pt-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[1240px] px-4 pt-4 sm:px-[var(--page-x)]">
           <GuideDirectoryNotice />
         </div>
 

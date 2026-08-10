@@ -515,7 +515,7 @@ export function AdminShell({
   return (
     <div className="min-h-dvh bg-primary/5 text-foreground dark:bg-background">
       <header className="sticky top-0 z-40 border-b border-primary/15 bg-white/95 backdrop-blur-xl dark:border-border dark:bg-card/95">
-        <div className="flex min-h-[64px] w-full items-center gap-2 px-3 sm:px-5 lg:px-6">
+        <div className="flex min-h-[64px] w-full items-center gap-2 px-[var(--page-x)]">
           {allowed ? (
             <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
               <SheetTrigger asChild>

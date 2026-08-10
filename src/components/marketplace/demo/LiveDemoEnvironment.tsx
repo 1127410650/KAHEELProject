@@ -221,7 +221,7 @@ export function LiveDemoEnvironment() {
             </span>
           </div>
 
-          <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-4 sm:px-0 lg:grid-cols-7">
+          <div className="-mx-[var(--page-x)] flex snap-x gap-2 overflow-x-auto px-[var(--page-x)] pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-4 sm:px-0 lg:grid-cols-7">
             {LIVE_DEMO_ROLES.map((role) => {
               const RoleIcon = ROLE_ICONS[role.id];
               const selected = role.id === active.id;

@@ -370,7 +370,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               description={t("market.realEstate.intentDescription")}
             />
 
-            <div className="market-rail -mx-3 mt-4 flex snap-x gap-[var(--sp-3)] overflow-x-auto px-3 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">
+            <div className="market-rail -mx-[var(--page-x)] mt-4 flex snap-x gap-[var(--sp-3)] overflow-x-auto px-[var(--page-x)] pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">
               {PURPOSES.map((purpose) => {
                 const Icon = purpose.icon;
                 const active = params.type === purpose.code;
@@ -418,7 +418,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 title={t("market.realEstate.propertyTypesTitle")}
                 description={t("market.realEstate.propertyTypesDescription")}
               />
-              <div className="market-rail -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
+              <div className="market-rail -mx-[var(--page-x)] mt-3 flex gap-2 overflow-x-auto px-[var(--page-x)] pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
                 <FilterChip
                   active={!params.sub}
                   onClick={() => onUpdate({ sub: undefined })}
@@ -463,7 +463,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
                 title={t("market.realEstate.citiesTitle")}
                 description={t("market.realEstate.citiesDescription")}
               />
-              <div className="market-rail -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-2 sm:mx-0 sm:px-0">
+              <div className="market-rail -mx-[var(--page-x)] mt-3 flex gap-2 overflow-x-auto px-[var(--page-x)] pb-2 sm:mx-0 sm:px-0">
                 <FilterChip
                   active={!params.cityId}
                   onClick={() => onUpdate({ cityId: undefined })}
@@ -511,7 +511,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               </div>
 
               {featuredRows.length > 0 && (
-                <div className="market-rail -mx-3 mt-4 flex snap-x gap-3 overflow-x-auto px-3 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+                <div className="market-rail -mx-[var(--page-x)] mt-4 flex snap-x gap-3 overflow-x-auto px-[var(--page-x)] pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
                   {featuredRows.map((listing, index) => (
                     <div
                       key={listing.id}
