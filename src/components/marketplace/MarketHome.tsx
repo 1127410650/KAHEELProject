@@ -55,6 +55,8 @@ const RAILS = [
 export function MarketHome() {
   const { locale } = useI18n();
   const ar = locale === "ar";
+  // كل الصفوف في استعلام واحد: لا صف يُركّب قبل معرفة محتواه ⇒ لا ظهور ثم اختفاء.
+  const rails = useHomeRails(RAILS);
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
@@ -77,19 +79,19 @@ export function MarketHome() {
         </LazyMount>
 
         {RAILS.map((rail) => (
-          <LazyMount key={rail.id} minHeight="430px">
-            <CategoryRail
-              id={rail.id}
-              title={ar ? rail.ar : rail.en}
-              href={rail.href}
-              filters={rail.filters}
-            />
-          </LazyMount>
+          <CategoryRail
+            key={rail.id}
+            id={rail.id}
+            title={ar ? rail.ar : rail.en}
+            href={rail.href}
+            rows={rails.data?.[rail.id] ?? []}
+          />
         ))}
 
         <LazyMount minHeight="220px">
           <ExclusiveOffersRail />
         </LazyMount>
+
 
       </div>
     </div>
