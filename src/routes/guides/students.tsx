@@ -5,6 +5,7 @@ import {
   FileText,
   GraduationCap,
   ListChecks,
+  MessageCircleQuestion,
   Sparkles,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -80,7 +81,26 @@ function StudentToolsPage() {
               </div>
             </div>
 
+            <div className="border-b border-border p-4 sm:p-6">
+              <Link
+                to="/guides/students/assistant"
+                className="flex items-center gap-3 rounded-2xl border border-accent/45 bg-accent/8 p-3 text-start"
+              >
+                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent">
+                  <MessageCircleQuestion className="size-5" aria-hidden />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs font-black text-foreground">مساعد الطالب</span>
+                  <span className="mt-0.5 block text-[11px] leading-5 text-muted-foreground">
+                    اسأل عن أي مسألة، أو ارفع صورة السؤال — شرح خطوة بخطوة، ٥ أسئلة مجانية يوميًا.
+                  </span>
+                </span>
+                <ChevronRight className="size-4 shrink-0 rotate-180 text-muted-foreground" aria-hidden />
+              </Link>
+            </div>
+
             <div className="p-4 sm:p-6">
+
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"

@@ -50,6 +50,7 @@ import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
+import { Route as AdminStudentBotRouteImport } from './routes/admin/student-bot'
 import { Route as AdminTaxonomyRouteImport } from './routes/admin/taxonomy'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
@@ -94,6 +95,7 @@ import { Route as BusinessStoreIndexRouteImport } from './routes/business/store.
 import { Route as BusinessStoreCatalogRouteImport } from './routes/business/store.catalog'
 import { Route as BusinessStoreNewRouteImport } from './routes/business/store.new'
 import { Route as BusinessStoreOffersRouteImport } from './routes/business/store.offers'
+import { Route as GuidesStudentsAssistantRouteImport } from './routes/guides/students_.assistant'
 import { Route as GuidesSyriaSlugRouteImport } from './routes/guides/syria_.$slug'
 import { Route as MyAdsIndexRouteImport } from './routes/my/ads.index'
 import { Route as MyAdsNewRouteImport } from './routes/my/ads.new'
@@ -309,6 +311,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminStoresRoute = AdminStoresRouteImport.update({
   id: '/stores',
   path: '/stores',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminStudentBotRoute = AdminStudentBotRouteImport.update({
+  id: '/student-bot',
+  path: '/student-bot',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminTaxonomyRoute = AdminTaxonomyRouteImport.update({
@@ -533,6 +540,11 @@ const BusinessStoreOffersRoute = BusinessStoreOffersRouteImport.update({
   path: '/store/offers',
   getParentRoute: () => BusinessRouteRoute,
 } as any)
+const GuidesStudentsAssistantRoute = GuidesStudentsAssistantRouteImport.update({
+  id: '/guides/students_/assistant',
+  path: '/guides/students/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesSyriaSlugRoute = GuidesSyriaSlugRouteImport.update({
   id: '/guides/syria_/$slug',
   path: '/guides/syria/$slug',
@@ -632,6 +644,7 @@ export interface FileRoutesByFullPath {
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/student-bot': typeof AdminStudentBotRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -674,6 +687,7 @@ export interface FileRoutesByFullPath {
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
   '/business/store/offers': typeof BusinessStoreOffersRoute
+  '/guides/students/assistant': typeof GuidesStudentsAssistantRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
@@ -727,6 +741,7 @@ export interface FileRoutesByTo {
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/student-bot': typeof AdminStudentBotRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -769,6 +784,7 @@ export interface FileRoutesByTo {
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
   '/business/store/offers': typeof BusinessStoreOffersRoute
+  '/guides/students/assistant': typeof GuidesStudentsAssistantRoute
   '/guides/syria/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
@@ -826,6 +842,7 @@ export interface FileRoutesById {
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
+  '/admin/student-bot': typeof AdminStudentBotRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -868,6 +885,7 @@ export interface FileRoutesById {
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
   '/business/store/new': typeof BusinessStoreNewRoute
   '/business/store/offers': typeof BusinessStoreOffersRoute
+  '/guides/students_/assistant': typeof GuidesStudentsAssistantRoute
   '/guides/syria_/$slug': typeof GuidesSyriaSlugRoute
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
@@ -926,6 +944,7 @@ export interface FileRouteTypes {
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/student-bot'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -968,6 +987,7 @@ export interface FileRouteTypes {
     | '/business/store/catalog'
     | '/business/store/new'
     | '/business/store/offers'
+    | '/guides/students/assistant'
     | '/guides/syria/$slug'
     | '/my/ads/new'
     | '/my/errands/$id'
@@ -1021,6 +1041,7 @@ export interface FileRouteTypes {
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/student-bot'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1063,6 +1084,7 @@ export interface FileRouteTypes {
     | '/business/store/catalog'
     | '/business/store/new'
     | '/business/store/offers'
+    | '/guides/students/assistant'
     | '/guides/syria/$slug'
     | '/my/ads/new'
     | '/my/errands/$id'
@@ -1119,6 +1141,7 @@ export interface FileRouteTypes {
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
+    | '/admin/student-bot'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1161,6 +1184,7 @@ export interface FileRouteTypes {
     | '/business/store/catalog'
     | '/business/store/new'
     | '/business/store/offers'
+    | '/guides/students_/assistant'
     | '/guides/syria_/$slug'
     | '/my/ads/new'
     | '/my/errands/$id'
@@ -1210,6 +1234,7 @@ export interface RootRouteChildren {
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
+  GuidesStudentsAssistantRoute: typeof GuidesStudentsAssistantRoute
   GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
   ApiPublicAdCreditGatewayWebhookRoute: typeof ApiPublicAdCreditGatewayWebhookRoute
   ApiPublicOtpLinksyriaStatusRoute: typeof ApiPublicOtpLinksyriaStatusRoute
@@ -1502,6 +1527,13 @@ declare module '@tanstack/react-router' {
       path: '/stores'
       fullPath: '/admin/stores'
       preLoaderRoute: typeof AdminStoresRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/student-bot': {
+      id: '/admin/student-bot'
+      path: '/student-bot'
+      fullPath: '/admin/student-bot'
+      preLoaderRoute: typeof AdminStudentBotRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/taxonomy': {
@@ -1812,6 +1844,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessStoreOffersRouteImport
       parentRoute: typeof BusinessRouteRoute
     }
+    '/guides/students_/assistant': {
+      id: '/guides/students_/assistant'
+      path: '/guides/students/assistant'
+      fullPath: '/guides/students/assistant'
+      preLoaderRoute: typeof GuidesStudentsAssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/syria_/$slug': {
       id: '/guides/syria_/$slug'
       path: '/guides/syria/$slug'
@@ -1912,6 +1951,7 @@ interface AdminRouteRouteChildren {
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStoresRoute: typeof AdminStoresRoute
+  AdminStudentBotRoute: typeof AdminStudentBotRoute
   AdminTaxonomyRoute: typeof AdminTaxonomyRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
@@ -1946,6 +1986,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStoresRoute: AdminStoresRoute,
+  AdminStudentBotRoute: AdminStudentBotRoute,
   AdminTaxonomyRoute: AdminTaxonomyRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,
@@ -2086,6 +2127,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,
+  GuidesStudentsAssistantRoute: GuidesStudentsAssistantRoute,
   GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
   ApiPublicAdCreditGatewayWebhookRoute: ApiPublicAdCreditGatewayWebhookRoute,
   ApiPublicOtpLinksyriaStatusRoute: ApiPublicOtpLinksyriaStatusRoute,
