@@ -143,14 +143,18 @@ export function MascotRoam() {
       const band = findSafeBand(SCENE_WIDTH, SCENE_HEIGHT, {
         topInset: 118,
         bottomInset: 84,
-        pad: 14,
+        pad: 18,
       });
       if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return;
+      // تأكيد لحظي أنّ الصندوق فارغ فعلًا (بطاقات، نصوص، أزرار) قبل أي رسم.
+      const box = { left: band.left, top: band.top, width: band.width, height: SCENE_HEIGHT };
+      if (!areaStillFree(box, 14)) return;
       releaseRef.current = acquireStage(`roam:${kind}`);
       keyRef.current += 1;
       const pool = kind === "stroll" ? STROLL_COPY : SEARCH_COPY;
       const line = pickCopy(pool, lastCopyRef, ar);
-      setScene({ key: keyRef.current, kind, copy: line, band });
+      setScene({ key: keyRef.current, kind, copy: line, band, tone: sampleAreaTone(box) });
+
       window.clearTimeout(hideTimer.current);
       hideTimer.current = window.setTimeout(end, pacing.roamDurationMs);
     };
