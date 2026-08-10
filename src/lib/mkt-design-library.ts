@@ -164,7 +164,7 @@ export async function saveDesignTemplate(
   patch: Record<string, unknown>,
 ): Promise<string> {
   const { data, error } = await supabase.rpc("mkt_admin_design_template_save", {
-    _id: id,
+    _id: id as never,
     _patch: patch as never,
   });
   if (error) throw error;
