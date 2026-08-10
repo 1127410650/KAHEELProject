@@ -35,6 +35,8 @@ export const Route = createFileRoute("/admin/appearance")({
 function AppearancePage() {
   const slots = useMediaSlots();
   const refresh = useRefreshMediaSlots();
+  const library = useAiLibrary(true);
+
   const groups = groupSlotsBySection(slots.data ?? []);
 
   return (
