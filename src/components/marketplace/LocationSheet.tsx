@@ -215,8 +215,25 @@ export function LocationSheet({
 
   return (
     <>
-      <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="bottom" dir={dir} className="max-h-[88vh] overflow-y-auto">
+      <Sheet
+        open={open}
+        onOpenChange={(value) => {
+          // نافذة الخريطة تغطي الشاشة: لا تُغلق لوحة الموقع خلفها.
+          if (!value && mapOpen) return;
+          onOpenChange(value);
+        }}
+      >
+        <SheetContent
+          side="bottom"
+          dir={dir}
+          className="max-h-[88vh] overflow-y-auto"
+          onPointerDownOutside={(event) => {
+            if (mapOpen) event.preventDefault();
+          }}
+          onInteractOutside={(event) => {
+            if (mapOpen) event.preventDefault();
+          }}
+        >
           <SheetHeader className="text-start">
             <SheetTitle>{ar ? "موقعك" : "Your location"}</SheetTitle>
             <SheetDescription>
