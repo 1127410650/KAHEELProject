@@ -37,7 +37,9 @@ function CampaignTile({
     if (campaign) trackCampaign(campaign.id, "impression");
   }, [campaign]);
 
-  const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-card shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
+  // الأساس لافندر خفيف (لا أبيض) كي لا يبدو الموضع فارغًا مع أصل حملة شفاف.
+  const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
+
 
   /* الطبقة الأساسية: صورة القسم + تدرّج بنفسجي فوقها والنص — تضمن ألّا يظهر
      صندوق أبيض فارغ إذا كان أصل الحملة شفافًا أو تعذّر تحميله. */
