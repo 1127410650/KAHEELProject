@@ -16,7 +16,8 @@ import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
 import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
 import { useActivePageVariant } from "@/lib/mkt-page-variants";
-import { DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
+import { applyMediaSlotsToAqar, DEFAULT_AQAR_IMAGERY, loadAqarImagery } from "@/lib/aqar-imagery";
+import { useMediaSlots } from "@/lib/mkt-media-slots";
 import {
   fetchAqarListings,
   fetchAqarPromoted,
@@ -75,7 +76,11 @@ function AqarHomePage() {
     queryFn: () => fetchAqarListings({ track, limit: 16 }),
   });
 
-  const hero = imagery.data.hero;
+  /* صور الفتحات المرفوعة من لوحة الإدارة تتقدّم على الافتراضي، والفارغة لا تغيّر شيئًا. */
+  const slots = useMediaSlots();
+  const visuals = applyMediaSlotsToAqar(imagery.data, slots.data);
+
+  const hero = visuals.hero;
   const rate = usdRate.data ?? null;
 
   return (
@@ -123,13 +128,13 @@ function AqarHomePage() {
         {/* ترتيب «الأنواع أولًا» أو «المدن أولًا» يُبدّله المدير من لوحة التصاميم. */}
         {variant === "aqar.cities_first" ? (
           <>
-            <AqarCityCircles cities={imagery.data.cities} track={track} />
-            <AqarTypeGrid types={imagery.data.types} track={track} counts={counts.data ?? {}} />
+            <AqarCityCircles cities={visuals.cities} track={track} />
+            <AqarTypeGrid types={visuals.types} track={track} counts={counts.data ?? {}} />
           </>
         ) : (
           <>
-            <AqarTypeGrid types={imagery.data.types} track={track} counts={counts.data ?? {}} />
-            <AqarCityCircles cities={imagery.data.cities} track={track} />
+            <AqarTypeGrid types={visuals.types} track={track} counts={counts.data ?? {}} />
+            <AqarCityCircles cities={visuals.cities} track={track} />
           </>
         )}
 
