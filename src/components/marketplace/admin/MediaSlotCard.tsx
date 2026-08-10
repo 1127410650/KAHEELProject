@@ -13,10 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { readableSize } from "@/lib/media-compress";
 import {
+  BRAND_STAMP_DEFAULTS,
+  STAMP_COLORS,
   STAMP_POSITIONS,
+  STAMP_SIZES,
   type BrandStampOptions,
-  type BrandStampPosition,
 } from "@/lib/kaheel-brand-stamp";
+
 import {
   clearMediaSlot,
   saveMediaSlotMeta,
