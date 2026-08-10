@@ -19,6 +19,8 @@ export const MEDIA_SLOT_PREFIX = "public/media-slots";
 export const MEDIA_SLOTS_QUERY_KEY = ["mkt", "media-slots"] as const;
 
 export type MediaSlotKind = "image" | "video_url";
+/** نوع أدوات التعديل التي تظهر للفتحة في وضع التحرير البصري. */
+export type MediaSlotEditKind = "media" | "background" | "ad" | "design";
 
 export interface MediaSlotRow {
   slot_key: string;
@@ -33,6 +35,17 @@ export interface MediaSlotRow {
   sort_order: number;
   hidden: boolean;
   is_demo: boolean;
+  /** مظهر الفتحة المنشور: لون خلفية أو تدرّج بلونين وزاوية. */
+  bg_color: string | null;
+  grad_from: string | null;
+  grad_to: string | null;
+  grad_angle: number | null;
+  /** ربط موضع إعلاني بحملة من `mkt_ad_campaigns` مع فترة عرض. */
+  campaign_id: string | null;
+  campaign_from: string | null;
+  campaign_to: string | null;
+  edit_kind: MediaSlotEditKind;
+  variant_page: string | null;
 }
 
 export interface MediaSlot extends MediaSlotRow {
@@ -49,6 +62,12 @@ export const MEDIA_SECTION_LABELS: Record<string, string> = {
   aqar_types: "أنواع العقار",
   cities: "دوائر المدن",
 };
+
+const SLOT_COLUMNS =
+  "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, " +
+  "sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
+  "campaign_from, campaign_to, edit_kind, variant_page";
+
 
 export async function fetchMediaSlots(): Promise<MediaSlot[]> {
   const { data, error } = await supabase
