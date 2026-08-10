@@ -44,44 +44,46 @@ export const Route = createFileRoute("/admin/")({
 
 type Tone = "teal" | "blue" | "amber" | "rose" | "violet" | "slate";
 
+// كل النغمات من design tokens الخاصة بلوحة الإدارة — لا قيمة لون مباشرة هنا.
 const TONES: Record<Tone, { icon: string; value: string; border: string; glow: string }> = {
   teal: {
-    icon: "bg-[#e5f6f3] text-[#087f78] dark:bg-primary/15 dark:text-primary",
-    value: "text-[#075e59] dark:text-foreground",
-    border: "hover:border-[#8ccbc5]",
-    glow: "from-[#e8f8f5]/80",
+    icon: "bg-primary/12 text-primary dark:bg-primary/15 dark:text-primary",
+    value: "text-primary-pressed dark:text-foreground",
+    border: "hover:border-primary/45",
+    glow: "from-primary/8",
   },
   blue: {
-    icon: "bg-sky-50 text-sky-700 dark:bg-sky-950/30 dark:text-sky-300",
-    value: "text-sky-900 dark:text-foreground",
-    border: "hover:border-sky-300",
-    glow: "from-sky-50/80",
+    icon: "bg-admin-progress-soft text-admin-progress",
+    value: "text-admin-progress dark:text-foreground",
+    border: "hover:border-admin-progress/45",
+    glow: "from-admin-progress-soft/80",
   },
   amber: {
-    icon: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300",
-    value: "text-amber-900 dark:text-foreground",
-    border: "hover:border-amber-300",
-    glow: "from-amber-50/80",
+    icon: "bg-admin-pending-soft text-admin-pending",
+    value: "text-admin-pending dark:text-foreground",
+    border: "hover:border-admin-pending/45",
+    glow: "from-admin-pending-soft/80",
   },
   rose: {
-    icon: "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300",
-    value: "text-rose-900 dark:text-foreground",
-    border: "hover:border-rose-300",
-    glow: "from-rose-50/80",
+    icon: "bg-admin-critical-soft text-admin-critical",
+    value: "text-admin-critical dark:text-foreground",
+    border: "hover:border-admin-critical/45",
+    glow: "from-admin-critical-soft/80",
   },
   violet: {
-    icon: "bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300",
-    value: "text-violet-900 dark:text-foreground",
-    border: "hover:border-violet-300",
-    glow: "from-violet-50/80",
+    icon: "bg-admin-verify-soft text-admin-verify",
+    value: "text-admin-verify dark:text-foreground",
+    border: "hover:border-admin-verify/45",
+    glow: "from-admin-verify-soft/80",
   },
   slate: {
-    icon: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
-    value: "text-slate-900 dark:text-foreground",
-    border: "hover:border-slate-300",
-    glow: "from-slate-50/80",
+    icon: "bg-admin-idle-soft text-admin-idle",
+    value: "text-admin-idle dark:text-foreground",
+    border: "hover:border-admin-idle/40",
+    glow: "from-admin-idle-soft/80",
   },
 };
+
 
 function Stat({
   label,
