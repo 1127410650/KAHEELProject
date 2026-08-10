@@ -72,12 +72,12 @@ export function MarketHome() {
           <SponsoredBanner />
         </LazyMount>
 
-        <LazyMount minHeight="230px">
+        <LazyMount minHeight="380px">
           <CategoryTileGrid />
         </LazyMount>
 
         {RAILS.map((rail) => (
-          <LazyMount key={rail.id} minHeight="300px">
+          <LazyMount key={rail.id} minHeight="430px">
             <CategoryRail
               id={rail.id}
               title={ar ? rail.ar : rail.en}
@@ -87,9 +87,10 @@ export function MarketHome() {
           </LazyMount>
         ))}
 
-        <LazyMount minHeight="260px">
+        <LazyMount minHeight="220px">
           <ExclusiveOffersRail />
         </LazyMount>
+
       </div>
     </div>
   );
