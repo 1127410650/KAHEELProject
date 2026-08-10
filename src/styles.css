@@ -108,11 +108,12 @@
 
 
   --shadow-panel:
-    0 1px 2px oklch(0.2354 0.1416 303.37 / 0.05),
-    0 6px 18px -12px oklch(0.2354 0.1416 303.37 / 0.14);
+    0 1px 2px oklch(0 0 0 / 0.04),
+    0 6px 18px -14px oklch(0 0 0 / 0.1);
   --shadow-raised:
-    0 1px 3px oklch(0.2354 0.1416 303.37 / 0.07),
-    0 14px 32px -20px oklch(0.2354 0.1416 303.37 / 0.22);
+    0 1px 3px oklch(0 0 0 / 0.05),
+    0 14px 32px -22px oklch(0 0 0 / 0.14);
+
 }
 
 /*
@@ -124,32 +125,33 @@
 :root {
   --radius: 0.75rem;
 
-  /* #FFFFFF / #240046 */
+  /* أسطح محايدة: أبيض للصفحة والبطاقات، ونص أسود مائل (#111) */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.2354 0.1416 303.37);
+  --foreground: oklch(0.1776 0 0);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2354 0.1416 303.37);
+  --card-foreground: oklch(0.1776 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2354 0.1416 303.37);
+  --popover-foreground: oklch(0.1776 0 0);
 
-  /* #7B2CBF / #5A189A / #3C096C */
+  /* #7B2CBF / #5A189A / #3C096C — البنفسجي لون تجميلي فقط */
   --primary: oklch(0.4854 0.2222 303.37);
   --primary-foreground: oklch(1 0 0);
   --primary-dark: oklch(0.3906 0.1922 303.44);
   --primary-pressed: oklch(0.3009 0.1601 303.65);
-  /* أعمق درجة للهوية (#10002B) — للحالة النشطة والتدرجات الداكنة */
+  /* أعمق درجة للهوية (#10002B) — للتفاصيل الدقيقة فقط */
   --primary-deep: oklch(0.1584 0.1103 303.5);
 
-  /* أسطح فاتحة مشتقة من #E0AAFF و #C77DFF */
-  --secondary: oklch(0.9536 0.0338 305.5);
-  --secondary-foreground: oklch(0.3009 0.1601 303.65);
+  /* أسطح رمادية محايدة جدًا — لا تلوين بنفسجي للمساحات */
+  --secondary: oklch(0.968 0 0);
+  --secondary-foreground: oklch(0.2178 0 0);
 
-  --muted: oklch(0.9662 0.0252 305.5);
-  --muted-foreground: oklch(0.3906 0.1922 303.44);
+  --muted: oklch(0.972 0 0);
+  --muted-foreground: oklch(0.4386 0 0);
 
-  --accent: oklch(0.9432 0.0409 305.5);
+  --accent: oklch(0.9702 0.0075 305.5);
   --accent-foreground: oklch(0.3009 0.1601 303.65);
+
 
   /* الذهبي — للعناصر المميزة فقط */
   --gold: oklch(0.7686 0.1647 70.08);
@@ -169,8 +171,9 @@
   --info: oklch(0.4854 0.2222 303.37);
   --info-foreground: oklch(1 0 0);
 
-  --border: oklch(0.8837 0.0755 305.5);
-  --input: oklch(0.8299 0.1046 304.7);
+  /* حدود رمادية فاتحة 1px — الفصل بالحد لا باللون */
+  --border: oklch(0.918 0 0);
+  --input: oklch(0.888 0 0);
   --ring: oklch(0.4854 0.2222 303.37);
 
   --chart-1: oklch(0.4854 0.2222 303.37);
@@ -180,13 +183,14 @@
   --chart-5: oklch(0.7413 0.1435 305.5);
 
   --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.2354 0.1416 303.37);
+  --sidebar-foreground: oklch(0.1776 0 0);
   --sidebar-primary: oklch(0.4854 0.2222 303.37);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.9536 0.0338 305.5);
-  --sidebar-accent-foreground: oklch(0.2354 0.1416 303.37);
-  --sidebar-border: oklch(0.8837 0.0755 305.5);
+  --sidebar-accent: oklch(0.968 0 0);
+  --sidebar-accent-foreground: oklch(0.1776 0 0);
+  --sidebar-border: oklch(0.918 0 0);
   --sidebar-ring: oklch(0.4854 0.2222 303.37);
+
 
   /* admin status tones — مشتقة من البنفسجي عدا الدلالي (خطر/إنجاز) */
   --admin-critical: oklch(0.42 0.17 25);
@@ -613,38 +617,40 @@ body {
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
   --background: #ffffff;
-  --foreground: #240046;
+  --foreground: #111111;
   --card: #ffffff;
-  --card-foreground: #240046;
+  --card-foreground: #111111;
   --popover: #ffffff;
-  --popover-foreground: #240046;
+  --popover-foreground: #111111;
 
   --primary: #7b2cbf;
   --primary-foreground: #ffffff;
   --primary-dark: #5a189a;
   --primary-pressed: #3c096c;
 
-  --secondary: color-mix(in srgb, #e0aaff 24%, white);
-  --secondary-foreground: #3c096c;
-  --muted: color-mix(in srgb, #e0aaff 18%, white);
-  --muted-foreground: #5a189a;
-  --accent: color-mix(in srgb, #c77dff 20%, white);
+  /* أسطح رمادية محايدة — لا مساحات بنفسجية */
+  --secondary: #f5f5f7;
+  --secondary-foreground: #1f1f24;
+  --muted: #f7f7f8;
+  --muted-foreground: #55555f;
+  --accent: #f7f4fb;
   --accent-foreground: #3c096c;
 
-  --border: color-mix(in srgb, #c77dff 48%, white);
-  --input: color-mix(in srgb, #9d4edd 42%, white);
+  /* حد رمادي فاتح جدًا 1px هو أداة الفصل الوحيدة */
+  --border: #e8e8ec;
+  --input: #dcdce2;
   --ring: #7b2cbf;
 
   --gold: #f59e0b;
   --gold-dark: #c77b15;
-  --gold-soft: #fff4de;
+  --gold-soft: #fff8ec;
   --gold-foreground: #59451f;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #240046;
-  --sidebar-accent: color-mix(in srgb, #e0aaff 24%, white);
-  --sidebar-accent-foreground: #240046;
-  --sidebar-border: color-mix(in srgb, #c77dff 48%, white);
+  --sidebar-foreground: #111111;
+  --sidebar-accent: #f5f5f7;
+  --sidebar-accent-foreground: #111111;
+  --sidebar-border: #e8e8ec;
   --sidebar-primary: #7b2cbf;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-ring: #7b2cbf;
@@ -660,40 +666,33 @@ body:has(.market-surface) {
 }
 
 /*
- * Elevation: the shared `--shadow-panel` / `--shadow-raised` tokens are tinted
- * with the internal system's petrol ink. Inside the marketplace scope the same
- * elevation is re-tinted with navy so no teal reaches a computed style, while
- * the admin console keeps its own shadows untouched.
+ * Elevation: ظلال محايدة ناعمة جدًا — الفصل بالحد الرفيع أولًا ثم بظل خفيف.
  */
 .market-surface,
 body:has(.market-surface) {
-  --shadow-panel: 0 1px 2px rgb(60 9 108 / 0.05), 0 12px 30px -20px rgb(60 9 108 / 0.24);
-  --shadow-raised: 0 2px 5px rgb(60 9 108 / 0.08), 0 22px 52px -28px rgb(36 0 70 / 0.32);
+  --shadow-panel: 0 1px 2px rgb(17 17 17 / 0.04), 0 8px 22px -18px rgb(17 17 17 / 0.12);
+  --shadow-raised: 0 1px 3px rgb(17 17 17 / 0.05), 0 16px 36px -26px rgb(17 17 17 / 0.16);
 }
 
 .market-surface .shadow-panel,
 body:has(.market-surface) .shadow-panel {
   box-shadow:
-    0 1px 2px rgb(60 9 108 / 0.08),
-    0 10px 24px -16px rgb(36 0 70 / 0.25) !important;
+    0 1px 2px rgb(17 17 17 / 0.05),
+    0 8px 20px -16px rgb(17 17 17 / 0.12) !important;
 }
 
 .market-surface .shadow-raised,
 body:has(.market-surface) .shadow-raised {
   box-shadow:
-    0 1px 3px rgb(60 9 108 / 0.1),
-    0 18px 42px -24px rgb(36 0 70 / 0.32) !important;
+    0 1px 3px rgb(17 17 17 / 0.06),
+    0 14px 32px -24px rgb(17 17 17 / 0.16) !important;
 }
 
-/* One contemporary visual language for every Kaheel marketplace/account page.
- * Admin pages never carry `.market-surface`, so their established console
- * layout and status palette remain isolated. */
+/* سطح المنصة أبيض نظيف: لا تدرجات ولا بوكيه خلف المحتوى. */
 .market-shell > main {
-  background:
-    radial-gradient(circle at 92% 0%, rgb(157 78 221 / 0.07), transparent 24rem),
-    radial-gradient(circle at 8% 18%, rgb(245 158 11 / 0.045), transparent 20rem),
-    linear-gradient(180deg, #ffffff 0%, var(--background) 38%, #ffffff 100%);
+  background: #ffffff;
 }
+
 
 /* خلفية اليوم: الطبقة تجلس خلف كل شيء، فيصبح سطح المحتوى شفافًا حتى تُرى.
  * البطاقات والرؤوس تبقى بخلفياتها كما هي، فالنصوص لا تفقد تباينها. */
@@ -757,15 +756,10 @@ body:has(.market-surface) .shadow-raised {
 .market-page-intro {
   position: relative;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--border) 80%, white);
+  border: 1px solid var(--border);
   border-radius: 1.35rem;
-  background:
-    radial-gradient(circle at 96% -10%, rgb(157 78 221 / 0.2), transparent 11rem),
-    radial-gradient(circle at 2% 120%, rgb(224 170 255 / 0.28), transparent 10rem),
-    linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, #e0aaff 12%, white) 100%);
-  box-shadow:
-    0 1px 1px rgb(36 0 70 / 0.04), 0 4px 10px -4px rgb(36 0 70 / 0.08),
-    0 20px 34px -20px rgb(36 0 70 / 0.2), inset 0 1px 0 #fff;
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(17 17 17 / 0.04), 0 10px 24px -20px rgb(17 17 17 / 0.12);
   padding: 1.1rem 1.2rem;
 }
 
@@ -773,21 +767,20 @@ body:has(.market-surface) .shadow-raised {
   position: absolute;
   inset-block: 0.95rem;
   inset-inline-start: 0;
-  width: 4px;
+  width: 3px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #3c096c, #c77dff);
+  background: var(--primary);
   content: "";
 }
 
 .market-section {
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--border) 88%, white);
+  border: 1px solid var(--border);
   border-radius: 1.15rem;
-  background: rgb(255 255 255 / 0.96);
-  box-shadow:
-    0 1px 1px rgb(36 0 70 / 0.04), 0 3px 8px -3px rgb(36 0 70 / 0.07),
-    0 16px 28px -18px rgb(36 0 70 / 0.18);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(17 17 17 / 0.04), 0 8px 20px -18px rgb(17 17 17 / 0.12);
 }
+
 
 /* ───────────────────────── Compact page hero band ─────────────────────────
  * One shared size for every large purple section header (guides, services,
@@ -1686,16 +1679,17 @@ body:has(.market-surface) {
   --k-fast: 140ms;
   --k-mid: 240ms;
 
-  /* layered elevation — three stacked layers read as real depth */
+  /* layered elevation — رمادي محايد وناعم فوق الأبيض */
   --k-shadow-1:
-    0 1px 1px rgb(36 0 70 / 0.04), 0 2px 4px rgb(36 0 70 / 0.04),
-    0 8px 16px -10px rgb(36 0 70 / 0.1);
+    0 1px 1px rgb(17 17 17 / 0.03), 0 2px 4px rgb(17 17 17 / 0.03),
+    0 8px 16px -12px rgb(17 17 17 / 0.08);
   --k-shadow-2:
-    0 1px 1px rgb(36 0 70 / 0.05), 0 4px 8px -2px rgb(36 0 70 / 0.06),
-    0 16px 28px -14px rgb(36 0 70 / 0.16);
+    0 1px 2px rgb(17 17 17 / 0.04), 0 4px 8px -3px rgb(17 17 17 / 0.05),
+    0 16px 28px -18px rgb(17 17 17 / 0.11);
   --k-shadow-3:
-    0 1px 2px rgb(36 0 70 / 0.06), 0 8px 16px -6px rgb(36 0 70 / 0.1),
-    0 28px 52px -20px rgb(36 0 70 / 0.24);
+    0 1px 2px rgb(17 17 17 / 0.05), 0 8px 16px -8px rgb(17 17 17 / 0.07),
+    0 28px 52px -26px rgb(17 17 17 / 0.16);
+
   --k-glow: 0 10px 30px -12px rgb(157 78 221 / 0.5);
 
   /* gradient stock */

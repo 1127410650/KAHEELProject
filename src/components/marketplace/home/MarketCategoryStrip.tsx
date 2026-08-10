@@ -41,11 +41,8 @@ export function MarketCategoryStrip() {
   }
 
   return (
-    <div className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_18%_-45%,rgb(224_170_255/0.42),transparent_39%),linear-gradient(105deg,#10002b_0%,#3c096c_52%,#7b2cbf_135%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.08)]">
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
-      />
+    <div className="relative w-full overflow-hidden border-t border-border bg-background text-foreground">
+
 
       <nav
         aria-label={t("market.home.strip.label")}
@@ -131,9 +128,9 @@ function StripTile({
   const frameClass =
     "grid size-[44px] place-items-center overflow-hidden rounded-full border-2 transition duration-300 sm:size-[50px] lg:size-[54px]";
   const idleFrame =
-    "border-white/75 bg-white shadow-[0_6px_16px_rgb(36_0_70/0.28),inset_0_1px_0_rgb(255_255_255/0.9)] group-hover:-translate-y-0.5";
-  const activeFrame =
-    "border-white bg-[linear-gradient(145deg,#9d4edd,#5a189a)] shadow-[0_8px_22px_rgb(60_9_108/0.42)]";
+    "border-border bg-background shadow-panel group-hover:-translate-y-0.5";
+  const activeFrame = "border-primary bg-accent shadow-panel";
+
 
   const body = (
     <>
@@ -157,7 +154,10 @@ function StripTile({
       {/* Full name, wrapped over at most two lines — never clipped. */}
       <span
         dir={dir}
-        className="flex min-h-[24px] w-full items-start justify-center whitespace-normal break-words text-[9.5px] font-black leading-[1.2] text-market-navy-foreground/95 sm:text-[10.5px]"
+        className={`flex min-h-[24px] w-full items-start justify-center whitespace-normal break-words text-[9.5px] font-black leading-[1.2] sm:text-[10.5px] ${
+          active ? "text-primary" : "text-foreground"
+        }`}
+
       >
         {label}
       </span>

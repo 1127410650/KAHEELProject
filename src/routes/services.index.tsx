@@ -153,13 +153,11 @@ function ServicesMarketplacePage() {
           banner={<HomeAdStrip addHref="/my/listings/new" />}
           progress={progressSteps}
         />
-        <section className="relative overflow-hidden border-b bg-market-navy text-white">
-          <div className="absolute -start-24 -top-24 size-72 rounded-full bg-primary/25 blur-3xl" />
-          <div className="absolute -bottom-32 end-0 size-80 rounded-full bg-primary/20 blur-3xl" />
+        <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
           <div className="market-hero-band relative mx-auto w-full max-w-7xl px-4">
             <div className="max-w-2xl">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold backdrop-blur">
-                <ShieldCheck className="size-4 text-primary-foreground/80" />
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-bold text-primary">
+                <ShieldCheck className="size-4" />
                 {locale === "ar"
                   ? "مواعيد واضحة ومقدمو خدمات موثوقون"
                   : "Clear appointments, trusted providers"}
@@ -167,7 +165,7 @@ function ServicesMarketplacePage() {
               <h1 className="font-black tracking-tight">
                 {locale === "ar" ? "خدمتك، في الوقت الذي يناسبك" : "Your service, at your time"}
               </h1>
-              <p className="mt-1.5 max-w-xl text-white/75">
+              <p className="mt-1.5 max-w-xl text-muted-foreground">
                 {locale === "ar"
                   ? "اختر الخدمة والمختص والموعد، ثم تابع حالة الحجز من حسابك خطوة بخطوة."
                   : "Choose a service, professional and time, then track every booking step from your account."}
@@ -183,11 +181,12 @@ function ServicesMarketplacePage() {
                     ? "ابحث عن تنظيف، صيانة، تدريب…"
                     : "Search cleaning, maintenance, training…"
                 }
-                className="h-14 rounded-2xl border-white/10 bg-white ps-12 text-base text-foreground shadow-2xl placeholder:text-muted-foreground"
+                className="h-14 rounded-2xl border-border bg-card ps-12 text-base text-foreground shadow-panel placeholder:text-muted-foreground"
               />
             </div>
           </div>
         </section>
+
 
         <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-7">
           <section aria-labelledby="service-categories-title">

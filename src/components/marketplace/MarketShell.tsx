@@ -21,10 +21,10 @@ import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { routeRuleFor } from "@/lib/routes-map";
 import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
-import { BackdropLayer } from "@/components/marketplace/BackdropLayer";
+
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
 
-import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
+
 
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
@@ -86,9 +86,14 @@ export function MarketHeader({
     <>
       <header
         ref={headerRef}
-        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-white/15 bg-[linear-gradient(112deg,#240046_0%,#3c096c_56%,#5a189a_118%)] text-white shadow-[0_7px_28px_rgb(36_0_70/0.22)] backdrop-blur-xl"
+        className="fixed inset-x-0 top-0 z-40 overflow-hidden border-b border-border bg-background/95 text-foreground shadow-[0_1px_0_rgb(17_17_17/0.04)] backdrop-blur-xl"
       >
-        <SeasonalLayer placement="header" />
+        {/* زخرفة هندسية خفيفة جدًا بدل الكتلة الملوّنة — بلا أي تأثير على القياسات. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.5] [background-image:linear-gradient(115deg,rgb(123_44_191/0.05)_0_1px,transparent_1px_9px)] [background-size:9px_9px]"
+        />
+
         <div
           className={
             home
@@ -102,7 +107,7 @@ export function MarketHeader({
               <button
                 type="button"
                 onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
@@ -111,7 +116,7 @@ export function MarketHeader({
                   className={
                     locationKnown
                       ? "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight"
-                      : "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight text-[#ffd166] underline decoration-dotted underline-offset-2"
+                      : "min-w-0 truncate whitespace-nowrap text-[12.5px] font-black leading-tight text-primary underline decoration-dotted underline-offset-2"
                   }
                 >
                   {locationLabel}
@@ -129,19 +134,20 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-6 shrink-0 rounded-lg bg-white p-0.5 shadow-[0_5px_16px_rgb(16_0_43/0.22)] sm:size-7"
+                  className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-[18px] font-black leading-none tracking-[-0.07em] text-white sm:text-xl">
+                <span className="text-[18px] font-black leading-none tracking-[-0.07em] text-foreground sm:text-xl">
                   {t("market.brand")}
                 </span>
+
               </Link>
               <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
                 <a
                   href={
                     session ? "/my/notifications" : "/auth?next=%2Fdashboard%2Fnotifications"
                   }
-                  className="relative grid size-8 place-items-center rounded-full outline-none transition hover:bg-white/12 focus-visible:ring-2 focus-visible:ring-white"
+                  className="relative grid size-8 place-items-center rounded-full text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45"
                   aria-label={t("market.bottomNav.alerts")}
                 >
                   <Bell className="size-[18px]" aria-hidden />
@@ -168,17 +174,17 @@ export function MarketHeader({
                   width={1024}
                   height={1024}
                   loading="lazy"
-                  className="size-6 shrink-0 rounded-lg bg-white p-0.5 sm:size-7"
+                  className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
                   aria-hidden
                 />
-                <span className="text-lg font-black leading-none tracking-[-0.06em] text-white sm:text-xl">
+                <span className="text-lg font-black leading-none tracking-[-0.06em] text-foreground sm:text-xl">
                   {t("market.brand")}
                 </span>
               </Link>
               <button
                 type="button"
                 onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-brand-300 outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-1 text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
@@ -195,7 +201,8 @@ export function MarketHeader({
         {home && (
           <nav
             aria-label={t("market.nav.menu")}
-            className="border-t border-white/12 bg-brand-950/92"
+            className="border-t border-border bg-background"
+
           >
             <div className="mx-auto flex min-h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
               {[
@@ -211,8 +218,9 @@ export function MarketHeader({
                   href={href}
                   className={
                     index === 0
-                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-white px-3.5 text-[11px] font-black text-brand-900 outline-none focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
-                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-[11px] font-bold text-white/84 outline-none transition hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-300 sm:text-xs"
+                      ? "inline-flex min-h-7 shrink-0 items-center rounded-full bg-primary px-3.5 text-[11px] font-black text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
+                      : "inline-flex min-h-7 shrink-0 items-center rounded-full px-3 text-[11px] font-bold text-muted-foreground outline-none transition hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/45 sm:text-xs"
+
                   }
                 >
                   {label}
@@ -223,7 +231,7 @@ export function MarketHeader({
         )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
-          <div className="border-t border-white/14 bg-brand-300 px-3 py-1 text-center text-[11px] font-medium text-brand-950 sm:text-xs">
+          <div className="border-t border-border bg-secondary px-3 py-1 text-center text-[11px] font-medium text-foreground sm:text-xs">
             {t("market.offlineNotice")}
           </div>
         )}
@@ -339,24 +347,25 @@ export function MarketBottomNav() {
       aria-label={t("market.nav.menu")}
       data-testid="mkt-bottom-nav"
       data-auth={authenticated ? "member" : "guest"}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-brand-400/40 bg-white/94 pb-[env(safe-area-inset-bottom)] text-market-navy shadow-[0_-1px_0_rgb(199_125_255/0.3),0_-6px_16px_-12px_rgb(60_9_108/0.28)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/96 pb-[env(safe-area-inset-bottom)] text-foreground shadow-[0_-1px_0_rgb(17_17_17/0.04)] backdrop-blur-xl lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch px-1">
         {items.map((item) => {
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
-          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-[9.5px] font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-market-blue min-[360px]:text-[10px] ${
-            active ? "text-market-blue" : "text-market-silver-muted hover:text-market-navy"
+          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-[9.5px] font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-[10px] ${
+            active ? "text-primary" : "text-muted-foreground hover:text-foreground"
           }`;
           const inner = (
             <>
               <span
                 className={
                   active
-                    ? "grid h-[22px] w-9 place-items-center rounded-full bg-[radial-gradient(circle_at_50%_18%,#f3e3ff,#e0aaff)] text-market-blue"
+                    ? "grid h-[22px] w-9 place-items-center rounded-full bg-accent text-primary"
                     : "grid h-[22px] w-9 place-items-center rounded-full"
                 }
               >
+
                 <item.icon className="size-[17px]" strokeWidth={active ? 2.4 : 2} aria-hidden />
               </span>
               <span className="max-w-full truncate">{label}</span>
@@ -482,7 +491,7 @@ export function MarketShell({
           : "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip"
       }
     >
-      <BackdropLayer />
+      {/* سطح أبيض نظيف: لا طبقة خلفية مصوّرة خلف المحتوى. */}
       <MarketHeader showCategories={showCategories} home={home} />
       <main className="flex-1">{children}</main>
 
