@@ -9,7 +9,7 @@ import { Briefcase, Home, Mountain, Waves } from "lucide-react";
 import type { AqarTrack } from "@/lib/mkt-aqar";
 
 const MOODS: { key: string; label: string; hint: string; icon: typeof Waves }[] = [
-  { key: "chalet", label: "استراحة", hint: "شاليهات ومسابح", icon: Waves },
+  { key: "chalet", label: "استراحة", hint: "شاليه ومسبح", icon: Waves },
   { key: "villa", label: "عزوة العائلة", hint: "فلل واسعة", icon: Home },
   { key: "apartment", label: "إقامة عمل", hint: "شقق مفروشة", icon: Briefcase },
   { key: "farm", label: "هدوء الريف", hint: "مزارع وبيوت", icon: Mountain },
