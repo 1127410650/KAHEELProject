@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" role="img" aria-label="">
   <defs>
     <linearGradient id="ws" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#6f3ddb"/>
-      <stop offset="1" stop-color="#2a1c4d"/>
+      <stop offset="0" stop-color="#1E4C77"/>
+      <stop offset="1" stop-color="#14324F"/>
     </linearGradient>
   </defs>
   <rect width="600" height="320" fill="url(#ws)"/>
-  <circle cx="500" cy="70" r="90" fill="#f5c96b" opacity="0.20"/>
+  <circle cx="500" cy="70" r="90" fill="#0E9F6E" opacity="0.20"/>
   <rect x="-40" y="230" width="700" height="140" fill="#ffffff" opacity="0.08" transform="rotate(-6 300 300)"/>
 </svg>
