@@ -353,18 +353,19 @@ export function MarketBottomNav() {
         {items.map((item) => {
           const active = activeKey === item.key;
           const label = t(`market.bottomNav.${item.key}`);
-          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-[9.5px] font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-market-blue min-[360px]:text-[10px] ${
-            active ? "text-market-blue" : "text-market-silver-muted hover:text-market-navy"
+          const className = `k-press flex min-h-[46px] min-w-0 flex-col items-center justify-center gap-[3px] rounded-xl px-1 py-1 text-[9.5px] font-bold leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary/45 min-[360px]:text-[10px] ${
+            active ? "text-primary" : "text-muted-foreground hover:text-foreground"
           }`;
           const inner = (
             <>
               <span
                 className={
                   active
-                    ? "grid h-[22px] w-9 place-items-center rounded-full bg-[radial-gradient(circle_at_50%_18%,#f3e3ff,#e0aaff)] text-market-blue"
+                    ? "grid h-[22px] w-9 place-items-center rounded-full bg-accent text-primary"
                     : "grid h-[22px] w-9 place-items-center rounded-full"
                 }
               >
+
                 <item.icon className="size-[17px]" strokeWidth={active ? 2.4 : 2} aria-hidden />
               </span>
               <span className="max-w-full truncate">{label}</span>
