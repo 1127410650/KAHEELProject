@@ -545,7 +545,25 @@ export function AdminShell({
   return (
     <div className="min-h-dvh bg-primary/5 text-foreground dark:bg-background">
       <header className="sticky top-0 z-40 border-b border-primary/15 bg-white/95 backdrop-blur-xl dark:border-border dark:bg-card/95">
+        {/* الشريط الموقّع للإدارة: تدرّج كحلي من رموز اللوحة + طبقة زخرفية هادئة */}
+        <div className="relative overflow-hidden bg-[linear-gradient(135deg,var(--kt-header-from)_0%,var(--kt-header-to)_100%)] text-[color:var(--kt-cta-bg)]">
+          <span className="k-admin-grain pointer-events-none absolute inset-0" aria-hidden />
+          <div className="relative flex min-h-[44px] w-full items-center gap-[var(--sp-2)] px-[var(--page-x)]">
+            <span className="truncate text-[14px] font-black">{t("admin.consoleBrand")}</span>
+            <span className="hidden truncate text-[14px] opacity-80 sm:inline">
+              · {displayName}
+            </span>
+            <span className="ms-auto flex shrink-0 items-center gap-2 text-[14px] opacity-90">
+              <span className="hidden sm:inline">{t("admin.paletteActive")}</span>
+              <span
+                className="size-3 rounded-full border border-[color:var(--kt-cta-bg)]/60 bg-[color:var(--kt-primary)]"
+                aria-label={t("admin.paletteActive")}
+              />
+            </span>
+          </div>
+        </div>
         <div className="flex min-h-[64px] w-full items-center gap-2 px-[var(--page-x)]">
+
           {allowed ? (
             <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
               <SheetTrigger asChild>
