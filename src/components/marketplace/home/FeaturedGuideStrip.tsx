@@ -34,7 +34,7 @@ export function FeaturedGuideStrip() {
   return (
     <section
       aria-label="إعلانات مميزة"
-      className="rounded-3xl border border-market-purple/35 bg-market-purple/[0.05] p-2.5 shadow-[0_0_24px_-12px_hsl(var(--market-purple)/0.55)]"
+      className="rounded-3xl border border-market-purple/35 bg-market-purple/[0.05] p-2.5 shadow-[0_0_24px_-12px_hsl(var(--primary)/0.55)]"
     >
       <h2 className="text-section mb-2 flex items-center gap-1.5 px-1 font-black text-market-purple">
         <Sparkles className="size-3.5" aria-hidden />

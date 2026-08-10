@@ -311,12 +311,12 @@ export function ListingCard({
       {distance && (
         <span className="num inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-1.5 py-[1px] font-bold text-primary">
           <Navigation className="size-[11px] shrink-0" aria-hidden />
-          {distance}
+          <bdi>{distance}</bdi>
         </span>
       )}
       <span className="inline-flex items-center gap-1">
         <Clock className="size-3" aria-hidden />
-        {relativeTime(listing.published_at ?? listing.created_at, locale)}
+        <bdi>{relativeTime(listing.published_at ?? listing.created_at, locale)}</bdi>
       </span>
     </div>
   );
@@ -368,7 +368,7 @@ export function ListingCard({
           </h3>
 
           <p className="mt-1 flex h-[24px] items-center text-price font-bold text-primary sm:text-price">
-            {price}
+            <bdi>{price}</bdi>
           </p>
           {meta}
         </div>

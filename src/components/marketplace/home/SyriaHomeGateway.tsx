@@ -88,7 +88,7 @@ export function SyriaHomeGateway() {
           }
           aria-label={`${gateway.title}: ${gateway.description}`}
         >
-          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900 shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(60_9_108/0.45)] sm:size-[58px] sm:rounded-[1rem]">
+          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[0.8rem] border-2 border-white bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary shadow-[inset_0_1px_0_#fff,0_6px_14px_-6px_rgb(138_79_255/0.45)] sm:size-[58px] sm:rounded-[1rem]">
             {isSyria ? (
               <>
                 <img
@@ -116,7 +116,7 @@ export function SyriaHomeGateway() {
               <Sparkles className="size-2.5 sm:size-3" aria-hidden />
               {gateway.eyebrow}
             </span>
-            <h2 className="text-section mt-0.5 font-black leading-none tracking-tight sm:mt-1">
+            <h2 className="text-section mt-0.5 font-black leading-none sm:mt-1">
               {gateway.title}
             </h2>
             <p className="mt-1 line-clamp-2 max-w-[28rem] text-desc leading-4 text-brand-800 sm:line-clamp-1">

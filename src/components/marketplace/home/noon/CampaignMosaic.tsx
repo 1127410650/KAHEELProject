@@ -77,7 +77,7 @@ function CampaignTile({
       />
       <span className="absolute inset-0 z-0 flex flex-col justify-center gap-1 px-4 sm:px-6">
         <strong
-          className={`text-lg font-black tracking-tight sm:text-2xl ${
+          className={`text-lg font-black sm:text-2xl ${
             fallbackImage ? "text-primary-foreground" : ""
           }`}
         >

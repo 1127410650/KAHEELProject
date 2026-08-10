@@ -1100,11 +1100,11 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
         <dl className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm">
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.form.categoryPath")}</dt>
-            <dd className="min-w-0 break-words text-foreground">{pathLabel || "—"}</dd>
+            <dd className="min-w-0 text-foreground">{pathLabel || "—"}</dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.dash.listingTitle")}</dt>
-            <dd className="min-w-0 break-words text-foreground">{title}</dd>
+            <dd className="min-w-0 text-foreground">{title}</dd>
           </div>
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-muted-foreground">{t("market.dash.price")}</dt>

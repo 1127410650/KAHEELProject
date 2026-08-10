@@ -70,7 +70,7 @@ export function DemoParcelScene({ scene }: { scene: DemoSceneCopy["scene"] }) {
       className="relative grid size-16 shrink-0 place-items-end justify-items-center overflow-hidden rounded-2xl border border-white/15 bg-white/10 motion-safe:animate-[kaheel-demo-float_4.5s_ease-in-out_infinite] sm:size-20"
     >
       <span
-        className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_50%_35%,rgb(224_170_255/0.35),transparent_70%)]"
+        className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_50%_35%,rgb(195_171_255/0.35),transparent_70%)]"
         aria-hidden
       />
       <Mascot

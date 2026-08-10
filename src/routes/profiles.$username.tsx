@@ -146,7 +146,7 @@ function UserProfilePage() {
               )}
             </span>
             <div className="min-w-0 flex-1">
-              <h1 className="text-page break-words font-bold leading-tight text-foreground">
+              <h1 className="text-page font-bold leading-tight text-foreground">
                 {name}
               </h1>
               {/* The trust check mark lives under the name only. */}
@@ -220,7 +220,7 @@ function UserProfilePage() {
             <div className="mt-4">
               <h2 className="text-section font-bold text-foreground">{t("market.business.about")}</h2>
               <p
-                className={`mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground ${
+                className={`mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground ${
                   aboutLong && !aboutOpen ? "line-clamp-4" : ""
                 }`}
               >

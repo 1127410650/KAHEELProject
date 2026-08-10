@@ -78,7 +78,7 @@ export function ListingLicenseSection({ license }: { license: PublicListingLicen
               <div key={row.label} className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <dt className="text-muted-foreground">{row.label}:</dt>
                 <dd
-                  className="min-w-0 break-words font-medium text-foreground"
+                  className="min-w-0 font-medium text-foreground"
                   {...(row.ltr ? { dir: "ltr" } : {})}
                 >
                   {row.value}

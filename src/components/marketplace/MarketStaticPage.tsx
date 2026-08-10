@@ -17,7 +17,7 @@ export function MarketStaticPage({
   return (
     <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-6">
       <header className="market-page-intro">
-        <h1 className="text-page font-black tracking-tight text-foreground">
+        <h1 className="text-page font-black text-foreground">
           {t(`market.pages.${pageKey}.title`)}
         </h1>
       </header>

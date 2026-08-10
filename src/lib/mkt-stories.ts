@@ -54,10 +54,10 @@ export const STORY_GRADIENTS: StoryGradient[] = ["violet", "sunset", "mint", "ni
 
 /** خلفيات جاهزة — تدرجات CSS فقط، فلا وزن على الشبكة. */
 export const STORY_GRADIENT_CSS: Record<StoryGradient, string> = {
-  violet: "linear-gradient(160deg,#3c096c,#7b2cbf 55%,#c77dff)",
+  violet: "linear-gradient(160deg,#8A4FFF 0%,#C3ABFF 100%)",
   sunset: "linear-gradient(160deg,#4a1042,#a4133c 55%,#ff8500)",
   mint: "linear-gradient(160deg,#10403b,#128f7e 55%,#7ae582)",
-  night: "linear-gradient(160deg,#0b0a1f,#241046 55%,#5a189a)",
+  night: "linear-gradient(160deg,#1B1B1F 0%,#8A4FFF 100%)",
   gold: "linear-gradient(160deg,#3f2c05,#a97a11 55%,#ffd166)",
 };
 

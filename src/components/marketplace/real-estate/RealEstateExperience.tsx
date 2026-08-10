@@ -319,7 +319,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               <p className="text-desc font-semibold tracking-wide text-market-silver sm:text-sm">
                 {t("market.realEstate.eyebrow")}
               </p>
-              <h1 className="mt-1.5 font-bold leading-tight tracking-tight">
+              <h1 className="mt-1.5 font-bold leading-tight">
                 {t("market.realEstate.heroTitle")}
               </h1>
               <p className="mt-1.5 max-w-xl text-market-silver">
@@ -529,7 +529,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               )}
 
               {featuredRows.length > 0 && (
-                <h2 className="text-section mt-8 font-bold tracking-tight text-foreground">
+                <h2 className="text-section mt-8 font-bold text-foreground">
                   {t("market.realEstate.latestTitle")}
                 </h2>
               )}
@@ -821,7 +821,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
 function SectionHeading({ title, description }: { title: string; description: string }) {
   return (
     <div className="min-w-0">
-      <h2 className="text-section font-bold tracking-tight text-foreground">{title}</h2>
+      <h2 className="text-section font-bold text-foreground">{title}</h2>
       <p className="mt-1 text-desc leading-5 text-muted-foreground sm:text-sm">{description}</p>
     </div>
   );

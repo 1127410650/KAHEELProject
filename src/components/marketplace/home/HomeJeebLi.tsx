@@ -63,7 +63,7 @@ export function HomeJeebLi() {
   return (
     <section aria-labelledby="home-jeebli-title">
       <div className="flex items-center justify-between gap-2">
-        <h2 id="home-jeebli-title" className="text-body font-black tracking-tight sm:text-lg">
+        <h2 id="home-jeebli-title" className="text-body font-black sm:text-lg">
           {ar ? "جيب لي" : "Jeeb Li"}
         </h2>
         <Link

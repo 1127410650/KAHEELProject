@@ -227,7 +227,7 @@ function JoinApplicationsAdminPage() {
               {payloadRows(selected, locale).map(([label, value]) => (
                 <div key={label} className="min-w-0">
                   <p className="text-desc text-muted-foreground">{label}</p>
-                  <p className="mt-1 break-words font-semibold">{value || "—"}</p>
+                  <p className="mt-1 font-semibold">{value || "—"}</p>
                 </div>
               ))}
             </div>

@@ -407,7 +407,7 @@ export function floatingTextStyle(tone: AreaTone): {
           "0 1px 2px rgba(16,0,43,0.85), 0 0 6px rgba(16,0,43,0.65), 0 0 1px rgba(16,0,43,0.9)",
       }
     : {
-        color: "#3C096C",
+        color: "#8A4FFF",
         textShadow:
           "0 1px 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.85), 0 0 1px rgba(255,255,255,0.9)",
       };

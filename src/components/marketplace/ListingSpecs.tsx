@@ -77,7 +77,7 @@ export function ListingSpecs({ listing }: { listing: MktListing }) {
             className="flex items-baseline justify-between gap-3 border-b border-border/60 pb-2 text-sm last:border-0"
           >
             <dt className="min-w-0 shrink text-muted-foreground">{row.label}</dt>
-            <dd className="min-w-0 break-words text-end font-medium text-foreground">
+            <dd className="min-w-0 text-end font-medium text-foreground">
               {row.value}
             </dd>
           </div>

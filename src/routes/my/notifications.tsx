@@ -99,7 +99,7 @@ function MktNotificationsPage() {
                   notification={n}
                   className="font-medium text-primary hover:underline"
                 />
-                {n.body && <p className="break-words text-muted-foreground">{n.body}</p>}
+                {n.body && <p className=" text-muted-foreground">{n.body}</p>}
                 <p className="num text-desc text-muted-foreground">{formatDateTime(n.created_at)}</p>
               </div>
               {!n.read_at && (

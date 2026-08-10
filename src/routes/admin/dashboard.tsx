@@ -248,11 +248,11 @@ function AnalyticsDashboardPage() {
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Area type="monotone" dataKey="views" stroke="#240046" fill="#240046" fillOpacity={0.15} />
-                <Area type="monotone" dataKey="listings" stroke="#7b2cbf" fill="#7b2cbf" fillOpacity={0.15} />
-                <Area type="monotone" dataKey="messages" stroke="#9d4edd" fill="#9d4edd" fillOpacity={0.12} />
+                <Area type="monotone" dataKey="views" stroke="#8A4FFF" fill="#8A4FFF" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="listings" stroke="#C3ABFF" fill="#C3ABFF" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="messages" stroke="#6E6E7D" fill="#6E6E7D" fillOpacity={0.12} />
                 <Area type="monotone" dataKey="searches" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.12} />
-                <Area type="monotone" dataKey="users" stroke="#5a189a" fill="#5a189a" fillOpacity={0.12} />
+                <Area type="monotone" dataKey="users" stroke="#1B1B1F" fill="#1B1B1F" fillOpacity={0.12} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -300,8 +300,8 @@ function AnalyticsDashboardPage() {
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: 11 }} />
-                  <Bar dataKey="listings" fill="#240046" />
-                  <Bar dataKey="views" fill="#a08fb8" />
+                  <Bar dataKey="listings" fill="#8A4FFF" />
+                  <Bar dataKey="views" fill="#6E6E7D" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -309,7 +309,7 @@ function AnalyticsDashboardPage() {
               <table className="w-full min-w-[720px] text-desc">
                 <thead className="text-muted-foreground">
                   <tr>
-                    <th className="p-2 text-start">{t("admin.analytics.field")}</th>
+                    <th className="sticky start-0 z-[1] bg-card p-2 text-start">{t("admin.analytics.field")}</th>
                     <th className="p-2 text-start">{t("admin.analytics.published")}</th>
                     <th className="p-2 text-start">{t("admin.analytics.new")}</th>
                     <th className="p-2 text-start">{t("admin.analytics.expired")}</th>
@@ -322,7 +322,7 @@ function AnalyticsDashboardPage() {
                 <tbody>
                   {fieldRows.map((f) => (
                     <tr key={f.category_id} className="border-t border-border">
-                      <td className="p-2 text-foreground">
+                      <td className="sticky start-0 z-[1] bg-card p-2 text-foreground">
                         {locale === "ar" ? f.name_ar : (f.name_en ?? f.name_ar)}
                       </td>
                       <td className="p-2 tabular-nums">{n(f.listings)}</td>
@@ -531,7 +531,7 @@ function AnalyticsDashboardPage() {
               <tbody>
                 {geo.data.map((g) => (
                   <tr key={g.id} className="border-t border-border">
-                    <td className="p-2 text-foreground">{locale === "ar" ? g.name_ar : (g.name_en ?? g.name_ar)}</td>
+                    <td className="sticky start-0 z-[1] bg-card p-2 text-foreground">{locale === "ar" ? g.name_ar : (g.name_en ?? g.name_ar)}</td>
                     <td className="p-2 tabular-nums">{n(g.listings)}</td>
                     <td className="p-2 tabular-nums">{n(g.users)}</td>
                     <td className="p-2 tabular-nums">{n(g.businesses)}</td>

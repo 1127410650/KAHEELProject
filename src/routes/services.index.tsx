@@ -162,7 +162,7 @@ function ServicesMarketplacePage() {
                   ? "مواعيد واضحة ومقدمو خدمات موثوقون"
                   : "Clear appointments, trusted providers"}
               </div>
-              <h1 className="font-black tracking-tight">
+              <h1 className="font-black">
                 {locale === "ar" ? "خدمتك، في الوقت الذي يناسبك" : "Your service, at your time"}
               </h1>
               <p className="mt-1.5 max-w-xl text-muted-foreground">

@@ -19,11 +19,11 @@ import { useSeason, type ResolvedSeason, type SeasonPlacement } from "@/lib/mkt-
 
 
 const SCRIM: Record<ResolvedSeason["overlay"], string> = {
-  soft: "bg-[linear-gradient(180deg,rgb(36_0_70/0.35)_0%,rgb(36_0_70/0.28)_55%,rgb(36_0_70/0.52)_100%)]",
+  soft: "bg-[linear-gradient(180deg,rgb(0_0_0/0.35)_0%,rgb(0_0_0/0.28)_55%,rgb(0_0_0/0.52)_100%)]",
   medium:
-    "bg-[linear-gradient(180deg,rgb(36_0_70/0.55)_0%,rgb(36_0_70/0.46)_55%,rgb(36_0_70/0.66)_100%)]",
+    "bg-[linear-gradient(180deg,rgb(0_0_0/0.55)_0%,rgb(0_0_0/0.46)_55%,rgb(0_0_0/0.66)_100%)]",
   strong:
-    "bg-[linear-gradient(180deg,rgb(36_0_70/0.72)_0%,rgb(36_0_70/0.62)_55%,rgb(36_0_70/0.80)_100%)]",
+    "bg-[linear-gradient(180deg,rgb(0_0_0/0.72)_0%,rgb(0_0_0/0.62)_55%,rgb(0_0_0/0.80)_100%)]",
 };
 
 /** نقاط النمط: مواضع ثابتة (لا عشوائية) فالشكل نفسه لكل الزوار. */

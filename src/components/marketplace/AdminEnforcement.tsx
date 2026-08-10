@@ -180,7 +180,7 @@ export function AdminEnforcement({
                     {live ? t("admin.detail.restrictionActive") : t("admin.detail.restrictionEnded")}
                   </Chip>
                 </div>
-                <p className="mt-1 break-words text-desc text-muted-foreground">
+                <p className="mt-1 text-desc text-muted-foreground">
                   {row.reason || "—"}
                 </p>
                 <p className="mt-1 text-desc tabular-nums text-muted-foreground">

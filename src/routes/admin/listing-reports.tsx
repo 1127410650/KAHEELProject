@@ -325,11 +325,11 @@ function AdminListingReportsPage() {
           </ul>
 
           {/* desktop: table */}
-          <div className="mt-4 hidden overflow-hidden rounded-xl border border-border lg:block">
-            <table className="w-full text-start text-desc">
+          <div className="mt-4 hidden overflow-x-auto rounded-xl border border-border lg:block">
+            <table className="w-full min-w-[960px] text-start text-desc">
               <thead className="bg-muted/50 text-muted-foreground">
                 <tr>
-                  <th className="p-2 text-start font-medium">{t("market.lr.col.ref")}</th>
+                  <th className="sticky start-0 z-[1] bg-muted/50 p-2 text-start font-medium">{t("market.lr.col.ref")}</th>
                   <th className="p-2 text-start font-medium">{t("market.lr.col.listing")}</th>
                   <th className="p-2 text-start font-medium">{t("market.lr.col.owner")}</th>
                   <th className="p-2 text-start font-medium">{t("market.lr.col.reason")}</th>
@@ -345,7 +345,7 @@ function AdminListingReportsPage() {
               <tbody>
                 {list.map((r) => (
                   <tr key={r.id} className="border-t border-border align-top">
-                    <td dir="ltr" className="p-2 font-mono font-bold text-foreground">
+                    <td dir="ltr" className="sticky start-0 z-[1] whitespace-nowrap bg-card p-2 font-mono font-bold text-foreground">
                       {r.ref_no ?? "—"}
                     </td>
                     <td className="max-w-[220px] p-2">
@@ -380,7 +380,7 @@ function AdminListingReportsPage() {
                     <td className="p-2 text-foreground">
                       {t(`market.reports.priority.${r.priority}`)}
                     </td>
-                    <td dir="ltr" className="p-2 text-foreground">
+                    <td dir="ltr" className="whitespace-nowrap p-2 text-foreground">
                       {r.listing_report_count}
                     </td>
                     <td className="p-2 text-foreground">
@@ -389,7 +389,7 @@ function AdminListingReportsPage() {
                     <td className="p-2 text-foreground">
                       {r.last_action ? t(`market.lr.status.${r.last_action}`) : "—"}
                     </td>
-                    <td dir="ltr" className="p-2 text-muted-foreground">
+                    <td dir="ltr" className="whitespace-nowrap p-2 text-muted-foreground">
                       {formatDateTime(r.updated_at)}
                     </td>
                     <td className="p-2">

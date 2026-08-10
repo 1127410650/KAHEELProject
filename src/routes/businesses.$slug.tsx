@@ -225,7 +225,7 @@ function BusinessPage() {
                 )}
               </span>
               <div className="min-w-0 flex-1">
-                <h1 className="text-page break-words font-bold leading-tight text-foreground">
+                <h1 className="text-page font-bold leading-tight text-foreground">
                   {name}
                 </h1>
                 {/* The trust check mark lives under the name only. */}
@@ -234,7 +234,7 @@ function BusinessPage() {
             </div>
 
             <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
-              {activitySummary && <span className="break-words">{activitySummary}</span>}
+              {activitySummary && <span className="">{activitySummary}</span>}
               {city && (
                 <span className="inline-flex min-w-0 items-center gap-1">
                   <MapPin className="size-3.5 shrink-0" aria-hidden />
@@ -338,7 +338,7 @@ function BusinessPage() {
               <div className="mt-4">
                 <h2 className="text-section font-bold text-foreground">{t("market.business.about")}</h2>
                 <p
-                  className={`mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground ${
+                  className={`mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground ${
                     aboutLong && !aboutOpen ? "line-clamp-4" : ""
                   }`}
                 >

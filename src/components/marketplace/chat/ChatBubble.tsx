@@ -142,7 +142,7 @@ function AttachmentBody({ message }: { message: ChatMessage }) {
       className="flex items-center gap-2 underline-offset-2 hover:underline"
     >
       <FileText className="size-4 shrink-0" aria-hidden />
-      <span className="line-clamp-2 break-all text-sm">{name || t("market.chat.document")}</span>
+      <span className="line-clamp-2 text-sm">{name || t("market.chat.document")}</span>
     </a>
   );
 }
@@ -350,7 +350,7 @@ export function ChatBubble({ message, onShareBank, onChanged, onRetry }: Props) 
           {message.deleted_at ? (
             <span className="text-desc italic opacity-80">{t("market.chat.deleted")}</span>
           ) : message.kind === "text" ? (
-            <p className="whitespace-pre-wrap break-words">{message.body}</p>
+            <p className="whitespace-pre-wrap">{message.body}</p>
           ) : message.kind === "location" ? (
             <LocationBody message={message} />
           ) : message.kind === "contact" ? (

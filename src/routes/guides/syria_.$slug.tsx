@@ -168,7 +168,7 @@ function Row({
       <span className="mt-0.5 text-market-navy">{icon}</span>
       <div className="min-w-0">
         <dt className="font-black">{label}</dt>
-        <dd className="break-words text-muted-foreground">
+        <dd className=" text-muted-foreground">
           {href ? (
             <a
               href={href}

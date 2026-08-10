@@ -449,6 +449,10 @@ body {
      container, which is what keeps `position: sticky` working inside pages. */
   overflow-x: clip;
   -webkit-text-size-adjust: 100%;
+  /* Arabic body copy needs generous leading so ascenders/descenders and
+     stacked diacritics never crowd the line above/below; headings still
+     override this via their own text-* line-height utilities. */
+  line-height: 1.6;
 }
 
 @media (max-width: 767px) {

@@ -25,7 +25,7 @@ export function SectionHead({
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
       <div className="min-w-0">
-        <h2 id={id} className="truncate text-body font-black tracking-tight sm:text-lg">
+        <h2 id={id} className="truncate text-body font-black sm:text-lg">
           {title}
         </h2>
         {hint ? (

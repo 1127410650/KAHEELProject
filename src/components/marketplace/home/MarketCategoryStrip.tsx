@@ -154,7 +154,7 @@ function StripTile({
       {/* Full name, wrapped over at most two lines — never clipped. */}
       <span
         dir={dir}
-        className={`flex min-h-[24px] w-full items-start justify-center whitespace-normal break-words text-desc font-black leading-[1.2] sm:text-desc ${
+        className={`flex min-h-[24px] w-full items-start justify-center whitespace-normal text-desc font-black leading-[1.2] sm:text-desc ${
           active ? "text-primary" : "text-foreground"
         }`}
 
