@@ -231,7 +231,7 @@ export function MarketHeader({
         )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
-          <div className="border-t border-white/14 bg-brand-300 px-3 py-1 text-center text-[11px] font-medium text-brand-950 sm:text-xs">
+          <div className="border-t border-border bg-secondary px-3 py-1 text-center text-[11px] font-medium text-foreground sm:text-xs">
             {t("market.offlineNotice")}
           </div>
         )}
