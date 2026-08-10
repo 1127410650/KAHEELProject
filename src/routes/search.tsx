@@ -858,7 +858,7 @@ function GenericSearchPage() {
                 onClick={() => chooseView("grid")}
                 className={
                   view === "grid"
-                    ? "k-press bg-[linear-gradient(140deg,var(--color-primary),color-mix(in_srgb,var(--color-primary)_70%,black))] p-2 text-primary-foreground"
+                    ? "k-press k-toggle-active p-2"
                     : "k-press p-2 text-muted-foreground hover:bg-primary/8"
                 }
               >
@@ -871,7 +871,7 @@ function GenericSearchPage() {
                 onClick={() => chooseView("list")}
                 className={
                   view === "list"
-                    ? "k-press bg-[linear-gradient(140deg,var(--color-primary),color-mix(in_srgb,var(--color-primary)_70%,black))] p-2 text-primary-foreground"
+                    ? "k-press k-toggle-active p-2"
                     : "k-press p-2 text-muted-foreground hover:bg-primary/8"
                 }
               >

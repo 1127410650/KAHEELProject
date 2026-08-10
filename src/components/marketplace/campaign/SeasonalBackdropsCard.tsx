@@ -551,7 +551,7 @@ function FilePick({
         disabled={busy}
         onChange={(event) => onPick(event.target.files?.[0] ?? null)}
       />
-      {done ? <p className="text-[11px] text-emerald-600">✓</p> : null}
+      {done ? <p className="text-[11px] text-success">✓</p> : null}
     </div>
   );
 }

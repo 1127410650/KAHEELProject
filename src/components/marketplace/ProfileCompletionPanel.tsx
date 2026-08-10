@@ -349,8 +349,8 @@ export function ProfileCompletionPanel() {
         <span
           className={
             complete
-              ? "grid size-9 shrink-0 place-items-center rounded-full bg-emerald-500/10 text-emerald-600"
-              : "grid size-9 shrink-0 place-items-center rounded-full bg-amber-500/10 text-amber-600"
+              ? "grid size-9 shrink-0 place-items-center rounded-full bg-success/10 text-success"
+              : "grid size-9 shrink-0 place-items-center rounded-full bg-gold/15 text-gold-dark"
           }
         >
           {complete ? <CheckCircle2 className="size-5" /> : <AlertCircle className="size-5" />}

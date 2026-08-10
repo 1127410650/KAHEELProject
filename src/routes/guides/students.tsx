@@ -44,7 +44,7 @@ function StudentToolsPage() {
 
   return (
     <MarketShell>
-      <main className="min-h-screen bg-[linear-gradient(180deg,var(--color-secondary)_0%,var(--color-background)_24rem)] pb-8">
+      <main className="min-h-screen bg-[linear-gradient(180deg,var(--secondary)_0%,var(--background)_24rem)] pb-8">
         <section className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 sm:py-8">
           <Link
             to="/"

@@ -221,7 +221,7 @@ function EntryRow({ entry }: { entry: AdCreditEntry }) {
         )}
         <span
           className={`text-sm font-semibold tabular-nums ${
-            positive ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"
+            positive ? "text-success" : "text-foreground"
           }`}
           dir="ltr"
         >

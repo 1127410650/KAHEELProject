@@ -281,7 +281,7 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
               {providersOff && (
                 <p
                   data-testid="otp-disabled-note"
-                  className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"
+                  className="rounded-xl border border-gold/45 bg-gold-soft px-3 py-2 text-xs font-semibold text-gold-foreground"
                 >
                   {t("market.easyAuth.disabled")}
                 </p>

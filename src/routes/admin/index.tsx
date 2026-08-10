@@ -44,44 +44,46 @@ export const Route = createFileRoute("/admin/")({
 
 type Tone = "teal" | "blue" | "amber" | "rose" | "violet" | "slate";
 
+// كل النغمات من design tokens الخاصة بلوحة الإدارة — لا قيمة لون مباشرة هنا.
 const TONES: Record<Tone, { icon: string; value: string; border: string; glow: string }> = {
   teal: {
-    icon: "bg-[#e5f6f3] text-[#087f78] dark:bg-primary/15 dark:text-primary",
-    value: "text-[#075e59] dark:text-foreground",
-    border: "hover:border-[#8ccbc5]",
-    glow: "from-[#e8f8f5]/80",
+    icon: "bg-primary/12 text-primary dark:bg-primary/15 dark:text-primary",
+    value: "text-primary-pressed dark:text-foreground",
+    border: "hover:border-primary/45",
+    glow: "from-primary/8",
   },
   blue: {
-    icon: "bg-sky-50 text-sky-700 dark:bg-sky-950/30 dark:text-sky-300",
-    value: "text-sky-900 dark:text-foreground",
-    border: "hover:border-sky-300",
-    glow: "from-sky-50/80",
+    icon: "bg-admin-progress-soft text-admin-progress",
+    value: "text-admin-progress dark:text-foreground",
+    border: "hover:border-admin-progress/45",
+    glow: "from-admin-progress-soft/80",
   },
   amber: {
-    icon: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300",
-    value: "text-amber-900 dark:text-foreground",
-    border: "hover:border-amber-300",
-    glow: "from-amber-50/80",
+    icon: "bg-admin-pending-soft text-admin-pending",
+    value: "text-admin-pending dark:text-foreground",
+    border: "hover:border-admin-pending/45",
+    glow: "from-admin-pending-soft/80",
   },
   rose: {
-    icon: "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300",
-    value: "text-rose-900 dark:text-foreground",
-    border: "hover:border-rose-300",
-    glow: "from-rose-50/80",
+    icon: "bg-admin-critical-soft text-admin-critical",
+    value: "text-admin-critical dark:text-foreground",
+    border: "hover:border-admin-critical/45",
+    glow: "from-admin-critical-soft/80",
   },
   violet: {
-    icon: "bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300",
-    value: "text-violet-900 dark:text-foreground",
-    border: "hover:border-violet-300",
-    glow: "from-violet-50/80",
+    icon: "bg-admin-verify-soft text-admin-verify",
+    value: "text-admin-verify dark:text-foreground",
+    border: "hover:border-admin-verify/45",
+    glow: "from-admin-verify-soft/80",
   },
   slate: {
-    icon: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
-    value: "text-slate-900 dark:text-foreground",
-    border: "hover:border-slate-300",
-    glow: "from-slate-50/80",
+    icon: "bg-admin-idle-soft text-admin-idle",
+    value: "text-admin-idle dark:text-foreground",
+    border: "hover:border-admin-idle/40",
+    glow: "from-admin-idle-soft/80",
   },
 };
+
 
 function Stat({
   label,
@@ -106,7 +108,7 @@ function Stat({
     <Link
       to={to}
       search={search ?? {}}
-      className={`group relative isolate min-h-[126px] overflow-hidden rounded-2xl border border-[#dcebea] bg-white p-4 shadow-[0_8px_24px_rgba(13,90,84,0.035)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(13,90,84,0.08)] dark:border-border dark:bg-card ${palette.border}`}
+      className={`group relative isolate min-h-[126px] overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:shadow-raised dark:border-border dark:bg-card ${palette.border}`}
     >
       <div
         className={`pointer-events-none absolute -end-8 -top-10 -z-10 size-28 rounded-full bg-gradient-to-br ${palette.glow} to-transparent blur-2xl`}
@@ -117,7 +119,7 @@ function Stat({
           <Icon className="size-[17px]" aria-hidden />
         </span>
         <Arrow
-          className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-[#087f78]"
+          className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-primary"
           aria-hidden
         />
       </div>
@@ -157,14 +159,14 @@ function ActionRow({
     <Link
       to={to}
       search={search ?? {}}
-      className="group flex min-h-[68px] items-center gap-3 rounded-2xl border border-[#dcebea] bg-[#fbfdfd] px-3.5 py-3 transition hover:border-[#9bcfc9] hover:bg-white hover:shadow-sm dark:border-border dark:bg-background"
+      className="group flex min-h-[68px] items-center gap-3 rounded-2xl border border-border bg-secondary/45 px-3.5 py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
     >
       <span
         className={
           "grid size-10 shrink-0 place-items-center rounded-xl " +
           (urgent && count > 0
-            ? "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300"
-            : "bg-[#e5f6f3] text-[#087f78] dark:bg-primary/15 dark:text-primary")
+            ? "bg-admin-critical-soft text-admin-critical"
+            : "bg-primary/12 text-primary")
         }
       >
         <Icon className="size-[18px]" aria-hidden />
@@ -179,14 +181,14 @@ function ActionRow({
         className={
           "grid min-w-8 shrink-0 place-items-center rounded-full px-2 py-1 text-[11px] font-black tabular-nums " +
           (count > 0
-            ? "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300"
+            ? "bg-admin-critical-soft text-admin-critical"
             : "bg-secondary text-muted-foreground")
         }
       >
         {count}
       </span>
       <Arrow
-        className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-[#087f78]"
+        className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-primary"
         aria-hidden
       />
     </Link>
@@ -212,13 +214,13 @@ function AdminHomePage() {
         </div>
       ) : (
         <div className="space-y-5">
-          <section className="relative overflow-hidden rounded-2xl border border-[#cfe5e2] bg-gradient-to-l from-[#087f78] via-[#0b9188] to-[#13a096] px-4 py-4 text-white shadow-[0_14px_34px_rgba(8,127,120,0.16)] sm:px-5 sm:py-5">
+          <section className="relative overflow-hidden rounded-2xl border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:px-5 sm:py-5">
             <div
               className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl"
               aria-hidden
             />
             <div
-              className="absolute -bottom-20 end-10 size-48 rounded-full bg-cyan-200/10 blur-3xl"
+              className="absolute -bottom-20 end-10 size-48 rounded-full bg-primary-foreground/10 blur-3xl"
               aria-hidden
             />
             <div className="relative flex flex-wrap items-center justify-between gap-3">
@@ -353,7 +355,7 @@ function AdminHomePage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-[#dcebea] bg-white p-4 shadow-[0_8px_24px_rgba(13,90,84,0.035)] dark:border-border dark:bg-card sm:p-5">
+          <section className="rounded-2xl border border-border bg-card p-4 shadow-panel sm:p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <h2 className="text-base font-black text-foreground">{t("admin.actionNeeded")}</h2>
@@ -361,7 +363,7 @@ function AdminHomePage() {
                   {t("admin.actionNeededHint")}
                 </p>
               </div>
-              <span className="rounded-full bg-[#e5f6f3] px-3 py-1 text-[10px] font-black text-[#087f78] dark:bg-primary/15 dark:text-primary">
+              <span className="rounded-full bg-primary/12 px-3 py-1 text-[10px] font-black text-primary">
                 {data.listings_pending +
                   data.reports_new +
                   data.verifications_pending +

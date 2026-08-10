@@ -127,9 +127,9 @@ function JoinPage() {
           {locale === "ar" ? "العودة إلى المزيد" : "Back to More"}
         </Link>
 
-        <section className="mb-4 overflow-hidden rounded-3xl bg-gradient-to-br from-market-navy via-market-navy-dark to-cyan-900 p-5 text-white shadow-raised sm:p-7">
+        <section className="mb-4 overflow-hidden rounded-3xl bg-gradient-to-br from-market-navy via-market-navy-dark to-primary-deep p-5 text-white shadow-raised sm:p-7">
           <span className="grid size-12 place-items-center rounded-2xl bg-white/10">
-            <Icon className="size-6 text-cyan-100" />
+            <Icon className="size-6 text-primary-foreground/80" />
           </span>
           <h1 className="mt-5 text-2xl font-black sm:text-3xl">
             {locale === "ar" ? content.ar : content.en}

@@ -37,7 +37,7 @@ export function Chip({
   const tones = {
     neutral: "bg-secondary text-muted-foreground",
     good: "bg-primary/10 text-primary",
-    warn: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+    warn: "bg-gold-soft text-gold-dark",
     bad: "bg-destructive/10 text-destructive",
   } as const;
   return (

@@ -187,10 +187,10 @@ function StoreHubPage() {
         </Card>
 
         {serviceStore ? (
-          <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy to-cyan-950 text-white shadow-xl">
+          <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-market-navy to-primary-deep text-white shadow-xl">
             <CardContent className="flex flex-wrap items-center gap-4 p-5">
               <span className="grid size-12 place-items-center rounded-2xl bg-white/10">
-                <CalendarClock className="size-6 text-cyan-200" />
+                <CalendarClock className="size-6 text-primary-foreground/75" />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="font-black">{t("market.services.providerCenter")}</p>

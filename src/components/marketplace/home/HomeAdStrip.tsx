@@ -33,16 +33,16 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
         {/* نفس بطاقة الصفحة الموحّدة، بلا كتلة بنفسجية مصمتة. */}
         <Link
           to={addHref}
-          className={`${BOX} k-surface k-lift group flex items-center gap-3 px-3.5 text-[#240046] outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf] sm:px-5`}
+          className={`${BOX} k-surface k-lift group flex items-center gap-3 px-3.5 text-brand-950 outline-none focus-visible:ring-2 focus-visible:ring-brand-700 sm:px-5`}
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-2xl border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-[#3c096c] sm:size-11">
+          <span className="grid size-9 shrink-0 place-items-center rounded-2xl border-2 border-white bg-[radial-gradient(circle_at_32%_25%,#f3e3ff,#e0aaff_78%)] text-brand-900 sm:size-11">
             <Megaphone className="size-4 sm:size-5" aria-hidden />
           </span>
           <span className="min-w-0 flex-1">
             <strong className="block truncate text-xs font-black sm:text-base">
               {ar ? "مساحتك الإعلانية على كَحيل" : "Your ad space on Kaheel"}
             </strong>
-            <span className="mt-0.5 block truncate text-[9px] text-[#5a189a] sm:text-xs">
+            <span className="mt-0.5 block truncate text-[9px] text-brand-800 sm:text-xs">
               {ar
                 ? "أوصل عرضك لجمهور السوق في المكان الأبرز"
                 : "Put your offer in front of the whole marketplace"}
@@ -61,7 +61,7 @@ export function HomeAdStrip({ addHref }: { addHref: string }) {
       <a
         href={campaign.click_url}
         onClick={() => trackCampaign(campaign.id, "click")}
-        className={`${BOX} k-surface block outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]`}
+        className={`${BOX} k-surface block outline-none focus-visible:ring-2 focus-visible:ring-brand-700`}
       >
 
         <CampaignAsset campaign={campaign} />

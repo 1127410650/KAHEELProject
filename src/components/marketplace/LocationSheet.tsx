@@ -299,10 +299,10 @@ export function LocationSheet({
 
             {outsideMarket && (
               <div
-                className="flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3"
+                className="flex items-start gap-2 rounded-xl border border-gold/45 bg-gold-soft p-3"
                 data-testid="outside-market"
               >
-                <Globe2 className="mt-0.5 size-4 shrink-0 text-amber-600" aria-hidden />
+                <Globe2 className="mt-0.5 size-4 shrink-0 text-gold-dark" aria-hidden />
                 <p className="text-xs leading-relaxed text-foreground">
                   {ar
                     ? `يبدو أنك خارج ${marketName || "سوريا"}${

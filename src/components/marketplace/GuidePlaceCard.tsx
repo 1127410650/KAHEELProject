@@ -29,7 +29,7 @@ import {
 export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   if (isOpenStreetMap(place)) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-1 text-[10px] font-black text-amber-800">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-gold-soft px-2.5 py-1 text-[10px] font-black text-gold-foreground">
         <Info className="size-3.5" aria-hidden />
         معلومات أولية — ساعدنا في التحقق
       </span>
@@ -37,7 +37,7 @@ export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
   }
   if (isVerified(place)) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-[10px] font-black text-emerald-800">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/40 bg-success-soft px-2.5 py-1 text-[10px] font-black text-success-strong">
         <ShieldCheck className="size-3.5" aria-hidden />
         موثّق
       </span>
@@ -159,7 +159,7 @@ export function GuidePlaceActions({ place }: { place: GuidePlace }) {
         </button>
       </div>
       {contacted ? (
-        <p className="text-[10px] font-bold text-amber-700">
+        <p className="text-[10px] font-bold text-gold-dark">
           تم التواصل مع هذه الجهة سابقًا — يُفضّل عدم تكرار المراسلة.
         </p>
       ) : null}

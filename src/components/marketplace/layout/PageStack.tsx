@@ -31,10 +31,10 @@ export function PageSearchBar({ placeholder, href = "/search" }: { placeholder?:
   return (
     <Link
       to={href}
-      className="k-surface flex min-h-11 items-center gap-2 rounded-2xl px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]/40"
+      className="k-surface flex min-h-11 items-center gap-2 rounded-2xl px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-brand-700/40"
       aria-label={ar ? "ابحث في كَحيل" : "Search Kaheel"}
     >
-      <Search className="size-4 shrink-0 text-[#7b2cbf]" aria-hidden />
+      <Search className="size-4 shrink-0 text-brand-700" aria-hidden />
       <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-muted-foreground">
         {placeholder ?? (ar ? "ابحث عن أي شي في كَحيل…" : "Search anything on Kaheel…")}
       </span>
@@ -84,7 +84,7 @@ export function PageNoticeBar({
       className={`flex min-h-[34px] items-center gap-2 rounded-xl px-3 py-1 text-[12px] font-bold ${
         tone === "warn"
           ? "bg-[#ffe8b3] text-[#5b3d00]"
-          : "bg-[#e0aaff]/40 text-[#3c096c]"
+          : "bg-brand-300/40 text-brand-900"
       }`}
     >
       <span className="min-w-0 flex-1 truncate">{children}</span>
@@ -99,7 +99,7 @@ export function PageNoticeBar({
           }
         }}
         aria-label={ar ? "إغلاق التنبيه" : "Dismiss notice"}
-        className="grid size-6 shrink-0 place-items-center rounded-full bg-black/8 outline-none focus-visible:ring-2 focus-visible:ring-[#7b2cbf]"
+        className="grid size-6 shrink-0 place-items-center rounded-full bg-black/8 outline-none focus-visible:ring-2 focus-visible:ring-brand-700"
       >
         <X className="size-3.5" aria-hidden />
       </button>
@@ -124,12 +124,12 @@ export function PageTileGrid({ items }: { items: PageTile[] }) {
         <li key={tile.key} className="min-w-0">
           <a
             href={tile.href}
-            className="k-surface flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-2xl px-1 py-2 text-center outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#7b2cbf]/40"
+            className="k-surface flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-2xl px-1 py-2 text-center outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-700/40"
           >
-            <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-[#e0aaff]/40 text-[#3c096c]">
+            <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand-300/40 text-brand-900">
               {tile.icon}
             </span>
-            <span className="w-full truncate text-[11px] font-bold text-[#240046]">{tile.label}</span>
+            <span className="w-full truncate text-[11px] font-bold text-brand-950">{tile.label}</span>
           </a>
         </li>
       ))}
@@ -161,24 +161,24 @@ export function PageProgressStrip({ steps }: { steps: ProgressStep[] }) {
   return (
     <a
       href={next.href}
-      className="k-surface flex min-h-[58px] items-center gap-3 rounded-2xl px-3 py-2 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#7b2cbf]/40"
+      className="k-surface flex min-h-[58px] items-center gap-3 rounded-2xl px-3 py-2 outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-700/40"
     >
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-black text-[#240046]">{next.label}</span>
+        <span className="block truncate text-[13px] font-black text-brand-950">{next.label}</span>
         <span
           aria-hidden
-          className="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-[#e0aaff]/45"
+          className="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-brand-300/45"
         >
           <span
             className="block h-full rounded-full bg-[linear-gradient(90deg,#7b2cbf,#c77dff)]"
             style={{ width: `${percent}%` }}
           />
         </span>
-        <span className="num mt-1 block text-[11px] font-bold text-[#5a189a]">
+        <span className="num mt-1 block text-[11px] font-bold text-brand-800">
           {ar ? `${done}/${steps.length} خطوات — ${percent}%` : `${done}/${steps.length} steps — ${percent}%`}
         </span>
       </span>
-      <ChevronRight className="size-4 shrink-0 text-[#7b2cbf] rtl:rotate-180" aria-hidden />
+      <ChevronRight className="size-4 shrink-0 text-brand-700 rtl:rotate-180" aria-hidden />
     </a>
   );
 }

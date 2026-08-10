@@ -50,7 +50,7 @@ export function AdminSearchBox() {
       <PopoverAnchor asChild>
         <div ref={boxRef} className="relative hidden min-w-0 flex-1 sm:block sm:max-w-sm xl:max-w-md">
           <Search
-            className="pointer-events-none absolute inset-y-0 start-3 my-auto size-[17px] text-[#6d8582]"
+            className="pointer-events-none absolute inset-y-0 start-3 my-auto size-[17px] text-[#6f6480]"
             aria-hidden
           />
           <Input
@@ -66,7 +66,7 @@ export function AdminSearchBox() {
                 void navigate({ to: "/admin/search", search: { q: term.trim() } });
               }
             }}
-            className="h-10 rounded-xl border-[#d6e8e6] bg-[#f7fbfa] ps-9 text-xs shadow-none placeholder:text-[#7f9794] focus-visible:border-[#72bdb7] focus-visible:ring-[#087f78]/15 dark:border-border dark:bg-background sm:text-sm"
+            className="h-10 rounded-xl border-[#e0aaff] bg-[#fbf7ff] ps-9 text-xs shadow-none placeholder:text-[#7d7290] focus-visible:border-[#c77dff] focus-visible:ring-[#7b2cbf]/15 dark:border-border dark:bg-background sm:text-sm"
             aria-label={t("admin.search.label")}
             placeholder={t("admin.search.placeholder")}
           />
@@ -74,11 +74,11 @@ export function AdminSearchBox() {
       </PopoverAnchor>
       <PopoverContent
         align="start"
-        className="w-[min(25rem,92vw)] rounded-2xl border-[#dcebea] p-2 shadow-2xl"
+        className="w-[min(25rem,92vw)] rounded-2xl border-[#ead9fb] p-2 shadow-2xl"
         onOpenAutoFocus={(event) => event.preventDefault()}
       >
-        <div className="mb-1 flex items-center gap-2 rounded-xl bg-[#f4f9f8] px-3 py-2 dark:bg-accent">
-          <Search className="size-4 text-[#087f78]" aria-hidden />
+        <div className="mb-1 flex items-center gap-2 rounded-xl bg-[#f9f4ff] px-3 py-2 dark:bg-accent">
+          <Search className="size-4 text-[#7b2cbf]" aria-hidden />
           <p className="truncate text-xs font-bold text-foreground">{term}</p>
         </div>
 
@@ -100,7 +100,7 @@ export function AdminSearchBox() {
                       key={item.id}
                       type="button"
                       onClick={() => go(group.type, item.id)}
-                      className="flex min-h-12 w-full flex-col items-start justify-center rounded-xl px-3 text-start transition hover:bg-[#f2f9f8]"
+                      className="flex min-h-12 w-full flex-col items-start justify-center rounded-xl px-3 text-start transition hover:bg-[#f8f2ff]"
                     >
                       <span className="w-full truncate text-sm font-semibold text-foreground">
                         {item.title || item.id}
@@ -121,7 +121,7 @@ export function AdminSearchBox() {
                 setOpen(false);
                 void navigate({ to: "/admin/search", search: { q: debounced } });
               }}
-              className="mt-1 flex min-h-11 w-full items-center justify-center rounded-xl border border-[#d6e8e6] bg-white text-xs font-bold text-[#087f78] transition hover:bg-[#f2f9f8] dark:border-border dark:bg-card dark:text-primary"
+              className="mt-1 flex min-h-11 w-full items-center justify-center rounded-xl border border-[#e0aaff] bg-white text-xs font-bold text-[#7b2cbf] transition hover:bg-[#f8f2ff] dark:border-border dark:bg-card dark:text-primary"
             >
               {t("admin.search.all")}
             </button>

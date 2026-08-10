@@ -135,7 +135,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
                   </span>
                   {STEP_LABELS[step]}
                   {filters[step] ? (
-                    <Check className="size-3.5 text-emerald-600" aria-hidden />
+                    <Check className="size-3.5 text-success" aria-hidden />
                   ) : null}
                 </div>
                 <div className="flex max-h-40 flex-wrap gap-1.5 overflow-y-auto">

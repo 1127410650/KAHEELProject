@@ -164,7 +164,7 @@ function AdminBusinessesPage() {
       status === "verified"
         ? "bg-primary/10 text-primary"
         : status === "pending"
-          ? "bg-amber-500/10 text-amber-600"
+          ? "bg-gold-soft text-gold-dark"
           : "bg-secondary text-muted-foreground";
     return (
       <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${tone}`}>

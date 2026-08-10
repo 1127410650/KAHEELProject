@@ -23,7 +23,7 @@ export function AddListingButton({ href, className }: Props) {
       aria-label={label}
       className={[
         "k-add-cta relative inline-flex size-11 shrink-0 items-center justify-center gap-1 rounded-full",
-        "bg-[linear-gradient(140deg,#ffe9ae_0%,#f9c22e_46%,#e08c0b_100%)] text-[#240046]",
+        "bg-[linear-gradient(140deg,#ffe9ae_0%,#f9c22e_46%,#e08c0b_100%)] text-brand-950",
         "shadow-[0_6px_18px_rgb(224_140_11/0.45)] ring-1 ring-inset ring-white/60",
         "outline-none transition-transform duration-150 will-change-transform",
         "hover:-translate-y-0.5 active:scale-95",

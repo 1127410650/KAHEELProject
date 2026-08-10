@@ -256,7 +256,7 @@ function ErrandDetailPage() {
                             </p>
                             <p className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
                               <span className="flex items-center gap-0.5">
-                                <Star className="h-3 w-3 text-amber-500" />
+                                <Star className="h-3 w-3 text-gold-dark" />
                                 {formatNumber(captain?.rating_avg ?? 0)}
                               </span>
                               {offer.eta_minutes != null ? (
@@ -328,7 +328,7 @@ function ErrandDetailPage() {
                 >
                   <Star
                     className={`h-6 w-6 ${
-                      star <= rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground"
+                      star <= rating ? "fill-gold text-gold" : "text-muted-foreground"
                     }`}
                   />
                 </button>
