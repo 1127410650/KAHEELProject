@@ -653,35 +653,36 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  /* لافندر فاتح جدًا للصفحة، وأبيض نقي للبطاقات — التباين بينهما هو أداة الفصل. */
-  --background: #f2f0fa;
+  /* لافندر فاتح جدًا للصفحة (مشتق من #8a4fff)، وأبيض نقي للبطاقات. */
+  --background: #f3efff;
   --foreground: #171423;
   --card: #ffffff;
   --card-foreground: #171423;
   --popover: #ffffff;
   --popover-foreground: #171423;
 
-  /* تدرج الهيدر الفاتح المضيء — مُغمّق قليلًا ليحقق 4.5:1 للنص الأبيض. */
-  --header-from: #7a4fc7;
-  --header-to: #8b5cd6;
+  /* تدرج الهوية النهائي المعتمد — قيم لا تُغمّق ولا تُعدّل. */
+  --header-from: #8a4fff;
+  --header-to: #c3abff;
 
-  --primary: #7551c2;
+  --primary: #8a4fff;
   --primary-foreground: #ffffff;
-  --primary-dark: #5f35a8;
-  --primary-pressed: #4a2680;
+  /* درجات مساندة مشتقة من #8a4fff نفسه */
+  --primary-dark: #7a3af5;
+  --primary-pressed: #6522d6;
 
   /* أسطح لافندر أغمق قليلًا من الخلفية — للاختصارات الدائرية والحبّات الهادئة */
-  --secondary: #e6e1f7;
-  --secondary-foreground: #3b2e63;
-  --muted: #edeaf8;
+  --secondary: #e8dfff;
+  --secondary-foreground: #3d2179;
+  --muted: #efe9ff;
   --muted-foreground: #4b4658;
-  --accent: #f4f1fc;
-  --accent-foreground: #4a2680;
+  --accent: #f6f2ff;
+  --accent-foreground: #6522d6;
 
   /* حد رمادي-لافندر رفيع يبقى أداة الفصل الأولى */
-  --border: #e2ddf0;
-  --input: #d6cfea;
-  --ring: #7551c2;
+  --border: #e4dcfa;
+  --input: #d8cdf7;
+  --ring: #8a4fff;
 
   --gold: #f59e0b;
   --gold-dark: #c77b15;
