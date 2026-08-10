@@ -451,10 +451,10 @@ function JoinSection({
                 <span
                   className={`mt-1.5 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${
                     application.status === "approved"
-                      ? "bg-emerald-100 text-emerald-800"
+                      ? "bg-success-soft text-success-strong"
                       : application.status === "rejected" || application.status === "withdrawn"
                         ? "bg-secondary text-muted-foreground"
-                        : "bg-amber-100 text-amber-800"
+                        : "bg-gold-soft text-gold-foreground"
                   }`}
                 >
                   {STATUS_LABELS[application.status][locale]}

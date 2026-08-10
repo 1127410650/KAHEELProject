@@ -301,7 +301,7 @@ function MyPhotosSection({
             />
             <div className="min-w-0 flex-1 text-[11px] font-bold">
               {photo.status === "approved" ? (
-                <span className="inline-flex items-center gap-1 text-emerald-600">
+                <span className="inline-flex items-center gap-1 text-success">
                   <CheckCircle2 className="size-3.5" aria-hidden /> معتمدة وظاهرة
                 </span>
               ) : photo.status === "rejected" ? (
@@ -309,7 +309,7 @@ function MyPhotosSection({
                   مرفوضة — {photo.reject_reason ?? "لا تتوافق مع الشروط"}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-amber-600">
+                <span className="inline-flex items-center gap-1 text-gold-dark">
                   <Clock3 className="size-3.5" aria-hidden /> قيد المراجعة
                 </span>
               )}
