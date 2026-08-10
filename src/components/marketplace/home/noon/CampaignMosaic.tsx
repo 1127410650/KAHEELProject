@@ -8,12 +8,17 @@
  */
 import { useEffect } from "react";
 
+import restaurantsImg from "@/assets/market/cat-restaurants-hero.webp";
+import groceriesImg from "@/assets/market/cat-groceries-hero.webp";
+import realEstateImg from "@/assets/market/cat-real-estate-hero.webp";
+import carsImg from "@/assets/market/cat-cars.webp";
 import { CampaignAsset } from "@/components/marketplace/campaign/CampaignAsset";
 import { useI18n } from "@/i18n";
 import { trackCampaign, useLiveCampaigns, type LiveCampaign } from "@/lib/mkt-campaigns";
 
 const WIDE = "h-[132px] sm:h-[190px]";
 const HALF = "h-[112px] sm:h-[150px]";
+
 
 function CampaignTile({
   campaign,
