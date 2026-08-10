@@ -28,10 +28,10 @@ export function AqarListingRail({
   emptyText?: string;
 }) {
   return (
-    <section className="mt-7">
-      <div className="mb-3 flex items-center justify-between gap-2 px-4">
+    <section className="mt-5">
+      <div className="mb-2.5 flex items-center justify-between gap-2 px-4">
 
-        <h2 className="text-section font-extrabold text-foreground">{title}</h2>
+        <h2 className="text-lg font-bold text-foreground">{title}</h2>
         {moreTrack && listings.length > 0 ? (
           <Link
             to="/aqar/browse"
@@ -49,7 +49,7 @@ export function AqarListingRail({
       ) : (
         <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {listings.map((listing) => (
-            <li key={listing.id} className="w-[15rem] shrink-0 snap-start sm:w-[17rem]">
+            <li key={listing.id} className="w-[62%] max-w-[240px] shrink-0 snap-start">
               <AqarListingCard
                 listing={listing}
                 usdRate={usdRate}
