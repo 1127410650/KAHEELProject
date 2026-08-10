@@ -181,7 +181,12 @@ export function MascotRoam() {
    */
   useEffect(() => {
     if (!scene || leaving) return;
-    const hide = () => end();
+    const hide = (event: Event) => {
+      // ضغطة على المشهد نفسه: تتولّاها أزراره (تفتح القسم ثم تُخفي).
+      const target = event.target as HTMLElement | null;
+      if (target?.closest?.("[data-kaheel-stage]")) return;
+      end();
+    };
     window.addEventListener("pointerdown", hide, { capture: true, passive: true });
     window.addEventListener("touchstart", hide, { capture: true, passive: true });
     window.addEventListener("keydown", hide, { capture: true });
