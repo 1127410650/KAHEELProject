@@ -13,7 +13,7 @@ export function AqarTrackTabs({
     <div
       role="tablist"
       aria-label="نوع العرض"
-      className="mx-4 flex h-12 gap-1 rounded-full border border-border bg-card p-1"
+      className="mx-4 flex gap-1 rounded-full border border-border bg-card p-1"
     >
       {AQAR_TRACKS.map((item) => {
         const active = item.key === track;
