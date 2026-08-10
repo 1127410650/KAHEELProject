@@ -31,7 +31,14 @@ import { LocationSheet } from "@/components/marketplace/LocationSheet";
 import kaheelLogo from "@/assets/kaheel-logo.png";
 import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
+/** أبعاد هيدر الرئيسية بالبكسل — ثابتة كي تبقى المساحة المحجوزة أدناه ثابتة. */
+const HOME_ROW_H = 44;
+const HOME_NAV_H = 34;
+const HOME_SEARCH_H = 58;
+const HOME_HEADER_H = HOME_ROW_H + HOME_NAV_H + HOME_SEARCH_H;
+
 export function MarketHeader({
+
   showCategories = false,
   home = false,
 }: {
