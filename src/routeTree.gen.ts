@@ -109,6 +109,7 @@ import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.in
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
 import { Route as AdminStaffAttendanceRouteImport } from './routes/admin/staff.attendance'
 import { Route as AdminStaffWorkloadRouteImport } from './routes/admin/staff.workload'
+import { Route as AdminStudioCanvasRouteImport } from './routes/admin/studio.canvas'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as ApiPublicKaheelIntroDotpdfRouteImport } from './routes/api/public/kaheel-intro[.]pdf'
@@ -632,6 +633,11 @@ const AdminStaffWorkloadRoute = AdminStaffWorkloadRouteImport.update({
   path: '/staff/workload',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminStudioCanvasRoute = AdminStudioCanvasRouteImport.update({
+  id: '/studio/canvas',
+  path: '/studio/canvas',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
   id: '/users_/$id',
   path: '/users/$id',
@@ -847,6 +853,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
+  '/admin/studio/canvas': typeof AdminStudioCanvasRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
@@ -967,6 +974,7 @@ export interface FileRoutesByTo {
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
+  '/admin/studio/canvas': typeof AdminStudioCanvasRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1092,6 +1100,7 @@ export interface FileRoutesById {
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
   '/admin/staff/workload': typeof AdminStaffWorkloadRoute
+  '/admin/studio/canvas': typeof AdminStudioCanvasRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1218,6 +1227,7 @@ export interface FileRouteTypes {
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
     | '/admin/staff/workload'
+    | '/admin/studio/canvas'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
@@ -1338,6 +1348,7 @@ export interface FileRouteTypes {
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
     | '/admin/staff/workload'
+    | '/admin/studio/canvas'
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
@@ -1462,6 +1473,7 @@ export interface FileRouteTypes {
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
     | '/admin/staff/workload'
+    | '/admin/studio/canvas'
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
     | '/api/public/kaheel-intro.pdf'
@@ -2235,6 +2247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStaffWorkloadRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/studio/canvas': {
+      id: '/admin/studio/canvas'
+      path: '/studio/canvas'
+      fullPath: '/admin/studio/canvas'
+      preLoaderRoute: typeof AdminStudioCanvasRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users_/$id': {
       id: '/admin/users_/$id'
       path: '/users/$id'
@@ -2432,6 +2451,7 @@ interface AdminRouteRouteChildren {
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   AdminStaffAttendanceRoute: typeof AdminStaffAttendanceRoute
   AdminStaffWorkloadRoute: typeof AdminStaffWorkloadRoute
+  AdminStudioCanvasRoute: typeof AdminStudioCanvasRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
@@ -2477,6 +2497,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminReportsIdRoute: AdminReportsIdRoute,
   AdminStaffAttendanceRoute: AdminStaffAttendanceRoute,
   AdminStaffWorkloadRoute: AdminStaffWorkloadRoute,
+  AdminStudioCanvasRoute: AdminStudioCanvasRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
@@ -2645,13 +2666,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
