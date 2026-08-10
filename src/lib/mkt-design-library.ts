@@ -71,6 +71,15 @@ export interface DesignRoute {
   sort_order: number;
 }
 
+export type TemplateLayout = "classic" | "centered" | "split";
+
+/** تخطيطات القالب الثلاثة — مواضع العناصر داخل البطاقة. */
+export const LAYOUT_OPTIONS: { value: TemplateLayout; label: string }[] = [
+  { value: "classic", label: "كلاسيكي (النص أعلى)" },
+  { value: "centered", label: "متوسّط" },
+  { value: "split", label: "مقسوم (النص والشارة جانبًا)" },
+];
+
 export interface DesignTemplate {
   id: string;
   kind: "offer" | "promo";
@@ -96,8 +105,14 @@ export interface DesignTemplate {
   starts_at: string | null;
   ends_at: string | null;
   is_active: boolean;
+  /** ختم اسم كَحيل على البطاقة. */
+  brand_stamp: boolean;
+  layout_key: TemplateLayout;
+  /** التصميم الأصل إن كانت هذه تنويعة مولّدة. */
+  variation_of: string | null;
   updated_at: string;
 }
+
 
 export interface DesignLibrary {
   shapes: DesignShape[];
