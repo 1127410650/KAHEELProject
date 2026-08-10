@@ -13,6 +13,7 @@ import {
 } from "@/lib/mkt";
 import type { ListingCardData } from "@/components/marketplace/ListingCard";
 import { loadCountryIdByIso2 } from "@/lib/mkt-geo";
+import { nearbyListingIds, orderByIds, type RadiusKm } from "@/lib/mkt-nearby";
 import { isEnabledMarket } from "@/lib/mkt-markets";
 
 
@@ -314,7 +315,6 @@ async function queryListings(
   // Tie-breaker so rows never shift between pages and appear twice.
   query = query.order("id", { ascending: false });
 
-  const size = filters.limit ?? 48;
   if (filters.page !== undefined) {
     const from = filters.page * size;
     query = query.range(from, from + size - 1);
