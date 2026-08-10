@@ -154,7 +154,12 @@ export function resetStage(): void {
  */
 const OBSTACLES =
   "a,button,input,textarea,select,summary,label,img,svg,video,canvas," +
-  "h1,h2,h3,h4,h5,p,li,table,[role='button'],[role='link'],[role='tab'],[data-kaheel-card]";
+  "h1,h2,h3,h4,h5,h6,p,li,table,dl,form,header,nav,footer,aside," +
+  "[role='button'],[role='link'],[role='tab'],[role='alert'],[role='status']," +
+  "[role='dialog'],[role='navigation'],[role='banner'],[role='listbox']," +
+  "[data-kaheel-card],[data-kaheel-stories],[data-kaheel-banner]," +
+  "[data-kaheel-strip],[data-kaheel-nav],[data-slot='card']";
+
 
 export interface SafeBand {
   /** يسار الشريط الحر بالبكسل (إحداثيات الشاشة). */
