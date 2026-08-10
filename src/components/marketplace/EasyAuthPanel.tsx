@@ -52,6 +52,8 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
   // القناة لا يختارها المستخدم: المحوّل الخادمي يقررها من مفتاح الدولة.
   const [channels, setChannels] = useState<OtpChannel[] | null>(null);
   const [code, setCode] = useState("");
+  /** القناة التي وصل عبرها الرمز فعلًا — تحدد كيف نتحقق منه. */
+  const [deliveredChannel, setDeliveredChannel] = useState<OtpChannel>("sms");
   const [stage, setStage] = useState<"identify" | "code">("identify");
   const [busy, setBusy] = useState(false);
   const [providers, setProviders] = useState<{ sms: boolean; whatsapp: boolean } | null>(null);
