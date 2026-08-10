@@ -2801,3 +2801,53 @@ body:has(.market-surface) {
   from { opacity: 1; transform: translateY(0) scale(1); }
   to { opacity: 0; transform: translateY(6px) scale(0.94); }
 }
+
+/* ═══════════════ مكتبة حركات الفتحات (وضع التحرير) ═══════════════
+   ست حركات فقط، كلها CSS خفيفة على `transform`/`opacity`/`filter` — تُطبَّق
+   على الفتحات من القاعدة عبر `SlotStyleLayer`، وبحد أقصى ثلاثة عناصر متحركة
+   في الشاشة. من فعّل «تقليل الحركة» في جهازه يرى كل شيء ثابتًا (آخر الملف). */
+@keyframes kpulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+@keyframes kfloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes kspin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes kglow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.12); }
+}
+@keyframes kgradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes kslide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* الطبقة الزخرفية: شكل SVG من مكتبة الأشكال يُرسم كخلفية داخل الفتحة. */
+[data-kslot] > .k-slot-decor,
+.k-slot-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  border-radius: inherit;
+}
+
+/* احترام تقليل الحركة على مستوى النظام: كل حركات الفتحات تتوقف. */
+@media (prefers-reduced-motion: reduce) {
+  [data-kslot],
+  [data-kslot] .k-slot-decor,
+  .k-slot-anim {
+    animation: none !important;
+    transition: none !important;
+  }
+}
