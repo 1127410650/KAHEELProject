@@ -64,9 +64,10 @@ export function MarketHome() {
       <div className="mx-auto w-full max-w-[1240px] space-y-5 overflow-x-clip px-3 pb-3 pt-3 sm:space-y-7 sm:px-5 lg:px-8">
         <QuickTiles />
 
-        <BigSearchField />
+        {/* حقل البحث العريض يعيش في الهيدر (MarketShell) كي يبقى وحده بعد الانكماش. */}
 
         <SyriaPrideStrip />
+
 
         <CampaignMosaic />
 
