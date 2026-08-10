@@ -91,19 +91,22 @@ function AqarHomePage() {
   return (
     <AqarShell subtitle="إيجار يومي وطويل وبيع في سوريا">
       <div className="mx-auto w-full max-w-3xl">
-        {/* الهيرو: صورة معلم سوري بارتفاع ثابت + حقل بحث أبيض عائم فوق حدّها السفلي. */}
-        <section className="relative px-4 pt-4">
-          <div data-kslot="aqar.hero" className="relative overflow-hidden rounded-2xl border border-border">
+        {/* الهيرو: بطاقة صورة تطفو فوق الحدّ السفلي للهيدر بنسبة 16:9 ثابتة (لا إزاحة تخطيط). */}
+        <section className="-mt-6 px-4">
+          <div
+            data-kslot="aqar.hero"
+            className="relative aspect-[16/9] overflow-hidden rounded-3xl shadow-lg"
+          >
             <img
               src={hero.image}
               alt={`${hero.name} — ${hero.city}`}
-              width={1280}
-              height={720}
-              className="h-48 w-full object-cover sm:h-60"
+              width={1600}
+              height={900}
+              className="absolute inset-0 size-full object-cover"
               decoding="async"
             />
-            <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            <div className="absolute inset-x-4 top-4">
+            <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-4">
               <strong className="block text-page font-extrabold text-white drop-shadow-md">
                 أهلًا بك في كَحيل عقار
               </strong>
@@ -112,35 +115,25 @@ function AqarHomePage() {
               </span>
             </div>
           </div>
-          {/* الحقل العائم: بطاقة بيضاء نصفها خارج الصورة، كما في مرجع التصميم. */}
-          <div className="absolute inset-x-7 -bottom-7">
-            <Link
-              to="/aqar/browse"
-              search={{ track }}
-              className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 shadow-lg"
-              style={{ minHeight: 60 }}
-            >
-              <Search className="size-5 shrink-0 text-primary" aria-hidden />
-              <span className="min-w-0">
-                <strong className="block truncate text-desc font-bold text-foreground">
-                  إلى أين؟
-                </strong>
-                <span className="block truncate text-nav text-muted-foreground">
-                  مدينة، حي، أو نوع عقار
-                </span>
-              </span>
-            </Link>
-          </div>
         </section>
 
-
-        <div className="pt-12">
-          <AqarTrackTabs track={track} onChange={setTrack} />
+        {/* حقل البحث: كبسولة بيضاء بارتفاع 48px ثم تبويبات المسار بنفس الإيقاع. */}
+        <div className="mt-4 px-4">
+          <Link
+            to="/aqar/browse"
+            search={{ track }}
+            className="flex h-12 items-center gap-2 rounded-full bg-card px-4 shadow-sm"
+          >
+            <Search className="size-5 shrink-0 text-primary" aria-hidden />
+            <span className="truncate text-body font-semibold text-muted-foreground">
+              إلى أين؟ مدينة، حي، أو نوع عقار
+            </span>
+          </Link>
         </div>
 
-        <AqarMoodCards track={track} />
-        <AqarPriceRanges track={track} />
-
+        <div className="mt-3">
+          <AqarTrackTabs track={track} onChange={setTrack} />
+        </div>
 
         {/* ترتيب «الأنواع أولًا» أو «المدن أولًا» يُبدّله المدير من لوحة التصاميم. */}
         {variant === "aqar.cities_first" ? (
@@ -151,9 +144,12 @@ function AqarHomePage() {
         ) : (
           <>
             <AqarTypeGrid types={visuals.types} track={track} counts={counts.data ?? {}} />
+            <AqarMoodCards track={track} />
+            <AqarPriceRanges track={track} />
             <AqarCityCircles cities={visuals.cities} track={track} />
           </>
         )}
+
 
         <AqarListingRail
           title="مميزة"

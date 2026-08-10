@@ -16,9 +16,10 @@ const RANGES: { key: string; label: string; note: string }[] = [
 
 export function AqarPriceRanges({ track }: { track: AqarTrack }) {
   return (
-    <section className="py-3">
-      <h2 className="mb-2 px-4 text-section font-extrabold text-foreground">حسب ميزانيتك</h2>
+    <section className="mt-7">
+      <h2 className="mb-3 px-4 text-section font-extrabold text-foreground">حسب ميزانيتك</h2>
       <ul className="flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
         {RANGES.map((range) => (
           <li key={range.key} className="shrink-0">
             <Link

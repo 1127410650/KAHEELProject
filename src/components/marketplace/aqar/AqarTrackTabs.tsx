@@ -24,17 +24,19 @@ export function AqarTrackTabs({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(item.key)}
-            className={`flex-1 rounded-full px-3 py-2 text-desc font-bold transition-colors ${
+            className={`flex flex-1 items-center justify-center rounded-full px-3 text-desc font-bold transition-colors ${
               active
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }`}
             style={{ minHeight: 44 }}
+
           >
             {item.label}
           </button>
         );
       })}
+
     </div>
   );
 }

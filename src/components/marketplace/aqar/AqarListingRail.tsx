@@ -28,8 +28,9 @@ export function AqarListingRail({
   emptyText?: string;
 }) {
   return (
-    <section className="py-3">
-      <div className="mb-2 flex items-center justify-between gap-2 px-4">
+    <section className="mt-7">
+      <div className="mb-3 flex items-center justify-between gap-2 px-4">
+
         <h2 className="text-section font-extrabold text-foreground">{title}</h2>
         {moreTrack && listings.length > 0 ? (
           <Link
