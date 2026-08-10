@@ -94,7 +94,7 @@ function useStudioStats() {
         supabase
           .from("mkt_ad_campaigns")
           .select("id", { count: "exact", head: true })
-          .eq("is_active", true),
+          .eq("status", "active"),
         supabase
           .from("mkt_media_slots")
           .select("updated_at")
@@ -113,7 +113,7 @@ function useStudioStats() {
 }
 
 function AdminStudioPage() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const { overview, extras } = useStudioStats();
 
   function openLiveEdit() {
@@ -147,7 +147,7 @@ function AdminStudioPage() {
     {
       key: "admin.studio.statLastEdit",
       value: extras.data?.lastAppearanceEdit
-        ? formatDateTime(extras.data.lastAppearanceEdit, locale)
+        ? formatDateTime(extras.data.lastAppearanceEdit)
         : "—",
       icon: Clock,
       to: "/admin/appearance",
