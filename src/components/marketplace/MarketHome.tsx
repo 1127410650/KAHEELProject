@@ -71,7 +71,7 @@ export function MarketHome() {
   const composed = usePageBlocks("market.home");
   /* بانر «سوريا فخرنا» صار ثابتًا في رأس الصفحة، فنستبعد نسخته المؤلَّفة
      كي لا يظهر مرتين في الصفحات التي أُلِّفت من /admin/composer. */
-  const blocks = (composed.data ?? []).filter((block) => block.kind !== "pride_strip");
+  const blocks = (composed.data ?? []).filter((block) => block.block_type !== "pride_strip");
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
