@@ -6,12 +6,17 @@
  * إرسالها (١٦٠٠px · WebP · ≤٣٠٠KB)، والفيديو رابط خارجي فقط حاليًا.
  */
 import { useRef, useState } from "react";
-import { Eye, EyeOff, ImagePlus, Link2, RefreshCw, Trash2, Upload } from "lucide-react";
+import { Eye, EyeOff, ImagePlus, Link2, RefreshCw, Stamp, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { readableSize } from "@/lib/media-compress";
+import {
+  STAMP_POSITIONS,
+  type BrandStampOptions,
+  type BrandStampPosition,
+} from "@/lib/kaheel-brand-stamp";
 import {
   clearMediaSlot,
   saveMediaSlotMeta,
@@ -19,6 +24,7 @@ import {
   uploadMediaSlotImage,
   type MediaSlot,
 } from "@/lib/mkt-media-slots";
+
 
 const ERRORS: Record<string, string> = {
   COMPRESS_TOO_LARGE: "تعذّر ضغط الصورة تحت ٣٠٠ كيلوبايت — جرّب صورة أبسط.",
