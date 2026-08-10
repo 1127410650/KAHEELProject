@@ -54,10 +54,13 @@ import {
 } from "@/lib/popup-pacing";
 
 /** مقاس المشهد كاملًا (فقاعة سطرين + شخصية + رفيق) — أساس قياس المنطقة الآمنة. */
-const SCENE_WIDTH = 208;
-const SCENE_HEIGHT = 150;
-/** أدنى مسافة تنقّل تستحق مشهد مشي. */
-const MIN_TRAVEL = 40;
+const SCENE_MAX_WIDTH = 208;
+const SCENE_HEIGHT = 132;
+
+/** عرض المشهد على هذا المقاس — لا يتجاوز الشاشة الضيقة أبدًا. */
+function sceneWidth(): number {
+  return Math.max(150, Math.min(SCENE_MAX_WIDTH, window.innerWidth - 32));
+}
 
 interface Scene {
   key: number;
@@ -131,12 +134,14 @@ export function MascotRoam() {
 
     const start = (data: CompanionScene): void => {
       // دراسة مكان النزول: أكبر منطقة فارغة فعلًا، وإلا فلا ظهور.
-      const band = findSafeBand(SCENE_WIDTH, SCENE_HEIGHT, {
-        topInset: 118,
-        bottomInset: 92,
-        pad: 20,
+      const width = sceneWidth();
+      const band = findSafeBand(width, SCENE_HEIGHT, {
+        topInset: 110,
+        bottomInset: 88,
+        pad: 14,
       });
-      if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return debug("no-safe-band");
+      // لا مساحة تتّسع للمشهد كاملًا (شخصية + رفيق + فقاعة) ⇒ لا ظهور إطلاقًا.
+      if (!band) return debug("no-safe-band");
       const box = { left: band.left, top: band.top, width: band.width, height: SCENE_HEIGHT };
       if (!areaStillFree(box, 14)) return debug("box-not-free");
       releaseRef.current = acquireStage(`companion:${data.id}`);
@@ -264,7 +269,8 @@ export function MascotRoam() {
 
   const data = scene.data;
   const search = data.main === "kaheelan";
-  const travel = Math.max(0, scene.band.width - SCENE_WIDTH);
+  const width = Math.min(SCENE_MAX_WIDTH, scene.band.width);
+  const travel = Math.max(0, scene.band.width - width);
   const toEnd = search ? !ar : ar;
   const duration = `${Math.max(6, pacing.roamDurationMs / 1000)}s`;
   const friend = KIDS_FRIEND_ART[data.friend].sm;
@@ -290,7 +296,7 @@ export function MascotRoam() {
           position: "absolute",
           left: `${toEnd ? scene.band.left : scene.band.left + travel}px`,
           top: `${scene.band.top}px`,
-          width: `${SCENE_WIDTH}px`,
+          width: `${width}px`,
           height: `${SCENE_HEIGHT}px`,
           ["--roam-x" as string]: `${toEnd ? travel : -travel}px`,
           animation: leaving

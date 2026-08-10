@@ -253,8 +253,9 @@ function boxIsClear(
   const top = rect.top - pad;
   const right = rect.left + rect.width + pad;
   const bottom = rect.top + rect.height + pad;
-  const xs = [0, 0.25, 0.5, 0.75, 1].map((f) => left + (right - left) * f);
-  const ys = [0, 0.2, 0.4, 0.6, 0.8, 1].map((f) => top + (bottom - top) * f);
+  // العيّنات داخل الصندوق بهامش بسيط: الحافة تمامًا تلمس هوامش العوائق.
+  const xs = [0.06, 0.3, 0.5, 0.7, 0.94].map((f) => left + (right - left) * f);
+  const ys = [0.06, 0.25, 0.45, 0.65, 0.85, 0.96].map((f) => top + (bottom - top) * f);
   for (const x of xs) {
     for (const y of ys) {
       if (pointBlocked(Math.min(window.innerWidth - 1, Math.max(1, x)), Math.min(window.innerHeight - 1, Math.max(1, y)))) {
