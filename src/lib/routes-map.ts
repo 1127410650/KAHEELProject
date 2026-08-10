@@ -75,6 +75,8 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/", "public", "market"),
   rule("/search", "public", "market"),
   rule("/categories/$slug", "public", "market"),
+  // عالم القسم المولّد من قالب واحد لكل قسم رئيسي.
+  rule("/c/$slug", "public", "market"),
   rule("/ads/$slug", "public", "market"),
   rule("/profiles/$username", "public", "market"),
   rule("/businesses/$slug", "public", "market"),
@@ -300,6 +302,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/errands", "admin", "admin"),
 
   rule("/admin/taxonomy", "admin", "admin"),
+  rule("/admin/categories", "admin", "admin"),
   rule("/admin/users", "admin", "admin"),
   rule("/admin/businesses", "admin", "admin"),
   rule("/admin/roles", "admin", "admin"),

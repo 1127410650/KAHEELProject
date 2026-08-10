@@ -221,6 +221,12 @@ const NAV: NavItem[] = [
     perms: ["attendance.view", "attendance.manage", "attendance.approve"],
   },
   {
+    to: "/admin/categories",
+    labelKey: "admin.nav.categories",
+    icon: ListChecks,
+    section: "operations",
+  },
+  {
     to: "/admin/taxonomy",
     labelKey: "admin.nav.activities",
     icon: ListChecks,

@@ -88,6 +88,7 @@ export async function loadCategories(): Promise<MktCategory[]> {
   const { data, error } = await supabase
     .from("mkt_categories")
     .select("id, parent_id, slug, name_ar, name_en, icon, sort_order")
+    .is("deleted_at", null)
     .eq("is_active", true)
     .order("sort_order");
   if (error) throw error;
