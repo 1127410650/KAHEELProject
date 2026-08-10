@@ -27,7 +27,7 @@ export function AqarMoodCards({ track }: { track: AqarTrack }) {
             <Link
               to="/aqar/browse"
               search={{ track, type: key }}
-              className="k-lift flex items-center gap-2 rounded-2xl border border-border bg-card p-3"
+              className="k-lift flex items-center gap-2 rounded-[var(--r-card)] border border-border bg-card p-3"
               style={{ minHeight: 72 }}
             >
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10">

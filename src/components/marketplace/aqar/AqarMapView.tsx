@@ -72,5 +72,5 @@ export default function AqarMapView({
     };
   }, [lat, lng, zoom, approximate]);
 
-  return <div ref={holder} className="h-56 w-full rounded-2xl border border-border" />;
+  return <div ref={holder} className="h-56 w-full rounded-[var(--r-card)] border border-border" />;
 }

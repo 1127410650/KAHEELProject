@@ -127,8 +127,8 @@ function AqarBookPage() {
     return (
       <AqarShell title="إرسال الطلب" back="/aqar" backLabel="عقار">
         <div className="mx-auto max-w-3xl space-y-3 p-4">
-          <Skeleton className="h-24 w-full rounded-2xl" />
-          <Skeleton className="h-40 w-full rounded-2xl" />
+          <Skeleton className="h-24 w-full rounded-[var(--r-card)]" />
+          <Skeleton className="h-40 w-full rounded-[var(--r-card)]" />
         </div>
       </AqarShell>
     );
@@ -165,7 +165,7 @@ function AqarBookPage() {
     >
       <div className="mx-auto w-full max-w-3xl p-4 pb-10">
         {/* ملخّص العقار المطلوب */}
-        <section className="rounded-2xl border border-border bg-card p-4">
+        <section className="rounded-[var(--r-card)] border border-border bg-card p-4">
           <span className="k-pill px-3 py-0.5 text-nav font-bold">
             {AQAR_TYPE_LABELS[row.property_type] ?? "عقار"}
           </span>
@@ -182,7 +182,7 @@ function AqarBookPage() {
         </section>
 
         {/* تفاصيل الطلب */}
-        <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+        <section className="mt-4 rounded-[var(--r-card)] border border-border bg-card p-4">
           <h2 className="mb-3 flex items-center gap-2 text-section font-extrabold text-foreground">
             <CalendarDays className="size-5 text-primary" aria-hidden />
             تفاصيل الطلب
@@ -281,7 +281,7 @@ function AqarBookPage() {
         </section>
 
         {/* الملخّص المالي — تقدير للعرض فقط */}
-        <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+        <section className="mt-4 rounded-[var(--r-card)] border border-border bg-card p-4">
           <h2 className="mb-2 text-section font-extrabold text-foreground">الملخّص المالي</h2>
           <ul className="divide-y divide-border">
             {estimate.lines.map((line) => (
@@ -307,7 +307,7 @@ function AqarBookPage() {
         </section>
 
         {/* السياسات */}
-        <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+        <section className="mt-4 rounded-[var(--r-card)] border border-border bg-card p-4">
           <h2 className="mb-2 flex items-center gap-2 text-section font-extrabold text-foreground">
             <Timer className="size-5 text-primary" aria-hidden />
             السياسات والمدد
@@ -327,7 +327,7 @@ function AqarBookPage() {
         </section>
 
         {/* الحماية الصادقة */}
-        <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+        <section className="mt-4 rounded-[var(--r-card)] border border-border bg-card p-4">
           <h2 className="mb-2 flex items-center gap-2 text-section font-extrabold text-foreground">
             <ShieldAlert className="size-5 text-primary" aria-hidden />
             ما تضمنه كَحيل وما لا تضمنه

@@ -52,9 +52,9 @@ function AqarChatsPage() {
     <AqarShell title="المحادثات" subtitle="مع معلني العقارات" back="/aqar" backLabel="عقار">
       <div className="mx-auto w-full max-w-3xl p-4 pb-10">
         {session.data && bookings.isPending ? (
-          <Skeleton className="h-28 w-full rounded-2xl" />
+          <Skeleton className="h-28 w-full rounded-[var(--r-card)]" />
         ) : pinned ? (
-          <section className="rounded-2xl border-2 border-primary/30 bg-card p-4">
+          <section className="rounded-[var(--r-card)] border-2 border-primary/30 bg-card p-4">
             <p className="flex items-center gap-1 text-nav font-bold text-primary">
               <Pin className="size-4" aria-hidden />
               بطاقة الحجز المثبّتة
@@ -99,7 +99,7 @@ function AqarChatsPage() {
           </section>
         ) : null}
 
-        <div className="mt-4 flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-6 text-center">
+        <div className="mt-4 flex flex-col items-center gap-2 rounded-[var(--r-card)] border border-border bg-card p-6 text-center">
           <MessagesSquare className="size-8 text-primary" aria-hidden />
           <p className="text-body text-foreground">
             محادثاتك مع المعلنين تجري في مركز محادثات كَحيل، ويبقى سياق الطلب مثبّتًا هنا.

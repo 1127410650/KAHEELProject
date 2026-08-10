@@ -25,7 +25,7 @@ export function AqarPriceRanges({ track }: { track: AqarTrack }) {
             <Link
               to="/aqar/browse"
               search={{ track, price: range.key }}
-              className="k-lift flex w-36 flex-col justify-center rounded-2xl border border-border bg-card px-3 py-3"
+              className="k-lift flex w-36 flex-col justify-center rounded-[var(--r-card)] border border-border bg-card px-3 py-3"
               style={{ minHeight: 72 }}
             >
               <strong className="text-title font-extrabold text-primary">{range.label}</strong>

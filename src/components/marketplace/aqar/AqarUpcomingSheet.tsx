@@ -39,7 +39,7 @@ export function AqarUpcomingSheet({ row }: { row: AqarBookingRow }) {
   return (
     <section
       aria-label="حجزك القادم"
-      className="mx-4 mt-4 rounded-2xl border border-primary/25 bg-card p-4 shadow-sm"
+      className="mx-4 mt-4 rounded-[var(--r-card)] border border-primary/25 bg-card p-4 shadow-sm"
     >
       <div className="flex items-start justify-between gap-2">
         <span className="k-pill px-3 py-0.5 text-nav font-bold">حجزك القادم</span>
