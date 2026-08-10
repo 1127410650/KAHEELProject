@@ -66,22 +66,23 @@ export function MarketHome() {
   /* التصميم النشط يُدار من /admin/appearance/variants ويسري على كل الزوار فورًا. */
   const variant = useActivePageVariant("home", "home.noon");
   const bigCards = variant === "home.big_cards";
-  /* التأليف من /admin/composer له الأولوية؛ وإن لم تُؤلَّف الصفحة بعد يظهر
-     ترتيبها المكتوب أدناه كما هو ⇒ لا شاشة فارغة أبدًا. */
+  /* التأليف من /admin/composer له الأولوية الكاملة: إن وُجدت كتلة واحدة
+     مرئية فالصفحة تُبنى من الكتل فقط، ولا يُركَّب أي قسم مكتوب في الكود ⇒
+     صفر تكرار. وإن لم تُؤلَّف الصفحة بعد يظهر الترتيب المكتوب كما هو. */
   const composed = usePageBlocks("market.home");
-  /* رأس الصفحة ثابت الترتيب: البانر ← الستوريات ← شريط التصنيفات ← لوحة
-     الإعلانات ← «جيب لي». فنستبعد نُسخ هذه الكتل من التأليف كي لا تتكرّر. */
-  const blocks = (composed.data ?? []).filter(
-    (block) => block.block_type !== "pride_strip" && block.block_type !== "campaign_mosaic",
-  );
+  const blocks = composed.data ?? [];
+  const composedMode = blocks.length > 0;
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-background pb-5 text-foreground">
       <div className="mx-auto w-full max-w-[1240px] space-y-[var(--section-gap)] overflow-x-clip px-[var(--page-x)] pb-[var(--sp-4)] pt-[var(--sp-4)]">
+        {composedMode ? (
+          <PageBlocks blocks={blocks} />
+        ) : (
+          <>
         {/* بانر «سوريا فخرنا» ثم الستوريات ثم شريط التصنيفات الماشي ثم لوحة
-            الإعلانات و«جيب لي»: يظهر هذا الرأس في كل التصميمات (مؤلَّفة أو لا)
-            وارتفاع كل قطعة محجوز فلا هزّة تخطيط. */}
+            الإعلانات و«جيب لي»: ترتيب افتراضي حتى تُؤلَّف الصفحة. */}
         <SyriaPrideBanner />
 
         <KaheelStories />
@@ -94,10 +95,7 @@ export function MarketHome() {
 
         <HomeJeebLi />
 
-        {blocks.length > 0 ? (
-          <PageBlocks blocks={blocks} />
-        ) : (
-          <>
+
 
         <QuickTiles />
 

@@ -20,6 +20,7 @@ import {
 import { toast } from "sonner";
 
 import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
+import { LocatePreviewButton } from "@/components/marketplace/admin/LocatePreviewButton";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -227,6 +228,10 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
           </div>
         ) : null}
       </fieldset>
+
+      <div className="mt-3">
+        <LocatePreviewButton target={{ kind: "slot", slotKey: slot.slot_key }} />
+      </div>
 
       <div className="mt-3 flex flex-wrap gap-2">
 

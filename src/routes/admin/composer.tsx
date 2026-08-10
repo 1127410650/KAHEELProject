@@ -55,6 +55,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LocatePreviewButton } from "@/components/marketplace/admin/LocatePreviewButton";
 import { formatDateTime } from "@/lib/format";
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { useMediaSlots } from "@/lib/mkt-media-slots";
@@ -310,6 +311,7 @@ function BlockRow({
       {open && !deleted && (
         <div className="mt-3 space-y-3 border-t border-border pt-3">
           <p className="text-desc text-muted-foreground">{def?.description_ar}</p>
+          <LocatePreviewButton target={{ kind: "block", id: block.id, page: block.page }} />
           {(def?.fields ?? []).map((field) => (
             <FieldEditor
               key={field.key}
@@ -336,6 +338,7 @@ function AdminComposerPage() {
   const [page, setPage] = useState<string>(COMPOSER_PAGES[0].page);
   const [addType, setAddType] = useState<BlockType>("hero_gradient");
   const [snapshotName, setSnapshotName] = useState("");
+  const [addAt, setAddAt] = useState<string>("end");
 
   const blocks = useAllPageBlocks(page);
   const compositions = usePageCompositions(page);
@@ -351,7 +354,7 @@ function AdminComposerPage() {
   const trashed = rows.filter((b) => b.deleted_at !== null);
   const preview = live.filter((b) => !b.hidden);
   const busy =
-    m.save.isPending || m.remove.isPending || m.restore.isPending || m.reorder.isPending || m.apply.isPending;
+    m.save.isPending || m.remove.isPending || m.restore.isPending || m.reorder.isPending || m.apply.isPending || m.seed.isPending || m.blank.isPending;
 
   function run(promise: Promise<unknown>, ok: string) {
     promise.then(() => toast.success(ok)).catch((error: unknown) => toast.error(errorText(error)));
@@ -406,16 +409,41 @@ function AdminComposerPage() {
                 ))}
               </SelectContent>
             </Select>
+            {/* موضع الإدراج: البداية، أو بعد أي كتلة قائمة، أو النهاية. */}
+            <Select value={addAt} onValueChange={setAddAt}>
+              <SelectTrigger className="min-w-[220px]" style={{ minHeight: 44 }}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="start">في بداية الصفحة</SelectItem>
+                {live.map((b) => (
+                  <SelectItem key={b.id} value={b.id}>
+                    بعد: {blockDefinition(b.block_type)?.name_ar ?? b.block_type}
+                  </SelectItem>
+                ))}
+                <SelectItem value="end">في نهاية الصفحة</SelectItem>
+              </SelectContent>
+            </Select>
             <Button
               disabled={busy || live.length >= MAX_BLOCKS_PER_PAGE}
               onClick={() =>
                 run(
-                  m.save.mutateAsync({
-                    page,
-                    block_type: addType,
-                    settings: defaultSettings(addType),
-                  }),
-                  "أُضيفت الكتلة في نهاية الصفحة",
+                  m.save
+                    .mutateAsync({
+                      page,
+                      block_type: addType,
+                      settings: defaultSettings(addType),
+                    })
+                    .then(async (created) => {
+                      if (addAt === "end") return created;
+                      /* الإدراج = إضافة ثم إعادة ترتيب المعرّفات مرّة واحدة. */
+                      const ids = live.map((b) => b.id).filter((id) => id !== created.id);
+                      const at = addAt === "start" ? 0 : ids.indexOf(addAt) + 1;
+                      ids.splice(at, 0, created.id);
+                      await m.reorder.mutateAsync(ids);
+                      return created;
+                    }),
+                  "أُضيفت الكتلة في الموضع المطلوب",
                 )
               }
               style={{ minHeight: 44 }}
@@ -424,6 +452,34 @@ function AdminComposerPage() {
               إضافة
             </Button>
           </div>
+
+          {/* التحكّم الكامل: استيراد الترتيب المكتوب ككتل، أو البدء من صفحة بيضاء. */}
+          <div className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3">
+            <Button
+              variant="outline"
+              disabled={busy}
+              style={{ minHeight: 44 }}
+              onClick={() => run(m.seed.mutateAsync(), "استُوردت كتل الترتيب الافتراضي")}
+            >
+              استيراد الترتيب الحالي ككتل
+            </Button>
+            <Button
+              variant="outline"
+              disabled={busy || live.length === 0}
+              style={{ minHeight: 44 }}
+              onClick={() =>
+                run(
+                  m.blank.mutateAsync(live.map((b) => b.id)),
+                  "حُفظت نسخة ثم أُفرغت الصفحة — الاسترجاع متاح",
+                )
+              }
+            >
+              ابدأ من صفحة بيضاء
+            </Button>
+          </div>
+          <p className="mt-2 text-nav text-muted-foreground">
+            «صفحة بيضاء» تحفظ نسخة من الترتيب الحالي أولًا، ثم تُفرغ الصفحة حذفًا ناعمًا — لا شيء يُفقد.
+          </p>
         </div>
 
         {/* الكتل: سحب لإعادة الترتيب */}

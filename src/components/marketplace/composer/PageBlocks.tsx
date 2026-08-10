@@ -13,6 +13,9 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
+import { HomeJeebLi } from "@/components/marketplace/home/HomeJeebLi";
+import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
+import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 import { CampaignMosaic } from "@/components/marketplace/home/noon/CampaignMosaic";
 import { CategoryRail, useHomeRails } from "@/components/marketplace/home/noon/CategoryRail";
 import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTileGrid";
@@ -284,10 +287,28 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
   return (
     <div className={cn("space-y-5 sm:space-y-[var(--sp-8)]", className)}>
       {blocks.map((block) => {
+        /* كل كتلة تُغلَّف بسمة `data-kblock` كي يجدها زر «معاينة المكان». */
+        const wrap = (node: ReactNode) => (
+          <div key={block.id} data-kblock={block.id} data-kblock-type={block.block_type}>
+            {node}
+          </div>
+        );
         const override = overrides?.[block.block_type];
-        if (override) return <div key={block.id}>{override(block)}</div>;
+        if (override) return wrap(override(block));
         const { settings } = block;
 
+        return wrap(renderBlock(block, settings, rails));
+      })}
+    </div>
+  );
+}
+
+function renderBlock(
+  block: PageBlock,
+  settings: BlockSettings,
+  rails: ReturnType<typeof useHomeRails>,
+): ReactNode {
+  {
         switch (block.block_type) {
           case "hero_image":
             return <HeroImageBlock key={block.id} settings={settings} />;
@@ -334,6 +355,24 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
             return <QuickTiles key={block.id} />;
           case "pride_strip":
             return <SyriaPrideBanner key={block.id} />;
+          case "stories_rail":
+            return (
+              <LazyMount key={block.id} minHeight="104px">
+                <KaheelStories />
+              </LazyMount>
+            );
+          case "category_marquee":
+            return (
+              <div key={block.id} className="-mx-[var(--page-x)]">
+                <MarketCategoryStrip />
+              </div>
+            );
+          case "jeeb_li":
+            return (
+              <LazyMount key={block.id} minHeight="180px">
+                <HomeJeebLi />
+              </LazyMount>
+            );
           case "exclusive_offers":
             return (
               <LazyMount key={block.id} minHeight="220px">
@@ -344,7 +383,5 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
             /* نوع لا تعرفه هذه النسخة من الواجهة — يُتجاهل بلا خطأ. */
             return null;
         }
-      })}
-    </div>
-  );
+  }
 }

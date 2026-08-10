@@ -21,6 +21,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { CallCenterProvider } from "@/lib/mkt-call-center";
 import { PromoPopupHost } from "@/components/marketplace/campaign/PromoPopupHost";
 import { MascotPresence } from "@/components/marketplace/campaign/MascotPresence";
+import { FocusHighlightLayer } from "@/components/marketplace/live-edit/FocusHighlightLayer";
 import { CallOverlay } from "@/components/marketplace/CallOverlay";
 import { recoverStaleAssetOnce } from "@/lib/runtime-recovery";
 import { SlotStyleLayer } from "@/components/marketplace/SlotStyleLayer";
@@ -203,6 +204,7 @@ function RootComponent() {
             <Outlet />
             <ThemeVarsLayer />
             <SlotStyleLayer />
+            <FocusHighlightLayer />
             <LiveEditGate />
             <CallOverlay />
             <PromoPopupHost />
