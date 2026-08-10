@@ -10,6 +10,9 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 
 import { AqarCityCircles } from "@/components/marketplace/aqar/AqarCityCircles";
+import { AqarMoodCards } from "@/components/marketplace/aqar/AqarMoodCards";
+import { AqarPriceRanges } from "@/components/marketplace/aqar/AqarPriceRanges";
+
 import { AqarListingRail } from "@/components/marketplace/aqar/AqarListingRail";
 import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
