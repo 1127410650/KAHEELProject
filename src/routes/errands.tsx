@@ -41,6 +41,11 @@ import {
 
 export const Route = createFileRoute("/errands")({
   ssr: "data-only",
+  /* ‎?service=slug‎ يفتح الصفحة على الخدمة المطلوبة من بطاقات الرئيسية. */
+  validateSearch: (search: Record<string, unknown>) => ({
+    service: typeof search["service"] === "string" ? (search["service"] as string) : undefined,
+  }),
+
   head: () => ({
     meta: [
       { title: "جيب لي — اطلب أي شي من أي مكان | كَحيل" },
@@ -72,7 +77,8 @@ function ErrandsPage() {
   const services = useErrandServices();
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const [serviceSlug, setServiceSlug] = useState("jeb-li");
+  const requested = Route.useSearch().service;
+  const [serviceSlug, setServiceSlug] = useState(requested ?? "fetch-me");
   const [details, setDetails] = useState("");
   const [budget, setBudget] = useState("");
   const [pickup, setPickup] = useState<ErrandPoint | null>(null);
@@ -80,10 +86,13 @@ function ErrandsPage() {
   const [photo, setPhoto] = useState<{ file: File; preview: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  /* لو لم يطابق المعرّف أي خدمة مفعّلة نرجع للأولى كي لا يبقى النموذج معطّلًا. */
   const active: ErrandService | undefined = useMemo(
-    () => services.data?.find((service) => service.slug === serviceSlug),
+    () =>
+      services.data?.find((service) => service.slug === serviceSlug) ?? services.data?.[0],
     [services.data, serviceSlug],
   );
+
 
   function pickPhoto(file: File | undefined) {
     if (!file) return;
@@ -109,7 +118,7 @@ function ErrandsPage() {
     }
     const point = dropoff ?? null;
     const input = {
-      serviceSlug,
+      serviceSlug: active?.slug ?? serviceSlug,
       details,
       dropoff: point ?? { label: "" },
       ...(active?.needs_pickup && pickup ? { pickup } : {}),
@@ -200,7 +209,7 @@ function ErrandsPage() {
           ) : (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {(services.data ?? []).map((service) => {
-                const selected = service.slug === serviceSlug;
+                const selected = service.slug === (active?.slug ?? serviceSlug);
                 return (
                   <button
                     key={service.id}
