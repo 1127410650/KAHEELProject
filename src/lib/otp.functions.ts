@@ -11,6 +11,7 @@ import {
   type RequestOtpResult,
   type VerifyOtpResult,
 } from "@/lib/otp.server";
+import { sendEmailOtpImpl, type EmailOtpResult } from "@/lib/otp-email.server";
 import type { OtpChannel } from "@/lib/otp-channels";
 
 function clientKey(): string {
