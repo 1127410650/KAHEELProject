@@ -388,7 +388,7 @@ function CanvasStudioPage() {
             {designs.isLoading ? (
               <Skeleton className="h-24 w-full rounded-[var(--r-card)]" />
             ) : (designs.data ?? []).length === 0 ? (
-              <AdminEmptyState title="لا تصاميم بعد" description="ابدأ بلوح فارغ وأضف أول عنصر." />
+              <AdminEmptyState icon={Shapes} title="لا تصاميم بعد" hint="ابدأ بلوح فارغ وأضف أول عنصر." />
             ) : (
               <ul className="space-y-2">
                 {(designs.data ?? []).map((design) => (
