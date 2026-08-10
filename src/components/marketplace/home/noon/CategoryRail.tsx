@@ -69,24 +69,34 @@ export function useHomeRails(specs: readonly HomeRailSpec[]) {
   });
 }
 
+/**
+ * صف تصنيف واحد.
+ *
+ * `layout="rail"` (الافتراضي، نمط نون): شريط أفقي ببطاقات ٨٠٪ من العرض.
+ * `layout="grid"`: شبكة بطاقات كبيرة بعمودين على الجوال — تصميم «البطاقات
+ * الكبيرة» البديل. الاختلاف في العرض فقط؛ المحتوى وترتيب الممولة نفسه.
+ */
 export function CategoryRail({
   id,
   title,
   href,
   rows,
+  layout = "rail",
 }: {
   id: string;
   title: string;
   href: string;
   rows: ListingCardData[];
+  layout?: "rail" | "grid";
 }) {
   if (rows.length < MIN_ROW) return null;
+  const grid = layout === "grid";
   return (
     <section aria-labelledby={id}>
       <SectionHead id={id} title={title} href={href} />
-      <div className={RAIL_SCROLLER}>
-        {rows.map((listing) => (
-          <div key={listing.id} className={RAIL_ITEM}>
+      <div className={grid ? "grid grid-cols-2 gap-3 lg:grid-cols-4" : RAIL_SCROLLER}>
+        {(grid ? rows.slice(0, 8) : rows).map((listing) => (
+          <div key={listing.id} className={grid ? "min-w-0" : RAIL_ITEM}>
             <ListingCard listing={listing} />
           </div>
         ))}
@@ -94,6 +104,7 @@ export function CategoryRail({
     </section>
   );
 }
+
 
 /** يوزّع الممولة على المواضع ١ و٤ و٨ ويملأ ما بينها بالأحدث/الأقرب بلا تكرار. */
 function mergeRow(sponsored: ListingCardData[], fresh: ListingCardData[]): ListingCardData[] {
