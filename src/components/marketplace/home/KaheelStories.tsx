@@ -29,14 +29,15 @@ const STORY_MS = 5000;
 export function KaheelStories() {
   const { locale } = useI18n();
   const ar = locale === "ar";
-  const { data: stories } = useLiveStories();
+  const { data: stories, isPending } = useLiveStories();
   const { seen, markSeen } = useSeenStories();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const list = useMemo(() => stories ?? [], [stories]);
   const images = useStoryImages(list, openIndex !== null);
 
-  if (list.length === 0) return null;
+  /* الارتفاع محجوز أثناء الجلب: الصف يظهر داخل مساحته ولا يدفع ما تحته ⇒ لا هزّة تخطيط. */
+  if (list.length === 0) return isPending ? <div aria-hidden className="min-h-[112px]" /> : null;
 
   return (
     <section aria-label={ar ? "ستوريات كَحيل" : "Kaheel stories"} className="min-h-[112px]">
@@ -70,7 +71,7 @@ export function KaheelStories() {
                     />
                   </span>
                 </span>
-                <span className="line-clamp-2 min-h-[26px] w-full text-center text-desc font-bold leading-[13px] text-brand-900">
+                <span className="line-clamp-2 min-h-[32px] w-full text-center text-desc font-bold leading-[1.25] text-brand-900">
                   {ar ? story.title_ar : story.title_en}
                 </span>
               </button>
