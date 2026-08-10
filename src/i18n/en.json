@@ -3848,7 +3848,9 @@
       "adCredit": "Ad credit",
       "campaigns": "Animated campaigns",
       "mascots": "Mascot preview",
-      "errands": "Errands service"
+      "errands": "Errands service",
+      "guideRequests": "Guide edit/removal requests",
+      "guideClaims": "Guide ownership claims"
     },
     "alerts": {
       "title": "Alerts",
