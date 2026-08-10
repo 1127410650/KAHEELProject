@@ -215,6 +215,7 @@ export function MapPickerDialog({ open, onOpenChange, initial, onConfirm }: Prop
           {ar ? "تأكيد هذا الموقع" : "Confirm this location"}
         </Button>
       </footer>
-    </div>
+    </div>,
+    document.body,
   );
 }
