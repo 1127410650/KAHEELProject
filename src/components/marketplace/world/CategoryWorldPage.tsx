@@ -55,7 +55,7 @@ export function CategoryWorldPage({
   /* أقسام الصفحة تُعرَّف مرة واحدة، ويستخدمها المسارَان: التركيب المكتوب في
      الكود، والتأليف من /admin/composer (قالب واحد لكل عوالم الأقسام). */
   const heroSection = (
-    <section data-kslot={`world.${world.slug}.hero`} className="px-4 pt-3">
+    <section data-kslot={`world.${world.slug}.hero`} className="k-gutter pt-[var(--sp-3)]">
       <div className="relative overflow-hidden rounded-[var(--r-card)] border border-border">
         <img
           src={heroUrl}
@@ -83,7 +83,7 @@ export function CategoryWorldPage({
     subs.length > 0 ? (
       <nav
         aria-label="فلاتر القسم"
-        className="mt-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]"
+        className="k-rail mt-[var(--sp-4)] flex overflow-x-auto pb-1 [scrollbar-width:none]"
       >
         {[{ id: "", label: "الكل" }, ...subs.map((s) => ({ id: s.id, label: categoryName(s, locale) }))].map(
           (chip) => (
@@ -106,9 +106,9 @@ export function CategoryWorldPage({
 
   const subsGrid =
     subs.length > 0 ? (
-      <section className="px-4 py-3">
-        <h2 className="mb-2 text-section font-extrabold text-foreground">تصفّح الأقسام الفرعية</h2>
-        <ul className="grid grid-cols-2 gap-3">
+      <section className="k-gutter k-section">
+        <h2 className="k-section-title">تصفّح الأقسام الفرعية</h2>
+        <ul className="grid grid-cols-2 gap-[var(--sp-3)]">
           {subs.map((sub, index) => {
             const key = `world.${world.slug}.sub.${sub.slug}`;
             const wide = subs.length % 2 === 1 && index === subs.length - 1;
@@ -207,11 +207,11 @@ function WorldRow({
 }) {
   if (!loading && rows.length === 0) return null;
   return (
-    <section aria-labelledby={id} className="px-4 py-3">
+    <section aria-labelledby={id} className="k-gutter k-section">
       <SectionHead id={id} title={title} href={href} />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-56 rounded-xl" />)
+          ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-56 rounded-[var(--r-card)]" />)
           : rows.map((listing) => <ListingCard key={listing.id} listing={listing} />)}
       </div>
     </section>
