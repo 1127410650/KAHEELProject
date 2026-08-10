@@ -4,25 +4,28 @@ import { LayoutGrid } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
 import { CATEGORY_IMAGE_SIZE, categoryImage } from "@/lib/market-category-images";
+import { mascotAsset } from "@/lib/mascot-assets";
 import { useMarqueeRail } from "@/components/marketplace/home/useMarqueeRail";
 
 /**
- * Two circular tile rows that drift in opposite directions: the top row travels
- * to the right, the bottom row to the left. Each row is its own marquee track
- * that renders its field list twice and moves with `translate3d`, wrapping at
- * exactly one group width, so the loop never shows a seam or a jump.
+ * صف واحد من دوائر التصنيفات يسير بلا نهاية، وخلفه كَحيل وكحيلان يمشيان
+ * مشيًا مضحكًا على خط الشريط.
  *
- * Tiles are round with the label underneath on up to two wrapped lines — never
- * truncated — and each row fades out at both edges instead of being cut.
+ * • صف واحد فقط: دوائر 72px بحلقة بيضاء 2px وظل خفيف، والاسم كاملًا تحتها
+ *   بمقاس 14px على سطرين كحد أقصى — لا قطع ولا حروف مكسورة.
+ * • المسار يعرض القائمة مرّتين ويتحرّك بـ `translate3d` فيلتف عند نصف عرضه
+ *   بالضبط ⇒ لا خيط ولا قفزة، ويتوقّف باللمس ويرجع بعد الإفلات.
+ * • الشخصيتان طبقة تحت الدوائر (`z-0` مقابل `z-10`) و`pointer-events-none`،
+ *   فلا تحجبان أي رابط، وتختفيان تحت `prefers-reduced-motion`.
+ * • ارتفاع القسم محجوز (112px) فلا هزّة تخطيط.
  */
 const STRIP_FIELDS = PRIMARY_FIELDS.filter((field) => field.kind === "field");
 
-/** Alternating split keeps both rows equal in length and visually varied. */
-const TOP_ROW = STRIP_FIELDS.filter((_, index) => index % 2 === 0);
-const BOTTOM_ROW = STRIP_FIELDS.filter((_, index) => index % 2 === 1);
-
 /** Slow and calm: a full tile every few seconds, not a spinning carousel. */
 const ROW_SPEED = 16;
+
+/** ارتفاع القسم كاملًا — محجوز مسبقًا. */
+export const CATEGORY_STRIP_H = 128;
 
 type Field = (typeof STRIP_FIELDS)[number];
 
@@ -41,16 +44,56 @@ export function MarketCategoryStrip() {
   }
 
   return (
-    <div className="relative w-full overflow-hidden bg-transparent text-foreground">
-
+    <div
+      className="relative w-full overflow-hidden bg-transparent text-foreground"
+      style={{ height: `${CATEGORY_STRIP_H}px` }}
+    >
+      <WalkingMascots />
 
       <nav
         aria-label={t("market.home.strip.label")}
-        className="mx-auto flex w-full max-w-[1320px] flex-col gap-1 pb-[var(--sp-2)] pt-[var(--sp-2)]"
+        className="relative z-10 mx-auto flex h-full w-full max-w-[1320px] items-center"
       >
-        <StripRow fields={TOP_ROW} direction={-1} pathname={pathname} current={current} kept={kept} />
-        <StripRow fields={BOTTOM_ROW} direction={1} pathname={pathname} current={current} kept={kept} />
+        <StripRow
+          fields={STRIP_FIELDS}
+          direction={-1}
+          pathname={pathname}
+          current={current}
+          kept={kept}
+        />
       </nav>
+    </div>
+  );
+}
+
+/** كَحيل يمشي من البداية للنهاية، وكحيلان بالعكس — حركة CSS واحدة لكل منهما. */
+function WalkingMascots() {
+  const kaheel = mascotAsset("kaheel", "sm");
+  const kaheelan = mascotAsset("kaheelan", "sm");
+  const height = 48;
+
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <img
+        src={kaheel.src}
+        alt=""
+        width={Math.round((kaheel.width / kaheel.height) * height)}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        className="k-mascot-walk k-mascot-walk-ltr absolute bottom-0 opacity-40"
+        style={{ height, width: Math.round((kaheel.width / kaheel.height) * height) }}
+      />
+      <img
+        src={kaheelan.src}
+        alt=""
+        width={Math.round((kaheelan.width / kaheelan.height) * height)}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        className="k-mascot-walk k-mascot-walk-rtl absolute bottom-0 opacity-40"
+        style={{ height, width: Math.round((kaheelan.width / kaheelan.height) * height) }}
+      />
     </div>
   );
 }
@@ -124,13 +167,11 @@ function StripTile({
   // Every tile reserves the same box — round photo plus a two-line label slot —
   // so decoding images and longer names can never nudge a neighbour.
   const tileClass =
-    "group flex w-[64px] shrink-0 flex-col items-center gap-[3px] px-1 text-center outline-none sm:w-[72px] lg:w-[78px]";
+    "group flex w-[84px] shrink-0 flex-col items-center gap-[3px] px-1 text-center outline-none";
   const frameClass =
-    "grid size-[44px] place-items-center overflow-hidden rounded-full border-2 transition duration-300 sm:size-[50px] lg:size-[54px]";
-  const idleFrame =
-    "border-border bg-background shadow-panel group-hover:-translate-y-0.5";
-  const activeFrame = "border-primary bg-accent shadow-panel";
-
+    "grid size-[72px] place-items-center overflow-hidden rounded-full ring-2 ring-inset transition duration-300 shadow-panel";
+  const idleFrame = "ring-card bg-card group-hover:-translate-y-0.5";
+  const activeFrame = "ring-primary bg-accent";
 
   const body = (
     <>
@@ -148,16 +189,15 @@ function StripTile({
             style={{ aspectRatio: "1 / 1" }}
           />
         ) : (
-          <LayoutGrid className="size-5 text-market-blue" aria-hidden />
+          <LayoutGrid className="size-5 text-primary" aria-hidden />
         )}
       </span>
       {/* Full name, wrapped over at most two lines — never clipped. */}
       <span
         dir={dir}
-        className={`flex min-h-[24px] w-full items-start justify-center whitespace-normal text-desc font-black leading-[1.2] sm:text-desc ${
+        className={`flex min-h-[34px] w-full items-start justify-center whitespace-normal text-desc font-black leading-[1.2] ${
           active ? "text-primary" : "text-foreground"
         }`}
-
       >
         {label}
       </span>

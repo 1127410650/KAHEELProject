@@ -5,9 +5,9 @@
  *                  مقصوص) · الجرس · كبسولة «إنشاء إعلان» (النهاية).
  *   الصف ٢ (44px): كبسولات الأقسام السريعة — تتحوّل من كبسولة إلى دائرة مع
  *                  تقدّم التمرير.
- *   الصف ٣ (44px + 8px أسفل): حقل البحث الأبيض.
+ *   الصف ٣ (40px + 6px أسفل): شريط بحث رقيق (h-10, rounded-full).
  *
- * الارتفاع الكامل ثابت 150px + حاشية شريط حالة iOS، وتحته مساحة محجوزة بنفس
+ * الارتفاع الكامل ثابت 144px + حاشية شريط حالة iOS، وتحته مساحة محجوزة بنفس
  * القيمة بالضبط ⇒ الشريط التالي لا يُغطّى أبدًا وCLS ≈ 0.
  *
  * الانكماش: متغيّر واحد `--p` (0 → 1) من `useHeaderProgress` يطوي الصفّين
@@ -28,11 +28,11 @@ import kaheelLogo from "@/assets/kaheel-logo.png";
 const PT = 6;
 const ROW1_H = 48;
 const ROW2_H = 44;
-const ROW3_H = 44;
-const PB = 8;
+const ROW3_H = 40;
+const PB = 6;
 /** ارتفاع الجزء القابل للطي (الصفّان الأول والثاني). */
 const COLLAPSIBLE_H = ROW1_H + ROW2_H;
-export const HOME_HEADER_FULL_H = PT + COLLAPSIBLE_H + ROW3_H + PB; // 150
+export const HOME_HEADER_FULL_H = PT + COLLAPSIBLE_H + ROW3_H + PB; // 144
 
 /** ارتفاع المساحة المحجوزة: ثابت ولا يُقاس أبدًا في وقت التشغيل. */
 const SPACER_H = `calc(${HOME_HEADER_FULL_H}px + env(safe-area-inset-top, 0px))`;
@@ -180,11 +180,11 @@ export function CollapsingHomeHeader({
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex h-11 w-full items-center gap-[var(--sp-2)] rounded-[12px] bg-card px-[var(--sp-4)] text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+            className="flex h-10 w-full items-center gap-[var(--sp-2)] rounded-full bg-card/95 px-[var(--sp-4)] py-0 text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
             aria-label={searchPlaceholder}
           >
             <Search className="size-4 shrink-0" aria-hidden />
-            <span className="truncate text-sm font-semibold">{searchPlaceholder}</span>
+            <span className="truncate text-desc font-semibold">{searchPlaceholder}</span>
           </a>
         </div>
         {extra}
