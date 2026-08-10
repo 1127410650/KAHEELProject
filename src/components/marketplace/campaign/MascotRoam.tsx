@@ -120,16 +120,23 @@ export function MascotRoam() {
 
     const settledAt = Date.now() + pacing.pageSettleMs;
 
-    const start = (data: CompanionScene) => {
+    /** تشخيص المعاينة فقط (`?roam=now`): سبب عدم الظهور. */
+    const debug = (reason: string) => {
+      if (window.location.search.includes("roam=now")) {
+        (window as unknown as { __roam?: string }).__roam = reason;
+      }
+    };
+
+    const start = (data: CompanionScene): void => {
       // دراسة مكان النزول: أكبر منطقة فارغة فعلًا، وإلا فلا ظهور.
       const band = findSafeBand(SCENE_WIDTH, SCENE_HEIGHT, {
         topInset: 118,
         bottomInset: 92,
         pad: 20,
       });
-      if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return;
+      if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return debug("no-safe-band");
       const box = { left: band.left, top: band.top, width: band.width, height: SCENE_HEIGHT };
-      if (!areaStillFree(box, 14)) return;
+      if (!areaStillFree(box, 14)) return debug("box-not-free");
       releaseRef.current = acquireStage(`companion:${data.id}`);
       lastSceneRef.current = data.id;
       keyRef.current += 1;
@@ -140,15 +147,16 @@ export function MascotRoam() {
     };
 
     const run = () => {
-      if (Date.now() < settledAt) return;
-      if (blockedNow()) return;
+      if (Date.now() < settledAt) return debug("not-settled");
+      if (blockedNow()) return debug("blocked-gate");
       // معاينة/اختبار: `?scene=<id>` يُثبّت مشهدًا محددًا (لا تأثير على الزوار).
       const forced = new URLSearchParams(window.location.search).get("scene");
       const data = forced
         ? (COMPANION_SCENES.find((item) => item.id === forced) ??
            pickCompanionScene(lastSceneRef.current))
         : pickCompanionScene(lastSceneRef.current);
-      if (!canShowMascot(`companion:${data.id}`, limits)) return;
+      if (!canShowMascot(`companion:${data.id}`, limits)) return debug("pacing");
+      debug("start");
       start(data);
     };
 
