@@ -257,12 +257,12 @@ function ProviderNetworkPage() {
 
         <TabsContent value="account" className="space-y-4">
           <Card className="overflow-hidden rounded-[var(--r-card)]">
-            <CardHeader className="bg-gradient-to-br from-market-navy to-primary-deep text-white">
+            <CardHeader className="bg-gradient-to-br from-market-navy to-primary-deep text-primary-foreground">
               <CardTitle className="flex items-center gap-2">
                 <Boxes className="size-5 text-primary-foreground/75" />
                 {locale === "ar" ? "فئة حساب المتجر" : "Store account category"}
               </CardTitle>
-              <p className="text-sm leading-6 text-white/70">
+              <p className="text-sm leading-6 text-primary-foreground/70">
                 {locale === "ar"
                   ? "الفئة تحدد الوظائف المناسبة للحساب، مع بقاء متجر واحد وهوية واحدة وبيانات معزولة."
                   : "The category enables the right capabilities while keeping one store identity and isolated data."}

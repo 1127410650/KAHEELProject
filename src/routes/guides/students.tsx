@@ -105,7 +105,7 @@ function StudentToolsPage() {
                   aria-pressed={studyMode === "summary"}
                   className={
                     studyMode === "summary"
-                      ? "rounded-xl bg-market-navy px-3 py-3 text-desc font-black text-white shadow-sm"
+                      ? "rounded-xl bg-market-navy px-3 py-3 text-desc font-black text-primary-foreground shadow-sm"
                       : "rounded-xl border border-border bg-background px-3 py-3 text-desc font-black text-muted-foreground"
                   }
                 >
@@ -118,7 +118,7 @@ function StudentToolsPage() {
                   aria-pressed={studyMode === "questions"}
                   className={
                     studyMode === "questions"
-                      ? "rounded-xl bg-market-navy px-3 py-3 text-desc font-black text-white shadow-sm"
+                      ? "rounded-xl bg-market-navy px-3 py-3 text-desc font-black text-primary-foreground shadow-sm"
                       : "rounded-xl border border-border bg-background px-3 py-3 text-desc font-black text-muted-foreground"
                   }
                 >

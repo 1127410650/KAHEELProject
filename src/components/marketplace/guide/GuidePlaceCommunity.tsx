@@ -217,7 +217,7 @@ function GallerySection({
               className="size-full object-cover"
             />
             {item.kind === "official" ? (
-              <span className="absolute bottom-1.5 start-1.5 rounded-full bg-market-navy/90 px-2 py-0.5 text-desc font-black text-white">
+              <span className="absolute bottom-1.5 start-1.5 rounded-full bg-market-navy/90 px-2 py-0.5 text-desc font-black text-primary-foreground">
                 صورة رسمية
               </span>
             ) : null}
@@ -268,7 +268,7 @@ function UploadSection({ placeId, userId }: { placeId: string; userId: string | 
         type="button"
         disabled={!userId || upload.isPending}
         onClick={() => input.current?.click()}
-        className="mt-3 inline-flex h-10 items-center gap-[var(--sp-2)] rounded-[var(--r-card)] bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
+        className="mt-3 inline-flex h-10 items-center gap-[var(--sp-2)] rounded-[var(--r-card)] bg-market-navy px-4 text-desc font-black text-primary-foreground disabled:opacity-50"
       >
         <ImagePlus className="size-4" aria-hidden />
         {upload.isPending ? "جاري الضغط والرفع…" : `اختر صورًا (حتى ${GUIDE_PHOTO_BATCH_LIMIT})`}
@@ -411,7 +411,7 @@ function ReviewsSection({
                 },
               )
             }
-            className="mt-2 inline-flex h-10 items-center rounded-[var(--r-card)] bg-market-navy px-4 text-desc font-black text-white disabled:opacity-50"
+            className="mt-2 inline-flex h-10 items-center rounded-[var(--r-card)] bg-market-navy px-4 text-desc font-black text-primary-foreground disabled:opacity-50"
           >
             {submit.isPending ? "جاري الإرسال…" : "إرسال التقييم"}
           </button>
@@ -485,7 +485,7 @@ function PromoteSection({
             onClick={() => setDays(option)}
             className={`rounded-full border px-3 py-1 text-desc font-black transition ${
               days === option
-                ? "border-market-purple bg-market-purple text-white"
+                ? "border-market-purple bg-market-purple text-primary-foreground"
                 : "border-border bg-background"
             }`}
           >
@@ -510,7 +510,7 @@ function PromoteSection({
               ),
           })
         }
-        className="mt-3 inline-flex h-10 items-center rounded-[var(--r-card)] bg-market-purple px-4 text-desc font-black text-white disabled:opacity-50"
+        className="mt-3 inline-flex h-10 items-center rounded-[var(--r-card)] bg-market-purple px-4 text-desc font-black text-primary-foreground disabled:opacity-50"
       >
         {promote.isPending ? "جاري التنفيذ…" : `ترويج الآن — ${cost.toLocaleString("en-US")} رصيد`}
       </button>

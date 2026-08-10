@@ -213,7 +213,7 @@ function ProviderServiceCenter() {
   return (
     <DashboardShell title={locale === "ar" ? "مركز مقدم الخدمة" : "Provider center"}>
       <div className="space-y-5">
-        <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
+        <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-primary-foreground shadow-xl">
           <CardContent className="space-y-5 p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -221,7 +221,7 @@ function ProviderServiceCenter() {
                   {locale === "ar" ? "حساب مقدم خدمة" : "Service provider account"}
                 </p>
                 <h2 className="text-section mt-1 font-black">{setup.data.store_name}</h2>
-                <p className="mt-1 text-desc text-white/65">
+                <p className="mt-1 text-desc text-primary-foreground/65">
                   {setup.data.settings.accepts_bookings
                     ? locale === "ar"
                       ? "يستقبل الحجوزات الآن"
@@ -242,7 +242,7 @@ function ProviderServiceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                    className="border-white/25 bg-white/10 text-primary-foreground hover:bg-white/20 hover:text-primary-foreground"
                     asChild
                   >
                     <Link to="/stores/$slug" params={{ slug: setup.data.store_slug }}>
@@ -259,7 +259,7 @@ function ProviderServiceCenter() {
                   key={String(label)}
                   className="rounded-[var(--r-card)] border border-white/10 bg-white/10 p-3 backdrop-blur"
                 >
-                  <p className="text-desc text-white/60">{label}</p>
+                  <p className="text-desc text-primary-foreground/60">{label}</p>
                   <p className="mt-1 text-2xl font-black">{value}</p>
                 </div>
               ))}

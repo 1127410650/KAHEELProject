@@ -85,7 +85,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
           type="button"
           onClick={() => setOpen((current) => !current)}
           aria-expanded={open}
-          className="inline-flex h-9 shrink-0 items-center gap-[var(--sp-2)] rounded-full border border-market-navy/25 bg-market-navy px-[var(--sp-4)] text-desc font-black text-white"
+          className="inline-flex h-9 shrink-0 items-center gap-[var(--sp-2)] rounded-full border border-market-navy/25 bg-market-navy px-[var(--sp-4)] text-desc font-black text-primary-foreground"
         >
           <Filter className="size-3.5" aria-hidden />
           تصفية
@@ -130,7 +130,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
             {visibleSteps.map((step, index) => (
               <li key={step}>
                 <div className="mb-[var(--sp-2)] flex items-center gap-[var(--sp-2)] text-desc font-black">
-                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-market-navy text-desc text-white">
+                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-market-navy text-desc text-primary-foreground">
                     {index + 1}
                   </span>
                   {STEP_LABELS[step]}
@@ -151,7 +151,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
                           onClick={() => (active ? clearFrom(step) : pick(step, option.value))}
                           className={`rounded-full border px-[var(--sp-3)] py-1 text-desc font-bold transition ${
                             active
-                              ? "border-market-navy bg-market-navy text-white"
+                              ? "border-market-navy bg-market-navy text-primary-foreground"
                               : "border-border bg-background hover:border-market-navy/40"
                           }`}
                         >

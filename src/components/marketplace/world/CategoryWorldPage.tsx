@@ -93,7 +93,7 @@ export function CategoryWorldPage({
               onClick={() => setActiveSub(chip.id)}
               className={
                 activeSub === chip.id
-                  ? "k-accent-bar k-press min-h-[44px] shrink-0 rounded-full px-4 text-desc font-bold text-white"
+                  ? "k-accent-bar k-press min-h-[44px] shrink-0 rounded-full px-4 text-desc font-bold text-primary-foreground"
                   : "k-press min-h-[44px] shrink-0 rounded-full border border-border bg-card px-4 text-desc font-semibold text-foreground hover:bg-accent"
               }
             >
