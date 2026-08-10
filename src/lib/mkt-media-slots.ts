@@ -78,7 +78,7 @@ export async function fetchMediaSlots(): Promise<MediaSlot[]> {
     .order("slot_key", { ascending: true });
   if (error) throw error;
 
-  const rows = (data ?? []) as MediaSlotRow[];
+  const rows = (data ?? []) as unknown as MediaSlotRow[];
   const paths = rows.map((row) => row.path).filter((path): path is string => !!path);
 
   const signed: Record<string, string> = {};
