@@ -4526,6 +4526,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -4542,6 +4543,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         Insert: {
           alt_text?: string | null
@@ -4550,6 +4552,7 @@ export type Database = {
           campaign_id?: string | null
           campaign_to?: string | null
           created_at?: string
+          edit_kind?: string
           external_url?: string | null
           grad_angle?: number | null
           grad_from?: string | null
@@ -4566,6 +4569,7 @@ export type Database = {
           title_ar?: string | null
           updated_at?: string
           updated_by?: string | null
+          variant_page?: string | null
         }
         Update: {
           alt_text?: string | null
@@ -4574,6 +4578,7 @@ export type Database = {
           campaign_id?: string | null
           campaign_to?: string | null
           created_at?: string
+          edit_kind?: string
           external_url?: string | null
           grad_angle?: number | null
           grad_from?: string | null
@@ -4590,6 +4595,7 @@ export type Database = {
           title_ar?: string | null
           updated_at?: string
           updated_by?: string | null
+          variant_page?: string | null
         }
         Relationships: [
           {
@@ -10693,6 +10699,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -10709,6 +10716,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -10968,6 +10976,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -10984,6 +10993,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -11006,6 +11016,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -11022,6 +11033,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -11060,6 +11072,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -11076,6 +11089,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -11097,6 +11111,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -11113,6 +11128,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
@@ -12680,6 +12696,7 @@ export type Database = {
           campaign_id: string | null
           campaign_to: string | null
           created_at: string
+          edit_kind: string
           external_url: string | null
           grad_angle: number | null
           grad_from: string | null
@@ -12696,6 +12713,7 @@ export type Database = {
           title_ar: string | null
           updated_at: string
           updated_by: string | null
+          variant_page: string | null
         }
         SetofOptions: {
           from: "*"
