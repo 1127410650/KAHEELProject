@@ -42,7 +42,15 @@ export function MarketHeader({
   const offline = useOffline();
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  /**
+   * الهيدر المتكيّف (الرئيسية فقط): ينكمش تدريجيًا مع التمرير لأسفل حتى يبقى
+   * شريط رفيع فيه حقل البحث، ويعود كاملًا عند السحب لأعلى. الارتفاع المحجوز
+   * أسفله يبقى ارتفاع الحالة الكاملة، فلا هزّة تخطيط عند الانكماش.
+   */
+  const [collapsed, setCollapsed] = useState(false);
+  const collapsedRef = useRef(false);
   const [locationOpen, setLocationOpenState] = useState(false);
+
   const [locationMounted, setLocationMounted] = useState(false);
   const setLocationOpen = (value: boolean) => {
     if (value) setLocationMounted(true);
