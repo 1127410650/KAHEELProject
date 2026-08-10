@@ -227,6 +227,12 @@ const NAV: NavItem[] = [
     section: "operations",
   },
   {
+    to: "/admin/labels",
+    labelKey: "admin.nav.labels",
+    icon: ListChecks,
+    section: "system",
+  },
+  {
     to: "/admin/taxonomy",
     labelKey: "admin.nav.activities",
     icon: ListChecks,

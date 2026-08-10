@@ -3856,7 +3856,8 @@
       "guideClaims": "Guide ownership claims",
       "appearance": "Appearance & media",
       "pageVariants": "Page layouts",
-      "categories": "Categories & worlds"
+      "categories": "Categories & worlds",
+      "labels": "UI labels"
     },
     "alerts": {
       "title": "Alerts",

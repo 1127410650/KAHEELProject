@@ -55,6 +55,8 @@ export interface AqarListing {
 
 export interface AqarProvider {
   id: string;
+  /** معرّف الرابط العام للبروفايل: /p/{slug} */
+  slug: string | null;
   display_name: string;
   provider_type: "agency" | "hotel" | "individual";
   city: string | null;
@@ -232,12 +234,26 @@ export async function fetchAqarListing(id: string): Promise<AqarListing | null> 
 export async function fetchAqarProvider(id: string): Promise<AqarProvider | null> {
   const { data } = await supabase
     .from("mkt_realestate_providers")
-    .select("id, display_name, provider_type, city, verification_status, is_demo")
+    .select("id, slug, display_name, provider_type, city, verification_status, is_demo")
     .eq("id", id)
     .is("deleted_at", null)
     .maybeSingle();
   return (data as AqarProvider | null) ?? null;
 }
+
+/** إعلانات معلن واحد المنشورة — تُستخدم في بروفايله العام. */
+export async function fetchAqarListingsByProvider(
+  providerId: string,
+  limit = 24,
+): Promise<AqarListing[]> {
+  const { data } = await buildBase()
+    .eq("provider_id", providerId)
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .limit(limit);
+  return attachPhotos((data ?? []) as unknown as Omit<AqarListing, "photos">[]);
+}
+
+
 
 export interface AqarRoomType {
   id: string;

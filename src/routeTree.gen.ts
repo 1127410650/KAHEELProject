@@ -45,6 +45,7 @@ import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideClaimsRouteImport } from './routes/admin/guide-claims'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
 import { Route as AdminGuideRequestsRouteImport } from './routes/admin/guide-requests'
+import { Route as AdminLabelsRouteImport } from './routes/admin/labels'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
@@ -95,6 +96,7 @@ import { Route as MyProfileRouteImport } from './routes/my/profile'
 import { Route as MyQuotesRouteImport } from './routes/my/quotes'
 import { Route as MyViolationsRouteImport } from './routes/my/violations'
 import { Route as MyWalletRouteImport } from './routes/my/wallet'
+import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as ProfilesUsernameRouteImport } from './routes/profiles.$username'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
@@ -305,6 +307,11 @@ const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
 const AdminGuideRequestsRoute = AdminGuideRequestsRouteImport.update({
   id: '/guide-requests',
   path: '/guide-requests',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLabelsRoute = AdminLabelsRouteImport.update({
+  id: '/labels',
+  path: '/labels',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -557,6 +564,11 @@ const MyWalletRoute = MyWalletRouteImport.update({
   path: '/wallet',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const PSlugRoute = PSlugRouteImport.update({
+  id: '/p/$slug',
+  path: '/p/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfilesUsernameRoute = ProfilesUsernameRouteImport.update({
   id: '/profiles/$username',
   path: '/profiles/$username',
@@ -753,6 +765,7 @@ export interface FileRoutesByFullPath {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -801,6 +814,7 @@ export interface FileRoutesByFullPath {
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
+  '/p/$slug': typeof PSlugRoute
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -868,6 +882,7 @@ export interface FileRoutesByTo {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -916,6 +931,7 @@ export interface FileRoutesByTo {
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
+  '/p/$slug': typeof PSlugRoute
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -988,6 +1004,7 @@ export interface FileRoutesById {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -1036,6 +1053,7 @@ export interface FileRoutesById {
   '/my/quotes': typeof MyQuotesRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
+  '/p/$slug': typeof PSlugRoute
   '/profiles/$username': typeof ProfilesUsernameRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -1109,6 +1127,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1157,6 +1176,7 @@ export interface FileRouteTypes {
     | '/my/quotes'
     | '/my/violations'
     | '/my/wallet'
+    | '/p/$slug'
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin/'
@@ -1224,6 +1244,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1272,6 +1293,7 @@ export interface FileRouteTypes {
     | '/my/quotes'
     | '/my/violations'
     | '/my/wallet'
+    | '/p/$slug'
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin'
@@ -1343,6 +1365,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1391,6 +1414,7 @@ export interface FileRouteTypes {
     | '/my/quotes'
     | '/my/violations'
     | '/my/wallet'
+    | '/p/$slug'
     | '/profiles/$username'
     | '/stores/$slug'
     | '/admin/'
@@ -1463,6 +1487,7 @@ export interface RootRouteChildren {
   LegalDirectoryPolicyRoute: typeof LegalDirectoryPolicyRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
+  PSlugRoute: typeof PSlugRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
@@ -1724,6 +1749,13 @@ declare module '@tanstack/react-router' {
       path: '/guide-requests'
       fullPath: '/admin/guide-requests'
       preLoaderRoute: typeof AdminGuideRequestsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/labels': {
+      id: '/admin/labels'
+      path: '/labels'
+      fullPath: '/admin/labels'
+      preLoaderRoute: typeof AdminLabelsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -2076,6 +2108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyWalletRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/p/$slug': {
+      id: '/p/$slug'
+      path: '/p/$slug'
+      fullPath: '/p/$slug'
+      preLoaderRoute: typeof PSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profiles/$username': {
       id: '/profiles/$username'
       path: '/profiles/$username'
@@ -2310,6 +2349,7 @@ interface AdminRouteRouteChildren {
   AdminGuideClaimsRoute: typeof AdminGuideClaimsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
   AdminGuideRequestsRoute: typeof AdminGuideRequestsRoute
+  AdminLabelsRoute: typeof AdminLabelsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
@@ -2352,6 +2392,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminGuideClaimsRoute: AdminGuideClaimsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
   AdminGuideRequestsRoute: AdminGuideRequestsRoute,
+  AdminLabelsRoute: AdminLabelsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
@@ -2529,6 +2570,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalDirectoryPolicyRoute: LegalDirectoryPolicyRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
+  PSlugRoute: PSlugRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,

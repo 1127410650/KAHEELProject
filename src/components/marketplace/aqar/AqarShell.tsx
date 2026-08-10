@@ -9,16 +9,18 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowRight, Heart, ClipboardList, MessagesSquare, Search } from "lucide-react";
 
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
+import { useLabels } from "@/lib/mkt-ui-labels";
 
 const NAV = [
-  { to: "/aqar/browse", label: "بحث", icon: Search },
-  { to: "/aqar/favorites", label: "مفضلة", icon: Heart },
-  { to: "/aqar/requests", label: "طلباتي", icon: ClipboardList },
-  { to: "/aqar/chats", label: "محادثات", icon: MessagesSquare },
+  { to: "/aqar/browse", key: "aqar.browse", label: "تصفّح", icon: Search },
+  { to: "/aqar/favorites", key: "aqar.favorites", label: "المفضلة", icon: Heart },
+  { to: "/aqar/requests", key: "aqar.requests", label: "طلباتي", icon: ClipboardList },
+  { to: "/aqar/chats", key: "aqar.chats", label: "المحادثات", icon: MessagesSquare },
 ] as const;
 
 function AqarBottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const label = useLabels();
   return (
     <nav
       aria-label="تنقل كَحيل عقار"
@@ -26,7 +28,7 @@ function AqarBottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <ul className="mx-auto flex max-w-3xl items-stretch">
-        {NAV.map(({ to, label, icon: Icon }) => {
+        {NAV.map(({ to, key, label: fallback, icon: Icon }) => {
           const active = pathname === to;
           return (
             <li key={to} className="flex-1">
@@ -38,7 +40,7 @@ function AqarBottomNav() {
                 }`}
               >
                 <Icon className="size-5" aria-hidden />
-                <span className="font-semibold">{label}</span>
+                <span className="font-semibold">{label(key, fallback)}</span>
               </Link>
             </li>
           );

@@ -6607,6 +6607,7 @@ export type Database = {
       }
       mkt_realestate_providers: {
         Row: {
+          bio: string | null
           city: string | null
           created_at: string
           deleted_at: string | null
@@ -6619,7 +6620,11 @@ export type Database = {
           phone: string | null
           provider_type: string
           provider_type_locked: boolean
+          public_email: string | null
           response_deadline_minutes: number
+          show_email: boolean
+          show_phone: boolean
+          slug: string | null
           tenant_id: string | null
           updated_at: string
           verification_status: string
@@ -6627,6 +6632,7 @@ export type Database = {
           whatsapp: string | null
         }
         Insert: {
+          bio?: string | null
           city?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -6639,7 +6645,11 @@ export type Database = {
           phone?: string | null
           provider_type?: string
           provider_type_locked?: boolean
+          public_email?: string | null
           response_deadline_minutes?: number
+          show_email?: boolean
+          show_phone?: boolean
+          slug?: string | null
           tenant_id?: string | null
           updated_at?: string
           verification_status?: string
@@ -6647,6 +6657,7 @@ export type Database = {
           whatsapp?: string | null
         }
         Update: {
+          bio?: string | null
           city?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -6659,7 +6670,11 @@ export type Database = {
           phone?: string | null
           provider_type?: string
           provider_type_locked?: boolean
+          public_email?: string | null
           response_deadline_minutes?: number
+          show_email?: boolean
+          show_phone?: boolean
+          slug?: string | null
           tenant_id?: string | null
           updated_at?: string
           verification_status?: string
@@ -9757,6 +9772,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mkt_ui_labels: {
+        Row: {
+          context_ar: string
+          created_at: string
+          custom_text: string | null
+          default_text: string
+          id: string
+          label_key: string
+          screen: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          context_ar?: string
+          created_at?: string
+          custom_text?: string | null
+          default_text: string
+          id?: string
+          label_key: string
+          screen?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          context_ar?: string
+          created_at?: string
+          custom_text?: string | null
+          default_text?: string
+          id?: string
+          label_key?: string
+          screen?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       mkt_user_activity: {
         Row: {
@@ -12910,6 +12961,30 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      mkt_re_provider_public: {
+        Args: { _slug: string }
+        Returns: {
+          active_listings: number
+          avg_response_minutes: number
+          bio: string
+          city: string
+          created_at: string
+          display_name: string
+          id: string
+          is_demo: boolean
+          phone: string
+          provider_type: string
+          public_email: string
+          rating: number
+          slug: string
+          verification_status: string
+          whatsapp: string
+        }[]
+      }
+      mkt_re_provider_slugify: {
+        Args: { _id: string; _name: string }
+        Returns: string
       }
       mkt_re_verification_review: {
         Args: { _approve: boolean; _note?: string; _verification_id: string }
