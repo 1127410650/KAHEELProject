@@ -36,7 +36,11 @@ import {
   type AreaTone,
   type SafeBand,
 } from "@/lib/mascot-stage";
-import { pickCompanionScene, type CompanionScene } from "@/lib/mascot-companions";
+import {
+  COMPANION_SCENES,
+  pickCompanionScene,
+  type CompanionScene,
+} from "@/lib/mascot-companions";
 
 import { useCallCenter } from "@/lib/mkt-call-center";
 import { watchScrollIdle } from "@/lib/scroll-idle";
@@ -138,7 +142,12 @@ export function MascotRoam() {
     const run = () => {
       if (Date.now() < settledAt) return;
       if (blockedNow()) return;
-      const data = pickCompanionScene(lastSceneRef.current);
+      // معاينة/اختبار: `?scene=<id>` يُثبّت مشهدًا محددًا (لا تأثير على الزوار).
+      const forced = new URLSearchParams(window.location.search).get("scene");
+      const data = forced
+        ? (COMPANION_SCENES.find((item) => item.id === forced) ??
+           pickCompanionScene(lastSceneRef.current))
+        : pickCompanionScene(lastSceneRef.current);
       if (!canShowMascot(`companion:${data.id}`, limits)) return;
       start(data);
     };
