@@ -2592,6 +2592,7 @@ export type Database = {
           id: string
           image_path: string | null
           image_url: string | null
+          is_demo: boolean
           listing_id: string | null
           priority: number
           slug: string
@@ -2617,6 +2618,7 @@ export type Database = {
           id?: string
           image_path?: string | null
           image_url?: string | null
+          is_demo?: boolean
           listing_id?: string | null
           priority?: number
           slug: string
@@ -2642,6 +2644,7 @@ export type Database = {
           id?: string
           image_path?: string | null
           image_url?: string | null
+          is_demo?: boolean
           listing_id?: string | null
           priority?: number
           slug?: string
@@ -3965,6 +3968,7 @@ export type Database = {
           featured_until: string | null
           guaranteed_impressions: number | null
           id: string
+          is_demo: boolean
           is_featured: boolean
           item_condition: string | null
           keywords: string[]
@@ -4038,6 +4042,7 @@ export type Database = {
           featured_until?: string | null
           guaranteed_impressions?: number | null
           id?: string
+          is_demo?: boolean
           is_featured?: boolean
           item_condition?: string | null
           keywords?: string[]
@@ -4111,6 +4116,7 @@ export type Database = {
           featured_until?: string | null
           guaranteed_impressions?: number | null
           id?: string
+          is_demo?: boolean
           is_featured?: boolean
           item_condition?: string | null
           keywords?: string[]
@@ -7090,6 +7096,7 @@ export type Database = {
           id: string
           image_path: string | null
           is_available: boolean
+          is_demo: boolean
           is_featured: boolean
           item_type: string
           name_ar: string
@@ -7117,6 +7124,7 @@ export type Database = {
           id?: string
           image_path?: string | null
           is_available?: boolean
+          is_demo?: boolean
           is_featured?: boolean
           item_type?: string
           name_ar: string
@@ -7144,6 +7152,7 @@ export type Database = {
           id?: string
           image_path?: string | null
           is_available?: boolean
+          is_demo?: boolean
           is_featured?: boolean
           item_type?: string
           name_ar?: string
@@ -7397,6 +7406,7 @@ export type Database = {
           estimated_delivery_minutes_min: number | null
           id: string
           idempotency_key: string | null
+          is_demo: boolean
           is_open_manually: boolean
           latitude: number | null
           location_precision: string
@@ -7443,6 +7453,7 @@ export type Database = {
           estimated_delivery_minutes_min?: number | null
           id?: string
           idempotency_key?: string | null
+          is_demo?: boolean
           is_open_manually?: boolean
           latitude?: number | null
           location_precision?: string
@@ -7489,6 +7500,7 @@ export type Database = {
           estimated_delivery_minutes_min?: number | null
           id?: string
           idempotency_key?: string | null
+          is_demo?: boolean
           is_open_manually?: boolean
           latitude?: number | null
           location_precision?: string
@@ -7563,6 +7575,7 @@ export type Database = {
           image_height: number
           image_path: string | null
           image_width: number
+          is_demo: boolean
           mascot: string
           mascot_pose: string
           priority: number
@@ -7589,6 +7602,7 @@ export type Database = {
           image_height?: number
           image_path?: string | null
           image_width?: number
+          is_demo?: boolean
           mascot?: string
           mascot_pose?: string
           priority?: number
@@ -7615,6 +7629,7 @@ export type Database = {
           image_height?: number
           image_path?: string | null
           image_width?: number
+          is_demo?: boolean
           mascot?: string
           mascot_pose?: string
           priority?: number
