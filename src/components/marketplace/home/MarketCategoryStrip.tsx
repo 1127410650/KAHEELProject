@@ -41,7 +41,7 @@ export function MarketCategoryStrip() {
   }
 
   return (
-    <div className="relative w-full overflow-hidden border-t border-border bg-background text-foreground">
+    <div className="relative w-full overflow-hidden bg-transparent text-foreground">
 
 
       <nav
