@@ -111,9 +111,13 @@ function toTemplate(draft: Draft, id: string): DesignTemplate {
     starts_at: draft.starts_at || null,
     ends_at: draft.ends_at || null,
     is_active: true,
+    brand_stamp: draft.brand_stamp,
+    layout_key: draft.layout_key as DesignTemplate["layout_key"],
+    variation_of: null,
     updated_at: new Date().toISOString(),
   };
 }
+
 
 function fromTemplate(row: DesignTemplate): Draft {
   return {
