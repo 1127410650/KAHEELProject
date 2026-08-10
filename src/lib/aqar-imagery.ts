@@ -23,6 +23,15 @@ import cityHoms from "@/assets/aqar/city-homs.webp.asset.json";
 import cityLatakia from "@/assets/aqar/city-latakia.webp.asset.json";
 import cityTartus from "@/assets/aqar/city-tartus.webp.asset.json";
 import heroPalmyra from "@/assets/aqar/hero-palmyra.webp.asset.json";
+import interiorBedroom1 from "@/assets/aqar/interior-bedroom-1.webp.asset.json";
+import interiorBedroom2 from "@/assets/aqar/interior-bedroom-2.webp.asset.json";
+import interiorBedroom3 from "@/assets/aqar/interior-bedroom-3.webp.asset.json";
+import interiorKitchen1 from "@/assets/aqar/interior-kitchen-1.webp.asset.json";
+import interiorKitchen2 from "@/assets/aqar/interior-kitchen-2.webp.asset.json";
+import interiorLiving1 from "@/assets/aqar/interior-living-1.webp.asset.json";
+import interiorLiving2 from "@/assets/aqar/interior-living-2.webp.asset.json";
+import interiorLiving3 from "@/assets/aqar/interior-living-3.webp.asset.json";
+import exteriorDamascusStreet from "@/assets/aqar/exterior-damascus-street.webp.asset.json";
 import typeApartment from "@/assets/aqar/type-apartment.webp.asset.json";
 import typeBuilding from "@/assets/aqar/type-building.webp.asset.json";
 import typeFarm from "@/assets/aqar/type-farm.webp.asset.json";
@@ -66,10 +75,10 @@ export interface AqarImagery {
 /** الافتراضي المدمج — يعمل بلا اتصال بقاعدة البيانات. */
 export const DEFAULT_AQAR_IMAGERY: AqarImagery = {
   types: [
-    { key: "apartment", label: "شقق", image: typeApartment.url, wide: true },
+    { key: "apartment", label: "شقق", image: typeBuilding.url, wide: true },
     { key: "villa", label: "فلل", image: typeVilla.url },
 
-    { key: "building", label: "عمائر", image: typeBuilding.url },
+    { key: "building", label: "عمائر", image: typeApartment.url },
     { key: "land", label: "أراضٍ", image: typeLand.url },
     { key: "shop", also: ["office", "warehouse"], label: "محلات", image: typeShop.url },
     { key: "farm", also: ["chalet"], label: "مزارع وشاليهات", image: typeFarm.url },
@@ -84,6 +93,22 @@ export const DEFAULT_AQAR_IMAGERY: AqarImagery = {
   ],
   hero: { image: heroPalmyra.url, name: "أعمدة تدمر", city: "تدمر — حمص" },
 };
+
+/**
+ * صور فوتوغرافية حقيقية (مرخّصة حرًّا) للبيانات التجريبية — لا صور مولّدة.
+ * تُستخدم مباشرة كأغلفة للإعلانات التجريبية بحيث تبقى متنوّعة لا متشابهة.
+ */
+export const AQAR_REAL_PHOTOS: string[] = [
+  interiorLiving1.url,
+  interiorBedroom1.url,
+  interiorKitchen1.url,
+  interiorLiving2.url,
+  interiorBedroom2.url,
+  interiorKitchen2.url,
+  interiorLiving3.url,
+  interiorBedroom3.url,
+  exteriorDamascusStreet.url,
+];
 
 /** أسماء الأنواع بالعربية — تُستخدم في البطاقات وصفحة الإعلان. */
 export const AQAR_TYPE_LABELS: Record<string, string> = {
