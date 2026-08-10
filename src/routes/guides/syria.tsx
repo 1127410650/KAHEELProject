@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, Search, ShieldCheck, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Navigation, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { MarketShell } from "@/components/marketplace/MarketShell";
