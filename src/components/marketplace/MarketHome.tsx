@@ -61,11 +61,20 @@ export function MarketHome() {
   /* التصميم النشط يُدار من /admin/appearance/variants ويسري على كل الزوار فورًا. */
   const variant = useActivePageVariant("home", "home.noon");
   const bigCards = variant === "home.big_cards";
+  /* التأليف من /admin/composer له الأولوية؛ وإن لم تُؤلَّف الصفحة بعد يظهر
+     ترتيبها المكتوب أدناه كما هو ⇒ لا شاشة فارغة أبدًا. */
+  const composed = usePageBlocks("market.home");
+  const blocks = composed.data ?? [];
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
     <div className="k-page-surface bg-background pb-5 text-foreground">
       <div className="mx-auto w-full max-w-[1240px] space-y-5 overflow-x-clip px-3 pb-3 pt-3 sm:space-y-7 sm:px-5 lg:px-8">
+        {blocks.length > 0 ? (
+          <PageBlocks blocks={blocks} />
+        ) : (
+          <>
+
         <QuickTiles />
 
         {/* حقل البحث العريض يعيش في الهيدر (MarketShell) كي يبقى وحده بعد الانكماش. */}
