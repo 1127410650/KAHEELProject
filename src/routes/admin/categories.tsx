@@ -11,6 +11,7 @@ import { ArrowDownToLine, ArrowUpToLine, Loader2, Merge, Plus } from "lucide-rea
 import { toast } from "sonner";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminPageHead } from "@/components/admin/AdminPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
