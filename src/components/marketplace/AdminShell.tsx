@@ -721,6 +721,59 @@ export function AdminShell({
           </div>
         </main>
       </div>
+
+      {allowed ? <AdminTabBar onMenu={() => setDrawerOpen(true)} /> : null}
     </div>
   );
 }
+
+/** شريط تبويب سفلي للجوال — نفس مجموعات القائمة، والفعّال بلون اللوحة. */
+const TABS: { to: string; labelKey: string; icon: typeof Gauge }[] = [
+  { to: "/admin", labelKey: "admin.navSections.studio", icon: Gauge },
+  { to: "/admin/listings", labelKey: "admin.navSections.content", icon: Megaphone },
+  { to: "/admin/campaigns", labelKey: "admin.navSections.campaigns", icon: Clapperboard },
+  { to: "/admin/ad-credit", labelKey: "admin.navSections.finance", icon: Coins },
+];
+
+function AdminTabBar({ onMenu }: { onMenu: () => void }) {
+  const { t } = useI18n();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  return (
+    <nav
+      aria-label={t("admin.console")}
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-primary/15 bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+    >
+      <div className="grid grid-cols-5">
+        {TABS.map((tab) => {
+          const active =
+            tab.to === "/admin" ? pathname === "/admin" || pathname === "/admin/" : pathname.startsWith(tab.to);
+          const Icon = tab.icon;
+          return (
+            <Link
+              key={tab.to}
+              to={tab.to}
+              aria-current={active ? "page" : undefined}
+              className={
+                "k-press flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 text-[11px] font-bold " +
+                (active ? "text-primary" : "text-muted-foreground")
+              }
+            >
+              <Icon className="size-[18px]" aria-hidden />
+              <span className="max-w-full truncate">{t(tab.labelKey)}</span>
+            </Link>
+          );
+        })}
+        <button
+          type="button"
+          onClick={onMenu}
+          className="k-press flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 text-[11px] font-bold text-muted-foreground"
+        >
+          <Menu className="size-[18px]" aria-hidden />
+          <span className="max-w-full truncate">{t("admin.menu")}</span>
+        </button>
+      </div>
+    </nav>
+  );
+}
+
