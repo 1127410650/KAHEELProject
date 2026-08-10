@@ -984,6 +984,94 @@ body:has(.market-surface) .shadow-raised {
   }
 }
 
+/* ── مداخل حضور الشخصيتين ───────────────────────────────────────────────────
+   كلها `transform`/`opacity` فقط (بلا أي خاصية تُعيد التخطيط) ومدتها 350ms،
+   فالظهور لا يحرّك أي عنصر في الصفحة. */
+.k-mascot-enter {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+.k-mascot-enter-drop {
+  animation-name: k-mascot-drop;
+}
+.k-mascot-enter-slide-start {
+  animation-name: k-mascot-slide-start;
+}
+.k-mascot-enter-slide-end {
+  animation-name: k-mascot-slide-end;
+}
+.k-mascot-enter-pop {
+  animation-name: k-mascot-pop;
+}
+.k-mascot-enter-peek {
+  animation-name: k-mascot-peek;
+}
+
+@keyframes k-mascot-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes k-mascot-slide-start {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(-32px * var(--k-dir, 1)));
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes k-mascot-slide-end {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(32px * var(--k-dir, 1)));
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes k-mascot-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes k-mascot-peek {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) rotate(-4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-mascot-enter {
+    animation: none;
+  }
+}
+
+
+
 
 /* حبّة ممتلئة: بنفسجي متوسط ونص أبيض — للأزرار والوسوم. */
 @utility k-pill {
