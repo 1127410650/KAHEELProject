@@ -87,14 +87,13 @@ export function AqarShell({
           ...style,
           // تُفرض هنا لأن `.k-header-hero` تعرّف position/الاستدارة خارج طبقات الأدوات.
           position: "fixed",
-          borderBottomLeftRadius: "calc(28px*(1 - var(--p)) + 14px*var(--p))",
-          borderBottomRightRadius: "calc(28px*(1 - var(--p)) + 14px*var(--p))",
+          borderBottomLeftRadius: "16px",
+          borderBottomRightRadius: "16px",
         }}
-        className="k-header-hero inset-x-0 top-0 z-40 overflow-hidden [height:calc(190px-44px*var(--p))]"
+        className="k-header-hero inset-x-0 top-0 z-40 h-24 overflow-hidden"
       >
-
         <HeaderShapes />
-        {/* صف الهوية — يبقى */}
+        {/* صف الهوية: رجوع + اسم القسم + الشخصية — ارتفاع 44px */}
         <div className="k-header-hero relative z-20 mx-auto flex h-11 max-w-3xl items-center gap-3 px-4">
           <Link
             to={back}
@@ -103,44 +102,15 @@ export function AqarShell({
             <ArrowRight className="size-4" aria-hidden />
             <span>{backLabel}</span>
           </Link>
-          <strong className="min-w-0 flex-1 truncate text-section font-extrabold">{title}</strong>
-          <Mascot name="kaheel" size="sm" className="hidden h-11 w-auto shrink-0 sm:block" />
+          <strong className="min-w-0 flex-1 truncate text-base font-bold">{title}</strong>
+          {subtitle ? <span className="sr-only">{subtitle}</span> : null}
+          <Mascot name="kaheel" size="sm" className="hidden h-9 w-auto shrink-0 sm:block" />
         </div>
-        {/* الطبقات السفلى تتحرّك بـ transform فقط — بلا أي إعادة تخطيط ⇒ صفر CLS */}
-        <div style={{ transform: "translateY(calc(-44px * var(--p)))" }}>
-        {/* سطر الوصف — يُغلق مع التمرير لأسفل */}
-        <div
-          className="relative z-0 h-11 overflow-hidden px-4"
-          style={{ opacity: "calc(1 - var(--p)*1.6)" }}
-        >
-          {subtitle ? (
-            <span className="mx-auto block max-w-3xl truncate text-desc leading-[44px] opacity-90">
-              {subtitle}
-            </span>
-          ) : null}
-        </div>
-        {/* كبسولات أقسام العقار — تبقى وتتحوّل إلى دوائر */}
-        <HeaderChipsRow>
-          {NAV.map(({ to, key, label: fallback, icon: Icon }) => (
-            <HeaderChip
-              key={to}
-              href={to}
-              label={label(key, fallback)}
-              icon={<Icon className="size-[18px]" />}
-            />
-          ))}
-        </HeaderChipsRow>
-        {/* صف البحث — يبقى دائمًا قابلًا للنقر */}
-        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-2.5">
+        {/* صف البحث — يبقى دائمًا قابلًا للنقر، بلا أي إعادة تخطيط ⇒ صفر CLS */}
+        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-2">
           <a
             href="/aqar/browse"
-            onClick={(event) => {
-              if (p > 0.6) {
-                event.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }
-            }}
-            className="flex h-11 w-full items-center gap-2 rounded-full border border-border bg-card px-4 text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            className="flex h-11 w-full items-center gap-2 rounded-[var(--r-control)] border border-border bg-card px-3 text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             aria-label={label("aqar.searchPlaceholder", "ابحث عن وحدة أو مدينة")}
           >
             <Search className="size-4 shrink-0" aria-hidden />
@@ -149,8 +119,8 @@ export function AqarShell({
             </span>
           </a>
         </div>
-        </div>
       </header>
+
       <div aria-hidden style={{ height: `${AQAR_HEADER_FULL_H}px` }} />
 
       <main className="flex-1">{children}</main>
