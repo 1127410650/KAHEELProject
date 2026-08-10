@@ -57,6 +57,9 @@ export function MarketHome() {
   const ar = locale === "ar";
   // كل الصفوف في استعلام واحد: لا صف يُركّب قبل معرفة محتواه ⇒ لا ظهور ثم اختفاء.
   const rails = useHomeRails(RAILS);
+  /* التصميم النشط يُدار من /admin/appearance/variants ويسري على كل الزوار فورًا. */
+  const variant = useActivePageVariant("home", "home.noon");
+  const bigCards = variant === "home.big_cards";
 
   return (
     /* k-page-surface: سطح أبيض يصبح شفافًا وحده عندما تكون خلفية اليوم مفعّلة. */
@@ -68,16 +71,28 @@ export function MarketHome() {
 
         <SyriaPrideStrip />
 
-
-        <CampaignMosaic />
-
-        <LazyMount minHeight="150px">
-          <SponsoredBanner />
-        </LazyMount>
-
-        <LazyMount minHeight="380px">
-          <CategoryTileGrid />
-        </LazyMount>
+        {/* تصميم «البطاقات الكبيرة» يقدّم شبكة التصنيفات قبل الحملات. */}
+        {bigCards ? (
+          <>
+            <LazyMount minHeight="380px">
+              <CategoryTileGrid />
+            </LazyMount>
+            <CampaignMosaic />
+            <LazyMount minHeight="150px">
+              <SponsoredBanner />
+            </LazyMount>
+          </>
+        ) : (
+          <>
+            <CampaignMosaic />
+            <LazyMount minHeight="150px">
+              <SponsoredBanner />
+            </LazyMount>
+            <LazyMount minHeight="380px">
+              <CategoryTileGrid />
+            </LazyMount>
+          </>
+        )}
 
         {/* ذيل الصفحة يُضاف مرة واحدة بعد جهوز الصفوف: إضافة أسفل المحتوى
             القائم لا تحرّك شيئًا ⇒ لا هزّة تخطيط. */}
@@ -90,16 +105,15 @@ export function MarketHome() {
                 title={ar ? rail.ar : rail.en}
                 href={rail.href}
                 rows={rails.data?.[rail.id] ?? []}
+                layout={bigCards ? "grid" : "rail"}
               />
             ))}
 
             <ExclusiveOffersRail />
           </>
         )}
-
-
-
       </div>
     </div>
   );
 }
+
