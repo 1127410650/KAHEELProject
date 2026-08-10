@@ -11,13 +11,16 @@ export interface MktUserAddress {
   details: string | null;
   lat: number | null;
   lng: number | null;
+  accuracy_m: number | null;
+  place_label: string | null;
   source: string;
   is_default: boolean;
   created_at: string;
 }
 
 export const ADDRESS_COLUMNS =
-  "id, label, country_id, city_id, district, details, lat, lng, source, is_default, created_at";
+  "id, label, country_id, city_id, district, details, lat, lng, accuracy_m, place_label, source, is_default, created_at";
+
 
 export async function loadMyAddresses(): Promise<MktUserAddress[]> {
   const { data, error } = await supabase
@@ -37,7 +40,11 @@ export interface NewAddressInput {
   details?: string;
   lat?: number | null;
   lng?: number | null;
-  source?: "manual" | "device";
+  /** دقة الموقع بالأمتار — تُحفظ فقط عند التحديد التلقائي من الجهاز. */
+  accuracyM?: number | null;
+  /** وصف نصي مستنتج من الخريطة (شارع/حي). */
+  placeLabel?: string | null;
+  source?: "manual" | "device" | "map";
   isDefault?: boolean;
 }
 
@@ -50,6 +57,7 @@ export function addressInputError(input: NewAddressInput): string | null {
   if ((input.details ?? "").length > 300) return "الوصف طويل — 300 حرف كحد أقصى.";
   return null;
 }
+
 
 export async function saveMyAddress(input: NewAddressInput): Promise<MktUserAddress> {
   const { data: auth } = await supabase.auth.getSession();
@@ -67,8 +75,11 @@ export async function saveMyAddress(input: NewAddressInput): Promise<MktUserAddr
       details: input.details?.trim() || null,
       lat: input.lat ?? null,
       lng: input.lng ?? null,
+      accuracy_m: input.accuracyM ?? null,
+      place_label: input.placeLabel?.trim() || null,
       source: input.source ?? "manual",
       is_default: input.isDefault ?? false,
+
     })
     .select(ADDRESS_COLUMNS)
     .single();
@@ -92,9 +103,14 @@ export async function deleteMyAddress(id: string): Promise<void> {
 export interface DeviceCoords {
   lat: number;
   lng: number;
+  /** دقة القراءة بالأمتار كما يبلّغها الجهاز (قد تكون غير متوفرة). */
+  accuracy?: number | null;
 }
 
-/** GPS lookup with an Arabic reason when the browser or the user declines. */
+/**
+ * قراءة موقع الجهاز الحقيقي أيًّا كان البلد — بلا أي افتراض جغرافي.
+ * الإذن يُطلب عند الاستدعاء فقط (لا عند فتح التطبيق)، والنتيجة لا تُخزَّن.
+ */
 export function requestDeviceLocation(): Promise<DeviceCoords> {
   return new Promise((resolve, reject) => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -103,9 +119,28 @@ export function requestDeviceLocation(): Promise<DeviceCoords> {
     }
     navigator.geolocation.getCurrentPosition(
       (position) =>
-        resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
-      () => reject(new Error("تعذّر تحديد الموقع — تأكد من السماح بالوصول للموقع.")),
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          accuracy: Number.isFinite(position.coords.accuracy) ? position.coords.accuracy : null,
+        }),
+      (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          reject(new Error("PERMISSION_DENIED"));
+          return;
+        }
+        reject(new Error("تعذّر تحديد الموقع — يمكنك اختياره على الخريطة."));
+      },
       { enableHighAccuracy: true, timeout: 12_000, maximumAge: 60_000 },
     );
   });
 }
+
+/** نص عربي لدقة الموقع، مثل: «دقة تقريبية ±50م». */
+export function accuracyLabel(accuracy: number | null | undefined): string | null {
+  if (!accuracy || !Number.isFinite(accuracy)) return null;
+  const meters = Math.round(accuracy);
+  if (meters >= 1000) return `دقة تقريبية ±${(meters / 1000).toFixed(1)}كم`;
+  return `دقة تقريبية ±${meters}م`;
+}
+

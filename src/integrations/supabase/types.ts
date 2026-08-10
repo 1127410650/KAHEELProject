@@ -8082,6 +8082,7 @@ export type Database = {
       }
       mkt_user_addresses: {
         Row: {
+          accuracy_m: number | null
           city_id: string | null
           country_id: string | null
           created_at: string
@@ -8092,11 +8093,13 @@ export type Database = {
           label: string
           lat: number | null
           lng: number | null
+          place_label: string | null
           source: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          accuracy_m?: number | null
           city_id?: string | null
           country_id?: string | null
           created_at?: string
@@ -8107,11 +8110,13 @@ export type Database = {
           label: string
           lat?: number | null
           lng?: number | null
+          place_label?: string | null
           source?: string
           updated_at?: string
           user_id?: string
         }
         Update: {
+          accuracy_m?: number | null
           city_id?: string | null
           country_id?: string | null
           created_at?: string
@@ -8122,6 +8127,7 @@ export type Database = {
           label?: string
           lat?: number | null
           lng?: number | null
+          place_label?: string | null
           source?: string
           updated_at?: string
           user_id?: string
