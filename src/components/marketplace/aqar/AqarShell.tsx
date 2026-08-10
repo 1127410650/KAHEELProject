@@ -83,9 +83,16 @@ export function AqarShell({
     >
       <header
         data-kslot="aqar.header"
-        style={style}
-        className="k-header-hero fixed inset-x-0 top-0 z-40 overflow-hidden [height:calc(190px-44px*var(--p))] rounded-b-[calc(28px*(1-var(--p))+14px*var(--p))]"
+        style={{
+          ...style,
+          // تُفرض هنا لأن `.k-header-hero` تعرّف position/الاستدارة خارج طبقات الأدوات.
+          position: "fixed",
+          borderBottomLeftRadius: "calc(28px*(1 - var(--p)) + 14px*var(--p))",
+          borderBottomRightRadius: "calc(28px*(1 - var(--p)) + 14px*var(--p))",
+        }}
+        className="k-header-hero inset-x-0 top-0 z-40 overflow-hidden [height:calc(190px-44px*var(--p))]"
       >
+
         <HeaderShapes />
         {/* صف الهوية — يبقى */}
         <div className="k-header-hero relative z-20 mx-auto flex h-11 max-w-3xl items-center gap-3 px-4">
