@@ -78,9 +78,11 @@ export function CollapsingHomeHeader({
           "--p": p,
           // التدرّج المعتمد نهائيًا — بلا أي طبقة تعتيم فوقه.
           backgroundImage: "linear-gradient(90deg, #8A4FFF 0%, #C3ABFF 100%)",
-          // حاشية شريط حالة iOS داخل التدرّج نفسه.
+          // حاشية شريط حالة iOS تُطبَّق هنا مرة واحدة فقط في كل الشجرة.
           paddingTop: `calc(env(safe-area-inset-top, 0px) + ${PT}px)`,
           paddingBottom: `${PB}px`,
+          // لا حد أدنى للارتفاع: الارتفاع مجموع الصفوف فحسب.
+          minHeight: 0,
         } as React.CSSProperties}
         className="fixed inset-x-0 top-0 z-40 rounded-b-[16px] text-primary-foreground shadow-[0_10px_28px_-22px_rgb(138_79_255/0.55)]"
         onClick={
@@ -89,15 +91,22 @@ export function CollapsingHomeHeader({
             : undefined
         }
       >
-        {/* الصفّان القابلان للطي — ارتفاع وشفافية فقط، بلا أي حركة تخطيط خارجية. */}
+        {/* الصفّان القابلان للطي — الارتفاع والحواشي والشفافية كلها تصل صفرًا
+            عند p=1 فلا يبقى أي «شبح» مساحة بنفسجية فوق شريط البحث. */}
         <div
           className="overflow-hidden"
           style={{
             height: `calc(${COLLAPSIBLE_H}px * (1 - var(--p)))`,
+            minHeight: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
             opacity: "calc(1 - var(--p) * 1.6)",
+            pointerEvents: collapsed ? "none" : undefined,
           }}
           aria-hidden={collapsed}
         >
+
           {/* الصف ١ — الهوية والموقع والجرس وزر الإعلان. */}
           <div
             className="mx-auto grid w-full max-w-[1240px] grid-cols-[auto_1fr_auto_auto] items-center gap-1.5 px-[var(--page-x)]"
