@@ -363,7 +363,7 @@ export function ListingCard({
 
           {/* Two reserved lines: the height is identical for one- and
               two-line titles, which is what keeps the rails shift-free. */}
-          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-card font-semibold text-foreground sm:text-card">
+          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-title font-semibold text-foreground sm:text-title">
             {listing.title}
           </h3>
 
