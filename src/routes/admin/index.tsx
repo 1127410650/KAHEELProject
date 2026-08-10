@@ -7,6 +7,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   Brush,
+  Brush,
   Images,
   LayoutTemplate,
   Megaphone,
@@ -60,6 +61,12 @@ interface StudioTile {
 }
 
 const TILES: StudioTile[] = [
+  {
+    to: "/admin/studio/canvas",
+    labelKey: "admin.studio.canvas",
+    descKey: "admin.studio.canvasDesc",
+    icon: Brush,
+  },
   {
     to: "/admin/composer",
     labelKey: "admin.studio.composer",

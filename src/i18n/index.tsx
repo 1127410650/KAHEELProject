@@ -84,6 +84,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
 
     "admin.nav.designs": "مكتبة التصاميم",
     "admin.nav.canvasStudio": "استوديو الرسم",
+    "admin.studio.canvas": "ورقة الرسم",
+    "admin.studio.canvasDesc": "ارسم كتلة من الصفر ثم صدّرها ككتلة قابلة للنقر.",
     "admin.nav.integrations": "الخدمات الخارجية",
     "admin.nav.pricing": "الأسعار وسعر الصرف",
     "admin.dashboardBadge": "مركز المتابعة",
@@ -162,6 +164,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
 
     "admin.nav.designs": "Design library",
     "admin.nav.canvasStudio": "Canvas studio",
+    "admin.studio.canvas": "Canvas sheet",
+    "admin.studio.canvasDesc": "Draw a block from scratch, then export it as a clickable block.",
     "admin.nav.integrations": "External services",
     "admin.nav.pricing": "Pricing and exchange rate",
     "admin.dashboardBadge": "Operations center",
