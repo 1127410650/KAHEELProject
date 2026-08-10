@@ -19,7 +19,7 @@ const MOODS: { key: string; label: string; hint: string; icon: typeof Waves }[] 
 export function AqarMoodCards({ track }: { track: AqarTrack }) {
   return (
     <section className="mt-5 px-4">
-      <h2 className="mb-3 text-section font-extrabold text-foreground">على مزاجك</h2>
+      <h2 className="mb-2.5 text-lg font-bold text-foreground">على مزاجك</h2>
       <ul className="grid grid-cols-2 gap-3">
 
         {MOODS.map(({ key, label, hint, icon: Icon }) => (
