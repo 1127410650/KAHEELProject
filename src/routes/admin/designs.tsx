@@ -142,8 +142,11 @@ function DesignsPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [busy, setBusy] = useState(false);
+  const [variations, setVariations] = useState<DesignTemplate[]>([]);
+  const [variationSource, setVariationSource] = useState("");
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((prev) => ({ ...prev, [key]: value }));
+
 
   const save = async () => {
     if (!draft.name_ar.trim()) {
