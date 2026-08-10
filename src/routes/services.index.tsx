@@ -67,17 +67,24 @@ const ICONS: Record<string, ComponentType<{ className?: string }>> = {
   "grid-2x2": Grid2X2,
 };
 
+// نغمات التصنيفات كلها من هوية كَحيل: بنفسجي بدرجاته + الذهبي للتمييز.
+// لا ألوان دخيلة — كل نغمة تشير إلى design tokens.
+const TONE_BRAND = "from-primary/20 to-secondary text-primary ring-primary/25";
+const TONE_DEEP = "from-primary-pressed/25 to-secondary text-primary-pressed ring-primary/30";
+const TONE_SOFT = "from-primary/12 to-accent text-primary-dark ring-primary/20";
+const TONE_GOLD = "from-gold/25 to-gold-soft text-gold-foreground ring-gold/35";
+
 const COLORS: Record<string, string> = {
-  teal: "from-teal-500/20 to-teal-50 text-teal-700 ring-teal-200",
-  navy: "from-slate-800/20 to-slate-50 text-slate-800 ring-slate-300",
-  rose: "from-rose-500/20 to-rose-50 text-rose-700 ring-rose-200",
-  emerald: "from-emerald-500/20 to-emerald-50 text-emerald-700 ring-emerald-200",
-  violet: "from-violet-500/20 to-violet-50 text-violet-700 ring-violet-200",
-  amber: "from-amber-500/20 to-amber-50 text-amber-700 ring-amber-200",
-  sky: "from-sky-500/20 to-sky-50 text-sky-700 ring-sky-200",
-  fuchsia: "from-fuchsia-500/20 to-fuchsia-50 text-fuchsia-700 ring-fuchsia-200",
-  indigo: "from-indigo-500/20 to-indigo-50 text-indigo-700 ring-indigo-200",
-  slate: "from-slate-500/20 to-slate-50 text-slate-700 ring-slate-200",
+  teal: TONE_BRAND,
+  navy: TONE_DEEP,
+  rose: TONE_SOFT,
+  emerald: TONE_BRAND,
+  violet: TONE_BRAND,
+  amber: TONE_GOLD,
+  sky: TONE_SOFT,
+  fuchsia: TONE_BRAND,
+  indigo: TONE_DEEP,
+  slate: TONE_SOFT,
 };
 
 function CategoryButton({
@@ -147,12 +154,12 @@ function ServicesMarketplacePage() {
           progress={progressSteps}
         />
         <section className="relative overflow-hidden border-b bg-market-navy text-white">
-          <div className="absolute -start-24 -top-24 size-72 rounded-full bg-cyan-400/15 blur-3xl" />
-          <div className="absolute -bottom-32 end-0 size-80 rounded-full bg-violet-500/20 blur-3xl" />
+          <div className="absolute -start-24 -top-24 size-72 rounded-full bg-primary/25 blur-3xl" />
+          <div className="absolute -bottom-32 end-0 size-80 rounded-full bg-primary/20 blur-3xl" />
           <div className="market-hero-band relative mx-auto w-full max-w-7xl px-4">
             <div className="max-w-2xl">
               <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold backdrop-blur">
-                <ShieldCheck className="size-4 text-cyan-200" />
+                <ShieldCheck className="size-4 text-primary-foreground/80" />
                 {locale === "ar"
                   ? "مواعيد واضحة ومقدمو خدمات موثوقون"
                   : "Clear appointments, trusted providers"}
@@ -271,7 +278,7 @@ function ServicesMarketplacePage() {
                       key={`${item.storefront_id}:${item.item_id}`}
                       className="group overflow-hidden rounded-3xl border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
                     >
-                      <div className="relative h-40 overflow-hidden bg-gradient-to-br from-market-navy via-slate-800 to-cyan-900">
+                      <div className="relative h-40 overflow-hidden bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep">
                         {image ? (
                           <img
                             src={image}
@@ -281,11 +288,11 @@ function ServicesMarketplacePage() {
                           />
                         ) : (
                           <div className="grid size-full place-items-center">
-                            <Sparkles className="size-10 text-cyan-100/80" />
+                            <Sparkles className="size-10 text-primary-foreground/70" />
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent" />
-                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black text-slate-900 shadow">
+                        <span className="absolute start-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black text-foreground shadow">
                           {item.confirmation_mode === "instant"
                             ? locale === "ar"
                               ? "تأكيد فوري"
