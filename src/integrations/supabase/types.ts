@@ -848,6 +848,7 @@ export type Database = {
           asset_path: string | null
           bytes: number
           cost_credits: number
+          cost_usd: number
           created_at: string
           detail: string | null
           finished_at: string | null
@@ -855,7 +856,9 @@ export type Database = {
           model: string
           preset: string | null
           prompt: string
+          purpose: string | null
           size_key: string
+          slot_key: string | null
           status: string
           user_id: string
         }
@@ -863,6 +866,7 @@ export type Database = {
           asset_path?: string | null
           bytes?: number
           cost_credits?: number
+          cost_usd?: number
           created_at?: string
           detail?: string | null
           finished_at?: string | null
@@ -870,7 +874,9 @@ export type Database = {
           model: string
           preset?: string | null
           prompt: string
+          purpose?: string | null
           size_key: string
+          slot_key?: string | null
           status?: string
           user_id: string
         }
@@ -878,6 +884,7 @@ export type Database = {
           asset_path?: string | null
           bytes?: number
           cost_credits?: number
+          cost_usd?: number
           created_at?: string
           detail?: string | null
           finished_at?: string | null
@@ -885,7 +892,9 @@ export type Database = {
           model?: string
           preset?: string | null
           prompt?: string
+          purpose?: string | null
           size_key?: string
+          slot_key?: string | null
           status?: string
           user_id?: string
         }
@@ -11656,12 +11665,16 @@ export type Database = {
         Args: { _tenant_id?: string; _user_id: string }
         Returns: Json
       }
+      mkt_ai_image_budget: { Args: never; Returns: Json }
       mkt_ai_image_claim: {
         Args: {
           _model: string
           _preset?: string
           _prompt: string
+          _purpose?: string
           _size_key: string
+          _slot_key?: string
+          _unit_usd?: number
         }
         Returns: Json
       }
@@ -11670,12 +11683,15 @@ export type Database = {
           _asset_path?: string
           _bytes?: number
           _cost?: number
+          _cost_usd?: number
           _detail?: string
           _job_id: string
           _status: string
         }
         Returns: undefined
       }
+      mkt_ai_image_monthly_cap: { Args: never; Returns: number }
+      mkt_ai_image_set_budget: { Args: { _usd: number }; Returns: number }
       mkt_analytics_fields: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_funnel: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_geo: { Args: { _limit?: number }; Returns: Json }
