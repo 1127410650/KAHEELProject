@@ -55,8 +55,8 @@ export function KaheelStories() {
                   className="grid size-[66px] place-items-center rounded-full p-[3px]"
                   style={{
                     background: isSeen
-                      ? "linear-gradient(140deg,#cfc6dd,#b9aecb)"
-                      : "linear-gradient(140deg,#ff8500,#C3ABFF 45%,#8A4FFF)",
+                      ? "linear-gradient(140deg, color-mix(in srgb, var(--kt-divider) 70%, #9aa3ad), var(--kt-divider))"
+                      : "linear-gradient(140deg, var(--kt-story-ring), color-mix(in srgb, var(--kt-story-ring) 55%, #ffffff) 45%, var(--kt-primary-deep))",
                   }}
                 >
                   <span

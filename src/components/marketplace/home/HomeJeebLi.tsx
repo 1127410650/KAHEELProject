@@ -68,6 +68,7 @@ export function HomeJeebLi() {
         </h2>
         <Link
           to="/errands"
+          search={{ service: undefined }}
           className="inline-flex min-h-11 items-center gap-1 text-desc font-bold text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
         >
           {ar ? "كل الخدمات" : "All services"}

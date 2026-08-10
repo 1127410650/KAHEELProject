@@ -42,7 +42,7 @@ function AqarBottomNav() {
                 to={to}
                 aria-current={active ? "page" : undefined}
                 className={`flex min-h-[47px] flex-col items-center justify-center gap-0.5 py-1 text-nav ${
-                  active ? "text-primary" : "text-muted-foreground"
+                  active ? "text-[var(--kt-bottomnav-active)]" : "text-muted-foreground"
                 }`}
               >
                 <Icon className="size-5" aria-hidden />
@@ -85,12 +85,15 @@ export function AqarShell({
           position: "fixed",
           borderBottomLeftRadius: "16px",
           borderBottomRightRadius: "16px",
+          // حاشية أمان iOS مرة واحدة على حاوية الرأس — لا تتكرر داخليًا.
+          paddingTop: "env(safe-area-inset-top, 0px)",
+          height: `calc(${AQAR_HEADER_FULL_H}px + env(safe-area-inset-top, 0px))`,
         }}
-        className="k-header-hero inset-x-0 top-0 z-40 h-24 overflow-hidden"
+        className="k-header-hero inset-x-0 top-0 z-40 overflow-hidden"
       >
         <HeaderShapes />
         {/* صف الهوية: رجوع + اسم القسم + الشخصية — ارتفاع 44px */}
-        <div className="k-header-hero k-gutter relative z-20 mx-auto flex h-11 max-w-3xl items-center gap-[var(--sp-3)]">
+        <div className="k-header-hero k-gutter relative z-20 mx-auto flex h-11 max-w-3xl items-center gap-1.5">
           <Link
             to={back}
             className="inline-flex h-9 min-w-11 items-center justify-center gap-[var(--sp-1)] rounded-full bg-card/20 px-[var(--sp-4)] text-[14px] font-semibold"
@@ -117,7 +120,11 @@ export function AqarShell({
         </div>
       </header>
 
-      <div aria-hidden style={{ height: `${AQAR_HEADER_FULL_H}px` }} />
+      <div
+        aria-hidden
+        style={{ height: `calc(${AQAR_HEADER_FULL_H}px + env(safe-area-inset-top, 0px))` }}
+      />
+
 
       <main className="flex-1">{children}</main>
       <AqarBottomNav />

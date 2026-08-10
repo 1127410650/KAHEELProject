@@ -48,7 +48,7 @@ function MyErrandsPage() {
             {ar ? "طلبات جيب لي" : "My errands"}
           </h1>
           <Button asChild size="sm" className="h-9 gap-1 text-desc font-bold">
-            <Link to="/errands">
+            <Link to="/errands" search={{ service: undefined }}>
               <Plus className="h-4 w-4" />
               {ar ? "طلب جديد" : "New request"}
             </Link>

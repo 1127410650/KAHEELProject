@@ -369,7 +369,7 @@ export function ListingCard({
             {listing.title}
           </h3>
 
-          <p className="mt-1 flex h-[24px] items-center text-price font-bold text-primary sm:text-price">
+          <p className="mt-1 flex h-[24px] items-center text-price font-bold text-[var(--kt-price-color)] sm:text-price">
             <bdi>{price}</bdi>
           </p>
           {meta}

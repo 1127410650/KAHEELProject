@@ -31,9 +31,11 @@ export function CategoryWorldShell({
     >
       <header
         data-kslot={`world.${slug}.header`}
-        className="k-header-hero relative overflow-hidden px-4 pb-5 pt-3"
+        /* حاشية الأمان + الهامش الأفقي القياسي: مرة واحدة على حاوية الرأس. */
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}
+        className="k-header-hero relative overflow-hidden px-[var(--page-x)] pb-[var(--sp-4)]"
       >
-        <div className="mx-auto flex max-w-5xl items-center gap-3">
+        <div className="mx-auto flex min-h-11 max-w-5xl items-center gap-1.5">
           <Link
             to="/"
             className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 rounded-full bg-card/20 px-3 text-desc font-semibold"

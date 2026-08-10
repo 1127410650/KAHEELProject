@@ -1,0 +1,119 @@
+/**
+ * قراءة وكتابة لوحة ألوان المنصة.
+ *
+ * القراءة العامة: استعلام واحد مخزَّن (`mkt_theme_active`) يعيد رموز اللوحة
+ * المفعّلة لكل زائر. الكتابة والتفعيل يمران بدوال SECURITY DEFINER تتحقق من
+ * صفة مدير المنصة في القاعدة وتسجّل كل تغيير (من/متى/قديم/جديد).
+ */
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { supabase } from "@/integrations/supabase/client";
+import {
+  normalizeTokens,
+  type ThemeTokenMap,
+} from "@/lib/theme-tokens";
+
+export const THEME_QUERY_KEY = ["mkt", "theme", "active"] as const;
+export const THEME_PALETTES_KEY = ["mkt", "theme", "palettes"] as const;
+
+export interface ThemePaletteRow {
+  id: string;
+  name_ar: string;
+  is_active: boolean;
+  is_builtin: boolean;
+  updated_at: string;
+  tokens: ThemeTokenMap;
+}
+
+/** رموز اللوحة المفعّلة — استعلام واحد لكل زيارة. */
+export function useActiveTheme() {
+  return useQuery({
+    queryKey: THEME_QUERY_KEY,
+    staleTime: 10 * 60_000,
+    gcTime: 60 * 60_000,
+    retry: 1,
+    queryFn: async (): Promise<ThemeTokenMap> => {
+      const { data, error } = await supabase.rpc("mkt_theme_active" as never);
+      if (error) throw error;
+      return normalizeTokens(data as unknown as Record<string, unknown>);
+    },
+  });
+}
+
+/** كل اللوحات المحفوظة — لشاشة الإدارة فقط. */
+export function useThemePalettes(enabled = true) {
+  return useQuery({
+    queryKey: THEME_PALETTES_KEY,
+    enabled,
+    staleTime: 30_000,
+    queryFn: async (): Promise<ThemePaletteRow[]> => {
+      const { data, error } = await supabase.rpc("mkt_theme_palette_list" as never);
+      if (error) throw error;
+      return ((data ?? []) as unknown as Array<Record<string, unknown>>).map((row) => ({
+        id: String(row["id"]),
+        name_ar: String(row["name_ar"] ?? ""),
+        is_active: row["is_active"] === true,
+        is_builtin: row["is_builtin"] === true,
+        updated_at: String(row["updated_at"] ?? ""),
+        tokens: normalizeTokens(row["tokens"] as Record<string, unknown>),
+      }));
+    },
+  });
+}
+
+export async function saveThemePalette(input: {
+  paletteId: string | null;
+  nameAr: string;
+  tokens: ThemeTokenMap;
+  activate: boolean;
+}): Promise<string> {
+  const { data, error } = await supabase.rpc(
+    "mkt_theme_palette_save" as never,
+    {
+      _palette_id: input.paletteId,
+      _name_ar: input.nameAr,
+      _tokens: input.tokens,
+      _activate: input.activate,
+    } as never,
+  );
+  if (error) throw error;
+  return String(data);
+}
+
+export async function activateThemePalette(paletteId: string): Promise<void> {
+  const { error } = await supabase.rpc(
+    "mkt_theme_palette_activate" as never,
+    { _palette_id: paletteId } as never,
+  );
+  if (error) throw error;
+}
+
+export async function resetThemeToDefault(): Promise<void> {
+  const { error } = await supabase.rpc("mkt_theme_reset_default" as never);
+  if (error) throw error;
+}
+
+export async function deleteThemePalette(paletteId: string): Promise<void> {
+  const { error } = await supabase.rpc(
+    "mkt_theme_palette_delete" as never,
+    { _palette_id: paletteId } as never,
+  );
+  if (error) throw error;
+}
+
+/** يفرّغ مخزن اللوحة بعد أي تغيير فيسري اللون فورًا في كل الشاشة. */
+export function useRefreshTheme() {
+  const client = useQueryClient();
+  return () => {
+    void client.invalidateQueries({ queryKey: THEME_QUERY_KEY });
+    void client.invalidateQueries({ queryKey: THEME_PALETTES_KEY });
+  };
+}
+
+export function useThemeMutation<TInput>(run: (input: TInput) => Promise<unknown>) {
+  const refresh = useRefreshTheme();
+  return useMutation({
+    mutationFn: run,
+    onSuccess: () => refresh(),
+  });
+}

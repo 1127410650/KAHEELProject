@@ -78,7 +78,7 @@ const ANCHOR_CLASS: Record<string, string> = {
 };
 
 const SHAPE_TONE_HEX: Record<string, string> = {
-  brand: "#8a4fff",
+  brand: "var(--kt-primary)",
   gold: "#f59e0b",
   surface: "#94a3b8",
 };

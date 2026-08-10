@@ -209,7 +209,7 @@ export function SeasonalBackdropsCard() {
         </header>
 
         {/* معاينة حية للموسم قيد الإنشاء */}
-        <div className="relative h-28 overflow-hidden rounded-[var(--r-card)] bg-[linear-gradient(130deg,#8A4FFF,#C3ABFF)]">
+        <div className="relative h-28 overflow-hidden rounded-[var(--r-card)] bg-[linear-gradient(130deg,var(--kt-header-from),var(--kt-header-to))]">
           {image ? (
             <img
               src={image.url}

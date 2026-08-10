@@ -170,7 +170,7 @@ export function PageProgressStrip({ steps }: { steps: ProgressStep[] }) {
           className="mt-[var(--sp-2)] block h-1.5 w-full overflow-hidden rounded-full bg-brand-300/45"
         >
           <span
-            className="block h-full rounded-full bg-[linear-gradient(90deg,#8A4FFF,#C3ABFF)]"
+            className="block h-full rounded-full bg-[linear-gradient(90deg,var(--kt-primary-deep),var(--kt-primary))]"
             style={{ width: `${percent}%` }}
           />
         </span>
