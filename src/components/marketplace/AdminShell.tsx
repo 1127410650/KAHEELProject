@@ -158,6 +158,18 @@ const NAV: NavItem[] = [
     section: "market",
   },
   {
+    to: "/admin/appearance",
+    labelKey: "admin.nav.appearance",
+    icon: Images,
+    section: "market",
+  },
+  {
+    to: "/admin/appearance/variants",
+    labelKey: "admin.nav.pageVariants",
+    icon: LayoutTemplate,
+    section: "market",
+  },
+  {
     to: "/admin/users",
     labelKey: "admin.nav.users",
     icon: Users,
