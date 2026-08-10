@@ -14,6 +14,7 @@ import { AqarMoodCards } from "@/components/marketplace/aqar/AqarMoodCards";
 import { AqarPriceRanges } from "@/components/marketplace/aqar/AqarPriceRanges";
 
 import { AqarListingRail } from "@/components/marketplace/aqar/AqarListingRail";
+import { AqarPickedRail } from "@/components/marketplace/aqar/AqarPickedRail";
 import { AqarReviewPrompt } from "@/components/marketplace/aqar/AqarReviewPrompt";
 import { AqarUpcomingSheet } from "@/components/marketplace/aqar/AqarUpcomingSheet";
 import {
@@ -26,6 +27,7 @@ import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
 import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
 import { useAqarFavorites } from "@/lib/aqar-favorites";
+import { useSession } from "@/lib/session";
 import { useLabels } from "@/lib/mkt-ui-labels";
 import { useActivePageVariant } from "@/lib/mkt-page-variants";
 import {
@@ -40,6 +42,7 @@ import {
   fetchAqarPromoted,
   fetchAqarTypeCounts,
   fetchAqarUsdRate,
+  type AqarListing,
   type AqarTrack,
 } from "@/lib/mkt-aqar";
 
@@ -128,7 +131,7 @@ function AqarHomePage() {
   /* «اختيارات مخصصة لك»: مزيج المميزة ثم الأحدث بلا تكرار — عرض فقط. */
   const picked = (() => {
     const seen = new Set<string>();
-    const out: typeof latestList = [];
+    const out: AqarListing[] = [];
     for (const listing of [...(promoted.data ?? []), ...(latest.data ?? [])]) {
       if (seen.has(listing.id)) continue;
       seen.add(listing.id);
