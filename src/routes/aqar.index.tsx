@@ -88,7 +88,7 @@ function AqarHomePage() {
   return (
     <AqarShell subtitle="إيجار يومي وطويل وبيع في سوريا">
       <div className="mx-auto w-full max-w-3xl">
-        {/* الهيرو: صورة معلم سوري بارتفاع ثابت، فلا إزاحة تخطيط عند التحميل. */}
+        {/* الهيرو: صورة معلم سوري بارتفاع ثابت + حقل بحث أبيض عائم فوق حدّها السفلي. */}
         <section className="px-4 pt-4">
           <div data-kslot="aqar.hero" className="relative overflow-hidden rounded-2xl border border-border">
             <img
@@ -96,11 +96,11 @@ function AqarHomePage() {
               alt={`${hero.name} — ${hero.city}`}
               width={1280}
               height={720}
-              className="h-44 w-full object-cover sm:h-56"
+              className="h-48 w-full object-cover sm:h-60"
               decoding="async"
             />
             <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            <div className="absolute inset-x-4 bottom-3">
+            <div className="absolute inset-x-4 top-4">
               <strong className="block text-page font-extrabold text-white drop-shadow-md">
                 أهلًا بك في كَحيل عقار
               </strong>
@@ -108,24 +108,35 @@ function AqarHomePage() {
                 {hero.name} — {hero.city}
               </span>
             </div>
+            {/* الحقل العائم: بطاقة بيضاء نصفها خارج الصورة، كما في مرجع التصميم. */}
+            <div className="absolute inset-x-4 -bottom-6">
+              <Link
+                to="/aqar/browse"
+                search={{ track }}
+                className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 shadow-lg"
+                style={{ minHeight: 56 }}
+              >
+                <Search className="size-5 shrink-0 text-primary" aria-hidden />
+                <span className="min-w-0">
+                  <strong className="block truncate text-desc font-bold text-foreground">
+                    إلى أين؟
+                  </strong>
+                  <span className="block truncate text-nav text-muted-foreground">
+                    مدينة، حي، أو نوع عقار
+                  </span>
+                </span>
+              </Link>
+            </div>
           </div>
         </section>
 
-        <section className="px-4 pt-3">
-          <Link
-            to="/aqar/browse"
-            search={{ track }}
-            className="flex items-center gap-2 rounded-full border border-border bg-card px-4 text-body text-muted-foreground"
-            style={{ minHeight: 48 }}
-          >
-            <Search className="size-5 text-primary" aria-hidden />
-            ابحث عن مدينة، حي، أو نوع عقار
-          </Link>
-        </section>
-
-        <div className="pt-3">
+        <div className="pt-10">
           <AqarTrackTabs track={track} onChange={setTrack} />
         </div>
+
+        <AqarMoodCards track={track} />
+        <AqarPriceRanges track={track} />
+
 
         {/* ترتيب «الأنواع أولًا» أو «المدن أولًا» يُبدّله المدير من لوحة التصاميم. */}
         {variant === "aqar.cities_first" ? (
