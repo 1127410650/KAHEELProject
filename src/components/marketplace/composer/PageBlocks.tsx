@@ -327,6 +327,16 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
             return <SpacerBlock key={block.id} settings={settings} />;
           case "shape_layer":
             return <ShapeLayerBlock key={block.id} settings={settings} />;
+          case "quick_tiles":
+            return <QuickTiles key={block.id} />;
+          case "pride_strip":
+            return <SyriaPrideStrip key={block.id} />;
+          case "exclusive_offers":
+            return (
+              <LazyMount key={block.id}>
+                <ExclusiveOffersRail />
+              </LazyMount>
+            );
           default:
             /* نوع لا تعرفه هذه النسخة من الواجهة — يُتجاهل بلا خطأ. */
             return null;
