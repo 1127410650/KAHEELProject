@@ -62,7 +62,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-type NavSection = "overview" | "market" | "accounts" | "operations" | "system";
+type NavSection =
+  | "overview"
+  | "appearance"
+  | "market"
+  | "guide"
+  | "accounts"
+  | "operations"
+  | "system";
 
 interface NavItem {
   to: string;
@@ -126,20 +133,20 @@ const NAV: NavItem[] = [
     to: "/admin/guide-queue",
     labelKey: "admin.nav.guideQueue",
     icon: ShieldQuestion,
-    section: "market",
+    section: "guide",
   },
 
   {
     to: "/admin/guide-requests",
     labelKey: "admin.nav.guideRequests",
     icon: ShieldQuestion,
-    section: "market",
+    section: "guide",
   },
   {
     to: "/admin/guide-claims",
     labelKey: "admin.nav.guideClaims",
     icon: ShieldQuestion,
-    section: "market",
+    section: "guide",
   },
   {
     to: "/admin/ad-credit",
@@ -157,25 +164,38 @@ const NAV: NavItem[] = [
     to: "/admin/mascots",
     labelKey: "admin.nav.mascots",
     icon: Smile,
-    section: "market",
+    section: "appearance",
   },
   {
     to: "/admin/appearance",
     labelKey: "admin.nav.appearance",
     icon: Images,
-    section: "market",
+    section: "appearance",
   },
   {
     to: "/admin/composer",
     labelKey: "admin.nav.composer",
     icon: LayoutTemplate,
-    section: "market",
+    section: "appearance",
+  },
+  {
+    to: "/admin/designs",
+    labelKey: "admin.nav.designs",
+    icon: LayoutTemplate,
+    section: "appearance",
+  },
+  {
+    to: "/admin/pricing",
+    labelKey: "admin.nav.pricing",
+    icon: Coins,
+    section: "system",
+    ownerOnly: true,
   },
   {
     to: "/admin/appearance/variants",
     labelKey: "admin.nav.pageVariants",
     icon: LayoutTemplate,
-    section: "market",
+    section: "appearance",
   },
   {
     to: "/admin/users",
@@ -236,7 +256,7 @@ const NAV: NavItem[] = [
     to: "/admin/labels",
     labelKey: "admin.nav.labels",
     icon: ListChecks,
-    section: "system",
+    section: "appearance",
   },
   {
     to: "/admin/taxonomy",
@@ -283,7 +303,15 @@ const NAV: NavItem[] = [
 ];
 
 
-const NAV_SECTIONS: NavSection[] = ["overview", "market", "accounts", "operations", "system"];
+const NAV_SECTIONS: NavSection[] = [
+  "overview",
+  "appearance",
+  "market",
+  "guide",
+  "accounts",
+  "operations",
+  "system",
+];
 
 function visibleNav(identity: PlatformIdentity): NavItem[] {
   if (identity.is_system_owner) return NAV;

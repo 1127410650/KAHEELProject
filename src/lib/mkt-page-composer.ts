@@ -45,6 +45,9 @@ export type BlockType =
   | "shape_layer"
   | "quick_tiles"
   | "pride_strip"
+  | "stories_rail"
+  | "category_marquee"
+  | "jeeb_li"
   | "exclusive_offers";
 
 export type FieldType =
@@ -363,6 +366,27 @@ export const BLOCK_LIBRARY: BlockDefinition[] = [
     fields: [],
   },
   {
+    type: "stories_rail",
+    name_ar: "شريط الستوريات",
+    description_ar: "دوائر ستوريات كَحيل أعلى الصفحة.",
+    icon: "circle-play",
+    fields: [],
+  },
+  {
+    type: "category_marquee",
+    name_ar: "شريط التصنيفات الماشي",
+    description_ar: "دوائر التصنيفات بحركة أفقية مستمرة مع الشخصيات خلفها.",
+    icon: "move-horizontal",
+    fields: [],
+  },
+  {
+    type: "jeeb_li",
+    name_ar: "بطاقات «جيب لي»",
+    description_ar: "بطاقات طلب الخدمة السريعة «جيب لي».",
+    icon: "hand-helping",
+    fields: [],
+  },
+  {
     type: "exclusive_offers",
     name_ar: "صف العروض الحصرية",
     description_ar: "صف أفقي للعروض الحصرية النشطة.",
@@ -561,7 +585,50 @@ export function useComposerMutations(page: string) {
       onSuccess: invalidate,
     }),
     apply: useMutation({ mutationFn: applyComposition, onSuccess: invalidate }),
+    seed: useMutation({ mutationFn: () => seedPageBlocks(page), onSuccess: invalidate }),
+    blank: useMutation({ mutationFn: (ids: string[]) => blankPage(page, ids), onSuccess: invalidate }),
   };
+}
+
+// ── ترتيب افتراضي وصفحة بيضاء ─────────────────────────────────────────────
+
+/**
+ * الترتيب المكتوب في الكود لكل صفحة، كقائمة كتل قابلة للتحرير.
+ * استيراده مرّة واحدة يجعل كل قسم مرئي كتلةً يمكن نقلها أو حذفها.
+ */
+export const PAGE_SEED: Record<string, BlockType[]> = {
+  "market.home": [
+    "pride_strip",
+    "stories_rail",
+    "category_marquee",
+    "campaign_mosaic",
+    "jeeb_li",
+    "quick_tiles",
+    "sponsored_banner",
+    "category_grid",
+  ],
+  "aqar.home": ["hero_image", "search_field", "type_cards", "city_circles", "listing_rail"],
+  "category.world": ["hero_gradient", "category_grid", "listing_rail"],
+};
+
+/** يُنشئ كتل الترتيب الافتراضي بالتتابع (بعد أخذ نسخة احتياطية). */
+export async function seedPageBlocks(page: string): Promise<number> {
+  const types = PAGE_SEED[page] ?? [];
+  let order = 0;
+  for (const type of types) {
+    await saveBlock({ page, block_type: type, settings: defaultSettings(type), sort_order: order });
+    order += 10;
+  }
+  return types.length;
+}
+
+/**
+ * «ابدأ من صفحة بيضاء»: نسخة محفوظة أولًا، ثم حذف ناعم لكل الكتل الحالية.
+ * لا شيء يُفقد — الاسترجاع بضغطة من قائمة النسخ أو من سلة الكتل المحذوفة.
+ */
+export async function blankPage(page: string, blockIds: string[]): Promise<void> {
+  await saveComposition(page, `قبل الصفحة البيضاء — ${new Date().toISOString().slice(0, 16)}`);
+  for (const id of blockIds) await deleteBlock(id);
 }
 
 // ── مساعدات القراءة الآمنة للإعدادات ──────────────────────────────────────
