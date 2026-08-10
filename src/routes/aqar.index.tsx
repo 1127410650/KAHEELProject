@@ -118,8 +118,18 @@ function AqarHomePage() {
           <AqarTrackTabs track={track} onChange={setTrack} />
         </div>
 
-        <AqarTypeGrid types={imagery.data.types} track={track} counts={counts.data ?? {}} />
-        <AqarCityCircles cities={imagery.data.cities} track={track} />
+        {/* ترتيب «الأنواع أولًا» أو «المدن أولًا» يُبدّله المدير من لوحة التصاميم. */}
+        {variant === "aqar.cities_first" ? (
+          <>
+            <AqarCityCircles cities={imagery.data.cities} track={track} />
+            <AqarTypeGrid types={imagery.data.types} track={track} counts={counts.data ?? {}} />
+          </>
+        ) : (
+          <>
+            <AqarTypeGrid types={imagery.data.types} track={track} counts={counts.data ?? {}} />
+            <AqarCityCircles cities={imagery.data.cities} track={track} />
+          </>
+        )}
 
         <AqarListingRail
           title="مميزة"
