@@ -78,6 +78,35 @@ function AppearancePage() {
         حاليًا برابط خارجي فقط.
       </p>
 
+      <details className="mb-4 rounded-2xl border border-border bg-card p-3">
+        <summary className="flex cursor-pointer items-center gap-1.5 text-section font-extrabold text-foreground">
+          <Sparkles className="size-4 text-primary" aria-hidden />
+          مكتبة تصاميمي — توليد بالذكاء الاصطناعي
+        </summary>
+        <p className="mt-1 mb-3 text-desc text-muted-foreground">
+          التوليد لمدير المنصة فقط، بسقف شهري بالدولار يوقف الخدمة آليًا، وكل صورة تُختَم باسم كَحيل
+          قبل الحفظ. لتوليد صورة لفتحة معيّنة استخدم زر «ولّد بالذكاء الاصطناعي» داخل بطاقتها.
+        </p>
+        <BrandImageStudio onChanged={refresh} />
+
+        {(library.data ?? []).length > 0 ? (
+          <ul className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+            {(library.data ?? []).map((item) => (
+              <li key={item.path} className="overflow-hidden rounded-xl border border-border">
+                <img
+                  src={item.url}
+                  alt="صورة في مكتبة كَحيل المولّدة"
+                  className="aspect-square w-full object-cover"
+                  loading="lazy"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </details>
+
+
+
       {slots.isPending ? (
         <div className="space-y-3">
           {[0, 1, 2, 3].map((row) => (
