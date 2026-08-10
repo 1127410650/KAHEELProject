@@ -9,6 +9,7 @@
  *    preliminary information instead.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { nearbyGuidePlaceIds, orderByIds, type RadiusKm } from "@/lib/mkt-nearby";
 import { defaultMarketIso2 } from "@/lib/mkt-markets";
 
 export const GUIDE_PAGE_SIZE = 24;
@@ -102,13 +103,41 @@ export interface GuidePlacesPage {
 export async function fetchGuidePlaces(
   filters: GuideFilters,
   page: number,
+  /** «الأقرب إليك»: القاعدة ترتّب وتحسب المسافة، ولا يُجلب سوى صفحة واحدة. */
+  near?: { lat: number; lng: number; radiusKm: RadiusKm } | undefined,
 ): Promise<GuidePlacesPage> {
+  const iso2 = await defaultMarketIso2();
+  if (near) {
+    const nearPage = await nearbyGuidePlaceIds({
+      lat: near.lat,
+      lng: near.lng,
+      radiusKm: near.radiusKm,
+      limit: GUIDE_PAGE_SIZE,
+      offset: page * GUIDE_PAGE_SIZE,
+      countryIso2: iso2,
+      sector: filters.sector || undefined,
+      governorate: filters.governorate || undefined,
+      category: filters.category || undefined,
+      subcategory: filters.subcategory || undefined,
+      q: filters.query || undefined,
+    });
+    if (nearPage.ids.length === 0) return { rows: [], total: 0 };
+    const { data, error: nearError } = await supabase
+      .from("mkt_guide_places")
+      .select(SELECT_COLUMNS)
+      .in("id", nearPage.ids);
+    if (nearError) throw nearError;
+    const ordered = orderByIds((data ?? []) as unknown as GuidePlace[], nearPage.ids)
+      .filter((row) => !isForbiddenPlace(row))
+      .map((row) => ({ ...row, distanceM: nearPage.distances[row.id] ?? null }));
+    return { rows: ordered, total: ordered.length };
+  }
   // نطاق الدولة من إعداد «الدول المفعّلة»، لا من قيمة ثابتة في الكود.
   let request = supabase
     .from("mkt_guide_places")
     .select(SELECT_COLUMNS, { count: "exact" })
     .eq("is_published", true)
-    .eq("country_iso2", await defaultMarketIso2());
+    .eq("country_iso2", iso2);
 
   const term = safePattern(filters.query);
   if (term.length > 0) {
