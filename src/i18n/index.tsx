@@ -83,6 +83,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "admin.studio.statLastEdit": "آخر تعديل مظهر",
 
     "admin.nav.designs": "مكتبة التصاميم",
+    "admin.nav.canvasStudio": "استوديو الرسم",
+    "admin.nav.integrations": "الخدمات الخارجية",
     "admin.nav.pricing": "الأسعار وسعر الصرف",
     "admin.dashboardBadge": "مركز المتابعة",
     "admin.dashboardWelcome": "كل عمليات المنصة في مكان واحد",
@@ -159,6 +161,8 @@ const COPY_OVERRIDES: Record<Locale, Record<string, string>> = {
     "admin.studio.statLastEdit": "Last appearance edit",
 
     "admin.nav.designs": "Design library",
+    "admin.nav.canvasStudio": "Canvas studio",
+    "admin.nav.integrations": "External services",
     "admin.nav.pricing": "Pricing and exchange rate",
     "admin.dashboardBadge": "Operations center",
     "admin.dashboardWelcome": "All platform operations in one place",

@@ -188,6 +188,19 @@ const NAV: NavItem[] = [
     ownerOnly: true,
   },
   {
+    to: "/admin/studio/canvas",
+    labelKey: "admin.nav.canvasStudio",
+    icon: Shapes,
+    section: "studio",
+  },
+  {
+    to: "/admin/integrations",
+    labelKey: "admin.nav.integrations",
+    icon: Plug,
+    section: "settings",
+    ownerOnly: true,
+  },
+  {
     to: "/admin/designs",
     labelKey: "admin.nav.designs",
     icon: LayoutTemplate,
