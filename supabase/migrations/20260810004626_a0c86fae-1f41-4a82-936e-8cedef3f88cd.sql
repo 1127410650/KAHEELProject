@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.mkt_student_bot_state() FROM anon;
