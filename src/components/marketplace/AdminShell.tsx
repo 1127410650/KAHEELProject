@@ -27,6 +27,8 @@ import {
   Settings,
   ShieldAlert,
   ShieldCheck,
+  Images,
+  LayoutTemplate,
   Smile,
   ShieldQuestion,
   Store,
