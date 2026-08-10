@@ -137,7 +137,9 @@ export async function requestOtpImpl(
           : sent.error === "RATE_LIMITED"
             ? "RATE_LIMITED"
             : "EMAIL_SEND_FAILED",
-      retry_after_seconds: sent.retry_after_seconds,
+      ...(sent.retry_after_seconds === undefined
+        ? {}
+        : { retry_after_seconds: sent.retry_after_seconds }),
     };
   }
 
