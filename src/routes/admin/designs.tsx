@@ -12,7 +12,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Megaphone, Save, Tag } from "lucide-react";
+import { Megaphone, Save, Sparkles, Tag } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { DesignCard } from "@/components/marketplace/design/DesignCard";
@@ -22,16 +22,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatDateTime } from "@/lib/format";
 import { useAdminCampaigns } from "@/lib/mkt-campaigns";
 import {
+  LAYOUT_OPTIONS,
   SHAPE_POSITIONS,
   SIZE_OPTIONS,
   SPEED_OPTIONS,
+  VARIATION_COUNT,
+  generateVariations,
   saveDesignTemplate,
   setDesignTemplateActive,
   useDesignLibrary,
   useDesignTemplates,
   useRefreshDesignTemplates,
+  variationPatch,
   type DesignTemplate,
 } from "@/lib/mkt-design-library";
+
 
 export const Route = createFileRoute("/admin/designs")({
   head: () => ({
