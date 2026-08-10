@@ -46,6 +46,10 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
   const [busy, setBusy] = useState<null | "upload" | "hide" | "clear" | "meta">(null);
   const [alt, setAlt] = useState(slot.alt_text ?? "");
   const [videoUrl, setVideoUrl] = useState(slot.kind === "video_url" ? slot.external_url ?? "" : "");
+  const [stampOn, setStampOn] = useState(false);
+  const [stamp, setStamp] = useState<BrandStampOptions>(BRAND_STAMP_DEFAULTS);
+  const setStampField = <K extends keyof BrandStampOptions>(key: K, value: BrandStampOptions[K]) =>
+    setStamp((prev) => ({ ...prev, [key]: value }));
 
   const run = async (kind: NonNullable<typeof busy>, action: () => Promise<void>, done: string) => {
     setBusy(kind);
@@ -65,12 +69,17 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
     void run(
       "upload",
       async () => {
-        const out = await uploadMediaSlotImage(slot, file);
-        toast.message(`تم الضغط: ${out.width}×${out.height} · ${readableSize(out.bytes)}`);
+        const out = await uploadMediaSlotImage(slot, file, stampOn ? stamp : undefined);
+        toast.message(
+          `تم الضغط: ${out.width}×${out.height} · ${readableSize(out.bytes)}${
+            out.stamped ? " · مختومة باسم كَحيل والأصل محفوظ" : ""
+          }`,
+        );
       },
       "تم رفع الصورة وظهرت في مكانها.",
     );
   };
+
 
   return (
     <li className="rounded-2xl border border-border bg-card p-3">
