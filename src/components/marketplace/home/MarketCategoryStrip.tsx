@@ -41,11 +41,8 @@ export function MarketCategoryStrip() {
   }
 
   return (
-    <div className="relative w-full overflow-hidden border-t border-white/14 bg-[radial-gradient(circle_at_18%_-45%,rgb(224_170_255/0.42),transparent_39%),linear-gradient(105deg,#10002b_0%,#3c096c_52%,#7b2cbf_135%)] text-market-navy-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.08)]">
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
-      />
+    <div className="relative w-full overflow-hidden border-t border-border bg-background text-foreground">
+
 
       <nav
         aria-label={t("market.home.strip.label")}
