@@ -37,7 +37,11 @@ export interface NewAddressInput {
   details?: string;
   lat?: number | null;
   lng?: number | null;
-  source?: "manual" | "device";
+  /** دقة الموقع بالأمتار — تُحفظ فقط عند التحديد التلقائي من الجهاز. */
+  accuracyM?: number | null;
+  /** وصف نصي مستنتج من الخريطة (شارع/حي). */
+  placeLabel?: string | null;
+  source?: "manual" | "device" | "map";
   isDefault?: boolean;
 }
 
@@ -50,6 +54,7 @@ export function addressInputError(input: NewAddressInput): string | null {
   if ((input.details ?? "").length > 300) return "الوصف طويل — 300 حرف كحد أقصى.";
   return null;
 }
+
 
 export async function saveMyAddress(input: NewAddressInput): Promise<MktUserAddress> {
   const { data: auth } = await supabase.auth.getSession();
