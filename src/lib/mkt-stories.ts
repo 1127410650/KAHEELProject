@@ -109,7 +109,10 @@ export function useLiveStories() {
  * القصص بلا صورة لا تُدخل الطلب أصلًا.
  */
 export function useStoryImages(stories: Story[], enabled: boolean) {
-  const paths = stories.map((story) => story.image_path).filter((path): path is string => !!path);
+  /* الأغلفة المرفقة بالحزمة (`asset:`) لا تُوقّع — ليست في التخزين. */
+  const paths = stories
+    .map((story) => story.image_path)
+    .filter((path): path is string => !!path && !path.startsWith("asset:"));
   return useQuery({
     queryKey: ["mkt", "stories", "images", paths],
     enabled: enabled && paths.length > 0,
