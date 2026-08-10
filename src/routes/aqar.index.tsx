@@ -14,6 +14,14 @@ import { AqarMoodCards } from "@/components/marketplace/aqar/AqarMoodCards";
 import { AqarPriceRanges } from "@/components/marketplace/aqar/AqarPriceRanges";
 
 import { AqarListingRail } from "@/components/marketplace/aqar/AqarListingRail";
+import { AqarReviewPrompt } from "@/components/marketplace/aqar/AqarReviewPrompt";
+import { AqarUpcomingSheet } from "@/components/marketplace/aqar/AqarUpcomingSheet";
+import {
+  fetchNextUpcomingAqarBooking,
+  fetchRatableAqarBooking,
+} from "@/lib/mkt-aqar-booking";
+import { fetchMyReviewedBookingIds } from "@/lib/mkt-aqar-reviews";
+
 import { AqarShell } from "@/components/marketplace/aqar/AqarShell";
 import { AqarTrackTabs } from "@/components/marketplace/aqar/AqarTrackTabs";
 import { AqarTypeGrid } from "@/components/marketplace/aqar/AqarTypeGrid";
@@ -85,6 +93,26 @@ function AqarHomePage() {
     queryKey: ["aqar", "latest", track],
     queryFn: () => fetchAqarListings({ track, limit: 16 }),
   });
+
+  /* لوحات المدخل الشخصية: حجز قادم + إقامة منتهية بلا تقييم. غير المسجَّل يحصل
+     على null فورًا فلا تظهر أي لوحة ولا يُستهلك طلب. */
+  const upcoming = useQuery({
+    queryKey: ["aqar", "next-upcoming-booking"],
+    queryFn: fetchNextUpcomingAqarBooking,
+    staleTime: 60 * 1000,
+  });
+  const reviewed = useQuery({
+    queryKey: ["aqar", "reviewed-bookings"],
+    queryFn: fetchMyReviewedBookingIds,
+    staleTime: 60 * 1000,
+  });
+  const ratable = useQuery({
+    queryKey: ["aqar", "ratable-booking", reviewed.data ?? []],
+    queryFn: () => fetchRatableAqarBooking(reviewed.data ?? []),
+    enabled: reviewed.isSuccess,
+    staleTime: 60 * 1000,
+  });
+
 
   /* صور الفتحات المرفوعة من لوحة الإدارة تتقدّم على الافتراضي، والفارغة لا تغيّر شيئًا. */
   const slots = useMediaSlots();
@@ -164,8 +192,12 @@ function AqarHomePage() {
   return (
     <AqarShell subtitle="إيجار يومي وطويل وبيع في سوريا">
       <div className="mx-auto w-full max-w-3xl">
+        {/* مدخل القسم: لوحة الحجز القادم ثم تلميح التقييم — لأصحاب الحجوزات فقط. */}
+        {upcoming.data ? <AqarUpcomingSheet row={upcoming.data} /> : null}
+        {ratable.data ? <AqarReviewPrompt row={ratable.data} /> : null}
         {blocks.length > 0 ? (
           <PageBlocks blocks={blocks} overrides={overrides} className="pb-4" />
+
         ) : (
           <>
 

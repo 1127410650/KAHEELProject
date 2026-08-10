@@ -6278,6 +6278,85 @@ export type Database = {
           },
         ]
       }
+      mkt_realestate_booking_extensions: {
+        Row: {
+          booking_id: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_reason: string | null
+          deleted_at: string | null
+          deleted_reason: string | null
+          expires_at: string
+          id: string
+          listing_id: string
+          new_check_out: string
+          previous_check_out: string | null
+          provider_id: string
+          requested_by: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          expires_at: string
+          id?: string
+          listing_id: string
+          new_check_out: string
+          previous_check_out?: string | null
+          provider_id: string
+          requested_by: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_reason?: string | null
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          expires_at?: string
+          id?: string
+          listing_id?: string
+          new_check_out?: string
+          previous_check_out?: string | null
+          provider_id?: string
+          requested_by?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_booking_extensions_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_booking_extensions_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_booking_extensions_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_realestate_bookings: {
         Row: {
           check_in: string | null
@@ -6292,10 +6371,14 @@ export type Database = {
           deleted_at: string | null
           deleted_reason: string | null
           expires_at: string
+          extended_at: string | null
+          extension_count: number
+          extension_id: string | null
           guests: number | null
           id: string
           listing_id: string
           message: string | null
+          previous_check_out: string | null
           provider_id: string
           room_type_id: string | null
           status: string
@@ -6314,10 +6397,14 @@ export type Database = {
           deleted_at?: string | null
           deleted_reason?: string | null
           expires_at: string
+          extended_at?: string | null
+          extension_count?: number
+          extension_id?: string | null
           guests?: number | null
           id?: string
           listing_id: string
           message?: string | null
+          previous_check_out?: string | null
           provider_id: string
           room_type_id?: string | null
           status?: string
@@ -6336,10 +6423,14 @@ export type Database = {
           deleted_at?: string | null
           deleted_reason?: string | null
           expires_at?: string
+          extended_at?: string | null
+          extension_count?: number
+          extension_id?: string | null
           guests?: number | null
           id?: string
           listing_id?: string
           message?: string | null
+          previous_check_out?: string | null
           provider_id?: string
           room_type_id?: string | null
           status?: string
@@ -6787,6 +6878,79 @@ export type Database = {
           whatsapp?: string | null
         }
         Relationships: []
+      }
+      mkt_realestate_reviews: {
+        Row: {
+          booking_id: string
+          comment: string | null
+          created_at: string
+          deleted_at: string | null
+          deleted_reason: string | null
+          hidden_reason: string | null
+          id: string
+          listing_id: string
+          provider_id: string
+          rating: number
+          reviewer_user_id: string
+          status: string
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          comment?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          hidden_reason?: string | null
+          id?: string
+          listing_id: string
+          provider_id: string
+          rating: number
+          reviewer_user_id: string
+          status?: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          comment?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          deleted_reason?: string | null
+          hidden_reason?: string | null
+          id?: string
+          listing_id?: string
+          provider_id?: string
+          rating?: number
+          reviewer_user_id?: string
+          status?: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_realestate_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_reviews_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_realestate_reviews_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_realestate_room_types: {
         Row: {
@@ -10883,6 +11047,39 @@ export type Database = {
           },
         ]
       }
+      mkt_realestate_listing_review_stats: {
+        Row: {
+          listing_id: string | null
+          rating_avg: number | null
+          reviews_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_reviews_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_realestate_provider_review_stats: {
+        Row: {
+          provider_id: string | null
+          rating_avg: number | null
+          reviews_count: number | null
+          top_tags: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_realestate_reviews_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_realestate_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       activate_account: {
@@ -13068,10 +13265,14 @@ export type Database = {
           deleted_at: string | null
           deleted_reason: string | null
           expires_at: string
+          extended_at: string | null
+          extension_count: number
+          extension_id: string | null
           guests: number | null
           id: string
           listing_id: string
           message: string | null
+          previous_check_out: string | null
           provider_id: string
           room_type_id: string | null
           status: string
@@ -13084,7 +13285,12 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      mkt_re_decide_extension: {
+        Args: { _accept: boolean; _extension_id: string; _reason?: string }
+        Returns: undefined
+      }
       mkt_re_expire_bookings: { Args: never; Returns: number }
+      mkt_re_expire_extensions: { Args: never; Returns: number }
       mkt_re_is_member: { Args: { _provider_id: string }; Returns: boolean }
       mkt_re_is_owner: { Args: { _provider_id: string }; Returns: boolean }
       mkt_re_license_active: {
@@ -13144,6 +13350,19 @@ export type Database = {
       }
       mkt_re_provider_slugify: {
         Args: { _id: string; _name: string }
+        Returns: string
+      }
+      mkt_re_request_extension: {
+        Args: { _booking_id: string; _new_check_out: string }
+        Returns: string
+      }
+      mkt_re_submit_review: {
+        Args: {
+          _booking_id: string
+          _comment?: string
+          _rating: number
+          _tags?: string[]
+        }
         Returns: string
       }
       mkt_re_verification_review: {

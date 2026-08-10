@@ -19,13 +19,17 @@ import { AQAR_TYPE_LABELS } from "@/lib/aqar-imagery";
 import { formatAqarAmount } from "@/lib/mkt-aqar";
 import {
   AQAR_BOOKING_STATUS_LABELS,
+  AQAR_EXTENSION_STATUS_LABELS,
   cancelAqarBooking,
   fetchMyAqarBookings,
+  fetchMyAqarExtensions,
   isUpcomingBooking,
   nightsBetween,
   requestAqarExtension,
   type AqarBookingRow,
+  type AqarExtensionRow,
 } from "@/lib/mkt-aqar-booking";
+
 import { formatDate } from "@/lib/format";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -61,11 +65,13 @@ function hoursLeft(expiresAt: string): number {
 
 function BookingCard({
   row,
+  extensions,
   onCancel,
   onExtend,
   busy,
 }: {
   row: AqarBookingRow;
+  extensions: AqarExtensionRow[];
   onCancel: (id: string) => void;
   onExtend: (row: AqarBookingRow, date: string) => void;
   busy: boolean;
@@ -74,7 +80,10 @@ function BookingCard({
   const listing = row.listing;
   const nights = nightsBetween(row.check_in, row.check_out);
   const canCancel = row.status === "pending" || row.status === "accepted";
-  const canExtend = row.status === "accepted" && Boolean(row.check_out);
+  const pendingExtension = extensions.find((item) => item.status === "pending");
+  const canExtend =
+    row.status === "accepted" && Boolean(row.check_out) && !pendingExtension;
+
 
   return (
     <li className="rounded-2xl border border-border bg-card p-4">
@@ -101,14 +110,25 @@ function BookingCard({
             </p>
           ) : null}
         </div>
-        <span
-          className={`shrink-0 rounded-full px-3 py-1 text-nav font-bold ${
-            STATUS_TONE[row.status] ?? "bg-muted text-muted-foreground"
-          }`}
-        >
-          {AQAR_BOOKING_STATUS_LABELS[row.status]}
-        </span>
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <span
+            className={`rounded-full px-3 py-1 text-nav font-bold ${
+              STATUS_TONE[row.status] ?? "bg-muted text-muted-foreground"
+            }`}
+          >
+            {AQAR_BOOKING_STATUS_LABELS[row.status]}
+          </span>
+          {row.extended_at ? (
+            <span className="rounded-full bg-secondary px-3 py-1 text-nav font-bold text-secondary-foreground">
+              تم التمديد
+              {row.extension_count > 1
+                ? ` ×${row.extension_count.toLocaleString("en-US")}`
+                : ""}
+            </span>
+          ) : null}
+        </div>
       </div>
+
 
       <ul className="mt-2 space-y-1 text-desc text-foreground">
         {row.check_in ? (
@@ -190,9 +210,30 @@ function BookingCard({
           </div>
         </div>
       ) : null}
+
+      {extensions.length > 0 ? (
+        <ul className="mt-3 space-y-1 rounded-xl bg-muted p-3 text-nav text-foreground">
+          <li className="font-bold">طلبات التمديد</li>
+          {extensions.map((item) => (
+            <li key={item.id} className="flex flex-wrap items-center gap-1">
+              <bdi>
+                {item.previous_check_out ? `${formatDate(item.previous_check_out)} → ` : ""}
+                {formatDate(item.new_check_out)}
+              </bdi>
+              <span className="font-bold text-primary">
+                {AQAR_EXTENSION_STATUS_LABELS[item.status]}
+              </span>
+              {item.decision_reason ? (
+                <span className="text-muted-foreground">— {item.decision_reason}</span>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </li>
   );
 }
+
 
 function AqarRequestsPage() {
   const queryClient = useQueryClient();
@@ -207,8 +248,17 @@ function AqarRequestsPage() {
     queryFn: fetchMyAqarBookings,
     enabled: Boolean(session.data),
   });
+  const extensionRows = useQuery({
+    queryKey: ["aqar", "my-extensions"],
+    queryFn: fetchMyAqarExtensions,
+    enabled: Boolean(session.data),
+  });
 
-  const refresh = () => void queryClient.invalidateQueries({ queryKey: ["aqar", "my-bookings"] });
+  const refresh = () => {
+    void queryClient.invalidateQueries({ queryKey: ["aqar", "my-bookings"] });
+    void queryClient.invalidateQueries({ queryKey: ["aqar", "my-extensions"] });
+  };
+
 
   const cancel = useMutation({
     mutationFn: cancelAqarBooking,
@@ -300,10 +350,14 @@ function AqarRequestsPage() {
                   <BookingCard
                     key={row.id}
                     row={row}
+                    extensions={(extensionRows.data ?? []).filter(
+                      (item) => item.booking_id === row.id,
+                    )}
                     busy={busy}
                     onCancel={(id) => cancel.mutate(id)}
                     onExtend={(target, date) => extend.mutate({ row: target, date })}
                   />
+
                 ))}
               </ul>
             )}

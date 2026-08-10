@@ -20,6 +20,8 @@ import {
   Printer,
   QrCode,
   Share2,
+  Star,
+
   Timer,
 } from "lucide-react";
 
@@ -43,6 +45,12 @@ import {
   fetchAqarPublicProvider,
   formatResponseSpeed,
 } from "@/lib/mkt-aqar-profile";
+import {
+  AQAR_REVIEW_TAG_LABELS,
+  fetchAqarProviderReviewStats,
+  formatRating,
+} from "@/lib/mkt-aqar-reviews";
+
 import { buildQrCardPng, downloadDataUrl, qrDataUrl } from "@/lib/kaheel-qr-card";
 import { useLabels } from "@/lib/mkt-ui-labels";
 import { formatDate } from "@/lib/format";
@@ -109,6 +117,13 @@ function AdvertiserProfilePage() {
     queryFn: () => fetchAqarListingsByProvider(providerId as string, 24),
     enabled: Boolean(providerId),
   });
+  const reviewStats = useQuery({
+    queryKey: ["aqar", "provider-review-stats", providerId],
+    queryFn: () => fetchAqarProviderReviewStats(providerId as string),
+    enabled: Boolean(providerId),
+    staleTime: 5 * 60 * 1000,
+  });
+
   const usdRate = useQuery({
     queryKey: ["aqar", "usd-rate"],
     queryFn: fetchAqarUsdRate,
@@ -255,11 +270,32 @@ function AdvertiserProfilePage() {
               label={label("aqar.profile_response", "متوسط سرعة الرد")}
               value={formatResponseSpeed(row.avg_response_minutes)}
             />
-            {row.rating !== null ? (
+            {reviewStats.data && reviewStats.data.reviews_count > 0 ? (
+              <Stat
+                icon={Star}
+                label="تقييم النزلاء"
+                value={`${formatRating(reviewStats.data.rating_avg)} / 5 (${reviewStats.data.reviews_count.toLocaleString("en-US")})`}
+              />
+            ) : row.rating !== null ? (
               <Stat icon={Timer} label="التقييم" value={Number(row.rating).toFixed(1)} />
             ) : null}
           </ul>
+
+          {/* شرائح أكثر ما أشاد به النزلاء — محسوبة في القاعدة لا على الجهاز. */}
+          {reviewStats.data && (reviewStats.data.top_tags?.length ?? 0) > 0 ? (
+            <ul className="mt-2 flex flex-wrap gap-2">
+              {reviewStats.data.top_tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full border border-primary/25 bg-secondary px-3 py-1 text-nav font-bold text-secondary-foreground"
+                >
+                  {AQAR_REVIEW_TAG_LABELS[tag] ?? tag}
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </section>
+
 
         <section className="px-4 pt-4">
           <div className="grid grid-cols-2 gap-2">
