@@ -98,87 +98,96 @@
     0 14px 32px -20px oklch(0.2651 0.0319 198.75 / 0.22);
 }
 
+/*
+ * نظام ألوان كَحيل — المصدر الوحيد للحقيقة.
+ * البنفسجي: #10002B · #3C096C · #5A189A · #7B2CBF · #C77DFF · #E0AAFF
+ * الذهبي للتمييز فقط، والأحمر/الأخضر دلاليان فقط (خطر/حذف — قبول/متاح).
+ * لا يُكتب أي لون مباشرة في أي مكوّن؛ كل شيء يمرّ من هنا.
+ */
 :root {
   --radius: 0.75rem;
 
-  /* #F4F9F9 / #102A2B */
-  --background: oklch(0.9784 0.0053 197.07);
-  --foreground: oklch(0.2651 0.0319 198.75);
+  /* #FFFFFF / #240046 */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2354 0.1416 303.37);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2651 0.0319 198.75);
+  --card-foreground: oklch(0.2354 0.1416 303.37);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2651 0.0319 198.75);
+  --popover-foreground: oklch(0.2354 0.1416 303.37);
 
-  /* #006B6D / #004F52 / #003F42 */
-  --primary: oklch(0.4787 0.0815 197.04);
-  --primary-foreground: oklch(0.9784 0.0053 197.07);
-  --primary-dark: oklch(0.3884 0.066 199.21);
-  --primary-pressed: oklch(0.3342 0.0568 200.13);
+  /* #7B2CBF / #5A189A / #3C096C */
+  --primary: oklch(0.4854 0.2222 303.37);
+  --primary-foreground: oklch(1 0 0);
+  --primary-dark: oklch(0.3906 0.1922 303.44);
+  --primary-pressed: oklch(0.3009 0.1601 303.65);
+  /* أعمق درجة للهوية (#10002B) — للحالة النشطة والتدرجات الداكنة */
+  --primary-deep: oklch(0.1584 0.1103 303.5);
 
-  /* #E3F1F1 light element surface */
-  --secondary: oklch(0.9477 0.0148 196.91);
-  --secondary-foreground: oklch(0.3884 0.066 199.21);
+  /* أسطح فاتحة مشتقة من #E0AAFF و #C77DFF */
+  --secondary: oklch(0.9536 0.0338 305.5);
+  --secondary-foreground: oklch(0.3009 0.1601 303.65);
 
-  --muted: oklch(0.9477 0.0148 196.91);
-  --muted-foreground: oklch(0.5616 0.0269 199.68);
+  --muted: oklch(0.9662 0.0252 305.5);
+  --muted-foreground: oklch(0.3906 0.1922 303.44);
 
-  --accent: oklch(0.9477 0.0148 196.91);
-  --accent-foreground: oklch(0.2651 0.0319 198.75);
+  --accent: oklch(0.9432 0.0409 305.5);
+  --accent-foreground: oklch(0.3009 0.1601 303.65);
 
-  /* #D6A74F / #B88932 / #FFF6E2 */
-  --gold: oklch(0.7547 0.1189 80.9);
-  --gold-dark: oklch(0.6601 0.1165 79.29);
-  --gold-soft: oklch(0.9749 0.028 86.64);
-  --gold-foreground: oklch(0.3 0.06 70);
+  /* الذهبي — للعناصر المميزة فقط */
+  --gold: oklch(0.7686 0.1647 70.08);
+  --gold-dark: oklch(0.6567 0.1416 68.5);
+  --gold-soft: oklch(0.9764 0.0264 84.59);
+  --gold-foreground: oklch(0.4126 0.0553 82.53);
 
+  /* دلالية فقط */
   --destructive: oklch(0.55 0.196 25);
-  --destructive-foreground: oklch(0.9784 0.0053 197.07);
-
+  --destructive-foreground: oklch(1 0 0);
   --success: oklch(0.52 0.105 165);
-  --success-foreground: oklch(0.9784 0.0053 197.07);
-  --warning: oklch(0.6601 0.1165 79.29);
-  --warning-foreground: oklch(0.9749 0.028 86.64);
-  --info: oklch(0.55 0.09 232);
-  --info-foreground: oklch(0.9784 0.0053 197.07);
+  --success-foreground: oklch(1 0 0);
+  --success-soft: oklch(0.958 0.035 165);
+  --success-strong: oklch(0.44 0.1 165);
+  --warning: oklch(0.6567 0.1416 68.5);
+  --warning-foreground: oklch(0.9764 0.0264 84.59);
+  --info: oklch(0.4854 0.2222 303.37);
+  --info-foreground: oklch(1 0 0);
 
-  /* #CFE0E0 */
-  --border: oklch(0.894 0.0182 196.83);
-  --input: oklch(0.894 0.0182 196.83);
-  --ring: oklch(0.4787 0.0815 197.04);
+  --border: oklch(0.8837 0.0755 305.5);
+  --input: oklch(0.8299 0.1046 304.7);
+  --ring: oklch(0.4854 0.2222 303.37);
 
-  --chart-1: oklch(0.4787 0.0815 197.04);
-  --chart-2: oklch(0.7547 0.1189 80.9);
-  --chart-3: oklch(0.52 0.105 165);
-  --chart-4: oklch(0.55 0.09 232);
+  --chart-1: oklch(0.4854 0.2222 303.37);
+  --chart-2: oklch(0.3009 0.1601 303.65);
+  --chart-3: oklch(0.7686 0.1647 70.08);
+  --chart-4: oklch(0.6114 0.204 304.7);
+  --chart-5: oklch(0.7413 0.1435 305.5);
 
-  --chart-5: oklch(0.65 0.14 30);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.2354 0.1416 303.37);
+  --sidebar-primary: oklch(0.4854 0.2222 303.37);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.9536 0.0338 305.5);
+  --sidebar-accent-foreground: oklch(0.2354 0.1416 303.37);
+  --sidebar-border: oklch(0.8837 0.0755 305.5);
+  --sidebar-ring: oklch(0.4854 0.2222 303.37);
 
-  --sidebar: oklch(0.26 0.036 204);
-  --sidebar-foreground: oklch(0.93 0.012 195);
-  --sidebar-primary: oklch(0.74 0.108 78);
-  --sidebar-primary-foreground: oklch(0.22 0.045 60);
-  --sidebar-accent: oklch(0.32 0.04 203);
-  --sidebar-accent-foreground: oklch(0.97 0.008 190);
-  --sidebar-border: oklch(0.34 0.038 203);
-  --sidebar-ring: oklch(0.74 0.108 78);
-
-  /* admin status tones (light) */
+  /* admin status tones — مشتقة من البنفسجي عدا الدلالي (خطر/إنجاز) */
   --admin-critical: oklch(0.42 0.17 25);
   --admin-critical-soft: oklch(0.94 0.04 25);
-  --admin-urgent: oklch(0.55 0.16 45);
-  --admin-urgent-soft: oklch(0.95 0.045 45);
-  --admin-pending: oklch(0.5 0.11 85);
-  --admin-pending-soft: oklch(0.95 0.05 85);
-  --admin-progress: oklch(0.5 0.11 245);
-  --admin-progress-soft: oklch(0.945 0.035 245);
+  --admin-urgent: oklch(0.5 0.16 340);
+  --admin-urgent-soft: oklch(0.95 0.04 340);
+  --admin-pending: oklch(0.6567 0.1416 68.5);
+  --admin-pending-soft: oklch(0.9764 0.0264 84.59);
+  --admin-progress: oklch(0.4854 0.2222 303.37);
+  --admin-progress-soft: oklch(0.9536 0.0338 305.5);
   --admin-done: oklch(0.48 0.1 158);
   --admin-done-soft: oklch(0.94 0.04 158);
-  --admin-idle: oklch(0.5 0.012 205);
-  --admin-idle-soft: oklch(0.94 0.008 205);
-  --admin-verify: oklch(0.47 0.14 300);
-  --admin-verify-soft: oklch(0.95 0.04 300);
+  --admin-idle: oklch(0.5 0.02 303);
+  --admin-idle-soft: oklch(0.955 0.012 303);
+  --admin-verify: oklch(0.3906 0.1922 303.44);
+  --admin-verify-soft: oklch(0.9432 0.0409 305.5);
 }
+
 
 .dark {
   --background: oklch(0.19 0.026 205);
