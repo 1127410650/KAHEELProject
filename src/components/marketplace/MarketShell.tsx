@@ -107,7 +107,7 @@ export function MarketHeader({
               <button
                 type="button"
                 onClick={() => setLocationOpen(true)}
-                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="flex min-w-0 items-center gap-1.5 justify-self-start rounded-xl text-start text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
                 aria-label={`${t("market.geo.accountLocation")}: ${locationLabel}`}
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
