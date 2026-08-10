@@ -1,27 +1,31 @@
 /**
- * تجوّل الشخصيتين — مشهد واحد، في منطقة آمنة فقط، وبتكرار قليل جدًا.
+ * «رفاق كَحيل» — مشهد مشترك واحد على الشاشة، في منطقة فارغة فعلًا، ويُخفى بأي ضغطة.
  *
  * القواعد المعتمدة (صارمة):
- *  • **شخصية واحدة فقط على الشاشة**: المشهد يحجز «مسرح الشخصيات»
- *    (`acquireStage`)، فلا يظهر مشهد ثانٍ — لا بطاقة ولا إطلالة — قبل انتهائه.
- *  • **تكرار قليل**: فاصل طويل بزمن التصفح النشط، حد أقصى للجلسة، ولا تظهر
- *    الشخصية نفسها مرتين متتاليتين — كلها من لوحة الإدارة عبر `popup.pacing`.
- *  • **صمت بعد الإغلاق**: لا ظهور أثناء فترة الصمت التالية لأي إغلاق.
- *  • **لا تغطية للمحتوى إطلاقًا**: الموضع يُقاس لحظة الظهور بـ`findSafeBand`
- *    (شريط حر فعلًا بهوامش من كل بطاقة/نص/زر). إن لم توجد مساحة آمنة ⇒ لا ظهور.
- *    وأثناء العرض يُعاد التحقق كل نصف ثانية، وأي تغيّر يجعل المكان غير آمن
- *    (تمرير، تحميل بطاقات، تغيير مقاس) يُنهي المشهد فورًا.
- *  • `pointer-events: none` على كل الحاوية ⇒ لا تعترض ضغطة ولا تمريرًا.
- *  • الحركة على `transform`/`opacity` فقط (CLS = 0)، تتوقّف مع إخفاء التبويب
+ *  • **شخصية رئيسية + رفيق صغير + فقاعة واحدة مشتركة** (`mascot-companions.ts`)،
+ *    والضغط على المشهد أو نصّه يفتح القسم المذكور مباشرة.
+ *  • **دراسة مكان النزول قبل أي ظهور**: نقيس كل العناصر المرئية
+ *    (`getBoundingClientRect`) + فحص حسّي بشبكة نقاط (`elementsFromPoint`)،
+ *    ونختار **أكبر منطقة فارغة** تتّسع للمشهد والفقاعة كاملين.
+ *    **إن لم توجد مساحة كافية ⇒ لا ظهور إطلاقًا** — يُؤجَّل حتى يتغيّر التمرير.
+ *  • **الإغلاق بالضغط في أي مكان**: أي ضغطة على الشاشة تُخفي المشهد فورًا،
+ *    **دون استهلاك الضغطة** (البطاقة تُفتح والشخصية تختفي في الوقت نفسه).
+ *    التمرير يُخفيه بنعومة أيضًا.
+ *  • **صمت ٩٠ ثانية على الأقل** بعد أي إخفاء قبل الظهور التالي (`popup.pacing`).
+ *  • شخصية واحدة فقط في أي لحظة (حجز المسرح)، وحد أقصى للجلسة، ولا يتكرّر
+ *    المشهد نفسه مرتين متتاليتين.
+ *  • الحركة على `transform`/`opacity` فقط (CLS = 0)، تتوقّف مع التبويب المخفي
  *    وتُطفأ كليًا مع `prefers-reduced-motion`.
- *  • **لا خلفية للنص إطلاقًا**: النص يُكتب فوق الصفحة بلون وظل حروف يتكيّفان
- *    مع سطوع المكان (`sampleAreaTone` + `floatingTextStyle`) — كأسلوب الترجمة.
+ *  • لا خلفية للنص: لونه وظلّه يتكيّفان مع سطوع المكان.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouterState } from "@tanstack/react-router";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { X } from "lucide-react";
 
 import { MascotWalk } from "@/components/marketplace/campaign/MascotWalk";
 import { useI18n } from "@/i18n";
+import { KIDS_FRIEND_ART } from "@/lib/kids-friend-assets";
+import { kidsFriendMeta } from "@/lib/kids-friends";
 import {
   acquireStage,
   areaStillFree,
@@ -32,92 +36,70 @@ import {
   type AreaTone,
   type SafeBand,
 } from "@/lib/mascot-stage";
+import { pickCompanionScene, type CompanionScene } from "@/lib/mascot-companions";
 
 import { useCallCenter } from "@/lib/mkt-call-center";
 import { watchScrollIdle } from "@/lib/scroll-idle";
 import {
   isQuietPath,
   isTypingNow,
+  mutePopups,
   popupsMuted,
   popupsSuppressed,
   usePopupPacing,
 } from "@/lib/popup-pacing";
 
-type RoamScene = "stroll" | "search";
-
-/** ترحيب كَحيل القصير — نبرة رسمية مؤدّبة. */
-const STROLL_COPY: { ar: string; en: string }[] = [
-  { ar: "مرحبا فيك بكَحيل 🤍", en: "Welcome to Kaheel 🤍" },
-  { ar: "عم مرق أشوف كل شي تمام 👌", en: "Just passing by to check on things 👌" },
-  { ar: "إذا احتجت شي، أنا هون.", en: "If you need anything, I'm here." },
-];
-
-/** جُمل كَحيلان أثناء دورانه — نبرة زعيم الحارة. */
-const SEARCH_COPY: { ar: string; en: string }[] = [
-  { ar: "شفتك محتار… ترا عندي واسطة كبيرة 👀", en: "You look unsure… I've got a big favour 👀" },
-  { ar: "عم دوّر عليك… شو بدك؟ 🧣", en: "I was looking for you… what do you need? 🧣" },
-  { ar: "قول كلمة وبتوصل بواسطتي 😉", en: "Say the word — it happens through me 😉" },
-];
-
-/** مقاس المشهد: الفقاعة فوق الشخصية. يُستخدم لقياس المساحة الآمنة قبل الظهور. */
-const SCENE_WIDTH = 176;
-const SCENE_HEIGHT = 124;
-/** أدنى عرض شريط آمن يستحق مشهد مشي (مساحة تنقّل معقولة). */
-const MIN_TRAVEL = 56;
-
-/** اختيار جملة لا تتكرّر مباشرة بعد سابقتها. */
-function pickCopy(
-  pool: { ar: string; en: string }[],
-  last: { current: string },
-  ar: boolean,
-): string {
-  const options = pool.filter((line) => (ar ? line.ar : line.en) !== last.current);
-  const list = options.length > 0 ? options : pool;
-  const picked = list[Math.floor(Math.random() * list.length)]!;
-  const text = ar ? picked.ar : picked.en;
-  last.current = text;
-  return text;
-}
+/** مقاس المشهد كاملًا (فقاعة سطرين + شخصية + رفيق) — أساس قياس المنطقة الآمنة. */
+const SCENE_WIDTH = 208;
+const SCENE_HEIGHT = 150;
+/** أدنى مسافة تنقّل تستحق مشهد مشي. */
+const MIN_TRAVEL = 40;
 
 interface Scene {
   key: number;
-  kind: RoamScene;
-  copy: string;
+  data: CompanionScene;
   band: SafeBand;
-  /** سطوع المكان لحظة الظهور — يحدّد لون النص وظلّه. */
   tone: AreaTone;
 }
-
 
 export function MascotRoam() {
   const { locale } = useI18n();
   const ar = locale === "ar";
   const pacing = usePopupPacing();
   const { call } = useCallCenter();
+  const navigate = useNavigate();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
 
   const [scene, setScene] = useState<Scene | null>(null);
+  const [leaving, setLeaving] = useState(false);
   const [paused, setPaused] = useState(false);
   const keyRef = useRef(0);
   const hideTimer = useRef(0);
-  const lastCopyRef = useRef("");
+  const exitTimer = useRef(0);
+  const lastSceneRef = useRef<string | null>(null);
   const releaseRef = useRef<((closed?: boolean) => void) | null>(null);
 
   const limits = {
     minGapMs: pacing.mascotMinGapMs,
     maxPerSession: pacing.mascotMaxPerSession,
-    quietAfterCloseMs: pacing.mascotQuietAfterCloseMs,
+    // فترة الصمت بعد أي إخفاء — لا تقلّ عن ٩٠ ثانية.
+    quietAfterCloseMs: Math.max(90_000, pacing.mascotQuietAfterCloseMs),
   };
 
-  /** إنهاء المشهد والإفراج عن المسرح. */
+  /** إخفاء فوري بحركة خروج سريعة + بدء عدّ فترة الصمت. */
   const end = useCallback(() => {
     window.clearTimeout(hideTimer.current);
-    releaseRef.current?.();
+    releaseRef.current?.(true);
     releaseRef.current = null;
-    setScene(null);
+    setLeaving(true);
+    window.clearTimeout(exitTimer.current);
+    exitTimer.current = window.setTimeout(() => {
+      setScene(null);
+      setLeaving(false);
+    }, 200);
   }, []);
 
-  /** بوابات الأدب — أي واحدة تمنع التجوّل. */
+  /** بوابات الأدب — أي واحدة تمنع الظهور. */
   const blockedNow = useCallback(() => {
     if (!pacing.roamEnabled || !pacing.enabled) return true;
     if (popupsMuted() || popupsSuppressed()) return true;
@@ -127,35 +109,28 @@ export function MascotRoam() {
     if (document.visibilityState !== "visible") return true;
     return false;
   }, [call, pacing.enabled, pacing.roamEnabled, pathname]);
-  /**
-   * الجدولة بسلوك الزائر لا بمؤقّت: الشخصية تظهر عندما **يتوقّف التمرير** ويثبت
-   * الزائر على منطقة لمدة `mascotIdleMs` (٢-٣ ثوانٍ افتراضيًا) — لحظة قراءة
-   * هادئة، لا مقاطعة. أثناء التمرير لا ظهور، والاستئناف السريع يُنهي المشهد.
-   */
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // بوابة «أول ٣ ثوانٍ من تحميل الصفحة»: لا ظهور قبل أن تستقرّ الصفحة.
     const settledAt = Date.now() + pacing.pageSettleMs;
 
-    const start = (kind: RoamScene) => {
-      // القاعدة الثانية: منطقة آمنة أو لا ظهور. (القياس بعد السكون فقط.)
+    const start = (data: CompanionScene) => {
+      // دراسة مكان النزول: أكبر منطقة فارغة فعلًا، وإلا فلا ظهور.
       const band = findSafeBand(SCENE_WIDTH, SCENE_HEIGHT, {
         topInset: 118,
-        bottomInset: 84,
-        pad: 18,
+        bottomInset: 92,
+        pad: 20,
       });
       if (!band || band.width < SCENE_WIDTH + MIN_TRAVEL) return;
-      // تأكيد لحظي أنّ الصندوق فارغ فعلًا (بطاقات، نصوص، أزرار) قبل أي رسم.
       const box = { left: band.left, top: band.top, width: band.width, height: SCENE_HEIGHT };
       if (!areaStillFree(box, 14)) return;
-      releaseRef.current = acquireStage(`roam:${kind}`);
+      releaseRef.current = acquireStage(`companion:${data.id}`);
+      lastSceneRef.current = data.id;
       keyRef.current += 1;
-      const pool = kind === "stroll" ? STROLL_COPY : SEARCH_COPY;
-      const line = pickCopy(pool, lastCopyRef, ar);
-      setScene({ key: keyRef.current, kind, copy: line, band, tone: sampleAreaTone(box) });
-
+      setLeaving(false);
+      setScene({ key: keyRef.current, data, band, tone: sampleAreaTone(box) });
       window.clearTimeout(hideTimer.current);
       hideTimer.current = window.setTimeout(end, pacing.roamDurationMs);
     };
@@ -163,34 +138,29 @@ export function MascotRoam() {
     const run = () => {
       if (Date.now() < settledAt) return;
       if (blockedNow()) return;
-      const kind: RoamScene = Math.random() < 0.5 ? "stroll" : "search";
-      // القاعدة الأولى: شخصية واحدة فقط، وفاصل أدنى، ولا تكرار للنوع نفسه.
-      if (!canShowMascot(`roam:${kind}`, limits)) {
-        const other: RoamScene = kind === "stroll" ? "search" : "stroll";
-        if (!canShowMascot(`roam:${other}`, limits)) return;
-        return start(other);
-      }
-      start(kind);
+      const data = pickCompanionScene(lastSceneRef.current);
+      if (!canShowMascot(`companion:${data.id}`, limits)) return;
+      start(data);
     };
 
     const stop = watchScrollIdle({
       idleMs: pacing.mascotIdleMs,
       onIdle: run,
-      // استئناف التمرير بسرعة ⇒ المشهد يختفي بنعومة (لا مطاردة للزائر).
       onScroll: (delta) => {
         if (delta > 24) end();
       },
     });
 
-    // صفحة قصيرة لا تُمرَّر: السكون هنا هو الحالة الأصلية، فيُفحص مرة واحدة بعد
-    // استقرار الصفحة + مدة السكون نفسها.
     const quick = window.location.search.includes("roam=now");
     const first = window.setTimeout(run, quick ? 900 : pacing.pageSettleMs + pacing.mascotIdleMs);
 
     return () => {
       stop();
       window.clearTimeout(first);
-      end();
+      window.clearTimeout(hideTimer.current);
+      window.clearTimeout(exitTimer.current);
+      releaseRef.current?.(true);
+      releaseRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -204,8 +174,25 @@ export function MascotRoam() {
     pacing.mascotQuietAfterCloseMs,
   ]);
 
+  /**
+   * الضغط في أي مكان يُخفي المشهد — **بلا استهلاك الضغطة**: نستمع في مرحلة
+   * الالتقاط بلا `preventDefault` ولا `stopPropagation`، فالبطاقة تُفتح كما لو
+   * لم تكن الشخصية موجودة، والشخصية تختفي في نفس اللحظة.
+   */
+  useEffect(() => {
+    if (!scene || leaving) return;
+    const hide = () => end();
+    window.addEventListener("pointerdown", hide, { capture: true, passive: true });
+    window.addEventListener("touchstart", hide, { capture: true, passive: true });
+    window.addEventListener("keydown", hide, { capture: true });
+    return () => {
+      window.removeEventListener("pointerdown", hide, { capture: true });
+      window.removeEventListener("touchstart", hide, { capture: true });
+      window.removeEventListener("keydown", hide, { capture: true });
+    };
+  }, [scene?.key, leaving, end]);
 
-  // التبويب المخفي: الحركة تتوقّف تمامًا (لا رسم ولا حسابات).
+  // التبويب المخفي: الحركة تتوقّف تمامًا.
   useEffect(() => {
     const sync = () => setPaused(document.visibilityState !== "visible");
     sync();
@@ -213,16 +200,13 @@ export function MascotRoam() {
     return () => document.removeEventListener("visibilitychange", sync);
   }, []);
 
-  // مغادرة الصفحة أو الكتابة أو مكالمة تُنهي المشهد فورًا.
+  // مغادرة الصفحة أو مسار هادئ يُنهي المشهد فورًا.
   useEffect(() => {
     if (scene && isQuietPath(pathname)) end();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  /**
-   * إعادة التحقق المستمر: عدم التغطية شرط لحظي لا قرار مرة واحدة. أي تمرير أو
-   * تحميل بطاقة أو تغيير مقاس يجعل الشريط غير آمن ⇒ ينتهي المشهد فورًا.
-   */
+  /** عدم التغطية شرط لحظي: أي تغيّر يجعل المكان غير آمن يُنهي المشهد. */
   useEffect(() => {
     if (!scene) return;
     const check = () => {
@@ -247,17 +231,24 @@ export function MascotRoam() {
 
   if (!scene) return null;
 
-  const search = scene.kind === "search";
+  const data = scene.data;
+  const search = data.main === "kaheelan";
   const travel = Math.max(0, scene.band.width - SCENE_WIDTH);
-  // اتجاه المشي: داخل الشريط الآمن حصرًا — لا يتجاوز حدوده أبدًا.
   const toEnd = search ? !ar : ar;
   const duration = `${Math.max(6, pacing.roamDurationMs / 1000)}s`;
+  const friend = KIDS_FRIEND_ART[data.friend].sm;
+  const friendName = kidsFriendMeta(data.friend);
+  const textStyle = floatingTextStyle(scene.tone);
+
+  const open = () => {
+    end();
+    navigate({ to: data.to as never });
+  };
 
   return (
     <div
       data-kaheel-roam
-      data-kaheel-stage="roam"
-      aria-hidden={false}
+      data-kaheel-stage="companion"
       className="pointer-events-none fixed inset-0 z-30 overflow-hidden"
     >
       <div
@@ -271,28 +262,89 @@ export function MascotRoam() {
           width: `${SCENE_WIDTH}px`,
           height: `${SCENE_HEIGHT}px`,
           ["--roam-x" as string]: `${toEnd ? travel : -travel}px`,
-          animation: `mascot-roam-x ${duration} linear both, mascot-roam-out 0.5s ease-in ${duration} both`,
+          animation: leaving
+            ? "mascot-scene-out 0.2s ease-in both"
+            : `mascot-roam-x ${duration} linear both, mascot-roam-out 0.5s ease-in ${duration} both`,
           animationPlayState: paused ? "paused" : "running",
         }}
-        className="pointer-events-none flex flex-col items-center justify-end gap-1"
+        className="pointer-events-auto flex flex-col items-center justify-end gap-1"
       >
-        {/* النص عائم بلا أي خلفية: لونه وظلّه يتكيّفان مع سطوع المكان. */}
-        <span
+        {/* فقاعة واحدة مشتركة، بلا أي خلفية — والضغط عليها يفتح القسم. */}
+        <button
+          type="button"
           dir={ar ? "rtl" : "ltr"}
-          style={floatingTextStyle(scene.tone)}
-          className="max-w-[10.5rem] bg-transparent px-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
+          onClick={open}
+          style={textStyle}
+          className="max-w-[13rem] bg-transparent px-1 text-center text-[11px] font-black leading-snug [overflow-wrap:anywhere]"
         >
-          {scene.copy}
-        </span>
+          <span className="block">{ar ? data.hook.ar : data.hook.en}</span>
+          <span className="mt-0.5 block text-[10px] font-bold opacity-95">
+            {ar ? data.line.ar : data.line.en}
+          </span>
+        </button>
 
-        {/* الجسم: مشي حقيقي بتسلسل الإطارات الأربعة + ارتدادة وميلان خفيفين. */}
-        <MascotWalk
-          name={search ? "kaheelan" : "kaheel"}
-          lang={ar ? "ar" : "en"}
-          facing={toEnd ? 1 : -1}
-          paused={paused}
-          className="h-[68px]"
-        />
+        <div className="flex w-full items-end justify-center gap-1">
+          {/* الرئيسية أكبر — مشي حقيقي بالإطارات الأربعة. */}
+          <button
+            type="button"
+            onClick={open}
+            aria-label={ar ? data.line.ar : data.line.en}
+            className="block"
+          >
+            <MascotWalk
+              name={data.main}
+              lang={ar ? "ar" : "en"}
+              facing={toEnd ? 1 : -1}
+              paused={paused}
+              className="h-[72px]"
+            />
+          </button>
+
+          {/* الرفيق أصغر بجانبها — نفس الأصول المعتمدة لقسم الأطفال. */}
+          <button type="button" onClick={open} className="block" tabIndex={-1}>
+            <img
+              src={friend.src}
+              width={friend.width}
+              height={friend.height}
+              alt={ar ? friendName.nameAr : friendName.nameEn}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              className="h-[42px] w-auto select-none object-contain"
+              style={
+                paused
+                  ? undefined
+                  : { animation: "mascot-walk-bob 520ms ease-in-out infinite" }
+              }
+            />
+          </button>
+        </div>
+
+        {/* الإغلاق الصريح يبقى: × وعدم الإظهار اليوم. */}
+        <div className="flex items-center gap-2 pt-0.5" style={textStyle}>
+          <button
+            type="button"
+            aria-label={ar ? "إغلاق" : "Close"}
+            onClick={(event) => {
+              event.stopPropagation();
+              end();
+            }}
+            className="grid h-5 w-5 place-items-center rounded-full border border-current/40"
+          >
+            <X className="h-3 w-3" />
+          </button>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              mutePopups(24);
+              end();
+            }}
+            className="text-[9px] font-bold underline underline-offset-2"
+          >
+            {ar ? "لا تُظهرها اليوم" : "Not today"}
+          </button>
+        </div>
       </div>
     </div>
   );
