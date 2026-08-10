@@ -8,9 +8,10 @@ import {
   MapPin,
   MessageCircle,
   MoreHorizontal,
-  
+  Search,
   Tag,
 } from "lucide-react";
+
 import { useEffect, useRef, useState } from "react";
 
 import { addListingHref } from "@/lib/add-listing";
