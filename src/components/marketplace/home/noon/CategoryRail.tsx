@@ -8,12 +8,16 @@
  */
 import { useQuery } from "@tanstack/react-query";
 
-import { ListingCard, ListingCardSkeleton } from "@/components/marketplace/ListingCard";
+import {
+  ListingCard,
+  ListingCardSkeleton,
+  type ListingCardData,
+} from "@/components/marketplace/ListingCard";
 import { RAIL_ITEM, RAIL_SCROLLER, SectionHead } from "@/components/marketplace/home/noon/NoonKit";
 import { useI18n } from "@/i18n";
 import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { loadListings, type ListingFilters } from "@/lib/mkt-queries";
-import type { ListingCardData } from "@/lib/mkt-types";
+
 
 const ROW_SIZE = 10;
 /** مواضع الإعلانات الممولة داخل الصف (١-based). */
