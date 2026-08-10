@@ -66,6 +66,7 @@ import { Route as GuidesStudentsRouteImport } from './routes/guides/students'
 import { Route as GuidesSyriaRouteImport } from './routes/guides/syria'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as LegalCopyrightRouteImport } from './routes/legal/copyright'
+import { Route as LegalDirectoryPolicyRouteImport } from './routes/legal/directory-policy'
 import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
 import { Route as LegalTermsRouteImport } from './routes/legal/terms'
 import { Route as MyAdCreditRouteImport } from './routes/my/ad-credit'
@@ -395,6 +396,11 @@ const LegalCopyrightRoute = LegalCopyrightRouteImport.update({
   path: '/legal/copyright',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalDirectoryPolicyRoute = LegalDirectoryPolicyRouteImport.update({
+  id: '/legal/directory-policy',
+  path: '/legal/directory-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
   id: '/legal/privacy',
   path: '/legal/privacy',
@@ -671,6 +677,7 @@ export interface FileRoutesByFullPath {
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/directory-policy': typeof LegalDirectoryPolicyRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
@@ -770,6 +777,7 @@ export interface FileRoutesByTo {
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/directory-policy': typeof LegalDirectoryPolicyRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
@@ -873,6 +881,7 @@ export interface FileRoutesById {
   '/guides/syria': typeof GuidesSyriaRoute
   '/invite/$token': typeof InviteTokenRoute
   '/legal/copyright': typeof LegalCopyrightRoute
+  '/legal/directory-policy': typeof LegalDirectoryPolicyRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/my/ad-credit': typeof MyAdCreditRoute
@@ -977,6 +986,7 @@ export interface FileRouteTypes {
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/directory-policy'
     | '/legal/privacy'
     | '/legal/terms'
     | '/my/ad-credit'
@@ -1076,6 +1086,7 @@ export interface FileRouteTypes {
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/directory-policy'
     | '/legal/privacy'
     | '/legal/terms'
     | '/my/ad-credit'
@@ -1178,6 +1189,7 @@ export interface FileRouteTypes {
     | '/guides/syria'
     | '/invite/$token'
     | '/legal/copyright'
+    | '/legal/directory-policy'
     | '/legal/privacy'
     | '/legal/terms'
     | '/my/ad-credit'
@@ -1255,6 +1267,7 @@ export interface RootRouteChildren {
   GuidesSyriaRoute: typeof GuidesSyriaRoute
   InviteTokenRoute: typeof InviteTokenRoute
   LegalCopyrightRoute: typeof LegalCopyrightRoute
+  LegalDirectoryPolicyRoute: typeof LegalDirectoryPolicyRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
@@ -1665,6 +1678,13 @@ declare module '@tanstack/react-router' {
       path: '/legal/copyright'
       fullPath: '/legal/copyright'
       preLoaderRoute: typeof LegalCopyrightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/directory-policy': {
+      id: '/legal/directory-policy'
+      path: '/legal/directory-policy'
+      fullPath: '/legal/directory-policy'
+      preLoaderRoute: typeof LegalDirectoryPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/privacy': {
@@ -2164,6 +2184,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesSyriaRoute: GuidesSyriaRoute,
   InviteTokenRoute: InviteTokenRoute,
   LegalCopyrightRoute: LegalCopyrightRoute,
+  LegalDirectoryPolicyRoute: LegalDirectoryPolicyRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
   ProfilesUsernameRoute: ProfilesUsernameRoute,
