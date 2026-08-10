@@ -33,6 +33,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAdCreditRouteImport } from './routes/admin/ad-credit'
+import { Route as AdminAppearanceRouteImport } from './routes/admin/appearance'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
@@ -239,6 +240,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminAdCreditRoute = AdminAdCreditRouteImport.update({
   id: '/ad-credit',
   path: '/ad-credit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAppearanceRoute = AdminAppearanceRouteImport.update({
+  id: '/appearance',
+  path: '/appearance',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
@@ -705,6 +711,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/admin/ad-credit': typeof AdminAdCreditRoute
+  '/admin/appearance': typeof AdminAppearanceRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -814,6 +821,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/admin/ad-credit': typeof AdminAdCreditRoute
+  '/admin/appearance': typeof AdminAppearanceRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -928,6 +936,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
   '/admin/ad-credit': typeof AdminAdCreditRoute
+  '/admin/appearance': typeof AdminAppearanceRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/businesses': typeof AdminBusinessesRoute
@@ -1043,6 +1052,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/services'
     | '/admin/ad-credit'
+    | '/admin/appearance'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -1152,6 +1162,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/admin/ad-credit'
+    | '/admin/appearance'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -1265,6 +1276,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/services'
     | '/admin/ad-credit'
+    | '/admin/appearance'
     | '/admin/applications'
     | '/admin/audit-log'
     | '/admin/businesses'
@@ -1567,6 +1579,13 @@ declare module '@tanstack/react-router' {
       path: '/ad-credit'
       fullPath: '/admin/ad-credit'
       preLoaderRoute: typeof AdminAdCreditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/appearance': {
+      id: '/admin/appearance'
+      path: '/appearance'
+      fullPath: '/admin/appearance'
+      preLoaderRoute: typeof AdminAppearanceRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/applications': {
@@ -2183,6 +2202,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminAdCreditRoute: typeof AdminAdCreditRoute
+  AdminAppearanceRoute: typeof AdminAppearanceRoute
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminBusinessesRoute: typeof AdminBusinessesRoute
@@ -2220,6 +2240,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdCreditRoute: AdminAdCreditRoute,
+  AdminAppearanceRoute: AdminAppearanceRoute,
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminBusinessesRoute: AdminBusinessesRoute,
