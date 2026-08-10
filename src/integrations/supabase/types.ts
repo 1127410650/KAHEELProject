@@ -7753,6 +7753,211 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_student_bot_conversations: {
+        Row: {
+          created_at: string
+          grade: string
+          id: string
+          message_count: number
+          messages: Json
+          status: string
+          subject: string
+          summary: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          grade: string
+          id?: string
+          message_count?: number
+          messages?: Json
+          status?: string
+          subject: string
+          summary?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          grade?: string
+          id?: string
+          message_count?: number
+          messages?: Json
+          status?: string
+          subject?: string
+          summary?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mkt_student_bot_plans: {
+        Row: {
+          code: string
+          created_at: string
+          daily_limit: number
+          duration_days: number | null
+          id: string
+          is_active: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          perks: Json
+          price_credits: number
+          season_ends_at: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          daily_limit?: number
+          duration_days?: number | null
+          id?: string
+          is_active?: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          perks?: Json
+          price_credits?: number
+          season_ends_at?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          daily_limit?: number
+          duration_days?: number | null
+          id?: string
+          is_active?: boolean
+          kind?: string
+          name_ar?: string
+          name_en?: string
+          perks?: Json
+          price_credits?: number
+          season_ends_at?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_student_bot_subscriptions: {
+        Row: {
+          created_at: string
+          daily_limit: number
+          ends_at: string
+          id: string
+          plan_id: string
+          price_credits: number
+          starts_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_limit?: number
+          ends_at: string
+          id?: string
+          plan_id: string
+          price_credits?: number
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_limit?: number
+          ends_at?: string
+          id?: string
+          plan_id?: string
+          price_credits?: number
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_student_bot_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_student_bot_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_student_bot_usage: {
+        Row: {
+          conversation_id: string | null
+          cost_usd: number
+          created_at: string
+          detail: string | null
+          finished_at: string | null
+          grade: string | null
+          had_image: boolean
+          id: string
+          input_tokens: number
+          ip_hash: string | null
+          model: string | null
+          output_tokens: number
+          question_text: string | null
+          status: string
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id?: string | null
+          cost_usd?: number
+          created_at?: string
+          detail?: string | null
+          finished_at?: string | null
+          grade?: string | null
+          had_image?: boolean
+          id?: string
+          input_tokens?: number
+          ip_hash?: string | null
+          model?: string | null
+          output_tokens?: number
+          question_text?: string | null
+          status?: string
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string | null
+          cost_usd?: number
+          created_at?: string
+          detail?: string | null
+          finished_at?: string | null
+          grade?: string | null
+          had_image?: boolean
+          id?: string
+          input_tokens?: number
+          ip_hash?: string | null
+          model?: string | null
+          output_tokens?: number
+          question_text?: string | null
+          status?: string
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_student_bot_usage_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_student_bot_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_syria_directory_entries: {
         Row: {
           address: string | null
@@ -11175,6 +11380,36 @@ export type Database = {
         Args: { _kind: string; _session_key?: string; _story_id: string }
         Returns: undefined
       }
+      mkt_student_bot_admin_stats: { Args: { _days?: number }; Returns: Json }
+      mkt_student_bot_budget_alerts: { Args: never; Returns: undefined }
+      mkt_student_bot_claim: {
+        Args: {
+          _conversation_id?: string
+          _grade: string
+          _has_image?: boolean
+          _ip_hash?: string
+          _subject: string
+        }
+        Returns: Json
+      }
+      mkt_student_bot_config: { Args: never; Returns: Json }
+      mkt_student_bot_finish: {
+        Args: {
+          _answer?: string
+          _cost_usd?: number
+          _detail?: string
+          _input_tokens?: number
+          _model?: string
+          _output_tokens?: number
+          _question?: string
+          _status: string
+          _usage_id: string
+        }
+        Returns: Json
+      }
+      mkt_student_bot_month_spend: { Args: never; Returns: number }
+      mkt_student_bot_state: { Args: never; Returns: Json }
+      mkt_student_bot_subscribe: { Args: { _plan_id: string }; Returns: Json }
       mkt_submit_appeal: {
         Args: { _reason: string; _report_id: string }
         Returns: string
