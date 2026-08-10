@@ -491,7 +491,7 @@ export function MarketShell({
           : "market-surface market-shell flex min-h-dvh flex-col overflow-x-clip"
       }
     >
-      <BackdropLayer />
+      {/* سطح أبيض نظيف: لا طبقة خلفية مصوّرة خلف المحتوى. */}
       <MarketHeader showCategories={showCategories} home={home} />
       <main className="flex-1">{children}</main>
 
