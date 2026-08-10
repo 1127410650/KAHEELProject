@@ -39,6 +39,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
 import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideClaimsRouteImport } from './routes/admin/guide-claims'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
@@ -271,6 +272,11 @@ const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminDesignsRoute = AdminDesignsRouteImport.update({
+  id: '/designs',
+  path: '/designs',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminErrandsRoute = AdminErrandsRouteImport.update({
@@ -723,6 +729,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
@@ -834,6 +841,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
@@ -950,6 +958,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
@@ -1067,6 +1076,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/designs'
     | '/admin/errands'
     | '/admin/guide-claims'
     | '/admin/guide-queue'
@@ -1178,6 +1188,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/designs'
     | '/admin/errands'
     | '/admin/guide-claims'
     | '/admin/guide-queue'
@@ -1293,6 +1304,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/designs'
     | '/admin/errands'
     | '/admin/guide-claims'
     | '/admin/guide-queue'
@@ -1633,6 +1645,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/designs': {
+      id: '/admin/designs'
+      path: '/designs'
+      fullPath: '/admin/designs'
+      preLoaderRoute: typeof AdminDesignsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/errands': {
@@ -2227,6 +2246,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminDesignsRoute: typeof AdminDesignsRoute
   AdminErrandsRoute: typeof AdminErrandsRoute
   AdminGuideClaimsRoute: typeof AdminGuideClaimsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
@@ -2266,6 +2286,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminDesignsRoute: AdminDesignsRoute,
   AdminErrandsRoute: AdminErrandsRoute,
   AdminGuideClaimsRoute: AdminGuideClaimsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
