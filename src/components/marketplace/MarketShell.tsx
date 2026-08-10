@@ -127,7 +127,7 @@ export function MarketHeader({
           alt=""
           aria-hidden
           loading="lazy"
-          className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(138_79_255/0.35)] sm:block"
+          className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_color-mix(in_srgb,var(--kt-primary)_35%,transparent)] sm:block"
         />
 
         {/* صف الهوية: الشعار + الموقع + إنشاء إعلان. */}

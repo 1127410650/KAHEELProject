@@ -39,7 +39,7 @@ export function ExclusiveOffersRail() {
 
       <div className="relative z-10">
         <header className="flex items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-[var(--r-card)] bg-[radial-gradient(circle_at_32%_25%,rgb(138_79_255/0.1),rgb(138_79_255/0.35)_78%)] text-primary">
+          <span className="grid size-9 place-items-center rounded-[var(--r-card)] bg-[radial-gradient(circle_at_32%_25%,color-mix(in_srgb,var(--kt-primary)_10%,transparent),color-mix(in_srgb,var(--kt-primary)_35%,transparent)_78%)] text-primary">
             <Sparkles className="size-5" aria-hidden />
           </span>
           <div className="min-w-0">

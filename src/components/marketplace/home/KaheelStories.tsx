@@ -11,10 +11,13 @@ import { useNavigate } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import groceriesCover from "@/assets/market/cat-groceries-hero.webp";
+import restaurantsCover from "@/assets/market/cat-restaurants-hero.webp";
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
 import { useI18n } from "@/i18n";
 import {
   STORY_GRADIENT_CSS,
+  storyAssetKey,
   storyPose,
   trackStory,
   useLiveStories,
@@ -22,6 +25,19 @@ import {
   useStoryImages,
   type Story,
 } from "@/lib/mkt-stories";
+
+/** الأغلفة المرفقة بالحزمة — مفتاح `asset:` في `image_path` يشير إلى إحداها. */
+const LOCAL_COVERS: Record<string, string> = {
+  groceries: groceriesCover,
+  restaurants: restaurantsCover,
+};
+
+/** غلاف الستوري: صورة مرفقة، أو صورة موقّعة من التخزين، أو لا شيء (تدرّج + شخصية). */
+function storyCover(story: Story, images: Record<string, string>): string | undefined {
+  const assetKey = storyAssetKey(story.image_path);
+  if (assetKey) return LOCAL_COVERS[assetKey];
+  return story.image_path ? images[story.image_path] : undefined;
+}
 
 /** مدة عرض الستوري الواحدة قبل الانتقال التلقائي. */
 const STORY_MS = 5000;
@@ -44,6 +60,7 @@ export function KaheelStories() {
       <ul className="flex list-none gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {list.map((story, index) => {
           const isSeen = seen.includes(story.id);
+          const cover = storyCover(story, images.data ?? {});
           return (
             <li key={story.id} className="shrink-0">
               <button
@@ -63,14 +80,25 @@ export function KaheelStories() {
                     className="grid size-full place-items-center overflow-hidden rounded-full bg-white"
                     style={{ background: STORY_GRADIENT_CSS[story.gradient] }}
                   >
-                    <Mascot
-                      name={story.mascot}
-                      pose={storyPose(story)}
-                      lang={ar ? "ar" : "en"}
-                      className="h-[52px] w-auto"
-                    />
+                    {cover ? (
+                      <img
+                        src={cover}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <Mascot
+                        name={story.mascot}
+                        pose={storyPose(story)}
+                        lang={ar ? "ar" : "en"}
+                        className="h-[52px] w-auto"
+                      />
+                    )}
                   </span>
                 </span>
+
                 <span className="line-clamp-2 min-h-[32px] w-full text-center text-desc font-bold leading-[1.25] text-brand-900">
                   {ar ? story.title_ar : story.title_en}
                 </span>
@@ -167,7 +195,7 @@ function StoryViewer({
 
   if (!story) return null;
 
-  const imageUrl = story.image_path ? images[story.image_path] : undefined;
+  const imageUrl = storyCover(story, images);
 
   const openTarget = () => {
     trackStory(story.id, "click");

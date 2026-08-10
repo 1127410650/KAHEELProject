@@ -54,12 +54,25 @@ export const STORY_GRADIENTS: StoryGradient[] = ["violet", "sunset", "mint", "ni
 
 /** خلفيات جاهزة — تدرجات CSS فقط، فلا وزن على الشبكة. */
 export const STORY_GRADIENT_CSS: Record<StoryGradient, string> = {
-  violet: "linear-gradient(160deg,#8A4FFF 0%,#C3ABFF 100%)",
+  /* «violet» و«night» يأخذان لونهما من اللوحة المفعّلة — لا لون مكتوب. */
+  violet:
+    "linear-gradient(160deg,var(--kt-primary-deep) 0%,color-mix(in srgb,var(--kt-primary) 45%,#ffffff) 100%)",
   sunset: "linear-gradient(160deg,#4a1042,#a4133c 55%,#ff8500)",
   mint: "linear-gradient(160deg,#10403b,#128f7e 55%,#7ae582)",
-  night: "linear-gradient(160deg,#1B1B1F 0%,#8A4FFF 100%)",
+  night:
+    "linear-gradient(160deg,var(--kt-header-from) 0%,var(--kt-primary) 100%)",
   gold: "linear-gradient(160deg,#3f2c05,#a97a11 55%,#ffd166)",
 };
+
+/**
+ * أغلفة مرفقة بالحزمة: `image_path` يبدأ بـ `asset:` ⇒ المفتاح بعده يُترجم إلى
+ * صورة مستوردة في `KaheelStories`، فكل دائرة لها مشهد مختلف بدل تكرار رسم
+ * الشخصية نفسها. لا شبكة ولا توقيع روابط.
+ */
+export function storyAssetKey(imagePath: string | null | undefined): string | undefined {
+  if (!imagePath || !imagePath.startsWith("asset:")) return undefined;
+  return imagePath.slice("asset:".length);
+}
 
 /** حد صورة الستوري: 150KB. أي شيء أكبر يُرفض قبل أن يلمس التخزين. */
 export const STORY_IMAGE_LIMIT = 150 * 1024;
@@ -96,7 +109,10 @@ export function useLiveStories() {
  * القصص بلا صورة لا تُدخل الطلب أصلًا.
  */
 export function useStoryImages(stories: Story[], enabled: boolean) {
-  const paths = stories.map((story) => story.image_path).filter((path): path is string => !!path);
+  /* الأغلفة المرفقة بالحزمة (`asset:`) لا تُوقّع — ليست في التخزين. */
+  const paths = stories
+    .map((story) => story.image_path)
+    .filter((path): path is string => !!path && !path.startsWith("asset:"));
   return useQuery({
     queryKey: ["mkt", "stories", "images", paths],
     enabled: enabled && paths.length > 0,

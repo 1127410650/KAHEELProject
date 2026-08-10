@@ -89,7 +89,7 @@ export function CollapsingHomeHeader({
           transform: `translate3d(0, calc(-${COLLAPSIBLE_H}px * var(--p)), 0)`,
           willChange: "transform",
         } as React.CSSProperties}
-        className="fixed inset-x-0 top-0 z-40 rounded-b-[16px] text-primary-foreground shadow-[0_10px_28px_-22px_rgb(138_79_255/0.55)]"
+        className="fixed inset-x-0 top-0 z-40 rounded-b-[16px] text-primary-foreground shadow-[0_10px_28px_-22px_color-mix(in_srgb,var(--kt-header-from)_55%,transparent)]"
         onClick={
           collapsed
             ? () => window.scrollTo({ top: 0, behavior: "smooth" })
