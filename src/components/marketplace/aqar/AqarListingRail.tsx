@@ -28,15 +28,14 @@ export function AqarListingRail({
   emptyText?: string;
 }) {
   return (
-    <section className="mt-5">
-      <div className="mb-2.5 flex items-center justify-between gap-2 px-4">
-
-        <h2 className="text-lg font-bold text-foreground">{title}</h2>
+    <section className="k-section">
+      <div className="k-gutter flex items-center justify-between gap-[var(--sp-2)] pb-[var(--sp-3)]">
+        <h2 className="k-section-title mb-0">{title}</h2>
         {moreTrack && listings.length > 0 ? (
           <Link
             to="/aqar/browse"
             search={{ track: moreTrack }}
-            className="inline-flex min-h-[44px] items-center gap-0.5 text-desc font-bold text-primary"
+            className="inline-flex min-h-11 items-center gap-[var(--sp-1)] text-[14px] font-bold text-primary"
           >
             الكل
             <ChevronLeft className="size-4" aria-hidden />
@@ -45,9 +44,9 @@ export function AqarListingRail({
       </div>
 
       {listings.length === 0 ? (
-        <p className="px-4 text-desc text-muted-foreground">{emptyText}</p>
+        <p className="k-gutter text-[14px] font-medium text-muted-foreground">{emptyText}</p>
       ) : (
-        <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="k-rail flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {listings.map((listing) => (
             <li key={listing.id} className="w-[62%] max-w-[240px] shrink-0 snap-start">
               <AqarListingCard
@@ -62,5 +61,6 @@ export function AqarListingRail({
         </ul>
       )}
     </section>
+
   );
 }
