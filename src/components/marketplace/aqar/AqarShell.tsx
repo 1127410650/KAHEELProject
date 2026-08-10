@@ -17,8 +17,8 @@ import {
 import { useHeaderProgress } from "@/lib/use-header-progress";
 import { useLabels } from "@/lib/mkt-ui-labels";
 
-/** ارتفاع هيدر العقار الكامل — ثابت فلا تتحرّك الصفحة أبدًا. */
-const AQAR_HEADER_FULL_H = 44 + 44 + 48 + 54;
+/** ارتفاع هيدر العقار — ثابت 96px (صف الهوية 44 + صف البحث 52) فلا تتحرّك الصفحة. */
+const AQAR_HEADER_FULL_H = 96;
 
 const NAV = [
   { to: "/aqar/browse", key: "aqar.browse", label: "تصفّح", icon: Search },
