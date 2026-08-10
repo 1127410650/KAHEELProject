@@ -88,9 +88,82 @@ function AqarHomePage() {
   const hero = visuals.hero;
   const rate = usdRate.data ?? null;
 
+  /* التأليف من /admin/composer له الأولوية؛ الكتل الخاصة بالعقار تُركَّب هنا
+     بنفس بياناتها فلا يُنسخ خط بيانات في مكانين. */
+  const composed = usePageBlocks("aqar.home");
+  const blocks = composed.data ?? [];
+  const overrides: BlockOverrides = {
+    hero_image: () => (
+      <section className="-mt-6 px-4">
+        <div
+          data-kslot="aqar.hero"
+          className="relative aspect-[16/9] overflow-hidden rounded-3xl shadow-lg"
+        >
+          <img
+            src={hero.image}
+            alt={`${hero.name} — ${hero.city}`}
+            width={1600}
+            height={900}
+            className="absolute inset-0 size-full object-cover"
+            decoding="async"
+          />
+          <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 p-4">
+            <strong className="block text-page font-extrabold text-white drop-shadow-md">
+              أهلًا بك في كَحيل عقار
+            </strong>
+            <span className="block text-desc font-semibold text-white/90">
+              {hero.name} — {hero.city}
+            </span>
+          </div>
+        </div>
+      </section>
+    ),
+    search_field: () => (
+      <div className="px-4">
+        <Link
+          to="/aqar/browse"
+          search={{ track }}
+          className="flex h-12 items-center gap-2 rounded-full bg-card px-4 shadow-sm"
+        >
+          <Search className="size-5 shrink-0 text-primary" aria-hidden />
+          <span className="truncate text-body font-semibold text-muted-foreground">
+            إلى أين؟ مدينة، حي، أو نوع عقار
+          </span>
+        </Link>
+        <div className="mt-3">
+          <AqarTrackTabs track={track} onChange={setTrack} />
+        </div>
+      </div>
+    ),
+    type_cards: () => (
+      <AqarTypeGrid types={visuals.types} track={track} counts={counts.data ?? {}} />
+    ),
+    city_circles: () => <AqarCityCircles cities={visuals.cities} track={track} />,
+    listing_rail: (block) => (
+      <AqarListingRail
+        title={str(block.settings, "title_ar", "إعلانات")}
+        listings={
+          str(block.settings, "source", "newest") === "featured"
+            ? (promoted.data ?? [])
+            : (latest.data ?? [])
+        }
+        usdRate={rate}
+        favorites={ids}
+        onToggleFavorite={toggle}
+        moreTrack={track}
+      />
+    ),
+  };
+
   return (
     <AqarShell subtitle="إيجار يومي وطويل وبيع في سوريا">
       <div className="mx-auto w-full max-w-3xl">
+        {blocks.length > 0 ? (
+          <PageBlocks blocks={blocks} overrides={overrides} className="pb-4" />
+        ) : (
+          <>
+
         {/* الهيرو: بطاقة صورة تطفو فوق الحدّ السفلي للهيدر بنسبة 16:9 ثابتة (لا إزاحة تخطيط). */}
         <section className="-mt-6 px-4">
           <div
