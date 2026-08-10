@@ -11,10 +11,13 @@ import { useNavigate } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import groceriesCover from "@/assets/market/cat-groceries-hero.webp";
+import restaurantsCover from "@/assets/market/cat-restaurants-hero.webp";
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
 import { useI18n } from "@/i18n";
 import {
   STORY_GRADIENT_CSS,
+  storyAssetKey,
   storyPose,
   trackStory,
   useLiveStories,
@@ -22,6 +25,19 @@ import {
   useStoryImages,
   type Story,
 } from "@/lib/mkt-stories";
+
+/** الأغلفة المرفقة بالحزمة — مفتاح `asset:` في `image_path` يشير إلى إحداها. */
+const LOCAL_COVERS: Record<string, string> = {
+  groceries: groceriesCover,
+  restaurants: restaurantsCover,
+};
+
+/** غلاف الستوري: صورة مرفقة، أو صورة موقّعة من التخزين، أو لا شيء (تدرّج + شخصية). */
+function storyCover(story: Story, images: Record<string, string>): string | undefined {
+  const assetKey = storyAssetKey(story.image_path);
+  if (assetKey) return LOCAL_COVERS[assetKey];
+  return story.image_path ? images[story.image_path] : undefined;
+}
 
 /** مدة عرض الستوري الواحدة قبل الانتقال التلقائي. */
 const STORY_MS = 5000;
