@@ -15,7 +15,9 @@ import { toast } from "sonner";
 import { Megaphone, Save, Sparkles, Tag } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
 import { DesignCard } from "@/components/marketplace/design/DesignCard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
