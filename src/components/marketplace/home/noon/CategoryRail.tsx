@@ -1,16 +1,18 @@
 /**
- * صف تصنيف أفقي بنمط «نون»: عنوان + «عرض الكل»، وبطاقات بعرض 80% من الشاشة مع
- * ظهور حافة البطاقة التالية.
+ * صفوف التصنيفات الأفقية بنمط «نون»: عنوان + «عرض الكل»، وبطاقات بعرض 80% من
+ * الشاشة مع ظهور حافة البطاقة التالية.
  *
  * التركيب: عشرة عناصر لكل صف، ثلاثة منها ممولة (إعلانات ذات ترويج ساري) في
  * المواضع ١ و٤ و٨، والباقي الأحدث — ومع توفر موقع المستخدم تُرتَّب بالأقرب.
- * الصف الذي يقل محتواه عن أربعة عناصر لا يظهر إطلاقًا (لا هيكل فراغ).
+ * الصف الذي يقل محتواه عن أربعة عناصر لا يظهر إطلاقًا.
+ *
+ * صفر هزّة تخطيط: كل الصفوف تُجلب في استعلام واحد متوازٍ (`useHomeRails`) ولا
+ * يُركّب أي صف قبل معرفة محتواه، فلا صف يظهر ثم يختفي ويحرّك ما تحته.
  */
 import { useQuery } from "@tanstack/react-query";
 
 import {
   ListingCard,
-  ListingCardSkeleton,
   type ListingCardData,
 } from "@/components/marketplace/ListingCard";
 import { RAIL_ITEM, RAIL_SCROLLER, SectionHead } from "@/components/marketplace/home/noon/NoonKit";
@@ -18,68 +20,76 @@ import { useI18n } from "@/i18n";
 import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { loadListings, type ListingFilters } from "@/lib/mkt-queries";
 
-
 const ROW_SIZE = 10;
 /** مواضع الإعلانات الممولة داخل الصف (١-based). */
 const SPONSORED_SLOTS = [1, 4, 8];
+/** الحد الأدنى لظهور الصف. */
+const MIN_ROW = 4;
+
+export interface HomeRailSpec {
+  id: string;
+  href: string;
+  filters: ListingFilters;
+}
+
+/** يجلب كل الصفوف معًا ويعيد المحتوى الجاهز لكل صف بمعرّفه. */
+export function useHomeRails(specs: readonly HomeRailSpec[]) {
+  const { locale } = useI18n();
+  const lang = locale === "ar" ? "ar" : "en";
+  const { origin } = useNearbyOrigin();
+
+  return useQuery({
+    queryKey: [
+      "mkt",
+      "home-rails",
+      specs.map((spec) => spec.id).join("|"),
+      lang,
+      origin ? `${origin.lat},${origin.lng}` : "no-origin",
+    ],
+    staleTime: 120_000,
+    queryFn: async () => {
+      const near = origin
+        ? ({ sort: "nearest", originLat: origin.lat, originLng: origin.lng } as const)
+        : ({ sort: "newest" } as const);
+
+      const results = await Promise.all(
+        specs.map(async (spec) => {
+          const [sponsored, fresh] = await Promise.all([
+            loadListings(
+              { ...spec.filters, featuredOnly: true, sort: "newest", limit: SPONSORED_SLOTS.length },
+              lang,
+            ),
+            loadListings({ ...spec.filters, ...near, limit: ROW_SIZE }, lang),
+          ]);
+          return [spec.id, mergeRow(sponsored, fresh)] as const;
+        }),
+      );
+      return Object.fromEntries(results) as Record<string, ListingCardData[]>;
+    },
+  });
+}
 
 export function CategoryRail({
   id,
   title,
   href,
-  filters,
+  rows,
 }: {
   id: string;
   title: string;
   href: string;
-  filters: ListingFilters;
+  rows: ListingCardData[];
 }) {
-  const { locale } = useI18n();
-  const lang = locale === "ar" ? "ar" : "en";
-  const { origin } = useNearbyOrigin();
-
-  const near = origin
-    ? ({ sort: "nearest", originLat: origin.lat, originLng: origin.lng } as const)
-    : ({ sort: "newest" } as const);
-
-  const key = ["mkt", "home-rail", id, lang, origin ? `${origin.lat},${origin.lng}` : "no-origin"];
-
-  const query = useQuery({
-    queryKey: key,
-    staleTime: 120_000,
-    queryFn: async () => {
-      const [sponsored, fresh] = await Promise.all([
-        loadListings(
-          { ...filters, featuredOnly: true, sort: "newest", limit: SPONSORED_SLOTS.length },
-          lang,
-        ),
-        loadListings({ ...filters, ...near, limit: ROW_SIZE }, lang),
-      ]);
-      return mergeRow(sponsored, fresh);
-    },
-  });
-
-  const rows = query.data ?? [];
-
-  // لا شيء أثناء التحميل الأول غير هيكل خفيف بنفس الارتفاع، ثم إخفاء كامل
-  // للصفوف الفقيرة.
-  if (!query.isPending && rows.length < 4) return null;
-
+  if (rows.length < MIN_ROW) return null;
   return (
     <section aria-labelledby={id}>
       <SectionHead id={id} title={title} href={href} />
       <div className={RAIL_SCROLLER}>
-        {query.isPending
-          ? Array.from({ length: 3 }).map((_, index) => (
-              <div key={`skel-${index}`} className={RAIL_ITEM}>
-                <ListingCardSkeleton />
-              </div>
-            ))
-          : rows.map((listing) => (
-              <div key={listing.id} className={RAIL_ITEM}>
-                <ListingCard listing={listing} />
-              </div>
-            ))}
+        {rows.map((listing) => (
+          <div key={listing.id} className={RAIL_ITEM}>
+            <ListingCard listing={listing} />
+          </div>
+        ))}
       </div>
     </section>
   );
