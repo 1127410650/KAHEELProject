@@ -515,6 +515,12 @@ function PromoteSection({
 
 /* ── ownership claim ──────────────────────────────────────────────────────── */
 
+/**
+ * A claim is never accepted on words alone: it needs the applicant's name, their
+ * role, the account's OTP-verified login phone, and at least one document. The
+ * documents go to a private bucket and the request stays `pending` until an
+ * admin decides it by hand.
+ */
 function ClaimSection({
   placeId,
   userId,
@@ -524,17 +530,29 @@ function ClaimSection({
   userId: string | null;
   claim: { status: string; reject_reason: string | null } | null;
 }) {
+  const { session, profile } = useSession();
   const [open, setOpen] = useState(false);
+  const [applicantName, setApplicantName] = useState("");
+  const [applicantRole, setApplicantRole] = useState<"owner" | "agent">("owner");
+  const [docKind, setDocKind] = useState("commercial_register");
+  const [files, setFiles] = useState<File[]>([]);
   const [evidence, setEvidence] = useState("");
-  const [contact, setContact] = useState("");
-  const submit = useClaimGuidePlace(placeId, userId);
+  const submit = useSubmitGuideClaim(placeId, userId);
+
+  /* The login phone is already OTP-verified by the sign-in flow itself. */
+  const verifiedPhone = session?.user.phone
+    ? `+${session.user.phone.replace(/\D/g, "")}`
+    : (profile?.phone ?? null);
 
   if (!userId) return null;
 
+  const inputClass =
+    "h-10 w-full rounded-xl border border-input bg-background px-3 text-[12px] outline-none focus:border-primary";
+
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
+    <section id="guide-claim" className="rounded-3xl border border-border/80 bg-card p-4 sm:p-5">
       <h2 className="mb-1 flex items-center gap-1.5 text-sm font-black">
-        <ShieldQuestion className="size-4 text-market-navy" aria-hidden />
+        <ShieldQuestion className="size-4 text-primary" aria-hidden />
         هذه جهتك؟ طالب بإدارتها
       </h2>
       {claim ? (
@@ -543,41 +561,110 @@ function ClaimSection({
             ? "مطالبتك معتمدة — تستطيع إدارة صور الجهة."
             : claim.status === "rejected"
               ? `المطالبة مرفوضة: ${claim.reject_reason ?? "لم تكفِ الإثباتات"}`
-              : "مطالبتك قيد المراجعة."}
+              : "مطالبتك قيد المراجعة — الموافقة يدوية دائمًا."}
         </p>
       ) : open ? (
         <div className="mt-2 space-y-2">
+          <input
+            value={applicantName}
+            onChange={(event) => setApplicantName(event.target.value)}
+            placeholder="اسم مقدّم الطلب"
+            className={inputClass}
+          />
+          <div className="flex gap-2">
+            {(["owner", "agent"] as const).map((role) => (
+              <button
+                key={role}
+                type="button"
+                onClick={() => setApplicantRole(role)}
+                className={`h-10 flex-1 rounded-xl border text-[12px] font-black ${
+                  applicantRole === role
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-muted-foreground"
+                }`}
+              >
+                {role === "owner" ? "مالك" : "مفوّض"}
+              </button>
+            ))}
+          </div>
+
+          <div className="rounded-xl border border-border bg-muted/40 p-2.5">
+            <p className="text-[11px] font-black">الجوال الموثّق</p>
+            <p className="mt-0.5 text-[11px] font-bold text-muted-foreground">
+              {verifiedPhone
+                ? `${verifiedPhone} — موثّق برمز التحقق عند تسجيل الدخول`
+                : "لا يوجد جوال موثّق على حسابك — أضف جوالك ووثّقه بالدخول برمز التحقق قبل تقديم المطالبة."}
+            </p>
+          </div>
+
+          <select
+            value={docKind}
+            onChange={(event) => setDocKind(event.target.value)}
+            className={inputClass}
+          >
+            {Object.entries(CLAIM_DOC_KIND_LABEL).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <input
+            type="file"
+            multiple
+            accept={CLAIM_DOC_ACCEPT}
+            onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
+            className="w-full rounded-xl border border-input bg-background p-2 text-[11px]"
+          />
+          <p className="text-[10.5px] font-bold text-muted-foreground">
+            مستند واحد على الأقل (سجل تجاري أو ترخيص أو تفويض رسمي). المستندات تُحفظ في حاوية خاصة
+            وتُحذف تلقائيًا بعد {CLAIM_DOC_RETENTION_DAYS.toLocaleString("en-US")} يومًا من البتّ في
+            الطلب.
+          </p>
+
           <textarea
             value={evidence}
             onChange={(event) => setEvidence(event.target.value)}
             rows={2}
-            placeholder="إثبات الملكية (سجل تجاري، بريد رسمي، صفحة الجهة…)"
-            className="w-full resize-none rounded-xl border border-input bg-background p-2.5 text-[12px] outline-none focus:border-market-navy"
+            placeholder="توضيح إضافي (اختياري)"
+            className="w-full resize-none rounded-xl border border-input bg-background p-2.5 text-[12px] outline-none focus:border-primary"
           />
-          <input
-            value={contact}
-            onChange={(event) => setContact(event.target.value)}
-            placeholder="رقم للتواصل"
-            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-[12px] outline-none focus:border-market-navy"
-          />
+
           <button
             type="button"
-            disabled={submit.isPending || evidence.trim().length < 5}
+            disabled={
+              submit.isPending ||
+              !verifiedPhone ||
+              files.length === 0 ||
+              applicantName.trim().length < 3
+            }
             onClick={() =>
               submit.mutate(
-                { evidence, contact },
+                {
+                  applicantName,
+                  applicantRole,
+                  phone: verifiedPhone ?? "",
+                  phoneVerified: !!verifiedPhone,
+                  evidence,
+                  files: files.map((file) => ({ file, kind: docKind })),
+                },
                 {
                   onSuccess: () => {
                     setOpen(false);
-                    toast.success("تم إرسال المطالبة للمراجعة");
+                    setFiles([]);
+                    toast.success("تم إرسال المطالبة للمراجعة اليدوية");
                   },
-                  onError: () => toast.error("تعذّر إرسال المطالبة."),
+                  onError: (error) =>
+                    toast.error(
+                      String((error as Error).message).includes("DOC_TOO_LARGE")
+                        ? "حجم المستند كبير — الحد ٨ ميجابايت."
+                        : "تعذّر إرسال المطالبة.",
+                    ),
                 },
               )
             }
-            className="inline-flex h-10 items-center rounded-2xl bg-market-navy px-4 text-[12px] font-black text-white disabled:opacity-50"
+            className="inline-flex h-10 items-center rounded-2xl bg-primary px-4 text-[12px] font-black text-primary-foreground disabled:opacity-50"
           >
-            إرسال المطالبة
+            {submit.isPending ? "جاري الإرسال…" : "إرسال المطالبة"}
           </button>
         </div>
       ) : (
@@ -592,3 +679,4 @@ function ClaimSection({
     </section>
   );
 }
+
