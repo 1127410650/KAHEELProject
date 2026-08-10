@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AqarRouteImport } from './routes/aqar'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BusinessRouteRouteImport } from './routes/business/route'
 import { Route as ChooseAccountRouteImport } from './routes/choose-account'
@@ -132,6 +133,11 @@ const AboutRoute = AboutRouteImport.update({
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AqarRoute = AqarRouteImport.update({
+  id: '/aqar',
+  path: '/aqar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -646,6 +652,7 @@ export interface FileRoutesByFullPath {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/aqar': typeof AqarRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -750,6 +757,7 @@ export interface FileRoutesByTo {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/aqar': typeof AqarRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -856,6 +864,7 @@ export interface FileRoutesById {
   '/my': typeof MyRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/aqar': typeof AqarRoute
   '/auth': typeof AuthRoute
   '/choose-account': typeof ChooseAccountRoute
   '/demo': typeof DemoRoute
@@ -964,6 +973,7 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
+    | '/aqar'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -1068,6 +1078,7 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
+    | '/aqar'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -1173,6 +1184,7 @@ export interface FileRouteTypes {
     | '/my'
     | '/$'
     | '/about'
+    | '/aqar'
     | '/auth'
     | '/choose-account'
     | '/demo'
@@ -1280,6 +1292,7 @@ export interface RootRouteChildren {
   MyRouteRoute: typeof MyRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
+  AqarRoute: typeof AqarRoute
   AuthRoute: typeof AuthRoute
   ChooseAccountRoute: typeof ChooseAccountRoute
   DemoRoute: typeof DemoRoute
@@ -1344,6 +1357,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aqar': {
+      id: '/aqar'
+      path: '/aqar'
+      fullPath: '/aqar'
+      preLoaderRoute: typeof AqarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -2223,6 +2243,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyRouteRoute: MyRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
+  AqarRoute: AqarRoute,
   AuthRoute: AuthRoute,
   ChooseAccountRoute: ChooseAccountRoute,
   DemoRoute: DemoRoute,
