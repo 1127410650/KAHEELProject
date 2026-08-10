@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
-import { categoryName, usePrimaryCategories } from "@/lib/mkt-category-tree";
+import { categoryName, primaryCategories, useCategoryTree } from "@/lib/mkt-category-tree";
 
 const ICONS: Record<string, LucideIcon> = {
   "building-2": Building2,
@@ -65,8 +65,8 @@ const labelClass = "w-full truncate text-center text-desc font-bold text-foregro
 export function CategoryTileGrid() {
   const { locale } = useI18n();
   const ar = locale === "ar";
-  const primaries = usePrimaryCategories();
-  const rows = primaries.data ?? [];
+  const tree = useCategoryTree();
+  const rows = primaryCategories(tree.data ?? []);
 
   return (
     <section aria-labelledby="home-categories-title">
