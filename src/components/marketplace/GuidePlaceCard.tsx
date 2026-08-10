@@ -26,7 +26,7 @@ import {
 
 
 /** No source imagery is rendered anywhere — rights are unverified by design. */
-export function GuidePlaceBadges({ place }: { place: GuidePlace }) {
+({ place }: { place: GuidePlace }) {
   if (isOpenStreetMap(place)) {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-gold-soft px-2.5 py-1 text-[10px] font-black text-gold-foreground">
