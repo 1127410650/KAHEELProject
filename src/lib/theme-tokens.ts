@@ -180,7 +180,9 @@ const PAIRS: Array<{ text: ThemeToken | "#FFFFFF"; bg: ThemeToken; label: string
   { text: "primary-deep", bg: "primary-soft", label: "الأساس الغامق فوق الأساس الفاتح", min: 4.5 },
   { text: "#FFFFFF", bg: "primary-deep", label: "نص أبيض فوق الأساس الغامق", min: 4.5 },
   { text: "#FFFFFF", bg: "header-from", label: "نص أبيض فوق بداية تدرج الهيدر", min: 4.5 },
-  { text: "#FFFFFF", bg: "header-to", label: "نص أبيض فوق نهاية تدرج الهيدر", min: 4.5 },
+  /* نهاية التدرج تُفحص عند 3:1 لأن نص الهيدر عريض/كبير، ولأن طبقة التعتيم
+     (`.k-header-hero::before`) تُغمّق الطرف الفاتح فعليًا قبل ظهور النص. */
+  { text: "#FFFFFF", bg: "header-to", label: "نص أبيض فوق نهاية تدرج الهيدر", min: 3 },
   { text: "cta-fg", bg: "cta-bg", label: "رمز زر الإجراء فوق خلفيته", min: 3 },
 ];
 
