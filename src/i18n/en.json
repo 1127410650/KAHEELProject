@@ -4545,6 +4545,108 @@
       "text": "Copyright text",
       "url": "URL",
       "preview": "Live preview"
+    },
+    "studio": {
+      "title": "Kaheel Studio",
+      "subtitle": "Owner command center: numbers, queues and tools in one place.",
+      "eyebrow": "Kaheel admin",
+      "heroTitle": "Kaheel Studio",
+      "heroDesc": "Total arrangement, drawing, platform colors, media and live edit.",
+      "openComposer": "Open composer",
+      "liveEdit": "Live edit mode",
+      "composer": "Composer",
+      "composerDesc": "Total arrangement: blocks, blank page and variants.",
+      "shapes": "Drawing & shapes",
+      "shapesDesc": "Shape library, canvas editor, brand stamp and variations.",
+      "palette": "Platform colors",
+      "paletteDesc": "Palettes, pickers and the contrast guard.",
+      "media": "Media",
+      "mediaDesc": "Image slots, scheduled rotation and image enhancement.",
+      "statsTitle": "Quick numbers",
+      "statsHint": "From real platform data.",
+      "statListings": "Active listings",
+      "statRequests": "Requests today",
+      "statCampaigns": "Live campaigns",
+      "statLastEdit": "Last appearance edit"
+    },
+    "gm": {
+      "range": {
+        "today": "Today",
+        "week": "7 days",
+        "month": "30 days"
+      },
+      "kpi": {
+        "title": "KPIs",
+        "hint": "Real numbers; demo rows excluded.",
+        "withDemo": "With demo",
+        "users": "New users",
+        "listings": "New listings",
+        "errands": "Errand requests",
+        "serviceBookings": "Service bookings",
+        "aqarBookings": "Property requests",
+        "conversations": "New conversations",
+        "campaigns": "Campaign clicks / views",
+        "topups": "Credit top-ups pending",
+        "reviews": "New reviews"
+      },
+      "queue": {
+        "title": "Waiting for you today",
+        "hint": "Each queue with a live count and a direct link.",
+        "waiting": "Needs a decision",
+        "empty": "Nothing waiting",
+        "verifications": "Advertiser verifications",
+        "saleListings": "Sale listing review",
+        "topups": "Credit top-up receipts",
+        "reports": "Reports and complaints",
+        "claims": "Directory claims",
+        "removals": "Directory edit/removal requests",
+        "expiring": "Stories and campaigns ending in 48h"
+      },
+      "feed": {
+        "title": "Activity feed",
+        "hint": "Last 30 events — read only.",
+        "empty": "No activity yet",
+        "kind": {
+          "listing": "New listing",
+          "report": "Report",
+          "appearance": "Appearance edit",
+          "palette": "Color palette",
+          "blocks": "Page blocks"
+        }
+      },
+      "health": {
+        "title": "System health",
+        "hint": "Slots, demo data and the active palette.",
+        "emptySlots": "Empty slots",
+        "demoRows": "Demo rows",
+        "lastEdit": "Last appearance edit",
+        "palette": "Active palette",
+        "purgeHint": "Purge is a soft hide, never a hard delete, and needs two confirmations.",
+        "purge": "Purge demo",
+        "purgeConfirm1": "Are you sure?",
+        "purgeConfirm2": "Yes, hide demo data",
+        "cancel": "Cancel",
+        "purged": "Demo data hidden",
+        "purgeFailed": "Could not hide demo data"
+      },
+      "ai": {
+        "title": "AI spend",
+        "hint": "Separate monthly cap per capability with a hard auto-stop.",
+        "generation": "Image generation",
+        "enhancement": "Image enhancement",
+        "thisMonth": "This month",
+        "remaining": "Remaining",
+        "stopped": "Stopped",
+        "capLabel": "Monthly cap in USD",
+        "saveCap": "Save cap",
+        "saved": "Cap saved",
+        "saveFailed": "Could not save the cap",
+        "badCap": "Invalid value",
+        "capReached": "Monthly cap reached",
+        "dailyReached": "Daily limit reached",
+        "notAllowed": "Not authorized",
+        "failed": "Enhancement failed"
+      }
     }
   }
 }
