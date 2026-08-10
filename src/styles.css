@@ -653,35 +653,36 @@ body {
 /* Radix portals (dialogs, sheets, toasts) render at the end of <body>, so the
  * scope is mirrored onto the body whenever a marketplace shell is mounted. */
 body:has(.market-surface) {
-  /* لافندر فاتح جدًا للصفحة، وأبيض نقي للبطاقات — التباين بينهما هو أداة الفصل. */
-  --background: #f2f0fa;
+  /* لافندر فاتح جدًا للصفحة (مشتق من #8a4fff)، وأبيض نقي للبطاقات. */
+  --background: #f3efff;
   --foreground: #171423;
   --card: #ffffff;
   --card-foreground: #171423;
   --popover: #ffffff;
   --popover-foreground: #171423;
 
-  /* تدرج الهيدر الفاتح المضيء — مُغمّق قليلًا ليحقق 4.5:1 للنص الأبيض. */
-  --header-from: #7a4fc7;
-  --header-to: #8b5cd6;
+  /* تدرج الهوية النهائي المعتمد — قيم لا تُغمّق ولا تُعدّل. */
+  --header-from: #8a4fff;
+  --header-to: #c3abff;
 
-  --primary: #7551c2;
+  --primary: #8a4fff;
   --primary-foreground: #ffffff;
-  --primary-dark: #5f35a8;
-  --primary-pressed: #4a2680;
+  /* درجات مساندة مشتقة من #8a4fff نفسه */
+  --primary-dark: #7a3af5;
+  --primary-pressed: #6522d6;
 
   /* أسطح لافندر أغمق قليلًا من الخلفية — للاختصارات الدائرية والحبّات الهادئة */
-  --secondary: #e6e1f7;
-  --secondary-foreground: #3b2e63;
-  --muted: #edeaf8;
+  --secondary: #e8dfff;
+  --secondary-foreground: #3d2179;
+  --muted: #efe9ff;
   --muted-foreground: #4b4658;
-  --accent: #f4f1fc;
-  --accent-foreground: #4a2680;
+  --accent: #f6f2ff;
+  --accent-foreground: #6522d6;
 
   /* حد رمادي-لافندر رفيع يبقى أداة الفصل الأولى */
-  --border: #e2ddf0;
-  --input: #d6cfea;
-  --ring: #7551c2;
+  --border: #e4dcfa;
+  --input: #d8cdf7;
+  --ring: #8a4fff;
 
   --gold: #f59e0b;
   --gold-dark: #c77b15;
@@ -690,17 +691,17 @@ body:has(.market-surface) {
 
   --sidebar: #ffffff;
   --sidebar-foreground: #171423;
-  --sidebar-accent: #e6e1f7;
+  --sidebar-accent: #e8dfff;
   --sidebar-accent-foreground: #171423;
-  --sidebar-border: #e2ddf0;
-  --sidebar-primary: #7551c2;
+  --sidebar-border: #e4dcfa;
+  --sidebar-primary: #8a4fff;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-ring: #7551c2;
+  --sidebar-ring: #8a4fff;
 
-  --chart-1: #7551c2;
-  --chart-2: #4a2680;
+  --chart-1: #8a4fff;
+  --chart-2: #6522d6;
   --chart-3: #f59e0b;
-  --chart-4: #9d4edd;
+  --chart-4: #c3abff;
 
   background-color: var(--background);
   color: var(--foreground);
@@ -731,11 +732,14 @@ body:has(.market-surface) .shadow-raised {
 }
 
 /*
- * الهيدر: تدرج بنفسجي فاتح مضيء بحواف سفلية دائرية كبيرة. الرموز الدلالية
- * تُعاد توجيهها داخل نطاق الهيدر فقط، فيصبح كل نص وأيقونة أبيض بلا تعديل JSX.
+ * الهيدر/الهيرو: التدرج المعتمد نهائيًا كما هو
+ * linear-gradient(90deg, #8a4fff 0%, #c3abff 100%) — لا يُغمّق.
+ * التباين يُعالج بطبقة تعتيم رقيقة خلف النص فقط (::before) والمحتوى فوقها.
  */
 .k-header-hero {
-  background-image: linear-gradient(135deg, var(--header-from), var(--header-to));
+  position: relative;
+  isolation: isolate;
+  background-image: linear-gradient(90deg, var(--header-from) 0%, var(--header-to) 100%);
   border-bottom-left-radius: 26px;
   border-bottom-right-radius: 26px;
   border-bottom-color: transparent;
@@ -749,11 +753,27 @@ body:has(.market-surface) .shadow-raised {
   --border: rgb(255 255 255 / 0.42);
   --input: rgb(255 255 255 / 0.42);
   --primary: #ffffff;
-  --primary-foreground: #5f35a8;
+  --primary-foreground: #6522d6;
   --accent: rgb(255 255 255 / 0.18);
   --accent-foreground: #ffffff;
   color: #ffffff;
 }
+
+/* طبقة التعتيم: خلف المحتوى فقط، تتكثّف تجاه طرف #c3abff الفاتح. */
+.k-header-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    rgb(43 12 92 / 0.18) 0%,
+    rgb(43 12 92 / 0.46) 100%
+  );
+  border-radius: inherit;
+}
+
 
 .k-header-hero :where(strong, span, a, button) {
   text-shadow: none;
