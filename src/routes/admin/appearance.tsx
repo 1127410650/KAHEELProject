@@ -5,13 +5,14 @@
  * كتابة تمرّ بدوال SECURITY DEFINER تعيد فحص الصلاحية في القاعدة.
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LayoutTemplate } from "lucide-react";
+import { LayoutTemplate, MousePointerClick } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { groupSlotsBySection, useMediaSlots, useRefreshMediaSlots } from "@/lib/mkt-media-slots";
+import { requestLiveEdit } from "@/lib/mkt-live-edit";
 
 export const Route = createFileRoute("/admin/appearance")({
   head: () => ({
@@ -37,12 +38,26 @@ function AppearancePage() {
     <AdminShell
       title="إدارة المظهر والوسائط"
       actions={
+        <div className="flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          className="gap-1.5"
+          onClick={() => {
+            /* الوضع يُفتح على الموقع الفعلي، والقاعدة تعيد التحقق من صفة المدير. */
+            requestLiveEdit(true);
+            window.location.assign("/");
+          }}
+        >
+          <MousePointerClick className="size-4" aria-hidden />
+          وضع التحرير
+        </Button>
         <Button asChild size="sm" variant="outline" className="gap-1.5">
           <Link to="/admin/appearance/variants">
             <LayoutTemplate className="size-4" aria-hidden />
             تصاميم الصفحات
           </Link>
         </Button>
+        </div>
       }
     >
       <p className="mb-4 rounded-2xl border border-primary/25 bg-primary/8 p-3 text-desc text-foreground">
