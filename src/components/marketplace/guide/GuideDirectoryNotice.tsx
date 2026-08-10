@@ -25,7 +25,7 @@ export function GuideDirectoryNotice({
 
   return (
     <aside
-      className="rounded-[var(--r-card)] border border-primary/20 bg-primary/6 p-3 sm:p-3.5"
+      className="rounded-[var(--r-card)] border border-primary/20 bg-primary/6 p-3 sm:p-[var(--sp-4)]"
       aria-label="ملاحظة عن دليل كَحيل"
     >
       <div className="flex items-start gap-2">

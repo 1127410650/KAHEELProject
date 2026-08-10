@@ -136,7 +136,7 @@ function PricingPage() {
     <AdminShell
       title="الأسعار والقيم التشغيلية"
       actions={
-        <Button asChild size="sm" variant="outline" className="gap-1.5">
+        <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
           <Link to="/admin/ad-credit">
             <Wallet className="size-4" aria-hidden />
             أرصدة المحافظ
@@ -196,10 +196,10 @@ function PricingPage() {
           ))}
         </ul>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" className="gap-1.5" onClick={() => setPacks((prev) => [...prev, { credits: 100, amount: 100 }])}>
+          <Button size="sm" variant="outline" className="gap-[var(--sp-2)]" onClick={() => setPacks((prev) => [...prev, { credits: 100, amount: 100 }])}>
             <Plus className="size-4" aria-hidden /> حزمة
           </Button>
-          <Button size="sm" className="gap-1.5" disabled={busy} onClick={savePacks}>
+          <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={savePacks}>
             <Save className="size-4" aria-hidden /> حفظ الحزم
           </Button>
         </div>
@@ -251,12 +251,12 @@ function PricingPage() {
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5"
+            className="gap-[var(--sp-2)]"
             onClick={() => setDurations((prev) => [...prev, { days: "1", points: "10" }])}
           >
             <Plus className="size-4" aria-hidden /> مدة
           </Button>
-          <Button size="sm" className="gap-1.5" disabled={busy} onClick={savePrices}>
+          <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={savePrices}>
             <Save className="size-4" aria-hidden /> حفظ الأسعار
           </Button>
         </div>
@@ -271,7 +271,7 @@ function PricingPage() {
             السعر المعتمد
             <Input className="num mt-1" type="number" min={1} value={usd} onChange={(event) => setUsd(event.target.value)} />
           </label>
-          <Button size="sm" className="gap-1.5" disabled={busy} onClick={saveRate}>
+          <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={saveRate}>
             <Save className="size-4" aria-hidden /> اعتماد
           </Button>
         </div>

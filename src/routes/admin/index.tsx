@@ -159,7 +159,7 @@ function ActionRow({
     <Link
       to={to}
       search={search ?? {}}
-      className="group flex min-h-[68px] items-center gap-3 rounded-[var(--r-card)] border border-border bg-secondary/45 px-3.5 py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
+      className="group flex min-h-[68px] items-center gap-3 rounded-[var(--r-card)] border border-border bg-secondary/45 px-[var(--sp-4)] py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
     >
       <span
         className={
@@ -225,7 +225,7 @@ function AdminHomePage() {
             />
             <div className="relative flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-desc font-bold backdrop-blur">
+                <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full border border-white/20 bg-white/10 px-[var(--sp-3)] py-1 text-desc font-bold backdrop-blur">
                   <Sparkles className="size-3.5" aria-hidden />
                   {t("admin.dashboardBadge")}
                 </span>
@@ -371,7 +371,7 @@ function AdminHomePage() {
               </span>
             </div>
 
-            <div className="mt-4 grid gap-2.5 md:grid-cols-2">
+            <div className="mt-4 grid gap-[var(--sp-3)] md:grid-cols-2">
               <ActionRow
                 to="/admin/listings"
                 label={t("admin.alerts.listingsPending")}

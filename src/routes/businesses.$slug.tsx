@@ -210,7 +210,7 @@ function BusinessPage() {
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
         <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-5">
-          <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5 lg:sticky lg:top-20">
+          <header className="rounded-xl border border-border bg-card p-[var(--sp-4)] sm:p-5 lg:sticky lg:top-20">
             <div className="flex items-start gap-3">
               <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-secondary text-sm font-bold text-muted-foreground">
                 {logo.data ? (
@@ -374,7 +374,7 @@ function BusinessPage() {
                 {chips.length > ACTIVITY_LIMIT && (
                   <button
                     type="button"
-                    className="mt-1.5 text-desc font-semibold text-primary"
+                    className="mt-[var(--sp-2)] text-desc font-semibold text-primary"
                     onClick={() => setAllActivities((v) => !v)}
                   >
                     {t(allActivities ? "market.ad.showLess" : "market.business.showAllActivities")}

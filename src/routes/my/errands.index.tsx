@@ -89,7 +89,7 @@ function MyErrandsPage() {
                     {errandStatusLabel(errand.status, ar)}
                   </Badge>
                 </div>
-                <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
+                <div className="mt-[var(--sp-2)] flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
                   <span>{formatDateTime(errand.created_at)}</span>
                   <span>
                     {ar ? "العروض" : "Offers"}: {errand.offers_count}

@@ -135,7 +135,7 @@ export function LiveDemoEnvironment() {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#eef3f9_0%,#f8fafc_20rem,#f3f6fa_100%)] pb-8 text-slate-950">
       <div className="border-b border-amber-200 bg-amber-50 px-4 py-[var(--sp-3)] text-center text-desc font-black leading-5 text-amber-950 sm:text-desc">
-        <span className="me-1.5 inline-block size-2 rounded-full bg-amber-500 motion-safe:animate-pulse" />
+        <span className="me-[var(--sp-2)] inline-block size-2 rounded-full bg-amber-500 motion-safe:animate-pulse" />
         {text(
           locale,
           "بيئة تجريبية حيّة على كَحيل — البيانات للعرض، ولا تُنفَّذ منها دفعات أو طلبات حقيقية",
@@ -144,10 +144,10 @@ export function LiveDemoEnvironment() {
       </div>
 
       <main className="mx-auto w-full max-w-[1240px] space-y-5 px-[var(--page-x)] py-4 sm:py-6">
-        <section className="relative overflow-hidden rounded-[30px] bg-[#071d46] px-5 py-7 text-white shadow-[0_22px_54px_rgb(7_29_70/0.23)] sm:py-9">
+        <section className="relative overflow-hidden rounded-[30px] bg-[#071d46] px-5 py-[var(--sp-8)] text-white shadow-[0_22px_54px_rgb(7_29_70/0.23)] sm:py-9">
           <div className="absolute -end-16 -top-24 size-72 rounded-full bg-[#1685ff]/30 blur-3xl" />
           <div className="absolute -bottom-24 start-[25%] size-64 rounded-full bg-cyan-300/15 blur-3xl" />
-          <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_0.78fr]">
+          <div className="relative grid items-center gap-[var(--sp-8)] lg:grid-cols-[1fr_0.78fr]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-[var(--sp-2)] text-desc font-black text-cyan-100 backdrop-blur sm:text-desc">
                 <Sparkles className="size-3.5" aria-hidden />
@@ -312,7 +312,7 @@ export function LiveDemoEnvironment() {
               {active.metrics.map((metric) => (
                 <div
                   key={metric.labelAr}
-                  className={`rounded-[var(--r-card)] bg-slate-50 p-3.5 ring-1 ${tone.ring}`}
+                  className={`rounded-[var(--r-card)] bg-slate-50 p-[var(--sp-4)] ring-1 ${tone.ring}`}
                 >
                   <p className="text-desc font-bold text-slate-500 sm:text-desc">
                     {text(locale, metric.labelAr, metric.labelEn)}

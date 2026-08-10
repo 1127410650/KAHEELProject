@@ -134,7 +134,7 @@ function RemovalRequestPage() {
               <CheckCircle2 className="size-4" aria-hidden />
               وصلنا طلبك وسيُراجع يدويًا.
             </p>
-            <p className="mt-1.5 text-desc font-bold text-muted-foreground">
+            <p className="mt-[var(--sp-2)] text-desc font-bold text-muted-foreground">
               سنتواصل معك على وسيلة التواصل التي كتبتها عند الحاجة إلى توضيح.
             </p>
             <Link

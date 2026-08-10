@@ -127,7 +127,7 @@ function JoinPage() {
           {locale === "ar" ? "العودة إلى المزيد" : "Back to More"}
         </Link>
 
-        <section className="mb-4 overflow-hidden rounded-[var(--r-card)] border border-border bg-card p-5 text-foreground shadow-panel sm:p-7">
+        <section className="mb-4 overflow-hidden rounded-[var(--r-card)] border border-border bg-card p-5 text-foreground shadow-panel sm:p-[var(--sp-8)]">
           <span className="grid size-12 place-items-center rounded-[var(--r-card)] bg-accent text-primary">
             <Icon className="size-6" />
           </span>

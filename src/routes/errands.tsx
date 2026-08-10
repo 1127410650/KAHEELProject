@@ -349,7 +349,7 @@ function ErrandsPage() {
                 {ar ? "تكلفة التوصيل" : "Delivery fee"}
               </Label>
               <div className="flex h-9 items-center rounded-md border border-dashed border-primary/40 bg-primary/5 px-[var(--sp-3)] text-desc font-bold text-primary">
-                <PackageSearch className="me-1.5 h-3.5 w-3.5" />
+                <PackageSearch className="me-[var(--sp-2)] h-3.5 w-3.5" />
                 {ar ? "بانتظار عرض الكابتن" : "Waiting for the captain's offer"}
               </div>
             </div>

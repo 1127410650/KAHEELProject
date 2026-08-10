@@ -129,7 +129,7 @@ export function GuideFilterBar({ filters, facets, total, loading, onChange }: Pr
           <ol className="space-y-3">
             {visibleSteps.map((step, index) => (
               <li key={step}>
-                <div className="mb-1.5 flex items-center gap-[var(--sp-2)] text-desc font-black">
+                <div className="mb-[var(--sp-2)] flex items-center gap-[var(--sp-2)] text-desc font-black">
                   <span className="inline-flex size-5 items-center justify-center rounded-full bg-market-navy text-desc text-white">
                     {index + 1}
                   </span>

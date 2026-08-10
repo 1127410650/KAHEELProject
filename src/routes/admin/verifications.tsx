@@ -160,7 +160,7 @@ function AdminVerificationsPage() {
                         <p className="mt-1 text-desc text-destructive">{req.decision_reason}</p>
                       )}
                     </div>
-                    <span className="rounded-full bg-secondary px-2.5 py-0.5 text-desc font-medium text-secondary-foreground">
+                    <span className="rounded-full bg-secondary px-[var(--sp-3)] py-0.5 text-desc font-medium text-secondary-foreground">
                       {t(`market.biz.status.${req.status}`)}
                     </span>
                   </div>
@@ -172,7 +172,7 @@ function AdminVerificationsPage() {
                           <button
                             type="button"
                             onClick={() => void openDoc(d.file_path)}
-                            className="rounded-full border border-border px-2.5 py-1 text-desc text-foreground hover:bg-accent"
+                            className="rounded-full border border-border px-[var(--sp-3)] py-1 text-desc text-foreground hover:bg-accent"
                           >
                             {d.file_name}
                           </button>
@@ -233,7 +233,7 @@ function AdminVerificationsPage() {
               void submitDecision(String(fd.get("reason") ?? ""));
             }}
           >
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="reason">
                 {decision?.action === "approve"
                   ? t("market.admin.noteOptional")

@@ -390,7 +390,7 @@ export function LocationSheet({
                       <p className="truncate text-sm font-bold text-foreground">
                         {address.label}
                         {address.is_default && (
-                          <span className="ms-1.5 rounded-full bg-primary/10 px-[var(--sp-2)] text-desc font-bold text-primary">
+                          <span className="ms-[var(--sp-2)] rounded-full bg-primary/10 px-[var(--sp-2)] text-desc font-bold text-primary">
                             {ar ? "الافتراضي" : "Default"}
                           </span>
                         )}

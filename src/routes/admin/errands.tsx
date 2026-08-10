@@ -139,7 +139,7 @@ function AdminErrandsPage() {
                 {(services.data ?? []).map((service) => (
                   <div
                     key={service.id}
-                    className="flex items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/50 p-2.5"
+                    className="flex items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/50 p-[var(--sp-3)]"
                   >
                     <div className="min-w-0">
                       <p className="truncate text-desc font-bold text-foreground">
@@ -175,7 +175,7 @@ function AdminErrandsPage() {
                 {captains.data!.map((captain) => (
                   <div
                     key={captain.id}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/50 p-2.5"
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/60 bg-card/50 p-[var(--sp-3)]"
                   >
                     <div className="min-w-0">
                       <p className="truncate text-desc font-bold text-foreground">
@@ -190,7 +190,7 @@ function AdminErrandsPage() {
                         <span>{formatDateTime(captain.created_at)}</span>
                       </p>
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-[var(--sp-2)]">
                       <Badge
                         variant={captain.status === "approved" ? "default" : "secondary"}
                         className="text-desc"
@@ -260,7 +260,7 @@ function AdminErrandsPage() {
                 {requests.data!.map((request) => (
                   <div
                     key={request.id}
-                    className="rounded-xl border border-border/60 bg-card/50 p-2.5"
+                    className="rounded-xl border border-border/60 bg-card/50 p-[var(--sp-3)]"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <p className="line-clamp-2 min-w-0 text-desc text-foreground">

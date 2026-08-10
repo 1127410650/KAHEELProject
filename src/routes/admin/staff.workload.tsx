@@ -218,7 +218,7 @@ function AdminWorkforcePage() {
             })
           }
         >
-          <Shuffle className="me-1.5 size-4" aria-hidden />
+          <Shuffle className="me-[var(--sp-2)] size-4" aria-hidden />
           {t("admin.workforce.distribute")}
         </Button>
       </div>
@@ -318,7 +318,7 @@ function AdminWorkforcePage() {
                   </p>
                 </div>
 
-                <div className="flex w-full flex-wrap items-center gap-1.5 sm:w-auto sm:shrink-0">
+                <div className="flex w-full flex-wrap items-center gap-[var(--sp-2)] sm:w-auto sm:shrink-0">
                   <span className="rounded-full bg-secondary px-2 py-0.5 text-desc font-medium text-foreground">
                     {t(`admin.workforce.priority.${item.priority}`)}
                   </span>
@@ -453,7 +453,7 @@ function LeaveDialog({
           </DialogTitle>
         </DialogHeader>
         <div className="grid gap-3">
-          <div className="grid gap-1.5">
+          <div className="grid gap-[var(--sp-2)]">
             <Label>{t("admin.workforce.leaveKindLabel")}</Label>
             <Select value={kind} onValueChange={(value) => setKind(value as LeaveKind)}>
               <SelectTrigger className="h-11">
@@ -469,7 +469,7 @@ function LeaveDialog({
             </Select>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="grid gap-1.5">
+            <div className="grid gap-[var(--sp-2)]">
               <Label htmlFor="leave-start">{t("admin.workforce.from")}</Label>
               <Input
                 id="leave-start"
@@ -479,7 +479,7 @@ function LeaveDialog({
                 onChange={(event) => setStartsOn(event.target.value)}
               />
             </div>
-            <div className="grid gap-1.5">
+            <div className="grid gap-[var(--sp-2)]">
               <Label htmlFor="leave-end">{t("admin.workforce.to")}</Label>
               <Input
                 id="leave-end"
@@ -490,7 +490,7 @@ function LeaveDialog({
               />
             </div>
           </div>
-          <div className="grid gap-1.5">
+          <div className="grid gap-[var(--sp-2)]">
             <Label htmlFor="leave-note">{t("admin.workforce.noteLabel")}</Label>
             <Input
               id="leave-note"
@@ -549,7 +549,7 @@ function StaffCard({
     <div className="rounded-xl border border-border bg-card p-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+          <p className="flex items-center gap-[var(--sp-2)] text-sm font-semibold text-foreground">
             <UserCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             <span className="truncate">{row.label}</span>
           </p>
@@ -622,7 +622,7 @@ function StaffCard({
             </p>
           )}
 
-          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          <div className="mt-2 flex flex-wrap items-center gap-[var(--sp-2)]">
             <Select value={row.department ?? ""} onValueChange={onDepartment}>
               <SelectTrigger
                 className="h-10 w-[11rem] max-w-[52vw]"
@@ -652,7 +652,7 @@ function StaffCard({
               }}
             />
             <Button variant="outline" size="sm" className="min-h-10" onClick={onLeave}>
-              <CalendarOff className="me-1.5 size-4" aria-hidden />
+              <CalendarOff className="me-[var(--sp-2)] size-4" aria-hidden />
               {t("admin.workforce.addLeave")}
             </Button>
           </div>

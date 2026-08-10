@@ -76,7 +76,7 @@ function GuidePlacePage() {
             />
 
             {/* بطاقة واحدة مضغوطة: الاسم + التصنيف + العنوان والتواصل */}
-            <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-3.5 sm:p-4">
+            <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-[var(--sp-4)] sm:p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <h1 className="text-page font-black leading-tight sm:text-[26px]">{data.name_ar}</h1>
@@ -135,13 +135,13 @@ function GuidePlacePage() {
 
             <GuidePlaceCommunity placeId={data.id} placeName={data.name_ar} />
 
-            <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-3.5 text-desc leading-5 sm:p-4">
-              <h2 className="text-section mb-1.5 font-black">المصدر والتحقق</h2>
+            <section className="rounded-[var(--r-card)] border border-border/80 bg-card p-[var(--sp-4)] text-desc leading-5 sm:p-4">
+              <h2 className="text-section mb-[var(--sp-2)] font-black">المصدر والتحقق</h2>
               <p className="text-muted-foreground">
                 {[data.source_label, data.source_type, data.source_date].filter(Boolean).join(" · ") ||
                   "لا يوجد مصدر منشور لهذا السجل."}
               </p>
-              {data.notes ? <p className="mt-1.5 text-muted-foreground">{data.notes}</p> : null}
+              {data.notes ? <p className="mt-[var(--sp-2)] text-muted-foreground">{data.notes}</p> : null}
               <OsmAttribution className="mt-2" />
             </section>
           </article>

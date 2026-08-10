@@ -128,7 +128,7 @@ function StudentToolsPage() {
               </div>
 
               <label className="mt-4 block" htmlFor="student-tools-text">
-                <span className="mb-1.5 block text-desc font-black text-foreground">نص الدرس</span>
+                <span className="mb-[var(--sp-2)] block text-desc font-black text-foreground">نص الدرس</span>
                 <textarea
                   id="student-tools-text"
                   value={studyText}
@@ -153,7 +153,7 @@ function StudentToolsPage() {
                   </ol>
                 </div>
               ) : (
-                <div className="mt-4 rounded-[var(--r-card)] border border-dashed border-border bg-muted/25 px-4 py-7 text-center">
+                <div className="mt-4 rounded-[var(--r-card)] border border-dashed border-border bg-muted/25 px-4 py-[var(--sp-8)] text-center">
                   <BookOpen className="mx-auto size-6 text-muted-foreground" aria-hidden />
                   <p className="mt-2 text-desc text-muted-foreground">
                     ستظهر النتيجة هنا بعد لصق النص.

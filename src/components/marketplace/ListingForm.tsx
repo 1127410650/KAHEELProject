@@ -808,7 +808,7 @@ export function ListingForm({ listing, initialFieldSlug }: Props) {
                   setErrors((prev) => ({ ...prev, path: fieldError("path") ?? undefined }));
               }}
             />
-            {errors.path && <p className="mt-1.5 text-desc text-destructive">{errors.path}</p>}
+            {errors.path && <p className="mt-[var(--sp-2)] text-desc text-destructive">{errors.path}</p>}
             {purposeOptions.length > 1 && (
               <div className="mt-3 space-y-[var(--sp-2)]">
                 <span className="text-sm font-medium text-foreground">

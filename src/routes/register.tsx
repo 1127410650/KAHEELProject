@@ -196,7 +196,7 @@ function RegisterPage() {
   return (
     <Shell>
       <h1 className="text-page font-bold text-foreground">{t("signup.title")}</h1>
-      <p className="mt-1.5 text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
+      <p className="mt-[var(--sp-2)] text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
       <p className="mt-3 rounded-lg bg-secondary p-[var(--sp-3)] text-desc text-muted-foreground">
         {t("signup.inviteNote")}{" "}
         <span dir="ltr" className="font-semibold text-foreground">
@@ -207,7 +207,7 @@ function RegisterPage() {
         {t("signup.adsSyriaOnly")}
       </p>
 
-      <form onSubmit={onInviteSubmit} className="mt-5 space-y-3.5">
+      <form onSubmit={onInviteSubmit} className="mt-5 space-y-[var(--sp-4)]">
         <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="full_name">{nameLabel}</Label>
           <Input id="full_name" required value={form.full_name} onChange={set("full_name")} />
@@ -338,14 +338,14 @@ function PublicSignupForm() {
   return (
     <Shell>
       <h1 className="text-page font-bold text-foreground">{t("signup.publicTitle")}</h1>
-      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-[var(--sp-2)] text-sm leading-relaxed text-muted-foreground">
         {t("signup.publicSubtitle")}
       </p>
       <p className="mt-3 rounded-lg border border-primary/15 bg-primary/5 p-[var(--sp-3)] text-desc font-semibold text-primary">
         {t("signup.adsSyriaOnly")}
       </p>
 
-      <form onSubmit={onSubmit} className="mt-5 space-y-3.5">
+      <form onSubmit={onSubmit} className="mt-5 space-y-[var(--sp-4)]">
         <div className="space-y-[var(--sp-2)]">
           <Label htmlFor="p_full_name">{nameLabel}</Label>
           <Input id="p_full_name" required value={form.full_name} onChange={set("full_name")} />

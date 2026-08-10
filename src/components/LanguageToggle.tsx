@@ -33,7 +33,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => change("ar")}
         className={cn(
-          "rounded-full px-1.5 py-1 text-desc font-semibold leading-none transition-colors md:text-desc",
+          "rounded-full px-[var(--sp-2)] py-1 text-desc font-semibold leading-none transition-colors md:text-desc",
           locale === "ar"
             ? "bg-primary text-primary-foreground"
             : "text-muted-foreground hover:text-foreground",
@@ -46,7 +46,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => change("en")}
         className={cn(
-          "rounded-full px-1.5 py-1 text-desc font-semibold leading-none transition-colors md:text-desc",
+          "rounded-full px-[var(--sp-2)] py-1 text-desc font-semibold leading-none transition-colors md:text-desc",
           locale === "en"
             ? "bg-primary text-primary-foreground"
             : "text-muted-foreground hover:text-foreground",

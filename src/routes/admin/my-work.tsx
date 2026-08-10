@@ -268,7 +268,7 @@ function WorkList({
                     {item.auto_assigned && <span>{t("admin.workforce.autoAssigned")}</span>}
                   </p>
                 </div>
-                <div className="flex shrink-0 flex-wrap items-center gap-1.5">{renderActions(item)}</div>
+                <div className="flex shrink-0 flex-wrap items-center gap-[var(--sp-2)]">{renderActions(item)}</div>
               </div>
             </div>
           ))}

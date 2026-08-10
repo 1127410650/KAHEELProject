@@ -319,10 +319,10 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               <p className="text-desc font-semibold tracking-wide text-market-silver sm:text-sm">
                 {t("market.realEstate.eyebrow")}
               </p>
-              <h1 className="mt-1.5 font-bold leading-tight">
+              <h1 className="mt-[var(--sp-2)] font-bold leading-tight">
                 {t("market.realEstate.heroTitle")}
               </h1>
-              <p className="mt-1.5 max-w-xl text-market-silver">
+              <p className="mt-[var(--sp-2)] max-w-xl text-market-silver">
                 {t("market.realEstate.heroDescription")}
               </p>
             </div>
@@ -413,7 +413,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
               })}
             </div>
 
-            <div className="real-estate-deferred mt-7">
+            <div className="real-estate-deferred mt-[var(--sp-8)]">
               <SectionHeading
                 title={t("market.realEstate.propertyTypesTitle")}
                 description={t("market.realEstate.propertyTypesDescription")}
@@ -458,7 +458,7 @@ export function RealEstateExperience({ params, onUpdate }: RealEstateExperienceP
             </div>
 
 
-            <div className="real-estate-deferred mt-7">
+            <div className="real-estate-deferred mt-[var(--sp-8)]">
               <SectionHeading
                 title={t("market.realEstate.citiesTitle")}
                 description={t("market.realEstate.citiesDescription")}

@@ -318,7 +318,7 @@ function AdminNavList({ items, onNavigate }: { items: NavItem[]; onNavigate?: ()
 
         return (
           <div key={section}>
-            <p className="mb-1.5 px-3 text-desc font-bold tracking-[0.08em] text-muted-foreground/75">
+            <p className="mb-[var(--sp-2)] px-3 text-desc font-bold tracking-[0.08em] text-muted-foreground/75">
               {t(`admin.navSections.${section}`)}
             </p>
             <div className="space-y-1">

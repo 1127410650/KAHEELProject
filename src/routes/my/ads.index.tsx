@@ -513,7 +513,7 @@ function MyAdsPage() {
                   </p>
 
 
-                  <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-desc text-muted-foreground">
+                  <p className="mt-[var(--sp-2)] flex flex-wrap gap-x-3 gap-y-0.5 text-desc text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Eye className="size-3" aria-hidden />
                       <span dir="ltr">{ad.views_count ?? 0}</span>

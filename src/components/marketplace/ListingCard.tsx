@@ -363,7 +363,7 @@ export function ListingCard({
 
           {/* Two reserved lines: the height is identical for one- and
               two-line titles, which is what keeps the rails shift-free. */}
-          <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-title font-semibold text-foreground sm:text-title">
+          <h3 className="mt-[var(--sp-2)] line-clamp-2 min-h-[2.6em] text-title font-semibold text-foreground sm:text-title">
             {listing.title}
           </h3>
 
@@ -415,7 +415,7 @@ export function ListingCardSkeleton() {
         <span className="flex h-[18px] items-center">
           <span className="k-skel h-3.5 w-14 rounded-full" />
         </span>
-        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+        <div className="mt-[var(--sp-2)] min-h-[2.6em] space-y-1">
           <span className="k-skel block h-[0.95em] w-full rounded" />
           <span className="k-skel block h-[0.95em] w-3/5 rounded" />
         </div>
@@ -443,7 +443,7 @@ export function ListingRowSkeleton() {
         <span className="flex h-[18px] items-center">
           <span className="k-skel h-3.5 w-16 rounded-full" />
         </span>
-        <div className="mt-1.5 min-h-[2.6em] space-y-1">
+        <div className="mt-[var(--sp-2)] min-h-[2.6em] space-y-1">
           <span className="k-skel block h-[0.95em] w-full rounded" />
           <span className="k-skel block h-[0.95em] w-2/3 rounded" />
         </div>

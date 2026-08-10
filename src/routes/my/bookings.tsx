@@ -186,14 +186,14 @@ function MyBookingsPage() {
                     </div>
                     <div className="grid gap-2 rounded-[var(--r-card)] bg-secondary/50 p-3 text-sm sm:grid-cols-2">
                       <p>
-                        <CalendarCheck2 className="me-1.5 inline size-4 text-primary" />
+                        <CalendarCheck2 className="me-[var(--sp-2)] inline size-4 text-primary" />
                         {new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", {
                           dateStyle: "medium",
                           timeZone: booking.timezone,
                         }).format(new Date(booking.starts_at))}
                       </p>
                       <p>
-                        <Clock3 className="me-1.5 inline size-4 text-primary" />
+                        <Clock3 className="me-[var(--sp-2)] inline size-4 text-primary" />
                         {new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", {
                           hour: "numeric",
                           minute: "2-digit",

@@ -30,7 +30,7 @@ export function BigSearchField() {
           search={{ filters: 1 }}
           aria-label={detailed}
           title={detailed}
-          className="me-1.5 inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+          className="me-[var(--sp-2)] inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
         >
           <SlidersHorizontal className="size-4" aria-hidden />
         </Link>

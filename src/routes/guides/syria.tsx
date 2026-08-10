@@ -120,7 +120,7 @@ function SyriaGuidePage() {
               مصادر ظاهرة وشارات تحقق صادقة
             </span>
             <h1 className="max-w-3xl font-black">دليل سوريا</h1>
-            <p className="mt-1.5 max-w-2xl text-muted-foreground">
+            <p className="mt-[var(--sp-2)] max-w-2xl text-muted-foreground">
               جهات حكومية ومشافٍ وجامعات وخدمات وأماكن، مع اتجاهات وطرق تواصل مباشرة.
             </p>
             <div className="mt-[var(--sp-3)] flex flex-wrap gap-2 text-desc font-bold text-muted-foreground sm:text-desc">
@@ -212,7 +212,7 @@ function SyriaGuidePage() {
           <GuideDirectoryNotice />
         </div>
 
-        <section className="mx-auto w-full max-w-[1240px] px-[var(--page-x)] py-5 sm:py-7">
+        <section className="mx-auto w-full max-w-[1240px] px-[var(--page-x)] py-5 sm:py-[var(--sp-8)]">
           {places.isLoading ? (
             <div className="grid grid-cols-1 gap-[var(--sp-4)] sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, index) => (

@@ -109,7 +109,7 @@ function MerchantOrdersPage() {
     return (
       <DashboardShell title={locale === "ar" ? "إدارة الطلبات" : "Order management"}>
         <Card className="rounded-[var(--r-card)]">
-          <CardContent className="space-y-3 p-7 text-center">
+          <CardContent className="space-y-3 p-[var(--sp-8)] text-center">
             <PackageCheck className="mx-auto size-10 text-primary" />
             <p className="font-black">
               {locale === "ar"

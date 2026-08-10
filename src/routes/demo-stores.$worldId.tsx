@@ -57,8 +57,8 @@ function DemoStoreWorldPage() {
               <Sparkles className="size-3.5" aria-hidden />
               {world.eyebrow}
             </span>
-            <h1 className="mt-1.5 max-w-3xl font-black leading-tight drop-shadow">{world.title}</h1>
-            <p className="mt-1.5 max-w-2xl text-white/78">{world.description}</p>
+            <h1 className="mt-[var(--sp-2)] max-w-3xl font-black leading-tight drop-shadow">{world.title}</h1>
+            <p className="mt-[var(--sp-2)] max-w-2xl text-white/78">{world.description}</p>
 
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <Link
@@ -105,7 +105,7 @@ function DemoStoreWorldPage() {
                   </div>
                 </div>
 
-                <div className="p-3.5">
+                <div className="p-[var(--sp-4)]">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-desc font-bold text-muted-foreground">{store.count}</span>
                     <span className="inline-flex items-center gap-1 text-desc font-bold text-primary">

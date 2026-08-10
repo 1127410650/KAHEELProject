@@ -66,7 +66,7 @@ function VariantsPage() {
     <AdminShell
       title="تصاميم الصفحات"
       actions={
-        <Button asChild size="sm" variant="outline" className="gap-1.5">
+        <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
           <Link to="/admin/appearance">
             <Images className="size-4" aria-hidden />
             إدارة الوسائط

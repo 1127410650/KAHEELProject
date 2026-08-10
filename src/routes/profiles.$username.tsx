@@ -131,7 +131,7 @@ function UserProfilePage() {
   return (
     <MarketShell>
       <div className="mx-auto w-full max-w-7xl px-[var(--page-x)] py-4 sm:py-6">
-        <header className="rounded-xl border border-border bg-card p-3.5 sm:p-5">
+        <header className="rounded-xl border border-border bg-card p-[var(--sp-4)] sm:p-5">
           <div className="flex items-start gap-3">
             <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-sm font-bold text-muted-foreground">
               {avatar.data ? (
@@ -151,7 +151,7 @@ function UserProfilePage() {
               </h1>
               {/* The trust check mark lives under the name only. */}
               <VerifiedBadge status={me.verification_status} />
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
+              <div className="mt-[var(--sp-2)] flex flex-wrap items-center gap-x-3 gap-y-1 text-desc text-muted-foreground">
                 <span>{t("market.person.kindIndividual")}</span>
                 {city && (
                   <span className="inline-flex min-w-0 items-center gap-1">

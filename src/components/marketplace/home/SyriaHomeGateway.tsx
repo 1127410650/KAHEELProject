@@ -123,7 +123,7 @@ export function SyriaHomeGateway() {
               {gateway.description}
             </p>
 
-            <span className="mt-1 inline-flex items-center gap-1 text-desc font-black text-brand-700 sm:mt-1.5 sm:text-desc">
+            <span className="mt-1 inline-flex items-center gap-1 text-desc font-black text-brand-700 sm:mt-[var(--sp-2)] sm:text-desc">
               {gateway.cta}
               <ArrowLeft className="size-3.5 transition group-hover:-translate-x-0.5" aria-hidden />
             </span>

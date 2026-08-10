@@ -127,8 +127,8 @@ function AdminReportsPage() {
             onClick={() => set("worklist", key)}
             className={
               filters.worklist === key
-                ? "shrink-0 rounded-full bg-primary px-3 py-1.5 text-desc font-semibold text-primary-foreground"
-                : "shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-desc font-medium text-foreground hover:bg-accent"
+                ? "shrink-0 rounded-full bg-primary px-3 py-[var(--sp-2)] text-desc font-semibold text-primary-foreground"
+                : "shrink-0 rounded-full border border-border bg-card px-3 py-[var(--sp-2)] text-desc font-medium text-foreground hover:bg-accent"
             }
           >
             {t(`market.reports.admin.worklist.${key}`)}

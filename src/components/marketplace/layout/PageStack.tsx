@@ -167,7 +167,7 @@ export function PageProgressStrip({ steps }: { steps: ProgressStep[] }) {
         <span className="block truncate text-desc font-black text-brand-950">{next.label}</span>
         <span
           aria-hidden
-          className="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-brand-300/45"
+          className="mt-[var(--sp-2)] block h-1.5 w-full overflow-hidden rounded-full bg-brand-300/45"
         >
           <span
             className="block h-full rounded-full bg-[linear-gradient(90deg,#8A4FFF,#C3ABFF)]"

@@ -152,7 +152,7 @@ export function AdminAssignmentBar({
           <select
             value={target}
             onChange={(event) => setTarget(event.target.value)}
-            className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground"
+            className="mt-[var(--sp-2)] h-11 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground"
           >
             <option value="">—</option>
             {(officers.data ?? [])

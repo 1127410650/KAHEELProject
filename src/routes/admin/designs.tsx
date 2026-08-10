@@ -233,7 +233,7 @@ function DesignsPage() {
                 key={kind}
                 size="sm"
                 variant={draft.kind === kind ? "default" : "outline"}
-                className="gap-1.5"
+                className="gap-[var(--sp-2)]"
                 onClick={() => set("kind", kind)}
               >
                 {kind === "offer" ? <Tag className="size-4" aria-hidden /> : <Megaphone className="size-4" aria-hidden />}
@@ -312,7 +312,7 @@ function DesignsPage() {
 
 
 
-            <fieldset className="rounded-[var(--r-card)] border border-border p-2.5">
+            <fieldset className="rounded-[var(--r-card)] border border-border p-[var(--sp-3)]">
               <legend className="px-1 text-desc font-bold text-foreground">الخلفية</legend>
               <div className="flex flex-wrap items-center gap-2">
                 <input
@@ -350,7 +350,7 @@ function DesignsPage() {
               </div>
             </fieldset>
 
-            <fieldset className="rounded-[var(--r-card)] border border-border p-2.5">
+            <fieldset className="rounded-[var(--r-card)] border border-border p-[var(--sp-3)]">
               <legend className="px-1 text-desc font-bold text-foreground">الشكل والحركة</legend>
               <div className="grid grid-cols-2 gap-2">
                 <label className="text-desc font-bold text-foreground">
@@ -442,7 +442,7 @@ function DesignsPage() {
             </fieldset>
 
             {draft.kind === "promo" ? (
-              <fieldset className="rounded-[var(--r-card)] border border-border p-2.5">
+              <fieldset className="rounded-[var(--r-card)] border border-border p-[var(--sp-3)]">
                 <legend className="px-1 text-desc font-bold text-foreground">الجدولة والحملة</legend>
                 <label className="block text-desc font-bold text-foreground">
                   حملة قائمة
@@ -469,7 +469,7 @@ function DesignsPage() {
             ) : null}
 
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" className="gap-1.5" disabled={busy} onClick={() => void save()}>
+              <Button size="sm" className="gap-[var(--sp-2)]" disabled={busy} onClick={() => void save()}>
                 <Save className="size-4" aria-hidden />
                 {editing ? "حفظ التعديل" : "حفظ في تصاميمي"}
               </Button>
@@ -511,7 +511,7 @@ function DesignsPage() {
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(templates.data ?? []).map((row) => (
-              <li key={row.id} className="space-y-2 rounded-[var(--r-card)] border border-border bg-card p-2.5">
+              <li key={row.id} className="space-y-2 rounded-[var(--r-card)] border border-border bg-card p-[var(--sp-3)]">
                 <DesignCard template={row} library={lib.data} />
                 <p className="text-desc font-bold text-foreground">{row.name_ar}</p>
                 <p className="text-desc text-muted-foreground">
@@ -550,7 +550,7 @@ function DesignsPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="gap-1.5"
+                    className="gap-[var(--sp-2)]"
                     onClick={() => {
                       setVariations(generateVariations(row, lib.data));
                       setVariationSource(row.name_ar);
@@ -586,7 +586,7 @@ function DesignsPage() {
           </p>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {variations.map((row) => (
-              <li key={row.id} className="space-y-2 rounded-[var(--r-card)] border border-border bg-card p-2.5">
+              <li key={row.id} className="space-y-2 rounded-[var(--r-card)] border border-border bg-card p-[var(--sp-3)]">
                 <DesignCard template={row} library={lib.data} />
                 <p className="text-desc font-bold text-foreground">{row.name_ar}</p>
                 <Button
@@ -620,7 +620,7 @@ function DesignsPage() {
         aria-labelledby="ai-studio"
         className="mt-6 rounded-[var(--r-card)] border border-border bg-card p-3"
       >
-        <h2 id="ai-studio" className="flex items-center gap-1.5 text-section font-extrabold text-foreground">
+        <h2 id="ai-studio" className="flex items-center gap-[var(--sp-2)] text-section font-extrabold text-foreground">
           <Sparkles className="size-4 text-primary" aria-hidden />
           توليد صور جديدة بالذكاء الاصطناعي
         </h2>

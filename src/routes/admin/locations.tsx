@@ -141,7 +141,7 @@ function AdminGeoPage() {
           <Label htmlFor="admin-country">{t("market.geo.country")}</Label>
           <select
             id="admin-country"
-            className={`${selectClass} mt-1.5`}
+            className={`${selectClass} mt-[var(--sp-2)]`}
             value={countryId}
             onChange={(e) => setCountryId(e.target.value)}
           >

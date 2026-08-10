@@ -46,7 +46,7 @@ function AppearancePage() {
         <div className="flex flex-wrap gap-2">
         <Button
           size="sm"
-          className="gap-1.5"
+          className="gap-[var(--sp-2)]"
           onClick={() => {
             /* الوضع يُفتح على الموقع الفعلي، والقاعدة تعيد التحقق من صفة المدير. */
             requestLiveEdit(true);
@@ -56,19 +56,19 @@ function AppearancePage() {
           <MousePointerClick className="size-4" aria-hidden />
           وضع التحرير
         </Button>
-        <Button asChild size="sm" variant="outline" className="gap-1.5">
+        <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
           <Link to="/admin/designs">
             <Sparkles className="size-4" aria-hidden />
             بانِ العروض والترويج
           </Link>
         </Button>
-        <Button asChild size="sm" variant="outline" className="gap-1.5">
+        <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
           <Link to="/admin/pricing">
             <CircleDollarSign className="size-4" aria-hidden />
             الأسعار والقيم
           </Link>
         </Button>
-        <Button asChild size="sm" variant="outline" className="gap-1.5">
+        <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
           <Link to="/admin/appearance/variants">
             <LayoutTemplate className="size-4" aria-hidden />
             تصاميم الصفحات
@@ -84,7 +84,7 @@ function AppearancePage() {
       </p>
 
       <details className="mb-4 rounded-[var(--r-card)] border border-border bg-card p-3">
-        <summary className="flex cursor-pointer items-center gap-1.5 text-section font-extrabold text-foreground">
+        <summary className="flex cursor-pointer items-center gap-[var(--sp-2)] text-section font-extrabold text-foreground">
           <Sparkles className="size-4 text-primary" aria-hidden />
           مكتبة تصاميمي — توليد بالذكاء الاصطناعي
         </summary>

@@ -197,7 +197,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
           </Button>
         </div>
         {blocked ? (
-          <p className="mt-2 flex items-center gap-1.5 text-desc font-bold text-destructive">
+          <p className="mt-2 flex items-center gap-[var(--sp-2)] text-desc font-bold text-destructive">
             <AlertTriangle className="size-4" aria-hidden />
             التوليد موقوف آليًا حتى بداية الشهر أو رفع السقف.
           </p>
@@ -245,7 +245,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
         <div className="flex flex-wrap items-end gap-3">
           <div>
             <Label className="text-desc">المقاس</Label>
-            <div className="mt-1 flex flex-wrap gap-1.5">
+            <div className="mt-1 flex flex-wrap gap-[var(--sp-2)]">
               {STUDIO_SIZES.map((size) => (
                 <Button
                   key={size.key}
@@ -262,7 +262,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
           </div>
           <div>
             <Label className="text-desc">عدد الصور (حتى {MAX_PER_REQUEST})</Label>
-            <div className="mt-1 flex gap-1.5">
+            <div className="mt-1 flex gap-[var(--sp-2)]">
               {[1, 2, 3, 4].map((value) => (
                 <Button
                   key={value}
@@ -290,7 +290,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
               if (file) void pickReference(file);
             }}
           />
-          <Button size="sm" variant="outline" className="h-11 gap-1.5" onClick={() => refInput.current?.click()}>
+          <Button size="sm" variant="outline" className="h-11 gap-[var(--sp-2)]" onClick={() => refInput.current?.click()}>
             <ImageUp className="size-4" aria-hidden />
             صورة مرجعية «مثلها بأسلوبنا»
           </Button>
@@ -304,7 +304,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
           ) : null}
         </div>
 
-        <Button className="h-11 w-full gap-1.5" disabled={busy || blocked} onClick={() => void run()}>
+        <Button className="h-11 w-full gap-[var(--sp-2)]" disabled={busy || blocked} onClick={() => void run()}>
           {busy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Wand2 className="size-4" aria-hidden />}
           {busy ? "يولّد…" : "ولّد بالذكاء الاصطناعي"}
         </Button>
@@ -325,7 +325,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
                 {candidate.width.toLocaleString("en-US")}×{candidate.height.toLocaleString("en-US")} ·{" "}
                 {readableSize(candidate.stamped.size)} · مختومة
               </p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
                 {slot ? (
                   <Button
                     size="sm"
@@ -367,7 +367,7 @@ export function BrandImageStudio({ slot, onChanged }: Props) {
         <summary className="cursor-pointer text-desc font-extrabold text-foreground">
           سجل التوليد ({(jobs.data ?? []).length.toLocaleString("en-US")})
         </summary>
-        <ul className="mt-2 space-y-1.5">
+        <ul className="mt-2 space-y-[var(--sp-2)]">
           {(jobs.data ?? []).map((job) => (
             <li key={job.id} className="text-desc text-muted-foreground">
               <span className="font-bold text-foreground">{job.prompt.slice(0, 60)}</span> ·{" "}

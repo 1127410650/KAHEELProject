@@ -206,7 +206,7 @@ function AdminUsersPage() {
           <Link
             to="/admin/users"
             search={{ restricted: undefined }}
-            className="min-h-11 py-2.5 text-primary underline-offset-4 hover:underline"
+            className="min-h-11 py-[var(--sp-3)] text-primary underline-offset-4 hover:underline"
           >
             {t("market.filters.all")}
           </Link>
@@ -316,7 +316,7 @@ function AdminUsersPage() {
                   </div>
                   <ActionsMenu row={row} />
                 </div>
-                <dl className="mt-2 grid grid-cols-2 gap-1.5 text-desc">
+                <dl className="mt-2 grid grid-cols-2 gap-[var(--sp-2)] text-desc">
                   <div className="flex gap-1">
                     <dt className="text-muted-foreground">{t("admin.users.created")}:</dt>
                     <dd className="tabular-nums text-foreground">{formatDate(row.created_at)}</dd>

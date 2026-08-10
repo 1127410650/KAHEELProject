@@ -242,7 +242,7 @@ export function CallOverlay() {
         )}
 
         {!incoming && !ended && (
-          <div className="mx-auto flex max-w-sm items-center justify-center gap-7">
+          <div className="mx-auto flex max-w-sm items-center justify-center gap-[var(--sp-8)]">
             <button
               type="button"
               onClick={toggleMute}

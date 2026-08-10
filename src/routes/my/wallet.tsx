@@ -91,7 +91,7 @@ function PointsPage() {
             {t("market.points.balance")}
           </p>
           {wallet.isLoading ? (
-            <Skeleton className="mt-1.5 h-6 w-16" />
+            <Skeleton className="mt-[var(--sp-2)] h-6 w-16" />
           ) : (
             <p className="mt-1 text-xl font-bold text-foreground" dir="ltr">
               {formatNumber(wallet.data?.balance_points ?? 0)}
@@ -101,7 +101,7 @@ function PointsPage() {
         <div className="rounded-xl border border-border bg-card p-3">
           <p className="text-desc text-muted-foreground">{t("market.points.lifetimeSpent")}</p>
           {wallet.isLoading ? (
-            <Skeleton className="mt-1.5 h-6 w-16" />
+            <Skeleton className="mt-[var(--sp-2)] h-6 w-16" />
           ) : (
             <p className="mt-1 text-xl font-bold text-foreground" dir="ltr">
               {formatNumber(wallet.data?.lifetime_spent ?? 0)}

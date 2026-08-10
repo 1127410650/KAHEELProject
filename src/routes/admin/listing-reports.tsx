@@ -475,7 +475,7 @@ function ReportCard({
             id={report.listing_id}
             name={report.listing_title}
             truncate
-            className="mt-1 min-h-11 py-2.5 text-sm font-medium"
+            className="mt-1 min-h-11 py-[var(--sp-3)] text-sm font-medium"
           />
           <p dir="ltr" className="font-mono text-desc text-muted-foreground">
             {report.listing_ref ?? "—"}
@@ -714,7 +714,7 @@ function CaseDrawer({
       <AdminListingLink
         id={report.listing_id}
         name={t("market.lr.openListing")}
-        className="mt-3 min-h-11 py-2.5 text-desc font-medium"
+        className="mt-3 min-h-11 py-[var(--sp-3)] text-desc font-medium"
       />
 
 

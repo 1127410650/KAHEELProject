@@ -63,7 +63,7 @@ export function ReasonDialog({
             value={reason}
             onChange={(event) => setReason(event.target.value)}
             rows={3}
-            className="mt-1.5"
+            className="mt-[var(--sp-2)]"
             placeholder={t("admin.reasonHint")}
           />
         </label>

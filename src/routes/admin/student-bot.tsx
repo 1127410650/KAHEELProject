@@ -411,7 +411,7 @@ function AdminStudentBotPage() {
                 {data.subjects.map((row) => (
                   <li
                     key={`${row.grade}-${row.subject}`}
-                    className="flex items-center justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
+                    className="flex items-center justify-between gap-2 rounded-lg bg-background px-[var(--sp-3)] py-[var(--sp-2)]"
                   >
                     <span className="truncate text-desc font-bold text-foreground">
                       {row.subject}
@@ -436,7 +436,7 @@ function AdminStudentBotPage() {
                 {data.top_questions.map((row, index) => (
                   <li
                     key={`${index}-${row.question.slice(0, 12)}`}
-                    className="flex items-start justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
+                    className="flex items-start justify-between gap-2 rounded-lg bg-background px-[var(--sp-3)] py-[var(--sp-2)]"
                   >
                     <span className="line-clamp-2 text-desc text-foreground">{row.question}</span>
                     <span className="shrink-0 text-desc tabular-nums text-muted-foreground">

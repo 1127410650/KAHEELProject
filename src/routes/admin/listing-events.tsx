@@ -247,7 +247,7 @@ function AdminListingEventsPage() {
                 </span>
               </div>
 
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-[var(--sp-2)]">
                 {ADMIN_LISTING_ACTIONS.filter((action) =>
                   staff.can(ADMIN_ACTION_PERM[action] as StaffPerm),
                 ).map((action) => (

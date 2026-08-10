@@ -215,7 +215,7 @@ export function StoreTemplatePicker({ onSelect }: { onSelect: (template: StoreTe
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${template.gradient}`} aria-hidden />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_38%)]" aria-hidden />
-              <div className="relative flex h-full min-h-48 flex-col p-3.5 text-white sm:min-h-52 sm:p-4">
+              <div className="relative flex h-full min-h-48 flex-col p-[var(--sp-4)] text-white sm:min-h-52 sm:p-4">
                 <div className="flex items-start justify-between gap-2">
                   <span className="grid size-10 place-items-center rounded-xl border border-white/20 bg-white/15 backdrop-blur sm:size-12 sm:rounded-[var(--r-card)]">
                     <Icon className="size-5 sm:size-6" aria-hidden />

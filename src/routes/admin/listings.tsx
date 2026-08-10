@@ -408,7 +408,7 @@ function AdminListingsPage() {
               void submitDecision(String(fd.get("reason") ?? ""));
             }}
           >
-            <div className="space-y-1.5">
+            <div className="space-y-[var(--sp-2)]">
               <Label htmlFor="reason">
                 {decision?.action === "approve"
                   ? t("market.admin.noteOptional")

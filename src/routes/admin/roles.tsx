@@ -96,7 +96,7 @@ function AdminRolesPage() {
               <div key={row.user_id} className="rounded-xl border border-border bg-card p-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-foreground">
+                    <p className="flex items-center gap-[var(--sp-2)] truncate text-sm font-semibold text-foreground">
                       {row.platform_role === "system_owner" ? (
                         <ShieldCheck className="size-4 shrink-0 text-primary" aria-hidden />
                       ) : (
@@ -111,7 +111,7 @@ function AdminRolesPage() {
                       </p>
                     )}
                   </div>
-                  <div className="flex shrink-0 items-center gap-1.5">
+                  <div className="flex shrink-0 items-center gap-[var(--sp-2)]">
                     <span className="rounded-full bg-secondary px-2 py-0.5 text-desc font-medium text-foreground">
                       {row.platform_role
                         ? t(`admin.role.${row.platform_role === "system_owner" ? "systemOwner" : "platformAdmin"}`)
@@ -159,7 +159,7 @@ function AdminRolesPage() {
                 </div>
 
                 {open && (
-                  <div className="mt-3 grid gap-1.5 border-t border-border pt-3 sm:grid-cols-2">
+                  <div className="mt-3 grid gap-[var(--sp-2)] border-t border-border pt-3 sm:grid-cols-2">
                     {STAFF_PERMISSIONS.map((perm) => {
                       const granted = row.staff_perms.includes(perm);
                       return (

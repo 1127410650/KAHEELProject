@@ -282,7 +282,7 @@ export function PageBlocks({ blocks, overrides, className }: PageBlocksProps) {
   const rails = useHomeRails(railSpecs);
 
   return (
-    <div className={cn("space-y-5 sm:space-y-7", className)}>
+    <div className={cn("space-y-5 sm:space-y-[var(--sp-8)]", className)}>
       {blocks.map((block) => {
         const override = overrides?.[block.block_type];
         if (override) return <div key={block.id}>{override(block)}</div>;

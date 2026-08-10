@@ -180,7 +180,7 @@ function ProviderOperationsPage() {
     <DashboardShell title={locale === "ar" ? "مركز التشغيل" : "Operations center"}>
       <div className="space-y-5">
         <Card className="overflow-hidden rounded-[var(--r-card)] border-0 bg-gradient-to-br from-market-navy via-primary-pressed to-primary-deep text-white shadow-xl">
-          <CardContent className="space-y-5 p-5 sm:p-7">
+          <CardContent className="space-y-5 p-5 sm:p-[var(--sp-8)]">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
@@ -235,7 +235,7 @@ function ProviderOperationsPage() {
               <h2 className="mt-4 font-black text-foreground group-hover:text-primary">
                 {module.title}
               </h2>
-              <p className="mt-1.5 text-desc leading-6 text-muted-foreground">{module.hint}</p>
+              <p className="mt-[var(--sp-2)] text-desc leading-6 text-muted-foreground">{module.hint}</p>
             </Link>
           ))}
         </div>

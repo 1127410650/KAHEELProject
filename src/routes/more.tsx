@@ -196,7 +196,7 @@ function MorePage() {
             {/* Active account card — display only, no sensitive data. */}
             <section ref={accountsRef} className="mt-5 scroll-mt-20">
               <h2 className="text-section mb-2 font-bold text-foreground">{t("market.more.account")}</h2>
-              <div className="market-section flex items-center gap-3 p-3.5">
+              <div className="market-section flex items-center gap-3 p-[var(--sp-4)]">
                 {active.avatar_url ? (
                   <img
                     src={active.avatar_url}
@@ -449,7 +449,7 @@ function JoinSection({
               </span>
               {application ? (
                 <span
-                  className={`mt-1.5 inline-flex rounded-full px-2 py-0.5 text-desc font-bold ${
+                  className={`mt-[var(--sp-2)] inline-flex rounded-full px-2 py-0.5 text-desc font-bold ${
                     application.status === "approved"
                       ? "bg-success-soft text-success-strong"
                       : application.status === "rejected" || application.status === "withdrawn"

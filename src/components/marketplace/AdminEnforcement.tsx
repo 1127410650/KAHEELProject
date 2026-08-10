@@ -221,7 +221,7 @@ export function AdminEnforcement({
               onChange={(event) => setDays(event.target.value.replace(/\D/g, ""))}
               inputMode="numeric"
               placeholder={t("admin.detail.durationHint")}
-              className="mt-1.5 tabular-nums"
+              className="mt-[var(--sp-2)] tabular-nums"
             />
           </Label>
         )}
@@ -237,7 +237,7 @@ export function AdminEnforcement({
             <Input
               value={notifyTitle}
               onChange={(event) => setNotifyTitle(event.target.value)}
-              className="mt-1.5"
+              className="mt-[var(--sp-2)]"
             />
           </Label>
           <Label className="block text-desc font-medium text-foreground">
@@ -246,7 +246,7 @@ export function AdminEnforcement({
               value={notifyBody}
               onChange={(event) => setNotifyBody(event.target.value)}
               rows={4}
-              className="mt-1.5"
+              className="mt-[var(--sp-2)]"
             />
           </Label>
           <DialogFooter>
