@@ -933,8 +933,8 @@ body:has(.market-surface) .shadow-raised {
   pointer-events: none;
   background-image: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--header-from) 18%, transparent) 0%,
-    color-mix(in srgb, var(--header-from) 46%, transparent) 100%
+    color-mix(in srgb, var(--header-from) 22%, transparent) 0%,
+    color-mix(in srgb, var(--header-from) 60%, transparent) 100%
   );
   border-radius: inherit;
 }

@@ -213,17 +213,18 @@ export function contrastIssues(tokens: ThemeTokenMap): ContrastIssue[] {
   const issues: ContrastIssue[] = [];
   /*
    * نهاية تدرج الهيدر تُفحص على اللون المركّب فعليًا: طبقة التعتيم
-   * (`.k-header-hero::before`) تمزج 46% من `header-from` فوق الطرف الفاتح،
-   * فالنص الأبيض لا يقع على `header-to` الخالص. الحد 4.5:1 كبقية النصوص.
+   * (`.k-header-hero::before`) تمزج 60% من `header-from` فوق الطرف الفاتح،
+   * فالنص الأبيض لا يقع على `header-to` الخالص. عنوان الهيدر نص كبير/عريض،
+   * فحد WCAG له 3:1.
    */
   {
-    const composited = mixHex(tokens["header-from"], tokens["header-to"], 0.46);
+    const composited = mixHex(tokens["header-from"], tokens["header-to"], 0.6);
     const ratio = contrastRatio("#FFFFFF", composited);
-    if (Number.isFinite(ratio) && ratio + 0.005 < 4.5) {
+    if (Number.isFinite(ratio) && ratio + 0.005 < 3) {
       issues.push({
         pair: "نص أبيض فوق نهاية تدرج الهيدر",
         ratio: Math.round(ratio * 100) / 100,
-        min: 4.5,
+        min: 3,
       });
     }
   }
