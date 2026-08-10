@@ -84,7 +84,14 @@ const TILES: StudioTile[] = [
     descKey: "admin.studio.mediaDesc",
     icon: Images,
   },
+  {
+    to: "/admin/ai",
+    labelKey: "admin.studio.ai",
+    descKey: "admin.studio.aiDesc",
+    icon: Sparkles,
+  },
 ];
+
 
 function useStudioStats() {
   const overview = useQuery({

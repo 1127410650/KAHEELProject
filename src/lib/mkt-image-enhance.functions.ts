@@ -85,3 +85,24 @@ export const upscaleImageExternally = createServerFn({ method: "POST" })
       };
     }
   });
+
+export interface EnhanceProviderStatus {
+  /** هل أُضيف المفتاح في إعدادات المشروع → الأسرار؟ */
+  configured: boolean;
+  secretName: "IMAGE_ENHANCE_API_KEY";
+  provider: "Replicate — Real-ESRGAN";
+  signupUrl: "https://replicate.com/account/api-tokens";
+  /** التكلفة التقديرية لكل صورة بالدولار (Real-ESRGAN، صورة متوسطة). */
+  unitUsd: number;
+}
+
+/** حالة مزوّد «النصاعة» الخارجي — لا يُعاد المفتاح ولا أي جزء منه. */
+export const getEnhanceProviderStatus = createServerFn({ method: "GET" }).handler(
+  async (): Promise<EnhanceProviderStatus> => ({
+    configured: Boolean(process.env["IMAGE_ENHANCE_API_KEY"]),
+    secretName: "IMAGE_ENHANCE_API_KEY",
+    provider: "Replicate — Real-ESRGAN",
+    signupUrl: "https://replicate.com/account/api-tokens",
+    unitUsd: 0.0023,
+  }),
+);

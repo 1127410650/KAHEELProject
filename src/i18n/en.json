@@ -3859,7 +3859,8 @@
       "composer": "Page composer",
       "pageVariants": "Page layouts",
       "categories": "Categories & worlds",
-      "labels": "UI labels"
+      "labels": "UI labels",
+      "aiServices": "AI services"
     },
     "alerts": {
       "title": "Alerts",
@@ -4567,7 +4568,9 @@
       "statListings": "Active listings",
       "statRequests": "Requests today",
       "statCampaigns": "Live campaigns",
-      "statLastEdit": "Last appearance edit"
+      "statLastEdit": "Last appearance edit",
+      "ai": "AI services",
+      "aiDesc": "Generation and enhancement: caps, counters, and logs."
     },
     "gm": {
       "range": {

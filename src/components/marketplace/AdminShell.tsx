@@ -30,6 +30,7 @@ import {
   Images,
   LayoutTemplate,
   Smile,
+  Sparkles,
   ShieldQuestion,
   Store,
   UserCog,
@@ -178,6 +179,13 @@ const NAV: NavItem[] = [
     labelKey: "admin.nav.composer",
     icon: LayoutTemplate,
     section: "studio",
+  },
+  {
+    to: "/admin/ai",
+    labelKey: "admin.nav.aiServices",
+    icon: Sparkles,
+    section: "studio",
+    ownerOnly: true,
   },
   {
     to: "/admin/designs",
