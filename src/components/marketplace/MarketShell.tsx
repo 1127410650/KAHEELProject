@@ -24,7 +24,7 @@ import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategor
 
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
 
-import { SeasonalLayer } from "@/components/marketplace/season/SeasonalLayer";
+
 
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
