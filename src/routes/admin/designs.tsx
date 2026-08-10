@@ -78,6 +78,9 @@ const EMPTY = {
   campaign_id: "",
   starts_at: "",
   ends_at: "",
+  brand_stamp: true,
+  layout_key: "classic",
+
 };
 
 type Draft = typeof EMPTY;
