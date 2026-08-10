@@ -184,13 +184,13 @@ function AdvertiserProfilePage() {
             <h1 className="flex flex-wrap items-center gap-2 text-page font-extrabold text-foreground">
               {row.display_name}
               {row.verification_status === "verified" ? (
-                <span className="k-pill text-desc font-bold text-primary">
+                <span className="k-pill px-3 py-0.5 text-desc font-bold">
                   ✔ {label("aqar.verified", "موثّق")}
                 </span>
               ) : null}
             </h1>
             <p className="mt-1 flex flex-wrap items-center gap-2 text-desc text-muted-foreground">
-              <span className="k-pill font-semibold">{typeLabel}</span>
+              <span className="k-pill px-3 py-0.5 font-semibold">{typeLabel}</span>
               {row.city ? (
                 <span className="flex items-center gap-1">
                   <MapPin className="size-4 shrink-0" aria-hidden />
