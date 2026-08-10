@@ -9,11 +9,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowRight, Heart, ClipboardList, MessagesSquare, Search } from "lucide-react";
 
 import { Mascot } from "@/components/marketplace/campaign/Mascot";
-import {
-  HeaderChip,
-  HeaderChipsRow,
-  HeaderShapes,
-} from "@/components/marketplace/home/noon/CollapsingHeaderParts";
+import { HeaderShapes } from "@/components/marketplace/home/noon/CollapsingHeaderParts";
 import { useHeaderProgress } from "@/lib/use-header-progress";
 import { useLabels } from "@/lib/mkt-ui-labels";
 
