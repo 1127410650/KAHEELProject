@@ -2164,6 +2164,7 @@ export type Database = {
           account_kind: string
           city: string | null
           city_id: string | null
+          country_id: string | null
           created_at: string
           display_name_ar: string
           display_name_en: string | null
@@ -2179,6 +2180,7 @@ export type Database = {
           account_kind: string
           city?: string | null
           city_id?: string | null
+          country_id?: string | null
           created_at?: string
           display_name_ar: string
           display_name_en?: string | null
@@ -2194,6 +2196,7 @@ export type Database = {
           account_kind?: string
           city?: string | null
           city_id?: string | null
+          country_id?: string | null
           created_at?: string
           display_name_ar?: string
           display_name_en?: string | null
@@ -2211,6 +2214,13 @@ export type Database = {
             columns: ["city_id"]
             isOneToOne: false
             referencedRelation: "mkt_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_demo_accounts_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_countries"
             referencedColumns: ["id"]
           },
         ]
