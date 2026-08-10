@@ -33,7 +33,11 @@ export default function MapPickerCanvas({
   const dragging = useRef(false);
   const change = useRef(onChange);
   change.current = onChange;
-  const external = useRef(true);
+  // آخر نقطة ضُبطت برمجيًا: تمنع إعادة بثّ نفس النقطة كأنها تحريك مستخدم.
+  const target = useRef<{ lat: number; lng: number }>({ lat, lng });
+  const near = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) =>
+    Math.abs(a.lat - b.lat) < 1e-6 && Math.abs(a.lng - b.lng) < 1e-6;
+
 
   useEffect(() => {
     let cancelled = false;
