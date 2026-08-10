@@ -1,410 +1,261 @@
+/**
+ * /admin — «استوديو كَحيل»: بوابة بصرية واحدة لكل أدوات الترتيب والرسم.
+ * كل بلاطة تفتح شاشة موجودة (لا قدرة معلّقة بلا مدخل)، وكل الألوان من رموز
+ * اللوحة المفعّلة.
+ */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
-  AlertTriangle,
-  BadgeCheck,
-  Building2,
-  ChevronLeft,
-  ChevronRight,
-  Flag,
-  Inbox,
-  ListChecks,
+  Brush,
+  Images,
+  LayoutTemplate,
   Megaphone,
-  ShieldOff,
+  Palette,
+  PenTool,
   Sparkles,
-  UserCheck,
-  Users,
+  Clock,
+  Inbox,
+  ArrowUpRight,
   type LucideIcon,
 } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
 import { loadAdminOverview } from "@/lib/mkt-platform";
+import { supabase } from "@/integrations/supabase/client";
+import { formatDateTime } from "@/lib/format";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/admin/")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "إدارة المنصة — كَحيل" },
+      { title: "استوديو كَحيل — لوحة الإدارة" },
       {
         name: "description",
-        content:
-          "لوحة مدير النظام: نظرة سريعة على المستخدمين والمتاجر والإعلانات والبلاغات وطلبات التوثيق.",
+        content: "استوديو كَحيل: المؤلّف والرسم والأشكال وألوان المنصة والوسائط ووضع التحرير الحي.",
       },
-      { property: "og:title", content: "إدارة المنصة — كَحيل" },
-      { property: "og:description", content: "لوحة مدير النظام في منصة كَحيل." },
+      { property: "og:title", content: "استوديو كَحيل — لوحة الإدارة" },
+      { property: "og:description", content: "بوابة الترتيب الكلي والرسم في منصة كَحيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: AdminHomePage,
+  component: AdminStudioPage,
 });
 
-type Tone = "teal" | "blue" | "amber" | "rose" | "violet" | "slate";
-
-// كل النغمات من design tokens الخاصة بلوحة الإدارة — لا قيمة لون مباشرة هنا.
-const TONES: Record<Tone, { icon: string; value: string; border: string; glow: string }> = {
-  teal: {
-    icon: "bg-primary/12 text-primary dark:bg-primary/15 dark:text-primary",
-    value: "text-primary-pressed dark:text-foreground",
-    border: "hover:border-primary/45",
-    glow: "from-primary/8",
-  },
-  blue: {
-    icon: "bg-admin-progress-soft text-admin-progress",
-    value: "text-admin-progress dark:text-foreground",
-    border: "hover:border-admin-progress/45",
-    glow: "from-admin-progress-soft/80",
-  },
-  amber: {
-    icon: "bg-admin-pending-soft text-admin-pending",
-    value: "text-admin-pending dark:text-foreground",
-    border: "hover:border-admin-pending/45",
-    glow: "from-admin-pending-soft/80",
-  },
-  rose: {
-    icon: "bg-admin-critical-soft text-admin-critical",
-    value: "text-admin-critical dark:text-foreground",
-    border: "hover:border-admin-critical/45",
-    glow: "from-admin-critical-soft/80",
-  },
-  violet: {
-    icon: "bg-admin-verify-soft text-admin-verify",
-    value: "text-admin-verify dark:text-foreground",
-    border: "hover:border-admin-verify/45",
-    glow: "from-admin-verify-soft/80",
-  },
-  slate: {
-    icon: "bg-admin-idle-soft text-admin-idle",
-    value: "text-admin-idle dark:text-foreground",
-    border: "hover:border-admin-idle/40",
-    glow: "from-admin-idle-soft/80",
-  },
-};
-
-
-function Stat({
-  label,
-  value,
-  icon: Icon,
-  to,
-  search,
-  tone,
-}: {
-  label: string;
-  value: number;
+interface StudioTile {
+  to?: string;
+  labelKey: string;
+  descKey: string;
   icon: LucideIcon;
-  to: string;
-  search?: Record<string, string | boolean>;
-  tone: Tone;
-}) {
-  const { dir } = useI18n();
-  const Arrow = dir === "rtl" ? ChevronLeft : ChevronRight;
-  const palette = TONES[tone];
-
-  return (
-    <Link
-      to={to}
-      search={search ?? {}}
-      className={`group relative isolate min-h-[126px] overflow-hidden rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel transition duration-200 hover:-translate-y-0.5 hover:shadow-raised dark:border-border dark:bg-card ${palette.border}`}
-    >
-      <div
-        className={`pointer-events-none absolute -end-8 -top-10 -z-10 size-28 rounded-full bg-gradient-to-br ${palette.glow} to-transparent blur-2xl`}
-        aria-hidden
-      />
-      <div className="flex items-start justify-between gap-2">
-        <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${palette.icon}`}>
-          <Icon className="size-[17px]" aria-hidden />
-        </span>
-        <Arrow
-          className="mt-1 size-4 text-muted-foreground/45 transition group-hover:text-primary"
-          aria-hidden
-        />
-      </div>
-      <div className="mt-3">
-        <p className="truncate text-desc font-semibold text-muted-foreground sm:text-desc">
-          {label}
-        </p>
-        <p
-          className={`mt-1 text-2xl font-black tabular-nums sm:text-[28px] ${palette.value}`}
-        >
-          {value.toLocaleString("en-US")}
-        </p>
-      </div>
-    </Link>
-  );
+  onClick?: () => void;
 }
 
-function ActionRow({
-  to,
-  label,
-  count,
-  icon: Icon,
-  search,
-  urgent = false,
-}: {
-  to: string;
-  label: string;
-  count: number;
-  icon: LucideIcon;
-  search?: Record<string, string | boolean>;
-  urgent?: boolean;
-}) {
-  const { dir } = useI18n();
-  const Arrow = dir === "rtl" ? ChevronLeft : ChevronRight;
+const TILES: StudioTile[] = [
+  {
+    to: "/admin/composer",
+    labelKey: "admin.studio.composer",
+    descKey: "admin.studio.composerDesc",
+    icon: LayoutTemplate,
+  },
+  {
+    to: "/admin/designs",
+    labelKey: "admin.studio.shapes",
+    descKey: "admin.studio.shapesDesc",
+    icon: PenTool,
+  },
+  {
+    to: "/admin/appearance",
+    labelKey: "admin.studio.palette",
+    descKey: "admin.studio.paletteDesc",
+    icon: Palette,
+  },
+  {
+    to: "/admin/appearance/variants",
+    labelKey: "admin.studio.media",
+    descKey: "admin.studio.mediaDesc",
+    icon: Images,
+  },
+];
 
-  return (
-    <Link
-      to={to}
-      search={search ?? {}}
-      className="group flex min-h-[68px] items-center gap-3 rounded-[var(--r-card)] border border-border bg-secondary/45 px-[var(--sp-4)] py-3 transition hover:border-primary/40 hover:bg-card hover:shadow-sm dark:border-border dark:bg-background"
-    >
-      <span
-        className={
-          "grid size-10 shrink-0 place-items-center rounded-xl " +
-          (urgent && count > 0
-            ? "bg-admin-critical-soft text-admin-critical"
-            : "bg-primary/12 text-primary")
-        }
-      >
-        <Icon className="size-[18px]" aria-hidden />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-desc font-bold text-foreground sm:text-sm">{label}</span>
-        <span className="mt-0.5 block text-desc text-muted-foreground">
-          {count > 0 ? "بانتظار المراجعة أو الإجراء" : "لا توجد عناصر معلّقة"}
-        </span>
-      </span>
-      <span
-        className={
-          "grid min-w-8 shrink-0 place-items-center rounded-full px-2 py-1 text-desc font-black tabular-nums " +
-          (count > 0
-            ? "bg-admin-critical-soft text-admin-critical"
-            : "bg-secondary text-muted-foreground")
-        }
-      >
-        {count}
-      </span>
-      <Arrow
-        className="size-4 shrink-0 text-muted-foreground/45 transition group-hover:text-primary"
-        aria-hidden
-      />
-    </Link>
-  );
-}
-
-function AdminHomePage() {
-  const { t } = useI18n();
+function useStudioStats() {
   const overview = useQuery({
-    queryKey: ["mkt", "admin", "overview"],
+    queryKey: ["mkt", "admin", "overview", "studio"],
     queryFn: loadAdminOverview,
-    staleTime: 30_000,
   });
-  const data = overview.data;
+
+  const extras = useQuery({
+    queryKey: ["mkt", "admin", "studio", "extras"],
+    queryFn: async () => {
+      const [campaigns, slot] = await Promise.all([
+        supabase
+          .from("mkt_ad_campaigns")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "active"),
+        supabase
+          .from("mkt_media_slots")
+          .select("updated_at")
+          .order("updated_at", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ]);
+      return {
+        activeCampaigns: campaigns.count ?? 0,
+        lastAppearanceEdit: (slot.data?.updated_at as string | null) ?? null,
+      };
+    },
+  });
+
+  return { overview, extras };
+}
+
+function AdminStudioPage() {
+  const { t } = useI18n();
+  const { overview, extras } = useStudioStats();
+
+  function openLiveEdit() {
+    try {
+      sessionStorage.setItem("kaheel.liveEdit", "1");
+    } catch {
+      /* التخزين غير متاح — الوضع يبقى قابلًا للتفعيل من الواجهة */
+    }
+    window.location.href = "/?admin_preview=1";
+  }
+
+  const stats: { key: string; value: string; icon: LucideIcon; to: string }[] = [
+    {
+      key: "admin.studio.statListings",
+      value: String(overview.data?.listings_published ?? 0),
+      icon: Megaphone,
+      to: "/admin/listings",
+    },
+    {
+      key: "admin.studio.statRequests",
+      value: String(overview.data?.unassigned_requests ?? 0),
+      icon: Inbox,
+      to: "/admin/reports",
+    },
+    {
+      key: "admin.studio.statCampaigns",
+      value: String(extras.data?.activeCampaigns ?? 0),
+      icon: Sparkles,
+      to: "/admin/campaigns",
+    },
+    {
+      key: "admin.studio.statLastEdit",
+      value: extras.data?.lastAppearanceEdit
+        ? formatDateTime(extras.data.lastAppearanceEdit)
+        : "—",
+      icon: Clock,
+      to: "/admin/appearance",
+    },
+  ];
 
   return (
-    <AdminShell title={t("admin.console")}>
-      {overview.isLoading || !data ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-          {Array.from({ length: 12 }).map((_, index) => (
-            <Skeleton key={index} className="h-[126px] w-full rounded-[var(--r-card)]" />
-          ))}
+    <AdminShell title={t("admin.studio.title")}>
+      <AdminPageHead title={t("admin.studio.title")} description={t("admin.studio.subtitle")} />
+
+      {/* بطاقة الاستوديو الرئيسية */}
+      <section className="k-fade-up relative overflow-hidden rounded-[var(--r-card)] border border-border bg-[linear-gradient(135deg,var(--kt-header-from)_0%,var(--kt-header-to)_100%)] p-[var(--sp-5)] text-[color:var(--kt-cta-bg)] shadow-[0_10px_34px_rgba(0,0,0,0.10)]">
+        <span className="k-admin-grain pointer-events-none absolute inset-0" aria-hidden />
+        <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-start gap-[var(--sp-3)]">
+          <div className="min-w-0">
+            <p className="text-[14px] font-bold opacity-80">{t("admin.studio.eyebrow")}</p>
+            <h1 className="mt-1 text-[20px] font-black leading-tight sm:text-[24px]">
+              {t("admin.studio.heroTitle")}
+            </h1>
+            <p className="mt-[var(--sp-2)] max-w-[52ch] text-[14px] leading-relaxed opacity-85">
+              {t("admin.studio.heroDesc")}
+            </p>
+          </div>
+          <span className="grid size-12 shrink-0 place-items-center rounded-[var(--r-card)] bg-[color:var(--kt-cta-bg)]/15">
+            <Brush className="size-6" aria-hidden />
+          </span>
         </div>
-      ) : (
-        <div className="space-y-5">
-          <section className="relative overflow-hidden rounded-[var(--r-card)] border border-primary/35 bg-gradient-to-l from-primary-pressed via-primary to-primary-dark px-4 py-4 text-primary-foreground shadow-raised sm:py-5">
-            <div
-              className="absolute -start-10 -top-16 size-44 rounded-full bg-white/10 blur-3xl"
-              aria-hidden
-            />
-            <div
-              className="absolute -bottom-20 end-10 size-48 rounded-full bg-primary-foreground/10 blur-3xl"
-              aria-hidden
-            />
-            <div className="relative flex flex-wrap items-center justify-between gap-3">
-              <div className="min-w-0">
-                <span className="inline-flex items-center gap-[var(--sp-2)] rounded-full border border-white/20 bg-white/10 px-[var(--sp-3)] py-1 text-desc font-bold backdrop-blur">
-                  <Sparkles className="size-3.5" aria-hidden />
-                  {t("admin.dashboardBadge")}
-                </span>
-                <h2 className="text-section mt-2 font-black">
-                  {t("admin.dashboardWelcome")}
-                </h2>
-                <p className="mt-1 max-w-2xl text-desc leading-5 text-white/75 sm:text-sm sm:leading-6">
-                  {t("admin.dashboardIntro")}
-                </p>
-              </div>
-              <div className="flex shrink-0 items-center gap-2 rounded-[var(--r-card)] border border-white/15 bg-black/10 px-3 py-2 backdrop-blur">
-                <span className="text-desc text-white/70">{t("admin.dashboardPending")}</span>
-                <strong className="text-xl font-black tabular-nums">
-                  {data.listings_pending + data.reports_new + data.verifications_pending}
-                </strong>
-              </div>
-            </div>
-          </section>
+        <div className="relative mt-[var(--sp-4)] flex flex-wrap gap-2">
+          <Link
+            to="/admin/composer"
+            className="k-press inline-flex min-h-11 items-center gap-2 rounded-[var(--r-btn,12px)] bg-[color:var(--kt-cta-bg)] px-4 text-[14px] font-bold text-[color:var(--kt-cta-fg)]"
+          >
+            <LayoutTemplate className="size-4" aria-hidden />
+            {t("admin.studio.openComposer")}
+          </Link>
+          <button
+            type="button"
+            onClick={openLiveEdit}
+            className="k-press inline-flex min-h-11 items-center gap-2 rounded-[var(--r-btn,12px)] border border-[color:var(--kt-cta-bg)]/45 px-4 text-[14px] font-bold"
+          >
+            <Sparkles className="size-4" aria-hidden />
+            {t("admin.studio.liveEdit")}
+          </button>
+        </div>
+      </section>
 
-          <section>
-            <div className="mb-3 flex items-end justify-between gap-3">
-              <div>
-                <h2 className="text-section font-black text-foreground">
-                  {t("admin.dashboardOverview")}
-                </h2>
-                <p className="mt-0.5 text-desc text-muted-foreground sm:text-desc">
-                  {t("admin.dashboardOverviewHint")}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-              <Stat
-                label={t("admin.stats.users")}
-                value={data.users}
-                icon={Users}
-                to="/admin/users"
-                tone="teal"
-              />
-              <Stat
-                label={t("admin.stats.businesses")}
-                value={data.businesses}
-                icon={Building2}
-                to="/admin/businesses"
-                tone="blue"
-              />
-              <Stat
-                label={t("admin.stats.published")}
-                value={data.listings_published}
-                icon={Megaphone}
-                to="/admin/listings"
-                search={{ status: "published" }}
-                tone="teal"
-              />
-              <Stat
-                label={t("admin.stats.pending")}
-                value={data.listings_pending}
-                icon={Megaphone}
-                to="/admin/listings"
-                search={{ status: "pending" }}
-                tone="amber"
-              />
-              <Stat
-                label={t("admin.stats.reports")}
-                value={data.reports_new}
-                icon={Flag}
-                to="/admin/listing-reports"
-                search={{ status: "new" }}
-                tone="rose"
-              />
-              <Stat
-                label={t("admin.stats.verifications")}
-                value={data.verifications_pending}
-                icon={BadgeCheck}
-                to="/admin/verifications"
-                search={{ status: "pending" }}
-                tone="violet"
-              />
-              <Stat
-                label={t("admin.stats.restricted")}
-                value={data.restricted_accounts}
-                icon={ShieldOff}
-                to="/admin/users"
-                search={{ restricted: true }}
-                tone="slate"
-              />
-              <Stat
-                label={t("admin.stats.suggestions")}
-                value={data.activity_suggestions}
-                icon={ListChecks}
-                to="/admin/taxonomy"
-                search={{ tab: "suggestions" }}
-                tone="blue"
-              />
-              <Stat
-                label={t("admin.stats.banned")}
-                value={data.banned_accounts}
-                icon={ShieldOff}
-                to="/admin/users"
-                search={{ restricted: true, state: "banned" }}
-                tone="rose"
-              />
-              <Stat
-                label={t("admin.stats.unassigned")}
-                value={data.unassigned_requests}
-                icon={Inbox}
-                to="/admin/listings"
-                search={{ status: "pending", queue: "unassigned" }}
-                tone="amber"
-              />
-              <Stat
-                label={t("admin.stats.assignedToMe")}
-                value={data.assigned_to_me}
-                icon={UserCheck}
-                to="/admin/listings"
-                search={{ queue: "mine" }}
-                tone="teal"
-              />
-              <Stat
-                label={t("admin.stats.urgent")}
-                value={data.urgent_actions}
-                icon={AlertTriangle}
-                to="/admin/listing-reports"
-                search={{ status: "new" }}
-                tone="rose"
-              />
-            </div>
-          </section>
-
-          <section className="rounded-[var(--r-card)] border border-border bg-card p-4 shadow-panel sm:p-5">
-            <div className="flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <h2 className="text-section font-black text-foreground">{t("admin.actionNeeded")}</h2>
-                <p className="mt-0.5 text-desc text-muted-foreground sm:text-desc">
-                  {t("admin.actionNeededHint")}
-                </p>
-              </div>
-              <span className="rounded-full bg-primary/12 px-3 py-1 text-desc font-black text-primary">
-                {data.listings_pending +
-                  data.reports_new +
-                  data.verifications_pending +
-                  data.activity_suggestions}
+      {/* بلاطات الاستوديو */}
+      <div className="mt-[var(--sp-4)] grid grid-cols-1 gap-[var(--sp-3)] sm:grid-cols-2 xl:grid-cols-4">
+        {TILES.map((tile) => {
+          const Icon = tile.icon;
+          return (
+            <Link
+              key={tile.labelKey}
+              to={tile.to ?? "/admin"}
+              className="k-press k-fade-up group flex min-h-[112px] flex-col justify-between rounded-[var(--r-card)] border border-border border-s-[3px] border-s-primary bg-[color-mix(in_srgb,var(--kt-primary)_6%,var(--kt-card))] p-[var(--sp-4)]"
+            >
+              <span className="grid size-10 place-items-center rounded-[var(--r-chip,12px)] bg-primary/12 text-primary">
+                <Icon className="size-5" aria-hidden />
               </span>
-            </div>
+              <span className="mt-[var(--sp-3)] block min-w-0">
+                <span className="flex items-center gap-1 text-[16px] font-bold text-foreground">
+                  <span className="truncate">{t(tile.labelKey)}</span>
+                  <ArrowUpRight className="size-4 shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100" aria-hidden />
+                </span>
+                <span className="mt-0.5 block text-[14px] leading-snug text-muted-foreground">
+                  {t(tile.descKey)}
+                </span>
+              </span>
+            </Link>
+          );
+        })}
+      </div>
 
-            <div className="mt-4 grid gap-[var(--sp-3)] md:grid-cols-2">
-              <ActionRow
-                to="/admin/listings"
-                label={t("admin.alerts.listingsPending")}
-                count={data.listings_pending}
-                icon={Megaphone}
-                search={{ status: "pending" }}
-              />
-              <ActionRow
-                to="/admin/listing-reports"
-                label={t("admin.alerts.reportsNew")}
-                count={data.reports_new}
-                icon={Flag}
-                search={{ status: "new" }}
-                urgent
-              />
-              <ActionRow
-                to="/admin/verifications"
-                label={t("admin.alerts.verifications")}
-                count={data.verifications_pending}
-                icon={BadgeCheck}
-                search={{ status: "pending" }}
-              />
-              <ActionRow
-                to="/admin/taxonomy"
-                label={t("admin.alerts.activitySuggestions")}
-                count={data.activity_suggestions}
-                icon={ListChecks}
-                search={{ tab: "suggestions" }}
-              />
-            </div>
-          </section>
-        </div>
-      )}
+      {/* أرقام سريعة */}
+      <AdminCard
+        className="mt-[var(--sp-4)]"
+        title={t("admin.studio.statsTitle")}
+        description={t("admin.studio.statsHint")}
+      >
+        {overview.isLoading ? (
+          <div className="grid grid-cols-2 gap-[var(--sp-3)] lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} className="h-20 w-full rounded-[var(--r-card)]" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-[var(--sp-3)] lg:grid-cols-4">
+            {stats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Link
+                  key={stat.key}
+                  to={stat.to}
+                  className="k-press min-w-0 rounded-[var(--r-card)] border border-border bg-secondary/40 p-[var(--sp-3)]"
+                >
+                  <span className="flex items-center gap-2 text-[14px] text-muted-foreground">
+                    <Icon className="size-4 shrink-0 text-primary" aria-hidden />
+                    <span className="truncate">{t(stat.key)}</span>
+                  </span>
+                  <span className="mt-1 block truncate text-[18px] font-black tabular-nums text-foreground">
+                    {stat.value}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </AdminCard>
     </AdminShell>
   );
 }

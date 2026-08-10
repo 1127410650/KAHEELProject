@@ -64,12 +64,12 @@ const EMPTY = {
   title_ar: "",
   body_ar: "",
   discount_pct: "",
-  bg_color: "#8a4fff",
+  bg_color: "var(--kt-primary)",
   grad_from: "",
   grad_to: "",
   grad_angle: 90,
   shape_key: "",
-  shape_color: "#ffffff",
+  shape_color: "var(--kt-cta-bg)",
   shape_opacity: 18,
   shape_size: "md",
   shape_pos: "corner-tr",
@@ -128,12 +128,12 @@ function fromTemplate(row: DesignTemplate): Draft {
     title_ar: row.title_ar ?? "",
     body_ar: row.body_ar ?? "",
     discount_pct: row.discount_pct == null ? "" : String(row.discount_pct),
-    bg_color: row.bg_color ?? "#8a4fff",
+    bg_color: row.bg_color ?? "var(--kt-primary)",
     grad_from: row.grad_from ?? "",
     grad_to: row.grad_to ?? "",
     grad_angle: row.grad_angle ?? 90,
     shape_key: row.shape_key ?? "",
-    shape_color: row.shape_color ?? "#ffffff",
+    shape_color: row.shape_color ?? "var(--kt-cta-bg)",
     shape_opacity: row.shape_opacity,
     shape_size: row.shape_size,
     shape_pos: row.shape_pos,
@@ -324,14 +324,14 @@ function DesignsPage() {
                 />
                 <input
                   type="color"
-                  value={draft.grad_from || "#8a4fff"}
+                  value={draft.grad_from || "var(--kt-primary)"}
                   onChange={(e) => set("grad_from", e.target.value)}
                   className="size-11 rounded-xl border border-border"
                   aria-label="بداية التدرّج"
                 />
                 <input
                   type="color"
-                  value={draft.grad_to || "#c3abff"}
+                  value={draft.grad_to || "var(--kt-primary)"}
                   onChange={(e) => set("grad_to", e.target.value)}
                   className="size-11 rounded-xl border border-border"
                   aria-label="نهاية التدرّج"

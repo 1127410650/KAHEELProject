@@ -974,6 +974,28 @@ body:has(.market-surface) .shadow-raised {
   background: var(--section-accent);
 }
 
+/*
+ * التوقيع الزخرفي للإدارة: طبقة أشكال هندسية هادئة (نقاط + خطوط قُطرية)
+ * بلون بطاقة اللوحة وشفافية ≤0.12 — بلا حركة وبلا قيمة لون مباشرة.
+ */
+@utility k-admin-grain {
+  opacity: 0.12;
+  background-image:
+    radial-gradient(circle at 12% 30%, var(--kt-cta-bg) 0 2px, transparent 2px),
+    radial-gradient(circle at 78% 68%, var(--kt-cta-bg) 0 3px, transparent 3px),
+    repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--kt-cta-bg) 60%, transparent) 0 1px,
+      transparent 1px 14px
+    );
+  background-size:
+    72px 72px,
+    96px 96px,
+    auto;
+}
+
+
+
 /* لمسة ضغط موحّدة: تصغير طفيف عند اللمس بلا إزاحة تخطيط. */
 @utility k-press {
   transition: transform 120ms var(--k-ease, ease);

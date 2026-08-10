@@ -11,6 +11,7 @@ import { ArrowDownToLine, ArrowUpToLine, Loader2, Merge, Plus } from "lucide-rea
 import { toast } from "sonner";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { AdminPageHead } from "@/components/admin/AdminPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,16 +132,17 @@ function AdminCategoriesPage() {
 
   return (
     <AdminShell title="إدارة الأقسام">
-      <div className="min-w-0 space-y-4">
-        <header className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-desc text-muted-foreground">
-            الأقسام الرئيسية لها عالمها على <code>/c/{"{slug}"}</code> وبلاطتها في الرئيسية. العمق
-            مستويان: رئيسي ← فرعي.
-          </p>
-          <Button type="button" onClick={() => setOpenAdd((v) => !v)} disabled={busy}>
-            <Plus className="me-1 size-4" aria-hidden /> إضافة قسم
-          </Button>
-        </header>
+      <div className="min-w-0 space-y-[var(--sp-4)]">
+        <AdminPageHead
+          title="إدارة الأقسام"
+          description="الأقسام الرئيسية لها عالمها على /c/{slug} وبلاطتها في الرئيسية — العمق مستويان: رئيسي ← فرعي."
+          actions={
+            <Button type="button" onClick={() => setOpenAdd((v) => !v)} disabled={busy}>
+              <Plus className="me-1 size-4" aria-hidden /> إضافة قسم
+            </Button>
+          }
+        />
+
 
         {openAdd && (
           <AddCategoryCard
