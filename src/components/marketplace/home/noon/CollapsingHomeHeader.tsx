@@ -25,17 +25,20 @@ import { useHeaderProgress } from "@/lib/use-header-progress";
 import kaheelLogo from "@/assets/kaheel-logo.png";
 
 /** ارتفاعات الصفوف — ثابتة ومصدرها الوحيد هذا الملف. */
-const PT = 6;
+const PT = 8;
 const ROW1_H = 48;
 const ROW2_H = 44;
 const ROW3_H = 40;
-const PB = 6;
+const PB = 8;
 /** ارتفاع الجزء القابل للطي (الصفّان الأول والثاني). */
 const COLLAPSIBLE_H = ROW1_H + ROW2_H;
-export const HOME_HEADER_FULL_H = PT + COLLAPSIBLE_H + ROW3_H + PB; // 144
+/** الارتفاع المنكمش = حاشية الأمان + صف البحث وحده (8 + 40 + 8 = 56). */
+export const HOME_HEADER_COLLAPSED_H = PT + ROW3_H + PB; // 56
+export const HOME_HEADER_FULL_H = PT + COLLAPSIBLE_H + ROW3_H + PB; // 148
 
 /** ارتفاع المساحة المحجوزة: ثابت ولا يُقاس أبدًا في وقت التشغيل. */
 const SPACER_H = `calc(${HOME_HEADER_FULL_H}px + env(safe-area-inset-top, 0px))`;
+
 
 /** كبسولات الأقسام السريعة في الصف الثاني. */
 const CHIPS = [
@@ -75,9 +78,16 @@ export function CollapsingHomeHeader({
           "--p": p,
           // التدرّج المعتمد نهائيًا — بلا أي طبقة تعتيم فوقه.
           backgroundImage: "linear-gradient(90deg, #8A4FFF 0%, #C3ABFF 100%)",
-          // حاشية شريط حالة iOS داخل التدرّج نفسه.
+          // حاشية شريط حالة iOS تُطبَّق هنا مرة واحدة فقط في كل الشجرة.
           paddingTop: `calc(env(safe-area-inset-top, 0px) + ${PT}px)`,
           paddingBottom: `${PB}px`,
+          // لا حد أدنى للارتفاع: الارتفاع مجموع الصفوف فحسب.
+          minHeight: 0,
+          /* الانكماش بالإزاحة وحدها: الصندوق ثابت الارتفاع فلا يعيد المتصفح
+             تخطيط أي عنصر ⇒ لا مساهمة في CLS إطلاقًا. الحد المرئي للتدرّج
+             ينزلق لأعلى فيبقى صف البحث وحده = حاشية الأمان + 56px. */
+          transform: `translate3d(0, calc(-${COLLAPSIBLE_H}px * var(--p)), 0)`,
+          willChange: "transform",
         } as React.CSSProperties}
         className="fixed inset-x-0 top-0 z-40 rounded-b-[16px] text-primary-foreground shadow-[0_10px_28px_-22px_rgb(138_79_255/0.55)]"
         onClick={
@@ -86,15 +96,23 @@ export function CollapsingHomeHeader({
             : undefined
         }
       >
-        {/* الصفّان القابلان للطي — ارتفاع وشفافية فقط، بلا أي حركة تخطيط خارجية. */}
+        {/* الصفّان القابلان للطي — يخرجان من الشاشة مع الإزاحة ويتلاشيان،
+            بلا أي ارتفاع أو حاشية باقية تصنع «شبح» مساحة بنفسجية. */}
         <div
           className="overflow-hidden"
           style={{
-            height: `calc(${COLLAPSIBLE_H}px * (1 - var(--p)))`,
+            height: `${COLLAPSIBLE_H}px`,
+            minHeight: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
             opacity: "calc(1 - var(--p) * 1.6)",
+            pointerEvents: collapsed ? "none" : undefined,
           }}
           aria-hidden={collapsed}
         >
+
+
           {/* الصف ١ — الهوية والموقع والجرس وزر الإعلان. */}
           <div
             className="mx-auto grid w-full max-w-[1240px] grid-cols-[auto_1fr_auto_auto] items-center gap-1.5 px-[var(--page-x)]"
