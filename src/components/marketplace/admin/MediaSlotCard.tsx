@@ -64,10 +64,11 @@ function message(error: unknown): string {
 
 export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged: () => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState<null | "upload" | "hide" | "clear" | "meta">(null);
+  const [busy, setBusy] = useState<null | "upload" | "hide" | "clear" | "meta" | "enhance">(null);
   const [alt, setAlt] = useState(slot.alt_text ?? "");
   const [videoUrl, setVideoUrl] = useState(slot.kind === "video_url" ? slot.external_url ?? "" : "");
   const [stampOn, setStampOn] = useState(false);
+  const [enhanceOn, setEnhanceOn] = useState(true);
   const [studioOpen, setStudioOpen] = useState(false);
 
   const [stamp, setStamp] = useState<BrandStampOptions>(BRAND_STAMP_DEFAULTS);
@@ -87,12 +88,28 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
     }
   };
 
+  /** تحسين محلي (تكبير + إبراز + إعادة ضغط ≤300KB) مُسجَّل في سجل الصرف. */
+  const enhanceFile = async (file: File): Promise<File> => {
+    const { result } = await withEnhanceAudit(
+      { provider: "local-canvas", purpose: "media_slot", slotKey: slot.slot_key, unitUsd: 0 },
+      async () => {
+        const out = await enhanceImageLocally(file, { targetWidth: 1536 });
+        return { result: out, bytes: out.bytes };
+      },
+    );
+    toast.message(
+      `تحسين: ${result.width}×${result.height} · ${readableSize(result.bytes)} · ×${result.scaled}`,
+    );
+    return new File([result.blob], `${slot.slot_key}-enhanced.webp`, { type: "image/webp" });
+  };
+
   const pick = (file: File | undefined) => {
     if (!file) return;
     void run(
       "upload",
       async () => {
-        const out = await uploadMediaSlotImage(slot, file, stampOn ? stamp : undefined);
+        const source = enhanceOn && file.type.startsWith("image/") ? await enhanceFile(file) : file;
+        const out = await uploadMediaSlotImage(slot, source, stampOn ? stamp : undefined);
         toast.message(
           `تم الضغط: ${out.width}×${out.height} · ${readableSize(out.bytes)}${
             out.stamped ? " · مختومة باسم كَحيل والأصل محفوظ" : ""
@@ -102,6 +119,25 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
       "تم رفع الصورة وظهرت في مكانها.",
     );
   };
+
+  /** «حسّن الصورة» للصورة المنشورة حاليًا في الفتحة. */
+  const enhanceCurrent = () => {
+    if (!slot.url) return;
+    void run(
+      "enhance",
+      async () => {
+        const response = await fetch(slot.url as string);
+        if (!response.ok) throw new Error("FETCH_FAILED");
+        const blob = await response.blob();
+        const source = await enhanceFile(
+          new File([blob], `${slot.slot_key}.webp`, { type: blob.type || "image/webp" }),
+        );
+        await uploadMediaSlotImage(slot, source, stampOn ? stamp : undefined);
+      },
+      "تم تحسين الصورة الحالية.",
+    );
+  };
+
 
 
   return (
