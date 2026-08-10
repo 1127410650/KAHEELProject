@@ -32,6 +32,19 @@ export interface SlotPatch {
   path?: string | null;
   alt_text?: string | null;
   hidden?: boolean;
+  /** الشكل الزخرفي والحركة — مفاتيح من مكتبة التصميم لا قيم حرة. */
+  shape_key?: string | null;
+  shape_color?: string | null;
+  shape_opacity?: number | null;
+  shape_size?: string | null;
+  shape_pos?: string | null;
+  motion_key?: string | null;
+  motion_state?: string | null;
+  motion_speed?: string | null;
+  /** حجم البلاطة ووجهتها المسجّلة وقالب «تصاميمي» المربوط. */
+  tile_size?: string | null;
+  link_path?: string | null;
+  template_id?: string | null;
 }
 
 export interface SlotDraft {

@@ -13,6 +13,7 @@ import { CheckCheck, ImagePlus, Undo2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { SlotDesignControls } from "@/components/marketplace/live-edit/SlotDesignControls";
 import { readableSize } from "@/lib/media-compress";
 import { formatDateTime } from "@/lib/format";
 import { activatePageVariant, usePageVariants, useRefreshPageVariants } from "@/lib/mkt-page-variants";
@@ -331,6 +332,13 @@ export function LiveEditSheet({
             ) : null}
           </ul>
         ) : null}
+
+        <SlotDesignControls
+          slot={slot}
+          current={current}
+          busy={busy}
+          onSave={(patch, done) => void run(() => saveSlotDraft(slot.slot_key, patch), done)}
+        />
 
         <input
           ref={fileRef}

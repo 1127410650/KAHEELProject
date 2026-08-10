@@ -46,6 +46,19 @@ export interface MediaSlotRow {
   campaign_to: string | null;
   edit_kind: MediaSlotEditKind;
   variant_page: string | null;
+  /** الشكل الزخرفي والحركة من مكتبة التصميم (`mkt_design_shapes/_motions`). */
+  shape_key: string | null;
+  shape_color: string | null;
+  shape_opacity: number | null;
+  shape_size: string | null;
+  shape_pos: string | null;
+  motion_key: string | null;
+  motion_state: string | null;
+  motion_speed: string | null;
+  /** حجم البلاطة ووجهتها المسجّلة وقالب «تصاميمي» المربوط. */
+  tile_size: string | null;
+  link_path: string | null;
+  template_id: string | null;
 }
 
 export interface MediaSlot extends MediaSlotRow {
@@ -66,7 +79,8 @@ export const MEDIA_SECTION_LABELS: Record<string, string> = {
 const SLOT_COLUMNS =
   "slot_key, section, group_key, kind, path, external_url, title_ar, subtitle_ar, alt_text, " +
   "sort_order, hidden, is_demo, bg_color, grad_from, grad_to, grad_angle, campaign_id, " +
-  "campaign_from, campaign_to, edit_kind, variant_page";
+  "campaign_from, campaign_to, edit_kind, variant_page, shape_key, shape_color, shape_opacity, " +
+  "shape_size, shape_pos, motion_key, motion_state, motion_speed, tile_size, link_path, template_id";
 
 
 export async function fetchMediaSlots(): Promise<MediaSlot[]> {
@@ -146,6 +160,26 @@ export function slotStyleCss(slot: MediaSlotRow): string | null {
   }
   if (decls.length === 0) return null;
   return `[data-kslot="${slot.slot_key}"]{${decls.map((d) => `${d} !important`).join(";")}}`;
+}
+
+/** حجم البلاطة المعتمد للفتحة، أو الحجم الافتراضي للشبكة. */
+export function slotTileSize(
+  slots: MediaSlot[] | undefined,
+  key: string,
+  fallback: "sm" | "md" | "lg" = "sm",
+): "sm" | "md" | "lg" {
+  const value = slots?.find((item) => item.slot_key === key)?.tile_size;
+  return value === "sm" || value === "md" || value === "lg" ? value : fallback;
+}
+
+/** وجهة الضغط المسجّلة للفتحة، أو الوجهة المدمجة في الواجهة. */
+export function slotLink(slots: MediaSlot[] | undefined, key: string, fallback: string): string {
+  return slots?.find((item) => item.slot_key === key)?.link_path || fallback;
+}
+
+/** قالب «تصاميمي» المربوط بفتحة إعلانية. */
+export function slotTemplateId(slots: MediaSlot[] | undefined, key: string): string | null {
+  return slots?.find((item) => item.slot_key === key)?.template_id ?? null;
 }
 
 /** معرّف الحملة المربوطة بموضع إعلاني، إن كانت داخل فترة العرض. */

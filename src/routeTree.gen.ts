@@ -39,6 +39,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
 import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideClaimsRouteImport } from './routes/admin/guide-claims'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
@@ -50,6 +51,7 @@ import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminMascotsRouteImport } from './routes/admin/mascots'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
+import { Route as AdminPricingRouteImport } from './routes/admin/pricing'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
@@ -273,6 +275,11 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminDesignsRoute = AdminDesignsRouteImport.update({
+  id: '/designs',
+  path: '/designs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminErrandsRoute = AdminErrandsRouteImport.update({
   id: '/errands',
   path: '/errands',
@@ -326,6 +333,11 @@ const AdminModerationRoute = AdminModerationRouteImport.update({
 const AdminMyWorkRoute = AdminMyWorkRouteImport.update({
   id: '/my-work',
   path: '/my-work',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
@@ -723,6 +735,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
@@ -734,6 +747,7 @@ export interface FileRoutesByFullPath {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -834,6 +848,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
@@ -845,6 +860,7 @@ export interface FileRoutesByTo {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -950,6 +966,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/designs': typeof AdminDesignsRoute
   '/admin/errands': typeof AdminErrandsRoute
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
@@ -961,6 +978,7 @@ export interface FileRoutesById {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -1067,6 +1085,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/designs'
     | '/admin/errands'
     | '/admin/guide-claims'
     | '/admin/guide-queue'
@@ -1078,6 +1097,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1178,6 +1198,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/designs'
     | '/admin/errands'
     | '/admin/guide-claims'
     | '/admin/guide-queue'
@@ -1189,6 +1210,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1293,6 +1315,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/dashboard'
+    | '/admin/designs'
     | '/admin/errands'
     | '/admin/guide-claims'
     | '/admin/guide-queue'
@@ -1304,6 +1327,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1635,6 +1659,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/designs': {
+      id: '/admin/designs'
+      path: '/designs'
+      fullPath: '/admin/designs'
+      preLoaderRoute: typeof AdminDesignsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/errands': {
       id: '/admin/errands'
       path: '/errands'
@@ -1710,6 +1741,13 @@ declare module '@tanstack/react-router' {
       path: '/my-work'
       fullPath: '/admin/my-work'
       preLoaderRoute: typeof AdminMyWorkRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/roles': {
@@ -2227,6 +2265,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminDesignsRoute: typeof AdminDesignsRoute
   AdminErrandsRoute: typeof AdminErrandsRoute
   AdminGuideClaimsRoute: typeof AdminGuideClaimsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
@@ -2238,6 +2277,7 @@ interface AdminRouteRouteChildren {
   AdminMascotsRoute: typeof AdminMascotsRoute
   AdminModerationRoute: typeof AdminModerationRoute
   AdminMyWorkRoute: typeof AdminMyWorkRoute
+  AdminPricingRoute: typeof AdminPricingRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -2266,6 +2306,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminDesignsRoute: AdminDesignsRoute,
   AdminErrandsRoute: AdminErrandsRoute,
   AdminGuideClaimsRoute: AdminGuideClaimsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
@@ -2277,6 +2318,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminMascotsRoute: AdminMascotsRoute,
   AdminModerationRoute: AdminModerationRoute,
   AdminMyWorkRoute: AdminMyWorkRoute,
+  AdminPricingRoute: AdminPricingRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,

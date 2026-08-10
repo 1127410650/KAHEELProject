@@ -5,7 +5,7 @@
  * كتابة تمرّ بدوال SECURITY DEFINER تعيد فحص الصلاحية في القاعدة.
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LayoutTemplate, MousePointerClick } from "lucide-react";
+import { CircleDollarSign, LayoutTemplate, MousePointerClick, Sparkles } from "lucide-react";
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
@@ -50,6 +50,18 @@ function AppearancePage() {
         >
           <MousePointerClick className="size-4" aria-hidden />
           وضع التحرير
+        </Button>
+        <Button asChild size="sm" variant="outline" className="gap-1.5">
+          <Link to="/admin/designs">
+            <Sparkles className="size-4" aria-hidden />
+            بانِ العروض والترويج
+          </Link>
+        </Button>
+        <Button asChild size="sm" variant="outline" className="gap-1.5">
+          <Link to="/admin/pricing">
+            <CircleDollarSign className="size-4" aria-hidden />
+            الأسعار والقيم
+          </Link>
         </Button>
         <Button asChild size="sm" variant="outline" className="gap-1.5">
           <Link to="/admin/appearance/variants">

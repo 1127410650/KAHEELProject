@@ -15,6 +15,9 @@ import carsImg from "@/assets/market/cat-cars.webp";
 import { CampaignAsset } from "@/components/marketplace/campaign/CampaignAsset";
 import { useI18n } from "@/i18n";
 import { trackCampaign, useLiveCampaigns, type LiveCampaign } from "@/lib/mkt-campaigns";
+import { DesignCard } from "@/components/marketplace/design/DesignCard";
+import { useDesignLibrary, useDesignTemplates } from "@/lib/mkt-design-library";
+import { slotTemplateId, useMediaSlots } from "@/lib/mkt-media-slots";
 
 const WIDE = "h-[132px] sm:h-[190px]";
 const HALF = "h-[112px] sm:h-[150px]";
@@ -38,6 +41,13 @@ function CampaignTile({
   useEffect(() => {
     if (campaign) trackCampaign(campaign.id, "impression");
   }, [campaign]);
+
+  /* بطاقة مبنية من «تصاميمي» ومربوطة بهذه الفتحة تتقدّم على الحملة والافتراضي. */
+  const slots = useMediaSlots();
+  const templateId = slotTemplateId(slots.data, slotKey);
+  const templates = useDesignTemplates(!!templateId);
+  const lib = useDesignLibrary(!!templateId);
+  const template = templateId ? templates.data?.find((item) => item.id === templateId) : undefined;
 
   // الأساس لافندر خفيف (لا أبيض) كي لا يبدو الموضع فارغًا مع أصل حملة شفاف.
   const box = `relative block w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45 ${className}`;
@@ -76,6 +86,13 @@ function CampaignTile({
       </span>
     </>
   );
+
+  if (template)
+    return (
+      <div data-kslot={slotKey} className={box}>
+        <DesignCard template={template} library={lib.data} className={`size-full ${className}`} />
+      </div>
+    );
 
   if (!campaign)
     return (
