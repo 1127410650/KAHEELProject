@@ -545,7 +545,7 @@ function AdPage() {
             {listing.title}
           </h1>
           <p className="mt-1 text-lg font-bold text-primary sm:text-xl">
-            {priceLabel(listing, "—", locale)}
+            <bdi>{priceLabel(listing, "—", locale)}</bdi>
           </p>
 
           {/* شريط المواصفات السريعة (غرف · حمامات · مساحة) — يظهر فقط عند وجود قيم. */}
@@ -568,7 +568,7 @@ function AdPage() {
             )}
             <span className="inline-flex items-center gap-1">
               <CalendarDays className="size-3.5" aria-hidden />
-              {relativeTime(listing.published_at ?? listing.created_at, locale)}
+              <bdi>{relativeTime(listing.published_at ?? listing.created_at, locale)}</bdi>
             </span>
             {visible && (
               <span className="inline-flex items-center gap-1">
