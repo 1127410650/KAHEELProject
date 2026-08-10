@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { SlotDesignControls } from "@/components/marketplace/live-edit/SlotDesignControls";
+import { SlotRotationControls } from "@/components/marketplace/live-edit/SlotRotationControls";
+
 import { readableSize } from "@/lib/media-compress";
 import { formatDateTime } from "@/lib/format";
 import { activatePageVariant, usePageVariants, useRefreshPageVariants } from "@/lib/mkt-page-variants";
