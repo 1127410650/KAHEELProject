@@ -729,6 +729,61 @@ body:has(.market-surface) .shadow-raised {
     0 14px 32px -24px rgb(17 17 17 / 0.16) !important;
 }
 
+/*
+ * الهيدر: تدرج بنفسجي فاتح مضيء بحواف سفلية دائرية كبيرة. الرموز الدلالية
+ * تُعاد توجيهها داخل نطاق الهيدر فقط، فيصبح كل نص وأيقونة أبيض بلا تعديل JSX.
+ */
+.k-header-hero {
+  background-image: linear-gradient(135deg, var(--header-from), var(--header-to));
+  border-bottom-left-radius: 26px;
+  border-bottom-right-radius: 26px;
+  border-bottom-color: transparent;
+
+  --foreground: #ffffff;
+  --card-foreground: #ffffff;
+  --muted-foreground: rgb(255 255 255 / 0.9);
+  --secondary: rgb(255 255 255 / 0.18);
+  --secondary-foreground: #ffffff;
+  --card: rgb(255 255 255 / 0.16);
+  --border: rgb(255 255 255 / 0.42);
+  --input: rgb(255 255 255 / 0.42);
+  --primary: #ffffff;
+  --primary-foreground: #5f35a8;
+  --accent: rgb(255 255 255 / 0.18);
+  --accent-foreground: #ffffff;
+  color: #ffffff;
+}
+
+.k-header-hero :where(strong, span, a, button) {
+  text-shadow: none;
+}
+
+/* نقاط ترقيم الكاروسيل بيضاء صغيرة داخل الهيدر. */
+.k-header-hero [data-dot] {
+  background: rgb(255 255 255 / 0.45);
+}
+
+.k-header-hero [data-dot][data-active="true"] {
+  background: #ffffff;
+}
+
+/* بلاطة تصنيف: مربع أبيض بإطار بنفسجي رفيع وأيقونة خطية بنفسجية. */
+@utility k-tile {
+  background: var(--card);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 40%, white);
+  color: var(--primary);
+}
+
+/* حبّة ممتلئة: بنفسجي متوسط ونص أبيض — للأزرار والوسوم. */
+@utility k-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
 /* سطح المنصة لافندر فاتح جدًا، والبطاقات البيضاء تطفو فوقه. */
 .market-shell > main {
   background: var(--background);
