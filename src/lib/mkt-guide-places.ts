@@ -172,6 +172,7 @@ export async function fetchGuidePlaces(
     const { data, error: nearError } = await supabase
       .from("mkt_guide_places")
       .select(SELECT_COLUMNS)
+      .is("removed_at", null)
       .in("id", nearPage.ids);
     if (nearError) throw nearError;
     const ordered = orderByIds((data ?? []) as unknown as GuidePlace[], nearPage.ids)
@@ -185,6 +186,7 @@ export async function fetchGuidePlaces(
   let request = supabase
     .from("mkt_guide_places")
     .select(SELECT_COLUMNS, { count: "exact" })
+    .is("removed_at", null)
     .eq("is_published", true)
     .eq("country_iso2", iso2);
 
@@ -220,6 +222,7 @@ export async function fetchGuidePlace(slug: string): Promise<GuidePlace | null> 
     .from("mkt_guide_places")
     .select(SELECT_COLUMNS)
     .eq("slug", slug)
+    .is("removed_at", null)
     .eq("is_published", true)
     .maybeSingle();
 
@@ -262,6 +265,7 @@ export async function fetchGuideFacetRows(): Promise<GuideFacetRow[]> {
     const { data, error, count } = await supabase
       .from("mkt_guide_places")
       .select("sector,governorate,category,subcategory", { count: "exact" })
+      .is("removed_at", null)
       .eq("is_published", true)
       .eq("country_iso2", iso2)
       .order("id", { ascending: true })
