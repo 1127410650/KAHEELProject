@@ -22,10 +22,15 @@ import {
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
+import { KpiDeck } from "@/components/admin/KpiDeck";
+import { WorkQueue } from "@/components/admin/WorkQueue";
+import { ActivityFeed, SystemHealthCard } from "@/components/admin/ActivityFeed";
+import { AiSpendCard } from "@/components/admin/AiSpendCard";
 import { loadAdminOverview } from "@/lib/mkt-platform";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime } from "@/lib/format";
 import { Skeleton } from "@/components/ui/skeleton";
+
 
 export const Route = createFileRoute("/admin/")({
   ssr: "data-only",
