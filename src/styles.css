@@ -171,6 +171,11 @@
 :root {
   --radius: 0.75rem;
 
+  /* استدارات ناضجة موحّدة: بطاقة 14px، عنصر تحكم 12px، صورة 12px. */
+  --r-card: 14px;
+  --r-control: 12px;
+  --r-img: 12px;
+
   /* أسطح محايدة: خلفية الصفحة #F7F7F8 وبطاقات بيضاء ونص #1B1B1F */
   --background: var(--neutral-bg);
   --foreground: var(--text-primary);
