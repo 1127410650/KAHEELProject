@@ -340,6 +340,16 @@ export function LiveEditSheet({
           onSave={(patch, done) => void run(() => saveSlotDraft(slot.slot_key, patch), done)}
         />
 
+        {slot.edit_kind === "ad" || slot.edit_kind === "background" || slot.edit_kind === "media" ? (
+          <SlotRotationControls
+            slot={slot}
+            current={current}
+            busy={busy}
+            onSave={(patch, done) => void run(() => saveSlotDraft(slot.slot_key, patch), done)}
+          />
+        ) : null}
+
+
         <input
           ref={fileRef}
           type="file"
