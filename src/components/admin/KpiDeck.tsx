@@ -60,19 +60,19 @@ export function KpiDeck() {
           key: "admin.gm.kpi.serviceBookings",
           value: formatNumber(data.serviceBookings.total),
           points: data.serviceBookings.points,
-          to: "/admin/bookings",
+          to: "/admin/stores",
         },
         {
           key: "admin.gm.kpi.aqarBookings",
           value: formatNumber(data.aqarBookings.total),
           points: data.aqarBookings.points,
-          to: "/admin/aqar",
+          to: "/admin/listings",
         },
         {
           key: "admin.gm.kpi.conversations",
           value: formatNumber(data.conversations.total),
           points: data.conversations.points,
-          to: "/admin/reports",
+          to: "/admin/moderation",
         },
         {
           key: "admin.gm.kpi.campaigns",
@@ -86,13 +86,13 @@ export function KpiDeck() {
           value: formatNumber(data.topupsPending),
           hint: `${formatNumber(Math.round(data.topupsPendingAmount))} SAR`,
           points: [],
-          to: "/admin/wallets",
+          to: "/admin/ad-credit",
         },
         {
           key: "admin.gm.kpi.reviews",
           value: formatNumber(data.reviews.total),
           points: data.reviews.points,
-          to: "/admin/reports",
+          to: "/admin/moderation",
         },
       ]
     : [];

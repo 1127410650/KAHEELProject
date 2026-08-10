@@ -221,12 +221,12 @@ export async function loadGmQueues(): Promise<GmQueue[]> {
     ]);
 
   return [
-    { key: "verifications", count: verifications, to: "/admin/verification", urgency: 1 },
+    { key: "verifications", count: verifications, to: "/admin/verifications", urgency: 1 },
     { key: "saleListings", count: saleListings, to: "/admin/listings", urgency: 2 },
-    { key: "topups", count: topups, to: "/admin/wallets", urgency: 3 },
+    { key: "topups", count: topups, to: "/admin/ad-credit", urgency: 3 },
     { key: "reports", count: reports, to: "/admin/reports", urgency: 4 },
     { key: "claims", count: claims, to: "/admin/guide-claims", urgency: 5 },
-    { key: "removals", count: removals, to: "/admin/guide-claims", urgency: 6 },
+    { key: "removals", count: removals, to: "/admin/guide-requests", urgency: 6 },
     { key: "expiring", count: expiring, to: "/admin/campaigns", urgency: 7 },
   ].sort((a, b) => (b.count > 0 ? 1 : 0) - (a.count > 0 ? 1 : 0) || a.urgency - b.urgency);
 }
