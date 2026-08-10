@@ -59,6 +59,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
 import { Route as AdsSlugRouteImport } from './routes/ads.$slug'
 import { Route as AqarIndexRouteImport } from './routes/aqar.index'
+import { Route as AqarBrowseRouteImport } from './routes/aqar.browse'
 import { Route as BusinessIndexRouteImport } from './routes/business/index'
 import { Route as BusinessOrdersRouteImport } from './routes/business/orders'
 import { Route as BusinessPartnersRouteImport } from './routes/business/partners'
@@ -364,6 +365,11 @@ const AdsSlugRoute = AdsSlugRouteImport.update({
 const AqarIndexRoute = AqarIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AqarRoute,
+} as any)
+const AqarBrowseRoute = AqarBrowseRouteImport.update({
+  id: '/browse',
+  path: '/browse',
   getParentRoute: () => AqarRoute,
 } as any)
 const BusinessIndexRoute = BusinessIndexRouteImport.update({
@@ -700,6 +706,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/aqar/browse': typeof AqarBrowseRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
@@ -804,6 +811,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/aqar/browse': typeof AqarBrowseRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
@@ -913,6 +921,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
   '/ads/$slug': typeof AdsSlugRoute
+  '/aqar/browse': typeof AqarBrowseRoute
   '/business/orders': typeof BusinessOrdersRoute
   '/business/partners': typeof BusinessPartnersRoute
   '/business/profile': typeof BusinessProfileRoute
@@ -1023,6 +1032,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/aqar/browse'
     | '/business/orders'
     | '/business/partners'
     | '/business/profile'
@@ -1127,6 +1137,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/aqar/browse'
     | '/business/orders'
     | '/business/partners'
     | '/business/profile'
@@ -1235,6 +1246,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/ads/$slug'
+    | '/aqar/browse'
     | '/business/orders'
     | '/business/partners'
     | '/business/profile'
@@ -1689,6 +1701,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/aqar/'
       preLoaderRoute: typeof AqarIndexRouteImport
+      parentRoute: typeof AqarRoute
+    }
+    '/aqar/browse': {
+      id: '/aqar/browse'
+      path: '/browse'
+      fullPath: '/aqar/browse'
+      preLoaderRoute: typeof AqarBrowseRouteImport
       parentRoute: typeof AqarRoute
     }
     '/business/': {
@@ -2240,10 +2259,12 @@ const MyRouteRouteWithChildren =
   MyRouteRoute._addFileChildren(MyRouteRouteChildren)
 
 interface AqarRouteChildren {
+  AqarBrowseRoute: typeof AqarBrowseRoute
   AqarIndexRoute: typeof AqarIndexRoute
 }
 
 const AqarRouteChildren: AqarRouteChildren = {
+  AqarBrowseRoute: AqarBrowseRoute,
   AqarIndexRoute: AqarIndexRoute,
 }
 
