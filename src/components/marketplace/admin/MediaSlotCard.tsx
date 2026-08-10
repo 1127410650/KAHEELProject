@@ -67,6 +67,8 @@ export function MediaSlotCard({ slot, onChanged }: { slot: MediaSlot; onChanged:
   const [alt, setAlt] = useState(slot.alt_text ?? "");
   const [videoUrl, setVideoUrl] = useState(slot.kind === "video_url" ? slot.external_url ?? "" : "");
   const [stampOn, setStampOn] = useState(false);
+  const [studioOpen, setStudioOpen] = useState(false);
+
   const [stamp, setStamp] = useState<BrandStampOptions>(BRAND_STAMP_DEFAULTS);
   const setStampField = <K extends keyof BrandStampOptions>(key: K, value: BrandStampOptions[K]) =>
     setStamp((prev) => ({ ...prev, [key]: value }));
