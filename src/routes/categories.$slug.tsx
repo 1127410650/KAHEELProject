@@ -1,4 +1,6 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+
+import { getCategoryRedirect } from "@/lib/mkt-category-redirects.functions";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
