@@ -14,6 +14,9 @@ import {
   CalendarDays,
   Heart,
   ImageOff,
+  KeyRound,
+  ShieldCheck,
+
   Layers,
   MapPin,
   Ruler,
