@@ -60,6 +60,7 @@ export function KaheelStories() {
       <ul className="flex list-none gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {list.map((story, index) => {
           const isSeen = seen.includes(story.id);
+          const cover = storyCover(story, images.data ?? {});
           return (
             <li key={story.id} className="shrink-0">
               <button
@@ -79,14 +80,25 @@ export function KaheelStories() {
                     className="grid size-full place-items-center overflow-hidden rounded-full bg-white"
                     style={{ background: STORY_GRADIENT_CSS[story.gradient] }}
                   >
-                    <Mascot
-                      name={story.mascot}
-                      pose={storyPose(story)}
-                      lang={ar ? "ar" : "en"}
-                      className="h-[52px] w-auto"
-                    />
+                    {cover ? (
+                      <img
+                        src={cover}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <Mascot
+                        name={story.mascot}
+                        pose={storyPose(story)}
+                        lang={ar ? "ar" : "en"}
+                        className="h-[52px] w-auto"
+                      />
+                    )}
                   </span>
                 </span>
+
                 <span className="line-clamp-2 min-h-[32px] w-full text-center text-desc font-bold leading-[1.25] text-brand-900">
                   {ar ? story.title_ar : story.title_en}
                 </span>
