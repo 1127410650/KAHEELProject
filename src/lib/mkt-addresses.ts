@@ -11,13 +11,16 @@ export interface MktUserAddress {
   details: string | null;
   lat: number | null;
   lng: number | null;
+  accuracy_m: number | null;
+  place_label: string | null;
   source: string;
   is_default: boolean;
   created_at: string;
 }
 
 export const ADDRESS_COLUMNS =
-  "id, label, country_id, city_id, district, details, lat, lng, source, is_default, created_at";
+  "id, label, country_id, city_id, district, details, lat, lng, accuracy_m, place_label, source, is_default, created_at";
+
 
 export async function loadMyAddresses(): Promise<MktUserAddress[]> {
   const { data, error } = await supabase
