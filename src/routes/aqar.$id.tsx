@@ -373,9 +373,13 @@ function AqarListingPage() {
                 ≈ {price.secondary}
               </span>
             ) : null}
+            <span className="block truncate text-nav text-muted-foreground">
+              الإجمالي يُحسب في صفحة الطلب — لا دفع عبر المنصة
+            </span>
           </span>
           <Link
-            to="/aqar/requests"
+            to="/aqar/book/$id"
+            params={{ id: row.id }}
             className="inline-flex shrink-0 items-center rounded-full bg-primary px-5 text-body font-bold text-primary-foreground"
             style={{ minHeight: 44 }}
           >
@@ -383,6 +387,7 @@ function AqarListingPage() {
               ? label("aqar.request_visit", "طلب معاينة")
               : label("aqar.request_booking", "طلب حجز")}
           </Link>
+
         </div>
       </div>
     </AqarShell>
