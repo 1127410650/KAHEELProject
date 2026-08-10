@@ -8,9 +8,10 @@ import {
   MapPin,
   MessageCircle,
   MoreHorizontal,
-  
+  Search,
   Tag,
 } from "lucide-react";
+
 import { useEffect, useRef, useState } from "react";
 
 import { addListingHref } from "@/lib/add-listing";
@@ -23,6 +24,8 @@ import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
 
 import { AddListingButton } from "@/components/marketplace/AddListingButton";
+import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
+
 
 
 
@@ -31,7 +34,14 @@ import { LocationSheet } from "@/components/marketplace/LocationSheet";
 import kaheelLogo from "@/assets/kaheel-logo.png";
 import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
+/** أبعاد هيدر الرئيسية بالبكسل — ثابتة كي تبقى المساحة المحجوزة أدناه ثابتة. */
+const HOME_ROW_H = 44;
+const HOME_NAV_H = 34;
+const HOME_SEARCH_H = 58;
+const HOME_HEADER_H = HOME_ROW_H + HOME_NAV_H + HOME_SEARCH_H;
+
 export function MarketHeader({
+
   showCategories = false,
   home = false,
 }: {
@@ -44,12 +54,14 @@ export function MarketHeader({
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
   /**
-   * الهيدر المتكيّف (الرئيسية فقط): ينكمش تدريجيًا مع التمرير لأسفل حتى يبقى
-   * شريط رفيع فيه حقل البحث، ويعود كاملًا عند السحب لأعلى. الارتفاع المحجوز
-   * أسفله يبقى ارتفاع الحالة الكاملة، فلا هزّة تخطيط عند الانكماش.
+   * الهيدر المتكيّف (الرئيسية فقط): ينكمش **تدريجيًا** مع حركة الإصبع — لا قفزة
+   * بين حالتين. `shrink` قيمة متصلة من 0 (كامل) إلى 1 (شريط البحث فقط)، تتقدّم
+   * بمقدار التمرير لأسفل وتعود إلى الصفر فورًا مع أول سحب لأعلى.
+   * المساحة المحجوزة أسفل الهيدر ثابتة على ارتفاع الحالة الكاملة ⇒ صفر هزّة.
    */
-  const [collapsed, setCollapsed] = useState(false);
-  const collapsedRef = useRef(false);
+  const [shrink, setShrink] = useState(0);
+  const shrinkRef = useRef(0);
+
   const [locationOpen, setLocationOpenState] = useState(false);
 
   const [locationMounted, setLocationMounted] = useState(false);
@@ -78,11 +90,11 @@ export function MarketHeader({
   });
 
   useEffect(() => {
+    // الرئيسية تحجز ارتفاعًا ثابتًا (HOME_HEADER_H) فلا تحتاج قياسًا متغيرًا.
+    if (home) return;
     const header = headerRef.current;
     if (!header) return;
     const measure = () => {
-      // القياس في الحالة الكاملة فقط: المساحة المحجوزة أدناه لا تتقلّص أبدًا.
-      if (collapsedRef.current) return;
       setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
     };
     measure();
@@ -93,24 +105,28 @@ export function MarketHeader({
     const observer = new ResizeObserver(measure);
     observer.observe(header);
     return () => observer.disconnect();
-  }, []);
+  }, [home]);
 
   useEffect(() => {
     if (!home) return;
     let last = window.scrollY;
     let frame = 0;
+    /** مسافة التمرير اللازمة للانكماش الكامل — تجعل الحركة متدرّجة مع الإصبع. */
+    const RANGE = 90;
     const onScroll = () => {
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
         const y = window.scrollY;
-        const goingDown = y > last + 4;
-        const goingUp = y < last - 4;
+        const delta = y - last;
         last = y;
-        const next = y < 96 ? false : goingDown ? true : goingUp ? false : collapsedRef.current;
-        if (next !== collapsedRef.current) {
-          collapsedRef.current = next;
-          setCollapsed(next);
+        let next = shrinkRef.current;
+        if (y <= 8) next = 0;
+        else if (delta > 0) next = Math.min(1, shrinkRef.current + delta / RANGE);
+        else if (delta < 0) next = 0; // أول سحب لأعلى يعيد الهيدر كاملًا فورًا
+        if (Math.abs(next - shrinkRef.current) > 0.003) {
+          shrinkRef.current = next;
+          setShrink(next);
         }
       });
     };
@@ -121,7 +137,8 @@ export function MarketHeader({
     };
   }, [home]);
 
-  const shrunk = home && collapsed;
+  const collapsedEnough = home && shrink > 0.6;
+
 
   return (
     <>
@@ -143,29 +160,18 @@ export function MarketHeader({
           className="pointer-events-none absolute -bottom-2 end-2 hidden h-[62px] w-auto select-none opacity-90 drop-shadow-[0_6px_14px_rgb(74_38_128/0.35)] sm:block"
         />
 
-        {shrunk ? (
-          /* الشريط الرفيع: حقل البحث وحده، والضغط عليه يعيد المستخدم لأعلى الصفحة. */
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="relative z-10 mx-auto flex h-[42px] w-full max-w-[1240px] items-center gap-2 px-3 text-start outline-none focus-visible:ring-2 focus-visible:ring-primary/45 sm:px-5 lg:px-8"
-            aria-label={t("market.homeV2.searchPlaceholder" as "market.brand")}
-          >
-            <span className="flex h-8 min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 text-muted-foreground">
-              <MapPin className="size-4 shrink-0 text-primary" aria-hidden />
-              <span className="truncate text-desc font-semibold">
-                {t("market.homeV2.searchPlaceholder" as "market.brand")}
-              </span>
-            </span>
-          </button>
-        ) : (
+        {/* صف الهوية: الشعار + الموقع + إنشاء إعلان — يتقلّص تدريجيًا مع التمرير. */}
         <div
-          className={
+          className={`relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 overflow-hidden px-3 sm:px-5 lg:px-8 ${
+            collapsedEnough ? "pointer-events-none" : ""
+          }`}
+          style={
             home
-              ? "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
-              : "relative z-10 mx-auto grid min-h-[40px] w-full max-w-[1240px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:min-h-[44px] sm:px-5 lg:px-8"
+              ? { height: `${HOME_ROW_H * (1 - shrink)}px`, opacity: 1 - shrink }
+              : { minHeight: "44px" }
           }
         >
+
 
 
           {home ? (
@@ -264,15 +270,16 @@ export function MarketHeader({
             </>
           )}
         </div>
-        )}
-        {home && !shrunk && (
-
+        {home && (
           <nav
             aria-label={t("market.nav.menu")}
-            className="border-t border-white/25 bg-transparent"
-
+            className={`overflow-hidden border-t border-white/25 bg-transparent ${
+              collapsedEnough ? "pointer-events-none" : ""
+            }`}
+            style={{ height: `${HOME_NAV_H * (1 - shrink)}px`, opacity: 1 - shrink }}
           >
-            <div className="mx-auto flex min-h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+            <div className="mx-auto flex h-[34px] w-full max-w-[1240px] items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 sm:px-5 lg:px-8">
+
               {[
                 [t("market.bottomNav.home"), "/"],
                 [t("market.homeV2.fields.restaurants.title"), "/search?category=restaurants"],
@@ -297,6 +304,32 @@ export function MarketHeader({
             </div>
           </nav>
         )}
+        {home && (
+          /* صف البحث: يبقى دائمًا ظاهرًا — وهو وحده ما يتبقّى بعد الانكماش.
+             عند الانكماش يصبح الضغط عليه صعودًا سلسًا لأعلى الصفحة. */
+          <div
+            className="relative z-10 mx-auto flex w-full max-w-[1240px] items-center px-3 sm:px-5 lg:px-8"
+            style={{ height: `${HOME_SEARCH_H}px` }}
+          >
+            {collapsedEnough ? (
+              <button
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                aria-label={t("market.homeV2.searchPlaceholder" as "market.brand")}
+                className="flex h-11 w-full items-center gap-2.5 rounded-full border border-border bg-card px-4 text-start text-muted-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+              >
+                <Search className="size-[18px] shrink-0" aria-hidden />
+                <span className="truncate text-desc font-semibold">
+                  {t("market.homeV2.searchPlaceholder" as "market.brand")}
+                </span>
+              </button>
+            ) : (
+              <div className="w-full">
+                <BigSearchField />
+              </div>
+            )}
+          </div>
+        )}
         {showCategories && <MarketCategoryStrip />}
         {session && offline && (
           <div className="border-t border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground sm:text-desc">
@@ -310,15 +343,22 @@ export function MarketHeader({
           // The category strip is two rows now, so the pre-measurement fallback
           // reserves the taller band and nothing jumps on first paint.
           home
-            ? "h-[80px] sm:h-[86px]"
+            ? undefined
 
             : showCategories
               ? "h-[11.25rem] sm:h-[11.75rem]"
               : "h-[46px] sm:h-[50px]"
 
         }
-        style={headerHeight > 0 ? { height: `${headerHeight}px` } : undefined}
+        style={
+          home
+            ? { height: `${HOME_HEADER_H}px` }
+            : headerHeight > 0
+              ? { height: `${headerHeight}px` }
+              : undefined
+        }
       />
+
       {/* Mounted only after a tap so the sheet never costs anything on first paint. */}
       {locationMounted && <LocationSheet open={locationOpen} onOpenChange={setLocationOpen} />}
     </>

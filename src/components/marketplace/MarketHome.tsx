@@ -9,7 +9,7 @@
  * محجوز مسبقًا، وكل صورة لها أبعاد أو نسبة أبعاد ⇒ صفر هزّة تخطيط.
  * الهيدر ينكمش مع التمرير ويُدار في `MarketShell`، وارتفاعه محجوز هناك.
  */
-import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchField";
+
 import { CampaignMosaic } from "@/components/marketplace/home/noon/CampaignMosaic";
 import { CategoryRail, useHomeRails } from "@/components/marketplace/home/noon/CategoryRail";
 import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTileGrid";
@@ -64,9 +64,10 @@ export function MarketHome() {
       <div className="mx-auto w-full max-w-[1240px] space-y-5 overflow-x-clip px-3 pb-3 pt-3 sm:space-y-7 sm:px-5 lg:px-8">
         <QuickTiles />
 
-        <BigSearchField />
+        {/* حقل البحث العريض يعيش في الهيدر (MarketShell) كي يبقى وحده بعد الانكماش. */}
 
         <SyriaPrideStrip />
+
 
         <CampaignMosaic />
 

@@ -15,7 +15,7 @@ const TILES = [
     icon: Compass,
     ar: "دليل سوريا",
     en: "Syria guide",
-    tint: "bg-primary/10 text-primary ring-primary/20",
+    tint: "bg-primary/12 text-primary ring-primary/25",
   },
   {
     key: "student",
@@ -23,7 +23,7 @@ const TILES = [
     icon: BookOpenCheck,
     ar: "دليل الطالب",
     en: "Student guide",
-    tint: "bg-gold/15 text-gold-foreground ring-gold/30",
+    tint: "bg-gold/20 text-gold-foreground ring-gold/40",
   },
   {
     key: "bookings",
@@ -31,9 +31,10 @@ const TILES = [
     icon: CalendarClock,
     ar: "مواعيد",
     en: "Bookings",
-    tint: "bg-secondary text-foreground ring-border",
+    tint: "bg-primary text-primary-foreground ring-primary/40",
   },
 ] as const;
+
 
 export function QuickTiles() {
   const { locale } = useI18n();
