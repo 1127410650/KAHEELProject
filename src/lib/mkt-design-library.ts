@@ -154,7 +154,9 @@ export function useDesignLibrary(enabled = true) {
 const TEMPLATE_COLUMNS =
   "id, kind, name_ar, title_ar, body_ar, discount_pct, bg_color, grad_from, grad_to, grad_angle, " +
   "image_path, shape_key, shape_color, shape_opacity, shape_size, shape_pos, motion_key, " +
-  "motion_state, motion_speed, link_path, campaign_id, starts_at, ends_at, is_active, updated_at";
+  "motion_state, motion_speed, link_path, campaign_id, starts_at, ends_at, is_active, " +
+  "brand_stamp, layout_key, variation_of, updated_at";
+
 
 export async function fetchDesignTemplates(): Promise<DesignTemplate[]> {
   const { data, error } = await supabase
