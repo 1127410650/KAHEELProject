@@ -45,6 +45,7 @@ import { Route as AdminErrandsRouteImport } from './routes/admin/errands'
 import { Route as AdminGuideClaimsRouteImport } from './routes/admin/guide-claims'
 import { Route as AdminGuideQueueRouteImport } from './routes/admin/guide-queue'
 import { Route as AdminGuideRequestsRouteImport } from './routes/admin/guide-requests'
+import { Route as AdminLabelsRouteImport } from './routes/admin/labels'
 import { Route as AdminListingEventsRouteImport } from './routes/admin/listing-events'
 import { Route as AdminListingReportsRouteImport } from './routes/admin/listing-reports'
 import { Route as AdminListingsRouteImport } from './routes/admin/listings'
@@ -306,6 +307,11 @@ const AdminGuideQueueRoute = AdminGuideQueueRouteImport.update({
 const AdminGuideRequestsRoute = AdminGuideRequestsRouteImport.update({
   id: '/guide-requests',
   path: '/guide-requests',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLabelsRoute = AdminLabelsRouteImport.update({
+  id: '/labels',
+  path: '/labels',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingEventsRoute = AdminListingEventsRouteImport.update({
@@ -759,6 +765,7 @@ export interface FileRoutesByFullPath {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -875,6 +882,7 @@ export interface FileRoutesByTo {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -996,6 +1004,7 @@ export interface FileRoutesById {
   '/admin/guide-claims': typeof AdminGuideClaimsRoute
   '/admin/guide-queue': typeof AdminGuideQueueRoute
   '/admin/guide-requests': typeof AdminGuideRequestsRoute
+  '/admin/labels': typeof AdminLabelsRoute
   '/admin/listing-events': typeof AdminListingEventsRoute
   '/admin/listing-reports': typeof AdminListingReportsRoute
   '/admin/listings': typeof AdminListingsRoute
@@ -1118,6 +1127,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1234,6 +1244,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1354,6 +1365,7 @@ export interface FileRouteTypes {
     | '/admin/guide-claims'
     | '/admin/guide-queue'
     | '/admin/guide-requests'
+    | '/admin/labels'
     | '/admin/listing-events'
     | '/admin/listing-reports'
     | '/admin/listings'
@@ -1737,6 +1749,13 @@ declare module '@tanstack/react-router' {
       path: '/guide-requests'
       fullPath: '/admin/guide-requests'
       preLoaderRoute: typeof AdminGuideRequestsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/labels': {
+      id: '/admin/labels'
+      path: '/labels'
+      fullPath: '/admin/labels'
+      preLoaderRoute: typeof AdminLabelsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listing-events': {
@@ -2330,6 +2349,7 @@ interface AdminRouteRouteChildren {
   AdminGuideClaimsRoute: typeof AdminGuideClaimsRoute
   AdminGuideQueueRoute: typeof AdminGuideQueueRoute
   AdminGuideRequestsRoute: typeof AdminGuideRequestsRoute
+  AdminLabelsRoute: typeof AdminLabelsRoute
   AdminListingEventsRoute: typeof AdminListingEventsRoute
   AdminListingReportsRoute: typeof AdminListingReportsRoute
   AdminListingsRoute: typeof AdminListingsRoute
@@ -2372,6 +2392,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminGuideClaimsRoute: AdminGuideClaimsRoute,
   AdminGuideQueueRoute: AdminGuideQueueRoute,
   AdminGuideRequestsRoute: AdminGuideRequestsRoute,
+  AdminLabelsRoute: AdminLabelsRoute,
   AdminListingEventsRoute: AdminListingEventsRoute,
   AdminListingReportsRoute: AdminListingReportsRoute,
   AdminListingsRoute: AdminListingsRoute,
