@@ -108,6 +108,7 @@ import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
+import { Route as AdminContentIndexRouteImport } from './routes/admin/content.index'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
@@ -632,6 +633,11 @@ const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
   path: '/businesses/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
+  id: '/content/',
+  path: '/content/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminListingsIdRoute = AdminListingsIdRouteImport.update({
   id: '/listings_/$id',
   path: '/listings/$id',
@@ -895,6 +901,7 @@ export interface FileRoutesByFullPath {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
@@ -1020,6 +1027,7 @@ export interface FileRoutesByTo {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/content': typeof AdminContentIndexRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/business/services': typeof BusinessServicesIndexRoute
   '/business/store': typeof BusinessStoreIndexRoute
@@ -1150,6 +1158,7 @@ export interface FileRoutesById {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
@@ -1281,6 +1290,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
     | '/business/store/'
@@ -1406,6 +1416,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/content'
     | '/admin/reports'
     | '/business/services'
     | '/business/store'
@@ -1535,6 +1546,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
     | '/business/store/'
@@ -2288,6 +2300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBusinessesIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/content/': {
+      id: '/admin/content/'
+      path: '/content'
+      fullPath: '/admin/content/'
+      preLoaderRoute: typeof AdminContentIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/listings_/$id': {
       id: '/admin/listings_/$id'
       path: '/listings/$id'
@@ -2534,6 +2553,7 @@ interface AdminRouteRouteChildren {
   AdminStudioCanvasRoute: typeof AdminStudioCanvasRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
+  AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
 }
 
@@ -2584,6 +2604,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminStudioCanvasRoute: AdminStudioCanvasRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
+  AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
 }
 
