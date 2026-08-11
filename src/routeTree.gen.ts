@@ -108,6 +108,7 @@ import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
+import { Route as AdminContentIndexRouteImport } from './routes/admin/content.index'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
@@ -132,6 +133,7 @@ import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
 import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
+import { Route as AdminContentPagesIdRouteImport } from './routes/admin/content.pages.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
 import { Route as ApiPublicOtpLinksyriaStatusRouteImport } from './routes/api/public/otp/linksyria-status'
 import { Route as MyAdsIdEditRouteImport } from './routes/my/ads.$id.edit'
@@ -632,6 +634,11 @@ const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
   path: '/businesses/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
+  id: '/content/',
+  path: '/content/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminListingsIdRoute = AdminListingsIdRouteImport.update({
   id: '/listings_/$id',
   path: '/listings/$id',
@@ -753,6 +760,11 @@ const MyReportsIdRoute = MyReportsIdRouteImport.update({
   id: '/reports/$id',
   path: '/reports/$id',
   getParentRoute: () => MyRouteRoute,
+} as any)
+const AdminContentPagesIdRoute = AdminContentPagesIdRouteImport.update({
+  id: '/content/pages/$id',
+  path: '/content/pages/$id',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const ApiPublicAdCreditGatewayWebhookRoute =
   ApiPublicAdCreditGatewayWebhookRouteImport.update({
@@ -895,12 +907,14 @@ export interface FileRoutesByFullPath {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
   '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
+  '/admin/content/pages/$id': typeof AdminContentPagesIdRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -1020,12 +1034,14 @@ export interface FileRoutesByTo {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/content': typeof AdminContentIndexRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/business/services': typeof BusinessServicesIndexRoute
   '/business/store': typeof BusinessStoreIndexRoute
   '/my/ads': typeof MyAdsIndexRoute
   '/my/errands': typeof MyErrandsIndexRoute
   '/my/reports': typeof MyReportsIndexRoute
+  '/admin/content/pages/$id': typeof AdminContentPagesIdRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -1150,12 +1166,14 @@ export interface FileRoutesById {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
   '/business/store/': typeof BusinessStoreIndexRoute
   '/my/ads/': typeof MyAdsIndexRoute
   '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
+  '/admin/content/pages/$id': typeof AdminContentPagesIdRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -1281,12 +1299,14 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
     | '/business/store/'
     | '/my/ads/'
     | '/my/errands/'
     | '/my/reports/'
+    | '/admin/content/pages/$id'
     | '/api/public/ad-credit/gateway-webhook'
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
@@ -1406,12 +1426,14 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/content'
     | '/admin/reports'
     | '/business/services'
     | '/business/store'
     | '/my/ads'
     | '/my/errands'
     | '/my/reports'
+    | '/admin/content/pages/$id'
     | '/api/public/ad-credit/gateway-webhook'
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
@@ -1535,12 +1557,14 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
     | '/business/store/'
     | '/my/ads/'
     | '/my/errands/'
     | '/my/reports/'
+    | '/admin/content/pages/$id'
     | '/api/public/ad-credit/gateway-webhook'
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
@@ -2288,6 +2312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBusinessesIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/content/': {
+      id: '/admin/content/'
+      path: '/content'
+      fullPath: '/admin/content/'
+      preLoaderRoute: typeof AdminContentIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/listings_/$id': {
       id: '/admin/listings_/$id'
       path: '/listings/$id'
@@ -2456,6 +2487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyReportsIdRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/admin/content/pages/$id': {
+      id: '/admin/content/pages/$id'
+      path: '/content/pages/$id'
+      fullPath: '/admin/content/pages/$id'
+      preLoaderRoute: typeof AdminContentPagesIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/api/public/ad-credit/gateway-webhook': {
       id: '/api/public/ad-credit/gateway-webhook'
       path: '/api/public/ad-credit/gateway-webhook'
@@ -2534,7 +2572,9 @@ interface AdminRouteRouteChildren {
   AdminStudioCanvasRoute: typeof AdminStudioCanvasRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
+  AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
+  AdminContentPagesIdRoute: typeof AdminContentPagesIdRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -2584,7 +2624,9 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminStudioCanvasRoute: AdminStudioCanvasRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
+  AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
+  AdminContentPagesIdRoute: AdminContentPagesIdRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

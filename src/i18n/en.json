@@ -3863,7 +3863,8 @@
       "aiServices": "AI services",
       "chatReports": "Reported conversations",
       "support": "Support desk",
-      "opsLog": "Operations log"
+      "opsLog": "Operations log",
+      "contentStudio": "Content Studio"
     },
     "alerts": {
       "title": "Alerts",

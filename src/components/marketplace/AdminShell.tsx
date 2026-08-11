@@ -230,7 +230,14 @@ const NAV: NavItem[] = [
   { to: "/admin/labels", labelKey: "admin.nav.labels", icon: ListChecks, section: "references" },
 
   // 10 — Studio and content
+  {
+    to: "/admin/content",
+    labelKey: "admin.nav.contentStudio",
+    icon: LayoutTemplate,
+    section: "studio",
+  },
   { to: "/admin/composer", labelKey: "admin.nav.composer", icon: LayoutTemplate, section: "studio" },
+
   { to: "/admin/appearance", labelKey: "admin.nav.appearance", icon: Images, section: "studio" },
   {
     to: "/admin/appearance/variants",
