@@ -10,6 +10,7 @@ import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 import { flushAnalytics, track } from "@/lib/analytics";
+import { startWebVitals } from "@/lib/perf-rum";
 import { flushTracking, trackPageView } from "@/lib/track";
 
 
@@ -17,6 +18,11 @@ export function useAnalyticsInstrumentation(): void {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const mountedAt = useRef<number>(0);
   const first = useRef(true);
+
+  // قياس الأداء الحقيقي (LCP/INP/CLS ووزن الأصول) عبر محرك التتبع الموحّد.
+  useEffect(() => {
+    startWebVitals();
+  }, []);
 
   // Page views + duration.
   useEffect(() => {

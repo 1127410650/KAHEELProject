@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { ContentHealthBox } from "@/components/admin/reliability/ContentHealthBox";
 import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import { formatDateTime } from "@/lib/format";
@@ -115,6 +116,17 @@ function MyWorkPage() {
       staffChecking={identityLoading}
     >
       <p className="text-desc text-muted-foreground">{t("admin.myWork.hint")}</p>
+
+      <div className="mt-4">
+        <ContentHealthBox
+          enabled={
+            identity?.is_system_owner === true ||
+            identity?.is_platform_admin === true ||
+            identity?.staff_perms.includes("platform.health.view") === true
+          }
+        />
+      </div>
+
 
       {status.isLoading ? (
         <Skeleton className="mt-4 h-24 w-full rounded-xl" />

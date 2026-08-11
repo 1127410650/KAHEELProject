@@ -2573,6 +2573,98 @@ export type Database = {
           },
         ]
       }
+      mkt_cms_preflight_overrides: {
+        Row: {
+          codes: string[]
+          created_at: string
+          created_by: string
+          id: string
+          page_id: string
+          reason: string
+        }
+        Insert: {
+          codes?: string[]
+          created_at?: string
+          created_by: string
+          id?: string
+          page_id: string
+          reason: string
+        }
+        Update: {
+          codes?: string[]
+          created_at?: string
+          created_by?: string
+          id?: string
+          page_id?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cms_preflight_overrides_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cms_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_content_health_findings: {
+        Row: {
+          check_key: string
+          created_at: string
+          dedupe_key: string
+          detail_ar: string | null
+          entity: string
+          entity_id: string | null
+          entity_label: string | null
+          first_seen_at: string
+          href: string | null
+          id: string
+          last_seen_at: string
+          occurrence_count: number
+          resolved_at: string | null
+          severity: string
+          title_ar: string
+          updated_at: string
+        }
+        Insert: {
+          check_key: string
+          created_at?: string
+          dedupe_key: string
+          detail_ar?: string | null
+          entity: string
+          entity_id?: string | null
+          entity_label?: string | null
+          first_seen_at?: string
+          href?: string | null
+          id?: string
+          last_seen_at?: string
+          occurrence_count?: number
+          resolved_at?: string | null
+          severity?: string
+          title_ar: string
+          updated_at?: string
+        }
+        Update: {
+          check_key?: string
+          created_at?: string
+          dedupe_key?: string
+          detail_ar?: string | null
+          entity?: string
+          entity_id?: string | null
+          entity_label?: string | null
+          first_seen_at?: string
+          href?: string | null
+          id?: string
+          last_seen_at?: string
+          occurrence_count?: number
+          resolved_at?: string | null
+          severity?: string
+          title_ar?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_conversation_state: {
         Row: {
           conversation_id: string
@@ -3682,15 +3774,19 @@ export type Database = {
       }
       mkt_feature_flags: {
         Row: {
+          activated_at: string | null
+          activated_by: string | null
           created_at: string
           depends_on: string[]
           description_ar: string | null
           description_en: string | null
+          expected_minutes: number | null
           expires_at: string | null
           fallback_note: string | null
           flag_key: string
           id: string
           is_kill_switch: boolean
+          is_protected: boolean
           last_change_reason: string | null
           last_changed_by: string | null
           owner_user_id: string | null
@@ -3698,19 +3794,24 @@ export type Database = {
           rollout_percent: number
           scope: string
           status: string
+          switch_level: string
           unit: string
           updated_at: string
         }
         Insert: {
+          activated_at?: string | null
+          activated_by?: string | null
           created_at?: string
           depends_on?: string[]
           description_ar?: string | null
           description_en?: string | null
+          expected_minutes?: number | null
           expires_at?: string | null
           fallback_note?: string | null
           flag_key: string
           id?: string
           is_kill_switch?: boolean
+          is_protected?: boolean
           last_change_reason?: string | null
           last_changed_by?: string | null
           owner_user_id?: string | null
@@ -3718,19 +3819,24 @@ export type Database = {
           rollout_percent?: number
           scope?: string
           status?: string
+          switch_level?: string
           unit?: string
           updated_at?: string
         }
         Update: {
+          activated_at?: string | null
+          activated_by?: string | null
           created_at?: string
           depends_on?: string[]
           description_ar?: string | null
           description_en?: string | null
+          expected_minutes?: number | null
           expires_at?: string | null
           fallback_note?: string | null
           flag_key?: string
           id?: string
           is_kill_switch?: boolean
+          is_protected?: boolean
           last_change_reason?: string | null
           last_changed_by?: string | null
           owner_user_id?: string | null
@@ -3738,6 +3844,7 @@ export type Database = {
           rollout_percent?: number
           scope?: string
           status?: string
+          switch_level?: string
           unit?: string
           updated_at?: string
         }
@@ -3783,6 +3890,68 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "mkt_feature_overrides_flag_id_fkey"
+            columns: ["flag_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_feature_flags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_flag_change_requests: {
+        Row: {
+          applied_at: string | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          decision_note: string | null
+          expected_minutes: number
+          flag_id: string
+          id: string
+          reason: string
+          requested_at: string
+          requested_by: string
+          state: string
+          switch_level: string
+          target_status: string
+          updated_at: string
+        }
+        Insert: {
+          applied_at?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          decision_note?: string | null
+          expected_minutes: number
+          flag_id: string
+          id?: string
+          reason: string
+          requested_at?: string
+          requested_by: string
+          state?: string
+          switch_level?: string
+          target_status: string
+          updated_at?: string
+        }
+        Update: {
+          applied_at?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          decision_note?: string | null
+          expected_minutes?: number
+          flag_id?: string
+          id?: string
+          reason?: string
+          requested_at?: string
+          requested_by?: string
+          state?: string
+          switch_level?: string
+          target_status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_flag_change_requests_flag_id_fkey"
             columns: ["flag_id"]
             isOneToOne: false
             referencedRelation: "mkt_feature_flags"
@@ -6694,6 +6863,57 @@ export type Database = {
           sort_order?: number
           updated_at?: string
           variant_key?: string
+        }
+        Relationships: []
+      }
+      mkt_perf_budgets: {
+        Row: {
+          cls_milli: number
+          created_at: string
+          id: string
+          inp_ms: number
+          is_active: boolean
+          lcp_ms: number
+          max_asset_kb: number
+          max_page_kb: number
+          name_ar: string
+          name_en: string
+          note: string | null
+          page_type: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          cls_milli?: number
+          created_at?: string
+          id?: string
+          inp_ms?: number
+          is_active?: boolean
+          lcp_ms?: number
+          max_asset_kb?: number
+          max_page_kb?: number
+          name_ar: string
+          name_en: string
+          note?: string | null
+          page_type: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          cls_milli?: number
+          created_at?: string
+          id?: string
+          inp_ms?: number
+          is_active?: boolean
+          lcp_ms?: number
+          max_asset_kb?: number
+          max_page_kb?: number
+          name_ar?: string
+          name_en?: string
+          note?: string | null
+          page_type?: string
+          updated_at?: string
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -14052,8 +14272,40 @@ export type Database = {
       }
       mkt_chat_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       mkt_chat_peer: { Args: { _conversation_id: string }; Returns: string }
+      mkt_cms_preflight_override: {
+        Args: { _codes: string[]; _page_id: string; _reason: string }
+        Returns: string
+      }
       mkt_commerce_flags: { Args: never; Returns: Json }
       mkt_content_can: { Args: { _perm: string }; Returns: boolean }
+      mkt_content_health_open: {
+        Args: { _limit?: number }
+        Returns: {
+          check_key: string
+          created_at: string
+          dedupe_key: string
+          detail_ar: string | null
+          entity: string
+          entity_id: string | null
+          entity_label: string | null
+          first_seen_at: string
+          href: string | null
+          id: string
+          last_seen_at: string
+          occurrence_count: number
+          resolved_at: string | null
+          severity: string
+          title_ar: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "mkt_content_health_findings"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      mkt_content_health_scan: { Args: never; Returns: Json }
       mkt_conversation_context: {
         Args: { _conversation_id: string }
         Returns: Json
@@ -14178,8 +14430,22 @@ export type Database = {
           updated_at: string
         }[]
       }
+      mkt_feature_guard: { Args: { _flag_key: string }; Returns: boolean }
       mkt_feature_state: {
         Args: { _account_type?: string; _country?: string; _flag_key: string }
+        Returns: Json
+      }
+      mkt_flag_change_decide: {
+        Args: { _approve: boolean; _note?: string; _request_id: string }
+        Returns: Json
+      }
+      mkt_flag_change_request: {
+        Args: {
+          _expected_minutes: number
+          _flag_key: string
+          _reason: string
+          _target_status: string
+        }
         Returns: Json
       }
       mkt_guide_featured_places: {
@@ -14711,6 +14977,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mkt_perf_summary: { Args: { _days?: number }; Returns: Json }
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
       mkt_platform_health_summary: { Args: never; Returns: Json }

@@ -9,6 +9,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -50,7 +51,9 @@ import {
   type CmsBlock,
   type CmsDevice,
   type CmsVersion,
+  type PreflightPerfContext,
 } from "@/lib/mkt-cms";
+import { loadPerfSummary } from "@/lib/mkt-reliability";
 import { BLOCK_LIBRARY, blockDefinition, type PageBlock } from "@/lib/mkt-page-composer";
 
 
@@ -140,9 +143,49 @@ function CmsPageEditor() {
 
   const blocks = history.blocks;
   const issues = useMemo(() => validateBlocks(blocks).issues, [blocks]);
+
+  /** أداء مقيس فعلي لهذا المسار + ميزانية نوع الصفحة — تُدخَل في فحص ما قبل النشر. */
+  const perf = useQuery({
+    queryKey: ["mkt", "admin", "perf-summary", 7],
+    queryFn: () => loadPerfSummary(7),
+    staleTime: 300_000,
+    retry: false,
+  });
+
+  const perfContext = useMemo<PreflightPerfContext | undefined>(() => {
+    const summary = perf.data;
+    const routePath = page.data?.route_path;
+    if (!summary || !routePath) return undefined;
+    const budget =
+      summary.budgets.find((b) => b.page_type === "cms") ?? summary.budgets[0];
+    if (!budget) return undefined;
+    const measured = summary.slow_pages.find((p) => p.route_path === routePath);
+    const assets = summary.heavy_assets
+      .filter((a) => a.route_path === routePath)
+      .map((a) => ({ path: a.asset_path, kb: Number(a.max_kb) }));
+    return {
+      budget: {
+        lcp_ms: budget.lcp_ms,
+        inp_ms: budget.inp_ms,
+        cls_milli: budget.cls_milli,
+        max_asset_kb: budget.max_asset_kb,
+      },
+      ...(measured
+        ? {
+            measured: {
+              samples: Number(measured.samples),
+              lcp_p75: measured.lcp_p75 === null ? null : Number(measured.lcp_p75),
+              cls_p75: measured.cls_p75 === null ? null : Number(measured.cls_p75),
+            },
+          }
+        : {}),
+      assets,
+    };
+  }, [perf.data, page.data?.route_path]);
+
   const preflight = useMemo(
-    () => (page.data ? preflightPage(page.data, blocks) : []),
-    [page.data, blocks],
+    () => (page.data ? preflightPage(page.data, blocks, perfContext) : []),
+    [page.data, blocks, perfContext],
   );
   const blockingCount = preflight.filter((i) => i.blocking).length;
 

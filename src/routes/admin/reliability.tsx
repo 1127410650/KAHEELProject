@@ -18,7 +18,10 @@ import {
   requeueJob,
   setIncidentStatus,
   setJobEnabled,
+  loadPerfSummary,
 } from "@/lib/mkt-reliability";
+import { KillSwitchPanel } from "@/components/admin/reliability/KillSwitchPanel";
+import { PerfPanel } from "@/components/admin/reliability/PerfPanel";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import {
   AdminCard,
@@ -82,7 +85,7 @@ function StatTile({
 function AdminReliabilityPage() {
   const { session } = useSession();
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<"health" | "jobs" | "incidents">("health");
+  const [tab, setTab] = useState<"health" | "perf" | "switches" | "jobs" | "incidents">("health");
 
   const access = useQuery({
     queryKey: ["mkt", "staff-access", session?.user.id],
@@ -114,6 +117,12 @@ function AdminReliabilityPage() {
     queryKey: ["mkt", "admin", "incidents"],
     enabled: canView,
     queryFn: () => loadIncidents(50),
+  });
+  const perf = useQuery({
+    queryKey: ["mkt", "admin", "perf-summary", 7],
+    enabled: canView && tab === "perf",
+    queryFn: () => loadPerfSummary(7),
+    retry: false,
   });
   const rules = useQuery({
     queryKey: ["mkt", "admin", "alert-rules"],
@@ -182,6 +191,8 @@ function AdminReliabilityPage() {
             {(
               [
                 ["health", "الصحة والأهداف"],
+                ["perf", "الأداء والميزانيات"],
+                ["switches", "الإيقاف الطارئ"],
                 ["jobs", "المهام الخلفية"],
                 ["incidents", "الحوادث والتنبيهات"],
               ] as const
@@ -306,6 +317,22 @@ function AdminReliabilityPage() {
               </AdminCard>
             </>
           ) : null}
+
+          {tab === "perf" ? (
+            perf.isLoading ? (
+              <Skeleton className="h-64 w-full" />
+            ) : perf.data ? (
+              <PerfPanel summary={perf.data} />
+            ) : (
+              <AdminCard>
+                <p className="text-[14px] text-muted-foreground">
+                  تعذّر تحميل أرقام الأداء — تحتاج صلاحية «عرض صحة المنصة».
+                </p>
+              </AdminCard>
+            )
+          ) : null}
+
+          {tab === "switches" ? <KillSwitchPanel canManage={staff.can("flags.manage")} /> : null}
 
           {tab === "jobs" && summary ? (
             <>
