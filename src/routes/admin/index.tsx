@@ -27,7 +27,7 @@ import { WorkQueue } from "@/components/admin/WorkQueue";
 import { ActionRequiredNow } from "@/components/admin/ActionRequiredNow";
 import { ActivityFeed, SystemHealthCard } from "@/components/admin/ActivityFeed";
 import { AiSpendCard } from "@/components/admin/AiSpendCard";
-import { loadAdminOverview } from "@/lib/mkt-platform";
+import { loadAdminOverview, usePlatformIdentity } from "@/lib/mkt-platform";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime } from "@/lib/format";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -101,8 +101,12 @@ const TILES: StudioTile[] = [
 
 
 function useStudioStats() {
+  const { identity } = usePlatformIdentity();
+  // The overview RPC is platform-admin only; staff without it would get a 400.
+  const canOverview = identity?.is_platform_admin === true && identity.restricted !== true;
   const overview = useQuery({
     queryKey: ["mkt", "admin", "overview", "studio"],
+    enabled: canOverview,
     queryFn: loadAdminOverview,
   });
 
