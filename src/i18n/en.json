@@ -3861,7 +3861,9 @@
       "categories": "Categories & worlds",
       "labels": "UI labels",
       "aiServices": "AI services",
-      "chatReports": "Reported conversations"
+      "chatReports": "Reported conversations",
+      "support": "Support desk",
+      "opsLog": "Operations log"
     },
     "alerts": {
       "title": "Alerts",
@@ -4689,6 +4691,78 @@
         "hide_message": "Hide message",
         "dismiss": "Dismiss report",
         "keep_reviewed": "Mark reviewed"
+      }
+    },
+    "support": {
+      "title": "Support desk",
+      "hint": "Incoming support tickets — reply to the customer or add an internal note they never see.",
+      "noAccess": "You do not have permission to view support tickets.",
+      "filter": "Status",
+      "empty": "No tickets in this status",
+      "emptyHint": "Nothing needs a reply right now.",
+      "replySent": "Reply sent",
+      "updated": "Ticket updated",
+      "failed": "Could not complete the action",
+      "showThread": "Show replies",
+      "hideThread": "Hide replies",
+      "noReplies": "No replies yet.",
+      "replyPlaceholder": "Reply text",
+      "sendReply": "Send to customer",
+      "sendInternal": "Internal note",
+      "internalBadge": "Internal",
+      "status": {
+        "all": "All",
+        "new": "New",
+        "processing": "Processing",
+        "awaiting_customer": "Awaiting customer",
+        "closed": "Closed"
+      },
+      "setStatus": {
+        "new": "Back to new",
+        "processing": "Start processing",
+        "awaiting_customer": "Await customer",
+        "closed": "Close"
+      },
+      "priority": {
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "unit": {
+        "platform": "Platform",
+        "market": "Market",
+        "aqar": "Aqar",
+        "services": "Services",
+        "errands": "Errands",
+        "guide": "Guide",
+        "account": "Accounts",
+        "billing": "Billing"
+      }
+    },
+    "opsLog": {
+      "title": "Unified operations log",
+      "hint": "Every sensitive admin action with its actor and time — append-only: no edits, no deletions.",
+      "noAccess": "You do not have permission to view the audit log.",
+      "filter": "Filters",
+      "searchPlaceholder": "Search action or summary",
+      "allUnits": "All units",
+      "appendOnly": "This log is append-only and enforced by the database.",
+      "entries": "Actions",
+      "empty": "No matching actions",
+      "emptyHint": "Try widening the filter.",
+      "exports": "Export log",
+      "noExports": "No exports recorded.",
+      "rows": "rows:",
+      "unit": {
+        "platform": "Platform",
+        "market": "Market",
+        "aqar": "Aqar",
+        "services": "Services",
+        "errands": "Errands",
+        "guide": "Guide",
+        "account": "Accounts",
+        "billing": "Billing"
       }
     }
   }

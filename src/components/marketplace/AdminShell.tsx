@@ -312,6 +312,24 @@ const NAV: NavItem[] = [
     perms: ["reports.audit_view"],
   },
 
+  // 15b — Support desk
+  {
+    to: "/admin/support",
+    labelKey: "admin.nav.support",
+    icon: Headphones,
+    section: "reports",
+    perms: ["support.view", "support.manage"],
+  },
+
+  // 15c — Unified operations log (append-only)
+  {
+    to: "/admin/ops-log",
+    labelKey: "admin.nav.opsLog",
+    icon: Activity,
+    section: "audit",
+    perms: ["audit.view", "reports.audit_view"],
+  },
+
   // 16 — Platform settings
   {
     to: "/admin/settings",

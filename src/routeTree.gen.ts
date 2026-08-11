@@ -57,6 +57,7 @@ import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminMascotsRouteImport } from './routes/admin/mascots'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
+import { Route as AdminOpsLogRouteImport } from './routes/admin/ops-log'
 import { Route as AdminPricingRouteImport } from './routes/admin/pricing'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
@@ -374,6 +375,11 @@ const AdminModerationRoute = AdminModerationRouteImport.update({
 const AdminMyWorkRoute = AdminMyWorkRouteImport.update({
   id: '/my-work',
   path: '/my-work',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminOpsLogRoute = AdminOpsLogRouteImport.update({
+  id: '/ops-log',
+  path: '/ops-log',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminPricingRoute = AdminPricingRouteImport.update({
@@ -819,6 +825,7 @@ export interface FileRoutesByFullPath {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
@@ -943,6 +950,7 @@ export interface FileRoutesByTo {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
@@ -1072,6 +1080,7 @@ export interface FileRoutesById {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
@@ -1202,6 +1211,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/ops-log'
     | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
@@ -1326,6 +1336,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/ops-log'
     | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
@@ -1454,6 +1465,7 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/ops-log'
     | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
@@ -1917,6 +1929,13 @@ declare module '@tanstack/react-router' {
       path: '/my-work'
       fullPath: '/admin/my-work'
       preLoaderRoute: typeof AdminMyWorkRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/ops-log': {
+      id: '/admin/ops-log'
+      path: '/ops-log'
+      fullPath: '/admin/ops-log'
+      preLoaderRoute: typeof AdminOpsLogRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/pricing': {
@@ -2494,6 +2513,7 @@ interface AdminRouteRouteChildren {
   AdminMascotsRoute: typeof AdminMascotsRoute
   AdminModerationRoute: typeof AdminModerationRoute
   AdminMyWorkRoute: typeof AdminMyWorkRoute
+  AdminOpsLogRoute: typeof AdminOpsLogRoute
   AdminPricingRoute: typeof AdminPricingRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
@@ -2543,6 +2563,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminMascotsRoute: AdminMascotsRoute,
   AdminModerationRoute: AdminModerationRoute,
   AdminMyWorkRoute: AdminMyWorkRoute,
+  AdminOpsLogRoute: AdminOpsLogRoute,
   AdminPricingRoute: AdminPricingRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
