@@ -4649,6 +4649,17 @@
         "dailyReached": "Daily limit reached",
         "notAllowed": "Not authorized",
         "failed": "Enhancement failed"
+      },
+      "now": {
+        "title": "Needs action now",
+        "hint": "Queues whose oldest item passed the agreed response limit.",
+        "clear": "Nothing is past its response limit.",
+        "overdueItems": "items past the response limit",
+        "oldest": "Oldest item:",
+        "sla": "Limit:",
+        "hours": "h",
+        "days": "d",
+        "overdue": "Overdue"
       }
     }
   }
