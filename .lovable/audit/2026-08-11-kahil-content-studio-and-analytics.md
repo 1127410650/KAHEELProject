@@ -66,3 +66,13 @@
 - `src/routes/admin/index.tsx` → `useStudioStats()` تستدعي الآن `usePlatformIdentity()` وتُمرّر `enabled: canOverview`.
 
 لا تغييرات واسعة أخرى في الدفعة 1 (وفق الأمر: الجرد فقط).
+
+## Batch 2 — Data & security foundation (DONE)
+
+- `mkt_cms_pages` / `mkt_cms_page_versions` / `mkt_cms_page_redirects` / `mkt_cms_page_locks` created with GRANTs, RLS (public reads published only; staff via `mkt_content_can`), and updated_at triggers.
+- Campaigns EXTENDED, not duplicated: `mkt_cms_ad_placements` (6 seeded placements) + `mkt_cms_campaign_placements` reference the existing `mkt_ad_campaigns`; approval cycle columns (`review_status`, `reviewed_by`, `reviewed_at`, `review_note`, `fallback_campaign_id`) added to that same table. Acceptance test 69 holds: no second campaigns table.
+- Theme engine EXTENDED: `mkt_theme_settings.category` (color/font/type/radius/shadow/space) + `draft_value` for the draft→preview cycle. No second tokens system.
+- Third character «كحيلا» registered (`mkt_mascot_phrases` check widened to kaheel/kaheelan/kahila) with two hidden media slots; new brand logo slots added (header light/dark, footer, favicon, social share).
+- Analytics isolated in a NON-exposed `analytics` schema (events_raw + agg_hourly + agg_daily + settings), no anon/authenticated grants, RLS on, service_role only. Retention default 90 days, adjustable through `mkt_analytics_retention_set` (permission + written reason + audit log); `mkt_analytics_purge_expired`, `mkt_analytics_purge_test`, `mkt_analytics_rollup` exclude `is_test` / `is_internal` / `is_demo`.
+- Structure-guard exception: guard disabled and re-enabled inside the same migration, both events written to `mkt_structure_guard_events`. Verified `enabled = true` afterwards.
+- Fixed PK error from the first attempt: `COALESCE(...)` is not allowed in a PRIMARY KEY, so the aggregation keys use NOT NULL sentinel-UUID columns instead.
