@@ -46,7 +46,7 @@ export function ContentHealthBox({ enabled }: { enabled: boolean }) {
       title="سلامة المحتوى والروابط"
       description="روابط مكسورة، وسائط ناقصة، وحملات منتهية — من مهمة الفحص الخلفية."
       accent={rows.some((r) => r.severity === "P0" || r.severity === "P1")}
-      action={
+      actions={
         <Button
           type="button"
           size="sm"
