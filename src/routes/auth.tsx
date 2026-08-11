@@ -15,18 +15,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EasyAuthPanel } from "@/components/marketplace/EasyAuthPanel";
+import { RegisterPanel } from "@/components/marketplace/RegisterPanel";
+
+type AuthTab = "signin" | "register";
 
 export const Route = createFileRoute("/auth")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — كَحيل | Sign in — Kaheel" },
+      { title: "تسجيل الدخول وإنشاء حساب — كَحيل | Sign in or register — Kaheel" },
       {
         name: "description",
-        content: "تسجيل دخول المستخدمين المصرح لهم في منصة كَحيل لإدارة المشاريع وعهد المشرفين.",
+        content:
+          "شاشة واحدة للدخول إلى كَحيل أو إنشاء حساب جديد برقم الجوال أو البريد الإلكتروني.",
       },
-      { property: "og:title", content: "تسجيل الدخول — كَحيل" },
-      { property: "og:description", content: "Sign in to Kaheel — internal management system." },
+      { property: "og:title", content: "تسجيل الدخول وإنشاء حساب — كَحيل" },
+      {
+        property: "og:description",
+        content: "One screen to sign in to Kaheel or create a new account.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,
@@ -39,6 +48,19 @@ function safeNext(): string | null {
   return safeInternalPath(raw);
 }
 
+/** The tab and the invitation token are read from the URL, so links can target either. */
+function urlTab(): AuthTab {
+  if (typeof window === "undefined") return "signin";
+  const raw = new URLSearchParams(window.location.search).get("tab");
+  return raw === "register" || raw === "signup" ? "register" : "signin";
+}
+
+function urlInviteToken(): string | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("invite");
+  return raw && /^[a-f0-9]{16,128}$/i.test(raw) ? raw : null;
+}
+
 function AuthPage() {
   const { t, locale, setLocale, dir } = useI18n();
   const navigate = useNavigate();
@@ -47,11 +69,15 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [mode, setMode] = useState<"code" | "password">("code");
+  const [tab, setTab] = useState<AuthTab>("signin");
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
   // The route is client-only; matching the empty server shell on the first paint
   // avoids a hydration mismatch.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
+    setTab(urlTab());
+    setInviteToken(urlInviteToken());
     // Marketplace sessions are durable by design for both personal and store
     // identities. They end only through explicit sign-out or security revocation.
     enablePersistentSession();
@@ -74,6 +100,7 @@ function AuthPage() {
       if (data.session) navigate({ to: await landing(), replace: true });
     });
   }, [navigate]);
+
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
