@@ -83,6 +83,15 @@ export function useClearAdminCache() {
   };
 }
 
+/** Drops cached admin answers but keeps the identity itself, so a refused
+ *  screen can still render its "no access" card instead of hanging. */
+export function useClearAdminData() {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.removeQueries({ queryKey: ["mkt", "admin"] });
+  };
+}
+
 /** Where a freshly signed-in user belongs: the console, or the normal flow. */
 export async function landingPathForSession(): Promise<string> {
   const identity = await loadPlatformIdentity();
