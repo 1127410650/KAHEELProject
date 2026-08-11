@@ -292,7 +292,7 @@ function MorePage() {
               <span className="min-w-0 flex-1 truncate">{t("market.signIn")}</span>
               <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             </Link>
-            <Link to="/register" className={rowClass}>
+            <Link to="/auth" search={{ tab: "register" } as never} className={rowClass}>
               <UserPlus className="size-5 shrink-0 text-muted-foreground" aria-hidden />
               <span className="min-w-0 flex-1 truncate">{t("market.signUp")}</span>
               <Arrow className="size-4 shrink-0 text-muted-foreground" aria-hidden />

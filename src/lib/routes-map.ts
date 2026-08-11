@@ -108,7 +108,7 @@ export const ROUTE_MAP: RouteRule[] = [
   }),
 
   rule("/auth", "public", "bare"),
-  rule("/register", "public", "bare"),
+  rule("/register", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
   rule("/forgot-password", "public", "bare"),
   rule("/reset-password", "public", "bare"),
   rule("/invite/$token", "public", "bare"),
@@ -343,8 +343,8 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/login", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
   rule("/signin", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
   rule("/sign-in", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
-  rule("/signup", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
-  rule("/sign-up", "legacy", "bare", { legacy_redirect: "/register", is_public: true }),
+  rule("/signup", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
+  rule("/sign-up", "legacy", "bare", { legacy_redirect: "/auth", is_public: true }),
   rule("/home", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   rule("/market", "legacy", "market", { legacy_redirect: "/", is_public: true }),
   // The old personal dashboard. Its own route file is gone: `/go` is now the one

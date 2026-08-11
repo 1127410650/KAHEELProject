@@ -150,6 +150,9 @@ function InviteSignupForm({
   return (
     <div>
       <p className="text-sm text-muted-foreground">{t("signup.inviteOnlySubtitle")}</p>
+      <p className="mt-2 rounded-lg border border-primary/15 bg-primary/5 p-[var(--sp-3)] text-desc font-semibold text-primary">
+        {t("signup.adsSyriaOnly")}
+      </p>
       <p className="mt-3 rounded-lg bg-secondary p-[var(--sp-3)] text-desc text-muted-foreground">
         {t("signup.inviteNote")}{" "}
         <span dir="ltr" className="font-semibold text-foreground">
