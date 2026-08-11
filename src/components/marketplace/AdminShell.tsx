@@ -678,7 +678,9 @@ export function AdminShell({
                   <Search className="size-[18px]" aria-hidden />
                 </Link>
               </Button>
-              <AdminAlerts enabled={allowed} />
+              {/* `mkt_admin_overview` raises for non-platform-admins; gate the call
+                  client-side so content staff never trigger a 400 in the console. */}
+              <AdminAlerts enabled={allowed && admin} />
               <Button
                 asChild
                 variant="outline"
