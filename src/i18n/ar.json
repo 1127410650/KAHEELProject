@@ -3867,7 +3867,8 @@
       "opsLog": "سجل العمليات",
       "contentStudio": "استوديو المحتوى",
       "placements": "مواضع الحملات",
-      "platformAnalytics": "تحليلات المنصة"
+      "platformAnalytics": "تحليلات المنصة",
+      "reliability": "صحة المنصة والحوادث"
     },
     "alerts": {
       "title": "مركز التنبيهات",
