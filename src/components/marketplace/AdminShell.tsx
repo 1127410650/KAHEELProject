@@ -17,6 +17,7 @@ import {
   Flag,
   MessageSquareWarning,
   Gauge,
+  Headphones,
   Globe2,
   GraduationCap,
   ListChecks,
