@@ -380,17 +380,47 @@ export interface PreflightItem {
     | "empty_field"
     | "bad_target"
     | "empty_page"
-    | "missing_description";
+    | "missing_description"
+    | "oversized_asset"
+    | "layout_shift"
+    | "slow_page";
   message: string;
   /** يمنع النشر، أو تحذير يراه الناشر ويقرّر. */
   blocking: boolean;
 }
 
 /**
+ * سياق الأداء المقيس لهذا المسار — يأتي من `mkt_perf_summary` (قياس حقيقي من
+ * متصفحات الزوار) وميزانية نوع الصفحة، فلا تقدير ولا رقم ثابت في الواجهة.
+ */
+export interface PreflightPerfContext {
+  budget: {
+    lcp_ms: number;
+    inp_ms: number;
+    cls_milli: number;
+    max_asset_kb: number;
+  };
+  measured?: {
+    samples: number;
+    lcp_p75: number | null;
+    cls_p75: number | null;
+  };
+  /** أثقل الأصول المقيسة على هذا المسار: المسار والحجم بالكيلوبايت. */
+  assets?: { path: string; kb: number }[];
+}
+
+/**
  * فحص إلزامي يراه الناشر قبل النشر: ترجمة ناقصة، زر بلا وجهة صالحة، كتلة
  * غير معروفة، وحقل مطلوب فارغ. البنود المانعة تُعطّل زر النشر.
+ *
+ * عند تمرير سياق أداء، يمتد الفحص إلى ميزانيات الأداء: أصل أثقل من الميزانية
+ * أو إزاحة تصميم أعلى من الحد يمنعان النشر، والتباطؤ دون الضعف تحذير.
  */
-export function preflightPage(page: CmsPage, blocks: CmsBlock[]): PreflightItem[] {
+export function preflightPage(
+  page: CmsPage,
+  blocks: CmsBlock[],
+  perf?: PreflightPerfContext,
+): PreflightItem[] {
   const items: PreflightItem[] = [];
   const { issues } = validateBlocks(blocks);
 
