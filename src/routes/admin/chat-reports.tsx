@@ -73,7 +73,7 @@ function AdminChatReportsPage() {
   });
 
   return (
-    <AdminShell>
+    <AdminShell title={t("admin.chatReports.title")}>
       <AdminPageHead
         title={t("admin.chatReports.title")}
         description={t("admin.chatReports.hint")}
@@ -124,7 +124,7 @@ function AdminChatReportsPage() {
             <AdminEmptyState
               icon={ShieldCheck}
               title={t("admin.chatReports.empty")}
-              description={t("admin.chatReports.emptyHint")}
+              hint={t("admin.chatReports.emptyHint")}
             />
           ) : (
             <div className="grid gap-[var(--sp-3)]">

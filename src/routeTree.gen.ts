@@ -40,6 +40,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
+import { Route as AdminChatReportsRouteImport } from './routes/admin/chat-reports'
 import { Route as AdminComposerRouteImport } from './routes/admin/composer'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
@@ -287,6 +288,11 @@ const AdminCampaignsRoute = AdminCampaignsRouteImport.update({
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminChatReportsRoute = AdminChatReportsRouteImport.update({
+  id: '/chat-reports',
+  path: '/chat-reports',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminComposerRoute = AdminComposerRouteImport.update({
@@ -790,6 +796,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chat-reports': typeof AdminChatReportsRoute
   '/admin/composer': typeof AdminComposerRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
@@ -912,6 +919,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chat-reports': typeof AdminChatReportsRoute
   '/admin/composer': typeof AdminComposerRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
@@ -1039,6 +1047,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chat-reports': typeof AdminChatReportsRoute
   '/admin/composer': typeof AdminComposerRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
@@ -1167,6 +1176,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/categories'
+    | '/admin/chat-reports'
     | '/admin/composer'
     | '/admin/dashboard'
     | '/admin/designs'
@@ -1289,6 +1299,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/categories'
+    | '/admin/chat-reports'
     | '/admin/composer'
     | '/admin/dashboard'
     | '/admin/designs'
@@ -1415,6 +1426,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/categories'
+    | '/admin/chat-reports'
     | '/admin/composer'
     | '/admin/dashboard'
     | '/admin/designs'
@@ -1774,6 +1786,13 @@ declare module '@tanstack/react-router' {
       path: '/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/chat-reports': {
+      id: '/admin/chat-reports'
+      path: '/chat-reports'
+      fullPath: '/admin/chat-reports'
+      preLoaderRoute: typeof AdminChatReportsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/composer': {
@@ -2439,6 +2458,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminChatReportsRoute: typeof AdminChatReportsRoute
   AdminComposerRoute: typeof AdminComposerRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminDesignsRoute: typeof AdminDesignsRoute
@@ -2486,6 +2506,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminChatReportsRoute: AdminChatReportsRoute,
   AdminComposerRoute: AdminComposerRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminDesignsRoute: AdminDesignsRoute,
