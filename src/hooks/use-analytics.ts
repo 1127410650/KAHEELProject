@@ -78,7 +78,11 @@ export function useAnalyticsInstrumentation(): void {
   // Do not lose the tail of a visit.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const onHide = () => flushAnalytics();
+    const onHide = () => {
+      flushAnalytics();
+      flushTracking();
+    };
+
     document.addEventListener("visibilitychange", onHide);
     window.addEventListener("pagehide", onHide);
     return () => {
