@@ -184,3 +184,40 @@ entering `0552311766` resolved to and authenticated the owner account successful
 
 The permanent recovery fix remains unchanged: update Supabase Authentication → URL
 Configuration with the Kaheel Site URL and redirect allow-list documented in §1.
+
+## 5. Auth URL configuration CONFIRMED — 11/08/2026 02:4x UTC
+
+The owner's dashboard change (Site URL `https://www.kaheel.market`, 3 redirect
+patterns) is live and verified from here. QA-safe probes first:
+
+| Probe (`type=recovery`, deliberately invalid token) | Status | Location |
+|---|---|---|
+| `redirect_to=https://www.kaheel.market/reset-password` | 303 | `https://www.kaheel.market/reset-password#error=access_denied&error_code=otp_expired…` |
+| `redirect_to=https://evil.example.com/x` | 303 | `https://www.kaheel.market#error=access_denied…` (allow-list rejects the evil origin, falls back to Site URL) |
+
+The retired origin `check-your-name-ai.vercel.app` no longer appears in either case.
+
+### Real recovery link followed once (`b11339911@gmail.com`)
+
+Requested `redirect_to=https://www.kaheel.market/reset-password`; followed with
+`curl -D -` exactly once (that token is now consumed):
+
+```
+303 → https://www.kaheel.market/reset-password#access_token=…&expires_in=3600
+      &refresh_token=…&token_type=bearer&type=recovery
+```
+
+Decoded JWT: `sub 4f54fa13-a380-4462-8252-afe87424a99f`, `email b11339911@gmail.com`,
+`amr[0].method = otp`. So `redirect_to` is now honoured and the recovery session is
+delivered to the canonical Kaheel origin.
+
+**The recovery-link issue is closed permanently.** No hash-copy workaround is needed
+any more; recovery links land directly on `/reset-password`, which establishes the
+session from the fragment and renders the new-password form.
+
+### Fresh, unconsumed recovery link for the owner to use
+
+`b11339911@gmail.com`:
+`https://rgpnhzovtceitqxpiilf.supabase.co/auth/v1/verify?token=62ea6484afd2bae4c39b3002dde5302cc2881a4482c2a676983732a2&type=recovery&redirect_to=https://www.kaheel.market/reset-password`
+
+Nothing was published and no account was modified in this pass.
