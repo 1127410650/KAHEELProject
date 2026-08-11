@@ -476,6 +476,7 @@ export type Database = {
           cta_ar: string
           cta_en: string
           ends_at: string | null
+          fallback_campaign_id: string | null
           id: string
           impressions: number
           placement: string
@@ -483,6 +484,10 @@ export type Database = {
           popup_side: string
           poster_path: string | null
           priority: number
+          review_note: string | null
+          review_status: string
+          reviewed_at: string | null
+          reviewed_by: string | null
           slug: string
           starts_at: string
           status: string
@@ -506,6 +511,7 @@ export type Database = {
           cta_ar?: string
           cta_en?: string
           ends_at?: string | null
+          fallback_campaign_id?: string | null
           id?: string
           impressions?: number
           placement?: string
@@ -513,6 +519,10 @@ export type Database = {
           popup_side?: string
           poster_path?: string | null
           priority?: number
+          review_note?: string | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           slug: string
           starts_at?: string
           status?: string
@@ -536,6 +546,7 @@ export type Database = {
           cta_ar?: string
           cta_en?: string
           ends_at?: string | null
+          fallback_campaign_id?: string | null
           id?: string
           impressions?: number
           placement?: string
@@ -543,6 +554,10 @@ export type Database = {
           popup_side?: string
           poster_path?: string | null
           priority?: number
+          review_note?: string | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           slug?: string
           starts_at?: string
           status?: string
@@ -552,7 +567,15 @@ export type Database = {
           title_en?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mkt_ad_campaigns_fallback_campaign_id_fkey"
+            columns: ["fallback_campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_ad_credit_entries: {
         Row: {
@@ -2186,6 +2209,303 @@ export type Database = {
             columns: ["country_id"]
             isOneToOne: false
             referencedRelation: "mkt_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_cms_ad_placements: {
+        Row: {
+          aspect: string | null
+          created_at: string
+          is_active: boolean
+          max_active: number
+          name_ar: string
+          name_en: string | null
+          placement_key: string
+          sort_order: number
+          surface: string
+          updated_at: string
+        }
+        Insert: {
+          aspect?: string | null
+          created_at?: string
+          is_active?: boolean
+          max_active?: number
+          name_ar: string
+          name_en?: string | null
+          placement_key: string
+          sort_order?: number
+          surface?: string
+          updated_at?: string
+        }
+        Update: {
+          aspect?: string | null
+          created_at?: string
+          is_active?: boolean
+          max_active?: number
+          name_ar?: string
+          name_en?: string | null
+          placement_key?: string
+          sort_order?: number
+          surface?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_cms_campaign_placements: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          created_by: string | null
+          ends_at: string | null
+          fallback_campaign_id: string | null
+          id: string
+          placement_key: string
+          starts_at: string | null
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          fallback_campaign_id?: string | null
+          id?: string
+          placement_key: string
+          starts_at?: string | null
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          fallback_campaign_id?: string | null
+          id?: string
+          placement_key?: string
+          starts_at?: string | null
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cms_campaign_placements_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_cms_campaign_placements_fallback_campaign_id_fkey"
+            columns: ["fallback_campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_ad_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_cms_campaign_placements_placement_key_fkey"
+            columns: ["placement_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_cms_ad_placements"
+            referencedColumns: ["placement_key"]
+          },
+        ]
+      }
+      mkt_cms_page_locks: {
+        Row: {
+          acquired_at: string
+          heartbeat_at: string
+          page_id: string
+          user_id: string
+        }
+        Insert: {
+          acquired_at?: string
+          heartbeat_at?: string
+          page_id: string
+          user_id: string
+        }
+        Update: {
+          acquired_at?: string
+          heartbeat_at?: string
+          page_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cms_page_locks_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: true
+            referencedRelation: "mkt_cms_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_cms_page_redirects: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          from_path: string
+          id: string
+          page_id: string | null
+          reason: string | null
+          to_path: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          from_path: string
+          id?: string
+          page_id?: string | null
+          reason?: string | null
+          to_path: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          from_path?: string
+          id?: string
+          page_id?: string | null
+          reason?: string | null
+          to_path?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cms_page_redirects_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cms_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_cms_page_versions: {
+        Row: {
+          blocks: Json
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string | null
+          page_id: string
+          published_at: string | null
+          published_by: string | null
+          seo: Json
+          status: string
+          tokens: Json
+          updated_at: string
+          version_no: number
+        }
+        Insert: {
+          blocks?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          page_id: string
+          published_at?: string | null
+          published_by?: string | null
+          seo?: Json
+          status?: string
+          tokens?: Json
+          updated_at?: string
+          version_no: number
+        }
+        Update: {
+          blocks?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          page_id?: string
+          published_at?: string | null
+          published_by?: string | null
+          seo?: Json
+          status?: string
+          tokens?: Json
+          updated_at?: string
+          version_no?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cms_page_versions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cms_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_cms_pages: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description_ar: string | null
+          description_en: string | null
+          id: string
+          is_demo: boolean
+          is_system: boolean
+          kind: string
+          locked: boolean
+          og_image_path: string | null
+          published_version_id: string | null
+          robots: string
+          route_path: string
+          slug: string
+          status: string
+          title_ar: string
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_demo?: boolean
+          is_system?: boolean
+          kind?: string
+          locked?: boolean
+          og_image_path?: string | null
+          published_version_id?: string | null
+          robots?: string
+          route_path: string
+          slug: string
+          status?: string
+          title_ar: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_demo?: boolean
+          is_system?: boolean
+          kind?: string
+          locked?: boolean
+          og_image_path?: string | null
+          published_version_id?: string | null
+          robots?: string
+          route_path?: string
+          slug?: string
+          status?: string
+          title_ar?: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_cms_pages_published_version_fk"
+            columns: ["published_version_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_cms_page_versions"
             referencedColumns: ["id"]
           },
         ]
@@ -10481,7 +10801,9 @@ export type Database = {
       }
       mkt_theme_settings: {
         Row: {
+          category: string
           created_at: string
+          draft_value: string | null
           id: string
           palette_id: string
           token_key: string
@@ -10489,7 +10811,9 @@ export type Database = {
           value: string
         }
         Insert: {
+          category?: string
           created_at?: string
+          draft_value?: string | null
           id?: string
           palette_id: string
           token_key: string
@@ -10497,7 +10821,9 @@ export type Database = {
           value: string
         }
         Update: {
+          category?: string
           created_at?: string
+          draft_value?: string | null
           id?: string
           palette_id?: string
           token_key?: string
@@ -12890,6 +13216,14 @@ export type Database = {
         Args: { _days?: number; _limit?: number }
         Returns: Json
       }
+      mkt_analytics_purge_expired: { Args: never; Returns: number }
+      mkt_analytics_purge_test: { Args: never; Returns: number }
+      mkt_analytics_retention_get: { Args: never; Returns: number }
+      mkt_analytics_retention_set: {
+        Args: { _days: number; _reason: string }
+        Returns: number
+      }
+      mkt_analytics_rollup: { Args: { _since?: string }; Returns: number }
       mkt_analytics_search: {
         Args: { _days?: number; _limit?: number }
         Returns: Json
@@ -13077,6 +13411,7 @@ export type Database = {
       mkt_chat_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       mkt_chat_peer: { Args: { _conversation_id: string }; Returns: string }
       mkt_commerce_flags: { Args: never; Returns: Json }
+      mkt_content_can: { Args: { _perm: string }; Returns: boolean }
       mkt_conversation_context: {
         Args: { _conversation_id: string }
         Returns: Json
