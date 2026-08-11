@@ -491,6 +491,36 @@ export function preflightPage(
     }
   });
 
+  if (perf) {
+    for (const asset of perf.assets ?? []) {
+      const over = asset.kb - perf.budget.max_asset_kb;
+      if (over > 0)
+        items.push({
+          code: "oversized_asset",
+          message: `أصل أثقل من الميزانية: ${asset.path} بحجم ${asset.kb}KB (الحد ${perf.budget.max_asset_kb}KB)`,
+          // تجاوز الضعف يمنع النشر، وما دونه تحذير يراه الناشر.
+          blocking: asset.kb >= perf.budget.max_asset_kb * 2,
+        });
+    }
+
+    const measured = perf.measured;
+    if (measured && measured.samples >= 3) {
+      const clsBudget = perf.budget.cls_milli / 1000;
+      if (measured.cls_p75 !== null && measured.cls_p75 > clsBudget)
+        items.push({
+          code: "layout_shift",
+          message: `إزاحة تصميم مقيسة ${measured.cls_p75.toFixed(3)} تتجاوز الحد ${clsBudget.toFixed(3)}`,
+          blocking: measured.cls_p75 > clsBudget * 2,
+        });
+      if (measured.lcp_p75 !== null && measured.lcp_p75 > perf.budget.lcp_ms)
+        items.push({
+          code: "slow_page",
+          message: `أبطأ عنصر مرئي ${Math.round(measured.lcp_p75)}ms يتجاوز ميزانية ${perf.budget.lcp_ms}ms`,
+          blocking: measured.lcp_p75 > perf.budget.lcp_ms * 2,
+        });
+    }
+  }
+
   return items;
 }
 
