@@ -65,14 +65,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
+/**
+ * Sidebar information architecture of the platform command centre.
+ *
+ * Sections follow operational priority (what needs a decision first), not the
+ * order the screens were built in. Nothing is invented here: every entry points
+ * at an existing screen, and every entry is filtered by the server-verified
+ * identity in `visibleNav`, so an unauthorised member never even sees the module
+ * name.
+ */
 type NavSection =
-  | "studio"
-  | "content"
-  | "campaigns"
-  | "aqar"
-  | "finance"
+  | "overview"
+  | "inbox"
+  | "market"
+  | "accounts"
+  | "verification"
+  | "reports"
   | "guide"
-  | "labels"
+  | "aqar"
+  | "references"
+  | "studio"
+  | "campaigns"
+  | "finance"
+  | "analytics"
+  | "staff"
+  | "audit"
   | "settings";
 
 interface NavItem {
@@ -86,60 +103,91 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { to: "/admin", labelKey: "admin.nav.home", icon: Gauge, section: "studio" },
-  {
-    to: "/admin/dashboard",
-    labelKey: "admin.nav.analytics",
-    icon: BarChart3,
-    section: "content",
-  },
-  { to: "/admin/search", labelKey: "admin.nav.search", icon: Search, section: "content" },
+  // 1 — Overview
+  { to: "/admin", labelKey: "admin.nav.home", icon: Gauge, section: "overview" },
+  { to: "/admin/search", labelKey: "admin.nav.search", icon: Search, section: "overview" },
+
+  // 2 — Work inbox
   {
     to: "/admin/my-work",
     labelKey: "admin.nav.myWork",
     icon: Briefcase,
-    section: "content",
+    section: "inbox",
     anyStaff: true,
   },
+
+  // 3 — Marketplace and listings
   {
     to: "/admin/listings",
     labelKey: "admin.nav.listings",
     icon: Megaphone,
-    section: "content",
-  },
-  {
-    to: "/admin/listing-reports",
-    labelKey: "admin.nav.listingReports",
-    icon: Flag,
-    section: "content",
-    perms: ["reports.inbox_view", "ads.reports_view"],
+    section: "market",
   },
   {
     to: "/admin/listing-events",
     labelKey: "admin.nav.listingEvents",
     icon: ScrollText,
-    section: "content",
+    section: "market",
     perms: ["reports.audit_view"],
   },
+  { to: "/admin/stores", labelKey: "admin.nav.stores", icon: Store, section: "market" },
+  { to: "/admin/errands", labelKey: "admin.nav.errands", icon: Store, section: "market" },
+
+  // 4 — Accounts and businesses
   {
-    to: "/admin/stores",
-    labelKey: "admin.nav.stores",
-    icon: Store,
-    section: "content",
+    to: "/admin/users",
+    labelKey: "admin.nav.users",
+    icon: Users,
+    section: "accounts",
+    perms: ["accounts.restrict"],
   },
   {
-    to: "/admin/errands",
-    labelKey: "admin.nav.errands",
-    icon: Store,
-    section: "content",
+    to: "/admin/businesses",
+    labelKey: "admin.nav.businesses",
+    icon: Building2,
+    section: "accounts",
+    perms: ["verifications.review"],
   },
+  {
+    to: "/admin/applications",
+    labelKey: "admin.nav.joinApplications",
+    icon: UserRoundCheck,
+    section: "accounts",
+    perms: ["verifications.review"],
+  },
+
+  // 5 — Verification
+  {
+    to: "/admin/verifications",
+    labelKey: "admin.nav.verifications",
+    icon: BadgeCheck,
+    section: "verification",
+    perms: ["verifications.review"],
+  },
+
+  // 6 — Reports and appeals
+  {
+    to: "/admin/reports",
+    labelKey: "admin.nav.reports",
+    icon: ClipboardList,
+    section: "reports",
+    perms: ["reports.inbox_view"],
+  },
+  {
+    to: "/admin/listing-reports",
+    labelKey: "admin.nav.listingReports",
+    icon: Flag,
+    section: "reports",
+    perms: ["reports.inbox_view", "ads.reports_view"],
+  },
+
+  // 7 — Guide
   {
     to: "/admin/guide-queue",
     labelKey: "admin.nav.guideQueue",
     icon: ShieldQuestion,
     section: "guide",
   },
-
   {
     to: "/admin/guide-requests",
     labelKey: "admin.nav.guideRequests",
@@ -152,36 +200,37 @@ const NAV: NavItem[] = [
     icon: ShieldQuestion,
     section: "guide",
   },
+
+  // 8 — Real estate
+  { to: "/admin/locations", labelKey: "admin.nav.geo", icon: Globe2, section: "references" },
+
+  // 9 — Categories, activities and places
   {
-    to: "/admin/ad-credit",
-    labelKey: "admin.nav.adCredit",
-    icon: Coins,
-    section: "finance",
+    to: "/admin/categories",
+    labelKey: "admin.nav.categories",
+    icon: ListChecks,
+    section: "references",
   },
   {
-    to: "/admin/campaigns",
-    labelKey: "admin.nav.campaigns",
-    icon: Clapperboard,
-    section: "campaigns",
+    to: "/admin/taxonomy",
+    labelKey: "admin.nav.activities",
+    icon: ListChecks,
+    section: "references",
   },
+  { to: "/admin/labels", labelKey: "admin.nav.labels", icon: ListChecks, section: "references" },
+
+  // 10 — Studio and content
+  { to: "/admin/composer", labelKey: "admin.nav.composer", icon: LayoutTemplate, section: "studio" },
+  { to: "/admin/appearance", labelKey: "admin.nav.appearance", icon: Images, section: "studio" },
   {
-    to: "/admin/mascots",
-    labelKey: "admin.nav.mascots",
-    icon: Smile,
-    section: "studio",
-  },
-  {
-    to: "/admin/appearance",
-    labelKey: "admin.nav.appearance",
-    icon: Images,
-    section: "studio",
-  },
-  {
-    to: "/admin/composer",
-    labelKey: "admin.nav.composer",
+    to: "/admin/appearance/variants",
+    labelKey: "admin.nav.pageVariants",
     icon: LayoutTemplate,
     section: "studio",
   },
+  { to: "/admin/designs", labelKey: "admin.nav.designs", icon: LayoutTemplate, section: "studio" },
+  { to: "/admin/studio/canvas", labelKey: "admin.nav.canvasStudio", icon: Shapes, section: "studio" },
+  { to: "/admin/mascots", labelKey: "admin.nav.mascots", icon: Smile, section: "studio" },
   {
     to: "/admin/ai",
     labelKey: "admin.nav.aiServices",
@@ -189,25 +238,24 @@ const NAV: NavItem[] = [
     section: "studio",
     ownerOnly: true,
   },
+
+  // 11 — Campaigns
   {
-    to: "/admin/studio/canvas",
-    labelKey: "admin.nav.canvasStudio",
-    icon: Shapes,
-    section: "studio",
+    to: "/admin/campaigns",
+    labelKey: "admin.nav.campaigns",
+    icon: Clapperboard,
+    section: "campaigns",
   },
   {
-    to: "/admin/integrations",
-    labelKey: "admin.nav.integrations",
-    icon: Plug,
-    section: "settings",
+    to: "/admin/student-bot",
+    labelKey: "admin.nav.studentBot",
+    icon: GraduationCap,
+    section: "campaigns",
     ownerOnly: true,
   },
-  {
-    to: "/admin/designs",
-    labelKey: "admin.nav.designs",
-    icon: LayoutTemplate,
-    section: "studio",
-  },
+
+  // 12 — Finance
+  { to: "/admin/ad-credit", labelKey: "admin.nav.adCredit", icon: Coins, section: "finance" },
   {
     to: "/admin/pricing",
     labelKey: "admin.nav.pricing",
@@ -215,93 +263,54 @@ const NAV: NavItem[] = [
     section: "finance",
     ownerOnly: true,
   },
+
+  // 13 — Reports and analytics
   {
-    to: "/admin/appearance/variants",
-    labelKey: "admin.nav.pageVariants",
-    icon: LayoutTemplate,
-    section: "studio",
+    to: "/admin/dashboard",
+    labelKey: "admin.nav.analytics",
+    icon: BarChart3,
+    section: "analytics",
   },
+
+  // 14 — Platform staff and permissions
   {
-    to: "/admin/users",
-    labelKey: "admin.nav.users",
-    icon: Users,
-    section: "settings",
-    perms: ["accounts.restrict"],
-  },
-  {
-    to: "/admin/businesses",
-    labelKey: "admin.nav.businesses",
-    icon: Building2,
-    section: "settings",
-    perms: ["verifications.review"],
-  },
-  {
-    to: "/admin/verifications",
-    labelKey: "admin.nav.verifications",
-    icon: BadgeCheck,
-    section: "settings",
-    perms: ["verifications.review"],
-  },
-  {
-    to: "/admin/applications",
-    labelKey: "admin.nav.joinApplications",
-    icon: UserRoundCheck,
-    section: "settings",
-    perms: ["verifications.review"],
-  },
-  {
-    to: "/admin/reports",
-    labelKey: "admin.nav.reports",
-    icon: ClipboardList,
-    section: "settings",
-    perms: ["reports.inbox_view"],
+    to: "/admin/roles",
+    labelKey: "admin.nav.roles",
+    icon: UserCog,
+    section: "staff",
+    ownerOnly: true,
   },
   {
     to: "/admin/staff/workload",
     labelKey: "admin.nav.workforce",
     icon: Users2,
-    section: "settings",
+    section: "staff",
     perms: ["workforce.manage"],
   },
   {
     to: "/admin/staff/attendance",
     labelKey: "admin.nav.attendance",
     icon: CalendarClock,
-    section: "settings",
+    section: "staff",
     perms: ["attendance.view", "attendance.manage", "attendance.approve"],
   },
-  {
-    to: "/admin/categories",
-    labelKey: "admin.nav.categories",
-    icon: ListChecks,
-    section: "content",
-  },
-  {
-    to: "/admin/labels",
-    labelKey: "admin.nav.labels",
-    icon: ListChecks,
-    section: "labels",
-  },
-  {
-    to: "/admin/taxonomy",
-    labelKey: "admin.nav.activities",
-    icon: ListChecks,
-    section: "content",
-  },
-  { to: "/admin/locations", labelKey: "admin.nav.geo", icon: Globe2, section: "aqar" },
-  {
-    to: "/admin/roles",
-    labelKey: "admin.nav.roles",
-    icon: UserCog,
-    section: "settings",
-    ownerOnly: true,
-  },
+
+  // 15 — Operations log
   {
     to: "/admin/audit-log",
     labelKey: "admin.nav.auditLog",
     icon: Activity,
-    section: "settings",
+    section: "audit",
     perms: ["reports.audit_view"],
+  },
+
+  // 16 — Platform settings
+  {
+    to: "/admin/settings",
+    labelKey: "admin.nav.settings",
+    icon: Settings,
+    section: "settings",
+    ownerOnly: true,
   },
   {
     to: "/admin/moderation",
@@ -311,30 +320,30 @@ const NAV: NavItem[] = [
     ownerOnly: true,
   },
   {
-    to: "/admin/student-bot",
-    labelKey: "admin.nav.studentBot",
-    icon: GraduationCap,
-    section: "campaigns",
-    ownerOnly: true,
-  },
-  {
-    to: "/admin/settings",
-    labelKey: "admin.nav.settings",
-    icon: Settings,
+    to: "/admin/integrations",
+    labelKey: "admin.nav.integrations",
+    icon: Plug,
     section: "settings",
     ownerOnly: true,
   },
 ];
 
-
 const NAV_SECTIONS: NavSection[] = [
-  "studio",
-  "content",
-  "campaigns",
-  "aqar",
-  "finance",
+  "overview",
+  "inbox",
+  "market",
+  "accounts",
+  "verification",
+  "reports",
   "guide",
-  "labels",
+  "aqar",
+  "references",
+  "studio",
+  "campaigns",
+  "finance",
+  "analytics",
+  "staff",
+  "audit",
   "settings",
 ];
 
