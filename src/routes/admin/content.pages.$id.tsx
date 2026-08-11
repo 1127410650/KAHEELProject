@@ -27,6 +27,8 @@ import {
 import { toast } from "sonner";
 
 import { BlockFieldEditor } from "@/components/admin/cms/BlockFieldEditor";
+import { PageSettingsCard } from "@/components/admin/cms/PageSettingsCard";
+import { PreflightList } from "@/components/admin/cms/PreflightList";
 import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { PageBlocks } from "@/components/marketplace/composer/PageBlocks";
@@ -37,6 +39,7 @@ import {
   DEVICE_WIDTH,
   duplicateBlock,
   newBlock,
+  preflightPage,
   useBlockHistory,
   useCmsErrorText,
   useCmsMutations,
@@ -49,6 +52,7 @@ import {
   type CmsVersion,
 } from "@/lib/mkt-cms";
 import { BLOCK_LIBRARY, blockDefinition, type PageBlock } from "@/lib/mkt-page-composer";
+
 
 export const Route = createFileRoute("/admin/content/pages/$id")({
   ssr: "data-only",
