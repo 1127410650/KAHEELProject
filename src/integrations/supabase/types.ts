@@ -5459,6 +5459,42 @@ export type Database = {
           },
         ]
       }
+      mkt_ops_log: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          at: string
+          entity: string | null
+          entity_id: string | null
+          id: string
+          meta: Json
+          summary: string | null
+          unit: string
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          meta?: Json
+          summary?: string | null
+          unit?: string
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          meta?: Json
+          summary?: string | null
+          unit?: string
+        }
+        Relationships: []
+      }
       mkt_order_item_addons: {
         Row: {
           addon_name_snapshot: string
@@ -12261,6 +12297,27 @@ export type Database = {
         Args: { _body: string; _title: string; _user_id: string }
         Returns: undefined
       }
+      mkt_admin_ops_log: {
+        Args: {
+          _from?: string
+          _limit?: number
+          _offset?: number
+          _search?: string
+          _to?: string
+          _unit?: string
+        }
+        Returns: {
+          action: string
+          actor_user_id: string
+          at: string
+          entity: string
+          entity_id: string
+          id: string
+          meta: Json
+          summary: string
+          unit: string
+        }[]
+      }
       mkt_admin_overview: { Args: never; Returns: Json }
       mkt_admin_page_block_delete: { Args: { _id: string }; Returns: undefined }
       mkt_admin_page_block_restore: {
@@ -13534,6 +13591,17 @@ export type Database = {
         Returns: undefined
       }
       mkt_operational_access: { Args: { _account_key: string }; Returns: Json }
+      mkt_ops_log_write: {
+        Args: {
+          _action: string
+          _entity?: string
+          _entity_id?: string
+          _meta?: Json
+          _summary?: string
+          _unit?: string
+        }
+        Returns: string
+      }
       mkt_order_item_party: {
         Args: { _order_item_id: string }
         Returns: boolean
