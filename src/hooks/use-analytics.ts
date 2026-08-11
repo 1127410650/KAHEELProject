@@ -10,6 +10,8 @@ import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 import { flushAnalytics, track } from "@/lib/analytics";
+import { flushTracking, trackPageView } from "@/lib/track";
+
 
 export function useAnalyticsInstrumentation(): void {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
