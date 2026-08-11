@@ -89,6 +89,11 @@ export const STAFF_PERMS = [
   "businesses.suspend",
   "businesses.revoke_verification",
   "appeals.review",
+  "support.view",
+  "support.manage",
+  "audit.view",
+  "data.export",
+  "staff.sessions_revoke",
 ] as const;
 export type StaffPerm = (typeof STAFF_PERMS)[number];
 
