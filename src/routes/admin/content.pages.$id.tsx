@@ -197,6 +197,11 @@ function CmsPageEditor() {
       toast.error("توجد كتلة غير معروفة — لا يمكن النشر");
       return;
     }
+    if (blockingCount > 0) {
+      toast.error(`فحص ما قبل النشر: ${blockingCount} بند مانع`);
+      return;
+    }
+
     mutations.publish.mutate(draft.id, {
       onSuccess: () => {
         toast.success("نُشرت الصفحة");
