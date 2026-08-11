@@ -113,9 +113,10 @@ function errorText(error: unknown): string {
 
 /**
  * حقل واحد من تعريف الكتلة — المحرّر مشترك مع استوديو المحتوى، فلا نسخة ثانية
- * منه هنا: `@/components/admin/cms/BlockFieldEditor`.
+ * منه هنا.
  */
 const FieldEditor = BlockFieldEditor;
+
 
 
 function BlockRow({
