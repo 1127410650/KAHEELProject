@@ -33,13 +33,16 @@ export function useActiveTheme() {
     staleTime: 10 * 60_000,
     gcTime: 60 * 60_000,
     retry: 1,
-    queryFn: async (): Promise<ThemeTokenMap> => {
+    queryFn: async (): Promise<Record<string, unknown>> => {
       const { data, error } = await supabase.rpc("mkt_theme_active" as never);
       if (error) throw error;
-      return normalizeTokens(data as unknown as Record<string, unknown>);
+      return (data ?? {}) as unknown as Record<string, unknown>;
     },
+    // نفس المخزن يخدم الألوان ورموز التصميم — الاشتقاق في `select` لا في `queryFn`.
+    select: (raw): ThemeTokenMap => normalizeTokens(raw),
   });
 }
+
 
 /** كل اللوحات المحفوظة — لشاشة الإدارة فقط. */
 export function useThemePalettes(enabled = true) {
