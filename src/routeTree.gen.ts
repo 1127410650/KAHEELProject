@@ -110,6 +110,7 @@ import { Route as AdminAnalyticsIndexRouteImport } from './routes/admin/analytic
 import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminContentIndexRouteImport } from './routes/admin/content.index'
+import { Route as AdminContentPlacementsRouteImport } from './routes/admin/content.placements'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
@@ -646,6 +647,11 @@ const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
   path: '/content/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminContentPlacementsRoute = AdminContentPlacementsRouteImport.update({
+  id: '/content/placements',
+  path: '/content/placements',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminListingsIdRoute = AdminListingsIdRouteImport.update({
   id: '/listings_/$id',
   path: '/listings/$id',
@@ -901,6 +907,7 @@ export interface FileRoutesByFullPath {
   '/services/': typeof ServicesIndexRoute
   '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
@@ -1030,6 +1037,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesIndexRoute
   '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
@@ -1164,6 +1172,7 @@ export interface FileRoutesById {
   '/services/': typeof ServicesIndexRoute
   '/admin/appearance_/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
@@ -1299,6 +1308,7 @@ export interface FileRouteTypes {
     | '/services/'
     | '/admin/appearance/variants'
     | '/admin/businesses/$id'
+    | '/admin/content/placements'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
@@ -1428,6 +1438,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/appearance/variants'
     | '/admin/businesses/$id'
+    | '/admin/content/placements'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
@@ -1561,6 +1572,7 @@ export interface FileRouteTypes {
     | '/services/'
     | '/admin/appearance_/variants'
     | '/admin/businesses_/$id'
+    | '/admin/content/placements'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
@@ -2351,6 +2363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContentIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/content/placements': {
+      id: '/admin/content/placements'
+      path: '/content/placements'
+      fullPath: '/admin/content/placements'
+      preLoaderRoute: typeof AdminContentPlacementsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/listings_/$id': {
       id: '/admin/listings_/$id'
       path: '/listings/$id'
@@ -2604,6 +2623,7 @@ interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminAppearanceVariantsRoute: typeof AdminAppearanceVariantsRoute
   AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
+  AdminContentPlacementsRoute: typeof AdminContentPlacementsRoute
   AdminListingsIdRoute: typeof AdminListingsIdRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   AdminStaffAttendanceRoute: typeof AdminStaffAttendanceRoute
@@ -2657,6 +2677,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminAppearanceVariantsRoute: AdminAppearanceVariantsRoute,
   AdminBusinessesIdRoute: AdminBusinessesIdRoute,
+  AdminContentPlacementsRoute: AdminContentPlacementsRoute,
   AdminListingsIdRoute: AdminListingsIdRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
   AdminStaffAttendanceRoute: AdminStaffAttendanceRoute,
