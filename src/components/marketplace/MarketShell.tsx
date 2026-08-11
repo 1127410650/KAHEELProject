@@ -336,7 +336,10 @@ export function MarketCompactFooter() {
   return (
     <footer className="mt-8 border-t border-border">
       <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-[var(--page-x)] py-4 text-desc text-muted-foreground">
+        {/* شعار التذييل يتبع فتحة `brand.logo.footer` نفسها التي تديرها شاشة المظهر. */}
+        <BrandLogo placement="footer" className="size-5 shrink-0 rounded-md" />
         <p>{t("market.footer.rights")}</p>
+
         {(
           [
             ["/legal/copyright", "market.footer.copyright"],
