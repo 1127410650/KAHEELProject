@@ -46,7 +46,7 @@ export async function loadAdminMessageReports(
   offset = 0,
 ): Promise<AdminMessageReport[]> {
   const { data, error } = await supabase.rpc("mkt_admin_message_reports", {
-    _status: status,
+    _status: status ?? undefined,
     _limit: limit,
     _offset: offset,
   });
@@ -66,7 +66,7 @@ export async function reviewMessageReport(
   const { error } = await supabase.rpc("mkt_admin_message_report_review", {
     _id: id,
     _action: action,
-    _note: note?.trim() ? note.trim() : null,
+    _note: note?.trim() ? note.trim() : undefined,
   });
   if (error) throw error;
 }
