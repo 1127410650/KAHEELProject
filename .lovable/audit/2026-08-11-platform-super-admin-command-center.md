@@ -108,3 +108,59 @@
 للدعم، دالة إبطال الجلسات الخادمية، سجل العمليات الموحد، صلاحية وسجل التصدير)،
 وكل ترحيل يتطلب مراجعة واعتمادًا مستقلًا قبل تنفيذه. لم تُنشأ أي شاشة تبدو
 مكتملة لهذه الوحدات.
+
+## Batch 4 — Market units (continued)
+
+- Migration: `mkt_message_reports` grants narrowed — `REVOKE ALL … FROM anon`, authenticated limited to SELECT/INSERT/UPDATE (no DELETE), service_role full.
+- Verified: anon REST read → `401 / 42501 permission denied`. Admin screen `/admin/chat-reports` → 200.
+- Remaining market units (accounts, businesses, listings, stores, errands, verifications) already exist as admin screens and are wired in `AdminShell` nav; no new migration required.
+
+## Batch 5 — Operational requests, support, references
+
+- Migration: `mkt_support_tickets` + `mkt_support_messages`.
+  - Sequential ref `SUP-YYMM-#####`; statuses new/processing/awaiting_customer/closed; priorities low..urgent; units market/aqar/services/errands/guide/account/billing.
+  - RLS: requester reads own ticket + non-internal replies only; `support.view` reads all; `support.manage` updates and replies; requester may reply only while not closed.
+  - Guard trigger freezes `requester_user_id`, `ref_no`, `created_at`; sets `closed_at`/`closed_by` on close. No DELETE grant anywhere.
+  - Grants re-narrowed in a follow-up migration (anon revoked on both tables and the ticket sequence).
+- Internal notes never reach the requester: enforced by the `is_internal = false` predicate in the requester SELECT policy, not by UI filtering.
+- Existing operational request modules keep their own identifiers; references (locations, categories, labels) unchanged.
+- UI: `src/lib/mkt-support.ts`, `src/routes/admin/support.tsx`, nav entry `admin.nav.support`. Route → 200.
+
+## Batch 6 — Platform staff, sessions, unified log, audited export
+
+- Migration: `mkt_ops_log` (append-only).
+  - Append-only enforced by three triggers (UPDATE / DELETE / TRUNCATE) raising `mkt_ops_log is append-only`; no UPDATE/DELETE grant for any application role.
+  - Verified live: INSERT of `qa.append.probe` succeeded, subsequent UPDATE rejected with `P0001: mkt_ops_log is append-only`. The probe row is intentionally unremovable from the app — it is a labelled log line, not user data.
+  - Single write path `mkt_ops_log_write` takes the actor from `auth.uid()`, never from the request.
+  - Reader `mkt_admin_ops_log(search, unit, from, to, limit≤500, offset)` gated on `audit.view`.
+- Migration: `mkt_admin_revoke_user_sessions(user_id, reason)`.
+  - Ends all sessions and refresh tokens of the target; requires `staff.sessions_revoke`; mandatory reason ≥3 chars; refuses self-revoke and refuses revoking another platform admin; logs `staff.sessions_revoked` with the ended-session count.
+  - No structural change to auth schema — session rows only.
+- Migration: `mkt_export_log` + `mkt_admin_export_record`.
+  - Requires `data.export` and a reason ≥5 chars; daily cap 20 exports per staff member; append-only via the same guard; mirrors each export into the ops log as `data.exported`.
+- UI: `src/lib/mkt-ops-log.ts`, `src/routes/admin/ops-log.tsx` (ops log + export log), nav entry `admin.nav.opsLog`. Route → 200.
+- New permission keys added to `STAFF_PERMS`: `support.view`, `support.manage`, `audit.view`, `data.export`, `staff.sessions_revoke`.
+
+## Batch 7 — Acceptance checks executed this pass
+
+Numbers below are actual observed results, not projections.
+
+1. anon read `mkt_message_reports` → 401 (42501). PASS
+2. anon read `mkt_support_tickets` → 401. PASS
+3. anon read `mkt_support_messages` → 401. PASS
+4. anon read `mkt_ops_log` → 401. PASS
+5. anon read `mkt_export_log` → 401. PASS
+6. anon rpc `mkt_admin_ops_log` → 401. PASS
+7. anon rpc `mkt_admin_export_log` → 401. PASS
+8. anon rpc `mkt_ops_log_write` (valid args) → 401. PASS
+9. anon rpc `mkt_admin_export_record` (valid args) → 401. PASS
+10. anon rpc `mkt_admin_revoke_user_sessions` (valid args) → 401. PASS
+11. ops log UPDATE blocked at database level → P0001 raised. PASS
+12. `tsgo --noEmit` → 0 errors. PASS
+13. `/admin/support` → 200. PASS
+14. `/admin/ops-log` → 200. PASS
+15. `/admin/chat-reports` → 200. PASS
+
+Not yet executed (needs a signed-in staff session and a signed-in non-staff session in the browser): the 20 role-boundary and workflow assertions — support ticket visibility for a second signed-in user, internal-note invisibility to the requester, closed-ticket reply refusal, export daily-cap trip at the 21st call, session-revoke happy path and the two refusals, and the ops-log write-through from each admin action. These are runtime checks, not schema checks; the schema-side guards for each are in place and listed above.
+
+No Publish performed.
