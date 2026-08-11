@@ -40,6 +40,7 @@ import { Route as AdminAuditLogRouteImport } from './routes/admin/audit-log'
 import { Route as AdminBusinessesRouteImport } from './routes/admin/businesses'
 import { Route as AdminCampaignsRouteImport } from './routes/admin/campaigns'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
+import { Route as AdminChatReportsRouteImport } from './routes/admin/chat-reports'
 import { Route as AdminComposerRouteImport } from './routes/admin/composer'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
@@ -56,12 +57,14 @@ import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminMascotsRouteImport } from './routes/admin/mascots'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
+import { Route as AdminOpsLogRouteImport } from './routes/admin/ops-log'
 import { Route as AdminPricingRouteImport } from './routes/admin/pricing'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
 import { Route as AdminStudentBotRouteImport } from './routes/admin/student-bot'
+import { Route as AdminSupportRouteImport } from './routes/admin/support'
 import { Route as AdminTaxonomyRouteImport } from './routes/admin/taxonomy'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVerificationsRouteImport } from './routes/admin/verifications'
@@ -289,6 +292,11 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminChatReportsRoute = AdminChatReportsRouteImport.update({
+  id: '/chat-reports',
+  path: '/chat-reports',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminComposerRoute = AdminComposerRouteImport.update({
   id: '/composer',
   path: '/composer',
@@ -369,6 +377,11 @@ const AdminMyWorkRoute = AdminMyWorkRouteImport.update({
   path: '/my-work',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminOpsLogRoute = AdminOpsLogRouteImport.update({
+  id: '/ops-log',
+  path: '/ops-log',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminPricingRoute = AdminPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -397,6 +410,11 @@ const AdminStoresRoute = AdminStoresRouteImport.update({
 const AdminStudentBotRoute = AdminStudentBotRouteImport.update({
   id: '/student-bot',
   path: '/student-bot',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSupportRoute = AdminSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminTaxonomyRoute = AdminTaxonomyRouteImport.update({
@@ -790,6 +808,7 @@ export interface FileRoutesByFullPath {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chat-reports': typeof AdminChatReportsRoute
   '/admin/composer': typeof AdminComposerRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
@@ -806,12 +825,14 @@ export interface FileRoutesByFullPath {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/student-bot': typeof AdminStudentBotRoute
+  '/admin/support': typeof AdminSupportRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -912,6 +933,7 @@ export interface FileRoutesByTo {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chat-reports': typeof AdminChatReportsRoute
   '/admin/composer': typeof AdminComposerRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
@@ -928,12 +950,14 @@ export interface FileRoutesByTo {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/student-bot': typeof AdminStudentBotRoute
+  '/admin/support': typeof AdminSupportRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -1039,6 +1063,7 @@ export interface FileRoutesById {
   '/admin/businesses': typeof AdminBusinessesRoute
   '/admin/campaigns': typeof AdminCampaignsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chat-reports': typeof AdminChatReportsRoute
   '/admin/composer': typeof AdminComposerRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/designs': typeof AdminDesignsRoute
@@ -1055,12 +1080,14 @@ export interface FileRoutesById {
   '/admin/mascots': typeof AdminMascotsRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/my-work': typeof AdminMyWorkRoute
+  '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/student-bot': typeof AdminStudentBotRoute
+  '/admin/support': typeof AdminSupportRoute
   '/admin/taxonomy': typeof AdminTaxonomyRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/verifications': typeof AdminVerificationsRoute
@@ -1167,6 +1194,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/categories'
+    | '/admin/chat-reports'
     | '/admin/composer'
     | '/admin/dashboard'
     | '/admin/designs'
@@ -1183,12 +1211,14 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/ops-log'
     | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
     | '/admin/student-bot'
+    | '/admin/support'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1289,6 +1319,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/categories'
+    | '/admin/chat-reports'
     | '/admin/composer'
     | '/admin/dashboard'
     | '/admin/designs'
@@ -1305,12 +1336,14 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/ops-log'
     | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
     | '/admin/student-bot'
+    | '/admin/support'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1415,6 +1448,7 @@ export interface FileRouteTypes {
     | '/admin/businesses'
     | '/admin/campaigns'
     | '/admin/categories'
+    | '/admin/chat-reports'
     | '/admin/composer'
     | '/admin/dashboard'
     | '/admin/designs'
@@ -1431,12 +1465,14 @@ export interface FileRouteTypes {
     | '/admin/mascots'
     | '/admin/moderation'
     | '/admin/my-work'
+    | '/admin/ops-log'
     | '/admin/pricing'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
     | '/admin/stores'
     | '/admin/student-bot'
+    | '/admin/support'
     | '/admin/taxonomy'
     | '/admin/users'
     | '/admin/verifications'
@@ -1776,6 +1812,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/chat-reports': {
+      id: '/admin/chat-reports'
+      path: '/chat-reports'
+      fullPath: '/admin/chat-reports'
+      preLoaderRoute: typeof AdminChatReportsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/composer': {
       id: '/admin/composer'
       path: '/composer'
@@ -1888,6 +1931,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMyWorkRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/ops-log': {
+      id: '/admin/ops-log'
+      path: '/ops-log'
+      fullPath: '/admin/ops-log'
+      preLoaderRoute: typeof AdminOpsLogRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/pricing': {
       id: '/admin/pricing'
       path: '/pricing'
@@ -1928,6 +1978,13 @@ declare module '@tanstack/react-router' {
       path: '/student-bot'
       fullPath: '/admin/student-bot'
       preLoaderRoute: typeof AdminStudentBotRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/support': {
+      id: '/admin/support'
+      path: '/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AdminSupportRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/taxonomy': {
@@ -2439,6 +2496,7 @@ interface AdminRouteRouteChildren {
   AdminBusinessesRoute: typeof AdminBusinessesRoute
   AdminCampaignsRoute: typeof AdminCampaignsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminChatReportsRoute: typeof AdminChatReportsRoute
   AdminComposerRoute: typeof AdminComposerRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminDesignsRoute: typeof AdminDesignsRoute
@@ -2455,12 +2513,14 @@ interface AdminRouteRouteChildren {
   AdminMascotsRoute: typeof AdminMascotsRoute
   AdminModerationRoute: typeof AdminModerationRoute
   AdminMyWorkRoute: typeof AdminMyWorkRoute
+  AdminOpsLogRoute: typeof AdminOpsLogRoute
   AdminPricingRoute: typeof AdminPricingRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStoresRoute: typeof AdminStoresRoute
   AdminStudentBotRoute: typeof AdminStudentBotRoute
+  AdminSupportRoute: typeof AdminSupportRoute
   AdminTaxonomyRoute: typeof AdminTaxonomyRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVerificationsRoute: typeof AdminVerificationsRoute
@@ -2486,6 +2546,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBusinessesRoute: AdminBusinessesRoute,
   AdminCampaignsRoute: AdminCampaignsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminChatReportsRoute: AdminChatReportsRoute,
   AdminComposerRoute: AdminComposerRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminDesignsRoute: AdminDesignsRoute,
@@ -2502,12 +2563,14 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminMascotsRoute: AdminMascotsRoute,
   AdminModerationRoute: AdminModerationRoute,
   AdminMyWorkRoute: AdminMyWorkRoute,
+  AdminOpsLogRoute: AdminOpsLogRoute,
   AdminPricingRoute: AdminPricingRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStoresRoute: AdminStoresRoute,
   AdminStudentBotRoute: AdminStudentBotRoute,
+  AdminSupportRoute: AdminSupportRoute,
   AdminTaxonomyRoute: AdminTaxonomyRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVerificationsRoute: AdminVerificationsRoute,

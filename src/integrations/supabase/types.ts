@@ -3169,6 +3169,39 @@ export type Database = {
           },
         ]
       }
+      mkt_export_log: {
+        Row: {
+          actor_user_id: string
+          at: string
+          filters: Json
+          id: string
+          kind: string
+          reason: string
+          row_count: number
+          unit: string
+        }
+        Insert: {
+          actor_user_id: string
+          at?: string
+          filters?: Json
+          id?: string
+          kind: string
+          reason: string
+          row_count?: number
+          unit?: string
+        }
+        Update: {
+          actor_user_id?: string
+          at?: string
+          filters?: Json
+          id?: string
+          kind?: string
+          reason?: string
+          row_count?: number
+          unit?: string
+        }
+        Relationships: []
+      }
       mkt_external_integrations: {
         Row: {
           config_public: Json
@@ -5170,6 +5203,72 @@ export type Database = {
           },
         ]
       }
+      mkt_message_reports: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          decision: string | null
+          decision_note: string | null
+          id: string
+          message_id: string
+          note: string | null
+          reason_code: string
+          reporter_user_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          severity: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          decision?: string | null
+          decision_note?: string | null
+          id?: string
+          message_id: string
+          note?: string | null
+          reason_code: string
+          reporter_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          decision?: string | null
+          decision_note?: string | null
+          id?: string
+          message_id?: string
+          note?: string | null
+          reason_code?: string
+          reporter_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_message_reports_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_message_reports_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_messages: {
         Row: {
           attachment_path: string | null
@@ -5392,6 +5491,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mkt_ops_log: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          at: string
+          entity: string | null
+          entity_id: string | null
+          id: string
+          meta: Json
+          summary: string | null
+          unit: string
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          meta?: Json
+          summary?: string | null
+          unit?: string
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          meta?: Json
+          summary?: string | null
+          unit?: string
+        }
+        Relationships: []
       }
       mkt_order_item_addons: {
         Row: {
@@ -9937,6 +10072,101 @@ export type Database = {
           },
         ]
       }
+      mkt_support_messages: {
+        Row: {
+          author_user_id: string
+          body: string
+          created_at: string
+          id: string
+          is_internal: boolean
+          ticket_id: string
+        }
+        Insert: {
+          author_user_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean
+          ticket_id: string
+        }
+        Update: {
+          author_user_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_support_tickets: {
+        Row: {
+          assignee: string | null
+          body: string
+          channel: string
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          first_response_at: string | null
+          id: string
+          priority: string
+          ref_no: string
+          requester_user_id: string
+          status: string
+          subject: string
+          subject_id: string | null
+          subject_kind: string | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          body: string
+          channel?: string
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          first_response_at?: string | null
+          id?: string
+          priority?: string
+          ref_no?: string
+          requester_user_id?: string
+          status?: string
+          subject: string
+          subject_id?: string | null
+          subject_kind?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          body?: string
+          channel?: string
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          first_response_at?: string | null
+          id?: string
+          priority?: string
+          ref_no?: string
+          requester_user_id?: string
+          status?: string
+          subject?: string
+          subject_id?: string | null
+          subject_kind?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_syria_directory_entries: {
         Row: {
           address: string | null
@@ -11879,6 +12109,29 @@ export type Database = {
         Args: { _active: boolean; _id: string }
         Returns: undefined
       }
+      mkt_admin_export_log: {
+        Args: { _limit?: number; _offset?: number }
+        Returns: {
+          actor_user_id: string
+          at: string
+          filters: Json
+          id: string
+          kind: string
+          reason: string
+          row_count: number
+          unit: string
+        }[]
+      }
+      mkt_admin_export_record: {
+        Args: {
+          _filters?: Json
+          _kind: string
+          _reason: string
+          _row_count?: number
+          _unit?: string
+        }
+        Returns: string
+      }
       mkt_admin_grant_points: {
         Args: {
           _account_id: string
@@ -12039,6 +12292,34 @@ export type Database = {
         Args: { _kind: string; _path: string; _subject_id: string }
         Returns: undefined
       }
+      mkt_admin_message_report_review: {
+        Args: { _action: string; _id: string; _note?: string }
+        Returns: undefined
+      }
+      mkt_admin_message_reports: {
+        Args: { _limit?: number; _offset?: number; _status?: string }
+        Returns: {
+          conversation_id: string
+          created_at: string
+          decision: string
+          decision_note: string
+          id: string
+          listing_id: string
+          message_body: string
+          message_created_at: string
+          message_deleted_at: string
+          message_id: string
+          message_moderation_state: string
+          note: string
+          reason_code: string
+          reporter_user_id: string
+          reports_count: number
+          reviewed_at: string
+          sender_user_id: string
+          severity: string
+          status: string
+        }[]
+      }
       mkt_admin_moderation_rule_delete: {
         Args: { _id: string; _reason: string }
         Returns: undefined
@@ -12071,6 +12352,27 @@ export type Database = {
       mkt_admin_notify_user: {
         Args: { _body: string; _title: string; _user_id: string }
         Returns: undefined
+      }
+      mkt_admin_ops_log: {
+        Args: {
+          _from?: string
+          _limit?: number
+          _offset?: number
+          _search?: string
+          _to?: string
+          _unit?: string
+        }
+        Returns: {
+          action: string
+          actor_user_id: string
+          at: string
+          entity: string
+          entity_id: string
+          id: string
+          meta: Json
+          summary: string
+          unit: string
+        }[]
       }
       mkt_admin_overview: { Args: never; Returns: Json }
       mkt_admin_page_block_delete: { Args: { _id: string }; Returns: undefined }
@@ -12127,6 +12429,10 @@ export type Database = {
         Returns: undefined
       }
       mkt_admin_rescan_listing: { Args: { _id: string }; Returns: Json }
+      mkt_admin_revoke_user_sessions: {
+        Args: { _reason: string; _user_id: string }
+        Returns: number
+      }
       mkt_admin_roles: {
         Args: never
         Returns: {
@@ -13345,6 +13651,17 @@ export type Database = {
         Returns: undefined
       }
       mkt_operational_access: { Args: { _account_key: string }; Returns: Json }
+      mkt_ops_log_write: {
+        Args: {
+          _action: string
+          _entity?: string
+          _entity_id?: string
+          _meta?: Json
+          _summary?: string
+          _unit?: string
+        }
+        Returns: string
+      }
       mkt_order_item_party: {
         Args: { _order_item_id: string }
         Returns: boolean

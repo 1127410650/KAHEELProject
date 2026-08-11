@@ -15,7 +15,9 @@ import {
   ChevronRight,
   ClipboardList,
   Flag,
+  MessageSquareWarning,
   Gauge,
+  Headphones,
   Globe2,
   GraduationCap,
   ListChecks,
@@ -174,6 +176,13 @@ const NAV: NavItem[] = [
     perms: ["reports.inbox_view"],
   },
   {
+    to: "/admin/chat-reports",
+    labelKey: "admin.nav.chatReports",
+    icon: MessageSquareWarning,
+    section: "reports",
+    perms: ["reports.inbox_view"],
+  },
+  {
     to: "/admin/listing-reports",
     labelKey: "admin.nav.listingReports",
     icon: Flag,
@@ -302,6 +311,24 @@ const NAV: NavItem[] = [
     icon: Activity,
     section: "audit",
     perms: ["reports.audit_view"],
+  },
+
+  // 15b — Support desk
+  {
+    to: "/admin/support",
+    labelKey: "admin.nav.support",
+    icon: Headphones,
+    section: "reports",
+    perms: ["support.view", "support.manage"],
+  },
+
+  // 15c — Unified operations log (append-only)
+  {
+    to: "/admin/ops-log",
+    labelKey: "admin.nav.opsLog",
+    icon: Activity,
+    section: "audit",
+    perms: ["audit.view", "reports.audit_view"],
   },
 
   // 16 — Platform settings
