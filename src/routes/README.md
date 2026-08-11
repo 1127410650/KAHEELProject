@@ -29,7 +29,7 @@ inventing a fifth prefix.
 | Area | Prefix | Who | Layout / guard |
 | --- | --- | --- | --- |
 | Public marketplace | `/`, `/search`, `/ads/*`, `/categories/*`, `/stores/*`, `/businesses/*`, `/profiles/*`, `/services/*`, `/guides/*`, static pages | anyone, indexable | `MarketShell` |
-| Entry & transition | `/auth`, `/register`, `/forgot-password`, `/reset-password`, `/invite/$token`, `/choose-account`, `/join`, `/market-setup`, `/go` | signing in or picking an account | bare, `noindex` |
+| Entry & transition | `/auth` (single screen: sign-in + create-account tabs; `/register` 301s here with `?tab=register`), `/forgot-password`, `/reset-password`, `/invite/$token`, `/choose-account`, `/join`, `/market-setup`, `/go` | signing in or picking an account | bare, `noindex` |
 | Account | `/my/*` | signed in, with an active account | `my/route.tsx` |
 | Business | `/business/*` | active account of kind `business` | `business/route.tsx` |
 | Back office | `/admin/*` | platform staff, by permission | `admin/route.tsx` + `AdminShell` |
