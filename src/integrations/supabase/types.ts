@@ -926,6 +926,69 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_alert_rules: {
+        Row: {
+          condition_note: string
+          created_at: string
+          dedupe_window_minutes: number
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          owner_user_id: string | null
+          rule_key: string
+          runbook_slug: string | null
+          service_key: string | null
+          severity: string
+          updated_at: string
+        }
+        Insert: {
+          condition_note: string
+          created_at?: string
+          dedupe_window_minutes?: number
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          owner_user_id?: string | null
+          rule_key: string
+          runbook_slug?: string | null
+          service_key?: string | null
+          severity?: string
+          updated_at?: string
+        }
+        Update: {
+          condition_note?: string
+          created_at?: string
+          dedupe_window_minutes?: number
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          owner_user_id?: string | null
+          rule_key?: string
+          runbook_slug?: string | null
+          service_key?: string | null
+          severity?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_alert_rules_runbook_slug_fkey"
+            columns: ["runbook_slug"]
+            isOneToOne: false
+            referencedRelation: "mkt_platform_runbooks"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "mkt_alert_rules_service_key_fkey"
+            columns: ["service_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_platform_slos"
+            referencedColumns: ["service_key"]
+          },
+        ]
+      }
       mkt_analytics_events: {
         Row: {
           browser: string | null
@@ -3617,6 +3680,116 @@ export type Database = {
           },
         ]
       }
+      mkt_feature_flags: {
+        Row: {
+          created_at: string
+          depends_on: string[]
+          description_ar: string | null
+          description_en: string | null
+          expires_at: string | null
+          fallback_note: string | null
+          flag_key: string
+          id: string
+          is_kill_switch: boolean
+          last_change_reason: string | null
+          last_changed_by: string | null
+          owner_user_id: string | null
+          review_at: string | null
+          rollout_percent: number
+          scope: string
+          status: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          depends_on?: string[]
+          description_ar?: string | null
+          description_en?: string | null
+          expires_at?: string | null
+          fallback_note?: string | null
+          flag_key: string
+          id?: string
+          is_kill_switch?: boolean
+          last_change_reason?: string | null
+          last_changed_by?: string | null
+          owner_user_id?: string | null
+          review_at?: string | null
+          rollout_percent?: number
+          scope?: string
+          status?: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          depends_on?: string[]
+          description_ar?: string | null
+          description_en?: string | null
+          expires_at?: string | null
+          fallback_note?: string | null
+          flag_key?: string
+          id?: string
+          is_kill_switch?: boolean
+          last_change_reason?: string | null
+          last_changed_by?: string | null
+          owner_user_id?: string | null
+          review_at?: string | null
+          rollout_percent?: number
+          scope?: string
+          status?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_feature_overrides: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          expires_at: string | null
+          flag_id: string
+          id: string
+          match_kind: string
+          match_value: string
+          reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          expires_at?: string | null
+          flag_id: string
+          id?: string
+          match_kind: string
+          match_value: string
+          reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          expires_at?: string | null
+          flag_id?: string
+          id?: string
+          match_kind?: string
+          match_value?: string
+          reason?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_feature_overrides_flag_id_fkey"
+            columns: ["flag_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_feature_flags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_follows: {
         Row: {
           created_at: string
@@ -4271,6 +4444,135 @@ export type Database = {
             columns: ["place_id"]
             isOneToOne: false
             referencedRelation: "mkt_guide_places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_health_checks: {
+        Row: {
+          check_key: string
+          created_at: string
+          fail_threshold: number | null
+          id: string
+          interval_minutes: number
+          is_active: boolean
+          kind: string
+          name_ar: string
+          name_en: string
+          service_key: string | null
+          updated_at: string
+          warn_threshold: number | null
+        }
+        Insert: {
+          check_key: string
+          created_at?: string
+          fail_threshold?: number | null
+          id?: string
+          interval_minutes?: number
+          is_active?: boolean
+          kind?: string
+          name_ar: string
+          name_en: string
+          service_key?: string | null
+          updated_at?: string
+          warn_threshold?: number | null
+        }
+        Update: {
+          check_key?: string
+          created_at?: string
+          fail_threshold?: number | null
+          id?: string
+          interval_minutes?: number
+          is_active?: boolean
+          kind?: string
+          name_ar?: string
+          name_en?: string
+          service_key?: string | null
+          updated_at?: string
+          warn_threshold?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_health_checks_service_key_fkey"
+            columns: ["service_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_platform_slos"
+            referencedColumns: ["service_key"]
+          },
+        ]
+      }
+      mkt_health_runs: {
+        Row: {
+          check_key: string
+          correlation_id: string | null
+          detail: string | null
+          duration_ms: number | null
+          id: string
+          observed_at: string
+          state: string
+          value: number | null
+        }
+        Insert: {
+          check_key: string
+          correlation_id?: string | null
+          detail?: string | null
+          duration_ms?: number | null
+          id?: string
+          observed_at?: string
+          state: string
+          value?: number | null
+        }
+        Update: {
+          check_key?: string
+          correlation_id?: string | null
+          detail?: string | null
+          duration_ms?: number | null
+          id?: string
+          observed_at?: string
+          state?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_health_runs_check_key_fkey"
+            columns: ["check_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_health_checks"
+            referencedColumns: ["check_key"]
+          },
+        ]
+      }
+      mkt_incident_timeline: {
+        Row: {
+          actor_user_id: string | null
+          at: string
+          body: string
+          id: string
+          incident_id: string
+          kind: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          at?: string
+          body: string
+          id?: string
+          incident_id: string
+          kind?: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          at?: string
+          body?: string
+          id?: string
+          incident_id?: string
+          kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_incident_timeline_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_platform_incidents"
             referencedColumns: ["id"]
           },
         ]
@@ -6422,6 +6724,123 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_platform_dependencies: {
+        Row: {
+          created_at: string
+          detail: Json
+          detected_at: string
+          id: string
+          is_published_path: boolean
+          relation: string
+          source_id: string
+          source_kind: string
+          target_id: string
+          target_kind: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: Json
+          detected_at?: string
+          id?: string
+          is_published_path?: boolean
+          relation?: string
+          source_id: string
+          source_kind: string
+          target_id: string
+          target_kind: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          detail?: Json
+          detected_at?: string
+          id?: string
+          is_published_path?: boolean
+          relation?: string
+          source_id?: string
+          source_kind?: string
+          target_id?: string
+          target_kind?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_platform_incidents: {
+        Row: {
+          correlation_id: string | null
+          created_at: string
+          id: string
+          incident_number: number
+          lead_user_id: string | null
+          mitigated_at: string | null
+          occurrence_count: number
+          postmortem: string | null
+          resolved_at: string | null
+          root_cause: string | null
+          rule_key: string | null
+          service_key: string | null
+          severity: string
+          started_at: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          correlation_id?: string | null
+          created_at?: string
+          id?: string
+          incident_number?: number
+          lead_user_id?: string | null
+          mitigated_at?: string | null
+          occurrence_count?: number
+          postmortem?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          rule_key?: string | null
+          service_key?: string | null
+          severity?: string
+          started_at?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          correlation_id?: string | null
+          created_at?: string
+          id?: string
+          incident_number?: number
+          lead_user_id?: string | null
+          mitigated_at?: string | null
+          occurrence_count?: number
+          postmortem?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          rule_key?: string | null
+          service_key?: string | null
+          severity?: string
+          started_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_platform_incidents_rule_key_fkey"
+            columns: ["rule_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_alert_rules"
+            referencedColumns: ["rule_key"]
+          },
+          {
+            foreignKeyName: "mkt_platform_incidents_service_key_fkey"
+            columns: ["service_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_platform_slos"
+            referencedColumns: ["service_key"]
+          },
+        ]
+      }
       mkt_platform_integrations: {
         Row: {
           adapter: string
@@ -6467,6 +6886,164 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_platform_job_definitions: {
+        Row: {
+          backoff_seconds: number
+          created_at: string
+          id: string
+          is_enabled: boolean
+          job_key: string
+          max_attempts: number
+          name_ar: string
+          name_en: string
+          owner_user_id: string | null
+          runbook_slug: string | null
+          schedule_cron: string | null
+          timeout_seconds: number
+          unit: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          backoff_seconds?: number
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          job_key: string
+          max_attempts?: number
+          name_ar: string
+          name_en: string
+          owner_user_id?: string | null
+          runbook_slug?: string | null
+          schedule_cron?: string | null
+          timeout_seconds?: number
+          unit?: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          backoff_seconds?: number
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          job_key?: string
+          max_attempts?: number
+          name_ar?: string
+          name_en?: string
+          owner_user_id?: string | null
+          runbook_slug?: string | null
+          schedule_cron?: string | null
+          timeout_seconds?: number
+          unit?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      mkt_platform_job_queue: {
+        Row: {
+          attempts: number
+          correlation_id: string
+          created_at: string
+          duration_ms: number | null
+          error_summary: string | null
+          finished_at: string | null
+          id: string
+          idempotency_key: string
+          job_key: string
+          locked_at: string | null
+          locked_by: string | null
+          payload: Json
+          scheduled_for: string
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          correlation_id?: string
+          created_at?: string
+          duration_ms?: number | null
+          error_summary?: string | null
+          finished_at?: string | null
+          id?: string
+          idempotency_key: string
+          job_key: string
+          locked_at?: string | null
+          locked_by?: string | null
+          payload?: Json
+          scheduled_for?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          correlation_id?: string
+          created_at?: string
+          duration_ms?: number | null
+          error_summary?: string | null
+          finished_at?: string | null
+          id?: string
+          idempotency_key?: string
+          job_key?: string
+          locked_at?: string | null
+          locked_by?: string | null
+          payload?: Json
+          scheduled_for?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_platform_job_queue_job_key_fkey"
+            columns: ["job_key"]
+            isOneToOne: false
+            referencedRelation: "mkt_platform_job_definitions"
+            referencedColumns: ["job_key"]
+          },
+        ]
+      }
+      mkt_platform_runbooks: {
+        Row: {
+          body_ar: string
+          body_en: string
+          created_at: string
+          id: string
+          owner_user_id: string | null
+          slug: string
+          title_ar: string
+          title_en: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          body_ar?: string
+          body_en?: string
+          created_at?: string
+          id?: string
+          owner_user_id?: string | null
+          slug: string
+          title_ar: string
+          title_en: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          body_ar?: string
+          body_en?: string
+          created_at?: string
+          id?: string
+          owner_user_id?: string | null
+          slug?: string
+          title_ar?: string
+          title_en?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_platform_settings: {
         Row: {
           created_at: string
@@ -6494,6 +7071,63 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
           value?: Json
+        }
+        Relationships: []
+      }
+      mkt_platform_slos: {
+        Row: {
+          baseline_measured_at: string | null
+          baseline_value: number | null
+          created_at: string
+          id: string
+          indicator: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          owner_user_id: string | null
+          runbook_slug: string | null
+          service_key: string
+          target_unit: string
+          target_value: number
+          unit: string
+          updated_at: string
+          window_days: number
+        }
+        Insert: {
+          baseline_measured_at?: string | null
+          baseline_value?: number | null
+          created_at?: string
+          id?: string
+          indicator: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          owner_user_id?: string | null
+          runbook_slug?: string | null
+          service_key: string
+          target_unit?: string
+          target_value: number
+          unit?: string
+          updated_at?: string
+          window_days?: number
+        }
+        Update: {
+          baseline_measured_at?: string | null
+          baseline_value?: number | null
+          created_at?: string
+          id?: string
+          indicator?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          owner_user_id?: string | null
+          runbook_slug?: string | null
+          service_key?: string
+          target_unit?: string
+          target_value?: number
+          unit?: string
+          updated_at?: string
+          window_days?: number
         }
         Relationships: []
       }
