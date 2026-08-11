@@ -264,6 +264,13 @@ const NAV: NavItem[] = [
     section: "campaigns",
   },
   {
+    to: "/admin/content/placements",
+    labelKey: "admin.nav.placements",
+    icon: LayoutTemplate,
+    section: "campaigns",
+  },
+
+  {
     to: "/admin/student-bot",
     labelKey: "admin.nav.studentBot",
     icon: GraduationCap,
