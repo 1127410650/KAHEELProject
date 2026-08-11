@@ -276,6 +276,7 @@ function AdminStudioPage() {
       </AdminCard>
 
       {/* الطبقة التنفيذية: المؤشرات ثم صندوق الوارد ثم النشاط والصحّة والصرف */}
+      <ActionRequiredNow />
       <KpiDeck />
       <WorkQueue />
       <div className="mt-[var(--sp-4)] grid grid-cols-1 gap-[var(--sp-3)] xl:grid-cols-2">
