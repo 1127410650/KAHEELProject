@@ -75,15 +75,16 @@ export async function loadHealthSummary(): Promise<HealthSummary> {
 export interface FeatureFlagRow {
   id: string;
   flag_key: string;
-  name_ar: string;
-  name_en: string;
   description_ar: string | null;
+  description_en: string | null;
+  unit: string;
   scope: string;
   status: string;
   rollout_percent: number;
   is_kill_switch: boolean;
   fallback_note: string | null;
-  owner_note: string | null;
+  last_change_reason: string | null;
+  review_at: string | null;
   expires_at: string | null;
   updated_at: string;
 }
@@ -94,6 +95,7 @@ export interface FeatureOverrideRow {
   match_kind: string;
   match_value: string;
   enabled: boolean;
+  reason: string | null;
   expires_at: string | null;
 }
 
@@ -101,7 +103,7 @@ export async function loadFeatureFlags(): Promise<FeatureFlagRow[]> {
   const { data, error } = await supabase
     .from("mkt_feature_flags")
     .select(
-      "id, flag_key, name_ar, name_en, description_ar, scope, status, rollout_percent, is_kill_switch, fallback_note, owner_note, expires_at, updated_at",
+      "id, flag_key, description_ar, description_en, unit, scope, status, rollout_percent, is_kill_switch, fallback_note, last_change_reason, review_at, expires_at, updated_at",
     )
     .order("is_kill_switch", { ascending: false })
     .order("flag_key");
@@ -112,7 +114,7 @@ export async function loadFeatureFlags(): Promise<FeatureFlagRow[]> {
 export async function loadFeatureOverrides(): Promise<FeatureOverrideRow[]> {
   const { data, error } = await supabase
     .from("mkt_feature_overrides")
-    .select("id, flag_id, match_kind, match_value, enabled, expires_at")
+    .select("id, flag_id, match_kind, match_value, enabled, reason, expires_at")
     .order("match_kind");
   if (error) throw error;
   return (data ?? []) as FeatureOverrideRow[];
@@ -156,12 +158,12 @@ export interface JobDefinitionRow {
   job_key: string;
   name_ar: string;
   name_en: string;
-  schedule_note: string | null;
+  unit: string;
+  schedule_cron: string | null;
   is_enabled: boolean;
   max_attempts: number;
   backoff_seconds: number;
   timeout_seconds: number;
-  is_idempotent: boolean;
   runbook_slug: string | null;
 }
 
@@ -183,7 +185,7 @@ export async function loadJobDefinitions(): Promise<JobDefinitionRow[]> {
   const { data, error } = await supabase
     .from("mkt_platform_job_definitions")
     .select(
-      "id, job_key, name_ar, name_en, schedule_note, is_enabled, max_attempts, backoff_seconds, timeout_seconds, is_idempotent, runbook_slug",
+      "id, job_key, name_ar, name_en, unit, schedule_cron, is_enabled, max_attempts, backoff_seconds, timeout_seconds, runbook_slug",
     )
     .order("job_key");
   if (error) throw error;
@@ -241,11 +243,12 @@ export interface IncidentRow {
   status: string;
   service_key: string | null;
   rule_key: string | null;
+  incident_number: number;
   started_at: string;
-  acknowledged_at: string | null;
+  mitigated_at: string | null;
   resolved_at: string | null;
   occurrence_count: number;
-  impact_note: string | null;
+  root_cause: string | null;
 }
 
 export interface IncidentTimelineRow {
@@ -260,7 +263,7 @@ export async function loadIncidents(limit = 50): Promise<IncidentRow[]> {
   const { data, error } = await supabase
     .from("mkt_platform_incidents")
     .select(
-      "id, title, severity, status, service_key, rule_key, started_at, acknowledged_at, resolved_at, occurrence_count, impact_note",
+      "id, incident_number, title, severity, status, service_key, rule_key, started_at, mitigated_at, resolved_at, occurrence_count, root_cause",
     )
     .order("started_at", { ascending: false })
     .limit(limit);
@@ -297,9 +300,12 @@ export async function setIncidentStatus(
   status: "open" | "mitigating" | "monitoring" | "resolved",
   note?: string,
 ): Promise<void> {
-  const patch: Record<string, unknown> = { status };
-  if (status === "resolved") patch.resolved_at = new Date().toISOString();
-  if (status === "mitigating") patch.acknowledged_at = new Date().toISOString();
+  const nowIso = new Date().toISOString();
+  const patch = {
+    status,
+    ...(status === "resolved" ? { resolved_at: nowIso } : {}),
+    ...(status === "mitigating" ? { mitigated_at: nowIso } : {}),
+  };
   const { error } = await supabase.from("mkt_platform_incidents").update(patch).eq("id", id);
   if (error) throw error;
   const { error: timelineError } = await supabase.from("mkt_incident_timeline").insert({
@@ -314,20 +320,21 @@ export async function setIncidentStatus(
 
 export interface DependencyRow {
   id: string;
-  from_unit: string;
-  to_unit: string;
+  source_kind: string;
+  source_id: string;
+  target_kind: string;
+  target_id: string;
   relation: string;
-  criticality: string;
-  failure_note: string | null;
-  fallback_note: string | null;
+  is_published_path: boolean;
+  detected_at: string;
 }
 
 export async function loadDependencies(): Promise<DependencyRow[]> {
   const { data, error } = await supabase
     .from("mkt_platform_dependencies")
-    .select("id, from_unit, to_unit, relation, criticality, failure_note, fallback_note")
-    .order("criticality")
-    .order("from_unit");
+    .select("id, source_kind, source_id, target_kind, target_id, relation, is_published_path, detected_at")
+    .order("is_published_path", { ascending: false })
+    .order("source_kind");
   if (error) throw error;
   return (data ?? []) as DependencyRow[];
 }
