@@ -103,6 +103,8 @@ export async function openSupportTicket(input: {
   return data.id as string;
 }
 
+/** Staff reply. Both branches are mirrored into the append-only ops log so the
+ *  action has an accountable line with its real actor (taken from auth.uid()). */
 export async function replySupportTicket(
   ticketId: string,
   body: string,
@@ -114,6 +116,13 @@ export async function replySupportTicket(
     is_internal: isInternal,
   });
   if (error) throw error;
+  await writeOpsLog({
+    action: isInternal ? "support.internal_note_added" : "support.replied",
+    unit: "platform",
+    entity: "support_ticket",
+    entityId: ticketId,
+    summary: isInternal ? "internal note" : "public reply",
+  });
 }
 
 export async function updateSupportTicket(
@@ -125,4 +134,13 @@ export async function updateSupportTicket(
     .update(patch)
     .eq("id", ticketId);
   if (error) throw error;
+  await writeOpsLog({
+    action: "support.ticket_updated",
+    unit: "platform",
+    entity: "support_ticket",
+    entityId: ticketId,
+    summary: Object.entries(patch)
+      .map(([key, value]) => `${key}=${String(value)}`)
+      .join(", "),
+  });
 }
