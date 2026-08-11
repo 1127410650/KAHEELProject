@@ -240,3 +240,134 @@ export function contrastIssues(tokens: ThemeTokenMap): ContrastIssue[] {
   }
   return issues;
 }
+
+// ── رموز التصميم غير اللونية: خطوط ومقاسات واستدارات وظلال وتباعد ──────────
+//
+// نفس محرك اللوحة ونفس الجدول (`mkt_theme_settings.category`) — لا نظام رموز
+// ثانٍ. كل رمز هنا يقود متغيّر CSS موجود أصلًا في `styles.css`، فالقيمة
+// الافتراضية تظل مطبوعة من الخادم بلا وميض.
+
+export type DesignTokenCategory = "font" | "type" | "radius" | "shadow" | "space";
+
+export interface DesignTokenDef {
+  key: string;
+  category: DesignTokenCategory;
+  label: string;
+  /** متغيّر CSS الذي يقوده هذا الرمز. */
+  cssVar: string;
+  default: string;
+  /** قيم جاهزة تُعرض للاختيار بدل الكتابة الحرة. */
+  presets: string[];
+  hint?: string;
+}
+
+export const DESIGN_TOKENS: DesignTokenDef[] = [
+  {
+    key: "font-family",
+    category: "font",
+    label: "خط الواجهة",
+    cssVar: "--font-sans",
+    default: "IBM Plex Sans Arabic",
+    presets: ["IBM Plex Sans Arabic", "Noto Kufi Arabic", "Cairo", "Tajawal"],
+    hint: "اسم العائلة فقط — الاحتياطي يُضاف تلقائيًا.",
+  },
+  {
+    key: "font-display-family",
+    category: "font",
+    label: "خط العناوين",
+    cssVar: "--font-display",
+    default: "IBM Plex Sans Arabic",
+    presets: ["IBM Plex Sans Arabic", "Noto Kufi Arabic", "Cairo", "Tajawal"],
+  },
+  { key: "type-body", category: "type", label: "حجم النص الأساسي", cssVar: "--text-body", default: "16px", presets: ["15px", "16px", "17px"] },
+  { key: "type-title", category: "type", label: "حجم عنوان البطاقة", cssVar: "--text-title", default: "16px", presets: ["16px", "17px", "18px"] },
+  { key: "type-section", category: "type", label: "حجم عنوان القسم", cssVar: "--text-section", default: "20px", presets: ["18px", "20px", "22px"] },
+  { key: "type-page", category: "type", label: "حجم عنوان الصفحة", cssVar: "--text-page", default: "26px", presets: ["24px", "26px", "28px"] },
+  { key: "radius-card", category: "radius", label: "استدارة البطاقة", cssVar: "--r-card", default: "14px", presets: ["8px", "14px", "20px", "24px"] },
+  { key: "radius-control", category: "radius", label: "استدارة الحقول والأزرار", cssVar: "--r-control", default: "12px", presets: ["8px", "12px", "16px", "999px"] },
+  { key: "radius-image", category: "radius", label: "استدارة الصور", cssVar: "--r-img", default: "12px", presets: ["0px", "12px", "16px"] },
+  {
+    key: "shadow-panel",
+    category: "shadow",
+    label: "ظل اللوحات",
+    cssVar: "--shadow-panel",
+    default: "0 2px 8px rgb(0 0 0 / 0.05)",
+    presets: ["none", "0 1px 3px rgb(0 0 0 / 0.06)", "0 2px 8px rgb(0 0 0 / 0.05)", "0 8px 24px rgb(0 0 0 / 0.10)"],
+  },
+  {
+    key: "shadow-raised",
+    category: "shadow",
+    label: "ظل العناصر البارزة",
+    cssVar: "--shadow-raised",
+    default: "0 2px 8px rgb(0 0 0 / 0.05)",
+    presets: ["none", "0 2px 8px rgb(0 0 0 / 0.05)", "0 10px 30px rgb(0 0 0 / 0.12)"],
+  },
+  { key: "space-3", category: "space", label: "تباعد صغير", cssVar: "--sp-3", default: "12px", presets: ["10px", "12px", "14px"] },
+  { key: "space-4", category: "space", label: "تباعد أساسي", cssVar: "--sp-4", default: "16px", presets: ["14px", "16px", "18px"] },
+  { key: "space-6", category: "space", label: "تباعد الأقسام", cssVar: "--sp-6", default: "24px", presets: ["20px", "24px", "28px"] },
+];
+
+export const DESIGN_TOKEN_CATEGORY_LABELS: Record<DesignTokenCategory, string> = {
+  font: "الخطوط",
+  type: "سلّم الأحجام",
+  radius: "الاستدارات",
+  shadow: "الظلال",
+  space: "التباعد",
+};
+
+export function designTokenDef(key: string): DesignTokenDef | undefined {
+  return DESIGN_TOKENS.find((token) => token.key === key);
+}
+
+const LENGTH = /^(?:0|\d{1,3}(?:\.\d+)?)(?:px|rem|%)$|^999px$/;
+const SHADOW = /^(?:none|[0-9a-z\s./()%-]{3,40})$/i;
+const FAMILY = /^[A-Za-z\u0600-\u06FF][A-Za-z0-9\u0600-\u06FF\s-]{1,38}$/;
+
+/** قيمة رمز تصميم صالحة — لا فاصلة منقوطة ولا أقواس معقوفة ولا وسوم. */
+export function isValidDesignValue(key: string, value: string): boolean {
+  const def = designTokenDef(key);
+  if (!def) return false;
+  const raw = value.trim();
+  if (raw.length === 0 || raw.length > 40 || /[<>;{}]/.test(raw)) return false;
+  if (def.category === "font") return FAMILY.test(raw);
+  if (def.category === "shadow") return SHADOW.test(raw);
+  return LENGTH.test(raw);
+}
+
+export type DesignTokenMap = Record<string, string>;
+
+export const DEFAULT_DESIGN_TOKENS: DesignTokenMap = Object.fromEntries(
+  DESIGN_TOKENS.map((token) => [token.key, token.default]),
+);
+
+/** يبقي المعروف والصالح فقط، فوق الافتراضي. */
+export function normalizeDesignTokens(
+  raw: Record<string, unknown> | null | undefined,
+): DesignTokenMap {
+  const out = { ...DEFAULT_DESIGN_TOKENS };
+  if (!raw) return out;
+  for (const def of DESIGN_TOKENS) {
+    const value = raw[def.key];
+    if (typeof value === "string" && isValidDesignValue(def.key, value)) out[def.key] = value.trim();
+  }
+  return out;
+}
+
+/** خط الواجهة يُركَّب مع الاحتياطي دائمًا حتى لا يسقط النص العربي. */
+function fontStack(family: string): string {
+  return `"${family}", "Kaheel Arabic Fallback", "Inter", system-ui, sans-serif`;
+}
+
+/** نص CSS لرموز التصميم — يُطبع مع رموز الألوان في نفس الطبقة. */
+export function designTokensCss(tokens: DesignTokenMap, selector = ":root"): string {
+  const body = DESIGN_TOKENS.map((def) => {
+    const value = tokens[def.key] ?? def.default;
+    return `${def.cssVar}:${def.category === "font" ? fontStack(value) : value}`;
+  }).join(";");
+  return `${selector}{${body}}`;
+}
+
+/** هل تختلف الرموز عن الافتراضي؟ لا نطبع طبقة بلا داعٍ. */
+export function designTokensChanged(tokens: DesignTokenMap): boolean {
+  return DESIGN_TOKENS.some((def) => tokens[def.key] !== def.default);
+}
