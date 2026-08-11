@@ -24,6 +24,7 @@ import { AdminShell } from "@/components/marketplace/AdminShell";
 import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
 import { KpiDeck } from "@/components/admin/KpiDeck";
 import { WorkQueue } from "@/components/admin/WorkQueue";
+import { ActionRequiredNow } from "@/components/admin/ActionRequiredNow";
 import { ActivityFeed, SystemHealthCard } from "@/components/admin/ActivityFeed";
 import { AiSpendCard } from "@/components/admin/AiSpendCard";
 import { loadAdminOverview } from "@/lib/mkt-platform";
