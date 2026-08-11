@@ -117,6 +117,17 @@ function MyWorkPage() {
     >
       <p className="text-desc text-muted-foreground">{t("admin.myWork.hint")}</p>
 
+      <div className="mt-4">
+        <ContentHealthBox
+          enabled={
+            identity?.is_system_owner === true ||
+            identity?.is_platform_admin === true ||
+            identity?.staff_perms.includes("platform.health.view") === true
+          }
+        />
+      </div>
+
+
       {status.isLoading ? (
         <Skeleton className="mt-4 h-24 w-full rounded-xl" />
       ) : !me ? (
