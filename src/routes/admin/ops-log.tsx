@@ -61,7 +61,11 @@ function AdminOpsLogPage() {
   });
 
   return (
-    <AdminShell title={t("admin.opsLog.title")}>
+    <AdminShell
+      title={t("admin.opsLog.title")}
+      staffAccess={canView}
+      staffChecking={access.isLoading}
+    >
       <AdminPageHead title={t("admin.opsLog.title")} description={t("admin.opsLog.hint")} />
 
       {!canView ? (

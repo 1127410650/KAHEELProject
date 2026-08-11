@@ -99,7 +99,11 @@ function AdminSupportPage() {
   });
 
   return (
-    <AdminShell title={t("admin.support.title")}>
+    <AdminShell
+      title={t("admin.support.title")}
+      staffAccess={canView}
+      staffChecking={access.isLoading}
+    >
       <AdminPageHead title={t("admin.support.title")} description={t("admin.support.hint")} />
 
       {!canView ? (

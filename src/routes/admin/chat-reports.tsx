@@ -73,7 +73,11 @@ function AdminChatReportsPage() {
   });
 
   return (
-    <AdminShell title={t("admin.chatReports.title")}>
+    <AdminShell
+      title={t("admin.chatReports.title")}
+      staffAccess={canView}
+      staffChecking={access.isLoading}
+    >
       <AdminPageHead
         title={t("admin.chatReports.title")}
         description={t("admin.chatReports.hint")}
