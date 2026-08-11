@@ -140,6 +140,12 @@ function CmsPageEditor() {
 
   const blocks = history.blocks;
   const issues = useMemo(() => validateBlocks(blocks).issues, [blocks]);
+  const preflight = useMemo(
+    () => (page.data ? preflightPage(page.data, blocks) : []),
+    [page.data, blocks],
+  );
+  const blockingCount = preflight.filter((i) => i.blocking).length;
+
 
   const commit = useCallback(
     (next: CmsBlock[]) => {
