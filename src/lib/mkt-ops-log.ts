@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 /* ──────────────  unified append-only operations log  ────────────── */
 
@@ -56,7 +57,7 @@ export async function writeOpsLog(input: {
   entity?: string;
   entityId?: string;
   summary?: string;
-  meta?: Record<string, unknown>;
+  meta?: Record<string, Json>;
 }): Promise<string> {
   const { data, error } = await supabase.rpc("mkt_ops_log_write", {
     _action: input.action,
@@ -64,7 +65,7 @@ export async function writeOpsLog(input: {
     ...(input.entity ? { _entity: input.entity } : {}),
     ...(input.entityId ? { _entity_id: input.entityId } : {}),
     ...(input.summary ? { _summary: input.summary } : {}),
-    ...(input.meta ? { _meta: input.meta } : {}),
+    ...(input.meta ? { _meta: input.meta as Json } : {}),
   });
   if (error) throw error;
   return data as string;
@@ -101,14 +102,14 @@ export async function recordExport(input: {
   kind: string;
   reason: string;
   unit?: string;
-  filters?: Record<string, unknown>;
+  filters?: Record<string, Json>;
   rowCount?: number;
 }): Promise<string> {
   const { data, error } = await supabase.rpc("mkt_admin_export_record", {
     _kind: input.kind,
     _reason: input.reason.trim(),
     ...(input.unit ? { _unit: input.unit } : {}),
-    ...(input.filters ? { _filters: input.filters } : {}),
+    ...(input.filters ? { _filters: input.filters as Json } : {}),
     ...(input.rowCount != null ? { _row_count: input.rowCount } : {}),
   });
   if (error) throw error;
