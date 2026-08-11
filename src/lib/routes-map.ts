@@ -160,6 +160,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/my/orders", "account", "dashboard"),
   rule("/my/ads", "account", "dashboard"),
   rule("/my/wallet", "account", "dashboard"),
+  rule("/my/stats", "account", "dashboard"),
   rule("/my/ad-credit", "account", "dashboard"),
   rule("/my/errands", "account", "dashboard"),
   rule("/my/errands/$id", "account", "dashboard"),

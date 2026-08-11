@@ -327,6 +327,144 @@ export async function unpublishPage(pageId: string): Promise<void> {
   if (error) throw error;
 }
 
+/** الأرشفة حالة لا حذف: الصفحة تخرج من العرض ويبقى تاريخها كاملًا. */
+export async function setPageArchived(pageId: string, archived: boolean): Promise<void> {
+  const { error } = await supabase
+    .from("mkt_cms_pages")
+    .update({ status: archived ? "archived" : "draft" } as never)
+    .eq("id", pageId);
+  if (error) throw error;
+}
+
+export interface CmsPageSettings {
+  title_ar: string;
+  title_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  og_image_path: string | null;
+  robots: string;
+}
+
+/** إعدادات الصفحة (SEO والفهرسة) — كل نص يُنظَّف قبل الحفظ. */
+export async function updatePageSettings(
+  pageId: string,
+  settings: CmsPageSettings,
+): Promise<void> {
+  const title = safeText(settings.title_ar);
+  if (title.length < 2) throw new Error("TITLE_REQUIRED");
+  const clean = (value: string | null) => {
+    const text = value ? safeText(value) : "";
+    return text.length > 0 ? text : null;
+  };
+  const { error } = await supabase
+    .from("mkt_cms_pages")
+    .update({
+      title_ar: title,
+      title_en: clean(settings.title_en),
+      description_ar: clean(settings.description_ar),
+      description_en: clean(settings.description_en),
+      og_image_path: settings.og_image_path ? safeHref(settings.og_image_path) : null,
+      robots: settings.robots === "noindex" ? "noindex" : "index",
+    } as never)
+    .eq("id", pageId);
+  if (error) throw error;
+}
+
+// ── فحص ما قبل النشر ───────────────────────────────────────────────────────
+
+export interface PreflightItem {
+  code:
+    | "unknown_block"
+    | "block_limit"
+    | "missing_translation"
+    | "empty_field"
+    | "bad_target"
+    | "empty_page"
+    | "missing_description";
+  message: string;
+  /** يمنع النشر، أو تحذير يراه الناشر ويقرّر. */
+  blocking: boolean;
+}
+
+/**
+ * فحص إلزامي يراه الناشر قبل النشر: ترجمة ناقصة، زر بلا وجهة صالحة، كتلة
+ * غير معروفة، وحقل مطلوب فارغ. البنود المانعة تُعطّل زر النشر.
+ */
+export function preflightPage(page: CmsPage, blocks: CmsBlock[]): PreflightItem[] {
+  const items: PreflightItem[] = [];
+  const { issues } = validateBlocks(blocks);
+
+  for (const issue of issues) {
+    items.push(
+      issue.code === "unknown_type"
+        ? {
+            code: "unknown_block",
+            message: `كتلة غير معروفة في الموضع ${issue.index + 1}: ${issue.detail}`,
+            blocking: true,
+          }
+        : {
+            code: "block_limit",
+            message: `تجاوز حد ${issue.detail} كتلة — الكتلة ${issue.index + 1} لن تُحفظ`,
+            blocking: true,
+          },
+    );
+  }
+
+  const visible = blocks.filter((b) => b.hidden !== true);
+  if (visible.length === 0)
+    items.push({ code: "empty_page", message: "لا كتلة مرئية في الصفحة", blocking: true });
+
+  if (!page.title_en || page.title_en.trim().length === 0)
+    items.push({ code: "missing_translation", message: "العنوان الإنجليزي ناقص", blocking: false });
+  if (!page.description_ar || page.description_ar.trim().length === 0)
+    items.push({ code: "missing_description", message: "وصف الصفحة العربي ناقص", blocking: false });
+  if (!page.description_en || page.description_en.trim().length === 0)
+    items.push({
+      code: "missing_translation",
+      message: "وصف الصفحة الإنجليزي ناقص",
+      blocking: false,
+    });
+
+  blocks.forEach((block, index) => {
+    const def = blockDefinition(block.block_type);
+    if (!def) return;
+    const label = `${def.name_ar} (${index + 1})`;
+    for (const field of def.fields) {
+      const raw = block.settings[field.key];
+      const text = raw === undefined || raw === null ? "" : String(raw).trim();
+
+      if (field.type === "link" || field.type === "anchor") {
+        if (text.length === 0)
+          items.push({
+            code: "bad_target",
+            message: `${label}: «${field.label_ar}» بلا وجهة`,
+            blocking: true,
+          });
+        else if (field.type === "link" && safeHref(text) === null)
+          items.push({
+            code: "bad_target",
+            message: `${label}: وجهة «${field.label_ar}» غير صالحة`,
+            blocking: true,
+          });
+        continue;
+      }
+
+      // حقل يملك قيمة ابتدائية نصية = حقل ذو معنى: فراغه نقص لا اختيار.
+      const hasMeaningfulDefault =
+        typeof field.default === "string" && field.default.trim().length > 0;
+      if (text.length === 0 && (hasMeaningfulDefault || field.type === "slot"))
+        items.push({
+          code: "empty_field",
+          message: `${label}: «${field.label_ar}» فارغ`,
+          blocking: false,
+        });
+    }
+  });
+
+  return items;
+}
+
+
 export async function fetchVersion(versionId: string): Promise<CmsVersion> {
   const { data, error } = await supabase
     .from("mkt_cms_page_versions")
@@ -510,8 +648,17 @@ export function useCmsMutations(pageId?: string) {
         changeRoutePath(input.page, input.nextPath),
       onSuccess: invalidate,
     }),
+    saveSettings: useMutation({
+      mutationFn: (settings: CmsPageSettings) => updatePageSettings(pageId ?? "", settings),
+      onSuccess: invalidate,
+    }),
+    setArchived: useMutation({
+      mutationFn: (archived: boolean) => setPageArchived(pageId ?? "", archived),
+      onSuccess: invalidate,
+    }),
   };
 }
+
 
 /** مقاسات المعاينة الثلاثة — نفس المقاسات المطلوبة في اختبارات التجاوب. */
 export const DEVICE_WIDTH: Record<CmsDevice, number> = {

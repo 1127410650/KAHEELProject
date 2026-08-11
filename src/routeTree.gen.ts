@@ -100,6 +100,7 @@ import { Route as MyNotificationsRouteImport } from './routes/my/notifications'
 import { Route as MyOrdersRouteImport } from './routes/my/orders'
 import { Route as MyProfileRouteImport } from './routes/my/profile'
 import { Route as MyQuotesRouteImport } from './routes/my/quotes'
+import { Route as MyStatsRouteImport } from './routes/my/stats'
 import { Route as MyViolationsRouteImport } from './routes/my/violations'
 import { Route as MyWalletRouteImport } from './routes/my/wallet'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
@@ -597,6 +598,11 @@ const MyQuotesRoute = MyQuotesRouteImport.update({
   path: '/quotes',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const MyStatsRoute = MyStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => MyRouteRoute,
+} as any)
 const MyViolationsRoute = MyViolationsRouteImport.update({
   id: '/violations',
   path: '/violations',
@@ -896,6 +902,7 @@ export interface FileRoutesByFullPath {
   '/my/orders': typeof MyOrdersRoute
   '/my/profile': typeof MyProfileRoute
   '/my/quotes': typeof MyQuotesRoute
+  '/my/stats': typeof MyStatsRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
   '/p/$slug': typeof PSlugRoute
@@ -1026,6 +1033,7 @@ export interface FileRoutesByTo {
   '/my/orders': typeof MyOrdersRoute
   '/my/profile': typeof MyProfileRoute
   '/my/quotes': typeof MyQuotesRoute
+  '/my/stats': typeof MyStatsRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
   '/p/$slug': typeof PSlugRoute
@@ -1161,6 +1169,7 @@ export interface FileRoutesById {
   '/my/orders': typeof MyOrdersRoute
   '/my/profile': typeof MyProfileRoute
   '/my/quotes': typeof MyQuotesRoute
+  '/my/stats': typeof MyStatsRoute
   '/my/violations': typeof MyViolationsRoute
   '/my/wallet': typeof MyWalletRoute
   '/p/$slug': typeof PSlugRoute
@@ -1297,6 +1306,7 @@ export interface FileRouteTypes {
     | '/my/orders'
     | '/my/profile'
     | '/my/quotes'
+    | '/my/stats'
     | '/my/violations'
     | '/my/wallet'
     | '/p/$slug'
@@ -1427,6 +1437,7 @@ export interface FileRouteTypes {
     | '/my/orders'
     | '/my/profile'
     | '/my/quotes'
+    | '/my/stats'
     | '/my/violations'
     | '/my/wallet'
     | '/p/$slug'
@@ -1561,6 +1572,7 @@ export interface FileRouteTypes {
     | '/my/orders'
     | '/my/profile'
     | '/my/quotes'
+    | '/my/stats'
     | '/my/violations'
     | '/my/wallet'
     | '/p/$slug'
@@ -2293,6 +2305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyQuotesRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/my/stats': {
+      id: '/my/stats'
+      path: '/stats'
+      fullPath: '/my/stats'
+      preLoaderRoute: typeof MyStatsRouteImport
+      parentRoute: typeof MyRouteRoute
+    }
     '/my/violations': {
       id: '/my/violations'
       path: '/violations'
@@ -2735,6 +2754,7 @@ interface MyRouteRouteChildren {
   MyOrdersRoute: typeof MyOrdersRoute
   MyProfileRoute: typeof MyProfileRoute
   MyQuotesRoute: typeof MyQuotesRoute
+  MyStatsRoute: typeof MyStatsRoute
   MyViolationsRoute: typeof MyViolationsRoute
   MyWalletRoute: typeof MyWalletRoute
   MyAdsNewRoute: typeof MyAdsNewRoute
@@ -2756,6 +2776,7 @@ const MyRouteRouteChildren: MyRouteRouteChildren = {
   MyOrdersRoute: MyOrdersRoute,
   MyProfileRoute: MyProfileRoute,
   MyQuotesRoute: MyQuotesRoute,
+  MyStatsRoute: MyStatsRoute,
   MyViolationsRoute: MyViolationsRoute,
   MyWalletRoute: MyWalletRoute,
   MyAdsNewRoute: MyAdsNewRoute,

@@ -10,6 +10,7 @@ import { CircleDollarSign, LayoutTemplate, MousePointerClick, Sparkles } from "l
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
 import { useAiLibrary } from "@/lib/mkt-ai-studio";
+import { DesignTokensCard } from "@/components/marketplace/admin/DesignTokensCard";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
 import { MascotPresenceCard } from "@/components/marketplace/admin/MascotPresenceCard";
 import { ThemePaletteCard } from "@/components/marketplace/admin/ThemePaletteCard";
@@ -114,6 +115,10 @@ function AppearancePage() {
 
       <div className="mb-6">
         <ThemePaletteCard />
+      </div>
+
+      <div className="mb-6">
+        <DesignTokensCard />
       </div>
 
       <div className="mb-6">

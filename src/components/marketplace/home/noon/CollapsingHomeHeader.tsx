@@ -22,7 +22,7 @@ import { AddListingButton } from "@/components/marketplace/AddListingButton";
 import { useI18n } from "@/i18n";
 import { useHeaderProgress } from "@/lib/use-header-progress";
 
-import kaheelLogo from "@/assets/kaheel-logo.png";
+import { BrandLogo } from "@/components/marketplace/BrandLogo";
 
 /** ارتفاعات الصفوف — ثابتة ومصدرها الوحيد هذا الملف. */
 const PT = 8;
@@ -124,14 +124,7 @@ export function CollapsingHomeHeader({
               aria-label={t("market.brand")}
               tabIndex={collapsed ? -1 : 0}
             >
-              <img
-                src={kaheelLogo}
-                alt=""
-                width={1024}
-                height={1024}
-                className="size-6 shrink-0 rounded-lg bg-background p-0.5"
-                aria-hidden
-              />
+              <BrandLogo className="size-6 shrink-0 rounded-lg bg-background p-0.5" />
               <span className="text-base font-black leading-none sm:text-lg">{t("market.brand")}</span>
             </Link>
 

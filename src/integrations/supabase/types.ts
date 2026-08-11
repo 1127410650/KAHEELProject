@@ -14010,6 +14010,10 @@ export type Database = {
         Returns: boolean
       }
       mkt_order_party: { Args: { _order_id: string }; Returns: boolean }
+      mkt_owner_analytics: {
+        Args: { _days?: number; _tenant_id?: string }
+        Returns: Json
+      }
       mkt_page_block_log: {
         Args: {
           _action: string
@@ -14954,6 +14958,33 @@ export type Database = {
         Returns: string
       }
       mkt_theme_reset_default: { Args: never; Returns: undefined }
+      mkt_theme_token_draft_set: {
+        Args: {
+          _category: string
+          _draft: string
+          _palette_id: string
+          _token_key: string
+        }
+        Returns: undefined
+      }
+      mkt_theme_tokens_admin: {
+        Args: { _palette_id?: string }
+        Returns: {
+          category: string
+          draft_value: string
+          palette_id: string
+          token_key: string
+          value: string
+        }[]
+      }
+      mkt_theme_tokens_apply: {
+        Args: { _palette_id?: string }
+        Returns: number
+      }
+      mkt_theme_tokens_discard: {
+        Args: { _palette_id?: string }
+        Returns: number
+      }
       mkt_track: { Args: { _events: Json }; Returns: number }
       mkt_typing_peer: { Args: { _conversation_id: string }; Returns: boolean }
       mkt_typing_ping: {

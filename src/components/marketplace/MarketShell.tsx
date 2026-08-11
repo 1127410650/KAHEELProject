@@ -32,7 +32,7 @@ import { CollapsingHomeHeader } from "@/components/marketplace/home/noon/Collaps
 
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
-import kaheelLogo from "@/assets/kaheel-logo.png";
+import { BrandLogo } from "@/components/marketplace/BrandLogo";
 import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
 export function MarketHeader({
@@ -140,15 +140,7 @@ export function MarketHeader({
             className="flex shrink-0 items-center gap-[var(--sp-2)]"
             aria-label={t("market.brand")}
           >
-            <img
-              src={kaheelLogo}
-              alt=""
-              width={1024}
-              height={1024}
-              loading="lazy"
-              className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
-              aria-hidden
-            />
+            <BrandLogo className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7" />
             <span className="text-lg font-black leading-none text-foreground sm:text-xl">
               {t("market.brand")}
             </span>
@@ -344,7 +336,10 @@ export function MarketCompactFooter() {
   return (
     <footer className="mt-8 border-t border-border">
       <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-center gap-x-3 gap-y-1 px-[var(--page-x)] py-4 text-desc text-muted-foreground">
+        {/* شعار التذييل يتبع فتحة `brand.logo.footer` نفسها التي تديرها شاشة المظهر. */}
+        <BrandLogo placement="footer" className="size-5 shrink-0 rounded-md" />
         <p>{t("market.footer.rights")}</p>
+
         {(
           [
             ["/legal/copyright", "market.footer.copyright"],

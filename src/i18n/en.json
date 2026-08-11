@@ -1644,7 +1644,8 @@
       "moveEarlier": "Move image earlier",
       "moveLater": "Move image later",
       "coverHint": "The first image is the cover. Reorder images or pick another cover.",
-      "more": "More"
+      "more": "More",
+      "stats": "My statistics"
     },
     "admin": {
       "title": "Marketplace admin",
@@ -3867,7 +3868,6 @@
       "contentStudio": "Content Studio",
       "placements": "Ad placements",
       "platformAnalytics": "Platform analytics"
-
     },
     "alerts": {
       "title": "Alerts",

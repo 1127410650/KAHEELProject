@@ -6,6 +6,7 @@
  * columns, so a hand-crafted API call cannot self-publish an ad or extend it.
  */
 
+import { track } from "@/lib/track";
 import { supabase } from "@/integrations/supabase/client";
 import { removeObjects } from "@/lib/mkt-listing-media";
 
@@ -143,6 +144,8 @@ export function trackListingShare(id: string): void {
 export type ListingTrackKind = "share" | "link_copy" | "qr_open";
 
 export function trackListingEvent(id: string, kind: ListingTrackKind): void {
+  // نفس الحدث يغذّي إحصاءات المالك عبر مسار التتبع المركزي — بلا عدّاد ثانٍ.
+  if (kind === "share") track({ name: "listing.share", entity_kind: "listing", entity_id: id });
   void supabase.rpc("mkt_listing_track", { _id: id, _kind: kind }).then(
     () => undefined,
     () => undefined,

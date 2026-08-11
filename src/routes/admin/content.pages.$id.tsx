@@ -27,6 +27,8 @@ import {
 import { toast } from "sonner";
 
 import { BlockFieldEditor } from "@/components/admin/cms/BlockFieldEditor";
+import { PageSettingsCard } from "@/components/admin/cms/PageSettingsCard";
+import { PreflightList } from "@/components/admin/cms/PreflightList";
 import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { PageBlocks } from "@/components/marketplace/composer/PageBlocks";
@@ -37,6 +39,7 @@ import {
   DEVICE_WIDTH,
   duplicateBlock,
   newBlock,
+  preflightPage,
   useBlockHistory,
   useCmsErrorText,
   useCmsMutations,
@@ -49,6 +52,7 @@ import {
   type CmsVersion,
 } from "@/lib/mkt-cms";
 import { BLOCK_LIBRARY, blockDefinition, type PageBlock } from "@/lib/mkt-page-composer";
+
 
 export const Route = createFileRoute("/admin/content/pages/$id")({
   ssr: "data-only",
@@ -136,6 +140,12 @@ function CmsPageEditor() {
 
   const blocks = history.blocks;
   const issues = useMemo(() => validateBlocks(blocks).issues, [blocks]);
+  const preflight = useMemo(
+    () => (page.data ? preflightPage(page.data, blocks) : []),
+    [page.data, blocks],
+  );
+  const blockingCount = preflight.filter((i) => i.blocking).length;
+
 
   const commit = useCallback(
     (next: CmsBlock[]) => {
@@ -187,6 +197,11 @@ function CmsPageEditor() {
       toast.error("توجد كتلة غير معروفة — لا يمكن النشر");
       return;
     }
+    if (blockingCount > 0) {
+      toast.error(`فحص ما قبل النشر: ${blockingCount} بند مانع`);
+      return;
+    }
+
     mutations.publish.mutate(draft.id, {
       onSuccess: () => {
         toast.success("نُشرت الصفحة");
@@ -252,7 +267,11 @@ function CmsPageEditor() {
             >
               <Redo2 aria-hidden className="size-5" />
             </Button>
-            <Button disabled={mutations.publish.isPending} onClick={publish} style={{ minHeight: 44 }}>
+            <Button
+              disabled={mutations.publish.isPending || blockingCount > 0}
+              onClick={publish}
+              style={{ minHeight: 44 }}
+            >
               <Upload aria-hidden className="size-4" />
               نشر
             </Button>
@@ -436,6 +455,16 @@ function CmsPageEditor() {
 
         {/* الخصائص + النسخ */}
         <div className="space-y-[var(--sp-4)]">
+          <PreflightList items={preflight} />
+
+          <PageSettingsCard
+            page={page.data}
+            mutations={mutations}
+            errorText={errorText}
+            disabled={lock.blocked}
+            onChanged={() => void page.refetch()}
+          />
+
           <AdminCard title="الخصائص">
             {!current || !def ? (
               <p className="text-desc text-muted-foreground">اختر كتلة من القائمة.</p>
