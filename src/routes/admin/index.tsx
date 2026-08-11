@@ -27,7 +27,7 @@ import { WorkQueue } from "@/components/admin/WorkQueue";
 import { ActionRequiredNow } from "@/components/admin/ActionRequiredNow";
 import { ActivityFeed, SystemHealthCard } from "@/components/admin/ActivityFeed";
 import { AiSpendCard } from "@/components/admin/AiSpendCard";
-import { loadAdminOverview } from "@/lib/mkt-platform";
+import { loadAdminOverview, usePlatformIdentity } from "@/lib/mkt-platform";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime } from "@/lib/format";
 import { Skeleton } from "@/components/ui/skeleton";
