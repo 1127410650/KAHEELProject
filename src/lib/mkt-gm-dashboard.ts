@@ -152,11 +152,23 @@ export async function loadGmKpis(range: KpiRange, includeDemo: boolean): Promise
 
 /* ------------------------------- طوابير العمل ------------------------------ */
 
+/**
+ * طابور عمل واحد في صندوق «يتطلب إجراء الآن».
+ *
+ * `slaHours` هو حدّ الاستجابة التشغيلي لهذا النوع من العمل، و`oldestAt` تاريخ
+ * أقدم عنصر ما زال ينتظر. التأخر (`isOverdue`) محسوب من هذين الرقمين فقط ولا
+ * يوجد أي تقدير أو قيمة ثابتة: طابور فارغ لا يمكن أن يكون متأخرًا.
+ */
 export interface GmQueue {
   key: string;
   count: number;
   to: string;
   urgency: number;
+  slaHours: number;
+  oldestAt: string | null;
+  /** عمر أقدم عنصر بالساعات، أو null إذا كان الطابور فارغًا. */
+  ageHours: number | null;
+  isOverdue: boolean;
 }
 
 async function countRows(
@@ -166,69 +178,212 @@ async function countRows(
   return count ?? 0;
 }
 
+async function oldestAt(
+  build: () => PromiseLike<{ data: { created_at: string | null }[] | null }>,
+): Promise<string | null> {
+  const { data } = await build();
+  return data?.[0]?.created_at ?? null;
+}
+
+function hoursSince(value: string | null): number | null {
+  if (!value) return null;
+  const diff = Date.now() - new Date(value).getTime();
+  if (!Number.isFinite(diff) || diff < 0) return 0;
+  return diff / 3_600_000;
+}
+
 export async function loadGmQueues(): Promise<GmQueue[]> {
   const soon = new Date(Date.now() + 48 * 3600 * 1000).toISOString();
   const now = new Date().toISOString();
 
-  const [verifications, saleListings, topups, reports, claims, removals, expiring] =
-    await Promise.all([
-      countRows(() =>
-        supabase
-          .from("mkt_verification_requests")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending"),
-      ),
-      countRows(() =>
-        supabase
-          .from("mkt_listings")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "under_review")
-          .is("deleted_at", null),
-      ),
-      countRows(() =>
-        supabase
-          .from("mkt_ad_credit_topups")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending"),
-      ),
-      countRows(() =>
-        supabase
-          .from("mkt_reports")
-          .select("id", { count: "exact", head: true })
-          .in("status", ["new", "under_review"]),
-      ),
-      countRows(() =>
-        supabase
-          .from("mkt_guide_place_claims")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending"),
-      ),
-      countRows(() =>
-        supabase
-          .from("mkt_guide_removal_requests")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending"),
-      ),
-      countRows(() =>
-        supabase
-          .from("mkt_ad_campaigns")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "active")
-          .not("ends_at", "is", null)
-          .gte("ends_at", now)
-          .lte("ends_at", soon),
-      ),
-    ]);
+  const [
+    verifications,
+    verificationsOldest,
+    saleListings,
+    saleListingsOldest,
+    topups,
+    topupsOldest,
+    reports,
+    reportsOldest,
+    claims,
+    claimsOldest,
+    removals,
+    removalsOldest,
+    expiring,
+  ] = await Promise.all([
+    countRows(() =>
+      supabase
+        .from("mkt_verification_requests")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending"),
+    ),
+    oldestAt(() =>
+      supabase
+        .from("mkt_verification_requests")
+        .select("created_at")
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ),
+    countRows(() =>
+      supabase
+        .from("mkt_listings")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "under_review")
+        .is("deleted_at", null),
+    ),
+    oldestAt(() =>
+      supabase
+        .from("mkt_listings")
+        .select("created_at")
+        .eq("status", "under_review")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ),
+    countRows(() =>
+      supabase
+        .from("mkt_ad_credit_topups")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending"),
+    ),
+    oldestAt(() =>
+      supabase
+        .from("mkt_ad_credit_topups")
+        .select("created_at")
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ),
+    countRows(() =>
+      supabase
+        .from("mkt_reports")
+        .select("id", { count: "exact", head: true })
+        .in("status", ["new", "under_review"]),
+    ),
+    oldestAt(() =>
+      supabase
+        .from("mkt_reports")
+        .select("created_at")
+        .in("status", ["new", "under_review"])
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ),
+    countRows(() =>
+      supabase
+        .from("mkt_guide_place_claims")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending"),
+    ),
+    oldestAt(() =>
+      supabase
+        .from("mkt_guide_place_claims")
+        .select("created_at")
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ),
+    countRows(() =>
+      supabase
+        .from("mkt_guide_removal_requests")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending"),
+    ),
+    oldestAt(() =>
+      supabase
+        .from("mkt_guide_removal_requests")
+        .select("created_at")
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ),
+    countRows(() =>
+      supabase
+        .from("mkt_ad_campaigns")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "active")
+        .not("ends_at", "is", null)
+        .gte("ends_at", now)
+        .lte("ends_at", soon),
+    ),
+  ]);
 
-  return [
-    { key: "verifications", count: verifications, to: "/admin/verifications", urgency: 1 },
-    { key: "saleListings", count: saleListings, to: "/admin/listings", urgency: 2 },
-    { key: "topups", count: topups, to: "/admin/ad-credit", urgency: 3 },
-    { key: "reports", count: reports, to: "/admin/reports", urgency: 4 },
-    { key: "claims", count: claims, to: "/admin/guide-claims", urgency: 5 },
-    { key: "removals", count: removals, to: "/admin/guide-requests", urgency: 6 },
-    { key: "expiring", count: expiring, to: "/admin/campaigns", urgency: 7 },
-  ].sort((a, b) => (b.count > 0 ? 1 : 0) - (a.count > 0 ? 1 : 0) || a.urgency - b.urgency);
+  const raw: Omit<GmQueue, "ageHours" | "isOverdue">[] = [
+    {
+      key: "verifications",
+      count: verifications,
+      to: "/admin/verifications",
+      urgency: 1,
+      slaHours: 24,
+      oldestAt: verificationsOldest,
+    },
+    {
+      key: "saleListings",
+      count: saleListings,
+      to: "/admin/listings",
+      urgency: 2,
+      slaHours: 12,
+      oldestAt: saleListingsOldest,
+    },
+    {
+      key: "topups",
+      count: topups,
+      to: "/admin/ad-credit",
+      urgency: 3,
+      slaHours: 24,
+      oldestAt: topupsOldest,
+    },
+    {
+      key: "reports",
+      count: reports,
+      to: "/admin/reports",
+      urgency: 4,
+      slaHours: 8,
+      oldestAt: reportsOldest,
+    },
+    {
+      key: "claims",
+      count: claims,
+      to: "/admin/guide-claims",
+      urgency: 5,
+      slaHours: 72,
+      oldestAt: claimsOldest,
+    },
+    {
+      key: "removals",
+      count: removals,
+      to: "/admin/guide-requests",
+      urgency: 6,
+      slaHours: 48,
+      oldestAt: removalsOldest,
+    },
+    {
+      // الحملات المنتهية قريبًا ليست عملًا متأخرًا بل تنبيه زمني مسبق.
+      key: "expiring",
+      count: expiring,
+      to: "/admin/campaigns",
+      urgency: 7,
+      slaHours: 0,
+      oldestAt: null,
+    },
+  ];
+
+  return raw
+    .map((queue) => {
+      const ageHours = queue.count > 0 ? hoursSince(queue.oldestAt) : null;
+      return {
+        ...queue,
+        ageHours,
+        isOverdue:
+          queue.slaHours > 0 && ageHours !== null && ageHours > queue.slaHours,
+      };
+    })
+    .sort(
+      (a, b) =>
+        Number(b.isOverdue) - Number(a.isOverdue) ||
+        (b.count > 0 ? 1 : 0) - (a.count > 0 ? 1 : 0) ||
+        a.urgency - b.urgency,
+    );
 }
 
 /* -------------------------------- سجل النشاط ------------------------------- */

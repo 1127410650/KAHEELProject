@@ -24,6 +24,7 @@ import { AdminShell } from "@/components/marketplace/AdminShell";
 import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
 import { KpiDeck } from "@/components/admin/KpiDeck";
 import { WorkQueue } from "@/components/admin/WorkQueue";
+import { ActionRequiredNow } from "@/components/admin/ActionRequiredNow";
 import { ActivityFeed, SystemHealthCard } from "@/components/admin/ActivityFeed";
 import { AiSpendCard } from "@/components/admin/AiSpendCard";
 import { loadAdminOverview } from "@/lib/mkt-platform";
@@ -276,6 +277,7 @@ function AdminStudioPage() {
       </AdminCard>
 
       {/* الطبقة التنفيذية: المؤشرات ثم صندوق الوارد ثم النشاط والصحّة والصرف */}
+      <ActionRequiredNow />
       <KpiDeck />
       <WorkQueue />
       <div className="mt-[var(--sp-4)] grid grid-cols-1 gap-[var(--sp-3)] xl:grid-cols-2">
