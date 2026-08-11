@@ -4,7 +4,7 @@
  */
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, ChevronLeft } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronLeft } from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { AdminCard } from "@/components/admin/AdminPage";
@@ -46,7 +46,14 @@ export function WorkQueue() {
                 </span>
                 <span className="mt-0.5 flex items-center gap-1 text-[14px] text-muted-foreground">
                   {queue.count > 0 ? (
-                    t("admin.gm.queue.waiting")
+                    queue.isOverdue ? (
+                      <>
+                        <AlertTriangle className="size-4 shrink-0 text-primary" aria-hidden />
+                        {t("admin.gm.now.overdue")}
+                      </>
+                    ) : (
+                      t("admin.gm.queue.waiting")
+                    )
                   ) : (
                     <>
                       <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden />
