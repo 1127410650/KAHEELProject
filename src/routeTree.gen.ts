@@ -133,6 +133,7 @@ import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
 import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
+import { Route as AdminContentPagesIdRouteImport } from './routes/admin/content.pages.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
 import { Route as ApiPublicOtpLinksyriaStatusRouteImport } from './routes/api/public/otp/linksyria-status'
 import { Route as MyAdsIdEditRouteImport } from './routes/my/ads.$id.edit'
@@ -760,6 +761,11 @@ const MyReportsIdRoute = MyReportsIdRouteImport.update({
   path: '/reports/$id',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const AdminContentPagesIdRoute = AdminContentPagesIdRouteImport.update({
+  id: '/content/pages/$id',
+  path: '/content/pages/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const ApiPublicAdCreditGatewayWebhookRoute =
   ApiPublicAdCreditGatewayWebhookRouteImport.update({
     id: '/api/public/ad-credit/gateway-webhook',
@@ -908,6 +914,7 @@ export interface FileRoutesByFullPath {
   '/my/ads/': typeof MyAdsIndexRoute
   '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
+  '/admin/content/pages/$id': typeof AdminContentPagesIdRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -1034,6 +1041,7 @@ export interface FileRoutesByTo {
   '/my/ads': typeof MyAdsIndexRoute
   '/my/errands': typeof MyErrandsIndexRoute
   '/my/reports': typeof MyReportsIndexRoute
+  '/admin/content/pages/$id': typeof AdminContentPagesIdRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -1165,6 +1173,7 @@ export interface FileRoutesById {
   '/my/ads/': typeof MyAdsIndexRoute
   '/my/errands/': typeof MyErrandsIndexRoute
   '/my/reports/': typeof MyReportsIndexRoute
+  '/admin/content/pages/$id': typeof AdminContentPagesIdRoute
   '/api/public/ad-credit/gateway-webhook': typeof ApiPublicAdCreditGatewayWebhookRoute
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
@@ -1297,6 +1306,7 @@ export interface FileRouteTypes {
     | '/my/ads/'
     | '/my/errands/'
     | '/my/reports/'
+    | '/admin/content/pages/$id'
     | '/api/public/ad-credit/gateway-webhook'
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
@@ -1423,6 +1433,7 @@ export interface FileRouteTypes {
     | '/my/ads'
     | '/my/errands'
     | '/my/reports'
+    | '/admin/content/pages/$id'
     | '/api/public/ad-credit/gateway-webhook'
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
@@ -1553,6 +1564,7 @@ export interface FileRouteTypes {
     | '/my/ads/'
     | '/my/errands/'
     | '/my/reports/'
+    | '/admin/content/pages/$id'
     | '/api/public/ad-credit/gateway-webhook'
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
@@ -2475,6 +2487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyReportsIdRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/admin/content/pages/$id': {
+      id: '/admin/content/pages/$id'
+      path: '/content/pages/$id'
+      fullPath: '/admin/content/pages/$id'
+      preLoaderRoute: typeof AdminContentPagesIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/api/public/ad-credit/gateway-webhook': {
       id: '/api/public/ad-credit/gateway-webhook'
       path: '/api/public/ad-credit/gateway-webhook'
@@ -2555,6 +2574,7 @@ interface AdminRouteRouteChildren {
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
   AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
+  AdminContentPagesIdRoute: typeof AdminContentPagesIdRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -2606,6 +2626,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
   AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
+  AdminContentPagesIdRoute: AdminContentPagesIdRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
