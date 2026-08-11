@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { writeOpsLog } from "@/lib/mkt-ops-log";
 
 export type SupportStatus = "new" | "processing" | "awaiting_customer" | "closed";
 export type SupportPriority = "low" | "normal" | "high" | "urgent";
