@@ -17,6 +17,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DialPhoneField } from "@/components/marketplace/DialPhoneField";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,7 +30,7 @@ import {
   verifyPhoneOtp,
 } from "@/lib/otp.functions";
 import type { OtpChannel } from "@/lib/otp-channels";
-import { DEFAULT_DIAL, DIAL_CODES, isAcceptablePhone, normalizePhone } from "@/lib/phone-normalize";
+import { DEFAULT_DIAL, isAcceptablePhone, normalizePhone } from "@/lib/phone-normalize";
 import { usePhoneOnlyDials } from "@/lib/mkt-markets";
 
 /**
