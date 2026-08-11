@@ -455,6 +455,16 @@ function CmsPageEditor() {
 
         {/* الخصائص + النسخ */}
         <div className="space-y-[var(--sp-4)]">
+          <PreflightList items={preflight} />
+
+          <PageSettingsCard
+            page={page.data}
+            mutations={mutations}
+            errorText={errorText}
+            disabled={lock.blocked}
+            onChanged={() => void page.refetch()}
+          />
+
           <AdminCard title="الخصائص">
             {!current || !def ? (
               <p className="text-desc text-muted-foreground">اختر كتلة من القائمة.</p>
