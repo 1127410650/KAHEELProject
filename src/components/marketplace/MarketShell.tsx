@@ -32,7 +32,7 @@ import { CollapsingHomeHeader } from "@/components/marketplace/home/noon/Collaps
 
 import { LocationSheet } from "@/components/marketplace/LocationSheet";
 
-import kaheelLogo from "@/assets/kaheel-logo.png";
+import { BrandLogo } from "@/components/marketplace/BrandLogo";
 import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
 export function MarketHeader({
@@ -140,15 +140,7 @@ export function MarketHeader({
             className="flex shrink-0 items-center gap-[var(--sp-2)]"
             aria-label={t("market.brand")}
           >
-            <img
-              src={kaheelLogo}
-              alt=""
-              width={1024}
-              height={1024}
-              loading="lazy"
-              className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7"
-              aria-hidden
-            />
+            <BrandLogo className="size-6 shrink-0 rounded-lg bg-background p-0.5 sm:size-7" />
             <span className="text-lg font-black leading-none text-foreground sm:text-xl">
               {t("market.brand")}
             </span>
