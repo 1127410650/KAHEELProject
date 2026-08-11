@@ -10003,6 +10003,101 @@ export type Database = {
           },
         ]
       }
+      mkt_support_messages: {
+        Row: {
+          author_user_id: string
+          body: string
+          created_at: string
+          id: string
+          is_internal: boolean
+          ticket_id: string
+        }
+        Insert: {
+          author_user_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean
+          ticket_id: string
+        }
+        Update: {
+          author_user_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_support_tickets: {
+        Row: {
+          assignee: string | null
+          body: string
+          channel: string
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          first_response_at: string | null
+          id: string
+          priority: string
+          ref_no: string
+          requester_user_id: string
+          status: string
+          subject: string
+          subject_id: string | null
+          subject_kind: string | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          body: string
+          channel?: string
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          first_response_at?: string | null
+          id?: string
+          priority?: string
+          ref_no?: string
+          requester_user_id?: string
+          status?: string
+          subject: string
+          subject_id?: string | null
+          subject_kind?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          body?: string
+          channel?: string
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          first_response_at?: string | null
+          id?: string
+          priority?: string
+          ref_no?: string
+          requester_user_id?: string
+          status?: string
+          subject?: string
+          subject_id?: string | null
+          subject_kind?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_syria_directory_entries: {
         Row: {
           address: string | null
