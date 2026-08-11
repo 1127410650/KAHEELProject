@@ -106,6 +106,7 @@ import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as ProfilesUsernameRouteImport } from './routes/profiles.$username'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
+import { Route as AdminAnalyticsIndexRouteImport } from './routes/admin/analytics.index'
 import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminContentIndexRouteImport } from './routes/admin/content.index'
@@ -625,6 +626,11 @@ const StoresSlugRoute = StoresSlugRouteImport.update({
   path: '/stores/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAnalyticsIndexRoute = AdminAnalyticsIndexRouteImport.update({
+  id: '/analytics/',
+  path: '/analytics/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAppearanceVariantsRoute = AdminAppearanceVariantsRouteImport.update({
   id: '/appearance_/variants',
   path: '/appearance/variants',
@@ -914,6 +920,7 @@ export interface FileRoutesByFullPath {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/analytics/': typeof AdminAnalyticsIndexRoute
   '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
@@ -1042,6 +1049,7 @@ export interface FileRoutesByTo {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/analytics': typeof AdminAnalyticsIndexRoute
   '/admin/content': typeof AdminContentIndexRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/business/services': typeof BusinessServicesIndexRoute
@@ -1175,6 +1183,7 @@ export interface FileRoutesById {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/analytics/': typeof AdminAnalyticsIndexRoute
   '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
@@ -1309,6 +1318,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/analytics/'
     | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
@@ -1437,6 +1447,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/analytics'
     | '/admin/content'
     | '/admin/reports'
     | '/business/services'
@@ -1569,6 +1580,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/analytics/'
     | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
@@ -2311,6 +2323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoresSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/analytics/': {
+      id: '/admin/analytics/'
+      path: '/analytics'
+      fullPath: '/admin/analytics/'
+      preLoaderRoute: typeof AdminAnalyticsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/appearance_/variants': {
       id: '/admin/appearance_/variants'
       path: '/appearance/variants'
@@ -2592,6 +2611,7 @@ interface AdminRouteRouteChildren {
   AdminStudioCanvasRoute: typeof AdminStudioCanvasRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
+  AdminAnalyticsIndexRoute: typeof AdminAnalyticsIndexRoute
   AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
   AdminContentPagesIdRoute: typeof AdminContentPagesIdRoute
@@ -2644,6 +2664,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminStudioCanvasRoute: AdminStudioCanvasRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
+  AdminAnalyticsIndexRoute: AdminAnalyticsIndexRoute,
   AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
   AdminContentPagesIdRoute: AdminContentPagesIdRoute,
