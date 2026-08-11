@@ -8,6 +8,7 @@
  * counters come from live queries, never from constants.
  */
 import {
+  BarChart3,
   CalendarCheck2,
   Megaphone,
   CalendarClock,
@@ -67,6 +68,7 @@ export const ACTIVITY_LINKS: MoreLinkDef[] = [
   // no entry here — so the only screen for them was unreachable from the UI.
   { key: "quotes", to: "/my/quotes", labelKey: "market.dash.requests", icon: FileText },
 
+  { key: "stats", to: "/my/stats", labelKey: "market.dash.stats", icon: BarChart3 },
   { key: "points", to: "/my/wallet", labelKey: "market.points.title", icon: Coins },
   { key: "adCredit", to: "/my/ad-credit", labelKey: "market.adCredit.title", icon: Megaphone },
   { key: "favorites", to: "/my/favorites", labelKey: "market.dash.favorites", icon: Heart },
