@@ -160,3 +160,29 @@ mkt_staff_permissions + mkt_platform_admins ──> mkt_admin_can / mkt_content_
 |---|---|---|
 | 1 — التدقيق الشامل | مكتملة | 11/08/2026 |
 | 2→10 | لم تبدأ | — |
+
+## الدفعة 2 — أساس التشغيل (مفاتيح الميزات، المهام الخلفية، الصحة والحوادث)
+
+### ما نُفّذ
+- **قاعدة البيانات (إضافة فقط)**: 12 جدولًا جديدًا بسابقة `mkt_`: `mkt_feature_flags`, `mkt_feature_overrides`, `mkt_platform_job_definitions`, `mkt_platform_job_queue`, `mkt_platform_slos`, `mkt_health_checks`, `mkt_health_runs`, `mkt_platform_runbooks`, `mkt_alert_rules`, `mkt_platform_incidents`, `mkt_incident_timeline`, `mkt_platform_dependencies`.
+- **دوال التشغيل (SECURITY DEFINER، search_path مثبّت)**: `mkt_jobs_enqueue` (إدراج بمفتاح تفرّد)، `mkt_jobs_claim` (سحب بـ `FOR UPDATE SKIP LOCKED`)، `mkt_jobs_finish` (تأجيل متزايد ثم رسائل ميتة عند تجاوز `max_attempts`)، `mkt_incident_open` (تجميع التنبيه المتكرر في حادثة واحدة بعدّاد تكرار)، `mkt_platform_health_summary` (أرقام فعلية من `analytics.events_raw` + الطابور + `mkt_ops_log`)، `mkt_feature_state` (حل المفتاح مع استثناءات الدولة/نوع الحساب والانتهاء).
+- **الواجهة**: `src/lib/mkt-reliability.ts` (طبقة قراءة/كتابة عميلة آمنة) + شاشة `/admin/reliability` بثلاثة تبويبات (الصحة والأهداف، المهام الخلفية، الحوادث والتنبيهات) داخل مركز القيادة القائم، ببوابة صلاحيات، وعنصر تنقل في قسم «التدقيق».
+- **الصلاحيات**: أُضيفت المفاتيح `platform.health.view`, `platform.incidents.manage`, `platform.dependencies.view`, `jobs.manage`, `flags.manage`, `settings.manage` إلى نظام `STAFF_PERMS`/`mkt_admin_can` القائم — بلا نظام صلاحيات موازٍ.
+
+### اختبارات الدفعة 2 (منفّذة فعليًا)
+| # | الاختبار | النتيجة | الدليل |
+|---|---|---|---|
+| B2-T1 | الزائر غير المسجّل لا يملك تنفيذ أي من الدوال السبع | نجح | `has_function_privilege('anon',…)=false` ×7 |
+| B2-T2 | المستخدم المسجّل يملك التنفيذ والبوابة داخل الدالة | نجح | `has_function_privilege('authenticated',…)=true` ×6 |
+| B2-T3 | `search_path` مثبّت في كل دالة جديدة | نجح | `search_path=public, pg_temp` ×7 |
+| B2-T4 | سحب المهمة لا يسمح لعاملين بأخذ الصف نفسه | نجح | وجود `SKIP LOCKED` في تعريف `mkt_jobs_claim` |
+| B2-T5 | تفرّد الإدراج (idempotency) مفروض في القاعدة | نجح | قيد `mkt_job_queue_idem_unique` |
+| B2-T6 | الجداول الجديدة محجوبة عن `anon` (قراءة وكتابة) | نجح | `has_table_privilege('anon',…)=false` ×12 |
+| B2-T7 | مفاتيح الصلاحيات الجديدة معروفة للبوابة المشتركة | نجح | `mkt_admin_can` يحتوي المفاتيح |
+| B2-T8 | فحص الأنواع وبناء الإنتاج | نجح | `tsgo --noEmit` بلا أخطاء، `npm run build` مكتمل |
+| B2-T9 | لا صفوف اختبار متبقية | نجح | 9 أهداف خدمة (تهيئة)، 0 مهام، 0 حوادث |
+
+### حالة صريحة
+- **جزئي**: `mkt_health_checks` بلا فحوص مفعّلة بعد، وخطوط أساس الأهداف (`baseline_value`) غير مقيسة — تُقاس فعليًا في الدفعة 3 (الأداء والوضع الآمن)، والشاشة تعرض «لم يُقس بعد» بدل رقم مُفترض.
+- **مؤجل**: شاشة إدارة مفاتيح الميزات المستقلة (`/admin/flags`) — المكتبة والدوال جاهزة، والعرض يُضاف مع أدوات الوضع الآمن في الدفعة 3.
+- **لا تنفيذ تلقائي بعد**: طابور المهام يعمل يدويًا/بالإدراج؛ ربط المشغّل الدوري يأتي في دفعة المهام الخلفية.
