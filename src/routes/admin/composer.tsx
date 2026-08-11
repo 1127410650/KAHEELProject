@@ -111,114 +111,12 @@ function errorText(error: unknown): string {
   return "تعذّر التنفيذ — أعد المحاولة";
 }
 
-/** حقل واحد من تعريف الكتلة. لا حقل نص حر يُفسَّر كـ HTML: كله نص عادي. */
-function FieldEditor({
-  field,
-  value,
-  onChange,
-}: {
-  field: BlockField;
-  value: unknown;
-  onChange: (next: unknown) => void;
-}) {
-  const slots = useMediaSlots();
-  const lib = useDesignLibrary(field.type === "shape");
-  const customBlocks = useCustomBlocks();
+/**
+ * حقل واحد من تعريف الكتلة — المحرّر مشترك مع استوديو المحتوى، فلا نسخة ثانية
+ * منه هنا: `@/components/admin/cms/BlockFieldEditor`.
+ */
+const FieldEditor = BlockFieldEditor;
 
-  const internalRoutes = useMemo(
-    () => ROUTE_MAP.filter((r) => r.is_public && !r.path.includes("$")).map((r) => r.path),
-    [],
-  );
-
-  if (field.type === "boolean") {
-    return (
-      <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/40 px-3 py-2">
-        <Label className="text-desc">{field.label_ar}</Label>
-        <Switch checked={value === true} onCheckedChange={(checked) => onChange(checked)} />
-      </div>
-    );
-  }
-
-  const options: { value: string; label_ar: string }[] =
-    field.type === "select"
-      ? (field.options ?? [])
-      : field.type === "anchor"
-        ? ANCHOR_OPTIONS
-        : field.type === "slot"
-          ? (slots.data ?? []).map((s) => ({ value: s.slot_key, label_ar: s.slot_key }))
-          : field.type === "shape"
-            ? (lib.data?.shapes ?? []).map((s) => ({ value: s.key, label_ar: s.label_ar }))
-            : field.type === "link"
-              ? internalRoutes.map((p) => ({ value: p, label_ar: p }))
-              : field.type === "custom_block"
-                ? (customBlocks.data ?? []).map((b) => ({ value: b.id, label_ar: b.name }))
-                : [];
-
-  return (
-    <div className="space-y-1">
-      <Label className="text-desc">{field.label_ar}</Label>
-
-      {options.length > 0 && field.type !== "link" ? (
-        <Select value={typeof value === "string" ? value : ""} onValueChange={onChange}>
-          <SelectTrigger style={{ minHeight: 44 }}>
-            <SelectValue placeholder="اختر" />
-          </SelectTrigger>
-          <SelectContent>
-            {options.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label_ar}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ) : field.type === "link" ? (
-        <div className="space-y-1">
-          <Select value="" onValueChange={onChange}>
-            <SelectTrigger style={{ minHeight: 44 }}>
-              <SelectValue placeholder="وجهة داخلية من خريطة المسارات" />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label_ar}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input
-            dir="ltr"
-            value={typeof value === "string" ? value : ""}
-            placeholder="/search أو https://..."
-            onChange={(event) => onChange(event.target.value.trim())}
-            style={{ minHeight: 44 }}
-          />
-          <p className="text-nav text-muted-foreground">
-            الروابط الخارجية تبدأ بـ https:// وتُفتح بأيقونة خروج.
-          </p>
-        </div>
-      ) : field.type === "number" ? (
-        <Input
-          type="number"
-          inputMode="numeric"
-          min={field.min}
-          max={field.max}
-          value={typeof value === "number" ? String(value) : ""}
-          onChange={(event) => onChange(Number(event.target.value))}
-          style={{ minHeight: 44 }}
-        />
-      ) : (
-        <Input
-          value={typeof value === "string" ? value : ""}
-          maxLength={120}
-          onChange={(event) => onChange(event.target.value.replace(/[<>]/g, ""))}
-          style={{ minHeight: 44 }}
-        />
-      )}
-
-      {field.hint_ar && <p className="text-nav text-muted-foreground">{field.hint_ar}</p>}
-    </div>
-  );
-}
 
 function BlockRow({
   block,
