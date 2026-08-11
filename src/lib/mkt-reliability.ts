@@ -311,7 +311,7 @@ export async function setIncidentStatus(
   const { error: timelineError } = await supabase.from("mkt_incident_timeline").insert({
     incident_id: id,
     kind: status === "resolved" ? "resolve" : "update",
-    body: note ?? null,
+    body: note ?? INCIDENT_STATUS_LABEL_AR[status] ?? status,
   });
   if (timelineError) throw timelineError;
 }
