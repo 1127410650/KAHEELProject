@@ -51,6 +51,7 @@ import {
   loadAdminOverview,
   usePlatformIdentity,
   useClearAdminCache,
+  useClearAdminData,
   type PlatformIdentity,
 } from "@/lib/mkt-platform";
 
@@ -578,17 +579,18 @@ export function AdminShell({
   const { session, profile } = useSession();
   const { identity, loading } = usePlatformIdentity();
   const clearAdminCache = useClearAdminCache();
+  const clearAdminData = useClearAdminData();
   const centralSignOut = useSignOut();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const checking = loading || (!!session && (!identity || staffChecking));
+  const checking = loading || staffChecking === true;
   const admin = identity?.is_platform_admin === true && identity.restricted !== true;
   const owner = identity?.is_system_owner === true;
   const allowed =
     !!session && !checking && (systemOwnerOnly ? owner : admin || staffAccess === true);
 
   useEffect(() => {
-    if (!checking && !allowed) clearAdminCache();
+    if (!checking && !allowed) clearAdminData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checking, allowed]);
 
