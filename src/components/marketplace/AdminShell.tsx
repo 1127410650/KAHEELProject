@@ -353,6 +353,17 @@ const NAV: NavItem[] = [
     perms: ["audit.view", "reports.audit_view"],
   },
 
+  // 15d — Reliability: health, SLOs, background jobs, incidents
+  {
+    to: "/admin/reliability",
+    labelKey: "admin.nav.reliability",
+    icon: Activity,
+    section: "audit",
+    perms: ["platform.health.view", "settings.manage"],
+  },
+
+
+
   // 16 — Platform settings
   {
     to: "/admin/settings",
