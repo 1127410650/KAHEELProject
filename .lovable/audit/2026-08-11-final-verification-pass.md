@@ -139,3 +139,48 @@ Two rows present, both at `2026-08-11 01:38:31+00`, unit `platform`, entity `aut
 Everything executable from inside the project is executed and measured. The single
 outstanding item is the Supabase Auth URL configuration, which requires a Management
 API token or dashboard access that this environment does not hold.
+
+## 4. Owner pragmatic unblock — 11/08/2026 02:31 UTC
+
+Scope was restricted to Auth user `04204bf7-caaa-4dcb-a0e3-f8d5e6d85269`
+(`o11339911@gmail.com`). No other account was modified and nothing was published.
+
+### Temporary password
+
+The Auth Admin API accepted the password update (`PUT /auth/v1/admin/users/{id}` →
+HTTP 200) and returned the expected owner user ID. The generated password is 20
+characters, contains uppercase/lowercase letters and digits, and excludes ambiguous
+`l`, `I`, `O`, and `0`. It was delivered directly to the owner in the completion
+message and is intentionally **not persisted in this repository**.
+
+### Published-flow end-to-end proof
+
+Both public entry URLs currently return HTTP 200 and redirect to the canonical
+`https://kaheel.market/auth`. The rendered published screen contains password mode.
+Each verification used that real screen and its `signInWithIdentifier` server function,
+then observed the Supabase session written by the password grant.
+
+| Identifier entered | Result | Session user ID | Test sign-out |
+|---|---|---|---|
+| `o11339911@gmail.com` | SUCCESS | `04204bf7-caaa-4dcb-a0e3-f8d5e6d85269` | HTTP 204 |
+| `0552311766` | SUCCESS | `04204bf7-caaa-4dcb-a0e3-f8d5e6d85269` | HTTP 204 |
+
+Therefore the owner can sign in **today** at `https://www.kaheel.market/auth`; it
+redirects to `https://kaheel.market/auth`, which is the exact working canonical URL.
+`https://aheelmarket.lovable.app/auth` also redirects to the same working screen.
+Contrary to the earlier preview-only assumption, the published auth page does contain
+password sign-in. The database-backed phone resolver is live in the published flow;
+entering `0552311766` resolved to and authenticated the owner account successfully.
+
+### Operations evidence
+
+`mkt_ops_log` contains one new append-only row:
+
+- action: `account.temp_password_issued`
+- actor/entity ID: `04204bf7-caaa-4dcb-a0e3-f8d5e6d85269`
+- unit: `account`
+- timestamp: `2026-08-11 02:31:14.234996+00`
+- reason: `recovery redirect blocked by stale auth URL config`
+
+The permanent recovery fix remains unchanged: update Supabase Authentication → URL
+Configuration with the Kaheel Site URL and redirect allow-list documented in §1.
