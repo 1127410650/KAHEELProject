@@ -3860,7 +3860,8 @@
       "pageVariants": "Page layouts",
       "categories": "Categories & worlds",
       "labels": "UI labels",
-      "aiServices": "AI services"
+      "aiServices": "AI services",
+      "chatReports": "Reported conversations"
     },
     "alerts": {
       "title": "Alerts",
@@ -4660,6 +4661,34 @@
         "hours": "h",
         "days": "d",
         "overdue": "Overdue"
+      }
+    },
+    "chatReports": {
+      "title": "Reported conversations",
+      "hint": "Reports on messages inside conversations — every decision is written to the chat audit log.",
+      "noAccess": "You do not have permission to view reports.",
+      "filter": "Status",
+      "empty": "No reports in this status",
+      "emptyHint": "Nothing needs a decision right now.",
+      "done": "Decision recorded",
+      "failed": "Could not record the decision",
+      "notePlaceholder": "Decision note (optional)",
+      "reporterNote": "Reporter note:",
+      "decision": "Decision:",
+      "noBody": "No message text (attachment only).",
+      "hiddenBadge": "Message hidden",
+      "conversationReports": "Conversation reports:",
+      "status": {
+        "all": "All",
+        "open": "Open",
+        "reviewed": "Reviewed",
+        "dismissed": "Dismissed",
+        "actioned": "Actioned"
+      },
+      "action": {
+        "hide_message": "Hide message",
+        "dismiss": "Dismiss report",
+        "keep_reviewed": "Mark reviewed"
       }
     }
   }
