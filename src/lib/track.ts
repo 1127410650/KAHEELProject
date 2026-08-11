@@ -148,15 +148,15 @@ export function track(event: TrackEvent): void {
   ensureListeners();
   if (queue.length >= MAX_QUEUE) return;
 
+  const host = referrerHost();
   queue.push({
     ...event,
-    props: event.props,
     event_id: crypto.randomUUID(),
     occurred_at: new Date().toISOString(),
     route_path: window.location.pathname.slice(0, 200),
     session_key: sessionKey(),
     device: deviceClass(),
-    referrer_host: referrerHost(),
+    ...(host ? { referrer_host: host } : {}),
   });
 
   if (queue.length >= BATCH_SIZE) flushTracking();
@@ -165,5 +165,6 @@ export function track(event: TrackEvent): void {
 
 /** مشاهدة صفحة — تُستدعى مرة لكل تغيّر مسار. */
 export function trackPageView(surface?: string): void {
-  track({ name: "page.view", surface });
+  track({ name: "page.view", ...(surface ? { surface } : {}) });
 }
+
