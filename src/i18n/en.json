@@ -3864,7 +3864,10 @@
       "chatReports": "Reported conversations",
       "support": "Support desk",
       "opsLog": "Operations log",
-      "contentStudio": "Content Studio"
+      "contentStudio": "Content Studio",
+      "placements": "Ad placements",
+      "platformAnalytics": "Platform analytics"
+
     },
     "alerts": {
       "title": "Alerts",
