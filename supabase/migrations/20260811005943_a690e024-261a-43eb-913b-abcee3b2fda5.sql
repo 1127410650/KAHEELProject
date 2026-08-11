@@ -1,0 +1,11 @@
+REVOKE ALL ON TABLE public.mkt_support_tickets FROM anon;
+REVOKE ALL ON TABLE public.mkt_support_messages FROM anon;
+REVOKE ALL ON SEQUENCE public.mkt_support_ticket_seq FROM anon;
+REVOKE ALL ON TABLE public.mkt_support_tickets FROM authenticated;
+REVOKE ALL ON TABLE public.mkt_support_messages FROM authenticated;
+GRANT SELECT, INSERT, UPDATE ON public.mkt_support_tickets TO authenticated;
+GRANT SELECT, INSERT ON public.mkt_support_messages TO authenticated;
+GRANT USAGE ON SEQUENCE public.mkt_support_ticket_seq TO authenticated;
+GRANT ALL ON public.mkt_support_tickets TO service_role;
+GRANT ALL ON public.mkt_support_messages TO service_role;
+GRANT ALL ON SEQUENCE public.mkt_support_ticket_seq TO service_role;
