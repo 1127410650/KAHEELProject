@@ -14178,6 +14178,10 @@ export type Database = {
           updated_at: string
         }[]
       }
+      mkt_feature_state: {
+        Args: { _account_type?: string; _country?: string; _flag_key: string }
+        Returns: Json
+      }
       mkt_guide_featured_places: {
         Args: { _limit?: number }
         Returns: {
@@ -14239,6 +14243,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      mkt_incident_open: {
+        Args: {
+          _correlation_id?: string
+          _rule_key: string
+          _severity?: string
+          _title: string
+        }
+        Returns: string
+      }
       mkt_increment_views: { Args: { _listing_id: string }; Returns: undefined }
       mkt_integration_catalog_public: {
         Args: never
@@ -14277,6 +14290,46 @@ export type Database = {
       mkt_is_verified_business: {
         Args: { _tenant_id: string }
         Returns: boolean
+      }
+      mkt_jobs_claim: {
+        Args: { _limit?: number; _worker: string }
+        Returns: {
+          attempts: number
+          correlation_id: string
+          created_at: string
+          duration_ms: number | null
+          error_summary: string | null
+          finished_at: string | null
+          id: string
+          idempotency_key: string
+          job_key: string
+          locked_at: string | null
+          locked_by: string | null
+          payload: Json
+          scheduled_for: string
+          started_at: string | null
+          status: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "mkt_platform_job_queue"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      mkt_jobs_enqueue: {
+        Args: {
+          _idempotency_key: string
+          _job_key: string
+          _payload?: Json
+          _scheduled_for?: string
+        }
+        Returns: string
+      }
+      mkt_jobs_finish: {
+        Args: { _error?: string; _id: string; _ok: boolean }
+        Returns: string
       }
       mkt_join_application_document_add: {
         Args: {
@@ -14660,6 +14713,7 @@ export type Database = {
       }
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
+      mkt_platform_health_summary: { Args: never; Returns: Json }
       mkt_promotion_prices: { Args: never; Returns: Json }
       mkt_provider_categories_public: {
         Args: never
