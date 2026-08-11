@@ -118,6 +118,7 @@ import { Route as AdminStudioCanvasRouteImport } from './routes/admin/studio.can
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as ApiPublicKaheelIntroDotpdfRouteImport } from './routes/api/public/kaheel-intro[.]pdf'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as AqarBookIdRouteImport } from './routes/aqar.book.$id'
 import { Route as BusinessServicesIndexRouteImport } from './routes/business/services.index'
 import { Route as BusinessServicesSettingsRouteImport } from './routes/business/services.settings'
@@ -685,6 +686,11 @@ const ApiPublicKaheelIntroDotpdfRoute =
     path: '/api/public/kaheel-intro.pdf',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AqarBookIdRoute = AqarBookIdRouteImport.update({
   id: '/book/$id',
   path: '/book/$id',
@@ -897,6 +903,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
@@ -1024,6 +1031,7 @@ export interface FileRoutesByTo {
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
@@ -1156,6 +1164,7 @@ export interface FileRoutesById {
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
@@ -1289,6 +1298,7 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/api/public/track'
     | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
@@ -1416,6 +1426,7 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/api/public/track'
     | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
@@ -1547,6 +1558,7 @@ export interface FileRouteTypes {
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/api/public/track'
     | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
@@ -1611,6 +1623,7 @@ export interface RootRouteChildren {
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   GuidesStudentsAssistantRoute: typeof GuidesStudentsAssistantRoute
   GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
   ApiPublicAdCreditGatewayWebhookRoute: typeof ApiPublicAdCreditGatewayWebhookRoute
@@ -2382,6 +2395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicKaheelIntroDotpdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aqar/book/$id': {
       id: '/aqar/book/$id'
       path: '/book/$id'
@@ -2784,6 +2804,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
   GuidesStudentsAssistantRoute: GuidesStudentsAssistantRoute,
   GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
   ApiPublicAdCreditGatewayWebhookRoute: ApiPublicAdCreditGatewayWebhookRoute,
