@@ -94,6 +94,13 @@ export const STAFF_PERMS = [
   "audit.view",
   "data.export",
   "staff.sessions_revoke",
+  // الدفعة 2 — موثوقية التشغيل ومفاتيح الميزات
+  "platform.health.view",
+  "platform.incidents.manage",
+  "platform.dependencies.view",
+  "jobs.manage",
+  "flags.manage",
+  "settings.manage",
 ] as const;
 export type StaffPerm = (typeof STAFF_PERMS)[number];
 

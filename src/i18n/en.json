@@ -3867,7 +3867,8 @@
       "opsLog": "Operations log",
       "contentStudio": "Content Studio",
       "placements": "Ad placements",
-      "platformAnalytics": "Platform analytics"
+      "platformAnalytics": "Platform analytics",
+      "reliability": "Reliability & incidents"
     },
     "alerts": {
       "title": "Alerts",
