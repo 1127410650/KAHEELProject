@@ -12373,6 +12373,10 @@ export type Database = {
         Returns: undefined
       }
       mkt_admin_rescan_listing: { Args: { _id: string }; Returns: Json }
+      mkt_admin_revoke_user_sessions: {
+        Args: { _reason: string; _user_id: string }
+        Returns: number
+      }
       mkt_admin_roles: {
         Args: never
         Returns: {
