@@ -5,6 +5,7 @@
  */
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+import { KEmptyState } from "@/components/marketplace/KEmptyState";
 
 /** عنوان الصفحة (18/700) + وصف سطر واحد (14 خفيف) + صف الإجراءات. */
 export function AdminPageHead({
