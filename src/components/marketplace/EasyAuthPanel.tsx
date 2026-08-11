@@ -235,36 +235,18 @@ export function EasyAuthPanel({ onSignedIn }: { onSignedIn: () => void }) {
 
       {stage === "identify" ? (
         <>
-          <div className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-2">
-            <div className="space-y-2">
-              <Label htmlFor="easy-dial">{t("market.easyAuth.dial")}</Label>
-              <select
-                id="easy-dial"
-                dir="ltr"
-                value={dial}
-                onChange={(event) => setDial(event.target.value)}
-                className="num h-12 w-full rounded-md border border-input bg-background px-2 text-sm"
-              >
-                {DIAL_CODES.map((item) => (
-                  <option key={item.dial} value={item.dial}>
-                    +{item.dial}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="easy-phone">{t("market.easyAuth.phone")}</Label>
-              <Input
-                id="easy-phone"
-                dir="ltr"
-                inputMode="tel"
-                autoComplete="tel"
-                className="num h-12"
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-              />
-            </div>
-          </div>
+          <DialPhoneField
+            id="easy-phone"
+            size="lg"
+            showCountryNames={false}
+            dial={dial}
+            onDialChange={setDial}
+            dialLabel={t("market.easyAuth.dial")}
+            label={t("market.easyAuth.phone")}
+            value={phone}
+            onChange={setPhone}
+          />
+
 
           {(!isPhoneOnly || providersOff) && (
             <div className="space-y-2">
