@@ -47,15 +47,6 @@ export interface OwnerAnalytics {
   top_listings: OwnerAnalyticsTopListing[];
 }
 
-const EMPTY_TOTALS: OwnerAnalyticsTotals = {
-  impressions: 0,
-  detail_visits: 0,
-  contact_clicks: 0,
-  favorites: 0,
-  shares: 0,
-  sessions: 0,
-};
-
 function num(value: unknown): number {
   const n = Number(value);
   return Number.isFinite(n) ? n : 0;
@@ -112,6 +103,5 @@ export function useOwnerAnalytics(input: {
       if (error) throw error;
       return normalize((data ?? null) as unknown as Record<string, unknown> | null);
     },
-    placeholderData: { ...EMPTY_TOTALS } as never,
   });
 }
