@@ -80,9 +80,14 @@ export function AdminTableScroll({ children }: { children: ReactNode }) {
   );
 }
 
-/** حالة فراغ موحّدة: أيقونة + عنوان + إجراء. */
+/**
+ * حالة الفراغ في الإدارة = نفس حالة الفراغ الموحّدة في المنصة.
+ *
+ * كانت هذه نسخة ثانية بنفس الشكل والخصائص، فصارت غلافًا رقيقًا حول
+ * `KEmptyState` مع إطار الإدارة المتقطّع فقط — مكوّن واحد لا اثنان.
+ */
 export function AdminEmptyState({
-  icon: Icon,
+  icon,
   title,
   hint,
   action,
@@ -93,13 +98,13 @@ export function AdminEmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-[var(--r-card)] border border-dashed border-border bg-secondary/40 p-[var(--sp-6)] text-center">
-      <span className="mx-auto grid size-12 place-items-center rounded-[var(--r-card)] bg-primary/10 text-primary">
-        <Icon className="size-6" aria-hidden />
-      </span>
-      <p className="mt-[var(--sp-3)] text-[16px] font-bold text-foreground">{title}</p>
-      {hint ? <p className="mt-1 text-[14px] text-muted-foreground">{hint}</p> : null}
-      {action ? <div className="mt-[var(--sp-4)] flex justify-center">{action}</div> : null}
-    </div>
+    <KEmptyState
+      icon={icon}
+      title={title}
+      hint={hint}
+      action={action}
+      className="rounded-[var(--r-card)] border border-dashed border-border bg-secondary/40"
+    />
   );
 }
+
