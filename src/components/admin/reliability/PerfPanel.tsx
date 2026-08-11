@@ -2,7 +2,7 @@
  * لوحة الأداء — أرقام مقيسة من متصفحات الزوار مقابل ميزانيات المنصة.
  * لا رقم تقديري: كل قيمة p75 محسوبة من أحداث `perf.web_vital` الحقيقية.
  */
-import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Gauge } from "lucide-react";
 
 import { AdminCard, AdminEmptyState, AdminTableScroll } from "@/components/admin/AdminPage";
 import { formatNumber } from "@/lib/format";
@@ -32,8 +32,9 @@ export function PerfPanel({ summary }: { summary: PerfSummary }) {
       >
         {summary.metrics.length === 0 ? (
           <AdminEmptyState
+            icon={Gauge}
             title="لا قياسات بعد"
-            description="القياس يبدأ من أول زيارة حقيقية بعد هذا التحديث — لا تُعرض أرقام تجريبية."
+            hint="القياس يبدأ من أول زيارة حقيقية بعد هذا التحديث — لا تُعرض أرقام تجريبية."
           />
         ) : (
           <AdminTableScroll>
@@ -88,7 +89,7 @@ export function PerfPanel({ summary }: { summary: PerfSummary }) {
 
       <AdminCard title="أبطأ الصفحات" description="مرتبة بأبطأ عنصر مرئي (LCP p75).">
         {summary.slow_pages.length === 0 ? (
-          <AdminEmptyState title="لا صفحة تجاوزت الحد" description="لا قياسات كافية بعد لهذه النافذة." />
+          <AdminEmptyState icon={Gauge} title="لا صفحة تجاوزت الحد" hint="لا قياسات كافية بعد لهذه النافذة." />
         ) : (
           <AdminTableScroll>
             <table className="w-full text-[14px]">
@@ -132,7 +133,7 @@ export function PerfPanel({ summary }: { summary: PerfSummary }) {
         }
       >
         {summary.heavy_assets.length === 0 ? (
-          <AdminEmptyState title="لا أصل ثقيل مقيس" description="لم يتجاوز أي أصل حدّ الإبلاغ." />
+          <AdminEmptyState icon={Gauge} title="لا أصل ثقيل مقيس" hint="لم يتجاوز أي أصل حدّ الإبلاغ." />
         ) : (
           <AdminTableScroll>
             <table className="w-full text-[14px]">
