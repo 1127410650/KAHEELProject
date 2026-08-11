@@ -31,7 +31,12 @@ export function useAnalyticsInstrumentation(): void {
     }
     mountedAt.current = performance.now();
     track({ event_type: "page_view", path: pathname, duration_ms: duration });
+    // نفس الحدث في محرك التتبع الموحّد (`analytics.events_raw`) الذي تقرأ منه
+    // شاشات التحليلات — سجل `mkt_analytics_events` يبقى لإشارات الأخطاء والسرعة
+    // فقط، فلا مقياس منتج محسوب مرتين.
+    trackPageView(pathname.startsWith("/admin") ? "admin" : "market");
   }, [pathname]);
+
 
   // Client-side error signals.
   useEffect(() => {
