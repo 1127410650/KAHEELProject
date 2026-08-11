@@ -267,7 +267,11 @@ function CmsPageEditor() {
             >
               <Redo2 aria-hidden className="size-5" />
             </Button>
-            <Button disabled={mutations.publish.isPending} onClick={publish} style={{ minHeight: 44 }}>
+            <Button
+              disabled={mutations.publish.isPending || blockingCount > 0}
+              onClick={publish}
+              style={{ minHeight: 44 }}
+            >
               <Upload aria-hidden className="size-4" />
               نشر
             </Button>
