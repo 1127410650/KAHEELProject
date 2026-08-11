@@ -5170,6 +5170,72 @@ export type Database = {
           },
         ]
       }
+      mkt_message_reports: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          decision: string | null
+          decision_note: string | null
+          id: string
+          message_id: string
+          note: string | null
+          reason_code: string
+          reporter_user_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          severity: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          decision?: string | null
+          decision_note?: string | null
+          id?: string
+          message_id: string
+          note?: string | null
+          reason_code: string
+          reporter_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          decision?: string | null
+          decision_note?: string | null
+          id?: string
+          message_id?: string
+          note?: string | null
+          reason_code?: string
+          reporter_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_message_reports_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_message_reports_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_messages: {
         Row: {
           attachment_path: string | null
@@ -12038,6 +12104,34 @@ export type Database = {
       mkt_admin_log_doc_access: {
         Args: { _kind: string; _path: string; _subject_id: string }
         Returns: undefined
+      }
+      mkt_admin_message_report_review: {
+        Args: { _action: string; _id: string; _note?: string }
+        Returns: undefined
+      }
+      mkt_admin_message_reports: {
+        Args: { _limit?: number; _offset?: number; _status?: string }
+        Returns: {
+          conversation_id: string
+          created_at: string
+          decision: string
+          decision_note: string
+          id: string
+          listing_id: string
+          message_body: string
+          message_created_at: string
+          message_deleted_at: string
+          message_id: string
+          message_moderation_state: string
+          note: string
+          reason_code: string
+          reporter_user_id: string
+          reports_count: number
+          reviewed_at: string
+          sender_user_id: string
+          severity: string
+          status: string
+        }[]
       }
       mkt_admin_moderation_rule_delete: {
         Args: { _id: string; _reason: string }
