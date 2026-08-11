@@ -59,6 +59,7 @@ import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminMyWorkRouteImport } from './routes/admin/my-work'
 import { Route as AdminOpsLogRouteImport } from './routes/admin/ops-log'
 import { Route as AdminPricingRouteImport } from './routes/admin/pricing'
+import { Route as AdminReliabilityRouteImport } from './routes/admin/reliability'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminSearchRouteImport } from './routes/admin/search'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
@@ -391,6 +392,11 @@ const AdminOpsLogRoute = AdminOpsLogRouteImport.update({
 const AdminPricingRoute = AdminPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminReliabilityRoute = AdminReliabilityRouteImport.update({
+  id: '/reliability',
+  path: '/reliability',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
@@ -863,6 +869,7 @@ export interface FileRoutesByFullPath {
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/reliability': typeof AdminReliabilityRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -994,6 +1001,7 @@ export interface FileRoutesByTo {
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/reliability': typeof AdminReliabilityRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -1130,6 +1138,7 @@ export interface FileRoutesById {
   '/admin/my-work': typeof AdminMyWorkRoute
   '/admin/ops-log': typeof AdminOpsLogRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/reliability': typeof AdminReliabilityRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/search': typeof AdminSearchRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -1267,6 +1276,7 @@ export interface FileRouteTypes {
     | '/admin/my-work'
     | '/admin/ops-log'
     | '/admin/pricing'
+    | '/admin/reliability'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1398,6 +1408,7 @@ export interface FileRouteTypes {
     | '/admin/my-work'
     | '/admin/ops-log'
     | '/admin/pricing'
+    | '/admin/reliability'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -1533,6 +1544,7 @@ export interface FileRouteTypes {
     | '/admin/my-work'
     | '/admin/ops-log'
     | '/admin/pricing'
+    | '/admin/reliability'
     | '/admin/roles'
     | '/admin/search'
     | '/admin/settings'
@@ -2016,6 +2028,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/admin/pricing'
       preLoaderRoute: typeof AdminPricingRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/reliability': {
+      id: '/admin/reliability'
+      path: '/reliability'
+      fullPath: '/admin/reliability'
+      preLoaderRoute: typeof AdminReliabilityRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/roles': {
@@ -2630,6 +2649,7 @@ interface AdminRouteRouteChildren {
   AdminMyWorkRoute: typeof AdminMyWorkRoute
   AdminOpsLogRoute: typeof AdminOpsLogRoute
   AdminPricingRoute: typeof AdminPricingRoute
+  AdminReliabilityRoute: typeof AdminReliabilityRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminSearchRoute: typeof AdminSearchRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -2684,6 +2704,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminMyWorkRoute: AdminMyWorkRoute,
   AdminOpsLogRoute: AdminOpsLogRoute,
   AdminPricingRoute: AdminPricingRoute,
+  AdminReliabilityRoute: AdminReliabilityRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminSearchRoute: AdminSearchRoute,
   AdminSettingsRoute: AdminSettingsRoute,
