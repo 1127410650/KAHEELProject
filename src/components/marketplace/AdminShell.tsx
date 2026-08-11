@@ -295,11 +295,13 @@ const NAV: NavItem[] = [
     icon: BarChart3,
     section: "analytics",
   },
-
-  // 14 — Platform staff and permissions
   {
-    to: "/admin/roles",
-    labelKey: "admin.nav.roles",
+    to: "/admin/analytics",
+    labelKey: "admin.nav.platformAnalytics",
+    icon: BarChart3,
+    section: "analytics",
+  },
+
     icon: UserCog,
     section: "staff",
     ownerOnly: true,
