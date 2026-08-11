@@ -20,6 +20,7 @@ import { ReportDialog } from "@/components/marketplace/ReportDialog";
 import { QrCodeButton } from "@/components/marketplace/QrCodeButton";
 import { ShareSheet } from "@/components/marketplace/ShareSheet";
 import { track } from "@/lib/analytics";
+import { track as trackEvent } from "@/lib/track";
 import { CallButton } from "@/components/marketplace/CallButton";
 import { chatErrorKey, openConversation } from "@/lib/mkt-chat";
 import { useListingCommerceAction } from "@/lib/mkt-provider-network";
@@ -126,6 +127,7 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
       return;
     }
     setSaved(true);
+    trackEvent({ name: "listing.favorite", entity_kind: "listing", entity_id: listing.id });
     toast.success(t("market.actions.savedToFavorites"));
   }
 
@@ -246,6 +248,7 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
           variant={commerceButton ? "outline" : "default"}
           onClick={() => {
             track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
+            trackEvent({ name: "listing.contact_click", entity_kind: "listing", entity_id: listing.id });
             void navigate({ href: loginHref(currentPath().split("?")[0] ?? "/", "contact") });
           }}
         >
@@ -265,6 +268,7 @@ export function ListingActions({ listing, pendingAction, variant = "panel", loca
           variant={commerceButton ? "outline" : "default"}
           onClick={() => {
             track({ event_type: "contact_click", path: "/ads", listing_id: listing.id });
+            trackEvent({ name: "listing.contact_click", entity_kind: "listing", entity_id: listing.id });
             if (gate("contact")) void goToChat();
           }}
           disabled={busy}

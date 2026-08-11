@@ -27,6 +27,7 @@ import { locationLink } from "@/lib/mkt-location-link";
 import { loadPublicLicense } from "@/lib/mkt-license";
 
 import { track } from "@/lib/analytics";
+import { track as trackEvent } from "@/lib/track";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { PropertySpecsBar } from "@/components/marketplace/real-estate/PropertyCard";
 import { ListingCard, VerifiedBadge } from "@/components/marketplace/ListingCard";
@@ -441,6 +442,8 @@ function AdPage() {
       category_id: row.category_id ?? undefined,
       city_id: row.city_id ?? undefined,
     });
+    // إحصاءات المالك: زيارة تفاصيل حقيقية.
+    trackEvent({ name: "listing.view", entity_kind: "listing", entity_id: row.id });
     // Feeds "Suggested for you" — ad + category + city only.
     trackMarketActivity({
       event: "view_ad",
