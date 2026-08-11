@@ -3169,6 +3169,39 @@ export type Database = {
           },
         ]
       }
+      mkt_export_log: {
+        Row: {
+          actor_user_id: string
+          at: string
+          filters: Json
+          id: string
+          kind: string
+          reason: string
+          row_count: number
+          unit: string
+        }
+        Insert: {
+          actor_user_id: string
+          at?: string
+          filters?: Json
+          id?: string
+          kind: string
+          reason: string
+          row_count?: number
+          unit?: string
+        }
+        Update: {
+          actor_user_id?: string
+          at?: string
+          filters?: Json
+          id?: string
+          kind?: string
+          reason?: string
+          row_count?: number
+          unit?: string
+        }
+        Relationships: []
+      }
       mkt_external_integrations: {
         Row: {
           config_public: Json
@@ -12075,6 +12108,29 @@ export type Database = {
       mkt_admin_design_template_set_active: {
         Args: { _active: boolean; _id: string }
         Returns: undefined
+      }
+      mkt_admin_export_log: {
+        Args: { _limit?: number; _offset?: number }
+        Returns: {
+          actor_user_id: string
+          at: string
+          filters: Json
+          id: string
+          kind: string
+          reason: string
+          row_count: number
+          unit: string
+        }[]
+      }
+      mkt_admin_export_record: {
+        Args: {
+          _filters?: Json
+          _kind: string
+          _reason: string
+          _row_count?: number
+          _unit?: string
+        }
+        Returns: string
       }
       mkt_admin_grant_points: {
         Args: {
