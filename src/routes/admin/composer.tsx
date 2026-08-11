@@ -41,8 +41,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { BlockFieldEditor } from "@/components/admin/cms/BlockFieldEditor";
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { PageBlocks } from "@/components/marketplace/composer/PageBlocks";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
