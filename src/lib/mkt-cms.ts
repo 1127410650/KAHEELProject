@@ -648,8 +648,17 @@ export function useCmsMutations(pageId?: string) {
         changeRoutePath(input.page, input.nextPath),
       onSuccess: invalidate,
     }),
+    saveSettings: useMutation({
+      mutationFn: (settings: CmsPageSettings) => updatePageSettings(pageId ?? "", settings),
+      onSuccess: invalidate,
+    }),
+    setArchived: useMutation({
+      mutationFn: (archived: boolean) => setPageArchived(pageId ?? "", archived),
+      onSuccess: invalidate,
+    }),
   };
 }
+
 
 /** مقاسات المعاينة الثلاثة — نفس المقاسات المطلوبة في اختبارات التجاوب. */
 export const DEVICE_WIDTH: Record<CmsDevice, number> = {
