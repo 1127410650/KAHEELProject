@@ -13209,6 +13209,10 @@ export type Database = {
       mkt_analytics_geo: { Args: { _limit?: number }; Returns: Json }
       mkt_analytics_guard: { Args: never; Returns: undefined }
       mkt_analytics_health: { Args: { _days?: number }; Returns: Json }
+      mkt_analytics_ingest: {
+        Args: { _events: Json; _is_test?: boolean }
+        Returns: number
+      }
       mkt_analytics_listings: { Args: { _limit?: number }; Returns: Json }
       mkt_analytics_ops: { Args: { _days?: number }; Returns: Json }
       mkt_analytics_overview: { Args: never; Returns: Json }
@@ -13218,6 +13222,10 @@ export type Database = {
       }
       mkt_analytics_purge_expired: { Args: never; Returns: number }
       mkt_analytics_purge_test: { Args: never; Returns: number }
+      mkt_analytics_report: {
+        Args: { _days?: number; _include_internal?: boolean }
+        Returns: Json
+      }
       mkt_analytics_retention_get: { Args: never; Returns: number }
       mkt_analytics_retention_set: {
         Args: { _days: number; _reason: string }
