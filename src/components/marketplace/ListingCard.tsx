@@ -18,6 +18,8 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { track } from "@/lib/analytics";
+import { useImpression } from "@/lib/use-impression";
+
 import { useI18n } from "@/i18n";
 import { useSession } from "@/lib/session";
 import { trackMarketActivity } from "@/lib/mkt-activity";
@@ -297,6 +299,14 @@ export function ListingCard({
   const navBlocked = useRef(false);
   const featured = activeFeatured(listing);
   const distance = formatDistance(listing.distanceM, locale === "ar" ? "ar" : "en");
+  // ظهور فعلي: يُرسل مرة واحدة لكل بطاقة في المشاهدة، ويغذّي «مرات الظهور».
+  const impressionRef = useImpression({
+    name: "listing.impression",
+    entityKind: "listing",
+    entityId: listing.id,
+    ...(origin ? { surface: origin } : {}),
+  });
+
 
 
   const meta = (
@@ -324,7 +334,7 @@ export function ListingCard({
 
 
   return (
-    <div className="relative">
+    <div ref={impressionRef} className="relative">
       <Link
         to="/ads/$slug"
         params={{ slug: listing.slug ?? listing.id }}
