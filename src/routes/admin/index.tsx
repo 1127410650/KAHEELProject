@@ -101,8 +101,12 @@ const TILES: StudioTile[] = [
 
 
 function useStudioStats() {
+  const { identity } = usePlatformIdentity();
+  // The overview RPC is platform-admin only; staff without it would get a 400.
+  const canOverview = identity?.is_platform_admin === true && identity.restricted !== true;
   const overview = useQuery({
     queryKey: ["mkt", "admin", "overview", "studio"],
+    enabled: canOverview,
     queryFn: loadAdminOverview,
   });
 
