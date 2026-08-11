@@ -15,18 +15,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EasyAuthPanel } from "@/components/marketplace/EasyAuthPanel";
+import { RegisterPanel } from "@/components/marketplace/RegisterPanel";
+
+type AuthTab = "signin" | "register";
 
 export const Route = createFileRoute("/auth")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — كَحيل | Sign in — Kaheel" },
+      { title: "تسجيل الدخول وإنشاء حساب — كَحيل | Sign in or register — Kaheel" },
       {
         name: "description",
-        content: "تسجيل دخول المستخدمين المصرح لهم في منصة كَحيل لإدارة المشاريع وعهد المشرفين.",
+        content:
+          "شاشة واحدة للدخول إلى كَحيل أو إنشاء حساب جديد برقم الجوال أو البريد الإلكتروني.",
       },
-      { property: "og:title", content: "تسجيل الدخول — كَحيل" },
-      { property: "og:description", content: "Sign in to Kaheel — internal management system." },
+      { property: "og:title", content: "تسجيل الدخول وإنشاء حساب — كَحيل" },
+      {
+        property: "og:description",
+        content: "One screen to sign in to Kaheel or create a new account.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,
@@ -39,6 +48,19 @@ function safeNext(): string | null {
   return safeInternalPath(raw);
 }
 
+/** The tab and the invitation token are read from the URL, so links can target either. */
+function urlTab(): AuthTab {
+  if (typeof window === "undefined") return "signin";
+  const raw = new URLSearchParams(window.location.search).get("tab");
+  return raw === "register" || raw === "signup" ? "register" : "signin";
+}
+
+function urlInviteToken(): string | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("invite");
+  return raw && /^[a-f0-9]{16,128}$/i.test(raw) ? raw : null;
+}
+
 function AuthPage() {
   const { t, locale, setLocale, dir } = useI18n();
   const navigate = useNavigate();
@@ -47,11 +69,15 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [mode, setMode] = useState<"code" | "password">("code");
+  const [tab, setTab] = useState<AuthTab>("signin");
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
   // The route is client-only; matching the empty server shell on the first paint
   // avoids a hydration mismatch.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
+    setTab(urlTab());
+    setInviteToken(urlInviteToken());
     // Marketplace sessions are durable by design for both personal and store
     // identities. They end only through explicit sign-out or security revocation.
     enablePersistentSession();
@@ -74,6 +100,7 @@ function AuthPage() {
       if (data.session) navigate({ to: await landing(), replace: true });
     });
   }, [navigate]);
+
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -164,89 +191,119 @@ function AuthPage() {
             </div>
           </div>
 
-          <h1 className="text-page font-bold text-foreground">{t("auth.signIn")}</h1>
-
-          <div className="mt-4 inline-flex w-full items-center gap-1 rounded-full border border-border bg-secondary p-1">
-            {(["code", "password"] as const).map((value) => (
+          {/* One canonical entry: sign in and create account are two tabs, not two screens. */}
+          <div className="inline-flex w-full items-center gap-1 rounded-full border border-border bg-secondary p-1">
+            {(["signin", "register"] as const).map((value) => (
               <button
                 key={value}
                 type="button"
-                onClick={() => setMode(value)}
+                aria-pressed={tab === value}
+                onClick={() => {
+                  setTab(value);
+                  const url = new URL(window.location.href);
+                  if (value === "register") url.searchParams.set("tab", "register");
+                  else url.searchParams.delete("tab");
+                  window.history.replaceState(null, "", url.toString());
+                }}
                 className={
-                  mode === value
-                    ? "flex-1 rounded-full bg-primary px-3 py-2 text-desc font-bold text-primary-foreground"
-                    : "flex-1 rounded-full px-3 py-2 text-desc font-bold text-muted-foreground"
+                  tab === value
+                    ? "flex-1 rounded-full bg-primary px-3 py-2 text-sm font-bold text-primary-foreground"
+                    : "flex-1 rounded-full px-3 py-2 text-sm font-bold text-muted-foreground"
                 }
               >
-                {value === "code"
-                  ? t("market.easyAuth.codeTab")
-                  : t("market.easyAuth.passwordTab")}
+                {value === "signin" ? t("auth.signIn") : t("auth.createAccount")}
               </button>
             ))}
           </div>
 
-          {mode === "code" && (
-            <div className="mt-5">
-              <EasyAuthPanel
-                onSignedIn={() => {
-                  void landing().then((path) => navigate({ to: path, replace: true }));
-                }}
-              />
+          <h1 className="text-page mt-5 font-bold text-foreground">
+            {tab === "signin" ? t("auth.signIn") : t("signup.publicTitle")}
+          </h1>
+
+          {tab === "register" ? (
+            <div className="mt-4">
+              <RegisterPanel inviteToken={inviteToken} />
             </div>
+          ) : (
+            <>
+              <div className="mt-4 inline-flex w-full items-center gap-1 rounded-full border border-border bg-secondary p-1">
+                {(["code", "password"] as const).map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setMode(value)}
+                    className={
+                      mode === value
+                        ? "flex-1 rounded-full bg-primary px-3 py-2 text-desc font-bold text-primary-foreground"
+                        : "flex-1 rounded-full px-3 py-2 text-desc font-bold text-muted-foreground"
+                    }
+                  >
+                    {value === "code"
+                      ? t("market.easyAuth.codeTab")
+                      : t("market.easyAuth.passwordTab")}
+                  </button>
+                ))}
+              </div>
+
+              {mode === "code" && (
+                <div className="mt-5">
+                  <EasyAuthPanel
+                    onSignedIn={() => {
+                      void landing().then((path) => navigate({ to: path, replace: true }));
+                    }}
+                  />
+                </div>
+              )}
+
+              <form
+                onSubmit={onSubmit}
+                className={mode === "password" ? "mt-6 space-y-4" : "hidden"}
+              >
+                <div className="space-y-2">
+                  <Label htmlFor="identifier">{t("auth.identifier")}</Label>
+                  <Input
+                    id="identifier"
+                    required
+                    dir="ltr"
+                    autoComplete="username"
+                    className="h-12"
+                    placeholder={t("auth.identifierHint")}
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">{t("auth.password")}</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    dir="ltr"
+                    autoComplete="current-password"
+                    className="h-12"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+
+                <Button type="submit" className="h-12 w-full" disabled={submitting}>
+                  {submitting && <Loader2 className="size-4 animate-spin" aria-hidden />}
+                  {submitting ? t("auth.signingIn") : t("auth.signIn")}
+                </Button>
+              </form>
+
+              <div className="mt-5 flex flex-col items-center gap-2 text-desc text-muted-foreground">
+                <Link
+                  to="/forgot-password"
+                  className="font-semibold text-muted-foreground underline hover:text-primary"
+                >
+                  {t("auth.forgot")}
+                </Link>
+              </div>
+            </>
           )}
 
-          <form
-            onSubmit={onSubmit}
-            className={mode === "password" ? "mt-6 space-y-4" : "hidden"}
-          >
-            <div className="space-y-2">
-              <Label htmlFor="identifier">{t("auth.identifier")}</Label>
-              <Input
-                id="identifier"
-                required
-                dir="ltr"
-                autoComplete="username"
-                className="h-12"
-                placeholder={t("auth.identifierHint")}
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">{t("auth.password")}</Label>
-              <Input
-                id="password"
-                type="password"
-                required
-                dir="ltr"
-                autoComplete="current-password"
-                className="h-12"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            <Button type="submit" className="h-12 w-full" disabled={submitting}>
-              {submitting && <Loader2 className="size-4 animate-spin" aria-hidden />}
-              {submitting ? t("auth.signingIn") : t("auth.signIn")}
-            </Button>
-          </form>
-
-          <div className="mt-5 flex flex-col items-center gap-2 text-desc text-muted-foreground">
-            <Link
-              to="/forgot-password"
-              className="font-semibold text-muted-foreground underline hover:text-primary"
-            >
-              {t("auth.forgot")}
-            </Link>
-            <p>
-              {t("auth.noAccount")}{" "}
-              <Link to="/register" className="font-semibold text-primary">
-                {t("auth.createAccount")}
-              </Link>
-            </p>
-          </div>
         </div>
 
         <p className="mt-6 text-center text-desc text-muted-foreground">{t("auth.rights")}</p>

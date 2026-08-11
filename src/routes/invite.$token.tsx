@@ -178,7 +178,7 @@ function InvitePage() {
                     </Link>
                   </Button>
                   <Button asChild variant="outline" className="w-full">
-                    <Link to="/register" search={{ invite: token } as never}>
+                    <Link to="/auth" search={{ tab: "register", invite: token } as never}>
                       {t("signup.createAccount")}
                     </Link>
                   </Button>

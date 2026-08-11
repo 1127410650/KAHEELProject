@@ -91,7 +91,14 @@ function permanentRedirect(request: Request): Response | null {
   if (!resolved) return null;
 
   const [targetPath = resolved, targetHash = ""] = resolved.split("#");
-  const location = `${targetPath}${targetPath.includes("?") ? "" : url.search}${targetHash ? `#${targetHash}` : ""}`;
+  // The incoming query is never dropped, even when the target carries its own
+  // parameters (`/register?invite=…` -> `/auth?tab=register&invite=…`): both sets
+  // are merged, and the target wins on a conflicting key.
+  const [basePath = targetPath, targetQuery = ""] = targetPath.split("?");
+  const merged = new URLSearchParams(url.search);
+  for (const [key, value] of new URLSearchParams(targetQuery)) merged.set(key, value);
+  const query = merged.toString();
+  const location = `${basePath}${query ? `?${query}` : ""}${targetHash ? `#${targetHash}` : ""}`;
   // Only a mapped rule is worth counting; a trailing-slash tidy-up is noise.
   if (target) console.info(`[legacy-route] ${path} -> ${targetPath}`);
 
