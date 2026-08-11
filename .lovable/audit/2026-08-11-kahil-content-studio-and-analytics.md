@@ -76,3 +76,18 @@
 - Analytics isolated in a NON-exposed `analytics` schema (events_raw + agg_hourly + agg_daily + settings), no anon/authenticated grants, RLS on, service_role only. Retention default 90 days, adjustable through `mkt_analytics_retention_set` (permission + written reason + audit log); `mkt_analytics_purge_expired`, `mkt_analytics_purge_test`, `mkt_analytics_rollup` exclude `is_test` / `is_internal` / `is_demo`.
 - Structure-guard exception: guard disabled and re-enabled inside the same migration, both events written to `mkt_structure_guard_events`. Verified `enabled = true` afterwards.
 - Fixed PK error from the first attempt: `COALESCE(...)` is not allowed in a PRIMARY KEY, so the aggregation keys use NOT NULL sentinel-UUID columns instead.
+
+## الدفعة 3 — محرّر الصفحات (مكتملة)
+
+- `src/lib/mkt-cms.ts`: طبقة بيانات الصفحات والنسخ — تنظيف نصوص إلزامي (لا HTML/Script)،
+  رفض الأنواع غير المعروفة، حد 40 كتلة، قفل تحرير نابض (90 ثانية) وحرس تعارض
+  عبر `updated_at`، رجوع بنسخة كاملة مُنشورة لا تعديل نسخة قديمة، وتغيير المسار
+  يُسجّل Redirect ويمنع التعارض.
+- `src/components/admin/cms/BlockFieldEditor.tsx`: محرّر الحقول المشترك — سُحب من
+  `/admin/composer` فصار مكوّنًا واحدًا للاستوديو والمؤلّف (لا سجل مكوّنات ثانٍ).
+- `src/routes/admin/content.index.tsx`: قائمة الصفحات وإنشاء صفحة كمسودة.
+- `src/routes/admin/content.pages.$id.tsx`: لوحة الرسم بثلاثة مقاسات (390/768/1366)
+  + المكتبة + لوحة الخصائص + حفظ تلقائي بعد سكون ثانيتين + تراجع/إعادة (50 خطوة)
+  + قائمة النسخ والرجوع، وعارض المعاينة هو نفسه `PageBlocks` العام.
+- `AdminShell`: بند تنقّل «استوديو المحتوى» داخل مجموعة الاستوديو + مفاتيح i18n عربي/إنجليزي.
+- التحقق: `tsgo --noEmit` نظيف، و`/admin/content` يرد 200. الرئيسية الحالية تبقى المنشورة.
