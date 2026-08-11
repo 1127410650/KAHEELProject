@@ -264,6 +264,13 @@ const NAV: NavItem[] = [
     section: "campaigns",
   },
   {
+    to: "/admin/content/placements",
+    labelKey: "admin.nav.placements",
+    icon: LayoutTemplate,
+    section: "campaigns",
+  },
+
+  {
     to: "/admin/student-bot",
     labelKey: "admin.nav.studentBot",
     icon: GraduationCap,
@@ -288,12 +295,19 @@ const NAV: NavItem[] = [
     icon: BarChart3,
     section: "analytics",
   },
+  {
+    to: "/admin/analytics",
+    labelKey: "admin.nav.platformAnalytics",
+    icon: BarChart3,
+    section: "analytics",
+  },
 
   // 14 — Platform staff and permissions
   {
     to: "/admin/roles",
     labelKey: "admin.nav.roles",
     icon: UserCog,
+
     section: "staff",
     ownerOnly: true,
   },

@@ -3864,7 +3864,10 @@
       "chatReports": "المحادثات المبلّغ عنها",
       "support": "الدعم والتذاكر",
       "opsLog": "سجل العمليات",
-      "contentStudio": "استوديو المحتوى"
+      "contentStudio": "استوديو المحتوى",
+      "placements": "مواضع الحملات",
+      "platformAnalytics": "تحليلات المنصة"
+
     },
     "alerts": {
       "title": "مركز التنبيهات",

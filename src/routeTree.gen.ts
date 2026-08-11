@@ -106,9 +106,11 @@ import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as ProfilesUsernameRouteImport } from './routes/profiles.$username'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
+import { Route as AdminAnalyticsIndexRouteImport } from './routes/admin/analytics.index'
 import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminContentIndexRouteImport } from './routes/admin/content.index'
+import { Route as AdminContentPlacementsRouteImport } from './routes/admin/content.placements'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
 import { Route as AdminReportsIdRouteImport } from './routes/admin/reports.$id'
@@ -118,6 +120,7 @@ import { Route as AdminStudioCanvasRouteImport } from './routes/admin/studio.can
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
 import { Route as AdminVerificationsIdRouteImport } from './routes/admin/verifications_.$id'
 import { Route as ApiPublicKaheelIntroDotpdfRouteImport } from './routes/api/public/kaheel-intro[.]pdf'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as AqarBookIdRouteImport } from './routes/aqar.book.$id'
 import { Route as BusinessServicesIndexRouteImport } from './routes/business/services.index'
 import { Route as BusinessServicesSettingsRouteImport } from './routes/business/services.settings'
@@ -624,6 +627,11 @@ const StoresSlugRoute = StoresSlugRouteImport.update({
   path: '/stores/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAnalyticsIndexRoute = AdminAnalyticsIndexRouteImport.update({
+  id: '/analytics/',
+  path: '/analytics/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAppearanceVariantsRoute = AdminAppearanceVariantsRouteImport.update({
   id: '/appearance_/variants',
   path: '/appearance/variants',
@@ -637,6 +645,11 @@ const AdminBusinessesIdRoute = AdminBusinessesIdRouteImport.update({
 const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
   id: '/content/',
   path: '/content/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminContentPlacementsRoute = AdminContentPlacementsRouteImport.update({
+  id: '/content/placements',
+  path: '/content/placements',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminListingsIdRoute = AdminListingsIdRouteImport.update({
@@ -685,6 +698,11 @@ const ApiPublicKaheelIntroDotpdfRoute =
     path: '/api/public/kaheel-intro.pdf',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AqarBookIdRoute = AqarBookIdRouteImport.update({
   id: '/book/$id',
   path: '/book/$id',
@@ -889,6 +907,7 @@ export interface FileRoutesByFullPath {
   '/services/': typeof ServicesIndexRoute
   '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
@@ -897,6 +916,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
@@ -907,6 +927,7 @@ export interface FileRoutesByFullPath {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/analytics/': typeof AdminAnalyticsIndexRoute
   '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
@@ -1016,6 +1037,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesIndexRoute
   '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
@@ -1024,6 +1046,7 @@ export interface FileRoutesByTo {
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/verifications/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
@@ -1034,6 +1057,7 @@ export interface FileRoutesByTo {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/analytics': typeof AdminAnalyticsIndexRoute
   '/admin/content': typeof AdminContentIndexRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/business/services': typeof BusinessServicesIndexRoute
@@ -1148,6 +1172,7 @@ export interface FileRoutesById {
   '/services/': typeof ServicesIndexRoute
   '/admin/appearance_/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
   '/admin/staff/attendance': typeof AdminStaffAttendanceRoute
@@ -1156,6 +1181,7 @@ export interface FileRoutesById {
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/verifications_/$id': typeof AdminVerificationsIdRoute
   '/api/public/kaheel-intro.pdf': typeof ApiPublicKaheelIntroDotpdfRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/aqar/book/$id': typeof AqarBookIdRoute
   '/business/services/settings': typeof BusinessServicesSettingsRoute
   '/business/store/catalog': typeof BusinessStoreCatalogRoute
@@ -1166,6 +1192,7 @@ export interface FileRoutesById {
   '/my/ads/new': typeof MyAdsNewRoute
   '/my/errands/$id': typeof MyErrandsIdRoute
   '/my/reports/$id': typeof MyReportsIdRoute
+  '/admin/analytics/': typeof AdminAnalyticsIndexRoute
   '/admin/content/': typeof AdminContentIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/business/services/': typeof BusinessServicesIndexRoute
@@ -1281,6 +1308,7 @@ export interface FileRouteTypes {
     | '/services/'
     | '/admin/appearance/variants'
     | '/admin/businesses/$id'
+    | '/admin/content/placements'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
@@ -1289,6 +1317,7 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/api/public/track'
     | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
@@ -1299,6 +1328,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/analytics/'
     | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
@@ -1408,6 +1438,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/appearance/variants'
     | '/admin/businesses/$id'
+    | '/admin/content/placements'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
@@ -1416,6 +1447,7 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/verifications/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/api/public/track'
     | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
@@ -1426,6 +1458,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/analytics'
     | '/admin/content'
     | '/admin/reports'
     | '/business/services'
@@ -1539,6 +1572,7 @@ export interface FileRouteTypes {
     | '/services/'
     | '/admin/appearance_/variants'
     | '/admin/businesses_/$id'
+    | '/admin/content/placements'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
     | '/admin/staff/attendance'
@@ -1547,6 +1581,7 @@ export interface FileRouteTypes {
     | '/admin/users_/$id'
     | '/admin/verifications_/$id'
     | '/api/public/kaheel-intro.pdf'
+    | '/api/public/track'
     | '/aqar/book/$id'
     | '/business/services/settings'
     | '/business/store/catalog'
@@ -1557,6 +1592,7 @@ export interface FileRouteTypes {
     | '/my/ads/new'
     | '/my/errands/$id'
     | '/my/reports/$id'
+    | '/admin/analytics/'
     | '/admin/content/'
     | '/admin/reports/'
     | '/business/services/'
@@ -1611,6 +1647,7 @@ export interface RootRouteChildren {
   ProfilesUsernameRoute: typeof ProfilesUsernameRoute
   StoresSlugRoute: typeof StoresSlugRoute
   ApiPublicKaheelIntroDotpdfRoute: typeof ApiPublicKaheelIntroDotpdfRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   GuidesStudentsAssistantRoute: typeof GuidesStudentsAssistantRoute
   GuidesSyriaSlugRoute: typeof GuidesSyriaSlugRoute
   ApiPublicAdCreditGatewayWebhookRoute: typeof ApiPublicAdCreditGatewayWebhookRoute
@@ -2298,6 +2335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoresSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/analytics/': {
+      id: '/admin/analytics/'
+      path: '/analytics'
+      fullPath: '/admin/analytics/'
+      preLoaderRoute: typeof AdminAnalyticsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/appearance_/variants': {
       id: '/admin/appearance_/variants'
       path: '/appearance/variants'
@@ -2317,6 +2361,13 @@ declare module '@tanstack/react-router' {
       path: '/content'
       fullPath: '/admin/content/'
       preLoaderRoute: typeof AdminContentIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/content/placements': {
+      id: '/admin/content/placements'
+      path: '/content/placements'
+      fullPath: '/admin/content/placements'
+      preLoaderRoute: typeof AdminContentPlacementsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/listings_/$id': {
@@ -2380,6 +2431,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/kaheel-intro.pdf'
       fullPath: '/api/public/kaheel-intro.pdf'
       preLoaderRoute: typeof ApiPublicKaheelIntroDotpdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/aqar/book/$id': {
@@ -2565,6 +2623,7 @@ interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminAppearanceVariantsRoute: typeof AdminAppearanceVariantsRoute
   AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
+  AdminContentPlacementsRoute: typeof AdminContentPlacementsRoute
   AdminListingsIdRoute: typeof AdminListingsIdRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
   AdminStaffAttendanceRoute: typeof AdminStaffAttendanceRoute
@@ -2572,6 +2631,7 @@ interface AdminRouteRouteChildren {
   AdminStudioCanvasRoute: typeof AdminStudioCanvasRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminVerificationsIdRoute: typeof AdminVerificationsIdRoute
+  AdminAnalyticsIndexRoute: typeof AdminAnalyticsIndexRoute
   AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
   AdminContentPagesIdRoute: typeof AdminContentPagesIdRoute
@@ -2617,6 +2677,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminAppearanceVariantsRoute: AdminAppearanceVariantsRoute,
   AdminBusinessesIdRoute: AdminBusinessesIdRoute,
+  AdminContentPlacementsRoute: AdminContentPlacementsRoute,
   AdminListingsIdRoute: AdminListingsIdRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
   AdminStaffAttendanceRoute: AdminStaffAttendanceRoute,
@@ -2624,6 +2685,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminStudioCanvasRoute: AdminStudioCanvasRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminVerificationsIdRoute: AdminVerificationsIdRoute,
+  AdminAnalyticsIndexRoute: AdminAnalyticsIndexRoute,
   AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
   AdminContentPagesIdRoute: AdminContentPagesIdRoute,
@@ -2784,6 +2846,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilesUsernameRoute: ProfilesUsernameRoute,
   StoresSlugRoute: StoresSlugRoute,
   ApiPublicKaheelIntroDotpdfRoute: ApiPublicKaheelIntroDotpdfRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
   GuidesStudentsAssistantRoute: GuidesStudentsAssistantRoute,
   GuidesSyriaSlugRoute: GuidesSyriaSlugRoute,
   ApiPublicAdCreditGatewayWebhookRoute: ApiPublicAdCreditGatewayWebhookRoute,

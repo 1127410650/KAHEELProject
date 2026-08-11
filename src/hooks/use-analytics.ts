@@ -10,6 +10,8 @@ import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 import { flushAnalytics, track } from "@/lib/analytics";
+import { flushTracking, trackPageView } from "@/lib/track";
+
 
 export function useAnalyticsInstrumentation(): void {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -29,7 +31,12 @@ export function useAnalyticsInstrumentation(): void {
     }
     mountedAt.current = performance.now();
     track({ event_type: "page_view", path: pathname, duration_ms: duration });
+    // نفس الحدث في محرك التتبع الموحّد (`analytics.events_raw`) الذي تقرأ منه
+    // شاشات التحليلات — سجل `mkt_analytics_events` يبقى لإشارات الأخطاء والسرعة
+    // فقط، فلا مقياس منتج محسوب مرتين.
+    trackPageView(pathname.startsWith("/admin") ? "admin" : "market");
   }, [pathname]);
+
 
   // Client-side error signals.
   useEffect(() => {
@@ -71,7 +78,11 @@ export function useAnalyticsInstrumentation(): void {
   // Do not lose the tail of a visit.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const onHide = () => flushAnalytics();
+    const onHide = () => {
+      flushAnalytics();
+      flushTracking();
+    };
+
     document.addEventListener("visibilitychange", onHide);
     window.addEventListener("pagehide", onHide);
     return () => {
