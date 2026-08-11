@@ -1,0 +1,14 @@
+REVOKE EXECUTE ON FUNCTION public.mkt_perf_summary(integer) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_flag_change_request(text, text, text, integer) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_flag_change_decide(uuid, boolean, text) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_feature_guard(text) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_content_health_scan() FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_content_health_open(integer) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.mkt_cms_preflight_override(uuid, text[], text) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.mkt_perf_summary(integer) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_flag_change_request(text, text, text, integer) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_flag_change_decide(uuid, boolean, text) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_feature_guard(text) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_content_health_scan() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_content_health_open(integer) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.mkt_cms_preflight_override(uuid, text[], text) TO authenticated;
