@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { useI18n } from "@/i18n";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { ContentHealthBox } from "@/components/admin/reliability/ContentHealthBox";
 import { usePlatformIdentity } from "@/lib/mkt-platform";
 import { ReasonDialog } from "@/components/marketplace/ReasonDialog";
 import { formatDateTime } from "@/lib/format";
