@@ -51,7 +51,9 @@ import {
   type CmsBlock,
   type CmsDevice,
   type CmsVersion,
+  type PreflightPerfContext,
 } from "@/lib/mkt-cms";
+import { loadPerfSummary } from "@/lib/mkt-reliability";
 import { BLOCK_LIBRARY, blockDefinition, type PageBlock } from "@/lib/mkt-page-composer";
 
 
