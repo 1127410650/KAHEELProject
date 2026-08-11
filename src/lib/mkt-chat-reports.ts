@@ -6,6 +6,7 @@
  * لا يوجد أي مسار قراءة للرسائل من هنا خارج البلاغ نفسه.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { writeOpsLog } from "@/lib/mkt-ops-log";
 
 export type MessageReportStatus = "open" | "reviewed" | "dismissed" | "actioned";
 export type MessageReportAction = "dismiss" | "hide_message" | "keep_reviewed";
@@ -70,4 +71,11 @@ export async function reviewMessageReport(
     ...(trimmed ? { _note: trimmed } : {}),
   });
   if (error) throw error;
+  await writeOpsLog({
+    action: `chat_report.${action}`,
+    unit: "market",
+    entity: "message_report",
+    entityId: id,
+    summary: trimmed ?? action,
+  });
 }
