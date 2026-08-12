@@ -1,172 +1,106 @@
 /**
- * استوديو المحتوى — قائمة الصفحات (/admin/content)
+ * لوحة الاستديو والمحتوى — تبويب «هوية وبيانات المنصة» (/admin/content)
  *
- * نمو للمؤلّف القائم لا بديل عنه: نفس `BLOCK_LIBRARY` ونفس عارض `PageBlocks`،
- * لكن مع نموذج صفحات ونسخ ونشر ورجوع. المسودة لا تظهر لزائر عادي أبدًا.
+ * الهوية البصرية (اللوحة والشعار والصور المولّدة) وبيانات التواصل في مكان واحد.
+ * كل كتابة تمرّ بدوال SECURITY DEFINER تفحص `mkt_is_platform_admin` في القاعدة.
  */
-import { useState } from "react";
-
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { FileText, Globe, Plus } from "lucide-react";
-import { toast } from "sonner";
+import { Code2, FileText, Images, Palette, Settings } from "lucide-react";
 
-import { AdminCard, AdminEmptyState, AdminPageHead } from "@/components/admin/AdminPage";
+import { AdminCard, AdminPageHead } from "@/components/admin/AdminPage";
 import { AdminShell } from "@/components/marketplace/AdminShell";
+import { StudioTabs } from "@/components/admin/StudioTabs";
+import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
+import { ThemePaletteCard } from "@/components/marketplace/admin/ThemePaletteCard";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
-import { formatDateTime } from "@/lib/format";
-import { useCmsErrorText, useCmsMutations, useCmsPages, type CmsPage } from "@/lib/mkt-cms";
+import { useRefreshMediaSlots } from "@/lib/mkt-media-slots";
+import { usePlatformIdentity } from "@/lib/mkt-platform";
 
 export const Route = createFileRoute("/admin/content/")({
   ssr: "data-only",
   head: () => ({
     meta: [
-      { title: "استوديو المحتوى — كَحيل" },
+      { title: "هوية وبيانات المنصة — استوديو كَحيل" },
       {
         name: "description",
-        content: "صفحات المنصة ونسخها ودورة المسودة والمعاينة والنشر والرجوع من مكان واحد.",
+        content: "لوحة ألوان كَحيل والشعار والصور وبيانات التواصل الرسمية للمنصة.",
       },
-      { property: "og:title", content: "استوديو المحتوى — كَحيل" },
-      { property: "og:description", content: "إدارة صفحات المنصة ونسخها ونشرها." },
+      { property: "og:title", content: "هوية وبيانات المنصة — استوديو كَحيل" },
+      { property: "og:description", content: "الهوية البصرية وبيانات المنصة من مكان واحد." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: AdminContentIndex,
+  component: StudioBrandRoute,
 });
 
-const STATUS_TEXT: Record<string, string> = {
-  draft: "مسودة",
-  published: "منشورة",
-  archived: "مؤرشفة",
-};
-
-function PageRow({ page }: { page: CmsPage }) {
-  return (
-    <li className="rounded-[var(--r-card)] border border-border bg-card p-3">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-        <div className="min-w-0">
-          <span className="block truncate text-body font-bold text-foreground">{page.title_ar}</span>
-          <span className="block truncate text-nav text-muted-foreground" dir="ltr">
-            {page.route_path}
-          </span>
-          <span className="mt-1 inline-flex items-center gap-2 text-nav text-muted-foreground">
-            {STATUS_TEXT[page.status] ?? page.status} • {formatDateTime(page.updated_at)}
-          </span>
-        </div>
-        <Button asChild size="sm" variant="outline">
-          <Link to="/admin/content/pages/$id" params={{ id: page.id }}>
-            تحرير
-          </Link>
-        </Button>
-      </div>
-    </li>
-  );
-}
-
-function AdminContentIndex() {
-  const pages = useCmsPages();
-  const { createPage } = useCmsMutations();
-  const errorText = useCmsErrorText();
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-
-  const submit = () => {
-    const cleanSlug = slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/^-+|-+$/g, "");
-    if (!title.trim() || !cleanSlug) {
-      toast.error("العنوان والمسار مطلوبان");
-      return;
-    }
-    createPage.mutate(
-      { slug: cleanSlug, route_path: `/${cleanSlug}`, title_ar: title.trim() },
-      {
-        onSuccess: () => {
-          toast.success("أُنشئت الصفحة كمسودة — غير ظاهرة للعامة");
-          setOpen(false);
-          setTitle("");
-          setSlug("");
-        },
-        onError: (error) => toast.error(errorText(error)),
-      },
-    );
-  };
+function StudioBrandRoute() {
+  const refresh = useRefreshMediaSlots();
+  const { identity } = usePlatformIdentity();
+  const isOwner = identity?.is_system_owner === true;
 
   return (
-    <AdminShell title="استوديو المحتوى">
+    <AdminShell title="لوحة الاستديو والمحتوى">
+      <StudioTabs />
       <AdminPageHead
-        title="صفحات المنصة"
-        description="كل صفحة قائمة كتل من نفس مكتبة المكوّنات — مسودة، معاينة، نشر، ورجوع بنسخة كاملة."
+        title="هوية وبيانات المنصة"
+        description="اللوحة والشعار والصور وبيانات التواصل — أساس كل ما يظهر للزائر."
         actions={
-          <Button onClick={() => setOpen((v) => !v)} style={{ minHeight: 44 }}>
-            <Plus aria-hidden className="size-4" />
-            صفحة جديدة
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
+              <Link to="/admin/settings">
+                <Settings className="size-4" aria-hidden />
+                بيانات التواصل والإعدادات
+              </Link>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="gap-[var(--sp-2)]">
+              <Link to="/admin/appearance">
+                <Images className="size-4" aria-hidden />
+                فتحات الوسائط
+              </Link>
+            </Button>
+          </div>
         }
       />
 
-      {open && (
-        <AdminCard title="صفحة جديدة" className="mb-[var(--sp-4)]">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1">
-              <Label className="text-desc">العنوان</Label>
-              <Input
-                value={title}
-                maxLength={120}
-                onChange={(event) => setTitle(event.target.value.replace(/[<>]/g, ""))}
-                style={{ minHeight: 44 }}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-desc">المسار</Label>
-              <Input
-                dir="ltr"
-                value={slug}
-                placeholder="about-us"
-                onChange={(event) => setSlug(event.target.value)}
-                style={{ minHeight: 44 }}
-              />
-            </div>
-          </div>
-          <Button
-            className="mt-3"
-            disabled={createPage.isPending}
-            onClick={submit}
-            style={{ minHeight: 44 }}
-          >
-            إنشاء كمسودة
-          </Button>
-        </AdminCard>
-      )}
+      <div className="mb-[var(--sp-4)]">
+        <ThemePaletteCard />
+      </div>
 
-      <AdminCard title="الصفحات" description="المسودات لا تُقرأ للعامة إطلاقًا.">
-        {pages.isLoading ? (
-          <div className="space-y-2">
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
-          </div>
-        ) : (pages.data ?? []).length === 0 ? (
-          <AdminEmptyState
-            icon={FileText}
-            title="لا صفحات بعد"
-            hint="أنشئ صفحة مسودة ثم ابنِ كتلها من نفس مكتبة المكوّنات."
-          />
-        ) : (
-          <ul className="space-y-2">
-            {(pages.data ?? []).map((page) => (
-              <PageRow key={page.id} page={page} />
-            ))}
-          </ul>
-        )}
+      <AdminCard
+        title="مكتبة الصور المولّدة"
+        description="التوليد لمدير المنصة فقط بسقف شهري، وكل صورة تُختَم باسم كَحيل قبل الحفظ."
+        className="mb-[var(--sp-4)]"
+      >
+        <BrandImageStudio onChanged={refresh} />
       </AdminCard>
 
-      <p className="mt-[var(--sp-4)] flex items-center gap-2 text-nav text-muted-foreground">
-        <Globe aria-hidden className="size-4" />
-        الرئيسية الحالية تبقى هي المنشورة حتى يعتمد المالك نسخة من الاستوديو بنفسه.
-      </p>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Link
+          to="/admin/content/design"
+          className="flex items-center gap-[var(--sp-2)] rounded-[var(--r-card)] border border-border bg-card p-3 text-body font-bold text-foreground hover:border-primary/40"
+        >
+          <Palette className="size-5 text-primary" aria-hidden />
+          خيارات التصميم
+        </Link>
+        <Link
+          to="/admin/content/pages"
+          className="flex items-center gap-[var(--sp-2)] rounded-[var(--r-card)] border border-border bg-card p-3 text-body font-bold text-foreground hover:border-primary/40"
+        >
+          <FileText className="size-5 text-primary" aria-hidden />
+          صفحات المنصة
+        </Link>
+        {isOwner ? (
+          <Link
+            to="/admin/content/code"
+            className="flex items-center gap-[var(--sp-2)] rounded-[var(--r-card)] border border-border bg-card p-3 text-body font-bold text-foreground hover:border-primary/40"
+          >
+            <Code2 className="size-5 text-primary" aria-hidden />
+            الأكواد البرمجية
+          </Link>
+        ) : null}
+      </div>
     </AdminShell>
   );
 }
