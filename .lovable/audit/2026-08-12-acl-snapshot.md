@@ -26,7 +26,7 @@ object-by-object — there is no blanket or approximate GRANT anywhere.
 
 - objects: 575
 - EXECUTE granted to PUBLIC: 372
-- EXECUTE reachable by anon (PUBLIC or explicit): 416
+- EXECUTE reachable by anon (PUBLIC or explicit): 429
 - trigger-returning functions: 99
 - proven public exceptions kept for anon: 39
 - objects hardened (anon/PUBLIC revoked, authenticated kept): 437
