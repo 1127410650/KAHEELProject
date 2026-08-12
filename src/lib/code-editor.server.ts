@@ -9,6 +9,7 @@
  * (Cloudflare Workers) للقراءة فقط، فالكتابة هناك ترفع خطأً واضحًا لا سقوطًا صامتًا.
  */
 import { createHash } from "node:crypto";
+import type { Dirent } from "node:fs";
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { join, normalize, relative, sep } from "node:path";
 
@@ -126,6 +127,69 @@ export async function listDir(rel: string): Promise<TreeEntry[]> {
   return out.sort((a, b) =>
     a.kind === b.kind ? a.path.localeCompare(b.path) : a.kind === "dir" ? -1 : 1,
   );
+}
+
+/**
+ * أنواع/لغات الكود المسموح تصنيفها — قائمة مغلقة.
+ *
+ * هذه طبقة تنظيم فوق الشجرة الكاملة: نفس حصر المسارات ونفس الامتدادات
+ * المسموحة، ولا تفتح أي مسار جديد. أي مفتاح غير مسجّل هنا يُرفض.
+ */
+export const CODE_KINDS: Record<string, string[]> = {
+  css: [".css"],
+  js: [".js", ".jsx", ".mjs"],
+  ts: [".ts"],
+  tsx: [".tsx"],
+  json: [".json"],
+  md: [".md", ".txt"],
+  html: [".html"],
+  sql: [".sql"],
+};
+
+const MAX_KIND_RESULTS = 600;
+
+/**
+ * كل ملفات نوع واحد في المشروع (مسح متعمّق) — بنفس استثناءات الشجرة
+ * (`SKIP_DIR` و`DENY_PREFIX`) وبلا اتباع للروابط الرمزية.
+ */
+export async function listByKind(kind: string): Promise<TreeEntry[]> {
+  const exts = CODE_KINDS[kind];
+  if (!exts) throw new CodeEditorError("UNKNOWN_KIND");
+  const allowed = new Set(exts.filter((ext) => ALLOWED_EXT.has(ext)));
+  const out: TreeEntry[] = [];
+
+  const walk = async (rel: string): Promise<void> => {
+    if (out.length >= MAX_KIND_RESULTS) return;
+    const dir = rel === "." ? ROOT : join(ROOT, rel);
+    let items: Dirent[];
+    try {
+      items = await readdir(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const item of items) {
+      if (out.length >= MAX_KIND_RESULTS) return;
+      if (item.isSymbolicLink()) continue;
+      if (item.name.startsWith(".env")) continue;
+      const child = rel === "." ? item.name : `${rel}/${item.name}`;
+      if (DENY_PREFIX.some((deny) => child === deny || child.startsWith(`${deny}/`))) continue;
+      if (item.isDirectory()) {
+        if (SKIP_DIR.has(item.name)) continue;
+        await walk(child);
+      } else if (item.isFile() && allowed.has(extOf(item.name))) {
+        let size = 0;
+        try {
+          size = (await stat(join(ROOT, child))).size;
+        } catch {
+          size = 0;
+        }
+        out.push({ path: child, kind: "file", size });
+      }
+    }
+  };
+
+  await walk(".");
+  return out.sort((a, b) => a.path.localeCompare(b.path));
 }
 
 export const MAX_FILE_BYTES = 512 * 1024;

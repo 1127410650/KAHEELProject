@@ -34,6 +34,17 @@ export const codeListDir = createServerFn({ method: "POST" })
     return { path: rel, entries: await mod.listDir(rel) };
   });
 
+/** كل ملفات نوع/لغة واحدة (طبقة تنظيم فوق الشجرة — نفس الحصر والامتدادات). */
+export const codeListKind = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { kind: string }) => ({ kind: String(data?.kind ?? "") }))
+  .handler(async ({ data, context }) => {
+    await assertOwner(context.supabase);
+    const mod = await import("@/lib/code-editor.server");
+    mod.assertEditorEnvironment();
+    return { kind: data.kind, entries: await mod.listByKind(data.kind) };
+  });
+
 /** قراءة ملف نصي. */
 export const codeReadFile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
