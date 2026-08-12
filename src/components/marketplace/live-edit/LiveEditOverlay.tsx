@@ -27,9 +27,11 @@ const OUTLINE_CSS = `
 export default function LiveEditOverlay({ onExit }: { onExit: () => void }) {
   const slots = useMediaSlots();
   const drafts = useSlotDrafts(true);
+  const registry = useEditableSlots();
   const [openKey, setOpenKey] = useState<string | null>(null);
 
-  /* الضغط على أي فتحة يفتح لوحتها ولا يُنفّذ الرابط أسفلها. */
+  /* الضغط على أي فتحة يفتح لوحتها ولا يُنفّذ الرابط أسفلها.
+     المكوّنات الوظيفية المشتركة مستثناة: ثابتة حتى لمدير المنصة. */
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
@@ -38,11 +40,16 @@ export default function LiveEditOverlay({ onExit }: { onExit: () => void }) {
       if (target?.closest?.("[data-kslot-ui]")) return;
       event.preventDefault();
       event.stopPropagation();
-      setOpenKey(host.getAttribute("data-kslot"));
+      const key = host.getAttribute("data-kslot");
+      if (key && isFunctionalSlot(registry.data, key)) {
+        toast.error("مكوّن وظيفي مشترك (حجز/مطابقة/دفع/مسافة) — ثابت ولا يُعدَّل.");
+        return;
+      }
+      setOpenKey(key);
     };
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, []);
+  }, [registry.data]);
 
   const draftMap = new Map<string, SlotPatch>(
     (drafts.data ?? []).map((row) => [row.slot_key, row.patch]),
