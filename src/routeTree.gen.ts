@@ -32,6 +32,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAccessControlRouteImport } from './routes/admin/access-control'
 import { Route as AdminAdCreditRouteImport } from './routes/admin/ad-credit'
 import { Route as AdminAiRouteImport } from './routes/admin/ai'
 import { Route as AdminAppearanceRouteImport } from './routes/admin/appearance'
@@ -257,6 +258,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAccessControlRoute = AdminAccessControlRouteImport.update({
+  id: '/access-control',
+  path: '/access-control',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAdCreditRoute = AdminAdCreditRouteImport.update({
@@ -842,6 +848,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
+  '/admin/access-control': typeof AdminAccessControlRoute
   '/admin/ad-credit': typeof AdminAdCreditRoute
   '/admin/ai': typeof AdminAiRoute
   '/admin/appearance': typeof AdminAppearanceRoute
@@ -974,6 +981,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
+  '/admin/access-control': typeof AdminAccessControlRoute
   '/admin/ad-credit': typeof AdminAdCreditRoute
   '/admin/ai': typeof AdminAiRoute
   '/admin/appearance': typeof AdminAppearanceRoute
@@ -1111,6 +1119,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRouteWithChildren
+  '/admin/access-control': typeof AdminAccessControlRoute
   '/admin/ad-credit': typeof AdminAdCreditRoute
   '/admin/ai': typeof AdminAiRoute
   '/admin/appearance': typeof AdminAppearanceRoute
@@ -1249,6 +1258,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/services'
+    | '/admin/access-control'
     | '/admin/ad-credit'
     | '/admin/ai'
     | '/admin/appearance'
@@ -1381,6 +1391,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/search'
+    | '/admin/access-control'
     | '/admin/ad-credit'
     | '/admin/ai'
     | '/admin/appearance'
@@ -1517,6 +1528,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/search'
     | '/services'
+    | '/admin/access-control'
     | '/admin/ad-credit'
     | '/admin/ai'
     | '/admin/appearance'
@@ -1839,6 +1851,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/access-control': {
+      id: '/admin/access-control'
+      path: '/access-control'
+      fullPath: '/admin/access-control'
+      preLoaderRoute: typeof AdminAccessControlRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/ad-credit': {
@@ -2622,6 +2641,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteRouteChildren {
+  AdminAccessControlRoute: typeof AdminAccessControlRoute
   AdminAdCreditRoute: typeof AdminAdCreditRoute
   AdminAiRoute: typeof AdminAiRoute
   AdminAppearanceRoute: typeof AdminAppearanceRoute
@@ -2677,6 +2697,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAccessControlRoute: AdminAccessControlRoute,
   AdminAdCreditRoute: AdminAdCreditRoute,
   AdminAiRoute: AdminAiRoute,
   AdminAppearanceRoute: AdminAppearanceRoute,
