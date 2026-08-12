@@ -162,8 +162,27 @@
 | `20260812180628_harden_set_staff_perm_grant` | سحب EXECUTE عن `anon` من `set_staff_perm` | قيد الإنتاج موجود؛ ملف بنفس الاسم غير موجود محليًا، لكن SQL المطابق مُعاد حرفيًا في `20260812181646` و`20260812183325` |
 | `supabase/migrations/20260812181646_6dde5f97-bc49-4879-bd4d-5fe7da601102.sql` | (1) إصلاح `entity_id` في `save_staff_perms`، (2) سحب EXECUTE عن `anon` من `mkt_admin_set_platform_role` و`mkt_admin_roles`، (3) إعادة إعلان منح/سحب الهجرتين أعلاه بصيغة idempotent | في المستودع ✔ |
 | `supabase/migrations/20260812183325_74974eda-4a75-4edb-8cef-b34198c233ce.sql` | جعل `mkt_content_health_open` يرفع `FORBIDDEN` صراحةً بدل قائمة فارغة، وإحكام EXECUTE للتسع دوال المختبرة | في المستودع ومطبّق على الإنتاج ✔ |
+| `supabase/migrations/20260812184520_994afb20-9565-43d9-926e-cd8ffa54f808.sql` | **ملف التكافؤ**: إعادة إعلان idempotent لكامل SQL الهجرتين `20260812180555_harden_access_control_fn_grants` و`20260812180628_harden_set_staff_perm_grant` (سحب EXECUTE عن `PUBLIC`/`anon` + منحه لـ`authenticated` على الدوال الست) | أُنشئ وطُبِّق اليوم ✔ |
 
-لا يوجد انحراف **وظيفي**: كل SQL فعّال في الإنتاج معلن في ملفات الهجرة الحالية. لكن يوجد انحراف **اسمي في سجل الهجرة**: الملفان ذوا الاسمين `20260812180555` و`20260812180628` غير موجودين محليًا رغم وجود قيديهما في دفتر الإنتاج. أداة الهجرة المُدارة تمنع إنشاء ملفات مرتجعة زمنيًا يدويًا؛ لذلك لا يدّعي هذا التقرير تطابقًا اسميًا غير موجود.
+### تكافؤ المستودع ↔ الإنتاج (نقطة المالك 5)
+
+- سبب النقص السابق: أداة الهجرة المُدارة لا تسمح بإنشاء ملفات بأسماء/طوابع زمنية مرتجعة، فلم يكن ممكنًا استرجاع الاسمين الأصليين حرفيًا.
+- المعالجة المنفَّذة الآن: ملف `20260812184520_…sql` يحتوي **نفس SQL الهجرتين المفقودتين بالكامل** بصيغة idempotent، فأصبح **استنساخ المستودع من الصفر يُنتج نفس حالة الإنتاج بالضبط**.
+- إثبات الحالة بعد التطبيق (استعلام `has_function_privilege` حيّ، 12/08/2026 18:45 UTC):
+
+```
+mkt_admin_save_staff_perms(uuid,text[],text)                     public=false anon=false authenticated=true
+mkt_admin_set_staff_perm(uuid,text,boolean,text)                 public=false anon=false authenticated=true
+mkt_permission_catalog_list()                                    public=false anon=false authenticated=true
+mkt_admin_set_platform_role(uuid,text,text)                      public=false anon=false authenticated=true
+mkt_admin_roles()                                                public=false anon=false authenticated=true
+mkt_admin_ops_log(text,text,timestamptz,timestamptz,int,int)     public=false anon=false authenticated=true
+mkt_content_health_open(int)                                     public=false anon=false authenticated=true
+mkt_track(jsonb)                                                 public=true  anon=true  authenticated=true   ← مسار عام شرعي
+mkt_public_business(text)                                        public=true  anon=true  authenticated=true   ← مسار عام شرعي
+```
+
+- **الترتيب**: ملفات المستودع مرتّبة زمنيًا وتنتهي بـ `…181646 → …183325 → …184520`، ودفتر الإنتاج يحمل نفس القيود بنفس الترتيب زائد القيدين القديمين اللذين صار مضمونهما مُعاد إعلانه في ملف التكافؤ. لا انحراف وظيفي ولا انحراف في المضمون؛ الفرق المتبقي هو **اسم قيد تاريخي فقط** ولا يؤثر على قابلية الاستنساخ.
 
 ## ملحق الإثبات المطلوب — جلسات JWT حقيقية بعد آخر هجرة
 
@@ -248,3 +267,76 @@
 | صدق البيئة | ✔ | القسم 9 |
 
 **حالة المرحلة الصادقة:** (أ) الدفعة 4 معلّقة، (ب) لا نشر Front-end، (ج) قاعدة الإنتاج تغيّرت بالفعل بهجرتي REVOKE الآمنتين للأمام وبالإصلاحات الإضافية الموثقة، (د) الفحوص الهيكلية ناجحة، (هـ) اختبارات التخويل الحية بجلسات JWT هي دليل هذا الملحق، (و) الاعتماد النهائي ما زال بانتظار المالك.
+
+---
+
+## 11) ضوابط حكامة الاختبار (أمر المالك الإضافي — 12/08/2026 18:39 UTC)
+
+### 11.1 نظافة الأسرار
+- لا يحتوي هذا التقرير ولا أي مخرَج محفوظ على **JWT أو access/refresh token أو مفتاح service_role أو سرّ جلسة**. أي قيمة من هذا النوع تُستبدل تلقائيًا بـ`***` في مخرجات سكربتات الاختبار (`.replace(/eyJ[A-Za-z0-9_.\-]+/g,'***')`).
+- إثبات الهوية في كل نداء يُقدَّم **بالنتيجة وبقيمة القرار فقط**: مثال المستخدم بلا صلاحيات → `mkt_admin_can('users.manage') = false`، وليس بعرض أي رمز.
+- تحقّق: البحث عن بادئة رموز JWT في هذا الملف لا يُعيد أي رمز فعلي — التطابق الوحيد هو نص قاعدة التنقية نفسها المذكورة أعلاه. وسكربتات الاختبار تقرأ المفاتيح من متغيرات البيئة ولا تطبعها إطلاقًا.
+
+### 11.2 حسابات الاختبار — الوسم والتنظيف المُثبت
+حسابات هذه الجولة موسومة صراحةً وبنطاق غير قابل للتسليم، ولا تحمل أي بيانات شخصية حقيقية:
+
+```
+qa+accesstest-nop-7psw2l@kaheel.invalid      → b291e240…  (مستخدم مسجّل بلا صلاحيات)
+qa+accesstest-target-7psw2l@kaheel.invalid   → a41d1258…  (هدف قابل للإفناء)
+qa+accesstest-tadmin-7psw2l@kaheel.invalid   → 2234e6f8…  (مالك نظام اختباري معزول)
+```
+
+الجولات الاستكشافية السابقة (`ac-probe-…`، `…-j29wlh`، `…-ef8nz6`) نُظّفت أيضًا. **إثبات الصفرية النهائي (حيّ، بعد الحذف):**
+
+```json
+{ "delete_status": 204,
+  "residual": { "mkt_notifications": 0, "mkt_staff_permissions": 0, "mkt_platform_admins": 0,
+                "mkt_staff_status": 0, "tenant_memberships": 0, "profiles": 0,
+                "auth.users:b291e240": 404, "auth.users:a41d1258": 404, "auth.users:2234e6f8": 404,
+                "auth.users:35cfbaba": 404, "auth.users:4a546994": 404, "auth.users:7d1b0705": 404,
+                "auth.users:a0dfa586": 404, "auth.users:75f3f1e4": 404, "auth.users:ca72a13b": 404,
+                "auth.users:cfb4756a": 404, "auth.users:553cb606": 404, "auth.users:81434937": 404 } }
+```
+
+`404` من `GET /auth/v1/admin/users/<id>` = الحساب غير موجود. لا عضويات ولا صلاحيات ولا أدوار ولا تنبيهات يتيمة. والعدّادات العامة رجعت إلى ما قبل الاختبار بالضبط: `mkt_staff_permissions=18`، `mkt_platform_admins=5`، `mkt_permission_catalog=69`.
+
+### 11.3 لا معاملات مستقلة مُلفّقة
+لم يُضف أي `dblink` / `pg_background` / أي حيلة «معاملة مستقلة» داخل PostgreSQL، ولم تُضف أي آلية تسجيل جديدة في هذا الدور. الموقف المعلن يبقى كما هو: **الرفض يرفع استثناءً فيتراجع، فلا صف يبقى — والأهم أن لا حالة تغيّرت (قبل ≡ بعد)**. أي تسجيل رفض دائم مستقبلًا يجب تصميمه في طبقة الخادم أو سجل خارجي موثوق، وهو خارج نطاق هذا الإثبات.
+
+### 11.4 التزامن على حسابات معزولة فقط
+- منفّذ التعديلات المتزامنة: **مالك نظام اختباري** (`2234e6f8…`) أُنشئ لهذه الجولة وحُذف بعدها. **لم يُستخدم حساب المالك الحقيقي في أي سيناريو، ولم يُعدّل، ولم تُقرأ أسراره.**
+- هدف التعديلات المتزامنة: مستخدم رمي (`a41d1258…`).
+- النتيجة الخام (جلستان متداخلتان، نفس الهدف):
+
+```json
+{"A":{"before":["listings.review","listings.view"],"after":["users.manage","users.view"],
+       "added":["users.manage","users.view"],"removed":["listings.review","listings.view"],
+       "operation_id":"3429ef02-f08d-4b0f-b3d4-259aeaf8e026"},
+ "B":{"before":[],"after":["listings.review","listings.view"],
+       "added":["listings.review","listings.view"],"removed":[],
+       "operation_id":"0998b48c-72e4-4a4b-bc96-ac375e8dfdb5"},
+ "final_perms":["users.manage","users.view"]}
+```
+
+التسلسل نظيف: `B` نفّذ أولًا (`before=[]`) و`A` بعده رأى نتيجة `B` كـ`before`، والحالة النهائية = نتيجة `A` بالكامل. **لا خليط ولا فقدان تحديث** — بفعل `FOR UPDATE` + `pg_advisory_xact_lock`.
+
+### 11.5 إعادة تشغيل الرفض بجلسة حقيقية (نفس الجولة)
+مستخدم مسجّل بلا أي صلاحية (`b291e240…`، `mkt_admin_can=false`):
+
+| الدالة | النتيجة الفعلية |
+|---|---|
+| `mkt_admin_save_staff_perms` | `400 · P0001 · Not authorized` |
+| `mkt_admin_set_staff_perm` | `400 · P0001 · Not authorized` |
+| `mkt_admin_set_platform_role` | `400 · P0001 · Not authorized` |
+| `mkt_admin_ops_log` | `200 · []` (لا صفوف — الحجب داخل الاستعلام) |
+| `mkt_content_health_open` | `400 · P0001 · FORBIDDEN` |
+
+العدّادات قبل وبعد سلسلة الرفض **متطابقة حرفيًا**: `mkt_staff_permissions=18`, `mkt_platform_admins=5`, `mkt_permission_catalog=69`, `audit_log=648`, `mkt_ops_log=40` → **أثر صفري**.
+
+كذلك حارس الذات على مالك النظام الاختباري: `You cannot change your own permissions`.
+
+### 11.6 حالة المرحلة (بلا تجميل)
+- الدفعة 4: **معلّقة** ولم تبدأ.
+- الواجهة: **لم تُنشر** أي نسخة.
+- قاعدة الإنتاج: **مغيَّرة فعلًا** بالمنح/السحب وإصلاحات الدوال، وأُضيف اليوم ملف التكافؤ.
+- الاعتماد النهائي: **بانتظار المالك**.
