@@ -17,9 +17,9 @@ const TABS = [
 ] as const;
 
 export function StudioTabs() {
-  const identity = usePlatformIdentity();
+  const { identity } = usePlatformIdentity();
   const path = useRouterState({ select: (state) => state.location.pathname });
-  const isOwner = identity.data?.is_system_owner === true;
+  const isOwner = identity?.is_system_owner === true;
 
   const items = [
     ...TABS,
