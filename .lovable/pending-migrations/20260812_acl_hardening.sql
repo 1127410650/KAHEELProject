@@ -42,10 +42,11 @@
 
 DO $acl$
 DECLARE
-  -- 39 individually proven public exceptions (full signatures).
+  -- 40 individually proven public exceptions (full signatures).
   v_exceptions text[] := ARRAY[
     'mkt_ad_campaign_track(uuid,text,text)',
     'mkt_analytics_ingest(jsonb,boolean)',
+    'mkt_distance_m(double precision,double precision,double precision,double precision)',
     'mkt_guide_featured_places(integer)',
     'mkt_guide_place_rating(uuid)',
     'mkt_guide_promo_track(uuid,text)',
@@ -84,11 +85,20 @@ DECLARE
     'mkt_theme_active()',
     'mkt_track(jsonb)'
   ];
+  -- Class E objects whose ONLY production grant was PUBLIC but which have real
+  -- signed-in client callers (proven in src/): re-granted to authenticated only.
+  --   mkt_admin_overview()    -> src/lib/mkt-platform.ts:120 (admin dashboard)
+  --   mkt_student_bot_state() -> src/lib/mkt-student-bot.ts:114 (session-gated)
+  v_auth_keep text[] := ARRAY[
+    'mkt_admin_overview()',
+    'mkt_student_bot_state()'
+  ];
   r            record;
   v_sig        text;
   n_trigger    integer := 0;
   n_exception  integer := 0;
   n_revoked    integer := 0;
+  n_authkeep   integer := 0;
 BEGIN
   FOR r IN
     SELECT p.oid,
@@ -113,6 +123,13 @@ BEGIN
         'REVOKE EXECUTE ON FUNCTION %s FROM PUBLIC', r.oid::regprocedure);
       n_exception := n_exception + 1;
 
+    ELSIF v_sig = ANY (v_auth_keep) THEN
+      EXECUTE format(
+        'REVOKE EXECUTE ON FUNCTION %s FROM PUBLIC, anon', r.oid::regprocedure);
+      EXECUTE format(
+        'GRANT EXECUTE ON FUNCTION %s TO authenticated', r.oid::regprocedure);
+      n_authkeep := n_authkeep + 1;
+
     ELSE
       EXECUTE format(
         'REVOKE EXECUTE ON FUNCTION %s FROM PUBLIC, anon', r.oid::regprocedure);
@@ -121,7 +138,7 @@ BEGIN
   END LOOP;
 
   -- Guard: every exception signature must exist, otherwise the list is stale.
-  FOREACH v_sig IN ARRAY v_exceptions LOOP
+  FOREACH v_sig IN ARRAY v_exceptions || v_auth_keep LOOP
     IF NOT EXISTS (
       SELECT 1 FROM pg_proc p
       JOIN pg_namespace n ON n.oid = p.pronamespace
@@ -132,7 +149,7 @@ BEGIN
     END IF;
   END LOOP;
 
-  RAISE NOTICE 'ACL_HARDENING: trigger_fns=% exceptions=% hardened=%',
-    n_trigger, n_exception, n_revoked;
+  RAISE NOTICE 'ACL_HARDENING: trigger_fns=% exceptions=% auth_keep=% hardened=%',
+    n_trigger, n_exception, n_authkeep, n_revoked;
 END
 $acl$;
