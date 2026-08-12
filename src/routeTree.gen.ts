@@ -139,6 +139,7 @@ import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
 import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
+import { Route as AdminContentPagesIndexRouteImport } from './routes/admin/content.pages.index'
 import { Route as AdminContentPagesIdRouteImport } from './routes/admin/content.pages.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
 import { Route as ApiPublicOtpLinksyriaStatusRouteImport } from './routes/api/public/otp/linksyria-status'
@@ -797,6 +798,11 @@ const MyReportsIdRoute = MyReportsIdRouteImport.update({
   path: '/reports/$id',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const AdminContentPagesIndexRoute = AdminContentPagesIndexRouteImport.update({
+  id: '/content/pages/',
+  path: '/content/pages/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminContentPagesIdRoute = AdminContentPagesIdRouteImport.update({
   id: '/content/pages/$id',
   path: '/content/pages/$id',
@@ -961,6 +967,7 @@ export interface FileRoutesByFullPath {
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
+  '/admin/content/pages/': typeof AdminContentPagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1094,6 +1101,7 @@ export interface FileRoutesByTo {
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
+  '/admin/content/pages': typeof AdminContentPagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1232,6 +1240,7 @@ export interface FileRoutesById {
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
+  '/admin/content/pages/': typeof AdminContentPagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1371,6 +1380,7 @@ export interface FileRouteTypes {
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
+    | '/admin/content/pages/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1504,6 +1514,7 @@ export interface FileRouteTypes {
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
+    | '/admin/content/pages'
   id:
     | '__root__'
     | '/'
@@ -1641,6 +1652,7 @@ export interface FileRouteTypes {
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
+    | '/admin/content/pages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2602,6 +2614,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyReportsIdRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/admin/content/pages/': {
+      id: '/admin/content/pages/'
+      path: '/content/pages'
+      fullPath: '/admin/content/pages/'
+      preLoaderRoute: typeof AdminContentPagesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/content/pages/$id': {
       id: '/admin/content/pages/$id'
       path: '/content/pages/$id'
@@ -2694,6 +2713,7 @@ interface AdminRouteRouteChildren {
   AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
   AdminContentPagesIdRoute: typeof AdminContentPagesIdRoute
+  AdminContentPagesIndexRoute: typeof AdminContentPagesIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -2750,6 +2770,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
   AdminContentPagesIdRoute: AdminContentPagesIdRoute,
+  AdminContentPagesIndexRoute: AdminContentPagesIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
