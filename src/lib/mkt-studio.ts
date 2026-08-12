@@ -130,6 +130,8 @@ export function useSaveStoreDesign() {
 
 const STUDIO_ERRORS: Record<string, string> = {
   NOT_OWNER: "محرر الكود لمالك المنصة حصرًا.",
+  CODE_EDITOR_DISABLED_IN_PRODUCTION:
+    "محرر الكود معطّل في بيئة الإنتاج (نظام ملفاتها للقراءة فقط) — يعمل في بيئة التطوير/المعاينة فقط.",
   NOT_ADMIN: "هذه العملية لمدير المنصة فقط.",
   NOT_STORE_OWNER: "لا تملك هذا المتجر — التعديل مرفوض.",
   FUNCTIONAL_SLOT_IMMUTABLE: "مكوّن وظيفي مشترك (حجز/مطابقة/دفع/مسافة) — ثابت ولا يُعدَّل.",
