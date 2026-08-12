@@ -61,7 +61,8 @@
 | 12 | مالك النظام (وهو الوحيد: `system_owner=1`, `platform_admin=4`) | تخفيض نفسه إلى `platform_admin` ثم إلغاء الدور | رفض | `400 P0001 "The last system owner cannot be removed"` (الحالتان) | حارس داخل `mkt_admin_set_platform_role` | دور المالك بعد الاختبار: `system_owner` (سليم) |
 | 13 | مستخدم مسجّل من خارج أي كيان | قراءة `tenants` / `audit_log` / `mkt_ops_log` / `mkt_admin_notes` / `mkt_staff_permissions` / `mkt_platform_admins` | لا بيانات | `200 []` لكل واحد | عزل RLS بـ `current_tenant_id()` / `auth.uid()` | لا شيء |
 | 14 | جلستان تعدّلان نفس الشخص | استدعاءان متزامنان لـ `save_perms` | تسلسل بلا نتيجة ممزّقة | A: `before=[]`, `after=[users.manage, users.view]` — B: `before=[users.manage, users.view]`, `after=[listings.review, listings.view]`؛ الحالة النهائية = نتيجة B بالضبط | `FOR UPDATE` + `pg_advisory_xact_lock` داخل نفس المعاملة | حالة نهائية متسقة، لا خليط |
-| 15 | تدقيق | فحص `audit_log` + `mkt_ops_log` | تسجيل كامل | صفوف حقيقية أدناه | كتابة داخل نفس معاملة التغيير | — |
+| 15أ | تدقيق — **نجاح** حسّاس | فحص `audit_log` + `mkt_ops_log` بعد حفظ صلاحيات ناجح | صف تدقيق ذرّي مع النجاح | صفوف حقيقية أدناه (نفس المعاملة، تُثبَّت معًا) | الكتابة داخل جسم الدالة قبل `COMMIT` نفسه | صف تدقيق دائم |
+| 15ب | تدقيق — **رفض** غير مخوّل | فحص `audit_log` + `mkt_ops_log` بعد رفض | **لا صف** (متوقَّع ومقبول) | `audit_rows=0, ops_rows=0` | `RAISE EXCEPTION` يتراجع بالمعاملة كاملة، **ولا حالة تغيّرت** (قبل≡بعد في س2/س3) | لا شيء |
 
 **سيناريو 2 — الحساب المؤقت:** أُنشئ حساب `ac-probe-…@example.com` حقيقي بكلمة مرور، ووُثّقت جلسته، ونُفّذت به كل نداءات الصفوف 2/2ب…2و، ثم **حُذف نهائيًا** (`DELETE /auth/v1/admin/users/<id>` → 200) مع حساب هدف ثانٍ وحساب عزل ثالث. تحقق ما بعد الحذف: `residual perms rows for temp users: []` والعدّادات النهائية مطابقة لعدّادات ما قبل التشغيل.
 
