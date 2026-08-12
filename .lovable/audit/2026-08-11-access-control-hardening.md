@@ -162,8 +162,27 @@
 | `20260812180628_harden_set_staff_perm_grant` | سحب EXECUTE عن `anon` من `set_staff_perm` | قيد الإنتاج موجود؛ ملف بنفس الاسم غير موجود محليًا، لكن SQL المطابق مُعاد حرفيًا في `20260812181646` و`20260812183325` |
 | `supabase/migrations/20260812181646_6dde5f97-bc49-4879-bd4d-5fe7da601102.sql` | (1) إصلاح `entity_id` في `save_staff_perms`، (2) سحب EXECUTE عن `anon` من `mkt_admin_set_platform_role` و`mkt_admin_roles`، (3) إعادة إعلان منح/سحب الهجرتين أعلاه بصيغة idempotent | في المستودع ✔ |
 | `supabase/migrations/20260812183325_74974eda-4a75-4edb-8cef-b34198c233ce.sql` | جعل `mkt_content_health_open` يرفع `FORBIDDEN` صراحةً بدل قائمة فارغة، وإحكام EXECUTE للتسع دوال المختبرة | في المستودع ومطبّق على الإنتاج ✔ |
+| `supabase/migrations/20260812184520_994afb20-9565-43d9-926e-cd8ffa54f808.sql` | **ملف التكافؤ**: إعادة إعلان idempotent لكامل SQL الهجرتين `20260812180555_harden_access_control_fn_grants` و`20260812180628_harden_set_staff_perm_grant` (سحب EXECUTE عن `PUBLIC`/`anon` + منحه لـ`authenticated` على الدوال الست) | أُنشئ وطُبِّق اليوم ✔ |
 
-لا يوجد انحراف **وظيفي**: كل SQL فعّال في الإنتاج معلن في ملفات الهجرة الحالية. لكن يوجد انحراف **اسمي في سجل الهجرة**: الملفان ذوا الاسمين `20260812180555` و`20260812180628` غير موجودين محليًا رغم وجود قيديهما في دفتر الإنتاج. أداة الهجرة المُدارة تمنع إنشاء ملفات مرتجعة زمنيًا يدويًا؛ لذلك لا يدّعي هذا التقرير تطابقًا اسميًا غير موجود.
+### تكافؤ المستودع ↔ الإنتاج (نقطة المالك 5)
+
+- سبب النقص السابق: أداة الهجرة المُدارة لا تسمح بإنشاء ملفات بأسماء/طوابع زمنية مرتجعة، فلم يكن ممكنًا استرجاع الاسمين الأصليين حرفيًا.
+- المعالجة المنفَّذة الآن: ملف `20260812184520_…sql` يحتوي **نفس SQL الهجرتين المفقودتين بالكامل** بصيغة idempotent، فأصبح **استنساخ المستودع من الصفر يُنتج نفس حالة الإنتاج بالضبط**.
+- إثبات الحالة بعد التطبيق (استعلام `has_function_privilege` حيّ، 12/08/2026 18:45 UTC):
+
+```
+mkt_admin_save_staff_perms(uuid,text[],text)                     public=false anon=false authenticated=true
+mkt_admin_set_staff_perm(uuid,text,boolean,text)                 public=false anon=false authenticated=true
+mkt_permission_catalog_list()                                    public=false anon=false authenticated=true
+mkt_admin_set_platform_role(uuid,text,text)                      public=false anon=false authenticated=true
+mkt_admin_roles()                                                public=false anon=false authenticated=true
+mkt_admin_ops_log(text,text,timestamptz,timestamptz,int,int)     public=false anon=false authenticated=true
+mkt_content_health_open(int)                                     public=false anon=false authenticated=true
+mkt_track(jsonb)                                                 public=true  anon=true  authenticated=true   ← مسار عام شرعي
+mkt_public_business(text)                                        public=true  anon=true  authenticated=true   ← مسار عام شرعي
+```
+
+- **الترتيب**: ملفات المستودع مرتّبة زمنيًا وتنتهي بـ `…181646 → …183325 → …184520`، ودفتر الإنتاج يحمل نفس القيود بنفس الترتيب زائد القيدين القديمين اللذين صار مضمونهما مُعاد إعلانه في ملف التكافؤ. لا انحراف وظيفي ولا انحراف في المضمون؛ الفرق المتبقي هو **اسم قيد تاريخي فقط** ولا يؤثر على قابلية الاستنساخ.
 
 ## ملحق الإثبات المطلوب — جلسات JWT حقيقية بعد آخر هجرة
 
