@@ -113,6 +113,8 @@ import { Route as AdminAnalyticsIndexRouteImport } from './routes/admin/analytic
 import { Route as AdminAppearanceVariantsRouteImport } from './routes/admin/appearance_.variants'
 import { Route as AdminBusinessesIdRouteImport } from './routes/admin/businesses_.$id'
 import { Route as AdminContentIndexRouteImport } from './routes/admin/content.index'
+import { Route as AdminContentCodeRouteImport } from './routes/admin/content.code'
+import { Route as AdminContentDesignRouteImport } from './routes/admin/content.design'
 import { Route as AdminContentPlacementsRouteImport } from './routes/admin/content.placements'
 import { Route as AdminListingsIdRouteImport } from './routes/admin/listings_.$id'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin/reports.index'
@@ -139,6 +141,7 @@ import { Route as MyErrandsIndexRouteImport } from './routes/my/errands.index'
 import { Route as MyErrandsIdRouteImport } from './routes/my/errands.$id'
 import { Route as MyReportsIndexRouteImport } from './routes/my/reports.index'
 import { Route as MyReportsIdRouteImport } from './routes/my/reports.$id'
+import { Route as AdminContentPagesIndexRouteImport } from './routes/admin/content.pages.index'
 import { Route as AdminContentPagesIdRouteImport } from './routes/admin/content.pages.$id'
 import { Route as ApiPublicAdCreditGatewayWebhookRouteImport } from './routes/api/public/ad-credit/gateway-webhook'
 import { Route as ApiPublicOtpLinksyriaStatusRouteImport } from './routes/api/public/otp/linksyria-status'
@@ -665,6 +668,16 @@ const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
   path: '/content/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminContentCodeRoute = AdminContentCodeRouteImport.update({
+  id: '/content/code',
+  path: '/content/code',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminContentDesignRoute = AdminContentDesignRouteImport.update({
+  id: '/content/design',
+  path: '/content/design',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminContentPlacementsRoute = AdminContentPlacementsRouteImport.update({
   id: '/content/placements',
   path: '/content/placements',
@@ -797,6 +810,11 @@ const MyReportsIdRoute = MyReportsIdRouteImport.update({
   path: '/reports/$id',
   getParentRoute: () => MyRouteRoute,
 } as any)
+const AdminContentPagesIndexRoute = AdminContentPagesIndexRouteImport.update({
+  id: '/content/pages/',
+  path: '/content/pages/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminContentPagesIdRoute = AdminContentPagesIdRouteImport.update({
   id: '/content/pages/$id',
   path: '/content/pages/$id',
@@ -928,6 +946,8 @@ export interface FileRoutesByFullPath {
   '/services/': typeof ServicesIndexRoute
   '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/code': typeof AdminContentCodeRoute
+  '/admin/content/design': typeof AdminContentDesignRoute
   '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -961,6 +981,7 @@ export interface FileRoutesByFullPath {
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
+  '/admin/content/pages/': typeof AdminContentPagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1061,6 +1082,8 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesIndexRoute
   '/admin/appearance/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/code': typeof AdminContentCodeRoute
+  '/admin/content/design': typeof AdminContentDesignRoute
   '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -1094,6 +1117,7 @@ export interface FileRoutesByTo {
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
+  '/admin/content/pages': typeof AdminContentPagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1199,6 +1223,8 @@ export interface FileRoutesById {
   '/services/': typeof ServicesIndexRoute
   '/admin/appearance_/variants': typeof AdminAppearanceVariantsRoute
   '/admin/businesses_/$id': typeof AdminBusinessesIdRoute
+  '/admin/content/code': typeof AdminContentCodeRoute
+  '/admin/content/design': typeof AdminContentDesignRoute
   '/admin/content/placements': typeof AdminContentPlacementsRoute
   '/admin/listings_/$id': typeof AdminListingsIdRoute
   '/admin/reports/$id': typeof AdminReportsIdRoute
@@ -1232,6 +1258,7 @@ export interface FileRoutesById {
   '/api/public/otp/linksyria-status': typeof ApiPublicOtpLinksyriaStatusRoute
   '/my/ads/$id/edit': typeof MyAdsIdEditRoute
   '/services/$slug/$itemId/book': typeof ServicesSlugItemIdBookRoute
+  '/admin/content/pages/': typeof AdminContentPagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1338,6 +1365,8 @@ export interface FileRouteTypes {
     | '/services/'
     | '/admin/appearance/variants'
     | '/admin/businesses/$id'
+    | '/admin/content/code'
+    | '/admin/content/design'
     | '/admin/content/placements'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
@@ -1371,6 +1400,7 @@ export interface FileRouteTypes {
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
+    | '/admin/content/pages/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1471,6 +1501,8 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/appearance/variants'
     | '/admin/businesses/$id'
+    | '/admin/content/code'
+    | '/admin/content/design'
     | '/admin/content/placements'
     | '/admin/listings/$id'
     | '/admin/reports/$id'
@@ -1504,6 +1536,7 @@ export interface FileRouteTypes {
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
+    | '/admin/content/pages'
   id:
     | '__root__'
     | '/'
@@ -1608,6 +1641,8 @@ export interface FileRouteTypes {
     | '/services/'
     | '/admin/appearance_/variants'
     | '/admin/businesses_/$id'
+    | '/admin/content/code'
+    | '/admin/content/design'
     | '/admin/content/placements'
     | '/admin/listings_/$id'
     | '/admin/reports/$id'
@@ -1641,6 +1676,7 @@ export interface FileRouteTypes {
     | '/api/public/otp/linksyria-status'
     | '/my/ads/$id/edit'
     | '/services/$slug/$itemId/book'
+    | '/admin/content/pages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2420,6 +2456,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContentIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/content/code': {
+      id: '/admin/content/code'
+      path: '/content/code'
+      fullPath: '/admin/content/code'
+      preLoaderRoute: typeof AdminContentCodeRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/content/design': {
+      id: '/admin/content/design'
+      path: '/content/design'
+      fullPath: '/admin/content/design'
+      preLoaderRoute: typeof AdminContentDesignRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/content/placements': {
       id: '/admin/content/placements'
       path: '/content/placements'
@@ -2602,6 +2652,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyReportsIdRouteImport
       parentRoute: typeof MyRouteRoute
     }
+    '/admin/content/pages/': {
+      id: '/admin/content/pages/'
+      path: '/content/pages'
+      fullPath: '/admin/content/pages/'
+      preLoaderRoute: typeof AdminContentPagesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/content/pages/$id': {
       id: '/admin/content/pages/$id'
       path: '/content/pages/$id'
@@ -2682,6 +2739,8 @@ interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminAppearanceVariantsRoute: typeof AdminAppearanceVariantsRoute
   AdminBusinessesIdRoute: typeof AdminBusinessesIdRoute
+  AdminContentCodeRoute: typeof AdminContentCodeRoute
+  AdminContentDesignRoute: typeof AdminContentDesignRoute
   AdminContentPlacementsRoute: typeof AdminContentPlacementsRoute
   AdminListingsIdRoute: typeof AdminListingsIdRoute
   AdminReportsIdRoute: typeof AdminReportsIdRoute
@@ -2694,6 +2753,7 @@ interface AdminRouteRouteChildren {
   AdminContentIndexRoute: typeof AdminContentIndexRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
   AdminContentPagesIdRoute: typeof AdminContentPagesIdRoute
+  AdminContentPagesIndexRoute: typeof AdminContentPagesIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -2738,6 +2798,8 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminAppearanceVariantsRoute: AdminAppearanceVariantsRoute,
   AdminBusinessesIdRoute: AdminBusinessesIdRoute,
+  AdminContentCodeRoute: AdminContentCodeRoute,
+  AdminContentDesignRoute: AdminContentDesignRoute,
   AdminContentPlacementsRoute: AdminContentPlacementsRoute,
   AdminListingsIdRoute: AdminListingsIdRoute,
   AdminReportsIdRoute: AdminReportsIdRoute,
@@ -2750,6 +2812,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminContentIndexRoute: AdminContentIndexRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
   AdminContentPagesIdRoute: AdminContentPagesIdRoute,
+  AdminContentPagesIndexRoute: AdminContentPagesIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

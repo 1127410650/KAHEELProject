@@ -17,6 +17,7 @@ import { locationLink } from "@/lib/mkt-location-link";
 import { usePublicStoreTheme } from "@/lib/mkt-store-theme";
 import { usePublicStore, type PublicStoreItem } from "@/lib/mkt-store-catalog";
 import { storeThemeAppearance } from "@/lib/store-theme";
+import { StoreEditGate } from "@/components/marketplace/live-edit/StoreEditGate";
 import { MarketShell } from "@/components/marketplace/MarketShell";
 import { VerifiedBadge } from "@/components/marketplace/ListingCard";
 import { StoreOffersStrip } from "@/components/marketplace/store/StoreOffersStrip";
@@ -144,6 +145,7 @@ function PublicStorePage() {
     <MarketShell>
       <div className="mx-auto w-full max-w-5xl space-y-5 px-[var(--page-x)] py-5">
         <div
+          data-kslot="store.header"
           className={`overflow-hidden rounded-[1.75rem] border bg-card shadow-panel ring-1 ${theme.ring}`}
         >
           <div
@@ -191,7 +193,11 @@ function PublicStorePage() {
               ) : null}
             </div>
 
-            {description ? <p className="max-w-3xl text-sm leading-7">{description}</p> : null}
+            {description ? (
+              <p data-kslot="store.about" className="max-w-3xl text-sm leading-7">
+                {description}
+              </p>
+            ) : null}
 
             <div className="flex flex-wrap gap-2">
               {!serviceStore && store.pickup_enabled ? (
@@ -423,6 +429,7 @@ function PublicStorePage() {
             </div>
           </div>
         ) : null}
+        <StoreEditGate storefrontId={store.id} />
       </div>
     </MarketShell>
   );
