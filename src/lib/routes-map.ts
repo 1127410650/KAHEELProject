@@ -307,6 +307,7 @@ export const ROUTE_MAP: RouteRule[] = [
   rule("/admin/users", "admin", "admin"),
   rule("/admin/businesses", "admin", "admin"),
   rule("/admin/roles", "admin", "admin"),
+  rule("/admin/access-control", "admin", "admin"),
   rule("/admin/audit-log", "admin", "admin"),
   rule("/admin/settings", "admin", "admin"),
   // Back-office pages that existed as route files without a rule: without an
