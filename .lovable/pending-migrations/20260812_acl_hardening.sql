@@ -18,16 +18,26 @@
 --           (the client must never call a trigger function directly; triggers
 --            execute with the privileges of the table owner, so revoking here
 --            cannot break any trigger.)
---   B. public exceptions (39 objects, individually proven)
+--   B. public exceptions (40 objects, individually proven)
 --        -> REVOKE EXECUTE FROM PUBLIC   (anon and authenticated preserved)
 --           PUBLIC is revoked because an explicit anon grant is the auditable
 --           surface; a residual PUBLIC grant would silently re-open access to
 --           every present and future role.
---   C. everything else
+--           The 40th, mkt_distance_m, was added after the shadow test: the four
+--           public mkt_nearby_* functions are SECURITY INVOKER and call it, so
+--           revoking it broke every nearby search for visitors.
+--   C. authenticated-keep (2 objects, class E in the snapshot: their only grant
+--      was PUBLIC, yet real signed-in client callers exist)
+--        -> REVOKE EXECUTE FROM PUBLIC, anon, then GRANT EXECUTE TO authenticated
+--           This is not a widening: authenticated already reached them through
+--           PUBLIC in production. It converts an implicit grant into an explicit
+--           one and removes anon.
+--   D. everything else
 --        -> REVOKE EXECUTE FROM PUBLIC, anon
 --           authenticated is deliberately KEPT: these functions stay protected
 --           by their in-function guard and required permission, and revoking
 --           authenticated would break legitimate signed-in/staff/admin paths.
+
 -- =====================================================================
 
 DO $acl$
