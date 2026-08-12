@@ -6917,6 +6917,45 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_permission_catalog: {
+        Row: {
+          action: string
+          created_at: string
+          description_ar: string
+          description_en: string
+          label_ar: string
+          label_en: string
+          module: string
+          perm_key: string
+          sort: number
+          updated_at: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          description_ar?: string
+          description_en?: string
+          label_ar: string
+          label_en: string
+          module: string
+          perm_key: string
+          sort?: number
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          description_ar?: string
+          description_en?: string
+          label_ar?: string
+          label_en?: string
+          module?: string
+          perm_key?: string
+          sort?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_platform_admins: {
         Row: {
           created_at: string
@@ -13686,6 +13725,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      mkt_admin_save_staff_perms: {
+        Args: { _perms: string[]; _reason: string; _user_id: string }
+        Returns: Json
+      }
       mkt_admin_scan_dismiss: {
         Args: { _reason: string; _scan_id: string }
         Returns: undefined
@@ -14979,6 +15022,19 @@ export type Database = {
       }
       mkt_perf_summary: { Args: { _days?: number }; Returns: Json }
       mkt_perm_aliases: { Args: { _perm: string }; Returns: string[] }
+      mkt_permission_catalog_list: {
+        Args: never
+        Returns: {
+          action: string
+          description_ar: string
+          description_en: string
+          label_ar: string
+          label_en: string
+          module: string
+          perm_key: string
+          sort: number
+        }[]
+      }
       mkt_person_is_restricted: { Args: { _user_id: string }; Returns: boolean }
       mkt_platform_health_summary: { Args: never; Returns: Json }
       mkt_promotion_prices: { Args: never; Returns: Json }

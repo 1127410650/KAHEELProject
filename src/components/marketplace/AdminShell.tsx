@@ -304,7 +304,7 @@ const NAV: NavItem[] = [
 
   // 14 — Platform staff and permissions
   {
-    to: "/admin/roles",
+    to: "/admin/access-control",
     labelKey: "admin.nav.roles",
     icon: UserCog,
 

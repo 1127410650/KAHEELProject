@@ -4769,6 +4769,49 @@
         "account": "Accounts",
         "billing": "Billing"
       }
+    },
+    "access": {
+      "hint": "One shared permission catalog: every switch here maps to a key the server actually enforces, and saving requires a reason that is written to the audit and operations logs.",
+      "loadFailed": "Could not load the data.",
+      "pickStaff": "Pick a staff member from the list to view and edit their permissions.",
+      "searchPerms": "Search permissions",
+      "enabledCount": "Granted",
+      "selectGroup": "Select all",
+      "clearGroup": "Clear all",
+      "unsaved": "Unsaved changes",
+      "discard": "You have unsaved changes. Discard them?",
+      "confirmTitle": "Confirm permission change",
+      "willGrant": "Will be granted",
+      "willRevoke": "Will be revoked",
+      "saved": "Permissions updated and the change was logged.",
+      "saveFailed": "Could not save the permissions.",
+      "ownerNote": "A system owner holds every permission by role; edits here do not restrict them.",
+      "module": {
+        "console": "Operations console",
+        "users": "Users",
+        "accounts": "Accounts",
+        "listings": "Listings",
+        "content": "Content",
+        "reports": "Reports",
+        "verifications": "Verifications",
+        "support": "Support",
+        "analytics": "Analytics",
+        "workforce": "Workforce",
+        "finance": "Finance",
+        "platform": "Platform",
+        "audit": "Audit"
+      },
+      "action": {
+        "view": "View",
+        "create": "Create",
+        "update": "Update",
+        "delete": "Delete",
+        "approve": "Approve",
+        "execute": "Execute",
+        "assign": "Assign",
+        "export": "Export",
+        "manage": "Manage"
+      }
     }
   }
 }
