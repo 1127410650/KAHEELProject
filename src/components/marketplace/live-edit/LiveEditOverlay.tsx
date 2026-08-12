@@ -8,6 +8,9 @@
  */
 import { useEffect, useState } from "react";
 import { PanelsTopLeft, X } from "lucide-react";
+import { toast } from "sonner";
+
+import { isFunctionalSlot, useEditableSlots } from "@/lib/mkt-studio";
 
 import { LiveEditSheet } from "@/components/marketplace/live-edit/LiveEditSheet";
 import { slotStyleCss, useMediaSlots, type MediaSlot } from "@/lib/mkt-media-slots";
