@@ -9,6 +9,7 @@
  * (Cloudflare Workers) للقراءة فقط، فالكتابة هناك ترفع خطأً واضحًا لا سقوطًا صامتًا.
  */
 import { createHash } from "node:crypto";
+import type { Dirent } from "node:fs";
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { join, normalize, relative, sep } from "node:path";
 
@@ -160,7 +161,7 @@ export async function listByKind(kind: string): Promise<TreeEntry[]> {
   const walk = async (rel: string): Promise<void> => {
     if (out.length >= MAX_KIND_RESULTS) return;
     const dir = rel === "." ? ROOT : join(ROOT, rel);
-    let items: Awaited<ReturnType<typeof readdir>>;
+    let items: Dirent[];
     try {
       items = await readdir(dir, { withFileTypes: true });
     } catch {
