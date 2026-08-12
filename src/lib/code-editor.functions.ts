@@ -29,6 +29,7 @@ export const codeListDir = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase);
     const mod = await import("@/lib/code-editor.server");
+    mod.assertEditorEnvironment();
     const rel = data.path === "." || !data.path ? "." : mod.safePath(data.path);
     return { path: rel, entries: await mod.listDir(rel) };
   });
@@ -40,6 +41,7 @@ export const codeReadFile = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase);
     const mod = await import("@/lib/code-editor.server");
+    mod.assertEditorEnvironment();
     const rel = mod.safePath(data.path);
     const file = await mod.readTextFile(rel);
     return { path: rel, ...file };
@@ -55,6 +57,7 @@ export const codeWriteFile = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase);
     const mod = await import("@/lib/code-editor.server");
+    mod.assertEditorEnvironment();
     const rel = mod.safePath(data.path);
     mod.assertEditable(rel);
 
@@ -109,6 +112,7 @@ export const codeRestoreSnapshot = createServerFn({ method: "POST" })
     }
 
     const mod = await import("@/lib/code-editor.server");
+    mod.assertEditorEnvironment();
     const rel = mod.safePath(snap.file_path);
     const current = await mod.readIfExists(rel);
 

@@ -182,7 +182,11 @@ function AqarListingPage() {
           </ul>
         ) : null}
 
-        <section className="px-4 pt-2">
+        <section
+          className="px-4 pt-2"
+          data-kslot="aqar.listing_header"
+          data-kscope={`listing:${row.id}`}
+        >
           <h1 className="text-page font-extrabold text-foreground">{row.title}</h1>
           <p className="mt-1 flex items-center gap-1 text-desc text-muted-foreground">
             <MapPin className="size-4 shrink-0" aria-hidden />
@@ -379,6 +383,8 @@ function AqarListingPage() {
 
           </span>
           <Link
+            data-kslot="aqar.booking"
+            data-kscope="functional"
             to="/aqar/book/$id"
             params={{ id: row.id }}
             className="inline-flex shrink-0 items-center rounded-full bg-primary px-5 text-body font-bold text-primary-foreground"

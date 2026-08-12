@@ -146,6 +146,7 @@ function PublicStorePage() {
       <div className="mx-auto w-full max-w-5xl space-y-5 px-[var(--page-x)] py-5">
         <div
           data-kslot="store.header"
+          data-kscope={`store:${store.id}`}
           className={`overflow-hidden rounded-[1.75rem] border bg-card shadow-panel ring-1 ${theme.ring}`}
         >
           <div
@@ -194,7 +195,7 @@ function PublicStorePage() {
             </div>
 
             {description ? (
-              <p data-kslot="store.about" className="max-w-3xl text-sm leading-7">
+              <p data-kslot="store.about" data-kscope={`store:${store.id}`} className="max-w-3xl text-sm leading-7">
                 {description}
               </p>
             ) : null}

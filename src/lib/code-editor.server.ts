@@ -55,6 +55,19 @@ const SKIP_DIR = new Set([
 
 export class CodeEditorError extends Error {}
 
+/**
+ * محرر الكود متاح في بيئة التطوير/المعاينة فقط.
+ *
+ * بيئة التشغيل المنشورة (Cloudflare Worker) لا تملك نظام ملفات قابلًا للكتابة،
+ * فلا يمكن لأي كود أن يعدّل ملفات المشروع بعد النشر. نرفض صريحًا بدل السقوط
+ * الصامت أو الوعد الكاذب بالحفظ.
+ */
+export function assertEditorEnvironment(): void {
+  if (process.env['NODE_ENV'] === 'production' || process.env['CF_PAGES'] || process.env['CLOUDFLARE_ENVIRONMENT']) {
+    throw new CodeEditorError('CODE_EDITOR_DISABLED_IN_PRODUCTION');
+  }
+}
+
 /** يعيد مسارًا نسبيًا آمنًا أو يرفع خطأً. */
 export function safePath(input: string): string {
   const raw = String(input ?? "").trim().replace(/^\/+/, "");

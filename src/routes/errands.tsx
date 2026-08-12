@@ -238,7 +238,12 @@ function ErrandsPage() {
           )}
         </section>
 
-        <form onSubmit={submit} className="grid gap-3">
+        <form
+          onSubmit={submit}
+          className="grid gap-3"
+          data-kslot="errand.request_form"
+          data-kscope="functional"
+        >
           {/* الوصف الحر */}
           <div className="rounded-[var(--r-card)] border border-border/70 bg-card/60 p-3">
             <Label className="text-sm font-bold text-foreground">
