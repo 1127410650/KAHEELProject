@@ -155,24 +155,24 @@
  */
 :root,
 .market-surface {
-  --kt-primary: #0e9f6e;
-  --kt-primary-deep: #0b7a55;
-  --kt-primary-soft: #e6f5ef;
-  --kt-header-from: #14324f;
-  --kt-header-to: #1e4c77;
+  --kt-primary: #083a31;
+  --kt-primary-deep: #062a24;
+  --kt-primary-soft: #dbefe4;
+  --kt-header-from: #083a31;
+  --kt-header-to: #0d5646;
   --kt-page-bg: #ffffff;
   --kt-card: #ffffff;
-  --kt-divider: #e5e7eb;
-  --kt-text-primary: #14324f;
-  --kt-text-secondary: #64748b;
-  --kt-disabled: #c7cdd4;
-  --kt-focus: #0e9f6e;
-  --kt-price-color: #14324f;
-  --kt-story-ring: #0e9f6e;
+  --kt-divider: #e6ebe8;
+  --kt-text-primary: #0b2b24;
+  --kt-text-secondary: #5c6f68;
+  --kt-disabled: #c3cdc9;
+  --kt-focus: #083a31;
+  --kt-price-color: #083a31;
+  --kt-story-ring: #083a31;
   --kt-cta-bg: #ffffff;
-  --kt-cta-fg: #0e9f6e;
-  --kt-pulse-color: rgba(14, 159, 110, 0.5);
-  --kt-bottomnav-active: #0e9f6e;
+  --kt-cta-fg: #083a31;
+  --kt-pulse-color: rgba(8, 58, 49, 0.45);
+  --kt-bottomnav-active: #083a31;
 }
 
 /*
