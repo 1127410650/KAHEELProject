@@ -35,7 +35,41 @@ import { LocationSheet } from "@/components/marketplace/LocationSheet";
 import { BrandLogo } from "@/components/marketplace/BrandLogo";
 import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
+/**
+ * هيدر المنصة — صار سطحًا واحدًا أبيض معتمدًا (`SiteHeader`) لكل الصفحات،
+ * ومعه تنبيه عدم الاتصال وشريط التصنيفات في صفحة البحث فقط. البحث انتقل إلى
+ * بنر الرئيسية، فلا صف بحث منفصل أسفل الهيدر بعد اليوم.
+ */
 export function MarketHeader({
+
+  showCategories = false,
+  home: _home = false,
+}: {
+  showCategories?: boolean;
+  home?: boolean;
+}) {
+  const { t } = useI18n();
+  const { session } = useSession();
+  const offline = useOffline();
+
+  return (
+    <>
+      <SiteHeader />
+      {session && offline ? (
+        <div className="border-b border-border bg-secondary px-3 py-1 text-center text-desc font-medium text-foreground">
+          {t("market.offlineNotice")}
+        </div>
+      ) : null}
+      {showCategories ? (
+        <div className="border-b border-border bg-card">
+          <MarketCategoryStrip />
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function LegacyMarketHeader({
 
   showCategories = false,
   home = false,
