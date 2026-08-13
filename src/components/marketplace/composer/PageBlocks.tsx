@@ -354,8 +354,11 @@ function renderBlock(
             return <ShapeLayerBlock key={block.id} settings={settings} />;
           case "quick_tiles":
             return <QuickTiles key={block.id} />;
+          /* كتلة «سوريا فخرنا» صارت تُعرض بالبنر الرئيسي المعتمد: نفس الكتلة
+             ونفس الترتيب في المؤلِّف، بهيئة بصرية جديدة (تدرّج أخضر + بطاقة
+             بحث بيضاء + شارة سوريا). الشريط القديم باقٍ كمكوّن متاح. */
           case "pride_strip":
-            return <SyriaPrideBanner key={block.id} />;
+            return <HomeHero key={block.id} />;
           case "stories_rail":
             return (
               <LazyMount key={block.id} minHeight="104px">
