@@ -113,6 +113,8 @@ function AppearancePage() {
         ) : null}
       </details>
 
+      <BrandIdentityUploads />
+
       <div className="mb-6">
         <ThemePaletteCard />
       </div>
