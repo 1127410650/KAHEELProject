@@ -145,6 +145,8 @@ const STUDIO_ERRORS: Record<string, string> = {
   EXT_NOT_ALLOWED: "امتداد غير مسموح بالتحرير.",
   FILE_TOO_LARGE: "الملف أكبر من الحد المسموح (٥١٢ كيلوبايت).",
   SNAPSHOT_NOT_FOUND: "اللقطة غير موجودة.",
+  NO_SESSION: "انتهت الجلسة — سجّل الدخول من جديد ثم أعد المحاولة.",
+  Unauthorized: "انتهت الجلسة — سجّل الدخول من جديد ثم أعد المحاولة.",
   SNAPSHOT_HAS_NO_CONTENT: "اللقطة لملف لم يكن موجودًا — لا محتوى لاسترجاعه.",
 };
 
