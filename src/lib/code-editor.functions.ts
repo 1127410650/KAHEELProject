@@ -18,9 +18,12 @@ type Supa = { rpc: (name: string, args?: unknown) => Promise<{ data: unknown; er
 
 async function assertOwner(supabase: unknown): Promise<void> {
   const { data, error } = await (supabase as Supa).rpc("mkt_is_system_owner");
-  if (error) throw new Error("OWNER_CHECK_FAILED");
-  if (data !== true) throw new Error("NOT_OWNER");
+  // رفض صريح بـ403 لا غلاف خطأ عام: النداء المباشر بـcurl/fetch من حساب غير مالك
+  // يستقبل رمز HTTP قاطعًا ورسالة مصدرها فحص `mkt_is_system_owner()` في القاعدة.
+  if (error) throw new Response("OWNER_CHECK_FAILED", { status: 403 });
+  if (data !== true) throw new Response("NOT_OWNER", { status: 403 });
 }
+
 
 /** شجرة مجلد واحد. */
 export const codeListDir = createServerFn({ method: "POST" })
