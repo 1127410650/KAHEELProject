@@ -14,6 +14,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSessionHeader } from "@/lib/code-editor-session";
 
 type Supa = { rpc: (name: string, args?: unknown) => Promise<{ data: unknown; error: unknown }> };
 
@@ -35,7 +36,7 @@ async function assertOwner(supabase: unknown): Promise<void> {
 
 /** شجرة مجلد واحد. */
 export const codeListDir = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSessionHeader, requireSupabaseAuth])
   .inputValidator((data: { path?: string }) => ({ path: data?.path ?? "." }))
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase);
@@ -47,7 +48,7 @@ export const codeListDir = createServerFn({ method: "POST" })
 
 /** كل ملفات نوع/لغة واحدة (طبقة تنظيم فوق الشجرة — نفس الحصر والامتدادات). */
 export const codeListKind = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSessionHeader, requireSupabaseAuth])
   .inputValidator((data: { kind: string }) => ({ kind: String(data?.kind ?? "") }))
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase);
@@ -58,7 +59,7 @@ export const codeListKind = createServerFn({ method: "POST" })
 
 /** قراءة ملف نصي. */
 export const codeReadFile = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSessionHeader, requireSupabaseAuth])
   .inputValidator((data: { path: string }) => ({ path: String(data?.path ?? "") }))
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase);
@@ -71,7 +72,7 @@ export const codeReadFile = createServerFn({ method: "POST" })
 
 /** كتابة مباشرة على الملف الحي — بعد لقطة إلزامية. */
 export const codeWriteFile = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSessionHeader, requireSupabaseAuth])
   .inputValidator((data: { path: string; content: string }) => ({
     path: String(data?.path ?? ""),
     content: String(data?.content ?? ""),
@@ -104,7 +105,7 @@ export const codeWriteFile = createServerFn({ method: "POST" })
 
 /** استرجاع ملف من لقطة — يأخذ لقطة للحالة الحالية أولًا ثم يكتب المحتوى القديم. */
 export const codeRestoreSnapshot = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSessionHeader, requireSupabaseAuth])
   .inputValidator((data: { snapshot_id: string }) => ({
     snapshot_id: String(data?.snapshot_id ?? ""),
   }))
