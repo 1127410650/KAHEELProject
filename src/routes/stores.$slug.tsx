@@ -275,21 +275,29 @@ function PublicStorePage() {
           </Card>
         ) : (
           <>
-            <div className="-mx-[var(--page-x)] flex gap-2 overflow-x-auto px-[var(--page-x)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {sections.map((section) => (
-                <Button
-                  key={section.id}
-                  size="sm"
-                  variant={current === section.id ? "default" : "outline"}
-                  className="shrink-0 rounded-full"
-                  onClick={() => setActiveSection(section.id)}
-                >
-                  {locale === "ar" ? section.name_ar : section.name_en || section.name_ar}
-                </Button>
-              ))}
+            {/* شرائح الأقسام: الشريحة النشطة ممتلئة بلون الهوية والبقية نعناعية هادئة. */}
+            <div className="-mx-[var(--page-x)] flex gap-[var(--sp-2)] overflow-x-auto px-[var(--page-x)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {sections.map((section) => {
+                const on = current === section.id;
+                return (
+                  <button
+                    key={section.id}
+                    type="button"
+                    onClick={() => setActiveSection(section.id)}
+                    className={`k-press shrink-0 whitespace-nowrap rounded-full px-5 py-2 text-sm transition-colors ${
+                      on
+                        ? "bg-primary font-bold text-primary-foreground shadow-sm"
+                        : "bg-accent font-medium text-accent-foreground hover:bg-primary/10"
+                    }`}
+                  >
+                    {locale === "ar" ? section.name_ar : section.name_en || section.name_ar}
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
+            {/* شبكة تجزئة: بطاقة رأسية موحّدة الارتفاع + زر إجراء واضح بعرض البطاقة. */}
+            <div className="grid grid-cols-2 gap-[var(--sp-3)] sm:grid-cols-3 lg:grid-cols-4">
               {(itemsBySection.get(current ?? "") ?? []).map((item) => {
                 const url = item.image_path ? store.media[item.image_path] : undefined;
                 const itemName = locale === "ar" ? item.name_ar : item.name_en || item.name_ar;
@@ -298,40 +306,52 @@ function PublicStorePage() {
                     ? item.description_ar
                     : item.description_en || item.description_ar;
                 const bookable = serviceStore && ["service", "package"].includes(item.item_type);
+                const minutes = bookable ? item.duration_minutes : item.preparation_minutes;
                 return (
-                  <div
+                  <article
                     key={item.id}
-                    className={`flex gap-3 rounded-[var(--r-card)] border p-3 shadow-sm ${theme.surface}`}
+                    className={`k-fade-up flex flex-col overflow-hidden rounded-[var(--r-card)] border shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel ${theme.surface}`}
                   >
                     <div
-                      className={`grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${theme.gradient}`}
+                      className={`relative grid aspect-square w-full place-items-center overflow-hidden bg-gradient-to-br ${theme.gradient}`}
                     >
                       {url ? (
                         <img
                           src={url}
                           alt={itemName}
                           loading="lazy"
+                          decoding="async"
                           className="size-full object-cover"
                         />
                       ) : (
-                        <ShoppingBag className="size-6 text-white/85" aria-hidden />
+                        <ShoppingBag className="size-7 text-white/85" aria-hidden />
                       )}
-                    </div>
-                    <div className="min-w-0 flex-1 space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="truncate font-bold">{itemName}</span>
-                        {!item.is_available ? (
-                          <Badge variant="outline">{t("market.store.catalog.unavailable")}</Badge>
-                        ) : null}
-                      </div>
-                      {itemDesc ? (
-                        <p className="line-clamp-2 text-sm text-muted-foreground">{itemDesc}</p>
+                      {!item.is_available ? (
+                        <span className="absolute end-2 top-2 rounded-md bg-background/90 px-2 py-0.5 text-[10px] font-bold text-muted-foreground backdrop-blur">
+                          {t("market.store.catalog.unavailable")}
+                        </span>
                       ) : null}
-                      <p className={`text-sm font-black ${theme.accent}`}>
-                        {money(item.base_price, item.currency_code || store.currency_code, locale)}
-                      </p>
+                      {minutes ? (
+                        <span className="absolute start-2 top-2 inline-flex items-center gap-1 rounded-md bg-background/90 px-2 py-0.5 text-[10px] font-bold text-foreground backdrop-blur">
+                          <Clock className="size-3" aria-hidden />
+                          <bdi className="num">
+                            {minutes} {t("market.store.publicPage.minutes")}
+                          </bdi>
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-[var(--sp-3)]">
+                      <h3 className="line-clamp-2 min-h-[2.6em] text-sm font-semibold leading-tight text-foreground">
+                        {itemName}
+                      </h3>
+                      {itemDesc ? (
+                        <p className="mt-1 line-clamp-1 text-desc text-muted-foreground">
+                          {itemDesc}
+                        </p>
+                      ) : null}
                       {item.addon_groups.length > 0 ? (
-                        <p className="text-desc text-muted-foreground">
+                        <p className="mt-1 line-clamp-1 text-desc text-muted-foreground">
                           {t("market.store.catalog.options")}:{" "}
                           {item.addon_groups
                             .map((group) =>
@@ -340,15 +360,19 @@ function PublicStorePage() {
                             .join(" · ")}
                         </p>
                       ) : null}
-                      {(bookable ? item.duration_minutes : item.preparation_minutes) ? (
-                        <p className="text-desc text-muted-foreground">
-                          <Clock className="me-1 inline h-3.5 w-3.5" />
-                          {bookable ? item.duration_minutes : item.preparation_minutes}{" "}
-                          {t("market.store.publicPage.minutes")}
-                        </p>
-                      ) : null}
+
+                      <p className={`mt-auto pt-[var(--sp-2)] text-base font-black ${theme.accent}`}>
+                        <bdi className="num">
+                          {money(
+                            item.base_price,
+                            item.currency_code || store.currency_code,
+                            locale,
+                          )}
+                        </bdi>
+                      </p>
+
                       {bookable && item.is_available ? (
-                        <Button asChild size="sm" className="mt-2 h-8 rounded-full px-4">
+                        <Button asChild size="sm" className="mt-[var(--sp-3)] w-full rounded-xl">
                           <Link
                             to="/services/$slug/$itemId/book"
                             params={{ slug: store.slug, itemId: item.id }}
@@ -357,12 +381,17 @@ function PublicStorePage() {
                             {locale === "ar" ? "احجز موعدًا" : "Book appointment"}
                           </Link>
                         </Button>
-                      ) : null}
+                      ) : (
+                        <span className="mt-[var(--sp-3)] grid h-9 w-full place-items-center rounded-xl border border-dashed border-primary/25 bg-accent/60 text-desc font-bold text-muted-foreground">
+                          {locale === "ar" ? "الطلب قريبًا" : "Ordering soon"}
+                        </span>
+                      )}
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </div>
+
           </>
         )}
 
