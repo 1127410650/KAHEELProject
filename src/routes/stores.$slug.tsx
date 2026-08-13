@@ -310,11 +310,9 @@ function PublicStorePage() {
                 return (
                   <article
                     key={item.id}
-                    className={`k-fade-up flex flex-col overflow-hidden rounded-[var(--r-card)] border shadow-sm transition hover:-translate-y-0.5 hover:shadow-panel ${theme.surface}`}
+                    className="k-fade-up flex flex-col overflow-hidden rounded-[var(--r-card)] border bg-card shadow-sm transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-panel"
                   >
-                    <div
-                      className={`relative grid aspect-square w-full place-items-center overflow-hidden bg-gradient-to-br ${theme.gradient}`}
-                    >
+                    <div className="relative grid aspect-square w-full place-items-center overflow-hidden bg-accent/60">
                       {url ? (
                         <img
                           src={url}
@@ -324,8 +322,9 @@ function PublicStorePage() {
                           className="size-full object-cover"
                         />
                       ) : (
-                        <ShoppingBag className="size-7 text-white/85" aria-hidden />
+                        <ShoppingBag className="size-7 text-primary/40" aria-hidden />
                       )}
+
                       {!item.is_available ? (
                         <span className="absolute end-2 top-2 rounded-md bg-background/90 px-2 py-0.5 text-[10px] font-bold text-muted-foreground backdrop-blur">
                           {t("market.store.catalog.unavailable")}
