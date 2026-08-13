@@ -11,6 +11,7 @@
  * لا تُكتب الملف إطلاقًا (لا حفظ بلا نسخة احتياطية).
  */
 import { createServerFn } from "@tanstack/react-start";
+import { setResponseStatus } from "@tanstack/react-start/server";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
@@ -18,9 +19,19 @@ type Supa = { rpc: (name: string, args?: unknown) => Promise<{ data: unknown; er
 
 async function assertOwner(supabase: unknown): Promise<void> {
   const { data, error } = await (supabase as Supa).rpc("mkt_is_system_owner");
-  if (error) throw new Error("OWNER_CHECK_FAILED");
-  if (data !== true) throw new Error("NOT_OWNER");
+  // الرفض يخرج برمز HTTP 403 قاطع (لا 200 بغلاف خطأ) حتى للنداء المباشر بـcurl/fetch،
+  // ومصدره حصرًا فحص `mkt_is_system_owner()` في القاعدة.
+  if (error) {
+    setResponseStatus(403);
+    throw new Error("OWNER_CHECK_FAILED");
+  }
+  if (data !== true) {
+    setResponseStatus(403);
+    throw new Error("NOT_OWNER");
+  }
 }
+
+
 
 /** شجرة مجلد واحد. */
 export const codeListDir = createServerFn({ method: "POST" })
