@@ -7,6 +7,11 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
     return await next();
   } catch (error) {
+    // A thrown Response is a deliberate answer (403 من بوابة المالك، 401 من المصادقة)
+    // ولا يجوز تحويله إلى صفحة 500 عامة.
+    if (error instanceof Response) {
+      throw error;
+    }
     if (error != null && typeof error === "object" && "statusCode" in error) {
       throw error;
     }
