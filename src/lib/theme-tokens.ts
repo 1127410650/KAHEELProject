@@ -98,7 +98,7 @@ export const PALETTE_PURPLE: ThemeTokenMap = {
   "bottomnav-active": "#8A4FFF",
 };
 
-/** «أخضر × كحلي» — اللوحة المعتمدة حاليًا. */
+/** «أخضر × كحلي» — لوحة سابقة، محفوظة للتوافق. */
 export const PALETTE_GREEN_NAVY: ThemeTokenMap = {
   primary: "#0E9F6E",
   "primary-deep": "#0B7A55",
@@ -120,8 +120,30 @@ export const PALETTE_GREEN_NAVY: ThemeTokenMap = {
   "bottomnav-active": "#0E9F6E",
 };
 
+/** «كَحيل الأخضر الغامق» — الهوية المعتمدة: #083a31 أساسًا و#dbefe4 نعناعيًا. */
+export const PALETTE_KAHEEL_GREEN: ThemeTokenMap = {
+  primary: "#083A31",
+  "primary-deep": "#062A24",
+  "primary-soft": "#DBEFE4",
+  "header-from": "#083A31",
+  "header-to": "#0D5646",
+  "page-bg": "#FFFFFF",
+  card: "#FFFFFF",
+  divider: "#E6EBE8",
+  "text-primary": "#0B2B24",
+  "text-secondary": "#5C6F68",
+  disabled: "#C3CDC9",
+  focus: "#083A31",
+  "price-color": "#083A31",
+  "story-ring": "#083A31",
+  "cta-bg": "#FFFFFF",
+  "cta-fg": "#083A31",
+  "pulse-color": "rgba(8,58,49,0.45)",
+  "bottomnav-active": "#083A31",
+};
+
 /** القيم الافتراضية عند غياب القاعدة — مطابقة لما هو مطبوع في styles.css. */
-export const DEFAULT_TOKENS: ThemeTokenMap = PALETTE_GREEN_NAVY;
+export const DEFAULT_TOKENS: ThemeTokenMap = PALETTE_KAHEEL_GREEN;
 
 const HEX = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 const RGBA = /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(?:,\s*(?:0|1|0?\.\d+)\s*)?\)$/;
