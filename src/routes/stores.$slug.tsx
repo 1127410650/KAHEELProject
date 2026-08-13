@@ -360,7 +360,7 @@ function PublicStorePage() {
                         </p>
                       ) : null}
 
-                      <p className={`mt-auto pt-[var(--sp-2)] text-base font-black ${theme.accent}`}>
+                      <p className="mt-auto pt-[var(--sp-2)] text-base font-black text-primary">
                         <bdi className="num">
                           {money(
                             item.base_price,
