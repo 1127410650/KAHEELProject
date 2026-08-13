@@ -1,39 +1,26 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
   ClipboardList,
   Home,
   LogIn,
-  MapPin,
   MessageCircle,
   MoreHorizontal,
   Tag,
 } from "lucide-react";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { addListingHref } from "@/lib/add-listing";
 import { useI18n } from "@/i18n";
-import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { useMarketSetupStatus } from "@/lib/mkt-onboarding";
 import { routeRuleFor } from "@/lib/routes-map";
 import { accentForPath } from "@/lib/section-accent";
 
-import { useNearbyOrigin } from "@/lib/mkt-nearby";
 import { MarketCategoryStrip } from "@/components/marketplace/home/MarketCategoryStrip";
-
-import { AddListingButton } from "@/components/marketplace/AddListingButton";
-import { CollapsingHomeHeader } from "@/components/marketplace/home/noon/CollapsingHomeHeader";
-
-
-
-
-import { LocationSheet } from "@/components/marketplace/LocationSheet";
+import { SiteHeader } from "@/components/marketplace/SiteHeader";
 
 import { BrandLogo } from "@/components/marketplace/BrandLogo";
-import kaheelMascot from "@/assets/characters/kaheel-sm.webp";
 
 /**
  * هيدر المنصة — صار سطحًا واحدًا أبيض معتمدًا (`SiteHeader`) لكل الصفحات،
