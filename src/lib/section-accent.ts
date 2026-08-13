@@ -13,22 +13,22 @@ export const BASE_ACCENT = "var(--kt-primary)";
 /** لون تمييز كل قسم؛ المفتاح هو slug القسم في mkt_categories. */
 export const SECTION_ACCENTS: Record<string, string> = {
   "real-estate": BASE_ACCENT,
-  restaurants: "#e2691b",
-  cars: "#1f7ae0",
-  devices: "#0f9b8e",
-  furniture: "#a2622b",
-  services: "#6c5ce7",
-  fashion: "#d63a7a",
-  jobs: "#2f6f4f",
-  training: "#b9791f",
-  "schools-universities": "#3d5bd6",
-  events: "#c0399b",
-  programming: "#1e6e8c",
-  gardens: "#3f8f3f",
-  arts: "#a3379b",
-  "lost-found": "#b0552a",
-  "projects-investments": "#2b6a8f",
-  "travel-tourism": "#0e8f9e",
+  restaurants: BASE_ACCENT,
+  cars: BASE_ACCENT,
+  devices: BASE_ACCENT,
+  furniture: BASE_ACCENT,
+  services: BASE_ACCENT,
+  fashion: BASE_ACCENT,
+  jobs: BASE_ACCENT,
+  training: BASE_ACCENT,
+  "schools-universities": BASE_ACCENT,
+  events: BASE_ACCENT,
+  programming: BASE_ACCENT,
+  gardens: BASE_ACCENT,
+  arts: BASE_ACCENT,
+  "lost-found": BASE_ACCENT,
+  "projects-investments": BASE_ACCENT,
+  "travel-tourism": BASE_ACCENT,
 };
 
 /** لون القسم من الـ slug، ولون اللوحة المفعّلة إن لم يوجد. */
@@ -40,9 +40,9 @@ export function sectionAccent(slug?: string | null): string {
 /** مسارات ثابتة لها لون قسم معروف (خارج عوالم /c/{slug}). */
 const PATH_ACCENTS: Array<[string, string]> = [
   ["/aqar", SECTION_ACCENTS["real-estate"]!],
-  ["/errands", "#e2691b"],
-  ["/guides/students", "#3d5bd6"],
-  ["/guides/syria", "#0e8f9e"],
+  ["/errands", BASE_ACCENT],
+  ["/guides/students", BASE_ACCENT],
+  ["/guides/syria", BASE_ACCENT],
   ["/services", SECTION_ACCENTS["services"]!],
 ];
 
