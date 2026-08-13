@@ -134,7 +134,6 @@ export function SiteHeader() {
       <div
         aria-hidden
         style={{ height: `calc(env(safe-area-inset-top, 0px) + ${SITE_HEADER_H}px)` }}
-        className="lg:!h-[calc(env(safe-area-inset-top,0px)+64px)]"
       />
       <div aria-hidden className="h-[37px] lg:hidden" />
     </>
