@@ -24,7 +24,7 @@ import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchFiel
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
-import { SyriaPrideBanner } from "@/components/marketplace/home/noon/SyriaPrideBanner";
+import { HomeHero } from "@/components/marketplace/home/HomeHero";
 import { ExclusiveOffersRail } from "@/components/marketplace/season/ExclusiveOffersRail";
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { shapeDataUri } from "@/lib/mkt-design-library";
