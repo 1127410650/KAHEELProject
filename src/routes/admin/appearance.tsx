@@ -9,6 +9,7 @@ import { CircleDollarSign, LayoutTemplate, MousePointerClick, Sparkles } from "l
 
 import { AdminShell } from "@/components/marketplace/AdminShell";
 import { BrandImageStudio } from "@/components/marketplace/admin/BrandImageStudio";
+import { BrandIdentityUploads } from "@/components/marketplace/admin/BrandIdentityUploads";
 import { useAiLibrary } from "@/lib/mkt-ai-studio";
 import { DesignTokensCard } from "@/components/marketplace/admin/DesignTokensCard";
 import { MediaSlotCard } from "@/components/marketplace/admin/MediaSlotCard";
