@@ -18,7 +18,7 @@ import { CategoryTileGrid } from "@/components/marketplace/home/noon/CategoryTil
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
-import { SyriaPrideBanner } from "@/components/marketplace/home/noon/SyriaPrideBanner";
+import { HomeHero } from "@/components/marketplace/home/HomeHero";
 import { KaheelStories } from "@/components/marketplace/home/KaheelStories";
 import { PageBlocks } from "@/components/marketplace/composer/PageBlocks";
 import { usePageBlocks } from "@/lib/mkt-page-composer";
@@ -81,9 +81,9 @@ export function MarketHome() {
           <PageBlocks blocks={blocks} />
         ) : (
           <>
-        {/* بانر «سوريا فخرنا» ثم الستوريات ثم شريط التصنيفات الماشي ثم لوحة
-            الإعلانات و«جيب لي»: ترتيب افتراضي حتى تُؤلَّف الصفحة. */}
-        <SyriaPrideBanner />
+        {/* البنر الرئيسي (تدرّج أخضر + بطاقة بحث بيضاء) ثم الستوريات ثم شريط
+            التصنيفات ثم لوحة الإعلانات و«جيب لي». */}
+        <HomeHero />
 
         <KaheelStories />
 

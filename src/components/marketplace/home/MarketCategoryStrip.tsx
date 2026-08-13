@@ -1,9 +1,43 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid } from "lucide-react";
+import {
+  Armchair,
+  Briefcase,
+  Building2,
+  Car,
+  GraduationCap,
+  Hammer,
+  LayoutGrid,
+  Leaf,
+  Palette,
+  PartyPopper,
+  Search as SearchIcon,
+  Shirt,
+  Smartphone,
+  Sparkles,
+  UtensilsCrossed,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
-import { CATEGORY_IMAGE_SIZE, categoryImage } from "@/lib/market-category-images";
+
+/** أيقونات SVG خطية موحّدة الأسلوب لكل مجال — بديل الصور المولّدة. */
+const FIELD_ICONS: Record<string, typeof LayoutGrid> = {
+  realestate: Building2,
+  cars: Car,
+  devices: Smartphone,
+  restaurants: UtensilsCrossed,
+  furniture: Armchair,
+  services: Hammer,
+  fashion: Shirt,
+  jobs: Briefcase,
+  training: GraduationCap,
+  schools: GraduationCap,
+  events: PartyPopper,
+  programming: Sparkles,
+  gardens: Leaf,
+  arts: Palette,
+  lostfound: SearchIcon,
+};
 import { mascotAsset } from "@/lib/mascot-assets";
 import { useMarqueeRail } from "@/components/marketplace/home/useMarqueeRail";
 
@@ -158,39 +192,28 @@ function StripTile({
 }) {
   const { t, locale, dir } = useI18n();
   const label = t(`market.fields.${field.id}`);
-  const photo = categoryImage(field.id);
+  const Icon = FIELD_ICONS[field.id] ?? LayoutGrid;
   const active =
     field.id === "services"
       ? pathname === "/services" || pathname.startsWith("/services/")
       : isFieldActive(field, current);
 
-  // Every tile reserves the same box — round photo plus a two-line label slot —
-  // so decoding images and longer names can never nudge a neighbour.
+  // Every tile reserves the same box — round icon plus a two-line label slot —
+  // so longer names can never nudge a neighbour.
   const tileClass =
     "group flex w-[84px] shrink-0 flex-col items-center gap-[3px] px-1 text-center outline-none";
+  /* دائرة نعناعية بأيقونة خطية بلون الهوية، وعند المرور تنقلب إلى الهوية
+     الداكنة بأيقونة بيضاء — نفس الأسلوب لكل التصنيفات بلا صور. */
   const frameClass =
-    "grid size-[72px] place-items-center overflow-hidden rounded-full ring-2 ring-inset transition duration-300 shadow-panel";
-  const idleFrame = "ring-card bg-card group-hover:-translate-y-0.5";
-  const activeFrame = "ring-primary bg-accent";
+    "grid size-[72px] place-items-center rounded-full transition-colors duration-200";
+  const idleFrame =
+    "bg-accent text-primary ring-1 ring-inset ring-primary/10 group-hover:bg-primary group-hover:text-primary-foreground";
+  const activeFrame = "bg-primary text-primary-foreground";
 
   const body = (
     <>
       <span className={`${frameClass} ${active ? activeFrame : idleFrame}`}>
-        {photo ? (
-          <img
-            src={photo}
-            alt=""
-            width={CATEGORY_IMAGE_SIZE}
-            height={CATEGORY_IMAGE_SIZE}
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-            className="size-full rounded-full object-cover"
-            style={{ aspectRatio: "1 / 1" }}
-          />
-        ) : (
-          <LayoutGrid className="size-5 text-primary" aria-hidden />
-        )}
+        <Icon className="size-7" strokeWidth={1.6} aria-hidden />
       </span>
       {/* Full name, wrapped over at most two lines — never clipped. */}
       <span

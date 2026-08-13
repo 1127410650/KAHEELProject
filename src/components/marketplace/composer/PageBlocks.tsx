@@ -24,7 +24,7 @@ import { BigSearchField } from "@/components/marketplace/home/noon/BigSearchFiel
 import { LazyMount } from "@/components/marketplace/home/noon/NoonKit";
 import { SponsoredBanner } from "@/components/marketplace/home/noon/SponsoredBanner";
 import { QuickTiles } from "@/components/marketplace/home/noon/QuickTiles";
-import { SyriaPrideBanner } from "@/components/marketplace/home/noon/SyriaPrideBanner";
+import { HomeHero } from "@/components/marketplace/home/HomeHero";
 import { ExclusiveOffersRail } from "@/components/marketplace/season/ExclusiveOffersRail";
 import { useDesignLibrary } from "@/lib/mkt-design-library";
 import { shapeDataUri } from "@/lib/mkt-design-library";
@@ -354,8 +354,11 @@ function renderBlock(
             return <ShapeLayerBlock key={block.id} settings={settings} />;
           case "quick_tiles":
             return <QuickTiles key={block.id} />;
+          /* كتلة «سوريا فخرنا» صارت تُعرض بالبنر الرئيسي المعتمد: نفس الكتلة
+             ونفس الترتيب في المؤلِّف، بهيئة بصرية جديدة (تدرّج أخضر + بطاقة
+             بحث بيضاء + شارة سوريا). الشريط القديم باقٍ كمكوّن متاح. */
           case "pride_strip":
-            return <SyriaPrideBanner key={block.id} />;
+            return <HomeHero key={block.id} />;
           case "stories_rail":
             return (
               <LazyMount key={block.id} minHeight="104px">
