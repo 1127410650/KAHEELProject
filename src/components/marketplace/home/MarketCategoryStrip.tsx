@@ -1,9 +1,43 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid } from "lucide-react";
+import {
+  Armchair,
+  Briefcase,
+  Building2,
+  Car,
+  GraduationCap,
+  Hammer,
+  LayoutGrid,
+  Leaf,
+  Palette,
+  PartyPopper,
+  Search as SearchIcon,
+  Shirt,
+  Smartphone,
+  Sparkles,
+  UtensilsCrossed,
+} from "lucide-react";
 
 import { useI18n } from "@/i18n";
 import { PRIMARY_FIELDS, fieldSearchParams, isFieldActive } from "@/lib/market-primary-navigation";
-import { CATEGORY_IMAGE_SIZE, categoryImage } from "@/lib/market-category-images";
+
+/** أيقونات SVG خطية موحّدة الأسلوب لكل مجال — بديل الصور المولّدة. */
+const FIELD_ICONS: Record<string, typeof LayoutGrid> = {
+  realestate: Building2,
+  cars: Car,
+  devices: Smartphone,
+  restaurants: UtensilsCrossed,
+  furniture: Armchair,
+  services: Hammer,
+  fashion: Shirt,
+  jobs: Briefcase,
+  training: GraduationCap,
+  schools: GraduationCap,
+  events: PartyPopper,
+  programming: Sparkles,
+  gardens: Leaf,
+  arts: Palette,
+  lostfound: SearchIcon,
+};
 import { mascotAsset } from "@/lib/mascot-assets";
 import { useMarqueeRail } from "@/components/marketplace/home/useMarqueeRail";
 
